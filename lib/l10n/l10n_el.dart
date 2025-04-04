@@ -354,6 +354,220 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String get arenaArena => 'Αρένα';
+
+  @override
+  String get arenaArenaTournaments => 'Τουρνουά αρένας';
+
+  @override
+  String get arenaIsItRated => 'Είναι βαθμολογημένο;';
+
+  @override
+  String get arenaWillBeNotified => 'Θα ειδοποιηθείτε όταν ξεκινήσει το τουρνουά, έτσι είναι ασφαλές να παίξετε σε άλλη καρτέλα όσο περιμένετε.';
+
+  @override
+  String get arenaIsRated => 'Αυτό το τουρνουά είναι με αξιολόγηση και θα επηρεάσει την βαθμολογία σας.';
+
+  @override
+  String get arenaIsNotRated => 'Αυτό το τουρνουά *δεν* είναι βαθμολογημένο και *δεν* θα επηρεάσει την βαθμολογία σας.';
+
+  @override
+  String get arenaSomeRated => 'Ορισμένα πρωταθλήματα είναι βαθμολογημένα και θα επηρεάσουν την βαθμολογία σας.';
+
+  @override
+  String get arenaHowAreScoresCalculated => 'Πως υπολογίζονται οι βαθμολογίες;';
+
+  @override
+  String get arenaHowAreScoresCalculatedAnswer => 'Η νίκη αξίζει 2 πόντους, η ισοπαλία 1 πόντο, και η ήττα κανένα.\nΑν νικήσετε δύο παρτίδες συνεχόμενα αποδίδονται διπλάσιοι πόντοι,\nπου αντιπροσωπεύονται από ένα εικονίδιο φλόγας.\nΟι επόμενες παρτίδες θα αξίζουν διπλάσιους πόντους μέχρι να χάσετε μία. Επομένως, η νίκη θα βαθμολογείται με 4 πόντους, η ισοπαλία 2 πόντους, και η ήττα 0.\nΓια παράδειγμα, δύο νίκες και μία ισοπαλία αξίζουν 6 πόντους: 2 + 2 + (2 x 1)';
+
+  @override
+  String get arenaBerserk => 'Αρένα Berserk';
+
+  @override
+  String get arenaBerserkAnswer => 'Όταν ο παίκτης πατήσει το πλήκτρο Berserk στην έναρξη της παρτίδας, χάνει τον μισό χρόνο στο ρολόι, αλλά η νίκη αξίζει ένα έξτρα πόντο στο τουρνουά.\n\nΠατώντας Berserk σε χρόνους με προσαύξηση, ακυρώνεται η προσαύξηση (εξαιρείται το 1+2, που γίνεται 1+0). \n\nTo Berserk δεν ισχύει για παρτίδες με μηδενικό αρχικό χρόνο (0+1, 0+2).\n\nΤο Berserk προσθέτει ένα έξτρα πόντο μόνο αν παιχθούν τουλάχιστον 7 κινήσεις στην παρτίδα.';
+
+  @override
+  String get arenaHowIsTheWinnerDecided => 'Πως αναδεικνύεται ο νικητής;';
+
+  @override
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Ο παίκτης/παίκτες με τους περισσότερους πόντους μετά τη λήξη του προκαθορισμένου χρόνου του τουρνουά αναδεικνύεται/αναδεικνύονται νικητής/νικητής.\n\nΌταν δύο ή περισσότεροι παίκτες έχουν τους ίδιους πόντους, η επίδοση στον διαγωνισμό καθορίζει τον νικητή.';
+
+  @override
+  String get arenaHowDoesPairingWork => 'Πως λειτουργεί η αντιστοίχιση;';
+
+  @override
+  String get arenaHowDoesPairingWorkAnswer => 'Στην αρχή του διαγωνισμού, οι παίκτες αντιστοιχίζονται βάσει της βαθμολογίας τους.\nΜόλις τελειώσει η παρτίδα σας, επιστρέφετε στο δωμάτιο αναμονής του τουρνουά όπου θα κληρωθείτε με παίκτη κοντά στην κατάταξή σας. Αυτό εξασφαλίζει μικρό χρόνο αναμονής, ωστόσο μπορεί να μην αντιμετωπίσετε όλους τους άλλους παίκτες στο πρωτάθλημα.\nΠαίξτε γρήγορα και επιστρέψτε στο δωμάτιο αναμονής για να παίξετε περισσότερες παρτίδες και να κερδίσετε περισσότερους πόντους.';
+
+  @override
+  String get arenaHowDoesItEnd => 'Πως τελειώνει;';
+
+  @override
+  String get arenaHowDoesItEndAnswer => 'Το τουρνουά έχει ρολόι αντίστροφης μέτρησης. Όταν αυτό φτάσει στο μηδέν, η βαθμολογίες των παικτών κλειδώνουν, και αναδεικνύεται ο νικητής. Οι παρτίδες σε εξέλιξη πρέπει να ολοκληρωθούν, ωστόσο το αποτέλεσμα τους δεν μετράει για το πρωτάθλημα.';
+
+  @override
+  String get arenaOtherRules => 'Άλλοι σημαντικοί κανόνες';
+
+  @override
+  String get arenaThereIsACountdown => 'Υπάρχει αντίστροφη μέτρηση για την πρώτη κίνηση. Εάν δεν κάνετε την πρώτη σας κίνηση μέσα σε αυτό το χρονικό διάστημα θα χάσετε την παρτίδα.';
+
+  @override
+  String get arenaThisIsPrivate => 'Αυτός ο διαγωνισμός είναι ιδιωτικός';
+
+  @override
+  String arenaShareUrl(String param) {
+    return 'Μοιραστείτε αυτήν την διεύθυνση URL για να συμμετάσχουν άλλα άτομα: $param';
+  }
+
+  @override
+  String arenaDrawStreakStandard(String param) {
+    return 'Συνεχόμενες ισοπαλίες: Όταν ένας παίκτης έχει συνεχόμενες ισοπαλίες στην αρένα, είτε μόνο η πρώτη θα δώσει ένα πόντο, είτε ισοπαλίες που διήρκησαν πάνω από $param κινήσεις. Οι συνεχόμενες ισοπαλίες σταματούν να θεωρούνται συνεχόμενες μόνο εφόσον τις ακολουθήσει μία νίκη και όχι μία ήττα ή ισοπαλία.';
+  }
+
+  @override
+  String get arenaDrawStreakVariants => 'Ο ελάχιστος αριθμός των κινήσεων που απαιτούνται στα ισόπαλα παιχνίδια για να δώσουν πόντους εξαρτάται από την κάθε παραλλαγή, όπως φαίνεται και στον παρακάτω πίνακα.';
+
+  @override
+  String get arenaVariant => 'Εκδοχή';
+
+  @override
+  String get arenaMinimumGameLength => 'Ελάχιστος αριθμός κινήσεων';
+
+  @override
+  String get arenaHistory => 'Ιστορικό αρένας';
+
+  @override
+  String get arenaNewTeamBattle => 'Νέα ομαδική μάχη';
+
+  @override
+  String get arenaCustomStartDate => 'Προσαρμοσμένη ημερομηνία έναρξης';
+
+  @override
+  String get arenaCustomStartDateHelp => 'Στην τοπική ζώνη ώρας σας. Αυτό υπερισχύει της ρύθμισης \"Χρόνος προτού ξεκινήσει το πρωτάθλημα\"';
+
+  @override
+  String get arenaAllowBerserk => 'Να επιτρέπεται το Berserk';
+
+  @override
+  String get arenaAllowBerserkHelp => 'Να επιτρέπεται στους παίκτες να μειώσουν τον χρόνο στο ρολόι τους κατά το ήμισυ για να κερδίσουν έναν επιπλέον πόντο';
+
+  @override
+  String get arenaAllowChatHelp => 'Να επιτρέπεται στους παίκτες να συζητούν σε δωμάτιο συνομιλίας';
+
+  @override
+  String get arenaArenaStreaks => 'Arena streaks';
+
+  @override
+  String get arenaArenaStreaksHelp => 'Μετά από 2 νίκες, επιπλέον διαδοχικές νίκες σας 4 πόντους αντί για 2.';
+
+  @override
+  String get arenaNoBerserkAllowed => 'Δεν επιτρέπεται το berserk';
+
+  @override
+  String get arenaNoArenaStreaks => 'Χωρίς σερί νικών Αρένας';
+
+  @override
+  String get arenaAveragePerformance => 'Μέση επίδοση';
+
+  @override
+  String get arenaAverageScore => 'Μέση βαθμολογία';
+
+  @override
+  String get arenaMyTournaments => 'Τα τουρνουά μου';
+
+  @override
+  String get arenaEditTournament => 'Επεξεργασία τουρνουά';
+
+  @override
+  String get arenaEditTeamBattle => 'Επεξεργασία ομαδικής μάχης';
+
+  @override
+  String get arenaDefender => 'Υπερασπιστής';
+
+  @override
+  String get arenaPickYourTeam => 'Διαλέξτε την ομάδα σας';
+
+  @override
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Ποια ομάδα θα αντιπροσωπεύσετε σε αυτή τη μάχη;';
+
+  @override
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Πρέπει να μπείτε σε μία από αυτές τις ομάδες για να συμμετάσχετε!';
+
+  @override
+  String get arenaCreated => 'Δημιουργήθηκε';
+
+  @override
+  String get arenaRecentlyPlayed => 'Παίχτηκαν πρόσφατα';
+
+  @override
+  String get arenaBestResults => 'Καλύτερα αποτελέσματα';
+
+  @override
+  String get arenaTournamentStats => 'Στατιστικά τουρνουά';
+
+  @override
+  String get arenaRankAvgHelp => 'Ο μέσος όρος κατάταξης είναι ένα ποσοστό της κατάταξης σας. Χαμηλότερο είναι καλύτερο.\n\nΓια παράδειγμα, είστε τρίτος σε ένα τουρνουά 100 παικτών = 3%. Όντας δέκατος σε ένα τουρνουά 1000 παικτών = 1%.';
+
+  @override
+  String get arenaMedians => 'διάμεσες τιμές';
+
+  @override
+  String arenaAllAveragesAreX(String param) {
+    return 'Όλοι οι μέσοι όροι σε αυτήν τη σελίδα είναι $param.';
+  }
+
+  @override
+  String get arenaTotal => 'Σύνολο';
+
+  @override
+  String get arenaPointsAvg => 'Μέσος όρος πόντων';
+
+  @override
+  String get arenaPointsSum => 'Σύνολο πόντων';
+
+  @override
+  String get arenaRankAvg => 'Μέσος όρος κατάταξης';
+
+  @override
+  String get arenaTournamentWinners => 'Νικητές πρωταθλήματος';
+
+  @override
+  String get arenaTournamentShields => 'Πρωταθλήματα Ασπίδας';
+
+  @override
+  String get arenaOnlyTitled => 'Μόνο τιτλούχοι παίκτες';
+
+  @override
+  String get arenaOnlyTitledHelp => 'Χρειάζεται ένας επίσημος τίτλος για συμμετοχή στο πρωτάθλημα';
+
+  @override
+  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+
+  @override
+  String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String arenaDrawingWithinNbMoves(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Η συμφωνία ισοπαλίας στις πρώτες $count κινήσεις δε δίνει πόντους σε κανέναν παίκτη.',
+      one: 'Η συμφωνία ισοπαλίας στην πρώτη $count κίνηση δε δίνει πόντους σε κανέναν παίκτη.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String arenaViewAllXTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Δείτε όλες τις $count ομάδες',
+      one: 'Δείτε την ομάδα',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get broadcastBroadcasts => 'Αναμεταδόσεις';
 
   @override
@@ -596,12 +810,26 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastSinceHideResults => 'Εφόσον επιλέξατε να κρύψετε τα αποτελέσματα, όλες οι σκακιέρες προεπισκόπησης είναι κενές ώστε να αποφευχθούν σπόιλερς.';
 
   @override
+  String get broadcastLiveboard => 'Live board';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count αναμεταδόσεις',
       one: '$count αναμετάδοση',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String broadcastNbViewers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viewers',
+      one: '$count viewer',
     );
     return '$_temp0';
   }
@@ -2086,6 +2314,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get claimADraw => 'Απαίτηση ισοπαλίας';
 
   @override
+  String get drawClaimed => 'Draw claimed';
+
+  @override
   String get offerDraw => 'Προσφορά ισοπαλίας';
 
   @override
@@ -2787,7 +3018,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get createdBy => 'Δημιουργήθηκε από';
 
   @override
-  String get tournamentIsStarting => 'Το τουρνουά αρχίζει';
+  String get startingIn => 'Starting in';
 
   @override
   String get tournamentPairingsAreNowClosed => 'Οι αντιστοιχίσεις του διαγωνισμού έχουν κλείσει.';
@@ -2832,11 +3063,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get draws => 'Ισοπαλίες';
-
-  @override
-  String nextXTournament(String param) {
-    return 'Επόμενο τουρνουά $param:';
-  }
 
   @override
   String get averageOpponent => 'Μέση βαθμολογία αντιπάλων';
@@ -3560,6 +3786,17 @@ class AppLocalizationsEl extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Εάν δεν μπορείτε να δείτε το μήνυμα ηλ. ταχυδρομείου, ελέγξτε άλλες θέσεις που θα μπορούσε να είναι, όπως στα διαγραμμένα, ανεπιθύμητη αλληλογραφία, κοινωνικά, ή σε άλλους φακέλους.';
 
   @override
+  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+
+  @override
+  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+
+  @override
+  String verifyYourAddress(String param) {
+    return 'Verify that $param is your email address';
+  }
+
+  @override
   String weHaveSentYouAnEmailTo(String param) {
     return 'Έχουμε στείλει ένα μήνυμα ηλ. ταχυδρομείου στο $param. Κάντε κλικ τον σύνδεσμο στο ηλ. ταχυδρομείο για να επαναφέρετε τον κωδικό πρόσβασής σας.';
   }
@@ -3588,6 +3825,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get downloadImported => 'Λήψη εισαγόμενου';
+
+  @override
+  String get downloadAllGames => 'Download all games';
 
   @override
   String get crosstable => 'Αποτελέσματα';
@@ -3694,6 +3934,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get language => 'Γλώσσα';
+
+  @override
+  String get allLanguages => 'All languages';
 
   @override
   String get background => 'Φόντο';
@@ -5128,16 +5371,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get studyShowEvalBar => 'Μπάρες αξιολόγησης';
 
   @override
-  String get studyFirst => 'Πρώτη';
-
-  @override
-  String get studyPrevious => 'Προηγούμενη';
-
-  @override
   String get studyNext => 'Επόμενη';
-
-  @override
-  String get studyLast => 'Τελευταία';
 
   @override
   String get studyShareAndExport => 'Διαμοιρασμός & εξαγωγή';
@@ -5470,6 +5704,105 @@ class AppLocalizationsEl extends AppLocalizations {
   String studyPerPage(String param) {
     return '$param ανά σελίδα';
   }
+
+  @override
+  String get studyGetTheTour => 'Need help? Get the tour!';
+
+  @override
+  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+
+  @override
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+
+  @override
+  String get studySharedAndSaveTitle => 'Shared and saved';
+
+  @override
+  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+
+  @override
+  String get studyStudyMembersTitle => 'Study members';
+
+  @override
+  String studyStudyMembersText(String param1, String param2) {
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+  }
+
+  @override
+  String studyAddMembersText(String param) {
+    return 'Click the $param button.<br>Then decide who can contribute or not.';
+  }
+
+  @override
+  String get studyStudyChaptersTitle => 'Study chapters';
+
+  @override
+  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+
+  @override
+  String get studyCommentPositionTitle => 'Comment on a position';
+
+  @override
+  String studyCommentPositionText(String param) {
+    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+  }
+
+  @override
+  String get studyAnnotatePositionTitle => 'Annotate a position';
+
+  @override
+  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+
+  @override
+  String get studyConclusionTitle => 'Thanks for your time';
+
+  @override
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+
+  @override
+  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+
+  @override
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+
+  @override
+  String get studyFromInitialPositionTitle => 'From initial position';
+
+  @override
+  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+
+  @override
+  String get studyCustomPositionTitle => 'Custom position';
+
+  @override
+  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+
+  @override
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+
+  @override
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyFromFenStringTitle => 'From a FEN string';
+
+  @override
+  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+
+  @override
+  String get studyFromPgnGameTitle => 'From a PGN game';
+
+  @override
+  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+
+  @override
+  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+
+  @override
+  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+
+  @override
+  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {

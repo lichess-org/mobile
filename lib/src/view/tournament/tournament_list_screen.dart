@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -121,7 +122,10 @@ class _TournamentListBody extends StatelessWidget {
       shrinkWrap: true,
       itemCount: tournamentListItems.length,
       separatorBuilder:
-          (context, index) => const PlatformDivider(height: 1, cupertinoHasLeading: true),
+          (context, index) =>
+              Theme.of(context).platform == TargetPlatform.iOS
+                  ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                  : const SizedBox.shrink(),
       itemBuilder: (context, index) => tournamentListItems[index],
     );
   }
@@ -197,7 +201,7 @@ class _TournamentListItem extends StatelessWidget {
           ),
         ],
       ),
-      onTap: () {},
+      onTap: () => Navigator.of(context).push(TournamentScreen.buildRoute(context, tournament.id)),
     );
   }
 }

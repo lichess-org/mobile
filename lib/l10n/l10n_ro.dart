@@ -372,6 +372,222 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String get arenaArena => 'Arena';
+
+  @override
+  String get arenaArenaTournaments => 'Turnee de tip arenă';
+
+  @override
+  String get arenaIsItRated => 'Este evaluat?';
+
+  @override
+  String get arenaWillBeNotified => 'Vei fi notificat când competiția începe, deci este în regulă să joci în altă filă în timp ce aștepți.';
+
+  @override
+  String get arenaIsRated => 'Această competiție este evaluată și-ți va afecta scorul.';
+
+  @override
+  String get arenaIsNotRated => 'Această competiție *nu* este evaluată și *nu* îți va afecta scorul.';
+
+  @override
+  String get arenaSomeRated => 'Unele competiții sunt evaluate și-ți vor afecta scorul.';
+
+  @override
+  String get arenaHowAreScoresCalculated => 'Cum e calculat scorul?';
+
+  @override
+  String get arenaHowAreScoresCalculatedAnswer => 'Un câștig valorează 2 puncte, o remiză: 1 punct, iar o înfrângere nu valorează nimic.\nDacă câștigi două partide consecutiv, punctele vor fi dublate pentru următoarele partide și sunt reprezentate de o pictogramă în flăcări.\nUrmătoarele partide vor valora punctaj dublu până se va întrerupe șirul de câștiguri consecutive.\nAsta înseamnă că: un câștig va valora 4 puncte, o remiză: 2 puncte, iar o înfrângere niciun punct.\n\nDe exemplu, două câștiguri urmate de o remiză vor valora 6 puncte: 2 + 2 + (2 x 1)';
+
+  @override
+  String get arenaBerserk => 'Arena Berserk';
+
+  @override
+  String get arenaBerserkAnswer => 'Când un jucător apasă pe butonul Berserk la începutul meciului, i se va înjumătăți timpul, dar câștigul va valora un punct în plus.\n\nApăsând pe butonul Berserk, nu vei beneficia de incrementarea timpului. (1+2 este o excepție, va fi 1+0)\n\nModul Berserk nu este valabil pentru partidele cu timp inițial zero (0+1, 0+2).\n\nModul Berserk îți va oferi un punct în plus doar dacă vei juca cel puțin 7 mutări în joc.';
+
+  @override
+  String get arenaHowIsTheWinnerDecided => 'Cum este decis câștigătorul?';
+
+  @override
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Jucătorul(-ii) care a(u) obținut cele mai multe puncte la încheierea timpului stabilit pentru turneu va fi declarat câștigător.\n\nCând doi sau mai mulți jucători au același număr de puncte, departajarea se va face pe baza perfomanței.';
+
+  @override
+  String get arenaHowDoesPairingWork => 'Cum funcționează potrivirea jucătorilor?';
+
+  @override
+  String get arenaHowDoesPairingWorkAnswer => 'La începutul competiției, jucătorii sunt asociați în funcție de scorul lor.\nDe îndată ce termini un meci și te întorci la lobby-ul competiției, vei fi asociat cu un jucător al cărui scor este apropiat de scorul tău. Aceasta asigură un timp de așteptare minim, totuși este posibil să nu joci cu toți jucătorii din competiție.\nJoacă rapid și întoarce-te la lobby pentru a juca mai multe partide și pentru a câștiga mai multe puncte.';
+
+  @override
+  String get arenaHowDoesItEnd => 'Cum se termină?';
+
+  @override
+  String get arenaHowDoesItEndAnswer => 'Competiția are un o limită de timp. Când ajunge la zero, scorurile din competiție sunt înghețate și câștigătorul este anunțat. Meciurile în desfășurare trebuie terminate, deși nu sunt luate în considerare pentru competiție.';
+
+  @override
+  String get arenaOtherRules => 'Alte reguli importante';
+
+  @override
+  String get arenaThereIsACountdown => 'Există o numărătoare inversă pentru prima dvs. mutare. Eșuarea efectuării unei mutări în această limită de timp va duce la abandonarea meciului.';
+
+  @override
+  String get arenaThisIsPrivate => 'Aceasta este o competiție privată';
+
+  @override
+  String arenaShareUrl(String param) {
+    return 'Pentru a distribui, folosiți acest URL: $param';
+  }
+
+  @override
+  String arenaDrawStreakStandard(String param) {
+    return 'Serie de remize consecutive: Când un jucător are remize consecutive într-un turneu de tip arenă, va primi un punct doar pentru prima remiză este punctată, precum și pentru remizele în partide standard care au mai mult de $param mutări. Seria de remize poate fi întreruptă doar de o victorie, nu de o înfrângere sau remiză.';
+  }
+
+  @override
+  String get arenaDrawStreakVariants => 'Lungimea minimă a jocului pentru a obține puncte în cazul remizelor diferă în funcție de variantă. Tabelul de mai jos enumeră pragul pentru fiecare variantă.';
+
+  @override
+  String get arenaVariant => 'Variantă';
+
+  @override
+  String get arenaMinimumGameLength => 'Lungimea minimă a jocului';
+
+  @override
+  String get arenaHistory => 'Istoricul turneelor de tip arenă';
+
+  @override
+  String get arenaNewTeamBattle => 'Luptă în echipă';
+
+  @override
+  String get arenaCustomStartDate => 'Data de început personalizată';
+
+  @override
+  String get arenaCustomStartDateHelp => 'În fusul orar local. Acest lucru înlocuiește setarea \"Timp înainte de începerea turneului\"';
+
+  @override
+  String get arenaAllowBerserk => 'Permite Berserk';
+
+  @override
+  String get arenaAllowBerserkHelp => 'Lăsați jucătorii să își înjumătățească timpul pentru a obține un punct în plus';
+
+  @override
+  String get arenaAllowChatHelp => 'Permiteți jucătorilor să discute într-o cameră de chat';
+
+  @override
+  String get arenaArenaStreaks => 'Serie de victorii in arenă';
+
+  @override
+  String get arenaArenaStreaksHelp => 'După 2 partide câştigate, câştigurile consecutive aduc 4 puncte în loc de 2.';
+
+  @override
+  String get arenaNoBerserkAllowed => 'Niciun Berserk permis';
+
+  @override
+  String get arenaNoArenaStreaks => 'Nicio serie de victorii în arenă';
+
+  @override
+  String get arenaAveragePerformance => 'Performanță medie';
+
+  @override
+  String get arenaAverageScore => 'Scor mediu';
+
+  @override
+  String get arenaMyTournaments => 'Turneele mele';
+
+  @override
+  String get arenaEditTournament => 'Editare turneu';
+
+  @override
+  String get arenaEditTeamBattle => 'Editare bătălie echipă';
+
+  @override
+  String get arenaDefender => 'Apărător';
+
+  @override
+  String get arenaPickYourTeam => 'Alege-ți echipa';
+
+  @override
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Ce echipă vei reprezenta în această bătălie?';
+
+  @override
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Trebuie să te alături uneia dintre aceste echipe pentru a participa!';
+
+  @override
+  String get arenaCreated => 'Creat';
+
+  @override
+  String get arenaRecentlyPlayed => 'Jucate recent';
+
+  @override
+  String get arenaBestResults => 'Cele mai bune rezultate';
+
+  @override
+  String get arenaTournamentStats => 'Statistici turneu';
+
+  @override
+  String get arenaRankAvgHelp => 'Media rangului este un procent din clasamentul tău. Mai mic e mai bine.\n\nDe exemplu, fiind clasat locul 3 într-un turneu de 100 de jucători = 3%. Find clasat locul 10 într-un turneu de 1000 de jucători = 1%.';
+
+  @override
+  String get arenaMedians => 'mediane';
+
+  @override
+  String arenaAllAveragesAreX(String param) {
+    return 'Toate mediile de pe această pagină sunt $param.';
+  }
+
+  @override
+  String get arenaTotal => 'Total';
+
+  @override
+  String get arenaPointsAvg => 'Medie puncte';
+
+  @override
+  String get arenaPointsSum => 'Sumă puncte';
+
+  @override
+  String get arenaRankAvg => 'Media rangului';
+
+  @override
+  String get arenaTournamentWinners => 'Câștigători de turnee';
+
+  @override
+  String get arenaTournamentShields => 'Scut turneu';
+
+  @override
+  String get arenaOnlyTitled => 'Doar jucători titrați';
+
+  @override
+  String get arenaOnlyTitledHelp => 'Solicitați un titlu oficial pentru a se alătura turneului';
+
+  @override
+  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+
+  @override
+  String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String arenaDrawingWithinNbMoves(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Efectuarea unei remize în primele $count mutări nu va aduce niciun punct niciunui jucător.',
+      few: 'Efectuarea unei remize în primele $count mutări nu va aduce niciun punct niciunui jucător.',
+      one: 'Efectuarea unei remize în prima $count mutare nu va aduce niciun punct niciunui jucător.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String arenaViewAllXTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Vezi toate cele $count de echipe',
+      few: 'Vezi toate cele $count echipe',
+      one: 'Vezi echipa',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get broadcastBroadcasts => 'Transmisiuni';
 
   @override
@@ -614,6 +830,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastSinceHideResults => 'Din moment ce ai ales să ascunzi rezultatele, toate tablele de previzualizare sunt goale pentru a evita spoilerele.';
 
   @override
+  String get broadcastLiveboard => 'Live board';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -621,6 +840,17 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de transmisiuni',
       few: '$count transmisiuni',
       one: '$count transmisiune',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String broadcastNbViewers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viewers',
+      one: '$count viewer',
     );
     return '$_temp0';
   }
@@ -2110,6 +2340,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get claimADraw => 'Cere remiză';
 
   @override
+  String get drawClaimed => 'Draw claimed';
+
+  @override
   String get offerDraw => 'Propune remiză';
 
   @override
@@ -2811,7 +3044,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get createdBy => 'Creat de';
 
   @override
-  String get tournamentIsStarting => 'Turneul începe';
+  String get startingIn => 'Starting in';
 
   @override
   String get tournamentPairingsAreNowClosed => 'Cuplarea partenerilor de turneu s-a încheiat.';
@@ -2856,11 +3089,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get draws => 'Remize';
-
-  @override
-  String nextXTournament(String param) {
-    return 'Următorul turneu $param:';
-  }
 
   @override
   String get averageOpponent => 'Cota medie a adversarilor';
@@ -3584,6 +3812,17 @@ class AppLocalizationsRo extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Dacă nu vezi email-ul trimis, verifică și în alte locuri, cum ar fi folderul de spam, gunoi, mesaje sociale sau alte foldere.';
 
   @override
+  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+
+  @override
+  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+
+  @override
+  String verifyYourAddress(String param) {
+    return 'Verify that $param is your email address';
+  }
+
+  @override
   String weHaveSentYouAnEmailTo(String param) {
     return 'Am trimis un email la $param. Dă click pe link-ul trimis în acel email pentru a-ți reseta parola.';
   }
@@ -3612,6 +3851,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get downloadImported => 'Descarcă importat';
+
+  @override
+  String get downloadAllGames => 'Download all games';
 
   @override
   String get crosstable => 'Tabel de scoruri';
@@ -3718,6 +3960,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get language => 'Limbă';
+
+  @override
+  String get allLanguages => 'All languages';
 
   @override
   String get background => 'Fundal';
@@ -5199,16 +5444,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyShowEvalBar => 'Bară de evaluare';
 
   @override
-  String get studyFirst => 'Prima';
-
-  @override
-  String get studyPrevious => 'Precedentă';
-
-  @override
   String get studyNext => 'Următoarea';
-
-  @override
-  String get studyLast => 'Ultima';
 
   @override
   String get studyShareAndExport => 'Împărtășește & exportă';
@@ -5541,6 +5777,105 @@ class AppLocalizationsRo extends AppLocalizations {
   String studyPerPage(String param) {
     return '$param pe pagină';
   }
+
+  @override
+  String get studyGetTheTour => 'Need help? Get the tour!';
+
+  @override
+  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+
+  @override
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+
+  @override
+  String get studySharedAndSaveTitle => 'Shared and saved';
+
+  @override
+  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+
+  @override
+  String get studyStudyMembersTitle => 'Study members';
+
+  @override
+  String studyStudyMembersText(String param1, String param2) {
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+  }
+
+  @override
+  String studyAddMembersText(String param) {
+    return 'Click the $param button.<br>Then decide who can contribute or not.';
+  }
+
+  @override
+  String get studyStudyChaptersTitle => 'Study chapters';
+
+  @override
+  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+
+  @override
+  String get studyCommentPositionTitle => 'Comment on a position';
+
+  @override
+  String studyCommentPositionText(String param) {
+    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+  }
+
+  @override
+  String get studyAnnotatePositionTitle => 'Annotate a position';
+
+  @override
+  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+
+  @override
+  String get studyConclusionTitle => 'Thanks for your time';
+
+  @override
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+
+  @override
+  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+
+  @override
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+
+  @override
+  String get studyFromInitialPositionTitle => 'From initial position';
+
+  @override
+  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+
+  @override
+  String get studyCustomPositionTitle => 'Custom position';
+
+  @override
+  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+
+  @override
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+
+  @override
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyFromFenStringTitle => 'From a FEN string';
+
+  @override
+  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+
+  @override
+  String get studyFromPgnGameTitle => 'From a PGN game';
+
+  @override
+  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+
+  @override
+  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+
+  @override
+  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+
+  @override
+  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {

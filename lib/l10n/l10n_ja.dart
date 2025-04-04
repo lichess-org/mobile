@@ -336,6 +336,218 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get arenaArena => 'アリーナ';
+
+  @override
+  String get arenaArenaTournaments => 'アリーナ トーナメント';
+
+  @override
+  String get arenaIsItRated => 'レート戦ですか？';
+
+  @override
+  String get arenaWillBeNotified => 'トーナメントが始まると通知が来るので、それまで別のタブで対局していても大丈夫です。';
+
+  @override
+  String get arenaIsRated => 'このトーナメントはレート戦で、レーティングが変動します。';
+
+  @override
+  String get arenaIsNotRated => 'このトーナメントはレート戦ではなく、レーティングは変動しません。';
+
+  @override
+  String get arenaSomeRated => '一部のトーナメントはレート戦で、レーティングが変動します。';
+
+  @override
+  String get arenaHowAreScoresCalculated => 'スコアの計算方法は？';
+
+  @override
+  String get arenaHowAreScoresCalculatedAnswer => '基本は勝ちが 2 点、ドローが 1 点、負けが 0 点です。\n2 連勝すると次のゲームから「2倍ボーナス」となり、炎のアイコンが表示されます。\n連勝後のゲームは、連勝が途切れるまで基本の点が 2 倍になります。つまり勝ちが 4 点、ドローが 2 点です。\nたとえば 2 連勝の後ドローなら合計は 2 + 2 + (2 x 1) = 6 点になります。';
+
+  @override
+  String get arenaBerserk => 'バーサーク（Berserk）';
+
+  @override
+  String get arenaBerserkAnswer => 'ゲーム開始時に時計の横の「バーサーク (berserk) 」ボタンをクリックすると、持時間が半分に減る代わりに勝った時に 1 点のボーナス点がもらえます。\n追加秒のある場合は追加秒もなくなります（ただし 1+2 は例外で 1+0 になります）。\n持時間が「0分+追加秒」の場合（0+1、0+2）はバーサークできません。\nバーサーク勝ちのボーナス点を得るには少なくとも 7 手指す必要があります。';
+
+  @override
+  String get arenaHowIsTheWinnerDecided => '優勝者の決め方は？';
+
+  @override
+  String get arenaHowIsTheWinnerDecidedAnswer => 'トーナメントの予定終了時刻の時点でもっともポイント数の多いプレイヤーが優勝です。';
+
+  @override
+  String get arenaHowDoesPairingWork => '対局の組み合わせはどう決まりますか？';
+
+  @override
+  String get arenaHowDoesPairingWorkAnswer => 'トーナメントの最初はレーティングによって組み合わせが決まります。対局が終わったらすぐにトーナメント・ロビーに戻ってください。間もなく順位の近い相手と対局の組み合わせが決まります。これによって待ち時間は少なくなりますが、ただし他のすべての参加者とは対局しないかもしれません。\n早く指して早くロビーに戻れば、それだけ対局数が増えてポイントも増えるでしょう。';
+
+  @override
+  String get arenaHowDoesItEnd => '終了のしかたは？';
+
+  @override
+  String get arenaHowDoesItEndAnswer => 'トーナメントには時間制限があります。残り時間がゼロになるとその時点で順位が確定し、優勝者が発表されます。この時に進行中のゲームは完了する必要がありますが、トーナメントの結果には算入しません。';
+
+  @override
+  String get arenaOtherRules => 'その他のルール';
+
+  @override
+  String get arenaThereIsACountdown => '初手にはカウントダウン・タイマーがあります。制限時間内に初手を指さないと不戦敗になります。';
+
+  @override
+  String get arenaThisIsPrivate => 'これはプライベートのトーナメントです';
+
+  @override
+  String arenaShareUrl(String param) {
+    return '誰もが参加できるようにシェアして: $param';
+  }
+
+  @override
+  String arenaDrawStreakStandard(String param) {
+    return '連続ドロー：ドローが続いた場合、ポイントが得られるのは最初のドローと、その後はスタンダード持時間で手数が $param 手を超えたゲームだけです。連続ドローが途切れるのは勝った時だけで、負けでは途切れたことになりません。';
+  }
+
+  @override
+  String get arenaDrawStreakVariants => 'ドローでポイントが得られる手数の下限はバリアントごとに違います。下の表をご覧ください。';
+
+  @override
+  String get arenaVariant => 'バリアント';
+
+  @override
+  String get arenaMinimumGameLength => '最小手数';
+
+  @override
+  String get arenaHistory => '過去のアリーナ';
+
+  @override
+  String get arenaNewTeamBattle => '新しいチームバトル';
+
+  @override
+  String get arenaCustomStartDate => '開始日を指定';
+
+  @override
+  String get arenaCustomStartDateHelp => '自分のタイムゾーンでの日時。これは「トーナメント開始時刻」の設定より優先されます。';
+
+  @override
+  String get arenaAllowBerserk => 'バーサークあり';
+
+  @override
+  String get arenaAllowBerserkHelp => '持時間半減で 1 ポイントボーナスを認める';
+
+  @override
+  String get arenaAllowChatHelp => 'チャットルームでの会話を認める';
+
+  @override
+  String get arenaArenaStreaks => '連勝ボーナスあり';
+
+  @override
+  String get arenaArenaStreaksHelp => '2 連勝すると以降の勝ちは 2 ではなく 4 ポイントになる。';
+
+  @override
+  String get arenaNoBerserkAllowed => 'バーサークなし';
+
+  @override
+  String get arenaNoArenaStreaks => '連勝ボーナスなし';
+
+  @override
+  String get arenaAveragePerformance => '平均パフォーマンス';
+
+  @override
+  String get arenaAverageScore => '平均スコア';
+
+  @override
+  String get arenaMyTournaments => '作成したトーナメント';
+
+  @override
+  String get arenaEditTournament => 'トーナメントを編集';
+
+  @override
+  String get arenaEditTeamBattle => 'チームバトルを編集';
+
+  @override
+  String get arenaDefender => '保持者';
+
+  @override
+  String get arenaPickYourTeam => 'チームを選択';
+
+  @override
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'このバトルでどのチームに所属しますか？';
+
+  @override
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => '参加するにはどれかのチームに入ってください！';
+
+  @override
+  String get arenaCreated => '自分で作成';
+
+  @override
+  String get arenaRecentlyPlayed => '最近に参加';
+
+  @override
+  String get arenaBestResults => '成績上位';
+
+  @override
+  String get arenaTournamentStats => 'トーナメントの統計';
+
+  @override
+  String get arenaRankAvgHelp => '平均順位はあなたの順位の百分位です。低いほど優秀です。\n\nたとえば 100 人参加のトーナメントで 3 位なら 3 %、 1000 人参加のトーナメントで 10 位なら 1 %となります。';
+
+  @override
+  String get arenaMedians => '中央値';
+
+  @override
+  String arenaAllAveragesAreX(String param) {
+    return 'このページで言う「平均」はすべて $param です。';
+  }
+
+  @override
+  String get arenaTotal => '合計';
+
+  @override
+  String get arenaPointsAvg => '平均ポイント数';
+
+  @override
+  String get arenaPointsSum => '累計ポイント数';
+
+  @override
+  String get arenaRankAvg => '平均順位';
+
+  @override
+  String get arenaTournamentWinners => 'トーナメント優勝者';
+
+  @override
+  String get arenaTournamentShields => 'トーナメント・シールド';
+
+  @override
+  String get arenaOnlyTitled => '公式タイトル保持者のみ';
+
+  @override
+  String get arenaOnlyTitledHelp => '参加には公式タイトルの保持を必須とする';
+
+  @override
+  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+
+  @override
+  String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String arenaDrawingWithinNbMoves(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 手以内のドローでは双方ともポイントが得られません。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String arenaViewAllXTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count チームを表示',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get broadcastBroadcasts => 'イベント中継';
 
   @override
@@ -578,11 +790,25 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastSinceHideResults => '結果を非表示にするよう選択したため、結果が見えないようプレビューボードはすべて空白です。';
 
   @override
+  String get broadcastLiveboard => 'Live board';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count ブロードキャスト',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String broadcastNbViewers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viewers',
+      one: '$count viewer',
     );
     return '$_temp0';
   }
@@ -2062,6 +2288,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get claimADraw => '引き分けを申し立てる';
 
   @override
+  String get drawClaimed => 'Draw claimed';
+
+  @override
   String get offerDraw => '引き分けを提案する';
 
   @override
@@ -2763,7 +2992,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get createdBy => 'トーナメント作成者';
 
   @override
-  String get tournamentIsStarting => 'トーナメント開始';
+  String get startingIn => 'Starting in';
 
   @override
   String get tournamentPairingsAreNowClosed => 'トーナメントの対局の組み合わせは終了しました。';
@@ -2808,11 +3037,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get draws => 'ドロー';
-
-  @override
-  String nextXTournament(String param) {
-    return '次の $param トーナメント:';
-  }
 
   @override
   String get averageOpponent => '対局相手の平均';
@@ -3536,6 +3760,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'メールが見つからない場合は、他の場所（スパムフォルダなど）を確認してください。';
 
   @override
+  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+
+  @override
+  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+
+  @override
+  String verifyYourAddress(String param) {
+    return 'Verify that $param is your email address';
+  }
+
+  @override
   String weHaveSentYouAnEmailTo(String param) {
     return '$paramにメールを送信しました。リンクをクリックしてパスワードの変更を完了してください。';
   }
@@ -3564,6 +3799,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get downloadImported => 'インポート分のダウンロード';
+
+  @override
+  String get downloadAllGames => 'Download all games';
 
   @override
   String get crosstable => '成績表';
@@ -3670,6 +3908,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get language => '言語';
+
+  @override
+  String get allLanguages => 'All languages';
 
   @override
   String get background => '背景';
@@ -5057,16 +5298,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyShowEvalBar => '評価値バー';
 
   @override
-  String get studyFirst => '最初';
-
-  @override
-  String get studyPrevious => '前';
-
-  @override
   String get studyNext => '次';
-
-  @override
-  String get studyLast => '最後';
 
   @override
   String get studyShareAndExport => '共有とエクスポート';
@@ -5399,6 +5631,105 @@ class AppLocalizationsJa extends AppLocalizations {
   String studyPerPage(String param) {
     return '$param 件/ページ';
   }
+
+  @override
+  String get studyGetTheTour => 'Need help? Get the tour!';
+
+  @override
+  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+
+  @override
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+
+  @override
+  String get studySharedAndSaveTitle => 'Shared and saved';
+
+  @override
+  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+
+  @override
+  String get studyStudyMembersTitle => 'Study members';
+
+  @override
+  String studyStudyMembersText(String param1, String param2) {
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+  }
+
+  @override
+  String studyAddMembersText(String param) {
+    return 'Click the $param button.<br>Then decide who can contribute or not.';
+  }
+
+  @override
+  String get studyStudyChaptersTitle => 'Study chapters';
+
+  @override
+  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+
+  @override
+  String get studyCommentPositionTitle => 'Comment on a position';
+
+  @override
+  String studyCommentPositionText(String param) {
+    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+  }
+
+  @override
+  String get studyAnnotatePositionTitle => 'Annotate a position';
+
+  @override
+  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+
+  @override
+  String get studyConclusionTitle => 'Thanks for your time';
+
+  @override
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+
+  @override
+  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+
+  @override
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+
+  @override
+  String get studyFromInitialPositionTitle => 'From initial position';
+
+  @override
+  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+
+  @override
+  String get studyCustomPositionTitle => 'Custom position';
+
+  @override
+  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+
+  @override
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+
+  @override
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyFromFenStringTitle => 'From a FEN string';
+
+  @override
+  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+
+  @override
+  String get studyFromPgnGameTitle => 'From a PGN game';
+
+  @override
+  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+
+  @override
+  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+
+  @override
+  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+
+  @override
+  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {

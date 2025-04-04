@@ -354,6 +354,220 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
+  String get arenaArena => 'Areno';
+
+  @override
+  String get arenaArenaTournaments => 'Arenaj turniroj';
+
+  @override
+  String get arenaIsItRated => 'Ĉu ĝi estas taksita?';
+
+  @override
+  String get arenaWillBeNotified => 'Vi estos sciigita kiam la turniro komenciĝas, do ĝi estas sekura ludi en alia langeto dum ĝi atendas.';
+
+  @override
+  String get arenaIsRated => 'Ĉi tiu turniro rangas kaj influos vian rangon.';
+
+  @override
+  String get arenaIsNotRated => 'Ĉi tiu turniro estas *ne* rangita kaj volos *ne* influos vian rangon.';
+
+  @override
+  String get arenaSomeRated => 'Luj turniroj rangas kaj influos vian rangon.';
+
+  @override
+  String get arenaHowAreScoresCalculated => 'Kiel lichess kalkulas poentarojn?';
+
+  @override
+  String get arenaHowAreScoresCalculatedAnswer => 'Venko havas bazan poentaron de 2 poentoj, sorto: 1 punkto, kaj perdo valoras neniujn punktojn.\nSe vi gajnos du ludojn sinsekve vi komencos duoblan punkton, reprezentitan per flamo-ikono.\nLa sekvaj ludoj daŭre valoras duoble punktojn ĝis vi ne gajnos ludon.\nTio estas, venko valoras 4 punktojn, remizo: 2 poentoj, kaj perdo restos valora sen punktoj.\n\nEkzemple, du venkoj sekvataj de remizo valoras 6 poentoj: 2 + 2 + (2 x 1)';
+
+  @override
+  String get arenaBerserk => 'Arena Berserko';
+
+  @override
+  String get arenaBerserkAnswer => 'Kiam ludanto klakas la butonon Berserk ĉe la komenco de la ludo, ili perdas duonon de sia horloĝo, sed la venko valoras unu ekstran punkton de turniro.\n\nIri Berserk en tempo kontroloj kun pliigo ankaŭ nuligas la kreskon. (1 + 2 estas escepto, ĝi donas 1 + 0)\n\nBerserk ne estas disponebla por ludoj kun nulo komenca tempo (0 + 1, 0 + 2).\n\nBerserk nur donas ekstran punkton se vi ludas almenaŭ 7 movojn en la ludo.';
+
+  @override
+  String get arenaHowIsTheWinnerDecided => 'Kiel decidas la venkanto?';
+
+  @override
+  String get arenaHowIsTheWinnerDecidedAnswer => 'La ludanto(j) kun plej multaj poentoj ĉe la konkludo de la tempo de la turniro de la turniro estos anoncita venkanto(j).';
+
+  @override
+  String get arenaHowDoesPairingWork => 'Kiel funkcias la kuniĝo?';
+
+  @override
+  String get arenaHowDoesPairingWorkAnswer => 'Al la komenco de la turniro, ludantoj estas parigitaj laŭ ilia rango.\nTuj kiam vi finos ludon, revenu al la turniro de la turniro: vi tiam parolos kun ludanto proksima al via ranking. Ĉi tio certigas minimuman atendi tempon, tamen vi eble ne alfrontos ĉiujn aliajn ludantojn en la turniro.\nLudu rapide kaj revenu al la vestiblo por ludi pli da ludoj kaj venki pli da punktoj.';
+
+  @override
+  String get arenaHowDoesItEnd => 'Kiel finiĝas?';
+
+  @override
+  String get arenaHowDoesItEndAnswer => 'La turniro havas kalkuleran horloĝon. Kiam ĝi atingas nulon, la turniroj estas frostigitaj, kaj la gajninto estas anoncita. Ludoj en progreso devas esti finitaj, tamen ili ne kalkulas por la turniro.';
+
+  @override
+  String get arenaOtherRules => 'Aliaj gravaj reguloj.';
+
+  @override
+  String get arenaThereIsACountdown => 'Estas retronombrado por via unua movo. Malsukceso fari movon en ĉi tiu tempo forigos la ludon al via kontraŭulo.';
+
+  @override
+  String get arenaThisIsPrivate => 'Tio estas privata turniro';
+
+  @override
+  String arenaShareUrl(String param) {
+    return 'Kunhavigu ĉi tiun URLon por lasi homojn aliĝi: $param';
+  }
+
+  @override
+  String arenaDrawStreakStandard(String param) {
+    return 'Egalvenkaj sinsekvoj: Kiam ludanto sinsekve egalvenkas en areno, nur la unua egalvenko estos rezultigi poenton, aŭ egalvenkoj daŭre pli ol $param movoj en normaj ludaj. La egalvenka sinsekvo povas rompita nur per venko, ne malvenko aŭ egalvenko.';
+  }
+
+  @override
+  String get arenaDrawStreakVariants => 'La minimuma daŭro de egalvenkaj ludoj kiuj aljuĝas poentojn diferencas per variaĵo. La malsupra tabelo listas la komenco de ĉiuj variaĵoj.';
+
+  @override
+  String get arenaVariant => 'Variaĵo';
+
+  @override
+  String get arenaMinimumGameLength => 'Minimuma daŭro de ludoj';
+
+  @override
+  String get arenaHistory => 'Historia Areno';
+
+  @override
+  String get arenaNewTeamBattle => 'Nova teama batalo';
+
+  @override
+  String get arenaCustomStartDate => 'Agorda komenca dato';
+
+  @override
+  String get arenaCustomStartDateHelp => 'En via loka horzono. Ĉi tiu transpasis la \"Tempo ĝis la turniro komeciĝas\" agordon';
+
+  @override
+  String get arenaAllowBerserk => 'Permesi uzi la Berserkon';
+
+  @override
+  String get arenaAllowBerserkHelp => 'Lasi ludantojn duonigi sian horloĝan tempon por gajni ekstran poenton';
+
+  @override
+  String get arenaAllowChatHelp => 'Permesi uzi la turniran babilejon';
+
+  @override
+  String get arenaArenaStreaks => 'Arenaj sinsekvoj';
+
+  @override
+  String get arenaArenaStreaksHelp => 'Poste 2 venkoj, sinsekvaj venkoj donas 4 poentojn anstataŭ 2.';
+
+  @override
+  String get arenaNoBerserkAllowed => 'Berserko ne permesas';
+
+  @override
+  String get arenaNoArenaStreaks => 'Ne Arenaj sinsekvoj';
+
+  @override
+  String get arenaAveragePerformance => 'Meznombra rendimento';
+
+  @override
+  String get arenaAverageScore => 'Averaĝa poentaro';
+
+  @override
+  String get arenaMyTournaments => 'Mia turniroj';
+
+  @override
+  String get arenaEditTournament => 'Redakti turniron';
+
+  @override
+  String get arenaEditTeamBattle => 'Redakti teaman batalon';
+
+  @override
+  String get arenaDefender => 'Defendanto';
+
+  @override
+  String get arenaPickYourTeam => 'Elektu vian teamon';
+
+  @override
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Kiu teamon vi reprezentos dum ĉi tiu batalo?';
+
+  @override
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Vi devas aliĝi al unu el ĉi tiuj teamojn por partopreni!';
+
+  @override
+  String get arenaCreated => 'Kreita';
+
+  @override
+  String get arenaRecentlyPlayed => 'Freŝdate ludita';
+
+  @override
+  String get arenaBestResults => 'Plej bonaj rezultoj';
+
+  @override
+  String get arenaTournamentStats => 'Turniraj statistikoj';
+
+  @override
+  String get arenaRankAvgHelp => 'La mezrango estas elcento de via rango. Ju pli malalta des pli bona.\n\nEkzemple, se vi estas rangita 3 en turniro de 100 ludantoj = 3%. Se vi estas rangita 10 en turniro de 1000 ludantoj = 1%.';
+
+  @override
+  String get arenaMedians => 'medianoj';
+
+  @override
+  String arenaAllAveragesAreX(String param) {
+    return 'Ĉiuj mezumoj sur ĉi tiu paĝo estas $param.';
+  }
+
+  @override
+  String get arenaTotal => 'Totalo';
+
+  @override
+  String get arenaPointsAvg => 'Poenta mezumo';
+
+  @override
+  String get arenaPointsSum => 'Poenta sumo';
+
+  @override
+  String get arenaRankAvg => 'Ranga mezumo';
+
+  @override
+  String get arenaTournamentWinners => 'Turniraj venkintoj';
+
+  @override
+  String get arenaTournamentShields => 'Turniraj ŝildoj';
+
+  @override
+  String get arenaOnlyTitled => 'Nur titolitaj ludantoj';
+
+  @override
+  String get arenaOnlyTitledHelp => 'Necesigi oficialan titolon por aliĝi al la turniro';
+
+  @override
+  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+
+  @override
+  String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String arenaDrawingWithinNbMoves(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Desegni la ludon ene de la unua $count movoj gajnos nek ludanton ajnajn poentojn.',
+      one: 'Desegni la ludon ene de la unua $count movo gajnos nek ludanton ajnajn poentojn.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String arenaViewAllXTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Rigardi ĉiujn $count teamojn',
+      one: 'Rigardi la teamon',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get broadcastBroadcasts => 'Elsendoj';
 
   @override
@@ -596,12 +810,26 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
+  String get broadcastLiveboard => 'Live board';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count elsendoj',
       one: '$count elsendo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String broadcastNbViewers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viewers',
+      one: '$count viewer',
     );
     return '$_temp0';
   }
@@ -2086,6 +2314,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get claimADraw => 'Postuli egalvenkon';
 
   @override
+  String get drawClaimed => 'Draw claimed';
+
+  @override
   String get offerDraw => 'Proponi egalvenkon';
 
   @override
@@ -2787,7 +3018,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get createdBy => 'Kreita de';
 
   @override
-  String get tournamentIsStarting => 'Turniro komenciĝas';
+  String get startingIn => 'Starting in';
 
   @override
   String get tournamentPairingsAreNowClosed => 'La turniraj parigoj nun fermiĝis.';
@@ -2832,11 +3063,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get draws => 'Egalvenkoj';
-
-  @override
-  String nextXTournament(String param) {
-    return 'Proksima $param turniro:';
-  }
 
   @override
   String get averageOpponent => 'Mezuma kontraŭulo';
@@ -3560,6 +3786,17 @@ class AppLocalizationsEo extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Se vi ne vidas la retpoŝton , kontrolu aliajn lokojn kie ĝi povas esti, kiel via rubo , spam, socia , aŭ aliaj dosierujoj.';
 
   @override
+  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+
+  @override
+  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+
+  @override
+  String verifyYourAddress(String param) {
+    return 'Verify that $param is your email address';
+  }
+
+  @override
   String weHaveSentYouAnEmailTo(String param) {
     return 'Ni sendis retmesaĝon al $param. Klaku la ligilon en la poŝto por rekomencigi vian pasvorton.';
   }
@@ -3588,6 +3825,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get downloadImported => 'Elŝutu importitan';
+
+  @override
+  String get downloadAllGames => 'Download all games';
 
   @override
   String get crosstable => 'Kructabelo';
@@ -3694,6 +3934,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get language => 'Lingvo';
+
+  @override
+  String get allLanguages => 'All languages';
 
   @override
   String get background => 'Fono';
@@ -5128,16 +5371,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyShowEvalBar => 'Taksaj stangoj';
 
   @override
-  String get studyFirst => 'Al la unua';
-
-  @override
-  String get studyPrevious => 'Antaŭa';
-
-  @override
   String get studyNext => 'Sekva';
-
-  @override
-  String get studyLast => 'Al la lasta';
 
   @override
   String get studyShareAndExport => 'Konigi & eksporti';
@@ -5470,6 +5704,105 @@ class AppLocalizationsEo extends AppLocalizations {
   String studyPerPage(String param) {
     return '$param per page';
   }
+
+  @override
+  String get studyGetTheTour => 'Need help? Get the tour!';
+
+  @override
+  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+
+  @override
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+
+  @override
+  String get studySharedAndSaveTitle => 'Shared and saved';
+
+  @override
+  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+
+  @override
+  String get studyStudyMembersTitle => 'Study members';
+
+  @override
+  String studyStudyMembersText(String param1, String param2) {
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+  }
+
+  @override
+  String studyAddMembersText(String param) {
+    return 'Click the $param button.<br>Then decide who can contribute or not.';
+  }
+
+  @override
+  String get studyStudyChaptersTitle => 'Study chapters';
+
+  @override
+  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+
+  @override
+  String get studyCommentPositionTitle => 'Comment on a position';
+
+  @override
+  String studyCommentPositionText(String param) {
+    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+  }
+
+  @override
+  String get studyAnnotatePositionTitle => 'Annotate a position';
+
+  @override
+  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+
+  @override
+  String get studyConclusionTitle => 'Thanks for your time';
+
+  @override
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+
+  @override
+  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+
+  @override
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+
+  @override
+  String get studyFromInitialPositionTitle => 'From initial position';
+
+  @override
+  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+
+  @override
+  String get studyCustomPositionTitle => 'Custom position';
+
+  @override
+  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+
+  @override
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+
+  @override
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyFromFenStringTitle => 'From a FEN string';
+
+  @override
+  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+
+  @override
+  String get studyFromPgnGameTitle => 'From a PGN game';
+
+  @override
+  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+
+  @override
+  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+
+  @override
+  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+
+  @override
+  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {

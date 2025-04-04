@@ -584,6 +584,390 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{Joined {count} team} other{Joined {count} teams}}'**
   String activityJoinedNbTeams(int count);
 
+  /// No description provided for @arenaArena.
+  ///
+  /// In en, this message translates to:
+  /// **'Arena'**
+  String get arenaArena;
+
+  /// No description provided for @arenaArenaTournaments.
+  ///
+  /// In en, this message translates to:
+  /// **'Arena tournaments'**
+  String get arenaArenaTournaments;
+
+  /// No description provided for @arenaIsItRated.
+  ///
+  /// In en, this message translates to:
+  /// **'Is it rated?'**
+  String get arenaIsItRated;
+
+  /// No description provided for @arenaWillBeNotified.
+  ///
+  /// In en, this message translates to:
+  /// **'You will be notified when the tournament starts, so it is safe to play in another tab while waiting.'**
+  String get arenaWillBeNotified;
+
+  /// No description provided for @arenaIsRated.
+  ///
+  /// In en, this message translates to:
+  /// **'This tournament is rated and will affect your rating.'**
+  String get arenaIsRated;
+
+  /// No description provided for @arenaIsNotRated.
+  ///
+  /// In en, this message translates to:
+  /// **'This tournament is *not* rated and will *not* affect your rating.'**
+  String get arenaIsNotRated;
+
+  /// No description provided for @arenaSomeRated.
+  ///
+  /// In en, this message translates to:
+  /// **'Some tournaments are rated and will affect your rating.'**
+  String get arenaSomeRated;
+
+  /// No description provided for @arenaHowAreScoresCalculated.
+  ///
+  /// In en, this message translates to:
+  /// **'How are scores calculated?'**
+  String get arenaHowAreScoresCalculated;
+
+  /// No description provided for @arenaHowAreScoresCalculatedAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'A win has a base score of 2 points, a draw 1 point, and a loss is worth no points.\nIf you win two games consecutively you will start a double-point streak, represented by a flame icon.\nThe following games will continue to be worth double points until you fail to win a game.\nThat is, a win will be worth 4 points, a draw 2 points and a loss will still not award any points.\n\nFor example, two wins followed by a draw will be worth 6 points: 2 + 2 + (2 x 1)'**
+  String get arenaHowAreScoresCalculatedAnswer;
+
+  /// No description provided for @arenaBerserk.
+  ///
+  /// In en, this message translates to:
+  /// **'Arena Berserk'**
+  String get arenaBerserk;
+
+  /// No description provided for @arenaBerserkAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'When a player clicks the Berserk button at the beginning of the game, they lose half of their clock time, but the win is worth one extra tournament point.\n\nGoing Berserk in time controls with an increment also cancels the increment (1+2 is an exception, it gives 1+0).\n\nBerserk is not available for games with zero initial time (0+1, 0+2).\n\nBerserk only grants an extra point if you play at least 7 moves in the game.'**
+  String get arenaBerserkAnswer;
+
+  /// No description provided for @arenaHowIsTheWinnerDecided.
+  ///
+  /// In en, this message translates to:
+  /// **'How is the winner decided?'**
+  String get arenaHowIsTheWinnerDecided;
+
+  /// No description provided for @arenaHowIsTheWinnerDecidedAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'The player(s) with the most points after the tournament\'s set time limit will be announced the winner(s).\n\nWhen two or more players have the same number of points, the tournament performance is the tie break.'**
+  String get arenaHowIsTheWinnerDecidedAnswer;
+
+  /// No description provided for @arenaHowDoesPairingWork.
+  ///
+  /// In en, this message translates to:
+  /// **'How does the pairing work?'**
+  String get arenaHowDoesPairingWork;
+
+  /// No description provided for @arenaHowDoesPairingWorkAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'At the beginning of the tournament, players are paired based on their rating.\nAs soon as you finish a game, return to the tournament lobby: you will then be paired with a player close to your ranking. This ensures minimum wait time, however, you may not face all other players in the tournament.\nPlay fast and return to the lobby to play more games and win more points.'**
+  String get arenaHowDoesPairingWorkAnswer;
+
+  /// No description provided for @arenaHowDoesItEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'How does it end?'**
+  String get arenaHowDoesItEnd;
+
+  /// No description provided for @arenaHowDoesItEndAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'The tournament has a countdown clock. When it reaches zero, the tournament rankings are frozen, and the winner is announced. Games in progress must be finished, however, they don\'t count for the tournament.'**
+  String get arenaHowDoesItEndAnswer;
+
+  /// No description provided for @arenaOtherRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Other important rules'**
+  String get arenaOtherRules;
+
+  /// No description provided for @arenaThereIsACountdown.
+  ///
+  /// In en, this message translates to:
+  /// **'There is a countdown for your first move. Failing to make a move within this time will forfeit the game to your opponent.'**
+  String get arenaThereIsACountdown;
+
+  /// No description provided for @arenaThisIsPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a private tournament'**
+  String get arenaThisIsPrivate;
+
+  /// No description provided for @arenaShareUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this URL to let people join: {param}'**
+  String arenaShareUrl(String param);
+
+  /// No description provided for @arenaDrawStreakStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw streaks: When a player has consecutive draws in an arena, only the first draw will result in a point or draws lasting more than {param} moves in standard games. The draw streak can only be broken by a win, not a loss or a draw.'**
+  String arenaDrawStreakStandard(String param);
+
+  /// No description provided for @arenaDrawStreakVariants.
+  ///
+  /// In en, this message translates to:
+  /// **'The minimum game length for drawn games to award points differs by variant. The table below lists the threshold for each variant.'**
+  String get arenaDrawStreakVariants;
+
+  /// No description provided for @arenaVariant.
+  ///
+  /// In en, this message translates to:
+  /// **'Variant'**
+  String get arenaVariant;
+
+  /// No description provided for @arenaMinimumGameLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum game length'**
+  String get arenaMinimumGameLength;
+
+  /// No description provided for @arenaHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Arena History'**
+  String get arenaHistory;
+
+  /// No description provided for @arenaNewTeamBattle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Team Battle'**
+  String get arenaNewTeamBattle;
+
+  /// No description provided for @arenaCustomStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom start date'**
+  String get arenaCustomStartDate;
+
+  /// No description provided for @arenaCustomStartDateHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'In your own local timezone. This overrides the \"Time before tournament starts\" setting'**
+  String get arenaCustomStartDateHelp;
+
+  /// No description provided for @arenaAllowBerserk.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Berserk'**
+  String get arenaAllowBerserk;
+
+  /// No description provided for @arenaAllowBerserkHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Let players halve their clock time to gain an extra point'**
+  String get arenaAllowBerserkHelp;
+
+  /// No description provided for @arenaAllowChatHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Let players discuss in a chat room'**
+  String get arenaAllowChatHelp;
+
+  /// No description provided for @arenaArenaStreaks.
+  ///
+  /// In en, this message translates to:
+  /// **'Arena streaks'**
+  String get arenaArenaStreaks;
+
+  /// No description provided for @arenaArenaStreaksHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'After 2 wins, consecutive wins grant 4 points instead of 2.'**
+  String get arenaArenaStreaksHelp;
+
+  /// No description provided for @arenaNoBerserkAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'No Berserk allowed'**
+  String get arenaNoBerserkAllowed;
+
+  /// No description provided for @arenaNoArenaStreaks.
+  ///
+  /// In en, this message translates to:
+  /// **'No Arena streaks'**
+  String get arenaNoArenaStreaks;
+
+  /// No description provided for @arenaAveragePerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'Average performance'**
+  String get arenaAveragePerformance;
+
+  /// No description provided for @arenaAverageScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Average score'**
+  String get arenaAverageScore;
+
+  /// No description provided for @arenaMyTournaments.
+  ///
+  /// In en, this message translates to:
+  /// **'My tournaments'**
+  String get arenaMyTournaments;
+
+  /// No description provided for @arenaEditTournament.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit tournament'**
+  String get arenaEditTournament;
+
+  /// No description provided for @arenaEditTeamBattle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit team battle'**
+  String get arenaEditTeamBattle;
+
+  /// No description provided for @arenaDefender.
+  ///
+  /// In en, this message translates to:
+  /// **'Defender'**
+  String get arenaDefender;
+
+  /// No description provided for @arenaPickYourTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick your team'**
+  String get arenaPickYourTeam;
+
+  /// No description provided for @arenaWhichTeamWillYouRepresentInThisBattle.
+  ///
+  /// In en, this message translates to:
+  /// **'Which team will you represent in this battle?'**
+  String get arenaWhichTeamWillYouRepresentInThisBattle;
+
+  /// No description provided for @arenaYouMustJoinOneOfTheseTeamsToParticipate.
+  ///
+  /// In en, this message translates to:
+  /// **'You must join one of these teams to participate!'**
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate;
+
+  /// No description provided for @arenaCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get arenaCreated;
+
+  /// No description provided for @arenaRecentlyPlayed.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently played'**
+  String get arenaRecentlyPlayed;
+
+  /// No description provided for @arenaBestResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Best results'**
+  String get arenaBestResults;
+
+  /// No description provided for @arenaTournamentStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Tournament stats'**
+  String get arenaTournamentStats;
+
+  /// No description provided for @arenaRankAvgHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.'**
+  String get arenaRankAvgHelp;
+
+  /// No description provided for @arenaMedians.
+  ///
+  /// In en, this message translates to:
+  /// **'medians'**
+  String get arenaMedians;
+
+  /// No description provided for @arenaAllAveragesAreX.
+  ///
+  /// In en, this message translates to:
+  /// **'All averages on this page are {param}.'**
+  String arenaAllAveragesAreX(String param);
+
+  /// No description provided for @arenaTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get arenaTotal;
+
+  /// No description provided for @arenaPointsAvg.
+  ///
+  /// In en, this message translates to:
+  /// **'Points average'**
+  String get arenaPointsAvg;
+
+  /// No description provided for @arenaPointsSum.
+  ///
+  /// In en, this message translates to:
+  /// **'Points sum'**
+  String get arenaPointsSum;
+
+  /// No description provided for @arenaRankAvg.
+  ///
+  /// In en, this message translates to:
+  /// **'Rank average'**
+  String get arenaRankAvg;
+
+  /// No description provided for @arenaTournamentWinners.
+  ///
+  /// In en, this message translates to:
+  /// **'Tournament winners'**
+  String get arenaTournamentWinners;
+
+  /// No description provided for @arenaTournamentShields.
+  ///
+  /// In en, this message translates to:
+  /// **'Tournament shields'**
+  String get arenaTournamentShields;
+
+  /// No description provided for @arenaOnlyTitled.
+  ///
+  /// In en, this message translates to:
+  /// **'Only titled players'**
+  String get arenaOnlyTitled;
+
+  /// No description provided for @arenaOnlyTitledHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Require an official title to join the tournament'**
+  String get arenaOnlyTitledHelp;
+
+  /// No description provided for @arenaTournamentPairingsAreNowClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'The tournament pairings are now closed.'**
+  String get arenaTournamentPairingsAreNowClosed;
+
+  /// No description provided for @arenaBerserkRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Berserk rate'**
+  String get arenaBerserkRate;
+
+  /// No description provided for @arenaDrawingWithinNbMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Drawing the game within the first {count} move will earn neither player any points.} other{Drawing the game within the first {count} moves will earn neither player any points.}}'**
+  String arenaDrawingWithinNbMoves(int count);
+
+  /// No description provided for @arenaViewAllXTeams.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{View the team} other{View all {count} teams}}'**
+  String arenaViewAllXTeams(int count);
+
   /// No description provided for @broadcastBroadcasts.
   ///
   /// In en, this message translates to:
@@ -1040,11 +1424,23 @@ abstract class AppLocalizations {
   /// **'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.'**
   String get broadcastSinceHideResults;
 
+  /// No description provided for @broadcastLiveboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Live board'**
+  String get broadcastLiveboard;
+
   /// No description provided for @broadcastNbBroadcasts.
   ///
   /// In en, this message translates to:
   /// **'{count, plural, =1{{count} broadcast} other{{count} broadcasts}}'**
   String broadcastNbBroadcasts(int count);
+
+  /// No description provided for @broadcastNbViewers.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} viewer} other{{count} viewers}}'**
+  String broadcastNbViewers(int count);
 
   /// No description provided for @challengeChallengesX.
   ///
@@ -3812,6 +4208,12 @@ abstract class AppLocalizations {
   /// **'Claim a draw'**
   String get claimADraw;
 
+  /// No description provided for @drawClaimed.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw claimed'**
+  String get drawClaimed;
+
   /// No description provided for @offerDraw.
   ///
   /// In en, this message translates to:
@@ -5114,11 +5516,11 @@ abstract class AppLocalizations {
   /// **'Created by'**
   String get createdBy;
 
-  /// No description provided for @tournamentIsStarting.
+  /// No description provided for @startingIn.
   ///
   /// In en, this message translates to:
-  /// **'The tournament is starting'**
-  String get tournamentIsStarting;
+  /// **'Starting in'**
+  String get startingIn;
 
   /// No description provided for @tournamentPairingsAreNowClosed.
   ///
@@ -5203,12 +5605,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Draws'**
   String get draws;
-
-  /// No description provided for @nextXTournament.
-  ///
-  /// In en, this message translates to:
-  /// **'Next {param} tournament:'**
-  String nextXTournament(String param);
 
   /// No description provided for @averageOpponent.
   ///
@@ -6548,6 +6944,24 @@ abstract class AppLocalizations {
   /// **'If you don\'t see the email, check other places it might be, like your junk, spam, social, or other folders.'**
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces;
 
+  /// No description provided for @ifYouDoNotGetTheEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'If you do not get the email within 5 minutes:'**
+  String get ifYouDoNotGetTheEmail;
+
+  /// No description provided for @checkAllEmailFolders.
+  ///
+  /// In en, this message translates to:
+  /// **'Check all junk, spam, and other folders'**
+  String get checkAllEmailFolders;
+
+  /// No description provided for @verifyYourAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify that {param} is your email address'**
+  String verifyYourAddress(String param);
+
   /// No description provided for @weHaveSentYouAnEmailTo.
   ///
   /// In en, this message translates to:
@@ -6595,6 +7009,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download imported'**
   String get downloadImported;
+
+  /// No description provided for @downloadAllGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Download all games'**
+  String get downloadAllGames;
 
   /// No description provided for @crosstable.
   ///
@@ -6787,6 +7207,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language'**
   String get language;
+
+  /// No description provided for @allLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'All languages'**
+  String get allLanguages;
 
   /// No description provided for @background.
   ///
@@ -8780,29 +9206,11 @@ abstract class AppLocalizations {
   /// **'Evaluation bars'**
   String get studyShowEvalBar;
 
-  /// No description provided for @studyFirst.
-  ///
-  /// In en, this message translates to:
-  /// **'First'**
-  String get studyFirst;
-
-  /// No description provided for @studyPrevious.
-  ///
-  /// In en, this message translates to:
-  /// **'Previous'**
-  String get studyPrevious;
-
   /// No description provided for @studyNext.
   ///
   /// In en, this message translates to:
   /// **'Next'**
   String get studyNext;
-
-  /// No description provided for @studyLast.
-  ///
-  /// In en, this message translates to:
-  /// **'Last'**
-  String get studyLast;
 
   /// No description provided for @studyShareAndExport.
   ///
@@ -9439,6 +9847,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{param} per page'**
   String studyPerPage(String param);
+
+  /// No description provided for @studyGetTheTour.
+  ///
+  /// In en, this message translates to:
+  /// **'Need help? Get the tour!'**
+  String get studyGetTheTour;
+
+  /// No description provided for @studyWelcomeToLichessStudyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Lichess Study!'**
+  String get studyWelcomeToLichessStudyTitle;
+
+  /// No description provided for @studyWelcomeToLichessStudyText.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.'**
+  String get studyWelcomeToLichessStudyText;
+
+  /// No description provided for @studySharedAndSaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared and saved'**
+  String get studySharedAndSaveTitle;
+
+  /// No description provided for @studySharedAndSavedText.
+  ///
+  /// In en, this message translates to:
+  /// **'Other members can see your moves in real time!<br>Plus, everything is saved forever.'**
+  String get studySharedAndSavedText;
+
+  /// No description provided for @studyStudyMembersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Study members'**
+  String get studyStudyMembersTitle;
+
+  /// No description provided for @studyStudyMembersText.
+  ///
+  /// In en, this message translates to:
+  /// **'{param1} Spectators can view the study and talk in the chat.<br><br>{param2} Contributors can make moves and update the study.'**
+  String studyStudyMembersText(String param1, String param2);
+
+  /// No description provided for @studyAddMembersText.
+  ///
+  /// In en, this message translates to:
+  /// **'Click the {param} button.<br>Then decide who can contribute or not.'**
+  String studyAddMembersText(String param);
+
+  /// No description provided for @studyStudyChaptersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Study chapters'**
+  String get studyStudyChaptersTitle;
+
+  /// No description provided for @studyStudyChaptersText.
+  ///
+  /// In en, this message translates to:
+  /// **'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.'**
+  String get studyStudyChaptersText;
+
+  /// No description provided for @studyCommentPositionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment on a position'**
+  String get studyCommentPositionTitle;
+
+  /// No description provided for @studyCommentPositionText.
+  ///
+  /// In en, this message translates to:
+  /// **'Click the {param} button, or right click on the move list on the right.<br>Comments are shared and saved.'**
+  String studyCommentPositionText(String param);
+
+  /// No description provided for @studyAnnotatePositionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Annotate a position'**
+  String get studyAnnotatePositionTitle;
+
+  /// No description provided for @studyAnnotatePositionText.
+  ///
+  /// In en, this message translates to:
+  /// **'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.'**
+  String get studyAnnotatePositionText;
+
+  /// No description provided for @studyConclusionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for your time'**
+  String get studyConclusionTitle;
+
+  /// No description provided for @studyConclusionText.
+  ///
+  /// In en, this message translates to:
+  /// **'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!'**
+  String get studyConclusionText;
+
+  /// No description provided for @studyCreateChapterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s create a study chapter'**
+  String get studyCreateChapterTitle;
+
+  /// No description provided for @studyCreateChapterText.
+  ///
+  /// In en, this message translates to:
+  /// **'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.'**
+  String get studyCreateChapterText;
+
+  /// No description provided for @studyFromInitialPositionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'From initial position'**
+  String get studyFromInitialPositionTitle;
+
+  /// No description provided for @studyFromInitialPositionText.
+  ///
+  /// In en, this message translates to:
+  /// **'Just a board setup for a new game.<br>Suited to explore openings.'**
+  String get studyFromInitialPositionText;
+
+  /// No description provided for @studyCustomPositionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom position'**
+  String get studyCustomPositionTitle;
+
+  /// No description provided for @studyCustomPositionText.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup the board your way.<br>Suited to explore endgames.'**
+  String get studyCustomPositionText;
+
+  /// No description provided for @studyLoadExistingLichessGameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Load an existing lichess game'**
+  String get studyLoadExistingLichessGameTitle;
+
+  /// No description provided for @studyLoadExistingLichessGameText.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.'**
+  String get studyLoadExistingLichessGameText;
+
+  /// No description provided for @studyFromFenStringTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'From a FEN string'**
+  String get studyFromFenStringTitle;
+
+  /// No description provided for @studyFromFenStringText.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.'**
+  String get studyFromFenStringText;
+
+  /// No description provided for @studyFromPgnGameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'From a PGN game'**
+  String get studyFromPgnGameTitle;
+
+  /// No description provided for @studyFromPgnGameText.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.'**
+  String get studyFromPgnGameText;
+
+  /// No description provided for @studyVariantsAreSupportedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Studies support variants'**
+  String get studyVariantsAreSupportedTitle;
+
+  /// No description provided for @studyVariantsAreSupportedText.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, you can study crazyhouse<br>and all lichess variants!'**
+  String get studyVariantsAreSupportedText;
+
+  /// No description provided for @studyChapterConclusionText.
+  ///
+  /// In en, this message translates to:
+  /// **'Chapters are saved forever.<br>Have fun organizing your chess content!'**
+  String get studyChapterConclusionText;
 
   /// No description provided for @studyNbChapters.
   ///

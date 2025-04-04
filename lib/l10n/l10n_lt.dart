@@ -388,6 +388,224 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
+  String get arenaArena => 'Arena';
+
+  @override
+  String get arenaArenaTournaments => 'Arenos turnyrai';
+
+  @override
+  String get arenaIsItRated => 'Ar jis vertinamas?';
+
+  @override
+  String get arenaWillBeNotified => 'Jums bus pranešta apie turnyro pradžią, tad laukdami galite saugiai žaisti kitoje kortelėje.';
+
+  @override
+  String get arenaIsRated => 'Šis turnyras yra vertinamas ir turės įtakos jūsų reitingui.';
+
+  @override
+  String get arenaIsNotRated => 'Šis turnyras *nėra* vertinamas ir *neturės* įtakos jūsų reitingui.';
+
+  @override
+  String get arenaSomeRated => 'Kai kurie turnyrai yra vertinami ir turės įtakos jūsų reitingui.';
+
+  @override
+  String get arenaHowAreScoresCalculated => 'Kaip apskaičiuojami taškai?';
+
+  @override
+  String get arenaHowAreScoresCalculatedAnswer => 'Pergalė vertinama 2 taškais, lygiosios: 1 tašku, o pralaimėjimas taškų nevertas.\nJeigu laimite dvi partijas iš eilės, pradėsite dvigubų taškų seriją, žymimą liepsnos piktograma.\nTolimesnės partijos bus vertos dvigubai daugiau taškų tol, kol nebelaimėsite.\nT. y., pergalė bus verta 4 taškų, lygiosios: 2 taškų, o pralaimėjimas taškų nepelnys.\n\nPavyzdžiui, dvi pergalės ir tada įvykusios lygiosios bus įvertinta 6 taškais: 2 + 2 + (2 x 1)';
+
+  @override
+  String get arenaBerserk => 'Įsiutimas arenoje';
+
+  @override
+  String get arenaBerserkAnswer => 'Žaidėjui partijos pradžioje paspaudus mygtuką „Įsiūtis“, jie praras pusę suteikiamo laiko ėjimams, tačiau pergalė bus verta vieno papildomo turnyrinio taško.\n\n„Įsiūtis“ laiko kontrolėse su prieaugiu kartu dar panaikins ir jį (1+2 yra išimtis, bus duodama 1+0).\n\n„Įsiūtis“ nėra galimas partijose su nuliniu pradiniu laiku (0+1, 0+2).\n\n„Įsiūtis“ suteiks papildomą tašką tik sužaidus bent 7 ėjimus partijoje.';
+
+  @override
+  String get arenaHowIsTheWinnerDecided => 'Kaip nustatomas laimėtojas?';
+
+  @override
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Žaidėjas (-ai), surinkęs (-ę) daugiausiai taškų pasibaigus nustatytam turnyro laiko limitui, bus paskelbtas (-i) laimėtoju (-ais).';
+
+  @override
+  String get arenaHowDoesPairingWork => 'Kaip veikia suporavimas?';
+
+  @override
+  String get arenaHowDoesPairingWorkAnswer => 'Turnyro pradžioje žaidėjai suporuojami atsižvelgiant į jų reitingus.\nKai tik baigiate partiją, grįžkite į turnyro laukiamąjį: tuomet būsite suporuoti su žaidėju, artimus jūsų reitingui. Tai užtikrina mažiausią laukimo laiką, visgi jūs galite nesusidurti su visais kitais turnyro žaidėjais.\nŽaisdami greitai ir grįždami į laukiamąjį sužaisite daugiau partijų ir galėsite pelnyti daugiau taškų.';
+
+  @override
+  String get arenaHowDoesItEnd => 'Kaip jis baigiasi?';
+
+  @override
+  String get arenaHowDoesItEndAnswer => 'Turnyras turi atgalinio skaičiavimo laikmatį. Jam pasiekus nulį, turnyro statistika užšaldoma bei paskelbiamas laimėtojas. Dar vykstančios partijos privalo būti užbaigtos, tačiau jos nebesiskaičiuoja turnyrui.';
+
+  @override
+  String get arenaOtherRules => 'Kitos svarbios taisyklės';
+
+  @override
+  String get arenaThereIsACountdown => 'Jūsų pirmajam ėjimui yra laiko limitas. Jei per šį laiką neatliksite ėjimo, jūsų varžovui bus įskaityta pergalė.';
+
+  @override
+  String get arenaThisIsPrivate => 'Tai yra privatus turnyras';
+
+  @override
+  String arenaShareUrl(String param) {
+    return 'Pasidalinkite šiuo adresu su žaidėjais: $param';
+  }
+
+  @override
+  String arenaDrawStreakStandard(String param) {
+    return 'Lygiųjų sekos: kai žaidėjas turi vienas po kitos einančias lygiąsias arenoje, tik pirmosios, arba trunkančios ilgiau nei $param ėjimų standartiniuose žaidimuose, lygiosios suteiks tašką. Lygiųjų seka gali būti nutraukta tik pergale, ne pralaimėjimu ar lygiosiomis.';
+  }
+
+  @override
+  String get arenaDrawStreakVariants => 'Minimalus žaidimo ilgis užtikrinantis taškus skiriasi pagal variantą. Pateiktoje lentelėje nurodomi slenksčiai kiekvienam variantui.';
+
+  @override
+  String get arenaVariant => 'Variantas';
+
+  @override
+  String get arenaMinimumGameLength => 'Minimalus partijos ilgis';
+
+  @override
+  String get arenaHistory => 'Arenų istorija';
+
+  @override
+  String get arenaNewTeamBattle => 'Nauja komandinė kova';
+
+  @override
+  String get arenaCustomStartDate => 'Kita pradžios data';
+
+  @override
+  String get arenaCustomStartDateHelp => 'Jūsų laiko zonoje. Turi pirmenybę prieš \"Laikas iki turnyro pradžios\" nustatymą';
+
+  @override
+  String get arenaAllowBerserk => 'Leisti \"įsiūtį\"';
+
+  @override
+  String get arenaAllowBerserkHelp => 'Leisti žaidėjams gauti papildomą tašką, perpus sumažinant savo laiką';
+
+  @override
+  String get arenaAllowChatHelp => 'Leisti žaidėjams kalbėtis pokalbių kambaryje';
+
+  @override
+  String get arenaArenaStreaks => 'Arenos serijos';
+
+  @override
+  String get arenaArenaStreaksHelp => 'Po dviejų pergalių kiti laimėjimai suteikia keturis taškus vietoje dviejų.';
+
+  @override
+  String get arenaNoBerserkAllowed => 'Negalimas Įsiutis';
+
+  @override
+  String get arenaNoArenaStreaks => 'Negalimos Arenos sekos';
+
+  @override
+  String get arenaAveragePerformance => 'Vidutinis pasirodymas';
+
+  @override
+  String get arenaAverageScore => 'Vidutiniškai taškų';
+
+  @override
+  String get arenaMyTournaments => 'Mano turnyrai';
+
+  @override
+  String get arenaEditTournament => 'Redaguoti turnyrą';
+
+  @override
+  String get arenaEditTeamBattle => 'Redaguoti komandų turnyrą';
+
+  @override
+  String get arenaDefender => 'Ginantis titulą';
+
+  @override
+  String get arenaPickYourTeam => 'Pasirinkti savo komandą';
+
+  @override
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Kuriai komandai atstovausite šiame mūšyje?';
+
+  @override
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Norėdami dalyvauti, turite prisijungti prie vienos iš šių komandų!';
+
+  @override
+  String get arenaCreated => 'Sukurtas';
+
+  @override
+  String get arenaRecentlyPlayed => 'Neseniai žaista';
+
+  @override
+  String get arenaBestResults => 'Geriausi rezultatai';
+
+  @override
+  String get arenaTournamentStats => 'Turnyro statistika';
+
+  @override
+  String get arenaRankAvgHelp => 'Reitingo vidurkis-tai jūsų reitingas procentais. Mažesnis yra geresnis.\n\nPavyzdžiui, užėmus 3 vietą 100 žaidėjų turnyre = 3%. Užėmus 10-ą vietą 1000 žaidėjų turnyre = 1%.';
+
+  @override
+  String get arenaMedians => 'medianos';
+
+  @override
+  String arenaAllAveragesAreX(String param) {
+    return 'Visi vidurkiai šiame puslapyje yra $param.';
+  }
+
+  @override
+  String get arenaTotal => 'Iš viso';
+
+  @override
+  String get arenaPointsAvg => 'Taškų vidurkis';
+
+  @override
+  String get arenaPointsSum => 'Taškų suma';
+
+  @override
+  String get arenaRankAvg => 'Reitingo vidurkis';
+
+  @override
+  String get arenaTournamentWinners => 'Turnyro nugalėtojai';
+
+  @override
+  String get arenaTournamentShields => 'Turnyro trofėjus';
+
+  @override
+  String get arenaOnlyTitled => 'Tik tituluoti žaidėjai';
+
+  @override
+  String get arenaOnlyTitledHelp => 'Prisijungti į turnyrą būtinas oficialus titulas';
+
+  @override
+  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+
+  @override
+  String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String arenaDrawingWithinNbMoves(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Lygiosios per pirmuosius $count ėjimų nesuteiks taškų nė vienam žaidėjui.',
+      many: 'Lygiosios per pirmuosius $count ėjimų nesuteiks taškų nė vienam žaidėjui.',
+      few: 'Lygiosios per pirmuosius $count ėjimus nesuteiks taškų nė vienam žaidėjui.',
+      one: 'Lygiosios per pirmąjį ėjimą nesuteiks taškų nė vienam žaidėjui.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String arenaViewAllXTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Peržvelgti visas $count komandų',
+      many: 'Peržvelgti visas $count komandų',
+      few: 'Peržvelgti visas $count komandas',
+      one: 'Peržvelgti komandą',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get broadcastBroadcasts => 'Transliacijos';
 
   @override
@@ -630,6 +848,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
+  String get broadcastLiveboard => 'Live board';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -638,6 +859,17 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count transliacijos',
       few: '$count transliacijos',
       one: '$count transliacija',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String broadcastNbViewers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viewers',
+      one: '$count viewer',
     );
     return '$_temp0';
   }
@@ -2132,6 +2364,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get claimADraw => 'Įskaityti lygiąsias';
 
   @override
+  String get drawClaimed => 'Draw claimed';
+
+  @override
   String get offerDraw => 'Siūlyti lygiąsias';
 
   @override
@@ -2833,7 +3068,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get createdBy => 'Sukūrė';
 
   @override
-  String get tournamentIsStarting => 'Turnyras prasideda';
+  String get startingIn => 'Starting in';
 
   @override
   String get tournamentPairingsAreNowClosed => 'Suporavimai turnyrui jau baigėsi.';
@@ -2878,11 +3113,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get draws => 'Lygiosios';
-
-  @override
-  String nextXTournament(String param) {
-    return 'Kitas $param turnyras:';
-  }
 
   @override
   String get averageOpponent => 'Vidutinis varžovas';
@@ -3606,6 +3836,17 @@ class AppLocalizationsLt extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Jei nematote laiško, patikrinkite kitas galimas vietas: šlamšto, šiukšlių, socialinius ar kitus aplankus.';
 
   @override
+  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+
+  @override
+  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+
+  @override
+  String verifyYourAddress(String param) {
+    return 'Verify that $param is your email address';
+  }
+
+  @override
   String weHaveSentYouAnEmailTo(String param) {
     return 'Išsiuntėme laišką į $param. Spustelėję jame esančią nurodą galėsite atstatyti savo slaptažodį.';
   }
@@ -3634,6 +3875,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get downloadImported => 'Siųstis importuotą';
+
+  @override
+  String get downloadAllGames => 'Download all games';
 
   @override
   String get crosstable => 'Susitikimai';
@@ -3740,6 +3984,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get language => 'Kalba';
+
+  @override
+  String get allLanguages => 'All languages';
 
   @override
   String get background => 'Fonas';
@@ -5268,16 +5515,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get studyShowEvalBar => 'Vertinimo skalė';
 
   @override
-  String get studyFirst => 'Pirmas';
-
-  @override
-  String get studyPrevious => 'Ankstesnis';
-
-  @override
   String get studyNext => 'Kitas';
-
-  @override
-  String get studyLast => 'Paskutinis';
 
   @override
   String get studyShareAndExport => 'Dalintis ir eksportuoti';
@@ -5610,6 +5848,105 @@ class AppLocalizationsLt extends AppLocalizations {
   String studyPerPage(String param) {
     return '$param puslapyje';
   }
+
+  @override
+  String get studyGetTheTour => 'Need help? Get the tour!';
+
+  @override
+  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+
+  @override
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+
+  @override
+  String get studySharedAndSaveTitle => 'Shared and saved';
+
+  @override
+  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+
+  @override
+  String get studyStudyMembersTitle => 'Study members';
+
+  @override
+  String studyStudyMembersText(String param1, String param2) {
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+  }
+
+  @override
+  String studyAddMembersText(String param) {
+    return 'Click the $param button.<br>Then decide who can contribute or not.';
+  }
+
+  @override
+  String get studyStudyChaptersTitle => 'Study chapters';
+
+  @override
+  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+
+  @override
+  String get studyCommentPositionTitle => 'Comment on a position';
+
+  @override
+  String studyCommentPositionText(String param) {
+    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+  }
+
+  @override
+  String get studyAnnotatePositionTitle => 'Annotate a position';
+
+  @override
+  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+
+  @override
+  String get studyConclusionTitle => 'Thanks for your time';
+
+  @override
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+
+  @override
+  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+
+  @override
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+
+  @override
+  String get studyFromInitialPositionTitle => 'From initial position';
+
+  @override
+  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+
+  @override
+  String get studyCustomPositionTitle => 'Custom position';
+
+  @override
+  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+
+  @override
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+
+  @override
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyFromFenStringTitle => 'From a FEN string';
+
+  @override
+  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+
+  @override
+  String get studyFromPgnGameTitle => 'From a PGN game';
+
+  @override
+  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+
+  @override
+  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+
+  @override
+  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+
+  @override
+  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {

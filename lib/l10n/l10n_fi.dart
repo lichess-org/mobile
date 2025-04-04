@@ -354,6 +354,220 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String get arenaArena => 'Areena';
+
+  @override
+  String get arenaArenaTournaments => 'Areenaturnaukset';
+
+  @override
+  String get arenaIsItRated => 'Vaikuttavatko vahvuuslukuun?';
+
+  @override
+  String get arenaWillBeNotified => 'Saat ilmoituksen kun turnaus alkaa, joten voit huoletta pelata toisessa välilehdessä odotellessa.';
+
+  @override
+  String get arenaIsRated => 'Turnaus on rankattu ja siten vaikuttaa vahvuuslukuusi.';
+
+  @override
+  String get arenaIsNotRated => 'Turnaus *ei* ole rankattu ja siten *ei* vaikuta vahvuuslukuusi.';
+
+  @override
+  String get arenaSomeRated => 'Jotkut turnaukset ovat rankattuja ja siten vaikuttavat vahvuuslukuusi.';
+
+  @override
+  String get arenaHowAreScoresCalculated => 'Miten pisteenlasku toimii?';
+
+  @override
+  String get arenaHowAreScoresCalculatedAnswer => 'Perusperiaate on, että voitosta saa 2 pistettä, tasapelistä yhden ja tappiosta ei saa pisteitä.\nJos voitat kaksi peliä peräjälkeen, alat saada tuplapisteitä peleistäsi, mitä kuvastaa liekkisymboli.\nSaat tuplapisteitä peleistäsi aina siihen asti, kunnes et voita peliä.\nSiis voitosta saat 4 pistettä ja tasapelistä kaksi; tappiosta et saa pisteitä edelleenkään.\n\nEsimerkiksi kaksi voittoa joiden jälkeen tasapeli tuottaa 6 pistettä: 2 + 2 + (2 x 1)';
+
+  @override
+  String get arenaBerserk => 'Areenaberserkki';
+
+  @override
+  String get arenaBerserkAnswer => 'Kun pelaaja klikkaa berserkkinappulaa pelin alkaessa, hän menettää puolet ajastaan pelikellossa, mutta ansaitsee voittaessaan lisäpisteen turnauksen pistetaulukkoon.\n\nBerserkkitilassa ei saa myöskään lisäaikaa siirroista, vaikka turnauksen kelloasetukset olisivat sellaiset (1+2 on poikkeus, berserkkitilassa käytössä on 1+0)\n\nBerserkkitila ei ole mahdollinen peleissä joissa on 0 sekuntia aikaa alun pitäen (0+1, 0+2).\n\nBerserkkitilan lisäpisteen saa vain, jos pelaa vähintään seitsemän siirtoa pelissä.';
+
+  @override
+  String get arenaHowIsTheWinnerDecided => 'Kuinka voittaja määräytyy?';
+
+  @override
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Pelaaja(t) jo(i)lla on eniten pisteitä turnausajan päättyessä julistetaan voittajaksi tai voittajiksi.';
+
+  @override
+  String get arenaHowDoesPairingWork => 'Kuinka peliparit määriytyvät?';
+
+  @override
+  String get arenaHowDoesPairingWorkAnswer => 'Turnauksen alussa peliparit määriytyvät vahvuuslukujen perusteella.\nKun pelisi on ohi, palaa turnausaulaan. Saat seuraavaksi vastustajaksesi pelaajan, jonka sijoitus on lähellä omaasi. Siten odotusaika pysyy mahdollisimman lyhyenä. Et välttämättä kuitenkaan kohtaa turnauksessa kaikkia siihen osallistuvia pelaajia.\nPelaa nopeasti ja palaa aulaan, niin voit pelata lisää pelejä ja ansaita lisää pisteitä.';
+
+  @override
+  String get arenaHowDoesItEnd => 'Kuinka turnaus päättyy?';
+
+  @override
+  String get arenaHowDoesItEndAnswer => 'Turnauksella on kohti nollaa juokseva ajastin. Kun se menee nollaan, turnauksen sijoitukset virallistetaan ja voittaja julistetaan. Käynnissä olevat pelit tulee pelata loppuun, mutta ne eivät vaikuta sijoituksiin turnauksessa.';
+
+  @override
+  String get arenaOtherRules => 'Muita tärkeitä sääntöjä';
+
+  @override
+  String get arenaThereIsACountdown => 'Ensimmäiselle siirrolle on lähtölaskenta. Jos ei tee siirtoa sinä aikana, peli tuomitaan vastustajan hyväksi.';
+
+  @override
+  String get arenaThisIsPrivate => 'Turnaus on yksityinen';
+
+  @override
+  String arenaShareUrl(String param) {
+    return 'Anna osallistujille tämä URL, jolla turnaukseen pääsee: $param';
+  }
+
+  @override
+  String arenaDrawStreakStandard(String param) {
+    return 'Tasapeliputket: Kun pelaaja pelaa areenassa peräkkäisiä tasapelejä, vain ensimmäisestä tasapelistä saa pisteen, tai yli $param siirtoa kestäneistä tasapeleistä tavallisissa peleissä. Tasapeliputken voi rikkoa vain voitto – ei häviö eikä tasapeli.';
+  }
+
+  @override
+  String get arenaDrawStreakVariants => 'Kullakin variantilla on pelin vaadittava vähimmäispituus, jolla tasapeliin päättyneistä peleistä saa pisteitä. Alla olevassa taulukossa luetellaan kunkin variantin tasapeliraja.';
+
+  @override
+  String get arenaVariant => 'Variantti';
+
+  @override
+  String get arenaMinimumGameLength => 'Pelin vähimmäispituus';
+
+  @override
+  String get arenaHistory => 'Areenahistoria';
+
+  @override
+  String get arenaNewTeamBattle => 'Uusi joukkuetaisto';
+
+  @override
+  String get arenaCustomStartDate => 'Mukautettu alkamisaika';
+
+  @override
+  String get arenaCustomStartDateHelp => 'Omalla aikavyöhykkeelläsi. Tämä korvaa asetuksen \"Aika ennen turnauksen alkua\"';
+
+  @override
+  String get arenaAllowBerserk => 'Salli berserkki';
+
+  @override
+  String get arenaAllowBerserkHelp => 'Anna pelaajien puolittaa aika kellossaan ja tavoitella lisäpistettä';
+
+  @override
+  String get arenaAllowChatHelp => 'Anna pelaajien kirjoittaa keskusteluhuoneeseen';
+
+  @override
+  String get arenaArenaStreaks => 'Areenaputket';
+
+  @override
+  String get arenaArenaStreaksHelp => 'Kahden voiton jälkeen jokaisesta seuraavasta voitosta saa 4 pistettä (2 pisteen sijaan).';
+
+  @override
+  String get arenaNoBerserkAllowed => 'Berserkki ei käytettävissä';
+
+  @override
+  String get arenaNoArenaStreaks => 'Ei areenaputkia';
+
+  @override
+  String get arenaAveragePerformance => 'Keskimääräinen suoritus';
+
+  @override
+  String get arenaAverageScore => 'Keskimääräinen pistemäärä';
+
+  @override
+  String get arenaMyTournaments => 'Omat turnaukset';
+
+  @override
+  String get arenaEditTournament => 'Muokkaa turnausta';
+
+  @override
+  String get arenaEditTeamBattle => 'Muokkaa joukkuetaistoa';
+
+  @override
+  String get arenaDefender => 'Puolustaja';
+
+  @override
+  String get arenaPickYourTeam => 'Valitse joukkueesi';
+
+  @override
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Mitä joukkuetta edustat tässä taistossa?';
+
+  @override
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Sinun täytyy liittyä johonkin näistä joukkueista osallistuaksesi turnaukseen!';
+
+  @override
+  String get arenaCreated => 'Luodut';
+
+  @override
+  String get arenaRecentlyPlayed => 'Äskettäin pelatut';
+
+  @override
+  String get arenaBestResults => 'Parhaat tulokset';
+
+  @override
+  String get arenaTournamentStats => 'Turnauksen tilastot';
+
+  @override
+  String get arenaRankAvgHelp => 'Sijoitusten keskiarvo on sijoituksesi prosenttiarvo. Matalampi luku on parempi.\n\nEsimerkiksi sijoittuminen 3. sijalle 100 pelaajan turnauksessa = 3%. Sijoittuminen 10. sijalle 1 000 pelaajan turnauksessa = 1%.';
+
+  @override
+  String get arenaMedians => 'mediaaneja';
+
+  @override
+  String arenaAllAveragesAreX(String param) {
+    return 'Kaikki keskiarvot tällä sivulla ovat $param.';
+  }
+
+  @override
+  String get arenaTotal => 'Yhteensä';
+
+  @override
+  String get arenaPointsAvg => 'Pisteiden keskiarvo';
+
+  @override
+  String get arenaPointsSum => 'Pisteiden summa';
+
+  @override
+  String get arenaRankAvg => 'Sijoitusten keskiarvo';
+
+  @override
+  String get arenaTournamentWinners => 'Turnauksen voittajat';
+
+  @override
+  String get arenaTournamentShields => 'Turnauskilvet';
+
+  @override
+  String get arenaOnlyTitled => 'Vain arvonimen saaneet pelaajat';
+
+  @override
+  String get arenaOnlyTitledHelp => 'Edellytä turnauksen osallistujilta virallista arvonimeä';
+
+  @override
+  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+
+  @override
+  String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String arenaDrawingWithinNbMoves(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Jos peli päättyy tasan ensimmäisten $count siirron aikana, kumpikaan pelaaja ei saa pisteitä.',
+      one: 'Jos peli päättyy tasan ensimmäisen $count siirron aikana, kumpikaan pelaaja ei saa pisteitä.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String arenaViewAllXTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Näytä kaikki $count joukkuetta',
+      one: 'Näytä joukkue',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get broadcastBroadcasts => 'Lähetykset';
 
   @override
@@ -596,12 +810,26 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastSinceHideResults => 'Koska olet päättänyt piilottaa tulokset ja koska vältämme spoilereita, ovat kaikkien lautojen esikatselut tyhjiä.';
 
   @override
+  String get broadcastLiveboard => 'Live board';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count lähetystä',
       one: '$count lähetys',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String broadcastNbViewers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viewers',
+      one: '$count viewer',
     );
     return '$_temp0';
   }
@@ -2086,6 +2314,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get claimADraw => 'Vaadi tasapeli';
 
   @override
+  String get drawClaimed => 'Draw claimed';
+
+  @override
   String get offerDraw => 'Ehdota tasapeliä';
 
   @override
@@ -2787,7 +3018,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get createdBy => 'Tekijä:';
 
   @override
-  String get tournamentIsStarting => 'Turnaus alkaa';
+  String get startingIn => 'Starting in';
 
   @override
   String get tournamentPairingsAreNowClosed => 'Turnauksen peliparien määritys on päättynyt.';
@@ -2832,11 +3063,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get draws => 'Tasapelejä';
-
-  @override
-  String nextXTournament(String param) {
-    return 'Seuraava $param-turnaus:';
-  }
 
   @override
   String get averageOpponent => 'Keskimääräinen vastustaja';
@@ -3560,6 +3786,17 @@ class AppLocalizationsFi extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Jos et näe viestiä, tarkista muut paikat joihin se voi olla joutunut (kuten roskaposti- ja spämmikansiot).';
 
   @override
+  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+
+  @override
+  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+
+  @override
+  String verifyYourAddress(String param) {
+    return 'Verify that $param is your email address';
+  }
+
+  @override
   String weHaveSentYouAnEmailTo(String param) {
     return 'Olemme lähettäneet sähköpostiviestin osoitteeseen $param. Klikkaa viestissä olevaa linkkiä nollataksesi salasanasi.';
   }
@@ -3588,6 +3825,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get downloadImported => 'Imuroi tuotu PGN';
+
+  @override
+  String get downloadAllGames => 'Download all games';
 
   @override
   String get crosstable => 'Pistetaulukko';
@@ -3694,6 +3934,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get language => 'Kieli';
+
+  @override
+  String get allLanguages => 'All languages';
 
   @override
   String get background => 'Tausta';
@@ -5128,16 +5371,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get studyShowEvalBar => 'Arviopalkit';
 
   @override
-  String get studyFirst => 'Alkuun';
-
-  @override
-  String get studyPrevious => 'Edellinen';
-
-  @override
   String get studyNext => 'Seuraava';
-
-  @override
-  String get studyLast => 'Loppuun';
 
   @override
   String get studyShareAndExport => 'Jaa & vie';
@@ -5470,6 +5704,105 @@ class AppLocalizationsFi extends AppLocalizations {
   String studyPerPage(String param) {
     return '$param per sivu';
   }
+
+  @override
+  String get studyGetTheTour => 'Need help? Get the tour!';
+
+  @override
+  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+
+  @override
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+
+  @override
+  String get studySharedAndSaveTitle => 'Shared and saved';
+
+  @override
+  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+
+  @override
+  String get studyStudyMembersTitle => 'Study members';
+
+  @override
+  String studyStudyMembersText(String param1, String param2) {
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+  }
+
+  @override
+  String studyAddMembersText(String param) {
+    return 'Click the $param button.<br>Then decide who can contribute or not.';
+  }
+
+  @override
+  String get studyStudyChaptersTitle => 'Study chapters';
+
+  @override
+  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+
+  @override
+  String get studyCommentPositionTitle => 'Comment on a position';
+
+  @override
+  String studyCommentPositionText(String param) {
+    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+  }
+
+  @override
+  String get studyAnnotatePositionTitle => 'Annotate a position';
+
+  @override
+  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+
+  @override
+  String get studyConclusionTitle => 'Thanks for your time';
+
+  @override
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+
+  @override
+  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+
+  @override
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+
+  @override
+  String get studyFromInitialPositionTitle => 'From initial position';
+
+  @override
+  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+
+  @override
+  String get studyCustomPositionTitle => 'Custom position';
+
+  @override
+  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+
+  @override
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+
+  @override
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyFromFenStringTitle => 'From a FEN string';
+
+  @override
+  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+
+  @override
+  String get studyFromPgnGameTitle => 'From a PGN game';
+
+  @override
+  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+
+  @override
+  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+
+  @override
+  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+
+  @override
+  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {
