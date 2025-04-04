@@ -75,6 +75,14 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
 
   Side get sideToMove => lastPosition.turn;
 
+  Duration? clockOf(Side side) {
+    return clock != null
+        ? side == Side.white
+            ? clock!.white
+            : clock!.black
+        : null;
+  }
+
   bool get hasAI => white.isAI || black.isAI;
 
   bool get imported => source == GameSource.import;

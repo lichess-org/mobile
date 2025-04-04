@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 
 Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
   if (appLinkUri.pathSegments.isEmpty) return null;
@@ -25,6 +26,9 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
         final tab = BroadcastRoundTab.tabOrNullFromString(appLinkUri.fragment);
         return BroadcastRoundScreenLoading.buildRoute(context, roundId, initialTab: tab);
       }
+    case 'tournament':
+      final tournamentId = TournamentId(appLinkUri.pathSegments[1]);
+      return TournamentScreen.buildRoute(context, tournamentId);
 
     case 'training':
       final id = appLinkUri.pathSegments[1];
