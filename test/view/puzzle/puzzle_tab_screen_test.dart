@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:mocktail/mocktail.dart';
@@ -84,6 +85,7 @@ void main() {
         httpClientFactoryProvider.overrideWith((ref) {
           return FakeHttpClientFactory(() => mockClient);
         }),
+        savedStreakScoreProvider.overrideWith((ref) => 123),
       ],
     );
 
@@ -94,6 +96,7 @@ void main() {
 
     expect(find.text('Puzzle Themes'), findsOneWidget);
     expect(find.text('Puzzle Streak'), findsOneWidget);
+    expect(find.text('123'), findsOneWidget); // saved streak score
     expect(find.text('Puzzle Storm'), findsOneWidget);
   });
 
