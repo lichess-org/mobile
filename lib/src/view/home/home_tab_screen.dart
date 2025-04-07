@@ -553,7 +553,6 @@ class _TabletCreateAGameSection extends StatelessWidget {
           shouldShow: true,
           child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
         ),
-        Padding(padding: Styles.bodySectionPadding, child: QuickGameButton()),
         CreateGameOptions(),
       ],
     );

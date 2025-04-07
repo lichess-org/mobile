@@ -411,8 +411,11 @@ class AdaptiveListTile extends StatelessWidget {
     this.onTap,
     this.isThreeLine = false,
     this.contentPadding,
+    this.tileColor,
+    this.iconColor,
     this.selected = false,
     this.dense,
+    this.visualDensity,
     super.key,
   });
 
@@ -425,12 +428,18 @@ class AdaptiveListTile extends StatelessWidget {
   final bool selected;
   final bool? dense;
   final EdgeInsetsGeometry? contentPadding;
+  final Color? tileColor;
+  final Color? iconColor;
+  final VisualDensity? visualDensity;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: ListTile(
+        visualDensity: visualDensity,
+        tileColor: tileColor,
+        iconColor: iconColor ?? ColorScheme.of(context).onSurface.withValues(alpha: 0.7),
         leading: leading,
         title: title,
         subtitle: subtitle,

@@ -1,10 +1,8 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
@@ -12,16 +10,16 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:linkify/linkify.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 final _onlineBotsProvider = FutureProvider.autoDispose<IList<User>>((ref) {
   return ref.withClientCacheFor(
@@ -44,6 +42,47 @@ class OnlineBotsScreen extends StatelessWidget {
       appBarTitle: Text(context.l10n.onlineBots),
       body: _Body(),
     );
+  }
+}
+
+class OnlineBotsWidget extends ConsumerWidget {
+  const OnlineBotsWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final onlineBotsAsync = ref.watch(_onlineBotsProvider);
+
+    return switch (onlineBotsAsync) {
+      AsyncData(:final value) => ListSection(
+        header: Text(context.l10n.onlineBots),
+        headerTrailing: NoPaddingTextButton(
+          onPressed: () {
+            Navigator.of(context).push(OnlineBotsScreen.buildRoute(context));
+          },
+          child: Text(context.l10n.more),
+        ),
+        children: [
+          for (final bot in value.where((bot) => bot.verified == true))
+            PlatformListTile(
+              title: UserFullNameWidget(user: bot.lightUser),
+              subtitle: (bot.perfs[Perf.blitz]?.games ?? 0) > 0 ? _BotRatings(bot: bot) : null,
+              onTap: () => _challengeBot(bot, context: context, ref: ref),
+              onLongPress: () {
+                showAdaptiveBottomSheet<void>(
+                  context: context,
+                  useRootNavigator: true,
+                  isDismissible: true,
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  builder: (context) => UserContextMenu(user: bot),
+                );
+              },
+            ),
+        ],
+      ),
+      AsyncError(:final error) => Center(child: Text('Could not load online bots: $error')),
+      _ => const Center(child: CircularProgressIndicator()),
+    };
   }
 }
 
@@ -95,45 +134,12 @@ class _Body extends ConsumerWidget {
                 ),
                 subtitle: Column(
                   children: [
-                    Row(
-                      children:
-                          [Perf.blitz, Perf.rapid, Perf.classical].map((perf) {
-                            final rating = bot.perfs[perf]?.rating;
-                            final nbGames = bot.perfs[perf]?.games ?? 0;
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 16.0, top: 4.0, bottom: 4.0),
-                              child: Row(
-                                children: [
-                                  Icon(perf.icon, size: 16),
-                                  const SizedBox(width: 4.0),
-                                  if (rating != null && nbGames > 0)
-                                    Text('$rating', style: const TextStyle(color: Colors.grey))
-                                  else
-                                    const Text('  -  '),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                    ),
+                    _BotRatings(bot: bot),
                     Text(bot.profile?.bio ?? '', maxLines: 2, overflow: TextOverflow.ellipsis),
                   ],
                 ),
                 onTap: () {
-                  final session = ref.read(authSessionProvider);
-                  if (session == null) {
-                    showPlatformSnackbar(
-                      context,
-                      context.l10n.challengeRegisterToSendChallenges,
-                      type: SnackBarType.error,
-                    );
-                    return;
-                  }
-                  final isOddBot = oddBots.contains(bot.lightUser.name.toLowerCase());
-                  Navigator.of(context).push(
-                    isOddBot
-                        ? ChallengeOddBotsScreen.buildRoute(context, bot.lightUser)
-                        : CreateChallengeScreen.buildRoute(context, bot.lightUser),
-                  );
+                  _challengeBot(bot, context: context, ref: ref);
                 },
                 onLongPress: () {
                   showAdaptiveBottomSheet<void>(
@@ -142,7 +148,7 @@ class _Body extends ConsumerWidget {
                     isDismissible: true,
                     isScrollControlled: true,
                     showDragHandle: true,
-                    builder: (context) => _ContextMenu(bot: bot),
+                    builder: (context) => UserContextMenu(user: bot),
                   );
                 },
               );
@@ -157,58 +163,54 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _ContextMenu extends ConsumerWidget {
-  const _ContextMenu({required this.bot});
+void _challengeBot(User bot, {required BuildContext context, required WidgetRef ref}) {
+  final session = ref.read(authSessionProvider);
+  if (session == null) {
+    showPlatformSnackbar(
+      context,
+
+      context.l10n.challengeRegisterToSendChallenges,
+      type: SnackBarType.error,
+    );
+    return;
+  }
+  final isOddBot = oddBots.contains(bot.lightUser.name.toLowerCase());
+  Navigator.of(context).push(
+    isOddBot
+        ? ChallengeOddBotsScreen.buildRoute(context, bot.lightUser)
+        : CreateChallengeScreen.buildRoute(context, bot.lightUser),
+  );
+}
+
+class _BotRatings extends StatelessWidget {
+  const _BotRatings({required this.bot});
 
   final User bot;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return BottomSheetScrollableContainer(
-      children: [
-        Padding(
-          padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(bottom: 16.0)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              UserFullNameWidget(user: bot.lightUser, style: Styles.title),
-              const SizedBox(height: 8.0),
-              if (bot.profile?.bio != null)
-                Linkify(
-                  onOpen: (link) {
-                    if (link.originText.startsWith('@')) {
-                      final username = link.originText.substring(1);
-                      Navigator.of(context).push(
-                        UserScreen.buildRoute(
-                          context,
-                          LightUser(id: UserId.fromUserName(username), name: username),
-                        ),
-                      );
-                    } else {
-                      launchUrl(Uri.parse(link.url));
-                    }
-                  },
-                  linkifiers: const [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()],
-                  text: bot.profile!.bio!,
-                  maxLines: 20,
-                  overflow: TextOverflow.ellipsis,
-                  linkStyle: const TextStyle(
-                    color: Colors.blueAccent,
-                    decoration: TextDecoration.none,
-                  ),
+  Widget build(BuildContext context) {
+    return RatingPrefAware(
+      orElse: const SizedBox.shrink(),
+      child: Row(
+        children:
+            [Perf.blitz, Perf.rapid, Perf.classical].map((perf) {
+              final rating = bot.perfs[perf]?.rating;
+              final nbGames = bot.perfs[perf]?.games ?? 0;
+              return Padding(
+                padding: const EdgeInsets.only(right: 16.0, top: 4.0, bottom: 4.0),
+                child: Row(
+                  children: [
+                    Icon(perf.icon, size: 16),
+                    const SizedBox(width: 4.0),
+                    if (rating != null && nbGames > 0)
+                      Text('$rating', style: const TextStyle(color: Colors.grey))
+                    else
+                      const Text('  -  '),
+                  ],
                 ),
-            ],
-          ),
-        ),
-        const PlatformDivider(),
-        BottomSheetContextMenuAction(
-          onPressed: () {
-            Navigator.of(context).push(UserScreen.buildRoute(context, bot.lightUser));
-          },
-          icon: Icons.person,
-          child: Text(context.l10n.profile),
-        ),
-      ],
+              );
+            }).toList(),
+      ),
     );
   }
 }

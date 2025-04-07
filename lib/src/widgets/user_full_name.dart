@@ -57,7 +57,7 @@ class UserFullNameWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provisionalStr = provisional == true ? '?' : '';
-    final ratingStr = rating != null ? '($rating$provisionalStr)' : null;
+    final ratingStr = rating != null ? '$rating$provisionalStr' : null;
     final showRatingAsync = ref.watch(showRatingsPrefProvider);
     final shouldShowRating = switch (showRatingAsync) {
       AsyncData(:final value) => value != ShowRatings.no,
@@ -103,7 +103,27 @@ class UserFullNameWidget extends ConsumerWidget {
           const SizedBox(width: 5),
         ],
         Flexible(
-          child: Text(displayName, maxLines: 1, overflow: TextOverflow.ellipsis, style: style),
+          child: Text.rich(
+            TextSpan(
+              text: displayName,
+              children: [
+                if (shouldShowRating && ratingStr != null) ...[
+                  const WidgetSpan(child: SizedBox(width: 5)),
+                  TextSpan(
+                    text: ratingStr,
+                    style:
+                        style?.copyWith(
+                          fontSize: style?.fontSize != null ? (style!.fontSize! - 3) : 12,
+                        ) ??
+                        const TextStyle(fontSize: 12),
+                  ),
+                ],
+              ],
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: style,
+          ),
         ),
         if (showFlair && user?.flair != null) ...[
           const SizedBox(width: 5),
@@ -113,10 +133,6 @@ class UserFullNameWidget extends ConsumerWidget {
             width: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
             height: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
           ),
-        ],
-        if (shouldShowRating && ratingStr != null) ...[
-          const SizedBox(width: 5),
-          Text(ratingStr, style: style),
         ],
       ],
     );
