@@ -15,9 +15,11 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Walang mga resulta</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Mga manlalaro na may \"%s\"</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Maglaro ng mga palaisipan mula sa iyong mga paboritong pagbubukas, o pumili ng tema.</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Mga nakaraang mga searches</string>
   <string name="showComments" comment="Shown in the analysis screen.">Ipakita ang mga komento</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Ipakita ang resulta</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">May maling nangyari.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Mga kulay ng sistema</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Naghihintay na sumali ang kalaban...</string>
