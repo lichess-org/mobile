@@ -73,6 +73,8 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
 
   @override
   Widget build(BuildContext context) {
+    final tournamentAsync = ref.watch(tournamentsProvider);
+
     return PlatformScaffold(
       appBarTitle: Text(context.l10n.tournaments),
       appBarBottom: TabBar(
@@ -84,7 +86,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
         ],
       ),
       appBarAutomaticBackgroundVisibility: false,
-      body: switch (ref.watch(tournamentsProvider)) {
+      body: switch (tournamentAsync) {
         AsyncData(:final value) => TabBarView(
           controller: _tabController,
           children: <Widget>[
@@ -100,15 +102,22 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   }
 }
 
-class _TournamentListBody extends StatelessWidget {
+class _TournamentListBody extends ConsumerStatefulWidget {
   const _TournamentListBody({required this.tournaments});
 
   final IList<TournamentListItem> tournaments;
 
   @override
+  ConsumerState<_TournamentListBody> createState() => _TournamentListBodyState();
+}
+
+class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
+  @override
   Widget build(BuildContext context) {
     final tournamentListItems =
-        tournaments
+        widget.tournaments
             .sorted((a, b) {
               final cmp = a.startsAt.compareTo(b.startsAt);
               if (cmp != 0) return cmp;
@@ -118,15 +127,23 @@ class _TournamentListBody extends StatelessWidget {
             .map((tournament) => _TournamentListItem(tournament: tournament))
             .toList();
 
-    return ListView.separated(
-      shrinkWrap: true,
-      itemCount: tournamentListItems.length,
-      separatorBuilder:
-          (context, index) =>
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-                  : const SizedBox.shrink(),
-      itemBuilder: (context, index) => tournamentListItems[index],
+    return RefreshIndicator.adaptive(
+      edgeOffset:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? MediaQuery.paddingOf(context).top + 16.0
+              : 0,
+      key: _refreshIndicatorKey,
+      onRefresh: () async => ref.refresh(tournamentsProvider),
+      child: ListView.separated(
+        shrinkWrap: true,
+        itemCount: tournamentListItems.length,
+        separatorBuilder:
+            (context, index) =>
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                    : const SizedBox.shrink(),
+        itemBuilder: (context, index) => tournamentListItems[index],
+      ),
     );
   }
 }
