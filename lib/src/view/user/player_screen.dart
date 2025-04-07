@@ -77,8 +77,6 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
 
-    print('build body session: $session');
-
     return ListView(
       children: [
         if (session != null) _OnlineFriendsWidget(),
