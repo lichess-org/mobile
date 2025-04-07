@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -22,6 +23,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -77,44 +79,43 @@ class _Body extends ConsumerWidget {
         children: [
           Expanded(
             child: Padding(
-              padding: Styles.bodyPadding,
+              padding: Styles.horizontalBodyPadding,
               child: ListView(
                 children: [
                   PlatformCard(
                     child: Padding(
                       padding: Styles.bodySectionPadding,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _TournamentInfo(state.tournament),
                           if (state.tournament.verdicts.list.isNotEmpty) ...[
                             const SizedBox(height: 10),
                             _Verdicts(state.tournament.verdicts),
                           ],
+                          if (!state.tournament.berserkable) ...[
+                            const SizedBox(height: 10),
+                            const Text.rich(
+                              TextSpan(
+                                children: [
+                                  WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
+                                  TextSpan(
+                                    // TODO l10n
+                                    text: ' No Berserk allowed',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  if (!state.tournament.berserkable) ...[
-                    const Text.rich(
-                      TextSpan(
-                        children: [
-                          WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
-                          TextSpan(
-                            // TODO l10n
-                            text: ' No Berserk allowed',
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
+                  const SizedBox(height: 16),
                   _Standing(state),
-                  const SizedBox(height: 10),
-                  if (state.tournament.featuredGame != null) ...[
+                  const SizedBox(height: 16),
+                  if (state.tournament.featuredGame != null)
                     _FeaturedGame(state.tournament.featuredGame!),
-                    const SizedBox(height: 10),
-                  ],
                 ],
               ),
             ),
@@ -171,11 +172,11 @@ class _Standing extends ConsumerWidget {
       clipBehavior: Clip.hardEdge,
       child: Column(
         children: [
+          _StandingControls(state: state),
           ...List.generate(
             10,
             (i) => standing.players.getOrNull(i),
           ).nonNulls.map((player) => _StandingPlayer(player: player)),
-          _StandingControls(state: state),
         ],
       ),
     );
@@ -193,40 +194,27 @@ class _StandingPlayer extends StatelessWidget {
       onTap: () {
         // TODO show player detail page
       },
-      child: ColoredBox(
-        color:
-            player.rank.isEven
-                ? ColorScheme.of(context).surfaceContainerLow
-                : ColorScheme.of(context).surfaceContainerHigh,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 2),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 5,
-            children: [
-              SizedBox(
-                width: 30,
-                child:
-                    player.withdraw
-                        ? const Icon(Icons.pause, color: LichessColors.grey, size: 20)
-                        : Text('${player.rank}', textAlign: TextAlign.center),
-              ),
-              UserFullNameWidget(
-                user: player.user,
-                rating: player.rating,
-                provisional: player.provisional,
-                shouldShowOnline: false,
-                showFlair: false,
-                showPatron: false,
-              ),
-              Expanded(child: _Scores(player.sheet.scores)),
-              Visibility.maintain(
-                visible: player.sheet.fire,
-                child: const Icon(LichessIcons.blitz, size: 17, color: LichessColors.brag),
-              ),
-              Text('${player.score}', style: const TextStyle(fontWeight: FontWeight.bold)),
-            ],
-          ),
+      child: AdaptiveListTile(
+        tileColor: player.rank.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
+        visualDensity: VisualDensity.compact,
+        leading:
+            player.withdraw
+                ? const Icon(Icons.pause, color: LichessColors.grey, size: 20)
+                : Text('${player.rank}', textAlign: TextAlign.center),
+        title: UserFullNameWidget(
+          user: player.user,
+          rating: player.rating,
+          provisional: player.provisional,
+          shouldShowOnline: false,
+        ),
+        subtitle: _Scores(player.sheet.scores),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (player.sheet.fire)
+              const Icon(LichessIcons.blitz, size: 17, color: LichessColors.brag),
+            Text('${player.score}', style: const TextStyle(fontWeight: FontWeight.bold)),
+          ],
         ),
       ),
     );
@@ -241,7 +229,6 @@ class _Scores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      alignment: WrapAlignment.end,
       children: scores.reversed
           .map(
             (score) => Text(
@@ -253,7 +240,8 @@ class _Scores extends StatelessWidget {
                         ? LichessColors.brag
                         : score > 1
                         ? LichessColors.good
-                        : LichessColors.grey,
+                        : textShade(context, 0.5),
+                fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
           )
