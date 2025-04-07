@@ -170,7 +170,11 @@ class _AppState extends ConsumerState<Application> {
       builder:
           isIOS
               ? (context, child) => IconTheme.merge(
-                data: IconThemeData(color: CupertinoTheme.of(context).textTheme.textStyle.color),
+                data: IconThemeData(
+                  color: CupertinoTheme.of(
+                    context,
+                  ).textTheme.textStyle.color?.withValues(alpha: 0.7),
+                ),
                 child: Material(color: Colors.transparent, child: child),
               )
               : null,

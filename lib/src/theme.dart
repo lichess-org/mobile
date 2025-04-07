@@ -126,6 +126,7 @@ extension CustomThemeBuildContext on BuildContext {
     light: themeLight.copyWith(
       cupertinoOverrideTheme: lightCupertino,
       splashFactory: isIOS ? NoSplash.splashFactory : null,
+      iconTheme: IconThemeData(color: themeLight.colorScheme.onSurface.withValues(alpha: 0.7)),
       cardTheme:
           isIOS
               ? CardThemeData(
@@ -152,6 +153,7 @@ extension CustomThemeBuildContext on BuildContext {
     dark: themeDark.copyWith(
       cupertinoOverrideTheme: darkCupertino,
       splashFactory: isIOS ? NoSplash.splashFactory : null,
+      iconTheme: IconThemeData(color: themeDark.colorScheme.onSurface.withValues(alpha: 0.7)),
       cardTheme:
           isIOS
               ? CardThemeData(

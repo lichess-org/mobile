@@ -364,30 +364,27 @@ class PlatformListTile extends StatelessWidget {
         );
       case TargetPlatform.iOS:
         final activatedColor = Styles.cupertinoListTileBackgroundActivated(context);
-        return IconTheme(
-          data: CupertinoIconThemeData(color: colorScheme.onSurface.withValues(alpha: 0.7)),
-          child: GestureDetector(
-            onLongPress: onLongPress,
-            child: CupertinoListTile.notched(
-              backgroundColor: selected == true ? activatedColor : backgroundColor,
-              backgroundColorActivated: activatedColor,
-              leading: leading,
-              title:
-                  harmonizeCupertinoTitleStyle
-                      ? DefaultTextStyle.merge(
-                        // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart
-                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
-                        child: title,
-                      )
-                      : title,
-              subtitle: subtitle,
-              trailing:
-                  trailing ??
-                  (selected == true ? const Icon(CupertinoIcons.check_mark_circled_solid) : null),
-              additionalInfo: additionalInfo,
-              padding: padding,
-              onTap: onTap,
-            ),
+        return GestureDetector(
+          onLongPress: onLongPress,
+          child: CupertinoListTile.notched(
+            backgroundColor: selected == true ? activatedColor : backgroundColor,
+            backgroundColorActivated: activatedColor,
+            leading: leading,
+            title:
+                harmonizeCupertinoTitleStyle
+                    ? DefaultTextStyle.merge(
+                      // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart
+                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
+                      child: title,
+                    )
+                    : title,
+            subtitle: subtitle,
+            trailing:
+                trailing ??
+                (selected == true ? const Icon(CupertinoIcons.check_mark_circled_solid) : null),
+            additionalInfo: additionalInfo,
+            padding: padding,
+            onTap: onTap,
           ),
         );
 
