@@ -36,6 +36,11 @@ Future<LightUser?> accountUser(Ref ref) async {
 }
 
 @riverpod
+Future<bool> kidMode(Ref ref) async {
+  return ref.watch(accountProvider.selectAsync((user) => user?.kid ?? false));
+}
+
+@riverpod
 Future<IList<UserActivity>> accountActivity(Ref ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();

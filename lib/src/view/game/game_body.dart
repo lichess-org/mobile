@@ -100,12 +100,14 @@ class GameBody extends ConsumerWidget {
     final enableChat = ref.watch(
       gamePreferencesProvider.select((prefs) => prefs.enableChat ?? false),
     );
+    final kidModeAsync = ref.watch(kidModeProvider);
 
     final gameStateAsync = ref.watch(ctrlProvider);
 
     return gameStateAsync.when(
       data: (gameState) {
-        final isChatEnabled = enableChat && !gameState.isZenModeActive;
+        final isChatEnabled =
+            enableChat && !gameState.isZenModeActive && kidModeAsync.valueOrNull == false;
         if (isChatEnabled) {
           ref.listen(
             chatControllerProvider(id),
@@ -430,11 +432,15 @@ class _GameBottomBar extends ConsumerWidget {
     final gameStateAsync = ref.watch(gameControllerProvider(id));
     final chatStateAsync =
         gamePrefs.enableChat == true ? ref.watch(chatControllerProvider(id)) : null;
+    final kidModeAsync = ref.watch(kidModeProvider);
 
     return PlatformBottomBar(
       children: gameStateAsync.when(
         data: (gameState) {
-          final isChatEnabled = chatStateAsync != null && !gameState.isZenModeActive;
+          final isChatEnabled =
+              chatStateAsync != null &&
+              !gameState.isZenModeActive &&
+              kidModeAsync.valueOrNull == false;
 
           final chatUnreadLabel =
               isChatEnabled
