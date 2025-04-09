@@ -235,7 +235,7 @@ void main() {
 
       expect(find.text('1-10 / 11'), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.skip_next));
+      await tester.tap(find.byIcon(Icons.chevron_right));
       // Wait for next page of standings to load
       await tester.pump();
 
@@ -246,7 +246,7 @@ void main() {
 
       expect(find.text('11-13 / 13'), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.skip_previous));
+      await tester.tap(find.byIcon(Icons.chevron_left));
       // Wait for first page of standings to load
       await tester.pump();
 

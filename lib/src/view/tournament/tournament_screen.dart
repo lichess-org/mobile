@@ -282,7 +282,7 @@ class _StandingControls extends ConsumerWidget {
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
                   : null,
           semanticsLabel: 'Previous',
-          icon: Icons.skip_previous,
+          icon: Icons.chevron_left,
         ),
         Expanded(
           child: Text(
@@ -301,7 +301,7 @@ class _StandingControls extends ConsumerWidget {
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadLastStandingsPage
                   : null,
           semanticsLabel: context.l10n.studyNext,
-          icon: Icons.skip_next,
+          icon: Icons.chevron_right,
         ),
         if (state.tournament.me != null)
           PlatformIconButton(
