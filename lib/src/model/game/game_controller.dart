@@ -882,10 +882,15 @@ class GameController extends _$GameController {
 
         final side = pick(event.data).asSideOrNull();
         final curState = state.requireValue;
+
         state = AsyncValue.data(
           curState.copyWith.game(
-            white: curState.game.white.copyWith(berserk: side == Side.white),
-            black: curState.game.black.copyWith(berserk: side == Side.black),
+            white: curState.game.white.copyWith(
+              berserk: side == Side.white || curState.game.white.berserk == true,
+            ),
+            black: curState.game.black.copyWith(
+              berserk: side == Side.black || curState.game.black.berserk == true,
+            ),
           ),
         );
     }
