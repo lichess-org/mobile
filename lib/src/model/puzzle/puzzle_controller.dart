@@ -281,12 +281,12 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
   void _saveCurrentStreakLocally() {
     if (state.streak != null) {
-      ref.read(streakStorageProvider(initialContext.userId)).saveActiveStreak(ref, state.streak!);
+      ref.read(streakStorageProvider(initialContext.userId)).saveActiveStreak(state.streak!);
     }
   }
 
   void _sendStreakResult() {
-    ref.read(streakStorageProvider(initialContext.userId)).clearActiveStreak(ref);
+    ref.read(streakStorageProvider(initialContext.userId)).clearActiveStreak();
 
     if (initialContext.userId != null) {
       final streak = state.streak?.index;

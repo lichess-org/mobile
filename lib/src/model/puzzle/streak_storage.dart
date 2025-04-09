@@ -13,7 +13,7 @@ part 'streak_storage.g.dart';
 
 @Riverpod(keepAlive: true)
 StreakStorage streakStorage(Ref ref, UserId? userId) {
-  return StreakStorage(userId);
+  return StreakStorage(ref, userId);
 }
 
 /// Fetches the current streak score from the local storage if available, returns null otherwise.
@@ -27,7 +27,8 @@ Future<int?> savedStreakScore(Ref ref) async {
 
 /// Local storage for the current puzzle streak.
 class StreakStorage {
-  const StreakStorage(this.userId);
+  const StreakStorage(this.ref, this.userId);
+  final Ref ref;
   final UserId? userId;
 
   Future<PuzzleStreak?> loadActiveStreak() async {
@@ -39,12 +40,12 @@ class StreakStorage {
     return PuzzleStreak.fromJson(jsonDecode(stored) as Map<String, dynamic>);
   }
 
-  Future<void> saveActiveStreak(Ref ref, PuzzleStreak streak) async {
+  Future<void> saveActiveStreak(PuzzleStreak streak) async {
     await _store.setString(_storageKey, jsonEncode(streak));
     ref.invalidate(savedStreakScoreProvider);
   }
 
-  Future<void> clearActiveStreak(Ref ref) async {
+  Future<void> clearActiveStreak() async {
     await _store.remove(_storageKey);
     ref.invalidate(savedStreakScoreProvider);
   }
