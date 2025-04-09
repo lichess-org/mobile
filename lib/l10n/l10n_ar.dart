@@ -3121,9 +3121,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'إزواج البطولة مغلق الآن.';
-
-  @override
   String standByX(String param) {
     return 'تأهب يا $param، جارٍ مزاوجة اللاعبين، استعد!';
   }
@@ -3139,9 +3136,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get winRate => 'معدل الفوز';
-
-  @override
-  String get berserkRate => 'معدل المخاطرة';
 
   @override
   String get performance => 'تقييم الأداء';
@@ -5669,9 +5663,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'PGN الدراسة';
-
-  @override
-  String get studyDownloadAllGames => 'حمل جميع الألعاب';
 
   @override
   String get studyChapterPgn => 'PGN الفصل';

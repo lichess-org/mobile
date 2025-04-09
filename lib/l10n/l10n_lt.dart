@@ -3071,9 +3071,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Suporavimai turnyrui jau baigėsi.';
-
-  @override
   String standByX(String param) {
     return '$param, būkite pasiruošę, suporuojami žaidėjai!';
   }
@@ -3089,9 +3086,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get winRate => 'Pergalių proc.';
-
-  @override
-  String get berserkRate => 'Įsiūčio proc.';
 
   @override
   String get performance => 'Pasirodymo lygis';
@@ -5525,9 +5519,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'Studijos PGN';
-
-  @override
-  String get studyDownloadAllGames => 'Atsisiųsti visus žaidimus';
 
   @override
   String get studyChapterPgn => 'Skyriaus PGN';

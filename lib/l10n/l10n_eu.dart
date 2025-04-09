@@ -540,10 +540,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Eskatu titulu ofiziala izatea txapelketan sartzeko';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'Txapelketaren parekatzeak itxita daude jada.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Berserk ratioa';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -810,7 +810,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastSinceHideResults => 'Emaitzak ezkutatzea erabaki duzunez, taulen aurreikuspenak hutsik daude.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Zuzeneko taula';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -828,8 +828,8 @@ class AppLocalizationsEu extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count ikusle',
+      one: 'Ikusle $count',
     );
     return '$_temp0';
   }
@@ -2314,7 +2314,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get claimADraw => 'Berdinketa eskatu';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Berdinketa eskatuta';
 
   @override
   String get offerDraw => 'Berdinketa eskaini';
@@ -3018,10 +3018,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get createdBy => 'Sortuta';
 
   @override
-  String get startingIn => 'Starting in';
-
-  @override
-  String get tournamentPairingsAreNowClosed => 'Txapelketaren parekatzeak itxita daude jada.';
+  String get startingIn => 'Laster hasiko da';
 
   @override
   String standByX(String param) {
@@ -3039,9 +3036,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get winRate => 'Irabazien ratioa';
-
-  @override
-  String get berserkRate => 'Berserk ratioa';
 
   @override
   String get performance => 'Performancea';
@@ -3786,14 +3780,14 @@ class AppLocalizationsEu extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Ez baduzu mezua aurkitzen, begiratu beste tokietan: zaborrontzian, spam karpetan, ...';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Mezua ez baduzu 5 minutuan jasotzen:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Begiratu spam karpetan';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Egiaztatu $param zure eposta helbidea dela';
   }
 
   @override
@@ -3827,7 +3821,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get downloadImported => 'Igo zen moduan jaitsi';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Deskargatu partida guztiak';
 
   @override
   String get crosstable => 'Aurreko emaitzak';
@@ -3936,7 +3930,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get language => 'Hizkuntza';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Hizkuntza guztiak';
 
   @override
   String get background => 'Atzeko planoa';
@@ -5381,9 +5375,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'Azterlanaren PGNa';
-
-  @override
-  String get studyDownloadAllGames => 'Partida guztiak deskargatu';
 
   @override
   String get studyChapterPgn => 'Kapituluaren PGNa';

@@ -5522,12 +5522,6 @@ abstract class AppLocalizations {
   /// **'Starting in'**
   String get startingIn;
 
-  /// No description provided for @tournamentPairingsAreNowClosed.
-  ///
-  /// In en, this message translates to:
-  /// **'The tournament pairings are now closed.'**
-  String get tournamentPairingsAreNowClosed;
-
   /// No description provided for @standByX.
   ///
   /// In en, this message translates to:
@@ -5557,12 +5551,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Win rate'**
   String get winRate;
-
-  /// No description provided for @berserkRate.
-  ///
-  /// In en, this message translates to:
-  /// **'Berserk rate'**
-  String get berserkRate;
 
   /// No description provided for @performance.
   ///
@@ -9229,12 +9217,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Study PGN'**
   String get studyStudyPgn;
-
-  /// No description provided for @studyDownloadAllGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Download all games'**
-  String get studyDownloadAllGames;
 
   /// No description provided for @studyChapterPgn.
   ///

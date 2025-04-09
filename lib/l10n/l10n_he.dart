@@ -576,10 +576,10 @@ class AppLocalizationsHe extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'יהיה צורך בתואר רשמי כדי להצטרף לטורניר';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'שיבוצי הטורניר סגורים כעת.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'אחוז המשחקים ב״אטרף״';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2366,7 +2366,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get claimADraw => 'דרוש תיקו';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'התבקש תיקו';
 
   @override
   String get offerDraw => 'הצע תיקו';
@@ -3070,10 +3070,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get createdBy => 'נוצר ע\"י';
 
   @override
-  String get startingIn => 'Starting in';
-
-  @override
-  String get tournamentPairingsAreNowClosed => 'השיבוץ לזוגות בטורניר הסתיים.';
+  String get startingIn => 'מתחיל בעוד';
 
   @override
   String standByX(String param) {
@@ -3091,9 +3088,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get winRate => 'שיעור זכייה';
-
-  @override
-  String get berserkRate => 'אחוז המשחקים באטרף';
 
   @override
   String get performance => 'דירוג הביצוע';
@@ -3838,14 +3832,14 @@ class AppLocalizationsHe extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'אם את/ה לא מוצא/ת את המייל, חפש/י במקומות אחרים, כגון דואר זבל, ספאם או תיקיות אחרות.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'אם לא יתקבל המייל ב-5 הדקות הקרובות:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'בדקו את כל תיקיות הספאם, דואר הזבל וכיוצא בזה';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'ודאו שאכן $param היא כתובת המייל שלכם';
   }
 
   @override
@@ -3879,7 +3873,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get downloadImported => 'הורד משחק מיובא';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'הורדת כל המשחקים';
 
   @override
   String get crosstable => 'חשבון הנקודות';
@@ -3988,7 +3982,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get language => 'שפה';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'כל השפות';
 
   @override
   String get background => 'רקע';
@@ -4551,7 +4545,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get reopenYourAccount => 'פתח/י את חשבונך מחדש';
 
   @override
-  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
+  String get reopenYourAccountDescription => 'אם סגרת את חשבונך והתחרטת, עדיין ישנה אפשרות לקבל את חשבונך בחזרה.';
 
   @override
   String get emailAssociatedToaccount => 'כתובת האימייל שמקושרת למשתמש';
@@ -5529,9 +5523,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyStudyPgn => 'ה-PGN של לוח הלמידה';
 
   @override
-  String get studyDownloadAllGames => 'הורדת כל המשחקים';
-
-  @override
   String get studyChapterPgn => 'ה-PGN של הפרק';
 
   @override
@@ -5852,10 +5843,10 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'זקוקים לעזרה? קבלו הדרכה!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'ברוכים הבאים ללוחות הלמידה של Lichess!';
 
   @override
   String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';

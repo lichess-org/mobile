@@ -3069,9 +3069,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Лёсаванне турніру скончана.';
-
-  @override
   String standByX(String param) {
     return '$param, ідзе лёсаванне. Напагатове!';
   }
@@ -3087,9 +3084,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get winRate => 'Працэнт перамог';
-
-  @override
-  String get berserkRate => 'Шаленства';
 
   @override
   String get performance => 'Эфектыўнасць';
@@ -5519,9 +5513,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'PGN навучання';
-
-  @override
-  String get studyDownloadAllGames => 'Спампаваць усе гульні';
 
   @override
   String get studyChapterPgn => 'PGN раздзелу';

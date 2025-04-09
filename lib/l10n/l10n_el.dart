@@ -804,7 +804,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastAllBroadcastsByMonth => 'Προβολή όλων των αναμεταδόσεων ανά μήνα';
 
   @override
-  String get broadcastBackToLiveMove => 'Back to live move';
+  String get broadcastBackToLiveMove => 'Επιστροφή στην τρέχουσα κίνηση';
 
   @override
   String get broadcastSinceHideResults => 'Εφόσον επιλέξατε να κρύψετε τα αποτελέσματα, όλες οι σκακιέρες προεπισκόπησης είναι κενές ώστε να αποφευχθούν σπόιλερς.';
@@ -1693,10 +1693,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Αντί για την αναμενόμενη κίνηση παίζουμε πρώτα μια άλλη κίνηση η οποία δημιουργεί μια άμεση απειλή και που ο αντίπαλος πρέπει να απαντήσει. Επίσης γνωστό ως \"Zwischenzug\" ή \"Intermezzo\".';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Kill box mate';
+  String get puzzleThemeKillBoxMate => 'Ματ του κουτιού εξόντωσης';
 
   @override
-  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+  String get puzzleThemeKillBoxMateDescription => 'Ένας πύργος βρίσκεται δίπλα στον εχθρικό βασιλιά και υποστηρίζεται από μια βασίλισσα που επίσης εμποδίζει τα τετράγωνα διαφυγής του βασιλιά. Ο πύργος και η βασίλισσα πιάνουν τον εχθρικό βασιλιά σε ένα «κουτί εξόντωσης» 3 επί 3.';
 
   @override
   String get puzzleThemeVukovicMate => 'Ματ του Vukovic';
@@ -2314,7 +2314,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get claimADraw => 'Απαίτηση ισοπαλίας';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Απαιτήθηκε ισοπαλία';
 
   @override
   String get offerDraw => 'Προσφορά ισοπαλίας';
@@ -3021,9 +3021,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Οι αντιστοιχίσεις του διαγωνισμού έχουν κλείσει.';
-
-  @override
   String standByX(String param) {
     return 'Αναμένετε $param, αντιστοίχιση παικτών, ετοιμαστείτε!';
   }
@@ -3039,9 +3036,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get winRate => 'Ποσοστό νικών';
-
-  @override
-  String get berserkRate => 'Ποσοστό berserk';
 
   @override
   String get performance => 'Επίδοση';
@@ -3786,14 +3780,14 @@ class AppLocalizationsEl extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Εάν δεν μπορείτε να δείτε το μήνυμα ηλ. ταχυδρομείου, ελέγξτε άλλες θέσεις που θα μπορούσε να είναι, όπως στα διαγραμμένα, ανεπιθύμητη αλληλογραφία, κοινωνικά, ή σε άλλους φακέλους.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Εάν δε λάβετε το email σε 5 λεπτά:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Ελέγξτε τα ανεπιθύμητα μηνύματα σας και άλλους φακέλους';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Επιβεβαιώστε ότι το $param είναι η διεύθυνση email σας';
   }
 
   @override
@@ -3936,7 +3930,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get language => 'Γλώσσα';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Όλες οι γλώσσες';
 
   @override
   String get background => 'Φόντο';
@@ -5381,9 +5375,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'PGN της μελέτης';
-
-  @override
-  String get studyDownloadAllGames => 'Λήψη όλων των παιχνιδιών';
 
   @override
   String get studyChapterPgn => 'PGN του κεφαλαίου';

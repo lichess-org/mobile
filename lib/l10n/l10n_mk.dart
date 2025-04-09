@@ -3021,9 +3021,6 @@ class AppLocalizationsMk extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Спарувањата за турнирот се затворени.';
-
-  @override
   String standByX(String param) {
     return 'Почекај $param, се спаруваат играчите, подготви се!';
   }
@@ -3039,9 +3036,6 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get winRate => 'Стапка на победи';
-
-  @override
-  String get berserkRate => 'Стапка на лудило';
 
   @override
   String get performance => 'Изведби';
@@ -5381,9 +5375,6 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'Study PGN';
-
-  @override
-  String get studyDownloadAllGames => 'Download all games';
 
   @override
   String get studyChapterPgn => 'Chapter PGN';

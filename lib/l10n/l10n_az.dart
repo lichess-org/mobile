@@ -9,137 +9,137 @@ class AppLocalizationsAz extends AppLocalizations {
   AppLocalizationsAz([String locale = 'az']) : super(locale);
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Bütün oyunlar';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'əminmisiniz?';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'geri qaytarmaq istəyini ləvğ edin';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'təmizləyin';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'yadda saxlanılmış gedişi təmizləyin';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'oyuna qoşulun';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'fidbek';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'Xoş gəlmişsiniz, \"$param\"';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'Salam';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Növləri gizlət';
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Ev';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Canlı yayınlayıcılar';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Bu səhifəyi görmək üçün registirasyadan keçməlisiniz';
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'nəticə yoxdur';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Heç bir istifadəçiyi takib etmirsiniz';
 
   @override
   String get mobileOkButton => 'OK';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return '\"$param\" ilə oyunçular';
   }
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobilePrefMagnifyDraggedPiece => 'Tutduğunuz fiquru böyütün';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Bu gedişi dayndırmaq istəyirsinizmi?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Göstəriləcək heç nə yoxdur, filteri dəyişin';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'Göstəriləcək heç bir şey yoxdur. Puzzle stormundan bir neçe gediş oynayın.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => '3 dəqiqə ərzində, çözə bildiyiniz qədər puzzle çözün';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'İndiki strikinizi itirəcəksiniz. Skorunuz qeyd olunacaq.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'Ən seviniz açılışlardan puzzle eləyin, və ya tema seçin.';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Puzzle\'lar';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Son axtarışlarınız';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'həptik fidbək';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'immersiv mod';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Oynayarkən sistem istifadəçi interfeysini gizlədin. Ekranın kənarlarında sistemin naviqasiya jestləri sizi narahat edirsə, bundan istifadə edin. Oyun və Puzzle Storm ekranlarına aiddir';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Ayarlar';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'PNG\'ni paylaşın';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Oyunun linkini paylaşın';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Pozisyonu FEN olaraq paylaşın';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Bu puzzle\'ı paylaşın ';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Rəyləri göstərin';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'Nəticəni gösterin';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Variasiyaları gösterin';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Nə isə səhv getdi';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Sistem rəngləri';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Temalar';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Əşyalar';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Rəqibin qoşulması üçün gözləyin';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'İzləyin';
 
   @override
   String get activityActivity => 'Aktivlik';
@@ -3019,9 +3019,6 @@ class AppLocalizationsAz extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Turnir qoşulmaları indi bağlıdır.';
-
-  @override
   String standByX(String param) {
     return 'Hazır ol $param, oyunçular qoşulur!';
   }
@@ -3037,9 +3034,6 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get winRate => 'Qazanma əmsalı';
-
-  @override
-  String get berserkRate => 'Berserk əmsalı';
 
   @override
   String get performance => 'Reytinq';
@@ -5379,9 +5373,6 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'Çalışma PGN-i';
-
-  @override
-  String get studyDownloadAllGames => 'Bütün oyunları endir';
 
   @override
   String get studyChapterPgn => 'Fəsil PGN-i';

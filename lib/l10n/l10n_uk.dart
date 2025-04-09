@@ -576,10 +576,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Необхідний офіційний титул, щоб приєднатися до турніру';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'Формування пар у турнірі завершено.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Ігор з берсерком';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -753,7 +753,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastOverview => 'Огляд';
 
   @override
-  String get broadcastSubscribeTitle => 'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+  String get broadcastSubscribeTitle => 'Підпишіться, аби отримувати сповіщення перед початком кожного раунду. Ви можете перемикати дзвінок та push-сповіщення трансляцій у налаштуваннях вашого облікового запису.';
 
   @override
   String get broadcastUploadImage => 'Завантажити зображення турніру';
@@ -841,16 +841,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastPastBroadcasts => 'Минулі трансляції';
 
   @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Переглянути всі трансляції за місяцями';
 
   @override
-  String get broadcastBackToLiveMove => 'Back to live move';
+  String get broadcastBackToLiveMove => 'Повернутися до поточного ходу';
 
   @override
-  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
+  String get broadcastSinceHideResults => 'Оскільки ви вибрали приховати результати, огляд дощок порожній, щоб не розкривати подробиць.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Наживо';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -870,8 +870,10 @@ class AppLocalizationsUk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count глядачів',
+      many: '$count глядачів',
+      few: '$count глядачі',
+      one: '$count глядач',
     );
     return '$_temp0';
   }
@@ -1745,16 +1747,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Замість очікуваного ходу, спочатку робиться інший хід з безпосередньою атакою, на яку суперник має відповісти. Також відомий як \"Zwischenzug\" або \"In between\".';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Kill box mate';
+  String get puzzleThemeKillBoxMate => 'Мат: Смертельна коробка';
 
   @override
-  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+  String get puzzleThemeKillBoxMateDescription => 'Тура стає біля ворожого короля під захистом ферзя. Ферзь у той самий час блокує всі поля, через які король може втекти. Тура й ферзь ловлять ворожого короля у «смертельну коробку» розміру 3 на 3.';
 
   @override
   String get puzzleThemeVukovicMate => 'Мат Вуковіча';
 
   @override
-  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+  String get puzzleThemeVukovicMateDescription => 'Тура й кінь об\'єднуються, аби поставити мат королю. Тура, яку захищає третя фігура, ставить мат, а кінь блокує всі поля, через які король може втекти.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Коньовий ендшпіль';
@@ -2366,7 +2368,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get claimADraw => 'Оголосити нічию';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Оголошена нічия';
 
   @override
   String get offerDraw => 'Запропонувати нічию';
@@ -3070,10 +3072,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get createdBy => 'Створив';
 
   @override
-  String get startingIn => 'Starting in';
-
-  @override
-  String get tournamentPairingsAreNowClosed => 'Жеребкування турніру завершено.';
+  String get startingIn => 'Початок через';
 
   @override
   String standByX(String param) {
@@ -3091,9 +3090,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get winRate => 'Відсоток перемог';
-
-  @override
-  String get berserkRate => 'Ігор з берсерком';
 
   @override
   String get performance => 'Ефективність';
@@ -3838,14 +3834,14 @@ class AppLocalizationsUk extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Якщо Ви не бачите листа, перевірте інші місця, де б він міг бути, наприклад, корзину, спам та інші папки.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Якщо ви не отримаєте лист протягом 5 хвилин:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Перевірте кошик, спам та інші папки';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Перевірте, чи $param дійсно є вашою адресою електронної пошти';
   }
 
   @override
@@ -3879,7 +3875,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get downloadImported => 'Завантажити імпортоване';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Завантажити всі ігри';
 
   @override
   String get crosstable => 'Рахунок';
@@ -3988,7 +3984,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get language => 'Мова';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Усі мови';
 
   @override
   String get background => 'Фон';
@@ -5529,9 +5525,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyStudyPgn => 'PGN дослідження';
 
   @override
-  String get studyDownloadAllGames => 'Завантажити всі партії';
-
-  @override
   String get studyChapterPgn => 'PGN розділу';
 
   @override
@@ -5852,58 +5845,58 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'Потрібна допомога? Пройдіть ознайомчий тур!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Ласкаво просимо до Lichess Дослідження!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'Це спільна дошка для аналізу.<br><br>Використовуйте її для аналізування та анотування партій,<br>обговорення позицій з друзями<br>і, звісно ж, для шахових уроків!<br><br>Це потужний інструмент — нумо розберімося, як він працює.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Надано спільний доступ і збережено';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => 'Інші учасники можуть бачити ваші ходи в реальному часі!<br>До того ж усе зберігається назавжди.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Учасники дослідження';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 Глядачі можуть переглядати дослідження й спілкуватися в чаті.<br><br>$param2 Співавтори можуть робити ходи та оновлювати дослідження.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Натисніть кнопку $param.<br>Потім оберіть, хто зможе вносити зміни, а хто — ні.';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Розділи дослідження';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => 'Дослідження може містити декілька розділів.<br>Кожен розділ має свою початкову позицію та дерево ходів.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Коментування позиції';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Натисніть кнопку $param або клацніть правою кнопкою миші на список ходів справа.<br>Коментарі зберігаються та доступні всім.';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'Анотування позиції';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Натисніть кнопку !? або клацніть правою кнопкою миші на список ходів справа.<br>Символьні анотації зберігаються та доступні всім.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Дякуємо за ваш час';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'Ви можете знайти свої <a href=\'/study/mine/hot\'>попередні дослідження</a> на сторінці профілю.<br>Також радимо ознайомитися з <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>блогом про дослідження</a>.<br>Досвідчені користувачі можуть натиснути \"?\", щоб побачити комбінації клавіш.<br>Бажаємо успіхів!';
 
   @override
   String get studyCreateChapterTitle => 'Let\'s create a study chapter';

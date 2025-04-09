@@ -3021,9 +3021,6 @@ class AppLocalizationsSv extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Turneringsparningarna är nu avslutade.';
-
-  @override
   String standByX(String param) {
     return '$param, vänta, parar spelare, var redo!';
   }
@@ -3039,9 +3036,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get winRate => 'Vinstfrekvens';
-
-  @override
-  String get berserkRate => 'Berserkfrekvens';
 
   @override
   String get performance => 'Prestation';
@@ -5381,9 +5375,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'Studiens PGN';
-
-  @override
-  String get studyDownloadAllGames => 'Ladda ner alla partier';
 
   @override
   String get studyChapterPgn => 'Kapitel PGN';

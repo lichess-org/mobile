@@ -3019,9 +3019,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
-
-  @override
   String standByX(String param) {
     return 'Stand by $param, pairing players, get ready!';
   }
@@ -3037,9 +3034,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get winRate => 'Win rate';
-
-  @override
-  String get berserkRate => 'Berserk rate';
 
   @override
   String get performance => 'Performance';
@@ -5381,9 +5375,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studyStudyPgn => 'Study PGN';
 
   @override
-  String get studyDownloadAllGames => 'Download all games';
-
-  @override
   String get studyChapterPgn => 'Chapter PGN';
 
   @override
@@ -6557,6 +6548,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get arenaOnlyTitledHelp => 'Require an official title to join the tournament';
 
   @override
+  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+
+  @override
+  String get arenaBerserkRate => 'Berserk rate';
+
+  @override
   String arenaDrawingWithinNbMoves(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6815,12 +6812,32 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
+  String get broadcastBackToLiveMove => 'Back to live move';
+
+  @override
+  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
+
+  @override
+  String get broadcastLiveboard => 'Live board';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count broadcasts',
       one: '$count broadcast',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String broadcastNbViewers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viewers',
+      one: '$count viewer',
     );
     return '$_temp0';
   }
@@ -7072,7 +7089,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get preferencesShowFlairs => 'Show player flairs';
 
   @override
-  String get preferencesExplainShowPlayerRatings => 'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.';
+  String get preferencesExplainShowPlayerRatings => 'This hides all ratings on Lichess to help you focus on the chess. Rated games still impact your rating; this only effects what you get to see.';
 
   @override
   String get preferencesDisplayBoardResizeHandle => 'Show board resize handle';
@@ -7684,6 +7701,18 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get puzzleThemeIntermezzoDescription => 'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".';
 
   @override
+  String get puzzleThemeKillBoxMate => 'Kill box mate';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+
+  @override
+  String get puzzleThemeVukovicMate => 'Vukovic mate';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+
+  @override
   String get puzzleThemeKnightEndgame => 'Knight endgame';
 
   @override
@@ -7873,7 +7902,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get puzzleThemeMix => 'Healthy mix';
 
   @override
-  String get puzzleThemeMixDescription => 'A bit of everything. You don\'t know what to expect, so you remain ready for anything! Just like in real games.';
+  String get puzzleThemeMixDescription => 'A mix of everything. You don\'t know what to expect, so you remain ready for anything! Just like in real games.';
 
   @override
   String get puzzleThemePlayerGames => 'Player games';
@@ -8291,6 +8320,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get claimADraw => 'Claim a draw';
+
+  @override
+  String get drawClaimed => 'Draw claimed';
 
   @override
   String get offerDraw => 'Offer draw';
@@ -8994,7 +9026,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get createdBy => 'Created by';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get startingIn => 'Starting in';
 
   @override
   String standByX(String param) {
@@ -9012,9 +9044,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get winRate => 'Win rate';
-
-  @override
-  String get berserkRate => 'Berserk rate';
 
   @override
   String get performance => 'Performance';
@@ -9759,6 +9788,17 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'If you don\'t see the email, check other places it might be, like your junk, spam, social, or other folders.';
 
   @override
+  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+
+  @override
+  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+
+  @override
+  String verifyYourAddress(String param) {
+    return 'Verify that $param is your email address';
+  }
+
+  @override
   String weHaveSentYouAnEmailTo(String param) {
     return 'We\'ve sent an email to $param. Click the link in the email to reset your password.';
   }
@@ -9787,6 +9827,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get downloadImported => 'Download imported';
+
+  @override
+  String get downloadAllGames => 'Download all games';
 
   @override
   String get crosstable => 'Crosstable';
@@ -9860,6 +9903,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get viewTheSolution => 'View the solution';
 
   @override
+  String get noChallenges => 'No challenges.';
+
+  @override
   String xHostsY(String param1, String param2) {
     return '$param1 hosts $param2';
   }
@@ -9890,6 +9936,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get language => 'Language';
+
+  @override
+  String get allLanguages => 'All languages';
 
   @override
   String get background => 'Background';
@@ -11336,9 +11385,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get studyStudyPgn => 'Study PGN';
 
   @override
-  String get studyDownloadAllGames => 'Download all games';
-
-  @override
   String get studyChapterPgn => 'Chapter PGN';
 
   @override
@@ -11657,6 +11703,105 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String studyPerPage(String param) {
     return '$param per page';
   }
+
+  @override
+  String get studyGetTheTour => 'Need help? Get the tour!';
+
+  @override
+  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+
+  @override
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>to discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool. Let\'s take some time to see how it works.';
+
+  @override
+  String get studySharedAndSaveTitle => 'Shared and saved';
+
+  @override
+  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+
+  @override
+  String get studyStudyMembersTitle => 'Study members';
+
+  @override
+  String studyStudyMembersText(String param1, String param2) {
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+  }
+
+  @override
+  String studyAddMembersText(String param) {
+    return 'Click the $param button.<br>Then decide who can contribute.';
+  }
+
+  @override
+  String get studyStudyChaptersTitle => 'Study chapters';
+
+  @override
+  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+
+  @override
+  String get studyCommentPositionTitle => 'Comment on a position';
+
+  @override
+  String studyCommentPositionText(String param) {
+    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+  }
+
+  @override
+  String get studyAnnotatePositionTitle => 'Annotate a position';
+
+  @override
+  String get studyAnnotatePositionText => 'Click the !? button, or right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+
+  @override
+  String get studyConclusionTitle => 'Thanks for your time';
+
+  @override
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> on your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+
+  @override
+  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+
+  @override
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree <br>and can be created in various ways.';
+
+  @override
+  String get studyFromInitialPositionTitle => 'From initial position';
+
+  @override
+  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+
+  @override
+  String get studyCustomPositionTitle => 'Custom position';
+
+  @override
+  String get studyCustomPositionText => 'Set up the board your way.<br>Suited to explore endgames.';
+
+  @override
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+
+  @override
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyFromFenStringTitle => 'From a FEN string';
+
+  @override
+  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+
+  @override
+  String get studyFromPgnGameTitle => 'From a PGN game';
+
+  @override
+  String get studyFromPgnGameText => 'Paste a game in PGN format<br>to load moves, comments, and variations in the chapter.';
+
+  @override
+  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+
+  @override
+  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+
+  @override
+  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {

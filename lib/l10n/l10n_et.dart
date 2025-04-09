@@ -3021,9 +3021,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Turniiri paaride loomine on nüüd lõppenud.';
-
-  @override
   String standByX(String param) {
     return 'Palun oodake $param, loome mängijate paare, olge valmis!';
   }
@@ -3039,9 +3036,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get winRate => 'Võidumäär';
-
-  @override
-  String get berserkRate => 'Berserk määr';
 
   @override
   String get performance => 'Sooritus';
@@ -5381,9 +5375,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'Uuringu PGN';
-
-  @override
-  String get studyDownloadAllGames => 'Lae alla kõik mängud';
 
   @override
   String get studyChapterPgn => 'Peatüki PGN';

@@ -2366,7 +2366,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get claimADraw => 'Požadovať remízu';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Požiadavka na remízu';
 
   @override
   String get offerDraw => 'Ponúknuť remízu';
@@ -3073,9 +3073,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Párovanie hráčov v turnaji je už uzavreté.';
-
-  @override
   String standByX(String param) {
     return 'Čakajte $param, vyberám súpera, pripravte sa!';
   }
@@ -3091,9 +3088,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get winRate => 'Pomer výhier';
-
-  @override
-  String get berserkRate => 'Miera besnenia';
 
   @override
   String get performance => 'Výkon';
@@ -3838,14 +3832,14 @@ class AppLocalizationsSk extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Ak nevidíte email, pozrite iné miesta kde by mohol byť, ako napríklad kôš, spam, sociálne, alebo iné priečinky.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Ak nedostanete e-mail do 5 minút:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Skontrolujte všetky priečinky nevyžiadanej pošty';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Overte, či $param je Vaša e-mailová adresa';
   }
 
   @override
@@ -3879,7 +3873,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get downloadImported => 'Stiahnuť importované';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Stiahnuť všetky partie';
 
   @override
   String get crosstable => 'Tabuľka';
@@ -3988,7 +3982,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get language => 'Jazyk';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Všetky jazyky';
 
   @override
   String get background => 'Pozadie';
@@ -5529,9 +5523,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get studyStudyPgn => 'PGN štúdie';
 
   @override
-  String get studyDownloadAllGames => 'Stiahnuť všetky partie';
-
-  @override
   String get studyChapterPgn => 'PGN kapitoly';
 
   @override
@@ -5852,45 +5843,45 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'Potrebujete pomoc? Pozrite sa ako to funguje!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Vitajte v Lichess štúdii!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'Toto je zdieľaná analytická tabuľka.<br><br>Použite ju na analýzu a komentovanie partií,<br>diskutujte o pozíciách s priateľmi,<br>a samozrejme na šachové lekcie!<br><br>Je to silný nástroj, poďme sa pozrieť, ako funguje.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Zdieľané a uložené';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => 'Ostatní členovia môžu vidieť vaše pohyby v reálnom čase!<br>Navyše je všetko navždy uložené.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Členovia štúdie';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 Diváci si môžu prezerať štúdiu a rozprávať sa na čete.<br><br>$param2 Prispievatelia môžu vykonávať ťahy a aktualizovať štúdiu.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Kliknite na tlačidlo $param.<br>Potom rozhodnite, kto môže alebo nemôže prispieť.';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Kapitoly štúdie';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => 'Štúdia môže obsahovať niekoľko kapitol.<br>Každá kapitola má odlišnú počiatočnú pozíciu a strom ťahov.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Komentovať pozíciu';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Kliknite na tlačidlo $param alebo kliknite pravým tlačidlom myši na záznam ťahov vpravo.<br>Komentáre sú zdieľané a uložené.';
   }
 
   @override

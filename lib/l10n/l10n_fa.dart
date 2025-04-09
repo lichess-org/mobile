@@ -1926,7 +1926,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
+  String get settingsCloseAccountAreYouSure => 'آیا از بستن حساب کابری خود مطمئن هستید؟';
 
   @override
   String get settingsThisAccountIsClosed => 'این حساب بسته شده است';
@@ -3021,9 +3021,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'تعین حریف به اتمام رسیده است.';
-
-  @override
   String standByX(String param) {
     return 'حریف $param است،آماده باشید!';
   }
@@ -3039,9 +3036,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get winRate => 'درصد برد';
-
-  @override
-  String get berserkRate => 'میزان دیوانگی';
 
   @override
   String get performance => 'عملکرد';
@@ -3558,7 +3552,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String xIsAFreeYLibreOpenSourceChessServer(String param1, String param2) {
-    return '$param1 کاملا رایگان($param2)، آزاد، بدون تبلیغات و سرور متن باز است.';
+    return 'وبگاه $param1 ($param2) رایگان، آزاد، بی‌تبلیغ و با کارسازِ متن‌بازِ شطرنج است.';
   }
 
   @override
@@ -3568,7 +3562,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get contribute => 'مشارکت';
 
   @override
-  String get termsOfService => 'قوانین';
+  String get termsOfService => 'شرایطِ استفاده';
 
   @override
   String get sourceCode => 'کد منبع';
@@ -3815,7 +3809,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get networkLagBetweenYouAndLichess => 'تاخیر شبکه میان شما و Lichess';
 
   @override
-  String get timeToProcessAMoveOnLichessServer => 'زمان سپری شده برای پردازش یک حرکت';
+  String get timeToProcessAMoveOnLichessServer => 'زمانِ پردازش یک حرکت در کارسازِ Lichess';
 
   @override
   String get downloadAnnotated => 'بارگیری حرکت‌نویسی';
@@ -3827,7 +3821,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get downloadImported => 'بارگیری درونبُرد';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'بارگیری تمام بازی ها';
 
   @override
   String get crosstable => 'رودررو';
@@ -3901,7 +3895,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get viewTheSolution => 'دیدن راه‌حل';
 
   @override
-  String get noChallenges => 'No challenges.';
+  String get noChallenges => 'هیچ چالشی موجود نیست.';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -4499,7 +4493,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get reopenYourAccount => 'باز کردن مجدد حساب کاربری';
 
   @override
-  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
+  String get reopenYourAccountDescription => 'اگر حسابتان را بسته اید ولی نظرتان عوض شده، فرصت بازپس‌گیری آن را دارید.';
 
   @override
   String get emailAssociatedToaccount => 'آدرس ایمیلی که به حساب کاربری مربوط شده است';
@@ -5269,10 +5263,10 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get studyNoneYet => 'هنوز، هیچ.';
+  String get studyNoneYet => 'هیچکدام تا به حال.';
 
   @override
-  String get studyHot => 'رواجیده';
+  String get studyHot => 'شلوغ';
 
   @override
   String get studyDateAddedNewest => 'تاریخ افزوده شدن (نوترین)';
@@ -5290,7 +5284,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyAlphabetical => 'براساس حروف الفبا';
 
   @override
-  String get studyAddNewChapter => 'افزودن بخش جدید';
+  String get studyAddNewChapter => 'بخش جدیدی اضافه کن';
 
   @override
   String get studyAddMembers => 'افزودن اعضا';
@@ -5350,7 +5344,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'تنها مشارکت‌گران این مطالعه، می‌توانند درخواست تحلیل رایانه‌ای دهند.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'یک تحلیل کامل رایانه‌ای کارساز-سو از شاخه اصلی بگیرید.';
+  String get studyGetAFullComputerAnalysis => 'یک تحلیلِ رایانه‌ای کارساز-سوی کامل از شاخه اصلی بگیرید.';
 
   @override
   String get studyMakeSureTheChapterIsComplete => 'مطمئن شوید که بخش کامل است. شما فقط یک بار می‌توانید درخواست تحلیل دهید.';
@@ -5359,13 +5353,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyAllSyncMembersRemainOnTheSamePosition => 'همه‌ی عضوهای همگام در وضعیت یکسانی باقی می‌مانند';
 
   @override
-  String get studyShareChanges => 'تغییرها را در کارساز ذخیره کنید و با تماشاگران به اشتراک گذارید';
+  String get studyShareChanges => 'هم‌رسانی تغییرها با تماشاگران و ذخیره‌شان در کارساز';
 
   @override
   String get studyPlaying => 'جاری';
 
   @override
-  String get studyShowResults => 'Results';
+  String get studyShowResults => 'نمایش نتایج';
 
   @override
   String get studyShowEvalBar => 'نوار ارزیابی';
@@ -5381,9 +5375,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'PGN مطالعه';
-
-  @override
-  String get studyDownloadAllGames => 'بارگیری تمام بازی ها';
 
   @override
   String get studyChapterPgn => 'PGN ِ بخش';
@@ -5706,10 +5697,10 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'کمک لازم داری؟ یه دور بزن!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'به بخش مطالعه لیچس خوش‌آمدید!';
 
   @override
   String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
@@ -5734,7 +5725,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'فصل های قابل مطالعه';
 
   @override
   String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
@@ -5754,7 +5745,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'ممنون از وقتی که گذاشتید';
 
   @override
   String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
@@ -5778,7 +5769,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'بازی قبلی در لیچس را بارگذاری کن';
 
   @override
   String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
@@ -5790,7 +5781,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'از بازی یک فایل PGN';
 
   @override
   String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';

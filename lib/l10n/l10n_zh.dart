@@ -522,10 +522,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get arenaOnlyTitledHelp => '需要官方头衔才能加入比赛';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => '竞技场配对已关闭。';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => '神速赛比例';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -790,7 +790,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastSinceHideResults => '由于您选择隐藏比赛结果，为避免剧透，所有棋局预览均为空白状态。';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => '实时棋局';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1072,7 +1072,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferencesInGameOnly => '仅在对局中';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => '对局中除外';
 
   @override
   String get preferencesChessClock => '棋钟';
@@ -1667,13 +1667,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => '不走预期的着法，而是走一着对手必须应对的直接威胁。';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Kill box mate';
+  String get puzzleThemeKillBoxMate => '封盒杀法';
 
   @override
-  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+  String get puzzleThemeKillBoxMateDescription => '被后保护的车在敌方王侧封锁了所有逃脱格。后与车合作将王封杀在3x3的盒中。';
 
   @override
-  String get puzzleThemeVukovicMate => 'Vukovic mate';
+  String get puzzleThemeVukovicMate => '武科维奇杀法';
 
   @override
   String get puzzleThemeVukovicMateDescription => '车和马一起合作将死了王。车在第三个子的合作下杀死了王，马用来挡住敌王的出路格子。';
@@ -2288,7 +2288,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get claimADraw => '宣布和棋';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => '平局声明';
 
   @override
   String get offerDraw => '提出和棋';
@@ -2992,10 +2992,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get createdBy => '创建者:';
 
   @override
-  String get startingIn => 'Starting in';
-
-  @override
-  String get tournamentPairingsAreNowClosed => '本锦标赛已不再产生新的对局';
+  String get startingIn => '开始于';
 
   @override
   String standByX(String param) {
@@ -3013,9 +3010,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get winRate => '胜率';
-
-  @override
-  String get berserkRate => '快棋率';
 
   @override
   String get performance => '表现评分';
@@ -3760,14 +3754,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => '如果你没有收到我们的邮件，请检查其他收件箱，例如垃圾箱，广告箱等。';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => '如果您在 5 分钟内没有收到电子邮件：';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => '请检查所有垃圾邮件或其他文件夹';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return '验证 $param 是您的邮箱地址';
   }
 
   @override
@@ -3801,7 +3795,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get downloadImported => '下载导入的棋局';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => '下载所有棋局';
 
   @override
   String get crosstable => '比分表';
@@ -3875,7 +3869,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get viewTheSolution => '看解答';
 
   @override
-  String get noChallenges => 'No challenges.';
+  String get noChallenges => '暂无挑战。';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -3910,7 +3904,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get language => '语言';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => '所有语言';
 
   @override
   String get background => '背景';
@@ -5310,9 +5304,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyStudyPgn => '研究 PGN';
 
   @override
-  String get studyDownloadAllGames => '下载所有棋局';
-
-  @override
   String get studyChapterPgn => '章节PGN';
 
   @override
@@ -5509,10 +5500,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyClearChat => '清空对话';
 
   @override
-  String get studyDeleteTheStudyChatHistory => '删除课程聊天记录？本操作无法撤销！';
+  String get studyDeleteTheStudyChatHistory => '删除研讨聊天记录？本操作无法撤销！';
 
   @override
-  String get studyDeleteStudy => '删除课程';
+  String get studyDeleteStudy => '删除研讨';
 
   @override
   String studyConfirmDeleteStudy(String param) {
@@ -5529,16 +5520,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyMistake => '错着';
 
   @override
-  String get studyBrilliantMove => '极好';
+  String get studyBrilliantMove => '妙着！';
 
   @override
   String get studyBlunder => '漏着';
 
   @override
-  String get studyInterestingMove => '略好';
+  String get studyInterestingMove => '趣着';
 
   @override
-  String get studyDubiousMove => '略坏';
+  String get studyDubiousMove => '惑着';
 
   @override
   String get studyOnlyMove => '唯一着法';
@@ -5571,7 +5562,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyBlackIsWinning => '黑方即胜';
 
   @override
-  String get studyNovelty => '新奇的';
+  String get studyNovelty => '创新';
 
   @override
   String get studyDevelopment => '发展';
@@ -5633,103 +5624,103 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => '需要帮助？开始导览！';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => '欢迎来到Lichess研讨！';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => '这是一个共同的分析委员会。<br><br>用它来分析和批注游戏，<br>与朋友讨论位置，<br>或者进行课程！<br><br>这是一个强大的工具，让我们花一些时间看看它如何运作。';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => '已共享并保存';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => '其他成员可以实时看到您的移动！<br>一切都会永远保存。';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => '研讨成员';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 旁观者可以在聊天室查看研讨并进行谈话。<br><br>$param2 贡献者可以移动并更新研讨。';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return '点击 $param 按钮.<br>选择你的贡献者';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => '研讨章节';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => '研讨可以包含多个章节。<br>每个章节都有一个独特的初始位置并行动树。';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => '评论当前局面';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return '点击 $param 按钮，或右键点击棋步列表。<br>注释会被共享并保存。';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => '标注局面';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => '点击!?按钮，或右键点击棋步列表。<br>标注会被共享并保存。';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => '感谢您抽出宝贵的时间';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => '你可以从你的个人资料界面找到你的<a href=\'/study/mine/hot\'>过往研讨 <br> 我们也提供了 <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>研讨博客</a>.<br>高级用户可以点击\"?\"查看键盘快捷键<br>研讨愉快';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => '让我们创建一个学习章节';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => '一份研讨可以有多个章节。<br>每个章节可以有独立的棋步树<br>可以通过多种方式';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => '从起始局面开始';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => '起始局面。<br> 可以用来研讨开局。';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => '自定义局面';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => '自定义局面。<br>可以用来研讨终局。';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => '导入Lichess棋局';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText => '导入Lichess棋局链接<br>(例如 lichess.org/7fHIU0XI)<br>来导入这局棋中的所有棋步';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => '导入FEN代码';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => '粘贴一个局面的FEN代码<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>来从这个局面开始章节';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => '导入PGN代码';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => '粘贴一局棋的PGN代码<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>在章节中导入所有的棋步，注释和变招。';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => '研究支持变体';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => '你也可以研讨CrazyHouse<br>和所有其他的lichess变种';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => '章节会永久保存。<br>研讨愉快！';
 
   @override
   String studyNbChapters(int count) {
@@ -6705,6 +6696,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get broadcastAllBroadcastsByMonth => '以月份顯示所有直播';
 
   @override
+  String get broadcastBackToLiveMove => '返回及時走法';
+
+  @override
+  String get broadcastSinceHideResults => '由於您選擇隱藏結果，所有預覽棋盤都是空的，以避免劇透。';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7568,6 +7565,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get puzzleThemeIntermezzoDescription => '與其走正常的棋譜，不如威脅敵方子吧！這樣不但可以破壞敵方原先計畫，還可以讓敵人必須對威脅採取對應的動作。這種戰術又稱為「Zwischenzug」或「In between」。';
 
   @override
+  String get puzzleThemeKillBoxMate => '殺戮箱將死';
+
+  @override
+  String get puzzleThemeKillBoxMateDescription => '一個城堡在敵方國王旁邊，由皇后支援，同時封鎖國王的逃脫路徑。城堡和皇后會將敵方國王困在 3×3 的『殺戮箱』中。';
+
+  @override
+  String get puzzleThemeVukovicMate => '武科維奇將死';
+
+  @override
+  String get puzzleThemeVukovicMateDescription => '一個城堡和一個騎士合作對國王發動將死。城堡執行將死攻擊，並由第三個棋子支援，而騎士則負責封鎖國王的逃脫路徑。';
+
+  @override
   String get puzzleThemeKnightEndgame => '馬殘局';
 
   @override
@@ -7988,7 +7997,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get toggleLocalEvaluation => '使用您當地的伺服器分析';
 
   @override
-  String get promoteVariation => '增加變化';
+  String get promoteVariation => '升級變化';
 
   @override
   String get makeMainLine => '將這步棋導入主要流程中';
@@ -8878,9 +8887,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get createdBy => '創建者：';
 
   @override
-  String get tournamentPairingsAreNowClosed => '此錦標賽的對手配對已結束。';
-
-  @override
   String standByX(String param) {
     return '$param準備好，你馬上要開始對棋了！';
   }
@@ -8896,9 +8902,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get winRate => '勝率';
-
-  @override
-  String get berserkRate => '快棋率';
 
   @override
   String get performance => '表現';
@@ -9744,6 +9747,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get viewTheSolution => '看解答';
 
   @override
+  String get noChallenges => '沒有挑戰。';
+
+  @override
   String xHostsY(String param1, String param2) {
     return '$param1主持$param2';
   }
@@ -10334,6 +10340,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get reopenYourAccount => '重新開啟帳戶';
+
+  @override
+  String get reopenYourAccountDescription => '如果你停用了自己的帳號，但是改變了心意，你有一次的機會可以拿回帳號。';
 
   @override
   String get emailAssociatedToaccount => '和此帳號相關的電子信箱';
@@ -11152,6 +11161,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get studyPlaying => '下棋中';
 
   @override
+  String get studyShowResults => '結果';
+
+  @override
   String get studyShowEvalBar => '評估條';
 
   @override
@@ -11165,9 +11177,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get studyStudyPgn => '研究 PGN';
-
-  @override
-  String get studyDownloadAllGames => '下載所有棋局';
 
   @override
   String get studyChapterPgn => '章節PGN';

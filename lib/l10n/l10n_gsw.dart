@@ -451,7 +451,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaAllowBerserkHelp => 'Erlaubt em Schpiller sini Bedänkziit z\'halbiere, um so en Zuesatzpunkt z\'günne';
 
   @override
-  String get arenaAllowChatHelp => 'Lass d\'Schpiller ime Chatruum diskutiere';
+  String get arenaAllowChatHelp => 'Loh d\'Schpiller ime Chatruum diskutiere';
 
   @override
   String get arenaArenaStreaks => 'Arena Sieges Serie';
@@ -540,10 +540,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Für e Teilnahm a dem Turnier, isch en offizielle Titel erforderlich';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'Es werded kei Turnierschpiel meh gschpillt.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Berserk-Wertig';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -810,7 +810,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastSinceHideResults => 'Will du entschide häsch, dini Ergäbnis z\'verberge, sind - zum Spoiler verhindere - all Vorschau-Brätter leer.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Live-Brätt';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -828,8 +828,8 @@ class AppLocalizationsGsw extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count Zueschauer',
+      one: '$count Zueschauer',
     );
     return '$_temp0';
   }
@@ -1947,7 +1947,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get waitingForOpponent => 'Uf de Gägner warte';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Oder lass din Gägner de QR-Code skänne';
+  String get orLetYourOpponentScanQrCode => 'Oder loh din Gägner de QR-Code skänne';
 
   @override
   String get waiting => 'Am Warte';
@@ -2314,7 +2314,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get claimADraw => 'Es Remis beaschpruche';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Remis g\'forderet';
 
   @override
   String get offerDraw => 'Remis abüte';
@@ -2773,7 +2773,7 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String yourPerfRatingIsTooLow(String param1, String param2) {
-    return 'Dini $param1 Wertig ($param2) isch z\'tüüf';
+    return 'Dini $param1 Wertig ($param2) isch z\'tüf';
   }
 
   @override
@@ -3018,10 +3018,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get createdBy => 'Erschtellt vo';
 
   @override
-  String get startingIn => 'Starting in';
-
-  @override
-  String get tournamentPairingsAreNowClosed => 'Es werded kei Turnierschpiel meh gschpillt.';
+  String get startingIn => 'Schtartet in';
 
   @override
   String standByX(String param) {
@@ -3039,9 +3036,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get winRate => 'Gwünn Rate';
-
-  @override
-  String get berserkRate => 'Berserkrate';
 
   @override
   String get performance => 'Leischtig';
@@ -3341,10 +3335,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get privacyPolicy => 'Datäschutzbeschtimmige';
 
   @override
-  String get letOtherPlayersFollowYou => 'Lass anderi Schpiller dir folge';
+  String get letOtherPlayersFollowYou => 'Loh anderi Schpiller dir folge';
 
   @override
-  String get letOtherPlayersChallengeYou => 'Lass anderi Schpiller dich fordere';
+  String get letOtherPlayersChallengeYou => 'Loh anderi Schpiller dich usefordere';
 
   @override
   String get letOtherPlayersInviteYouToStudy => 'Andere Schpiller erlaube, dich zu ere Schtudie izlade';
@@ -3786,14 +3780,14 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Wänn du die E-Mail nöd findsch, dursuech witeri Ordner: z. B. de Spamordner oder au de Papierchorb.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Wänn die E-Mail nöd innerhalb 5 Minute chunnt:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Suech im Junk, Spam und andere Ordner';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Prüef ob $param würkli dini E-Mail-Adrässe isch';
   }
 
   @override
@@ -3827,7 +3821,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get downloadImported => 'Importierte Download';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'All Schpiel abelade';
 
   @override
   String get crosstable => 'Matchverlauf';
@@ -3936,7 +3930,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get language => 'Schprach';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Alli Schprache';
 
   @override
   String get background => 'Hindergrund';
@@ -4061,7 +4055,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get hideBestMove => 'Verschteck de bescht Zug';
 
   @override
-  String get getAHint => 'Lass dir en Tipp geh';
+  String get getAHint => 'Loh dir en Tipp geh';
 
   @override
   String get evaluatingYourMove => 'Din Zug wird g\'wertet ...';
@@ -4895,8 +4889,8 @@ class AppLocalizationsGsw extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Du bruchsch no $count Wertigs-Schpiel meh',
-      one: 'Du bruchsch no $count Wertigs-Schpiel meh',
+      other: 'Du bruchsch no $count g\'werteti Schpiel meh',
+      one: 'Du bruchsch no $count g\'wertets Schpiel meh',
     );
     return '$_temp0';
   }
@@ -5383,9 +5377,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyStudyPgn => 'Schtudie PGN';
 
   @override
-  String get studyDownloadAllGames => 'All Schpiel abelade';
-
-  @override
   String get studyChapterPgn => 'Kapitel PGN';
 
   @override
@@ -5401,7 +5392,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyCurrentChapterUrl => 'URL aktuells Kapitel';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Du chasch das, zum ibinde, im Forum oder i dim Liches Tagebuech ifüege';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Du chasch das, zum ibinde, im Forum oder i dim Lichess Blog ifüege';
 
   @override
   String get studyStartAtInitialPosition => 'Fang ab de Grundschtellig a';
@@ -5706,103 +5697,103 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'Bruchsch Hilf? Mach d\'Tour!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Willkomme bi de Lichess-Schtudie!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'Das isch es gmeinsams Analysebrätt.<br><br>Benutz es zum Partie analysiere und zum kommentiere,<br>zum Schtellige mit Fründe z\'diskutiere,<br>und natürli für Schachunterricht!<br><br>Es isch es schtarchs Werchzüg, lass der ochli Zit, zum luege, wie\'s funktioniert.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Teilt und g\'schpeicheret';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => 'Anderi Mitglieder chönd dini Züg live gseh!<br>Und alles isch gschpeicheret, für immer.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Schtudie-Mitglieder';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 Zueschauer chönd die Schtudie gseh und im Chat schribe.<br><br>$param2 Mitwürkendi chönd Züg mache und die Schtudie aktualisiere.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Klick uf d\'Schaltflächi $param.<br>Und dänn entscheid, wer chann mitmache oder nöd.';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Schtudie-Kapitel';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => 'E Schtudie chann verschiedeni Kapitel ha.<br>Jedes Kapitel hät e beschtimmti Usganslag und en eigene Zugsbaum.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Kommentar zunere Schtellig';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Klick d\'Schaltflächi $param, oder en Rächtsklick uf de Zug, i de Zugslischte, rächts.<br>D\'Kommentär sind teilt und gschpeicheret.';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'E Schtellig vermerke';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Klick ufs !? Schaltfäld, or mach en Rächtsklick uf d\'Zugslischte uf de rächte Site<br>Bemerkigs-Symbol sind frei geh und gsicheret.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Merci für dini Ziit';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'Du findsch dini <a href=\'/study/mine/hot\'>vorherige Schtudie</a> vu dinere Profil-Site.<br>Da isch au en <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>Blog-Post über Schtudie</a>.<br>Poweruser chönd \"?\" trucke, um d\'Taschtaturchürzel z\'gseh.<br>Viel Schpass!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'Es Schtudie-Kapitel kreiere';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'E Schtudie chann mehreri Kapitel ha.<br>Jedes Kapitel hät en klare Zugsbaum,<br>und chann uf verschideni Arte kreiert werde.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Ab de Usgangsschtellig';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'Nur es Brätt in Afangsschtellig.<br>G\'eignet zum Eröffnige erkunde.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Benutzerdefinierti Schtellig';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Mach dir sälber e Schtellig.<br>G\'eignet zum Ändschpiel erkunde.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Lad e exischtierendi Lichess-Partie';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText => 'Füeg e Lichess-Partie-URL i<br>(wie z.B. lichess.org/7fHIU0XI)<br>zum d\'Züg is Kapitel lade.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'Vunere FEN-Partie';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => 'Füeg e Schtellig im FEN-Format i<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>um s\'Kapitel ab ere Schtellig z\'schtarte.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'Vunere PGN-Partie';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Füeg e Partie im PGN-Format i.<br>zum Züg, Kommentär und Variante is Kapitel lade.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'Vu Schtudie underschtützti Variante';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'Ja, du chasch crazyhouse Schtudie mache<br>und alli andere LichessVariante!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => 'Kapitel sind für immer g\'sicheret.<br>Freu dich am Organisiere vu dine Schach-Inhält!';
 
   @override
   String studyNbChapters(int count) {

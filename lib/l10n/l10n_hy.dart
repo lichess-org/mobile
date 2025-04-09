@@ -1693,16 +1693,16 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Սպասելի քայլ կատարելու փոխարեն, սկզբում կատարվում է այլ, անմիջական սպառնալիք ստեղծող քայլ, որին մրցակիցը պետք է պատասխանի։ Հայտնի է նաև  «Zwischenzug» կամ «Intermezzo» անուններով։';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Kill box mate';
+  String get puzzleThemeKillBoxMate => '«Մահացու տուփ» մատ';
 
   @override
-  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+  String get puzzleThemeKillBoxMateDescription => 'Նավակը տեղադրվում է մրցակցի արքայի կողքին՝ թագուհու պաշտպանության տակ, որը միաժամանակ կանխում է արքայի փախուստը։ Նավակը և թագուհին մրցակցի արքան վերցնում են 3x3 «մահացու տուփի» մեջ։';
 
   @override
-  String get puzzleThemeVukovicMate => 'Vukovic mate';
+  String get puzzleThemeVukovicMate => 'Վուկովիչի մատ';
 
   @override
-  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+  String get puzzleThemeVukovicMateDescription => 'Նավակը և ձին համատեղ մատ են անում արքային։ Մեկ խաղաքարով պաշտպանված նավակը մատ է անում, իսկ ձին կտրում է մրցակցի արքայի նահանջի դաշտերը։';
 
   @override
   String get puzzleThemeKnightEndgame => 'Ձիու վերջնախաղ';
@@ -1947,7 +1947,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get waitingForOpponent => 'Սպասում եմ հակառակորդին';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
+  String get orLetYourOpponentScanQrCode => 'Կամ թույլ տվեք Ձեր մրցակցին սկանավորել այս QR-կոդը';
 
   @override
   String get waiting => 'Սպասում եմ';
@@ -2134,16 +2134,16 @@ class AppLocalizationsHy extends AppLocalizations {
   String get deleteFromHere => 'Ջնջել այստեղից';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'Թաքցնել տարբերակները';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Ցուցադրել տարբերակները';
 
   @override
   String get forceVariation => 'Պարտադրել վարիացիան';
 
   @override
-  String get copyVariationPgn => 'Copy variation PGN';
+  String get copyVariationPgn => 'Տարբերակը պատճենել PGN ձևաչափով';
 
   @override
   String get move => 'Քայլ';
@@ -2373,7 +2373,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get friends => 'Ընկերներ';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'այլ խաղացողներ';
 
   @override
   String get discussions => 'Հաղորդագրություններ';
@@ -2559,7 +2559,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get gamesPlayed => 'Խաղացած խաղեր';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'Լավ';
 
   @override
   String get cancel => 'Հերքել';
@@ -2619,7 +2619,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get standard => 'Ստանդարտ';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => 'Կարգավորվող դիրք';
 
   @override
   String get unlimited => 'Անսահմանափակ';
@@ -2875,7 +2875,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get importGameCaveat => 'Տարբերակները կհեռացվեն։ Դրանք պահպանելու համար, PGN-ը տեղափոխեք ստուդիա։';
 
   @override
-  String get importGameDataPrivacyWarning => 'This PGN can be accessed by the public. To import a game privately, use a study.';
+  String get importGameDataPrivacyWarning => 'Այս PGN ֆայլը կարող է հասանելի լինել բոլորին։ Պարտիան անհատապես ներբեռնելու համար օգտագործեք ստուդիան։';
 
   @override
   String get thisIsAChessCaptcha => 'Սա շախմատային CAPTCHA է';
@@ -3021,9 +3021,6 @@ class AppLocalizationsHy extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Մրցաշարի վիճակահանությունն ավարտված է։';
-
-  @override
   String standByX(String param) {
     return 'Խնդրում ենք սպասել $param, տեղի է ունենում վիճակահանություն։ Պատրա՛ստ եղեք։';
   }
@@ -3041,9 +3038,6 @@ class AppLocalizationsHy extends AppLocalizations {
   String get winRate => 'Հաղթանակի տոկոս';
 
   @override
-  String get berserkRate => 'Բերսերկի տոկոս';
-
-  @override
   String get performance => 'Արտադրողականություն';
 
   @override
@@ -3059,7 +3053,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get blackWins => 'Սևերը հաղթել են';
 
   @override
-  String get drawRate => 'Draw rate';
+  String get drawRate => 'Ոչ-ոքիների ցուցանիշ';
 
   @override
   String get draws => 'Ոչ-ոքիներ';
@@ -3121,22 +3115,22 @@ class AppLocalizationsHy extends AppLocalizations {
   String get editProfile => 'Խմբագրել անձնագիրը';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Իրական անուն';
 
   @override
-  String get setFlair => 'Set your flair';
+  String get setFlair => 'Ընտրեք Ձեր էմոջին';
 
   @override
-  String get flair => 'Flair';
+  String get flair => 'Էմոջի';
 
   @override
-  String get youCanHideFlair => 'There is a setting to hide all user flairs across the entire site.';
+  String get youCanHideFlair => 'Այս կարգավորումը թաքցնում է օգտատերերի բոլոր էմոջիներն ամբողջ կայքում։';
 
   @override
   String get biography => 'Կենսագրություն';
 
   @override
-  String get countryRegion => 'Country or region';
+  String get countryRegion => 'Երկիր կամ տարածաշրջան';
 
   @override
   String get thankYou => 'Շնորհակալությո՛ւն։';
@@ -3181,7 +3175,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzles => 'Խնդիրներ';
 
   @override
-  String get onlineBots => 'Online bots';
+  String get onlineBots => 'Առցանց բոտեր';
 
   @override
   String get name => 'Անուն';
@@ -3202,10 +3196,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get yes => 'այո';
 
   @override
-  String get website => 'Website';
+  String get website => 'Կայք';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Բջջային';
 
   @override
   String get help => 'Օգնություն.';
@@ -3371,7 +3365,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get outsideTheBoard => 'Խաղատախտակից դուրս';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'Խաղատախտակի բոլոր դաշտերը';
 
   @override
   String get onSlowGames => 'Դանդաղ խաղերում';
@@ -3585,7 +3579,7 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get yourPendingSimuls => 'Your pending simuls';
+  String get yourPendingSimuls => 'Ձեր առաջիկա խաղաշարերը';
 
   @override
   String get createdSimuls => 'Վերջերս ստեղծված խաղաշարեր';
@@ -3594,7 +3588,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get hostANewSimul => 'Ստեղծել նոր խաղաշար';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Sign up to host or join a simul';
+  String get signUpToHostOrJoinASimul => 'Գրանցվեք՝ խաղաշար կազմակերպելու կամ դրան միանալու համար';
 
   @override
   String get noSimulFound => 'Խաղաշարը չի գտնվել';
@@ -3693,10 +3687,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get keyNextInaccuracy => 'Հաջորդ անճշտությունը';
 
   @override
-  String get keyPreviousBranch => 'Previous branch';
+  String get keyPreviousBranch => 'Նախորդ ճյուղ';
 
   @override
-  String get keyNextBranch => 'Next branch';
+  String get keyNextBranch => 'Հաջորդ ճյուղ';
 
   @override
   String get toggleVariationArrows => 'Toggle variation arrows';
@@ -5381,9 +5375,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'Ստուդիայի PGN-ն';
-
-  @override
-  String get studyDownloadAllGames => 'Ներբեռնել բոլոր պարտիաները';
 
   @override
   String get studyChapterPgn => 'Գլխի PGN-ը';

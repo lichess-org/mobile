@@ -3073,9 +3073,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Turnajové rozlosování je nyní uzavřeno.';
-
-  @override
   String standByX(String param) {
     return 'Vyčkejte $param, vybírám soupeře, připravte se!';
   }
@@ -3091,9 +3088,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get winRate => 'Poměr výher';
-
-  @override
-  String get berserkRate => 'Poměr Berserk';
 
   @override
   String get performance => 'Výkon';
@@ -5527,9 +5521,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'PGN studie';
-
-  @override
-  String get studyDownloadAllGames => 'Stáhnout všechny hry';
 
   @override
   String get studyChapterPgn => 'PGN kapitoly';

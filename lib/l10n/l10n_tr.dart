@@ -478,7 +478,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get arenaEditTournament => 'Turnuvayı düzenle';
 
   @override
-  String get arenaEditTeamBattle => 'Takım savaşını düzenle';
+  String get arenaEditTeamBattle => 'Takım çarpışmasını düzenle';
 
   @override
   String get arenaDefender => 'Savunucu';
@@ -543,7 +543,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Divane oranı';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -583,7 +583,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastNewBroadcast => 'Canlı Turnuva Ekle';
 
   @override
-  String get broadcastSubscribedBroadcasts => 'Abone olduğunuz yayınlar';
+  String get broadcastSubscribedBroadcasts => 'Abone olduğunuz canlı turnuvalar';
 
   @override
   String get broadcastAboutBroadcasts => 'Canlı Turnuvalar hakkında';
@@ -804,10 +804,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastAllBroadcastsByMonth => 'Tüm yayınları aylara göre görüntüleyin';
 
   @override
-  String get broadcastBackToLiveMove => 'Back to live move';
+  String get broadcastBackToLiveMove => 'Canlı hamleye dön';
 
   @override
-  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
+  String get broadcastSinceHideResults => 'Sonuçları gizlemeyi seçtiğiniz için, spoiler vermemek adına tüm tahta görünümleri boş olacak.';
 
   @override
   String get broadcastLiveboard => 'Live board';
@@ -1093,7 +1093,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferencesInGameOnly => 'Sadece oyun sırasında';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Oyun içi dışında';
 
   @override
   String get preferencesChessClock => 'Satranç saati';
@@ -1693,16 +1693,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Beklenen hamleyi oynamadan önce rakibin derhal yanıt vermesi gereken başka bir tehdit oluştur. Bu taktik aynı zamanda \"Zwischenzug\" olarak da bilinir.';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Kill box mate';
+  String get puzzleThemeKillBoxMate => 'Kafesleme matı';
 
   @override
-  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+  String get puzzleThemeKillBoxMateDescription => 'Rakip şahının yanında bir kale bulunur ve bir vezir tarafından desteklenir ve bu kale aynı zamanda şahın kaçış karelerini de engeller. Kale ve vezir, düşman şahını 3\'e 3\'lük bir \"kafeste\" sıkıştırır.';
 
   @override
-  String get puzzleThemeVukovicMate => 'Vukovic mate';
+  String get puzzleThemeVukovicMate => 'Vukovic matı';
 
   @override
-  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+  String get puzzleThemeVukovicMateDescription => 'Bir kale ve at, şahı mat etmek için bir araya gelir. Kale, üçüncü bir taşla desteklenerek mat eder ve at şahın kaçış karelerini engellemek için kullanılır.';
 
   @override
   String get puzzleThemeKnightEndgame => 'At oyunsonu';
@@ -1923,10 +1923,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsCantOpenSimilarAccount => 'Büyük-küçük harf değişiklikleri yapsanız dahi aynı kullanıcı adıyla yeni bir hesap açamazsınız.';
 
   @override
-  String get settingsCancelKeepAccount => 'Cancel and keep my account';
+  String get settingsCancelKeepAccount => 'Vazgeç ve hesabımı koru';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
+  String get settingsCloseAccountAreYouSure => 'Hesabınızı kapatmak istediğinize emin misiniz?';
 
   @override
   String get settingsThisAccountIsClosed => 'Hesap kapatılmıştır.';
@@ -1947,7 +1947,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get waitingForOpponent => 'Rakip bekleniyor';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Veya rakibinize bu QR kodunu taratın';
+  String get orLetYourOpponentScanQrCode => 'Veya rakibiniz bu QR kodunu tarasın';
 
   @override
   String get waiting => 'Bekleniyor';
@@ -1991,7 +1991,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get asWhite => 'beyazda';
 
   @override
-  String get asBlack => 'siyahta';
+  String get asBlack => 'siyahlarda';
 
   @override
   String get randomColor => 'Rastgele renk';
@@ -3021,9 +3021,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Turnuva eşleştirmeleri şu anda kapalıdır.';
-
-  @override
   String standByX(String param) {
     return 'Hazır ol $param, oyuncular eşleştiriliyor!';
   }
@@ -3039,9 +3036,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get winRate => 'Kazanma oranı';
-
-  @override
-  String get berserkRate => 'Divane oranı';
 
   @override
   String get performance => 'Performans';
@@ -3786,10 +3780,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Eğer e-postayı görmüyorsanız, spam, sosyal veya diğer klasörlere göz atmayı deneyin.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Eğer 5 dakika içerisinde mail size ulaşmazsa:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Tüm çöp, spam ve diğer klasörleri kontrol edin';
 
   @override
   String verifyYourAddress(String param) {
@@ -3901,7 +3895,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get viewTheSolution => 'Çözümü göster';
 
   @override
-  String get noChallenges => 'No challenges.';
+  String get noChallenges => 'Meydan okuma yok.';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -3936,7 +3930,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get language => 'Dil';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Tüm diller';
 
   @override
   String get background => 'Arkaplan';
@@ -4499,7 +4493,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reopenYourAccount => 'Hesabı aktifleştir';
 
   @override
-  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
+  String get reopenYourAccountDescription => 'Hesabınızı kapattıktan sonra fikrinizi değiştirdiyseniz hesabınızı tekrar açmak için bir şansınız var.';
 
   @override
   String get emailAssociatedToaccount => 'Hesabın bağlı olduğu e-posta adresi';
@@ -5365,7 +5359,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyPlaying => 'Oynanıyor';
 
   @override
-  String get studyShowResults => 'Results';
+  String get studyShowResults => 'Sonuçlar';
 
   @override
   String get studyShowEvalBar => 'Değerlendirme çubuğu';
@@ -5381,9 +5375,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'Çalışma PGN\'si';
-
-  @override
-  String get studyDownloadAllGames => 'Bütün oyunları indir';
 
   @override
   String get studyChapterPgn => 'Bölüm PGN\'si';
@@ -5754,7 +5745,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Zamanınız için teşekkürler';
 
   @override
   String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';

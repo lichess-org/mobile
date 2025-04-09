@@ -2995,9 +2995,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => '토너먼트 매칭이 종료되었습니다.';
-
-  @override
   String standByX(String param) {
     return '$param 님, 현재 매칭중입니다. 준비하십시오!';
   }
@@ -3013,9 +3010,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get winRate => '승률';
-
-  @override
-  String get berserkRate => '버서크 비율';
 
   @override
   String get performance => '퍼포먼스 레이팅';
@@ -5308,9 +5302,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get studyStudyPgn => '연구 PGN';
-
-  @override
-  String get studyDownloadAllGames => '모든 게임 다운로드';
 
   @override
   String get studyChapterPgn => '챕터 PGN';

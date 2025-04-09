@@ -540,10 +540,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Exigir un título oficial para participar en el torneo';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'Los emparejamientos del torneo están cerrados.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Tasa de berserk';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -810,7 +810,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastSinceHideResults => 'Como elegiste ocultar los resultados, todos los tableros de vista previa están vacíos.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Tablero en directo';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -828,8 +828,8 @@ class AppLocalizationsEs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count espectadores',
+      one: '$count espectador',
     );
     return '$_temp0';
   }
@@ -2314,7 +2314,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get claimADraw => 'Reclamar tablas';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Tablas reclamadas';
 
   @override
   String get offerDraw => 'Ofrecer tablas';
@@ -3018,10 +3018,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get createdBy => 'Creado por';
 
   @override
-  String get startingIn => 'Starting in';
-
-  @override
-  String get tournamentPairingsAreNowClosed => 'Los emparejamientos del torneo están cerrados.';
+  String get startingIn => 'Comienza en';
 
   @override
   String standByX(String param) {
@@ -3039,9 +3036,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get winRate => 'Tasa de victorias';
-
-  @override
-  String get berserkRate => 'Tasa de berserk';
 
   @override
   String get performance => 'Actuación';
@@ -3786,14 +3780,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Si no encuentras el correo, mira a ver si está en otras carpetas (spam, social, ...).';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Si no recibes el correo electrónico en 5 minutos:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Revisa todo el correo basura, spam y otras carpetas';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Verifica que $param es tu dirección de correo electrónico';
   }
 
   @override
@@ -3827,7 +3821,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get downloadImported => 'Descargar la partida importada';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Descargar todas las partidas';
 
   @override
   String get crosstable => 'Tabla cruzada';
@@ -3936,7 +3930,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get language => 'Idioma';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Todos los idiomas';
 
   @override
   String get background => 'Fondo';
@@ -5383,9 +5377,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get studyStudyPgn => 'PGN del estudio';
 
   @override
-  String get studyDownloadAllGames => 'Descargar todas las partidas';
-
-  @override
   String get studyChapterPgn => 'PGN del capítulo';
 
   @override
@@ -5706,103 +5697,103 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => '¿Necesitas ayuda? ¡Haz la visita guiada!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => '¡Bienvenido a Lichess Study!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'Se trata de un tablero de análisis compartido.<br><br>¡Úsalo para analizar y anotar partidas,<br>discutir posiciones con amigos,<br>y por supuesto para lecciones de ajedrez!<br><br>Es una herramienta poderosa, tomemos algo de tiempo para ver cómo funciona.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Compartido y guardado';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => '¡Otros miembros pueden ver tus movimientos en tiempo real!<br>Además, todo se guarda para siempre.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Miembros del estudio';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return 'Los espectadores $param1 pueden ver el estudio y hablar en el chat. Los colaboradores <br><br>$param2 pueden realizar movimientos y actualizar el estudio.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Haz clic en el botón $param.<br>Luego decide quién puede o no contribuir.';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Capítulos del estudio';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => 'Un estudio puede contener varios capítulos.<br>Cada capítulo tiene una posición inicial y un árbol de movimientos distintos.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Comentar una posición';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Haz clic en el botón $param o clic derecho en la lista de movimientos de la derecha.<br>Los comentarios serán compartidos y guardados.';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'Anotar una posición';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Haz clic en el botón !? o clic derecho en la lista de movimientos de la derecha.<br>Los comentarios serán compartidos y guardados.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Gracias por tu tiempo';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'Puedes encontrar tus <a href=\'/study/mine/hot\'>estudios previos</a> en tu perfil.<br>También existe un <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>comentario de blog sobre los estudios</a>.<br>Los usuarios avanzados pueden pulsar \"?\" para ver los atajos de teclado.<br>¡Que te diviertas!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'Vamos a crear un capítulo de estudio';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'Un estudio puede tener varios capítulos.<br>Cada capítulo tiene un árbol de movimientos distinto,<br>y puede ser creado de varias maneras.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Desde la posición inicial';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'Una configuración de tablero para una partida nueva.<br>Adecuado para explorar aperturas.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Posición personalizada';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Configura el tablero a tu manera.<br>Apropiado para explorar finales.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Cargar una partida de Lichess existente';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText => 'Pega la URL de una partida de Lichess<br>(como lichess.org/7fHIU0XI)<br>para cargar los movimientos en el capítulo.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'A partir de una cadena FEN';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => 'Pegar una posición en formato FEN<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>para iniciar el capítulo desde una posición.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'A partir de una partida PGN';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Pega una partida en formato PGN.<br>para cargar movimientos, comentarios y variaciones en el capítulo.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'Los estudios soportan variantes';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => '¡Sí, puedes estudiar Crazyhouse<br>y todas las variantes de Lichess!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => 'Los capítulos se guardan para siempre.<br>¡Diviértete organizando tu contenido de ajedrez!';
 
   @override
   String studyNbChapters(int count) {

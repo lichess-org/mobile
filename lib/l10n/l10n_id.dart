@@ -2203,7 +2203,7 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => 'Play first opening/endgame-explorer move';
+  String get playFirstOpeningEndgameExplorerMove => 'Saya';
 
   @override
   String get winPreventedBy50MoveRule => 'Tidak bisa menang karena peraturan 50 langkah';
@@ -2212,13 +2212,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get lossSavedBy50MoveRule => 'Kekalahan terhindari karena peraturan 50 langkah';
 
   @override
-  String get winOr50MovesByPriorMistake => 'Win or 50 moves by prior mistake';
+  String get winOr50MovesByPriorMistake => 'Saya1';
 
   @override
-  String get lossOr50MovesByPriorMistake => 'Loss or 50 moves by prior mistake';
+  String get lossOr50MovesByPriorMistake => 'Saya2';
 
   @override
-  String get unknownDueToRounding => 'Win/loss only guaranteed if recommended tablebase line has been followed since the last capture or pawn move, due to possible rounding of DTZ values in Syzygy tablebases.';
+  String get unknownDueToRounding => 'Saya';
 
   @override
   String get allSet => 'Semua siap!';
@@ -2997,9 +2997,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Pairing pemain sudah ditutup.';
-
-  @override
   String standByX(String param) {
     return 'Bersiaplah $param, pairing pemain sedang dilakukan!';
   }
@@ -3015,9 +3012,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get winRate => 'Rating kemenangan';
-
-  @override
-  String get berserkRate => 'Rating berserk';
 
   @override
   String get performance => 'Prestasi';
@@ -5310,9 +5304,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'Studi PGN';
-
-  @override
-  String get studyDownloadAllGames => 'Unduh semua permainan';
 
   @override
   String get studyChapterPgn => 'Bab PGN';

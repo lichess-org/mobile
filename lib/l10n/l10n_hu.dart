@@ -3021,9 +3021,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'A verseny párosításai lezárultak.';
-
-  @override
   String standByX(String param) {
     return 'Állj készen $param, hamarosan ellenfelet kapsz!';
   }
@@ -3039,9 +3036,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get winRate => 'Győzelmi arány';
-
-  @override
-  String get berserkRate => 'Berserk arány';
 
   @override
   String get performance => 'Teljesítmény';
@@ -5381,9 +5375,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'PGN a tanulmányról';
-
-  @override
-  String get studyDownloadAllGames => 'Az összes játszma letöltése';
 
   @override
   String get studyChapterPgn => 'PGN a fejezetről';

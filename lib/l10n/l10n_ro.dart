@@ -849,8 +849,9 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count spectatori',
+      few: '$count spectatori',
+      one: '$count spectator',
     );
     return '$_temp0';
   }
@@ -2340,7 +2341,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get claimADraw => 'Cere remiză';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Remiză revendicată';
 
   @override
   String get offerDraw => 'Propune remiză';
@@ -3047,9 +3048,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Cuplarea partenerilor de turneu s-a încheiat.';
-
-  @override
   String standByX(String param) {
     return 'Fii pe fază, $param, jucătorii sunt cuplați, pregătește-te!';
   }
@@ -3065,9 +3063,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get winRate => 'Procent de câștig';
-
-  @override
-  String get berserkRate => 'Procent jocuri cu timp înjumătățit';
 
   @override
   String get performance => 'Performanță';
@@ -3812,14 +3807,14 @@ class AppLocalizationsRo extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Dacă nu vezi email-ul trimis, verifică și în alte locuri, cum ar fi folderul de spam, gunoi, mesaje sociale sau alte foldere.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Dacă nu primești emailul în decurs de 5 minute:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Verifică secțiunile de spam, junk și altele';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Asigură-te că $param este adresa ta de email';
   }
 
   @override
@@ -3853,7 +3848,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get downloadImported => 'Descarcă importat';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Descarcă toate partidele';
 
   @override
   String get crosstable => 'Tabel de scoruri';
@@ -3962,7 +3957,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get language => 'Limbă';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Orice limbă';
 
   @override
   String get background => 'Fundal';
@@ -5454,9 +5449,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'PGN-ul studiului';
-
-  @override
-  String get studyDownloadAllGames => 'Descarcă toate partidele';
 
   @override
   String get studyChapterPgn => 'PGN-ul capitolului';

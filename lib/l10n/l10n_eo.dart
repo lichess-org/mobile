@@ -15,36 +15,36 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileAreYouSure => 'Ĉu vi certas?';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Nuligi proponon pri malmovo';
 
   @override
   String get mobileClearButton => 'Malplenigi';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Malplenigi konservitan movon';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Aliĝi al ludo';
 
   @override
   String get mobileFeedbackButton => 'Prikomentado';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'Saluton, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'Saluton';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Kaŝi varion';
 
   @override
   String get mobileHomeTab => 'Hejmo';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Vivaj filmprezentistoj';
 
   @override
   String get mobileMustBeLoggedIn => 'Vi devas esti ensalutata por spekti ĉi tiun paĝon.';
@@ -64,25 +64,25 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobilePrefMagnifyDraggedPiece => 'Pligrandigi trenitan ŝakpecon';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Ĉu vi volas fini ĉi tiun kuron?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Nenio por montri, bonvolu ŝanĝi la filtrilojn';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'Nenio por montri. Ludu kelkajn kurojn de Puzla Ŝtormo.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => 'Solvu tiom da puzloj kiom eble en 3 minutoj.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Vi perdos vian nunan sinsekvon kaj via poentaro estos konservita.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'Ludu puzlojn el viaj ŝatataj malfermoj, aŭ elektu temon.';
 
   @override
   String get mobilePuzzlesTab => 'Puzloj';
@@ -97,46 +97,46 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Enakviĝa reĝimo';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Kaŝi la sisteman uzantinterfacon dum ludado. Uzu ĉi tion, se vin ĝenas la sistemaj navigadaj gestoj ĉe la randoj de la ekrano. Aplikiĝas al ludaj kaj Puzlaj Ŝtormaj ekranoj.';
 
   @override
   String get mobileSettingsTab => 'Agordoj';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Kunhavigi PGN-on';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Kunhavigi ludan URL-on';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Kunhavigi pozicion kiel FEN-on';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Kunhavigi ĉi tiun puzlon';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Montri komentojn';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'Montri rezulton';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Montri varion';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Io misfunkciis.';
 
   @override
   String get mobileSystemColors => 'Sistemaj koloroj';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Temo';
 
   @override
   String get mobileToolsTab => 'Iloj';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Atendante ke la kontraŭulo aliĝu...';
 
   @override
   String get mobileWatchTab => 'Spekti';
@@ -2373,7 +2373,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get friends => 'Amikoj';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'aliaj ludantoj';
 
   @override
   String get discussions => 'Konversacioj';
@@ -2559,7 +2559,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get gamesPlayed => 'Luditaj ludoj';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'Bone';
 
   @override
   String get cancel => 'Nuligi';
@@ -3021,9 +3021,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'La turniraj parigoj nun fermiĝis.';
-
-  @override
   String standByX(String param) {
     return 'Atentu $param, parigante ludantojn, pretiĝu!';
   }
@@ -3039,9 +3036,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get winRate => 'Venka procento';
-
-  @override
-  String get berserkRate => 'Freneza procento';
 
   @override
   String get performance => 'Efikeco';
@@ -3202,7 +3196,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get yes => 'Jes';
 
   @override
-  String get website => 'Website';
+  String get website => 'Retejo';
 
   @override
   String get mobile => 'Mobile';
@@ -5381,9 +5375,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'PGN de la studo';
-
-  @override
-  String get studyDownloadAllGames => 'Elŝuti ĉiujn ludojn';
 
   @override
   String get studyChapterPgn => 'PGN de la ĉapitro';

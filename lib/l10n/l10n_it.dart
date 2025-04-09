@@ -3021,9 +3021,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Gli accoppiamenti del torneo sono ora chiusi.';
-
-  @override
   String standByX(String param) {
     return 'Resta in attesa $param, accoppiamento giocatori, preparati!';
   }
@@ -3039,9 +3036,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get winRate => 'Percentuale di vittorie';
-
-  @override
-  String get berserkRate => 'Percentuale Berserk';
 
   @override
   String get performance => 'Performance';
@@ -5365,7 +5359,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyPlaying => 'In corso';
 
   @override
-  String get studyShowResults => 'Results';
+  String get studyShowResults => 'Risultati';
 
   @override
   String get studyShowEvalBar => 'Barre di valutazione';
@@ -5381,9 +5375,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'PGN dello studio';
-
-  @override
-  String get studyDownloadAllGames => 'Scarica tutte le partite';
 
   @override
   String get studyChapterPgn => 'PGN del capitolo';
@@ -5709,7 +5700,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyGetTheTour => 'Need help? Get the tour!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Benvenuto allo Studio!';
 
   @override
   String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
@@ -5790,7 +5781,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'Preso da una partita PGN';
 
   @override
   String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';

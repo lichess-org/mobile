@@ -522,10 +522,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get arenaOnlyTitledHelp => '参加には公式タイトルの保持を必須とする';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'トーナメントの対局の組み合わせは終了しました。';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'バーサーク率';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -807,8 +807,7 @@ class AppLocalizationsJa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count 人の視聴者',
     );
     return '$_temp0';
   }
@@ -1909,7 +1908,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get playWithAFriend => '友達と対局する';
 
   @override
-  String get playWithTheMachine => 'コンピューターとチェスする';
+  String get playWithTheMachine => 'コンピュータと対戦';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => '誰かを招待する時はこのURLを送ってください';
@@ -2288,7 +2287,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get claimADraw => '引き分けを申し立てる';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'ドロー申立て';
 
   @override
   String get offerDraw => '引き分けを提案する';
@@ -2992,10 +2991,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get createdBy => 'トーナメント作成者';
 
   @override
-  String get startingIn => 'Starting in';
-
-  @override
-  String get tournamentPairingsAreNowClosed => 'トーナメントの対局の組み合わせは終了しました。';
+  String get startingIn => '開始まで';
 
   @override
   String standByX(String param) {
@@ -3013,9 +3009,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get winRate => '勝率';
-
-  @override
-  String get berserkRate => 'バーサーク率';
 
   @override
   String get performance => 'パフォーマンス';
@@ -3760,14 +3753,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'メールが見つからない場合は、他の場所（スパムフォルダなど）を確認してください。';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => '5 分以内にメールが届かない場合は：';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'ジャンクメール、スパムメールなどのフォルダをチェックする';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return '$param があなたのメールアドレスであることを確認する';
   }
 
   @override
@@ -3801,7 +3794,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get downloadImported => 'インポート分のダウンロード';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => '全局をダウンロード';
 
   @override
   String get crosstable => '成績表';
@@ -3910,7 +3903,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get language => '言語';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'すべての言語';
 
   @override
   String get background => '背景';
@@ -5310,9 +5303,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyStudyPgn => '研究の PGN';
 
   @override
-  String get studyDownloadAllGames => '全局をダウンロード';
-
-  @override
   String get studyChapterPgn => '章の PGN';
 
   @override
@@ -5633,7 +5623,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'お困りですか？　ツアーへどうぞ！';
 
   @override
   String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';

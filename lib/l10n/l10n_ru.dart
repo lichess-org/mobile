@@ -847,7 +847,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastBackToLiveMove => 'Вернуться к текущему ходу';
 
   @override
-  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
+  String get broadcastSinceHideResults => 'Вы выбрали скрыть результаты, поэтому обзор досок пуст, чтобы сохранить интригу.';
 
   @override
   String get broadcastLiveboard => 'Live board';
@@ -946,7 +946,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get challengeDeclineStandard => 'Я не принимаю вызовы на неклассические шахматы прямо сейчас.';
 
   @override
-  String get challengeDeclineVariant => 'Я не хочу играть в этот вариант шахмат сейчас.';
+  String get challengeDeclineVariant => 'Прямо сейчас я не хочу играть этот вариант.';
 
   @override
   String get challengeDeclineNoBot => 'Я не принимаю вызовы от ботов.';
@@ -2366,7 +2366,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get claimADraw => 'Потребовать ничью';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Объявлена ничья';
 
   @override
   String get offerDraw => 'Предложить ничью';
@@ -3073,9 +3073,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Жеребьёвка турнира завершена.';
-
-  @override
   String standByX(String param) {
     return 'Ожидайте, $param, идёт жеребьёвка. Будьте готовы!';
   }
@@ -3091,9 +3088,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get winRate => 'Победы';
-
-  @override
-  String get berserkRate => 'Берсерк';
 
   @override
   String get performance => 'Перформанс';
@@ -3838,14 +3832,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Если письма нет, проверьте папку для спама и другие места, куда оно могло попасть.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Если вы не получили письмо в течение 5 минут:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Проверьте папку «Спам» и подобные';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Проверьте, что $param — это ваш адрес электронной почты';
   }
 
   @override
@@ -3988,7 +3982,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get language => 'Язык (Language)';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Все языки';
 
   @override
   String get background => 'Тема';
@@ -5527,9 +5521,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'PGN студии';
-
-  @override
-  String get studyDownloadAllGames => 'Скачать все партии';
 
   @override
   String get studyChapterPgn => 'PGN главы';

@@ -1619,7 +1619,6 @@
   "losses": "Losses",
   "createdBy": "Created by",
   "startingIn": "Starting in",
-  "tournamentPairingsAreNowClosed": "The tournament pairings are now closed.",
   "standByX": "Stand by {param}, pairing players, get ready!",
   "@standByX": {
     "placeholders": {
@@ -1632,7 +1631,6 @@
   "resume": "Resume",
   "youArePlaying": "You are playing!",
   "winRate": "Win rate",
-  "berserkRate": "Berserk rate",
   "performance": "Performance",
   "tournamentComplete": "Tournament complete",
   "movesPlayed": "Moves played",
@@ -3103,7 +3101,6 @@
   "studyShareAndExport": "Share & export",
   "studyCloneStudy": "Clone",
   "studyStudyPgn": "Study PGN",
-  "studyDownloadAllGames": "Download all games",
   "studyChapterPgn": "Chapter PGN",
   "studyCopyChapterPgn": "Copy PGN",
   "studyDownloadGame": "Download game",

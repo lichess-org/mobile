@@ -787,10 +787,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastBackToLiveMove => 'Trở lại nước đi thực tế';
 
   @override
-  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
+  String get broadcastSinceHideResults => 'Bởi vì bạn đã chọn ẩn kết quả, tất cả các bàn đấu xem trước sẽ trống để tránh lộ thông tin.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Bàn cờ trực tiếp';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -807,8 +807,7 @@ class AppLocalizationsVi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count người xem',
     );
     return '$_temp0';
   }
@@ -2288,7 +2287,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get claimADraw => 'Nhận hòa';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Hòa cờ';
 
   @override
   String get offerDraw => 'Đề nghị hoà';
@@ -2995,9 +2994,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Đã đóng việc sắp xếp cặp đấu.';
-
-  @override
   String standByX(String param) {
     return '$param chờ nhé, đang xếp cặp đấu, chuẩn bị sẵn sàng!';
   }
@@ -3013,9 +3009,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get winRate => 'Tỉ lệ thắng';
-
-  @override
-  String get berserkRate => 'Tỉ lệ Berserk';
 
   @override
   String get performance => 'Hiệu suất';
@@ -3760,14 +3753,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Nếu bạn không thấy ở trong email, kiểm tra lại ở các nơi khác có thể có, như thư mục rác, thư rác, mạng xã hội hay các thư mục khác.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Nếu bạn không nhận được email trong vòng 5 phút:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Kiểm tra tất cả thư rác, thư spam và các thư mục khác';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Xác minh rằng $param là địa chỉ email của bạn';
   }
 
   @override
@@ -3801,7 +3794,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get downloadImported => 'Tải về tệp đã được nhập';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Tải xuống tất cả các ván đấu';
 
   @override
   String get crosstable => 'Tổng điểm đối đầu';
@@ -3910,7 +3903,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get language => 'Ngôn ngữ';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Tất cả ngôn ngữ';
 
   @override
   String get background => 'Nền';
@@ -5310,9 +5303,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyStudyPgn => 'PGN nghiên cứu';
 
   @override
-  String get studyDownloadAllGames => 'Tải về tất cả ván đấu';
-
-  @override
   String get studyChapterPgn => 'PGN chương';
 
   @override
@@ -5633,103 +5623,103 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'Cần giúp đỡ? Khám phá nào!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Chào mừng đến với Lichess Study!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'Đây là một bàn cờ phân tích được chia sẻ.<br><br><br><br><br><br>Sử dụng nó để phân tích và chú thích các trò chơi,<br>thảo luận về các vị trí với bạn bè, <br>và tất nhiên cho các bài học cờ vua!<br><br>Đó là một công cụ mạnh mẽ, hãy dành một chút thời gian để xem nó hoạt động như thế nào.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Đã lưu và chia sẻ';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => 'Các thành viên khác có thể thấy các nước đi của bạn trong thời gian thực!<br>Ngoài ra, mọi thứ được lưu mãi mãi.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Thành viên nghiên cứu';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 Khán giả có thể xem nghiên cứu và nói chuyện trong cuộc trò chuyện.<br><br>${param2}Người đóng góp có thể thực hiện các nước cờ và cập nhật nghiên cứu.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Nhấp vào nút $param.<br>Sau đó, quyết định ai có thể đóng góp hay không.';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Các chương nghiên cứu';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => 'Một nghiên cứu có thể chứa vài chương.<br>Mỗi chương có một thế cờ ban đầu và nhánh nước đi riêng biệt.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Bình luận về một thế cờ';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Nhấp vào nút $param hoặc nhấp chuột phải vào danh sách nước cờ ở bên phải.<br>Nhận xét được chia sẻ và lưu.';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'Chú thích một thế cờ';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Nhấp vào nút !? hoặc nhấp chuột phải vào danh sách nước đi ở bên phải.<br>Dấu chú thích được chia sẻ và lưu.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Cảm ơn bạn đã dành thời gian';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'Bạn có thể tìm <a href=\'/study/mine/hot\'>nghiên cứu trước đó</a>từ trang hồ sơ của bạn.<br>Ngoài ra còn có một <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>bài blog về các nghiên cứu</a>.<br>Những người thành thạo có thể nhập \"?\" để xem các phím tắt.<br>Chúc vui vẻ!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'Hãy tạo một chương nghiên cứu';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'Một nghiên cứu có thể có vài chương.<br>Mỗi chương có một cây nước cờ riêng biệt,<br>và có thể được tạo ra theo nhiều cách khác nhau.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Từ thế cờ ban đầu';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'Chỉ là một bàn cờ được thiết lập cho một ván cờ mới.<br>Phù hợp để khám phá khai cuộc.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Thế cờ tùy chỉnh';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Thiết lập bàn cờ theo cách của bạn.<br>phù hợp để khám phá cờ tàn, tàn cuộc.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Tải một ván cờ Lichess hiện có';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText => 'Dán URL một ván cờ trên lichess<br>(kiểu như lichess.org/7fhiu0xi)<br>để tải các nước cờ trong chương.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'Từ một chuỗi FEN';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => 'Dán một thế cờ ở định dạng FEN<br><i>4K3/4RB2/8/7P/8/5Q2/1PP5/1K6 W</i><br>để bắt đầu chương từ một thế cờ.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'Từ một PGN của ván cờ';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Dán một ván cờ ở định dạng PGN.<br>Để tải các nước cờ, nhận xét và các biến trong chương.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'Nghiên cứu hỗ trợ các biến thể';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'Có, bạn có thể nghiên cứu Crazyhouse<br>và tất cả các biến thể của Lichess!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => 'Các chương được lưu mãi mãi.<br>Hãy vui vẻ tổ chức nội dung cờ vua của bạn!';
 
   @override
   String studyNbChapters(int count) {

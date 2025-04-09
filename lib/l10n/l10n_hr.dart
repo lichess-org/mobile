@@ -3047,9 +3047,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Turnirska uparivanja su završena.';
-
-  @override
   String standByX(String param) {
     return 'Uparivanje igrača - $param, pripremi se za igru!';
   }
@@ -3065,9 +3062,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get winRate => 'Postotak pobjeda';
-
-  @override
-  String get berserkRate => 'Postotak berserka';
 
   @override
   String get performance => 'Performans';
@@ -5454,9 +5448,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'Studiraj PGN';
-
-  @override
-  String get studyDownloadAllGames => 'Preuzmite sve igre';
 
   @override
   String get studyChapterPgn => 'PGN poglavlja';

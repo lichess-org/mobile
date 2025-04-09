@@ -540,10 +540,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Krev en offisiell sjakktittel for å kunne bli med i turneringen';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'Turneringsparingene er nå lukket.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Berserkrate';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -810,7 +810,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastSinceHideResults => 'Du valgte å skjule resultatene, så alle forhåndsvisningene av brettene er tomme for å unngå å røpe noe.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Brett i sanntid';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2087,7 +2087,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get computerAnalysisAvailable => 'Datamaskinanalyse tilgjengelig';
 
   @override
-  String get computerAnalysisDisabled => 'Maskinanalyse er skrudd av';
+  String get computerAnalysisDisabled => 'Datamaskinanalyse deaktivert';
 
   @override
   String get analysis => 'Analysebrett';
@@ -2314,7 +2314,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get claimADraw => 'Krev remis';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Remiskrav';
 
   @override
   String get offerDraw => 'Tilby remis';
@@ -3018,10 +3018,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get createdBy => 'Opprettet av';
 
   @override
-  String get startingIn => 'Starting in';
-
-  @override
-  String get tournamentPairingsAreNowClosed => 'Oppsettet av turneringen er nå lukket.';
+  String get startingIn => 'Starter om';
 
   @override
   String standByX(String param) {
@@ -3039,9 +3036,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get winRate => 'Seierprosent';
-
-  @override
-  String get berserkRate => 'Berserkprosent';
 
   @override
   String get performance => 'Prestasjon';
@@ -3786,14 +3780,14 @@ class AppLocalizationsNb extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Om du ikke ser e-posten, sjekk andre steder den kan være, som søppel, spam, sosial, eller andre mapper.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Hvis du ikke mottar e-posten innen 5 minutter:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Sjekk alle mapper';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Sjekk at $param er e-postadressen din';
   }
 
   @override
@@ -3827,7 +3821,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get downloadImported => 'Last ned importen';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Last ned alle partiene';
 
   @override
   String get crosstable => 'Krysstabell';
@@ -3936,7 +3930,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get language => 'Språk';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Alle språk';
 
   @override
   String get background => 'Bakgrunn';
@@ -5383,9 +5377,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get studyStudyPgn => 'Studie-PGN';
 
   @override
-  String get studyDownloadAllGames => 'Last ned alle partiene';
-
-  @override
   String get studyChapterPgn => 'Kapittel-PGN';
 
   @override
@@ -5706,103 +5697,103 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'Trenger du hjelp? Ta omvisningen!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Velkommen til Lichess-studier!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'Dette er et delt analysebrett.<br><br>Bruk det til å analysere og kommentere partier,<br>diskutere stillinger med venner,<br>og selvfølgelig til sjakkleksjoner!<br><br>Det er et kraftig verktøy, la oss ta oss tid til å se hvordan det fungerer.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Delt og lagret';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => 'Andre medlemmer kan se trekkene dine i sanntid!<br>I tillegg blir alt lagret for alltid.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Studiemedlemmer';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 Tilskuere kan se studien og samtale.<br><br>$param2 Bidragsytere kan gjøre trekk og oppdatere studien.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Klikk på $param-knappen.<br>Deretter bestemmer du hvem som kan bidra eller ikke.';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Studiekapitler';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => 'En studie kan inneholde flere kapitler.<br>Hvert kapittel har en egen utgangsstilling og et eget trekktre.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Kommenter en stilling';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Klikk på $param-knappen, eller høyreklikk på trekklisten til høyre.<br>Kommentarer deles og lagres.';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'Kommenter en stilling med symboler';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Klikk på !? -knappen, eller høyreklikk på trekklisten til høyre.<br>Kommentarsymboler deles og lagres.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Takk for at du tok deg tid';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'Du kan finne dine <a href=\'/study/mine/hot\'>tidligere studier</a> fra profilen din.<br>Det finnes også et <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blogginnlegg om studier</a>.<br>Erfarne brukere kan trykke på «?» for å se hurtigtaster.<br>Ha det gøy!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'La oss lage et studiekapittel';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'En studie kan ha flere kapitler.<br>Hvert kapittel har et eget trekktre,<br>og kan opprettes på forskjellige måter.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Fra utgangsstillingen';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'Bare et brettoppsett for et nytt parti.<br>Egnet for å utforske åpninger.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Egendefinert stilling';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Sett opp brettet slik du ønsker.<br>Egnet for å utforske sluttspill.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Last inn et eksisterende Lichess-parti';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText => 'Lim inn en URL til et Lichess-parti<br>(som lichess.org/7fHIU0XI)<br>for å laste inn trekkene fra partiet i kapittelet.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'Fra FEN-streng';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => 'Lim inn en stilling i FEN-format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>for å starte kapittelet fra en stilling.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'Fra PGN-parti';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Lim inn et parti i PGN-format.<br>for å laste inn trekk, kommentarer og varianter i kapittelet.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'Studier støtter varianter';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'Ja, du kan studere crazyhouse<br>og alle Lichess-varianter!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => 'Kapitler lagres for alltid.<br>Ha det gøy med å organisere sjakkinnholdet ditt!';
 
   @override
   String studyNbChapters(int count) {
@@ -5849,10 +5840,10 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get timeagoJustNow => 'om litt';
+  String get timeagoJustNow => 'akkurat nå';
 
   @override
-  String get timeagoRightNow => 'for litt siden';
+  String get timeagoRightNow => 'akkurat nå';
 
   @override
   String get timeagoCompleted => 'fullført';
@@ -5873,8 +5864,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'om $count minutter',
-      one: 'om $count minutt',
+      other: 'i $count minutter',
+      one: 'i $count minutt',
     );
     return '$_temp0';
   }
@@ -5884,8 +5875,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'om $count timer',
-      one: 'om $count time',
+      other: 'i $count timer',
+      one: 'i $count time',
     );
     return '$_temp0';
   }
@@ -5895,8 +5886,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'om $count døgn',
-      one: 'om $count døgn',
+      other: 'i $count dager',
+      one: 'i $count dag',
     );
     return '$_temp0';
   }
@@ -5939,8 +5930,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'for $count minutter siden',
-      one: 'for $count minutt siden',
+      other: '$count minutter siden',
+      one: '$count minutt siden',
     );
     return '$_temp0';
   }
@@ -5950,8 +5941,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'for $count timer siden',
-      one: 'for $count time siden',
+      other: '$count timer siden',
+      one: '$count time siden',
     );
     return '$_temp0';
   }
@@ -5961,8 +5952,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'for $count døgn siden',
-      one: 'for $count døgn siden',
+      other: '$count dager siden',
+      one: '$count dag siden',
     );
     return '$_temp0';
   }
@@ -5972,8 +5963,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'for $count uker siden',
-      one: 'for $count uke siden',
+      other: '$count uker siden',
+      one: '$count uke siden',
     );
     return '$_temp0';
   }
@@ -5983,8 +5974,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'for $count måneder siden',
-      one: 'for $count måned siden',
+      other: '$count måneder siden',
+      one: '$count måned siden',
     );
     return '$_temp0';
   }
@@ -5994,8 +5985,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'for $count år siden',
-      one: 'for $count år siden',
+      other: '$count år siden',
+      one: '$count år siden',
     );
     return '$_temp0';
   }

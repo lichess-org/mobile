@@ -677,7 +677,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastFideFederations => 'FIDE federations';
 
   @override
-  String get broadcastTop10Rating => 'Top 10 rating';
+  String get broadcastTop10Rating => 'शीर्ष 10 रेटिंग';
 
   @override
   String get broadcastFidePlayers => 'FIDE players';
@@ -692,10 +692,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastFederation => 'Federation';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAgeThisYear => 'इस वर्ष आयु';
 
   @override
-  String get broadcastUnrated => 'Unrated';
+  String get broadcastUnrated => 'बिना रेटेड';
 
   @override
   String get broadcastRecentTournaments => 'Recent tournaments';
@@ -801,7 +801,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'सभी प्रसारण महीने के अनुसार देखें';
 
   @override
   String get broadcastBackToLiveMove => 'Back to live move';
@@ -3019,9 +3019,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'टूर्नामेंट जोड़ियां अब बंद हो गयी हैं।';
-
-  @override
   String standByX(String param) {
     return '$param, खिलाड़ियों, बाँधना द्वारा खड़े हो जाओ तैयार हो जाओ!';
   }
@@ -3037,9 +3034,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get winRate => 'जीत दर';
-
-  @override
-  String get berserkRate => 'निडर की दर';
 
   @override
   String get performance => 'प्रदर्शन';
@@ -5379,9 +5373,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'PGN का अध्ययन करें';
-
-  @override
-  String get studyDownloadAllGames => 'सभी खेल नीचे लादें';
 
   @override
   String get studyChapterPgn => 'अध्याय PGN';

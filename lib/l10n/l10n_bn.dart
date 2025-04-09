@@ -2314,7 +2314,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get claimADraw => 'সমান দাবী করুন';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'ড্র সম্মত';
 
   @override
   String get offerDraw => 'সমানের জন্য আহ্‌বান জানান';
@@ -3021,9 +3021,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'ক্রীড়া-প্রতিযোগিতা যোগদান এখন বন্ধ হয়ে গেছে.';
-
-  @override
   String standByX(String param) {
     return 'অপেক্ষিত $param, যোগদান খেলোয়ার, তৈরি হও!';
   }
@@ -3039,9 +3036,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get winRate => 'জয়ের অনুপাত';
-
-  @override
-  String get berserkRate => 'ক্ষিপ্ত অনুপাত';
 
   @override
   String get performance => 'সম্পাদন';
@@ -5377,13 +5371,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get studyShareAndExport => 'Share & export';
 
   @override
-  String get studyCloneStudy => 'Clone';
+  String get studyCloneStudy => 'ডুপ্লিকেট/নকল করবেন';
 
   @override
   String get studyStudyPgn => 'অধ্যায়ন PGN আকারে';
-
-  @override
-  String get studyDownloadAllGames => 'ডাউনলোড করুন সকল গেম';
 
   @override
   String get studyChapterPgn => 'Chapter PGN';

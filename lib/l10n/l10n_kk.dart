@@ -3021,9 +3021,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get startingIn => 'Starting in';
 
   @override
-  String get tournamentPairingsAreNowClosed => 'Жарысқа жұпталу аяқталды.';
-
-  @override
   String standByX(String param) {
     return '$param күтіңіз, ойыншылар жұпталуда, дайын болыңыз!';
   }
@@ -3039,9 +3036,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get winRate => 'Жеңіс үлесі';
-
-  @override
-  String get berserkRate => 'Берсерк үлесі';
 
   @override
   String get performance => 'Жетістік';
@@ -5381,9 +5375,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get studyStudyPgn => 'Зерттеудің PGN';
-
-  @override
-  String get studyDownloadAllGames => 'Барлық ойындарды жүктеп алу';
 
   @override
   String get studyChapterPgn => 'Бөлімнің PGN';

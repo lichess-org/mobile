@@ -528,7 +528,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get arenaRankAvg => 'Sijoitusten keskiarvo';
 
   @override
-  String get arenaTournamentWinners => 'Turnauksen voittajat';
+  String get arenaTournamentWinners => 'Turnausten voittajat';
 
   @override
   String get arenaTournamentShields => 'Turnauskilvet';
@@ -540,10 +540,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Edellytä turnauksen osallistujilta virallista arvonimeä';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'Turnauksen peliparien määritys on nyt päättynyt.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Berserkkiprosentti';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2314,7 +2314,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get claimADraw => 'Vaadi tasapeli';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Tasapeli vaadittu';
 
   @override
   String get offerDraw => 'Ehdota tasapeliä';
@@ -3018,10 +3018,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get createdBy => 'Tekijä:';
 
   @override
-  String get startingIn => 'Starting in';
-
-  @override
-  String get tournamentPairingsAreNowClosed => 'Turnauksen peliparien määritys on päättynyt.';
+  String get startingIn => 'Aikaa alkuun:';
 
   @override
   String standByX(String param) {
@@ -3039,9 +3036,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get winRate => 'Voittoprosentti';
-
-  @override
-  String get berserkRate => 'Berserkkiprosentti';
 
   @override
   String get performance => 'Suoritus';
@@ -3606,7 +3600,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get returnToSimulHomepage => 'Palaa simultaanin kotisivulle';
 
   @override
-  String get aboutSimul => 'Simultaaneissa yksi pelaaja pelaa useampaa pelaajaa vastaan samanaikaisesti.';
+  String get aboutSimul => 'Simultaaneissa yksi pelaaja pelaa yhtä aikaa monta pelaajaa vastaan.';
 
   @override
   String get aboutSimulImage => '50 vastustajastaan Fischer voitti 47, pelasi kahdesti tasan ja hävisi yhden.';
@@ -3618,7 +3612,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get aboutSimulRules => 'Kun simultaani alkaa, jokainen pelaaja aloittaa pelin simultaanin pitäjää vastaan. Simultaanin pitäjä pelaa valkeilla nappuloilla. Simultaani loppuu, kun kaikki pelit ovat loppuneet.';
 
   @override
-  String get aboutSimulSettings => 'Simultaanit ovat aina rentoja. Revanssit, siirtojen perumiset ja ajan lisääminen ovat pois käytöstä.';
+  String get aboutSimulSettings => 'Simultaanit ovat aina rentoja. Revanssit, siirtojen perumiset ja ajan lisääminen ovat poissa käytöstä.';
 
   @override
   String get create => 'Luo';
@@ -3786,14 +3780,14 @@ class AppLocalizationsFi extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Jos et näe viestiä, tarkista muut paikat joihin se voi olla joutunut (kuten roskaposti- ja spämmikansiot).';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Jos et saa sähköpostia 5 minuutin kuluessa:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Tarkista kaikki roskaposti-, spam- ja muut kansiot';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Tarkista, että $param on sinun sähköpostiosoitteesi';
   }
 
   @override
@@ -3827,7 +3821,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get downloadImported => 'Imuroi tuotu PGN';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Lataa kaikki pelit';
 
   @override
   String get crosstable => 'Pistetaulukko';
@@ -3936,7 +3930,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get language => 'Kieli';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Kaikki kielet';
 
   @override
   String get background => 'Tausta';
@@ -5383,9 +5377,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get studyStudyPgn => 'Tutkielman PGN';
 
   @override
-  String get studyDownloadAllGames => 'Lataa kaikki pelit';
-
-  @override
   String get studyChapterPgn => 'Luvun PGN';
 
   @override
@@ -5706,103 +5697,103 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'Avun tarpeessa? Katso esittely!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Tervetuloa Lichess-tutkielmiin!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'Tämä on jaettu analyysilauta.<br><br>Käytä sitä pelien analysoimiseen ja kommentoimiseen,<br>asemien tarkasteluun ystävien kesken<br>ja tietysti shakkioppitunneilla!<br><br>Katsotaanpa lähemmin, miten tämä tehokas työkalu toimii.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Jaettuna ja tallessa';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => 'Toiset jäsenet näkevät siirtosi reaaliajassa!<br>Lisäksi kaikki pysyy ikuisesti tallennettuna.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Tutkielman jäsenet';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 Katsojat voivat katsoa tutkielmaa ja keskustella chatissa.<br><br>$param2 Osallistujat voivat tehdä siirtoja ja muokata tutkielmaa.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Napsauta $param -painiketta.<br>Päätä sitten, kuka saa osallistua tutkielman muokkaamiseen ja kuka ei.';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Tutkielman luvut';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => 'Tutkielma voi sisältää useita lukuja.<br>Jokaisella luvulla on oma alkuasemansa ja siirtopuukaavionsa.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Kommentoi asemaa';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Napsauta $param -painiketta tai hiiren oikealla näppäimellä oikealla olevaa siirtolistaa.<br>Kommentit tallentuvat ja tulevat näkyviin kaikille jäsenille.';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'Arvioi asema symbolein';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Napsauta !?-painiketta tai hiiren oikealla näppäimellä oikealla olevaa siirtolistaa.<br>Arviosymbolit tallentuvat ja tulevat näkyviin kaikille jäsenille.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Kiitokset tutkielmiin tutustumisesta';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => '<a href=\'/study/mine/hot\'>Edelliset tutkielmasi</a> löytyvät profiilisivultasi.<br>Olemme myös kirjoittaneet tutkielmista <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blogiin </a>.<br>Edistyneille käyttäjille suosittelemme tutustumista pikanäppäimin, jotka saa näkyviin painamalla \"?\".<br>Pidä hauskaa!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'Tutkielman luvun luonti';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'Tutkielmassa voi olla useita lukuja.<br>Jokaisella luvulla on oma siirtopuukaavionsa,<br>ja lukuja voidaan luoda monin eri tavoin.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Alkuasema';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'Lauta on alkuasemassa valmiina uuteen peliin.<br>Tämä sopii avausten tutkimiseen.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Itse määritetty asema';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Aseta nappulat laudalle haluamallasi tavalla.<br>Tämä sopii loppupelien tutkimiseen.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Lataa Lichessissä pelattu peli';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText => 'Kun liität Lichessissä pelatun pelin URL:n<br>(esim. lichess.org/7fHIU0XI)<br>pelin siirrot latautuvat tutkielman lukuun.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'Tuo FEN-asema';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => 'Kun liität aseman FEN-muodossa,<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>tutkielman luku alkaa kyseisestä asemasta.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'Tuo PGN-peli';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Kun liität pelin PGN-muodossa,<br>sen siirrot, kommentit ja muunnelmat latautuvat tutkielman lukuun.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'Tutkielmat varianteille';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'Kyllä, voit tutkia crazyhousea<br>ja kaikkia Lichessin variantteja!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => 'Luvut pysyvät aina tallennettuina.<br>Toivotamme mukavia hetkiä shakkisisältöjesi järjestelyyn!';
 
   @override
   String studyNbChapters(int count) {
