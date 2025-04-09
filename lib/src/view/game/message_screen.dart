@@ -197,7 +197,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
       valueListenable: _textController,
       builder:
           (context, value, child) => PlatformIconButton(
-            onTap:
+            onPressed:
                 session != null && value.text.isNotEmpty
                     ? () {
                       ref

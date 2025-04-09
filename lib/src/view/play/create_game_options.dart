@@ -8,7 +8,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
-import 'package:lichess_mobile/src/view/play/online_bots_screen.dart';
+import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 /// A widget that displays the options for creating a game.
@@ -24,6 +25,10 @@ class CreateGameOptions extends ConsumerWidget {
       children: [
         _Section(
           children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+              child: QuickGameButton(),
+            ),
             _CreateGamePlatformButton(
               onTap:
                   isOnline && !isPlayban
@@ -35,33 +40,19 @@ class CreateGameOptions extends ConsumerWidget {
               icon: Icons.tune,
               label: context.l10n.custom,
             ),
+          ],
+        ),
+        _Section(
+          children: [
             _CreateGamePlatformButton(
-              onTap:
-                  isOnline
-                      ? () {
-                        Navigator.of(context).push(OnlineBotsScreen.buildRoute(context));
-                      }
-                      : null,
-              icon: Icons.computer,
-              label: context.l10n.onlineBots,
+              onTap: () {
+                Navigator.of(context).push(TournamentListScreen.buildRoute(context));
+              },
+              icon: LichessIcons.tournament_cup,
+              label: context.l10n.tournaments,
             ),
           ],
         ),
-        // TODO: Implement tournaments
-        // _Section(
-        //   children: [
-        //     _CreateGamePlatformButton(
-        //       onTap: () {
-        //         Navigator.of(
-        //           context,
-        //           rootNavigator: true,
-        //         ).push(TournamentListScreen.buildRoute(context));
-        //       },
-        //       icon: LichessIcons.tournament_cup,
-        //       label: context.l10n.tournaments,
-        //     ),
-        //   ],
-        // ),
         _Section(
           children: [
             _CreateGamePlatformButton(
@@ -88,12 +79,7 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? ListSection(hasLeading: true, children: children)
-        : Padding(
-          padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
-        );
+    return ListSection(hasLeading: true, children: children);
   }
 }
 
@@ -108,16 +94,14 @@ class _CreateGamePlatformButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? Opacity(
-          opacity: onTap == null ? 0.5 : 1.0,
-          child: PlatformListTile(
-            leading: Icon(icon, size: 28),
-            trailing: const CupertinoListTileChevron(),
-            title: Text(label, style: Styles.mainListTileTitle),
-            onTap: onTap,
-          ),
-        )
-        : FilledButton.tonalIcon(onPressed: onTap, icon: Icon(icon), label: Text(label));
+    return Opacity(
+      opacity: onTap == null ? 0.5 : 1.0,
+      child: PlatformListTile(
+        leading: Icon(icon, size: 28),
+        trailing: const CupertinoListTileChevron(),
+        title: Text(label, style: Styles.mainListTileTitle),
+        onTap: onTap,
+      ),
+    );
   }
 }

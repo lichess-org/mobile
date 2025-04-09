@@ -15,7 +15,7 @@ const _kAutoCompleteDebounceTimer = Duration(milliseconds: 300);
 
 @riverpod
 Future<User> user(Ref ref, {required UserId id}) {
-  return ref.withClient((client) => UserRepository(client).getUser(id));
+  return ref.withClient((client) => UserRepository(client).getUser(id, withCanChallenge: true));
 }
 
 @riverpod

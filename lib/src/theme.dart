@@ -126,6 +126,7 @@ extension CustomThemeBuildContext on BuildContext {
     light: themeLight.copyWith(
       cupertinoOverrideTheme: lightCupertino,
       splashFactory: isIOS ? NoSplash.splashFactory : null,
+      iconTheme: IconThemeData(color: themeLight.colorScheme.onSurface.withValues(alpha: 0.7)),
       cardTheme:
           isIOS
               ? CardThemeData(
@@ -152,6 +153,7 @@ extension CustomThemeBuildContext on BuildContext {
     dark: themeDark.copyWith(
       cupertinoOverrideTheme: darkCupertino,
       splashFactory: isIOS ? NoSplash.splashFactory : null,
+      iconTheme: IconThemeData(color: themeDark.colorScheme.onSurface.withValues(alpha: 0.7)),
       cardTheme:
           isIOS
               ? CardThemeData(
@@ -286,7 +288,10 @@ CupertinoTextThemeData cupertinoTextTheme(ColorScheme colors) =>
     );
 
 ListTileThemeData _cupertinoListTileTheme(CupertinoThemeData cupertinoTheme) => ListTileThemeData(
-  titleTextStyle: cupertinoTheme.textTheme.textStyle,
-  subtitleTextStyle: cupertinoTheme.textTheme.textStyle,
-  leadingAndTrailingTextStyle: cupertinoTheme.textTheme.textStyle,
+  titleTextStyle: cupertinoTheme.textTheme.textStyle.copyWith(fontSize: 16),
+  subtitleTextStyle: cupertinoTheme.textTheme.textStyle.copyWith(
+    fontSize: 14,
+    color: cupertinoTheme.textTheme.textStyle.color?.withValues(alpha: 0.7),
+  ),
+  leadingAndTrailingTextStyle: cupertinoTheme.textTheme.textStyle.copyWith(fontSize: 12),
 );

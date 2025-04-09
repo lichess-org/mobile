@@ -11,11 +11,14 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/relation/following_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
+import 'package:lichess_mobile/src/view/user/online_bots_screen.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -29,18 +32,17 @@ class PlayerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
     void onUserTap(LightUser user) =>
         Navigator.of(context).push(UserScreen.buildRoute(context, user));
 
     final searchButton = PreferredSize(
       preferredSize: Size.fromHeight(
         Theme.of(context).platform == TargetPlatform.iOS
-            ? kMinInteractiveDimensionCupertino
+            ? kMinInteractiveDimensionCupertino + 16.0
             : kToolbarHeight,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: PlatformSearchBar(
           hintText: context.l10n.searchSearch,
           focusNode: AlwaysDisabledFocusNode(),
@@ -52,11 +54,6 @@ class PlayerScreen extends ConsumerWidget {
       ),
     );
 
-    final listContent = [
-      if (session != null) _OnlineFriendsWidget(),
-      RatingPrefAware(child: LeaderboardWidget()),
-    ];
-
     return FocusDetector(
       onFocusRegained: () {
         ref.read(onlineFriendsProvider.notifier).startWatchingFriends();
@@ -66,24 +63,10 @@ class PlayerScreen extends ConsumerWidget {
           ref.read(onlineFriendsProvider.notifier).stopWatchingFriends();
         }
       },
-      child: PlatformWidget(
-        androidBuilder:
-            (context) => Scaffold(
-              appBar: AppBar(title: Text(context.l10n.players), bottom: searchButton),
-              body: _Body(),
-            ),
-        iosBuilder:
-            (context) => CupertinoPageScaffold(
-              child: CustomScrollView(
-                slivers: [
-                  CupertinoSliverNavigationBar(
-                    largeTitle: Text(context.l10n.players),
-                    bottom: searchButton,
-                  ),
-                  SliverList(delegate: SliverChildListDelegate(listContent)),
-                ],
-              ),
-            ),
+      child: PlatformScaffold(
+        appBarTitle: Text(context.l10n.players),
+        appBarBottom: searchButton,
+        body: _Body(),
       ),
     );
   }
@@ -97,6 +80,7 @@ class _Body extends ConsumerWidget {
     return ListView(
       children: [
         if (session != null) _OnlineFriendsWidget(),
+        const OnlineBotsWidget(),
         RatingPrefAware(child: LeaderboardWidget()),
       ],
     );
@@ -138,6 +122,15 @@ class _OnlineFriendsWidget extends ConsumerWidget {
                   child: UserFullNameWidget(user: user),
                 ),
                 onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
+                onLongPress:
+                    () => showAdaptiveBottomSheet<void>(
+                      context: context,
+                      useRootNavigator: true,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      showDragHandle: true,
+                      builder: (context) => UserContextMenu(userId: user.id),
+                    ),
               ),
           ],
         );

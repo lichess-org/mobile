@@ -36,7 +36,6 @@ void main() {
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clock.clock.now(),
             active: false,
             builder: clockBuilder,
           ),
@@ -54,7 +53,6 @@ void main() {
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clock.clock.now(),
             active: true,
             builder: clockBuilder,
           ),
@@ -107,13 +105,15 @@ void main() {
       expect(find.text('0:00.0'), findsOneWidget);
     });
 
-    testWidgets('do not update if clockUpdatedAt is same', (WidgetTester tester) async {
-      final clockUpdatedAt = clock.clock.now();
+    testWidgets('do not update if timeLeft is different but clockUpdatedAt is same', (
+      WidgetTester tester,
+    ) async {
+      final now = clock.clock.now();
       await tester.pumpWidget(
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clockUpdatedAt,
+            clockUpdatedAt: now,
             active: true,
             builder: clockBuilder,
           ),
@@ -132,7 +132,7 @@ void main() {
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 11),
-            clockUpdatedAt: clockUpdatedAt,
+            clockUpdatedAt: now,
             active: true,
             builder: clockBuilder,
           ),
@@ -144,13 +144,51 @@ void main() {
       expect(find.text('0:00.0'), findsOneWidget);
     });
 
-    testWidgets('stops when active become false', (WidgetTester tester) async {
-      final clockUpdatedAt = clock.clock.now();
+    testWidgets('update if timeLeft is different and clockUpdatedAt is null', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clockUpdatedAt,
+            active: true,
+            builder: clockBuilder,
+          ),
+        ),
+      );
+
+      expect(find.text('0:10.0'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.text('0:09.9'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.text('0:09.8'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.text('0:09.7'), findsOneWidget);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: CountdownClockBuilder(
+            timeLeft: const Duration(seconds: 11),
+            active: true,
+            builder: clockBuilder,
+          ),
+        ),
+      );
+
+      expect(find.text('0:11.0'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.text('0:10.9'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.text('0:10.8'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 11));
+      expect(find.text('0:00.0'), findsOneWidget);
+    });
+
+    testWidgets('stops when active become false', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: CountdownClockBuilder(
+            timeLeft: const Duration(seconds: 10),
             active: true,
             builder: clockBuilder,
           ),
@@ -169,7 +207,6 @@ void main() {
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clockUpdatedAt,
             active: false,
             builder: clockBuilder,
           ),
@@ -186,7 +223,6 @@ void main() {
         MaterialApp(
           home: CountdownClockBuilder(
             timeLeft: const Duration(seconds: 10),
-            clockUpdatedAt: clock.clock.now(),
             active: true,
             delay: const Duration(milliseconds: 250),
             builder: clockBuilder,

@@ -28,7 +28,6 @@ import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/play/create_game_options.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
-import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
@@ -553,7 +552,6 @@ class _TabletCreateAGameSection extends StatelessWidget {
           shouldShow: true,
           child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
         ),
-        Padding(padding: Styles.bodySectionPadding, child: QuickGameButton()),
         CreateGameOptions(),
       ],
     );

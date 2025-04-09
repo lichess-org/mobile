@@ -60,6 +60,7 @@
 
                 <data android:pathPattern="/training/....." />
                 <data android:pathPattern="/study/........" />
+                <data android:pathPattern="/tournament/........" />
 
                 <data android:pathPattern="/broadcast/.*/.*/........" />
                 <data android:pathPattern="/broadcast/.*/.*/......../........" />

@@ -230,7 +230,7 @@ class ClockTile extends ConsumerWidget {
                 iconSize: 32,
                 icon: Icons.tune,
                 color: clockStyle.textColor,
-                onTap:
+                onPressed:
                     clockState.started
                         ? null
                         : () => showAdaptiveBottomSheet<void>(

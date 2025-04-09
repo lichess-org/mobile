@@ -364,30 +364,27 @@ class PlatformListTile extends StatelessWidget {
         );
       case TargetPlatform.iOS:
         final activatedColor = Styles.cupertinoListTileBackgroundActivated(context);
-        return IconTheme(
-          data: CupertinoIconThemeData(color: colorScheme.onSurface.withValues(alpha: 0.7)),
-          child: GestureDetector(
-            onLongPress: onLongPress,
-            child: CupertinoListTile.notched(
-              backgroundColor: selected == true ? activatedColor : backgroundColor,
-              backgroundColorActivated: activatedColor,
-              leading: leading,
-              title:
-                  harmonizeCupertinoTitleStyle
-                      ? DefaultTextStyle.merge(
-                        // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart
-                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
-                        child: title,
-                      )
-                      : title,
-              subtitle: subtitle,
-              trailing:
-                  trailing ??
-                  (selected == true ? const Icon(CupertinoIcons.check_mark_circled_solid) : null),
-              additionalInfo: additionalInfo,
-              padding: padding,
-              onTap: onTap,
-            ),
+        return GestureDetector(
+          onLongPress: onLongPress,
+          child: CupertinoListTile.notched(
+            backgroundColor: selected == true ? activatedColor : backgroundColor,
+            backgroundColorActivated: activatedColor,
+            leading: leading,
+            title:
+                harmonizeCupertinoTitleStyle
+                    ? DefaultTextStyle.merge(
+                      // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart
+                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
+                      child: title,
+                    )
+                    : title,
+            subtitle: subtitle,
+            trailing:
+                trailing ??
+                (selected == true ? const Icon(CupertinoIcons.check_mark_circled_solid) : null),
+            additionalInfo: additionalInfo,
+            padding: padding,
+            onTap: onTap,
           ),
         );
 
@@ -414,8 +411,11 @@ class AdaptiveListTile extends StatelessWidget {
     this.onTap,
     this.isThreeLine = false,
     this.contentPadding,
+    this.tileColor,
+    this.iconColor,
     this.selected = false,
     this.dense,
+    this.visualDensity,
     super.key,
   });
 
@@ -428,12 +428,18 @@ class AdaptiveListTile extends StatelessWidget {
   final bool selected;
   final bool? dense;
   final EdgeInsetsGeometry? contentPadding;
+  final Color? tileColor;
+  final Color? iconColor;
+  final VisualDensity? visualDensity;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: ListTile(
+        visualDensity: visualDensity,
+        tileColor: tileColor,
+        iconColor: iconColor ?? ColorScheme.of(context).onSurface.withValues(alpha: 0.7),
         leading: leading,
         title: title,
         subtitle: subtitle,

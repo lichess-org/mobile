@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/play/create_game_options.dart';
 import 'package:lichess_mobile/src/view/play/playban.dart';
-import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class PlayScreen extends ConsumerWidget {
@@ -29,7 +28,6 @@ class PlayScreen extends ConsumerWidget {
           children: <Widget>[
             if (playban != null)
               Padding(padding: Styles.bodySectionPadding, child: PlaybanMessage(playban: playban)),
-            const Padding(padding: Styles.horizontalBodyPadding, child: QuickGameButton()),
             const CreateGameOptions(),
           ],
         ),

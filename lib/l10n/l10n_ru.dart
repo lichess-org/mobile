@@ -390,6 +390,224 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get arenaArena => 'Арена';
+
+  @override
+  String get arenaArenaTournaments => 'Турниры «Арена»';
+
+  @override
+  String get arenaIsItRated => 'Что будет с рейтингом?';
+
+  @override
+  String get arenaWillBeNotified => 'О начале турнира известит всплывающее уведомление, так что вы не пропустите его, если будете играть на другой вкладке.';
+
+  @override
+  String get arenaIsRated => 'Это рейтинговый турнир, каждая игра в нём повлияет на ваш рейтинг.';
+
+  @override
+  String get arenaIsNotRated => 'Это товарищеский турнир, игра в нём не повлияет на ваш рейтинг.';
+
+  @override
+  String get arenaSomeRated => 'Если турнир рейтинговый, то все игры в нём будут рейтинговыми, и это повлияет на ваш рейтинг.';
+
+  @override
+  String get arenaHowAreScoresCalculated => 'Как начисляются очки?';
+
+  @override
+  String get arenaHowAreScoresCalculatedAnswer => 'По умолчанию победа приносит 2 очка, ничья — 1 очко, а проигрыш не приносит очков вовсе. Если вы одержите 2 победы подряд, то активируется удвоение очков, отображающееся значком с пламенем. Последующие игры будут приносить вдвое больше очков, пока вы побеждаете. Таким образом, победа принесёт 4 очка, ничья принесёт 2 очка и погасит пламя, а поражение просто погасит пламя.\n\nНапример, две победы при последующей ничьей принесут 6 очков: 2 + 2 + (2 × 1)';
+
+  @override
+  String get arenaBerserk => 'Берсерк на Aрене';
+
+  @override
+  String get arenaBerserkAnswer => 'Если один из игроков нажмёт на кнопку Берсерка до того, как сделает первый ход, он потеряет половину времени, но победа принесёт ему дополнительное турнирное очко (которое не удваивается в режиме удвоения). Также будет убрано добавление времени на ход. Исключение составляет контроль 1+2, который превращается в 1+0 в режиме Берсерка.\n\nРежим Берсерка недоступен для игр с нулевым начальным временем (0+1, 0+2).\n\nДополнительное очко добавляется, только если оба игрока сделали хотя бы 7 ходов.';
+
+  @override
+  String get arenaHowIsTheWinnerDecided => 'Как определяется победитель?';
+
+  @override
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Игрок с наибольшим количеством очков в момент окончания времени турнира будет объявлен победителем.';
+
+  @override
+  String get arenaHowDoesPairingWork => 'Как проходит жеребьёвка?';
+
+  @override
+  String get arenaHowDoesPairingWorkAnswer => 'В начале турнира пары образуются согласно рейтингу. По окончании каждой партии игроки возвращаются на страницу турнира, и им предоставляется свободный соперник с близким количеством турнирных очков. Это обеспечивает маленькое время ожидания соперника, однако в результате вы можете встретиться с некоторыми участниками много раз или же не встретиться с кем-то ни разу.\nИграйте быстро и возвращайтесь на страницу турнира, чтобы сыграть больше игр и заработать больше очков.';
+
+  @override
+  String get arenaHowDoesItEnd => 'Как завершается турнир?';
+
+  @override
+  String get arenaHowDoesItEndAnswer => 'В турнире установлен обратный отсчёт времени. Когда он достигает нуля, очки в турнире замораживаются, и объявляется победитель. Все партии, играющиеся в этот момент, должны быть закончены (и повлияют на рейтинг, если турнир рейтинговый), однако они не засчитываются в турнире.';
+
+  @override
+  String get arenaOtherRules => 'Другие важные правила';
+
+  @override
+  String get arenaThereIsACountdown => 'Обратный отсчёт до вашего первого хода. Если вы не сделаете ход за это время, победа будет присуждена сопернику.';
+
+  @override
+  String get arenaThisIsPrivate => 'Это закрытый турнир';
+
+  @override
+  String arenaShareUrl(String param) {
+    return 'Поделитесь этой ссылкой, чтоб пригласить игроков: $param';
+  }
+
+  @override
+  String arenaDrawStreakStandard(String param) {
+    return 'Серия ничьих: Если игрок имеет несколько последовательных ничьих на Арене, то очко зачтётся только за первую ничью, или ничью, которая продлится больше, чем $param ходов в стандартном варианте. Серию ничьих можно прервать только победой, но не проигрышем или ещё одной ничьей.';
+  }
+
+  @override
+  String get arenaDrawStreakVariants => 'Минимальное число ходов в ничейных партиях, за которые начисляются очки, зависит от варианта игры. В таблице ниже перечислены пороговые значения для каждого варианта.';
+
+  @override
+  String get arenaVariant => 'Вариант';
+
+  @override
+  String get arenaMinimumGameLength => 'Минимальное число ходов';
+
+  @override
+  String get arenaHistory => 'История «Арены»';
+
+  @override
+  String get arenaNewTeamBattle => 'Новый межклубный турнир';
+
+  @override
+  String get arenaCustomStartDate => 'Особая дата начала';
+
+  @override
+  String get arenaCustomStartDateHelp => 'В вашем часовом поясе. Это переопределяет настройку «Время до начала турнира»';
+
+  @override
+  String get arenaAllowBerserk => 'Разрешить Берсерк';
+
+  @override
+  String get arenaAllowBerserkHelp => 'Разрешает игрокам получать дополнительные очки, если они уменьшат своё время наполовину';
+
+  @override
+  String get arenaAllowChatHelp => 'Разрешить игрокам обсуждение в чате';
+
+  @override
+  String get arenaArenaStreaks => 'Серии Арены';
+
+  @override
+  String get arenaArenaStreaksHelp => 'После двух побед подряд каждая следующая победа даёт не 2 очка, а 4.';
+
+  @override
+  String get arenaNoBerserkAllowed => 'Берсерк не допускается';
+
+  @override
+  String get arenaNoArenaStreaks => 'Без серий на Арене';
+
+  @override
+  String get arenaAveragePerformance => 'Средний перформанс';
+
+  @override
+  String get arenaAverageScore => 'Среднее количество очков';
+
+  @override
+  String get arenaMyTournaments => 'Мои турниры';
+
+  @override
+  String get arenaEditTournament => 'Изменить турнир';
+
+  @override
+  String get arenaEditTeamBattle => 'Изменить межклубный турнир';
+
+  @override
+  String get arenaDefender => 'Защищающийся';
+
+  @override
+  String get arenaPickYourTeam => 'Выберите свой клуб';
+
+  @override
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Какой клуб вы представляете в этом турнире?';
+
+  @override
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Вы должны стать членом одного из этих клубов, чтобы участвовать!';
+
+  @override
+  String get arenaCreated => 'Создан';
+
+  @override
+  String get arenaRecentlyPlayed => 'Недавно сыгранные';
+
+  @override
+  String get arenaBestResults => 'Лучшие результаты';
+
+  @override
+  String get arenaTournamentStats => 'Турнирная статистика';
+
+  @override
+  String get arenaRankAvgHelp => 'Среднее занятое место (вхождение в процент лучших игроков). Чем ниже значение, тем лучше.\n\nНапример, занятие 3 места в турнире из 100 игроков даёт 3 %. Занятие 10 места в турнире из 1000 игроков даёт 1 %.';
+
+  @override
+  String get arenaMedians => 'медианы';
+
+  @override
+  String arenaAllAveragesAreX(String param) {
+    return 'Средние значения по этой странице: $param.';
+  }
+
+  @override
+  String get arenaTotal => 'Всего';
+
+  @override
+  String get arenaPointsAvg => 'Очки в среднем';
+
+  @override
+  String get arenaPointsSum => 'Сумма очков';
+
+  @override
+  String get arenaRankAvg => 'Среднее занятое место';
+
+  @override
+  String get arenaTournamentWinners => 'Победители турнира';
+
+  @override
+  String get arenaTournamentShields => 'Щиты турниров';
+
+  @override
+  String get arenaOnlyTitled => 'Только игроки со званиями';
+
+  @override
+  String get arenaOnlyTitledHelp => 'Требуется официальное звание для участия в турнире';
+
+  @override
+  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+
+  @override
+  String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String arenaDrawingWithinNbMoves(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ничья в первых $count ходах не принесёт очков.',
+      many: 'Ничья в первых $count ходах не принесёт очков.',
+      few: 'Ничья в первых $count ходах не принесёт очков.',
+      one: 'Ничья в первых $count ходах не принесёт очков.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String arenaViewAllXTeams(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Посмотреть все $count клубов',
+      many: 'Посмотреть все $count клубов',
+      few: 'Посмотреть все $count клуба',
+      one: 'Посмотреть клуб',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get broadcastBroadcasts => 'Трансляции';
 
   @override
@@ -632,6 +850,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
+  String get broadcastLiveboard => 'Live board';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -640,6 +861,17 @@ class AppLocalizationsRu extends AppLocalizations {
       many: '$count трансляций',
       few: '$count трансляции',
       one: '$count трансляция',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String broadcastNbViewers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count viewers',
+      one: '$count viewer',
     );
     return '$_temp0';
   }
@@ -2134,6 +2366,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get claimADraw => 'Потребовать ничью';
 
   @override
+  String get drawClaimed => 'Draw claimed';
+
+  @override
   String get offerDraw => 'Предложить ничью';
 
   @override
@@ -2835,7 +3070,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get createdBy => 'Создан';
 
   @override
-  String get tournamentIsStarting => 'Турнир начинается';
+  String get startingIn => 'Starting in';
 
   @override
   String get tournamentPairingsAreNowClosed => 'Жеребьёвка турнира завершена.';
@@ -2880,11 +3115,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get draws => 'Ничьих';
-
-  @override
-  String nextXTournament(String param) {
-    return 'Следующий турнир по $param:';
-  }
 
   @override
   String get averageOpponent => 'Средний рейтинг соперников';
@@ -3608,6 +3838,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Если письма нет, проверьте папку для спама и другие места, куда оно могло попасть.';
 
   @override
+  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+
+  @override
+  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+
+  @override
+  String verifyYourAddress(String param) {
+    return 'Verify that $param is your email address';
+  }
+
+  @override
   String weHaveSentYouAnEmailTo(String param) {
     return 'Мы отправили письмо по адресу $param. Нажмите на ссылку в нём для сброса пароля.';
   }
@@ -3636,6 +3877,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get downloadImported => 'Скачать в исходном виде';
+
+  @override
+  String get downloadAllGames => 'Download all games';
 
   @override
   String get crosstable => 'Счёт';
@@ -3742,6 +3986,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get language => 'Язык (Language)';
+
+  @override
+  String get allLanguages => 'All languages';
 
   @override
   String get background => 'Тема';
@@ -5270,16 +5517,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get studyShowEvalBar => 'Шкалы оценки';
 
   @override
-  String get studyFirst => 'Первая';
-
-  @override
-  String get studyPrevious => 'Назад';
-
-  @override
   String get studyNext => 'Дальше';
-
-  @override
-  String get studyLast => 'Последняя';
 
   @override
   String get studyShareAndExport => 'Поделиться и экспортировать';
@@ -5612,6 +5850,105 @@ class AppLocalizationsRu extends AppLocalizations {
   String studyPerPage(String param) {
     return '$param на страницу';
   }
+
+  @override
+  String get studyGetTheTour => 'Need help? Get the tour!';
+
+  @override
+  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+
+  @override
+  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+
+  @override
+  String get studySharedAndSaveTitle => 'Shared and saved';
+
+  @override
+  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+
+  @override
+  String get studyStudyMembersTitle => 'Study members';
+
+  @override
+  String studyStudyMembersText(String param1, String param2) {
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+  }
+
+  @override
+  String studyAddMembersText(String param) {
+    return 'Click the $param button.<br>Then decide who can contribute or not.';
+  }
+
+  @override
+  String get studyStudyChaptersTitle => 'Study chapters';
+
+  @override
+  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+
+  @override
+  String get studyCommentPositionTitle => 'Comment on a position';
+
+  @override
+  String studyCommentPositionText(String param) {
+    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+  }
+
+  @override
+  String get studyAnnotatePositionTitle => 'Annotate a position';
+
+  @override
+  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+
+  @override
+  String get studyConclusionTitle => 'Thanks for your time';
+
+  @override
+  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+
+  @override
+  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+
+  @override
+  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+
+  @override
+  String get studyFromInitialPositionTitle => 'From initial position';
+
+  @override
+  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+
+  @override
+  String get studyCustomPositionTitle => 'Custom position';
+
+  @override
+  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+
+  @override
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+
+  @override
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyFromFenStringTitle => 'From a FEN string';
+
+  @override
+  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+
+  @override
+  String get studyFromPgnGameTitle => 'From a PGN game';
+
+  @override
+  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+
+  @override
+  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+
+  @override
+  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+
+  @override
+  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {

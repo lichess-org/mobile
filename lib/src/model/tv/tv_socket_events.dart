@@ -34,6 +34,28 @@ FenSocketEvent _tvFenEventFromPick(RequiredPick pick) {
 }
 
 @freezed
+class FinishSocketEvent with _$FinishSocketEvent {
+  const factory FinishSocketEvent({required GameId id, required Side? winner}) = _FinishSocketEvent;
+
+  factory FinishSocketEvent.fromJson(Map<String, dynamic> json) {
+    return _finishEventFromPick(pick(json).required());
+  }
+}
+
+FinishSocketEvent _finishEventFromPick(RequiredPick pick) {
+  final winner = pick('win').asStringOrNull();
+  return FinishSocketEvent(
+    id: pick('id').asGameIdOrThrow(),
+    winner:
+        winner == 'w'
+            ? Side.white
+            : winner == 'b'
+            ? Side.black
+            : null,
+  );
+}
+
+@freezed
 class TvSelectEvent with _$TvSelectEvent {
   const factory TvSelectEvent({
     required TvChannel channel,

@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -72,6 +73,8 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
 
   @override
   Widget build(BuildContext context) {
+    final tournamentAsync = ref.watch(tournamentsProvider);
+
     return PlatformScaffold(
       appBarTitle: Text(context.l10n.tournaments),
       appBarBottom: TabBar(
@@ -83,7 +86,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
         ],
       ),
       appBarAutomaticBackgroundVisibility: false,
-      body: switch (ref.watch(tournamentsProvider)) {
+      body: switch (tournamentAsync) {
         AsyncData(:final value) => TabBarView(
           controller: _tabController,
           children: <Widget>[
@@ -99,15 +102,22 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   }
 }
 
-class _TournamentListBody extends StatelessWidget {
+class _TournamentListBody extends ConsumerStatefulWidget {
   const _TournamentListBody({required this.tournaments});
 
   final IList<TournamentListItem> tournaments;
 
   @override
+  ConsumerState<_TournamentListBody> createState() => _TournamentListBodyState();
+}
+
+class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
+  @override
   Widget build(BuildContext context) {
     final tournamentListItems =
-        tournaments
+        widget.tournaments
             .sorted((a, b) {
               final cmp = a.startsAt.compareTo(b.startsAt);
               if (cmp != 0) return cmp;
@@ -117,12 +127,23 @@ class _TournamentListBody extends StatelessWidget {
             .map((tournament) => _TournamentListItem(tournament: tournament))
             .toList();
 
-    return ListView.separated(
-      shrinkWrap: true,
-      itemCount: tournamentListItems.length,
-      separatorBuilder:
-          (context, index) => const PlatformDivider(height: 1, cupertinoHasLeading: true),
-      itemBuilder: (context, index) => tournamentListItems[index],
+    return RefreshIndicator.adaptive(
+      edgeOffset:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? MediaQuery.paddingOf(context).top + 16.0
+              : 0,
+      key: _refreshIndicatorKey,
+      onRefresh: () async => ref.refresh(tournamentsProvider),
+      child: ListView.separated(
+        shrinkWrap: true,
+        itemCount: tournamentListItems.length,
+        separatorBuilder:
+            (context, index) =>
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                    : const SizedBox.shrink(),
+        itemBuilder: (context, index) => tournamentListItems[index],
+      ),
     );
   }
 }
@@ -142,6 +163,8 @@ class _TournamentListItem extends StatelessWidget {
   const _TournamentListItem({required this.tournament});
 
   final TournamentListItem tournament;
+
+  static final _hourMinuteFormat = DateFormat.Hm();
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +188,7 @@ class _TournamentListItem extends StatelessWidget {
                     ),
                     const SizedBox(width: 5),
                     Text(
-                      '${DateFormat.Hm().format(tournament.startsAt)} - ${DateFormat.Hm().format(tournament.finishesAt)}',
+                      '${_hourMinuteFormat.format(tournament.startsAt)} - ${_hourMinuteFormat.format(tournament.finishesAt)}',
                     ),
                   ],
                 ),
@@ -197,7 +220,11 @@ class _TournamentListItem extends StatelessWidget {
           ),
         ],
       ),
-      onTap: () {},
+      onTap:
+          () => Navigator.of(
+            context,
+            rootNavigator: true,
+          ).push(TournamentScreen.buildRoute(context, tournament.id)),
     );
   }
 }

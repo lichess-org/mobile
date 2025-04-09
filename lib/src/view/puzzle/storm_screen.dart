@@ -678,7 +678,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                             Theme.of(context).platform == TargetPlatform.iOS
                                 ? CupertinoIcons.clear_fill
                                 : Icons.close,
-                        onTap:
+                        onPressed:
                             () => setState(() => filter = filter.copyWith(failed: !filter.failed)),
                         highlighted: filter.failed,
                       ),
@@ -692,7 +692,8 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                             Theme.of(context).platform == TargetPlatform.iOS
                                 ? CupertinoIcons.hourglass
                                 : Icons.hourglass_bottom,
-                        onTap: () => setState(() => filter = filter.copyWith(slow: !filter.slow)),
+                        onPressed:
+                            () => setState(() => filter = filter.copyWith(slow: !filter.slow)),
                         highlighted: filter.slow,
                       ),
                     ),
