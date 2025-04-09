@@ -354,7 +354,6 @@ class GameController extends _$GameController {
   void berserk() {
     if (state.valueOrNull?.canBerserk == true && state.valueOrNull?.hasBerserked == false) {
       _socketClient.send('berserk', null);
-      ref.read(soundServiceProvider).play(Sound.berserk);
     }
   }
 
@@ -879,7 +878,7 @@ class GameController extends _$GameController {
         );
 
       case 'berserk':
-        // TODO play berserk sound
+        ref.read(soundServiceProvider).play(Sound.berserk);
 
         final side = pick(event.data).asSideOrNull();
         final curState = state.requireValue;
