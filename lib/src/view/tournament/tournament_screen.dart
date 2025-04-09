@@ -73,8 +73,28 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
+
     return PlatformScaffold(
       appBarTitle: _Title(state: state),
+      appBarActions: [
+        if (timeLeft != null)
+          CountdownClockBuilder(
+            timeLeft: timeLeft,
+            active: true,
+            tickInterval: const Duration(seconds: 1),
+            builder:
+                (BuildContext context, Duration timeLeft) => Center(
+                  child: Text(
+                    '${timeLeft.toHoursMinutesSeconds()} ',
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ),
+          ),
+      ],
       body: Column(
         children: [
           Expanded(
@@ -134,26 +154,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(child: AutoSizeText(state.tournament.fullName, maxLines: 1, minFontSize: 14.0)),
-        if (timeLeft != null)
-          CountdownClockBuilder(
-            timeLeft: timeLeft,
-            active: true,
-            tickInterval: const Duration(seconds: 1),
-            builder:
-                (BuildContext context, Duration timeLeft) => Center(
-                  child: Text(
-                    '${timeLeft.toHoursMinutesSeconds()} ',
-                    style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
-                  ),
-                ),
-          ),
-      ],
-    );
+    return AutoSizeText(state.tournament.fullName, maxLines: 1, minFontSize: 14.0);
   }
 }
 
