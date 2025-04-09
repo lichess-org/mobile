@@ -20,7 +20,9 @@ StreakStorage streakStorage(Ref ref, UserId? userId) {
 @riverpod
 Future<int?> savedStreakScore(Ref ref) async {
   final session = ref.watch(authSessionProvider);
-  final streakStorage = ref.watch(streakStorageProvider(session?.user.id));
+  // cannot use ref.watch because it would create a circular dependency
+  // as we invalidate this provider in the storage saveActiveStreak and clearActiveStreak methods
+  final streakStorage = ref.read(streakStorageProvider(session?.user.id));
   final streak = await streakStorage.loadActiveStreak();
   return streak?.index;
 }
