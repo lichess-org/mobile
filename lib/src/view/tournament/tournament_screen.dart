@@ -462,18 +462,9 @@ class _FeaturedGamePlayer extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 5),
-          if (game.finished == true)
-            Text(
-              game.winner == side
-                  ? '1'
-                  : game.winner == side.opposite
-                  ? '0'
-                  : '½',
-              style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
-            )
-          else
+          if (game.active)
             CountdownClockBuilder(
-              timeLeft: game.clockOf(side),
+              timeLeft: game.clockOf(side)!,
               active: clockActive,
               builder:
                   (context, timeLeft) => Text(
@@ -483,6 +474,15 @@ class _FeaturedGamePlayer extends StatelessWidget {
                       fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                   ),
+            )
+          else
+            Text(
+              game.winner == side
+                  ? '1'
+                  : game.winner == side.opposite
+                  ? '0'
+                  : '½',
+              style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
             ),
         ],
       ),
