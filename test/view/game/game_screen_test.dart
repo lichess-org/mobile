@@ -299,13 +299,21 @@ void main() {
 
       expect(await hasBerserkedFuture, true);
 
+      // No server response yet, so should not yet show the berserk icon next to our name.
+      expect(find.byIcon(LichessIcons.body_cut), findsOneWidget);
+
+      fakeSocket.addIncomingMessages(['''{"t": "berserk", "d": "white"}''']);
+      // wait for socket message
+      await tester.pump(const Duration(milliseconds: 10));
+
       // We have berserked, which caused the berserk icon appear next to our name.
       // Also, the berserk button is still there (but disabled).
       expect(find.byIcon(LichessIcons.body_cut), findsNWidgets(2));
 
       // opponent berserks
       fakeSocket.addIncomingMessages(['''{"t": "berserk", "d": "black"}''']);
-      await tester.pump();
+      // wait for socket message
+      await tester.pump(const Duration(milliseconds: 10));
 
       expect(find.byIcon(LichessIcons.body_cut), findsNWidgets(3));
     });
