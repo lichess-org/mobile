@@ -982,9 +982,6 @@ class GameState with _$GameState {
 
     /// Game full id used to redirect to the new game of the rematch
     GameFullId? redirectGameId,
-
-    /// Only if this game is part of a tournament
-    TournamentMeta? tournament,
   }) = _GameState;
 
   /// The [Position] at the current cursor.
@@ -1009,12 +1006,16 @@ class GameState with _$GameState {
   bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
   bool get canGoBackward => stepCursor > 0;
+
   bool get canBerserk =>
       game.meta.tournament?.berserkable == true &&
       game.playable &&
       game.steps.length <= 2 &&
       game.youAre != null;
   bool get hasBerserked => game.youAre != null && game.playerOf(game.youAre!).berserk == true;
+
+  // Only if this game is part of a tournament
+  TournamentMeta? get tournament => game.meta.tournament;
 
   bool get canGetNewOpponent =>
       !game.playable &&
