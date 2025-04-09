@@ -585,27 +585,28 @@ class _GameBottomBar extends ConsumerWidget {
                   orElse: () => null,
                 ),
               ),
-            BottomBarButton(
-              label: context.l10n.chat,
-              onTap:
-                  isChatEnabled
-                      ? () {
-                        Navigator.of(context).push(
-                          MessageScreen.buildRoute(
-                            context,
-                            title: UserFullNameWidget(user: gameState.game.opponent?.user),
-                            me: gameState.game.me?.user,
-                            id: id,
-                          ),
-                        );
-                      }
-                      : null,
-              icon:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? CupertinoIcons.chat_bubble
-                      : Icons.chat_bubble_outline,
-              badgeLabel: chatUnreadLabel,
-            ),
+            if (kidModeAsync.valueOrNull == false)
+              BottomBarButton(
+                label: context.l10n.chat,
+                onTap:
+                    isChatEnabled
+                        ? () {
+                          Navigator.of(context).push(
+                            MessageScreen.buildRoute(
+                              context,
+                              title: UserFullNameWidget(user: gameState.game.opponent?.user),
+                              me: gameState.game.me?.user,
+                              id: id,
+                            ),
+                          );
+                        }
+                        : null,
+                icon:
+                    Theme.of(context).platform == TargetPlatform.iOS
+                        ? CupertinoIcons.chat_bubble
+                        : Icons.chat_bubble_outline,
+                badgeLabel: chatUnreadLabel,
+              ),
             RepeatButton(
               onLongPress: gameState.canGoBackward ? () => _moveBackward(ref) : null,
               child: BottomBarButton(
