@@ -387,7 +387,6 @@ class _TournamentGameTitle extends ConsumerWidget {
         Flexible(child: AutoSizeText(tournament.name, maxLines: 1, minFontSize: 14.0)),
         CountdownClockBuilder(
           timeLeft: tournament.timeLeft,
-          clockUpdatedAt: DateTime.now(),
           active: true,
           tickInterval: const Duration(seconds: 1),
           builder:
