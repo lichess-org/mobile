@@ -354,6 +354,7 @@ class GameController extends _$GameController {
   void berserk() {
     if (state.valueOrNull?.canBerserk == true && state.valueOrNull?.hasBerserked == false) {
       _socketClient.send('berserk', null);
+      ref.read(soundServiceProvider).play(Sound.berserk);
     }
   }
 
