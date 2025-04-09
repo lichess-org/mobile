@@ -74,7 +74,15 @@ extension TournamentExtension on Pick {
   Verdicts asVerdictsOrThrow() {
     final requiredPick = this.required();
     return (
-      list: requiredPick('list').asListOrThrow((pick) => pick.asVerdictOrThrow()).toIList(),
+      list:
+          requiredPick('list')
+              .asListOrThrow((pick) => pick.asVerdictOrThrow())
+              .where(
+                // we don't want to show the condition specific to the bot players
+                // since it makes no sense a a bot player use the app
+                (v) => v.condition != 'Bot players are not allowed',
+              )
+              .toIList(),
       accepted: requiredPick('accepted').asBoolOrThrow(),
     );
   }
@@ -189,6 +197,7 @@ class Tournament with _$Tournament {
     required String? description,
     required bool? isFinished,
     required bool? isStarted,
+    required Duration duration,
     required Duration? timeToStart,
     required Duration? timeToFinish,
     required TournamentMe? me,
@@ -209,6 +218,7 @@ Tournament _tournamentFromPick(RequiredPick pick) {
   return Tournament(
     id: pick('id').asTournamentIdOrThrow(),
     createdBy: pick('createdBy').asStringOrThrow(),
+    duration: pick('minutes').asDurationFromMinutesOrThrow(),
     timeIncrement: pick('clock').asTimeIncrementOrThrow(),
     featuredGame: pick('featured').asFeaturedGameOrNull(),
     fullName: pick('fullName').asStringOrThrow(),

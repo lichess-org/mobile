@@ -164,6 +164,8 @@ class _TournamentListItem extends StatelessWidget {
 
   final TournamentListItem tournament;
 
+  static final _hourMinuteFormat = DateFormat.Hm();
+
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
@@ -186,7 +188,7 @@ class _TournamentListItem extends StatelessWidget {
                     ),
                     const SizedBox(width: 5),
                     Text(
-                      '${DateFormat.Hm().format(tournament.startsAt)} - ${DateFormat.Hm().format(tournament.finishesAt)}',
+                      '${_hourMinuteFormat.format(tournament.startsAt)} - ${_hourMinuteFormat.format(tournament.finishesAt)}',
                     ),
                   ],
                 ),

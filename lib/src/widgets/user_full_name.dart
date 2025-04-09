@@ -69,6 +69,9 @@ class UserFullNameWidget extends ConsumerWidget {
         (aiLevel != null
             ? context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString())
             : context.l10n.anonymous);
+
+    final contextTextStyle = style ?? DefaultTextStyle.of(context).style;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -77,7 +80,7 @@ class UserFullNameWidget extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 5),
             child: Icon(
               user?.isOnline == true ? Icons.cloud : Icons.cloud_off,
-              size: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
+              size: contextTextStyle.fontSize,
               color: user?.isOnline == true ? context.lichessColors.good : null,
             ),
           ),
@@ -86,8 +89,8 @@ class UserFullNameWidget extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 5),
             child: Icon(
               LichessIcons.patron,
-              size: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
-              color: style?.color ?? DefaultTextStyle.of(context).style.color,
+              size: contextTextStyle.fontSize,
+              color: contextTextStyle.color,
               semanticLabel: context.l10n.patronLichessPatron,
             ),
           ),
@@ -110,25 +113,19 @@ class UserFullNameWidget extends ConsumerWidget {
           CachedNetworkImage(
             imageUrl: lichessFlairSrc(user!.flair!),
             errorWidget: (_, _, _) => kEmptyWidget,
-            width: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
-            height: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
+            width: contextTextStyle.fontSize,
+            height: contextTextStyle.fontSize,
           ),
         ],
         if (shouldShowRating && ratingStr != null) ...[
           const SizedBox(width: 5),
           Text(
             ratingStr,
-            style:
-                style?.copyWith(
-                  fontWeight: FontWeight.w400,
-                  fontSize: style?.fontSize != null ? style!.fontSize! - 3 : 13,
-                  color: textShade(context, 0.8),
-                ) ??
-                TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 13,
-                  color: textShade(context, 0.8),
-                ),
+            style: contextTextStyle.copyWith(
+              fontWeight: FontWeight.w400,
+              fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
+              color: textShade(context, 0.8),
+            ),
           ),
         ],
       ],

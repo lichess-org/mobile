@@ -66,33 +66,41 @@ class TournamentScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends StatelessWidget {
   const _Body({required this.state});
 
   final TournamentState state;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
 
     return PlatformScaffold(
       appBarTitle: _Title(state: state),
       appBarActions: [
         if (timeLeft != null)
-          CountdownClockBuilder(
-            timeLeft: timeLeft,
-            active: true,
-            tickInterval: const Duration(seconds: 1),
-            builder:
-                (BuildContext context, Duration timeLeft) => Center(
-                  child: Text(
-                    '${timeLeft.toHoursMinutesSeconds()} ',
-                    style: const TextStyle(
-                      fontSize: 16.0,
-                      fontFeatures: [FontFeature.tabularFigures()],
-                    ),
-                  ),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (state.tournament.timeToStart != null)
+                  Text(context.l10n.startingIn, style: const TextStyle(fontSize: 14)),
+                CountdownClockBuilder(
+                  timeLeft: timeLeft,
+                  active: true,
+                  tickInterval: const Duration(seconds: 1),
+                  builder:
+                      (BuildContext context, Duration timeLeft) => Text(
+                        '${timeLeft.toHoursMinutesSeconds()} ',
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      ),
                 ),
+              ],
+            ),
           ),
       ],
       body: Column(
@@ -191,35 +199,33 @@ class _StandingPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // TODO show player detail page
-      },
-      child: AdaptiveListTile(
-        tileColor: player.rank.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
-        visualDensity: VisualDensity.compact,
-        leading:
-            player.withdraw
-                ? const Icon(Icons.pause, color: LichessColors.grey, size: 20)
-                : Text('${player.rank}', textAlign: TextAlign.center),
-        title: UserFullNameWidget(
-          user: player.user,
-          rating: player.rating,
-          provisional: player.provisional,
-          shouldShowOnline: false,
-        ),
-        subtitle: _Scores(player.sheet.scores),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (player.sheet.fire)
-              const Icon(LichessIcons.blitz, size: 17, color: LichessColors.brag),
-            Text(
-              '${player.score}',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-            ),
-          ],
-        ),
+    return AdaptiveListTile(
+      contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
+      visualDensity: VisualDensity.compact,
+      tileColor: player.rank.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
+      leading:
+          player.withdraw
+              ? Icon(Icons.pause, color: textShade(context, 0.3), size: 20)
+              : Text('${player.rank}', textAlign: TextAlign.center),
+      title: UserFullNameWidget(
+        user: player.user,
+        rating: player.rating,
+        provisional: player.provisional,
+        shouldShowOnline: false,
+      ),
+      subtitle: player.sheet.scores.isNotEmpty ? _Scores(player.sheet.scores) : null,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Visibility.maintain(
+            visible: player.sheet.fire,
+            child: const Icon(LichessIcons.blitz, size: 15, color: LichessColors.brag),
+          ),
+          Text(
+            player.score.toString().padLeft(2),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
+        ],
       ),
     );
   }
@@ -245,6 +251,7 @@ class _Scores extends StatelessWidget {
                         : score > 1
                         ? LichessColors.good
                         : textShade(context, 0.5),
+                letterSpacing: 0.5,
                 fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
@@ -262,50 +269,44 @@ class _StandingControls extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         PlatformIconButton(
-          onTap:
-              state.hasPreviousPage
-                  ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
-                  : null,
-          semanticsLabel: 'First',
-          icon: Icons.first_page,
-        ),
-        PlatformIconButton(
-          onTap:
+          onPressed:
               state.hasPreviousPage
                   ? ref
                       .read(tournamentControllerProvider(state.id).notifier)
                       .loadPreviousStandingsPage
                   : null,
+          onLongPress:
+              state.hasPreviousPage
+                  ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
+                  : null,
           semanticsLabel: 'Previous',
           icon: Icons.skip_previous,
         ),
-        Text(
-          '${state.firstRankOfPage}-${min(state.firstRankOfPage + kStandingsPageSize - 1, state.tournament.nbPlayers)} / ${state.tournament.nbPlayers}',
-          style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
+        Expanded(
+          child: Text(
+            '${state.firstRankOfPage}-${min(state.firstRankOfPage + kStandingsPageSize - 1, state.tournament.nbPlayers)} / ${state.tournament.nbPlayers}',
+            style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
+            textAlign: TextAlign.center,
+          ),
         ),
         PlatformIconButton(
-          onTap:
+          onPressed:
               state.hasNextPage
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadNextStandingsPage
+                  : null,
+          onLongPress:
+              state.hasNextPage
+                  ? ref.read(tournamentControllerProvider(state.id).notifier).loadLastStandingsPage
                   : null,
           semanticsLabel: context.l10n.studyNext,
           icon: Icons.skip_next,
         ),
-        PlatformIconButton(
-          onTap:
-              state.hasNextPage
-                  ? ref.read(tournamentControllerProvider(state.id).notifier).loadLastStandingsPage
-                  : null,
-          semanticsLabel: 'Last',
-          icon: Icons.last_page,
-        ),
         if (state.tournament.me != null)
           PlatformIconButton(
-            onTap: ref.read(tournamentControllerProvider(state.id).notifier).jumpToMyPage,
-            icon: LichessIcons.target,
+            onPressed: ref.read(tournamentControllerProvider(state.id).notifier).jumpToMyPage,
+            icon: Icons.person_pin_circle_outlined,
             // TODO l10n
             semanticsLabel: 'Jump to my page',
           ),
@@ -325,17 +326,19 @@ class _TournamentInfo extends StatelessWidget {
       children: [
         Icon(tournament.perf.icon, size: 36),
         const SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${tournament.timeIncrement.display} • ${tournament.perf.title}${tournament.timeToFinish != null ? ' • ${context.l10n.nbMinutes(tournament.timeToFinish!.inMinutes)}' : ''}',
-            ),
-            Text(
-              '${tournament.rated ? context.l10n.rated : context.l10n.casual} • ${context.l10n.arenaArena}',
-            ),
-            const SizedBox(height: 5),
-          ],
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${tournament.timeIncrement.display} • ${tournament.perf.title} • ${context.l10n.nbMinutes(tournament.duration.inMinutes)}',
+              ),
+              Text(
+                '${tournament.rated ? context.l10n.rated : context.l10n.casual} • ${context.l10n.arenaArena}',
+              ),
+              const SizedBox(height: 5),
+            ],
+          ),
         ),
       ],
     );
@@ -368,11 +371,11 @@ class _Verdicts extends ConsumerWidget {
           size: 30.0,
         ),
         const SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (final verdict in verdicts.list)
-              if (verdict.condition != 'Bot players are not allowed')
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (final verdict in verdicts.list)
                 Text(
                   verdict.condition,
                   style: TextStyle(
@@ -384,7 +387,8 @@ class _Verdicts extends ConsumerWidget {
                             : null,
                   ),
                 ),
-          ],
+            ],
+          ),
         ),
       ],
     );
@@ -446,11 +450,13 @@ class _FeaturedGamePlayer extends StatelessWidget {
             child: Row(
               children: [
                 Text('#${player.rank} ', style: const TextStyle(fontWeight: FontWeight.bold)),
-                UserFullNameWidget(
-                  user: player.user,
-                  showPatron: false,
-                  rating: player.rating,
-                  provisional: player.provisional,
+                Flexible(
+                  child: UserFullNameWidget(
+                    user: player.user,
+                    showPatron: false,
+                    rating: player.rating,
+                    provisional: player.provisional,
+                  ),
                 ),
               ],
             ),

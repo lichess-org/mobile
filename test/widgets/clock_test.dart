@@ -176,7 +176,11 @@ void main() {
       );
 
       expect(find.text('0:11.0'), findsOneWidget);
-      await tester.pump(const Duration(seconds: 12));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.text('0:10.9'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.text('0:10.8'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 11));
       expect(find.text('0:00.0'), findsOneWidget);
     });
 

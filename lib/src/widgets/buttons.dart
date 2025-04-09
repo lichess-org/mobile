@@ -181,12 +181,14 @@ class NoPaddingTextButton extends StatelessWidget {
 class CupertinoIconButton extends StatelessWidget {
   const CupertinoIconButton({
     required this.onPressed,
+    this.onLongPress,
     required this.semanticsLabel,
     required this.icon,
     this.padding,
     super.key,
   });
   final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
   final Widget icon;
   final String semanticsLabel;
 
@@ -206,6 +208,7 @@ class CupertinoIconButton extends StatelessWidget {
       child: CupertinoButton(
         padding: padding,
         onPressed: onPressed,
+        onLongPress: onLongPress,
         child: IconTheme.merge(data: const IconThemeData(size: 24.0), child: icon),
       ),
     );
@@ -344,7 +347,7 @@ class _RepeatButtonState extends State<RepeatButton> {
   }
 }
 
-/// Platform agnostic icon button
+/// Platform agnostic icon button.
 ///
 /// Optionally provide a bool to highlight the button
 /// Will use [IconButton] on Android and [CupertinoIconButton] on iOS.
@@ -352,7 +355,8 @@ class PlatformIconButton extends StatelessWidget {
   const PlatformIconButton({
     required this.icon,
     required this.semanticsLabel,
-    required this.onTap,
+    required this.onPressed,
+    this.onLongPress,
     this.highlighted = false,
     this.color,
     this.iconSize,
@@ -361,7 +365,8 @@ class PlatformIconButton extends StatelessWidget {
 
   final IconData icon;
   final String semanticsLabel;
-  final VoidCallback? onTap;
+  final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
   final bool highlighted;
   final Color? color;
   final double? iconSize;
@@ -375,7 +380,8 @@ class PlatformIconButton extends StatelessWidget {
         return Theme(
           data: themeData,
           child: IconButton(
-            onPressed: onTap,
+            onPressed: onPressed,
+            onLongPress: onLongPress,
             icon: Icon(icon),
             tooltip: semanticsLabel,
             color: highlighted ? themeData.colorScheme.primary : color,
@@ -388,7 +394,8 @@ class PlatformIconButton extends StatelessWidget {
         return CupertinoTheme(
           data: themeData.copyWith(primaryColor: themeData.textTheme.textStyle.color),
           child: CupertinoIconButton(
-            onPressed: onTap,
+            onPressed: onPressed,
+            onLongPress: onLongPress,
             semanticsLabel: semanticsLabel,
             padding: padding,
             icon: Icon(icon, color: highlighted ? themeData.primaryColor : color, size: iconSize),

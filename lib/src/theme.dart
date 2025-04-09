@@ -288,7 +288,7 @@ CupertinoTextThemeData cupertinoTextTheme(ColorScheme colors) =>
     );
 
 ListTileThemeData _cupertinoListTileTheme(CupertinoThemeData cupertinoTheme) => ListTileThemeData(
-  titleTextStyle: cupertinoTheme.textTheme.textStyle.copyWith(fontSize: 16, height: 1.4),
+  titleTextStyle: cupertinoTheme.textTheme.textStyle.copyWith(fontSize: 16),
   subtitleTextStyle: cupertinoTheme.textTheme.textStyle.copyWith(
     fontSize: 14,
     color: cupertinoTheme.textTheme.textStyle.color?.withValues(alpha: 0.7),

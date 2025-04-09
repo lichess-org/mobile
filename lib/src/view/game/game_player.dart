@@ -224,7 +224,7 @@ class ConfirmMove extends StatelessWidget {
           iconSize: 35,
           semanticsLabel: context.l10n.cancel,
           padding: const EdgeInsets.all(10),
-          onTap: onCancel,
+          onPressed: onCancel,
         ),
         Flexible(
           child: Text(
@@ -240,7 +240,7 @@ class ConfirmMove extends StatelessWidget {
           iconSize: 35,
           semanticsLabel: context.l10n.accept,
           padding: const EdgeInsets.all(10),
-          onTap: onConfirm,
+          onPressed: onConfirm,
         ),
       ],
     );

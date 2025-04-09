@@ -159,7 +159,8 @@ typedef ClockWidgetBuilder = Widget Function(BuildContext, Duration);
 ///
 /// The clock can be synchronized with the time at which the clock event was received from the server
 /// by setting the [clockUpdatedAt] parameter.
-/// This widget will only update its internal clock when the [clockUpdatedAt] parameter changes.
+/// If the [clockUpdatedAt] parameter is set, the clock will only update the [timeLeft] value when
+/// the [clockUpdatedAt] parameter changes. This way the clock can be reset with the same [timeLeft] value.
 ///
 /// The [delay] parameter can be used to delay the start of the clock.
 ///
@@ -276,9 +277,15 @@ class _CountdownClockState extends State<CountdownClockBuilder> {
     if (widget.clockUpdatedAt == null) {
       if (widget.timeLeft != oldClock.timeLeft) {
         timeLeft = widget.timeLeft;
+        if (widget.active) {
+          startClock();
+        }
       }
     } else if (widget.clockUpdatedAt != oldClock.clockUpdatedAt) {
       timeLeft = widget.timeLeft;
+      if (widget.active) {
+        startClock();
+      }
     }
 
     if (widget.active != oldClock.active) {

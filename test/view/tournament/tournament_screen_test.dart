@@ -247,7 +247,7 @@ void main() {
 
       expect(find.text('11-13 / 13'), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.first_page));
+      await tester.tap(find.byIcon(Icons.skip_previous));
       // Wait for first page of standings to load
       await tester.pump();
 
@@ -387,9 +387,8 @@ void main() {
       expect(find.text('Join'), findsNothing);
       expect(find.text('Pause'), findsOneWidget);
 
-      expect(find.byIcon(LichessIcons.target), findsOneWidget);
       // We're rank 11, so this should take us to the 2nd page
-      await tester.tap(find.byIcon(LichessIcons.target));
+      await tester.tap(find.byIcon(Icons.person_pin_circle_outlined));
 
       // Wait for next page of standings to load
       await tester.pump();

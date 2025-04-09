@@ -28,26 +28,40 @@ class TournamentController extends _$TournamentController {
   // so we manually have to set this timer to schedule a reload once we can join again.
   Timer? _pauseDelayTimer;
 
+  Timer? _startingTimer;
+
   @override
   Future<TournamentState> build(TournamentId id) async {
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _appLifecycleListener?.dispose();
       _pauseDelayTimer?.cancel();
+      _startingTimer?.cancel();
     });
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
-        if (this.state.hasValue) {
-          _reload(standingsPage: this.state.requireValue.standingsPage);
+        if (state.hasValue) {
+          _reload(standingsPage: state.requireValue.standingsPage);
         }
       },
     );
 
-    final state = TournamentState(
-      tournament: await ref.read(tournamentRepositoryProvider).getTournament(id),
-      standingsPage: 1,
-    );
+    final tournament = await ref.read(tournamentRepositoryProvider).getTournament(id);
+
+    if (tournament.timeToStart != null) {
+      _startingTimer?.cancel();
+      _startingTimer = Timer(tournament.timeToStart!, () async {
+        if (state.hasValue) {
+          final tour = await ref
+              .read(tournamentRepositoryProvider)
+              .getTournament(state.requireValue.tournament.id);
+          state = AsyncData(
+            TournamentState(tournament: tour, standingsPage: state.requireValue.standingsPage),
+          );
+        }
+      });
+    }
 
     final socketPool = ref.watch(socketPoolProvider);
     _socketClient = socketPool.open(Uri(path: '/tournament/$id/socket/v6'));
@@ -57,9 +71,9 @@ class TournamentController extends _$TournamentController {
 
     await _socketClient.firstConnection;
 
-    _watchFeaturedGameIfChanged(previous: null, current: state.tournament.featuredGame?.id);
+    _watchFeaturedGameIfChanged(previous: null, current: tournament.featuredGame?.id);
 
-    return state;
+    return TournamentState(tournament: tournament, standingsPage: 1);
   }
 
   void _watchFeaturedGameIfChanged({required GameId? previous, required GameId? current}) {

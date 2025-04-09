@@ -35,21 +35,24 @@ class PlatformBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return ColoredBox(
-        color: CupertinoTheme.of(
-          context,
-        ).barBackgroundColor.withValues(alpha: transparentBackground ? 0.0 : null),
-        child: SizedBox(
-          height: kBottomBarHeight + MediaQuery.paddingOf(context).bottom,
-          child: SafeArea(
-            top: false,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: mainAxisAlignment,
-              children:
-                  expandChildren
-                      ? children.map((child) => Expanded(child: child)).toList()
-                      : children,
+      return MediaQuery.withClampedTextScaling(
+        maxScaleFactor: 1.4,
+        child: ColoredBox(
+          color: CupertinoTheme.of(
+            context,
+          ).barBackgroundColor.withValues(alpha: transparentBackground ? 0.0 : null),
+          child: SizedBox(
+            height: kBottomBarHeight + MediaQuery.paddingOf(context).bottom,
+            child: SafeArea(
+              top: false,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: mainAxisAlignment,
+                children:
+                    expandChildren
+                        ? children.map((child) => Expanded(child: child)).toList()
+                        : children,
+              ),
             ),
           ),
         ),
