@@ -101,6 +101,7 @@ enum LinkSite {
   youtube('YouTube', IListConst(['youtube.com'])),
   twitch('Twitch', IListConst(['twitch.tv'])),
   github('GitHub', IListConst(['github.com'])),
+  gitlab('GitLab', IListConst(['gitlab.com'])),
   vkontakte('VKontakte', IListConst(['vk.com'])),
   chessCom('Chess.com', IListConst(['chess.com'])),
   chess24('Chess24', IListConst(['chess24.com'])),
