@@ -52,37 +52,46 @@ class OnlineBotsWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final onlineBotsAsync = ref.watch(_onlineBotsProvider);
 
-    return switch (onlineBotsAsync) {
-      AsyncData(:final value) => ListSection(
-        header: Text(context.l10n.onlineBots),
-        headerTrailing: NoPaddingTextButton(
-          onPressed: () {
-            Navigator.of(context).push(OnlineBotsScreen.buildRoute(context));
-          },
-          child: Text(context.l10n.more),
-        ),
-        children: [
-          for (final bot in value.where((bot) => bot.verified == true))
-            PlatformListTile(
-              title: UserFullNameWidget(user: bot.lightUser),
-              subtitle: (bot.perfs[Perf.blitz]?.games ?? 0) > 0 ? _BotRatings(bot: bot) : null,
-              onTap: () => _challengeBot(bot, context: context, ref: ref),
-              onLongPress: () {
-                showAdaptiveBottomSheet<void>(
-                  context: context,
-                  useRootNavigator: true,
-                  isDismissible: true,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  builder: (context) => UserContextMenu(user: bot),
-                );
-              },
-            ),
-        ],
-      ),
-      AsyncError(:final error) => Center(child: Text('Could not load online bots: $error')),
-      _ => const Center(child: CircularProgressIndicator()),
-    };
+    switch (onlineBotsAsync) {
+      case AsyncData(:final value):
+        if (value.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        return ListSection(
+          header: Text(context.l10n.onlineBots),
+          headerTrailing: NoPaddingTextButton(
+            onPressed: () {
+              Navigator.of(context).push(OnlineBotsScreen.buildRoute(context));
+            },
+            child: Text(context.l10n.more),
+          ),
+          children: [
+            for (final bot in value.where((bot) => bot.verified == true))
+              PlatformListTile(
+                title: UserFullNameWidget(user: bot.lightUser),
+                subtitle: (bot.perfs[Perf.blitz]?.games ?? 0) > 0 ? _BotRatings(bot: bot) : null,
+                onTap: () => _challengeBot(bot, context: context, ref: ref),
+                onLongPress: () {
+                  showAdaptiveBottomSheet<void>(
+                    context: context,
+                    useRootNavigator: true,
+                    isDismissible: true,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    builder: (context) => UserContextMenu(user: bot),
+                  );
+                },
+              ),
+          ],
+        );
+      case AsyncError(:final error):
+        return Padding(
+          padding: Styles.bodySectionPadding,
+          child: Text('Could not load online bots: $error'),
+        );
+      case _:
+        return const Center(child: CircularProgressIndicator());
+    }
   }
 }
 
