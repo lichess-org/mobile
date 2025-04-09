@@ -184,6 +184,40 @@ List<StandingPlayer> makeTestPlayers(int count) => List.generate(count, makeTest
 
 void main() {
   group('Tournament screen', () {
+    testWidgets('meets accessibility guidelines', variant: kPlatformVariant, (
+      WidgetTester tester,
+    ) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/tournament/82QbxlJb') {
+          return mockResponse(
+            makeTournamentJson(standings: makeTestPlayers(10), nbPlayers: 11),
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+        ],
+      );
+      await tester.pumpWidget(app);
+
+      // Wait for tournament data to load
+      await tester.pump();
+
+      await meetsTapTargetGuideline(tester);
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      handle.dispose();
+    });
+
     testWidgets('Displays tournament data and standings', (WidgetTester tester) async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/tournament/82QbxlJb') {
