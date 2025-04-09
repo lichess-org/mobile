@@ -213,7 +213,10 @@ class _StandingPlayer extends StatelessWidget {
           children: [
             if (player.sheet.fire)
               const Icon(LichessIcons.blitz, size: 17, color: LichessColors.brag),
-            Text('${player.score}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              '${player.score}',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
           ],
         ),
       ),
