@@ -273,7 +273,11 @@ class _CountdownClockState extends State<CountdownClockBuilder> {
   void didUpdateWidget(CountdownClockBuilder oldClock) {
     super.didUpdateWidget(oldClock);
 
-    if (widget.clockUpdatedAt != oldClock.clockUpdatedAt) {
+    if (widget.clockUpdatedAt == null) {
+      if (widget.timeLeft != oldClock.timeLeft) {
+        timeLeft = widget.timeLeft;
+      }
+    } else if (widget.clockUpdatedAt != oldClock.clockUpdatedAt) {
       timeLeft = widget.timeLeft;
     }
 
