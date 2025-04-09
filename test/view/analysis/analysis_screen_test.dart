@@ -512,6 +512,23 @@ void main() {
           expect(find.text('13. dxe6'), findsNothing);
         },
       );
+
+      testWidgets(
+        'user variations are still displayed in the move tree when computer analysis is disabled',
+        (tester) async {
+          await makeEngineTestApp(
+            tester,
+            isComputerAnalysisEnabled: false,
+            gameId: const GameId('xze7RH66'),
+          );
+
+          expect(find.byType(CircularProgressIndicator), findsOne);
+          // wait for the game to be loaded
+          await tester.pump(const Duration(milliseconds: 50));
+          await playMove(tester, 'd2', 'd4');
+          expect(find.text('Mistake. dxe6 was best.'), findsOne);
+        },
+      );
     });
 
     group('Engine lines', () {
