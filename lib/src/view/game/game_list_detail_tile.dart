@@ -53,6 +53,8 @@ class GameListDetailTile extends StatelessWidget {
       height: 1,
     );
 
+    final scaledTitleFontSize = MediaQuery.of(context).textScaler.scale(titleFontSize);
+
     return AdaptiveInkWell(
       onLongPress: () {
         showAdaptiveBottomSheet<void>(
@@ -195,48 +197,49 @@ class GameListDetailTile extends StatelessWidget {
                                 );
                               },
                             ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (game.opening != null || moveList?.isNotEmpty == true)
-                                Text.rich(
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: textShade(context, Styles.subtitleOpacity),
-                                    fontSize: subtitleFontSize,
-                                  ),
-                                  TextSpan(
-                                    text: game.opening?.name,
-                                    style: const TextStyle(fontWeight: FontWeight.w600),
-                                    children: [
-                                      if (moveList != null && moveList.length > 1) ...[
-                                        const TextSpan(text: '\n'),
-                                        ...moveList
-                                            .take(isTablet ? 6 : 4)
-                                            .toList()
-                                            .asMap()
-                                            .entries
-                                            .slices(2)
-                                            .mapIndexed((index, moves) {
-                                              return TextSpan(
-                                                text:
-                                                    '${index + 1}. ${moves.map((e) => '${e.value} ').join()}',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                              );
-                                            }),
-                                        TextSpan(
-                                          text: '\u2026 ${(moveList.length / 2).ceil()} moves',
-                                          style: const TextStyle(fontWeight: FontWeight.normal),
-                                        ),
+                          if (isTablet || scaledTitleFontSize <= 26)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (game.opening != null || moveList?.isNotEmpty == true)
+                                  Text.rich(
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: textShade(context, Styles.subtitleOpacity),
+                                      fontSize: subtitleFontSize,
+                                    ),
+                                    TextSpan(
+                                      text: game.opening?.name,
+                                      style: const TextStyle(fontWeight: FontWeight.w600),
+                                      children: [
+                                        if (moveList != null && moveList.length > 1) ...[
+                                          const TextSpan(text: '\n'),
+                                          ...moveList
+                                              .take(isTablet ? 6 : 4)
+                                              .toList()
+                                              .asMap()
+                                              .entries
+                                              .slices(2)
+                                              .mapIndexed((index, moves) {
+                                                return TextSpan(
+                                                  text:
+                                                      '${index + 1}. ${moves.map((e) => '${e.value} ').join()}',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.normal,
+                                                  ),
+                                                );
+                                              }),
+                                          TextSpan(
+                                            text: '\u2026 ${(moveList.length / 2).ceil()} moves',
+                                            style: const TextStyle(fontWeight: FontWeight.normal),
+                                          ),
+                                        ],
                                       ],
-                                    ],
+                                    ),
                                   ),
-                                ),
-                            ],
-                          ),
+                              ],
+                            ),
                         ],
                       ),
                     ),

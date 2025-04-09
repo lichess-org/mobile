@@ -510,29 +510,34 @@ class _HelloWidget extends ConsumerWidget {
 
     final user = accountUser ?? session?.user;
 
-    return Padding(
-      padding: Styles.horizontalBodyPadding
-          .add(Styles.sectionBottomPadding)
-          .add(const EdgeInsets.only(top: 8.0)),
-      child: GestureDetector(
-        onTap: () {
-          ref.invalidate(accountActivityProvider);
-          Navigator.of(context).push(ProfileScreen.buildRoute(context));
-        },
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.wb_sunny, size: iconSize, color: context.lichessColors.brag),
-            const SizedBox(width: 5.0),
-            if (user != null)
-              l10nWithWidget(
-                context.l10n.mobileGreeting,
-                UserFullNameWidget(user: user, style: style),
-                textStyle: style,
-              )
-            else
-              Text(context.l10n.mobileGreetingWithoutName, style: style),
-          ],
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: 1.3,
+      child: Padding(
+        padding: Styles.horizontalBodyPadding
+            .add(Styles.sectionBottomPadding)
+            .add(const EdgeInsets.only(top: 8.0)),
+        child: GestureDetector(
+          onTap: () {
+            ref.invalidate(accountActivityProvider);
+            Navigator.of(context).push(ProfileScreen.buildRoute(context));
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.wb_sunny, size: iconSize, color: context.lichessColors.brag),
+              const SizedBox(width: 5.0),
+              if (user != null)
+                Flexible(
+                  child: l10nWithWidget(
+                    context.l10n.mobileGreeting,
+                    UserFullNameWidget(user: user, style: style),
+                    textStyle: style,
+                  ),
+                )
+              else
+                Flexible(child: Text(context.l10n.mobileGreetingWithoutName, style: style)),
+            ],
+          ),
         ),
       ),
     );

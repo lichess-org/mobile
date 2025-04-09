@@ -64,78 +64,85 @@ class PerfCards extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return RatingPrefAware(
-      child: Padding(
-        padding: padding ?? Styles.bodySectionPadding,
-        child: SizedBox(
-          height: 106,
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 3.0),
-            scrollDirection: Axis.horizontal,
-            itemCount: userPerfs.length,
-            itemBuilder: (context, index) {
-              final perf = userPerfs[index];
-              final userPerf = user.perfs[perf]!;
-              final bool isPerfWithoutStats = Perf.streak == perf;
-              return SizedBox(
-                height: 100,
-                width: 100,
-                child: PlatformCard(
-                  borderRadius: _kCardBorderRadius,
-                  child: AdaptiveInkWell(
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: 1.4,
+      child: RatingPrefAware(
+        child: Padding(
+          padding: padding ?? Styles.bodySectionPadding,
+          child: SizedBox(
+            height: 106,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(vertical: 3.0),
+              scrollDirection: Axis.horizontal,
+              itemCount: userPerfs.length,
+              itemBuilder: (context, index) {
+                final perf = userPerfs[index];
+                final userPerf = user.perfs[perf]!;
+                final bool isPerfWithoutStats = Perf.streak == perf;
+                return SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: PlatformCard(
                     borderRadius: _kCardBorderRadius,
-                    onTap: isPerfWithoutStats ? null : () => _handlePerfCardTap(context, perf),
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(perf.shortTitle, style: TextStyle(color: textShade(context, 0.7))),
-                          Icon(perf.icon, color: textShade(context, 0.6)),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              RatingWidget(
-                                rating: userPerf.rating,
-                                deviation: userPerf.ratingDeviation,
-                                provisional: userPerf.provisional,
-                                style: Styles.bold,
-                              ),
-                              const SizedBox(width: 3),
-                              if (userPerf.progression != 0) ...[
-                                Icon(
-                                  userPerf.progression > 0
-                                      ? LichessIcons.arrow_full_upperright
-                                      : LichessIcons.arrow_full_lowerright,
-                                  color:
-                                      userPerf.progression > 0
-                                          ? context.lichessColors.good
-                                          : context.lichessColors.error,
-                                  size: 12,
+                    child: AdaptiveInkWell(
+                      borderRadius: _kCardBorderRadius,
+                      onTap: isPerfWithoutStats ? null : () => _handlePerfCardTap(context, perf),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(perf.shortTitle, style: TextStyle(color: textShade(context, 0.7))),
+                            Icon(perf.icon, color: textShade(context, 0.6)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                RatingWidget(
+                                  rating: userPerf.rating,
+                                  deviation: userPerf.ratingDeviation,
+                                  provisional: userPerf.provisional,
+                                  style: Styles.bold,
                                 ),
-                                Text(
-                                  userPerf.progression.abs().toString(),
-                                  style: TextStyle(
+                                const SizedBox(width: 3),
+                                if (userPerf.progression != 0) ...[
+                                  Icon(
+                                    userPerf.progression > 0
+                                        ? LichessIcons.arrow_full_upperright
+                                        : LichessIcons.arrow_full_lowerright,
                                     color:
                                         userPerf.progression > 0
                                             ? context.lichessColors.good
                                             : context.lichessColors.error,
-                                    fontSize: 11,
+                                    size: 12,
                                   ),
-                                ),
+                                  Flexible(
+                                    child: Text(
+                                      userPerf.progression.abs().toString(),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        color:
+                                            userPerf.progression > 0
+                                                ? context.lichessColors.good
+                                                : context.lichessColors.error,
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
-                          ),
-                        ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            },
-            separatorBuilder: (context, index) => const SizedBox(width: 10),
+                );
+              },
+              separatorBuilder: (context, index) => const SizedBox(width: 10),
+            ),
           ),
         ),
       ),
