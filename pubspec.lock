@@ -421,10 +421,10 @@ packages:
     dependency: "direct main"
     description:
       name: fast_immutable_collections
-      sha256: "95a69b9380483dff49ae2c12c9eb92e2b4e1aeff481a33c2a20883471771598a"
+      sha256: d1aa3d7788fab06cce7f303f4969c7a16a10c865e1bd2478291a8ebcbee084e5
       url: "https://pub.dev"
     source: hosted
-    version: "11.0.3"
+    version: "11.0.4"
   ffi:
     dependency: transitive
     description:
@@ -655,10 +655,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_native_splash
-      sha256: edb09c35ee9230c4b03f13dd45bb3a276d0801865f0a4650b7e2a3bba61a803a
+      sha256: "8321a6d11a8d13977fa780c89de8d257cce3d841eecfb7a4cadffcc4f12d82dc"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.5"
+    version: "2.4.6"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -809,10 +809,10 @@ packages:
     dependency: transitive
     description:
       name: html
-      sha256: "1fc58edeaec4307368c60d59b7e15b9d658b57d7f3125098b6294153c75337ec"
+      sha256: "9475be233c437f0e3637af55e7702cbbe5c23a68bd56e8a5fa2d426297b7c6c8"
       url: "https://pub.dev"
     source: hosted
-    version: "0.15.5"
+    version: "0.15.5+1"
   http:
     dependency: "direct main"
     description:
@@ -1090,10 +1090,10 @@ packages:
     dependency: transitive
     description:
       name: objective_c
-      sha256: "49e569fac1202d7fee1655fbbdfbf228840e11416be592bce2a6797b23de8231"
+      sha256: "9f034ba1eeca53ddb339bc8f4813cb07336a849cd735559b60cdc068ecce2dc7"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.0"
+    version: "7.1.0"
   octo_image:
     dependency: transitive
     description:
