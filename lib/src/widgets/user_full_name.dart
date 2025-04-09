@@ -103,27 +103,7 @@ class UserFullNameWidget extends ConsumerWidget {
           const SizedBox(width: 5),
         ],
         Flexible(
-          child: Text.rich(
-            TextSpan(
-              text: displayName,
-              children: [
-                if (shouldShowRating && ratingStr != null) ...[
-                  const WidgetSpan(child: SizedBox(width: 5)),
-                  TextSpan(
-                    text: ratingStr,
-                    style:
-                        style?.copyWith(
-                          fontSize: style?.fontSize != null ? (style!.fontSize! - 3) : 12,
-                        ) ??
-                        const TextStyle(fontSize: 12),
-                  ),
-                ],
-              ],
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: style,
-          ),
+          child: Text(displayName, maxLines: 1, overflow: TextOverflow.ellipsis, style: style),
         ),
         if (showFlair && user?.flair != null) ...[
           const SizedBox(width: 5),
@@ -132,6 +112,23 @@ class UserFullNameWidget extends ConsumerWidget {
             errorWidget: (_, _, _) => kEmptyWidget,
             width: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
             height: style?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
+          ),
+        ],
+        if (shouldShowRating && ratingStr != null) ...[
+          const SizedBox(width: 5),
+          Text(
+            ratingStr,
+            style:
+                style?.copyWith(
+                  fontWeight: FontWeight.w400,
+                  fontSize: style?.fontSize != null ? style!.fontSize! - 3 : 13,
+                  color: textShade(context, 0.8),
+                ) ??
+                TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13,
+                  color: textShade(context, 0.8),
+                ),
           ),
         ],
       ],

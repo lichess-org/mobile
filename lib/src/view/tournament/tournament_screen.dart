@@ -279,7 +279,7 @@ class _StandingControls extends ConsumerWidget {
           icon: Icons.skip_previous,
         ),
         Text(
-          '${state.firstRankOfPage.toString().padLeft(2)}-${min(state.firstRankOfPage + kStandingsPageSize - 1, state.tournament.nbPlayers)} / ${state.tournament.nbPlayers}',
+          '${state.firstRankOfPage}-${min(state.firstRankOfPage + kStandingsPageSize - 1, state.tournament.nbPlayers)} / ${state.tournament.nbPlayers}',
           style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
         ),
         PlatformIconButton(
