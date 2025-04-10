@@ -108,6 +108,7 @@ class PuzzleStreakController extends _$PuzzleStreakController {
             }),
           )
           .catchError((_) {
+            // ignore: avoid_manual_providers_as_generated_provider_dependency
             final currentContext = ref.read(currentNavigatorKeyProvider).currentContext;
             if (currentContext != null && currentContext.mounted) {
               showPlatformSnackbar(
