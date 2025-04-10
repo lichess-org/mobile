@@ -55,34 +55,33 @@ class _Load extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final streak = ref.watch(streakProvider);
     final session = ref.watch(authSessionProvider);
+    final streak = ref.watch(streakProvider);
 
-    return streak.when(
-      data: (data) {
-        return _Body(
-          initialPuzzleContext: PuzzleContext(
-            puzzle: data.puzzle,
-            angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            userId: session?.user.id,
-          ),
-          streak: data.streak,
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-      error: (e, s) {
-        debugPrint('SEVERE: [StreakScreen] could not load streak; $e\n$s');
+    switch (streak) {
+      case AsyncValue(:final error?, :final stackTrace):
+        debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
         return Center(
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
             fen: kEmptyFen,
             orientation: Side.white,
-            errorMessage: e.toString(),
+            errorMessage: error.toString(),
           ),
         );
-      },
-    );
+      case AsyncValue(:final value?):
+        return _Body(
+          initialPuzzleContext: PuzzleContext(
+            puzzle: value.puzzle,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            userId: session?.user.id,
+          ),
+          streak: value.streak,
+        );
+      case _:
+        return const Center(child: CircularProgressIndicator.adaptive());
+    }
   }
 }
 
