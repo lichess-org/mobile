@@ -475,8 +475,7 @@ class _GameBottomBar extends ConsumerWidget {
               ),
             if (gameState.canBerserk)
               BottomBarButton(
-                // TODO l10n
-                label: 'Berserk',
+                label: context.l10n.arenaBerserk,
                 onTap:
                     gameState.canBerserk && !gameState.hasBerserked
                         ? ref.read(gameControllerProvider(id).notifier).berserk

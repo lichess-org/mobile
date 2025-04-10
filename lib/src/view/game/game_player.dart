@@ -161,8 +161,7 @@ class GamePlayer extends StatelessWidget {
                   LichessIcons.body_cut,
                   color: LichessColors.brag,
                   size: playerFontSize,
-                  // TODO l10n
-                  semanticLabel: 'Berserked',
+                  semanticLabel: context.l10n.arenaBerserk,
                 ),
               ],
             ],
