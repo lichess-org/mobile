@@ -7,7 +7,9 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_streak.g.dart';
@@ -85,23 +87,37 @@ class PuzzleStreakController extends _$PuzzleStreakController {
     if (!state.hasValue || state.requireValue.nextPuzzle == null) {
       return;
     }
-
-    await Future<void>.delayed(const Duration(milliseconds: 250));
     ref.read(soundServiceProvider).play(Sound.confirmation);
 
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      final nextId = state.requireValue.streak.nextId;
-      final nextPuzzle =
-          nextId != null
-              ? await ref.withClient((client) => PuzzleRepository(client).fetch(nextId))
-              : null;
-      return (
-        streak: state.requireValue.streak.copyWith(index: state.requireValue.streak.index + 1),
-        puzzle: state.requireValue.nextPuzzle!,
-        nextPuzzle: nextPuzzle,
-      );
-    });
+    state = AsyncData((
+      streak: state.requireValue.streak.copyWith(index: state.requireValue.streak.index + 1),
+      puzzle: state.requireValue.nextPuzzle!,
+      nextPuzzle: null,
+    ));
+
+    final nextId = state.requireValue.streak.nextId;
+    if (nextId != null) {
+      ref
+          .withClient(
+            (client) => PuzzleRepository(client).fetch(nextId).then((puzzle) {
+              state = AsyncData((
+                streak: state.requireValue.streak,
+                puzzle: state.requireValue.puzzle,
+                nextPuzzle: puzzle,
+              ));
+            }),
+          )
+          .catchError((_) {
+            final currentContext = ref.read(currentNavigatorKeyProvider).currentContext;
+            if (currentContext != null && currentContext.mounted) {
+              showPlatformSnackbar(
+                currentContext,
+                'Error loading next puzzle',
+                type: SnackBarType.error,
+              );
+            }
+          });
+    }
 
     ref
         .read(streakStorageProvider(ref.read(authSessionProvider)?.user.id))
