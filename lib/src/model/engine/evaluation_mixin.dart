@@ -71,7 +71,8 @@ abstract class EvaluationMixinState {
 ///
 /// The parent must implement the following:
 /// - [evaluationState]
-/// - [socketClient] to provide the [SocketClient] to use for cloud evaluations.
+/// - [socketClient] to provide the [SocketClient] to use for cloud evaluations. If `null`, the
+///   cloud evaluations will not be requested.
 /// - [positionTree] to provide the tree where the evaluations are stored.
 /// - [evaluationServiceFactory]
 /// - [evaluationPreferencesNotifier]
@@ -90,7 +91,7 @@ mixin EngineEvaluationMixin {
   EngineEvaluationPrefState get evaluationPrefs;
   EngineEvaluationPreferences get evaluationPreferencesNotifier;
   EvaluationService evaluationServiceFactory();
-  SocketClient get socketClient;
+  SocketClient? get socketClient;
   Node get positionTree;
 
   final _cloudEvalGetDebounce = Debouncer(kRequestEvalDebounceDelay);
@@ -114,7 +115,7 @@ mixin EngineEvaluationMixin {
   /// The local engine is not started here, but only when [requestEval] is called.
   @nonVirtual
   void initEngineEvaluation() {
-    _subscription = socketClient.stream.listen(_handleSocketEvent);
+    _subscription = socketClient?.stream.listen(_handleSocketEvent);
     _evaluationService = evaluationServiceFactory();
   }
 
@@ -245,7 +246,7 @@ mixin EngineEvaluationMixin {
 
     final numEvalLines = evaluationPrefs.numEvalLines;
 
-    socketClient.send('evalGet', {
+    socketClient?.send('evalGet', {
       'fen': curPosition.fen,
       'path': evaluationState.currentPath.value,
       'mpv': numEvalLines,

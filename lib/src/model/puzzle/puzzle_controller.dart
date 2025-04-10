@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
-import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -53,7 +52,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
   @override
   @protected
-  late SocketClient socketClient;
+  SocketClient? socketClient;
 
   @override
   @protected
@@ -64,14 +63,6 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
   @override
   PuzzleState build(PuzzleContext initialContext, {bool isPuzzleStreak = false}) {
-    socketClient = ref.watch(socketPoolProvider).open(PuzzleController.socketUri);
-
-    isOnline(ref.read(defaultClientProvider)).then((online) {
-      if (!online) {
-        socketClient.close();
-      }
-    });
-
     initEngineEvaluation();
 
     ref.onDispose(() {
