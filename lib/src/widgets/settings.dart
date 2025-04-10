@@ -44,22 +44,21 @@ class SettingsListTile extends StatelessWidget {
         leading: icon,
         title: _SettingsTitle(title: settingsLabel),
         additionalInfo: showCupertinoTrailingValue ? Text(settingsValue) : null,
-        subtitle:
-            Theme.of(context).platform == TargetPlatform.android
-                ? Text(
-                  settingsValue,
-                  style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-                )
-                : explanation != null
-                ? Text(explanation!, maxLines: 5)
-                : null,
+        subtitle: explanation != null ? Text(explanation!, maxLines: 5) : null,
         onTap: onTap,
         trailing:
             Theme.of(context).platform == TargetPlatform.iOS
                 ? const CupertinoListTileChevron()
-                : explanation != null
-                ? _SettingsInfoTooltip(message: explanation!, child: const Icon(Icons.info_outline))
-                : null,
+                : ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.25),
+                  child: Text(
+                    settingsValue,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                    maxLines: 2,
+                    style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                  ),
+                ),
       ),
     );
   }
@@ -90,7 +89,11 @@ class SwitchSettingTile extends StatelessWidget {
       leading: leading,
       title: _SettingsTitle(title: title),
       subtitle: subtitle,
-      trailing: Switch.adaptive(value: value, onChanged: onChanged),
+      trailing: Switch.adaptive(
+        value: value,
+        onChanged: onChanged,
+        padding: const EdgeInsets.only(left: 8.0),
+      ),
     );
   }
 }
@@ -156,32 +159,7 @@ class SettingsSectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: textShade(context, 0.5))
-              : TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: textShade(context, 0.6),
-              ),
-    );
-  }
-}
-
-class _SettingsInfoTooltip extends StatelessWidget {
-  const _SettingsInfoTooltip({required this.message, required this.child});
-
-  final String message;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Tooltip(
-      message: message,
-      triggerMode: TooltipTriggerMode.tap,
-      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      showDuration: const Duration(seconds: 4),
-      child: child,
+      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: textShade(context, 0.5)),
     );
   }
 }
