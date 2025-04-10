@@ -118,14 +118,11 @@ class _Body extends StatelessWidget {
                           ],
                           if (!state.tournament.berserkable) ...[
                             const SizedBox(height: 10),
-                            const Text.rich(
+                            Text.rich(
                               TextSpan(
                                 children: [
-                                  WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
-                                  TextSpan(
-                                    // TODO l10n
-                                    text: ' No Berserk allowed',
-                                  ),
+                                  const WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
+                                  TextSpan(text: ' ${context.l10n.arenaNoBerserkAllowed}'),
                                 ],
                               ),
                             ),
