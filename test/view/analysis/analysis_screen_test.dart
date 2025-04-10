@@ -468,9 +468,9 @@ void main() {
   });
 
   // more engine evaluation test files are to be found in /test/view/engine/
-  group('Engine evaluation', () {
-    group('Engine move tree', () {
-      testWidgets('evals are displayed in the move tree', (tester) async {
+  group('Engine evaluation:', () {
+    group('in move tree', () {
+      testWidgets('evals are displayed', (tester) async {
         await makeEngineTestApp(tester, isCloudEvalEnabled: false);
         await playMove(tester, 'e2', 'e4');
         expect(find.byType(InlineMove), findsOne);
@@ -483,40 +483,32 @@ void main() {
     });
 
     group('Engine lines', () {
-      testWidgets('engine lines are displayed', (tester) async {
+      testWidgets('are displayed', (tester) async {
         await makeEngineTestApp(tester);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(Engineline), findsOne);
         expect(find.widgetWithText(Engineline, '1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 '), findsOne);
       });
 
-      testWidgets('engine lines are not displayed if computer analysis is not allowed', (
-        tester,
-      ) async {
+      testWidgets('are not displayed if computer analysis is not allowed', (tester) async {
         await makeEngineTestApp(tester, isComputerAnalysisAllowed: false);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(Engineline), findsNothing);
       });
 
-      testWidgets('engine lines are not displayed if computer analysis is not enabled', (
-        tester,
-      ) async {
+      testWidgets('are not displayed if computer analysis is not enabled', (tester) async {
         await makeEngineTestApp(tester, isComputerAnalysisEnabled: false);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(Engineline), findsNothing);
       });
 
-      testWidgets('engine lines are not displayed if engine is disabled by user preferences', (
-        tester,
-      ) async {
+      testWidgets('are not displayed if engine is disabled by user preferences', (tester) async {
         await makeEngineTestApp(tester, isEngineEnabled: false);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(Engineline), findsNothing);
       });
 
-      testWidgets('engine lines are not displayed if they are disabled by user preferences', (
-        tester,
-      ) async {
+      testWidgets('are not displayed if they are disabled by user preferences', (tester) async {
         await makeEngineTestApp(tester, numEvalLines: 0);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(Engineline), findsNothing);
@@ -524,86 +516,75 @@ void main() {
     });
 
     group('Engine gauge', () {
-      testWidgets('engine gauge is not displayed if computer analysis is not allowed', (
-        tester,
-      ) async {
+      testWidgets('is not displayed if computer analysis is not allowed', (tester) async {
         await makeEngineTestApp(tester, isComputerAnalysisAllowed: false);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(EngineGauge), findsNothing);
       });
 
-      testWidgets('engine gauge is not displayed if computer analysis is not enabled', (
-        tester,
-      ) async {
-        await makeEngineTestApp(tester, isComputerAnalysisEnabled: false);
+      testWidgets('is not displayed if computer analysis is not enabled', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          isComputerAnalysisEnabled: false,
+          gameId: const GameId('xze7RH66'),
+        );
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(EngineGauge), findsNothing);
       });
 
-      testWidgets('engine gauge is not displayed if engine is disabled by user preferences', (
-        tester,
-      ) async {
+      testWidgets('is not displayed if engine is disabled by user preferences', (tester) async {
         await makeEngineTestApp(tester, isEngineEnabled: false);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(EngineGauge), findsNothing);
       });
 
-      testWidgets('engine gauge is displayed if engine is available', (tester) async {
+      testWidgets('is displayed if engine is available', (tester) async {
         await makeEngineTestApp(tester);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(EngineGauge), findsOne);
         expect(find.widgetWithText(EngineGauge, '+0.2'), findsOne);
       });
 
-      testWidgets(
-        'engine gauge is displayed on an analysed game, even if engine eval is disabled',
-        (tester) async {
-          await makeEngineTestApp(tester, isEngineEnabled: false, gameId: const GameId('xze7RH66'));
+      testWidgets('is displayed on an analysed game, even if engine eval is disabled', (
+        tester,
+      ) async {
+        await makeEngineTestApp(tester, isEngineEnabled: false, gameId: const GameId('xze7RH66'));
 
-          expect(find.byType(CircularProgressIndicator), findsOne);
-          // wait for the game to be loaded
-          await tester.pump(const Duration(milliseconds: 50));
+        expect(find.byType(CircularProgressIndicator), findsOne);
+        // wait for the game to be loaded
+        await tester.pump(const Duration(milliseconds: 50));
 
-          expect(find.byType(EngineGauge), findsOne);
-          expect(find.widgetWithText(EngineGauge, 'Checkmate'), findsOne);
-        },
-      );
+        expect(find.byType(EngineGauge), findsOne);
+        expect(find.widgetWithText(EngineGauge, 'Checkmate'), findsOne);
+      });
     });
 
     group('Engine best move arrow', () {
-      testWidgets('best move arrow is not displayed if best move arrow is disabled', (
-        tester,
-      ) async {
+      testWidgets('is not displayed if best move arrow is disabled', (tester) async {
         await makeEngineTestApp(tester, showBestMoveArrow: false);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(BoardShapeWidget), findsNothing);
       });
 
-      testWidgets('best move arrow is not displayed if computer analysis is not allowed', (
-        tester,
-      ) async {
+      testWidgets('is not displayed if computer analysis is not allowed', (tester) async {
         await makeEngineTestApp(tester, isComputerAnalysisAllowed: false);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(BoardShapeWidget), findsNothing);
       });
 
-      testWidgets('best move arrow is not displayed if computer analysis is not enabled', (
-        tester,
-      ) async {
+      testWidgets('is not displayed if computer analysis is not enabled', (tester) async {
         await makeEngineTestApp(tester, isComputerAnalysisEnabled: false);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(BoardShapeWidget), findsNothing);
       });
 
-      testWidgets('best move arrow is not displayed if engine is disabled by user preferences', (
-        tester,
-      ) async {
+      testWidgets('is not displayed if engine is disabled by user preferences', (tester) async {
         await makeEngineTestApp(tester, isEngineEnabled: false);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(BoardShapeWidget), findsNothing);
       });
 
-      testWidgets('best move arrow is displayed if engine is available', (tester) async {
+      testWidgets('is displayed if engine is available', (tester) async {
         await makeEngineTestApp(tester);
         await tester.pump(kRequestEvalDebounceDelay);
         expect(find.byType(BoardShapeWidget), findsOne);

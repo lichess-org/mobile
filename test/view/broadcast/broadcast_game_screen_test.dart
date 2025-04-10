@@ -3,24 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
+import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 
+import '../../model/broadcast/example_data.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
+import '../engine/test_engine_app.dart';
+
+const _tournamentId = BroadcastTournamentId('RAIoMC7L');
+const _roundId = BroadcastRoundId('6VuqTjes');
+const _gameId = BroadcastGameId('G2LUflKg');
+const _gameIdWithServerAnalysis = BroadcastGameId('Wf2MqRBR');
 
 final client = MockClient((request) {
   if (request.url.path == '/api/broadcast/-/-/$_roundId') {
     return mockResponse(
-      _roundResponse,
+      broadcastRoundMockResponses[(_tournamentId, _roundId)]!,
       200,
       headers: {'content-type': 'application/json; charset=utf-8'},
     );
   }
   if (request.url.path == '/api/study/$_roundId/$_gameId.pgn') {
-    return mockResponse(_gameResponse, 200, headers: {'content-type': 'application/x-chess-pgn'});
+    return mockResponse(
+      broadcastGamePgnResponses[_gameId]!,
+      200,
+      headers: {'content-type': 'application/x-chess-pgn'},
+    );
   }
   return mockResponse('', 404);
 });
@@ -87,152 +101,124 @@ void main() {
       expect(find.byKey(const Key('e3-whitebishop')), findsOneWidget);
     });
   });
+
+  group('Engine evaluation:', () {
+    group('Engine lines', () {
+      testWidgets('are displayed', (tester) async {
+        await makeEngineTestApp(tester, broadcastGame: (_tournamentId, _roundId, _gameId));
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(Engineline), findsOne);
+      });
+
+      testWidgets('are not displayed if computer analysis is not enabled', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameId),
+          isComputerAnalysisEnabled: false,
+        );
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(Engineline), findsNothing);
+      });
+
+      testWidgets('are not displayed if engine is disabled by user preferences', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameId),
+          isEngineEnabled: false,
+        );
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(Engineline), findsNothing);
+      });
+
+      testWidgets('are not displayed if they are disabled by user preferences', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameId),
+          numEvalLines: 0,
+        );
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(Engineline), findsNothing);
+      });
+    });
+
+    group('Engine gauge', () {
+      testWidgets('is not displayed if computer analysis is not enabled', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameIdWithServerAnalysis),
+          isComputerAnalysisEnabled: false,
+        );
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(EngineGauge), findsNothing);
+      });
+
+      testWidgets('is not displayed if engine is disabled and no server eval available', (
+        tester,
+      ) async {
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameId),
+          isEngineEnabled: false,
+        );
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(EngineGauge), findsNothing);
+      });
+
+      testWidgets('engine gauge is displayed if engine is available', (tester) async {
+        await makeEngineTestApp(tester, broadcastGame: (_tournamentId, _roundId, _gameId));
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(EngineGauge), findsOne);
+      });
+
+      testWidgets('engine gauge is displayed if engine is disabled but an eval is available', (
+        tester,
+      ) async {
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameIdWithServerAnalysis),
+          isEngineEnabled: false,
+        );
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(EngineGauge), findsOne);
+      });
+    });
+
+    group('Engine best move arrow', () {
+      testWidgets('is not displayed if best move arrow is disabled', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameId),
+          showBestMoveArrow: false,
+        );
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(BoardShapeWidget), findsNothing);
+      });
+
+      testWidgets('is not displayed if computer analysis is not enabled', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameId),
+          isComputerAnalysisEnabled: false,
+        );
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(BoardShapeWidget), findsNothing);
+      });
+
+      testWidgets('is not displayed if engine is disabled by user preferences', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameId),
+          isEngineEnabled: false,
+        );
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(BoardShapeWidget), findsNothing);
+      });
+
+      testWidgets('is displayed if engine is available', (tester) async {
+        await makeEngineTestApp(tester, broadcastGame: (_tournamentId, _roundId, _gameId));
+        await tester.pump(kRequestEvalDebounceDelay);
+        expect(find.byType(BoardShapeWidget), findsOne);
+      });
+    });
+  });
 }
-
-const _tournamentId = BroadcastTournamentId('RAIoMC7L');
-const _roundId = BroadcastRoundId('6VuqTjes');
-const _gameId = BroadcastGameId('G2LUflKg');
-
-const _roundResponse = '''
-{
-  "round": {
-    "id": "6VuqTjes",
-    "name": "Round 4.1",
-    "slug": "round-41",
-    "createdAt": 1734081596041,
-    "ongoing": true,
-    "startsAt": 1734606000000,
-    "url": "https://lichess.org/broadcast/turkish-chess-championship-2024/round-41/6VuqTjes"
-  },
-  "tour": {
-    "id": "RAIoMC7L",
-    "name": "Turkish Chess Championship 2024",
-    "slug": "turkish-chess-championship-2024",
-    "info": {
-      "website": "http://tr2024.tsf.org.tr/",
-      "players": "Yılmaz, Şanal, Daştan, Yılmazyerli",
-      "location": "Kemer, Turkey",
-      "tc": "90 min + 30 sec / move",
-      "fideTc": "standard",
-      "timeZone": "Turkey",
-      "standings": "https://chess-results.com/tnr1080829.aspx?art=1",
-      "format": "16-player knockout"
-    },
-    "createdAt": 1734081433831,
-    "url": "https://lichess.org/broadcast/turkish-chess-championship-2024/RAIoMC7L",
-    "tier": 4,
-    "dates": [
-      1734087600000,
-      1734778800000
-    ],
-    "image": "https://image.lichess1.org/display?fmt=webp&h=400&op=thumbnail&path=relay:RAIoMC7L:7C8IGWzr.webp&w=800&sig=f80b016b5b197796781fac50cce7a774ded9ff38"
-  },
-  "study": {
-    "writeable": false
-  },
-  "games": [
-    {
-      "id": "G2LUflKg",
-      "name": "Dastan, Muhammed Batuhan - Gokerkan, Cem Kaan",
-      "fen": "rnq2rk1/pp2ppbp/5np1/2P1N3/2N5/6P1/PP2PPKP/R1BQ1R2 w - - 1 12",
-      "players": [
-        {
-          "name": "Dastan, Muhammed Batuhan",
-          "title": "GM",
-          "rating": 2560,
-          "fideId": 6300014,
-          "fed": "TUR",
-          "clock": 415200
-        },
-        {
-          "name": "Gokerkan, Cem Kaan",
-          "title": "GM",
-          "rating": 2486,
-          "fideId": 6336760,
-          "fed": "TUR",
-          "clock": 345100
-        }
-      ],
-      "lastMove": "d8c8",
-      "thinkTime": 355,
-      "status": "*"
-    },
-    {
-      "id": "Wf2MqRBR",
-      "name": "Yilmazyerli, Mert - Tarhan, Adar",
-      "fen": "r3n3/ppp1k2Q/5p2/3qp3/7p/3B4/P1P3PP/4R1K1 b - - 8 27",
-      "players": [
-        {
-          "name": "Yilmazyerli, Mert",
-          "title": "GM",
-          "rating": 2515,
-          "fideId": 6305962,
-          "fed": "TUR",
-          "clock": 562900
-        },
-        {
-          "name": "Tarhan, Adar",
-          "title": "IM",
-          "rating": 2483,
-          "fideId": 34544712,
-          "fed": "TUR",
-          "clock": 548600
-        }
-      ],
-      "lastMove": "h6h7",
-      "check": "+",
-      "status": "½-½"
-    },
-    {
-      "id": "GwfDrsCc",
-      "name": "Isik, Alparslan - Gunduz, Umut Erdem",
-      "fen": "r4rk1/pbq1bppp/4pn2/2p5/2P5/3BBN1P/PP2QPP1/R4RK1 b - - 2 16",
-      "players": [
-        {
-          "name": "Isik, Alparslan",
-          "title": "IM",
-          "rating": 2475,
-          "fideId": 34506896,
-          "fed": "TUR",
-          "clock": 336700
-        },
-        {
-          "name": "Gunduz, Umut Erdem",
-          "title": "IM",
-          "rating": 2287,
-          "fideId": 6381383,
-          "fed": "TUR",
-          "clock": 430100
-        }
-      ],
-      "lastMove": "c2e2",
-      "thinkTime": 148,
-      "status": "*"
-    }
-  ]
-}
-''';
-
-const _gameResponse = '''
-[Event "Round 4.1: Dastan, Muhammed Batuhan - Gokerkan, Cem Kaan"]
-[Site "https://lichess.org/study/6VuqTjes/G2LUflKg"]
-[Date "2024-12-19"]
-[Round "7.1"]
-[White "Dastan, Muhammed Batuhan"]
-[Black "Gokerkan, Cem Kaan"]
-[Result "*"]
-[WhiteElo "2560"]
-[WhiteTitle "GM"]
-[WhiteFideId "6300014"]
-[BlackElo "2486"]
-[BlackTitle "GM"]
-[BlackFideId "6336760"]
-[Variant "Standard"]
-[ECO "D77"]
-[Opening "Neo-Grünfeld Defense: Classical Variation, Modern Defense"]
-[Annotator "https://lichess.org/broadcast/-/-/6VuqTjes"]
-[StudyName "Round 4.1"]
-[ChapterName "Dastan, Muhammed Batuhan - Gokerkan, Cem Kaan"]
-
-1. Nf3 { [%clk 1:30:32] } 1... Nf6 { [%clk 1:30:05] } 2. g3 { [%clk 1:30:47] } 2... g6 { [%clk 1:29:44] } 3. Bg2 { [%clk 1:30:58] } 3... Bg7 { [%clk 1:30:07] } 4. O-O { [%clk 1:31:12] } 4... O-O { [%clk 1:30:27] } 5. d4 { [%clk 1:30:11] } 5... d5 { [%clk 1:29:40] } 6. c4 { [%clk 1:30:17] } 6... dxc4 { [%clk 1:22:10] } 7. Na3 { [%clk 1:29:35] } 7... c5 { [%clk 1:22:30] } 8. Nxc4 { [%clk 1:23:58] } 8... Be6 { [%clk 1:22:23] } 9. Nfe5 { [%clk 1:13:51] } 9... Bd5 { [%clk 0:56:58] } 10. dxc5 { [%clk 1:12:39] } 10... Bxg2 { [%clk 0:57:21] } 11. Kxg2 { [%clk 1:09:12] } 11... Qc8 { [%clk 0:57:31] } *
-''';

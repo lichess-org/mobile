@@ -103,8 +103,9 @@ class Engineline extends ConsumerWidget {
       );
       ply += 1;
     });
-
+    final line = lineBuffer.toString();
     final evalString = pvData.evalString;
+
     return AdaptiveInkWell(
       onTap: () => onTapMove?.call(NormalMove.fromUci(pvData.moves[0])),
       child: SizedBox(
@@ -137,7 +138,7 @@ class Engineline extends ConsumerWidget {
               const SizedBox(width: 8.0),
               Expanded(
                 child: Text(
-                  lineBuffer.toString(),
+                  line,
                   maxLines: 1,
                   softWrap: false,
                   style: TextStyle(

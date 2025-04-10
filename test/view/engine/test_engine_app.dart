@@ -13,16 +13,21 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 
+import '../../model/broadcast/example_data.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
-/// Creates a test app to test engine evaluation with the [AnalysisScreen].
+/// Creates a test app to test engine evaluation.
 Future<void> makeEngineTestApp(
   WidgetTester tester, {
   GameId? gameId,
+  (BroadcastTournamentId, BroadcastRoundId, BroadcastGameId)? broadcastGame,
   int numEvalLines = 1,
+
+  /// Whether the computer analysis is allowed (only for analysis screen)
   bool isComputerAnalysisAllowed = true,
   bool isComputerAnalysisEnabled = true,
   bool isEngineEnabled = true,
@@ -79,28 +84,64 @@ Future<void> makeEngineTestApp(
           });
 
           return LichessClient(client, ref);
+        })
+      else if (broadcastGame != null)
+        lichessClientProvider.overrideWith((ref) {
+          final client = MockClient((request) {
+            if (request.url.path == '/api/broadcast/-/-/${broadcastGame.$2}') {
+              return mockResponse(
+                broadcastRoundMockResponses[(broadcastGame.$1, broadcastGame.$2)]!,
+                200,
+                headers: {'content-type': 'application/json; charset=utf-8'},
+              );
+            }
+            if (request.url.path == '/api/study/${broadcastGame.$2}/${broadcastGame.$3}.pgn') {
+              return mockResponse(
+                broadcastGamePgnResponses[broadcastGame.$3]!,
+                200,
+                headers: {'content-type': 'application/x-chess-pgn'},
+              );
+            }
+            return mockResponse('', 404);
+          });
+
+          return LichessClient(client, ref);
         }),
       webSocketChannelFactoryProvider.overrideWith(
         (_) => FakeWebSocketChannelFactory((_) => fakeChannel),
       ),
     ],
-    home: AnalysisScreen(
-      options: AnalysisOptions(
-        orientation: Side.white,
-        gameId: gameId,
-        standalone:
-            gameId == null
-                ? (
-                  pgn: '',
-                  isComputerAnalysisAllowed: isComputerAnalysisAllowed,
-                  variant: Variant.standard,
-                )
-                : null,
-      ),
-    ),
+    home:
+        broadcastGame != null
+            ? BroadcastGameScreen(
+              tournamentId: broadcastGame.$1,
+              roundId: broadcastGame.$2,
+              gameId: broadcastGame.$3,
+            )
+            : AnalysisScreen(
+              options: AnalysisOptions(
+                orientation: Side.white,
+                gameId: gameId,
+                standalone:
+                    gameId == null
+                        ? (
+                          pgn: '',
+                          isComputerAnalysisAllowed: isComputerAnalysisAllowed,
+                          variant: Variant.standard,
+                        )
+                        : null,
+              ),
+            ),
   );
 
   await tester.pumpWidget(app);
+
+  if (broadcastGame != null) {
+    // Load the broadcast analysis controller
+    await tester.pump();
+    // Load the broadcast round game provider
+    await tester.pump();
+  }
 }
 
 const Map<GameId, String> gameResponses = {
