@@ -1153,10 +1153,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
 }
 
 Color? _textColor(BuildContext context, double opacity, {int? nag}) {
-  final defaultColor =
-      Theme.of(context).platform == TargetPlatform.android
-          ? TextTheme.of(context).bodyLarge?.color?.withValues(alpha: opacity)
-          : CupertinoTheme.of(context).textTheme.textStyle.color?.withValues(alpha: opacity);
+  final defaultColor = TextTheme.of(context).bodyLarge?.color?.withValues(alpha: opacity);
 
   return nag != null && nag > 0 ? _nagColor(context, nag) : defaultColor;
 }
