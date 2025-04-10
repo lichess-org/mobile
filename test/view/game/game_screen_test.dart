@@ -9,6 +9,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -215,6 +216,107 @@ void main() {
         expect(find.byKey(const Key('a1-dest')), findsOneWidget);
       });
     }
+  });
+
+  group('Tournament Game', () {
+    final tournamentGameEvent = makeFullEvent(
+      const GameId('qVChCOTc'),
+      '',
+      whiteUserName: 'Peter',
+      blackUserName: 'Steven',
+      youAre: Side.white,
+      tournament: const TournamentMeta(
+        id: TournamentId('id'),
+        name: 'Test Tournament',
+        timeLeft: Duration(minutes: 10),
+        berserkable: true,
+        ranks: (white: 42, black: 24),
+      ),
+    );
+    testWidgets('displays tournament info', (WidgetTester tester) async {
+      final fakeSocket = FakeWebSocketChannel();
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(initialGameId: GameFullId('qVChCOTcHSeW')),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+          webSocketChannelFactoryProvider.overrideWith((ref) {
+            return FakeWebSocketChannelFactory((_) => fakeSocket);
+          }),
+        ],
+      );
+      await tester.pumpWidget(app);
+      // Wait for game screen to load
+      await tester.pump(const Duration(milliseconds: 10));
+
+      await fakeSocket.connectionEstablished;
+
+      fakeSocket.addIncomingMessages([tournamentGameEvent]);
+      // wait for socket message
+      await tester.pump(const Duration(milliseconds: 10));
+
+      // Should display tournament info
+      expect(find.text('Peter'), findsOneWidget);
+      expect(find.text('Steven'), findsOneWidget);
+      expect(find.text('Test Tournament'), findsOneWidget);
+      expect(find.textContaining('#42'), findsOneWidget);
+      expect(find.textContaining('#24'), findsOneWidget);
+    });
+
+    testWidgets('supports berserking', (WidgetTester tester) async {
+      final fakeSocket = FakeWebSocketChannel();
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(initialGameId: GameFullId('qVChCOTcHSeW')),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
+          webSocketChannelFactoryProvider.overrideWith((ref) {
+            return FakeWebSocketChannelFactory((_) => fakeSocket);
+          }),
+        ],
+      );
+      await tester.pumpWidget(app);
+      // Wait for game screen to load
+      await tester.pump(const Duration(milliseconds: 10));
+
+      await fakeSocket.connectionEstablished;
+
+      fakeSocket.addIncomingMessages([tournamentGameEvent]);
+      // wait for socket message
+      await tester.pump(const Duration(milliseconds: 10));
+
+      // Nobody has berserked yet.
+      // The widget we're finding is our own berserk button.
+      expect(find.byIcon(LichessIcons.body_cut), findsOneWidget);
+
+      final hasBerserkedFuture = fakeSocket.sentMessages.contains('{"t":"berserk"}');
+
+      // we berserk
+      await tester.tap(find.byIcon(LichessIcons.body_cut));
+      await tester.pump(const Duration(milliseconds: 10));
+
+      expect(await hasBerserkedFuture, true);
+
+      // No server response yet, so should not yet show the berserk icon next to our name.
+      expect(find.byIcon(LichessIcons.body_cut), findsOneWidget);
+
+      fakeSocket.addIncomingMessages(['''{"t": "berserk", "d": "white"}''']);
+      // wait for socket message
+      await tester.pump(const Duration(milliseconds: 10));
+
+      // We have berserked, which caused the berserk icon appear next to our name.
+      // Also, the berserk button is still there (but disabled).
+      expect(find.byIcon(LichessIcons.body_cut), findsNWidgets(2));
+
+      // opponent berserks
+      fakeSocket.addIncomingMessages(['''{"t": "berserk", "d": "black"}''']);
+      // wait for socket message
+      await tester.pump(const Duration(milliseconds: 10));
+
+      expect(find.byIcon(LichessIcons.body_cut), findsNWidgets(3));
+    });
   });
 
   group('Clock', () {
@@ -651,6 +753,7 @@ Future<void> createTestGame(
   FullEventTestCorrespondenceClock? correspondenceClock,
   Map<String, Object>? defaultPreferences,
   List<Override>? overrides,
+  TournamentMeta? tournament,
 }) async {
   final app = await makeTestProviderScopeApp(
     tester,
@@ -680,6 +783,7 @@ Future<void> createTestGame(
       socketVersion: socketVersion,
       clock: clock,
       correspondenceClock: correspondenceClock,
+      tournament: tournament,
     ),
   ]);
   await tester.pump(const Duration(milliseconds: 10));

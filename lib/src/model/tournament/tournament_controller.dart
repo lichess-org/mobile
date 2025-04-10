@@ -181,7 +181,7 @@ class TournamentController extends _$TournamentController {
             oldState.copyWith(
               tournament: oldState.tournament.copyWith(
                 featuredGame: oldState.featuredGame!.copyWith(
-                  finished: true,
+                  clocks: null,
                   winner: finishEvent.winner,
                 ),
               ),

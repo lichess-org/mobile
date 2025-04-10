@@ -337,14 +337,15 @@ class FeaturedGame with _$FeaturedGame {
     required Side orientation,
     required String fen,
     required Move? lastMove,
-    required bool? finished,
     required Side? winner,
-    required FeaturedGameClocks clocks,
+    required FeaturedGameClocks? clocks,
   }) = _FeaturedGame;
 
-  Duration clockOf(Side side) => side == Side.white ? clocks.white : clocks.black;
+  Duration? clockOf(Side side) => side == Side.white ? clocks?.white : clocks?.black;
 
   FeaturedPlayer playerOf(Side side) => side == Side.white ? white : black;
+
+  bool get active => clocks != null;
 }
 
 FeaturedGame _featuredGameFromPick(RequiredPick pick) {
@@ -355,11 +356,12 @@ FeaturedGame _featuredGameFromPick(RequiredPick pick) {
     orientation: pick('orientation').asSideOrThrow(),
     fen: pick('fen').asStringOrThrow(),
     lastMove: pick('lastMove').asUciMoveOrNull(),
-    finished: pick('finished').asBoolOrNull(),
     winner: pick('winner').asSideOrNull(),
-    clocks: (
-      white: pick('c', 'white').asDurationFromSecondsOrThrow(),
-      black: pick('c', 'black').asDurationFromSecondsOrThrow(),
+    clocks: pick('c').letOrNull(
+      (pick) => (
+        white: pick('white').asDurationFromSecondsOrThrow(),
+        black: pick('black').asDurationFromSecondsOrThrow(),
+      ),
     ),
   );
 }

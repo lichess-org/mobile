@@ -351,6 +351,12 @@ class GameController extends _$GameController {
     _socketClient.send('moretime', null);
   }
 
+  void berserk() {
+    if (state.valueOrNull?.canBerserk == true && state.valueOrNull?.hasBerserked == false) {
+      _socketClient.send('berserk', null);
+    }
+  }
+
   void abortGame() {
     _socketClient.send('abort', null);
   }
@@ -870,6 +876,23 @@ class GameController extends _$GameController {
             evals: data.evals,
           ),
         );
+
+      case 'berserk':
+        ref.read(soundServiceProvider).play(Sound.berserk);
+
+        final side = pick(event.data).asSideOrNull();
+        final curState = state.requireValue;
+
+        state = AsyncValue.data(
+          curState.copyWith.game(
+            white: curState.game.white.copyWith(
+              berserk: side == Side.white || curState.game.white.berserk == true,
+            ),
+            black: curState.game.black.copyWith(
+              berserk: side == Side.black || curState.game.black.berserk == true,
+            ),
+          ),
+        );
     }
   }
 
@@ -987,6 +1010,16 @@ class GameState with _$GameState {
   bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
   bool get canGoBackward => stepCursor > 0;
+
+  bool get canBerserk =>
+      game.meta.tournament?.berserkable == true &&
+      game.playable &&
+      game.steps.length <= 2 &&
+      game.youAre != null;
+  bool get hasBerserked => game.youAre != null && game.playerOf(game.youAre!).berserk == true;
+
+  // Only if this game is part of a tournament
+  TournamentMeta? get tournament => game.meta.tournament;
 
   bool get canGetNewOpponent =>
       !game.playable &&

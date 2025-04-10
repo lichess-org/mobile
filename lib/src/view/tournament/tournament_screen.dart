@@ -123,14 +123,11 @@ class _Body extends StatelessWidget {
                           ],
                           if (!state.tournament.berserkable) ...[
                             const SizedBox(height: 10),
-                            const Text.rich(
+                            Text.rich(
                               TextSpan(
                                 children: [
-                                  WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
-                                  TextSpan(
-                                    // TODO l10n
-                                    text: ' No Berserk allowed',
-                                  ),
+                                  const WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
+                                  TextSpan(text: ' ${context.l10n.arenaNoBerserkAllowed}'),
                                 ],
                               ),
                             ),
@@ -462,18 +459,9 @@ class _FeaturedGamePlayer extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 5),
-          if (game.finished == true)
-            Text(
-              game.winner == side
-                  ? '1'
-                  : game.winner == side.opposite
-                  ? '0'
-                  : '½',
-              style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
-            )
-          else
+          if (game.active)
             CountdownClockBuilder(
-              timeLeft: game.clockOf(side),
+              timeLeft: game.clockOf(side)!,
               active: clockActive,
               builder:
                   (context, timeLeft) => Text(
@@ -483,6 +471,15 @@ class _FeaturedGamePlayer extends StatelessWidget {
                       fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                   ),
+            )
+          else
+            Text(
+              game.winner == side
+                  ? '1'
+                  : game.winner == side.opposite
+                  ? '0'
+                  : '½',
+              style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
             ),
         ],
       ),

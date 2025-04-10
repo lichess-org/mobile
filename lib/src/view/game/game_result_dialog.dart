@@ -138,6 +138,19 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                     : null,
             child: Text(context.l10n.newOpponent, textAlign: TextAlign.center),
           ),
+        if (gameState.tournament != null)
+          SecondaryButton(
+            semanticsLabel: context.l10n.backToTournament,
+            onPressed: () {
+              // Close the dialog
+              Navigator.of(context).popUntil((route) => route is! PopupRoute);
+              // Close the game screen
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context).pop(); // Pop the screen after frame
+              });
+            },
+            child: Text(context.l10n.backToTournament, textAlign: TextAlign.center),
+          ),
         if (gameState.game.userAnalysable)
           SecondaryButton(
             semanticsLabel: context.l10n.analysis,
