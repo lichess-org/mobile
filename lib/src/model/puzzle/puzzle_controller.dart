@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -14,19 +13,14 @@ import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_controller.freezed.dart';
@@ -39,10 +33,6 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   late Branch _gameTree;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
-
-  // on streak, we pre-load the next puzzle to avoid a delay when the user
-  // completes the current one
-  FutureResult<PuzzleContext?>? _nextPuzzleFuture;
 
   @override
   @protected
@@ -73,7 +63,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
 
   @override
-  PuzzleState build(PuzzleContext initialContext, {PuzzleStreak? initialStreak}) {
+  PuzzleState build(PuzzleContext initialContext, {bool isPuzzleStreak = false}) {
     socketClient = ref.watch(socketPoolProvider).open(PuzzleController.socketUri);
 
     isOnline(ref.read(defaultClientProvider)).then((online) {
@@ -96,7 +86,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       _updateUserRating();
     }
 
-    return _loadNewContext(initialContext, initialStreak);
+    return _loadNewContext(initialContext);
   }
 
   PuzzleRepository _repository(LichessClient client) => PuzzleRepository(client);
@@ -111,7 +101,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
     } catch (_) {}
   }
 
-  PuzzleState _loadNewContext(PuzzleContext context, PuzzleStreak? streak) {
+  PuzzleState _loadNewContext(PuzzleContext context) {
     final root = Root.fromPgnMoves(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Branch;
 
@@ -121,11 +111,6 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
     });
 
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
-
-    // preload next streak puzzle
-    if (streak != null) {
-      _nextPuzzleFuture = _fetchNextStreakPuzzle(streak);
-    }
 
     return PuzzleState(
       puzzle: context.puzzle,
@@ -141,9 +126,6 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       isChangingDifficulty: false,
       shouldBlinkNextArrow: false,
       isEvaluationEnabled: false,
-      streak: streak,
-      nextPuzzleStreakFetchError: false,
-      nextPuzzleStreakFetchIsRetrying: false,
     );
   }
 
@@ -192,7 +174,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       } else {
         state = state.copyWith(feedback: PuzzleFeedback.bad);
         _onFailOrWin(PuzzleResult.lose);
-        if (initialStreak == null) {
+        if (!isPuzzleStreak) {
           await Future<void>.delayed(const Duration(milliseconds: 500));
           _setPath(state.currentPath.penultimate);
         }
@@ -251,8 +233,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   }
 
   void skipMove() {
-    if (state.streak != null && state._nextSolutionMove != null) {
-      state = state.copyWith.streak!(hasSkipped: true);
+    if (isPuzzleStreak && state._nextSolutionMove != null) {
       onUserMove(state._nextSolutionMove!);
     }
   }
@@ -272,67 +253,10 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
     return nextPuzzle;
   }
 
-  void onLoadPuzzle(PuzzleContext nextContext, {PuzzleStreak? nextStreak}) {
+  void onLoadPuzzle(PuzzleContext nextContext) {
     ref.read(evaluationServiceProvider).disposeEngine();
 
-    state = _loadNewContext(nextContext, nextStreak ?? state.streak);
-    _saveCurrentStreakLocally();
-  }
-
-  void _saveCurrentStreakLocally() {
-    if (state.streak != null) {
-      ref.read(streakStorageProvider(initialContext.userId)).saveActiveStreak(state.streak!);
-    }
-  }
-
-  void _sendStreakResult() {
-    ref.read(streakStorageProvider(initialContext.userId)).clearActiveStreak();
-
-    if (initialContext.userId != null) {
-      final streak = state.streak?.index;
-      if (streak != null && streak > 0) {
-        ref.withClient((client) => _repository(client).postStreakRun(streak));
-      }
-    }
-  }
-
-  FutureResult<PuzzleContext?> retryFetchNextStreakPuzzle(PuzzleStreak streak) async {
-    state = state.copyWith(nextPuzzleStreakFetchIsRetrying: true);
-
-    final result = await _fetchNextStreakPuzzle(streak);
-
-    state = state.copyWith(nextPuzzleStreakFetchIsRetrying: false);
-
-    result.match(
-      onSuccess: (nextContext) {
-        if (nextContext != null) {
-          state = state.copyWith(streak: streak.copyWith(index: streak.index + 1));
-        } else {
-          // no more puzzle
-          state = state.copyWith(streak: streak.copyWith(index: streak.index + 1, finished: true));
-        }
-      },
-    );
-
-    return result;
-  }
-
-  FutureResult<PuzzleContext?> _fetchNextStreakPuzzle(PuzzleStreak streak) {
-    return streak.nextId != null
-        ? Result.capture(
-          ref.withClient(
-            (client) => _repository(client)
-                .fetch(streak.nextId!)
-                .then(
-                  (puzzle) => PuzzleContext(
-                    angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                    puzzle: puzzle,
-                    userId: initialContext.userId,
-                  ),
-                ),
-          ),
-        )
-        : Future.value(Result.value(null));
+    state = _loadNewContext(nextContext);
   }
 
   void _goToNextNode({bool isNavigating = false}) {
@@ -356,7 +280,19 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
     final soundService = ref.read(soundServiceProvider);
 
-    if (state.streak == null) {
+    if (isPuzzleStreak) {
+      // one fail and streak is over
+      if (result == PuzzleResult.lose) {
+        soundService.play(Sound.error);
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        _setPath(state.currentPath.penultimate);
+        _mergeSolution();
+        state = state.copyWith(
+          mode: PuzzleMode.view,
+          node: _gameTree.branchAt(state.currentPath).view,
+        );
+      }
+    } else {
       final next = await (await _service).solve(
         userId: initialContext.userId,
         angle: initialContext.angle,
@@ -388,44 +324,6 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
           result == PuzzleResult.win &&
           ref.read(puzzlePreferencesProvider).autoNext) {
         onLoadPuzzle(next);
-      }
-    } else {
-      // one fail and streak is over
-      if (result == PuzzleResult.lose) {
-        soundService.play(Sound.error);
-        await Future<void>.delayed(const Duration(milliseconds: 500));
-        _setPath(state.currentPath.penultimate);
-        _mergeSolution();
-        state = state.copyWith(
-          mode: PuzzleMode.view,
-          node: _gameTree.branchAt(state.currentPath).view,
-          streak: state.streak!.copyWith(finished: true),
-        );
-        _sendStreakResult();
-      } else {
-        if (_nextPuzzleFuture == null) {
-          assert(false, 'next puzzle future cannot be null with streak');
-        } else {
-          final result = await _nextPuzzleFuture!;
-          result.match(
-            onSuccess: (nextContext) async {
-              if (nextContext != null) {
-                await Future<void>.delayed(const Duration(milliseconds: 250));
-                soundService.play(Sound.confirmation);
-                onLoadPuzzle(
-                  nextContext,
-                  nextStreak: state.streak!.copyWith(index: state.streak!.index + 1),
-                );
-              } else {
-                // no more puzzle
-                state = state.copyWith.streak!(finished: true);
-              }
-            },
-            onError: (error, _) {
-              state = state.copyWith(nextPuzzleStreakFetchError: true);
-            },
-          );
-        }
       }
     }
   }
@@ -538,11 +436,6 @@ class PuzzleState with _$PuzzleState implements EvaluationMixinState {
     required bool shouldBlinkNextArrow,
     required bool isEvaluationEnabled,
     PuzzleContext? nextContext,
-    PuzzleStreak? streak,
-    // if the automatic attempt to fetch the next puzzle in the streak fails
-    // we will make the user retry
-    required bool nextPuzzleStreakFetchError,
-    required bool nextPuzzleStreakFetchIsRetrying,
   }) = _PuzzleState;
 
   @override

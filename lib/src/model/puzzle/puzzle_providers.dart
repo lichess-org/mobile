@@ -11,10 +11,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
-import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -32,34 +30,6 @@ Future<PuzzleContext?> nextPuzzle(Ref ref, PuzzleAngle angle) async {
   ref.cacheFor(const Duration(minutes: 1));
 
   return puzzleService.nextPuzzle(userId: session?.user.id, angle: angle);
-}
-
-typedef InitialStreak = ({PuzzleStreak streak, Puzzle puzzle});
-
-/// Fetches the active streak from the local storage if available, otherwise fetches it from the server.
-@riverpod
-Future<InitialStreak> streak(Ref ref) async {
-  final session = ref.watch(authSessionProvider);
-  final streakStorage = ref.watch(streakStorageProvider(session?.user.id));
-  final activeStreak = await streakStorage.loadActiveStreak();
-  if (activeStreak != null) {
-    final puzzle = await ref.read(puzzleProvider(activeStreak.streak[activeStreak.index]).future);
-
-    return (streak: activeStreak, puzzle: puzzle);
-  }
-
-  final rsp = await ref.withClient((client) => PuzzleRepository(client).streak());
-
-  return (
-    streak: PuzzleStreak(
-      streak: rsp.streak,
-      index: 0,
-      hasSkipped: false,
-      finished: false,
-      timestamp: rsp.timestamp,
-    ),
-    puzzle: rsp.puzzle,
-  );
 }
 
 @riverpod

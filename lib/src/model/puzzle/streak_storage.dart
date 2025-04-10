@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 part 'streak_storage.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 StreakStorage streakStorage(Ref ref, UserId? userId) {
   return StreakStorage(ref, userId);
 }
