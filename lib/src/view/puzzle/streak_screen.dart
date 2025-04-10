@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -29,7 +28,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-import 'package:result_extensions/result_extensions.dart';
 
 class StreakScreen extends StatelessWidget {
   const StreakScreen({super.key});
@@ -55,34 +53,33 @@ class _Load extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final streak = ref.watch(streakProvider);
     final session = ref.watch(authSessionProvider);
+    final streak = ref.watch(puzzleStreakControllerProvider);
 
-    return streak.when(
-      data: (data) {
-        return _Body(
-          initialPuzzleContext: PuzzleContext(
-            puzzle: data.puzzle,
-            angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            userId: session?.user.id,
-          ),
-          streak: data.streak,
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-      error: (e, s) {
-        debugPrint('SEVERE: [StreakScreen] could not load streak; $e\n$s');
+    switch (streak) {
+      case AsyncValue(:final error?, :final stackTrace):
+        debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
         return Center(
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
             fen: kEmptyFen,
             orientation: Side.white,
-            errorMessage: e.toString(),
+            errorMessage: error.toString(),
           ),
         );
-      },
-    );
+      case AsyncValue(:final value?):
+        return _Body(
+          initialPuzzleContext: PuzzleContext(
+            puzzle: value.puzzle,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            userId: session?.user.id,
+          ),
+          streak: value.streak,
+        );
+      case _:
+        return const Center(child: CircularProgressIndicator.adaptive());
+    }
   }
 }
 
@@ -94,22 +91,14 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
+    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, isPuzzleStreak: true);
     final puzzleState = ref.watch(ctrlProvider);
 
-    ref.listen<bool>(ctrlProvider.select((s) => s.nextPuzzleStreakFetchError), (
-      _,
-      shouldShowDialog,
-    ) {
-      if (shouldShowDialog) {
-        showAdaptiveDialog<void>(
-          context: context,
-          builder:
-              (context) => _RetryFetchPuzzleDialog(
-                initialPuzzleContext: initialPuzzleContext,
-                streak: streak,
-              ),
-        );
+    ref.listen(ctrlProvider, (previous, next) {
+      if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
+        ref.read(puzzleStreakControllerProvider.notifier).gameOver();
+      } else if (previous?.result != PuzzleResult.win && next.result == PuzzleResult.win) {
+        ref.read(puzzleStreakControllerProvider.notifier).next();
       }
     });
 
@@ -168,7 +157,7 @@ class _Body extends ConsumerWidget {
                               ),
                               const SizedBox(width: 8.0),
                               Text(
-                                puzzleState.streak!.index.toString(),
+                                streak.index.toString(),
                                 style: TextStyle(
                                   fontSize: 30.0,
                                   fontWeight: FontWeight.bold,
@@ -192,7 +181,7 @@ class _Body extends ConsumerWidget {
     );
 
     return PopScope(
-      canPop: puzzleState.streak!.index == 0 || puzzleState.streak!.finished,
+      canPop: streak.index == 0 || streak.finished,
       onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) {
           return;
@@ -225,29 +214,32 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
+    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, isPuzzleStreak: true);
     final puzzleState = ref.watch(ctrlProvider);
 
     return PlatformBottomBar(
       children: [
-        if (!puzzleState.streak!.finished)
+        if (!streak.finished)
           BottomBarButton(
             icon: Icons.info_outline,
             label: context.l10n.aboutX('Streak'),
             showLabel: true,
             onTap: () => _streakInfoDialogBuilder(context),
           ),
-        if (!puzzleState.streak!.finished)
+        if (!streak.finished)
           BottomBarButton(
             icon: Icons.skip_next,
             label: context.l10n.skipThisMove,
             showLabel: true,
             onTap:
-                puzzleState.streak!.hasSkipped || puzzleState.mode == PuzzleMode.view
+                streak.hasSkipped || puzzleState.mode == PuzzleMode.view
                     ? null
-                    : () => ref.read(ctrlProvider.notifier).skipMove(),
+                    : () {
+                      ref.read(ctrlProvider.notifier).skipMove();
+                      ref.read(puzzleStreakControllerProvider.notifier).skipMove();
+                    },
           ),
-        if (puzzleState.streak!.finished)
+        if (streak.finished)
           BottomBarButton(
             onTap: () {
               launchShareDialog(
@@ -261,7 +253,7 @@ class _BottomBar extends ConsumerWidget {
                     ? CupertinoIcons.share
                     : Icons.share,
           ),
-        if (puzzleState.streak!.finished)
+        if (streak.finished)
           BottomBarButton(
             onTap: () {
               Navigator.of(context, rootNavigator: true).push(
@@ -282,24 +274,24 @@ class _BottomBar extends ConsumerWidget {
             label: context.l10n.analysis,
             icon: Icons.biotech,
           ),
-        if (puzzleState.streak!.finished)
+        if (streak.finished)
           BottomBarButton(
             onTap:
                 puzzleState.canGoBack ? () => ref.read(ctrlProvider.notifier).userPrevious() : null,
             label: 'Previous',
             icon: CupertinoIcons.chevron_back,
           ),
-        if (puzzleState.streak!.finished)
+        if (streak.finished)
           BottomBarButton(
             onTap: puzzleState.canGoNext ? () => ref.read(ctrlProvider.notifier).userNext() : null,
             label: context.l10n.next,
             icon: CupertinoIcons.chevron_forward,
           ),
-        if (puzzleState.streak!.finished)
+        if (streak.finished)
           BottomBarButton(
             onTap:
-                ref.read(streakProvider).isLoading == false
-                    ? () => ref.invalidate(streakProvider)
+                ref.read(puzzleStreakControllerProvider).isLoading == false
+                    ? () => ref.invalidate(puzzleStreakControllerProvider)
                     : null,
             highlighted: true,
             label: context.l10n.puzzleNewStreak,
@@ -323,62 +315,6 @@ class _BottomBar extends ConsumerWidget {
               ),
             ],
           ),
-    );
-  }
-}
-
-class _RetryFetchPuzzleDialog extends ConsumerWidget {
-  const _RetryFetchPuzzleDialog({required this.initialPuzzleContext, required this.streak});
-
-  final PuzzleContext initialPuzzleContext;
-  final PuzzleStreak streak;
-
-  static const title = 'Could not fetch the puzzle';
-  static const content = 'Please check your internet connection and try again.';
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
-    final state = ref.watch(ctrlProvider);
-
-    Future<void> retryStreakNext() async {
-      final result = await ref
-          .read(ctrlProvider.notifier)
-          .retryFetchNextStreakPuzzle(state.streak!);
-      result.match(
-        onSuccess: (data) {
-          if (context.mounted) {
-            Navigator.of(context).pop();
-          }
-          if (data != null) {
-            ref
-                .read(ctrlProvider.notifier)
-                .onLoadPuzzle(
-                  data,
-                  nextStreak: state.streak!.copyWith(index: state.streak!.index + 1),
-                );
-          }
-        },
-      );
-    }
-
-    final canRetry = state.nextPuzzleStreakFetchError && !state.nextPuzzleStreakFetchIsRetrying;
-
-    return PlatformAlertDialog(
-      title: const Text(title),
-      content: const Text(content),
-      actions: [
-        PlatformDialogAction(
-          onPressed: () => Navigator.of(context).pop(),
-          cupertinoIsDestructiveAction: true,
-          child: Text(context.l10n.cancel),
-        ),
-        PlatformDialogAction(
-          onPressed: canRetry ? retryStreakNext : null,
-          cupertinoIsDefaultAction: true,
-          child: Text(context.l10n.retry),
-        ),
-      ],
     );
   }
 }

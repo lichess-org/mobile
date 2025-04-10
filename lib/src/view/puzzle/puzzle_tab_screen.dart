@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -349,12 +350,14 @@ class _PuzzleMenuListTile extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
+    this.badgeLabel,
     this.onTap,
   });
 
   final IconData icon;
   final String title;
   final String subtitle;
+  final String? badgeLabel;
   final VoidCallback? onTap;
 
   @override
@@ -364,10 +367,20 @@ class _PuzzleMenuListTile extends StatelessWidget {
           Theme.of(context).platform == TargetPlatform.iOS
               ? const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0)
               : null,
-      leading: Icon(
-        icon,
-        size: Styles.mainListTileIconSize,
-        color: ColorScheme.of(context).primary,
+      leading: Badge(
+        backgroundColor: ColorScheme.of(context).secondary,
+        textStyle: TextStyle(
+          color: ColorScheme.of(context).onSecondary,
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
+        ),
+        isLabelVisible: badgeLabel != null,
+        label: (badgeLabel != null) ? Text(badgeLabel!) : null,
+        child: Icon(
+          icon,
+          size: Styles.mainListTileIconSize,
+          color: ColorScheme.of(context).primary,
+        ),
       ),
       title: Text(title, style: Styles.mainListTileTitle),
       subtitle: Text(subtitle, maxLines: 3),
@@ -404,6 +417,10 @@ class _PuzzleMenu extends ConsumerWidget {
           child: _PuzzleMenuListTile(
             icon: LichessIcons.streak,
             title: 'Puzzle Streak',
+            badgeLabel: switch (ref.watch(savedStreakScoreProvider)) {
+              AsyncData(:final value?) => value.toString(),
+              _ => null,
+            },
             subtitle:
                 context.l10n.puzzleStreakDescription.characters
                     .takeWhile((c) => c != '.')
