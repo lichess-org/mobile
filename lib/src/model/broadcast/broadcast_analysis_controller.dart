@@ -79,7 +79,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     _socketClient = ref
         .watch(socketPoolProvider)
         .open(BroadcastAnalysisController.broadcastSocketUri(roundId));
-
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
     await _socketClient.firstConnection;
@@ -148,17 +147,19 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       clocks: _getClocks(currentPath),
     );
 
-    // We need to define the state value in the build method because `sendEvalGetEvent` and
-    // `debouncedStartEngineEval` require the state to have a value.
+    // We need to define the state value in the build method because `requestEval` requires the
+    // state to have a value.
     state = AsyncData(broadcastState);
 
     initEngineEvaluation();
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
-      requestEval();
+      socketClient.firstConnection.timeout(const Duration(seconds: 3)).then((_) {
+        requestEval();
+      }, onError: (_) {});
     }
 
-    return broadcastState;
+    return state.requireValue;
   }
 
   Future<void> _reloadPgn() async {

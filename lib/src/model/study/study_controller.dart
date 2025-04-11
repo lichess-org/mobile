@@ -66,8 +66,8 @@ class StudyController extends _$StudyController
 
   @override
   Future<StudyState> build(StudyId id) async {
-    final socketPool = ref.watch(socketPoolProvider);
-    _socketClient = socketPool.open(Uri(path: '/study/$id/socket/v6'));
+    _socketClient = ref.watch(socketPoolProvider).open(Uri(path: '/study/$id/socket/v6'));
+    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
@@ -76,14 +76,11 @@ class StudyController extends _$StudyController
       disposeEngineEvaluation();
     });
 
-    final chapter = await _fetchChapter(id);
-
-    _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
+    await _fetchChapter(id);
 
     initEngineEvaluation();
 
-    return chapter;
+    return state.requireValue;
   }
 
   @override
@@ -115,7 +112,7 @@ class StudyController extends _$StudyController
     _ensureItsOurTurnIfGamebook();
   }
 
-  Future<StudyState> _fetchChapter(StudyId id, {StudyChapterId? chapterId}) async {
+  Future<void> _fetchChapter(StudyId id, {StudyChapterId? chapterId}) async {
     final (study, pgn) = await ref
         .read(studyRepositoryProvider)
         .getStudy(id: id, chapterId: chapterId);
@@ -132,7 +129,7 @@ class StudyController extends _$StudyController
     try {
       _root = Root.fromPgnGame(game);
     } on PositionSetupException {
-      return StudyState(
+      final studyState = StudyState(
         variant: variant,
         study: study,
         currentPath: UciPath.empty,
@@ -146,6 +143,9 @@ class StudyController extends _$StudyController
         gamebookActive: false,
         pgn: pgn,
       );
+
+      state = AsyncData(studyState);
+      return;
     }
 
     const currentPath = UciPath.empty;
@@ -167,17 +167,15 @@ class StudyController extends _$StudyController
       pgn: pgn,
     );
 
-    // We need to define the state value in the build method because `requestEval` require the state
-    // to have a value.
+    // We need to define the state value in the build method because `requestEval` requires the
+    // state to have a value.
     state = AsyncData(studyState);
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
-      socketClient.firstConnection.then((_) {
+      socketClient.firstConnection.timeout(const Duration(seconds: 3)).then((_) {
         requestEval();
-      });
+      }, onError: (_) {});
     }
-
-    return studyState;
   }
 
   void toggleLike() {
