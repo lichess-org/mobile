@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Bütün oyunlar</string>
-  <string name="areYouSure" comment="This is shown in confirmation dialogs.">əminmisiniz?</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Əminsinizmi?</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">geri qaytarmaq istəyini ləvğ edin</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">təmizləyin</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">yadda saxlanılmış gedişi təmizləyin</string>
