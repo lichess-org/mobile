@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:dartchess/dartchess.dart';
+import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,18 +13,31 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:multistockfish/multistockfish.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 part 'evaluation_service.freezed.dart';
 part 'evaluation_service.g.dart';
 
-const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 300);
+const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 
 final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
 final defaultEngineCores = min((Platform.numberOfProcessors / 2).ceil(), maxEngineCores);
 
 const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
+
+@Riverpod(keepAlive: true)
+EvaluationService evaluationService(Ref ref) {
+  final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
+  final service = EvaluationService(maxMemory: maxMemory);
+
+  ref.onDispose(() {
+    service._dispose();
+  });
+
+  return service;
+}
 
 /// A service to evaluate chess positions using an engine.
 class EvaluationService {
@@ -47,24 +60,23 @@ class EvaluationService {
   final ValueNotifier<EngineEvaluationState> _state = ValueNotifier(_defaultState);
   ValueListenable<EngineEvaluationState> get state => _state;
 
+  Engine _engineFactory() {
+    // TODO: choose the flavor based on variant
+    return StockfishEngine(StockfishFlavor.chess);
+  }
+
   /// Initialize the engine with the given context and options.
   ///
   /// If the engine is already initialized, it is disposed first.
   ///
-  /// An optional [engineFactory] can be provided, it defaults to Stockfish.
-  ///
   /// If [options] is not provided, the default options are used.
   /// This method must be called before calling [start]. It is the caller's
   /// responsibility to close the engine.
-  Future<void> _initEngine(
-    EvaluationContext context, {
-    Engine Function() engineFactory = StockfishEngine.new,
-    EvaluationOptions? initOptions,
-  }) async {
+  Future<void> _initEngine(EvaluationContext context, {EvaluationOptions? initOptions}) async {
     await disposeEngine();
     _context = context;
     if (initOptions != null) options = initOptions;
-    _engine = engineFactory.call();
+    _engine = _engineFactory();
     _engine!.state.addListener(() {
       debugPrint('Engine state: ${_engine?.state.value}');
       if (_engine?.state.value == EngineState.initial ||
@@ -84,14 +96,13 @@ class EvaluationService {
   /// Ensure the engine is initialized with the given context and options.
   Future<void> ensureEngineInitialized(
     EvaluationContext context, {
-    Engine Function() engineFactory = StockfishEngine.new,
     EvaluationOptions? initOptions,
   }) async {
     if (_engine == null ||
         _engine?.isDisposed == true ||
         _context != context ||
         options != initOptions) {
-      await _initEngine(context, engineFactory: engineFactory, initOptions: initOptions);
+      await _initEngine(context, initOptions: initOptions);
     }
   }
 
@@ -100,7 +111,16 @@ class EvaluationService {
   /// Returns a future that completes once the engine is disposed.
   /// It is safe to call this method multiple times.
   Future<void> disposeEngine() {
-    return _engine?.dispose() ?? Future.value();
+    return (_engine?.dispose() ?? Future.value()).then((_) {
+      _engine = null;
+      _state.value = _defaultState;
+    });
+  }
+
+  /// Dispose the service.
+  void _dispose() {
+    disposeEngine();
+    _state.dispose();
   }
 
   /// Start the engine evaluation with the given [path] and [steps].
@@ -130,6 +150,9 @@ class EvaluationService {
     if (!engineSupportedVariants.contains(context.variant)) {
       return null;
     }
+
+    // reset eval
+    _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: null);
 
     final work = Work(
       variant: context.variant,
@@ -170,21 +193,6 @@ class EvaluationService {
   void stop() {
     _engine?.stop();
   }
-
-  void resetEval() {
-    _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: null);
-  }
-}
-
-@Riverpod(keepAlive: true)
-EvaluationService evaluationService(Ref ref) {
-  final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
-
-  final service = EvaluationService(maxMemory: maxMemory);
-  ref.onDispose(() {
-    service.disposeEngine();
-  });
-  return service;
 }
 
 typedef EngineEvaluationState = ({String engineName, EngineState state, LocalEval? eval});
@@ -194,7 +202,7 @@ typedef EngineEvaluationState = ({String engineName, EngineState state, LocalEva
 class EngineEvaluation extends _$EngineEvaluation {
   @override
   EngineEvaluationState build() {
-    final listenable = ref.read(evaluationServiceProvider).state;
+    final listenable = ref.watch(evaluationServiceProvider).state;
 
     listenable.addListener(_listener);
 

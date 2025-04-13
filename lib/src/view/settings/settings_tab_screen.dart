@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/theme_settings_screen.dart';
@@ -30,6 +31,7 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsTabScreen extends ConsumerWidget {
@@ -225,7 +227,7 @@ class _Body extends ConsumerWidget {
             },
           ),
           PlatformListTile(
-            leading: const Icon(LichessIcons.chess_board),
+            leading: const Icon(Symbols.chess_pawn),
             title: Text(context.l10n.preferencesGameBehavior, overflow: TextOverflow.ellipsis),
             trailing:
                 Theme.of(context).platform == TargetPlatform.iOS
@@ -233,6 +235,17 @@ class _Body extends ConsumerWidget {
                     : null,
             onTap: () {
               Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
+            },
+          ),
+          PlatformListTile(
+            leading: const Icon(Icons.memory_outlined),
+            title: const Text('Engine'),
+            trailing:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+            onTap: () {
+              Navigator.of(context).push(EngineSettingsScreen.buildRoute(context));
             },
           ),
           SettingsListTile(

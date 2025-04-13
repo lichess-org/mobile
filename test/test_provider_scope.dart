@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -128,13 +129,15 @@ Future<Widget> makeTestProviderScope(
 
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
-  // disable piece animation to simplify tests
-  final defaultBoardPref = {
-    'preferences.board': jsonEncode(BoardPrefs.defaults.copyWith(pieceAnimation: false).toJson()),
+  final defaultTestPrefs = {
+    // disable piece animation to simplify tests
+    PrefCategory.board.storageKey: jsonEncode(
+      BoardPrefs.defaults.copyWith(pieceAnimation: false).toJson(),
+    ),
   };
 
   await binding.setInitialSharedPreferencesValues(
-    defaultPreferences != null ? {...defaultBoardPref, ...defaultPreferences} : defaultBoardPref,
+    defaultPreferences != null ? {...defaultTestPrefs, ...defaultPreferences} : defaultTestPrefs,
   );
 
   FlutterSecureStorage.setMockInitialValues({
@@ -223,6 +226,7 @@ Future<Widget> makeTestProviderScope(
           userSession: userSession,
           engineMaxMemoryInMb: 256,
           appDocumentsDirectory: null,
+          appSupportDirectory: null,
         );
       }),
       ...overrides ?? [],

@@ -58,7 +58,9 @@ dependencies:
   linkify: ^5.0.0
   logging: ^1.1.0
   material_color_utilities: ^0.11.1
+  material_symbols_icons: ^4.2811.0
   meta: ^1.8.0
+  multistockfish: ^0.1.0
   package_info_plus: ^8.0.0
   path: ^1.8.2
   path_provider: ^2.1.5
@@ -71,10 +73,6 @@ dependencies:
   signal_strength_indicator: ^0.4.1
   sound_effect: ^0.1.0
   sqflite: ^2.2.5
-  stockfish:
-    git:
-      url: https://github.com/lichess-org/dart-stockfish.git
-      ref: 47cbf16ce5b600e4a15d7f7fe36b089bd5d30b29
   stream_transform: ^2.1.0
   url_launcher: ^6.1.9
   visibility_detector: ^0.4.0

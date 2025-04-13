@@ -3,22 +3,38 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/src/foundation/change_notifier.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
-import 'package:stockfish/stockfish.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 class FakeStockfishFactory extends StockfishFactory {
   const FakeStockfishFactory();
 
   @override
-  Stockfish call() => FakeStockfish();
+  Stockfish call({
+    StockfishFlavor flavor = StockfishFlavor.chess,
+    String? bigNetPath,
+    String? smallNetPath,
+  }) => FakeStockfish(flavor);
 }
 
 /// A fake implementation of [Stockfish].
 class FakeStockfish implements Stockfish {
-  FakeStockfish() {
+  FakeStockfish(this.flavor) {
     scheduleMicrotask(() {
       _state.value = StockfishState.ready;
     });
   }
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => throw UnimplementedError();
+
+  @override
+  String? get smallNetPath => throw UnimplementedError();
+
+  @override
+  final StockfishFlavor flavor;
 
   final _state = ValueNotifier<StockfishState>(StockfishState.starting);
   final _stdoutController = StreamController<String>();
@@ -89,7 +105,4 @@ class FakeStockfish implements Stockfish {
 
   @override
   Stream<String> get stdout => _stdoutController.stream;
-
-  @override
-  Completer<Stockfish>? get completer => throw UnimplementedError();
 }

@@ -25,79 +25,88 @@ class StockfishSettingsWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
-    return ListSection(
-      header: const SettingsSectionTitle('Stockfish 16'),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (onToggleLocalEvaluation != null)
-          SwitchSettingTile(
-            title: Text(context.l10n.toggleLocalEvaluation),
-            value: prefs.isEnabled,
-            onChanged: (_) {
-              onToggleLocalEvaluation!.call();
-            },
+          ListSection(
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.toggleLocalEvaluation),
+                value: prefs.isEnabled,
+                onChanged: (_) {
+                  onToggleLocalEvaluation!.call();
+                },
+              ),
+            ],
           ),
-        PlatformListTile(
-          title: Text.rich(
-            TextSpan(
-              text: 'Search time: ',
-              style: const TextStyle(fontWeight: FontWeight.normal),
-              children: [
+        ListSection(
+          header: const SettingsSectionTitle('Stockfish'),
+          children: [
+            PlatformListTile(
+              title: Text.rich(
                 TextSpan(
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  text:
-                      prefs.engineSearchTime.inSeconds == 3600
-                          ? '∞'
-                          : '${prefs.engineSearchTime.inSeconds}s',
+                  text: 'Search time: ',
+                  style: const TextStyle(fontWeight: FontWeight.normal),
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      text:
+                          prefs.engineSearchTime.inSeconds == 3600
+                              ? '∞'
+                              : '${prefs.engineSearchTime.inSeconds}s',
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          subtitle: NonLinearSlider(
-            labelBuilder: (value) => value == 3600 ? '∞' : '${value}s',
-            value: prefs.engineSearchTime.inSeconds,
-            values: kAvailableEngineSearchTimes.map((e) => e.inSeconds).toList(),
-            onChangeEnd: (value) => onSetEngineSearchTime(Duration(seconds: value.toInt())),
-          ),
-        ),
-        PlatformListTile(
-          title: Text.rich(
-            TextSpan(
-              text: '${context.l10n.multipleLines}: ',
-              style: const TextStyle(fontWeight: FontWeight.normal),
-              children: [
-                TextSpan(
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  text: prefs.numEvalLines.toString(),
-                ),
-              ],
-            ),
-          ),
-          subtitle: NonLinearSlider(
-            value: prefs.numEvalLines,
-            values: const [0, 1, 2, 3],
-            onChangeEnd: (value) => onSetNumEvalLines(value.toInt()),
-          ),
-        ),
-        if (maxEngineCores > 1)
-          PlatformListTile(
-            title: Text.rich(
-              TextSpan(
-                text: '${context.l10n.cpus}: ',
-                style: const TextStyle(fontWeight: FontWeight.normal),
-                children: [
-                  TextSpan(
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    text: prefs.numEngineCores.toString(),
-                  ),
-                ],
+              ),
+              subtitle: NonLinearSlider(
+                labelBuilder: (value) => value == 3600 ? '∞' : '${value}s',
+                value: prefs.engineSearchTime.inSeconds,
+                values: kAvailableEngineSearchTimes.map((e) => e.inSeconds).toList(),
+                onChangeEnd: (value) => onSetEngineSearchTime(Duration(seconds: value.toInt())),
               ),
             ),
-            subtitle: NonLinearSlider(
-              value: prefs.numEngineCores,
-              values: List.generate(maxEngineCores, (index) => index + 1),
-              onChangeEnd: (value) => onSetEngineCores(value.toInt()),
+            PlatformListTile(
+              title: Text.rich(
+                TextSpan(
+                  text: '${context.l10n.multipleLines}: ',
+                  style: const TextStyle(fontWeight: FontWeight.normal),
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      text: prefs.numEvalLines.toString(),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: prefs.numEvalLines,
+                values: const [0, 1, 2, 3],
+                onChangeEnd: (value) => onSetNumEvalLines(value.toInt()),
+              ),
             ),
-          ),
+            if (maxEngineCores > 1)
+              PlatformListTile(
+                title: Text.rich(
+                  TextSpan(
+                    text: '${context.l10n.cpus}: ',
+                    style: const TextStyle(fontWeight: FontWeight.normal),
+                    children: [
+                      TextSpan(
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                        text: prefs.numEngineCores.toString(),
+                      ),
+                    ],
+                  ),
+                ),
+                subtitle: NonLinearSlider(
+                  value: prefs.numEngineCores,
+                  values: List.generate(maxEngineCores, (index) => index + 1),
+                  onChangeEnd: (value) => onSetEngineCores(value.toInt()),
+                ),
+              ),
+          ],
+        ),
       ],
     );
   }

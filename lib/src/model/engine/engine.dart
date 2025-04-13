@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
-import 'package:stockfish/stockfish.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 enum EngineState { initial, loading, idle, computing, error, disposed }
 
@@ -44,8 +44,12 @@ abstract class Engine {
   Future<void> dispose();
 }
 
+/// A concrete implementation of [Engine] that uses Stockfish as the underlying engine.
 class StockfishEngine implements Engine {
-  StockfishEngine() : _protocol = UCIProtocol();
+  StockfishEngine(this.flavor) : _protocol = UCIProtocol();
+
+  final StockfishFlavor flavor;
+  final UCIProtocol _protocol;
 
   Stockfish? _stockfish;
   String _name = 'Stockfish';
@@ -55,7 +59,6 @@ class StockfishEngine implements Engine {
 
   final _state = ValueNotifier(EngineState.initial);
 
-  final UCIProtocol _protocol;
   final _log = Logger('StockfishEngine');
 
   /// A completer that completes once the underlying engine has exited.
@@ -84,7 +87,7 @@ class StockfishEngine implements Engine {
 
     if (_stockfish == null) {
       try {
-        final stockfish = LichessBinding.instance.stockfishFactory();
+        final stockfish = LichessBinding.instance.stockfishFactory(flavor: flavor);
         _stockfish = stockfish;
 
         _state.value = EngineState.loading;
@@ -174,5 +177,5 @@ class StockfishEngine implements Engine {
 class StockfishFactory {
   const StockfishFactory();
 
-  Stockfish call() => Stockfish();
+  Stockfish call({StockfishFlavor flavor = StockfishFlavor.chess}) => Stockfish(flavor: flavor);
 }
