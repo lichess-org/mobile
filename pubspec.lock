@@ -1097,9 +1097,10 @@ packages:
   multistockfish:
     dependency: "direct main"
     description:
-      path: "../dart-multistockfish/pkgs/multistockfish"
-      relative: true
-    source: path
+      name: multistockfish
+      sha256: ecf8de9febe2cbf637b379a94d7a06cad4673b50df68bf820a5f4b8b91e657e7
+      url: "https://pub.dev"
+    source: hosted
     version: "0.1.0"
   multistockfish_chess:
     dependency: transitive

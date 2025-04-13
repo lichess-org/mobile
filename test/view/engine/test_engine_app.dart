@@ -61,11 +61,7 @@ Future<void> makeEngineTestApp(
     defaultPreferences: {
       PrefCategory.engineEvaluation.storageKey: jsonEncode(
         EngineEvaluationPrefState.defaults
-            .copyWith(
-              numEvalLines: numEvalLines,
-              isEnabled: isEngineEnabled,
-              evaluationFunction: EvaluationFunctionPref.hce,
-            )
+            .copyWith(numEvalLines: numEvalLines, isEnabled: isEngineEnabled)
             .toJson(),
       ),
       PrefCategory.analysis.storageKey: jsonEncode(

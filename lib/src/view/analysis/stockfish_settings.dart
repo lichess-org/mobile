@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -46,55 +45,6 @@ class _StockfishSettingsWidgetState extends ConsumerState<StockfishSettingsWidge
               ),
             ],
           ),
-        ListSection(
-          footer: const Text.rich(
-            TextSpan(
-              text: 'Stockfish NNUE',
-              style: TextStyle(fontWeight: FontWeight.bold),
-              children: [
-                TextSpan(
-                  text: ' is the modern Stockfish engine using neural network evaluation.',
-                  style: TextStyle(fontWeight: FontWeight.normal),
-                ),
-                TextSpan(text: ' Stockfish HCE', style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(
-                  text: ' is the traditional Stockfish engine using handcrafted evaluation. ',
-                  style: TextStyle(fontWeight: FontWeight.normal),
-                ),
-                TextSpan(
-                  text:
-                      '\nThe NNUE engine is better at evaluating positions but requires to download a 79MB neural network.',
-                  style: TextStyle(fontWeight: FontWeight.normal),
-                ),
-              ],
-            ),
-          ),
-          children: [
-            SettingsListTile(
-              settingsLabel: const Text('Engine'),
-              settingsValue:
-                  prefs.evaluationFunction == EvaluationFunctionPref.hce
-                      ? 'Stockfish HCE'
-                      : 'Stockfish NNUE (79MB)',
-              onTap: () {
-                showChoicePicker(
-                  context,
-                  choices: EvaluationFunctionPref.values,
-                  selectedItem: prefs.evaluationFunction,
-                  labelBuilder:
-                      (t) => Text(
-                        t == EvaluationFunctionPref.hce ? 'Stockfish HCE' : 'Stockfish NNUE (79MB)',
-                      ),
-                  onSelectedItemChanged: (EvaluationFunctionPref? value) {
-                    ref
-                        .read(engineEvaluationPreferencesProvider.notifier)
-                        .setEvaluationFunction(value ?? EvaluationFunctionPref.nnue);
-                  },
-                );
-              },
-            ),
-          ],
-        ),
         ListSection(
           header: const SettingsSectionTitle('Stockfish'),
           children: [

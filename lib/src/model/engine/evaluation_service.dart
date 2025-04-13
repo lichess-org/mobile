@@ -2,22 +2,17 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:http/http.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:multistockfish/multistockfish.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -35,7 +30,7 @@ const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fro
 @Riverpod(keepAlive: true)
 EvaluationService evaluationService(Ref ref) {
   final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
-  final service = EvaluationService(ref, maxMemory: maxMemory);
+  final service = EvaluationService(maxMemory: maxMemory);
 
   ref.onDispose(() {
     service._dispose();
@@ -46,9 +41,8 @@ EvaluationService evaluationService(Ref ref) {
 
 /// A service to evaluate chess positions using an engine.
 class EvaluationService {
-  EvaluationService(Ref ref, {required this.maxMemory}) : _ref = ref;
+  EvaluationService({required this.maxMemory});
 
-  final Ref _ref;
   final int maxMemory;
 
   Engine? _engine;
@@ -56,7 +50,6 @@ class EvaluationService {
   EvaluationContext? _context;
 
   EvaluationOptions options = EvaluationOptions(
-    evaluationFunction: EvaluationFunctionPref.hce,
     multiPv: 1,
     cores: defaultEngineCores,
     searchTime: const Duration(seconds: 10),
@@ -67,23 +60,9 @@ class EvaluationService {
   final ValueNotifier<EngineEvaluationState> _state = ValueNotifier(_defaultState);
   ValueListenable<EngineEvaluationState> get state => _state;
 
-  Future<Engine> _engineFactory(EvaluationFunctionPref pref) async {
-    switch (pref) {
-      case EvaluationFunctionPref.nnue:
-        try {
-          final nnueFiles = await _ref.read(stockfishNNUEFilesProvider.future);
-          return StockfishEngine(
-            StockfishFlavor.nnue,
-            bigNetPath: nnueFiles.bigNetPath,
-            smallNetPath: nnueFiles.smallNetPath,
-          );
-        } catch (e, st) {
-          debugPrint('Failed to load NNUE files: $e\n$st');
-          return StockfishEngine(StockfishFlavor.hce);
-        }
-      case EvaluationFunctionPref.hce:
-        return StockfishEngine(StockfishFlavor.hce);
-    }
+  Engine _engineFactory() {
+    // TODO: choose the flavor based on variant
+    return StockfishEngine(StockfishFlavor.chess);
   }
 
   /// Initialize the engine with the given context and options.
@@ -97,7 +76,7 @@ class EvaluationService {
     await disposeEngine();
     _context = context;
     if (initOptions != null) options = initOptions;
-    _engine = await _engineFactory(options.evaluationFunction);
+    _engine = _engineFactory();
     _engine!.state.addListener(() {
       debugPrint('Engine state: ${_engine?.state.value}');
       if (_engine?.state.value == EngineState.initial ||
@@ -251,7 +230,6 @@ class EvaluationContext with _$EvaluationContext {
 @freezed
 class EvaluationOptions with _$EvaluationOptions {
   const factory EvaluationOptions({
-    required EvaluationFunctionPref evaluationFunction,
     required int multiPv,
     required int cores,
     required Duration searchTime,
@@ -303,56 +281,4 @@ IList<MoveWithWinningChances>? pickBestMoves({
     LocalEval() => localBestMoves ?? savedEval.bestMoves,
     null => localBestMoves,
   };
-}
-
-typedef NNUEFiles = ({String bigNetPath, String smallNetPath});
-
-/// Fetches and saves locally the Stockfish NNUE files from the server.
-@riverpod
-Future<NNUEFiles> stockfishNNUEFiles(Ref ref) async {
-  final link = ref.keepAlive();
-
-  final appSupportDirectory = ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
-
-  if (appSupportDirectory == null) {
-    throw Exception('App support directory is null.');
-  }
-
-  final bigNetFile = File('${appSupportDirectory.path}/${Stockfish.defaultBigNetFile}');
-  final smallNetFile = File('${appSupportDirectory.path}/${Stockfish.defaultSmallNetFile}');
-
-  if (await bigNetFile.exists() && await smallNetFile.exists()) {
-    return (bigNetPath: bigNetFile.path, smallNetPath: smallNetFile.path);
-  }
-
-  try {
-    // delete any existing nnue files before downloading
-    await for (final entity in appSupportDirectory.list(followLinks: false)) {
-      if (entity is File && entity.path.endsWith('.nnue')) {
-        debugPrint('Deleting existing nnue ${entity.path}');
-        await entity.delete();
-      }
-    }
-
-    final connectivityResult = await ref.read(connectivityPluginProvider).checkConnectivity();
-    final downloadAllowed = connectivityResult.contains(ConnectivityResult.wifi);
-    if (downloadAllowed == false) {
-      link.close();
-      throw Exception('Cannot download in background on mobile data.');
-    }
-
-    final client = ref.read(defaultClientProvider);
-
-    await Future.wait([
-      downloadFile(client, StockfishEngine.bigNetUrl, bigNetFile),
-      downloadFile(client, StockfishEngine.smallNetUrl, smallNetFile),
-    ]);
-    return (bigNetPath: bigNetFile.path, smallNetPath: smallNetFile.path);
-  } on SocketException catch (_) {
-    link.close();
-    rethrow;
-  } on ClientException catch (_) {
-    link.close();
-    rethrow;
-  }
 }

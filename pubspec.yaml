@@ -71,18 +71,13 @@ dependencies:
   signal_strength_indicator: ^0.4.1
   sound_effect: ^0.1.0
   sqflite: ^2.2.5
-  multistockfish:
-    path: ../dart-multistockfish/pkgs/multistockfish
-  # stockfish:
-  #   git:
-  #     url: https://github.com/lichess-org/dart-stockfish.git
-  #     ref: 47cbf16ce5b600e4a15d7f7fe36b089bd5d30b29
   stream_transform: ^2.1.0
   url_launcher: ^6.1.9
   visibility_detector: ^0.4.0
   wakelock_plus: ^1.1.1
   web_socket_channel: ^3.0.0
   material_symbols_icons: ^4.2811.0
+  multistockfish: ^0.1.0
 
 dev_dependencies:
   build_runner: ^2.3.2

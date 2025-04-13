@@ -15,7 +15,7 @@ void main() {
 
   group('Engine', () {
     test('Test fake engine', () async {
-      final stockfishEngine = StockfishEngine(StockfishFlavor.hce);
+      final stockfishEngine = StockfishEngine(StockfishFlavor.chess);
 
       final work = Work(
         variant: Variant.standard,
