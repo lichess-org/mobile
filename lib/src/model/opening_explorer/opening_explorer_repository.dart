@@ -19,10 +19,11 @@ class OpeningExplorer extends _$OpeningExplorer {
 
   @override
   Future<({OpeningExplorerEntry entry, bool isIndexing})?> build({required String fen}) async {
-    await ref.debounce(const Duration(milliseconds: 300));
     ref.onDispose(() {
       _openingExplorerSubscription?.cancel();
     });
+
+    await ref.debounce(const Duration(milliseconds: 300));
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
     final client = ref.read(defaultClientProvider);

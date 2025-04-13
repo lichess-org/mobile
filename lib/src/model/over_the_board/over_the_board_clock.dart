@@ -13,10 +13,14 @@ part 'over_the_board_clock.g.dart';
 class OverTheBoardClock extends _$OverTheBoardClock {
   final Stopwatch _stopwatch = Stopwatch();
 
-  late Timer _updateTimer;
+  Timer? _updateTimer;
 
   @override
   OverTheBoardClockState build() {
+    ref.onDispose(() {
+      _updateTimer?.cancel();
+    });
+
     _updateTimer = Timer.periodic(const Duration(milliseconds: 100), (_) {
       if (_stopwatch.isRunning) {
         final newTime = state.timeLeft(state.activeClock!)! - _stopwatch.elapsed;
@@ -33,10 +37,6 @@ class OverTheBoardClock extends _$OverTheBoardClock {
 
         _stopwatch.reset();
       }
-    });
-
-    ref.onDispose(() {
-      _updateTimer.cancel();
     });
 
     return OverTheBoardClockState.fromTimeIncrement(

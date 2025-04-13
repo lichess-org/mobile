@@ -18,6 +18,11 @@ class OnlineFriends extends _$OnlineFriends {
 
   @override
   Future<IList<LightUser>> build() async {
+    ref.onDispose(() {
+      _socketSubscription?.cancel();
+      _socketOpenSubscription?.cancel();
+    });
+
     _socketClient = _socketPool.open(Uri(path: kDefaultSocketRoute));
 
     final state = _socketClient.stream
@@ -36,11 +41,6 @@ class OnlineFriends extends _$OnlineFriends {
     // Request again the list of online friends every time the socket is reconnected.
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
       _socketClient.send('following_onlines', null);
-    });
-
-    ref.onDispose(() {
-      _socketSubscription?.cancel();
-      _socketOpenSubscription?.cancel();
     });
 
     return state;
