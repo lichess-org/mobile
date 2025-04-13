@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class StockfishSettingsWidget extends ConsumerStatefulWidget {
+class StockfishSettingsWidget extends ConsumerWidget {
   const StockfishSettingsWidget({
     this.onToggleLocalEvaluation,
     required this.onSetEngineSearchTime,
@@ -22,25 +22,20 @@ class StockfishSettingsWidget extends ConsumerStatefulWidget {
   final void Function(int) onSetEngineCores;
 
   @override
-  ConsumerState<StockfishSettingsWidget> createState() => _StockfishSettingsWidgetState();
-}
-
-class _StockfishSettingsWidgetState extends ConsumerState<StockfishSettingsWidget> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (widget.onToggleLocalEvaluation != null)
+        if (onToggleLocalEvaluation != null)
           ListSection(
             children: [
               SwitchSettingTile(
                 title: Text(context.l10n.toggleLocalEvaluation),
                 value: prefs.isEnabled,
                 onChanged: (_) {
-                  widget.onToggleLocalEvaluation!.call();
+                  onToggleLocalEvaluation!.call();
                 },
               ),
             ],
@@ -68,8 +63,7 @@ class _StockfishSettingsWidgetState extends ConsumerState<StockfishSettingsWidge
                 labelBuilder: (value) => value == 3600 ? '∞' : '${value}s',
                 value: prefs.engineSearchTime.inSeconds,
                 values: kAvailableEngineSearchTimes.map((e) => e.inSeconds).toList(),
-                onChangeEnd:
-                    (value) => widget.onSetEngineSearchTime(Duration(seconds: value.toInt())),
+                onChangeEnd: (value) => onSetEngineSearchTime(Duration(seconds: value.toInt())),
               ),
             ),
             PlatformListTile(
@@ -88,7 +82,7 @@ class _StockfishSettingsWidgetState extends ConsumerState<StockfishSettingsWidge
               subtitle: NonLinearSlider(
                 value: prefs.numEvalLines,
                 values: const [0, 1, 2, 3],
-                onChangeEnd: (value) => widget.onSetNumEvalLines(value.toInt()),
+                onChangeEnd: (value) => onSetNumEvalLines(value.toInt()),
               ),
             ),
             if (maxEngineCores > 1)
@@ -108,7 +102,7 @@ class _StockfishSettingsWidgetState extends ConsumerState<StockfishSettingsWidge
                 subtitle: NonLinearSlider(
                   value: prefs.numEngineCores,
                   values: List.generate(maxEngineCores, (index) => index + 1),
-                  onChangeEnd: (value) => widget.onSetEngineCores(value.toInt()),
+                  onChangeEnd: (value) => onSetEngineCores(value.toInt()),
                 ),
               ),
           ],

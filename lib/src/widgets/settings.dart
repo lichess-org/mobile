@@ -11,7 +11,6 @@ class SettingsListTile extends StatelessWidget {
     required this.settingsValue,
     required this.onTap,
     this.explanation,
-    this.explanationDuration = const Duration(seconds: 4),
     this.showCupertinoTrailingValue = true,
     super.key,
   });
@@ -28,9 +27,6 @@ class SettingsListTile extends StatelessWidget {
 
   /// The optional explanation of the settings.
   final String? explanation;
-
-  /// The explanation tooltip display duration.
-  final Duration explanationDuration;
 
   /// Whether to show the value in the trailing position on iOS.
   ///

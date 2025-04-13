@@ -58,7 +58,9 @@ dependencies:
   linkify: ^5.0.0
   logging: ^1.1.0
   material_color_utilities: ^0.11.1
+  material_symbols_icons: ^4.2811.0
   meta: ^1.8.0
+  multistockfish: ^0.1.0
   package_info_plus: ^8.0.0
   path: ^1.8.2
   path_provider: ^2.1.5
@@ -76,8 +78,6 @@ dependencies:
   visibility_detector: ^0.4.0
   wakelock_plus: ^1.1.1
   web_socket_channel: ^3.0.0
-  material_symbols_icons: ^4.2811.0
-  multistockfish: ^0.1.0
 
 dev_dependencies:
   build_runner: ^2.3.2
