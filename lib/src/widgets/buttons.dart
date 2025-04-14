@@ -1,12 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// Platform agnostic button which is used for important actions.
-///
-/// Will use an [FilledButton] on Android and a [CupertinoButton.tinted] on iOS.
 class FatButton extends StatelessWidget {
   const FatButton({
     required this.semanticsLabel,
