@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class EngineLines extends ConsumerStatefulWidget {
   const EngineLines({required this.onTapMove, required this.savedEval, required this.isGameOver});
@@ -106,7 +105,7 @@ class Engineline extends ConsumerWidget {
     final line = lineBuffer.toString();
     final evalString = pvData.evalString;
 
-    return AdaptiveInkWell(
+    return InkWell(
       onTap: () => onTapMove?.call(NormalMove.fromUci(pvData.moves[0])),
       child: SizedBox(
         height: kEvalGaugeSize,

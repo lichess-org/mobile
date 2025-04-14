@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/styles/social_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kThumbnailSize = 75.0;
@@ -111,7 +110,7 @@ class StreamerListTile extends StatelessWidget {
           subtitle: subtitle,
           trailing: trailing,
         )
-        : AdaptiveInkWell(
+        : InkWell(
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),

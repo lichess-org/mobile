@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StudyGamebook extends StatelessWidget {
@@ -123,7 +122,7 @@ class GamebookButton extends StatelessWidget {
       button: true,
       label: label,
       excludeSemantics: true,
-      child: AdaptiveInkWell(
+      child: InkWell(
         borderRadius: BorderRadius.zero,
         onTap: onTap,
         child: Opacity(

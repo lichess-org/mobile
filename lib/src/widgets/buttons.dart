@@ -101,55 +101,6 @@ class NoPaddingTextButton extends StatelessWidget {
   }
 }
 
-/// InkWell that adapts to the iOS platform.
-///
-/// Used to create a button that shows a ripple on Android and a highlight on iOS.
-class AdaptiveInkWell extends StatelessWidget {
-  const AdaptiveInkWell({
-    required this.child,
-    this.onTap,
-    this.onTapDown,
-    this.onTapUp,
-    this.onTapCancel,
-    this.onLongPress,
-    this.borderRadius,
-    this.splashColor,
-    super.key,
-  });
-
-  final Widget child;
-  final VoidCallback? onTap;
-  final GestureTapDownCallback? onTapDown;
-  final GestureTapUpCallback? onTapUp;
-  final GestureTapCancelCallback? onTapCancel;
-  final VoidCallback? onLongPress;
-  final BorderRadius? borderRadius;
-  final Color? splashColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final platform = Theme.of(context).platform;
-    final inkWell = InkWell(
-      onTap: onTap,
-      onTapDown: onTapDown,
-      onTapUp: onTapUp,
-      onTapCancel: onTapCancel,
-      onLongPress: onLongPress,
-      borderRadius: borderRadius,
-      splashColor:
-          platform == TargetPlatform.iOS
-              ? splashColor ?? CupertinoColors.systemGrey5.resolveFrom(context)
-              : splashColor,
-      splashFactory: platform == TargetPlatform.iOS ? NoSplash.splashFactory : null,
-      child: child,
-    );
-
-    return platform == TargetPlatform.iOS
-        ? Material(color: Colors.transparent, child: inkWell)
-        : inkWell;
-  }
-}
-
 /// Button to repeatedly call a funtion, triggered after a long press.
 ///
 /// This widget is just a wrapper, the visuals are delegated to the child widget.

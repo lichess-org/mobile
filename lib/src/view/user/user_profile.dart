@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -134,7 +133,7 @@ class UserProfileWidget extends ConsumerWidget {
                   for (final link in user.profile!.links!)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: AdaptiveInkWell(
+                      child: InkWell(
                         onTap: () => launchUrl(link.url),
                         child: Text(
                           link.site?.title ?? link.url.toString(),

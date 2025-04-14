@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/playban.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 const _kMatrixSpacing = 8.0;
 
@@ -158,7 +157,7 @@ class _ChoiceChip extends StatelessWidget {
       opacity: onTap != null ? 1.0 : 0.5,
       child: Container(
         decoration: BoxDecoration(color: bgColor, borderRadius: _kBorderRadius),
-        child: AdaptiveInkWell(
+        child: InkWell(
           borderRadius: _kBorderRadius,
           onTap: onTap,
           splashColor: Theme.of(context).primaryColor.withValues(alpha: 0.5),

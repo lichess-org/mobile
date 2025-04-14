@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -286,7 +285,7 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                     child: PlatformCard(
                       margin: const EdgeInsets.all(16.0),
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      child: AdaptiveInkWell(
+                      child: InkWell(
                         borderRadius: const BorderRadius.all(Radius.circular(20)),
                         onTap: () {
                           setState(() {
@@ -494,7 +493,7 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                 child: PlatformCard(
                   margin: const EdgeInsets.all(16.0),
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  child: AdaptiveInkWell(
+                  child: InkWell(
                     borderRadius: const BorderRadius.all(Radius.circular(20)),
                     onTap: () {
                       setState(() {

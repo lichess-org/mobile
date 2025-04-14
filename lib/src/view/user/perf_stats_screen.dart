@@ -24,7 +24,6 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -258,7 +257,7 @@ class _Body extends ConsumerWidget {
               child: Tooltip(
                 excludeFromSemantics: true,
                 message: context.l10n.perfStatViewTheGames,
-                child: AdaptiveInkWell(
+                child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(
                       GameHistoryScreen.buildRoute(
@@ -929,7 +928,7 @@ class _RangeButton extends StatelessWidget {
     return PlatformCard(
       color: selected ? chartColor.withValues(alpha: 0.2) : null,
       shadowColor: selected ? Colors.transparent : null,
-      child: AdaptiveInkWell(
+      child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(8.0)),
         onTap: onPressed,
         child: Center(

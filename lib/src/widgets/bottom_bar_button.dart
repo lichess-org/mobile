@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 /// A bottom bar button.
 ///
@@ -84,7 +83,7 @@ class BottomBarButton extends StatelessWidget {
         excludeFromSemantics: true,
         message: label,
         triggerMode: showTooltip ? TooltipTriggerMode.longPress : TooltipTriggerMode.manual,
-        child: AdaptiveInkWell(
+        child: InkWell(
           borderRadius: BorderRadius.zero,
           onTap: onTap,
           child:

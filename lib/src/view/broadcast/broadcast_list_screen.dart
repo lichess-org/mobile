@@ -368,7 +368,7 @@ class BroadcastListTile extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
     );
 
-    return AdaptiveInkWell(
+    return InkWell(
       onTap: () {
         Navigator.of(
           context,

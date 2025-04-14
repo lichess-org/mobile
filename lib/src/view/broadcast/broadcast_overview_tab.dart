@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -103,7 +102,7 @@ class _BroadcastOverviewCard extends StatelessWidget {
     return PlatformCard(
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       margin: const EdgeInsets.all(4.0),
-      child: AdaptiveInkWell(
+      child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         onTap: website != null ? () => launchUrl(website!) : null,
         child: Padding(

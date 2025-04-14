@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart'
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kTableRowVerticalPadding = 10.0;
@@ -348,7 +347,7 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
     return Container(
       padding: _kTableRowPadding,
       color: widget.color,
-      child: AdaptiveInkWell(
+      child: InkWell(
         onTap: () {
           Navigator.of(context).push(
             ArchivedGameScreen.buildRoute(

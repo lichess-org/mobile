@@ -293,7 +293,7 @@ class _ChoiceChip extends StatelessWidget {
           ),
         ),
       ),
-      child: AdaptiveInkWell(
+      child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         onTap: () => onSelected(true),
         child: Padding(
