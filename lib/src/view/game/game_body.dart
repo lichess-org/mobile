@@ -545,8 +545,7 @@ class _GameBottomBar extends ConsumerWidget {
                   ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
                 },
               )
-            else if (gameState.game.meta.speed == Speed.bullet ||
-                gameState.game.meta.speed == Speed.ultraBullet)
+            else
               BottomBarButton(
                 label: context.l10n.resign,
                 onTap:
@@ -564,12 +563,6 @@ class _GameBottomBar extends ConsumerWidget {
                             }
                         : null,
                 icon: Icons.flag,
-              )
-            else
-              const BottomBarButton(
-                label: 'No game action available',
-                onTap: null,
-                icon: Icons.pending_outlined,
               ),
             if (gameState.game.meta.speed == Speed.correspondence && !gameState.game.finished)
               BottomBarButton(
