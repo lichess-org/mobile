@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class ChallengeListItem extends ConsumerWidget {
@@ -118,7 +117,7 @@ class ChallengeListItem extends ConsumerWidget {
                   ],
                   // onTap: onPressed,
                 )
-                : AdaptiveListTile(
+                : ListTile(
                   leading: leading,
                   title: title,
                   subtitle: subtitle,

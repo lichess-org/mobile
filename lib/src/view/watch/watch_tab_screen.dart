@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -24,7 +23,6 @@ import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -84,10 +82,6 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       }
     });
 
-    return ConsumerPlatformWidget(ref: ref, androidBuilder: _buildAndroid, iosBuilder: _buildIos);
-  }
-
-  Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
     return PopScope(
       canPop: false,
@@ -102,7 +96,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
             isOnline
                 ? OrientationBuilder(
                   builder: (context, orientation) {
-                    return RefreshIndicator(
+                    return RefreshIndicator.adaptive(
                       key: _androidRefreshKey,
                       onRefresh: _refreshData,
                       child: _Body(orientation),
@@ -112,31 +106,6 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                 : offlineWidget,
       ),
     );
-  }
-
-  Widget _buildIos(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? true;
-    return isOnline
-        ? CupertinoPageScaffold(
-          child: OrientationBuilder(
-            builder: (context, orientation) {
-              return CustomScrollView(
-                controller: watchScrollController,
-                slivers: [
-                  const CupertinoSliverNavigationBar(
-                    padding: EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
-                  ),
-                  CupertinoSliverRefreshControl(onRefresh: _refreshData),
-                  SliverSafeArea(top: false, sliver: _Body(orientation)),
-                ],
-              );
-            },
-          ),
-        )
-        : const CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(),
-          child: offlineWidget,
-        );
   }
 
   Future<void> _refreshData() async {
@@ -197,9 +166,7 @@ class _BodyState extends ConsumerState<_Body> {
       _StreamerWidget(streamers),
     ];
 
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? SliverList(delegate: SliverChildListDelegate(content))
-        : ListView(controller: watchScrollController, children: content);
+    return ListView(controller: watchScrollController, children: content);
   }
 }
 
@@ -293,7 +260,7 @@ class _WatchTvWidget extends ConsumerWidget {
           ),
           children: data
               .map((snapshot) {
-                return PlatformListTile(
+                return ListTile(
                   leading: Icon(snapshot.channel.icon),
                   title: Text(snapshot.channel.label),
                   subtitle: UserFullNameWidget.player(

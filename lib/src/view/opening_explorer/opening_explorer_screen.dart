@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class OpeningExplorerScreen extends ConsumerWidget {
   const OpeningExplorerScreen({required this.options});
@@ -28,11 +27,7 @@ class OpeningExplorerScreen extends ConsumerWidget {
   final AnalysisOptions options;
 
   static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.openingExplorer,
-      screen: OpeningExplorerScreen(options: options),
-    );
+    return buildScreenRoute(context, screen: OpeningExplorerScreen(options: options));
   }
 
   @override
@@ -46,26 +41,12 @@ class OpeningExplorerScreen extends ConsumerWidget {
       ),
       _ => const CenterLoadingIndicator(),
     };
-
-    return PlatformWidget(
-      androidBuilder:
-          (_) => Scaffold(
-            body: body,
-            appBar: AppBar(
-              title: Text(context.l10n.openingExplorer),
-              bottom: _MoveList(options: options),
-            ),
-          ),
-      iosBuilder:
-          (_) => CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              enableBackgroundFilterBlur: false,
-              middle: Text(context.l10n.openingExplorer),
-              automaticBackgroundVisibility: false,
-              border: null,
-            ),
-            child: body,
-          ),
+    return Scaffold(
+      body: body,
+      appBar: AppBar(
+        title: Text(context.l10n.openingExplorer),
+        bottom: _MoveList(options: options),
+      ),
     );
   }
 }
@@ -84,14 +65,6 @@ class _Body extends ConsumerWidget {
       bottom: false,
       child: Column(
         children: [
-          if (Theme.of(context).platform == TargetPlatform.iOS)
-            Padding(
-              padding:
-                  isTablet
-                      ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                      : EdgeInsets.zero,
-              child: _MoveList(options: options),
-            ),
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -131,7 +104,7 @@ class _Body extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: PlatformCard(
+                              child: Card(
                                 clipBehavior: Clip.hardEdge,
                                 margin: const EdgeInsets.all(kTabletBoardTableSidePadding),
                                 semanticContainer: false,
@@ -221,13 +194,6 @@ class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
         final currentMoveIndex = state.currentNode.position.ply;
 
         return MoveList(
-          inlineDecoration:
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? BoxDecoration(
-                    color: CupertinoTheme.of(context).barBackgroundColor,
-                    border: const Border(bottom: BorderSide(color: Color(0x4D000000), width: 0.0)),
-                  )
-                  : null,
           type: MoveListType.inline,
           slicedMoves: slicedMoves,
           currentMoveIndex: currentMoveIndex,

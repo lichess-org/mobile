@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 final _dateFormatter = DateFormat('yyyy.MM.dd');
 
@@ -23,17 +22,13 @@ class AnalysisShareScreen extends StatelessWidget {
   final AnalysisOptions options;
 
   static Route<dynamic> buildRoute(BuildContext context, {required AnalysisOptions options}) {
-    return buildScreenRoute(
-      context,
-      screen: AnalysisShareScreen(options: options),
-      title: context.l10n.studyShareAndExport,
-    );
+    return buildScreenRoute(context, screen: AnalysisShareScreen(options: options));
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.studyShareAndExport),
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.studyShareAndExport)),
       body: _EditPgnTagsForm(options),
     );
   }
@@ -298,11 +293,7 @@ class _EditablePgnField extends StatelessWidget {
           Expanded(
             child: AdaptiveTextField(
               focusNode: focusNode,
-              cupertinoDecoration: BoxDecoration(
-                color: CupertinoColors.tertiarySystemBackground,
-                border: Border.all(color: CupertinoColors.systemGrey4, width: 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
+              cupertinoDecoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
               controller: controller,
               textInputAction: TextInputAction.next,
               keyboardType:

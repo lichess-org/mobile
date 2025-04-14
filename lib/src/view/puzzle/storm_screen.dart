@@ -1,7 +1,6 @@
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,16 +28,14 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class StormScreen extends ConsumerStatefulWidget {
   const StormScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const StormScreen(), title: 'Puzzle Storm');
+    return buildScreenRoute(context, screen: const StormScreen());
   }
 
   @override
@@ -51,9 +48,11 @@ class _StormScreenState extends ConsumerState<StormScreen> {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: PlatformScaffold(
-        appBarActions: [_StormDashboardButton(), const ToggleSoundButton()],
-        appBarTitle: const Text('Puzzle Storm'),
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [_StormDashboardButton(), const ToggleSoundButton()],
+          title: const Text('Puzzle Storm'),
+        ),
         body: _Load(_boardKey),
       ),
     );
@@ -294,7 +293,7 @@ class _TopTable extends ConsumerWidget {
               ),
             )
           else ...[
-            PlatformCard(
+            Card(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -399,25 +398,13 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
                       children: [
                         Text(
                           widget.combo.current.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 26,
                             height: 1.0,
                             fontWeight: FontWeight.bold,
-                            color:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? CupertinoTheme.of(context).textTheme.textStyle.color
-                                    : null,
                           ),
                         ),
-                        Text(
-                          context.l10n.stormCombo,
-                          style: TextStyle(
-                            color:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? CupertinoTheme.of(context).textTheme.textStyle.color
-                                    : null,
-                          ),
-                        ),
+                        Text(context.l10n.stormCombo),
                       ],
                     ),
                   ),
@@ -566,23 +553,20 @@ class _RunStats extends StatelessWidget {
   final StormRunStats stats;
 
   static Route<dynamic> buildRoute(BuildContext context, StormRunStats stats) {
-    return buildScreenRoute(
-      context,
-      screen: _RunStats(stats),
-      title: 'Storm Stats',
-      fullscreenDialog: true,
-    );
+    return buildScreenRoute(context, screen: _RunStats(stats), fullscreenDialog: true);
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      body: _RunStatsPopup(stats),
-      appBarLeading: IconButton(
-        icon: const Icon(Icons.close),
-        onPressed: () => Navigator.of(context).pop(),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const SizedBox.shrink(),
       ),
-      appBarTitle: const SizedBox.shrink(),
+      body: _RunStatsPopup(stats),
     );
   }
 }
@@ -605,7 +589,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
         widget.stats.newHigh != null
             ? [
               const SizedBox(height: 16),
-              PlatformCard(
+              Card(
                 margin: Styles.bodySectionPadding,
                 child: ListTile(
                   leading: Icon(
@@ -672,29 +656,23 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                     Tooltip(
                       excludeFromSemantics: true,
                       message: context.l10n.stormFailedPuzzles,
-                      child: PlatformIconButton(
+                      child: SemanticIconButton(
                         semanticsLabel: context.l10n.stormFailedPuzzles,
-                        icon:
-                            Theme.of(context).platform == TargetPlatform.iOS
-                                ? CupertinoIcons.clear_fill
-                                : Icons.close,
+                        icon: const Icon(Icons.close),
                         onPressed:
                             () => setState(() => filter = filter.copyWith(failed: !filter.failed)),
-                        highlighted: filter.failed,
+                        color: filter.failed ? ColorScheme.of(context).primary : null,
                       ),
                     ),
                     Tooltip(
                       message: context.l10n.stormSlowPuzzles,
                       excludeFromSemantics: true,
-                      child: PlatformIconButton(
+                      child: SemanticIconButton(
                         semanticsLabel: context.l10n.stormSlowPuzzles,
-                        icon:
-                            Theme.of(context).platform == TargetPlatform.iOS
-                                ? CupertinoIcons.hourglass
-                                : Icons.hourglass_bottom,
+                        icon: const Icon(Icons.hourglass_bottom),
                         onPressed:
                             () => setState(() => filter = filter.copyWith(slow: !filter.slow)),
-                        highlighted: filter.slow,
+                        color: filter.slow ? ColorScheme.of(context).primary : null,
                       ),
                     ),
                   ],
@@ -749,24 +727,11 @@ class _StormDashboardButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     if (session != null) {
-      switch (Theme.of(context).platform) {
-        case TargetPlatform.iOS:
-          return CupertinoIconButton(
-            padding: EdgeInsets.zero,
-            onPressed: () => _showDashboard(context, session),
-            semanticsLabel: 'Storm History',
-            icon: const Icon(Icons.history),
-          );
-        case TargetPlatform.android:
-          return IconButton(
-            tooltip: 'Storm History',
-            onPressed: () => _showDashboard(context, session),
-            icon: const Icon(Icons.history),
-          );
-        default:
-          assert(false, 'Unexpected platform $Theme.of(context).platform');
-          return const SizedBox.shrink();
-      }
+      return IconButton(
+        tooltip: 'Storm History',
+        onPressed: () => _showDashboard(context, session),
+        icon: const Icon(Icons.history),
+      );
     }
     return const SizedBox.shrink();
   }

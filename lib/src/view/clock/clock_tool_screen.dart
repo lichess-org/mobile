@@ -225,10 +225,10 @@ class ClockTile extends ConsumerWidget {
             child: AnimatedOpacity(
               opacity: clockState.started ? 0 : 1.0,
               duration: const Duration(milliseconds: 300),
-              child: PlatformIconButton(
+              child: SemanticIconButton(
                 semanticsLabel: context.l10n.settingsSettings,
                 iconSize: 32,
-                icon: Icons.tune,
+                icon: const Icon(Icons.tune),
                 color: clockStyle.textColor,
                 onPressed:
                     clockState.started

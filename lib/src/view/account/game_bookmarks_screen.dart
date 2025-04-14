@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class GameBookmarksScreen extends ConsumerWidget {
   const GameBookmarksScreen({required this.nbBookmarks, super.key});
@@ -19,18 +18,13 @@ class GameBookmarksScreen extends ConsumerWidget {
   final int nbBookmarks;
 
   static Route<dynamic> buildRoute(BuildContext context, {required int nbBookmarks}) {
-    return buildScreenRoute(
-      context,
-      screen: GameBookmarksScreen(nbBookmarks: nbBookmarks),
-      title: context.l10n.nbBookmarks(nbBookmarks),
-    );
+    return buildScreenRoute(context, screen: GameBookmarksScreen(nbBookmarks: nbBookmarks));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformScaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      appBarTitle: Text(context.l10n.nbBookmarks(nbBookmarks)),
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.nbBookmarks(nbBookmarks))),
       body: const _Body(),
     );
   }
@@ -122,22 +116,13 @@ class _BodyState extends ConsumerState<_Body> {
                     ref.read(gameBookmarksPaginatorProvider.notifier).removeBookmark(game.id);
                   } on Exception catch (_) {
                     if (context.mounted) {
-                      showPlatformSnackbar(
-                        context,
-                        'Bookmark action failed',
-                        type: SnackBarType.error,
-                      );
+                      showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
                     }
                   }
                 }
 
                 final gameTile = GameListTile(
                   item: list[index],
-                  // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
-                  padding:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
-                          : null,
                   onPressedBookmark: onRemoveBookmark,
                 );
 
@@ -159,7 +144,7 @@ class _BodyState extends ConsumerState<_Body> {
                                   );
                                 }
                                 : (_) {
-                                  showPlatformSnackbar(
+                                  showSnackBar(
                                     context,
                                     'This variant is not supported yet.',
                                     type: SnackBarType.info,

@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 enum BroadcastRoundTab {
@@ -85,13 +84,13 @@ class BroadcastRoundScreenLoading extends ConsumerWidget {
         ),
         initialTab: initialTab,
       ),
-      AsyncError(:final error) => PlatformScaffold(
-        appBarTitle: const Text(''),
+      AsyncError(:final error) => Scaffold(
+        appBar: AppBar(title: const Text('')),
         body: Center(child: Text('Cannot load round data: $error')),
       ),
-      _ => const PlatformScaffold(
-        appBarTitle: Text(''),
-        body: Center(child: CircularProgressIndicator.adaptive()),
+      _ => Scaffold(
+        appBar: AppBar(title: const Text('')),
+        body: const Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
   }
@@ -111,7 +110,6 @@ class BroadcastRoundScreen extends ConsumerStatefulWidget {
     return buildScreenRoute(
       context,
       screen: BroadcastRoundScreen(broadcast: broadcast, initialTab: initialTab),
-      title: broadcast.title,
     );
   }
 
@@ -173,14 +171,15 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     AsyncValue<BroadcastTournament> asyncTournament,
     AsyncValue<BroadcastRoundState> asyncRound,
   ) {
-    return PlatformScaffold(
-      appBarTitle: AutoSizeText(
+    return Scaffold(
+      appBar: AppBar(
+      title: AutoSizeText(
         widget.broadcast.title,
         minFontSize: 14.0,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
       ),
-      appBarBottom: TabBar(
+      bottom: TabBar(
         controller: _tabController,
         tabs: <Widget>[
           Tab(text: context.l10n.broadcastOverview),
@@ -188,9 +187,8 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           Tab(text: context.l10n.players),
         ],
       ),
-      appBarAutomaticBackgroundVisibility: false,
-      appBarActions: [
-        AppBarIconButton(
+      actions: [
+        SemanticIconButton(
           icon: const Icon(Icons.settings),
           onPressed:
               () => showAdaptiveBottomSheet<void>(
@@ -203,12 +201,13 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
               ),
           semanticsLabel: context.l10n.settingsSettings,
         ),
-        AppBarIconButton(
+        SemanticIconButton(
           icon: const PlatformShareIcon(),
           semanticsLabel: context.l10n.studyShareAndExport,
           onPressed: () => showBroadcastShareMenu(context, widget.broadcast),
         ),
       ],
+      ),
       body: switch (asyncRound) {
         AsyncData(value: final _) => TabBarView(
           controller: _tabController,
@@ -292,7 +291,7 @@ class _BottomBar extends ConsumerWidget {
       transparentBackground: false,
       children: [
         if (tournament.group != null)
-          AdaptiveTextButton(
+          TextButton(
             onPressed:
                 () => showAdaptiveBottomSheet<void>(
                   context: context,
@@ -322,7 +321,7 @@ class _BottomBar extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-        AdaptiveTextButton(
+        TextButton(
           onPressed:
               () => showAdaptiveBottomSheet<void>(
                 context: context,
@@ -405,7 +404,7 @@ class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
       scrollController: widget.scrollController,
       children: [
         for (final (index, round) in widget.rounds.indexed)
-          PlatformListTile(
+          ListTile(
             key: round.id == widget.selectedRoundId ? currentRoundKey : null,
             selected: round.id == widget.selectedRoundId,
             title: Text(round.name, overflow: TextOverflow.ellipsis, maxLines: 2),
@@ -468,7 +467,7 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
       scrollController: widget.scrollController,
       children: [
         for (final tournament in widget.group)
-          PlatformListTile(
+          ListTile(
             key: tournament.id == widget.tournament.data.id ? currentTournamentKey : null,
             selected: tournament.id == widget.tournament.data.id,
             title: Text(tournament.name),

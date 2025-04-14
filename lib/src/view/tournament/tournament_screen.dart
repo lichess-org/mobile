@@ -23,9 +23,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class TournamentScreen extends ConsumerWidget {
@@ -34,11 +31,7 @@ class TournamentScreen extends ConsumerWidget {
   final TournamentId id;
 
   static Route<void> buildRoute(BuildContext context, TournamentId id) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.tournament,
-      screen: TournamentScreen(id: id),
-    );
+    return buildScreenRoute(context, screen: TournamentScreen(id: id));
   }
 
   @override
@@ -58,9 +51,9 @@ class TournamentScreen extends ConsumerWidget {
     return switch (ref.watch(tournamentControllerProvider(id))) {
       AsyncError(:final error) => Center(child: Text('Could not load tournament: $error')),
       AsyncValue(:final value?) => _Body(state: value),
-      _ => const PlatformScaffold(
-        appBarTitle: SizedBox.shrink(),
-        body: Center(child: CircularProgressIndicator()),
+      _ => Scaffold(
+        appBar: AppBar(title: const SizedBox.shrink()),
+        body: const Center(child: CircularProgressIndicator()),
       ),
     };
   }
@@ -75,34 +68,36 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
 
-    return PlatformScaffold(
-      appBarTitle: _Title(state: state),
-      appBarActions: [
-        if (timeLeft != null)
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (state.tournament.timeToStart != null)
-                  Text(context.l10n.startingIn, style: const TextStyle(fontSize: 14)),
-                CountdownClockBuilder(
-                  timeLeft: timeLeft,
-                  active: true,
-                  tickInterval: const Duration(seconds: 1),
-                  builder:
-                      (BuildContext context, Duration timeLeft) => Text(
-                        '${timeLeft.toHoursMinutesSeconds()} ',
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          fontFeatures: [FontFeature.tabularFigures()],
+    return Scaffold(
+      appBar: AppBar(
+        title: _Title(state: state),
+        actions: [
+          if (timeLeft != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (state.tournament.timeToStart != null)
+                    Text(context.l10n.startingIn, style: const TextStyle(fontSize: 14)),
+                  CountdownClockBuilder(
+                    timeLeft: timeLeft,
+                    active: true,
+                    tickInterval: const Duration(seconds: 1),
+                    builder:
+                        (BuildContext context, Duration timeLeft) => Text(
+                          '${timeLeft.toHoursMinutesSeconds()} ',
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            fontFeatures: [FontFeature.tabularFigures()],
+                          ),
                         ),
-                      ),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
@@ -110,7 +105,7 @@ class _Body extends StatelessWidget {
               padding: Styles.horizontalBodyPadding,
               child: ListView(
                 children: [
-                  PlatformCard(
+                  Card(
                     child: Padding(
                       padding: Styles.bodySectionPadding,
                       child: Column(
@@ -177,7 +172,7 @@ class _Standing extends ConsumerWidget {
     if (standing == null) {
       return const SizedBox.shrink();
     }
-    return PlatformCard(
+    return Card(
       clipBehavior: Clip.hardEdge,
       child: Column(
         children: [
@@ -199,7 +194,7 @@ class _StandingPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveListTile(
+    return ListTile(
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
       visualDensity: VisualDensity.compact,
       tileColor: player.rank.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
@@ -270,7 +265,7 @@ class _StandingControls extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
-        PlatformIconButton(
+        SemanticIconButton(
           onPressed:
               state.hasPreviousPage
                   ? ref
@@ -282,7 +277,7 @@ class _StandingControls extends ConsumerWidget {
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
                   : null,
           semanticsLabel: 'Previous',
-          icon: Icons.chevron_left,
+          icon: const Icon(Icons.chevron_left),
         ),
         Expanded(
           child: Text(
@@ -291,7 +286,7 @@ class _StandingControls extends ConsumerWidget {
             textAlign: TextAlign.center,
           ),
         ),
-        PlatformIconButton(
+        SemanticIconButton(
           onPressed:
               state.hasNextPage
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadNextStandingsPage
@@ -301,12 +296,12 @@ class _StandingControls extends ConsumerWidget {
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadLastStandingsPage
                   : null,
           semanticsLabel: context.l10n.studyNext,
-          icon: Icons.chevron_right,
+          icon: const Icon(Icons.chevron_right),
         ),
         if (state.tournament.me != null)
-          PlatformIconButton(
+          SemanticIconButton(
             onPressed: ref.read(tournamentControllerProvider(state.id).notifier).jumpToMyPage,
-            icon: Icons.person_pin_circle_outlined,
+            icon: const Icon(Icons.person_pin_circle_outlined),
             // TODO l10n
             semanticsLabel: 'Jump to my page',
           ),

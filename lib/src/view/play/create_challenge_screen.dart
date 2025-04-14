@@ -26,9 +26,7 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class CreateChallengeScreen extends StatelessWidget {
   const CreateChallengeScreen(this.user);
@@ -36,17 +34,13 @@ class CreateChallengeScreen extends StatelessWidget {
   final LightUser user;
 
   static Route<dynamic> buildRoute(BuildContext context, LightUser user) {
-    return buildScreenRoute(
-      context,
-      screen: CreateChallengeScreen(user),
-      title: context.l10n.challengeChallengesX(user.name),
-    );
+    return buildScreenRoute(context, screen: CreateChallengeScreen(user));
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.challengeChallengesX(user.name)),
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.challengeChallengesX(user.name))),
       body: _ChallengeBody(user),
     );
   }
@@ -104,15 +98,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
         return Center(
           child: ListView(
             shrinkWrap: true,
-            padding:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? Styles.sectionBottomPadding
-                    : Styles.verticalBodyPadding,
+            padding: Styles.verticalBodyPadding,
             children: [
-              PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              ListTile(
                 title: Text(context.l10n.timeControl),
-                trailing: AdaptiveTextButton(
+                trailing: TextButton(
                   onPressed: () {
                     showChoicePicker(
                       context,
@@ -145,8 +135,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     int seconds = preferences.clock.time.inSeconds;
                     return StatefulBuilder(
                       builder: (context, setState) {
-                        return PlatformListTile(
-                          harmonizeCupertinoTitleStyle: true,
+                        return ListTile(
                           title: Text.rich(
                             TextSpan(
                               text: '${context.l10n.minutesPerSide}: ',
@@ -162,14 +151,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                             value: seconds,
                             values: kAvailableTimesInSeconds,
                             labelBuilder: clockLabelInMinutes,
-                            onChange:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? (num value) {
-                                      setState(() {
-                                        seconds = value.toInt();
-                                      });
-                                    }
-                                    : null,
+                            onChange: (num value) {
+                              setState(() {
+                                seconds = value.toInt();
+                              });
+                            },
                             onChangeEnd: (num value) {
                               setState(() {
                                 seconds = value.toInt();
@@ -192,8 +178,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     int incrementSeconds = preferences.clock.increment.inSeconds;
                     return StatefulBuilder(
                       builder: (context, setState) {
-                        return PlatformListTile(
-                          harmonizeCupertinoTitleStyle: true,
+                        return ListTile(
                           title: Text.rich(
                             TextSpan(
                               text: '${context.l10n.incrementInSeconds}: ',
@@ -208,14 +193,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                           subtitle: NonLinearSlider(
                             value: incrementSeconds,
                             values: kAvailableIncrementsInSeconds,
-                            onChange:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? (num value) {
-                                      setState(() {
-                                        incrementSeconds = value.toInt();
-                                      });
-                                    }
-                                    : null,
+                            onChange: (num value) {
+                              setState(() {
+                                incrementSeconds = value.toInt();
+                              });
+                            },
                             onChangeEnd: (num value) {
                               setState(() {
                                 incrementSeconds = value.toInt();
@@ -239,8 +221,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     int daysPerTurn = preferences.days;
                     return StatefulBuilder(
                       builder: (context, setState) {
-                        return PlatformListTile(
-                          harmonizeCupertinoTitleStyle: true,
+                        return ListTile(
                           title: Text.rich(
                             TextSpan(
                               text: '${context.l10n.daysPerTurn}: ',
@@ -256,14 +237,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                             value: daysPerTurn,
                             values: kAvailableDaysPerTurn,
                             labelBuilder: _daysLabel,
-                            onChange:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? (num value) {
-                                      setState(() {
-                                        daysPerTurn = value.toInt();
-                                      });
-                                    }
-                                    : null,
+                            onChange: (num value) {
+                              setState(() {
+                                daysPerTurn = value.toInt();
+                              });
+                            },
                             onChangeEnd: (num value) {
                               setState(() {
                                 daysPerTurn = value.toInt();
@@ -279,10 +257,9 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                   },
                 ),
               ],
-              PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              ListTile(
                 title: Text(context.l10n.variant),
-                trailing: AdaptiveTextButton(
+                trailing: TextButton(
                   onPressed: () {
                     showChoicePicker(
                       context,
@@ -313,10 +290,9 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
               ),
               ExpandedSection(
                 expand: preferences.rated == false || preferences.variant == Variant.fromPosition,
-                child: PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
+                child: ListTile(
                   title: Text(context.l10n.side),
-                  trailing: AdaptiveTextButton(
+                  trailing: TextButton(
                     onPressed: () {
                       showChoicePicker<SideChoice>(
                         context,
@@ -335,8 +311,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
               if (account != null)
                 ExpandedSection(
                   expand: preferences.variant != Variant.fromPosition,
-                  child: PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
+                  child: ListTile(
                     title: Text(context.l10n.rated),
                     trailing: Switch.adaptive(
                       value: preferences.rated,
@@ -424,7 +399,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
         _controller.text = data.text!;
       } catch (_) {
         if (mounted) {
-          showPlatformSnackbar(context, context.l10n.invalidFen, type: SnackBarType.error);
+          showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
         }
       }
     }

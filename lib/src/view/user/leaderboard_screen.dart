@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 /// Create a Screen with Top 10 players for each Lichess Variant
@@ -19,16 +18,12 @@ class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.leaderboard,
-      screen: const LeaderboardScreen(),
-    );
+    return buildScreenRoute(context, screen: const LeaderboardScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(appBarTitle: Text(context.l10n.leaderboard), body: const _Body());
+    return Scaffold(appBar: AppBar(title: Text(context.l10n.leaderboard)), body: const _Body());
   }
 }
 
@@ -88,7 +83,7 @@ class LeaderboardListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    return ListTile(
       onTap: () => _handleTap(context),
       leading: perfIcon != null ? Icon(perfIcon) : null,
       title: Padding(

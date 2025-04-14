@@ -24,11 +24,8 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
@@ -48,18 +45,13 @@ class PerfStatsScreen extends StatelessWidget {
   final Perf perf;
 
   static Route<dynamic> buildRoute(BuildContext context, {required User user, required Perf perf}) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.perfStatPerfStats(perf.title),
-      screen: PerfStatsScreen(user: user, perf: perf),
-    );
+    return buildScreenRoute(context, screen: PerfStatsScreen(user: user, perf: perf));
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarAndroidTitleSpacing: 0,
-      appBarTitle: _Title(user: user, perf: perf),
+    return Scaffold(
+      appBar: AppBar(titleSpacing: 0, title: _Title(user: user, perf: perf)),
       body: _Body(user: user, perf: perf),
     );
   }
@@ -85,7 +77,7 @@ class _Title extends StatelessWidget {
               p.ratingDeviation < kClueLessDeviation;
         })
         .toList(growable: false);
-    return AppBarTextButton(
+    return TextButton(
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -155,7 +147,7 @@ class _Body extends ConsumerWidget {
                 if (ratingHistoryPerfData == null || ratingHistoryPerfData.points.length <= 1) {
                   return const SizedBox.shrink();
                 }
-                return PlatformCard(
+                return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: _EloChart(ratingHistoryPerfData),
@@ -186,7 +178,7 @@ class _Body extends ConsumerWidget {
                 ),
               ],
             ),
-            PlatformCard(
+            Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -258,7 +250,7 @@ class _Body extends ConsumerWidget {
               child: Tooltip(
                 excludeFromSemantics: true,
                 message: context.l10n.perfStatViewTheGames,
-                child: AdaptiveInkWell(
+                child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(
                       GameHistoryScreen.buildRoute(
@@ -290,7 +282,7 @@ class _Body extends ConsumerWidget {
                 ),
               ),
             ),
-            PlatformCard(
+            Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -638,7 +630,7 @@ class _GameListWidget extends ConsumerWidget {
                   ),
                 );
               } else if (context.mounted && gameData != null) {
-                showPlatformSnackbar(context, 'This variant is not supported yet');
+                showSnackBar(context, 'This variant is not supported yet');
               }
             },
             playerTitle: UserFullNameWidget(user: game.opponent, rating: game.opponentRating),
@@ -658,7 +650,7 @@ class _GameListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    return ListTile(
       onTap: onTap,
       title: playerTitle,
       subtitle:
@@ -781,7 +773,7 @@ class _EloChartState extends State<_EloChart> {
         meta: meta,
         child: Text(
           value.toInt().toString(),
-          style: const TextStyle(color: Colors.grey, fontSize: 10),
+          style: TextStyle(color: textShade(context, 0.6), fontSize: 10),
         ),
       );
     }
@@ -793,7 +785,7 @@ class _EloChartState extends State<_EloChart> {
         meta: meta,
         child: Text(
           formatDateFromTimestamp(value),
-          style: const TextStyle(color: Colors.grey, fontSize: 10),
+          style: TextStyle(color: textShade(context, 0.6), fontSize: 10),
         ),
       );
     }
@@ -832,7 +824,7 @@ class _EloChartState extends State<_EloChart> {
                   spots: _flSpot,
                   dotData: const FlDotData(show: false),
                   color: chartColor,
-                  belowBarData: BarAreaData(color: chartColor.withValues(alpha: 0.2), show: true),
+                  belowBarData: BarAreaData(color: chartColor.withValues(alpha: 0.3), show: true),
                   barWidth: 1.5,
                 ),
               ],
@@ -926,10 +918,10 @@ class _RangeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final chartColor = Styles.chartColor(context);
 
-    return PlatformCard(
+    return Card(
       color: selected ? chartColor.withValues(alpha: 0.2) : null,
       shadowColor: selected ? Colors.transparent : null,
-      child: AdaptiveInkWell(
+      child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(8.0)),
         onTap: onPressed,
         child: Center(

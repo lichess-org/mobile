@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -41,7 +40,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               moves: const [],
-              boardOverlay: PlatformCard(
+              boardOverlay: Card(
                 color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Center(
@@ -100,7 +99,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
                               await _cancelGameCreationFuture;
                             } catch (_) {
                               if (context.mounted) {
-                                showPlatformSnackbar(
+                                showSnackBar(
                                   context,
                                   'Error cancelling game creation',
                                   type: SnackBarType.error,
@@ -150,7 +149,7 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               moves: const [],
-              boardOverlay: PlatformCard(
+              boardOverlay: Card(
                 color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Center(
@@ -205,7 +204,7 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
                               await _cancelChallengeFuture;
                             } catch (_) {
                               if (context.mounted) {
-                                showPlatformSnackbar(
+                                showSnackBar(
                                   context,
                                   'Error cancelling challenge',
                                   type: SnackBarType.error,
@@ -356,7 +355,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               moves: const [],
-              boardOverlay: PlatformCard(
+              boardOverlay: Card(
                 color: Theme.of(context).dialogTheme.backgroundColor,
                 elevation: 2.0,
                 child: Padding(

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -9,8 +8,6 @@ import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 
 /// A widget that displays the performance cards of a user.
@@ -82,9 +79,8 @@ class PerfCards extends StatelessWidget {
                 return SizedBox(
                   height: 100,
                   width: 100,
-                  child: PlatformCard(
-                    borderRadius: _kCardBorderRadius,
-                    child: AdaptiveInkWell(
+                  child: Card(
+                    child: InkWell(
                       borderRadius: _kCardBorderRadius,
                       onTap: isPerfWithoutStats ? null : () => _handlePerfCardTap(context, perf),
                       child: Padding(

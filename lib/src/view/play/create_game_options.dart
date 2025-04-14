@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -95,9 +94,9 @@ class _CreateGamePlatformButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Opacity(
       opacity: onTap == null ? 0.5 : 1.0,
-      child: PlatformListTile(
+      child: ListTile(
         leading: Icon(icon, size: 28),
-        trailing: const CupertinoListTileChevron(),
+        trailing: const Icon(Icons.chevron_right),
         title: Text(label, style: Styles.mainListTileTitle),
         onTap: onTap,
       ),

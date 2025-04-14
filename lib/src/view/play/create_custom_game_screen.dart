@@ -30,7 +30,6 @@ import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 enum _ViewMode { create, challenges }
 
@@ -38,11 +37,7 @@ class CreateCustomGameScreen extends StatefulWidget {
   const CreateCustomGameScreen();
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const CreateCustomGameScreen(),
-      title: context.l10n.custom,
-    );
+    return buildScreenRoute(context, screen: const CreateCustomGameScreen());
   }
 
   @override
@@ -75,16 +70,17 @@ class _CreateCustomGameScreenState extends State<CreateCustomGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.custom),
-      appBarBottom: TabBar(
-        controller: _tabController,
-        tabs: <Widget>[
-          Tab(text: context.l10n.createAGame),
-          Tab(text: context.l10n.mobileCustomGameJoinAGame),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(context.l10n.custom),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: <Widget>[
+            Tab(text: context.l10n.createAGame),
+            Tab(text: context.l10n.mobileCustomGameJoinAGame),
+          ],
+        ),
       ),
-      appBarAutomaticBackgroundVisibility: false,
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
@@ -176,7 +172,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                       ? null
                       : session == null
                       ? () {
-                        showPlatformSnackbar(context, context.l10n.youNeedAnAccountToDoThat);
+                        showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
                       }
                       : () {
                         showConfirmDialog<void>(
@@ -231,8 +227,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
           int customTimeSeconds = preferences.customTimeSeconds;
           return StatefulBuilder(
             builder: (context, setState) {
-              return PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              return ListTile(
                 title: Text.rich(
                   TextSpan(
                     text: '${context.l10n.minutesPerSide}: ',
@@ -248,14 +243,11 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   value: customTimeSeconds,
                   values: kAvailableTimesInSeconds,
                   labelBuilder: clockLabelInMinutes,
-                  onChange:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? (num value) {
-                            setState(() {
-                              customTimeSeconds = value.toInt();
-                            });
-                          }
-                          : null,
+                  onChange: (num value) {
+                    setState(() {
+                      customTimeSeconds = value.toInt();
+                    });
+                  },
                   onChangeEnd: (num value) {
                     setState(() {
                       customTimeSeconds = value.toInt();
@@ -275,8 +267,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
           int customIncrementSeconds = preferences.customIncrementSeconds;
           return StatefulBuilder(
             builder: (context, setState) {
-              return PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              return ListTile(
                 title: Text.rich(
                   TextSpan(
                     text: '${context.l10n.incrementInSeconds}: ',
@@ -291,14 +282,11 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 subtitle: NonLinearSlider(
                   value: customIncrementSeconds,
                   values: kAvailableIncrementsInSeconds,
-                  onChange:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? (num value) {
-                            setState(() {
-                              customIncrementSeconds = value.toInt();
-                            });
-                          }
-                          : null,
+                  onChange: (num value) {
+                    setState(() {
+                      customIncrementSeconds = value.toInt();
+                    });
+                  },
                   onChangeEnd: (num value) {
                     setState(() {
                       customIncrementSeconds = value.toInt();
@@ -321,8 +309,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
           int daysPerTurn = preferences.customDaysPerTurn;
           return StatefulBuilder(
             builder: (context, setState) {
-              return PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              return ListTile(
                 title: Text.rich(
                   TextSpan(
                     text: '${context.l10n.daysPerTurn}: ',
@@ -338,14 +325,11 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   value: daysPerTurn,
                   values: kAvailableDaysPerTurn,
                   labelBuilder: _daysLabel,
-                  onChange:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? (num value) {
-                            setState(() {
-                              daysPerTurn = value.toInt();
-                            });
-                          }
-                          : null,
+                  onChange: (num value) {
+                    setState(() {
+                      daysPerTurn = value.toInt();
+                    });
+                  },
                   onChangeEnd: (num value) {
                     setState(() {
                       daysPerTurn = value.toInt();
@@ -376,10 +360,9 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
             shrinkWrap: true,
             children: [
               if (account != null)
-                PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
+                ListTile(
                   title: Text(context.l10n.timeControl),
-                  trailing: AdaptiveTextButton(
+                  trailing: TextButton(
                     onPressed: () {
                       showChoicePicker(
                         context,
@@ -409,10 +392,9 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 ...realTimeSelector
               else
                 ...correspondenceSelector,
-              PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              ListTile(
                 title: Text(context.l10n.variant),
-                trailing: AdaptiveTextButton(
+                trailing: TextButton(
                   onPressed: () {
                     showChoicePicker(
                       context,
@@ -429,18 +411,16 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
               ),
               ExpandedSection(
                 expand: preferences.customRated == false,
-                child: PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
+                child: ListTile(
                   title: Text(context.l10n.side),
-                  trailing: AdaptiveTextButton(
+                  trailing: TextButton(
                     onPressed: null,
                     child: Text(SideChoice.random.label(context.l10n)),
                   ),
                 ),
               ),
               if (account != null)
-                PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
+                ListTile(
                   title: Text(context.l10n.rated),
                   trailing: Switch.adaptive(
                     value: preferences.customRated,

@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -11,7 +10,6 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class LoadPositionScreen extends StatelessWidget {
   const LoadPositionScreen({super.key});
@@ -22,7 +20,7 @@ class LoadPositionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(appBarTitle: Text(context.l10n.loadPosition), body: const _Body());
+    return Scaffold(appBar: AppBar(title: Text(context.l10n.loadPosition)), body: const _Body());
   }
 }
 

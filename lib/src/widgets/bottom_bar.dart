@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
@@ -29,44 +28,22 @@ class PlatformBottomBar extends StatelessWidget {
   /// Whether to expand the children to fill the available space. Defaults to true.
   final bool expandChildren;
 
-  /// Whether to make the Cupertino bar transparent. Defaults to true.
+  /// Whether to make the bar transparent. Defaults to true.
   final bool transparentBackground;
 
   @override
   Widget build(BuildContext context) {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return MediaQuery.withClampedTextScaling(
-        maxScaleFactor: 1.4,
-        child: ColoredBox(
-          color: CupertinoTheme.of(
-            context,
-          ).barBackgroundColor.withValues(alpha: transparentBackground ? 0.0 : null),
-          child: SizedBox(
-            height: kBottomBarHeight + MediaQuery.paddingOf(context).bottom,
-            child: SafeArea(
-              top: false,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: mainAxisAlignment,
-                children:
-                    expandChildren
-                        ? children.map((child) => Expanded(child: child)).toList()
-                        : children,
-              ),
-            ),
-          ),
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: 1.4,
+      child: BottomAppBar(
+        color: transparentBackground ? Colors.transparent : null,
+        height: kBottomBarHeight,
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+        child: Row(
+          mainAxisAlignment: mainAxisAlignment,
+          children:
+              expandChildren ? children.map((child) => Expanded(child: child)).toList() : children,
         ),
-      );
-    }
-
-    return BottomAppBar(
-      color: transparentBackground ? Colors.transparent : null,
-      height: kBottomBarHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-      child: Row(
-        mainAxisAlignment: mainAxisAlignment,
-        children:
-            expandChildren ? children.map((child) => Expanded(child: child)).toList() : children,
       ),
     );
   }

@@ -4,7 +4,6 @@ import 'dart:ui' as ui;
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart' show Side, kInitialFEN;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,14 +11,11 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_color_utilities/score/score.dart';
 import 'package:path/path.dart';
@@ -28,24 +24,12 @@ class BackgroundChoiceScreen extends StatelessWidget {
   const BackgroundChoiceScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const BackgroundChoiceScreen(),
-      title: context.l10n.background,
-    );
+    return buildScreenRoute(context, screen: const BackgroundChoiceScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
-  }
-
-  Widget _androidBuilder(BuildContext context) {
     return Scaffold(appBar: AppBar(title: Text(context.l10n.background)), body: _Body());
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(navigationBar: const CupertinoNavigationBar(), child: _Body());
   }
 }
 
@@ -67,12 +51,12 @@ class _Body extends ConsumerWidget {
         if (appDocumentsDirectory != null) ...[
           ListSection(
             children: [
-              PlatformListTile(
+              ListTile(
                 leading: const Icon(Icons.image_outlined),
                 title: const Text('Pick an image'),
                 trailing:
                     Theme.of(context).platform == TargetPlatform.iOS
-                        ? const CupertinoListTileChevron()
+                        ? const Icon(Icons.chevron_right)
                         : null,
                 onTap: () async {
                   final ImagePicker picker = ImagePicker();
@@ -292,10 +276,9 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                   left: orientation == Orientation.portrait ? 0 : null,
                   right: 0,
                   child: Center(
-                    child: PlatformCard(
+                    child: Card(
                       margin: const EdgeInsets.all(16.0),
-                      borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      child: AdaptiveInkWell(
+                      child: InkWell(
                         borderRadius: const BorderRadius.all(Radius.circular(20)),
                         onTap: () {
                           setState(() {
@@ -331,11 +314,11 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
           },
         ),
         persistentFooterButtons: [
-          AdaptiveTextButton(
+          TextButton(
             child: Text(context.l10n.cancel),
             onPressed: () => Navigator.pop(context, null),
           ),
-          AdaptiveTextButton(
+          TextButton(
             child: Text(context.l10n.accept),
             onPressed:
                 () => Navigator.pop(
@@ -500,10 +483,9 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
               left: widget.viewportOrientation == Orientation.portrait ? 0 : null,
               right: 0,
               child: Center(
-                child: PlatformCard(
+                child: Card(
                   margin: const EdgeInsets.all(16.0),
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  child: AdaptiveInkWell(
+                  child: InkWell(
                     borderRadius: const BorderRadius.all(Radius.circular(20)),
                     onTap: () {
                       setState(() {
@@ -532,7 +514,7 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  AdaptiveTextButton(
+                  TextButton(
                     child: Text(showBoard ? 'Hide board' : 'Show board'),
                     onPressed:
                         () => {
@@ -545,12 +527,12 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      AdaptiveTextButton(
+                      TextButton(
                         child: Text(context.l10n.cancel),
                         onPressed: () => Navigator.pop(context, null),
                       ),
                       const SizedBox(width: 10.0),
-                      AdaptiveTextButton(
+                      TextButton(
                         child: Text(context.l10n.accept),
                         onPressed: () async {
                           final ext = extension(widget.image.path);
@@ -599,25 +581,6 @@ class _BackgroundTheme extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cupertinoTheme = CupertinoThemeData(
-      applyThemeToAll: true,
-      primaryColor: baseTheme.colorScheme.primary,
-      primaryContrastingColor: baseTheme.colorScheme.onPrimary,
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor,
-      barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
-      textTheme: cupertinoTextTheme(baseTheme.colorScheme),
-    );
-
-    return Theme(
-      data: baseTheme,
-      child: CupertinoTheme(
-        data: cupertinoTheme,
-        child: IconTheme(
-          data: IconThemeData(color: cupertinoTheme.textTheme.textStyle.color),
-          child: DefaultTextStyle.merge(style: cupertinoTheme.textTheme.textStyle, child: child),
-        ),
-      ),
-    );
+    return Theme(data: baseTheme, child: child);
   }
 }

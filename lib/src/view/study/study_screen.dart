@@ -3,7 +3,6 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -35,8 +34,8 @@ import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:logging/logging.dart';
 
@@ -71,9 +70,8 @@ class _StudyScreenLoader extends ConsumerWidget {
         return _StudyScreen(id: id, studyState: value);
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load study: $error', stackTrace);
-        return PlatformScaffold(
-          appBarEnableBackgroundFilterBlur: false,
-          appBarTitle: const Text(''),
+        return Scaffold(
+          appBar: AppBar(title: const Text('')),
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
@@ -94,18 +92,19 @@ class _StudyScreenLoader extends ConsumerWidget {
           ),
         );
       case _:
-        return PlatformScaffold(
-          appBarEnableBackgroundFilterBlur: false,
-          appBarTitle: Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: SizedBox(
-                height: 24.0,
-                width: 200.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10.0),
+        return Scaffold(
+          appBar: AppBar(
+            title: Shimmer(
+              child: ShimmerLoading(
+                isLoading: true,
+                child: SizedBox(
+                  height: 24.0,
+                  width: 200.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                 ),
               ),
@@ -187,20 +186,21 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
   @override
   Widget build(BuildContext context) {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    return PlatformScaffold(
-      appBarEnableBackgroundFilterBlur: false,
-      appBarTitle: AutoSizeText(
-        widget.studyState.currentChapterTitle,
-        maxLines: 2,
-        minFontSize: 14,
-        overflow: TextOverflow.ellipsis,
+    return Scaffold(
+      appBar: AppBar(
+        title: AutoSizeText(
+          widget.studyState.currentChapterTitle,
+          maxLines: 2,
+          minFontSize: 14,
+          overflow: TextOverflow.ellipsis,
+        ),
+        actions: [
+          if (widget.studyState.isEngineAvailable(enginePrefs))
+            EngineDepth(savedEval: widget.studyState.currentNode.eval),
+          if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
+          _StudyMenu(id: widget.id),
+        ],
       ),
-      appBarActions: [
-        if (widget.studyState.isEngineAvailable(enginePrefs))
-          EngineDepth(savedEval: widget.studyState.currentNode.eval),
-        if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-        _StudyMenu(id: widget.id),
-      ],
       body: _Body(id: widget.id, tabController: _tabController, tabs: tabs),
     );
   }
@@ -216,28 +216,27 @@ class _StudyMenu extends ConsumerWidget {
     final session = ref.watch(authSessionProvider);
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
-    return PlatformContextMenuButton(
+    return ContextMenuButton(
       semanticsLabel: 'Study menu',
       icon: const Icon(Icons.more_horiz),
       actions: [
-        PlatformContextMenuAction(
-          icon: Icons.settings,
+        ContextMenuAction(
+          icon: const Icon(Icons.settings),
           label: context.l10n.settingsSettings,
           onPressed: () {
             Navigator.of(context).push(StudySettingsScreen.buildRoute(context, id));
           },
         ),
         if (session != null)
-          PlatformContextMenuAction(
-            icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
+          ContextMenuAction(
+            icon: Icon(state.study.liked ? Icons.favorite : Icons.favorite_border),
             label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
             onPressed: () {
               ref.read(studyControllerProvider(id).notifier).toggleLike();
             },
           ),
-        PlatformContextMenuAction(
-          icon:
-              Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
+        ContextMenuAction(
+          icon: const PlatformShareIcon(),
           label: context.l10n.studyShareAndExport,
           onPressed: () {
             showAdaptiveActionSheet<void>(
@@ -271,11 +270,7 @@ class _StudyMenu extends ConsumerWidget {
                         }
                       } catch (e) {
                         if (context.mounted) {
-                          showPlatformSnackbar(
-                            context,
-                            'Failed to get PGN',
-                            type: SnackBarType.error,
-                          );
+                          showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
                         }
                       }
                     },
@@ -309,11 +304,7 @@ class _StudyMenu extends ConsumerWidget {
                           }
                         } catch (e) {
                           if (context.mounted) {
-                            showPlatformSnackbar(
-                              context,
-                              'Failed to get GIF',
-                              type: SnackBarType.error,
-                            );
+                            showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
                           }
                         }
                       },
@@ -337,11 +328,7 @@ class _StudyMenu extends ConsumerWidget {
                       } catch (e) {
                         debugPrint(e.toString());
                         if (context.mounted) {
-                          showPlatformSnackbar(
-                            context,
-                            'Failed to get GIF',
-                            type: SnackBarType.error,
-                          );
+                          showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
                         }
                       }
                     },

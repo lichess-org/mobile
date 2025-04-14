@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 final _dateFormatter = DateFormat.yMMMd();
 
@@ -66,16 +65,12 @@ class PuzzleHistoryScreen extends StatelessWidget {
   const PuzzleHistoryScreen();
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const PuzzleHistoryScreen(),
-      title: context.l10n.puzzleHistory,
-    );
+    return buildScreenRoute(context, screen: const PuzzleHistoryScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(appBarTitle: Text(context.l10n.puzzleHistory), body: _Body());
+    return Scaffold(appBar: AppBar(title: Text(context.l10n.puzzleHistory)), body: _Body());
   }
 }
 
@@ -118,7 +113,7 @@ class _BodyState extends ConsumerState<_Body> {
     return historyState.when(
       data: (state) {
         if (state.hasError) {
-          showPlatformSnackbar(context, 'Error loading history', type: SnackBarType.error);
+          showSnackBar(context, 'Error loading history', type: SnackBarType.error);
         }
         final crossAxisCount = MediaQuery.sizeOf(context).width > FormFactor.tablet ? 4 : 2;
         final columnsGap = _kPuzzlePadding * crossAxisCount + _kPuzzlePadding;

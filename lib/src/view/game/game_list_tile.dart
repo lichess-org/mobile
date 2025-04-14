@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 final _dateFormatter = DateFormat.yMMMd().add_Hm();
@@ -65,7 +64,6 @@ class GameListTile extends StatelessWidget {
     return _GameListTile(
       game: game,
       mySide: youAre,
-      padding: padding,
       onTap:
           () => openGameScreen(
             context,
@@ -107,7 +105,6 @@ class _GameListTile extends StatelessWidget {
     this.subtitle,
     this.trailing,
     this.onTap,
-    this.padding,
   });
 
   final LightArchivedGame game;
@@ -119,11 +116,10 @@ class _GameListTile extends StatelessWidget {
   final Widget? subtitle;
   final Widget? trailing;
   final GestureTapCallback? onTap;
-  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    return ListTile(
       onTap: onTap,
       onLongPress: () {
         showAdaptiveBottomSheet<void>(
@@ -144,15 +140,8 @@ class _GameListTile extends StatelessWidget {
       },
       leading: icon != null ? Icon(icon) : null,
       title: opponentTitle,
-      subtitle:
-          subtitle != null
-              ? DefaultTextStyle.merge(
-                child: subtitle!,
-                style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-              )
-              : null,
+      subtitle: subtitle,
       trailing: trailing,
-      padding: padding,
     );
   }
 }
@@ -291,7 +280,7 @@ class GameContextMenu extends ConsumerWidget {
                     );
                   }
                   : () {
-                    showPlatformSnackbar(
+                    showSnackBar(
                       context,
                       'This variant is not supported yet.',
                       type: SnackBarType.info,
@@ -311,10 +300,7 @@ class GameContextMenu extends ConsumerWidget {
             onPressed: () {
               launchShareDialog(context, uri: lichessUri('/${game.id}/${orientation.name}'));
             },
-            icon:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoIcons.share
-                    : Icons.share,
+            icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
             child: Text(context.l10n.mobileShareGameURL),
           ),
           BottomSheetContextMenuAction(
@@ -336,7 +322,7 @@ class GameContextMenu extends ConsumerWidget {
               } catch (e) {
                 debugPrint(e.toString());
                 if (context.mounted) {
-                  showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
+                  showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
                 }
               }
             },
@@ -352,7 +338,7 @@ class GameContextMenu extends ConsumerWidget {
                 }
               } catch (e) {
                 if (context.mounted) {
-                  showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
                 }
               }
             },
@@ -369,7 +355,7 @@ class GameContextMenu extends ConsumerWidget {
                 }
               } catch (e) {
                 if (context.mounted) {
-                  showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
                 }
               }
             },

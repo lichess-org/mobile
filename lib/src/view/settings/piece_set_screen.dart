@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -14,7 +13,7 @@ class PieceSetScreen extends ConsumerStatefulWidget {
   const PieceSetScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const PieceSetScreen(), title: context.l10n.pieceSet);
+    return buildScreenRoute(context, screen: const PieceSetScreen());
   }
 
   @override
@@ -55,31 +54,23 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.pieceSet),
-      appBarActions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(context.l10n.pieceSet),
+        actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
+      ),
       body: SafeArea(
         child: ListView.separated(
           itemCount: PieceSet.values.length,
           separatorBuilder:
-              (_, _) => PlatformDivider(
-                height: 1,
-                // on iOS: 14 (default indent) + 16 (padding)
-                indent: Theme.of(context).platform == TargetPlatform.iOS ? 14 + 16 : null,
-                color: Theme.of(context).platform == TargetPlatform.iOS ? null : Colors.transparent,
-              ),
+              (_, _) =>
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? const PlatformDivider()
+                      : const SizedBox.shrink(),
           itemBuilder: (context, index) {
             final pieceSet = PieceSet.values[index];
-            return PlatformListTile(
-              trailing:
-                  boardPrefs.pieceSet == pieceSet
-                      ? Theme.of(context).platform == TargetPlatform.android
-                          ? const Icon(Icons.check)
-                          : Icon(
-                            CupertinoIcons.check_mark_circled_solid,
-                            color: CupertinoTheme.of(context).primaryColor,
-                          )
-                      : null,
+            return ListTile(
+              trailing: boardPrefs.pieceSet == pieceSet ? const Icon(Icons.check) : null,
               title: Text(pieceSet.label),
               subtitle: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 264),

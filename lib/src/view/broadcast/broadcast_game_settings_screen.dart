@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -10,7 +9,6 @@ import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BroadcastGameSettingsScreen extends ConsumerWidget {
@@ -24,11 +22,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
   }) {
-    return buildScreenRoute(
-      context,
-      screen: BroadcastGameSettingsScreen(roundId, gameId),
-      title: context.l10n.settingsSettings,
-    );
+    return buildScreenRoute(context, screen: BroadcastGameSettingsScreen(roundId, gameId));
   }
 
   @override
@@ -37,8 +31,8 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.settingsSettings),
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.settingsSettings)),
       body: ListView(
         children: [
           ListSection(
@@ -129,7 +123,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
           ),
           ListSection(
             children: [
-              PlatformListTile(
+              ListTile(
                 title: Text(context.l10n.openingExplorer),
                 onTap:
                     () => showAdaptiveBottomSheet<void>(

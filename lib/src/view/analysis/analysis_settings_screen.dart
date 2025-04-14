@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settin
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class AnalysisSettingsScreen extends ConsumerWidget {
@@ -18,11 +17,7 @@ class AnalysisSettingsScreen extends ConsumerWidget {
   final AnalysisOptions options;
 
   static Route<dynamic> buildRoute(BuildContext context, {required AnalysisOptions options}) {
-    return buildScreenRoute(
-      context,
-      screen: AnalysisSettingsScreen(options),
-      title: context.l10n.settingsSettings,
-    );
+    return buildScreenRoute(context, screen: AnalysisSettingsScreen(options));
   }
 
   @override
@@ -33,8 +28,8 @@ class AnalysisSettingsScreen extends ConsumerWidget {
 
     switch (asyncState) {
       case AsyncData(:final value):
-        return PlatformScaffold(
-          appBarTitle: Text(context.l10n.settingsSettings),
+        return Scaffold(
+          appBar: AppBar(title: Text(context.l10n.settingsSettings)),
           body: ListView(
             children: [
               ListSection(
@@ -138,7 +133,7 @@ class AnalysisSettingsScreen extends ConsumerWidget {
               ),
               ListSection(
                 children: [
-                  PlatformListTile(
+                  ListTile(
                     title: Text(context.l10n.openingExplorer),
                     onTap:
                         () => showAdaptiveBottomSheet<void>(

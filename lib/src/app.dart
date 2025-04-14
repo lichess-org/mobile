@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -150,14 +149,14 @@ class _AppState extends ConsumerState<Application> {
       title: 'lichess.org',
       locale: generalPrefs.locale,
       theme: themeLight.copyWith(
-        navigationBarTheme: NavigationBarTheme.of(
-          context,
-        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+        navigationBarTheme: NavigationBarTheme.of(context).copyWith(
+          height: isIOS || remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
+        ),
       ),
       darkTheme: themeDark.copyWith(
-        navigationBarTheme: NavigationBarTheme.of(
-          context,
-        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+        navigationBarTheme: NavigationBarTheme.of(context).copyWith(
+          height: isIOS || remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
+        ),
       ),
       themeMode:
           generalPrefs.isForcedDarkMode
@@ -167,17 +166,6 @@ class _AppState extends ConsumerState<Application> {
                 BackgroundThemeMode.dark => ThemeMode.dark,
                 BackgroundThemeMode.system => ThemeMode.system,
               },
-      builder:
-          isIOS
-              ? (context, child) => IconTheme.merge(
-                data: IconThemeData(
-                  color: CupertinoTheme.of(
-                    context,
-                  ).textTheme.textStyle.color?.withValues(alpha: 0.7),
-                ),
-                child: Material(color: Colors.transparent, child: child),
-              )
-              : null,
       onGenerateRoute:
           (settings) =>
               settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,

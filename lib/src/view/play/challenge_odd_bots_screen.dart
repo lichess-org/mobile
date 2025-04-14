@@ -14,9 +14,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class ChallengeOddBotsScreen extends StatelessWidget {
   const ChallengeOddBotsScreen(this.bot);
@@ -24,17 +22,13 @@ class ChallengeOddBotsScreen extends StatelessWidget {
   final LightUser bot;
 
   static Route<dynamic> buildRoute(BuildContext context, LightUser bot) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.challengeChallengesX(bot.name),
-      screen: ChallengeOddBotsScreen(bot),
-    );
+    return buildScreenRoute(context, screen: ChallengeOddBotsScreen(bot));
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.challengeChallengesX(bot.name)),
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.challengeChallengesX(bot.name))),
       body: _ChallengeBody(bot),
     );
   }
@@ -130,8 +124,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
             builder: (context) {
               return StatefulBuilder(
                 builder: (context, setState) {
-                  return PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
+                  return ListTile(
                     title: Text.rich(
                       TextSpan(
                         text: '${context.l10n.minutesPerSide}: ',
@@ -147,14 +140,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       value: seconds,
                       values: List.generate(15, (i) => (i + 1) * 60),
                       labelBuilder: clockLabelInMinutes,
-                      onChange:
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? (num value) {
-                                setState(() {
-                                  seconds = value.toInt();
-                                });
-                              }
-                              : null,
+                      onChange: (num value) {
+                        setState(() {
+                          seconds = value.toInt();
+                        });
+                      },
                       onChangeEnd: (num value) {
                         setState(() {
                           seconds = value.toInt();
@@ -170,8 +160,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
             builder: (context) {
               return StatefulBuilder(
                 builder: (context, setState) {
-                  return PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
+                  return ListTile(
                     title: Text.rich(
                       TextSpan(
                         text: '${context.l10n.incrementInSeconds}: ',
@@ -186,14 +175,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     subtitle: NonLinearSlider(
                       value: incrementSeconds,
                       values: List.generate(11, (i) => i),
-                      onChange:
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? (num value) {
-                                setState(() {
-                                  incrementSeconds = value.toInt();
-                                });
-                              }
-                              : null,
+                      onChange: (num value) {
+                        setState(() {
+                          incrementSeconds = value.toInt();
+                        });
+                      },
                       onChangeEnd: (num value) {
                         setState(() {
                           incrementSeconds = value.toInt();

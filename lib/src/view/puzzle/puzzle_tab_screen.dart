@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,11 +47,7 @@ class PuzzleTabScreen extends ConsumerWidget {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return _CupertinoTabBody(savedBatches);
-    } else {
-      return _MaterialTabBody(savedBatches);
-    }
+    return _MaterialTabBody(savedBatches);
   }
 }
 
@@ -67,11 +62,7 @@ Widget _buildMainListItem(
       return const _PuzzleMenu();
     case 1:
       return Padding(
-        padding: Styles.horizontalBodyPadding.add(
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? Styles.sectionTopPadding
-              : EdgeInsets.zero,
-        ),
+        padding: Styles.horizontalBodyPadding,
         child: Text(context.l10n.puzzleDesc, style: Styles.sectionTitle),
       );
     case 2:
@@ -106,140 +97,6 @@ Widget _buildMainListRemovedItem(
   Animation<double> animation,
 ) {
   return SizeTransition(sizeFactor: animation, child: PuzzleAnglePreview(angle: angle));
-}
-
-// display the main body list for cupertino devices, as a workaround
-// for missing type to handle both [SliverAnimatedList] and [AnimatedList].
-class _CupertinoTabBody extends ConsumerStatefulWidget {
-  const _CupertinoTabBody(this.savedBatches);
-
-  final IList<(PuzzleAngle, int)> savedBatches;
-
-  @override
-  ConsumerState<_CupertinoTabBody> createState() => _CupertinoTabBodyState();
-}
-
-class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
-  final GlobalKey<SliverAnimatedListState> _listKey = GlobalKey<SliverAnimatedListState>();
-  late SliverAnimatedListModel<PuzzleAngle> _angles;
-
-  @override
-  void initState() {
-    super.initState();
-    _angles = SliverAnimatedListModel<PuzzleAngle>(
-      listKey: _listKey,
-      removedItemBuilder: _buildMainListRemovedItem,
-      initialItems: widget.savedBatches.map((e) => e.$1),
-      itemsOffset: 4,
-    );
-  }
-
-  @override
-  void didUpdateWidget(covariant _CupertinoTabBody oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    final oldKeys = ISet(oldWidget.savedBatches.map((e) => e.$1));
-    final newKeys = ISet(widget.savedBatches.map((e) => e.$1));
-
-    if (oldKeys != newKeys) {
-      final missings = oldKeys.difference(newKeys);
-      if (missings.isNotEmpty) {
-        for (final missing in missings) {
-          final index = _angles.indexOf(missing);
-          if (index != -1) {
-            _angles.removeAt(index);
-          }
-        }
-      }
-
-      final additions = newKeys.difference(oldKeys);
-      if (additions.isNotEmpty) {
-        for (final addition in additions) {
-          _angles.prepend(addition);
-        }
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final isTablet = isTabletOrLarger(context);
-
-    Widget buildItem(BuildContext context, int index, Animation<double> animation) =>
-        _buildMainListItem(context, index, animation, (index) => _angles[index]);
-
-    if (isTablet) {
-      return Row(
-        children: [
-          Expanded(
-            child: CupertinoPageScaffold(
-              child: CustomScrollView(
-                controller: puzzlesScrollController,
-                slivers: [
-                  CupertinoSliverNavigationBar(
-                    padding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
-                    largeTitle: Text(context.l10n.puzzles),
-                    trailing: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [_DashboardButton()],
-                    ),
-                  ),
-                  const SliverToBoxAdapter(child: ConnectivityBanner()),
-                  SliverSafeArea(
-                    top: false,
-                    sliver: SliverAnimatedList(
-                      key: _listKey,
-                      initialItemCount: _angles.length,
-                      itemBuilder: buildItem,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          VerticalDivider(
-            width: 1.0,
-            thickness: 1.0,
-            color: CupertinoColors.opaqueSeparator.resolveFrom(context),
-          ),
-          Expanded(
-            child: CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                transitionBetweenRoutes: false,
-                middle: Text(context.l10n.puzzleHistory),
-                trailing: const _HistoryButton(),
-              ),
-              child: ListView(children: const [PuzzleHistoryWidget(showHeader: false)]),
-            ),
-          ),
-        ],
-      );
-    }
-
-    return CupertinoPageScaffold(
-      child: CustomScrollView(
-        controller: puzzlesScrollController,
-        slivers: [
-          CupertinoSliverNavigationBar(
-            padding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
-            largeTitle: Text(context.l10n.puzzles),
-            trailing: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [_DashboardButton(), SizedBox(width: 6.0), _HistoryButton()],
-            ),
-          ),
-          const SliverToBoxAdapter(child: ConnectivityBanner()),
-          SliverSafeArea(
-            top: false,
-            sliver: SliverAnimatedList(
-              key: _listKey,
-              initialItemCount: _angles.length,
-              itemBuilder: buildItem,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _MaterialTabBody extends ConsumerStatefulWidget {
@@ -362,11 +219,7 @@ class _PuzzleMenuListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
-      padding:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0)
-              : null,
+    return ListTile(
       leading: Badge(
         backgroundColor: ColorScheme.of(context).secondary,
         textStyle: TextStyle(
@@ -385,9 +238,7 @@ class _PuzzleMenuListTile extends StatelessWidget {
       title: Text(title, style: Styles.mainListTileTitle),
       subtitle: Text(subtitle, maxLines: 3),
       trailing:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? const CupertinoListTileChevron()
-              : null,
+          Theme.of(context).platform == TargetPlatform.iOS ? const Icon(Icons.chevron_right) : null,
       onTap: onTap,
     );
   }
@@ -491,7 +342,6 @@ class PuzzleHistoryWidget extends ConsumerWidget {
             isTablet ? _kNumberOfHistoryItemsOnTablet : _kNumberOfHistoryItemsOnHandset;
 
         return ListSection(
-          cupertinoClipBehavior: Clip.none,
           header: showHeader ? Text(context.l10n.puzzleHistory) : null,
           headerTrailing:
               showHeader
@@ -503,10 +353,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
                   : null,
           children: [
             Padding(
-              padding:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? EdgeInsets.zero
-                      : Styles.horizontalBodyPadding,
+              padding: Styles.horizontalBodyPadding,
               child: PuzzleHistoryPreview(recentActivity.take(maxItems).toIList(), maxRows: 5),
             ),
           ],
@@ -549,7 +396,7 @@ class _DashboardButton extends ConsumerWidget {
           offline: () => null,
         );
 
-    return AppBarIconButton(
+    return SemanticIconButton(
       icon: const Icon(Icons.assessment_outlined),
       semanticsLabel: context.l10n.puzzlePuzzleDashboard,
       onPressed: onPressed,
@@ -575,7 +422,7 @@ class _HistoryButton extends ConsumerWidget {
               },
           offline: () => null,
         );
-    return AppBarIconButton(
+    return SemanticIconButton(
       icon: const Icon(Icons.history_outlined),
       semanticsLabel: context.l10n.puzzleHistory,
       onPressed: onPressed,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 /// A bottom bar button.
 ///
@@ -39,10 +38,7 @@ class BottomBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final primary = ColorScheme.of(context).primary;
 
-    final labelFontSize =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? 11.0
-            : TextTheme.of(context).bodySmall?.fontSize;
+    final labelFontSize = TextTheme.of(context).bodySmall?.fontSize;
 
     final child = Opacity(
       opacity: enabled ? 1.0 : 0.4,
@@ -84,7 +80,7 @@ class BottomBarButton extends StatelessWidget {
         excludeFromSemantics: true,
         message: label,
         triggerMode: showTooltip ? TooltipTriggerMode.longPress : TooltipTriggerMode.manual,
-        child: AdaptiveInkWell(
+        child: InkWell(
           borderRadius: BorderRadius.zero,
           onTap: onTap,
           child:

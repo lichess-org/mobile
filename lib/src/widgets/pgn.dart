@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 const innacuracyColor = LichessColors.cyan;
@@ -1244,7 +1243,7 @@ class InlineMove extends ConsumerWidget {
     final eval =
         params.shouldShowComputerAnalysis && canShowEval ? branch.eval ?? branch.serverEval : null;
 
-    return AdaptiveInkWell(
+    return InkWell(
       key: isCurrentMove ? params.currentMoveKey : null,
       borderRadius: borderRadius,
       onTap: () => params.notifier.userJump(path),

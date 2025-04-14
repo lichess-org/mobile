@@ -7,22 +7,16 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class TournamentListScreen extends ConsumerStatefulWidget {
   const TournamentListScreen({super.key});
 
   static Route<void> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.tournaments,
-      screen: const TournamentListScreen(),
-    );
+    return buildScreenRoute(context, screen: const TournamentListScreen());
   }
 
   @override
@@ -75,17 +69,18 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   Widget build(BuildContext context) {
     final tournamentAsync = ref.watch(tournamentsProvider);
 
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.tournaments),
-      appBarBottom: TabBar(
-        controller: _tabController,
-        tabs: <Widget>[
-          Tab(text: _ViewMode.completed.l10n(context)),
-          Tab(text: _ViewMode.ongoing.l10n(context)),
-          Tab(text: _ViewMode.upcoming.l10n(context)),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(context.l10n.tournaments),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: <Widget>[
+            Tab(text: _ViewMode.completed.l10n(context)),
+            Tab(text: _ViewMode.ongoing.l10n(context)),
+            Tab(text: _ViewMode.upcoming.l10n(context)),
+          ],
+        ),
       ),
-      appBarAutomaticBackgroundVisibility: false,
       body: switch (tournamentAsync) {
         AsyncData(:final value) => TabBarView(
           controller: _tabController,
@@ -128,10 +123,6 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
             .toList();
 
     return RefreshIndicator.adaptive(
-      edgeOffset:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? MediaQuery.paddingOf(context).top + 16.0
-              : 0,
       key: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(tournamentsProvider),
       child: ListView.separated(
@@ -168,8 +159,7 @@ class _TournamentListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
-      padding: Styles.bodyPadding,
+    return ListTile(
       title: Row(
         children: [
           Icon(tournament.perf.icon, size: 30, color: _iconColor(tournament)),

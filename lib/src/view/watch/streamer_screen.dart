@@ -1,14 +1,10 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/styles/social_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kThumbnailSize = 75.0;
@@ -19,21 +15,12 @@ class StreamerScreen extends StatelessWidget {
   final IList<Streamer> streamers;
 
   static Route<dynamic> buildRoute(BuildContext context, IList<Streamer> streamers) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.mobileLiveStreamers,
-      screen: StreamerScreen(streamers: streamers),
-    );
+    return buildScreenRoute(context, screen: StreamerScreen(streamers: streamers));
   }
 
   @override
-  Widget build(BuildContext build) {
-    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
-  }
-
-  Widget _buildAndroid(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBar: AppBar(title: Text(context.l10n.mobileLiveStreamers)),
       body: ListView.builder(
         itemCount: streamers.length,
@@ -44,32 +31,6 @@ class StreamerScreen extends StatelessWidget {
               isPreview: false,
               maxSubtitleLines: 4,
             ),
-      ),
-    );
-  }
-
-  Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      navigationBar: CupertinoNavigationBar(middle: Text(context.l10n.mobileLiveStreamers)),
-      child: CustomScrollView(
-        slivers: [
-          SliverSafeArea(
-            sliver: SliverList.separated(
-              separatorBuilder:
-                  (context, index) =>
-                      const PlatformDivider(height: 1, indent: _kThumbnailSize + 16.0 + 10.0),
-              itemCount: streamers.length,
-              itemBuilder:
-                  (context, index) => StreamerListTile(
-                    thumbnailSize: _kThumbnailSize,
-                    streamer: streamers[index],
-                    isPreview: false,
-                    maxSubtitleLines: 4,
-                  ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -137,18 +98,14 @@ class StreamerListTile extends StatelessWidget {
     );
 
     return isPreview
-        ? PlatformListTile(
-          padding:
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0)
-                  : null,
+        ? ListTile(
           onTap: onTap,
           leading: leading,
           title: title,
           subtitle: subtitle,
           trailing: trailing,
         )
-        : AdaptiveInkWell(
+        : InkWell(
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),

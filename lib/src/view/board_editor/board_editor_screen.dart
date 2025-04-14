@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class BoardEditorScreen extends ConsumerWidget {
   const BoardEditorScreen({super.key, this.initialFen});
@@ -29,26 +28,24 @@ class BoardEditorScreen extends ConsumerWidget {
   final String? initialFen;
 
   static Route<dynamic> buildRoute(BuildContext context, {String? initialFen}) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.boardEditor,
-      screen: BoardEditorScreen(initialFen: initialFen),
-    );
+    return buildScreenRoute(context, screen: BoardEditorScreen(initialFen: initialFen));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardEditorState = ref.watch(boardEditorControllerProvider(initialFen));
 
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.boardEditor),
-      appBarActions: [
-        AppBarIconButton(
-          semanticsLabel: context.l10n.mobileSharePositionAsFEN,
-          onPressed: () => launchShareDialog(context, text: boardEditorState.fen),
-          icon: const PlatformShareIcon(),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(context.l10n.boardEditor),
+        actions: [
+          SemanticIconButton(
+            semanticsLabel: context.l10n.mobileSharePositionAsFEN,
+            onPressed: () => launchShareDialog(context, text: boardEditorState.fen),
+            icon: const PlatformShareIcon(),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(

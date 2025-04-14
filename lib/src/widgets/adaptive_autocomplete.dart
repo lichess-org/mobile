@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class AdaptiveAutoComplete<T extends Object> extends StatelessWidget {
   const AdaptiveAutoComplete({
@@ -59,7 +58,7 @@ class AdaptiveAutoComplete<T extends Object> extends StatelessWidget {
                     itemCount: options.length,
                     itemBuilder: (BuildContext context, int index) {
                       final T option = options.elementAt(index);
-                      return AdaptiveInkWell(
+                      return InkWell(
                         onTap: () {
                           onSelected(option);
                         },

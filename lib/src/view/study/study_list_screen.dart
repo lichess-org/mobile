@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:logging/logging.dart';
@@ -38,23 +37,24 @@ class StudyListScreen extends ConsumerWidget {
     final filter = ref.watch(studyFilterProvider);
     final title = Text(isLoggedIn ? filter.category.l10n(context.l10n) : context.l10n.studyMenu);
 
-    return PlatformScaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      appBarTitle: title,
-      appBarActions: [
-        AppBarIconButton(
-          icon: const Icon(Icons.filter_list),
-          // TODO: translate
-          semanticsLabel: 'Filter studies',
-          onPressed:
-              () => showAdaptiveBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                showDragHandle: true,
-                builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
-              ),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: title,
+        actions: [
+          SemanticIconButton(
+            icon: const Icon(Icons.filter_list),
+            // TODO: translate
+            semanticsLabel: 'Filter studies',
+            onPressed:
+                () => showAdaptiveBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
+                ),
+          ),
+        ],
+      ),
       body: SafeArea(top: false, child: _Body(filter: filter)),
     );
   }
@@ -224,11 +224,7 @@ class _StudyListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
-      padding:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
-              : null,
+    return ListTile(
       leading: _StudyFlair(flair: study.flair, size: 30),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -6,7 +6,6 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 
 import '../../model/auth/fake_session_storage.dart';
 import '../../test_helpers.dart';
@@ -59,7 +58,7 @@ void main() {
 
       expect(find.text('Sign out'), findsOneWidget);
 
-      await tester.tap(find.widgetWithText(PlatformListTile, 'Sign out'), warnIfMissed: false);
+      await tester.tap(find.widgetWithText(ListTile, 'Sign out'), warnIfMissed: false);
       await tester.pumpAndSettle();
 
       // confirm

@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 // TODO l10n
 String displayModeL10n(BuildContext context, GameHistoryDisplayMode mode) {
@@ -70,7 +69,7 @@ class GameHistoryScreen extends ConsumerWidget {
               error: (e, s) => Text(context.l10n.mobileAllGames),
             )
             : Text(filtersInUse.selectionLabel(context.l10n));
-    final filterBtn = AppBarIconButton(
+    final filterBtn = SemanticIconButton(
       icon: Badge.count(
         backgroundColor: ColorScheme.of(context).secondary,
         textStyle: TextStyle(
@@ -98,12 +97,12 @@ class GameHistoryScreen extends ConsumerWidget {
           }),
     );
 
-    final displayModeButton = PlatformContextMenuButton(
+    final displayModeButton = ContextMenuButton(
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
       actions: [
-        PlatformContextMenuAction(
-          icon: Icons.ballot_outlined,
+        ContextMenuAction(
+          icon: const Icon(Icons.ballot_outlined),
           label: 'Detailed view',
           onPressed: () {
             ref
@@ -111,8 +110,8 @@ class GameHistoryScreen extends ConsumerWidget {
                 .setDisplayMode(GameHistoryDisplayMode.detail);
           },
         ),
-        PlatformContextMenuAction(
-          icon: Icons.list_outlined,
+        ContextMenuAction(
+          icon: const Icon(Icons.list_outlined),
           label: 'Compact view',
           onPressed: () {
             ref
@@ -123,10 +122,8 @@ class GameHistoryScreen extends ConsumerWidget {
       ],
     );
 
-    return PlatformScaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      appBarTitle: title,
-      appBarActions: [filterBtn, displayModeButton],
+    return Scaffold(
+      appBar: AppBar(title: title, actions: [filterBtn, displayModeButton]),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
@@ -251,11 +248,7 @@ class _BodyState extends ConsumerState<_Body> {
                     ref.read(gameListProvider.notifier).toggleBookmark(game.id);
                   } on Exception catch (_) {
                     if (context.mounted) {
-                      showPlatformSnackbar(
-                        context,
-                        'Bookmark action failed',
-                        type: SnackBarType.error,
-                      );
+                      showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
                     }
                   }
                 }
@@ -264,11 +257,6 @@ class _BodyState extends ConsumerState<_Body> {
                 final gameTile = switch (displayMode) {
                   GameHistoryDisplayMode.compact => GameListTile(
                     item: item,
-                    // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
-                    padding:
-                        Theme.of(context).platform == TargetPlatform.iOS
-                            ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
-                            : null,
                     onPressedBookmark: onPressedBookmark,
                     gameListContext: (widget.user?.id, gameFilterState),
                   ),
@@ -297,7 +285,7 @@ class _BodyState extends ConsumerState<_Body> {
                                   );
                                 }
                                 : (_) {
-                                  showPlatformSnackbar(
+                                  showSnackBar(
                                     context,
                                     'This variant is not supported yet.',
                                     type: SnackBarType.info,
@@ -421,11 +409,11 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            AdaptiveTextButton(
+            TextButton(
               onPressed: () => setState(() => filter = const GameFilterState()),
               child: Text(context.l10n.reset),
             ),
-            AdaptiveTextButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(filter),
               child: Text(context.l10n.apply),
             ),

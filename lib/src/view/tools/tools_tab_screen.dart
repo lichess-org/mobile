@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -18,21 +17,12 @@ import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
 import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class ToolsTabScreen extends ConsumerWidget {
   const ToolsTabScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -43,19 +33,6 @@ class ToolsTabScreen extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(title: Text(context.l10n.tools)),
         body: const Column(children: [ConnectivityBanner(), Expanded(child: _Body())]),
-      ),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    return CupertinoPageScaffold(
-      child: CustomScrollView(
-        controller: toolsScrollController,
-        slivers: [
-          CupertinoSliverNavigationBar(largeTitle: Text(context.l10n.tools)),
-          const SliverToBoxAdapter(child: ConnectivityBanner()),
-          const SliverSafeArea(top: false, sliver: _Body()),
-        ],
       ),
     );
   }
@@ -72,23 +49,18 @@ class _ToolsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tilePadding =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? const EdgeInsets.symmetric(vertical: 8.0)
-            : EdgeInsets.zero;
-
     return Opacity(
       opacity: onTap == null ? 0.5 : 1.0,
-      child: PlatformListTile(
+      child: ListTile(
         leading: Icon(
           icon,
           size: Styles.mainListTileIconSize,
           color: ColorScheme.of(context).primary,
         ),
-        title: Padding(padding: tilePadding, child: Text(title, style: Styles.callout)),
+        title: Text(title, style: Styles.callout),
         trailing:
             Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
+                ? const Icon(Icons.chevron_right)
                 : null,
         onTap: onTap,
       ),
@@ -189,8 +161,6 @@ class _Body extends ConsumerWidget {
       ),
     ];
 
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? SliverList(delegate: SliverChildListDelegate(content))
-        : ListView(controller: toolsScrollController, children: content);
+    return ListView(controller: toolsScrollController, children: content);
   }
 }

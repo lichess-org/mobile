@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 
@@ -47,8 +46,7 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
     final isRatingRangeAvailable = widget.perf.provisional != true;
     return Opacity(
       opacity: isRatingRangeAvailable ? 1 : 0.5,
-      child: PlatformListTile(
-        harmonizeCupertinoTitleStyle: true,
+      child: ListTile(
         title: Text(context.l10n.ratingRange),
         subtitle: Row(
           mainAxisSize: MainAxisSize.max,
@@ -59,14 +57,11 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                   NonLinearSlider(
                     value: _subtract,
                     values: kSubtractingRatingRange,
-                    onChange:
-                        Theme.of(context).platform == TargetPlatform.iOS
-                            ? (num value) {
-                              setState(() {
-                                _subtract = value.toInt();
-                              });
-                            }
-                            : null,
+                    onChange: (num value) {
+                      setState(() {
+                        _subtract = value.toInt();
+                      });
+                    },
                     onChangeEnd:
                         isRatingRangeAvailable
                             ? (num value) {
@@ -94,14 +89,11 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                   NonLinearSlider(
                     value: _add,
                     values: kAddingRatingRange,
-                    onChange:
-                        Theme.of(context).platform == TargetPlatform.iOS
-                            ? (num value) {
-                              setState(() {
-                                _add = value.toInt();
-                              });
-                            }
-                            : null,
+                    onChange: (num value) {
+                      setState(() {
+                        _add = value.toInt();
+                      });
+                    },
                     onChangeEnd:
                         isRatingRangeAvailable
                             ? (num value) {

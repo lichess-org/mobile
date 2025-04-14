@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -27,7 +26,7 @@ class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const PlayerScreen(), title: context.l10n.players);
+    return buildScreenRoute(context, screen: const PlayerScreen());
   }
 
   @override
@@ -63,9 +62,8 @@ class PlayerScreen extends ConsumerWidget {
           ref.read(onlineFriendsProvider.notifier).stopWatchingFriends();
         }
       },
-      child: PlatformScaffold(
-        appBarTitle: Text(context.l10n.players),
-        appBarBottom: searchButton,
+      child: Scaffold(
+        appBar: AppBar(title: Text(context.l10n.players), bottom: searchButton),
         body: _Body(),
       ),
     );
@@ -110,13 +108,13 @@ class _OnlineFriendsWidget extends ConsumerWidget {
                   ),
           children: [
             if (data.isEmpty)
-              PlatformListTile(
+              ListTile(
                 title: Text(context.l10n.friends),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => _handleTap(context, data),
               ),
             for (final user in data)
-              PlatformListTile(
+              ListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(right: 5.0),
                   child: UserFullNameWidget(user: user),

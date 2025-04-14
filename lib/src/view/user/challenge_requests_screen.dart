@@ -13,24 +13,18 @@ import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class ChallengeRequestsScreen extends StatelessWidget {
   const ChallengeRequestsScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const ChallengeRequestsScreen(),
-      title: context.l10n.preferencesNotifyChallenge,
-    );
+    return buildScreenRoute(context, screen: const ChallengeRequestsScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      appBarTitle: Text(context.l10n.preferencesNotifyChallenge),
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.preferencesNotifyChallenge)),
       body: _Body(),
     );
   }
@@ -108,7 +102,7 @@ class _Body extends ConsumerWidget {
             }
 
             void showMissingAccountMessage() {
-              showPlatformSnackbar(context, context.l10n.youNeedAnAccountToDoThat);
+              showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
             }
 
             return ChallengeListItem(

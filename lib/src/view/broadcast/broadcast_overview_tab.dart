@@ -8,8 +8,6 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final _dateFormatter = DateFormat.MMMd();
@@ -100,10 +98,10 @@ class _BroadcastOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformCard(
-      borderRadius: const BorderRadius.all(Radius.circular(10)),
+    return Card(
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
       margin: const EdgeInsets.all(4.0),
-      child: AdaptiveInkWell(
+      child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         onTap: website != null ? () => launchUrl(website!) : null,
         child: Padding(

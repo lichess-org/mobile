@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class CoordinateTrainingScreen extends StatelessWidget {
@@ -34,25 +33,26 @@ class CoordinateTrainingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarEnableBackgroundFilterBlur: false,
-      appBarTitle: const Text('Coordinate Training'), // TODO l10n once script works
-      appBarActions: [
-        Builder(
-          builder: (context) {
-            return AppBarIconButton(
-              icon: const Icon(Icons.settings),
-              semanticsLabel: context.l10n.settingsSettings,
-              onPressed:
-                  () => showAdaptiveBottomSheet<void>(
-                    context: context,
-                    showDragHandle: true,
-                    builder: (BuildContext context) => const _CoordinateTrainingMenu(),
-                  ),
-            );
-          },
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Coordinate Training'), // TODO l10n once script works
+        actions: [
+          Builder(
+            builder: (context) {
+              return SemanticIconButton(
+                icon: const Icon(Icons.settings),
+                semanticsLabel: context.l10n.settingsSettings,
+                onPressed:
+                    () => showAdaptiveBottomSheet<void>(
+                      context: context,
+                      showDragHandle: true,
+                      builder: (BuildContext context) => const _CoordinateTrainingMenu(),
+                    ),
+              );
+            },
+          ),
+        ],
+      ),
       body: const _Body(),
     );
   }

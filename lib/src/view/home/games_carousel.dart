@@ -155,13 +155,10 @@ class OngoingGameCarouselItem extends StatelessWidget {
                           : game.isMyTurn
                           ? context.l10n.yourTurn
                           : context.l10n.waitingForOpponent,
-                      style:
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)
-                              : TextStyle(
-                                fontSize: TextTheme.of(context).labelMedium?.fontSize,
-                                fontWeight: FontWeight.w500,
-                              ),
+                      style: TextStyle(
+                        fontSize: TextTheme.of(context).labelMedium?.fontSize,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),

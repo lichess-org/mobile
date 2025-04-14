@@ -133,7 +133,18 @@ enum BackgroundThemeMode {
   light,
 
   /// Always use the dark mode (if available) regardless of system preference.
-  dark,
+  dark;
+
+  String title(AppLocalizations l10n) {
+    switch (this) {
+      case BackgroundThemeMode.system:
+        return l10n.deviceTheme;
+      case BackgroundThemeMode.dark:
+        return l10n.dark;
+      case BackgroundThemeMode.light:
+        return l10n.light;
+    }
+  }
 }
 
 enum SoundTheme {

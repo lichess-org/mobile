@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -13,6 +12,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
 /// Opens a game screen for the given [LightArchivedGame].
@@ -49,7 +49,7 @@ void openGameScreen(
           ),
     );
   } else {
-    showPlatformSnackbar(context, 'This variant is not supported yet.', type: SnackBarType.info);
+    showSnackBar(context, 'This variant is not supported yet.', type: SnackBarType.info);
   }
 }
 
@@ -92,9 +92,9 @@ class _GameBookmarkContextMenuActionState extends ConsumerState<GameBookmarkCont
     return FutureBuilder(
       future: _pendingBookmarkAction,
       builder: (context, snapshot) {
-        return PlatformContextMenuAction(
+        return ContextMenuAction(
           dismissOnPress: false,
-          icon: _bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
+          icon: Icon(_bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined),
           label: _bookmarked ? 'Unbookmark' : 'Bookmark',
           onPressed:
               snapshot.connectionState == ConnectionState.waiting
@@ -123,11 +123,7 @@ class _GameBookmarkContextMenuActionState extends ConsumerState<GameBookmarkCont
                       }
                     } catch (_) {
                       if (context.mounted) {
-                        showPlatformSnackbar(
-                          context,
-                          'Bookmark action failed',
-                          type: SnackBarType.error,
-                        );
+                        showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
                       }
                     }
                   },
@@ -137,23 +133,23 @@ class _GameBookmarkContextMenuActionState extends ConsumerState<GameBookmarkCont
   }
 }
 
-/// Makes a list of [PlatformContextMenuAction] for game sharing options.
-List<Widget> makeFinishedGameShareMenuItemButtons(
+/// Makes a list of [ContextMenuAction] for game sharing options.
+List<Widget> makeFinishedGameShareContextMenuActions(
   BuildContext context,
   WidgetRef ref, {
   required GameId gameId,
   required Side orientation,
 }) {
   return [
-    PlatformContextMenuAction(
-      icon: Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
+    ContextMenuAction(
+      icon: const PlatformShareIcon(),
       label: context.l10n.mobileShareGameURL,
       onPressed: () {
         launchShareDialog(context, uri: lichessUri('/$gameId/${orientation.name}'));
       },
     ),
-    PlatformContextMenuAction(
-      icon: Icons.gif_outlined,
+    ContextMenuAction(
+      icon: const Icon(Icons.gif_outlined),
       label: context.l10n.gameAsGIF,
       onPressed: () async {
         try {
@@ -164,13 +160,13 @@ List<Widget> makeFinishedGameShareMenuItemButtons(
         } catch (e) {
           debugPrint(e.toString());
           if (context.mounted) {
-            showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
+            showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
           }
         }
       },
     ),
-    PlatformContextMenuAction(
-      icon: Icons.text_snippet_outlined,
+    ContextMenuAction(
+      icon: const Icon(Icons.text_snippet_outlined),
       label: 'PGN: ${context.l10n.downloadAnnotated}',
       onPressed: () async {
         try {
@@ -180,13 +176,13 @@ List<Widget> makeFinishedGameShareMenuItemButtons(
           }
         } catch (e) {
           if (context.mounted) {
-            showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+            showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
           }
         }
       },
     ),
-    PlatformContextMenuAction(
-      icon: Icons.description_outlined,
+    ContextMenuAction(
+      icon: const Icon(Icons.description_outlined),
       label: 'PGN: ${context.l10n.downloadRaw}',
       onPressed: () async {
         try {
@@ -196,7 +192,7 @@ List<Widget> makeFinishedGameShareMenuItemButtons(
           }
         } catch (e) {
           if (context.mounted) {
-            showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+            showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
           }
         }
       },

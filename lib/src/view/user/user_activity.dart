@@ -240,7 +240,7 @@ class _UserActivityListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    return ListTile(
       leading: leading,
       title: Text(title, maxLines: 2),
       subtitle: subtitle,

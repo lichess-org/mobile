@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -12,7 +11,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/opening_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 @riverpod
@@ -35,17 +33,13 @@ class PuzzleThemesScreen extends StatelessWidget {
   const PuzzleThemesScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const PuzzleThemesScreen(),
-      title: context.l10n.puzzlePuzzleThemes,
-    );
+    return buildScreenRoute(context, screen: const PuzzleThemesScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.puzzlePuzzleThemes),
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.puzzlePuzzleThemes)),
       body: const _Body(),
     );
   }
@@ -59,10 +53,6 @@ class _Body extends ConsumerWidget {
     // skip recommended category since we display it on the puzzle tab screen
     final list = ref.watch(puzzleThemeCategoriesProvider).skip(1).toList();
     final themes = ref.watch(_themesProvider);
-    final expansionTileColor =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? CupertinoColors.secondaryLabel.resolveFrom(context)
-            : null;
 
     return themes.when(
       data: (data) {
@@ -76,8 +66,6 @@ class _Body extends ConsumerWidget {
               child: Opacity(
                 opacity: openingsAvailable ? 1 : 0.5,
                 child: ExpansionTile(
-                  iconColor: expansionTileColor,
-                  collapsedIconColor: expansionTileColor,
                   title: Text(context.l10n.puzzleByOpenings),
                   trailing: const Icon(Icons.keyboard_arrow_right),
                   onExpansionChanged:
@@ -140,7 +128,7 @@ class _Category extends ConsumerWidget {
 
                   return Opacity(
                     opacity: isThemeAvailable ? 1 : 0.5,
-                    child: PlatformListTile(
+                    child: ListTile(
                       leading: Icon(theme.icon),
                       trailing:
                           hasConnectivity && onlineThemes?.containsKey(theme) == true
@@ -157,31 +145,13 @@ class _Category extends ConsumerWidget {
                                 child: Text('${savedThemes[theme]!}', style: themeCountStyle),
                               )
                               : null,
-                      title: Padding(
-                        padding:
-                            Theme.of(context).platform == TargetPlatform.iOS
-                                ? const EdgeInsets.only(top: 6.0)
-                                : EdgeInsets.zero,
-                        child: Text(
-                          theme.l10n(context.l10n).name,
-                          style:
-                              Theme.of(context).platform == TargetPlatform.iOS
-                                  ? TextStyle(
-                                    color: CupertinoTheme.of(context).textTheme.textStyle.color,
-                                  )
-                                  : null,
-                        ),
+                      title: Text(theme.l10n(context.l10n).name),
+                      subtitle: Text(
+                        theme.l10n(context.l10n).description,
+                        maxLines: 10,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
                       ),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(bottom: 6.0),
-                        child: Text(
-                          theme.l10n(context.l10n).description,
-                          maxLines: 10,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-                        ),
-                      ),
-                      isThreeLine: true,
                       onTap:
                           isThemeAvailable
                               ? () {

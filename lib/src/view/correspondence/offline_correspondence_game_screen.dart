@@ -24,7 +24,6 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class OfflineCorrespondenceGameScreen extends StatefulWidget {
   const OfflineCorrespondenceGameScreen({required this.initialGame, super.key});
@@ -63,8 +62,8 @@ class _OfflineCorrespondenceGameScreenState extends State<OfflineCorrespondenceG
   @override
   Widget build(BuildContext context) {
     final (lastModified, game) = currentGame;
-    return PlatformScaffold(
-      appBarTitle: _Title(game),
+    return Scaffold(
+      appBar: AppBar(title: _Title(game)),
       body: _Body(game: game, lastModified: lastModified, onGameChanged: goToNextGame),
     );
   }

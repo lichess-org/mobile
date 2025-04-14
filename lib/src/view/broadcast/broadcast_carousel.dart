@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +18,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
@@ -417,12 +417,12 @@ class _BroadcastCardContent extends StatelessWidget {
                 ),
                 const Spacer(),
               ],
-              PlatformContextMenuButton(
+              ContextMenuButton(
                 semanticsLabel: context.l10n.menu,
                 icon: Icon(Icons.more_horiz, color: titleColor?.withValues(alpha: 0.5)),
                 actions: [
-                  PlatformContextMenuAction(
-                    icon: Icons.info,
+                  ContextMenuAction(
+                    icon: const Icon(Icons.info),
                     label: context.l10n.broadcastOverview,
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
@@ -434,8 +434,8 @@ class _BroadcastCardContent extends StatelessWidget {
                       );
                     },
                   ),
-                  PlatformContextMenuAction(
-                    icon: LichessIcons.chess_board,
+                  ContextMenuAction(
+                    icon: const Icon(LichessIcons.chess_board),
                     label: context.l10n.broadcastBoards,
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
@@ -447,8 +447,8 @@ class _BroadcastCardContent extends StatelessWidget {
                       );
                     },
                   ),
-                  PlatformContextMenuAction(
-                    icon: Icons.people,
+                  ContextMenuAction(
+                    icon: const Icon(Icons.people),
                     label: context.l10n.players,
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
@@ -460,11 +460,8 @@ class _BroadcastCardContent extends StatelessWidget {
                       );
                     },
                   ),
-                  PlatformContextMenuAction(
-                    icon:
-                        Theme.of(context).platform == TargetPlatform.iOS
-                            ? CupertinoIcons.share
-                            : Icons.share,
+                  ContextMenuAction(
+                    icon: const PlatformShareIcon(),
                     label: context.l10n.studyShareAndExport,
                     onPressed: () {
                       showBroadcastShareMenu(context, broadcast);

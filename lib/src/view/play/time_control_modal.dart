@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class TimeControlModal extends ConsumerWidget {
@@ -93,8 +92,7 @@ class TimeControlModal extends ConsumerWidget {
             ],
           ),
         ),
-        PlatformCard(
-          filled: true,
+        Card.filled(
           margin: _horizontalPadding.add(Styles.sectionBottomPadding),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
@@ -120,17 +118,11 @@ class TimeControlModal extends ConsumerWidget {
                                       value: custom.time,
                                       values: kAvailableTimesInSeconds,
                                       labelBuilder: clockLabelInMinutes,
-                                      onChange:
-                                          Theme.of(context).platform == TargetPlatform.iOS
-                                              ? (num value) {
-                                                setState(() {
-                                                  custom = TimeIncrement(
-                                                    value.toInt(),
-                                                    custom.increment,
-                                                  );
-                                                });
-                                              }
-                                              : null,
+                                      onChange: (num value) {
+                                        setState(() {
+                                          custom = TimeIncrement(value.toInt(), custom.increment);
+                                        });
+                                      },
                                       onChangeEnd: (num value) {
                                         setState(() {
                                           custom = TimeIncrement(value.toInt(), custom.increment);
@@ -162,17 +154,11 @@ class TimeControlModal extends ConsumerWidget {
                                     child: NonLinearSlider(
                                       value: custom.increment,
                                       values: kAvailableIncrementsInSeconds,
-                                      onChange:
-                                          Theme.of(context).platform == TargetPlatform.iOS
-                                              ? (num value) {
-                                                setState(() {
-                                                  custom = TimeIncrement(
-                                                    custom.time,
-                                                    value.toInt(),
-                                                  );
-                                                });
-                                              }
-                                              : null,
+                                      onChange: (num value) {
+                                        setState(() {
+                                          custom = TimeIncrement(custom.time, value.toInt());
+                                        });
+                                      },
                                       onChangeEnd: (num value) {
                                         setState(() {
                                           custom = TimeIncrement(custom.time, value.toInt());
@@ -293,7 +279,7 @@ class _ChoiceChip extends StatelessWidget {
           ),
         ),
       ),
-      child: AdaptiveInkWell(
+      child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         onTap: () => onSelected(true),
         child: Padding(

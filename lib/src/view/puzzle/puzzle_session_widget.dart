@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -151,18 +150,10 @@ class _SessionItem extends StatelessWidget {
   final void Function(PuzzleId id)? onTap;
 
   Color get good =>
-      brightness == Brightness.light
-          ? LichessColors.good.shade300
-          : defaultTargetPlatform == TargetPlatform.iOS
-          ? LichessColors.good.shade600
-          : LichessColors.good.shade400;
+      brightness == Brightness.light ? LichessColors.good.shade300 : LichessColors.good.shade400;
 
   Color get error =>
-      brightness == Brightness.light
-          ? LichessColors.error.shade300
-          : defaultTargetPlatform == TargetPlatform.iOS
-          ? LichessColors.error.shade600
-          : LichessColors.error.shade400;
+      brightness == Brightness.light ? LichessColors.error.shade300 : LichessColors.error.shade400;
 
   Color get next => Colors.grey.withValues(alpha: 0.5);
 

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -71,7 +72,7 @@ class GameSettings extends ConsumerWidget {
                 ref.read(gamePreferencesProvider.notifier).toggleBlindfoldMode();
               },
             ),
-            PlatformListTile(
+            ListTile(
               // TODO translate
               title: const Text('Board settings'),
               trailing: const Icon(CupertinoIcons.chevron_right),

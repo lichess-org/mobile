@@ -42,10 +42,10 @@ void main() {
 
       expect(
         tester
-            .widget<AppBarIconButton>(
+            .widget<SemanticIconButton>(
               find.ancestor(
                 of: find.byIcon(Icons.group_outlined),
-                matching: find.byType(AppBarIconButton),
+                matching: find.byType(SemanticIconButton),
               ),
             )
             .onPressed,
@@ -67,10 +67,10 @@ void main() {
 
       expect(
         tester
-            .widget<AppBarIconButton>(
+            .widget<SemanticIconButton>(
               find.ancestor(
                 of: find.byIcon(LichessIcons.crossed_swords),
-                matching: find.byType(AppBarIconButton),
+                matching: find.byType(SemanticIconButton),
               ),
             )
             .onPressed,
@@ -245,10 +245,10 @@ void main() {
 
       expect(
         tester
-            .widget<AppBarIconButton>(
+            .widget<SemanticIconButton>(
               find.ancestor(
                 of: find.byIcon(Icons.group_outlined),
-                matching: find.byType(AppBarIconButton),
+                matching: find.byType(SemanticIconButton),
               ),
             )
             .onPressed,

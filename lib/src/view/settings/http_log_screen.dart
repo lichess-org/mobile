@@ -7,15 +7,12 @@ import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class HttpLogScreen extends ConsumerStatefulWidget {
   const HttpLogScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const HttpLogScreen(), title: 'HTTP Logs');
+    return buildScreenRoute(context, screen: const HttpLogScreen());
   }
 
   @override
@@ -56,25 +53,26 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
   @override
   Widget build(BuildContext context) {
     final asyncState = ref.watch(httpLogPaginatorProvider);
-    return PlatformScaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      appBarTitle: const Text('HTTP Logs'),
-      appBarActions: [
-        if (asyncState.valueOrNull?.isDeleteButtonVisible == true)
-          IconButton(
-            // TODO localize
-            tooltip: 'Clear all logs',
-            icon: const Icon(Icons.delete_sweep),
-            onPressed: () {
-              showConfirmDialog<dynamic>(
-                context,
-                // TODO localize
-                title: const Text('Delete all logs'),
-                onConfirm: () => ref.read(httpLogPaginatorProvider.notifier).deleteAll(),
-              );
-            },
-          ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('HTTP Logs'),
+        actions: [
+          if (asyncState.valueOrNull?.isDeleteButtonVisible == true)
+            IconButton(
+              // TODO localize
+              tooltip: 'Clear all logs',
+              icon: const Icon(Icons.delete_sweep),
+              onPressed: () {
+                showConfirmDialog<dynamic>(
+                  context,
+                  // TODO localize
+                  title: const Text('Delete all logs'),
+                  onConfirm: () => ref.read(httpLogPaginatorProvider.notifier).deleteAll(),
+                );
+              },
+            ),
+        ],
+      ),
       body: _HttpLogList(
         scrollController: _scrollController,
         refreshIndicatorKey: _refreshIndicatorKey,
@@ -111,17 +109,13 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text('No logs to show'),
-            AdaptiveTextButton(onPressed: widget.onRefresh, child: const Text('Tap to refresh')),
+            TextButton(onPressed: widget.onRefresh, child: const Text('Tap to refresh')),
           ],
         ),
       );
     }
     return RefreshIndicator.adaptive(
       key: widget.refreshIndicatorKey,
-      edgeOffset:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? MediaQuery.paddingOf(context).top + 16.0
-              : 0,
       onRefresh: widget.onRefresh,
       child: ListView.separated(
         controller: widget.scrollController,
@@ -148,7 +142,7 @@ class HttpLogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveListTile(
+    return ListTile(
       dense: true,
       leading: SizedBox(
         width: 40,

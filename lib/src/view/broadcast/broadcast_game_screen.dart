@@ -36,7 +36,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class BroadcastGameScreen extends ConsumerStatefulWidget {
   final BroadcastTournamentId? tournamentId;
@@ -119,14 +118,15 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
       isBroadcastEngineAvailableProvider(widget.roundId, widget.gameId),
     );
 
-    return PlatformScaffold(
-      appBarEnableBackgroundFilterBlur: false,
-      appBarTitle: title,
-      appBarActions: [
-        if (asyncIsEngineAvailable.valueOrNull == true)
-          EngineDepth(savedEval: asyncEval.valueOrNull),
-        AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: title,
+        actions: [
+          if (asyncIsEngineAvailable.valueOrNull == true)
+            EngineDepth(savedEval: asyncEval.valueOrNull),
+          AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
+        ],
+      ),
       body: _Body(
         widget.tournamentId,
         widget.roundId,
@@ -589,11 +589,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                       }
                     } catch (e) {
                       if (context.mounted) {
-                        showPlatformSnackbar(
-                          context,
-                          'Failed to get PGN',
-                          type: SnackBarType.error,
-                        );
+                        showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
                       }
                     }
                   },
@@ -611,11 +607,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                     } catch (e) {
                       debugPrint(e.toString());
                       if (context.mounted) {
-                        showPlatformSnackbar(
-                          context,
-                          'Failed to get GIF',
-                          type: SnackBarType.error,
-                        );
+                        showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
                       }
                     }
                   },

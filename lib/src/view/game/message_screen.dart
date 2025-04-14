@@ -5,12 +5,10 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
   final GameFullId id;
@@ -56,9 +54,8 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: widget.title,
-      appBarCenterTitle: true,
+    return Scaffold(
+      appBar: AppBar(title: widget.title, centerTitle: true),
       body: _Body(me: widget.me, id: widget.id),
     );
   }
@@ -120,9 +117,7 @@ class _MessageBubble extends ConsumerWidget {
   const _MessageBubble({required this.you, required this.message});
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
-      you
-          ? ColorScheme.of(context).secondary
-          : lighten(Theme.of(context).scaffoldBackgroundColor, 0.2);
+      you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainerLow;
 
   Color _textColor(BuildContext context, Brightness brightness) =>
       you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;
@@ -196,7 +191,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
     final sendButton = ValueListenableBuilder<TextEditingValue>(
       valueListenable: _textController,
       builder:
-          (context, value, child) => PlatformIconButton(
+          (context, value, child) => SemanticIconButton(
             onPressed:
                 session != null && value.text.isNotEmpty
                     ? () {
@@ -206,7 +201,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
                       _textController.clear();
                     }
                     : null,
-            icon: Icons.send,
+            icon: const Icon(Icons.send),
             padding: EdgeInsets.zero,
             semanticsLabel: context.l10n.send,
           ),

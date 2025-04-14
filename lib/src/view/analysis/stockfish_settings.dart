@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -43,7 +43,7 @@ class StockfishSettingsWidget extends ConsumerWidget {
         ListSection(
           header: const SettingsSectionTitle('Stockfish'),
           children: [
-            PlatformListTile(
+            ListTile(
               title: Text.rich(
                 TextSpan(
                   text: 'Search time: ',
@@ -66,7 +66,7 @@ class StockfishSettingsWidget extends ConsumerWidget {
                 onChangeEnd: (value) => onSetEngineSearchTime(Duration(seconds: value.toInt())),
               ),
             ),
-            PlatformListTile(
+            ListTile(
               title: Text.rich(
                 TextSpan(
                   text: '${context.l10n.multipleLines}: ',
@@ -86,7 +86,7 @@ class StockfishSettingsWidget extends ConsumerWidget {
               ),
             ),
             if (maxEngineCores > 1)
-              PlatformListTile(
+              ListTile(
                 title: Text.rich(
                   TextSpan(
                     text: '${context.l10n.cpus}: ',

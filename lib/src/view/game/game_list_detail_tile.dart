@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 /// A list tile that shows more detailed game info than [GameListTile].
@@ -55,7 +54,7 @@ class GameListDetailTile extends StatelessWidget {
 
     final scaledTitleFontSize = MediaQuery.of(context).textScaler.scale(titleFontSize);
 
-    return AdaptiveInkWell(
+    return InkWell(
       onLongPress: () {
         showAdaptiveBottomSheet<void>(
           context: context,

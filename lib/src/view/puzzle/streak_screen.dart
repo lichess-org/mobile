@@ -24,25 +24,22 @@ import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class StreakScreen extends StatelessWidget {
   const StreakScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, title: 'Puzzle Streak', screen: const StreakScreen());
+    return buildScreenRoute(context, screen: const StreakScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    return const WakelockWidget(
-      child: PlatformScaffold(
-        appBarActions: [ToggleSoundButton()],
-        appBarTitle: Text('Puzzle Streak'),
-        body: _Load(),
+    return WakelockWidget(
+      child: Scaffold(
+        appBar: AppBar(actions: const [ToggleSoundButton()], title: const Text('Puzzle Streak')),
+        body: const _Load(),
       ),
     );
   }
@@ -145,7 +142,7 @@ class _Body extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      PlatformCard(
+                      Card(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
@@ -248,10 +245,7 @@ class _BottomBar extends ConsumerWidget {
               );
             },
             label: 'Share this puzzle',
-            icon:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoIcons.share
-                    : Icons.share,
+            icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
           ),
         if (streak.finished)
           BottomBarButton(

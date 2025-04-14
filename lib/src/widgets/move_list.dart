@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const _scrollAnimationDuration = Duration(milliseconds: 200);
 const _moveListOpacity = 0.8;
@@ -119,7 +118,7 @@ class _MoveListState extends ConsumerState<MoveList> {
             ),
           ),
         )
-        : PlatformCard(
+        : Card(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: SingleChildScrollView(

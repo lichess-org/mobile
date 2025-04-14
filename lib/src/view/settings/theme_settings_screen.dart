@@ -1,8 +1,6 @@
-import 'dart:ui' show ImageFilter;
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -19,34 +17,18 @@ import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class ThemeSettingsScreen extends ConsumerWidget {
   const ThemeSettingsScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const ThemeSettingsScreen(),
-      title: context.l10n.mobileTheme,
-    );
+    return buildScreenRoute(context, screen: const ThemeSettingsScreen());
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformWidget(
-      androidBuilder: (context) => const Scaffold(body: _Body()),
-      iosBuilder:
-          (context) => CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              automaticBackgroundVisibility: false,
-              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
-              border: null,
-            ),
-            child: const _Body(),
-          ),
-    );
+    return const Scaffold(body: _Body());
   }
 }
 
@@ -117,63 +99,29 @@ class _BodyState extends ConsumerState<_Body> {
 
     final boardSize = isTabletOrLarger(context) ? 350.0 : 200.0;
 
-    final backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
-
     return NotificationListener(
       onNotification: handleScrollNotification,
       child: CustomScrollView(
         slivers: [
-          if (Theme.of(context).platform == TargetPlatform.iOS)
-            PinnedHeaderSliver(
-              child: ClipRect(
-                child: BackdropFilter(
-                  enabled: backgroundColor.a != 1,
-                  filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    decoration: ShapeDecoration(
-                      color: headerOpacity == 1.0 ? backgroundColor : backgroundColor.withAlpha(0),
-                      shape: LinearBorder.bottom(
-                        side: BorderSide(
-                          color:
-                              headerOpacity == 1.0 ? const Color(0x4D000000) : Colors.transparent,
-                          width: 0.0,
-                        ),
-                      ),
-                    ),
-                    padding:
-                        Styles.bodyPadding +
-                        EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-                    child: _BoardPreview(
-                      size: boardSize,
-                      boardPrefs: boardPrefs,
-                      brightness: brightness,
-                      hue: hue,
-                    ),
-                  ),
-                ),
-              ),
-            )
-          else
-            SliverAppBar(
-              backgroundColor: Theme.of(
-                context,
-              ).appBarTheme.backgroundColor?.withValues(alpha: headerOpacity),
-              pinned: true,
-              title: Text(context.l10n.mobileTheme),
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(boardSize + 16.0),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: _BoardPreview(
-                    size: boardSize,
-                    boardPrefs: boardPrefs,
-                    brightness: brightness,
-                    hue: hue,
-                  ),
+          SliverAppBar(
+            backgroundColor: Theme.of(
+              context,
+            ).appBarTheme.backgroundColor?.withValues(alpha: headerOpacity),
+            pinned: true,
+            title: Text(context.l10n.mobileTheme),
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(boardSize + 16.0),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: _BoardPreview(
+                  size: boardSize,
+                  boardPrefs: boardPrefs,
+                  brightness: brightness,
+                  hue: hue,
                 ),
               ),
             ),
+          ),
           SliverList.list(
             children: [
               ListSection(
@@ -203,7 +151,7 @@ class _BodyState extends ConsumerState<_Body> {
                     },
                   ),
                   if (generalPrefs.backgroundColor != null || generalPrefs.backgroundImage != null)
-                    PlatformListTile(
+                    ListTile(
                       leading: const Icon(Icons.cancel),
                       title: const Text('Reset background'),
                       onTap: () {
@@ -280,7 +228,7 @@ class _BodyState extends ConsumerState<_Body> {
                 header: SettingsSectionTitle(context.l10n.advancedSettings),
                 hasLeading: true,
                 children: [
-                  PlatformListTile(
+                  ListTile(
                     leading: const Icon(Icons.brightness_6),
                     title: Slider.adaptive(
                       min: 0.2,
@@ -298,7 +246,7 @@ class _BodyState extends ConsumerState<_Body> {
                       },
                     ),
                   ),
-                  PlatformListTile(
+                  ListTile(
                     leading: const Icon(Icons.invert_colors),
                     title: Slider.adaptive(
                       min: 0.0,
@@ -314,7 +262,7 @@ class _BodyState extends ConsumerState<_Body> {
                       },
                     ),
                   ),
-                  PlatformListTile(
+                  ListTile(
                     leading: Opacity(
                       opacity: hasAjustedColors ? 1.0 : 0.5,
                       child: const Icon(Icons.cancel),

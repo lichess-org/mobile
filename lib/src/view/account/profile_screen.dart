@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -22,7 +21,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ProfileScreen(), title: context.l10n.profile);
+    return buildScreenRoute(context, screen: const ProfileScreen());
   }
 
   @override
@@ -35,21 +34,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
-    return PlatformScaffold(
-      appBarTitle: account.when(
-        data:
-            (user) =>
-                user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user.lightUser),
-        loading: () => const SizedBox.shrink(),
-        error: (error, _) => const SizedBox.shrink(),
-      ),
-      appBarActions: [
-        AppBarIconButton(
-          icon: const Icon(Icons.edit),
-          semanticsLabel: context.l10n.editProfile,
-          onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute(context)),
+    return Scaffold(
+      appBar: AppBar(
+        title: account.when(
+          data:
+              (user) =>
+                  user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user.lightUser),
+          loading: () => const SizedBox.shrink(),
+          error: (error, _) => const SizedBox.shrink(),
         ),
-      ],
+        actions: [
+          SemanticIconButton(
+            icon: const Icon(Icons.edit),
+            semanticsLabel: context.l10n.editProfile,
+            onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute(context)),
+          ),
+        ],
+      ),
       body: account.when(
         data: (user) {
           if (user == null) {
@@ -58,10 +59,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
           return RefreshIndicator.adaptive(
-            edgeOffset:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? MediaQuery.paddingOf(context).top + 16.0
-                    : 0,
             key: _refreshIndicatorKey,
             onRefresh: () async => ref.refresh(accountProvider),
             child: ListView(
@@ -72,7 +69,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ListSection(
                     hasLeading: true,
                     children: [
-                      PlatformListTile(
+                      ListTile(
                         title: Text(context.l10n.nbBookmarks(user.count!.bookmark)),
                         leading: const Icon(Icons.bookmarks_outlined),
                         onTap: () {

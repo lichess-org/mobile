@@ -89,7 +89,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                 );
               },
             ),
-            PlatformListTile(
+            ListTile(
               title: Text.rich(
                 TextSpan(
                   text: '${context.l10n.minutesPerSide}: ',
@@ -105,11 +105,11 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                 value: timeIncrement.time,
                 values: kAvailableTimesInSeconds,
                 labelBuilder: clockLabelInMinutes,
-                onChange: Theme.of(context).platform == TargetPlatform.iOS ? _setTotalTime : null,
+                onChange: _setTotalTime,
                 onChangeEnd: _setTotalTime,
               ),
             ),
-            PlatformListTile(
+            ListTile(
               title: Text.rich(
                 TextSpan(
                   text: '${context.l10n.incrementInSeconds}: ',
@@ -124,7 +124,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
               subtitle: NonLinearSlider(
                 value: timeIncrement.increment,
                 values: kAvailableIncrementsInSeconds,
-                onChange: Theme.of(context).platform == TargetPlatform.iOS ? _setIncrement : null,
+                onChange: _setIncrement,
                 onChangeEnd: _setIncrement,
               ),
             ),

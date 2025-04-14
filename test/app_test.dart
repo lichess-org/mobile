@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -96,11 +94,7 @@ void main() {
 
     expect(find.byType(BottomNavScaffold), findsOneWidget);
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      expect(find.byType(CupertinoTabBar), findsOneWidget);
-    } else {
-      expect(find.byType(NavigationDestination), findsNWidgets(5));
-    }
+    expect(find.byType(NavigationDestination), findsNWidgets(5));
 
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Puzzles'), findsOneWidget);
