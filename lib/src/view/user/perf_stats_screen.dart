@@ -26,7 +26,6 @@ import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
@@ -154,7 +153,7 @@ class _Body extends ConsumerWidget {
                 if (ratingHistoryPerfData == null || ratingHistoryPerfData.points.length <= 1) {
                   return const SizedBox.shrink();
                 }
-                return PlatformCard(
+                return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: _EloChart(ratingHistoryPerfData),
@@ -185,7 +184,7 @@ class _Body extends ConsumerWidget {
                 ),
               ],
             ),
-            PlatformCard(
+            Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -289,7 +288,7 @@ class _Body extends ConsumerWidget {
                 ),
               ),
             ),
-            PlatformCard(
+            Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -925,7 +924,7 @@ class _RangeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final chartColor = Styles.chartColor(context);
 
-    return PlatformCard(
+    return Card(
       color: selected ? chartColor.withValues(alpha: 0.2) : null,
       shadowColor: selected ? Colors.transparent : null,
       child: InkWell(

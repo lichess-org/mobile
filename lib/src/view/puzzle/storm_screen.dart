@@ -29,7 +29,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -294,7 +293,7 @@ class _TopTable extends ConsumerWidget {
               ),
             )
           else ...[
-            PlatformCard(
+            Card(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -605,7 +604,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
         widget.stats.newHigh != null
             ? [
               const SizedBox(height: 16),
-              PlatformCard(
+              Card(
                 margin: Styles.bodySectionPadding,
                 child: ListTile(
                   leading: Icon(

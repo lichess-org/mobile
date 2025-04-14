@@ -133,11 +133,7 @@ extension CustomThemeBuildContext on BuildContext {
       listTileTheme: _makeListTileTheme(themeLight.colorScheme, isIOS),
       cardTheme:
           isIOS
-              ? CardThemeData(
-                color: themeLight.colorScheme.surfaceContainerHigh,
-                elevation: 0,
-                margin: EdgeInsets.zero,
-              )
+              ? _kCupertinoCardTheme.copyWith(color: themeLight.colorScheme.surfaceContainerHigh)
               : null,
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme: isIOS ? _makeCupertinoMenuThemeData() : null,
@@ -160,11 +156,7 @@ extension CustomThemeBuildContext on BuildContext {
       listTileTheme: _makeListTileTheme(themeDark.colorScheme, isIOS),
       cardTheme:
           isIOS
-              ? CardThemeData(
-                color: themeDark.colorScheme.surfaceContainerHigh,
-                elevation: 0,
-                margin: EdgeInsets.zero,
-              )
+              ? _kCupertinoCardTheme.copyWith(color: themeDark.colorScheme.surfaceContainerHigh)
               : null,
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme: isIOS ? _makeCupertinoMenuThemeData() : null,
@@ -215,7 +207,7 @@ extension CustomThemeBuildContext on BuildContext {
     ),
     cupertinoOverrideTheme: cupertinoTheme,
     listTileTheme: _makeListTileTheme(baseTheme.colorScheme, isIOS),
-    cardTheme: isIOS ? const CardThemeData(elevation: 0, margin: EdgeInsets.zero) : null,
+    cardTheme: isIOS ? _kCupertinoCardTheme : null,
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor:
           isIOS
@@ -284,4 +276,10 @@ AppBarTheme _makeCupertinoAppBarTheme(BuildContext context) => AppBarTheme(
   titleTextStyle: AppBarTheme.of(
     context,
   ).titleTextStyle?.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
+);
+
+const _kCupertinoCardTheme = CardThemeData(
+  elevation: 0,
+  margin: EdgeInsets.zero,
+  shape: RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
 );

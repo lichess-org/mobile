@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 /// The height of the board header or footer in the analysis layout.
 const kAnalysisBoardHeaderOrFooterHeight = 26.0;
@@ -272,7 +271,7 @@ class AnalysisLayout extends StatelessWidget {
                             children: [
                               if (engineLines != null) engineLines!,
                               Expanded(
-                                child: PlatformCard(
+                                child: Card(
                                   clipBehavior: Clip.hardEdge,
                                   semanticContainer: false,
                                   child: TabBarView(controller: tabController, children: children),

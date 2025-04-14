@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class OpeningExplorerScreen extends ConsumerWidget {
   const OpeningExplorerScreen({required this.options});
@@ -109,7 +108,7 @@ class _Body extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: PlatformCard(
+                              child: Card(
                                 clipBehavior: Clip.hardEdge,
                                 margin: const EdgeInsets.all(kTabletBoardTableSidePadding),
                                 semanticContainer: false,

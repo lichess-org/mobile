@@ -51,7 +51,6 @@ const kFlexGoldenRatio = 161803398875;
 final List<BoxShadow> boardShadows =
     defaultTargetPlatform == TargetPlatform.iOS ? <BoxShadow>[] : kElevationToShadow[1]!;
 
-const kCardTextScaleFactor = 1.64;
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';

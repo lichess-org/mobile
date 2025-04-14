@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -109,7 +108,7 @@ class _Body extends StatelessWidget {
               padding: Styles.horizontalBodyPadding,
               child: ListView(
                 children: [
-                  PlatformCard(
+                  Card(
                     child: Padding(
                       padding: Styles.bodySectionPadding,
                       child: Column(
@@ -176,7 +175,7 @@ class _Standing extends ConsumerWidget {
     if (standing == null) {
       return const SizedBox.shrink();
     }
-    return PlatformCard(
+    return Card(
       clipBehavior: Clip.hardEdge,
       child: Column(
         children: [

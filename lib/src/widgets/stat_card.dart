@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
@@ -39,7 +38,7 @@ class StatCard extends StatelessWidget {
 
     final defaultValueStyle = TextStyle(fontSize: valueFontSize ?? _defaultValueFontSize);
 
-    return PlatformCard(
+    return Card(
       elevation: elevation,
       color: backgroundColor,
       margin: const EdgeInsets.symmetric(vertical: 6.0),

@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class TimeControlModal extends ConsumerWidget {
@@ -93,8 +92,7 @@ class TimeControlModal extends ConsumerWidget {
             ],
           ),
         ),
-        PlatformCard(
-          filled: true,
+        Card.filled(
           margin: _horizontalPadding.add(Styles.sectionBottomPadding),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
