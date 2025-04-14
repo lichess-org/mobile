@@ -44,21 +44,6 @@ return [
 ];
 ```
 
-## Platform-dependent code
-
-If one of your widget needs to display different things on iOS and Android, you can use the `PlatformWidget` helper:
-
-```dart
-PlatformWidget(
-  androidBuilder: (context) => {
-    // return widget to display for Android
-  },
-  iosBuilder: (context) => {
-    // return widget to display for iOS
-  },
-)
-```
-
 ## Writing UI code
 
 Here is a list of practical tips when writing widgets. These are generally coding best practices in flutter, and serve to keep the project consistent.
