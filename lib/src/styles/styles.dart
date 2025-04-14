@@ -1,5 +1,4 @@
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 
@@ -9,22 +8,10 @@ abstract class Styles {
   static const bold = TextStyle(fontWeight: FontWeight.bold);
   static const title = TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
   static const subtitle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
-  static final callout = TextStyle(
-    fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
-    letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
-    fontWeight: FontWeight.w600,
-  );
-  static final mainListTileTitle = TextStyle(
-    fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 19 : 18,
-    letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
-    fontWeight: FontWeight.w500,
-  );
+  static const callout = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
+  static const mainListTileTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
   static const mainListTileIconSize = 28.0;
-  static final sectionTitle = TextStyle(
-    fontSize: 18,
-    letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
-    fontWeight: FontWeight.bold,
-  );
+  static const sectionTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
   static const boardPreviewTitle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
   static const subtitleOpacity = 0.7;
   static const timeControl = TextStyle(letterSpacing: 1.2);
