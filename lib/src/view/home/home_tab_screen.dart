@@ -729,8 +729,12 @@ class _ChallengeScreenButton extends ConsumerWidget {
 
     return connectivity.maybeWhen(
       data:
-          (connectivity) => AppBarNotificationIconButton(
-            icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
+          (connectivity) => SemanticIconButton(
+            icon: Badge.count(
+              count: count ?? 0,
+              isLabelVisible: (count ?? 0) > 0,
+              child: const Icon(LichessIcons.crossed_swords, size: 18.0),
+            ),
             semanticsLabel: context.l10n.preferencesNotifyChallenge,
             onPressed:
                 !connectivity.isOnline
@@ -739,7 +743,6 @@ class _ChallengeScreenButton extends ConsumerWidget {
                       ref.invalidate(challengesProvider);
                       Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
                     },
-            count: count ?? 0,
           ),
       orElse:
           () => SemanticIconButton(
