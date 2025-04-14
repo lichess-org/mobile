@@ -375,7 +375,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
               if (account != null)
                 ListTile(
                   title: Text(context.l10n.timeControl),
-                  trailing: AdaptiveTextButton(
+                  trailing: TextButton(
                     onPressed: () {
                       showChoicePicker(
                         context,
@@ -407,7 +407,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 ...correspondenceSelector,
               ListTile(
                 title: Text(context.l10n.variant),
-                trailing: AdaptiveTextButton(
+                trailing: TextButton(
                   onPressed: () {
                     showChoicePicker(
                       context,
@@ -426,7 +426,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 expand: preferences.customRated == false,
                 child: ListTile(
                   title: Text(context.l10n.side),
-                  trailing: AdaptiveTextButton(
+                  trailing: TextButton(
                     onPressed: null,
                     child: Text(SideChoice.random.label(context.l10n)),
                   ),

@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class QuickGameButton extends ConsumerWidget {
   const QuickGameButton();
@@ -26,7 +25,7 @@ class QuickGameButton extends ConsumerWidget {
       children: [
         Flexible(
           flex: kFlexGoldenRatioBase,
-          child: AdaptiveTextButton(
+          child: TextButton(
             child: Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,

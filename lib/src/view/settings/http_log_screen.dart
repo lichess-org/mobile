@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class HttpLogScreen extends ConsumerStatefulWidget {
@@ -110,7 +109,7 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text('No logs to show'),
-            AdaptiveTextButton(onPressed: widget.onRefresh, child: const Text('Tap to refresh')),
+            TextButton(onPressed: widget.onRefresh, child: const Text('Tap to refresh')),
           ],
         ),
       );

@@ -292,7 +292,7 @@ class _BottomBar extends ConsumerWidget {
       transparentBackground: false,
       children: [
         if (tournament.group != null)
-          AdaptiveTextButton(
+          TextButton(
             onPressed:
                 () => showAdaptiveBottomSheet<void>(
                   context: context,
@@ -322,7 +322,7 @@ class _BottomBar extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-        AdaptiveTextButton(
+        TextButton(
           onPressed:
               () => showAdaptiveBottomSheet<void>(
                 context: context,

@@ -421,11 +421,11 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            AdaptiveTextButton(
+            TextButton(
               onPressed: () => setState(() => filter = const GameFilterState()),
               child: Text(context.l10n.reset),
             ),
-            AdaptiveTextButton(
+            TextButton(
               onPressed: () => Navigator.of(context).pop(filter),
               child: Text(context.l10n.apply),
             ),

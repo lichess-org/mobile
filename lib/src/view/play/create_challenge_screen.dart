@@ -110,7 +110,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
             children: [
               ListTile(
                 title: Text(context.l10n.timeControl),
-                trailing: AdaptiveTextButton(
+                trailing: TextButton(
                   onPressed: () {
                     showChoicePicker(
                       context,
@@ -276,7 +276,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
               ],
               ListTile(
                 title: Text(context.l10n.variant),
-                trailing: AdaptiveTextButton(
+                trailing: TextButton(
                   onPressed: () {
                     showChoicePicker(
                       context,
@@ -309,7 +309,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 expand: preferences.rated == false || preferences.variant == Variant.fromPosition,
                 child: ListTile(
                   title: Text(context.l10n.side),
-                  trailing: AdaptiveTextButton(
+                  trailing: TextButton(
                     onPressed: () {
                       showChoicePicker<SideChoice>(
                         context,

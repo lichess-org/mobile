@@ -322,11 +322,11 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
           },
         ),
         persistentFooterButtons: [
-          AdaptiveTextButton(
+          TextButton(
             child: Text(context.l10n.cancel),
             onPressed: () => Navigator.pop(context, null),
           ),
-          AdaptiveTextButton(
+          TextButton(
             child: Text(context.l10n.accept),
             onPressed:
                 () => Navigator.pop(
@@ -523,7 +523,7 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  AdaptiveTextButton(
+                  TextButton(
                     child: Text(showBoard ? 'Hide board' : 'Show board'),
                     onPressed:
                         () => {
@@ -536,12 +536,12 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      AdaptiveTextButton(
+                      TextButton(
                         child: Text(context.l10n.cancel),
                         onPressed: () => Navigator.pop(context, null),
                       ),
                       const SizedBox(width: 10.0),
-                      AdaptiveTextButton(
+                      TextButton(
                         child: Text(context.l10n.accept),
                         onPressed: () async {
                           final ext = extension(widget.image.path);
