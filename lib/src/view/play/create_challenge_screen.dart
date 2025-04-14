@@ -27,7 +27,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class CreateChallengeScreen extends StatelessWidget {
   const CreateChallengeScreen(this.user);
@@ -40,8 +39,8 @@ class CreateChallengeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.challengeChallengesX(user.name)),
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.challengeChallengesX(user.name))),
       body: _ChallengeBody(user),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -55,9 +54,11 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.pieceSet),
-      appBarActions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(context.l10n.pieceSet),
+        actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
+      ),
       body: SafeArea(
         child: ListView.separated(
           itemCount: PieceSet.values.length,

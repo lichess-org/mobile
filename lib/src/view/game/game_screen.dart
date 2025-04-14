@@ -26,7 +26,6 @@ import 'package:lichess_mobile/src/view/game/ping_rating.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 /// Screen to play a game, or to show a challenge or to show current user's past games.
@@ -192,24 +191,27 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                 )
                 : const LoadGameError('Could not create the game.');
 
-        return PlatformScaffold(
+        return Scaffold(
           resizeToAvoidBottomInset: false,
-          appBarLeading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
-            data: (prevent) => prevent ? const _PingRating() : null,
-            orElse: () => const _PingRating(),
-          ),
-          appBarTitle:
-              gameId != null
-                  ? _StandaloneGameTitle(id: gameId, lastMoveAt: widget.lastMoveAt)
-                  : widget.seek != null
-                  ? _LobbyGameTitle(seek: widget.seek!)
-                  : widget.challenge != null
-                  ? _ChallengeGameTitle(challenge: widget.challenge!)
-                  : const SizedBox.shrink(),
+          appBar: AppBar(
+            leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
+              data: (prevent) => prevent ? const _PingRating() : null,
+              orElse: () => const _PingRating(),
+            ),
+            title:
+                gameId != null
+                    ? _StandaloneGameTitle(id: gameId, lastMoveAt: widget.lastMoveAt)
+                    : widget.seek != null
+                    ? _LobbyGameTitle(seek: widget.seek!)
+                    : widget.challenge != null
+                    ? _ChallengeGameTitle(challenge: widget.challenge!)
+                    : const SizedBox.shrink(),
 
-          appBarActions: [
-            if (gameId != null) _GameMenu(gameId: gameId, gameListContext: widget.gameListContext),
-          ],
+            actions: [
+              if (gameId != null)
+                _GameMenu(gameId: gameId, gameListContext: widget.gameListContext),
+            ],
+          ),
           body: body,
         );
       case AsyncError(error: final e, stackTrace: final s):
@@ -225,14 +227,16 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
         final body = PopScope(child: message);
 
-        return PlatformScaffold(
-          appBarLeading: const _PingRating(),
-          appBarTitle:
-              widget.seek != null
-                  ? _LobbyGameTitle(seek: widget.seek!)
-                  : widget.challenge != null
-                  ? _ChallengeGameTitle(challenge: widget.challenge!)
-                  : const SizedBox.shrink(),
+        return Scaffold(
+          appBar: AppBar(
+            leading: const _PingRating(),
+            title:
+                widget.seek != null
+                    ? _LobbyGameTitle(seek: widget.seek!)
+                    : widget.challenge != null
+                    ? _ChallengeGameTitle(challenge: widget.challenge!)
+                    : const SizedBox.shrink(),
+          ),
           body: body,
         );
       case _:
@@ -249,15 +253,16 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                 )
                 : const StandaloneGameLoadingBoard();
 
-        return PlatformScaffold(
-          resizeToAvoidBottomInset: false,
-          appBarLeading: const _PingRating(),
-          appBarTitle:
-              widget.seek != null
-                  ? _LobbyGameTitle(seek: widget.seek!)
-                  : widget.challenge != null
-                  ? _ChallengeGameTitle(challenge: widget.challenge!)
-                  : const SizedBox.shrink(),
+        return Scaffold(
+          appBar: AppBar(
+            leading: const _PingRating(),
+            title:
+                widget.seek != null
+                    ? _LobbyGameTitle(seek: widget.seek!)
+                    : widget.challenge != null
+                    ? _ChallengeGameTitle(challenge: widget.challenge!)
+                    : const SizedBox.shrink(),
+          ),
           body: PopScope(canPop: false, child: loadingBoard),
         );
     }

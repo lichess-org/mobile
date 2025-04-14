@@ -28,7 +28,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('AnalysisScreen');
@@ -98,11 +97,9 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
 
     switch (asyncState) {
       case AsyncData(:final value):
-        return PlatformScaffold(
+        return Scaffold(
           resizeToAvoidBottomInset: false,
-          appBarEnableBackgroundFilterBlur: false,
-          appBarTitle: _Title(variant: value.variant),
-          appBarActions: appBarActions,
+          appBar: AppBar(title: _Title(variant: value.variant), actions: appBarActions),
           body: _Body(
             options: widget.options,
             controller: _tabController,
@@ -117,11 +114,9 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
           },
         );
       case _:
-        return PlatformScaffold(
+        return Scaffold(
           resizeToAvoidBottomInset: false,
-          appBarEnableBackgroundFilterBlur: false,
-          appBarTitle: const _Title(variant: Variant.standard),
-          appBarActions: appBarActions,
+          appBar: AppBar(title: const _Title(variant: Variant.standard), actions: appBarActions),
           body: const Center(child: CircularProgressIndicator()),
         );
     }

@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
@@ -28,10 +27,9 @@ class PuzzleDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PlatformScaffold(
-      body: _Body(),
-      appBarTitle: SizedBox.shrink(),
-      appBarActions: [DaysSelector()],
+    return Scaffold(
+      appBar: AppBar(title: const SizedBox.shrink(), actions: const [DaysSelector()]),
+      body: const _Body(),
     );
   }
 }

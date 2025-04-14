@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class EngineSettingsScreen extends StatelessWidget {
   const EngineSettingsScreen({super.key});
@@ -14,7 +13,7 @@ class EngineSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(appBarTitle: const Text('Engine'), body: _Body());
+    return Scaffold(appBar: AppBar(title: const Text('Engine')), body: _Body());
   }
 }
 

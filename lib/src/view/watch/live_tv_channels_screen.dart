@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class LiveTvChannelsScreen extends ConsumerWidget {
@@ -29,7 +28,7 @@ class LiveTvChannelsScreen extends ConsumerWidget {
           ref.read(liveTvChannelsProvider.notifier).stopWatching();
         }
       },
-      child: const PlatformScaffold(appBarTitle: Text('Lichess TV'), body: _Body()),
+      child: Scaffold(appBar: AppBar(title: const Text('Lichess TV')), body: const _Body()),
     );
   }
 }

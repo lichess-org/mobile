@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 final _dateFormatter = DateFormat('yyyy.MM.dd');
 
@@ -28,8 +27,8 @@ class AnalysisShareScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.studyShareAndExport),
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.studyShareAndExport)),
       body: _EditPgnTagsForm(options),
     );
   }

@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class ChallengeRequestsScreen extends StatelessWidget {
   const ChallengeRequestsScreen({super.key});
@@ -24,8 +23,8 @@ class ChallengeRequestsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.preferencesNotifyChallenge),
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.preferencesNotifyChallenge)),
       body: _Body(),
     );
   }

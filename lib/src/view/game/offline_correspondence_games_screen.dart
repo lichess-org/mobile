@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
@@ -9,7 +8,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
@@ -22,10 +20,12 @@ class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
-    return PlatformScaffold(
-      appBarTitle: offlineGames.maybeWhen(
-        data: (data) => Text(context.l10n.nbGamesInPlay(data.length)),
-        orElse: () => const SizedBox.shrink(),
+    return Scaffold(
+      appBar: AppBar(
+        title: offlineGames.maybeWhen(
+          data: (data) => Text(context.l10n.nbGamesInPlay(data.length)),
+          orElse: () => const SizedBox.shrink(),
+        ),
       ),
       body: _Body(),
     );

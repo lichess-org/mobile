@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 final _onlineBotsProvider = FutureProvider.autoDispose<IList<User>>((ref) {
@@ -37,7 +36,7 @@ class OnlineBotsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(appBarTitle: Text(context.l10n.onlineBots), body: _Body());
+    return Scaffold(appBar: AppBar(title: Text(context.l10n.onlineBots)), body: _Body());
   }
 }
 

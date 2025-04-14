@@ -45,7 +45,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class PuzzleScreen extends ConsumerStatefulWidget {
@@ -255,12 +254,14 @@ class _PuzzleScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: PlatformScaffold(
-        appBarActions: [
-          const ToggleSoundButton(),
-          if (initialPuzzleContext != null) _PuzzleSettingsButton(initialPuzzleContext!),
-        ],
-        appBarTitle: _Title(angle: angle),
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            const ToggleSoundButton(),
+            if (initialPuzzleContext != null) _PuzzleSettingsButton(initialPuzzleContext!),
+          ],
+          title: _Title(angle: angle),
+        ),
         body: body,
       ),
     );

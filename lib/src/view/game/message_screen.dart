@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
   final GameFullId id;
@@ -55,9 +54,8 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: widget.title,
-      appBarCenterTitle: true,
+    return Scaffold(
+      appBar: AppBar(title: widget.title, centerTitle: true),
       body: _Body(me: widget.me, id: widget.id),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -16,7 +17,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
@@ -61,9 +61,11 @@ class _TvScreenState extends ConsumerState<TvScreen> {
           ref.read(_tvGameCtrl.notifier).stopWatching();
         }
       },
-      child: PlatformScaffold(
-        appBarTitle: Text('${widget.channel.label} TV'),
-        appBarActions: const [ToggleSoundButton()],
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('${widget.channel.label} TV'),
+          actions: const [ToggleSoundButton()],
+        ),
         body: _Body(
           widget.channel,
           widget.initialGame,

@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class HttpLogScreen extends ConsumerStatefulWidget {
   const HttpLogScreen({super.key});
@@ -54,24 +53,26 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
   @override
   Widget build(BuildContext context) {
     final asyncState = ref.watch(httpLogPaginatorProvider);
-    return PlatformScaffold(
-      appBarTitle: const Text('HTTP Logs'),
-      appBarActions: [
-        if (asyncState.valueOrNull?.isDeleteButtonVisible == true)
-          IconButton(
-            // TODO localize
-            tooltip: 'Clear all logs',
-            icon: const Icon(Icons.delete_sweep),
-            onPressed: () {
-              showConfirmDialog<dynamic>(
-                context,
-                // TODO localize
-                title: const Text('Delete all logs'),
-                onConfirm: () => ref.read(httpLogPaginatorProvider.notifier).deleteAll(),
-              );
-            },
-          ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('HTTP Logs'),
+        actions: [
+          if (asyncState.valueOrNull?.isDeleteButtonVisible == true)
+            IconButton(
+              // TODO localize
+              tooltip: 'Clear all logs',
+              icon: const Icon(Icons.delete_sweep),
+              onPressed: () {
+                showConfirmDialog<dynamic>(
+                  context,
+                  // TODO localize
+                  title: const Text('Delete all logs'),
+                  onConfirm: () => ref.read(httpLogPaginatorProvider.notifier).deleteAll(),
+                );
+              },
+            ),
+        ],
+      ),
       body: _HttpLogList(
         scrollController: _scrollController,
         refreshIndicatorKey: _refreshIndicatorKey,

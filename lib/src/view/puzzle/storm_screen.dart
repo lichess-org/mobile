@@ -1,7 +1,6 @@
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,7 +29,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class StormScreen extends ConsumerStatefulWidget {
@@ -50,9 +48,11 @@ class _StormScreenState extends ConsumerState<StormScreen> {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: PlatformScaffold(
-        appBarActions: [_StormDashboardButton(), const ToggleSoundButton()],
-        appBarTitle: const Text('Puzzle Storm'),
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [_StormDashboardButton(), const ToggleSoundButton()],
+          title: const Text('Puzzle Storm'),
+        ),
         body: _Load(_boardKey),
       ),
     );
@@ -558,13 +558,15 @@ class _RunStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      body: _RunStatsPopup(stats),
-      appBarLeading: IconButton(
-        icon: const Icon(Icons.close),
-        onPressed: () => Navigator.of(context).pop(),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const SizedBox.shrink(),
       ),
-      appBarTitle: const SizedBox.shrink(),
+      body: _RunStatsPopup(stats),
     );
   }
 }

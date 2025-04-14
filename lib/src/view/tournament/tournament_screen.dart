@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class TournamentScreen extends ConsumerWidget {
@@ -52,9 +51,9 @@ class TournamentScreen extends ConsumerWidget {
     return switch (ref.watch(tournamentControllerProvider(id))) {
       AsyncError(:final error) => Center(child: Text('Could not load tournament: $error')),
       AsyncValue(:final value?) => _Body(state: value),
-      _ => const PlatformScaffold(
-        appBarTitle: SizedBox.shrink(),
-        body: Center(child: CircularProgressIndicator()),
+      _ => Scaffold(
+        appBar: AppBar(title: const SizedBox.shrink()),
+        body: const Center(child: CircularProgressIndicator()),
       ),
     };
   }
@@ -69,34 +68,36 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
 
-    return PlatformScaffold(
-      appBarTitle: _Title(state: state),
-      appBarActions: [
-        if (timeLeft != null)
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (state.tournament.timeToStart != null)
-                  Text(context.l10n.startingIn, style: const TextStyle(fontSize: 14)),
-                CountdownClockBuilder(
-                  timeLeft: timeLeft,
-                  active: true,
-                  tickInterval: const Duration(seconds: 1),
-                  builder:
-                      (BuildContext context, Duration timeLeft) => Text(
-                        '${timeLeft.toHoursMinutesSeconds()} ',
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          fontFeatures: [FontFeature.tabularFigures()],
+    return Scaffold(
+      appBar: AppBar(
+        title: _Title(state: state),
+        actions: [
+          if (timeLeft != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (state.tournament.timeToStart != null)
+                    Text(context.l10n.startingIn, style: const TextStyle(fontSize: 14)),
+                  CountdownClockBuilder(
+                    timeLeft: timeLeft,
+                    active: true,
+                    tickInterval: const Duration(seconds: 1),
+                    builder:
+                        (BuildContext context, Duration timeLeft) => Text(
+                          '${timeLeft.toHoursMinutesSeconds()} ',
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            fontFeatures: [FontFeature.tabularFigures()],
+                          ),
                         ),
-                      ),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
       body: Column(
         children: [
           Expanded(

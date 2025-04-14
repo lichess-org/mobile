@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BroadcastGameSettingsScreen extends ConsumerWidget {
@@ -32,8 +31,8 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
 
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
 
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.settingsSettings),
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.settingsSettings)),
       body: ListView(
         children: [
           ListSection(

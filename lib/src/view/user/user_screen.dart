@@ -54,12 +54,14 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       data: (data) => data.$1.lightUser.copyWith(isOnline: data.$2.online),
       orElse: () => null,
     );
-    return PlatformScaffold(
-      appBarTitle: UserFullNameWidget(
-        user: updatedLightUser ?? widget.user,
-        shouldShowOnline: updatedLightUser != null,
+    return Scaffold(
+      appBar: AppBar(
+        title: UserFullNameWidget(
+          user: updatedLightUser ?? widget.user,
+          shouldShowOnline: updatedLightUser != null,
+        ),
+        actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
-      appBarActions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       body: asyncUser.when(
         data: (data) => _UserProfileListView(data.$1, isLoading, setIsLoading),
         loading: () => const Center(child: CircularProgressIndicator()),

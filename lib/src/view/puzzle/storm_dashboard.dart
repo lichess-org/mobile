@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
@@ -24,16 +23,18 @@ class StormDashboardModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      body: _Body(user: user),
-      appBarTitle: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(LichessIcons.storm, size: 20),
-          const SizedBox(width: 8.0),
-          Text(context.l10n.stormHighscores),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(LichessIcons.storm, size: 20),
+            const SizedBox(width: 8.0),
+            Text(context.l10n.stormHighscores),
+          ],
+        ),
       ),
+      body: _Body(user: user),
     );
   }
 }

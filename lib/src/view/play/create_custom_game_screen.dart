@@ -30,7 +30,6 @@ import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 enum _ViewMode { create, challenges }
 
@@ -71,16 +70,17 @@ class _CreateCustomGameScreenState extends State<CreateCustomGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.custom),
-      appBarBottom: TabBar(
-        controller: _tabController,
-        tabs: <Widget>[
-          Tab(text: context.l10n.createAGame),
-          Tab(text: context.l10n.mobileCustomGameJoinAGame),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(context.l10n.custom),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: <Widget>[
+            Tab(text: context.l10n.createAGame),
+            Tab(text: context.l10n.mobileCustomGameJoinAGame),
+          ],
+        ),
       ),
-      appBarAutomaticBackgroundVisibility: false,
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[

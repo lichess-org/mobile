@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
@@ -44,13 +43,13 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
         tournamentId: tournamentId,
         player: player,
       ),
-      AsyncError(:final error) => PlatformScaffold(
-        appBarTitle: const Text(''),
+      AsyncError(:final error) => Scaffold(
+        appBar: AppBar(title: const Text('')),
         body: Center(child: Text('Cannot load round data: $error')),
       ),
-      _ => const PlatformScaffold(
-        appBarTitle: Text(''),
-        body: Center(child: CircularProgressIndicator.adaptive()),
+      _ => Scaffold(
+        appBar: AppBar(title: const Text('')),
+        body: const Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
   }
@@ -75,8 +74,10 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: BroadcastPlayerWidget(player: player, showFederation: false, showRating: false),
+    return Scaffold(
+      appBar: AppBar(
+        title: BroadcastPlayerWidget(player: player, showFederation: false, showRating: false),
+      ),
       body: _Body(tournamentId, player.id),
     );
   }

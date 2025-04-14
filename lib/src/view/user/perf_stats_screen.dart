@@ -26,7 +26,6 @@ import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
@@ -51,9 +50,8 @@ class PerfStatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarAndroidTitleSpacing: 0,
-      appBarTitle: _Title(user: user, perf: perf),
+    return Scaffold(
+      appBar: AppBar(titleSpacing: 0, title: _Title(user: user, perf: perf)),
       body: _Body(user: user, perf: perf),
     );
   }

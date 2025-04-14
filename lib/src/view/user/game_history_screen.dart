@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 // TODO l10n
 String displayModeL10n(BuildContext context, GameHistoryDisplayMode mode) {
@@ -123,9 +122,8 @@ class GameHistoryScreen extends ConsumerWidget {
       ],
     );
 
-    return PlatformScaffold(
-      appBarTitle: title,
-      appBarActions: [filterBtn, displayModeButton],
+    return Scaffold(
+      appBar: AppBar(title: title, actions: [filterBtn, displayModeButton]),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }

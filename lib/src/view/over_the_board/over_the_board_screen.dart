@@ -25,7 +25,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class OverTheBoardScreen extends StatelessWidget {
@@ -37,15 +36,17 @@ class OverTheBoardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarTitle: const Text('Over the board'), // TODO: l10n
-      appBarActions: [
-        SemanticIconButton(
-          onPressed: () => showConfigureDisplaySettings(context),
-          semanticsLabel: context.l10n.settingsSettings,
-          icon: const Icon(Icons.settings),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Over the board'), // TODO: l10n
+        actions: [
+          SemanticIconButton(
+            onPressed: () => showConfigureDisplaySettings(context),
+            semanticsLabel: context.l10n.settingsSettings,
+            icon: const Icon(Icons.settings),
+          ),
+        ],
+      ),
       body: const _Body(),
     );
   }

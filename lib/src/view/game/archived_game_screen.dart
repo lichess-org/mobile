@@ -195,38 +195,41 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
-    return PlatformScaffold(
-      appBarTitle:
-          widget.gameData != null
-              ? _GameTitle(gameData: widget.gameData!)
-              : const SizedBox.shrink(),
-      appBarActions: [
-        if (widget.gameData == null && widget.error == null) const PlatformAppBarLoadingIndicator(),
-        if (widget.gameData != null)
-          ContextMenuButton(
-            icon: const Icon(Icons.more_horiz),
-            semanticsLabel: context.l10n.menu,
-            actions: [
-              const ToggleSoundContextMenuAction(),
-              if (isLoggedIn)
-                GameBookmarkContextMenuAction(
-                  id: widget.gameData!.id,
-                  bookmarked: _bookmarked,
-                  onToggleBookmark: _toggleBookmark,
-                  gameListContext: widget.gameListContext,
-                ),
-              ...(switch (ref.watch(gameCursorProvider(widget.gameData!.id))) {
-                AsyncData(:final value) => makeFinishedGameShareContextMenuActions(
-                  context,
-                  ref,
-                  gameId: widget.gameData!.id,
-                  orientation: value.$1.youAre ?? Side.white,
-                ),
-                _ => [],
-              }),
-            ],
-          ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title:
+            widget.gameData != null
+                ? _GameTitle(gameData: widget.gameData!)
+                : const SizedBox.shrink(),
+        actions: [
+          if (widget.gameData == null && widget.error == null)
+            const PlatformAppBarLoadingIndicator(),
+          if (widget.gameData != null)
+            ContextMenuButton(
+              icon: const Icon(Icons.more_horiz),
+              semanticsLabel: context.l10n.menu,
+              actions: [
+                const ToggleSoundContextMenuAction(),
+                if (isLoggedIn)
+                  GameBookmarkContextMenuAction(
+                    id: widget.gameData!.id,
+                    bookmarked: _bookmarked,
+                    onToggleBookmark: _toggleBookmark,
+                    gameListContext: widget.gameListContext,
+                  ),
+                ...(switch (ref.watch(gameCursorProvider(widget.gameData!.id))) {
+                  AsyncData(:final value) => makeFinishedGameShareContextMenuActions(
+                    context,
+                    ref,
+                    gameId: widget.gameData!.id,
+                    orientation: value.$1.youAre ?? Side.white,
+                  ),
+                  _ => [],
+                }),
+              ],
+            ),
+        ],
+      ),
       body: SafeArea(
         bottom: false,
         child: Column(

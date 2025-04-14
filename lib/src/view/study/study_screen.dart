@@ -36,7 +36,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:logging/logging.dart';
 
@@ -71,9 +70,8 @@ class _StudyScreenLoader extends ConsumerWidget {
         return _StudyScreen(id: id, studyState: value);
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load study: $error', stackTrace);
-        return PlatformScaffold(
-          appBarEnableBackgroundFilterBlur: false,
-          appBarTitle: const Text(''),
+        return Scaffold(
+          appBar: AppBar(title: const Text('')),
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
@@ -94,18 +92,19 @@ class _StudyScreenLoader extends ConsumerWidget {
           ),
         );
       case _:
-        return PlatformScaffold(
-          appBarEnableBackgroundFilterBlur: false,
-          appBarTitle: Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: SizedBox(
-                height: 24.0,
-                width: 200.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10.0),
+        return Scaffold(
+          appBar: AppBar(
+            title: Shimmer(
+              child: ShimmerLoading(
+                isLoading: true,
+                child: SizedBox(
+                  height: 24.0,
+                  width: 200.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                 ),
               ),
@@ -187,20 +186,21 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
   @override
   Widget build(BuildContext context) {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    return PlatformScaffold(
-      appBarEnableBackgroundFilterBlur: false,
-      appBarTitle: AutoSizeText(
-        widget.studyState.currentChapterTitle,
-        maxLines: 2,
-        minFontSize: 14,
-        overflow: TextOverflow.ellipsis,
+    return Scaffold(
+      appBar: AppBar(
+        title: AutoSizeText(
+          widget.studyState.currentChapterTitle,
+          maxLines: 2,
+          minFontSize: 14,
+          overflow: TextOverflow.ellipsis,
+        ),
+        actions: [
+          if (widget.studyState.isEngineAvailable(enginePrefs))
+            EngineDepth(savedEval: widget.studyState.currentNode.eval),
+          if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
+          _StudyMenu(id: widget.id),
+        ],
       ),
-      appBarActions: [
-        if (widget.studyState.isEngineAvailable(enginePrefs))
-          EngineDepth(savedEval: widget.studyState.currentNode.eval),
-        if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-        _StudyMenu(id: widget.id),
-      ],
       body: _Body(id: widget.id, tabController: _tabController, tabs: tabs),
     );
   }

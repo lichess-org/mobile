@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BoardSettingsScreen extends StatelessWidget {
@@ -28,9 +27,11 @@ class BoardSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBarLeading: showCloseButton ? const CloseButton() : null,
-      appBarTitle: Text(context.l10n.preferencesGameBehavior),
+    return Scaffold(
+      appBar: AppBar(
+        leading: showCloseButton ? const CloseButton() : null,
+        title: Text(context.l10n.preferencesGameBehavior),
+      ),
       body: const _Body(),
     );
   }

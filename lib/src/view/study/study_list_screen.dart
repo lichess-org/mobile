@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:logging/logging.dart';
@@ -38,22 +37,24 @@ class StudyListScreen extends ConsumerWidget {
     final filter = ref.watch(studyFilterProvider);
     final title = Text(isLoggedIn ? filter.category.l10n(context.l10n) : context.l10n.studyMenu);
 
-    return PlatformScaffold(
-      appBarTitle: title,
-      appBarActions: [
-        SemanticIconButton(
-          icon: const Icon(Icons.filter_list),
-          // TODO: translate
-          semanticsLabel: 'Filter studies',
-          onPressed:
-              () => showAdaptiveBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                showDragHandle: true,
-                builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
-              ),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: title,
+        actions: [
+          SemanticIconButton(
+            icon: const Icon(Icons.filter_list),
+            // TODO: translate
+            semanticsLabel: 'Filter studies',
+            onPressed:
+                () => showAdaptiveBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
+                ),
+          ),
+        ],
+      ),
       body: SafeArea(top: false, child: _Body(filter: filter)),
     );
   }

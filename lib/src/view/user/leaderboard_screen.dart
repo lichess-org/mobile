@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 /// Create a Screen with Top 10 players for each Lichess Variant
@@ -24,7 +23,7 @@ class LeaderboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(appBarTitle: Text(context.l10n.leaderboard), body: const _Body());
+    return Scaffold(appBar: AppBar(title: Text(context.l10n.leaderboard)), body: const _Body());
   }
 }
 

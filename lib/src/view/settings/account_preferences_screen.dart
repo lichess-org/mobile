@@ -337,9 +337,11 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
       },
     );
 
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.preferencesPreferences),
-      appBarActions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(context.l10n.preferencesPreferences),
+        actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
+      ),
       body: content,
     );
   }

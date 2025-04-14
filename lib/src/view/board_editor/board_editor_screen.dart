@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class BoardEditorScreen extends ConsumerWidget {
   const BoardEditorScreen({super.key, this.initialFen});
@@ -36,15 +35,17 @@ class BoardEditorScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final boardEditorState = ref.watch(boardEditorControllerProvider(initialFen));
 
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.boardEditor),
-      appBarActions: [
-        SemanticIconButton(
-          semanticsLabel: context.l10n.mobileSharePositionAsFEN,
-          onPressed: () => launchShareDialog(context, text: boardEditorState.fen),
-          icon: const PlatformShareIcon(),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(context.l10n.boardEditor),
+        actions: [
+          SemanticIconButton(
+            semanticsLabel: context.l10n.mobileSharePositionAsFEN,
+            onPressed: () => launchShareDialog(context, text: boardEditorState.fen),
+            icon: const PlatformShareIcon(),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(

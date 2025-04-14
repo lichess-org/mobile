@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class TournamentListScreen extends ConsumerStatefulWidget {
   const TournamentListScreen({super.key});
@@ -70,17 +69,18 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   Widget build(BuildContext context) {
     final tournamentAsync = ref.watch(tournamentsProvider);
 
-    return PlatformScaffold(
-      appBarTitle: Text(context.l10n.tournaments),
-      appBarBottom: TabBar(
-        controller: _tabController,
-        tabs: <Widget>[
-          Tab(text: _ViewMode.completed.l10n(context)),
-          Tab(text: _ViewMode.ongoing.l10n(context)),
-          Tab(text: _ViewMode.upcoming.l10n(context)),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(context.l10n.tournaments),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: <Widget>[
+            Tab(text: _ViewMode.completed.l10n(context)),
+            Tab(text: _ViewMode.ongoing.l10n(context)),
+            Tab(text: _ViewMode.upcoming.l10n(context)),
+          ],
+        ),
       ),
-      appBarAutomaticBackgroundVisibility: false,
       body: switch (tournamentAsync) {
         AsyncData(:final value) => TabBarView(
           controller: _tabController,
