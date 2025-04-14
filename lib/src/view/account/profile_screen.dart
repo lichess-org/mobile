@@ -22,7 +22,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ProfileScreen(), title: context.l10n.profile);
+    return buildScreenRoute(context, screen: const ProfileScreen());
   }
 
   @override
@@ -58,10 +58,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
           return RefreshIndicator.adaptive(
-            edgeOffset:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? MediaQuery.paddingOf(context).top + 16.0
-                    : 0,
             key: _refreshIndicatorKey,
             onRefresh: () async => ref.refresh(accountProvider),
             child: ListView(

@@ -9,7 +9,7 @@ class EngineSettingsScreen extends StatelessWidget {
   const EngineSettingsScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const EngineSettingsScreen(), title: 'Engine');
+    return buildScreenRoute(context, screen: const EngineSettingsScreen());
   }
 
   @override

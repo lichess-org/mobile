@@ -111,7 +111,6 @@ class BroadcastRoundScreen extends ConsumerStatefulWidget {
     return buildScreenRoute(
       context,
       screen: BroadcastRoundScreen(broadcast: broadcast, initialTab: initialTab),
-      title: broadcast.title,
     );
   }
 

@@ -13,11 +13,7 @@ class AccountPreferencesScreen extends ConsumerStatefulWidget {
   const AccountPreferencesScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const AccountPreferencesScreen(),
-      title: context.l10n.preferencesPreferences,
-    );
+    return buildScreenRoute(context, screen: const AccountPreferencesScreen());
   }
 
   @override

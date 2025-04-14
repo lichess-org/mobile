@@ -28,11 +28,7 @@ class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const EditProfileScreen(),
-      title: context.l10n.editProfile,
-    );
+    return buildScreenRoute(context, screen: const EditProfileScreen());
   }
 
   Future<bool?> _showBackDialog(BuildContext context) {
@@ -292,7 +288,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                               result.match(
                                 onError: (err, _) {
                                   if (context.mounted) {
-                                    showPlatformSnackbar(
+                                    showSnackBar(
                                       context,
                                       'Something went wrong',
                                       type: SnackBarType.error,
@@ -302,7 +298,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                 onSuccess: (_) {
                                   if (context.mounted) {
                                     ref.invalidate(accountProvider);
-                                    showPlatformSnackbar(
+                                    showSnackBar(
                                       context,
                                       context.l10n.success,
                                       type: SnackBarType.success,

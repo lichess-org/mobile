@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -30,11 +29,7 @@ class OpeningThemeScreen extends StatelessWidget {
   const OpeningThemeScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const OpeningThemeScreen(),
-      title: context.l10n.puzzlePuzzlesByOpenings,
-    );
+    return buildScreenRoute(context, screen: const OpeningThemeScreen());
   }
 
   @override
@@ -51,11 +46,6 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final titleStyle =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? TextStyle(color: CupertinoTheme.of(context).textTheme.textStyle.color)
-            : null;
-
     final openings = ref.watch(_openingsProvider);
     return openings.when(
       data: (data) {
@@ -64,7 +54,7 @@ class _Body extends ConsumerWidget {
           return ListView(
             children: [
               for (final openingFamily in onlineOpenings)
-                _OpeningFamily(openingFamily: openingFamily, titleStyle: titleStyle),
+                _OpeningFamily(openingFamily: openingFamily, titleStyle: null),
             ],
           );
         } else {
@@ -77,7 +67,7 @@ class _Body extends ConsumerWidget {
                       name: openingKey.replaceAll('_', ' '),
                       openingKey: openingKey,
                       count: savedOpenings[openingKey]!,
-                      titleStyle: titleStyle,
+                      titleStyle: null,
                     ),
                 ],
               ),
@@ -165,7 +155,7 @@ class _OpeningTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Theme.of(context).platform == TargetPlatform.iOS ? null : const SizedBox.shrink(),
+      leading: const SizedBox.shrink(),
       title: Text(name, overflow: TextOverflow.ellipsis, style: titleStyle),
       trailing: Text('$count', style: TextStyle(color: textShade(context, Styles.subtitleOpacity))),
       onTap: () {

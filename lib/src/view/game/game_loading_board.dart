@@ -99,7 +99,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
                               await _cancelGameCreationFuture;
                             } catch (_) {
                               if (context.mounted) {
-                                showPlatformSnackbar(
+                                showSnackBar(
                                   context,
                                   'Error cancelling game creation',
                                   type: SnackBarType.error,
@@ -204,7 +204,7 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
                               await _cancelChallengeFuture;
                             } catch (_) {
                               if (context.mounted) {
-                                showPlatformSnackbar(
+                                showSnackBar(
                                   context,
                                   'Error cancelling challenge',
                                   type: SnackBarType.error,

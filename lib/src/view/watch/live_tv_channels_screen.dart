@@ -15,7 +15,7 @@ class LiveTvChannelsScreen extends ConsumerWidget {
   const LiveTvChannelsScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, title: 'Lichess TV', screen: const LiveTvChannelsScreen());
+    return buildScreenRoute(context, screen: const LiveTvChannelsScreen());
   }
 
   @override

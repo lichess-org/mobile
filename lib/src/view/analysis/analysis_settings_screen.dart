@@ -18,11 +18,7 @@ class AnalysisSettingsScreen extends ConsumerWidget {
   final AnalysisOptions options;
 
   static Route<dynamic> buildRoute(BuildContext context, {required AnalysisOptions options}) {
-    return buildScreenRoute(
-      context,
-      screen: AnalysisSettingsScreen(options),
-      title: context.l10n.settingsSettings,
-    );
+    return buildScreenRoute(context, screen: AnalysisSettingsScreen(options));
   }
 
   @override

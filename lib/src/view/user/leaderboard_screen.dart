@@ -19,11 +19,7 @@ class LeaderboardScreen extends StatelessWidget {
   const LeaderboardScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.leaderboard,
-      screen: const LeaderboardScreen(),
-    );
+    return buildScreenRoute(context, screen: const LeaderboardScreen());
   }
 
   @override

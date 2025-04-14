@@ -151,7 +151,7 @@ class _ChoiceChip extends StatelessWidget {
             ? scaffoldOpacity > 0
                 ? Colors.white10
                 : ColorScheme.of(context).surfaceContainerLow
-            : ColorScheme.of(context).onSurface.withValues(alpha: 0.08);
+            : ColorScheme.of(context).surfaceContainerHighest.withValues(alpha: 0.50);
 
     return Opacity(
       opacity: onTap != null ? 1.0 : 0.5,

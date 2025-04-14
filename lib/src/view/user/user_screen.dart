@@ -29,7 +29,7 @@ class UserScreen extends ConsumerStatefulWidget {
   final LightUser user;
 
   static Route<dynamic> buildRoute(BuildContext context, LightUser user) {
-    return buildScreenRoute(context, title: user.name, screen: UserScreen(user: user));
+    return buildScreenRoute(context, screen: UserScreen(user: user));
   }
 
   @override

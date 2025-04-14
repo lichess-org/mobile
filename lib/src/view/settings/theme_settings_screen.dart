@@ -23,11 +23,7 @@ class ThemeSettingsScreen extends ConsumerWidget {
   const ThemeSettingsScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const ThemeSettingsScreen(),
-      title: context.l10n.mobileTheme,
-    );
+    return buildScreenRoute(context, screen: const ThemeSettingsScreen());
   }
 
   @override

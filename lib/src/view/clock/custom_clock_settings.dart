@@ -77,12 +77,9 @@ class _PlayerTimeSlider extends StatelessWidget {
             value: clock.time,
             values: kAvailableTimesInSeconds,
             labelBuilder: _clockTimeLabel,
-            onChange:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? (num value) {
-                      updateTime(value.toInt());
-                    }
-                    : null,
+            onChange: (num value) {
+              updateTime(value.toInt());
+            },
             onChangeEnd: (num value) {
               updateTime(value.toInt());
             },
@@ -94,12 +91,9 @@ class _PlayerTimeSlider extends StatelessWidget {
             value: clock.increment,
             values: kAvailableIncrementsInSeconds,
             labelBuilder: (num sec) => sec.toString(),
-            onChange:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? (num value) {
-                      updateIncrement(value.toInt());
-                    }
-                    : null,
+            onChange: (num value) {
+              updateIncrement(value.toInt());
+            },
             onChangeEnd: (num value) {
               updateIncrement(value.toInt());
             },

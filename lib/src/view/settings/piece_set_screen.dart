@@ -14,7 +14,7 @@ class PieceSetScreen extends ConsumerStatefulWidget {
   const PieceSetScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const PieceSetScreen(), title: context.l10n.pieceSet);
+    return buildScreenRoute(context, screen: const PieceSetScreen());
   }
 
   @override
@@ -69,15 +69,7 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
           itemBuilder: (context, index) {
             final pieceSet = PieceSet.values[index];
             return ListTile(
-              trailing:
-                  boardPrefs.pieceSet == pieceSet
-                      ? Theme.of(context).platform == TargetPlatform.android
-                          ? const Icon(Icons.check)
-                          : Icon(
-                            CupertinoIcons.check_mark_circled_solid,
-                            color: CupertinoTheme.of(context).primaryColor,
-                          )
-                      : null,
+              trailing: boardPrefs.pieceSet == pieceSet ? const Icon(Icons.check) : null,
               title: Text(pieceSet.label),
               subtitle: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 264),

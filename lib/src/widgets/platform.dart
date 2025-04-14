@@ -24,33 +24,6 @@ class PlatformWidget extends StatelessWidget {
 
 typedef ConsumerWidgetBuilder = Widget Function(BuildContext context, WidgetRef ref);
 
-/// A widget that builds different things on different platforms with riverpod.
-class ConsumerPlatformWidget extends StatelessWidget {
-  const ConsumerPlatformWidget({
-    super.key,
-    required this.ref,
-    required this.androidBuilder,
-    required this.iosBuilder,
-  });
-
-  final WidgetRef ref;
-  final ConsumerWidgetBuilder androidBuilder;
-  final ConsumerWidgetBuilder iosBuilder;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        return androidBuilder(context, ref);
-      case TargetPlatform.iOS:
-        return iosBuilder(context, ref);
-      default:
-        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
-        return const SizedBox.shrink();
-    }
-  }
-}
-
 class PlatformShareIcon extends StatelessWidget {
   const PlatformShareIcon({super.key});
 

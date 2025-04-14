@@ -15,17 +15,12 @@ class StreamerScreen extends StatelessWidget {
   final IList<Streamer> streamers;
 
   static Route<dynamic> buildRoute(BuildContext context, IList<Streamer> streamers) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.mobileLiveStreamers,
-      screen: StreamerScreen(streamers: streamers),
-    );
+    return buildScreenRoute(context, screen: StreamerScreen(streamers: streamers));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBar: AppBar(title: Text(context.l10n.mobileLiveStreamers)),
       body: ListView.builder(
         itemCount: streamers.length,

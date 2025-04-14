@@ -429,13 +429,6 @@ class _OpenInNewIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      Icons.open_in_new,
-      size: 18,
-      color:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoColors.systemGrey2.resolveFrom(context)
-              : null,
-    );
+    return const Icon(Icons.open_in_new, size: 18);
   }
 }

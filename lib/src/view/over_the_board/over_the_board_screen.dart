@@ -32,7 +32,7 @@ class OverTheBoardScreen extends StatelessWidget {
   const OverTheBoardScreen({super.key});
 
   static Route<void> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, title: 'Over the board', screen: const OverTheBoardScreen());
+    return buildScreenRoute(context, screen: const OverTheBoardScreen());
   }
 
   @override

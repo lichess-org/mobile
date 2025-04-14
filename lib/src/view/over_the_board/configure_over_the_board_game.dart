@@ -105,7 +105,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                 value: timeIncrement.time,
                 values: kAvailableTimesInSeconds,
                 labelBuilder: clockLabelInMinutes,
-                onChange: Theme.of(context).platform == TargetPlatform.iOS ? _setTotalTime : null,
+                onChange: _setTotalTime,
                 onChangeEnd: _setTotalTime,
               ),
             ),
@@ -124,7 +124,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
               subtitle: NonLinearSlider(
                 value: timeIncrement.increment,
                 values: kAvailableIncrementsInSeconds,
-                onChange: Theme.of(context).platform == TargetPlatform.iOS ? _setIncrement : null,
+                onChange: _setIncrement,
                 onChangeEnd: _setIncrement,
               ),
             ),

@@ -34,6 +34,7 @@ import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -215,27 +216,27 @@ class _StudyMenu extends ConsumerWidget {
     final session = ref.watch(authSessionProvider);
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
-    return PlatformContextMenuButton(
+    return ContextMenuButton(
       semanticsLabel: 'Study menu',
       icon: const Icon(Icons.more_horiz),
       actions: [
-        PlatformContextMenuAction(
-          icon: Icons.settings,
+        ContextMenuAction(
+          icon: const Icon(Icons.settings),
           label: context.l10n.settingsSettings,
           onPressed: () {
             Navigator.of(context).push(StudySettingsScreen.buildRoute(context, id));
           },
         ),
         if (session != null)
-          PlatformContextMenuAction(
-            icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
+          ContextMenuAction(
+            icon: Icon(state.study.liked ? Icons.favorite : Icons.favorite_border),
             label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
             onPressed: () {
               ref.read(studyControllerProvider(id).notifier).toggleLike();
             },
           ),
-        PlatformContextMenuAction(
-          icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
+        ContextMenuAction(
+          icon: const PlatformShareIcon(),
           label: context.l10n.studyShareAndExport,
           onPressed: () {
             showAdaptiveActionSheet<void>(
@@ -269,11 +270,7 @@ class _StudyMenu extends ConsumerWidget {
                         }
                       } catch (e) {
                         if (context.mounted) {
-                          showPlatformSnackbar(
-                            context,
-                            'Failed to get PGN',
-                            type: SnackBarType.error,
-                          );
+                          showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
                         }
                       }
                     },
@@ -307,11 +304,7 @@ class _StudyMenu extends ConsumerWidget {
                           }
                         } catch (e) {
                           if (context.mounted) {
-                            showPlatformSnackbar(
-                              context,
-                              'Failed to get GIF',
-                              type: SnackBarType.error,
-                            );
+                            showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
                           }
                         }
                       },
@@ -335,11 +328,7 @@ class _StudyMenu extends ConsumerWidget {
                       } catch (e) {
                         debugPrint(e.toString());
                         if (context.mounted) {
-                          showPlatformSnackbar(
-                            context,
-                            'Failed to get GIF',
-                            type: SnackBarType.error,
-                          );
+                          showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
                         }
                       }
                     },

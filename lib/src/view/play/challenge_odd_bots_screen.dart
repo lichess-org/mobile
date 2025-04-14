@@ -23,11 +23,7 @@ class ChallengeOddBotsScreen extends StatelessWidget {
   final LightUser bot;
 
   static Route<dynamic> buildRoute(BuildContext context, LightUser bot) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.challengeChallengesX(bot.name),
-      screen: ChallengeOddBotsScreen(bot),
-    );
+    return buildScreenRoute(context, screen: ChallengeOddBotsScreen(bot));
   }
 
   @override
@@ -145,14 +141,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       value: seconds,
                       values: List.generate(15, (i) => (i + 1) * 60),
                       labelBuilder: clockLabelInMinutes,
-                      onChange:
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? (num value) {
-                                setState(() {
-                                  seconds = value.toInt();
-                                });
-                              }
-                              : null,
+                      onChange: (num value) {
+                        setState(() {
+                          seconds = value.toInt();
+                        });
+                      },
                       onChangeEnd: (num value) {
                         setState(() {
                           seconds = value.toInt();
@@ -183,14 +176,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     subtitle: NonLinearSlider(
                       value: incrementSeconds,
                       values: List.generate(11, (i) => i),
-                      onChange:
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? (num value) {
-                                setState(() {
-                                  incrementSeconds = value.toInt();
-                                });
-                              }
-                              : null,
+                      onChange: (num value) {
+                        setState(() {
+                          incrementSeconds = value.toInt();
+                        });
+                      },
                       onChangeEnd: (num value) {
                         setState(() {
                           incrementSeconds = value.toInt();

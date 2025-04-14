@@ -37,7 +37,7 @@ class StormScreen extends ConsumerStatefulWidget {
   const StormScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const StormScreen(), title: 'Puzzle Storm');
+    return buildScreenRoute(context, screen: const StormScreen());
   }
 
   @override
@@ -398,25 +398,13 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
                       children: [
                         Text(
                           widget.combo.current.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 26,
                             height: 1.0,
                             fontWeight: FontWeight.bold,
-                            color:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? CupertinoTheme.of(context).textTheme.textStyle.color
-                                    : null,
                           ),
                         ),
-                        Text(
-                          context.l10n.stormCombo,
-                          style: TextStyle(
-                            color:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? CupertinoTheme.of(context).textTheme.textStyle.color
-                                    : null,
-                          ),
-                        ),
+                        Text(context.l10n.stormCombo),
                       ],
                     ),
                   ),
@@ -565,12 +553,7 @@ class _RunStats extends StatelessWidget {
   final StormRunStats stats;
 
   static Route<dynamic> buildRoute(BuildContext context, StormRunStats stats) {
-    return buildScreenRoute(
-      context,
-      screen: _RunStats(stats),
-      title: 'Storm Stats',
-      fullscreenDialog: true,
-    );
+    return buildScreenRoute(context, screen: _RunStats(stats), fullscreenDialog: true);
   }
 
   @override

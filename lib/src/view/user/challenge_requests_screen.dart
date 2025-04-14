@@ -19,17 +19,12 @@ class ChallengeRequestsScreen extends StatelessWidget {
   const ChallengeRequestsScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const ChallengeRequestsScreen(),
-      title: context.l10n.preferencesNotifyChallenge,
-    );
+    return buildScreenRoute(context, screen: const ChallengeRequestsScreen());
   }
 
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBarTitle: Text(context.l10n.preferencesNotifyChallenge),
       body: _Body(),
     );
@@ -108,7 +103,7 @@ class _Body extends ConsumerWidget {
             }
 
             void showMissingAccountMessage() {
-              showPlatformSnackbar(context, context.l10n.youNeedAnAccountToDoThat);
+              showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
             }
 
             return ChallengeListItem(

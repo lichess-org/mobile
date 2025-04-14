@@ -34,9 +34,9 @@ class ToggleSoundContextMenuAction extends ConsumerWidget {
       generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
     );
 
-    return PlatformContextMenuAction(
+    return ContextMenuAction(
       dismissOnPress: false,
-      icon: isSoundEnabled ? Icons.volume_up : Icons.volume_off,
+      icon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
       label: context.l10n.sound,
       onPressed: () {
         ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();

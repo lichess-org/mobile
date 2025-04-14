@@ -179,7 +179,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                                 onPressed:
                                     ref.watch(authSessionProvider) == null
                                         ? () {
-                                          showPlatformSnackbar(
+                                          showSnackBar(
                                             context,
                                             context.l10n.youNeedAnAccountToDoThat,
                                           );
@@ -193,7 +193,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                                                 .requestServerAnalysis()
                                                 .catchError((Object e) {
                                                   if (context.mounted) {
-                                                    showPlatformSnackbar(
+                                                    showSnackBar(
                                                       context,
                                                       e.toString(),
                                                       type: SnackBarType.error,

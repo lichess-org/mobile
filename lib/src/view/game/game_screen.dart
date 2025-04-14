@@ -269,12 +269,9 @@ class _PingRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: Theme.of(context).platform == TargetPlatform.iOS ? 0 : 16.0,
-        vertical: Theme.of(context).platform == TargetPlatform.iOS ? 12.0 : 18.0,
-      ),
-      child: const SocketPingRating(size: 24.0),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
+      child: SocketPingRating(size: 24.0),
     );
   }
 }
@@ -289,12 +286,12 @@ class _GameMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isBookmarkedAsync = ref.watch(isGameBookmarkedProvider(gameId));
 
-    return PlatformContextMenuButton(
+    return ContextMenuButton(
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
       actions: [
-        PlatformContextMenuAction(
-          icon: Icons.settings,
+        ContextMenuAction(
+          icon: const Icon(Icons.settings),
           label: context.l10n.settingsSettings,
           onPressed:
               () => showAdaptiveBottomSheet<void>(
@@ -316,7 +313,7 @@ class _GameMenu extends ConsumerWidget {
         ...(switch (ref.watch(gameShareDataProvider(gameId))) {
           AsyncData(:final value) =>
             value.finished
-                ? makeFinishedGameShareMenuItemButtons(
+                ? makeFinishedGameShareContextMenuActions(
                   context,
                   ref,
                   gameId: gameId.gameId,

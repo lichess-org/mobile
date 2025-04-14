@@ -203,7 +203,7 @@ class _BodyState extends ConsumerState<_Body> {
       appBarActions: [
         if (widget.gameData == null && widget.error == null) const PlatformAppBarLoadingIndicator(),
         if (widget.gameData != null)
-          PlatformContextMenuButton(
+          ContextMenuButton(
             icon: const Icon(Icons.more_horiz),
             semanticsLabel: context.l10n.menu,
             actions: [
@@ -216,7 +216,7 @@ class _BodyState extends ConsumerState<_Body> {
                   gameListContext: widget.gameListContext,
                 ),
               ...(switch (ref.watch(gameCursorProvider(widget.gameData!.id))) {
-                AsyncData(:final value) => makeFinishedGameShareMenuItemButtons(
+                AsyncData(:final value) => makeFinishedGameShareContextMenuActions(
                   context,
                   ref,
                   gameId: widget.gameData!.id,

@@ -432,12 +432,9 @@ class _HelloWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-    final style =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? const TextStyle(fontSize: 20)
-            : TextTheme.of(context).bodyLarge;
+    final style = TextTheme.of(context).bodyLarge;
 
-    final iconSize = Theme.of(context).platform == TargetPlatform.iOS ? 26.0 : 24.0;
+    const iconSize = 24.0;
 
     // fetch the account user to be sure we have the latest data (flair, etc.)
     final accountUser = ref

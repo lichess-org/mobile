@@ -38,11 +38,7 @@ class CreateCustomGameScreen extends StatefulWidget {
   const CreateCustomGameScreen();
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const CreateCustomGameScreen(),
-      title: context.l10n.custom,
-    );
+    return buildScreenRoute(context, screen: const CreateCustomGameScreen());
   }
 
   @override
@@ -176,7 +172,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                       ? null
                       : session == null
                       ? () {
-                        showPlatformSnackbar(context, context.l10n.youNeedAnAccountToDoThat);
+                        showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
                       }
                       : () {
                         showConfirmDialog<void>(
@@ -247,14 +243,11 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   value: customTimeSeconds,
                   values: kAvailableTimesInSeconds,
                   labelBuilder: clockLabelInMinutes,
-                  onChange:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? (num value) {
-                            setState(() {
-                              customTimeSeconds = value.toInt();
-                            });
-                          }
-                          : null,
+                  onChange: (num value) {
+                    setState(() {
+                      customTimeSeconds = value.toInt();
+                    });
+                  },
                   onChangeEnd: (num value) {
                     setState(() {
                       customTimeSeconds = value.toInt();
@@ -289,14 +282,11 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 subtitle: NonLinearSlider(
                   value: customIncrementSeconds,
                   values: kAvailableIncrementsInSeconds,
-                  onChange:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? (num value) {
-                            setState(() {
-                              customIncrementSeconds = value.toInt();
-                            });
-                          }
-                          : null,
+                  onChange: (num value) {
+                    setState(() {
+                      customIncrementSeconds = value.toInt();
+                    });
+                  },
                   onChangeEnd: (num value) {
                     setState(() {
                       customIncrementSeconds = value.toInt();
@@ -335,14 +325,11 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   value: daysPerTurn,
                   values: kAvailableDaysPerTurn,
                   labelBuilder: _daysLabel,
-                  onChange:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? (num value) {
-                            setState(() {
-                              daysPerTurn = value.toInt();
-                            });
-                          }
-                          : null,
+                  onChange: (num value) {
+                    setState(() {
+                      daysPerTurn = value.toInt();
+                    });
+                  },
                   onChangeEnd: (num value) {
                     setState(() {
                       daysPerTurn = value.toInt();

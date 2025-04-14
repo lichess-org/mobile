@@ -23,11 +23,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
   }) {
-    return buildScreenRoute(
-      context,
-      screen: BroadcastGameSettingsScreen(roundId, gameId),
-      title: context.l10n.settingsSettings,
-    );
+    return buildScreenRoute(context, screen: BroadcastGameSettingsScreen(roundId, gameId));
   }
 
   @override

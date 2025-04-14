@@ -13,7 +13,7 @@ class PlayScreen extends ConsumerWidget {
   const PlayScreen();
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const PlayScreen(), title: context.l10n.play);
+    return buildScreenRoute(context, screen: const PlayScreen());
   }
 
   @override

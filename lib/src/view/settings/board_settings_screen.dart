@@ -23,22 +23,13 @@ class BoardSettingsScreen extends StatelessWidget {
       context,
       fullscreenDialog: fullscreenDialog,
       screen: const BoardSettingsScreen(),
-      title: context.l10n.preferencesGameBehavior,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBarLeading:
-          showCloseButton
-              ? Theme.of(context).platform == TargetPlatform.iOS
-                  ? TextButton(
-                    onPressed: () => Navigator.maybePop(context),
-                    child: Text(context.l10n.close),
-                  )
-                  : const CloseButton()
-              : null,
+      appBarLeading: showCloseButton ? const CloseButton() : null,
       appBarTitle: Text(context.l10n.preferencesGameBehavior),
       body: const _Body(),
     );

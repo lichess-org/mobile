@@ -66,11 +66,7 @@ class PuzzleHistoryScreen extends StatelessWidget {
   const PuzzleHistoryScreen();
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const PuzzleHistoryScreen(),
-      title: context.l10n.puzzleHistory,
-    );
+    return buildScreenRoute(context, screen: const PuzzleHistoryScreen());
   }
 
   @override
@@ -118,7 +114,7 @@ class _BodyState extends ConsumerState<_Body> {
     return historyState.when(
       data: (state) {
         if (state.hasError) {
-          showPlatformSnackbar(context, 'Error loading history', type: SnackBarType.error);
+          showSnackBar(context, 'Error loading history', type: SnackBarType.error);
         }
         final crossAxisCount = MediaQuery.sizeOf(context).width > FormFactor.tablet ? 4 : 2;
         final columnsGap = _kPuzzlePadding * crossAxisCount + _kPuzzlePadding;

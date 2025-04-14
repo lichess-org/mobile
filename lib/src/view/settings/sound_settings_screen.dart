@@ -14,11 +14,7 @@ class SoundSettingsScreen extends StatelessWidget {
   const SoundSettingsScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const SoundSettingsScreen(),
-      title: context.l10n.sound,
-    );
+    return buildScreenRoute(context, screen: const SoundSettingsScreen());
   }
 
   @override

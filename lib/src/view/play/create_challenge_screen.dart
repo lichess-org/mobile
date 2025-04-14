@@ -35,11 +35,7 @@ class CreateChallengeScreen extends StatelessWidget {
   final LightUser user;
 
   static Route<dynamic> buildRoute(BuildContext context, LightUser user) {
-    return buildScreenRoute(
-      context,
-      screen: CreateChallengeScreen(user),
-      title: context.l10n.challengeChallengesX(user.name),
-    );
+    return buildScreenRoute(context, screen: CreateChallengeScreen(user));
   }
 
   @override
@@ -103,10 +99,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
         return Center(
           child: ListView(
             shrinkWrap: true,
-            padding:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? Styles.sectionBottomPadding
-                    : Styles.verticalBodyPadding,
+            padding: Styles.verticalBodyPadding,
             children: [
               ListTile(
                 title: Text(context.l10n.timeControl),
@@ -159,14 +152,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                             value: seconds,
                             values: kAvailableTimesInSeconds,
                             labelBuilder: clockLabelInMinutes,
-                            onChange:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? (num value) {
-                                      setState(() {
-                                        seconds = value.toInt();
-                                      });
-                                    }
-                                    : null,
+                            onChange: (num value) {
+                              setState(() {
+                                seconds = value.toInt();
+                              });
+                            },
                             onChangeEnd: (num value) {
                               setState(() {
                                 seconds = value.toInt();
@@ -204,14 +194,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                           subtitle: NonLinearSlider(
                             value: incrementSeconds,
                             values: kAvailableIncrementsInSeconds,
-                            onChange:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? (num value) {
-                                      setState(() {
-                                        incrementSeconds = value.toInt();
-                                      });
-                                    }
-                                    : null,
+                            onChange: (num value) {
+                              setState(() {
+                                incrementSeconds = value.toInt();
+                              });
+                            },
                             onChangeEnd: (num value) {
                               setState(() {
                                 incrementSeconds = value.toInt();
@@ -251,14 +238,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                             value: daysPerTurn,
                             values: kAvailableDaysPerTurn,
                             labelBuilder: _daysLabel,
-                            onChange:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? (num value) {
-                                      setState(() {
-                                        daysPerTurn = value.toInt();
-                                      });
-                                    }
-                                    : null,
+                            onChange: (num value) {
+                              setState(() {
+                                daysPerTurn = value.toInt();
+                              });
+                            },
                             onChangeEnd: (num value) {
                               setState(() {
                                 daysPerTurn = value.toInt();
@@ -416,7 +400,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
         _controller.text = data.text!;
       } catch (_) {
         if (mounted) {
-          showPlatformSnackbar(context, context.l10n.invalidFen, type: SnackBarType.error);
+          showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
         }
       }
     }

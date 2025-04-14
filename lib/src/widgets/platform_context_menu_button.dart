@@ -4,8 +4,8 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 /// A platform agnostic context menu button.
 ///
 /// Typically used in the [AppBar] to show a context menu.
-class PlatformContextMenuButton extends StatelessWidget {
-  const PlatformContextMenuButton({
+class ContextMenuButton extends StatelessWidget {
+  const ContextMenuButton({
     required this.icon,
     required this.semanticsLabel,
     required this.actions,
@@ -44,15 +44,15 @@ class PlatformContextMenuButton extends StatelessWidget {
   }
 }
 
-class PlatformContextMenuAction extends StatelessWidget {
-  const PlatformContextMenuAction({
+class ContextMenuAction extends StatelessWidget {
+  const ContextMenuAction({
     required this.icon,
     required this.label,
     required this.onPressed,
     this.dismissOnPress = true,
   });
 
-  final IconData icon;
+  final Widget icon;
   final String label;
   final VoidCallback? onPressed;
 
@@ -65,7 +65,7 @@ class PlatformContextMenuAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return MenuItemButton(
       closeOnActivate: dismissOnPress,
-      leadingIcon: Icon(icon),
+      leadingIcon: icon,
       semanticsLabel: label,
       onPressed: onPressed,
       child: Text(label),

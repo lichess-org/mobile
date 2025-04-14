@@ -37,11 +37,7 @@ class OnlineBotsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      appBarTitle: Text(context.l10n.onlineBots),
-      body: _Body(),
-    );
+    return PlatformScaffold(appBarTitle: Text(context.l10n.onlineBots), body: _Body());
   }
 }
 
@@ -107,14 +103,7 @@ class _Body extends ConsumerWidget {
             separatorBuilder:
                 (context, index) =>
                     Theme.of(context).platform == TargetPlatform.iOS
-                        ? Divider(
-                          height: 0,
-                          thickness: 0,
-                          // equals to _kNotchedPaddingWithoutLeading constant
-                          // See: https://github.com/flutter/flutter/blob/89ea49204b37523a16daec53b5e6fae70995929d/packages/flutter/lib/src/cupertino/list_tile.dart#L24
-                          indent: 28,
-                          color: CupertinoDynamicColor.resolve(CupertinoColors.separator, context),
-                        )
+                        ? const PlatformDivider()
                         : const SizedBox.shrink(),
             itemBuilder: (context, index) {
               final bot = data[index];
@@ -123,6 +112,7 @@ class _Body extends ConsumerWidget {
                 trailing:
                     Theme.of(context).platform == TargetPlatform.iOS
                         ? Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             if (bot.verified == true) ...[
                               const Icon(Icons.verified_outlined),
@@ -134,14 +124,12 @@ class _Body extends ConsumerWidget {
                         : bot.verified == true
                         ? const Icon(Icons.verified_outlined)
                         : null,
-                title: Padding(
-                  padding: const EdgeInsets.only(right: 5.0),
-                  child: UserFullNameWidget(
-                    user: bot.lightUser,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
+                title: UserFullNameWidget(
+                  user: bot.lightUser,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 subtitle: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     _BotRatings(bot: bot),
                     Text(bot.profile?.bio ?? '', maxLines: 2, overflow: TextOverflow.ellipsis),
@@ -175,12 +163,7 @@ class _Body extends ConsumerWidget {
 void _challengeBot(User bot, {required BuildContext context, required WidgetRef ref}) {
   final session = ref.read(authSessionProvider);
   if (session == null) {
-    showPlatformSnackbar(
-      context,
-
-      context.l10n.challengeRegisterToSendChallenges,
-      type: SnackBarType.error,
-    );
+    showSnackBar(context, context.l10n.challengeRegisterToSendChallenges, type: SnackBarType.error);
     return;
   }
   final isOddBot = oddBots.contains(bot.lightUser.name.toLowerCase());
@@ -212,7 +195,10 @@ class _BotRatings extends StatelessWidget {
                     Icon(perf.icon, size: 16),
                     const SizedBox(width: 4.0),
                     if (rating != null && nbGames > 0)
-                      Text('$rating', style: const TextStyle(color: Colors.grey))
+                      Text(
+                        '$rating',
+                        style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                      )
                     else
                       const Text('  -  '),
                   ],

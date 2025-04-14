@@ -38,10 +38,7 @@ class BottomBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final primary = ColorScheme.of(context).primary;
 
-    final labelFontSize =
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? 11.0
-            : TextTheme.of(context).bodySmall?.fontSize;
+    final labelFontSize = TextTheme.of(context).bodySmall?.fontSize;
 
     final child = Opacity(
       opacity: enabled ? 1.0 : 0.4,

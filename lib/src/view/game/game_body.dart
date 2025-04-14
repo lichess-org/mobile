@@ -601,10 +601,7 @@ class _GameBottomBar extends ConsumerWidget {
                           );
                         }
                         : null,
-                icon:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? CupertinoIcons.chat_bubble
-                        : Icons.chat_bubble_outline,
+                icon: Icons.chat_bubble_outline,
                 badgeLabel: chatUnreadLabel,
               ),
             RepeatButton(

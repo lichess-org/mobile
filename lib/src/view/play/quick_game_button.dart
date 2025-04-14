@@ -56,7 +56,7 @@ class QuickGameButton extends ConsumerWidget {
             },
           ),
         ),
-        if (Theme.of(context).platform == TargetPlatform.android) const SizedBox(width: 8.0),
+        const SizedBox(width: 8.0),
         Expanded(
           flex: kFlexGoldenRatio,
           child: FilledButton(

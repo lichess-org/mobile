@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -11,7 +10,6 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
@@ -85,27 +83,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
     final body = _Body(_term, setSearchText, widget.onUserTap);
 
-    return PlatformWidget(
-      androidBuilder:
-          (context) => Scaffold(
-            appBar: AppBar(
-              toolbarHeight: 80, // Custom height to fit the search bar
-              title: searchBar,
-            ),
-            body: body,
-          ),
-      iosBuilder:
-          (context) => CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              automaticallyImplyLeading: false,
-              middle: SizedBox(height: 36.0, child: searchBar),
-              trailing: NoPaddingTextButton(
-                child: Text(context.l10n.close),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ),
-            child: body,
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 80, // Custom height to fit the search bar
+        title: searchBar,
+      ),
+      body: body,
     );
   }
 }

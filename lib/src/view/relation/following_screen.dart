@@ -29,16 +29,12 @@ class FollowingScreen extends StatelessWidget {
   const FollowingScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, title: context.l10n.friends, screen: const FollowingScreen());
+    return buildScreenRoute(context, screen: const FollowingScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      appBarTitle: Text(context.l10n.friends),
-      body: const _Body(),
-    );
+    return PlatformScaffold(appBarTitle: Text(context.l10n.friends), body: const _Body());
   }
 }
 

@@ -118,17 +118,11 @@ class TimeControlModal extends ConsumerWidget {
                                       value: custom.time,
                                       values: kAvailableTimesInSeconds,
                                       labelBuilder: clockLabelInMinutes,
-                                      onChange:
-                                          Theme.of(context).platform == TargetPlatform.iOS
-                                              ? (num value) {
-                                                setState(() {
-                                                  custom = TimeIncrement(
-                                                    value.toInt(),
-                                                    custom.increment,
-                                                  );
-                                                });
-                                              }
-                                              : null,
+                                      onChange: (num value) {
+                                        setState(() {
+                                          custom = TimeIncrement(value.toInt(), custom.increment);
+                                        });
+                                      },
                                       onChangeEnd: (num value) {
                                         setState(() {
                                           custom = TimeIncrement(value.toInt(), custom.increment);
@@ -160,17 +154,11 @@ class TimeControlModal extends ConsumerWidget {
                                     child: NonLinearSlider(
                                       value: custom.increment,
                                       values: kAvailableIncrementsInSeconds,
-                                      onChange:
-                                          Theme.of(context).platform == TargetPlatform.iOS
-                                              ? (num value) {
-                                                setState(() {
-                                                  custom = TimeIncrement(
-                                                    custom.time,
-                                                    value.toInt(),
-                                                  );
-                                                });
-                                              }
-                                              : null,
+                                      onChange: (num value) {
+                                        setState(() {
+                                          custom = TimeIncrement(custom.time, value.toInt());
+                                        });
+                                      },
                                       onChangeEnd: (num value) {
                                         setState(() {
                                           custom = TimeIncrement(custom.time, value.toInt());

@@ -23,11 +23,7 @@ class PuzzleDashboardScreen extends StatelessWidget {
   const PuzzleDashboardScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.puzzlePuzzleDashboard,
-      screen: const PuzzleDashboardScreen(),
-    );
+    return buildScreenRoute(context, screen: const PuzzleDashboardScreen());
   }
 
   @override
@@ -53,7 +49,6 @@ class PuzzleDashboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
-    final cardColor = Theme.of(context).platform == TargetPlatform.iOS ? Colors.transparent : null;
 
     return puzzleDashboard.when(
       data: (dashboard) {
@@ -79,7 +74,6 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               StatCard(
                 context.l10n.performance,
                 value: dashboard.global.performance.toString(),
-                backgroundColor: cardColor,
                 elevation: 0,
               ),
               StatCard(
@@ -89,13 +83,11 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                     .trim()
                     .capitalize(),
                 value: dashboard.global.nb.toString().localizeNumbers(),
-                backgroundColor: cardColor,
                 elevation: 0,
               ),
               StatCard(
                 context.l10n.puzzleSolved.capitalize(),
                 value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
-                backgroundColor: cardColor,
                 elevation: 0,
               ),
             ]),

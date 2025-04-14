@@ -41,11 +41,7 @@ class BroadcastListScreen extends StatefulWidget {
   const BroadcastListScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.broadcastBroadcasts,
-      screen: const BroadcastListScreen(),
-    );
+    return buildScreenRoute(context, screen: const BroadcastListScreen());
   }
 
   static double _thumbnailSize(BuildContext context) {
@@ -101,11 +97,7 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
           ),
     );
 
-    return Scaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
-      body: _Body(filter),
-      appBar: AppBar(title: title, actions: [filterButton]),
-    );
+    return Scaffold(body: _Body(filter), appBar: AppBar(title: title, actions: [filterButton]));
   }
 }
 

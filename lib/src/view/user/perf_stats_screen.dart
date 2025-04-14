@@ -46,11 +46,7 @@ class PerfStatsScreen extends StatelessWidget {
   final Perf perf;
 
   static Route<dynamic> buildRoute(BuildContext context, {required User user, required Perf perf}) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.perfStatPerfStats(perf.title),
-      screen: PerfStatsScreen(user: user, perf: perf),
-    );
+    return buildScreenRoute(context, screen: PerfStatsScreen(user: user, perf: perf));
   }
 
   @override
@@ -636,7 +632,7 @@ class _GameListWidget extends ConsumerWidget {
                   ),
                 );
               } else if (context.mounted && gameData != null) {
-                showPlatformSnackbar(context, 'This variant is not supported yet');
+                showSnackBar(context, 'This variant is not supported yet');
               }
             },
             playerTitle: UserFullNameWidget(user: game.opponent, rating: game.opponentRating),

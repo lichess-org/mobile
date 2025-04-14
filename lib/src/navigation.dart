@@ -152,20 +152,7 @@ class BottomNavScaffold extends ConsumerWidget {
     return FullScreenBackground(
       child: Scaffold(
         body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _androidTabBuilder),
-        bottomNavigationBar:
-        // Theme.of(context).platform == TargetPlatform.iOS
-        //     ? CupertinoTabBar(
-        //       currentIndex: currentTab.index,
-        //       items: [
-        //         for (final tab in BottomTab.values)
-        //           BottomNavigationBarItem(
-        //             icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-        //             label: tab.label(context.l10n),
-        //           ),
-        //       ],
-        //       onTap: (i) => _onItemTapped(ref, i),
-        //     )
-        NavigationBar(
+        bottomNavigationBar: NavigationBar(
           selectedIndex: currentTab.index,
           destinations: [
             for (final tab in BottomTab.values)

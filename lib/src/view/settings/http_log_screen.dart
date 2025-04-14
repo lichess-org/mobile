@@ -13,7 +13,7 @@ class HttpLogScreen extends ConsumerStatefulWidget {
   const HttpLogScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const HttpLogScreen(), title: 'HTTP Logs');
+    return buildScreenRoute(context, screen: const HttpLogScreen());
   }
 
   @override
@@ -55,7 +55,6 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
   Widget build(BuildContext context) {
     final asyncState = ref.watch(httpLogPaginatorProvider);
     return PlatformScaffold(
-      backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBarTitle: const Text('HTTP Logs'),
       appBarActions: [
         if (asyncState.valueOrNull?.isDeleteButtonVisible == true)
@@ -116,10 +115,6 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
     }
     return RefreshIndicator.adaptive(
       key: widget.refreshIndicatorKey,
-      edgeOffset:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? MediaQuery.paddingOf(context).top + 16.0
-              : 0,
       onRefresh: widget.onRefresh,
       child: ListView.separated(
         controller: widget.scrollController,

@@ -17,11 +17,7 @@ class TournamentListScreen extends ConsumerStatefulWidget {
   const TournamentListScreen({super.key});
 
   static Route<void> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.tournaments,
-      screen: const TournamentListScreen(),
-    );
+    return buildScreenRoute(context, screen: const TournamentListScreen());
   }
 
   @override
@@ -127,10 +123,6 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
             .toList();
 
     return RefreshIndicator.adaptive(
-      edgeOffset:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? MediaQuery.paddingOf(context).top + 16.0
-              : 0,
       key: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(tournamentsProvider),
       child: ListView.separated(

@@ -32,11 +32,7 @@ class TournamentScreen extends ConsumerWidget {
   final TournamentId id;
 
   static Route<void> buildRoute(BuildContext context, TournamentId id) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.tournament,
-      screen: TournamentScreen(id: id),
-    );
+    return buildScreenRoute(context, screen: TournamentScreen(id: id));
   }
 
   @override

@@ -111,11 +111,7 @@ class PuzzleStreakController extends _$PuzzleStreakController {
             // ignore: avoid_manual_providers_as_generated_provider_dependency
             final currentContext = ref.read(currentNavigatorKeyProvider).currentContext;
             if (currentContext != null && currentContext.mounted) {
-              showPlatformSnackbar(
-                currentContext,
-                'Error loading next puzzle',
-                type: SnackBarType.error,
-              );
+              showSnackBar(currentContext, 'Error loading next puzzle', type: SnackBarType.error);
             }
           });
     }

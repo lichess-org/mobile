@@ -63,11 +63,7 @@ Widget _buildMainListItem(
       return const _PuzzleMenu();
     case 1:
       return Padding(
-        padding: Styles.horizontalBodyPadding.add(
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? Styles.sectionTopPadding
-              : EdgeInsets.zero,
-        ),
+        padding: Styles.horizontalBodyPadding,
         child: Text(context.l10n.puzzleDesc, style: Styles.sectionTitle),
       );
     case 2:
@@ -360,10 +356,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
                   : null,
           children: [
             Padding(
-              padding:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? EdgeInsets.zero
-                      : Styles.horizontalBodyPadding,
+              padding: Styles.horizontalBodyPadding,
               child: PuzzleHistoryPreview(recentActivity.take(maxItems).toIList(), maxRows: 5),
             ),
           ],

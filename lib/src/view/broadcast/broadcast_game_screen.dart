@@ -589,11 +589,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                       }
                     } catch (e) {
                       if (context.mounted) {
-                        showPlatformSnackbar(
-                          context,
-                          'Failed to get PGN',
-                          type: SnackBarType.error,
-                        );
+                        showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
                       }
                     }
                   },
@@ -611,11 +607,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                     } catch (e) {
                       debugPrint(e.toString());
                       if (context.mounted) {
-                        showPlatformSnackbar(
-                          context,
-                          'Failed to get GIF',
-                          type: SnackBarType.error,
-                        );
+                        showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
                       }
                     }
                   },

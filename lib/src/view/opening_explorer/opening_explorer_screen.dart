@@ -27,11 +27,7 @@ class OpeningExplorerScreen extends ConsumerWidget {
   final AnalysisOptions options;
 
   static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
-    return buildScreenRoute(
-      context,
-      title: context.l10n.openingExplorer,
-      screen: OpeningExplorerScreen(options: options),
-    );
+    return buildScreenRoute(context, screen: OpeningExplorerScreen(options: options));
   }
 
   @override

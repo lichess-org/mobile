@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart' hide Position;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
@@ -10,7 +9,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class BoardEditorFilters extends ConsumerWidget {
   const BoardEditorFilters({required this.initialFen, super.key});
@@ -112,7 +110,6 @@ class SearchPositionScreen extends StatelessWidget {
     return buildScreenRoute(
       context,
       screen: SearchPositionScreen(onPositionSelected: onPositionSelected),
-      title: context.l10n.loadPosition,
     );
   }
 
@@ -130,21 +127,9 @@ class SearchPositionScreen extends StatelessWidget {
 
     return DefaultTabController(
       length: 2,
-      child: PlatformWidget(
-        iosBuilder: (context) {
-          return CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: Text(context.l10n.loadPosition),
-              bottom: tabBar,
-            ),
-            child: tabBarView,
-          );
-        },
-        androidBuilder:
-            (context) => Scaffold(
-              appBar: AppBar(title: Text(context.l10n.loadPosition), bottom: tabBar),
-              body: tabBarView,
-            ),
+      child: Scaffold(
+        appBar: AppBar(title: Text(context.l10n.loadPosition), bottom: tabBar),
+        body: tabBarView,
       ),
     );
   }
@@ -190,7 +175,6 @@ class _OpeningsTabState extends State<_OpeningsTab> {
           itemBuilder: (context, index) {
             final position = snapshot.data![index];
             return ListTile(
-              tileColor: Styles.listingsScreenBackgroundColor(context),
               title: Text(position.name),
               onTap: () => widget.onPositionSelected(position),
             );
@@ -238,7 +222,6 @@ class _EndGamesTabState extends State<_EndGamesTab> {
           itemBuilder: (context, index) {
             final position = snapshot.data![index];
             return ListTile(
-              tileColor: Styles.listingsScreenBackgroundColor(context),
               title: Text(position.name),
               onTap: () => widget.onPositionSelected(position),
             );

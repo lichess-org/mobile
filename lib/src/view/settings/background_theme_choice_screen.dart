@@ -25,11 +25,7 @@ class BackgroundChoiceScreen extends StatelessWidget {
   const BackgroundChoiceScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const BackgroundChoiceScreen(),
-      title: context.l10n.background,
-    );
+    return buildScreenRoute(context, screen: const BackgroundChoiceScreen());
   }
 
   @override

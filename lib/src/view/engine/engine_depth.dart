@@ -64,13 +64,8 @@ class EngineDepth extends ConsumerWidget {
                   direction: PopoverDirection.top,
                   width: 240,
                   backgroundColor:
-                      Theme.of(context).platform == TargetPlatform.android
-                          ? DialogTheme.of(context).backgroundColor ??
-                              ColorScheme.of(context).surfaceContainerHigh
-                          : CupertinoDynamicColor.resolve(
-                            CupertinoColors.tertiarySystemBackground,
-                            context,
-                          ),
+                      DialogTheme.of(context).backgroundColor ??
+                      ColorScheme.of(context).surfaceContainerHigh,
                   transitionDuration: Duration.zero,
                   popoverTransitionBuilder: (_, child) => child,
                 );

@@ -280,7 +280,7 @@ class GameContextMenu extends ConsumerWidget {
                     );
                   }
                   : () {
-                    showPlatformSnackbar(
+                    showSnackBar(
                       context,
                       'This variant is not supported yet.',
                       type: SnackBarType.info,
@@ -322,7 +322,7 @@ class GameContextMenu extends ConsumerWidget {
               } catch (e) {
                 debugPrint(e.toString());
                 if (context.mounted) {
-                  showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
+                  showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
                 }
               }
             },
@@ -338,7 +338,7 @@ class GameContextMenu extends ConsumerWidget {
                 }
               } catch (e) {
                 if (context.mounted) {
-                  showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
                 }
               }
             },
@@ -355,7 +355,7 @@ class GameContextMenu extends ConsumerWidget {
                 }
               } catch (e) {
                 if (context.mounted) {
-                  showPlatformSnackbar(context, 'Failed to get PGN', type: SnackBarType.error);
+                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
                 }
               }
             },

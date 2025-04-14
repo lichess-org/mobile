@@ -57,14 +57,11 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                   NonLinearSlider(
                     value: _subtract,
                     values: kSubtractingRatingRange,
-                    onChange:
-                        Theme.of(context).platform == TargetPlatform.iOS
-                            ? (num value) {
-                              setState(() {
-                                _subtract = value.toInt();
-                              });
-                            }
-                            : null,
+                    onChange: (num value) {
+                      setState(() {
+                        _subtract = value.toInt();
+                      });
+                    },
                     onChangeEnd:
                         isRatingRangeAvailable
                             ? (num value) {
@@ -92,14 +89,11 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                   NonLinearSlider(
                     value: _add,
                     values: kAddingRatingRange,
-                    onChange:
-                        Theme.of(context).platform == TargetPlatform.iOS
-                            ? (num value) {
-                              setState(() {
-                                _add = value.toInt();
-                              });
-                            }
-                            : null,
+                    onChange: (num value) {
+                      setState(() {
+                        _add = value.toInt();
+                      });
+                    },
                     onChangeEnd:
                         isRatingRangeAvailable
                             ? (num value) {

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -12,7 +11,7 @@ class BoardChoiceScreen extends StatelessWidget {
   const BoardChoiceScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const BoardChoiceScreen(), title: context.l10n.board);
+    return buildScreenRoute(context, screen: const BoardChoiceScreen());
   }
 
   @override
@@ -36,13 +35,7 @@ class _Body extends ConsumerWidget {
     void onChanged(BoardTheme? value) =>
         ref.read(boardPreferencesProvider.notifier).setBoardTheme(value ?? BoardTheme.brown);
 
-    final checkedIcon =
-        Theme.of(context).platform == TargetPlatform.android
-            ? const Icon(Icons.check)
-            : Icon(
-              CupertinoIcons.check_mark_circled_solid,
-              color: CupertinoTheme.of(context).primaryColor,
-            );
+    const checkedIcon = Icon(Icons.check);
 
     return SafeArea(
       child: ListView.separated(

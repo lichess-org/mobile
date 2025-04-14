@@ -378,7 +378,7 @@ class _BottomBar extends ConsumerWidget {
                 }
               } catch (e) {
                 if (context.mounted) {
-                  showPlatformSnackbar(context, 'Failed to get GIF', type: SnackBarType.error);
+                  showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
                 }
               }
             },

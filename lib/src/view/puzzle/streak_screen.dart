@@ -32,7 +32,7 @@ class StreakScreen extends StatelessWidget {
   const StreakScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, title: 'Puzzle Streak', screen: const StreakScreen());
+    return buildScreenRoute(context, screen: const StreakScreen());
   }
 
   @override
