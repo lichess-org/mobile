@@ -218,8 +218,8 @@ class ConfirmMove extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        PlatformIconButton(
-          icon: CupertinoIcons.xmark_rectangle_fill,
+        SemanticIconButton(
+          icon: const Icon(CupertinoIcons.xmark_rectangle_fill),
           color: context.lichessColors.error,
           iconSize: 35,
           semanticsLabel: context.l10n.cancel,
@@ -234,8 +234,8 @@ class ConfirmMove extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ),
-        PlatformIconButton(
-          icon: CupertinoIcons.checkmark_rectangle_fill,
+        SemanticIconButton(
+          icon: const Icon(CupertinoIcons.checkmark_rectangle_fill),
           color: context.lichessColors.good,
           iconSize: 35,
           semanticsLabel: context.l10n.accept,

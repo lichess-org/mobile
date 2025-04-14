@@ -193,7 +193,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
     final sendButton = ValueListenableBuilder<TextEditingValue>(
       valueListenable: _textController,
       builder:
-          (context, value, child) => PlatformIconButton(
+          (context, value, child) => SemanticIconButton(
             onPressed:
                 session != null && value.text.isNotEmpty
                     ? () {
@@ -203,7 +203,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
                       _textController.clear();
                     }
                     : null,
-            icon: Icons.send,
+            icon: const Icon(Icons.send),
             padding: EdgeInsets.zero,
             semanticsLabel: context.l10n.send,
           ),

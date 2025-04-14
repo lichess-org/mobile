@@ -672,29 +672,23 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                     Tooltip(
                       excludeFromSemantics: true,
                       message: context.l10n.stormFailedPuzzles,
-                      child: PlatformIconButton(
+                      child: SemanticIconButton(
                         semanticsLabel: context.l10n.stormFailedPuzzles,
-                        icon:
-                            Theme.of(context).platform == TargetPlatform.iOS
-                                ? CupertinoIcons.clear_fill
-                                : Icons.close,
+                        icon: const Icon(Icons.close),
                         onPressed:
                             () => setState(() => filter = filter.copyWith(failed: !filter.failed)),
-                        highlighted: filter.failed,
+                        color: filter.failed ? ColorScheme.of(context).primary : null,
                       ),
                     ),
                     Tooltip(
                       message: context.l10n.stormSlowPuzzles,
                       excludeFromSemantics: true,
-                      child: PlatformIconButton(
+                      child: SemanticIconButton(
                         semanticsLabel: context.l10n.stormSlowPuzzles,
-                        icon:
-                            Theme.of(context).platform == TargetPlatform.iOS
-                                ? CupertinoIcons.hourglass
-                                : Icons.hourglass_bottom,
+                        icon: const Icon(Icons.hourglass_bottom),
                         onPressed:
                             () => setState(() => filter = filter.copyWith(slow: !filter.slow)),
-                        highlighted: filter.slow,
+                        color: filter.slow ? ColorScheme.of(context).primary : null,
                       ),
                     ),
                   ],

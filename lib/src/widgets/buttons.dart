@@ -65,17 +65,33 @@ class SemanticIconButton extends StatelessWidget {
   const SemanticIconButton({
     required this.icon,
     required this.onPressed,
+    this.onLongPress,
     required this.semanticsLabel,
+    this.color,
+    this.iconSize,
+    this.padding,
     super.key,
   });
 
   final Widget icon;
   final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
   final String semanticsLabel;
+  final Color? color;
+  final double? iconSize;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(tooltip: semanticsLabel, icon: icon, onPressed: onPressed);
+    return IconButton(
+      tooltip: semanticsLabel,
+      icon: icon,
+      onPressed: onPressed,
+      onLongPress: onLongPress,
+      color: color,
+      iconSize: iconSize,
+      padding: padding,
+    );
   }
 }
 
@@ -180,48 +196,6 @@ class _RepeatButtonState extends State<RepeatButton> {
       onLongPressCancel: _onPressEnd,
       onLongPressUp: _onPressEnd,
       child: widget.child,
-    );
-  }
-}
-
-/// Platform agnostic icon button.
-///
-/// Optionally provide a bool to highlight the button
-class PlatformIconButton extends StatelessWidget {
-  const PlatformIconButton({
-    required this.icon,
-    required this.semanticsLabel,
-    required this.onPressed,
-    this.onLongPress,
-    this.highlighted = false,
-    this.color,
-    this.iconSize,
-    this.padding,
-  }) : assert(color == null || !highlighted, 'Cannot provide both color and highlighted');
-
-  final IconData icon;
-  final String semanticsLabel;
-  final VoidCallback? onPressed;
-  final VoidCallback? onLongPress;
-  final bool highlighted;
-  final Color? color;
-  final double? iconSize;
-  final EdgeInsetsGeometry? padding;
-
-  @override
-  Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    return Theme(
-      data: themeData,
-      child: IconButton(
-        onPressed: onPressed,
-        onLongPress: onLongPress,
-        icon: Icon(icon),
-        tooltip: semanticsLabel,
-        color: highlighted ? themeData.colorScheme.primary : color,
-        iconSize: iconSize,
-        padding: padding,
-      ),
     );
   }
 }

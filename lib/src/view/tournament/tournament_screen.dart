@@ -269,7 +269,7 @@ class _StandingControls extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
-        PlatformIconButton(
+        SemanticIconButton(
           onPressed:
               state.hasPreviousPage
                   ? ref
@@ -281,7 +281,7 @@ class _StandingControls extends ConsumerWidget {
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
                   : null,
           semanticsLabel: 'Previous',
-          icon: Icons.chevron_left,
+          icon: const Icon(Icons.chevron_left),
         ),
         Expanded(
           child: Text(
@@ -290,7 +290,7 @@ class _StandingControls extends ConsumerWidget {
             textAlign: TextAlign.center,
           ),
         ),
-        PlatformIconButton(
+        SemanticIconButton(
           onPressed:
               state.hasNextPage
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadNextStandingsPage
@@ -300,12 +300,12 @@ class _StandingControls extends ConsumerWidget {
                   ? ref.read(tournamentControllerProvider(state.id).notifier).loadLastStandingsPage
                   : null,
           semanticsLabel: context.l10n.studyNext,
-          icon: Icons.chevron_right,
+          icon: const Icon(Icons.chevron_right),
         ),
         if (state.tournament.me != null)
-          PlatformIconButton(
+          SemanticIconButton(
             onPressed: ref.read(tournamentControllerProvider(state.id).notifier).jumpToMyPage,
-            icon: Icons.person_pin_circle_outlined,
+            icon: const Icon(Icons.person_pin_circle_outlined),
             // TODO l10n
             semanticsLabel: 'Jump to my page',
           ),
