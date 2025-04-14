@@ -106,8 +106,6 @@ extension CustomThemeBuildContext on BuildContext {
     primaryColor: themeLight.colorScheme.primary,
     primaryContrastingColor: themeLight.colorScheme.onPrimary,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: const Color.fromARGB(255, 237, 235, 233),
-    barBackgroundColor: const Color(0xE6F9F9F9),
   );
 
   final darkCupertino = CupertinoThemeData(
@@ -115,8 +113,6 @@ extension CustomThemeBuildContext on BuildContext {
     primaryColor: themeDark.colorScheme.primary,
     primaryContrastingColor: themeDark.colorScheme.onPrimary,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: lighten(themeDark.scaffoldBackgroundColor, 0.04),
-    barBackgroundColor: themeDark.colorScheme.surface.withValues(alpha: 0.9),
   );
 
   final cupertinoFloatingActionButtonTheme = FloatingActionButtonThemeData(
@@ -183,8 +179,6 @@ extension CustomThemeBuildContext on BuildContext {
     primaryColor: primary,
     primaryContrastingColor: onPrimary,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
-    barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.6),
     applyThemeToAll: true,
   );
 
@@ -237,7 +231,7 @@ extension CustomThemeBuildContext on BuildContext {
             ),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: (isIOS ? _makeCupertinoAppBarTheme(context) : const AppBarTheme()).copyWith(
-      backgroundColor: seedColor.withValues(alpha: 0.5),
+      backgroundColor: baseTheme.colorScheme.surfaceContainer.withValues(alpha: 0.0),
     ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     pageTransitionsTheme: PageTransitionsTheme(

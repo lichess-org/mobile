@@ -275,7 +275,7 @@ class _PingRating extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: SocketPingRating(size: 24.0),
     );
   }

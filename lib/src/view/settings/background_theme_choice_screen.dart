@@ -4,7 +4,6 @@ import 'dart:ui' as ui;
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart' show Side, kInitialFEN;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -57,7 +56,7 @@ class _Body extends ConsumerWidget {
                 title: const Text('Pick an image'),
                 trailing:
                     Theme.of(context).platform == TargetPlatform.iOS
-                        ? const CupertinoListTileChevron()
+                        ? const Icon(Icons.chevron_right)
                         : null,
                 onTap: () async {
                   final ImagePicker picker = ImagePicker();
@@ -582,24 +581,6 @@ class _BackgroundTheme extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cupertinoTheme = CupertinoThemeData(
-      applyThemeToAll: true,
-      primaryColor: baseTheme.colorScheme.primary,
-      primaryContrastingColor: baseTheme.colorScheme.onPrimary,
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor,
-      barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
-    );
-
-    return Theme(
-      data: baseTheme,
-      child: CupertinoTheme(
-        data: cupertinoTheme,
-        child: IconTheme(
-          data: IconThemeData(color: cupertinoTheme.textTheme.textStyle.color),
-          child: DefaultTextStyle.merge(style: cupertinoTheme.textTheme.textStyle, child: child),
-        ),
-      ),
-    );
+    return Theme(data: baseTheme, child: child);
   }
 }

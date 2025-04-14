@@ -1,5 +1,4 @@
 import 'package:app_settings/app_settings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -81,7 +80,7 @@ class _Body extends ConsumerWidget {
               ),
               trailing:
                   Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
+                      ? const Icon(Icons.chevron_right)
                       : null,
               onTap: () {
                 launchUrl(Uri.parse('https://lichess.org/patron'));
@@ -100,7 +99,7 @@ class _Body extends ConsumerWidget {
               title: Text(context.l10n.profile),
               trailing:
                   Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
+                      ? const Icon(Icons.chevron_right)
                       : null,
               onTap: () {
                 ref.invalidate(accountActivityProvider);
@@ -112,7 +111,7 @@ class _Body extends ConsumerWidget {
               title: Text(context.l10n.preferencesPreferences),
               trailing:
                   Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
+                      ? const Icon(Icons.chevron_right)
                       : null,
               onTap: () {
                 Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
@@ -193,7 +192,7 @@ class _Body extends ConsumerWidget {
             title: Text(context.l10n.mobileTheme),
             trailing:
                 Theme.of(context).platform == TargetPlatform.iOS
-                    ? const CupertinoListTileChevron()
+                    ? const Icon(Icons.chevron_right)
                     : null,
             onTap: () {
               Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
@@ -204,7 +203,7 @@ class _Body extends ConsumerWidget {
             title: Text(context.l10n.preferencesGameBehavior, overflow: TextOverflow.ellipsis),
             trailing:
                 Theme.of(context).platform == TargetPlatform.iOS
-                    ? const CupertinoListTileChevron()
+                    ? const Icon(Icons.chevron_right)
                     : null,
             onTap: () {
               Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
@@ -215,7 +214,7 @@ class _Body extends ConsumerWidget {
             title: const Text('Engine'),
             trailing:
                 Theme.of(context).platform == TargetPlatform.iOS
-                    ? const CupertinoListTileChevron()
+                    ? const Icon(Icons.chevron_right)
                     : null,
             onTap: () {
               Navigator.of(context).push(EngineSettingsScreen.buildRoute(context));

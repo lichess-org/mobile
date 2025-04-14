@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -61,7 +60,7 @@ class _ToolsButton extends StatelessWidget {
         title: Text(title, style: Styles.callout),
         trailing:
             Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
+                ? const Icon(Icons.chevron_right)
                 : null,
         onTap: onTap,
       ),

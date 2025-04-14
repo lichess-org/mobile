@@ -293,11 +293,7 @@ class _EditablePgnField extends StatelessWidget {
           Expanded(
             child: AdaptiveTextField(
               focusNode: focusNode,
-              cupertinoDecoration: BoxDecoration(
-                color: CupertinoColors.tertiarySystemBackground,
-                border: Border.all(color: CupertinoColors.systemGrey4, width: 1),
-                borderRadius: BorderRadius.circular(8),
-              ),
+              cupertinoDecoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
               controller: controller,
               textInputAction: TextInputAction.next,
               keyboardType:

@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -117,7 +116,7 @@ class _Body extends ConsumerWidget {
                               const Icon(Icons.verified_outlined),
                               const SizedBox(width: 5),
                             ],
-                            const CupertinoListTileChevron(),
+                            const Icon(Icons.chevron_right),
                           ],
                         )
                         : bot.verified == true

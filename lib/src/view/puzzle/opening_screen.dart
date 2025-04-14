@@ -154,7 +154,6 @@ class _OpeningTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const SizedBox.shrink(),
       title: Text(name, overflow: TextOverflow.ellipsis, style: titleStyle),
       trailing: Text('$count', style: TextStyle(color: textShade(context, Styles.subtitleOpacity))),
       onTap: () {
