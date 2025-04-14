@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -18,10 +17,9 @@ final _logger = Logger('TournamentController');
 
 @riverpod
 class TournamentController extends _$TournamentController {
-  AppLifecycleListener? _appLifecycleListener;
   StreamSubscription<SocketEvent>? _socketSubscription;
 
-  late SocketClient _socketClient;
+  SocketClient? _socketClient;
 
   // If we join/leave too often, the server blocks us from joining, see [TournamentMe.pauseDelay].
   // However, there's no "reload" event from the socket once we're able to join again,
@@ -30,22 +28,17 @@ class TournamentController extends _$TournamentController {
 
   Timer? _startingTimer;
 
+  static Uri socketUri(TournamentId id) => Uri(path: '/tournament/$id/socket/v6');
+
+  SocketPool get _socketPool => ref.read(socketPoolProvider);
+
   @override
   Future<TournamentState> build(TournamentId id) async {
     ref.onDispose(() {
       _socketSubscription?.cancel();
-      _appLifecycleListener?.dispose();
       _pauseDelayTimer?.cancel();
       _startingTimer?.cancel();
     });
-
-    _appLifecycleListener = AppLifecycleListener(
-      onResume: () {
-        if (state.hasValue) {
-          _reload(standingsPage: state.requireValue.standingsPage);
-        }
-      },
-    );
 
     final tournament = await ref.read(tournamentRepositoryProvider).getTournament(id);
 
@@ -63,22 +56,28 @@ class TournamentController extends _$TournamentController {
       });
     }
 
-    final socketPool = ref.watch(socketPoolProvider);
-    _socketClient = socketPool.open(Uri(path: '/tournament/$id/socket/v6'));
-
-    _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-
-    await _socketClient.firstConnection;
+    listenToSocketEvents();
 
     _watchFeaturedGameIfChanged(previous: null, current: tournament.featuredGame?.id);
 
     return TournamentState(tournament: tournament, standingsPage: 1);
   }
 
+  /// Start listening to the tournament socket events.
+  void listenToSocketEvents() {
+    _socketClient = _socketPool.open(socketUri(id));
+    _socketSubscription?.cancel();
+    _socketSubscription = _socketClient!.stream.listen(_handleSocketEvent);
+  }
+
+  /// Stop listening to the tournament socket events.
+  void stopListeningToSocketEvents() {
+    _socketSubscription?.cancel();
+  }
+
   void _watchFeaturedGameIfChanged({required GameId? previous, required GameId? current}) {
     if (current != null && previous != current) {
-      _socketClient.send('startWatching', current.value);
+      _socketClient?.send('startWatching', current.value);
     }
   }
 

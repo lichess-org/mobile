@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -50,7 +51,7 @@ class TournamentScreen extends ConsumerWidget {
 
     return switch (ref.watch(tournamentControllerProvider(id))) {
       AsyncError(:final error) => Center(child: Text('Could not load tournament: $error')),
-      AsyncValue(:final value?) => _Body(state: value),
+      AsyncValue(:final value?) => _Body(id: id, state: value),
       _ => Scaffold(
         appBar: AppBar(title: const SizedBox.shrink()),
         body: const Center(child: CircularProgressIndicator()),
@@ -59,89 +60,100 @@ class TournamentScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends StatelessWidget {
-  const _Body({required this.state});
+class _Body extends ConsumerWidget {
+  const _Body({required this.id, required this.state});
 
+  final TournamentId id;
   final TournamentState state;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: _Title(state: state),
-        actions: [
-          if (timeLeft != null)
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (state.tournament.timeToStart != null)
-                    Text(context.l10n.startingIn, style: const TextStyle(fontSize: 14)),
-                  CountdownClockBuilder(
-                    timeLeft: timeLeft,
-                    active: true,
-                    tickInterval: const Duration(seconds: 1),
-                    builder:
-                        (BuildContext context, Duration timeLeft) => Text(
-                          '${timeLeft.toHoursMinutesSeconds()} ',
-                          style: const TextStyle(
-                            fontSize: 16.0,
-                            fontFeatures: [FontFeature.tabularFigures()],
-                          ),
-                        ),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: Styles.horizontalBodyPadding,
-              child: ListView(
-                children: [
-                  Card(
-                    child: Padding(
-                      padding: Styles.bodySectionPadding,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _TournamentInfo(state.tournament),
-                          if (state.tournament.verdicts.list.isNotEmpty) ...[
-                            const SizedBox(height: 10),
-                            _Verdicts(state.tournament.verdicts),
-                          ],
-                          if (!state.tournament.berserkable) ...[
-                            const SizedBox(height: 10),
-                            Text.rich(
-                              TextSpan(
-                                children: [
-                                  const WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
-                                  TextSpan(text: ' ${context.l10n.arenaNoBerserkAllowed}'),
-                                ],
-                              ),
+    return FocusDetector(
+      onFocusRegained: () {
+        ref.read(tournamentControllerProvider(id).notifier).listenToSocketEvents();
+      },
+      onFocusLost: () {
+        if (context.mounted) {
+          ref.read(tournamentControllerProvider(id).notifier).stopListeningToSocketEvents();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: _Title(state: state),
+          actions: [
+            if (timeLeft != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (state.tournament.timeToStart != null)
+                      Text(context.l10n.startingIn, style: const TextStyle(fontSize: 14)),
+                    CountdownClockBuilder(
+                      timeLeft: timeLeft,
+                      active: true,
+                      tickInterval: const Duration(seconds: 1),
+                      builder:
+                          (BuildContext context, Duration timeLeft) => Text(
+                            '${timeLeft.toHoursMinutesSeconds()} ',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              fontFeatures: [FontFeature.tabularFigures()],
                             ),
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: Styles.horizontalBodyPadding,
+                child: ListView(
+                  children: [
+                    Card(
+                      child: Padding(
+                        padding: Styles.bodySectionPadding,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _TournamentInfo(state.tournament),
+                            if (state.tournament.verdicts.list.isNotEmpty) ...[
+                              const SizedBox(height: 10),
+                              _Verdicts(state.tournament.verdicts),
+                            ],
+                            if (!state.tournament.berserkable) ...[
+                              const SizedBox(height: 10),
+                              Text.rich(
+                                TextSpan(
+                                  children: [
+                                    const WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
+                                    TextSpan(text: ' ${context.l10n.arenaNoBerserkAllowed}'),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ],
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  _Standing(state),
-                  const SizedBox(height: 16),
-                  if (state.tournament.featuredGame != null)
-                    _FeaturedGame(state.tournament.featuredGame!),
-                ],
+                    const SizedBox(height: 16),
+                    _Standing(state),
+                    const SizedBox(height: 16),
+                    if (state.tournament.featuredGame != null)
+                      _FeaturedGame(state.tournament.featuredGame!),
+                  ],
+                ),
               ),
             ),
-          ),
-          _BottomBar(state),
-        ],
+            _BottomBar(state),
+          ],
+        ),
       ),
     );
   }
