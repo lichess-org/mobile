@@ -627,7 +627,7 @@ class _PuzzleSettingsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBarIconButton(
+    return SemanticIconButton(
       onPressed:
           () => showAdaptiveBottomSheet<void>(
             context: context,

@@ -60,22 +60,9 @@ class SecondaryButton extends StatelessWidget {
   }
 }
 
-/// Platform agnostic text button to appear in the app bar.
-class AppBarTextButton extends StatelessWidget {
-  const AppBarTextButton({required this.child, required this.onPressed, super.key});
-
-  final VoidCallback? onPressed;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(onPressed: onPressed, child: child);
-  }
-}
-
-/// Platform agnostic icon button to appear in the app bar.
-class AppBarIconButton extends StatelessWidget {
-  const AppBarIconButton({
+/// Icon button with mandatory semantics.
+class SemanticIconButton extends StatelessWidget {
+  const SemanticIconButton({
     required this.icon,
     required this.onPressed,
     required this.semanticsLabel,
@@ -111,7 +98,7 @@ class AppBarNotificationIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBarIconButton(
+    return SemanticIconButton(
       icon: Badge.count(count: count, isLabelVisible: count > 0, child: icon),
       onPressed: onPressed,
       semanticsLabel: semanticsLabel,

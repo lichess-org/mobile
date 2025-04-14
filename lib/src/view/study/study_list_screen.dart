@@ -42,7 +42,7 @@ class StudyListScreen extends ConsumerWidget {
       backgroundColor: Styles.listingsScreenBackgroundColor(context),
       appBarTitle: title,
       appBarActions: [
-        AppBarIconButton(
+        SemanticIconButton(
           icon: const Icon(Icons.filter_list),
           // TODO: translate
           semanticsLabel: 'Filter studies',

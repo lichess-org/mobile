@@ -692,7 +692,7 @@ class _PlayerScreenButton extends ConsumerWidget {
 
     return connectivity.maybeWhen(
       data:
-          (connectivity) => AppBarIconButton(
+          (connectivity) => SemanticIconButton(
             icon: const Icon(Icons.group_outlined),
             semanticsLabel: context.l10n.players,
             onPressed:
@@ -703,7 +703,7 @@ class _PlayerScreenButton extends ConsumerWidget {
                     },
           ),
       orElse:
-          () => AppBarIconButton(
+          () => SemanticIconButton(
             icon: const Icon(Icons.group_outlined),
             semanticsLabel: context.l10n.players,
             onPressed: null,
@@ -742,7 +742,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
             count: count ?? 0,
           ),
       orElse:
-          () => AppBarIconButton(
+          () => SemanticIconButton(
             icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
             semanticsLabel: context.l10n.preferencesNotifyChallenge,
             onPressed: null,

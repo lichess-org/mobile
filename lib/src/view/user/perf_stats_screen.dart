@@ -85,7 +85,7 @@ class _Title extends StatelessWidget {
               p.ratingDeviation < kClueLessDeviation;
         })
         .toList(growable: false);
-    return AppBarTextButton(
+    return TextButton(
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -406,7 +406,7 @@ class _DashboardButton extends ConsumerWidget {
           offline: () => null,
         );
 
-    return AppBarIconButton(
+    return SemanticIconButton(
       icon: const Icon(Icons.assessment_outlined),
       semanticsLabel: context.l10n.puzzlePuzzleDashboard,
       onPressed: onPressed,
@@ -432,7 +432,7 @@ class _HistoryButton extends ConsumerWidget {
               },
           offline: () => null,
         );
-    return AppBarIconButton(
+    return SemanticIconButton(
       icon: const Icon(Icons.history_outlined),
       semanticsLabel: context.l10n.puzzleHistory,
       onPressed: onPressed,

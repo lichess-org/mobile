@@ -40,7 +40,7 @@ class CoordinateTrainingScreen extends StatelessWidget {
       appBarActions: [
         Builder(
           builder: (context) {
-            return AppBarIconButton(
+            return SemanticIconButton(
               icon: const Icon(Icons.settings),
               semanticsLabel: context.l10n.settingsSettings,
               onPressed:

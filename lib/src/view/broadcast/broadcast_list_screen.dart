@@ -67,7 +67,7 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
     );
-    final filterButton = AppBarIconButton(
+    final filterButton = SemanticIconButton(
       icon: const Icon(Icons.filter_list),
       // TODO: translate
       semanticsLabel: 'Filter broadcasts',

@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -214,7 +213,7 @@ class DaysSelector extends ConsumerWidget {
     final session = ref.watch(authSessionProvider);
     final day = ref.watch(daysProvider);
     return session != null
-        ? AppBarTextButton(
+        ? TextButton(
           onPressed:
               () => showChoicePicker(
                 context,

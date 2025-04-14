@@ -44,7 +44,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         error: (error, _) => const SizedBox.shrink(),
       ),
       appBarActions: [
-        AppBarIconButton(
+        SemanticIconButton(
           icon: const Icon(Icons.edit),
           semanticsLabel: context.l10n.editProfile,
           onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute(context)),

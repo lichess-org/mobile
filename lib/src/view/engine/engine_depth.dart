@@ -35,7 +35,7 @@ class EngineDepth extends ConsumerWidget {
       fontSize: 11,
     );
 
-    return AppBarIconButton(
+    return SemanticIconButton(
       semanticsLabel: switch (eval) {
         LocalEval(:final depth) => '$engineName, ${context.l10n.depthX('$depth')}',
         CloudEval(:final depth) =>

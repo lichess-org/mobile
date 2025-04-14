@@ -190,7 +190,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
       ),
       appBarAutomaticBackgroundVisibility: false,
       appBarActions: [
-        AppBarIconButton(
+        SemanticIconButton(
           icon: const Icon(Icons.settings),
           onPressed:
               () => showAdaptiveBottomSheet<void>(
@@ -203,7 +203,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
               ),
           semanticsLabel: context.l10n.settingsSettings,
         ),
-        AppBarIconButton(
+        SemanticIconButton(
           icon: const PlatformShareIcon(),
           semanticsLabel: context.l10n.studyShareAndExport,
           onPressed: () => showBroadcastShareMenu(context, widget.broadcast),

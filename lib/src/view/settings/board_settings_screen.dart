@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -34,7 +33,7 @@ class BoardSettingsScreen extends StatelessWidget {
       appBarLeading:
           showCloseButton
               ? Theme.of(context).platform == TargetPlatform.iOS
-                  ? AppBarTextButton(
+                  ? TextButton(
                     onPressed: () => Navigator.maybePop(context),
                     child: Text(context.l10n.close),
                   )

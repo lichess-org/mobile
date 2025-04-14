@@ -43,7 +43,7 @@ class BoardEditorScreen extends ConsumerWidget {
     return PlatformScaffold(
       appBarTitle: Text(context.l10n.boardEditor),
       appBarActions: [
-        AppBarIconButton(
+        SemanticIconButton(
           semanticsLabel: context.l10n.mobileSharePositionAsFEN,
           onPressed: () => launchShareDialog(context, text: boardEditorState.fen),
           icon: const PlatformShareIcon(),

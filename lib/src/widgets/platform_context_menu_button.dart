@@ -28,7 +28,7 @@ class PlatformContextMenuButton extends StatelessWidget {
       ),
       menuChildren: actions,
       builder: (BuildContext context, MenuController controller, Widget? child) {
-        return AppBarIconButton(
+        return SemanticIconButton(
           onPressed: () {
             if (controller.isOpen) {
               controller.close();

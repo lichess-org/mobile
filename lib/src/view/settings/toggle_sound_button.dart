@@ -15,7 +15,7 @@ class ToggleSoundButton extends ConsumerWidget {
       generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
     );
 
-    return AppBarIconButton(
+    return SemanticIconButton(
       // TODO: i18n
       semanticsLabel: 'Toggle sound',
       onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),

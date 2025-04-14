@@ -89,7 +89,7 @@ class _AppBarAnalysisTabIndicatorState extends State<AppBarAnalysisTabIndicator>
 
   @override
   Widget build(BuildContext context) {
-    return AppBarIconButton(
+    return SemanticIconButton(
       icon: Icon(widget.tabs[widget.controller.index].icon),
       semanticsLabel: widget.tabs[widget.controller.index].l10n(context.l10n),
       onPressed: () {

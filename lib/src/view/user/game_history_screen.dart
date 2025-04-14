@@ -70,7 +70,7 @@ class GameHistoryScreen extends ConsumerWidget {
               error: (e, s) => Text(context.l10n.mobileAllGames),
             )
             : Text(filtersInUse.selectionLabel(context.l10n));
-    final filterBtn = AppBarIconButton(
+    final filterBtn = SemanticIconButton(
       icon: Badge.count(
         backgroundColor: ColorScheme.of(context).secondary,
         textStyle: TextStyle(
