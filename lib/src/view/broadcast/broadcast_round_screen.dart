@@ -173,40 +173,41 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   ) {
     return Scaffold(
       appBar: AppBar(
-      title: AutoSizeText(
-        widget.broadcast.title,
-        minFontSize: 14.0,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      ),
-      bottom: TabBar(
-        controller: _tabController,
-        tabs: <Widget>[
-          Tab(text: context.l10n.broadcastOverview),
-          Tab(text: context.l10n.broadcastBoards),
-          Tab(text: context.l10n.players),
+        title: AutoSizeText(
+          widget.broadcast.title,
+          minFontSize: 14.0,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: <Widget>[
+            Tab(text: context.l10n.broadcastOverview),
+            Tab(text: context.l10n.broadcastBoards),
+            Tab(text: context.l10n.players),
+          ],
+        ),
+        actions: [
+          SemanticIconButton(
+            icon: const Icon(Icons.settings),
+            onPressed:
+                () => showAdaptiveBottomSheet<void>(
+                  context: context,
+                  isDismissible: true,
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  builder:
+                      (_) =>
+                          _BroadcastSettingsBottomSheet(filter, onGameFilterChange: setGameFilter),
+                ),
+            semanticsLabel: context.l10n.settingsSettings,
+          ),
+          SemanticIconButton(
+            icon: const PlatformShareIcon(),
+            semanticsLabel: context.l10n.studyShareAndExport,
+            onPressed: () => showBroadcastShareMenu(context, widget.broadcast),
+          ),
         ],
-      ),
-      actions: [
-        SemanticIconButton(
-          icon: const Icon(Icons.settings),
-          onPressed:
-              () => showAdaptiveBottomSheet<void>(
-                context: context,
-                isDismissible: true,
-                isScrollControlled: true,
-                showDragHandle: true,
-                builder:
-                    (_) => _BroadcastSettingsBottomSheet(filter, onGameFilterChange: setGameFilter),
-              ),
-          semanticsLabel: context.l10n.settingsSettings,
-        ),
-        SemanticIconButton(
-          icon: const PlatformShareIcon(),
-          semanticsLabel: context.l10n.studyShareAndExport,
-          onPressed: () => showBroadcastShareMenu(context, widget.broadcast),
-        ),
-      ],
       ),
       body: switch (asyncRound) {
         AsyncData(value: final _) => TabBarView(
