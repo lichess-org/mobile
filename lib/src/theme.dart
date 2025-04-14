@@ -82,10 +82,14 @@ extension CustomThemeBuildContext on BuildContext {
   final boardTheme = boardPrefs.boardTheme;
   final systemScheme = getDynamicColorSchemes();
   final hasSystemColors = systemScheme != null && generalPrefs.systemColors == true;
-  final defaultLight = ColorScheme.fromSeed(seedColor: boardTheme.colors.darkSquare);
+  final defaultLight = ColorScheme.fromSeed(
+    seedColor: boardTheme.colors.darkSquare,
+    dynamicSchemeVariant: DynamicSchemeVariant.neutral,
+  );
   final defaultDark = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
     brightness: Brightness.dark,
+    dynamicSchemeVariant: DynamicSchemeVariant.neutral,
   );
 
   final themeLight =
