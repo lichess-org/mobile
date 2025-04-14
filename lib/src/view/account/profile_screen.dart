@@ -72,7 +72,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ListSection(
                     hasLeading: true,
                     children: [
-                      PlatformListTile(
+                      ListTile(
                         title: Text(context.l10n.nbBookmarks(user.count!.bookmark)),
                         leading: const Icon(Icons.bookmarks_outlined),
                         onTap: () {

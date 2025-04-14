@@ -224,7 +224,7 @@ class _PuzzleMenuListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    return ListTile(
       leading: Badge(
         backgroundColor: ColorScheme.of(context).secondary,
         textStyle: TextStyle(

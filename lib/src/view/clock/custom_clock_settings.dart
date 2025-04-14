@@ -69,7 +69,7 @@ class _PlayerTimeSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListSection(
       children: [
-        PlatformListTile(
+        ListTile(
           title: Text(
             '${context.l10n.time}: ${clock.time < 60 ? context.l10n.nbSeconds(clock.time) : context.l10n.nbMinutes(_secToMin(clock.time))}',
           ),
@@ -88,7 +88,7 @@ class _PlayerTimeSlider extends StatelessWidget {
             },
           ),
         ),
-        PlatformListTile(
+        ListTile(
           title: Text('${context.l10n.increment}: ${context.l10n.nbSeconds(clock.increment)}'),
           subtitle: NonLinearSlider(
             value: clock.increment,

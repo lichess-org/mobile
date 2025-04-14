@@ -59,10 +59,6 @@ PlatformWidget(
 )
 ```
 
-> [!TIP]
-> The codebase already has some common platform-aware widgets that you can use, for example `PlatformScaffold`,
-> `PlatformAppBar`, `PlatformListTile`, ...
-
 ## Writing UI code
 
 Here is a list of practical tips when writing widgets. These are generally coding best practices in flutter, and serve to keep the project consistent.

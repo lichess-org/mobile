@@ -68,7 +68,7 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
                       : const SizedBox.shrink(),
           itemBuilder: (context, index) {
             final pieceSet = PieceSet.values[index];
-            return PlatformListTile(
+            return ListTile(
               trailing:
                   boardPrefs.pieceSet == pieceSet
                       ? Theme.of(context).platform == TargetPlatform.android

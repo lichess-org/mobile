@@ -63,7 +63,6 @@ class _Body extends ConsumerWidget {
             SettingsListTile(
               settingsLabel: Text(context.l10n.preferencesHowDoYouMovePieces),
               settingsValue: pieceShiftMethodl10n(context, boardPrefs.pieceShiftMethod),
-              showCupertinoTrailingValue: false,
               onTap: () {
                 showChoicePicker(
                   context,
@@ -83,7 +82,6 @@ class _Body extends ConsumerWidget {
                 context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
               ),
               settingsValue: boardPrefs.castlingMethod.l10n(context.l10n),
-              showCupertinoTrailingValue: false,
               onTap: () {
                 showChoicePicker(
                   context,

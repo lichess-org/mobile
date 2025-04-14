@@ -260,7 +260,7 @@ class _WatchTvWidget extends ConsumerWidget {
           ),
           children: data
               .map((snapshot) {
-                return PlatformListTile(
+                return ListTile(
                   leading: Icon(snapshot.channel.icon),
                   title: Text(snapshot.channel.label),
                   subtitle: UserFullNameWidget.player(

@@ -719,7 +719,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                   ref.read(puzzlePreferencesProvider.notifier).setRated(value);
                 },
               ),
-            PlatformListTile(
+            ListTile(
               title: const Text('Board settings'),
               trailing: const Icon(CupertinoIcons.chevron_right),
               onTap: () {

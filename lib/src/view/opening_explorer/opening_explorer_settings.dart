@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_prefe
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 
 class OpeningExplorerSettings extends ConsumerWidget {
   const OpeningExplorerSettings();
@@ -19,7 +18,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
     final prefs = ref.watch(openingExplorerPreferencesProvider);
 
     final List<Widget> masterDbSettings = [
-      PlatformListTile(
+      ListTile(
         title: const Text('Timespan'),
         subtitle: Wrap(
           spacing: 5,
@@ -40,7 +39,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
     ];
 
     final List<Widget> lichessDbSettings = [
-      PlatformListTile(
+      ListTile(
         title: Text(context.l10n.timeControl),
         subtitle: Wrap(
           spacing: 5,
@@ -62,7 +61,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .toList(growable: false),
         ),
       ),
-      PlatformListTile(
+      ListTile(
         title: Text(context.l10n.rating),
         subtitle: Wrap(
           spacing: 5,
@@ -86,7 +85,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .toList(growable: false),
         ),
       ),
-      PlatformListTile(
+      ListTile(
         title: const Text('Timespan'),
         subtitle: Wrap(
           spacing: 5,
@@ -106,7 +105,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
       ),
     ];
     final List<Widget> playerDbSettings = [
-      PlatformListTile(
+      ListTile(
         title: Text.rich(
           TextSpan(
             text: '${context.l10n.player}: ',
@@ -138,7 +137,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
           ),
         ),
       ),
-      PlatformListTile(
+      ListTile(
         title: Text(context.l10n.side),
         subtitle: Wrap(
           spacing: 5,
@@ -159,7 +158,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .toList(growable: false),
         ),
       ),
-      PlatformListTile(
+      ListTile(
         title: Text(context.l10n.timeControl),
         subtitle: Wrap(
           spacing: 5,
@@ -181,7 +180,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .toList(growable: false),
         ),
       ),
-      PlatformListTile(
+      ListTile(
         title: Text(context.l10n.mode),
         subtitle: Wrap(
           spacing: 5,
@@ -202,7 +201,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .toList(growable: false),
         ),
       ),
-      PlatformListTile(
+      ListTile(
         title: const Text('Timespan'),
         subtitle: Wrap(
           spacing: 5,
@@ -224,7 +223,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
 
     return BottomSheetScrollableContainer(
       children: [
-        PlatformListTile(
+        ListTile(
           title: Text(context.l10n.database),
           subtitle: Wrap(
             spacing: 5,

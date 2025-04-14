@@ -58,7 +58,7 @@ class _Body extends ConsumerWidget {
         if (appDocumentsDirectory != null) ...[
           ListSection(
             children: [
-              PlatformListTile(
+              ListTile(
                 leading: const Icon(Icons.image_outlined),
                 title: const Text('Pick an image'),
                 trailing:

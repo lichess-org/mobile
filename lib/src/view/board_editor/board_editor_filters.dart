@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class BoardEditorFilters extends ConsumerWidget {
@@ -190,8 +189,8 @@ class _OpeningsTabState extends State<_OpeningsTab> {
           itemCount: snapshot.data?.length ?? 0,
           itemBuilder: (context, index) {
             final position = snapshot.data![index];
-            return PlatformListTile(
-              backgroundColor: Styles.listingsScreenBackgroundColor(context),
+            return ListTile(
+              tileColor: Styles.listingsScreenBackgroundColor(context),
               title: Text(position.name),
               onTap: () => widget.onPositionSelected(position),
             );
@@ -238,8 +237,8 @@ class _EndGamesTabState extends State<_EndGamesTab> {
           itemCount: snapshot.data?.length ?? 0,
           itemBuilder: (context, index) {
             final position = snapshot.data![index];
-            return PlatformListTile(
-              backgroundColor: Styles.listingsScreenBackgroundColor(context),
+            return ListTile(
+              tileColor: Styles.listingsScreenBackgroundColor(context),
               title: Text(position.name),
               onTap: () => widget.onPositionSelected(position),
             );

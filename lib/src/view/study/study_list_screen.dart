@@ -224,11 +224,7 @@ class _StudyListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
-      padding:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
-              : null,
+    return ListTile(
       leading: _StudyFlair(flair: study.flair, size: 30),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

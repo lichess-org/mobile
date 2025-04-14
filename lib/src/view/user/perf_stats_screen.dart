@@ -658,7 +658,7 @@ class _GameListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    return ListTile(
       onTap: onTap,
       title: playerTitle,
       subtitle:

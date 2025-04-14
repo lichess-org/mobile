@@ -140,7 +140,7 @@ class _Category extends ConsumerWidget {
 
                   return Opacity(
                     opacity: isThemeAvailable ? 1 : 0.5,
-                    child: PlatformListTile(
+                    child: ListTile(
                       leading: Icon(theme.icon),
                       trailing:
                           hasConnectivity && onlineThemes?.containsKey(theme) == true

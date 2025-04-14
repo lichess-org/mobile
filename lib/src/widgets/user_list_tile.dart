@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 
 class UserListTile extends StatelessWidget {
   const UserListTile._(
@@ -56,9 +55,8 @@ class UserListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    return ListTile(
       onTap: onTap != null ? () => onTap?.call() : null,
-      padding: Theme.of(context).platform == TargetPlatform.iOS ? Styles.bodyPadding : null,
       leading: Icon(
         isOnline == true ? Icons.cloud : Icons.cloud_off,
         color: isOnline == true ? context.lichessColors.good : null,

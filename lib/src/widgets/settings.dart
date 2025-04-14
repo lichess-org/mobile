@@ -10,7 +10,6 @@ class SettingsListTile extends StatelessWidget {
     required this.settingsValue,
     required this.onTap,
     this.explanation,
-    this.showCupertinoTrailingValue = true,
     super.key,
   });
 
@@ -27,11 +26,6 @@ class SettingsListTile extends StatelessWidget {
   /// The optional explanation of the settings.
   final String? explanation;
 
-  /// Whether to show the value in the trailing position on iOS.
-  ///
-  /// True by default, can be disabled for long settings names.
-  final bool showCupertinoTrailingValue;
-
   @override
   Widget build(BuildContext context) {
     return Semantics(
@@ -39,10 +33,9 @@ class SettingsListTile extends StatelessWidget {
       button: true,
       label: '$settingsLabel: $settingsValue',
       excludeSemantics: true,
-      child: PlatformListTile(
+      child: ListTile(
         leading: icon,
         title: _SettingsTitle(title: settingsLabel),
-        additionalInfo: showCupertinoTrailingValue ? Text(settingsValue) : null,
         subtitle:
             explanation != null
                 ? Text(
@@ -76,7 +69,6 @@ class SwitchSettingTile extends StatelessWidget {
     required this.value,
     this.onChanged,
     this.leading,
-    this.padding,
     super.key,
   });
 
@@ -85,12 +77,10 @@ class SwitchSettingTile extends StatelessWidget {
   final bool value;
   final void Function(bool value)? onChanged;
   final Widget? leading;
-  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
-      padding: padding,
+    return ListTile(
       leading: leading,
       title: _SettingsTitle(title: title),
       subtitle:
@@ -152,7 +142,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
       },
     );
 
-    return PlatformListTile(
+    return ListTile(
       leading: widget.icon,
       title: slider,
       trailing:

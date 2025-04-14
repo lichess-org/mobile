@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -130,8 +129,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
             builder: (context) {
               return StatefulBuilder(
                 builder: (context, setState) {
-                  return PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
+                  return ListTile(
                     title: Text.rich(
                       TextSpan(
                         text: '${context.l10n.minutesPerSide}: ',
@@ -170,8 +168,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
             builder: (context) {
               return StatefulBuilder(
                 builder: (context, setState) {
-                  return PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
+                  return ListTile(
                     title: Text.rich(
                       TextSpan(
                         text: '${context.l10n.incrementInSeconds}: ',

@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kThumbnailSize = 75.0;
@@ -105,11 +104,7 @@ class StreamerListTile extends StatelessWidget {
     );
 
     return isPreview
-        ? PlatformListTile(
-          padding:
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0)
-                  : null,
+        ? ListTile(
           onTap: onTap,
           leading: leading,
           title: title,

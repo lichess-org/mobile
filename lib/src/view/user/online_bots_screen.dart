@@ -67,7 +67,7 @@ class OnlineBotsWidget extends ConsumerWidget {
           ),
           children: [
             for (final bot in value.where((bot) => bot.verified == true))
-              PlatformListTile(
+              ListTile(
                 title: UserFullNameWidget(user: bot.lightUser),
                 subtitle: (bot.perfs[Perf.blitz]?.games ?? 0) > 0 ? _BotRatings(bot: bot) : null,
                 onTap: () => _challengeBot(bot, context: context, ref: ref),
@@ -118,7 +118,7 @@ class _Body extends ConsumerWidget {
                         : const SizedBox.shrink(),
             itemBuilder: (context, index) {
               final bot = data[index];
-              return PlatformListTile(
+              return ListTile(
                 isThreeLine: true,
                 trailing:
                     Theme.of(context).platform == TargetPlatform.iOS

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -129,7 +128,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
           ),
           ListSection(
             children: [
-              PlatformListTile(
+              ListTile(
                 title: Text(context.l10n.openingExplorer),
                 onTap:
                     () => showAdaptiveBottomSheet<void>(

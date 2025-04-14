@@ -59,7 +59,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesZenMode),
                   settingsValue: data.zenMode.label(context),
-                  showCupertinoTrailingValue: false,
                   onTap: () {
                     showChoicePicker(
                       context,
@@ -82,7 +81,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesPgnPieceNotation),
                   settingsValue: data.pieceNotation.label(context),
-                  showCupertinoTrailingValue: false,
                   onTap: () {
                     showChoicePicker(
                       context,
@@ -105,7 +103,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesShowPlayerRatings),
                   settingsValue: data.showRatings.label(context),
-                  showCupertinoTrailingValue: false,
                   onTap: () {
                     showChoicePicker(
                       context,
@@ -163,7 +160,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesTakebacksWithOpponentApproval),
                   settingsValue: data.takeback.label(context),
-                  showCupertinoTrailingValue: false,
                   onTap: () {
                     showChoicePicker(
                       context,
@@ -186,7 +182,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesPromoteToQueenAutomatically),
                   settingsValue: data.autoQueen.label(context),
-                  showCupertinoTrailingValue: false,
                   onTap: () {
                     showChoicePicker(
                       context,
@@ -211,7 +206,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                     context.l10n.preferencesClaimDrawOnThreefoldRepetitionAutomatically,
                   ),
                   settingsValue: data.autoThreefold.label(context),
-                  showCupertinoTrailingValue: false,
                   onTap: () {
                     showChoicePicker(
                       context,
@@ -234,7 +228,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesMoveConfirmation),
                   settingsValue: data.submitMove.label(context),
-                  showCupertinoTrailingValue: false,
                   onTap: () {
                     showMultipleChoicesPicker(
                       context,
@@ -262,7 +255,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesGiveMoreTime),
                   settingsValue: data.moretime.label(context),
-                  showCupertinoTrailingValue: false,
                   onTap: () {
                     showChoicePicker(
                       context,
@@ -319,7 +311,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.letOtherPlayersChallengeYou),
                   settingsValue: data.challenge.label(context),
-                  showCupertinoTrailingValue: false,
                   onTap: () {
                     showChoicePicker(
                       context,

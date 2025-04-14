@@ -69,7 +69,7 @@ class _Body extends ConsumerWidget {
 
     final Widget? donateButton =
         userSession == null || userSession.user.isPatron != true
-            ? PlatformListTile(
+            ? ListTile(
               leading: Icon(
                 LichessIcons.patron,
                 semanticLabel: context.l10n.patronLichessPatron,
@@ -95,7 +95,7 @@ class _Body extends ConsumerWidget {
         hasLeading: true,
         children: [
           if (userSession != null) ...[
-            PlatformListTile(
+            ListTile(
               leading: const Icon(Icons.person_outline),
               title: Text(context.l10n.profile),
               trailing:
@@ -107,7 +107,7 @@ class _Body extends ConsumerWidget {
                 Navigator.of(context).push(ProfileScreen.buildRoute(context));
               },
             ),
-            PlatformListTile(
+            ListTile(
               leading: const Icon(Icons.manage_accounts_outlined),
               title: Text(context.l10n.preferencesPreferences),
               trailing:
@@ -119,12 +119,12 @@ class _Body extends ConsumerWidget {
               },
             ),
             if (authController.isLoading)
-              const PlatformListTile(
+              const ListTile(
                 leading: Icon(Icons.logout_outlined),
                 title: Center(child: ButtonLoadingIndicator()),
               )
             else
-              PlatformListTile(
+              ListTile(
                 leading: const Icon(Icons.logout_outlined),
                 title: Text(context.l10n.logOut),
                 onTap: () {
@@ -133,12 +133,12 @@ class _Body extends ConsumerWidget {
               ),
           ] else ...[
             if (authController.isLoading)
-              const PlatformListTile(
+              const ListTile(
                 leading: Icon(Icons.login_outlined),
                 title: Center(child: ButtonLoadingIndicator()),
               )
             else
-              PlatformListTile(
+              ListTile(
                 leading: const Icon(Icons.login_outlined),
                 title: Text(context.l10n.signIn),
                 onTap: () {
@@ -188,7 +188,7 @@ class _Body extends ConsumerWidget {
                       },
             ),
           ),
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Icons.palette_outlined),
             title: Text(context.l10n.mobileTheme),
             trailing:
@@ -199,7 +199,7 @@ class _Body extends ConsumerWidget {
               Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
             },
           ),
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Symbols.chess_pawn),
             title: Text(context.l10n.preferencesGameBehavior, overflow: TextOverflow.ellipsis),
             trailing:
@@ -210,7 +210,7 @@ class _Body extends ConsumerWidget {
               Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
             },
           ),
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Icons.memory_outlined),
             title: const Text('Engine'),
             trailing:
@@ -248,7 +248,7 @@ class _Body extends ConsumerWidget {
       ListSection(
         hasLeading: true,
         children: [
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Icons.info_outlined),
             title: Text(context.l10n.aboutX('Lichess')),
             trailing: const _OpenInNewIcon(),
@@ -256,7 +256,7 @@ class _Body extends ConsumerWidget {
               launchUrl(Uri.parse('https://lichess.org/about'));
             },
           ),
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Icons.feedback_outlined),
             title: Text(context.l10n.mobileFeedbackButton),
             trailing: const _OpenInNewIcon(),
@@ -264,7 +264,7 @@ class _Body extends ConsumerWidget {
               launchUrl(Uri.parse('https://lichess.org/contact'));
             },
           ),
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Icons.article_outlined),
             title: Text(context.l10n.termsOfService),
             trailing: const _OpenInNewIcon(),
@@ -272,7 +272,7 @@ class _Body extends ConsumerWidget {
               launchUrl(Uri.parse('https://lichess.org/terms-of-service'));
             },
           ),
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Icons.privacy_tip_outlined),
             title: Text(context.l10n.privacyPolicy),
             trailing: const _OpenInNewIcon(),
@@ -285,7 +285,7 @@ class _Body extends ConsumerWidget {
       ListSection(
         hasLeading: true,
         children: [
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Icons.code_outlined),
             title: Text(context.l10n.sourceCode),
             trailing: const _OpenInNewIcon(),
@@ -293,7 +293,7 @@ class _Body extends ConsumerWidget {
               launchUrl(Uri.parse('https://lichess.org/source'));
             },
           ),
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Icons.bug_report_outlined),
             title: Text(context.l10n.contribute),
             trailing: const _OpenInNewIcon(),
@@ -301,7 +301,7 @@ class _Body extends ConsumerWidget {
               launchUrl(Uri.parse('https://lichess.org/help/contribute'));
             },
           ),
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Icons.star_border_outlined),
             title: Text(context.l10n.thankYou),
             trailing: const _OpenInNewIcon(),
@@ -314,12 +314,12 @@ class _Body extends ConsumerWidget {
       ListSection(
         hasLeading: true,
         children: [
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Icons.storage_outlined),
             title: const Text('Local database size'),
             trailing: dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
           ),
-          PlatformListTile(
+          ListTile(
             leading: const Icon(Icons.http),
             title: const Text('HTTP logs'),
             onTap: () => Navigator.push(context, HttpLogScreen.buildRoute(context)),
@@ -331,7 +331,7 @@ class _Body extends ConsumerWidget {
           hasLeading: true,
           children: [
             if (Theme.of(context).platform == TargetPlatform.iOS)
-              PlatformListTile(
+              ListTile(
                 leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
                 title: Text(
                   'Delete your account',
@@ -343,7 +343,7 @@ class _Body extends ConsumerWidget {
                 },
               )
             else
-              PlatformListTile(
+              ListTile(
                 leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
                 title: Text(
                   context.l10n.settingsCloseAccount,

@@ -48,7 +48,7 @@ class _Body extends ConsumerWidget {
       child: ListView.separated(
         itemBuilder: (context, index) {
           final t = choices[index];
-          return PlatformListTile(
+          return ListTile(
             selected: t == boardTheme,
             trailing: t == boardTheme ? checkedIcon : null,
             title: Text(t.label),

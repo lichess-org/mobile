@@ -137,7 +137,7 @@ class _Body extends ConsumerWidget {
                     children:
                         searchHistory
                             .map(
-                              (term) => PlatformListTile(
+                              (term) => ListTile(
                                 leading: const Icon(Icons.history),
                                 title: Text(term),
                                 onTap: () => onRecentSearchTap(term),

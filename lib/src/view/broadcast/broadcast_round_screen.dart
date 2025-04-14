@@ -405,7 +405,7 @@ class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
       scrollController: widget.scrollController,
       children: [
         for (final (index, round) in widget.rounds.indexed)
-          PlatformListTile(
+          ListTile(
             key: round.id == widget.selectedRoundId ? currentRoundKey : null,
             selected: round.id == widget.selectedRoundId,
             title: Text(round.name, overflow: TextOverflow.ellipsis, maxLines: 2),
@@ -468,7 +468,7 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
       scrollController: widget.scrollController,
       children: [
         for (final tournament in widget.group)
-          PlatformListTile(
+          ListTile(
             key: tournament.id == widget.tournament.data.id ? currentTournamentKey : null,
             selected: tournament.id == widget.tournament.data.id,
             title: Text(tournament.name),

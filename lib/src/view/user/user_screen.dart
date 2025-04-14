@@ -119,7 +119,7 @@ class _UserProfileListView extends ConsumerWidget {
             hasLeading: true,
             children: [
               if (user.canChallenge == true)
-                PlatformListTile(
+                ListTile(
                   title: Text(context.l10n.challengeChallengeToPlay),
                   leading: const Icon(LichessIcons.crossed_swords),
                   onTap: () {
@@ -132,7 +132,7 @@ class _UserProfileListView extends ConsumerWidget {
                   },
                 ),
               if (user.followable == true && user.following != true)
-                PlatformListTile(
+                ListTile(
                   leading: const Icon(Icons.person_add),
                   title: Text(context.l10n.follow),
                   onTap:
@@ -142,7 +142,7 @@ class _UserProfileListView extends ConsumerWidget {
                               userAction((client) => RelationRepository(client).follow(user.id)),
                 )
               else if (user.following == true)
-                PlatformListTile(
+                ListTile(
                   leading: const Icon(Icons.person_remove),
                   title: Text(context.l10n.unfollow),
                   onTap:
@@ -152,7 +152,7 @@ class _UserProfileListView extends ConsumerWidget {
                               userAction((client) => RelationRepository(client).unfollow(user.id)),
                 ),
               if (user.following != true && user.blocking != true)
-                PlatformListTile(
+                ListTile(
                   leading: const Icon(Icons.block),
                   title: Text(context.l10n.block),
                   onTap:
@@ -161,7 +161,7 @@ class _UserProfileListView extends ConsumerWidget {
                           : () => userAction((client) => RelationRepository(client).block(user.id)),
                 )
               else if (user.blocking == true)
-                PlatformListTile(
+                ListTile(
                   leading: const Icon(Icons.block),
                   title: Text(context.l10n.unblock),
                   onTap:
@@ -170,7 +170,7 @@ class _UserProfileListView extends ConsumerWidget {
                           : () =>
                               userAction((client) => RelationRepository(client).unblock(user.id)),
                 ),
-              PlatformListTile(
+              ListTile(
                 leading: const Icon(Icons.report_problem),
                 title: Text(context.l10n.reportXToModerators(user.username)),
                 onTap: () {

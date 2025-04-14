@@ -89,7 +89,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                 );
               },
             ),
-            PlatformListTile(
+            ListTile(
               title: Text.rich(
                 TextSpan(
                   text: '${context.l10n.minutesPerSide}: ',
@@ -109,7 +109,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                 onChangeEnd: _setTotalTime,
               ),
             ),
-            PlatformListTile(
+            ListTile(
               title: Text.rich(
                 TextSpan(
                   text: '${context.l10n.incrementInSeconds}: ',

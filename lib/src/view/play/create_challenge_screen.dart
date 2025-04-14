@@ -26,7 +26,6 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -109,8 +108,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     ? Styles.sectionBottomPadding
                     : Styles.verticalBodyPadding,
             children: [
-              PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              ListTile(
                 title: Text(context.l10n.timeControl),
                 trailing: AdaptiveTextButton(
                   onPressed: () {
@@ -145,8 +143,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     int seconds = preferences.clock.time.inSeconds;
                     return StatefulBuilder(
                       builder: (context, setState) {
-                        return PlatformListTile(
-                          harmonizeCupertinoTitleStyle: true,
+                        return ListTile(
                           title: Text.rich(
                             TextSpan(
                               text: '${context.l10n.minutesPerSide}: ',
@@ -192,8 +189,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     int incrementSeconds = preferences.clock.increment.inSeconds;
                     return StatefulBuilder(
                       builder: (context, setState) {
-                        return PlatformListTile(
-                          harmonizeCupertinoTitleStyle: true,
+                        return ListTile(
                           title: Text.rich(
                             TextSpan(
                               text: '${context.l10n.incrementInSeconds}: ',
@@ -239,8 +235,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     int daysPerTurn = preferences.days;
                     return StatefulBuilder(
                       builder: (context, setState) {
-                        return PlatformListTile(
-                          harmonizeCupertinoTitleStyle: true,
+                        return ListTile(
                           title: Text.rich(
                             TextSpan(
                               text: '${context.l10n.daysPerTurn}: ',
@@ -279,8 +274,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                   },
                 ),
               ],
-              PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              ListTile(
                 title: Text(context.l10n.variant),
                 trailing: AdaptiveTextButton(
                   onPressed: () {
@@ -313,8 +307,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
               ),
               ExpandedSection(
                 expand: preferences.rated == false || preferences.variant == Variant.fromPosition,
-                child: PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
+                child: ListTile(
                   title: Text(context.l10n.side),
                   trailing: AdaptiveTextButton(
                     onPressed: () {
@@ -335,8 +328,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
               if (account != null)
                 ExpandedSection(
                   expand: preferences.variant != Variant.fromPosition,
-                  child: PlatformListTile(
-                    harmonizeCupertinoTitleStyle: true,
+                  child: ListTile(
                     title: Text(context.l10n.rated),
                     trailing: Switch.adaptive(
                       value: preferences.rated,

@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:popover/popover.dart';
 
 class EngineDepth extends ConsumerWidget {
@@ -54,7 +53,7 @@ class EngineDepth extends ConsumerWidget {
                       children: [
                         switch (eval) {
                           LocalEval() => _StockfishInfo(eval),
-                          CloudEval(:final depth) => PlatformListTile(
+                          CloudEval(:final depth) => ListTile(
                             title: Text(context.l10n.cloudAnalysis),
                             subtitle: Text(context.l10n.depthX('$depth')),
                           ),
@@ -255,7 +254,7 @@ class _StockfishInfo extends ConsumerWidget {
     // default name is Stockfish 11 64 POPCNT, so we remove the POPCNT part
     final fixedEngineName = engineName.startsWith('Stockfish 11') ? 'Stockfish 11' : engineName;
 
-    return PlatformListTile(
+    return ListTile(
       leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
       title: Text(fixedEngineName),
       subtitle: Text(context.l10n.depthX('$depth$knps')),

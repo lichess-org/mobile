@@ -110,13 +110,13 @@ class _OnlineFriendsWidget extends ConsumerWidget {
                   ),
           children: [
             if (data.isEmpty)
-              PlatformListTile(
+              ListTile(
                 title: Text(context.l10n.friends),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => _handleTap(context, data),
               ),
             for (final user in data)
-              PlatformListTile(
+              ListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(right: 5.0),
                   child: UserFullNameWidget(user: user),

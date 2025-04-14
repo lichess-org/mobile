@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 
 /// A modal bottom sheet that adapts to the platform (Android/iOS).
 Future<T?> showAdaptiveBottomSheet<T>({
@@ -76,7 +75,7 @@ class BottomSheetContextMenuAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    return ListTile(
       leading: Icon(icon),
       title: child,
       onTap: () {

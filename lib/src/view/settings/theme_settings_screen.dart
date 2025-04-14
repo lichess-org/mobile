@@ -155,7 +155,7 @@ class _BodyState extends ConsumerState<_Body> {
                     },
                   ),
                   if (generalPrefs.backgroundColor != null || generalPrefs.backgroundImage != null)
-                    PlatformListTile(
+                    ListTile(
                       leading: const Icon(Icons.cancel),
                       title: const Text('Reset background'),
                       onTap: () {
@@ -232,7 +232,7 @@ class _BodyState extends ConsumerState<_Body> {
                 header: SettingsSectionTitle(context.l10n.advancedSettings),
                 hasLeading: true,
                 children: [
-                  PlatformListTile(
+                  ListTile(
                     leading: const Icon(Icons.brightness_6),
                     title: Slider.adaptive(
                       min: 0.2,
@@ -250,7 +250,7 @@ class _BodyState extends ConsumerState<_Body> {
                       },
                     ),
                   ),
-                  PlatformListTile(
+                  ListTile(
                     leading: const Icon(Icons.invert_colors),
                     title: Slider.adaptive(
                       min: 0.0,
@@ -266,7 +266,7 @@ class _BodyState extends ConsumerState<_Body> {
                       },
                     ),
                   ),
-                  PlatformListTile(
+                  ListTile(
                     leading: Opacity(
                       opacity: hasAjustedColors ? 1.0 : 0.5,
                       child: const Icon(Icons.cancel),

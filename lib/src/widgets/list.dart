@@ -36,7 +36,7 @@ class ListSection extends StatelessWidget {
        backgroundColor = null,
        _isLoading = true;
 
-  /// Usually a list of [PlatformListTile] widgets
+  /// Usually a list of [ListTile] widgets
   final List<Widget> children;
 
   /// Whether the iOS tiles have a leading widget.
@@ -177,7 +177,7 @@ class ListSection extends StatelessWidget {
 
 /// Platform agnostic divider widget.
 ///
-/// Useful to show a divider between [PlatformListTile] widgets when using the
+/// Useful to show a divider between [ListTile] widgets when using the
 /// [ListView.separated] constructor.
 class PlatformDivider extends StatelessWidget {
   const PlatformDivider({
@@ -216,137 +216,6 @@ class PlatformDivider extends StatelessWidget {
           endIndent: endIndent,
           color: color,
         );
-  }
-}
-
-/// Platform agnostic list tile widget.
-///
-/// Will use [ListTile] on android and [CupertinoListTile] on iOS.
-class PlatformListTile extends StatelessWidget {
-  const PlatformListTile({
-    this.leading,
-    required this.title,
-    this.subtitle,
-    this.trailing,
-    this.additionalInfo,
-    this.dense,
-    this.onTap,
-    this.onLongPress,
-    this.selected = false,
-    this.isThreeLine = false,
-    this.padding,
-    this.backgroundColor,
-    this.visualDensity,
-    this.harmonizeCupertinoTitleStyle = false,
-    super.key,
-  });
-
-  final Widget? leading;
-  final Widget title;
-  final Widget? subtitle;
-  final Widget? trailing;
-
-  final EdgeInsetsGeometry? padding;
-
-  final Color? backgroundColor;
-
-  /// only on iOS
-  final Widget? additionalInfo;
-
-  /// Useful on some screens where ListTiles with and without subtitle are mixed.
-  final bool harmonizeCupertinoTitleStyle;
-
-  final bool selected;
-
-  // only on android
-  final bool? dense;
-
-  // only on android
-  final bool isThreeLine;
-
-  /// Only on android.
-  final VisualDensity? visualDensity;
-
-  final GestureTapCallback? onTap;
-
-  // Only on android
-  final GestureLongPressCallback? onLongPress;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: leading,
-      title: title,
-      subtitle: subtitle,
-      trailing: trailing,
-      dense: dense,
-      visualDensity: visualDensity,
-      onTap: onTap,
-      onLongPress: onLongPress,
-      tileColor: backgroundColor,
-      selected: selected,
-      isThreeLine: isThreeLine,
-      contentPadding: padding,
-    );
-  }
-}
-
-/// A [ListTile] that adapts to the platform.
-///
-/// Contrary to [PlatformListTile], this widget uses a [ListTile] on both iOS and
-/// Android.
-/// On Android the list tile will be displayed without modifications.
-/// On iOS the list tile will have a custom splash factory to remove the splash
-/// effect.
-class AdaptiveListTile extends StatelessWidget {
-  const AdaptiveListTile({
-    this.leading,
-    required this.title,
-    this.subtitle,
-    this.trailing,
-    this.onTap,
-    this.isThreeLine = false,
-    this.contentPadding,
-    this.tileColor,
-    this.iconColor,
-    this.selected = false,
-    this.dense,
-    this.visualDensity,
-    super.key,
-  });
-
-  final Widget? leading;
-  final Widget title;
-  final Widget? subtitle;
-  final Widget? trailing;
-  final GestureTapCallback? onTap;
-  final bool isThreeLine;
-  final bool selected;
-  final bool? dense;
-  final EdgeInsetsGeometry? contentPadding;
-  final Color? tileColor;
-  final Color? iconColor;
-  final VisualDensity? visualDensity;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: ListTile(
-        visualDensity: visualDensity,
-        tileColor: tileColor,
-        iconColor: iconColor ?? ColorScheme.of(context).onSurface.withValues(alpha: 0.7),
-        leading: leading,
-        title: title,
-        subtitle: subtitle,
-        trailing: trailing,
-        onTap: onTap,
-        selected: selected,
-        isThreeLine: isThreeLine,
-        contentPadding: contentPadding,
-        dense: dense,
-      ),
-    );
   }
 }
 

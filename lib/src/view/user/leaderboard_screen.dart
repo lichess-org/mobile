@@ -88,7 +88,7 @@ class LeaderboardListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    return ListTile(
       onTap: () => _handleTap(context),
       leading: perfIcon != null ? Icon(perfIcon) : null,
       title: Padding(

@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 final _dateFormatter = DateFormat.yMMMd().add_Hm();
@@ -65,7 +64,6 @@ class GameListTile extends StatelessWidget {
     return _GameListTile(
       game: game,
       mySide: youAre,
-      padding: padding,
       onTap:
           () => openGameScreen(
             context,
@@ -107,7 +105,6 @@ class _GameListTile extends StatelessWidget {
     this.subtitle,
     this.trailing,
     this.onTap,
-    this.padding,
   });
 
   final LightArchivedGame game;
@@ -119,11 +116,10 @@ class _GameListTile extends StatelessWidget {
   final Widget? subtitle;
   final Widget? trailing;
   final GestureTapCallback? onTap;
-  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
-    return PlatformListTile(
+    return ListTile(
       onTap: onTap,
       onLongPress: () {
         showAdaptiveBottomSheet<void>(
@@ -146,7 +142,6 @@ class _GameListTile extends StatelessWidget {
       title: opponentTitle,
       subtitle: subtitle,
       trailing: trailing,
-      padding: padding,
     );
   }
 }

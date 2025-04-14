@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 
 class StudyBottomBar extends ConsumerWidget {
   const StudyBottomBar({required this.id});
@@ -287,7 +286,7 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
         ),
         const SizedBox(height: 16),
         for (final chapter in state.study.chapters)
-          PlatformListTile(
+          ListTile(
             key: chapter.id == state.currentChapter.id ? currentChapterKey : null,
             title: Text.rich(
               TextSpan(

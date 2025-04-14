@@ -52,7 +52,7 @@ class _ToolsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Opacity(
       opacity: onTap == null ? 0.5 : 1.0,
-      child: PlatformListTile(
+      child: ListTile(
         leading: Icon(
           icon,
           size: Styles.mainListTileIconSize,

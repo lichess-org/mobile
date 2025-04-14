@@ -231,8 +231,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
           int customTimeSeconds = preferences.customTimeSeconds;
           return StatefulBuilder(
             builder: (context, setState) {
-              return PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              return ListTile(
                 title: Text.rich(
                   TextSpan(
                     text: '${context.l10n.minutesPerSide}: ',
@@ -275,8 +274,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
           int customIncrementSeconds = preferences.customIncrementSeconds;
           return StatefulBuilder(
             builder: (context, setState) {
-              return PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              return ListTile(
                 title: Text.rich(
                   TextSpan(
                     text: '${context.l10n.incrementInSeconds}: ',
@@ -321,8 +319,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
           int daysPerTurn = preferences.customDaysPerTurn;
           return StatefulBuilder(
             builder: (context, setState) {
-              return PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              return ListTile(
                 title: Text.rich(
                   TextSpan(
                     text: '${context.l10n.daysPerTurn}: ',
@@ -376,8 +373,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
             shrinkWrap: true,
             children: [
               if (account != null)
-                PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
+                ListTile(
                   title: Text(context.l10n.timeControl),
                   trailing: AdaptiveTextButton(
                     onPressed: () {
@@ -409,8 +405,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 ...realTimeSelector
               else
                 ...correspondenceSelector,
-              PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
+              ListTile(
                 title: Text(context.l10n.variant),
                 trailing: AdaptiveTextButton(
                   onPressed: () {
@@ -429,8 +424,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
               ),
               ExpandedSection(
                 expand: preferences.customRated == false,
-                child: PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
+                child: ListTile(
                   title: Text(context.l10n.side),
                   trailing: AdaptiveTextButton(
                     onPressed: null,
@@ -439,8 +433,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 ),
               ),
               if (account != null)
-                PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
+                ListTile(
                   title: Text(context.l10n.rated),
                   trailing: Switch.adaptive(
                     value: preferences.customRated,
