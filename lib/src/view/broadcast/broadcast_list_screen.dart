@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -17,7 +16,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
@@ -102,25 +100,11 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
                 ),
           ),
     );
-    return PlatformWidget(
-      androidBuilder:
-          (_) => Scaffold(
-            backgroundColor: Styles.listingsScreenBackgroundColor(context),
-            body: _Body(filter),
-            appBar: AppBar(title: title, actions: [filterButton]),
-          ),
-      iosBuilder:
-          (_) => CupertinoPageScaffold(
-            backgroundColor: Styles.listingsScreenBackgroundColor(context),
-            navigationBar: CupertinoNavigationBar(
-              middle: title,
-              automaticBackgroundVisibility: false,
-              backgroundColor: CupertinoTheme.of(context).barBackgroundColor.withValues(alpha: 0.0),
-              border: null,
-              trailing: filterButton,
-            ),
-            child: _Body(filter),
-          ),
+
+    return Scaffold(
+      backgroundColor: Styles.listingsScreenBackgroundColor(context),
+      body: _Body(filter),
+      appBar: AppBar(title: title, actions: [filterButton]),
     );
   }
 }
@@ -186,10 +170,6 @@ class _BodyState extends ConsumerState<_Body> {
     ];
 
     return RefreshIndicator.adaptive(
-      edgeOffset:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? MediaQuery.paddingOf(context).top + 16.0
-              : 0,
       key: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(broadcastsPaginatorProvider),
       child: CustomScrollView(
@@ -200,38 +180,22 @@ class _BodyState extends ConsumerState<_Body> {
               key: ValueKey(section.$1),
               slivers: [
                 if (section.$3.isNotEmpty)
-                  if (Theme.of(context).platform == TargetPlatform.iOS)
-                    CupertinoSliverNavigationBar(
-                      automaticallyImplyLeading: false,
-                      leading: null,
-                      largeTitle: AutoSizeText(
-                        section.$2,
-                        maxLines: 1,
-                        minFontSize: 14,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      transitionBetweenRoutes: false,
-                    )
-                  else
-                    SliverAppBar(
-                      backgroundColor: Theme.of(
-                        context,
-                      ).appBarTheme.backgroundColor?.withValues(alpha: 1),
-                      automaticallyImplyLeading: false,
-                      primary: false,
-                      title: AutoSizeText(
-                        section.$2,
-                        maxLines: 1,
-                        minFontSize: 14,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      pinned: true,
+                  SliverAppBar(
+                    backgroundColor: Theme.of(
+                      context,
+                    ).appBarTheme.backgroundColor?.withValues(alpha: 1),
+                    automaticallyImplyLeading: false,
+                    primary: false,
+                    title: AutoSizeText(
+                      section.$2,
+                      maxLines: 1,
+                      minFontSize: 14,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    pinned: true,
+                  ),
                 SliverPadding(
-                  padding:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? EdgeInsets.zero
-                          : Styles.sectionBottomPadding,
+                  padding: Styles.sectionBottomPadding,
                   sliver: SliverList.separated(
                     separatorBuilder:
                         (context, index) => PlatformDivider(

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -44,21 +43,27 @@ class SettingsListTile extends StatelessWidget {
         leading: icon,
         title: _SettingsTitle(title: settingsLabel),
         additionalInfo: showCupertinoTrailingValue ? Text(settingsValue) : null,
-        subtitle: explanation != null ? Text(explanation!, maxLines: 5) : null,
-        onTap: onTap,
-        trailing:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.25),
-                  child: Text(
-                    settingsValue,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
-                    maxLines: 2,
-                    style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+        subtitle:
+            explanation != null
+                ? Text(
+                  explanation!,
+                  maxLines: 5,
+                  style: ListTileTheme.of(context).subtitleTextStyle?.copyWith(
+                    fontSize: TextTheme.of(context).bodySmall?.fontSize,
                   ),
-                ),
+                )
+                : null,
+        onTap: onTap,
+        trailing: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.25),
+          child: Text(
+            settingsValue,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.end,
+            maxLines: 2,
+            style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+          ),
+        ),
       ),
     );
   }
@@ -88,7 +93,15 @@ class SwitchSettingTile extends StatelessWidget {
       padding: padding,
       leading: leading,
       title: _SettingsTitle(title: title),
-      subtitle: subtitle,
+      subtitle:
+          subtitle != null
+              ? DefaultTextStyle.merge(
+                style: ListTileTheme.of(
+                  context,
+                ).subtitleTextStyle?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
+                child: subtitle!,
+              )
+              : null,
       trailing: Switch.adaptive(
         value: value,
         onChanged: onChanged,
@@ -172,11 +185,6 @@ class _SettingsTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle.merge(
-      // forces iOS default font size
-      style:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoTheme.of(context).textTheme.textStyle.copyWith(fontSize: 17.0)
-              : null,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
       child: Text.rich(TextSpan(children: [title.textSpan ?? TextSpan(text: title.data)])),
@@ -220,69 +228,22 @@ class ChoicePicker<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        return Opacity(
-          opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
-          child: ListSection(
-            children: [
-              for (final value in choices)
-                ListTile(
-                  selected: selectedItem == value,
-                  trailing: selectedItem == value ? const Icon(Icons.check) : null,
-                  contentPadding: tileContentPadding,
-                  title: titleBuilder(value),
-                  subtitle: subtitleBuilder?.call(value),
-                  leading: leadingBuilder?.call(value),
-                  onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
-                ),
-            ],
-          ),
-        );
-      case TargetPlatform.iOS:
-        final tileConstructor = notchedTile ? CupertinoListTile.notched : CupertinoListTile.new;
-        return Padding(
-          padding: margin ?? Styles.bodySectionPadding,
-          child: Opacity(
-            opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
-            child: CupertinoListSection.insetGrouped(
-              backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
-              decoration: BoxDecoration(
-                color:
-                    Theme.of(context).cardTheme.color ??
-                    Theme.of(context).colorScheme.surfaceContainerLow,
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-              ),
-              separatorColor: Styles.cupertinoSeparatorColor.resolveFrom(context),
-              margin: EdgeInsets.zero,
-              additionalDividerMargin: notchedTile ? null : 6.0,
-              hasLeading: leadingBuilder != null,
-              children: choices
-                  .map((value) {
-                    return tileConstructor(
-                      trailing:
-                          selectedItem == value
-                              ? const Icon(CupertinoIcons.check_mark_circled_solid)
-                              : null,
-                      title: titleBuilder(value),
-                      subtitle: subtitleBuilder?.call(value),
-                      leading: leadingBuilder?.call(value),
-                      backgroundColorActivated: Styles.cupertinoListTileBackgroundActivated(
-                        context,
-                      ),
-                      onTap:
-                          onSelectedItemChanged != null
-                              ? () => onSelectedItemChanged!(value)
-                              : null,
-                    );
-                  })
-                  .toList(growable: false),
+    return Opacity(
+      opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
+      child: ListSection(
+        children: [
+          for (final value in choices)
+            ListTile(
+              selected: selectedItem == value,
+              trailing: selectedItem == value ? const Icon(Icons.check) : null,
+              contentPadding: tileContentPadding,
+              title: titleBuilder(value),
+              subtitle: subtitleBuilder?.call(value),
+              leading: leadingBuilder?.call(value),
+              onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
             ),
-          ),
-        );
-      default:
-        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
-        return const SizedBox.shrink();
-    }
+        ],
+      ),
+    );
   }
 }

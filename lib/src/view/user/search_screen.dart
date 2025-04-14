@@ -133,7 +133,6 @@ class _Body extends ConsumerWidget {
                       child: Text(context.l10n.mobileClearButton),
                       onPressed: () => ref.read(searchHistoryProvider.notifier).clear(),
                     ),
-                    showDividerBetweenTiles: true,
                     hasLeading: true,
                     children:
                         searchHistory
@@ -175,7 +174,6 @@ class _UserList extends ConsumerWidget {
                         ],
                       ),
                       hasLeading: true,
-                      showDividerBetweenTiles: true,
                       children:
                           userList
                               .map(

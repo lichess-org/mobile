@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -109,93 +108,42 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   nbOfGames: nbOfGames,
                 );
 
-        if (Theme.of(context).platform == TargetPlatform.iOS) {
-          return CupertinoPageScaffold(
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                CustomScrollView(
-                  controller: homeScrollController,
-                  slivers: [
-                    CupertinoSliverNavigationBar(
-                      padding: const EdgeInsetsDirectional.only(start: 16.0, end: 8.0),
-                      largeTitle: Text(context.l10n.mobileHomeTab),
-                      leading: CupertinoButton(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          ref.read(editModeProvider.notifier).state = !isEditing;
-                        },
-                        child: Text(isEditing ? 'Done' : 'Edit'),
-                      ),
-                      trailing: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [_ChallengeScreenButton(), _PlayerScreenButton()],
-                      ),
-                    ),
-                    CupertinoSliverRefreshControl(
-                      onRefresh: () => _refreshData(isOnline: status.isOnline),
-                    ),
-                    const SliverToBoxAdapter(child: ConnectivityBanner()),
-                    SliverSafeArea(
-                      top: false,
-                      sliver: SliverList(delegate: SliverChildListDelegate(widgets)),
-                    ),
-                  ],
-                ),
-                if (getScreenType(context) == ScreenType.handset)
-                  Positioned(
-                    bottom: MediaQuery.paddingOf(context).bottom + 16.0,
-                    right: 8.0,
-                    child: FloatingActionButton.extended(
-                      onPressed: () {
-                        Navigator.of(context).push(PlayScreen.buildRoute(context));
-                      },
-                      icon: const Icon(Icons.add),
-                      label: Text(context.l10n.play),
-                    ),
-                  ),
-              ],
-            ),
-          );
-        } else {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('lichess.org'),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    ref.read(editModeProvider.notifier).state = !isEditing;
-                  },
-                  icon: Icon(isEditing ? Icons.save_outlined : Icons.app_registration),
-                  tooltip: isEditing ? 'Save' : 'Edit',
-                ),
-                const _ChallengeScreenButton(),
-                const _PlayerScreenButton(),
-              ],
-            ),
-            body: RefreshIndicator(
-              key: _androidRefreshKey,
-              onRefresh: () => _refreshData(isOnline: status.isOnline),
-              child: Column(
-                children: [
-                  const ConnectivityBanner(),
-                  Expanded(child: ListView(controller: homeScrollController, children: widgets)),
-                ],
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('lichess.org'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  ref.read(editModeProvider.notifier).state = !isEditing;
+                },
+                icon: Icon(isEditing ? Icons.save_outlined : Icons.app_registration),
+                tooltip: isEditing ? 'Save' : 'Edit',
               ),
+              const _ChallengeScreenButton(),
+              const _PlayerScreenButton(),
+            ],
+          ),
+          body: RefreshIndicator.adaptive(
+            key: _androidRefreshKey,
+            onRefresh: () => _refreshData(isOnline: status.isOnline),
+            child: Column(
+              children: [
+                const ConnectivityBanner(),
+                Expanded(child: ListView(controller: homeScrollController, children: widgets)),
+              ],
             ),
-            floatingActionButton:
-                isTablet
-                    ? null
-                    : FloatingActionButton.extended(
-                      onPressed: () {
-                        Navigator.of(context).push(PlayScreen.buildRoute(context));
-                      },
-                      icon: const Icon(Icons.add),
-                      label: Text(context.l10n.play),
-                    ),
-          );
-        }
+          ),
+          floatingActionButton:
+              isTablet
+                  ? null
+                  : FloatingActionButton.extended(
+                    onPressed: () {
+                      Navigator.of(context).push(PlayScreen.buildRoute(context));
+                    },
+                    icon: const Icon(Icons.add),
+                    label: Text(context.l10n.play),
+                  ),
+        );
       },
       error: (_, _) => const CenterLoadingIndicator(),
       loading: () => const CenterLoadingIndicator(),
@@ -256,13 +204,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       final i = homePrefs.enabledWidgets.indexOf(widget.widget);
       return i != -1 ? i : HomeEditableWidget.values.length;
     });
-    return [
-      ...list,
-      if (Theme.of(context).platform == TargetPlatform.iOS)
-        const SizedBox(height: 70.0)
-      else
-        const SizedBox(height: 54.0),
-    ];
+    return [...list, const SizedBox(height: 54.0)];
   }
 
   List<Widget> _welcomeScreenWidgets({
@@ -273,13 +215,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     final welcomeWidgets = [
       Padding(
         padding: Styles.horizontalBodyPadding,
-        child: LichessMessage(
-          style:
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? const TextStyle(fontSize: 18)
-                  : TextTheme.of(context).bodyLarge,
-          textAlign: TextAlign.center,
-        ),
+        child: LichessMessage(style: TextTheme.of(context).bodyLarge, textAlign: TextAlign.center),
       ),
       const SizedBox(height: 24.0),
       if (session == null) ...[const Center(child: _SignInWidget()), const SizedBox(height: 16.0)],

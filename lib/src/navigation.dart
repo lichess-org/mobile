@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -111,8 +110,6 @@ final settingsScrollController = ScrollController(debugLabel: 'SettingsScroll');
 
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver = RouteObserver<PageRoute<void>>();
 
-final _cupertinoTabController = CupertinoTabController();
-
 /// A [ChangeNotifier] that can be used to notify when the Home tab is tapped, and all the built in
 /// interactions (pop stack, scroll to top) are done.
 final homeTabInteraction = _BottomTabInteraction();
@@ -152,50 +149,35 @@ class BottomNavScaffold extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
 
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        return FullScreenBackground(
-          child: Scaffold(
-            body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _androidTabBuilder),
-            bottomNavigationBar: Consumer(
-              builder: (context, ref, _) {
-                return NavigationBar(
-                  selectedIndex: currentTab.index,
-                  destinations: [
-                    for (final tab in BottomTab.values)
-                      NavigationDestination(
-                        icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                        label: tab.label(context.l10n),
-                      ),
-                  ],
-                  onDestinationSelected: (i) => _onItemTapped(ref, i),
-                );
-              },
-            ),
-          ),
-        );
-      case TargetPlatform.iOS:
-        return FullScreenBackground(
-          child: CupertinoTabScaffold(
-            tabBuilder: _iOSTabBuilder,
-            controller: _cupertinoTabController,
-            tabBar: CupertinoTabBar(
-              currentIndex: currentTab.index,
-              items: [
-                for (final tab in BottomTab.values)
-                  BottomNavigationBarItem(
-                    icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                    label: tab.label(context.l10n),
-                  ),
-              ],
-              onTap: (i) => _onItemTapped(ref, i),
-            ),
-          ),
-        );
-      default:
-        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
-        return const SizedBox.shrink();
-    }
+    return FullScreenBackground(
+      child: Scaffold(
+        body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _androidTabBuilder),
+        bottomNavigationBar:
+        // Theme.of(context).platform == TargetPlatform.iOS
+        //     ? CupertinoTabBar(
+        //       currentIndex: currentTab.index,
+        //       items: [
+        //         for (final tab in BottomTab.values)
+        //           BottomNavigationBarItem(
+        //             icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+        //             label: tab.label(context.l10n),
+        //           ),
+        //       ],
+        //       onTap: (i) => _onItemTapped(ref, i),
+        //     )
+        NavigationBar(
+          selectedIndex: currentTab.index,
+          destinations: [
+            for (final tab in BottomTab.values)
+              NavigationDestination(
+                icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                label: tab.label(context.l10n),
+              ),
+          ],
+          onDestinationSelected: (i) => _onItemTapped(ref, i),
+        ),
+      ),
+    );
   }
 
   /// If tapped tab is the same as the current tab, pop to the first route in
@@ -276,48 +258,9 @@ Widget _androidTabBuilder(BuildContext context, int index) {
   }
 }
 
-Widget _iOSTabBuilder(BuildContext context, int index) {
-  switch (index) {
-    case 0:
-      return CupertinoTabView(
-        defaultTitle: context.l10n.mobileHomeTab,
-        navigatorKey: homeNavigatorKey,
-        builder: (context) => const HomeTabScreen(),
-      );
-    case 1:
-      return CupertinoTabView(
-        defaultTitle: context.l10n.mobilePuzzlesTab,
-        navigatorKey: puzzlesNavigatorKey,
-        builder: (context) => const PuzzleTabScreen(),
-      );
-    case 2:
-      return CupertinoTabView(
-        defaultTitle: context.l10n.mobileToolsTab,
-        navigatorKey: toolsNavigatorKey,
-        builder: (context) => const ToolsTabScreen(),
-      );
-    case 3:
-      return CupertinoTabView(
-        defaultTitle: context.l10n.mobileWatchTab,
-        navigatorKey: watchNavigatorKey,
-        builder: (context) => const WatchTabScreen(),
-      );
-    case 4:
-      return CupertinoTabView(
-        defaultTitle: context.l10n.mobileSettingsTab,
-        navigatorKey: settingsNavigatorKey,
-        builder: (context) => const SettingsTabScreen(),
-      );
-    default:
-      assert(false, 'Unexpected tab');
-      return const SizedBox.shrink();
-  }
-}
-
 // --
 
 // Below code taken and adapted from https://github.com/flutter/flutter/blob/135454af32477f815a7525073027a3ff9eff1bfd/packages/flutter/lib/src/cupertino/tab_scaffold.dart#L403
-// in order to have nested stateful navigation support in each tab on Android
 
 /// A widget laying out multiple tabs with only one active tab being built
 /// at a time and on stage. Off stage tabs' animations are stopped.

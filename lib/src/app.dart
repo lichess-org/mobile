@@ -150,14 +150,14 @@ class _AppState extends ConsumerState<Application> {
       title: 'lichess.org',
       locale: generalPrefs.locale,
       theme: themeLight.copyWith(
-        navigationBarTheme: NavigationBarTheme.of(
-          context,
-        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+        navigationBarTheme: NavigationBarTheme.of(context).copyWith(
+          height: isIOS || remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
+        ),
       ),
       darkTheme: themeDark.copyWith(
-        navigationBarTheme: NavigationBarTheme.of(
-          context,
-        ).copyWith(height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null),
+        navigationBarTheme: NavigationBarTheme.of(context).copyWith(
+          height: isIOS || remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
+        ),
       ),
       themeMode:
           generalPrefs.isForcedDarkMode

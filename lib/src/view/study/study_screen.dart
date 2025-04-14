@@ -3,7 +3,6 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -236,8 +235,7 @@ class _StudyMenu extends ConsumerWidget {
             },
           ),
         PlatformContextMenuAction(
-          icon:
-              Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
+          icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
           label: context.l10n.studyShareAndExport,
           onPressed: () {
             showAdaptiveActionSheet<void>(

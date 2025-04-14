@@ -781,7 +781,7 @@ class _EloChartState extends State<_EloChart> {
         meta: meta,
         child: Text(
           value.toInt().toString(),
-          style: const TextStyle(color: Colors.grey, fontSize: 10),
+          style: TextStyle(color: textShade(context, 0.6), fontSize: 10),
         ),
       );
     }
@@ -793,7 +793,7 @@ class _EloChartState extends State<_EloChart> {
         meta: meta,
         child: Text(
           formatDateFromTimestamp(value),
-          style: const TextStyle(color: Colors.grey, fontSize: 10),
+          style: TextStyle(color: textShade(context, 0.6), fontSize: 10),
         ),
       );
     }
@@ -832,7 +832,7 @@ class _EloChartState extends State<_EloChart> {
                   spots: _flSpot,
                   dotData: const FlDotData(show: false),
                   color: chartColor,
-                  belowBarData: BarAreaData(color: chartColor.withValues(alpha: 0.2), show: true),
+                  belowBarData: BarAreaData(color: chartColor.withValues(alpha: 0.3), show: true),
                   barWidth: 1.5,
                 ),
               ],

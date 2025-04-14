@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
-import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
@@ -28,7 +27,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
@@ -39,14 +37,6 @@ class SettingsTabScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -57,18 +47,6 @@ class SettingsTabScreen extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(title: Text(context.l10n.settingsSettings)),
         body: SafeArea(child: _Body()),
-      ),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    return CupertinoPageScaffold(
-      child: CustomScrollView(
-        controller: settingsScrollController,
-        slivers: [
-          CupertinoSliverNavigationBar(largeTitle: Text(context.l10n.settingsSettings)),
-          SliverSafeArea(top: false, sliver: _Body()),
-        ],
       ),
     );
   }
@@ -189,29 +167,24 @@ class _Body extends ConsumerWidget {
             child: SettingsListTile(
               icon: const Icon(Icons.brightness_medium_outlined),
               settingsLabel: Text(context.l10n.background),
-              settingsValue: AppBackgroundModeScreen.themeTitle(
-                context,
-                generalPrefs.isForcedDarkMode ? BackgroundThemeMode.dark : generalPrefs.themeMode,
-              ),
+              settingsValue:
+                  generalPrefs.isForcedDarkMode
+                      ? BackgroundThemeMode.dark.title(context.l10n)
+                      : generalPrefs.themeMode.title(context.l10n),
               onTap:
                   generalPrefs.isForcedDarkMode
                       ? null
                       : () {
-                        if (Theme.of(context).platform == TargetPlatform.android) {
-                          showChoicePicker(
-                            context,
-                            choices: BackgroundThemeMode.values,
-                            selectedItem: generalPrefs.themeMode,
-                            labelBuilder:
-                                (t) => Text(AppBackgroundModeScreen.themeTitle(context, t)),
-                            onSelectedItemChanged:
-                                (BackgroundThemeMode? value) => ref
-                                    .read(generalPreferencesProvider.notifier)
-                                    .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
-                          );
-                        } else {
-                          Navigator.of(context).push(AppBackgroundModeScreen.buildRoute(context));
-                        }
+                        showChoicePicker(
+                          context,
+                          choices: BackgroundThemeMode.values,
+                          selectedItem: generalPrefs.themeMode,
+                          labelBuilder: (t) => Text(t.title(context.l10n)),
+                          onSelectedItemChanged:
+                              (BackgroundThemeMode? value) => ref
+                                  .read(generalPreferencesProvider.notifier)
+                                  .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
+                        );
                       },
             ),
           ),
@@ -344,11 +317,7 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.storage_outlined),
             title: const Text('Local database size'),
-            subtitle:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? null
-                    : Text(_getSizeString(dbSize.value)),
-            additionalInfo: dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
+            trailing: dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
           ),
           PlatformListTile(
             leading: const Icon(Icons.http),
@@ -400,9 +369,7 @@ class _Body extends ConsumerWidget {
       ),
     ];
 
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? SliverList(delegate: SliverChildListDelegate(content))
-        : ListView(controller: settingsScrollController, children: content);
+    return ListView(controller: settingsScrollController, children: content);
   }
 
   Future<void> _showSignOutConfirmDialog(BuildContext context, WidgetRef ref) {

@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
@@ -463,7 +462,7 @@ class _BroadcastCardContent extends StatelessWidget {
                   PlatformContextMenuAction(
                     icon:
                         Theme.of(context).platform == TargetPlatform.iOS
-                            ? CupertinoIcons.share
+                            ? Icons.ios_share
                             : Icons.share,
                     label: context.l10n.studyShareAndExport,
                     onPressed: () {

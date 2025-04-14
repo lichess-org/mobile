@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -61,46 +60,23 @@ class QuickGameButton extends ConsumerWidget {
         if (Theme.of(context).platform == TargetPlatform.android) const SizedBox(width: 8.0),
         Expanded(
           flex: kFlexGoldenRatio,
-          child:
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? CupertinoButton.tinted(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-                    onPressed:
-                        isOnline && !isPlayban
-                            ? () {
-                              Navigator.of(context, rootNavigator: true).push(
-                                GameScreen.buildRoute(
-                                  context,
-                                  seek: GameSeek.fastPairing(
-                                    playPrefs.quickPairingTimeIncrement,
-                                    session,
-                                  ),
-                                ),
-                              );
-                            }
-                            : null,
-                    child: Text(context.l10n.play),
-                  )
-                  : FilledButton(
-                    onPressed:
-                        isOnline && !isPlayban
-                            ? () {
-                              Navigator.of(context, rootNavigator: true).push(
-                                GameScreen.buildRoute(
-                                  context,
-                                  seek: GameSeek.fastPairing(
-                                    playPrefs.quickPairingTimeIncrement,
-                                    session,
-                                  ),
-                                ),
-                              );
-                            }
-                            : null,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(context.l10n.play),
-                    ),
-                  ),
+          child: FilledButton(
+            onPressed:
+                isOnline && !isPlayban
+                    ? () {
+                      Navigator.of(context, rootNavigator: true).push(
+                        GameScreen.buildRoute(
+                          context,
+                          seek: GameSeek.fastPairing(playPrefs.quickPairingTimeIncrement, session),
+                        ),
+                      );
+                    }
+                    : null,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(context.l10n.play),
+            ),
+          ),
         ),
       ],
     );

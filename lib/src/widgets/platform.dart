@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -116,7 +115,7 @@ class PlatformShareIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformWidget(
       androidBuilder: (_) => const Icon(Icons.share),
-      iosBuilder: (_) => const Icon(CupertinoIcons.share),
+      iosBuilder: (_) => const Icon(Icons.ios_share),
     );
   }
 }

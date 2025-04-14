@@ -15,13 +15,10 @@ class ListSection extends StatelessWidget {
     this.footer,
     this.margin,
     this.hasLeading = false,
-    this.showDividerBetweenTiles = false,
     this.dense = false,
     this.materialFilledCard = false,
     this.cupertinoAdditionalDividerMargin,
     this.backgroundColor,
-    this.cupertinoBorderRadius,
-    this.cupertinoClipBehavior = Clip.hardEdge,
   }) : _isLoading = false;
 
   ListSection.loading({
@@ -33,13 +30,10 @@ class ListSection extends StatelessWidget {
        headerTrailing = null,
        header = header ? const SizedBox.shrink() : null,
        footer = null,
-       showDividerBetweenTiles = false,
        dense = false,
        materialFilledCard = false,
        cupertinoAdditionalDividerMargin = null,
        backgroundColor = null,
-       cupertinoBorderRadius = null,
-       cupertinoClipBehavior = Clip.hardEdge,
        _isLoading = true;
 
   /// Usually a list of [PlatformListTile] widgets
@@ -59,13 +53,10 @@ class ListSection extends StatelessWidget {
 
   final EdgeInsetsGeometry? margin;
 
-  /// Only on android.
-  final bool showDividerBetweenTiles;
-
-  /// Whether the card should have a filled background. (Only on Android).
+  /// Whether the card should have a filled background.
   final bool materialFilledCard;
 
-  /// Use it to set [ListTileTheme.dense] property. Only on Android.
+  /// Use it to set [ListTileTheme.dense] property.
   final bool dense;
 
   /// See [CupertinoListSection.additionalDividerMargin].
@@ -73,97 +64,29 @@ class ListSection extends StatelessWidget {
 
   final Color? backgroundColor;
 
-  final BorderRadiusGeometry? cupertinoBorderRadius;
-
-  final Clip cupertinoClipBehavior;
-
   final bool _isLoading;
 
   static const double materialVerticalPadding = 8.0;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    switch (theme.platform) {
-      case TargetPlatform.android:
-        return _isLoading
-            ? Column(
-              children: [
-                PlatformCard(
-                  filled: materialFilledCard,
-                  clipBehavior: Clip.hardEdge,
-                  margin: margin ?? Styles.bodySectionPadding,
-                  color: backgroundColor,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: materialVerticalPadding),
-                      if (header != null)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                          child: Container(
-                            width: double.infinity,
-                            height: 25,
-                            decoration: const BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.all(Radius.circular(16)),
-                            ),
-                          ),
-                        ),
-                      for (int i = 0; i < children.length; i++)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                          child: Container(
-                            width: double.infinity,
-                            height: 50,
-                            decoration: const BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                          ),
-                        ),
-                      const SizedBox(height: materialVerticalPadding),
-                    ],
-                  ),
-                ),
-              ],
-            )
-            : PlatformCard(
+    return _isLoading
+        ? Column(
+          children: [
+            PlatformCard(
               filled: materialFilledCard,
               clipBehavior: Clip.hardEdge,
               margin: margin ?? Styles.bodySectionPadding,
               color: backgroundColor,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: materialVerticalPadding),
                   if (header != null)
-                    ListTile(
-                      dense: true,
-                      title: DefaultTextStyle.merge(style: Styles.sectionTitle, child: header!),
-                      trailing: headerTrailing,
-                    ),
-                  if (showDividerBetweenTiles)
-                    ...ListTile.divideTiles(context: context, tiles: children)
-                  else
-                    ...children,
-                  if (footer != null) footer!,
-                  const SizedBox(height: materialVerticalPadding),
-                ],
-              ),
-            );
-      case TargetPlatform.iOS:
-        return _isLoading
-            ? Padding(
-              padding: margin ?? Styles.bodySectionPadding,
-              child: Column(
-                children: [
-                  if (header != null)
-                    // ignore: avoid-wrapping-in-padding
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
                       child: Container(
                         width: double.infinity,
-                        height: 24,
+                        height: 25,
                         decoration: const BoxDecoration(
                           color: Colors.black,
                           borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -172,76 +95,83 @@ class ListSection extends StatelessWidget {
                     ),
                   for (int i = 0; i < children.length; i++)
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                      child: Row(
-                        children: [
-                          if (hasLeading) ...[
-                            Container(
-                              width: 46,
-                              height: 46,
-                              decoration: const BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                          ],
-                          Expanded(
-                            child: Container(
-                              height: 46,
-                              decoration: const BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                            ),
-                          ),
-                        ],
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                      child: Container(
+                        width: double.infinity,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
                       ),
                     ),
+                  const SizedBox(height: materialVerticalPadding),
                 ],
               ),
-            )
-            : Padding(
-              padding: margin ?? Styles.bodySectionPadding,
-              child: Column(
-                children: [
-                  if (header != null)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 6.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          DefaultTextStyle.merge(style: Styles.sectionTitle, child: header!),
-                          if (headerTrailing != null) headerTrailing!,
-                        ],
-                      ),
+            ),
+          ],
+        )
+        : Padding(
+          padding: margin ?? Styles.bodySectionPadding,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (header != null) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: DefaultTextStyle.merge(style: Styles.sectionTitle, child: header!),
                     ),
-                  CupertinoListSection.insetGrouped(
-                    clipBehavior: cupertinoClipBehavior,
-                    backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
-                    decoration: BoxDecoration(
-                      color:
-                          backgroundColor ??
-                          theme.cardTheme.color ??
-                          theme.colorScheme.surfaceContainerLow,
-                      borderRadius:
-                          cupertinoBorderRadius ?? const BorderRadius.all(Radius.circular(10.0)),
-                    ),
-                    separatorColor: Styles.cupertinoSeparatorColor.resolveFrom(context),
-                    margin: EdgeInsets.zero,
-                    hasLeading: hasLeading,
-                    additionalDividerMargin: cupertinoAdditionalDividerMargin,
-                    children: children,
-                  ),
-                  if (footer != null)
-                    Padding(padding: const EdgeInsets.only(top: 6.0), child: footer),
-                ],
+                    if (headerTrailing != null) headerTrailing!,
+                  ],
+                ),
+                const SizedBox(height: 4.0),
+              ],
+              PlatformCard(
+                filled: materialFilledCard,
+                clipBehavior: Clip.hardEdge,
+                color: backgroundColor,
+                margin: EdgeInsets.zero,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (Theme.of(context).platform == TargetPlatform.iOS)
+                      ..._divideTiles(
+                        context: context,
+                        tiles: children,
+                        cupertinoHasLeading: hasLeading,
+                      )
+                    else
+                      ...children,
+                  ],
+                ),
               ),
-            );
-      default:
-        assert(false, 'Unexpected platform ${theme.platform}');
-        return const SizedBox.shrink();
+              if (footer != null) footer!,
+            ],
+          ),
+        );
+  }
+
+  static Iterable<Widget> _divideTiles({
+    required BuildContext context,
+    required Iterable<Widget> tiles,
+    bool cupertinoHasLeading = false,
+  }) {
+    tiles = tiles.toList();
+
+    if (tiles.isEmpty || tiles.length == 1) {
+      return tiles;
     }
+
+    final List<Widget> result = [];
+    for (int i = 0; i < tiles.length; i++) {
+      result.add(tiles.elementAt(i));
+      if (i != tiles.length - 1) {
+        result.add(PlatformDivider(height: 0, cupertinoHasLeading: cupertinoHasLeading));
+      }
+    }
+    return result;
   }
 }
 
@@ -282,9 +212,7 @@ class PlatformDivider extends StatelessWidget {
         : Divider(
           height: height,
           thickness: thickness ?? 0.0,
-          // see:
-          // https://github.com/flutter/flutter/blob/bff6b93683de8be01d53a39b6183f230518541ac/packages/flutter/lib/src/cupertino/list_section.dart#L53
-          indent: indent ?? (cupertinoHasLeading ? 14 + 44.0 : 14.0),
+          indent: indent ?? (cupertinoHasLeading ? 16.0 + 42.0 : 16.0),
           endIndent: endIndent,
           color: color,
         );
@@ -346,60 +274,20 @@ class PlatformListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = ColorScheme.of(context);
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        return ListTile(
-          leading: leading,
-          title: title,
-          iconColor: colorScheme.onSurface.withValues(alpha: 0.7),
-          subtitle:
-              subtitle != null
-                  ? DefaultTextStyle.merge(
-                    child: subtitle!,
-                    style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-                  )
-                  : null,
-          trailing: trailing,
-          dense: dense,
-          visualDensity: visualDensity,
-          onTap: onTap,
-          onLongPress: onLongPress,
-          tileColor: backgroundColor,
-          selected: selected,
-          isThreeLine: isThreeLine,
-          contentPadding: padding,
-        );
-      case TargetPlatform.iOS:
-        final activatedColor = Styles.cupertinoListTileBackgroundActivated(context);
-        return GestureDetector(
-          onLongPress: onLongPress,
-          child: CupertinoListTile.notched(
-            backgroundColor: selected == true ? activatedColor : backgroundColor,
-            backgroundColorActivated: activatedColor,
-            leading: leading,
-            title:
-                harmonizeCupertinoTitleStyle
-                    ? DefaultTextStyle.merge(
-                      // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart
-                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
-                      child: title,
-                    )
-                    : title,
-            subtitle: subtitle,
-            trailing:
-                trailing ??
-                (selected == true ? const Icon(CupertinoIcons.check_mark_circled_solid) : null),
-            additionalInfo: additionalInfo,
-            padding: padding,
-            onTap: onTap,
-          ),
-        );
-
-      default:
-        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
-        return const SizedBox.shrink();
-    }
+    return ListTile(
+      leading: leading,
+      title: title,
+      subtitle: subtitle,
+      trailing: trailing,
+      dense: dense,
+      visualDensity: visualDensity,
+      onTap: onTap,
+      onLongPress: onLongPress,
+      tileColor: backgroundColor,
+      selected: selected,
+      isThreeLine: isThreeLine,
+      contentPadding: padding,
+    );
   }
 }
 

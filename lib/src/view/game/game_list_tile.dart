@@ -144,13 +144,7 @@ class _GameListTile extends StatelessWidget {
       },
       leading: icon != null ? Icon(icon) : null,
       title: opponentTitle,
-      subtitle:
-          subtitle != null
-              ? DefaultTextStyle.merge(
-                child: subtitle!,
-                style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-              )
-              : null,
+      subtitle: subtitle,
       trailing: trailing,
       padding: padding,
     );
@@ -311,10 +305,7 @@ class GameContextMenu extends ConsumerWidget {
             onPressed: () {
               launchShareDialog(context, uri: lichessUri('/${game.id}/${orientation.name}'));
             },
-            icon:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoIcons.share
-                    : Icons.share,
+            icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
             child: Text(context.l10n.mobileShareGameURL),
           ),
           BottomSheetContextMenuAction(

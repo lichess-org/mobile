@@ -749,24 +749,11 @@ class _StormDashboardButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     if (session != null) {
-      switch (Theme.of(context).platform) {
-        case TargetPlatform.iOS:
-          return CupertinoIconButton(
-            padding: EdgeInsets.zero,
-            onPressed: () => _showDashboard(context, session),
-            semanticsLabel: 'Storm History',
-            icon: const Icon(Icons.history),
-          );
-        case TargetPlatform.android:
-          return IconButton(
-            tooltip: 'Storm History',
-            onPressed: () => _showDashboard(context, session),
-            icon: const Icon(Icons.history),
-          );
-        default:
-          assert(false, 'Unexpected platform $Theme.of(context).platform');
-          return const SizedBox.shrink();
-      }
+      return IconButton(
+        tooltip: 'Storm History',
+        onPressed: () => _showDashboard(context, session),
+        icon: const Icon(Icons.history),
+      );
     }
     return const SizedBox.shrink();
   }

@@ -104,7 +104,6 @@ extension CustomThemeBuildContext on BuildContext {
     brightness: Brightness.light,
     scaffoldBackgroundColor: const Color.fromARGB(255, 237, 235, 233),
     barBackgroundColor: const Color(0xE6F9F9F9),
-    textTheme: cupertinoTextTheme(themeLight.colorScheme),
   );
 
   final darkCupertino = CupertinoThemeData(
@@ -114,7 +113,6 @@ extension CustomThemeBuildContext on BuildContext {
     brightness: Brightness.dark,
     scaffoldBackgroundColor: lighten(themeDark.scaffoldBackgroundColor, 0.04),
     barBackgroundColor: themeDark.colorScheme.surface.withValues(alpha: 0.9),
-    textTheme: cupertinoTextTheme(themeDark.colorScheme),
   );
 
   final cupertinoFloatingActionButtonTheme = FloatingActionButtonThemeData(
@@ -125,24 +123,24 @@ extension CustomThemeBuildContext on BuildContext {
   return (
     light: themeLight.copyWith(
       cupertinoOverrideTheme: lightCupertino,
+      typography: Typography.material2021(
+        platform: isIOS ? TargetPlatform.iOS : TargetPlatform.android,
+        colorScheme: themeLight.colorScheme,
+      ),
       splashFactory: isIOS ? NoSplash.splashFactory : null,
+      appBarTheme: isIOS ? _makeCupertinoAppBarTheme(context) : null,
       iconTheme: IconThemeData(color: themeLight.colorScheme.onSurface.withValues(alpha: 0.7)),
+      listTileTheme: _makeListTileTheme(themeLight.colorScheme, isIOS),
       cardTheme:
           isIOS
               ? CardThemeData(
-                color: themeLight.colorScheme.surfaceContainerLowest,
+                color: themeLight.colorScheme.surfaceContainerHigh,
                 elevation: 0,
                 margin: EdgeInsets.zero,
               )
               : null,
-      listTileTheme: isIOS ? _cupertinoListTileTheme(lightCupertino) : null,
-      bottomSheetTheme:
-          isIOS
-              ? BottomSheetThemeData(backgroundColor: lightCupertino.scaffoldBackgroundColor)
-              : null,
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
-      menuTheme:
-          isIOS ? _makeCupertinoMenuThemeData(themeLight.colorScheme.surfaceContainerLowest) : null,
+      menuTheme: isIOS ? _makeCupertinoMenuThemeData() : null,
       sliderTheme: kSliderTheme,
       extensions: [
         lichessCustomColors.harmonized(themeLight.colorScheme),
@@ -152,8 +150,14 @@ extension CustomThemeBuildContext on BuildContext {
     ),
     dark: themeDark.copyWith(
       cupertinoOverrideTheme: darkCupertino,
+      typography: Typography.material2021(
+        platform: isIOS ? TargetPlatform.iOS : TargetPlatform.android,
+        colorScheme: themeDark.colorScheme,
+      ),
       splashFactory: isIOS ? NoSplash.splashFactory : null,
+      appBarTheme: isIOS ? _makeCupertinoAppBarTheme(context) : null,
       iconTheme: IconThemeData(color: themeDark.colorScheme.onSurface.withValues(alpha: 0.7)),
+      listTileTheme: _makeListTileTheme(themeDark.colorScheme, isIOS),
       cardTheme:
           isIOS
               ? CardThemeData(
@@ -162,13 +166,8 @@ extension CustomThemeBuildContext on BuildContext {
                 margin: EdgeInsets.zero,
               )
               : null,
-      listTileTheme: isIOS ? _cupertinoListTileTheme(darkCupertino) : null,
-      bottomSheetTheme:
-          isIOS
-              ? BottomSheetThemeData(backgroundColor: darkCupertino.scaffoldBackgroundColor)
-              : null,
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
-      menuTheme: isIOS ? _makeCupertinoMenuThemeData(themeDark.colorScheme.surface) : null,
+      menuTheme: isIOS ? _makeCupertinoMenuThemeData() : null,
       sliderTheme: kSliderTheme,
       extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
     ),
@@ -188,7 +187,6 @@ extension CustomThemeBuildContext on BuildContext {
     primaryColor: primary,
     primaryContrastingColor: onPrimary,
     brightness: Brightness.dark,
-    textTheme: cupertinoTextTheme(baseTheme.colorScheme),
     scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor.withValues(alpha: 0),
     barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.6),
     applyThemeToAll: true,
@@ -216,7 +214,7 @@ extension CustomThemeBuildContext on BuildContext {
       surfaceBright: baseTheme.colorScheme.surfaceBright.withValues(alpha: baseSurfaceAlpha - 2),
     ),
     cupertinoOverrideTheme: cupertinoTheme,
-    listTileTheme: isIOS ? _cupertinoListTileTheme(cupertinoTheme) : null,
+    listTileTheme: _makeListTileTheme(baseTheme.colorScheme, isIOS),
     cardTheme: isIOS ? const CardThemeData(elevation: 0, margin: EdgeInsets.zero) : null,
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor:
@@ -233,9 +231,7 @@ extension CustomThemeBuildContext on BuildContext {
     ),
     menuTheme:
         isIOS
-            ? _makeCupertinoMenuThemeData(
-              baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
-            )
+            ? _makeCupertinoMenuThemeData()
             : MenuThemeData(
               style: MenuStyle(
                 backgroundColor: WidgetStatePropertyAll(
@@ -244,7 +240,9 @@ extension CustomThemeBuildContext on BuildContext {
               ),
             ),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
-    appBarTheme: baseTheme.appBarTheme.copyWith(backgroundColor: seedColor.withValues(alpha: 0.5)),
+    appBarTheme: (isIOS ? _makeCupertinoAppBarTheme(context) : const AppBarTheme()).copyWith(
+      backgroundColor: seedColor.withValues(alpha: 0.5),
+    ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     pageTransitionsTheme: PageTransitionsTheme(
       builders: {
@@ -262,36 +260,28 @@ extension CustomThemeBuildContext on BuildContext {
   return (light: theme, dark: theme);
 }
 
-MenuThemeData _makeCupertinoMenuThemeData(Color backgroundColor) {
-  return MenuThemeData(
+MenuThemeData _makeCupertinoMenuThemeData() {
+  return const MenuThemeData(
     style: MenuStyle(
-      backgroundColor: WidgetStatePropertyAll(backgroundColor),
-      elevation: const WidgetStatePropertyAll(0),
-      shape: const WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
-      ),
+      elevation: WidgetStatePropertyAll(0),
+      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius)),
     ),
   );
 }
 
-/// Makes a Cupertino text theme based on the given [colors].
-CupertinoTextThemeData cupertinoTextTheme(ColorScheme colors) =>
-    const CupertinoThemeData().textTheme.copyWith(
-      primaryColor: colors.primary,
-      textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(color: colors.onSurface),
-      navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
-        color: colors.onSurface,
-      ),
-      navLargeTitleTextStyle: const CupertinoThemeData().textTheme.navLargeTitleTextStyle.copyWith(
-        color: colors.onSurface,
-      ),
-    );
+ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
+  return ListTileThemeData(
+    iconColor: colorScheme.onSurface.withValues(alpha: 0.7),
+    subtitleTextStyle: TextStyle(
+      color: colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
+    ),
+    contentPadding: isIOS ? const EdgeInsets.symmetric(horizontal: 16) : null,
+  );
+}
 
-ListTileThemeData _cupertinoListTileTheme(CupertinoThemeData cupertinoTheme) => ListTileThemeData(
-  titleTextStyle: cupertinoTheme.textTheme.textStyle.copyWith(fontSize: 16),
-  subtitleTextStyle: cupertinoTheme.textTheme.textStyle.copyWith(
-    fontSize: 14,
-    color: cupertinoTheme.textTheme.textStyle.color?.withValues(alpha: 0.7),
-  ),
-  leadingAndTrailingTextStyle: cupertinoTheme.textTheme.textStyle.copyWith(fontSize: 12),
+AppBarTheme _makeCupertinoAppBarTheme(BuildContext context) => AppBarTheme(
+  toolbarHeight: kMinInteractiveDimensionCupertino,
+  titleTextStyle: AppBarTheme.of(
+    context,
+  ).titleTextStyle?.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
 );

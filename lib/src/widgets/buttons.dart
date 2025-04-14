@@ -27,10 +27,7 @@ class FatButton extends StatelessWidget {
       button: true,
       label: semanticsLabel,
       excludeSemantics: true,
-      child:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoButton.tinted(onPressed: onPressed, child: child)
-              : FilledButton(onPressed: onPressed, child: child),
+      child: FilledButton(onPressed: onPressed, child: child),
     );
   }
 }
@@ -58,10 +55,7 @@ class SecondaryButton extends StatelessWidget {
       button: true,
       label: semanticsLabel,
       excludeSemantics: true,
-      child:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoButton(onPressed: onPressed, child: child)
-              : FilledButton.tonal(onPressed: onPressed, child: child),
+      child: FilledButton.tonal(onPressed: onPressed, child: child),
     );
   }
 }
@@ -75,9 +69,7 @@ class AppBarTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoButton(padding: EdgeInsets.zero, onPressed: onPressed, child: child)
-        : TextButton(onPressed: onPressed, child: child);
+    return TextButton(onPressed: onPressed, child: child);
   }
 }
 
@@ -96,14 +88,7 @@ class AppBarIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoIconButton(
-          padding: EdgeInsets.zero,
-          semanticsLabel: semanticsLabel,
-          onPressed: onPressed,
-          icon: icon,
-        )
-        : IconButton(tooltip: semanticsLabel, icon: icon, onPressed: onPressed);
+    return IconButton(tooltip: semanticsLabel, icon: icon, onPressed: onPressed);
   }
 }
 
@@ -142,9 +127,7 @@ class AdaptiveTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoButton(onPressed: onPressed, child: child)
-        : TextButton(onPressed: onPressed, child: child);
+    return TextButton(onPressed: onPressed, child: child);
   }
 }
 
@@ -158,59 +141,14 @@ class NoPaddingTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: onPressed,
-          minimumSize: const Size(23, 23),
-          child: child,
-        )
-        : TextButton(
-          onPressed: onPressed,
-          style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            minimumSize: Size.zero,
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
-          child: child,
-        );
-  }
-}
-
-/// Cupertino icon button with mandatory semantics label
-class CupertinoIconButton extends StatelessWidget {
-  const CupertinoIconButton({
-    required this.onPressed,
-    this.onLongPress,
-    required this.semanticsLabel,
-    required this.icon,
-    this.padding,
-    super.key,
-  });
-  final VoidCallback? onPressed;
-  final VoidCallback? onLongPress;
-  final Widget icon;
-  final String semanticsLabel;
-
-  /// The amount of space to surround the child inside the bounds of the button.
-  ///
-  /// Defaults to 16.0 pixels.
-  final EdgeInsetsGeometry? padding;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      container: true,
-      enabled: true,
-      button: true,
-      label: semanticsLabel,
-      excludeSemantics: true,
-      child: CupertinoButton(
-        padding: padding,
-        onPressed: onPressed,
-        onLongPress: onLongPress,
-        child: IconTheme.merge(data: const IconThemeData(size: 24.0), child: icon),
+    return TextButton(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
+      child: child,
     );
   }
 }
@@ -350,7 +288,6 @@ class _RepeatButtonState extends State<RepeatButton> {
 /// Platform agnostic icon button.
 ///
 /// Optionally provide a bool to highlight the button
-/// Will use [IconButton] on Android and [CupertinoIconButton] on iOS.
 class PlatformIconButton extends StatelessWidget {
   const PlatformIconButton({
     required this.icon,
@@ -374,36 +311,18 @@ class PlatformIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        final themeData = Theme.of(context);
-        return Theme(
-          data: themeData,
-          child: IconButton(
-            onPressed: onPressed,
-            onLongPress: onLongPress,
-            icon: Icon(icon),
-            tooltip: semanticsLabel,
-            color: highlighted ? themeData.colorScheme.primary : color,
-            iconSize: iconSize,
-            padding: padding,
-          ),
-        );
-      case TargetPlatform.iOS:
-        final themeData = CupertinoTheme.of(context);
-        return CupertinoTheme(
-          data: themeData.copyWith(primaryColor: themeData.textTheme.textStyle.color),
-          child: CupertinoIconButton(
-            onPressed: onPressed,
-            onLongPress: onLongPress,
-            semanticsLabel: semanticsLabel,
-            padding: padding,
-            icon: Icon(icon, color: highlighted ? themeData.primaryColor : color, size: iconSize),
-          ),
-        );
-      default:
-        assert(false, 'Unexpected Platform ${Theme.of(context).platform}');
-        return const SizedBox.shrink();
-    }
+    final themeData = Theme.of(context);
+    return Theme(
+      data: themeData,
+      child: IconButton(
+        onPressed: onPressed,
+        onLongPress: onLongPress,
+        icon: Icon(icon),
+        tooltip: semanticsLabel,
+        color: highlighted ? themeData.colorScheme.primary : color,
+        iconSize: iconSize,
+        padding: padding,
+      ),
+    );
   }
 }

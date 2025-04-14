@@ -22,7 +22,7 @@ abstract class Styles {
   );
   static const mainListTileIconSize = 28.0;
   static final sectionTitle = TextStyle(
-    fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
+    fontSize: 18,
     letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
     fontWeight: FontWeight.bold,
   );

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -62,26 +61,22 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   settingsValue: data.zenMode.label(context),
                   showCupertinoTrailingValue: false,
                   onTap: () {
-                    if (Theme.of(context).platform == TargetPlatform.android) {
-                      showChoicePicker(
-                        context,
-                        choices: Zen.values,
-                        selectedItem: data.zenMode,
-                        labelBuilder: (t) => Text(t.label(context)),
-                        onSelectedItemChanged:
-                            isLoading
-                                ? null
-                                : (Zen? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(accountPreferencesProvider.notifier)
-                                        .setZen(value ?? data.zenMode),
-                                  );
-                                },
-                      );
-                    } else {
-                      Navigator.of(context).push(ZenSettingsScreen.buildRoute(context));
-                    }
+                    showChoicePicker(
+                      context,
+                      choices: Zen.values,
+                      selectedItem: data.zenMode,
+                      labelBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          isLoading
+                              ? null
+                              : (Zen? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(accountPreferencesProvider.notifier)
+                                      .setZen(value ?? data.zenMode),
+                                );
+                              },
+                    );
                   },
                 ),
                 SettingsListTile(
@@ -89,26 +84,22 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   settingsValue: data.pieceNotation.label(context),
                   showCupertinoTrailingValue: false,
                   onTap: () {
-                    if (Theme.of(context).platform == TargetPlatform.android) {
-                      showChoicePicker(
-                        context,
-                        choices: PieceNotation.values,
-                        selectedItem: data.pieceNotation,
-                        labelBuilder: (t) => Text(t.label(context)),
-                        onSelectedItemChanged:
-                            isLoading
-                                ? null
-                                : (PieceNotation? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(accountPreferencesProvider.notifier)
-                                        .setPieceNotation(value ?? data.pieceNotation),
-                                  );
-                                },
-                      );
-                    } else {
-                      Navigator.of(context).push(PieceNotationSettingsScreen.buildRoute(context));
-                    }
+                    showChoicePicker(
+                      context,
+                      choices: PieceNotation.values,
+                      selectedItem: data.pieceNotation,
+                      labelBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          isLoading
+                              ? null
+                              : (PieceNotation? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(accountPreferencesProvider.notifier)
+                                      .setPieceNotation(value ?? data.pieceNotation),
+                                );
+                              },
+                    );
                   },
                 ),
                 SettingsListTile(
@@ -116,26 +107,22 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   settingsValue: data.showRatings.label(context),
                   showCupertinoTrailingValue: false,
                   onTap: () {
-                    if (Theme.of(context).platform == TargetPlatform.android) {
-                      showChoicePicker(
-                        context,
-                        choices: ShowRatings.values,
-                        selectedItem: data.showRatings,
-                        labelBuilder: (t) => Text(t.label(context)),
-                        onSelectedItemChanged:
-                            isLoading
-                                ? null
-                                : (ShowRatings? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(accountPreferencesProvider.notifier)
-                                        .setShowRatings(value ?? data.showRatings),
-                                  );
-                                },
-                      );
-                    } else {
-                      Navigator.of(context).push(ShowRatingsSettingsScreen.buildRoute(context));
-                    }
+                    showChoicePicker(
+                      context,
+                      choices: ShowRatings.values,
+                      selectedItem: data.showRatings,
+                      labelBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          isLoading
+                              ? null
+                              : (ShowRatings? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(accountPreferencesProvider.notifier)
+                                      .setShowRatings(value ?? data.showRatings),
+                                );
+                              },
+                    );
                   },
                   explanation: context.l10n.preferencesExplainShowPlayerRatings,
                 ),
@@ -178,26 +165,22 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   settingsValue: data.takeback.label(context),
                   showCupertinoTrailingValue: false,
                   onTap: () {
-                    if (Theme.of(context).platform == TargetPlatform.android) {
-                      showChoicePicker(
-                        context,
-                        choices: Takeback.values,
-                        selectedItem: data.takeback,
-                        labelBuilder: (t) => Text(t.label(context)),
-                        onSelectedItemChanged:
-                            isLoading
-                                ? null
-                                : (Takeback? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(accountPreferencesProvider.notifier)
-                                        .setTakeback(value ?? data.takeback),
-                                  );
-                                },
-                      );
-                    } else {
-                      Navigator.of(context).push(TakebackSettingsScreen.buildRoute(context));
-                    }
+                    showChoicePicker(
+                      context,
+                      choices: Takeback.values,
+                      selectedItem: data.takeback,
+                      labelBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          isLoading
+                              ? null
+                              : (Takeback? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(accountPreferencesProvider.notifier)
+                                      .setTakeback(value ?? data.takeback),
+                                );
+                              },
+                    );
                   },
                 ),
                 SettingsListTile(
@@ -205,26 +188,22 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   settingsValue: data.autoQueen.label(context),
                   showCupertinoTrailingValue: false,
                   onTap: () {
-                    if (Theme.of(context).platform == TargetPlatform.android) {
-                      showChoicePicker(
-                        context,
-                        choices: AutoQueen.values,
-                        selectedItem: data.autoQueen,
-                        labelBuilder: (t) => Text(t.label(context)),
-                        onSelectedItemChanged:
-                            isLoading
-                                ? null
-                                : (AutoQueen? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(accountPreferencesProvider.notifier)
-                                        .setAutoQueen(value ?? data.autoQueen),
-                                  );
-                                },
-                      );
-                    } else {
-                      Navigator.of(context).push(AutoQueenSettingsScreen.buildRoute(context));
-                    }
+                    showChoicePicker(
+                      context,
+                      choices: AutoQueen.values,
+                      selectedItem: data.autoQueen,
+                      labelBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          isLoading
+                              ? null
+                              : (AutoQueen? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(accountPreferencesProvider.notifier)
+                                      .setAutoQueen(value ?? data.autoQueen),
+                                );
+                              },
+                    );
                   },
                 ),
                 SettingsListTile(
@@ -234,26 +213,22 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   settingsValue: data.autoThreefold.label(context),
                   showCupertinoTrailingValue: false,
                   onTap: () {
-                    if (Theme.of(context).platform == TargetPlatform.android) {
-                      showChoicePicker(
-                        context,
-                        choices: AutoThreefold.values,
-                        selectedItem: data.autoThreefold,
-                        labelBuilder: (t) => Text(t.label(context)),
-                        onSelectedItemChanged:
-                            isLoading
-                                ? null
-                                : (AutoThreefold? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(accountPreferencesProvider.notifier)
-                                        .setAutoThreefold(value ?? data.autoThreefold),
-                                  );
-                                },
-                      );
-                    } else {
-                      Navigator.of(context).push(AutoThreefoldSettingsScreen.buildRoute(context));
-                    }
+                    showChoicePicker(
+                      context,
+                      choices: AutoThreefold.values,
+                      selectedItem: data.autoThreefold,
+                      labelBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          isLoading
+                              ? null
+                              : (AutoThreefold? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(accountPreferencesProvider.notifier)
+                                      .setAutoThreefold(value ?? data.autoThreefold),
+                                );
+                              },
+                    );
                   },
                 ),
                 SettingsListTile(
@@ -289,26 +264,22 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   settingsValue: data.moretime.label(context),
                   showCupertinoTrailingValue: false,
                   onTap: () {
-                    if (Theme.of(context).platform == TargetPlatform.android) {
-                      showChoicePicker(
-                        context,
-                        choices: Moretime.values,
-                        selectedItem: data.moretime,
-                        labelBuilder: (t) => Text(t.label(context)),
-                        onSelectedItemChanged:
-                            isLoading
-                                ? null
-                                : (Moretime? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(accountPreferencesProvider.notifier)
-                                        .setMoretime(value ?? data.moretime),
-                                  );
-                                },
-                      );
-                    } else {
-                      Navigator.of(context).push(MoretimeSettingsScreen.buildRoute(context));
-                    }
+                    showChoicePicker(
+                      context,
+                      choices: Moretime.values,
+                      selectedItem: data.moretime,
+                      labelBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          isLoading
+                              ? null
+                              : (Moretime? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(accountPreferencesProvider.notifier)
+                                      .setMoretime(value ?? data.moretime),
+                                );
+                              },
+                    );
                   },
                 ),
                 SwitchSettingTile(
@@ -350,26 +321,22 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   settingsValue: data.challenge.label(context),
                   showCupertinoTrailingValue: false,
                   onTap: () {
-                    if (Theme.of(context).platform == TargetPlatform.android) {
-                      showChoicePicker(
-                        context,
-                        choices: Challenge.values,
-                        selectedItem: data.challenge,
-                        labelBuilder: (t) => Text(t.label(context)),
-                        onSelectedItemChanged:
-                            isLoading
-                                ? null
-                                : (Challenge? value) {
-                                  _setPref(
-                                    () => ref
-                                        .read(accountPreferencesProvider.notifier)
-                                        .setChallenge(value ?? data.challenge),
-                                  );
-                                },
-                      );
-                    } else {
-                      Navigator.of(context).push(_ChallengeSettingsScreen.buildRoute(context));
-                    }
+                    showChoicePicker(
+                      context,
+                      choices: Challenge.values,
+                      selectedItem: data.challenge,
+                      labelBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged:
+                          isLoading
+                              ? null
+                              : (Challenge? value) {
+                                _setPref(
+                                  () => ref
+                                      .read(accountPreferencesProvider.notifier)
+                                      .setChallenge(value ?? data.challenge),
+                                );
+                              },
+                    );
                   },
                 ),
               ],
@@ -387,537 +354,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
       appBarTitle: Text(context.l10n.preferencesPreferences),
       appBarActions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       body: content,
-    );
-  }
-}
-
-class ZenSettingsScreen extends ConsumerStatefulWidget {
-  const ZenSettingsScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const ZenSettingsScreen(),
-      title: context.l10n.preferencesZenMode,
-    );
-  }
-
-  @override
-  ConsumerState<ZenSettingsScreen> createState() => _ZenSettingsScreenState();
-}
-
-class _ZenSettingsScreenState extends ConsumerState<ZenSettingsScreen> {
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final accountPrefs = ref.watch(accountPreferencesProvider);
-    return accountPrefs.when(
-      data: (data) {
-        if (data == null) {
-          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
-        }
-
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            trailing: isLoading ? const CircularProgressIndicator.adaptive() : null,
-          ),
-          child: ListView(
-            children: [
-              ChoicePicker(
-                choices: Zen.values,
-                selectedItem: data.zenMode,
-                titleBuilder: (t) => Text(t.label(context)),
-                onSelectedItemChanged:
-                    isLoading
-                        ? null
-                        : (Zen? v) async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          try {
-                            await ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setZen(v ?? data.zenMode);
-                          } finally {
-                            setState(() {
-                              isLoading = false;
-                            });
-                          }
-                        },
-              ),
-            ],
-          ),
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text(err.toString())),
-    );
-  }
-}
-
-class PieceNotationSettingsScreen extends ConsumerStatefulWidget {
-  const PieceNotationSettingsScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const PieceNotationSettingsScreen(),
-      title: context.l10n.preferencesPgnPieceNotation,
-    );
-  }
-
-  @override
-  ConsumerState<PieceNotationSettingsScreen> createState() => _PieceNotationSettingsScreenState();
-}
-
-class _PieceNotationSettingsScreenState extends ConsumerState<PieceNotationSettingsScreen> {
-  Future<void>? _pendingSetPieceNotation;
-
-  @override
-  Widget build(BuildContext context) {
-    final accountPrefs = ref.watch(accountPreferencesProvider);
-    return accountPrefs.when(
-      data: (data) {
-        if (data == null) {
-          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
-        }
-
-        return FutureBuilder(
-          future: _pendingSetPieceNotation,
-          builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: PieceNotation.values,
-                    selectedItem: data.pieceNotation,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (PieceNotation? v) {
-                              final future = ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setPieceNotation(v ?? data.pieceNotation);
-                              setState(() {
-                                _pendingSetPieceNotation = future;
-                              });
-                            },
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text(err.toString())),
-    );
-  }
-}
-
-class ShowRatingsSettingsScreen extends ConsumerStatefulWidget {
-  const ShowRatingsSettingsScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const ShowRatingsSettingsScreen(),
-      title: context.l10n.preferencesShowPlayerRatings,
-    );
-  }
-
-  @override
-  ConsumerState<ShowRatingsSettingsScreen> createState() => _ShowRatingsSettingsScreenState();
-}
-
-class _ShowRatingsSettingsScreenState extends ConsumerState<ShowRatingsSettingsScreen> {
-  Future<void>? _pendingSetShowRatings;
-
-  @override
-  Widget build(BuildContext context) {
-    final accountPrefs = ref.watch(accountPreferencesProvider);
-    return accountPrefs.when(
-      data: (data) {
-        if (data == null) {
-          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
-        }
-
-        return FutureBuilder(
-          future: _pendingSetShowRatings,
-          builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: ShowRatings.values,
-                    selectedItem: data.showRatings,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (ShowRatings? v) {
-                              final future = ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setShowRatings(v ?? data.showRatings);
-                              setState(() {
-                                _pendingSetShowRatings = future;
-                              });
-                            },
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text(err.toString())),
-    );
-  }
-}
-
-class TakebackSettingsScreen extends ConsumerStatefulWidget {
-  const TakebackSettingsScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const TakebackSettingsScreen(),
-      title: context.l10n.preferencesTakebacksWithOpponentApproval,
-    );
-  }
-
-  @override
-  ConsumerState<TakebackSettingsScreen> createState() => _TakebackSettingsScreenState();
-}
-
-class _TakebackSettingsScreenState extends ConsumerState<TakebackSettingsScreen> {
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final accountPrefs = ref.watch(accountPreferencesProvider);
-    return accountPrefs.when(
-      data: (data) {
-        if (data == null) {
-          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
-        }
-
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            trailing: isLoading ? const CircularProgressIndicator.adaptive() : null,
-          ),
-          child: ListView(
-            children: [
-              ChoicePicker(
-                choices: Takeback.values,
-                selectedItem: data.takeback,
-                titleBuilder: (t) => Text(t.label(context)),
-                onSelectedItemChanged:
-                    isLoading
-                        ? null
-                        : (Takeback? v) async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          try {
-                            await ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setTakeback(v ?? data.takeback);
-                          } finally {
-                            setState(() {
-                              isLoading = false;
-                            });
-                          }
-                        },
-              ),
-            ],
-          ),
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text(err.toString())),
-    );
-  }
-}
-
-class AutoQueenSettingsScreen extends ConsumerStatefulWidget {
-  const AutoQueenSettingsScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const AutoQueenSettingsScreen(),
-      title: context.l10n.preferencesPromoteToQueenAutomatically,
-    );
-  }
-
-  @override
-  ConsumerState<AutoQueenSettingsScreen> createState() => _AutoQueenSettingsScreenState();
-}
-
-class _AutoQueenSettingsScreenState extends ConsumerState<AutoQueenSettingsScreen> {
-  Future<void>? _pendingSetAutoQueen;
-
-  @override
-  Widget build(BuildContext context) {
-    final accountPrefs = ref.watch(accountPreferencesProvider);
-    return accountPrefs.when(
-      data: (data) {
-        if (data == null) {
-          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
-        }
-
-        return FutureBuilder(
-          future: _pendingSetAutoQueen,
-          builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: AutoQueen.values,
-                    selectedItem: data.autoQueen,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (AutoQueen? v) {
-                              final future = ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setAutoQueen(v ?? data.autoQueen);
-                              setState(() {
-                                _pendingSetAutoQueen = future;
-                              });
-                            },
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text(err.toString())),
-    );
-  }
-}
-
-class AutoThreefoldSettingsScreen extends ConsumerStatefulWidget {
-  const AutoThreefoldSettingsScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const AutoThreefoldSettingsScreen(),
-      title: context.l10n.preferencesClaimDrawOnThreefoldRepetitionAutomatically,
-    );
-  }
-
-  @override
-  ConsumerState<AutoThreefoldSettingsScreen> createState() => _AutoThreefoldSettingsScreenState();
-}
-
-class _AutoThreefoldSettingsScreenState extends ConsumerState<AutoThreefoldSettingsScreen> {
-  Future<void>? _pendingSetAutoThreefold;
-
-  @override
-  Widget build(BuildContext context) {
-    final accountPrefs = ref.watch(accountPreferencesProvider);
-    return accountPrefs.when(
-      data: (data) {
-        if (data == null) {
-          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
-        }
-
-        return FutureBuilder(
-          future: _pendingSetAutoThreefold,
-          builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: AutoThreefold.values,
-                    selectedItem: data.autoThreefold,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (AutoThreefold? v) {
-                              final future = ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setAutoThreefold(v ?? data.autoThreefold);
-                              setState(() {
-                                _pendingSetAutoThreefold = future;
-                              });
-                            },
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text(err.toString())),
-    );
-  }
-}
-
-class MoretimeSettingsScreen extends ConsumerStatefulWidget {
-  const MoretimeSettingsScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const MoretimeSettingsScreen(),
-      title: context.l10n.preferencesGiveMoreTime,
-    );
-  }
-
-  @override
-  ConsumerState<MoretimeSettingsScreen> createState() => _MoretimeSettingsScreenState();
-}
-
-class _MoretimeSettingsScreenState extends ConsumerState<MoretimeSettingsScreen> {
-  Future<void>? _pendingSetMoretime;
-
-  @override
-  Widget build(BuildContext context) {
-    final accountPrefs = ref.watch(accountPreferencesProvider);
-    return accountPrefs.when(
-      data: (data) {
-        if (data == null) {
-          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
-        }
-
-        return FutureBuilder(
-          future: _pendingSetMoretime,
-          builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: Moretime.values,
-                    selectedItem: data.moretime,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (Moretime? v) {
-                              setState(() {
-                                _pendingSetMoretime = ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setMoretime(v ?? data.moretime);
-                              });
-                            },
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text(err.toString())),
-    );
-  }
-}
-
-class _ChallengeSettingsScreen extends ConsumerStatefulWidget {
-  const _ChallengeSettingsScreen();
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const _ChallengeSettingsScreen(),
-      title: context.l10n.letOtherPlayersChallengeYou,
-    );
-  }
-
-  @override
-  ConsumerState<_ChallengeSettingsScreen> createState() => _ChallengeSettingsScreenState();
-}
-
-class _ChallengeSettingsScreenState extends ConsumerState<_ChallengeSettingsScreen> {
-  Future<void>? _pendingSetChallenge;
-
-  @override
-  Widget build(BuildContext context) {
-    final accountPrefs = ref.watch(accountPreferencesProvider);
-    return accountPrefs.when(
-      data: (data) {
-        if (data == null) {
-          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
-        }
-
-        return FutureBuilder(
-          future: _pendingSetChallenge,
-          builder: (context, snapshot) {
-            return CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                trailing:
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? const CircularProgressIndicator.adaptive()
-                        : null,
-              ),
-              child: ListView(
-                children: [
-                  ChoicePicker(
-                    choices: Challenge.values,
-                    selectedItem: data.challenge,
-                    titleBuilder: (t) => Text(t.label(context)),
-                    onSelectedItemChanged:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : (Challenge? v) {
-                              final future = ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setChallenge(v ?? data.challenge);
-                              setState(() {
-                                _pendingSetChallenge = future;
-                              });
-                            },
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text(err.toString())),
     );
   }
 }

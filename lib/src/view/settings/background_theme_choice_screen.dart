@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -37,15 +36,7 @@ class BackgroundChoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
-  }
-
-  Widget _androidBuilder(BuildContext context) {
     return Scaffold(appBar: AppBar(title: Text(context.l10n.background)), body: _Body());
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(navigationBar: const CupertinoNavigationBar(), child: _Body());
   }
 }
 
@@ -606,7 +597,6 @@ class _BackgroundTheme extends StatelessWidget {
       brightness: Brightness.dark,
       scaffoldBackgroundColor: baseTheme.scaffoldBackgroundColor,
       barBackgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
-      textTheme: cupertinoTextTheme(baseTheme.colorScheme),
     );
 
     return Theme(

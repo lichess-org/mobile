@@ -152,8 +152,6 @@ class _ChoiceChip extends StatelessWidget {
             ? scaffoldOpacity > 0
                 ? Colors.white10
                 : ColorScheme.of(context).surfaceContainerLow
-            : Theme.of(context).platform == TargetPlatform.iOS
-            ? Colors.white70
             : ColorScheme.of(context).onSurface.withValues(alpha: 0.08);
 
     return Opacity(

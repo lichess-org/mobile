@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -146,7 +145,7 @@ List<Widget> makeFinishedGameShareMenuItemButtons(
 }) {
   return [
     PlatformContextMenuAction(
-      icon: Theme.of(context).platform == TargetPlatform.iOS ? CupertinoIcons.share : Icons.share,
+      icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
       label: context.l10n.mobileShareGameURL,
       onPressed: () {
         launchShareDialog(context, uri: lichessUri('/$gameId/${orientation.name}'));

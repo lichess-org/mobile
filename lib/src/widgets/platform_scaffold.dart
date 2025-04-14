@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const kCupertinoAppBarWithActionPadding = EdgeInsetsDirectional.only(start: 16.0, end: 8.0);
 
@@ -77,7 +76,8 @@ class PlatformScaffold extends StatelessWidget {
   /// Typically used for a [BottomNavigationBar].
   final Widget? bottomNavigationBar;
 
-  Widget _androidBuilder(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       backgroundColor: backgroundColor,
@@ -93,36 +93,6 @@ class PlatformScaffold extends StatelessWidget {
       bottomNavigationBar: bottomNavigationBar,
     );
   }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      navigationBar: CupertinoNavigationBar(
-        padding: appBarActions.isNotEmpty ? kCupertinoAppBarWithActionPadding : null,
-        middle: appBarTitle,
-        leading: appBarLeading,
-        bottom: appBarBottom,
-        trailing:
-            appBarActions.isNotEmpty
-                ? Row(mainAxisSize: MainAxisSize.min, children: appBarActions)
-                : null,
-        enableBackgroundFilterBlur: appBarEnableBackgroundFilterBlur,
-        automaticBackgroundVisibility: appBarAutomaticBackgroundVisibility,
-      ),
-      backgroundColor: backgroundColor,
-      child: Column(
-        children: <Widget>[
-          Expanded(child: body),
-          if (bottomNavigationBar != null) bottomNavigationBar!,
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _androidBuilder, iosBuilder: _iosBuilder);
-  }
 }
 
 /// A platform-aware circular loading indicator to be used in [PlatformAppBar.actions].
@@ -131,17 +101,13 @@ class PlatformAppBarLoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      iosBuilder: (_) => const CircularProgressIndicator.adaptive(),
-      androidBuilder:
-          (_) => const Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: SizedBox(
-              height: 24,
-              width: 24,
-              child: Center(child: CircularProgressIndicator()),
-            ),
-          ),
+    return const Padding(
+      padding: EdgeInsets.only(right: 16),
+      child: SizedBox(
+        height: 24,
+        width: 24,
+        child: Center(child: CircularProgressIndicator.adaptive()),
+      ),
     );
   }
 }

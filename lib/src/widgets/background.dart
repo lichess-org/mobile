@@ -14,8 +14,7 @@ const kBackgroundImageBlurFactor = 8.0;
 /// The background can be a color or an image. If an image is provided, it will be used instead of
 /// the color, and the color will be ignored.
 ///
-/// Since the background image is always full screen, this widget should be used to wrap only [Scaffold]
-/// or [CupertinoPageScaffold] widgets.
+/// Since the background image is always full screen, this widget should be used to wrap only [Scaffold] widgets.
 class FullScreenBackground extends ConsumerWidget {
   const FullScreenBackground({required this.child, super.key});
 

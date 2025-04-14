@@ -62,12 +62,10 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
         child: ListView.separated(
           itemCount: PieceSet.values.length,
           separatorBuilder:
-              (_, _) => PlatformDivider(
-                height: 1,
-                // on iOS: 14 (default indent) + 16 (padding)
-                indent: Theme.of(context).platform == TargetPlatform.iOS ? 14 + 16 : null,
-                color: Theme.of(context).platform == TargetPlatform.iOS ? null : Colors.transparent,
-              ),
+              (_, _) =>
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? const PlatformDivider()
+                      : const SizedBox.shrink(),
           itemBuilder: (context, index) {
             final pieceSet = PieceSet.values[index];
             return PlatformListTile(

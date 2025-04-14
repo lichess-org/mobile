@@ -248,10 +248,7 @@ class _BottomBar extends ConsumerWidget {
               );
             },
             label: 'Share this puzzle',
-            icon:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoIcons.share
-                    : Icons.share,
+            icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
           ),
         if (streak.finished)
           BottomBarButton(

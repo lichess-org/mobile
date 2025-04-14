@@ -1,10 +1,8 @@
 import 'package:chessground/chessground.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -67,21 +65,17 @@ class _Body extends ConsumerWidget {
               settingsValue: pieceShiftMethodl10n(context, boardPrefs.pieceShiftMethod),
               showCupertinoTrailingValue: false,
               onTap: () {
-                if (Theme.of(context).platform == TargetPlatform.android) {
-                  showChoicePicker(
-                    context,
-                    choices: PieceShiftMethod.values,
-                    selectedItem: boardPrefs.pieceShiftMethod,
-                    labelBuilder: (t) => Text(pieceShiftMethodl10n(context, t)),
-                    onSelectedItemChanged: (PieceShiftMethod? value) {
-                      ref
-                          .read(boardPreferencesProvider.notifier)
-                          .setPieceShiftMethod(value ?? PieceShiftMethod.either);
-                    },
-                  );
-                } else {
-                  Navigator.of(context).push(PieceShiftMethodSettingsScreen.buildRoute(context));
-                }
+                showChoicePicker(
+                  context,
+                  choices: PieceShiftMethod.values,
+                  selectedItem: boardPrefs.pieceShiftMethod,
+                  labelBuilder: (t) => Text(pieceShiftMethodl10n(context, t)),
+                  onSelectedItemChanged: (PieceShiftMethod? value) {
+                    ref
+                        .read(boardPreferencesProvider.notifier)
+                        .setPieceShiftMethod(value ?? PieceShiftMethod.either);
+                  },
+                );
               },
             ),
             SettingsListTile(
@@ -91,21 +85,17 @@ class _Body extends ConsumerWidget {
               settingsValue: boardPrefs.castlingMethod.l10n(context.l10n),
               showCupertinoTrailingValue: false,
               onTap: () {
-                if (Theme.of(context).platform == TargetPlatform.android) {
-                  showChoicePicker(
-                    context,
-                    choices: CastlingMethod.values,
-                    selectedItem: boardPrefs.castlingMethod,
-                    labelBuilder: (t) => Text(t.l10n(context.l10n)),
-                    onSelectedItemChanged: (CastlingMethod? value) {
-                      ref
-                          .read(boardPreferencesProvider.notifier)
-                          .setCastlingMethod(value ?? CastlingMethod.kingOverRook);
-                    },
-                  );
-                } else {
-                  Navigator.of(context).push(CastlingMethodSettingsScreen.buildRoute(context));
-                }
+                showChoicePicker(
+                  context,
+                  choices: CastlingMethod.values,
+                  selectedItem: boardPrefs.castlingMethod,
+                  labelBuilder: (t) => Text(t.l10n(context.l10n)),
+                  onSelectedItemChanged: (CastlingMethod? value) {
+                    ref
+                        .read(boardPreferencesProvider.notifier)
+                        .setCastlingMethod(value ?? CastlingMethod.kingOverRook);
+                  },
+                );
               },
             ),
             SwitchSettingTile(
@@ -123,21 +113,17 @@ class _Body extends ConsumerWidget {
                   'How the target square is highlighted when dragging a piece.',
               settingsValue: dragTargetKindLabel(boardPrefs.dragTargetKind),
               onTap: () {
-                if (Theme.of(context).platform == TargetPlatform.android) {
-                  showChoicePicker(
-                    context,
-                    choices: DragTargetKind.values,
-                    selectedItem: boardPrefs.dragTargetKind,
-                    labelBuilder: (t) => Text(dragTargetKindLabel(t)),
-                    onSelectedItemChanged: (DragTargetKind? value) {
-                      ref
-                          .read(boardPreferencesProvider.notifier)
-                          .setDragTargetKind(value ?? DragTargetKind.circle);
-                    },
-                  );
-                } else {
-                  Navigator.of(context).push(DragTargetKindSettingsScreen.buildRoute(context));
-                }
+                showChoicePicker(
+                  context,
+                  choices: DragTargetKind.values,
+                  selectedItem: boardPrefs.dragTargetKind,
+                  labelBuilder: (t) => Text(dragTargetKindLabel(t)),
+                  onSelectedItemChanged: (DragTargetKind? value) {
+                    ref
+                        .read(boardPreferencesProvider.notifier)
+                        .setDragTargetKind(value ?? DragTargetKind.circle);
+                  },
+                );
               },
             ),
             SwitchSettingTile(
@@ -186,20 +172,16 @@ class _Body extends ConsumerWidget {
               settingsLabel: const Text('Clock position'),
               settingsValue: boardPrefs.clockPosition.label,
               onTap: () {
-                if (Theme.of(context).platform == TargetPlatform.android) {
-                  showChoicePicker(
-                    context,
-                    choices: ClockPosition.values,
-                    selectedItem: boardPrefs.clockPosition,
-                    labelBuilder: (t) => Text(t.label),
-                    onSelectedItemChanged:
-                        (ClockPosition? value) => ref
-                            .read(boardPreferencesProvider.notifier)
-                            .setClockPosition(value ?? ClockPosition.right),
-                  );
-                } else {
-                  Navigator.of(context).push(BoardClockPositionScreen.buildRoute(context));
-                }
+                showChoicePicker(
+                  context,
+                  choices: ClockPosition.values,
+                  selectedItem: boardPrefs.clockPosition,
+                  labelBuilder: (t) => Text(t.label),
+                  onSelectedItemChanged:
+                      (ClockPosition? value) => ref
+                          .read(boardPreferencesProvider.notifier)
+                          .setClockPosition(value ?? ClockPosition.right),
+                );
               },
             ),
             SwitchSettingTile(
@@ -220,22 +202,18 @@ class _Body extends ConsumerWidget {
               settingsLabel: const Text('Material'), //TODO: l10n
               settingsValue: boardPrefs.materialDifferenceFormat.l10n(AppLocalizations.of(context)),
               onTap: () {
-                if (Theme.of(context).platform == TargetPlatform.android) {
-                  showChoicePicker(
-                    context,
-                    choices: MaterialDifferenceFormat.values,
-                    selectedItem: boardPrefs.materialDifferenceFormat,
-                    labelBuilder: (t) => Text(t.label),
-                    onSelectedItemChanged:
-                        (MaterialDifferenceFormat? value) => ref
-                            .read(boardPreferencesProvider.notifier)
-                            .setMaterialDifferenceFormat(
-                              value ?? MaterialDifferenceFormat.materialDifference,
-                            ),
-                  );
-                } else {
-                  Navigator.of(context).push(MaterialDifferenceFormatScreen.buildRoute(context));
-                }
+                showChoicePicker(
+                  context,
+                  choices: MaterialDifferenceFormat.values,
+                  selectedItem: boardPrefs.materialDifferenceFormat,
+                  labelBuilder: (t) => Text(t.label),
+                  onSelectedItemChanged:
+                      (MaterialDifferenceFormat? value) => ref
+                          .read(boardPreferencesProvider.notifier)
+                          .setMaterialDifferenceFormat(
+                            value ?? MaterialDifferenceFormat.materialDifference,
+                          ),
+                );
               },
             ),
             SwitchSettingTile(
@@ -254,203 +232,6 @@ class _Body extends ConsumerWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-class PieceShiftMethodSettingsScreen extends ConsumerWidget {
-  const PieceShiftMethodSettingsScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const PieceShiftMethodSettingsScreen(),
-      title: context.l10n.preferencesHowDoYouMovePieces,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final pieceShiftMethod = ref.watch(
-      boardPreferencesProvider.select((state) => state.pieceShiftMethod),
-    );
-
-    void onChanged(PieceShiftMethod? value) {
-      ref
-          .read(boardPreferencesProvider.notifier)
-          .setPieceShiftMethod(value ?? PieceShiftMethod.either);
-    }
-
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: SafeArea(
-        child: ListView(
-          children: [
-            ChoicePicker(
-              notchedTile: true,
-              choices: PieceShiftMethod.values,
-              selectedItem: pieceShiftMethod,
-              titleBuilder: (t) => Text(pieceShiftMethodl10n(context, t)),
-              onSelectedItemChanged: onChanged,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CastlingMethodSettingsScreen extends ConsumerWidget {
-  const CastlingMethodSettingsScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const CastlingMethodSettingsScreen(),
-      title: context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final castlingMethod = ref.watch(
-      boardPreferencesProvider.select((state) => state.castlingMethod),
-    );
-
-    void onChanged(CastlingMethod? value) {
-      ref
-          .read(boardPreferencesProvider.notifier)
-          .setCastlingMethod(value ?? CastlingMethod.kingOverRook);
-    }
-
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: ListView(
-        children: [
-          ChoicePicker(
-            notchedTile: true,
-            choices: CastlingMethod.values,
-            selectedItem: castlingMethod,
-            titleBuilder: (t) => Text(t.l10n(context.l10n)),
-            onSelectedItemChanged: onChanged,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class BoardClockPositionScreen extends ConsumerWidget {
-  const BoardClockPositionScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const BoardClockPositionScreen(),
-      title: 'Clock position',
-    );
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final clockPosition = ref.watch(
-      boardPreferencesProvider.select((state) => state.clockPosition),
-    );
-    void onChanged(ClockPosition? value) =>
-        ref.read(boardPreferencesProvider.notifier).setClockPosition(value ?? ClockPosition.right);
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: SafeArea(
-        child: ListView(
-          children: [
-            ChoicePicker(
-              choices: ClockPosition.values,
-              selectedItem: clockPosition,
-              titleBuilder: (t) => Text(t.label),
-              onSelectedItemChanged: onChanged,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class MaterialDifferenceFormatScreen extends ConsumerWidget {
-  const MaterialDifferenceFormatScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const MaterialDifferenceFormatScreen(),
-      title: 'Material',
-    );
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final materialDifferenceFormat = ref.watch(
-      boardPreferencesProvider.select((state) => state.materialDifferenceFormat),
-    );
-    void onChanged(MaterialDifferenceFormat? value) => ref
-        .read(boardPreferencesProvider.notifier)
-        .setMaterialDifferenceFormat(value ?? MaterialDifferenceFormat.materialDifference);
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: ListView(
-        children: [
-          ChoicePicker(
-            choices: MaterialDifferenceFormat.values,
-            selectedItem: materialDifferenceFormat,
-            titleBuilder: (t) => Text(t.label),
-            onSelectedItemChanged: onChanged,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class DragTargetKindSettingsScreen extends ConsumerWidget {
-  const DragTargetKindSettingsScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const DragTargetKindSettingsScreen(),
-      title: 'Dragged piece target',
-    );
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final dragTargetKind = ref.watch(
-      boardPreferencesProvider.select((state) => state.dragTargetKind),
-    );
-
-    void onChanged(DragTargetKind? value) {
-      ref.read(boardPreferencesProvider.notifier).setDragTargetKind(value ?? DragTargetKind.circle);
-    }
-
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: SafeArea(
-        child: ListView(
-          children: [
-            Padding(
-              padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
-              child: const Text('How the target square is highlighted when dragging a piece.'),
-            ),
-            ChoicePicker(
-              notchedTile: true,
-              choices: DragTargetKind.values,
-              selectedItem: dragTargetKind,
-              titleBuilder: (t) => Text(dragTargetKindLabel(t)),
-              onSelectedItemChanged: onChanged,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
