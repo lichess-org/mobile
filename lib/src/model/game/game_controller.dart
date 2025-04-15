@@ -65,18 +65,13 @@ class GameController extends _$GameController {
 
   static Uri gameSocketUri(GameFullId gameFullId) => Uri(path: '/play/$gameFullId/v6');
 
+  SocketPool get _socketPool => ref.read(socketPoolProvider);
+
   ChessClock? _clock;
   late SocketClient _socketClient;
 
   @override
   Future<GameState> build(GameFullId gameFullId) {
-    final socketPool = ref.watch(socketPoolProvider);
-
-    _socketClient = socketPool.open(gameSocketUri(gameFullId), forceReconnect: true);
-    _socketEventVersion = null;
-    _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _opponentLeftCountdownTimer?.cancel();
@@ -85,6 +80,8 @@ class GameController extends _$GameController {
       _clock?.dispose();
       _onFlagThrottler.cancel();
     });
+
+    listenToSocketEvents();
 
     return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) async {
       final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
@@ -148,6 +145,19 @@ class GameController extends _$GameController {
         liveClock: _liveClock,
       );
     });
+  }
+
+  /// Starts listening to game socket events.
+  void listenToSocketEvents() {
+    _socketClient = _socketPool.open(gameSocketUri(gameFullId), forceReconnect: true);
+    _socketEventVersion = null;
+    _socketSubscription?.cancel();
+    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
+  }
+
+  /// Stops listening to game socket events.
+  void stopListeningToSocketEvents() {
+    _socketSubscription?.cancel();
   }
 
   void userMove(NormalMove move, {bool? isDrop, bool? isPremove}) {
