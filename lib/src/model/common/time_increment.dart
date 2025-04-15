@@ -4,7 +4,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 
 /// A pair of time and increment in seconds used as game clock
 @immutable
-class TimeIncrement {
+class TimeIncrement implements Comparable<TimeIncrement> {
   const TimeIncrement(this.time, this.increment) : assert(time >= 0 && increment >= 0);
 
   TimeIncrement.fromDurations(Duration time, Duration increment)
@@ -53,6 +53,11 @@ class TimeIncrement {
 
   @override
   String toString() => 'TimeIncrement($time+$increment)';
+
+  @override
+  int compareTo(TimeIncrement other) {
+    return estimatedDuration.compareTo(other.estimatedDuration);
+  }
 }
 
 /// Displays a chess clock time in minutes from an amount of seconds

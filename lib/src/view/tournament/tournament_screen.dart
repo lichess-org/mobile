@@ -90,7 +90,8 @@ class _Body extends ConsumerWidget {
         appBar: AppBar(
           title: _Title(state: state),
           actions: [
-            SocketPingRating(socketUri: TournamentController.socketUri(id)),
+            if (state.tournament.isFinished != true)
+              SocketPingRating(socketUri: TournamentController.socketUri(id)),
             if (timeLeft != null)
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
@@ -100,7 +101,8 @@ class _Body extends ConsumerWidget {
                     if (state.tournament.timeToStart != null)
                       Text(context.l10n.startingIn, style: const TextStyle(fontSize: 14)),
                     CountdownClockBuilder(
-                      timeLeft: timeLeft,
+                      timeLeft: timeLeft.$1,
+                      clockUpdatedAt: timeLeft.$2,
                       active: true,
                       tickInterval: const Duration(seconds: 1),
                       builder:
@@ -533,7 +535,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
       children: [
         if (isLoggedIn)
           joinOrLeaveInProgress
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator.adaptive())
               : BottomBarButton(
                 label: widget.state.joined ? context.l10n.pause : context.l10n.join,
                 icon: widget.state.joined ? Icons.pause : Icons.play_arrow,

@@ -293,7 +293,7 @@ class TournamentMeta with _$TournamentMeta {
   const factory TournamentMeta({
     required TournamentId id,
     required String name,
-    required Duration timeLeft,
+    required ({Duration timeLeft, DateTime at}) clock,
     required bool berserkable,
     required ({int white, int black}) ranks,
   }) = _TournamentMeta;

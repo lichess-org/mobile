@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
@@ -69,30 +70,35 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   Widget build(BuildContext context) {
     final tournamentAsync = ref.watch(tournamentsProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.tournaments),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(text: _ViewMode.completed.l10n(context)),
-            Tab(text: _ViewMode.ongoing.l10n(context)),
-            Tab(text: _ViewMode.upcoming.l10n(context)),
-          ],
-        ),
-      ),
-      body: switch (tournamentAsync) {
-        AsyncData(:final value) => TabBarView(
-          controller: _tabController,
-          children: <Widget>[
-            _TournamentListBody(tournaments: value.finished),
-            _TournamentListBody(tournaments: value.started),
-            _TournamentListBody(tournaments: value.created),
-          ],
-        ),
-        AsyncError(:final error) => Center(child: Text('Could not load tournaments: $error')),
-        _ => const Center(child: CircularProgressIndicator()),
+    return FocusDetector(
+      onFocusRegained: () {
+        ref.invalidate(tournamentsProvider);
       },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(context.l10n.arenaArenaTournaments),
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: <Widget>[
+              Tab(text: _ViewMode.completed.l10n(context)),
+              Tab(text: _ViewMode.ongoing.l10n(context)),
+              Tab(text: _ViewMode.upcoming.l10n(context)),
+            ],
+          ),
+        ),
+        body: switch (tournamentAsync) {
+          AsyncData(:final value) => TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              _TournamentListBody(tournaments: value.finished),
+              _TournamentListBody(tournaments: value.started),
+              _TournamentListBody(tournaments: value.created),
+            ],
+          ),
+          AsyncError(:final error) => Center(child: Text('Could not load tournaments: $error')),
+          _ => const Center(child: CircularProgressIndicator()),
+        },
+      ),
     );
   }
 }
@@ -113,12 +119,28 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
   Widget build(BuildContext context) {
     final tournamentListItems =
         widget.tournaments
-            .sorted((a, b) {
-              final cmp = a.startsAt.compareTo(b.startsAt);
-              if (cmp != 0) return cmp;
-              return a.position.compareTo(b.position);
-            })
             .where((tournament) => playSupportedVariants.contains(tournament.variant))
+            .sorted((a, b) {
+              final aVariant = a.variant;
+              final bVariant = b.variant;
+              if (aVariant == Variant.standard && bVariant != Variant.standard) {
+                return -1;
+              } else if (aVariant != Variant.standard && bVariant == Variant.standard) {
+                return 1;
+              }
+
+              final aMaxRating = a.maxRating;
+              final bMaxRating = b.maxRating;
+              if (aMaxRating == null && bMaxRating != null) {
+                return -1;
+              } else if (aMaxRating != null && bMaxRating == null) {
+                return 1;
+              } else if (aMaxRating != null && bMaxRating != null) {
+                return aMaxRating.compareTo(bMaxRating);
+              } else {
+                return a.timeIncrement.compareTo(b.timeIncrement);
+              }
+            })
             .map((tournament) => _TournamentListItem(tournament: tournament))
             .toList();
 

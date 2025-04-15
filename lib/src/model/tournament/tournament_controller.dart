@@ -46,7 +46,7 @@ class TournamentController extends _$TournamentController {
 
     if (tournament.timeToStart != null) {
       _startingTimer?.cancel();
-      _startingTimer = Timer(tournament.timeToStart!, () async {
+      _startingTimer = Timer(tournament.timeToStart!.$1, () async {
         if (state.hasValue) {
           final tour = await ref
               .read(tournamentRepositoryProvider)

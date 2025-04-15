@@ -138,7 +138,6 @@ class TournamentListItem with _$TournamentListItem {
     required String fullName,
     required TimeIncrement timeIncrement,
     required bool rated,
-    required Duration? timeToStart,
     required DateTime startsAt,
     required DateTime finishesAt,
     required int? maxRating,
@@ -146,13 +145,15 @@ class TournamentListItem with _$TournamentListItem {
     required int nbPlayers,
     required Perf perf,
     required int position,
-    required TournamentFreq freq,
+    required TournamentFreq? freq,
     required Variant variant,
     required LightUser? winner,
   }) = _TournamentListItem;
 
   factory TournamentListItem.fromServerJson(Map<String, Object?> json) =>
       _tournamentListItemFromPick(pick(json).required());
+
+  bool get isSystemTournament => freq != null;
 }
 
 TournamentListItem _tournamentListItemFromPick(RequiredPick pick) {
@@ -168,8 +169,7 @@ TournamentListItem _tournamentListItemFromPick(RequiredPick pick) {
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
     position: pick('perf', 'position').asIntOrThrow(),
-    freq: pick('schedule', 'freq').asTournamentFreqOrThrow(),
-    timeToStart: pick('secondsToStart').asDurationFromSecondsOrNull(),
+    freq: pick('schedule').letOrNull((p) => p('freq').asTournamentFreqOrThrow()),
     startsAt: pick('startsAt').asDateTimeFromMillisecondsOrThrow(),
     variant: pick('variant').asVariantOrThrow(),
     winner: pick('winner').asLightUserOrNull(),
@@ -198,8 +198,8 @@ class Tournament with _$Tournament {
     required bool? isFinished,
     required bool? isStarted,
     required Duration duration,
-    required Duration? timeToStart,
-    required Duration? timeToFinish,
+    required (Duration, DateTime)? timeToStart,
+    required (Duration, DateTime)? timeToFinish,
     required TournamentMe? me,
     required int nbPlayers,
     required StandingPage? standing,
@@ -226,8 +226,12 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     rated: pick('rated').asBoolOrFalse(),
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
-    timeToStart: pick('secondsToStart').asDurationFromSecondsOrNull(),
-    timeToFinish: pick('secondsToFinish').asDurationFromSecondsOrNull(),
+    timeToStart: pick(
+      'secondsToStart',
+    ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
+    timeToFinish: pick(
+      'secondsToFinish',
+    ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
     me: pick('me').asTournamentMeOrNull(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     standing: pick('standing').asStandingPageOrNull(),
@@ -251,8 +255,12 @@ Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick 
             : tournament.featuredGame,
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
-    timeToStart: pick('secondsToStart').asDurationFromSecondsOrNull(),
-    timeToFinish: pick('secondsToFinish').asDurationFromSecondsOrNull(),
+    timeToStart: pick(
+      'secondsToStart',
+    ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
+    timeToFinish: pick(
+      'secondsToFinish',
+    ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
     me: pick('me').asTournamentMeOrNull(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     standing: pick('standing').asStandingPageOrNull(),

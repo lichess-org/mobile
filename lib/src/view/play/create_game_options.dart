@@ -48,7 +48,7 @@ class CreateGameOptions extends ConsumerWidget {
                 Navigator.of(context).push(TournamentListScreen.buildRoute(context));
               },
               icon: LichessIcons.tournament_cup,
-              label: context.l10n.tournaments,
+              label: context.l10n.arenaArenaTournaments,
             ),
           ],
         ),
