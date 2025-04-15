@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -18,6 +19,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/localized_piece.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
@@ -292,6 +294,24 @@ class GameBody extends ConsumerWidget {
                         ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
                       },
                       zenMode: gameState.isZenModeActive,
+                      squareSemanticValueBuilder:
+                          (highlighted, selected) => highlighted.piece?.localizedName(context),
+                      squareSemanticHintBuilder: (highlighted, selected) {
+                        if (selected != null) {
+                          final move = NormalMove(from: selected.square, to: highlighted.square);
+                          if (gameState.currentPosition.isLegal(move)) {
+                            final san = gameState.currentPosition.makeSanUnchecked(move).$2;
+                            return 'Tap to play $san';
+                          } else {
+                            return 'Tap to deselect ${selected.square.name}';
+                          }
+                        } else if (highlighted.piece != null &&
+                            gameState.currentPosition.turn == highlighted.piece!.color) {
+                          return 'Tap to select ${highlighted.square.name}';
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -389,6 +409,18 @@ class GameBody extends ConsumerWidget {
             withImmersiveMode:
                 ref.read(boardPreferencesProvider).immersiveModeWhilePlaying ?? false,
           );
+        }
+      }
+
+      // Check if the last move in the game has changed
+      if (prev?.value?.game.lastMove != state.value?.game.lastMove) {
+        // If was the oppenent's turn and the last move is not null
+        if (prev?.value?.game.isMyTurn == false && state.value?.game.lastMove != null) {
+          final prevPosition = prev?.value?.currentPosition;
+          final lastMove = state.value?.game.lastMove;
+          final san = prevPosition!.makeSanUnchecked(lastMove!).$2;
+          // Announce the move using the SemanticsService for accessibility
+          SemanticsService.announce(san, TextDirection.ltr);
         }
       }
     }

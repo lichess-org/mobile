@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/utils/localized_piece.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 class AnalysisBoard extends ConsumerStatefulWidget {
@@ -109,6 +110,23 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
           newShapeColor: boardPrefs.shapeColor.color,
         ),
       ),
+      squareSemanticValueBuilder: (highlighted, _) => highlighted.piece?.localizedName(context),
+      squareSemanticHintBuilder: (highlighted, selected) {
+        if (selected != null) {
+          final move = NormalMove(from: selected.square, to: highlighted.square);
+          if (analysisState.currentPosition.isLegal(move)) {
+            final san = analysisState.currentPosition.makeSanUnchecked(move).$2;
+            return 'Tap to play $san';
+          } else {
+            return 'Tap to deselect ${selected.square.name}';
+          }
+        } else if (highlighted.piece != null &&
+            analysisState.currentPosition.turn == highlighted.piece!.color) {
+          return 'Tap to select ${highlighted.square.name}';
+        } else {
+          return null;
+        }
+      },
     );
   }
 

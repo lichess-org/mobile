@@ -53,6 +53,8 @@ class BoardTable extends ConsumerStatefulWidget {
     this.showEngineGaugePlaceholder = false,
     this.boardKey,
     this.zenMode = false,
+    this.squareSemanticHintBuilder,
+    this.squareSemanticValueBuilder,
     super.key,
   }) : assert(
          fen != null || interactiveBoardParams != null,
@@ -74,7 +76,9 @@ class BoardTable extends ConsumerStatefulWidget {
       onSelectMove = null,
       boardOverlay = null,
       boardKey = null,
-      zenMode = false;
+      zenMode = false,
+      squareSemanticHintBuilder = null,
+      squareSemanticValueBuilder = null;
 
   final String? fen;
 
@@ -122,6 +126,10 @@ class BoardTable extends ConsumerStatefulWidget {
 
   /// If true, the move list will be hidden
   final bool zenMode;
+
+  final SemanticBuilder? squareSemanticHintBuilder;
+
+  final SemanticBuilder? squareSemanticValueBuilder;
 
   @override
   ConsumerState<BoardTable> createState() => _BoardTableState();
@@ -299,6 +307,8 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   boardKey: widget.boardKey,
                   boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
+                  squareSemanticHintBuilder: widget.squareSemanticHintBuilder,
+                  squareSemanticValueBuilder: widget.squareSemanticValueBuilder,
                 ),
               ),
               Expanded(
@@ -351,6 +361,8 @@ class _BoardWidget extends StatelessWidget {
     required this.settings,
     this.boardOverlay,
     this.error,
+    this.squareSemanticHintBuilder,
+    this.squareSemanticValueBuilder,
     this.boardKey,
   });
 
@@ -364,6 +376,8 @@ class _BoardWidget extends StatelessWidget {
   final String? error;
   final Widget? boardOverlay;
   final GlobalKey? boardKey;
+  final SemanticBuilder? squareSemanticHintBuilder;
+  final SemanticBuilder? squareSemanticValueBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -376,6 +390,8 @@ class _BoardWidget extends StatelessWidget {
       lastMove: lastMove,
       shapes: shapes,
       settings: settings,
+      squareSemanticHintBuilder: squareSemanticHintBuilder,
+      squareSemanticValueBuilder: squareSemanticValueBuilder,
     );
 
     if (boardOverlay != null) {
