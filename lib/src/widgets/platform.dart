@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// A simple widget that builds different things on different platforms.
 class PlatformWidget extends StatelessWidget {
@@ -21,8 +20,6 @@ class PlatformWidget extends StatelessWidget {
     }
   }
 }
-
-typedef ConsumerWidgetBuilder = Widget Function(BuildContext context, WidgetRef ref);
 
 class PlatformShareIcon extends StatelessWidget {
   const PlatformShareIcon({super.key});

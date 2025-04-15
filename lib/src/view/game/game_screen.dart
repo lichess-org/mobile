@@ -24,10 +24,10 @@ import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_settings.dart';
-import 'package:lichess_mobile/src/view/game/ping_rating.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -194,12 +194,14 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                 )
                 : const LoadGameError('Could not create the game.');
 
+        final gameSocketUri = gameId != null ? GameController.gameSocketUri(gameId) : null;
+
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
-              data: (prevent) => prevent ? const _PingRating() : null,
-              orElse: () => const _PingRating(),
+              data: (prevent) => prevent ? SocketPingRating(socketUri: gameSocketUri) : null,
+              orElse: () => SocketPingRating(socketUri: gameSocketUri),
             ),
             title:
                 gameId != null
@@ -232,7 +234,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
         return Scaffold(
           appBar: AppBar(
-            leading: const _PingRating(),
+            leading: const SocketPingRating(),
             title:
                 widget.seek != null
                     ? _LobbyGameTitle(seek: widget.seek!)
@@ -258,7 +260,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
         return Scaffold(
           appBar: AppBar(
-            leading: const _PingRating(),
+            leading: const SocketPingRating(),
             title:
                 widget.seek != null
                     ? _LobbyGameTitle(seek: widget.seek!)
@@ -269,18 +271,6 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
           body: PopScope(canPop: false, child: loadingBoard),
         );
     }
-  }
-}
-
-class _PingRating extends StatelessWidget {
-  const _PingRating();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      child: SocketPingRating(size: 24.0),
-    );
   }
 }
 

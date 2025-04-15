@@ -40,6 +40,8 @@ class TournamentController extends _$TournamentController {
       _startingTimer?.cancel();
     });
 
+    listenToSocketEvents();
+
     final tournament = await ref.read(tournamentRepositoryProvider).getTournament(id);
 
     if (tournament.timeToStart != null) {
@@ -55,8 +57,6 @@ class TournamentController extends _$TournamentController {
         }
       });
     }
-
-    listenToSocketEvents();
 
     _watchFeaturedGameIfChanged(previous: null, current: tournament.featuredGame?.id);
 
@@ -141,8 +141,8 @@ class TournamentController extends _$TournamentController {
 
   void _handleSocketEvent(SocketEvent event) {
     _logger.fine('Received socket event: $event');
+
     if (!state.hasValue) {
-      assert(false, 'received a game SocketEvent while TournamentState is null');
       return;
     }
 

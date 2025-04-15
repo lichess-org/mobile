@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class TournamentScreen extends ConsumerWidget {
@@ -50,7 +51,13 @@ class TournamentScreen extends ConsumerWidget {
     });
 
     return switch (ref.watch(tournamentControllerProvider(id))) {
-      AsyncError(:final error) => Center(child: Text('Could not load tournament: $error')),
+      AsyncError(:final error) => Scaffold(
+        appBar: AppBar(title: const SizedBox.shrink()),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(child: Text('Could not load tournament: $error')),
+        ),
+      ),
       AsyncValue(:final value?) => _Body(id: id, state: value),
       _ => Scaffold(
         appBar: AppBar(title: const SizedBox.shrink()),
@@ -83,6 +90,7 @@ class _Body extends ConsumerWidget {
         appBar: AppBar(
           title: _Title(state: state),
           actions: [
+            SocketPingRating(socketUri: TournamentController.socketUri(id)),
             if (timeLeft != null)
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),

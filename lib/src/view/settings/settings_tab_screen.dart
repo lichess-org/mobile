@@ -44,7 +44,10 @@ class SettingsTabScreen extends ConsumerWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(context.l10n.settingsSettings)),
+        appBar: AppBar(
+          leading: const SocketPingRating(),
+          title: Text(context.l10n.settingsSettings),
+        ),
         body: SafeArea(child: _Body()),
       ),
     );

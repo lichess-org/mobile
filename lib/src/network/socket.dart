@@ -585,12 +585,19 @@ SocketPool socketPool(Ref ref) {
   return pool;
 }
 
-/// Average lag computed from WebSocket ping/pong protocol.
+typedef SocketPingState = ({Duration averageLag, int rating});
+
+/// Average lag and ping rating computed from WebSocket ping/pong protocol.
+///
+/// If [route] is provided, it will return the average lag for that route only, and if any other route
+/// is active, it will return [Duration.zero], meaning the socket is not connected.
+/// If no route is provided, it will return the average lag for the current active route.
 @riverpod
-class AverageLag extends _$AverageLag {
+class SocketPing extends _$SocketPing {
   @override
-  Duration build() {
-    final listenable = ref.watch(socketPoolProvider).averageLag;
+  SocketPingState build({Uri? route}) {
+    final pool = ref.watch(socketPoolProvider);
+    final listenable = pool.averageLag;
 
     listenable.addListener(_listener);
 
@@ -598,13 +605,36 @@ class AverageLag extends _$AverageLag {
       listenable.removeListener(_listener);
     });
 
-    return listenable.value;
+    return _getPing(_currentRouteLag);
   }
 
+  Duration get _currentRouteLag {
+    final pool = ref.read(socketPoolProvider);
+    return route != null
+        ? route == pool.currentClient.route
+            ? pool.averageLag.value
+            : Duration.zero
+        : pool.averageLag.value;
+  }
+
+  SocketPingState _getPing(Duration lag) => (
+    averageLag: lag,
+    rating:
+        lag.inMicroseconds == 0
+            ? 0
+            : lag.inMicroseconds < 150000
+            ? 4
+            : lag.inMicroseconds < 300000
+            ? 3
+            : lag.inMicroseconds < 500000
+            ? 2
+            : 1,
+  );
+
   void _listener() {
-    final newLag = ref.read(socketPoolProvider).averageLag.value;
-    if (state != newLag) {
-      state = newLag;
+    final newLag = _currentRouteLag;
+    if (state.averageLag != newLag) {
+      state = _getPing(newLag);
     }
   }
 }
