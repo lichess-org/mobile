@@ -46,7 +46,7 @@ class ChallengeListItem extends ConsumerWidget {
 
     final isFromPosition = challenge.variant == Variant.fromPosition;
 
-    final leading = Icon(challenge.perf.icon, size: 36);
+    final leading = Icon(challenge.perf.icon);
     final trailing =
         challenge.challenger?.lagRating != null
             ? LagIndicator(lagRating: challenge.challenger!.lagRating!)
