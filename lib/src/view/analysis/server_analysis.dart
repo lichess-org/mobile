@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -109,23 +110,33 @@ class ServerAnalysisSummary extends ConsumerWidget {
                           playersAnalysis.white.inaccuracies.toString(),
                           context.l10n.nbInaccuracies(2).replaceAll('2', '').trim().capitalize(),
                           playersAnalysis.black.inaccuracies.toString(),
+                          LichessColors.cyan,
                         ),
                         (
                           playersAnalysis.white.mistakes.toString(),
                           context.l10n.nbMistakes(2).replaceAll('2', '').trim().capitalize(),
                           playersAnalysis.black.mistakes.toString(),
+                          LichessColors.mistake,
                         ),
                         (
                           playersAnalysis.white.blunders.toString(),
                           context.l10n.nbBlunders(2).replaceAll('2', '').trim().capitalize(),
                           playersAnalysis.black.blunders.toString(),
+                          LichessColors.blunder,
                         ),
                       ])
                         TableRow(
                           children: [
-                            _SummaryNumber(item.$1),
-                            Center(heightFactor: 1.2, child: Text(item.$2, softWrap: true)),
-                            _SummaryNumber(item.$3),
+                            _SummaryNumber(item.$1, item.$4),
+                            Center(
+                              heightFactor: 1.2,
+                              child: Text(
+                                item.$2,
+                                softWrap: true,
+                                style: TextStyle(color: item.$4),
+                              ),
+                            ),
+                            _SummaryNumber(item.$3, item.$4),
                           ],
                         ),
                       if (playersAnalysis.white.acpl != null && playersAnalysis.black.acpl != null)
@@ -238,12 +249,16 @@ class WaitingForServerAnalysis extends StatelessWidget {
 }
 
 class _SummaryNumber extends StatelessWidget {
-  const _SummaryNumber(this.data);
+  const _SummaryNumber(this.data, [this.color]);
   final String data;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text(data, softWrap: true));
+    if (color == null) {
+      return Center(child: Text(data, softWrap: true));
+    }
+    return Center(child: Text(data, softWrap: true, style: TextStyle(color: color)));
   }
 }
 
