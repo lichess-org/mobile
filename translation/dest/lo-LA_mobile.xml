@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">ເກມທັງໝົດ</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">ຂໍ້ສະເໜີແນະ</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ໜ້າຫຼັກ</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">ທ່ານຕ້ອງ​ລົງ​ຊື່​ເຂົ້າ​ໃຊ້ເພື່ອເຂົ້າ​ສູ່​ໜ້ານີ້.</string>
