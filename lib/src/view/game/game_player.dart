@@ -79,9 +79,9 @@ class GamePlayer extends StatelessWidget {
                     ? MainAxisAlignment.start
                     : MainAxisAlignment.end,
             children: [
-              if (tournament != null)
+              if (tournament?.ranks != null)
                 Text(
-                  '#${side == Side.white ? tournament.ranks.white : tournament.ranks.black} ',
+                  '#${side == Side.white ? tournament?.ranks?.white : tournament?.ranks?.black} ',
                   style: TextStyle(fontSize: playerFontSize, color: textShade(context, 0.7)),
                 ),
               if (player.user != null) ...[

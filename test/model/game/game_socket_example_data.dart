@@ -70,10 +70,7 @@ String makeFullEvent(
       "name": "${tournament.name}",
       "secondsLeft": ${tournament.clock.timeLeft.inSeconds},
       "berserkable": ${tournament.berserkable},
-      "ranks": {
-        "white": ${tournament.ranks.white},
-        "black": ${tournament.ranks.black}
-      }
+      ${tournament.ranks != null ? '"ranks": { "white": ${tournament.ranks!.white}, "black": ${tournament.ranks!.black}}' : ''}
     },
   '''
           : '';

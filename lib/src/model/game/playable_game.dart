@@ -269,10 +269,9 @@ TournamentMeta? _playableGameTournamentDataFromPick(RequiredPick pick) => Tourna
   name: pick('name').asStringOrThrow(),
   clock: (timeLeft: Duration(seconds: pick('secondsLeft').asIntOrThrow()), at: DateTime.now()),
   berserkable: pick('berserkable').asBoolOrFalse(),
-  ranks: (
-    white: pick('ranks', 'white').asIntOrThrow(),
-    black: pick('ranks', 'black').asIntOrThrow(),
-  ),
+  ranks: pick(
+    'ranks',
+  ).letOrNull((p) => (white: p('white').asIntOrThrow(), black: p('black').asIntOrThrow())),
 );
 
 ServerGamePrefs _gamePrefsFromPick(RequiredPick pick) {

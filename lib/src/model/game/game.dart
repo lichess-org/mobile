@@ -295,7 +295,7 @@ class TournamentMeta with _$TournamentMeta {
     required String name,
     required ({Duration timeLeft, DateTime at}) clock,
     required bool berserkable,
-    required ({int white, int black}) ranks,
+    ({int white, int black})? ranks,
   }) = _TournamentMeta;
 
   factory TournamentMeta.fromJson(Map<String, dynamic> json) => _$TournamentMetaFromJson(json);
