@@ -1,5 +1,4 @@
 import 'package:async/async.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -9,19 +8,12 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_autocomplete.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 final _countries = countries.values.toList();
-final _cupertinoTextFieldDecoration = BoxDecoration(
-  color: CupertinoColors.tertiarySystemBackground,
-  border: Border.all(color: CupertinoColors.systemGrey4, width: 1),
-  borderRadius: BorderRadius.circular(8),
-);
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
@@ -165,9 +157,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                   children: [
                     Text(context.l10n.countryRegion, style: Styles.formLabel),
                     const SizedBox(height: 6.0),
-                    AdaptiveAutoComplete<String>(
-                      cupertinoDecoration: _cupertinoTextFieldDecoration,
-                      textInputAction: TextInputAction.next,
+                    Autocomplete<String>(
                       initialValue:
                           field.value != null
                               ? TextEditingValue(text: countries[field.value]!)
@@ -185,6 +175,21 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                           (element) => element.value == selection,
                         );
                         field.didChange(country.key);
+                      },
+                      fieldViewBuilder: (
+                        BuildContext context,
+                        TextEditingController textEditingController,
+                        FocusNode focusNode,
+                        VoidCallback onFieldSubmitted,
+                      ) {
+                        return TextField(
+                          controller: textEditingController,
+                          textInputAction: TextInputAction.next,
+                          focusNode: focusNode,
+                          onSubmitted: (String value) {
+                            onFieldSubmitted();
+                          },
+                        );
                       },
                     ),
                   ],
@@ -367,30 +372,14 @@ class __NumericFieldState extends State<_NumericField> {
             children: [
               Text(widget.label, style: Styles.formLabel),
               const SizedBox(height: 6.0),
-              AdaptiveTextField(
+              TextField(
                 controller: _controller,
                 keyboardType: TextInputType.number,
-                cupertinoDecoration: _cupertinoTextFieldDecoration.copyWith(
-                  border: Border.all(
-                    color:
-                        field.errorText == null
-                            ? CupertinoColors.systemGrey4
-                            : context.lichessColors.error,
-                    width: 1,
-                  ),
-                ),
-                materialDecoration:
-                    field.errorText != null ? InputDecoration(errorText: field.errorText) : null,
-
+                decoration: InputDecoration(errorText: field.errorText),
                 onChanged: (value) {
                   field.didChange(int.tryParse(value));
                 },
               ),
-              if (Theme.of(context).platform == TargetPlatform.iOS && field.errorText != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 6.0),
-                  child: Text(field.errorText!, style: Styles.formError),
-                ),
             ],
           );
         },
@@ -453,21 +442,11 @@ class __TextFieldState extends State<_TextField> {
             children: [
               Text(widget.label, style: Styles.formLabel),
               const SizedBox(height: 6.0),
-              AdaptiveTextField(
+              TextField(
                 maxLength: widget.maxLength,
                 maxLines: widget.maxLines,
                 controller: _controller,
-                cupertinoDecoration: _cupertinoTextFieldDecoration.copyWith(
-                  border: Border.all(
-                    color:
-                        field.errorText == null
-                            ? CupertinoColors.systemGrey4
-                            : context.lichessColors.error,
-                    width: 1,
-                  ),
-                ),
-                materialDecoration:
-                    field.errorText != null ? InputDecoration(errorText: field.errorText) : null,
+                decoration: InputDecoration(errorText: field.errorText),
                 textInputAction: widget.textInputAction,
                 onChanged: (value) {
                   field.didChange(value.trim());
@@ -477,11 +456,6 @@ class __TextFieldState extends State<_TextField> {
                 const SizedBox(height: 6.0),
                 Text(widget.description!, style: Styles.formDescription),
               ],
-              if (Theme.of(context).platform == TargetPlatform.iOS && field.errorText != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 6.0),
-                  child: Text(field.errorText!, style: Styles.formError),
-                ),
             ],
           );
         },

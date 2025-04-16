@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 final _dateFormatter = DateFormat('yyyy.MM.dd');
@@ -291,9 +290,8 @@ class _EditablePgnField extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: AdaptiveTextField(
+            child: TextField(
               focusNode: focusNode,
-              cupertinoDecoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
               controller: controller,
               textInputAction: TextInputAction.next,
               keyboardType:

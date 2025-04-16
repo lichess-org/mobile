@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class LoadPositionScreen extends StatelessWidget {
@@ -62,10 +61,12 @@ class _BodyState extends State<_Body> {
           Expanded(
             child: Padding(
               padding: Styles.bodySectionPadding,
-              child: AdaptiveTextField(
+              child: TextField(
                 maxLines: 500,
-                placeholder:
-                    '${context.l10n.pasteTheFenStringHere} / ${context.l10n.pasteThePgnStringHere}',
+                decoration: InputDecoration(
+                  hintText: context.l10n.pasteTheFenStringHere,
+                  suffixIcon: const Icon(Icons.paste),
+                ),
                 controller: _controller,
                 readOnly: true,
                 onTap: _getClipboardData,

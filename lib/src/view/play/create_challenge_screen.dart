@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
@@ -279,9 +278,12 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 child: SmallBoardPreview(
                   orientation: preferences.sideChoice == SideChoice.black ? Side.black : Side.white,
                   fen: fromPositionFenInput ?? kEmptyFen,
-                  description: AdaptiveTextField(
+                  description: TextField(
                     maxLines: 5,
-                    placeholder: context.l10n.pasteTheFenStringHere,
+                    decoration: InputDecoration(
+                      labelText: context.l10n.pasteTheFenStringHere,
+                      suffixIcon: const Icon(Icons.paste),
+                    ),
                     controller: _controller,
                     readOnly: true,
                     onTap: _getClipboardData,

@@ -135,6 +135,8 @@ extension CustomThemeBuildContext on BuildContext {
           isIOS
               ? _kCupertinoCardTheme.copyWith(color: themeLight.colorScheme.surfaceContainerHigh)
               : null,
+      inputDecorationTheme:
+          isIOS ? _makeCupertinoInputDecorationTheme(themeLight.colorScheme) : null,
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme: isIOS ? _makeCupertinoMenuThemeData() : null,
       sliderTheme: kSliderTheme,
@@ -154,6 +156,8 @@ extension CustomThemeBuildContext on BuildContext {
           isIOS
               ? _kCupertinoCardTheme.copyWith(color: themeDark.colorScheme.surfaceContainerHigh)
               : null,
+      inputDecorationTheme:
+          isIOS ? _makeCupertinoInputDecorationTheme(themeDark.colorScheme) : null,
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme: isIOS ? _makeCupertinoMenuThemeData() : null,
       sliderTheme: kSliderTheme,
@@ -202,6 +206,7 @@ extension CustomThemeBuildContext on BuildContext {
     cupertinoOverrideTheme: cupertinoTheme,
     listTileTheme: _makeListTileTheme(baseTheme.colorScheme, isIOS),
     cardTheme: isIOS ? _kCupertinoCardTheme : null,
+    inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(baseTheme.colorScheme) : null,
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor:
           isIOS
@@ -277,3 +282,31 @@ const _kCupertinoCardTheme = CardThemeData(
   margin: EdgeInsets.zero,
   shape: RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
 );
+
+InputDecorationTheme _makeCupertinoInputDecorationTheme(ColorScheme colorScheme) {
+  return InputDecorationTheme(
+    filled: true,
+    fillColor: colorScheme.surfaceContainer.withValues(alpha: 0.7),
+    border: const OutlineInputBorder(),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: colorScheme.outline),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+    ),
+    disabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.1)),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.5)),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: colorScheme.error.withValues(alpha: 0.5)),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: colorScheme.error),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+    ),
+  );
+}

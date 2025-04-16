@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
@@ -211,23 +210,17 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
       top: false,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: AdaptiveTextField(
-          materialDecoration: InputDecoration(
+        child: TextField(
+          decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
             suffixIcon: sendButton,
             border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
             hintText: placeholder,
           ),
-          cupertinoDecoration: BoxDecoration(
-            border: Border.all(color: ColorScheme.of(context).outline),
-            borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-          ),
-          placeholder: placeholder,
           controller: _textController,
           keyboardType: TextInputType.text,
           minLines: 1,
           maxLines: 4,
-          suffix: sendButton,
           enableSuggestions: true,
           readOnly: session == null,
         ),
