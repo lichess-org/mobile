@@ -7,18 +7,83 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:stream_channel/stream_channel.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
-  final FutureOr<WebSocketChannel> Function(String url) createFunction;
+/// Default lag for the fake WebSocket connection.
+const kFakeWebSocketConnectionLag = Duration(milliseconds: 5);
 
-  const FakeWebSocketChannelFactory(this.createFunction);
+/// A [WebSocketChannelFactory] with default connection lag and no server handlers.
+const defaultFakeWebSocketChannelFactory = FakeWebSocketChannelFactory(
+  createDefaultFakeWebSocketChannel,
+);
+
+/// Creates a fake WebSocket channel with default connection lag with the given [socketRoute].
+FakeWebSocketChannel createDefaultFakeWebSocketChannel(Uri socketRoute) {
+  return FakeWebSocketChannel(socketRoute, connectionLag: kFakeWebSocketConnectionLag);
+}
+
+/// A [WebSocketChannelFactory] that creates fake WebSocket channels and exposes a stream of outgoing messages (except ping).
+class ListenableFakeWebSocketChannelFactory implements WebSocketChannelFactory {
+  ListenableFakeWebSocketChannelFactory(this.createFunction);
+
+  final FakeWebSocketChannel Function(Uri socketRoute) createFunction;
+
+  Stream<dynamic> outgoingMessages(Uri socketRoute) {
+    return _outcomingController.stream
+        .where((message) => message.$1 == socketRoute)
+        .map((message) => message.$2);
+  }
+
+  final Map<Uri, StreamSubscription<dynamic>> _subscriptions = {};
+  final _outcomingController = StreamController<(Uri, dynamic)>.broadcast();
+
+  void dispose() {
+    for (final subscription in _subscriptions.values) {
+      subscription.cancel();
+    }
+    _subscriptions.clear();
+    _outcomingController.close();
+  }
 
   @override
   Future<WebSocketChannel> create(
     String url, {
     Map<String, dynamic>? headers,
     Duration timeout = const Duration(seconds: 1),
-  }) async {
-    return createFunction(url);
+  }) {
+    final route = Uri(path: Uri.parse(url).path);
+    final channel = createFunction(route);
+
+    _subscriptions[route]?.cancel();
+    _subscriptions[route] = channel.sentMessagesExceptPing.listen((message) {
+      _outcomingController.add((route, message));
+    });
+
+    return Future.value(channel);
+  }
+}
+
+/// A [WebSocketChannelFactory] that creates fake WebSocket channels.
+class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
+  const FakeWebSocketChannelFactory(this.createFunction);
+
+  final FakeWebSocketChannel Function(Uri socketRoute) createFunction;
+
+  @override
+  Future<WebSocketChannel> create(
+    String url, {
+    Map<String, dynamic>? headers,
+    Duration timeout = const Duration(seconds: 1),
+  }) {
+    return Future.value(createFunction(Uri(path: Uri.parse(url).path)));
+  }
+}
+
+/// The controller for incoming (from server) messages.
+final _incomingController = StreamController<(Uri, dynamic)>.broadcast();
+
+/// Simulates incoming messages from the server.
+void sendServerSocketMessages(Uri socketRoute, Iterable<dynamic> messages) {
+  for (final message in messages) {
+    _incomingController.add((socketRoute, message));
   }
 }
 
@@ -29,7 +94,7 @@ typedef FakeSocketServerHandlers =
 /// A fake implementation of [WebSocketChannel]
 ///
 /// This implementation allows to simulate incoming messages from the server
-/// with the [addIncomingMessages] method.
+/// with the global [sendServerSocketMessages] function.
 ///
 /// It also allows to simulate server responses to client requests by setting the
 /// [serverHandlers] property.
@@ -38,20 +103,31 @@ typedef FakeSocketServerHandlers =
 /// behavior can be changed by setting [shouldSendPong] to false.
 ///
 /// It also allows to increase the lag of the connection by setting the
-/// [connectionLag] property. By default [connectionLag] is set to [Duration.zero]
-/// to simplify testing.
-/// When lag is 0, the pong and [serverHandlers] responses will be sent in the next microtask.
+/// [connectionLag] property.
 ///
 /// The [sentMessages] and [sentMessagesExceptPing] streams can be used to
 /// verify that the client sends the expected messages.
 class FakeWebSocketChannel implements WebSocketChannel {
-  FakeWebSocketChannel({this.connectionLag = Duration.zero, this.serverHandlers = const {}});
+  FakeWebSocketChannel(
+    this.route, {
+    this.connectionLag = kFakeWebSocketConnectionLag,
+    this.serverHandlers = const {},
+  }) : assert(route.path.isNotEmpty, 'Route path must not be empty'),
+       assert(connectionLag > Duration.zero, 'Connection lag must be greater than 0') {
+    _sink = _FakeWebSocketSink(this, serverHandlers);
+  }
+
+  final Uri route;
 
   final FakeSocketServerHandlers serverHandlers;
 
-  int _pongCount = 0;
+  late final _FakeWebSocketSink _sink;
 
-  final _connectionCompleter = Completer<void>();
+  Future<void> _close() {
+    return _outcomingController.close();
+  }
+
+  int _pongCount = 0;
 
   static bool isPing(dynamic data) {
     if (data is! String) {
@@ -67,9 +143,6 @@ class FakeWebSocketChannel implements WebSocketChannel {
     return false;
   }
 
-  /// The controller for incoming (from server) messages.
-  final _incomingController = StreamController<dynamic>.broadcast();
-
   /// The controller for outgoing (to server) messages.
   final _outcomingController = StreamController<dynamic>.broadcast();
 
@@ -84,9 +157,6 @@ class FakeWebSocketChannel implements WebSocketChannel {
   /// Number of pong response received
   int get pongCount => _pongCount;
 
-  /// A Future that resolves when the first pong message is received
-  Future<void> get connectionEstablished => _connectionCompleter.future;
-
   /// The stream of all outgoing messages.
   Stream<dynamic> get sentMessages => _outcomingController.stream;
 
@@ -94,18 +164,11 @@ class FakeWebSocketChannel implements WebSocketChannel {
   Stream<dynamic> get sentMessagesExceptPing =>
       _outcomingController.stream.where((message) => !isPing(message));
 
-  /// Simulates incoming messages from the server.
-  void addIncomingMessages(Iterable<dynamic> messages) {
-    for (final message in messages) {
-      _incomingController.add(message);
-    }
-  }
+  @override
+  int? get closeCode => _outcomingController.isClosed ? 1000 : null;
 
   @override
-  int? get closeCode => _incomingController.isClosed ? 1000 : null;
-
-  @override
-  String? get closeReason => _incomingController.isClosed ? 'OK' : null;
+  String? get closeReason => _outcomingController.isClosed ? 'OK' : null;
 
   @override
   String? get protocol => null;
@@ -114,10 +177,11 @@ class FakeWebSocketChannel implements WebSocketChannel {
   Future<void> get ready => Future<void>.value();
 
   @override
-  WebSocketSink get sink => _FakeWebSocketSink(this, serverHandlers);
+  WebSocketSink get sink => _sink;
 
   @override
-  Stream<dynamic> get stream => _incomingController.stream;
+  Stream<dynamic> get stream =>
+      _incomingController.stream.where((event) => event.$1 == route).map((event) => event.$2);
 
   @override
   void pipe(StreamChannel<dynamic> other) {}
@@ -165,28 +229,19 @@ class _FakeWebSocketSink implements WebSocketSink {
   final FakeWebSocketChannel _channel;
   final FakeSocketServerHandlers _serverHandlers;
 
+  Timer? _pingTimer;
+  final Map<String, Timer?> _serverHandlersTimers = {};
+
   @override
   void add(dynamic data) {
     _channel._outcomingController.add(data);
 
     // Simulates pong response if connection is not closed
     if (_channel.shouldSendPong && FakeWebSocketChannel.isPing(data)) {
-      void sendPong() {
-        if (_channel._incomingController.isClosed) {
-          return;
-        }
-        _channel._pongCount++;
-        if (_channel._pongCount == 1) {
-          _channel._connectionCompleter.complete();
-        }
-        _channel._incomingController.add('0');
-      }
-
-      if (_channel.connectionLag > Duration.zero) {
-        Future<void>.delayed(_channel.connectionLag, sendPong);
-      } else {
-        scheduleMicrotask(sendPong);
-      }
+      _pingTimer?.cancel();
+      _pingTimer = Timer(_channel.connectionLag, () {
+        _sendPong();
+      });
     }
 
     if (!FakeWebSocketChannel.isPing(data) && data is String) {
@@ -195,23 +250,26 @@ class _FakeWebSocketSink implements WebSocketSink {
         if (json is Map<String, dynamic>) {
           final t = json['t'] as String?;
           final serverHandler = _serverHandlers[t];
-          if (serverHandler != null) {
+          if (t != null && serverHandler != null) {
             final response = serverHandler(json);
-            if (_channel.connectionLag > Duration.zero) {
-              Future<void>.delayed(_channel.connectionLag, () {
-                _channel._incomingController.add(jsonEncode(response));
-              });
-            } else {
-              scheduleMicrotask(() {
-                _channel._incomingController.add(jsonEncode(response));
-              });
-            }
+            _serverHandlersTimers[t]?.cancel();
+            _serverHandlersTimers[t] = Timer(_channel.connectionLag, () {
+              _incomingController.add((_channel.route, jsonEncode(response)));
+            });
           }
         }
       } catch (e) {
         debugPrint('Fake socket server handler error: $e');
       }
     }
+  }
+
+  void _sendPong() {
+    if (_incomingController.isClosed) {
+      return;
+    }
+    _channel._pongCount++;
+    _incomingController.add((_channel.route, '0'));
   }
 
   @override
@@ -224,9 +282,13 @@ class _FakeWebSocketSink implements WebSocketSink {
 
   @override
   Future<void> close([int? closeCode, String? closeReason]) {
-    return Future.wait([_channel._incomingController.close()]);
+    _pingTimer?.cancel();
+    _serverHandlersTimers.forEach((_, timer) {
+      timer?.cancel();
+    });
+    return _channel._close();
   }
 
   @override
-  Future<dynamic> get done => _channel._incomingController.done;
+  Future<dynamic> get done => _channel._outcomingController.done;
 }

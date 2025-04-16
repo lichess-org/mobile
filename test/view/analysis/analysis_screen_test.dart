@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
+import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 import '../engine/test_engine_app.dart';
@@ -485,32 +486,32 @@ void main() {
     group('Engine lines', () {
       testWidgets('are displayed', (tester) async {
         await makeEngineTestApp(tester);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(Engineline), findsOne);
         expect(find.widgetWithText(Engineline, '1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 '), findsOne);
       });
 
       testWidgets('are not displayed if computer analysis is not allowed', (tester) async {
         await makeEngineTestApp(tester, isComputerAnalysisAllowed: false);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(Engineline), findsNothing);
       });
 
       testWidgets('are not displayed if computer analysis is not enabled', (tester) async {
         await makeEngineTestApp(tester, isComputerAnalysisEnabled: false);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(Engineline), findsNothing);
       });
 
       testWidgets('are not displayed if engine is disabled by user preferences', (tester) async {
         await makeEngineTestApp(tester, isEngineEnabled: false);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(Engineline), findsNothing);
       });
 
       testWidgets('are not displayed if they are disabled by user preferences', (tester) async {
         await makeEngineTestApp(tester, numEvalLines: 0);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(Engineline), findsNothing);
       });
     });
@@ -518,7 +519,7 @@ void main() {
     group('Engine gauge', () {
       testWidgets('is not displayed if computer analysis is not allowed', (tester) async {
         await makeEngineTestApp(tester, isComputerAnalysisAllowed: false);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(EngineGauge), findsNothing);
       });
 
@@ -528,19 +529,19 @@ void main() {
           isComputerAnalysisEnabled: false,
           gameId: const GameId('xze7RH66'),
         );
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(EngineGauge), findsNothing);
       });
 
       testWidgets('is not displayed if engine is disabled by user preferences', (tester) async {
         await makeEngineTestApp(tester, isEngineEnabled: false);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(EngineGauge), findsNothing);
       });
 
       testWidgets('is displayed if engine is available', (tester) async {
         await makeEngineTestApp(tester);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(EngineGauge), findsOne);
         expect(find.widgetWithText(EngineGauge, '+0.2'), findsOne);
       });
@@ -562,31 +563,31 @@ void main() {
     group('Engine best move arrow', () {
       testWidgets('is not displayed if best move arrow is disabled', (tester) async {
         await makeEngineTestApp(tester, showBestMoveArrow: false);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(BoardShapeWidget), findsNothing);
       });
 
       testWidgets('is not displayed if computer analysis is not allowed', (tester) async {
         await makeEngineTestApp(tester, isComputerAnalysisAllowed: false);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(BoardShapeWidget), findsNothing);
       });
 
       testWidgets('is not displayed if computer analysis is not enabled', (tester) async {
         await makeEngineTestApp(tester, isComputerAnalysisEnabled: false);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(BoardShapeWidget), findsNothing);
       });
 
       testWidgets('is not displayed if engine is disabled by user preferences', (tester) async {
         await makeEngineTestApp(tester, isEngineEnabled: false);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(BoardShapeWidget), findsNothing);
       });
 
       testWidgets('is displayed if engine is available', (tester) async {
         await makeEngineTestApp(tester);
-        await tester.pump(kRequestEvalDebounceDelay);
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(BoardShapeWidget), findsOne);
       });
     });

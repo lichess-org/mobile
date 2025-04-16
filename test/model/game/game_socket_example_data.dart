@@ -68,7 +68,7 @@ String makeFullEvent(
     "tournament": {
       "id": "${tournament.id}",
       "name": "${tournament.name}",
-      "secondsLeft": ${tournament.timeLeft.inSeconds},
+      "secondsLeft": ${tournament.clock.timeLeft.inSeconds},
       "berserkable": ${tournament.berserkable},
       "ranks": {
         "white": ${tournament.ranks.white},

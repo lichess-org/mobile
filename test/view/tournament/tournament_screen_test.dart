@@ -6,10 +6,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
+import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
@@ -292,6 +293,8 @@ void main() {
     });
 
     testWidgets('Displays featured game', (WidgetTester tester) async {
+      const tournamentId = TournamentId('82QbxlJb');
+
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/tournament/82QbxlJb') {
           return mockResponse(
@@ -302,17 +305,13 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final fakeSocket = FakeWebSocketChannel();
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+        home: const TournamentScreen(id: tournamentId),
         overrides: [
           lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
           }),
-          webSocketChannelFactoryProvider.overrideWith(
-            (ref) => FakeWebSocketChannelFactory((_) => fakeSocket),
-          ),
         ],
       );
       await tester.pumpWidget(app);
@@ -332,7 +331,7 @@ void main() {
       expect(find.byType(BoardThumbnail), findsOneWidget);
 
       // Pretend all the pieces are gone to check that the board is updated
-      fakeSocket.addIncomingMessages([
+      sendServerSocketMessages(TournamentController.socketUri(tournamentId), [
         '{"t": "fen", "d": {"id": "CW8jtJJO", "fen": "$kEmptyBoardFEN", "lm": "e2e4", "wc": 0, "bc": 0}  }',
       ]);
 
@@ -382,20 +381,17 @@ void main() {
       });
 
       const name = 'tom-anders';
+      const tournamentId = TournamentId('82QbxlJb');
       final user = LightUser(id: UserId.fromUserName(name), name: name);
       final session = AuthSessionState(user: user, token: 'test-token');
 
-      final fakeSocket = FakeWebSocketChannel();
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+        home: const TournamentScreen(id: tournamentId),
         userSession: session,
         overrides: [
           lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
-          }),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((_) => fakeSocket);
           }),
         ],
       );
@@ -412,7 +408,7 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       expect(find.text('Join'), findsNothing);
 
-      fakeSocket.addIncomingMessages(['{"t": "reload"}']);
+      sendServerSocketMessages(TournamentController.socketUri(tournamentId), ['{"t": "reload"}']);
       // Wait for reload
       await tester.pump();
 
@@ -477,20 +473,17 @@ void main() {
       });
 
       const name = 'tom-anders';
+      const tournamentId = TournamentId('82QbxlJb');
       final user = LightUser(id: UserId.fromUserName(name), name: name);
       final session = AuthSessionState(user: user, token: 'test-token');
 
-      final fakeSocket = FakeWebSocketChannel();
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+        home: const TournamentScreen(id: tournamentId),
         userSession: session,
         overrides: [
           lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
-          }),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((_) => fakeSocket);
           }),
         ],
       );
@@ -541,31 +534,17 @@ void main() {
       });
 
       const name = 'tom-anders';
+      const tournamenId = TournamentId('82QbxlJb');
       final user = LightUser(id: UserId.fromUserName(name), name: name);
       final session = AuthSessionState(user: user, token: 'test-token');
 
-      final fakeTournamentSocket = FakeWebSocketChannel();
-      final fakeGameSocket = FakeWebSocketChannel();
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+        home: const TournamentScreen(id: tournamenId),
         userSession: session,
         overrides: [
           lichessClientProvider.overrideWith((ref) {
             return LichessClient(mockClient, ref);
-          }),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((String url) {
-              final uri = Uri.parse(url);
-              switch (uri.path) {
-                case '/tournament/82QbxlJb/socket/v6':
-                  return fakeTournamentSocket;
-                case '/play/$gameId/v6':
-                  return fakeGameSocket;
-                default:
-                  throw Exception('Unexpected URL: $url');
-              }
-            });
           }),
         ],
       );
@@ -574,7 +553,7 @@ void main() {
       // Wait for tournament data to load
       await tester.pump();
 
-      fakeTournamentSocket.addIncomingMessages(['{"t": "reload"}']);
+      sendServerSocketMessages(TournamentController.socketUri(tournamenId), ['{"t": "reload"}']);
       // Wait for reload
       await tester.pump();
 
@@ -582,12 +561,12 @@ void main() {
       await tester.pump();
 
       expect(find.byType(GameScreen), findsOneWidget);
-      await fakeGameSocket.connectionEstablished;
-      fakeGameSocket.addIncomingMessages([
+      // wait for socket connection
+      await tester.pump(kFakeWebSocketConnectionLag);
+      sendServerSocketMessages(GameController.gameSocketUri(gameId), [
         makeFullEvent(gameId.gameId, '', whiteUserName: session.user.name, blackUserName: 'Steven'),
       ]);
-      // wait for socket message
-      await tester.pump(const Duration(milliseconds: 10));
+      await tester.pump();
       expect(find.text('Steven'), findsOneWidget);
     });
   });

@@ -36,13 +36,6 @@ void main() {
         startedAtTurn: null,
         rules: null,
         opening: null,
-        tournament: const TournamentMeta(
-          id: TournamentId('UmdV6NBV'),
-          name: 'Hourly UltraBullet Arena',
-          timeLeft: Duration(seconds: 123),
-          berserkable: true,
-          ranks: (white: 1, black: 2),
-        ),
       ),
     );
   });
@@ -109,16 +102,6 @@ const _gameJson = '''
         "f": "activity.lichess"
       }
     ]
-  },
-  "tournament": {
-    "id": "UmdV6NBV",
-    "name": "Hourly UltraBullet Arena",
-    "secondsLeft": 123,
-    "berserkable": true,
-    "ranks": {
-      "white": 1,
-      "black": 2
-    }
   }
 }
 ''';

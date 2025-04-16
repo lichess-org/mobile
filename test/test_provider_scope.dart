@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -65,17 +64,37 @@ Future<Widget> makeTestProviderScopeApp(
 }) {
   return makeTestProviderScope(
     tester,
-    child: MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      home: home,
-      builder: (context, child) {
-        return CupertinoTheme(data: const CupertinoThemeData(), child: Material(child: child));
-      },
-    ),
+    child: _FakeApp(home: home),
     overrides: overrides,
     userSession: userSession,
     defaultPreferences: defaultPreferences,
   );
+}
+
+class _FakeApp extends ConsumerStatefulWidget {
+  const _FakeApp({required this.home});
+
+  final Widget home;
+
+  @override
+  ConsumerState<_FakeApp> createState() => _FakeAppState();
+}
+
+class _FakeAppState extends ConsumerState<_FakeApp> {
+  @override
+  void initState() {
+    final socketClient = ref.read(socketPoolProvider).currentClient;
+    socketClient.connect();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      home: widget.home,
+    );
+  }
 }
 
 /// Wraps [makeTestProviderScope] with a [FakeHttpClientFactory] that returns an offline client.
@@ -186,7 +205,7 @@ Future<Widget> makeTestProviderScope(
       }),
       // ignore: scoped_providers_should_specify_dependencies
       webSocketChannelFactoryProvider.overrideWith((ref) {
-        return FakeWebSocketChannelFactory((_) => FakeWebSocketChannel());
+        return defaultFakeWebSocketChannelFactory;
       }),
       // ignore: scoped_providers_should_specify_dependencies
       socketPoolProvider.overrideWith((ref) {

@@ -78,14 +78,6 @@ Future<http.StreamedResponse> mockHttpStreamFromIterable(Iterable<String> events
 Future<http.StreamedResponse> mockHttpStream(Stream<String> stream) =>
     Future.value(http.StreamedResponse(stream.map(utf8.encode), 200));
 
-Future<void> tapBackButton(WidgetTester tester) async {
-  if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
-    await tester.tap(find.widgetWithIcon(CupertinoButton, CupertinoIcons.back));
-  } else {
-    await tester.tap(find.widgetWithIcon(IconButton, Icons.arrow_back));
-  }
-}
-
 Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
   if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
     await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));

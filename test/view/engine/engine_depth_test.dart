@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 
+import '../../network/fake_websocket_channel.dart';
 import 'test_engine_app.dart';
 
 /// Checks if the cloud eval label is displayed in the EngineDepth widget
@@ -37,7 +38,7 @@ void main() {
         find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitFadingFour)),
         findsOne,
       );
-      await tester.pump(kRequestEvalDebounceDelay);
+      await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
       expect(isCloudEvalDisplayed(), isTrue);
       expect(find.widgetWithText(EngineDepth, '36'), findsOne);
 
@@ -56,7 +57,7 @@ void main() {
         findsOne,
       );
 
-      await tester.pump(kRequestEvalDebounceDelay);
+      await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
       // cloud eval is not available, so it still displays loading indicator
       expect(
         find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitFadingFour)),

@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../network/fake_websocket_channel.dart';
@@ -29,12 +30,10 @@ void main() {
   });
 
   test('exposes a challenges stream', () async {
-    final fakeChannel = FakeWebSocketChannel();
-    final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+    final socketClient = makeTestSocketClient();
     await socketClient.connect();
     await socketClient.firstConnection;
-
-    fakeChannel.addIncomingMessages([
+    sendServerSocketMessages(Uri(path: kDefaultSocketRoute), [
       '''
 {"t": "challenges", "d": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "in" } ] }, "v": 0 }
 ''',
@@ -93,8 +92,7 @@ void main() {
     final challengeService = container.read(challengeServiceProvider);
 
     fakeAsync((async) {
-      final fakeChannel = FakeWebSocketChannel();
-      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      final socketClient = makeTestSocketClient();
       socketClient.connect();
       notificationService.start();
       challengeService.start();
@@ -103,7 +101,7 @@ void main() {
       async.elapse(const Duration(milliseconds: 100));
       async.flushMicrotasks();
 
-      fakeChannel.addIncomingMessages([
+      sendServerSocketMessages(Uri(path: kDefaultSocketRoute), [
         '''
 {"t": "challenges", "d": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "in" } ] }, "v": 0 }
 ''',
@@ -130,7 +128,7 @@ void main() {
             .having((d) => d.android?.priority, 'priority', Priority.high),
       );
 
-      fakeChannel.addIncomingMessages([
+      sendServerSocketMessages(Uri(path: kDefaultSocketRoute), [
         '''
 {"t": "challenges", "d": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "in" } ] }, "v": 0 }
 ''',
@@ -172,8 +170,7 @@ void main() {
     final challengeService = container.read(challengeServiceProvider);
 
     fakeAsync((async) {
-      final fakeChannel = FakeWebSocketChannel();
-      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      final socketClient = makeTestSocketClient();
       socketClient.connect();
       notificationService.start();
       challengeService.start();
@@ -182,7 +179,7 @@ void main() {
       async.elapse(const Duration(milliseconds: 100));
       async.flushMicrotasks();
 
-      fakeChannel.addIncomingMessages([
+      sendServerSocketMessages(Uri(path: kDefaultSocketRoute), [
         '''
 {"t": "challenges", "d": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "in" } ] }, "v": 0 }
 ''',
@@ -200,7 +197,7 @@ void main() {
         ),
       );
 
-      fakeChannel.addIncomingMessages([
+      sendServerSocketMessages(Uri(path: kDefaultSocketRoute), [
         '''
 {"t": "challenges", "d": {"in": [] }, "v": 0 }
 ''',

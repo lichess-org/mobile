@@ -33,29 +33,8 @@ Future<void> makeEngineTestApp(
   bool isEngineEnabled = true,
   bool isCloudEvalEnabled = true,
   bool showBestMoveArrow = true,
-  Duration connectionLag = Duration.zero,
+  Duration connectionLag = kFakeWebSocketConnectionLag,
 }) async {
-  final fakeChannel = FakeWebSocketChannel(
-    connectionLag: connectionLag,
-    serverHandlers: {
-      if (isCloudEvalEnabled)
-        'evalGet': (json) {
-          final data = json['d'] as Map<String, dynamic>;
-          // final fen = data['fen'] as String;
-          return {
-            't': 'evalHit',
-            'd': {
-              'path': data['path'],
-              'depth': '36',
-              'pvs': [
-                for (var i = 0; i < max(1, numEvalLines); i++)
-                  {'moves': 'e2e4 e7e5 g1f3 b8c6 f1b5 g8f6', 'cp': '23'},
-              ],
-            },
-          };
-        },
-    },
-  );
   final app = await makeTestProviderScopeApp(
     tester,
     defaultPreferences: {
@@ -108,7 +87,30 @@ Future<void> makeEngineTestApp(
           return LichessClient(client, ref);
         }),
       webSocketChannelFactoryProvider.overrideWith(
-        (_) => FakeWebSocketChannelFactory((_) => fakeChannel),
+        (_) => FakeWebSocketChannelFactory(
+          (uri) => FakeWebSocketChannel(
+            uri,
+            connectionLag: connectionLag,
+            serverHandlers: {
+              if (isCloudEvalEnabled)
+                'evalGet': (json) {
+                  final data = json['d'] as Map<String, dynamic>;
+                  // final fen = data['fen'] as String;
+                  return {
+                    't': 'evalHit',
+                    'd': {
+                      'path': data['path'],
+                      'depth': '36',
+                      'pvs': [
+                        for (var i = 0; i < max(1, numEvalLines); i++)
+                          {'moves': 'e2e4 e7e5 g1f3 b8c6 f1b5 g8f6', 'cp': '23'},
+                      ],
+                    },
+                  };
+                },
+            },
+          ),
+        ),
       ),
     ],
     home:

@@ -8,9 +8,13 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import 'fake_websocket_channel.dart';
 
-SocketClient makeTestSocketClient(FakeWebSocketChannelFactory fakeChannelFactory) {
+final defaultSocketUri = Uri(path: kDefaultSocketRoute);
+
+SocketClient makeTestSocketClient({
+  FakeWebSocketChannelFactory fakeChannelFactory = defaultFakeWebSocketChannelFactory,
+}) {
   final client = SocketClient(
-    Uri(path: kDefaultSocketRoute),
+    defaultSocketUri,
     channelFactory: fakeChannelFactory,
     getSession: () => null,
     sri: 'testSri',
@@ -41,9 +45,11 @@ SocketClient makeTestSocketClient(FakeWebSocketChannelFactory fakeChannelFactory
 void main() {
   group('SocketClient', () {
     test('handles ping/pong', () async {
-      final fakeChannel = FakeWebSocketChannel();
+      final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
 
-      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      final socketClient = makeTestSocketClient(
+        fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+      );
       socketClient.connect();
 
       int sentPingCount = 0;
@@ -72,10 +78,10 @@ void main() {
         if (numConnectionAttempts == 1) {
           throw const SocketException('Connection failed');
         }
-        return FakeWebSocketChannel();
+        return FakeWebSocketChannel(defaultSocketUri);
       });
 
-      final socketClient = makeTestSocketClient(fakeChannelFactory);
+      final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
       socketClient.connect();
 
       // The first connection attempt will fail, but the second one will succeed
@@ -95,7 +101,7 @@ void main() {
 
       final fakeChannelFactory = FakeWebSocketChannelFactory((_) {
         numConnectionAttempts++;
-        final channel = FakeWebSocketChannel();
+        final channel = FakeWebSocketChannel(defaultSocketUri);
         int sentPingCount = 0;
         channel.sentMessages.forEach((message) {
           if (FakeWebSocketChannel.isPing(message)) {
@@ -111,7 +117,7 @@ void main() {
         return channel;
       });
 
-      final socketClient = makeTestSocketClient(fakeChannelFactory);
+      final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
       socketClient.connect();
 
       await socketClient.firstConnection;
@@ -131,9 +137,14 @@ void main() {
     });
 
     test('computes average lag', () async {
-      final fakeChannel = FakeWebSocketChannel(connectionLag: const Duration(milliseconds: 10));
+      final fakeChannel = FakeWebSocketChannel(
+        defaultSocketUri,
+        connectionLag: const Duration(milliseconds: 10),
+      );
 
-      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      final socketClient = makeTestSocketClient(
+        fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+      );
       socketClient.connect();
 
       // before the connection is ready the average lag is zero
@@ -173,9 +184,11 @@ void main() {
     });
 
     test('handles ackable messages', () async {
-      final fakeChannel = FakeWebSocketChannel();
+      final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
 
-      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      final socketClient = makeTestSocketClient(
+        fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+      );
       await socketClient.connect();
 
       // send a message that requires an ack
@@ -192,7 +205,7 @@ void main() {
       );
 
       // server acks the message
-      fakeChannel.addIncomingMessages(['{"t":"ack","d":1}']);
+      sendServerSocketMessages(defaultSocketUri, ['{"t":"ack","d":1}']);
 
       // no more messages are expected
       await expectLater(fakeChannel.sentMessagesExceptPing, emitsInOrder([]));
@@ -201,9 +214,11 @@ void main() {
     });
 
     test('handles batch message', () async {
-      final fakeChannel = FakeWebSocketChannel();
+      final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
 
-      final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+      final socketClient = makeTestSocketClient(
+        fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+      );
       await socketClient.connect();
 
       const serverMessage = '''
@@ -231,9 +246,11 @@ void main() {
   });
 
   test('should emit events', () async {
-    final fakeChannel = FakeWebSocketChannel();
+    final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
 
-    final socketClient = makeTestSocketClient(FakeWebSocketChannelFactory((_) => fakeChannel));
+    final socketClient = makeTestSocketClient(
+      fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+    );
     await socketClient.connect();
 
     // should not emit if _pong
@@ -271,7 +288,7 @@ Future<void> testEventEmitted(
   final futureExpect = expectLater(socketClient.stream, emitsInOrder(eventsToMatch));
 
   // server sends the message
-  fakeChannel.addIncomingMessages([serverMessage]);
+  sendServerSocketMessages(defaultSocketUri, [serverMessage]);
 
   // check that the socket events were emitted in order
   await futureExpect;

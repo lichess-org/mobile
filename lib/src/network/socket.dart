@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:clock/clock.dart' as clock_package;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -87,7 +88,11 @@ class SocketClient {
     this.pingMaxLag = _kPingMaxLag,
     this.autoReconnectDelay = _kAutoReconnectDelay,
     this.resendAckDelay = _kResendAckDelay,
-  });
+  }) : assert(route.path.isNotEmpty, 'Route path must not be empty'),
+       assert(pingDelay > Duration.zero, 'Ping delay must be greater than 0'),
+       assert(pingMaxLag > Duration.zero, 'Ping max lag must be greater than 0'),
+       assert(autoReconnectDelay > Duration.zero, 'Auto reconnect delay must be greater than 0'),
+       assert(resendAckDelay > Duration.zero, 'Resend ack delay must be greater than 0');
 
   final WebSocketChannelFactory channelFactory;
 
@@ -132,7 +137,7 @@ class SocketClient {
   Timer? _reconnectTimer;
   Timer? _ackResendTimer;
   int _pongCount = 0;
-  DateTime _lastPing = DateTime.now();
+  DateTime _lastPing = clock_package.clock.now();
 
   final _averageLag = ValueNotifier(Duration.zero);
 
@@ -209,6 +214,11 @@ class SocketClient {
         timeout: _kDefaultConnectTimeout,
       );
 
+      if (isDisposed) {
+        _logger.warning('SocketClient is disposed, cannot connect.');
+        return;
+      }
+
       _channel = channel;
 
       _socketStreamSubscription?.cancel();
@@ -258,7 +268,7 @@ class SocketClient {
           if (withLag == true) 'l': _averageLag.value.inMilliseconds,
         },
       };
-      _acks.add((DateTime.now(), ackId, message));
+      _acks.add((clock_package.clock.now(), ackId, message));
     } else {
       message = {
         't': topic,
@@ -302,6 +312,11 @@ class SocketClient {
   ///
   /// Returns a [Future] that completes when the connection is closed.
   Future<void> _disconnect() {
+    _socketStreamSubscription?.cancel();
+    _pingTimer?.cancel();
+    _reconnectTimer?.cancel();
+    _ackResendTimer?.cancel();
+
     final future =
         _sink
             ?.close()
@@ -321,10 +336,6 @@ class SocketClient {
             }) ??
         Future.value();
     _channel = null;
-    _socketStreamSubscription?.cancel();
-    _pingTimer?.cancel();
-    _reconnectTimer?.cancel();
-    _ackResendTimer?.cancel();
 
     return future;
   }
@@ -364,7 +375,7 @@ class SocketClient {
           ? jsonEncode({'t': 'p', 'l': (_averageLag.value.inMilliseconds * 0.1).round()})
           : 'p',
     );
-    _lastPing = DateTime.now();
+    _lastPing = clock_package.clock.now();
     _scheduleReconnect(pingMaxLag);
   }
 
@@ -378,7 +389,7 @@ class SocketClient {
     _schedulePing(pingDelay);
     _pongCount++;
     final currentLag = Duration(
-      milliseconds: math.min(DateTime.now().difference(_lastPing).inMilliseconds, 10000),
+      milliseconds: math.min(clock_package.clock.now().difference(_lastPing).inMilliseconds, 10000),
     );
 
     // Average first 4 pings, then switch to decaying average.
@@ -407,7 +418,7 @@ class SocketClient {
   }
 
   void _resendAcks() {
-    final resendCutoff = DateTime.now().subtract(const Duration(milliseconds: 2500));
+    final resendCutoff = clock_package.clock.now().subtract(const Duration(milliseconds: 2500));
     for (final (at, _, ack) in _acks) {
       if (at.isBefore(resendCutoff)) {
         _sink?.add(jsonEncode(ack));

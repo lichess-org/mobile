@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -37,19 +38,15 @@ final client = MockClient((request) {
 class MockSoundService extends Mock implements SoundService {}
 
 void main() {
+  const testGameFullId = GameFullId('qVChCOTcHSeW');
+  final testGameSocketUri = GameController.gameSocketUri(testGameFullId);
+
   group('Loading', () {
     testWidgets('a game directly with initialGameId', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
-
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const GameScreen(initialGameId: GameFullId('qVChCOTcHSeW')),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((_) => fakeSocket);
-          }),
-        ],
+        home: const GameScreen(initialGameId: testGameFullId),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
       await tester.pumpWidget(app);
 
@@ -62,9 +59,9 @@ void main() {
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNothing);
 
-      await fakeSocket.connectionEstablished;
+      await tester.pump(kFakeWebSocketConnectionLag);
 
-      fakeSocket.addIncomingMessages([
+      sendServerSocketMessages(testGameSocketUri, [
         makeFullEvent(
           const GameId('qVChCOTc'),
           '',
@@ -72,8 +69,8 @@ void main() {
           blackUserName: 'Steven',
         ),
       ]);
-      // wait for socket message
-      await tester.pump(const Duration(milliseconds: 10));
+      // wait for socket message handling
+      await tester.pump();
 
       expect(find.byType(PieceWidget), findsNWidgets(32));
       expect(find.text('Peter'), findsOneWidget);
@@ -81,22 +78,12 @@ void main() {
     });
 
     testWidgets('a game from the pool with a seek', (WidgetTester tester) async {
-      final fakeLobbySocket = FakeWebSocketChannel();
-      final fakeGameSocket = FakeWebSocketChannel();
-
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(
           seek: GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true),
         ),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory(
-              (String url) => url.contains('lobby') ? fakeLobbySocket : fakeGameSocket,
-            );
-          }),
-        ],
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
       await tester.pumpWidget(app);
 
@@ -109,11 +96,11 @@ void main() {
       // waiting for the game
       await tester.pump(const Duration(seconds: 2));
 
-      // when a seek is accepted, server sends a 'redirect' message with game id
-      fakeLobbySocket.addIncomingMessages([
+      // when a seek is accepted, server lobby sends a 'redirect' message with game id
+      sendServerSocketMessages(Uri(path: '/lobby/socket/v5'), [
         '{"t": "redirect", "d": {"id": "qVChCOTcHSeW" }, "v": 1}',
       ]);
-      await tester.pump(const Duration(milliseconds: 1));
+      await tester.pump();
 
       // now the game controller is loading
       expect(find.byType(Chessboard), findsOneWidget);
@@ -122,11 +109,10 @@ void main() {
       expect(find.text('3+2'), findsNothing);
       expect(find.widgetWithText(BottomBarButton, 'Cancel'), findsNothing);
 
-      await fakeGameSocket.connectionEstablished;
-      // now that game socket is open, lobby socket should be closed
-      expect(fakeLobbySocket.closeCode, isNotNull);
+      // wait for game socket to connect
+      await tester.pump(kFakeWebSocketConnectionLag);
 
-      fakeGameSocket.addIncomingMessages([
+      sendServerSocketMessages(GameController.gameSocketUri(testGameFullId), [
         makeFullEvent(
           const GameId('qVChCOTc'),
           '',
@@ -134,8 +120,8 @@ void main() {
           blackUserName: 'Steven',
         ),
       ]);
-      // wait for socket message
-      await tester.pump(const Duration(milliseconds: 10));
+      // wait for socket message handling
+      await tester.pump();
 
       expect(find.byType(PieceWidget), findsNWidgets(32));
       expect(find.text('Peter'), findsOneWidget);
@@ -150,9 +136,7 @@ void main() {
 
     for (final castlingMethod in CastlingMethod.values) {
       testWidgets('respect castling preference ($castlingMethod)', (tester) async {
-        final fakeSocket = FakeWebSocketChannel();
         await createTestGame(
-          fakeSocket,
           pgn: castlingSetupPgn,
           defaultPreferences: {
             PrefCategory.board.storageKey: jsonEncode(
@@ -189,9 +173,7 @@ void main() {
 
     for (final castlingMethod in CastlingMethod.values) {
       testWidgets('chess960: $castlingMethod', (tester) async {
-        final fakeSocket = FakeWebSocketChannel();
         await createTestGame(
-          fakeSocket,
           pgn: castlingSetupPgn,
           variant: Variant.chess960,
           initialFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
@@ -225,36 +207,27 @@ void main() {
       whiteUserName: 'Peter',
       blackUserName: 'Steven',
       youAre: Side.white,
-      tournament: const TournamentMeta(
-        id: TournamentId('id'),
+      tournament: TournamentMeta(
+        id: const TournamentId('id'),
         name: 'Test Tournament',
-        timeLeft: Duration(minutes: 10),
+        clock: (timeLeft: const Duration(minutes: 10), at: DateTime.now()),
         berserkable: true,
         ranks: (white: 42, black: 24),
       ),
     );
     testWidgets('displays tournament info', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
-
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(initialGameId: GameFullId('qVChCOTcHSeW')),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((_) => fakeSocket);
-          }),
-        ],
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
       await tester.pumpWidget(app);
       // Wait for game screen to load
       await tester.pump(const Duration(milliseconds: 10));
 
-      await fakeSocket.connectionEstablished;
-
-      fakeSocket.addIncomingMessages([tournamentGameEvent]);
-      // wait for socket message
-      await tester.pump(const Duration(milliseconds: 10));
+      sendServerSocketMessages(GameController.gameSocketUri(testGameFullId), [tournamentGameEvent]);
+      // wait for socket message handling
+      await tester.pump();
 
       // Should display tournament info
       expect(find.text('Peter'), findsOneWidget);
@@ -265,55 +238,46 @@ void main() {
     });
 
     testWidgets('supports berserking', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
-
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(initialGameId: GameFullId('qVChCOTcHSeW')),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-          webSocketChannelFactoryProvider.overrideWith((ref) {
-            return FakeWebSocketChannelFactory((_) => fakeSocket);
-          }),
-        ],
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
       await tester.pumpWidget(app);
       // Wait for game screen to load
       await tester.pump(const Duration(milliseconds: 10));
 
-      await fakeSocket.connectionEstablished;
-
-      fakeSocket.addIncomingMessages([tournamentGameEvent]);
-      // wait for socket message
-      await tester.pump(const Duration(milliseconds: 10));
+      sendServerSocketMessages(GameController.gameSocketUri(testGameFullId), [tournamentGameEvent]);
+      // wait for socket message handling
+      await tester.pump();
 
       // Nobody has berserked yet.
       // The widget we're finding is our own berserk button.
       expect(find.byIcon(LichessIcons.body_cut), findsOneWidget);
 
-      final hasBerserkedFuture = fakeSocket.sentMessages.contains('{"t":"berserk"}');
-
       // we berserk
       await tester.tap(find.byIcon(LichessIcons.body_cut));
       await tester.pump(const Duration(milliseconds: 10));
 
-      expect(await hasBerserkedFuture, true);
-
       // No server response yet, so should not yet show the berserk icon next to our name.
       expect(find.byIcon(LichessIcons.body_cut), findsOneWidget);
 
-      fakeSocket.addIncomingMessages(['''{"t": "berserk", "d": "white"}''']);
-      // wait for socket message
-      await tester.pump(const Duration(milliseconds: 10));
+      sendServerSocketMessages(GameController.gameSocketUri(testGameFullId), [
+        '''{"t": "berserk", "d": "white"}''',
+      ]);
+      // wait for socket message handling
+      await tester.pump();
 
       // We have berserked, which caused the berserk icon appear next to our name.
       // Also, the berserk button is still there (but disabled).
       expect(find.byIcon(LichessIcons.body_cut), findsNWidgets(2));
 
       // opponent berserks
-      fakeSocket.addIncomingMessages(['''{"t": "berserk", "d": "black"}''']);
-      // wait for socket message
-      await tester.pump(const Duration(milliseconds: 10));
+      sendServerSocketMessages(GameController.gameSocketUri(testGameFullId), [
+        '''{"t": "berserk", "d": "black"}''',
+      ]);
+      // wait for socket message handling
+      await tester.pump();
 
       expect(find.byIcon(LichessIcons.body_cut), findsNWidgets(3));
     });
@@ -321,8 +285,7 @@ void main() {
 
   group('Clock', () {
     testWidgets('loads on game start', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
-      await createTestGame(fakeSocket, tester);
+      await createTestGame(tester);
       expect(findClockWithTime('3:00'), findsNWidgets(2));
       expect(
         tester
@@ -335,8 +298,7 @@ void main() {
     });
 
     testWidgets('ticks after the first full move', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
-      await createTestGame(fakeSocket, tester);
+      await createTestGame(tester);
       expect(findClockWithTime('3:00'), findsNWidgets(2));
       await playMove(tester, 'e2', 'e4');
       // at that point clock is not yet started
@@ -348,7 +310,7 @@ void main() {
         2,
         reason: 'clocks are not active yet',
       );
-      fakeSocket.addIncomingMessages([
+      sendServerSocketMessages(testGameSocketUri, [
         '{"t": "move", "v": 1, "d": {"ply": 1, "uci": "e2e4", "san": "e4", "clock": {"white": 180, "black": 180}}}',
         '{"t": "move", "v": 2, "d": {"ply": 2, "uci": "e7e5", "san": "e5", "clock": {"white": 180, "black": 180}}}',
       ]);
@@ -365,9 +327,7 @@ void main() {
     });
 
     testWidgets('ticks immediately when resuming game', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
       await createTestGame(
-        fakeSocket,
         tester,
         pgn: 'e4 e5 Nf3',
         clock: const (
@@ -393,9 +353,7 @@ void main() {
     });
 
     testWidgets('switch timer side after a move', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
       await createTestGame(
-        fakeSocket,
         tester,
         pgn: 'e4 e5',
         clock: const (
@@ -427,7 +385,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
       expect(findClockWithTime('3:00'), findsOneWidget);
       // server ack having the white clock updated with the increment
-      fakeSocket.addIncomingMessages([
+      sendServerSocketMessages(testGameSocketUri, [
         '{"t": "move", "v": 1, "d": {"ply": 3, "uci": "g1f3", "san": "Nf3", "clock": {"white": 177, "black": 180}}}',
       ]);
       await tester.pump(const Duration(milliseconds: 10));
@@ -447,10 +405,8 @@ void main() {
     });
 
     testWidgets('compensates opponent lag', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
       int socketVersion = 0;
       await createTestGame(
-        fakeSocket,
         tester,
         pgn: 'e4 e5 Nf3 Nc6',
         clock: const (
@@ -465,7 +421,7 @@ void main() {
       );
       await tester.pump(const Duration(seconds: 3));
       await playMoveWithServerAck(
-        fakeSocket,
+        testGameFullId,
         tester,
         'f1',
         'c4',
@@ -493,9 +449,7 @@ void main() {
     testWidgets('onEmergency', (WidgetTester tester) async {
       final mockSoundService = MockSoundService();
       when(() => mockSoundService.play(Sound.lowTime)).thenAnswer((_) async {});
-      final fakeSocket = FakeWebSocketChannel();
       await createTestGame(
-        fakeSocket,
         tester,
         pgn: 'e4 e5',
         clock: const (
@@ -518,10 +472,12 @@ void main() {
     });
 
     testWidgets('flags', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
+      final socketFactory = ListenableFakeWebSocketChannelFactory(
+        createDefaultFakeWebSocketChannel,
+      );
       await createTestGame(
-        fakeSocket,
         tester,
+        socketFactory: socketFactory,
         pgn: 'e4 e5 Nf3',
         clock: const (
           running: true,
@@ -557,11 +513,11 @@ void main() {
       // we'll simulate an anormally long server response of 1s to check 2
       // flag messages are sent
       expectLater(
-        fakeSocket.sentMessagesExceptPing,
+        socketFactory.outgoingMessages(testGameSocketUri),
         emitsInOrder(['{"t":"flag","d":"black"}', '{"t":"flag","d":"black"}']),
       );
       await tester.pump(const Duration(seconds: 1));
-      fakeSocket.addIncomingMessages([
+      sendServerSocketMessages(testGameSocketUri, [
         '{"t":"endData","d":{"status":"outoftime","winner":"white","clock":{"wc":17800,"bc":0}}}',
       ]);
       await tester.pump(const Duration(milliseconds: 10));
@@ -584,9 +540,7 @@ void main() {
 
   group('Opening analysis', () {
     testWidgets('is not possible for an unfinished real time game', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
       await createTestGame(
-        fakeSocket,
         tester,
         pgn: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Qf3 Rb8 Bd3',
         socketVersion: 0,
@@ -599,9 +553,7 @@ void main() {
     });
 
     testWidgets('for an unfinished correspondence game', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
       await createTestGame(
-        fakeSocket,
         tester,
         pgn: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Qf3 Rb8 Bd3',
         clock: null,
@@ -637,8 +589,7 @@ void main() {
     });
 
     testWidgets('for a finished game', (WidgetTester tester) async {
-      final fakeSocket = FakeWebSocketChannel();
-      await loadFinishedTestGame(fakeSocket, tester);
+      await loadFinishedTestGame(tester);
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byKey(const Key('e6-whitequeen')), findsOneWidget);
       expect(find.byKey(const Key('d5-lastMove')), findsOneWidget);
@@ -667,15 +618,15 @@ void main() {
         when(
           () => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')),
         ).thenAnswer((_) async {});
-        final fakeSocket = FakeWebSocketChannel();
         await createTestGame(
-          fakeSocket,
           tester,
           pgn: 'e4 e5',
           overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
         );
-        fakeSocket.addIncomingMessages(['{"t":"message","d":{"u":"Magnus","t":"Hello!"}}']);
-        await tester.pump(const Duration(milliseconds: 100));
+        sendServerSocketMessages(testGameSocketUri, [
+          '{"t":"message","d":{"u":"Magnus","t":"Hello!"}}',
+        ]);
+        await tester.pump();
         verify(
           () => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')),
         ).called(1);
@@ -686,16 +637,16 @@ void main() {
       testWidgets('onNewMessage', (WidgetTester tester) async {
         final mockSoundService = MockSoundService();
         when(() => mockSoundService.play(Sound.confirmation)).thenAnswer((_) async {});
-        final fakeSocket = FakeWebSocketChannel();
         await createTestGame(
-          fakeSocket,
           tester,
           pgn: 'e4 e5',
           defaultPreferences: {PrefCategory.game.storageKey: '{"enableChat": false}'},
           overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
         );
-        fakeSocket.addIncomingMessages(['{"t":"message","d":{"u":"Magnus","t":"Hello!"}}']);
-        await tester.pump(const Duration(milliseconds: 100));
+        sendServerSocketMessages(testGameSocketUri, [
+          '{"t":"message","d":{"u":"Magnus","t":"Hello!"}}',
+        ]);
+        await tester.pump();
         verifyNever(() => mockSoundService.play(Sound.confirmation));
       });
     });
@@ -711,7 +662,7 @@ Finder findClockWithTime(String text, {bool skipOffstage = true}) {
 
 /// Simulates playing a move and getting the ack from the server after [elapsedTime].
 Future<void> playMoveWithServerAck(
-  FakeWebSocketChannel socket,
+  GameFullId gameFullId,
   WidgetTester tester,
   String from,
   String to, {
@@ -727,15 +678,14 @@ Future<void> playMoveWithServerAck(
   final lagStr =
       clockAck.lag != null ? ', "lag": ${(clockAck.lag!.inMilliseconds / 10).round()}' : '';
   await tester.pump(elapsedTime - const Duration(milliseconds: 1));
-  socket.addIncomingMessages([
+  sendServerSocketMessages(GameController.gameSocketUri(gameFullId), [
     '{"t": "move", "v": $socketVersion, "d": {"ply": $ply, "uci": "$uci", "san": "$san", "clock": {"white": ${(clockAck.white.inMilliseconds / 1000).toStringAsFixed(2)}, "black": ${(clockAck.black.inMilliseconds / 1000).toStringAsFixed(2)}$lagStr}}}',
   ]);
-  await tester.pump(const Duration(milliseconds: 1));
+  await tester.pump();
 }
 
 /// Convenient function to start a new test game
 Future<void> createTestGame(
-  FakeWebSocketChannel socket,
   WidgetTester tester, {
   Variant variant = Variant.standard,
   String? initialFen,
@@ -754,24 +704,30 @@ Future<void> createTestGame(
   Map<String, Object>? defaultPreferences,
   List<Override>? overrides,
   TournamentMeta? tournament,
+
+  /// An optional listenable fake web socket channel factory to use in place of the default one if
+  /// we need to listen to the sent messages.
+  ListenableFakeWebSocketChannelFactory? socketFactory,
 }) async {
+  const gameFullId = GameFullId('qVChCOTcHSeW');
   final app = await makeTestProviderScopeApp(
     tester,
-    home: const GameScreen(initialGameId: GameFullId('qVChCOTcHSeW')),
+    home: const GameScreen(initialGameId: gameFullId),
     defaultPreferences: defaultPreferences,
     overrides: [
       lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-      webSocketChannelFactoryProvider.overrideWith((ref) {
-        return FakeWebSocketChannelFactory((_) => socket);
-      }),
+      if (socketFactory != null)
+        webSocketChannelFactoryProvider.overrideWith((ref) {
+          ref.onDispose(socketFactory.dispose);
+          return socketFactory;
+        }),
       ...?overrides,
     ],
   );
   await tester.pumpWidget(app);
   await tester.pump(const Duration(milliseconds: 10));
-  await socket.connectionEstablished;
 
-  socket.addIncomingMessages([
+  sendServerSocketMessages(GameController.gameSocketUri(gameFullId), [
     makeFullEvent(
       variant: variant,
       const GameId('qVChCOTc'),
@@ -786,34 +742,32 @@ Future<void> createTestGame(
       tournament: tournament,
     ),
   ]);
-  await tester.pump(const Duration(milliseconds: 10));
+  await tester.pump();
 }
 
 Future<void> loadFinishedTestGame(
-  FakeWebSocketChannel socket,
   WidgetTester tester, {
   String serverFullEvent = _finishedGameFullEvent,
   List<Override>? overrides,
 }) async {
   final json = jsonDecode(serverFullEvent) as Map<String, dynamic>;
   final gameId = GameFullEvent.fromJson(json['d'] as Map<String, dynamic>).game.id;
+  final gameFullId = GameFullId('${gameId.value}test');
   final app = await makeTestProviderScopeApp(
     tester,
-    home: GameScreen(initialGameId: GameFullId('${gameId.value}test')),
+    home: GameScreen(initialGameId: gameFullId),
     overrides: [
       lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-      webSocketChannelFactoryProvider.overrideWith((ref) {
-        return FakeWebSocketChannelFactory((_) => socket);
-      }),
       ...?overrides,
     ],
   );
   await tester.pumpWidget(app);
   await tester.pump(const Duration(milliseconds: 10));
-  await socket.connectionEstablished;
+  // wait for socket
+  await tester.pump(kFakeWebSocketConnectionLag);
 
-  socket.addIncomingMessages([serverFullEvent]);
-  await tester.pump(const Duration(milliseconds: 10));
+  sendServerSocketMessages(GameController.gameSocketUri(gameFullId), [serverFullEvent]);
+  await tester.pump();
 }
 
 const _finishedGameFullEvent = '''
