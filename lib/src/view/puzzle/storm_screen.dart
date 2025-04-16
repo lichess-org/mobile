@@ -614,7 +614,6 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
         children: [
           if (highScoreWidgets != null) ...highScoreWidgets,
           ListSection(
-            cupertinoAdditionalDividerMargin: 6,
             header: Text('${widget.stats.score} ${context.l10n.stormPuzzlesSolved}'),
             children: [
               _StatsRow(context.l10n.stormMoves, widget.stats.moves.toString()),

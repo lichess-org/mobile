@@ -65,8 +65,6 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               ),
             ],
           ),
-          // hack to make the divider take full length or row
-          cupertinoAdditionalDividerMargin: -14,
           children: [
             StatCardRow([
               StatCard(

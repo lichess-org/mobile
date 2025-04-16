@@ -16,7 +16,6 @@ class ListSection extends StatelessWidget {
     this.hasLeading = false,
     this.dense = false,
     this.materialFilledCard = false,
-    this.cupertinoAdditionalDividerMargin,
     this.backgroundColor,
   }) : _isLoading = false;
 
@@ -31,7 +30,6 @@ class ListSection extends StatelessWidget {
        footer = null,
        dense = false,
        materialFilledCard = false,
-       cupertinoAdditionalDividerMargin = null,
        backgroundColor = null,
        _isLoading = true;
 
@@ -57,9 +55,6 @@ class ListSection extends StatelessWidget {
 
   /// Use it to set [ListTileTheme.dense] property.
   final bool dense;
-
-  /// See [CupertinoListSection.additionalDividerMargin].
-  final double? cupertinoAdditionalDividerMargin;
 
   final Color? backgroundColor;
 
