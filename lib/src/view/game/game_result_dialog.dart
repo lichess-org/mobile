@@ -138,7 +138,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                     : null,
             child: Text(context.l10n.newOpponent, textAlign: TextAlign.center),
           ),
-        if (gameState.tournament != null)
+        if (gameState.tournament?.isOngoing == true)
           SecondaryButton(
             semanticsLabel: context.l10n.backToTournament,
             onPressed: () {

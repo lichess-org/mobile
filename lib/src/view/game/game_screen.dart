@@ -409,7 +409,7 @@ class _StandaloneGameTitle extends ConsumerWidget {
     final metaAsync = ref.watch(gameMetaProvider(id));
     return metaAsync.when(
       data: (meta) {
-        if (meta.tournament != null) {
+        if (meta.tournament?.isOngoing == true) {
           return _TournamentGameTitle(meta.tournament!);
         }
 

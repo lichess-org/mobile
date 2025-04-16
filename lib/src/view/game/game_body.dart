@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/message_screen.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -777,6 +778,15 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.newOpponent),
             onPressed: () => onNewOpponentCallback(gameState.game),
+          ),
+        if (gameState.tournament?.isFinished == true)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.backToTournament),
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(TournamentScreen.buildRoute(context, gameState.tournament!.id));
+            },
           ),
       ],
     );

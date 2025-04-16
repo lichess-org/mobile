@@ -290,6 +290,8 @@ class ServerGamePrefs with _$ServerGamePrefs {
 
 @Freezed(fromJson: true, toJson: true)
 class TournamentMeta with _$TournamentMeta {
+  const TournamentMeta._();
+
   const factory TournamentMeta({
     required TournamentId id,
     required String name,
@@ -299,6 +301,9 @@ class TournamentMeta with _$TournamentMeta {
   }) = _TournamentMeta;
 
   factory TournamentMeta.fromJson(Map<String, dynamic> json) => _$TournamentMetaFromJson(json);
+
+  bool get isOngoing => clock.timeLeft > Duration.zero;
+  bool get isFinished => clock.timeLeft <= Duration.zero;
 }
 
 @Freezed(fromJson: true, toJson: true)

@@ -97,7 +97,8 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
   bool get resignable => playable && !abortable;
   bool get drawable =>
       playable && lastPosition.fullmoves >= 2 && !(me?.offeringDraw == true) && !hasAI;
-  bool get rematchable => meta.rules == null || !meta.rules!.contains(GameRule.noRematch);
+  bool get rematchable =>
+      meta.tournament == null && (meta.rules == null || !meta.rules!.contains(GameRule.noRematch));
   bool get canTakeback =>
       takebackable &&
       playable &&
