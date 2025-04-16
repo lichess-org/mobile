@@ -65,7 +65,7 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
 extension CustomThemeBuildContext on BuildContext {
   CustomTheme get _defaultLichessTheme => CustomTheme(
     rowEven: ColorScheme.of(this).surfaceContainer,
-    rowOdd: ColorScheme.of(this).surfaceContainerHigh,
+    rowOdd: ColorScheme.of(this).surfaceContainerLow,
   );
 
   CustomTheme get lichessTheme => Theme.of(this).extension<CustomTheme>() ?? _defaultLichessTheme;
@@ -138,11 +138,7 @@ extension CustomThemeBuildContext on BuildContext {
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
       menuTheme: isIOS ? _makeCupertinoMenuThemeData() : null,
       sliderTheme: kSliderTheme,
-      extensions: [
-        lichessCustomColors.harmonized(themeLight.colorScheme),
-        if (isIOS)
-          const CustomTheme(rowEven: Colors.white, rowOdd: Color.fromARGB(255, 247, 246, 245)),
-      ],
+      extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
     ),
     dark: themeDark.copyWith(
       cupertinoOverrideTheme: darkCupertino,
