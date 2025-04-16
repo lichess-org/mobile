@@ -715,21 +715,25 @@ class _ChallengeScreenButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-
     if (session == null) {
       return const SizedBox.shrink();
     }
-
     final connectivity = ref.watch(connectivityChangesProvider);
     final challenges = ref.watch(challengesProvider);
-    final count = challenges.valueOrNull?.inward.length;
+
+    final inwardCount = challenges.valueOrNull?.inward.length ?? 0;
+    final outwardCount = challenges.valueOrNull?.outward.length ?? 0;
+
+    if (inwardCount == 0 && outwardCount == 0) {
+      return const SizedBox.shrink();
+    }
 
     return connectivity.maybeWhen(
       data:
           (connectivity) => SemanticIconButton(
             icon: Badge.count(
-              count: count ?? 0,
-              isLabelVisible: (count ?? 0) > 0,
+              count: inwardCount,
+              isLabelVisible: inwardCount > 0,
               child: const Icon(LichessIcons.crossed_swords, size: 18.0),
             ),
             semanticsLabel: context.l10n.preferencesNotifyChallenge,

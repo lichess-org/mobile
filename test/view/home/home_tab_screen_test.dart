@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import '../../example_data.dart';
 import '../../mock_server_responses.dart';
 import '../../model/auth/fake_session_storage.dart';
+import '../../model/challenge/challenge_repository_test.dart';
 import '../../network/fake_http_client_factory.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -53,16 +54,31 @@ void main() {
       );
     });
 
-    testWidgets('shows challenge button if has session', (tester) async {
+    testWidgets('shows challenge button if has challenges', (tester) async {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
         userSession: fakeSession,
+        overrides: [
+          httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) {
+                if (request.url.path == '/api/challenge') {
+                  return mockResponse(challengesList, 200);
+                }
+                return mockResponse('', 200);
+              }),
+            ),
+          ),
+        ],
       );
       await tester.pumpWidget(app);
 
       // wait for connectivity
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      await tester.pump();
+
+      // wait for challenge list to load
       await tester.pump();
 
       expect(
