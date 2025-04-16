@@ -138,10 +138,7 @@ class ConnectivityBanner extends ConsumerWidget {
                     'Network connectivity unavailable.',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color:
-                          theme.platform == TargetPlatform.iOS ? null : theme.colorScheme.onSurface,
-                    ),
+                    style: TextStyle(color: theme.colorScheme.onSurface),
                   ),
                 ),
               ],

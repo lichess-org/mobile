@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
@@ -7,7 +8,10 @@ double estimateRemainingHeightLeftBoard(BuildContext context) {
   final padding = MediaQuery.paddingOf(context);
   final safeViewportHeight = size.height - padding.top - padding.bottom;
   final boardSize = size.width;
-  final appBarHeight = Theme.of(context).platform == TargetPlatform.iOS ? 44.0 : 56.0;
+  final appBarHeight =
+      Theme.of(context).platform == TargetPlatform.iOS
+          ? kMinInteractiveDimensionCupertino
+          : kToolbarHeight;
   return safeViewportHeight - boardSize - appBarHeight - kBottomBarHeight;
 }
 
