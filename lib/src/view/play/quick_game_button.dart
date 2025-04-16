@@ -30,7 +30,10 @@ class QuickGameButton extends ConsumerWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(playPrefs.quickPairingTimeIncrement.display),
+                  Text(
+                    playPrefs.quickPairingTimeIncrement.display,
+                    style: const TextStyle(letterSpacing: 2.0),
+                  ),
                   const Icon(Icons.keyboard_arrow_down),
                 ],
               ),

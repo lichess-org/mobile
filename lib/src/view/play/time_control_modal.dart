@@ -37,59 +37,62 @@ class TimeControlModal extends ConsumerWidget {
       children: [
         Padding(padding: _horizontalPadding, child: SettingsSectionTitle(context.l10n.timeControl)),
         const SizedBox(height: 4.0),
-        Padding(
-          padding: Styles.bodySectionPadding.add(Styles.sectionBottomPadding),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _SectionChoices(
-                value,
-                choices: [
-                  if (!excludeUltraBullet) const TimeIncrement(0, 1),
-                  const TimeIncrement(60, 0),
-                  const TimeIncrement(60, 1),
-                  const TimeIncrement(120, 1),
-                ],
-                title: const _SectionTitle(title: 'Bullet', icon: LichessIcons.bullet),
-                onSelected: onSelected,
-              ),
-              const SizedBox(height: 20.0),
-              _SectionChoices(
-                value,
-                choices: const [
-                  TimeIncrement(180, 0),
-                  TimeIncrement(180, 2),
-                  TimeIncrement(300, 0),
-                  TimeIncrement(300, 3),
-                ],
-                title: const _SectionTitle(title: 'Blitz', icon: LichessIcons.blitz),
-                onSelected: onSelected,
-              ),
-              const SizedBox(height: 20.0),
-              _SectionChoices(
-                value,
-                choices: const [
-                  TimeIncrement(600, 0),
-                  TimeIncrement(600, 5),
-                  TimeIncrement(900, 0),
-                  TimeIncrement(900, 10),
-                ],
-                title: const _SectionTitle(title: 'Rapid', icon: LichessIcons.rapid),
-                onSelected: onSelected,
-              ),
-              const SizedBox(height: 20.0),
-              _SectionChoices(
-                value,
-                choices: const [
-                  TimeIncrement(1500, 0),
-                  TimeIncrement(1800, 0),
-                  TimeIncrement(1800, 20),
-                  TimeIncrement(3600, 0),
-                ],
-                title: const _SectionTitle(title: 'Classical', icon: LichessIcons.classical),
-                onSelected: onSelected,
-              ),
-            ],
+        Card.filled(
+          margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _SectionChoices(
+                  value,
+                  choices: [
+                    if (!excludeUltraBullet) const TimeIncrement(0, 1),
+                    const TimeIncrement(60, 0),
+                    const TimeIncrement(60, 1),
+                    const TimeIncrement(120, 1),
+                  ],
+                  title: const _SectionTitle(title: 'Bullet', icon: LichessIcons.bullet),
+                  onSelected: onSelected,
+                ),
+                const SizedBox(height: 20.0),
+                _SectionChoices(
+                  value,
+                  choices: const [
+                    TimeIncrement(180, 0),
+                    TimeIncrement(180, 2),
+                    TimeIncrement(300, 0),
+                    TimeIncrement(300, 3),
+                  ],
+                  title: const _SectionTitle(title: 'Blitz', icon: LichessIcons.blitz),
+                  onSelected: onSelected,
+                ),
+                const SizedBox(height: 20.0),
+                _SectionChoices(
+                  value,
+                  choices: const [
+                    TimeIncrement(600, 0),
+                    TimeIncrement(600, 5),
+                    TimeIncrement(900, 0),
+                    TimeIncrement(900, 10),
+                  ],
+                  title: const _SectionTitle(title: 'Rapid', icon: LichessIcons.rapid),
+                  onSelected: onSelected,
+                ),
+                const SizedBox(height: 20.0),
+                _SectionChoices(
+                  value,
+                  choices: const [
+                    TimeIncrement(1500, 0),
+                    TimeIncrement(1800, 0),
+                    TimeIncrement(1800, 20),
+                    TimeIncrement(3600, 0),
+                  ],
+                  title: const _SectionTitle(title: 'Classical', icon: LichessIcons.classical),
+                  onSelected: onSelected,
+                ),
+              ],
+            ),
           ),
         ),
         Card.filled(
@@ -267,14 +270,14 @@ class _ChoiceChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: ColorScheme.of(context).secondaryContainer.withValues(alpha: selected ? 1 : 0.2),
+        color:
+            selected
+                ? ColorScheme.of(context).primaryContainer
+                : ColorScheme.of(context).surfaceContainerLow,
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         border: Border.fromBorderSide(
           BorderSide(
-            color:
-                selected
-                    ? ColorScheme.of(context).secondaryContainer
-                    : Theme.of(context).dividerColor,
+            color: selected ? ColorScheme.of(context).primary : Theme.of(context).dividerColor,
             width: 1.0,
           ),
         ),
@@ -287,7 +290,10 @@ class _ChoiceChip extends StatelessWidget {
           child: Center(
             child: DefaultTextStyle.merge(
               style: Styles.timeControl.copyWith(
-                color: selected ? ColorScheme.of(context).onSecondaryContainer : null,
+                color:
+                    selected
+                        ? ColorScheme.of(context).onPrimaryContainer
+                        : ColorScheme.of(context).onSurfaceVariant,
               ),
               child: label,
             ),
