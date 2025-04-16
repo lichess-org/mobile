@@ -220,7 +220,7 @@ class _StandingPlayer extends StatelessWidget {
       leading:
           player.withdraw
               ? Icon(Icons.pause, color: textShade(context, 0.3), size: 20)
-              : Text('${player.rank}', textAlign: TextAlign.center),
+              : Text(player.rank.toString().padLeft(2).padRight(3), textAlign: TextAlign.center),
       title: UserFullNameWidget(
         user: player.user,
         rating: player.rating,
