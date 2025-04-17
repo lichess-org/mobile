@@ -78,13 +78,16 @@ class _Title extends StatelessWidget {
         })
         .toList(growable: false);
     return InkWell(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(perf.icon),
-          Text(' ${context.l10n.perfStatPerfStats(perf.title)}', overflow: TextOverflow.ellipsis),
-          const Icon(Icons.arrow_drop_down),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(perf.icon),
+            Text(' ${context.l10n.perfStatPerfStats(perf.title)}', overflow: TextOverflow.ellipsis),
+            const Icon(Icons.arrow_drop_down),
+          ],
+        ),
       ),
       onTap: () {
         showAdaptiveActionSheet<void>(
