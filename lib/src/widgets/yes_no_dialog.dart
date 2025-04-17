@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
@@ -21,7 +20,7 @@ class YesNoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformAlertDialog(
+    return AlertDialog.adaptive(
       title: title,
       content: content,
       actions: [

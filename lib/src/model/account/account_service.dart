@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart' show Navigator, Text, showAdaptiveDialog;
+import 'package:flutter/material.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart' show LichessBinding;
@@ -89,7 +89,7 @@ class AccountService {
       context: context,
       barrierDismissible: true,
       builder: (context) {
-        return PlatformAlertDialog(
+        return AlertDialog.adaptive(
           content: PlaybanMessage(playban: playban, centerText: true),
           actions: [
             PlatformDialogAction(

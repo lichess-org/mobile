@@ -299,7 +299,7 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveDialog(
       context: context,
       builder:
-          (context) => PlatformAlertDialog(
+          (context) => AlertDialog.adaptive(
             title: Text(context.l10n.aboutX('Puzzle Streak')),
             content: Text(context.l10n.puzzleStreakDescription),
             actions: [

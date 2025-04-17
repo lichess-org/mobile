@@ -26,7 +26,7 @@ class EditProfileScreen extends StatelessWidget {
     return showAdaptiveDialog<bool>(
       context: context,
       builder: (context) {
-        return PlatformAlertDialog(
+        return AlertDialog.adaptive(
           title: Text(context.l10n.mobileAreYouSure),
           content: const Text('Your changes will be lost.'),
           actions: [

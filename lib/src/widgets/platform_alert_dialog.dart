@@ -2,35 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-/// Displays an [AlertDialog] for Android and a [CupertinoAlertDialog] for iOS.
-class PlatformAlertDialog extends StatelessWidget {
-  const PlatformAlertDialog({
-    super.key,
-    this.title,
-    this.content,
-    this.actions = const <PlatformDialogAction>[],
-  });
-
-  /// See [AlertDialog.title] for Android and [CupertinoAlertDialog.title] for iOS.
-  final Widget? title;
-
-  /// See [AlertDialog.content] for Android and [CupertinoAlertDialog.content] for iOS.
-  final Widget? content;
-
-  /// See [AlertDialog.actions] for Android and [CupertinoAlertDialog.actions] for iOS.
-  final List<PlatformDialogAction> actions;
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: (context) => AlertDialog(title: title, content: content, actions: actions),
-      iosBuilder:
-          (context) => CupertinoAlertDialog(title: title, content: content, actions: actions),
-    );
-  }
-}
-
-/// To be used with [PlatformAlertDialog.actions]. Displays a [TextButton] for Android and a [CupertinoDialogAction] for iOS.
+/// Displays a [TextButton] for Android and a [CupertinoDialogAction] for iOS.
+///
+/// To be used with [AlertDialog.adaptive].
 class PlatformDialogAction extends StatelessWidget {
   const PlatformDialogAction({
     super.key,

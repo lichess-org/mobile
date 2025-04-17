@@ -477,43 +477,41 @@ Future<void> _coordinateTrainingInfoDialogBuilder(BuildContext context) {
   return showAdaptiveDialog(
     context: context,
     builder: (context) {
-      final content = SingleChildScrollView(
-        child: RichText(
-          text: TextSpan(
-            style: DefaultTextStyle.of(context).style,
-            // TODO translate
-            children: const [
-              TextSpan(
-                text:
-                    'Knowing the chessboard coordinates is a very important skill for several reasons:\n',
-              ),
-              TextSpan(
-                text:
-                    '  • Most chess courses and exercises use the algebraic notation extensively.\n',
-              ),
-              TextSpan(
-                text:
-                    "  • It makes it easier to talk to your chess friends, since you both understand the 'language of chess'.\n",
-              ),
-              TextSpan(
-                text:
-                    '  • You can analyse a game more effectively if you can quickly recognise coordinates.\n',
-              ),
-              TextSpan(text: '\n'),
-              TextSpan(text: 'Find Square\n', style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(
-                text:
-                    'A coordinate appears on the board and you must click on the corresponding square.\n',
-              ),
-              TextSpan(text: 'You have 30 seconds to correctly map as many squares as possible!\n'),
-            ],
+      return AlertDialog.adaptive(
+        title: Text(context.l10n.aboutX('Coordinate Training')),
+        content: const SingleChildScrollView(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text:
+                      'Knowing the chessboard coordinates is a very important skill for several reasons:\n',
+                ),
+                TextSpan(
+                  text:
+                      '  • Most chess courses and exercises use the algebraic notation extensively.\n',
+                ),
+                TextSpan(
+                  text:
+                      "  • It makes it easier to talk to your chess friends, since you both understand the 'language of chess'.\n",
+                ),
+                TextSpan(
+                  text:
+                      '  • You can analyse a game more effectively if you can quickly recognise coordinates.\n',
+                ),
+                TextSpan(text: '\n'),
+                TextSpan(text: 'Find Square\n', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(
+                  text:
+                      'A coordinate appears on the board and you must click on the corresponding square.\n',
+                ),
+                TextSpan(
+                  text: 'You have 30 seconds to correctly map as many squares as possible!\n',
+                ),
+              ],
+            ),
           ),
         ),
-      );
-
-      return PlatformAlertDialog(
-        title: Text(context.l10n.aboutX('Coordinate Training')),
-        content: content,
         actions: [
           PlatformDialogAction(
             onPressed: () => Navigator.of(context).pop(),

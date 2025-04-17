@@ -195,48 +195,45 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
   return showAdaptiveDialog(
     context: context,
     builder: (context) {
-      final content = SingleChildScrollView(
-        child: RichText(
-          text: TextSpan(
-            style: DefaultTextStyle.of(context).style,
-            children: const [
-              TextSpan(text: '\n'),
-              TextSpan(
-                text:
-                    'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
-              ),
-              TextSpan(text: '\n\n'),
-              TextSpan(text: 'Combo bar\n', style: TextStyle(fontSize: 18)),
-              TextSpan(
-                text: 'Each correct ',
-                children: [
-                  TextSpan(text: 'move', style: TextStyle(fontWeight: FontWeight.bold)),
-                  TextSpan(
-                    text:
-                        ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
-                  ),
-                ],
-              ),
-              TextSpan(text: '\n\n'),
-              TextSpan(text: 'Bonus values:\n'),
-              TextSpan(text: '• 5 moves: +3s\n'),
-              TextSpan(text: '• 12 moves: +5s\n'),
-              TextSpan(text: '• 20 moves: +7s\n'),
-              TextSpan(text: '• 30 moves: +10s\n'),
-              TextSpan(text: '• Then +10s every 10 other moves.\n'),
-              TextSpan(text: '\n'),
-              TextSpan(
-                text:
-                    'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
-              ),
-            ],
+      return AlertDialog.adaptive(
+        title: Text(context.l10n.aboutX('Puzzle Storm')),
+        content: const SingleChildScrollView(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: '\n'),
+                TextSpan(
+                  text:
+                      'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
+                ),
+                TextSpan(text: '\n\n'),
+                TextSpan(text: 'Combo bar\n', style: TextStyle(fontSize: 18)),
+                TextSpan(
+                  text: 'Each correct ',
+                  children: [
+                    TextSpan(text: 'move', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(
+                      text:
+                          ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
+                    ),
+                  ],
+                ),
+                TextSpan(text: '\n\n'),
+                TextSpan(text: 'Bonus values:\n'),
+                TextSpan(text: '• 5 moves: +3s\n'),
+                TextSpan(text: '• 12 moves: +5s\n'),
+                TextSpan(text: '• 20 moves: +7s\n'),
+                TextSpan(text: '• 30 moves: +10s\n'),
+                TextSpan(text: '• Then +10s every 10 other moves.\n'),
+                TextSpan(text: '\n'),
+                TextSpan(
+                  text:
+                      'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
+                ),
+              ],
+            ),
           ),
         ),
-      );
-
-      return PlatformAlertDialog(
-        title: Text(context.l10n.aboutX('Puzzle Storm')),
-        content: content,
         actions: [
           PlatformDialogAction(
             onPressed: () => Navigator.of(context).pop(),

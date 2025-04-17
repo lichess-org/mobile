@@ -838,7 +838,7 @@ class _GameNegotiationDialog extends StatelessWidget {
       onAccept();
     }
 
-    return PlatformAlertDialog(
+    return AlertDialog.adaptive(
       content: title,
       actions: [
         PlatformDialogAction(onPressed: accept, child: Text(context.l10n.accept)),
@@ -866,7 +866,7 @@ class _ThreefoldDialog extends ConsumerWidget {
       ref.read(gameControllerProvider(id).notifier).claimDraw();
     }
 
-    return PlatformAlertDialog(
+    return AlertDialog.adaptive(
       content: content,
       actions: [
         PlatformDialogAction(onPressed: accept, child: Text(context.l10n.claimADraw)),
@@ -898,7 +898,7 @@ class _ClaimWinDialog extends ConsumerWidget {
       ref.read(ctrlProvider.notifier).forceDraw();
     }
 
-    return PlatformAlertDialog(
+    return AlertDialog.adaptive(
       content: content,
       actions: [
         PlatformDialogAction(
