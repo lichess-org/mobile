@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_filters.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -46,63 +45,54 @@ class BoardEditorScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SafeArea(
-              bottom: false,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final aspectRatio = constraints.biggest.aspectRatio;
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final aspectRatio = constraints.biggest.aspectRatio;
 
-                  final defaultBoardSize = constraints.biggest.shortestSide;
-                  final isTablet = isTabletOrLarger(context);
-                  final remainingHeight = constraints.maxHeight - defaultBoardSize;
-                  final isSmallScreen = remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                  final boardSize =
-                      isTablet || isSmallScreen
-                          ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                          : defaultBoardSize;
+          final defaultBoardSize = constraints.biggest.shortestSide;
+          final isTablet = isTabletOrLarger(context);
+          final remainingHeight = constraints.maxHeight - defaultBoardSize;
+          final isSmallScreen = remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
+          final boardSize =
+              isTablet || isSmallScreen
+                  ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                  : defaultBoardSize;
 
-                  final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
+          final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
 
-                  return Flex(
-                    direction: direction,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _PieceMenu(
-                        boardSize,
-                        initialFen: initialFen,
-                        direction: flipAxis(direction),
-                        side: boardEditorState.orientation.opposite,
-                        isTablet: isTablet,
-                      ),
-                      _BoardEditor(
-                        boardSize,
-                        initialFen: initialFen,
-                        orientation: boardEditorState.orientation,
-                        isTablet: isTablet,
-                        // unlockView is safe because chessground will never modify the pieces
-                        pieces: boardEditorState.pieces.unlockView,
-                      ),
-                      _PieceMenu(
-                        boardSize,
-                        initialFen: initialFen,
-                        direction: flipAxis(direction),
-                        side: boardEditorState.orientation,
-                        isTablet: isTablet,
-                      ),
-                    ],
-                  );
-                },
+          return Flex(
+            direction: direction,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _PieceMenu(
+                boardSize,
+                initialFen: initialFen,
+                direction: flipAxis(direction),
+                side: boardEditorState.orientation.opposite,
+                isTablet: isTablet,
               ),
-            ),
-          ),
-          _BottomBar(initialFen),
-        ],
+              _BoardEditor(
+                boardSize,
+                initialFen: initialFen,
+                orientation: boardEditorState.orientation,
+                isTablet: isTablet,
+                // unlockView is safe because chessground will never modify the pieces
+                pieces: boardEditorState.pieces.unlockView,
+              ),
+              _PieceMenu(
+                boardSize,
+                initialFen: initialFen,
+                direction: flipAxis(direction),
+                side: boardEditorState.orientation,
+                isTablet: isTablet,
+              ),
+            ],
+          );
+        },
       ),
+      bottomNavigationBar: _BottomBar(initialFen),
     );
   }
 }
@@ -284,7 +274,7 @@ class _BottomBar extends ConsumerWidget {
     final editorState = ref.watch(editorController);
     final pieceCount = editorState.pieces.length;
 
-    return PlatformBottomBar(
+    return BottomBar(
       children: [
         BottomBarButton(
           icon: Icons.menu,

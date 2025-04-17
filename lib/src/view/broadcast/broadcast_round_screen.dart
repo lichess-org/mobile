@@ -235,7 +235,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           setTournamentId: setTournamentId,
           setRoundId: setRoundId,
         ),
-        _ => const PlatformBottomBar.empty(transparentBackground: false),
+        _ => const BottomBar.empty(transparentBackground: false),
       },
     );
   }
@@ -288,7 +288,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformBottomBar(
+    return BottomBar(
       transparentBackground: false,
       children: [
         if (tournament.group != null)

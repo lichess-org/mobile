@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class StudyBottomBar extends ConsumerWidget {
@@ -35,7 +34,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).valueOrNull;
     if (state == null) {
-      return const PlatformBottomBar(children: []);
+      return const BottomBar(children: []);
     }
 
     final onGoForward =
@@ -43,7 +42,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
     final onGoBack =
         state.canGoBack ? ref.read(studyControllerProvider(id).notifier).userPrevious : null;
 
-    return PlatformBottomBar(
+    return BottomBar(
       transparentBackground: false,
       children: [
         _ChapterButton(state: state),
@@ -89,7 +88,7 @@ class _GamebookBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).requireValue;
 
-    return PlatformBottomBar(
+    return BottomBar(
       children: [
         _ChapterButton(state: state),
         ...switch (state.gamebookState) {

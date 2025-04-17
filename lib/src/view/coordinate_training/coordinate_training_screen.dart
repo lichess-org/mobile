@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_display.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -187,7 +186,7 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
           if (!trainingState.trainingActive)
-            PlatformBottomBar(
+            BottomBar(
               children: [
                 BottomBarButton(
                   label: context.l10n.menu,

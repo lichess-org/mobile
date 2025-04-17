@@ -42,7 +42,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -210,7 +209,7 @@ class _LoadPuzzleFromId extends ConsumerWidget {
                     child: BoardTable.empty(showEngineGaugePlaceholder: true),
                   ),
                 ),
-                PlatformBottomBar.empty(),
+                BottomBar.empty(),
               ],
             ),
           ),
@@ -447,7 +446,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     final puzzleState = ref.watch(ctrlProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
-    return PlatformBottomBar(
+    return BottomBar(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         if (puzzleState.mode != PuzzleMode.view)

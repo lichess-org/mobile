@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
@@ -214,7 +213,7 @@ class _BottomBar extends ConsumerWidget {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, isPuzzleStreak: true);
     final puzzleState = ref.watch(ctrlProvider);
 
-    return PlatformBottomBar(
+    return BottomBar(
       children: [
         if (!streak.finished)
           BottomBarButton(

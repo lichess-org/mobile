@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settin
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
@@ -225,7 +224,7 @@ class _BottomBar extends ConsumerWidget {
       OpeningDatabase.player => context.l10n.player,
     };
 
-    return PlatformBottomBar(
+    return BottomBar(
       transparentBackground: false,
       children: [
         BottomBarButton(

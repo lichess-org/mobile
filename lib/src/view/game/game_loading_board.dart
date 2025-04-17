@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -82,7 +81,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
             ),
           ),
         ),
-        PlatformBottomBar(
+        BottomBar(
           children: [
             FutureBuilder(
               future: _cancelGameCreationFuture,
@@ -187,7 +186,7 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
             ),
           ),
         ),
-        PlatformBottomBar(
+        BottomBar(
           children: [
             FutureBuilder(
               future: _cancelChallengeFuture,
@@ -318,7 +317,7 @@ class LoadGameError extends StatelessWidget {
             ),
           ),
         ),
-        PlatformBottomBar(
+        BottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),
@@ -400,7 +399,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
             ),
           ),
         ),
-        PlatformBottomBar(
+        BottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),

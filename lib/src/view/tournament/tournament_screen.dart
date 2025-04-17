@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -119,51 +118,45 @@ class _Body extends ConsumerWidget {
               ),
           ],
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: Styles.horizontalBodyPadding,
-                child: ListView(
-                  children: [
-                    Card(
-                      child: Padding(
-                        padding: Styles.bodySectionPadding,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _TournamentInfo(state.tournament),
-                            if (state.tournament.verdicts.list.isNotEmpty) ...[
-                              const SizedBox(height: 10),
-                              _Verdicts(state.tournament.verdicts),
+        body: Padding(
+          padding: Styles.horizontalBodyPadding,
+          child: ListView(
+            children: [
+              Card(
+                child: Padding(
+                  padding: Styles.bodySectionPadding,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _TournamentInfo(state.tournament),
+                      if (state.tournament.verdicts.list.isNotEmpty) ...[
+                        const SizedBox(height: 10),
+                        _Verdicts(state.tournament.verdicts),
+                      ],
+                      if (!state.tournament.berserkable) ...[
+                        const SizedBox(height: 10),
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              const WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
+                              TextSpan(text: ' ${context.l10n.arenaNoBerserkAllowed}'),
                             ],
-                            if (!state.tournament.berserkable) ...[
-                              const SizedBox(height: 10),
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    const WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
-                                    TextSpan(text: ' ${context.l10n.arenaNoBerserkAllowed}'),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    _Standing(state),
-                    const SizedBox(height: 16),
-                    if (state.tournament.featuredGame != null)
-                      _FeaturedGame(state.tournament.featuredGame!),
-                  ],
+                      ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            _BottomBar(state),
-          ],
+              const SizedBox(height: 16),
+              _Standing(state),
+              const SizedBox(height: 16),
+              if (state.tournament.featuredGame != null)
+                _FeaturedGame(state.tournament.featuredGame!),
+            ],
+          ),
         ),
+        bottomNavigationBar: _BottomBar(state),
       ),
     );
   }
@@ -531,7 +524,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
       },
     );
 
-    return PlatformBottomBar(
+    return BottomBar(
       children: [
         if (isLoggedIn)
           joinOrLeaveInProgress

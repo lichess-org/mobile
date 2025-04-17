@@ -31,7 +31,6 @@ import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
@@ -447,7 +446,7 @@ class _GameBottomBar extends ConsumerWidget {
         gamePrefs.enableChat == true ? ref.watch(chatControllerProvider(id)) : null;
     final kidModeAsync = ref.watch(kidModeProvider);
 
-    return PlatformBottomBar(
+    return BottomBar(
       children: gameStateAsync.when(
         data: (gameState) {
           final isChatEnabled =

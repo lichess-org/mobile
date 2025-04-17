@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/view/over_the_board/configure_over_the_board_
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -209,7 +208,7 @@ class _BottomBar extends ConsumerWidget {
 
     final clock = ref.watch(overTheBoardClockProvider);
 
-    return PlatformBottomBar(
+    return BottomBar(
       children: [
         BottomBarButton(
           label: context.l10n.menu,
