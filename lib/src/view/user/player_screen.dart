@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -35,11 +34,7 @@ class PlayerScreen extends ConsumerWidget {
         Navigator.of(context).push(UserScreen.buildRoute(context, user));
 
     final searchButton = PreferredSize(
-      preferredSize: Size.fromHeight(
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? kMinInteractiveDimensionCupertino + 16.0
-            : kToolbarHeight,
-      ),
+      preferredSize: const Size.fromHeight(kToolbarHeight),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: PlatformSearchBar(

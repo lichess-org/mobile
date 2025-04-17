@@ -128,7 +128,7 @@ extension CustomThemeBuildContext on BuildContext {
         colorScheme: themeLight.colorScheme,
       ),
       splashFactory: isIOS ? NoSplash.splashFactory : null,
-      appBarTheme: isIOS ? _cupertinoAppBarTheme : null,
+      appBarTheme: _appBarTheme,
       iconTheme: IconThemeData(color: themeLight.colorScheme.onSurface.withValues(alpha: 0.7)),
       listTileTheme: _makeListTileTheme(themeLight.colorScheme, isIOS),
       cardTheme:
@@ -149,7 +149,7 @@ extension CustomThemeBuildContext on BuildContext {
         colorScheme: themeDark.colorScheme,
       ),
       splashFactory: isIOS ? NoSplash.splashFactory : null,
-      appBarTheme: isIOS ? _cupertinoAppBarTheme : null,
+      appBarTheme: _appBarTheme,
       iconTheme: IconThemeData(color: themeDark.colorScheme.onSurface.withValues(alpha: 0.7)),
       listTileTheme: _makeListTileTheme(themeDark.colorScheme, isIOS),
       cardTheme:
@@ -231,7 +231,7 @@ extension CustomThemeBuildContext on BuildContext {
               ),
             ),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
-    appBarTheme: (isIOS ? _cupertinoAppBarTheme : const AppBarTheme()).copyWith(
+    appBarTheme: _appBarTheme.copyWith(
       backgroundColor: baseTheme.colorScheme.surfaceContainer.withValues(alpha: 0.0),
     ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
@@ -270,10 +270,7 @@ ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
   );
 }
 
-const _cupertinoAppBarTheme = AppBarTheme(
-  actionsPadding: EdgeInsets.only(right: 8.0),
-  toolbarHeight: kMinInteractiveDimensionCupertino,
-);
+const _appBarTheme = AppBarTheme(actionsPadding: EdgeInsets.only(right: 8.0));
 
 const _kCupertinoCardTheme = CardThemeData(
   elevation: 0,
