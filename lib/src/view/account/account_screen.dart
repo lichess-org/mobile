@@ -66,7 +66,7 @@ class AccountScreen extends ConsumerWidget {
   }
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, fullscreenDialog: true, screen: const AccountScreen());
+    return buildScreenRoute(context, screen: const AccountScreen());
   }
 }
 
