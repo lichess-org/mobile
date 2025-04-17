@@ -51,7 +51,7 @@ class PerfStatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(titleSpacing: 0, title: _Title(user: user, perf: perf)),
+      appBar: AppBar(title: _Title(user: user, perf: perf)),
       body: _Body(user: user, perf: perf),
     );
   }
@@ -77,7 +77,7 @@ class _Title extends StatelessWidget {
               p.ratingDeviation < kClueLessDeviation;
         })
         .toList(growable: false);
-    return TextButton(
+    return InkWell(
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -86,7 +86,7 @@ class _Title extends StatelessWidget {
           const Icon(Icons.arrow_drop_down),
         ],
       ),
-      onPressed: () {
+      onTap: () {
         showAdaptiveActionSheet<void>(
           context: context,
           actions: allPerfs
