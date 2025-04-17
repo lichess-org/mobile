@@ -431,6 +431,13 @@ class _EditableWidget extends ConsumerWidget {
 class _HelloWidget extends ConsumerWidget {
   const _HelloWidget();
 
+/// Returns the string representing the current time of day
+/// Used in the greeting widget to provide visual time indicator
+  String getTimeOfDayIcon() {
+  final hour = DateTime.now().hour;
+  return hour >= 6 && hour < 18 ? '☀️' : '🌙';
+}
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
@@ -459,7 +466,10 @@ class _HelloWidget extends ConsumerWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.wb_sunny, size: iconSize, color: context.lichessColors.brag),
+              Text(
+                getTimeOfDayIcon(),
+                style: const TextStyle(fontSize: iconSize, height: 1.0),
+              ),
               const SizedBox(width: 5.0),
               if (user != null)
                 Flexible(
