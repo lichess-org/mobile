@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/account/account_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -49,54 +50,6 @@ class PuzzleTabScreen extends ConsumerWidget {
 
     return _MaterialTabBody(savedBatches);
   }
-}
-
-Widget _buildMainListItem(
-  BuildContext context,
-  int index,
-  Animation<double> animation,
-  PuzzleAngle Function(int index) getAngle,
-) {
-  switch (index) {
-    case 0:
-      return const _PuzzleMenu();
-    case 1:
-      return Padding(
-        padding: Styles.horizontalBodyPadding,
-        child: Text(context.l10n.puzzleDesc, style: Styles.sectionTitle),
-      );
-    case 2:
-      return const DailyPuzzle();
-    case 3:
-      return PuzzleAnglePreview(
-        angle: const PuzzleTheme(PuzzleThemeKey.mix),
-        onTap: () {
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).push(PuzzleScreen.buildRoute(context, angle: const PuzzleTheme(PuzzleThemeKey.mix)));
-        },
-      );
-    default:
-      final angle = getAngle(index);
-      return PuzzleAnglePreview(
-        angle: angle,
-        onTap: () {
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).push(PuzzleScreen.buildRoute(context, angle: angle));
-        },
-      );
-  }
-}
-
-Widget _buildMainListRemovedItem(
-  PuzzleAngle angle,
-  BuildContext context,
-  Animation<double> animation,
-) {
-  return SizeTransition(sizeFactor: animation, child: PuzzleAnglePreview(angle: angle));
 }
 
 class _MaterialTabBody extends ConsumerStatefulWidget {
@@ -165,6 +118,7 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
       },
       child: Scaffold(
         appBar: AppBar(
+          leading: const AccountIconButton(),
           title: Text(context.l10n.puzzles),
           actions: const [_DashboardButton(), _HistoryButton()],
         ),
@@ -200,6 +154,54 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
       ),
     );
   }
+}
+
+Widget _buildMainListItem(
+  BuildContext context,
+  int index,
+  Animation<double> animation,
+  PuzzleAngle Function(int index) getAngle,
+) {
+  switch (index) {
+    case 0:
+      return const _PuzzleMenu();
+    case 1:
+      return Padding(
+        padding: Styles.horizontalBodyPadding,
+        child: Text(context.l10n.puzzleDesc, style: Styles.sectionTitle),
+      );
+    case 2:
+      return const DailyPuzzle();
+    case 3:
+      return PuzzleAnglePreview(
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        onTap: () {
+          Navigator.of(
+            context,
+            rootNavigator: true,
+          ).push(PuzzleScreen.buildRoute(context, angle: const PuzzleTheme(PuzzleThemeKey.mix)));
+        },
+      );
+    default:
+      final angle = getAngle(index);
+      return PuzzleAnglePreview(
+        angle: angle,
+        onTap: () {
+          Navigator.of(
+            context,
+            rootNavigator: true,
+          ).push(PuzzleScreen.buildRoute(context, angle: angle));
+        },
+      );
+  }
+}
+
+Widget _buildMainListRemovedItem(
+  PuzzleAngle angle,
+  BuildContext context,
+  Animation<double> animation,
+) {
+  return SizeTransition(sizeFactor: animation, child: PuzzleAnglePreview(angle: angle));
 }
 
 class _PuzzleMenuListTile extends StatelessWidget {

@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/account/account_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
@@ -91,7 +92,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(context.l10n.watch)),
+        appBar: AppBar(leading: const AccountIconButton(), title: Text(context.l10n.watch)),
         body:
             isOnline
                 ? OrientationBuilder(

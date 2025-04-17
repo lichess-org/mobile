@@ -4,7 +4,6 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
-import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
@@ -12,9 +11,8 @@ import 'package:lichess_mobile/src/widgets/background.dart';
 enum BottomTab {
   home,
   puzzles,
-  tools,
   watch,
-  settings;
+  tools;
 
   String label(AppLocalizations strings) {
     switch (this) {
@@ -26,8 +24,6 @@ enum BottomTab {
         return strings.mobileToolsTab;
       case BottomTab.watch:
         return strings.mobileWatchTab;
-      case BottomTab.settings:
-        return strings.mobileSettingsTab;
     }
   }
 
@@ -41,8 +37,6 @@ enum BottomTab {
         return Icons.handyman_outlined;
       case BottomTab.watch:
         return Icons.live_tv_outlined;
-      case BottomTab.settings:
-        return Icons.settings_outlined;
     }
   }
 
@@ -56,8 +50,6 @@ enum BottomTab {
         return Icons.handyman;
       case BottomTab.watch:
         return Icons.live_tv;
-      case BottomTab.settings:
-        return Icons.settings;
     }
   }
 }
@@ -75,8 +67,6 @@ final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
       return toolsNavigatorKey;
     case BottomTab.watch:
       return watchNavigatorKey;
-    case BottomTab.settings:
-      return settingsNavigatorKey;
   }
 });
 
@@ -91,8 +81,6 @@ final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
       return toolsScrollController;
     case BottomTab.watch:
       return watchScrollController;
-    case BottomTab.settings:
-      return settingsScrollController;
   }
 });
 
@@ -100,13 +88,11 @@ final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
 final puzzlesNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'puzzles');
 final toolsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'tools');
 final watchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'watch');
-final settingsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'settings');
 
 final homeScrollController = ScrollController(debugLabel: 'HomeScroll');
 final puzzlesScrollController = ScrollController(debugLabel: 'PuzzlesScroll');
 final toolsScrollController = ScrollController(debugLabel: 'ToolsScroll');
 final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
-final settingsScrollController = ScrollController(debugLabel: 'SettingsScroll');
 
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver = RouteObserver<PageRoute<void>>();
 
@@ -125,10 +111,6 @@ final toolsTabInteraction = _BottomTabInteraction();
 /// A [ChangeNotifier] that can be used to notify when the Watch tab is tapped, and all the built in
 /// interactions (pop stack, scroll to top) are done.
 final watchTabInteraction = _BottomTabInteraction();
-
-/// A [ChangeNotifier] that can be used to notify when the Settings tab is tapped, and all the built in
-/// interactions (pop stack, scroll to top) are done.
-final settingsTabInteraction = _BottomTabInteraction();
 
 class _BottomTabInteraction extends ChangeNotifier {
   void notifyItemTapped() {
@@ -197,8 +179,6 @@ class BottomNavScaffold extends ConsumerWidget {
             toolsTabInteraction.notifyItemTapped();
           case BottomTab.watch:
             watchTabInteraction.notifyItemTapped();
-          case BottomTab.settings:
-            settingsTabInteraction.notifyItemTapped();
         }
       }
     } else {
@@ -223,21 +203,15 @@ Widget _androidTabBuilder(BuildContext context, int index) {
       );
     case 2:
       return _MaterialTabView(
-        navigatorKey: toolsNavigatorKey,
-        tab: BottomTab.tools,
-        builder: (context) => const ToolsTabScreen(),
-      );
-    case 3:
-      return _MaterialTabView(
         navigatorKey: watchNavigatorKey,
         tab: BottomTab.watch,
         builder: (context) => const WatchTabScreen(),
       );
-    case 4:
+    case 3:
       return _MaterialTabView(
-        navigatorKey: settingsNavigatorKey,
-        tab: BottomTab.settings,
-        builder: (context) => const SettingsTabScreen(),
+        navigatorKey: toolsNavigatorKey,
+        tab: BottomTab.tools,
+        builder: (context) => const ToolsTabScreen(),
       );
     default:
       assert(false, 'Unexpected tab');

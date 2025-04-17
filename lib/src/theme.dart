@@ -271,6 +271,7 @@ ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
 }
 
 AppBarTheme _makeCupertinoAppBarTheme(BuildContext context) => AppBarTheme(
+  actionsPadding: const EdgeInsets.only(right: 8.0),
   toolbarHeight: kMinInteractiveDimensionCupertino,
   titleTextStyle: AppBarTheme.of(
     context,

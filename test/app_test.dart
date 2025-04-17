@@ -87,21 +87,20 @@ void main() {
     expect(find.text('Sign in'), findsOneWidget);
   }, variant: kPlatformVariant);
 
-  testWidgets('Bottom navigation', (tester) async {
+  testWidgets('Bottom navigation', variant: kPlatformVariant, (tester) async {
     final app = await makeTestProviderScope(tester, child: const Application());
 
     await tester.pumpWidget(app);
 
     expect(find.byType(BottomNavScaffold), findsOneWidget);
 
-    expect(find.byType(NavigationDestination), findsNWidgets(5));
+    expect(find.byType(NavigationDestination), findsNWidgets(4));
 
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Puzzles'), findsOneWidget);
     expect(find.text('Tools'), findsOneWidget);
     expect(find.text('Watch'), findsOneWidget);
-    expect(find.text('Settings'), findsOneWidget);
-  }, variant: kPlatformVariant);
+  });
 
   testWidgets('language support', (tester) async {
     for (final locale in AppLocalizations.supportedLocales) {

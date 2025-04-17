@@ -8,12 +8,12 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
@@ -31,38 +31,48 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SettingsTabScreen extends ConsumerWidget {
-  const SettingsTabScreen({super.key});
+class AccountIconButton extends ConsumerWidget {
+  const AccountIconButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (bool didPop, _) {
-        if (!didPop) {
-          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
-        }
+    final session = ref.watch(authSessionProvider);
+    return IconButton(
+      icon:
+          session == null
+              ? const Icon(Icons.account_circle_outlined)
+              : CircleAvatar(child: Text(session.user.name.substring(0, 1).toUpperCase())),
+      tooltip: session == null ? context.l10n.signIn : session.user.name,
+      onPressed: () {
+        Navigator.of(context).push(AccountScreen.buildRoute(context));
       },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: const SocketPingRating(),
-          title: Text(context.l10n.settingsSettings),
-        ),
-        body: SafeArea(child: _Body()),
-      ),
     );
+  }
+}
+
+class AccountScreen extends ConsumerWidget {
+  const AccountScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    return Scaffold(
+      appBar: AppBar(
+        title: session == null ? const SizedBox.shrink() : UserFullNameWidget(user: session.user),
+        actions: const [SocketPingRating()],
+      ),
+      body: SafeArea(child: _Body()),
+    );
+  }
+
+  static Route<dynamic> buildRoute(BuildContext context) {
+    return buildScreenRoute(context, fullscreenDialog: true, screen: const AccountScreen());
   }
 }
 
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(currentBottomTabProvider, (prev, current) {
-      if (prev != BottomTab.settings && current == BottomTab.settings) {
-        _refreshData(ref);
-      }
-    });
-
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
@@ -93,7 +103,6 @@ class _Body extends ConsumerWidget {
 
     final List<Widget> content = [
       ListSection(
-        header: userSession != null ? UserFullNameWidget(user: userSession.user) : null,
         hasLeading: true,
         children: [
           if (userSession != null) ...[
@@ -371,7 +380,7 @@ class _Body extends ConsumerWidget {
       ),
     ];
 
-    return ListView(controller: settingsScrollController, children: content);
+    return ListView(children: content);
   }
 
   Future<void> _showSignOutConfirmDialog(BuildContext context, WidgetRef ref) {
@@ -420,10 +429,6 @@ class _Body extends ConsumerWidget {
   String _getSizeString(int? bytes) => '${_bytesToMB(bytes ?? 0).toStringAsFixed(2)}MB';
 
   double _bytesToMB(int bytes) => bytes * 0.000001;
-
-  void _refreshData(WidgetRef ref) {
-    ref.invalidate(getDbSizeInBytesProvider);
-  }
 }
 
 class _OpenInNewIcon extends StatelessWidget {

@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/account/account_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
@@ -31,7 +32,7 @@ class ToolsTabScreen extends ConsumerWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(context.l10n.tools)),
+        appBar: AppBar(leading: const AccountIconButton(), title: Text(context.l10n.tools)),
         body: const Column(children: [ConnectivityBanner(), Expanded(child: _Body())]),
       ),
     );

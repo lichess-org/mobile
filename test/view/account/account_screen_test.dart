@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
+import 'package:lichess_mobile/src/view/account/account_screen.dart';
 
 import '../../model/auth/fake_session_storage.dart';
 import '../../test_helpers.dart';
@@ -19,11 +19,11 @@ final client = MockClient((request) {
 });
 
 void main() {
-  group('SettingsTabScreen', () {
+  group('AccountScreen', () {
     testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
 
-      final app = await makeTestProviderScopeApp(tester, home: const SettingsTabScreen());
+      final app = await makeTestProviderScopeApp(tester, home: const AccountScreen());
 
       await tester.pumpWidget(app);
 
@@ -36,7 +36,7 @@ void main() {
     }, variant: kPlatformVariant);
 
     testWidgets("don't show signOut if no session", (WidgetTester tester) async {
-      final app = await makeTestProviderScopeApp(tester, home: const SettingsTabScreen());
+      final app = await makeTestProviderScopeApp(tester, home: const AccountScreen());
 
       await tester.pumpWidget(app);
 
@@ -46,7 +46,7 @@ void main() {
     testWidgets('signout', (WidgetTester tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const SettingsTabScreen(),
+        home: const AccountScreen(),
         userSession: fakeSession,
         overrides: [
           lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),

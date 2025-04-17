@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/account/account_screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -111,6 +112,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         return Scaffold(
           appBar: AppBar(
             title: const Text('lichess.org'),
+            leading: const AccountIconButton(),
             actions: [
               IconButton(
                 onPressed: () {
