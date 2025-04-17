@@ -376,7 +376,14 @@ class _TournamentGameTitle extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(child: AutoSizeText(tournament.name, maxLines: 1, minFontSize: 14.0)),
+        Flexible(
+          child: AutoSizeText(
+            tournament.name,
+            maxLines: 1,
+            minFontSize: 14.0,
+            maxFontSize: AppBarTheme.of(context).titleTextStyle?.fontSize ?? 20.0,
+          ),
+        ),
         CountdownClockBuilder(
           timeLeft: tournament.clock.timeLeft,
           clockUpdatedAt: tournament.clock.at,
@@ -428,6 +435,7 @@ class _StandaloneGameTitle extends ConsumerWidget {
                   '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$info',
                   maxLines: 1,
                   minFontSize: 14.0,
+                  maxFontSize: AppBarTheme.of(context).titleTextStyle?.fontSize ?? 20.0,
                 ),
               )
             else if (meta.daysPerTurn != null)
@@ -436,11 +444,17 @@ class _StandaloneGameTitle extends ConsumerWidget {
                   '${context.l10n.nbDays(meta.daysPerTurn!)}$info',
                   maxLines: 1,
                   minFontSize: 14.0,
+                  maxFontSize: AppBarTheme.of(context).titleTextStyle?.fontSize ?? 20.0,
                 ),
               )
             else
               Flexible(
-                child: AutoSizeText('${meta.perf.title}$info', maxLines: 1, minFontSize: 14.0),
+                child: AutoSizeText(
+                  '${meta.perf.title}$info',
+                  maxLines: 1,
+                  minFontSize: 14.0,
+                  maxFontSize: AppBarTheme.of(context).titleTextStyle?.fontSize ?? 20.0,
+                ),
               ),
           ],
         );

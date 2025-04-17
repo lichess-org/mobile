@@ -128,7 +128,7 @@ extension CustomThemeBuildContext on BuildContext {
         colorScheme: themeLight.colorScheme,
       ),
       splashFactory: isIOS ? NoSplash.splashFactory : null,
-      appBarTheme: isIOS ? _makeCupertinoAppBarTheme(context) : null,
+      appBarTheme: isIOS ? _cupertinoAppBarTheme : null,
       iconTheme: IconThemeData(color: themeLight.colorScheme.onSurface.withValues(alpha: 0.7)),
       listTileTheme: _makeListTileTheme(themeLight.colorScheme, isIOS),
       cardTheme:
@@ -149,7 +149,7 @@ extension CustomThemeBuildContext on BuildContext {
         colorScheme: themeDark.colorScheme,
       ),
       splashFactory: isIOS ? NoSplash.splashFactory : null,
-      appBarTheme: isIOS ? _makeCupertinoAppBarTheme(context) : null,
+      appBarTheme: isIOS ? _cupertinoAppBarTheme : null,
       iconTheme: IconThemeData(color: themeDark.colorScheme.onSurface.withValues(alpha: 0.7)),
       listTileTheme: _makeListTileTheme(themeDark.colorScheme, isIOS),
       cardTheme:
@@ -231,7 +231,7 @@ extension CustomThemeBuildContext on BuildContext {
               ),
             ),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
-    appBarTheme: (isIOS ? _makeCupertinoAppBarTheme(context) : const AppBarTheme()).copyWith(
+    appBarTheme: (isIOS ? _cupertinoAppBarTheme : const AppBarTheme()).copyWith(
       backgroundColor: baseTheme.colorScheme.surfaceContainer.withValues(alpha: 0.0),
     ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
@@ -270,12 +270,9 @@ ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
   );
 }
 
-AppBarTheme _makeCupertinoAppBarTheme(BuildContext context) => AppBarTheme(
-  actionsPadding: const EdgeInsets.only(right: 8.0),
+const _cupertinoAppBarTheme = AppBarTheme(
+  actionsPadding: EdgeInsets.only(right: 8.0),
   toolbarHeight: kMinInteractiveDimensionCupertino,
-  titleTextStyle: AppBarTheme.of(
-    context,
-  ).titleTextStyle?.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
 );
 
 const _kCupertinoCardTheme = CardThemeData(
