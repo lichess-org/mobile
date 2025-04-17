@@ -180,7 +180,7 @@ class TimeControlModal extends ConsumerWidget {
                                   ),
                                 ],
                               ),
-                              SecondaryButton(
+                              FatButton(
                                 onPressed: custom.isInfinite ? null : () => onSelected(custom),
                                 semanticsLabel: 'OK',
                                 child: Text(context.l10n.mobileOkButton, style: Styles.bold),
