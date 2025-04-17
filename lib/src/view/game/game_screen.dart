@@ -201,7 +201,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
           appBar: AppBar(
             leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
               data: (prevent) => prevent ? SocketPingRating(socketUri: gameSocketUri) : null,
-              orElse: () => SocketPingRating(socketUri: gameSocketUri),
+              orElse: () => null,
             ),
             title:
                 gameId != null
