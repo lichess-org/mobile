@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'tournament.freezed.dart';
 
-enum TournamentFreq {
+enum TournamentFreq implements Comparable<TournamentFreq> {
   hourly,
   daily,
   eastern,
@@ -25,6 +25,11 @@ enum TournamentFreq {
   unique;
 
   static final IMap<String, TournamentFreq> nameMap = IMap(TournamentFreq.values.asNameMap());
+
+  @override
+  int compareTo(TournamentFreq other) {
+    return values.indexOf(other).compareTo(values.indexOf(this));
+  }
 }
 
 typedef TournamentLists =

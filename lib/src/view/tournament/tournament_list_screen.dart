@@ -117,32 +117,52 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
 
   @override
   Widget build(BuildContext context) {
-    final tournamentListItems =
-        widget.tournaments
-            .where((tournament) => playSupportedVariants.contains(tournament.variant))
-            .sorted((a, b) {
-              final aVariant = a.variant;
-              final bVariant = b.variant;
-              if (aVariant == Variant.standard && bVariant != Variant.standard) {
-                return -1;
-              } else if (aVariant != Variant.standard && bVariant == Variant.standard) {
-                return 1;
-              }
+    final List<TournamentListItem> systemTours = [];
+    final List<TournamentListItem> userTours = [];
 
-              final aMaxRating = a.maxRating;
-              final bMaxRating = b.maxRating;
-              if (aMaxRating == null && bMaxRating != null) {
-                return -1;
-              } else if (aMaxRating != null && bMaxRating == null) {
-                return 1;
-              } else if (aMaxRating != null && bMaxRating != null) {
-                return aMaxRating.compareTo(bMaxRating);
-              } else {
-                return a.timeIncrement.compareTo(b.timeIncrement);
-              }
-            })
-            .map((tournament) => _TournamentListItem(tournament: tournament))
-            .toList();
+    widget.tournaments
+        .where((tournament) => playSupportedVariants.contains(tournament.variant))
+        .forEach((tournament) {
+          if (tournament.isSystemTournament) {
+            systemTours.add(tournament);
+          } else {
+            userTours.add(tournament);
+          }
+        });
+
+    final sortedSystemTours = systemTours
+        .sorted((a, b) {
+          final aVariant = a.variant;
+          final bVariant = b.variant;
+          if (aVariant == Variant.standard && bVariant != Variant.standard) {
+            return -1;
+          } else if (aVariant != Variant.standard && bVariant == Variant.standard) {
+            return 1;
+          }
+
+          final aMaxRating = a.maxRating;
+          final bMaxRating = b.maxRating;
+          if (aMaxRating == null && bMaxRating != null) {
+            return -1;
+          } else if (aMaxRating != null && bMaxRating == null) {
+            return 1;
+          } else if (aMaxRating != null && bMaxRating != null) {
+            return aMaxRating.compareTo(bMaxRating);
+          }
+
+          final position = a.position.compareTo(b.position);
+          if (position != 0) {
+            return position;
+          } else {
+            return a.startsAt.compareTo(b.startsAt);
+          }
+        })
+        .sortedBy((tournament) => tournament.freq ?? TournamentFreq.hourly);
+
+    final tournamentListItems = [
+      ...sortedSystemTours.map((tournament) => _TournamentListItem(tournament: tournament)),
+      ...userTours.map((tournament) => _TournamentListItem(tournament: tournament)),
+    ];
 
     return RefreshIndicator.adaptive(
       key: _refreshIndicatorKey,
