@@ -551,6 +551,20 @@ class _GameBottomBar extends ConsumerWidget {
                 },
                 icon: CupertinoIcons.arrowshape_turn_up_left,
               )
+            else if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence)
+              BottomBarButton(
+                label: 'Go to the next game',
+                icon: Icons.skip_next,
+                onTap: ongoingGames.maybeWhen(
+                  data: (games) {
+                    final nextTurn = games
+                        .whereNot((g) => g.fullId == id)
+                        .firstWhereOrNull((g) => g.isMyTurn);
+                    return nextTurn != null ? () => onLoadGameCallback(nextTurn.fullId) : null;
+                  },
+                  orElse: () => null,
+                ),
+              )
             else if (gameState.game.finished)
               BottomBarButton(
                 label: context.l10n.analysis,
@@ -579,20 +593,6 @@ class _GameBottomBar extends ConsumerWidget {
                             }
                         : null,
                 icon: Icons.flag,
-              ),
-            if (gameState.game.meta.speed == Speed.correspondence && !gameState.game.finished)
-              BottomBarButton(
-                label: 'Go to the next game',
-                icon: Icons.skip_next,
-                onTap: ongoingGames.maybeWhen(
-                  data: (games) {
-                    final nextTurn = games
-                        .whereNot((g) => g.fullId == id)
-                        .firstWhereOrNull((g) => g.isMyTurn);
-                    return nextTurn != null ? () => onLoadGameCallback(nextTurn.fullId) : null;
-                  },
-                  orElse: () => null,
-                ),
               ),
             if (kidModeAsync.valueOrNull == false)
               BottomBarButton(
