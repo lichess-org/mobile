@@ -194,10 +194,10 @@ class _FullScreenBackgroundColorTheme extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (color, isDark) = backgroundColor;
+    final (color, _) = backgroundColor;
     return Stack(
       children: [
-        ColoredBox(color: isDark ? color.darker : color.color, child: const SizedBox.expand()),
+        ColoredBox(color: color.darker, child: const SizedBox.expand()),
         Positioned.fill(child: child),
       ],
     );

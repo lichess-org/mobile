@@ -162,16 +162,16 @@ class _Body extends ConsumerWidget {
                           .then((value) {
                             if (context.mounted) {
                               if (value != null) {
-                                final (index, darken) = value;
+                                final (index, _) = value;
                                 final selected = colorChoices[index];
                                 ref
                                     .read(generalPreferencesProvider.notifier)
-                                    .setBackground(backgroundColor: (selected, darken));
+                                    .setBackground(backgroundColor: (selected, true));
                                 Navigator.pop(context);
                               }
                             }
                           }),
-                  child: SizedBox.expand(child: ColoredBox(color: t.color)),
+                  child: SizedBox.expand(child: ColoredBox(color: t.darker)),
                 );
               },
               itemCount: colorChoices.length,
@@ -198,8 +198,6 @@ class ConfirmColorBackgroundScreen extends StatefulWidget {
 }
 
 class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScreen> {
-  bool darken = false;
-
   late PageController _controller;
 
   @override
@@ -241,7 +239,7 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                   itemBuilder: (context, index) {
                     final backgroundTheme = colorChoices[index];
                     return ColoredBox(
-                      color: darken ? backgroundTheme.darker : backgroundTheme.color,
+                      color: backgroundTheme.darker,
                       child: const SizedBox.expand(),
                     );
                   },
@@ -272,35 +270,6 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                   ),
                 ),
                 Positioned(
-                  top: MediaQuery.paddingOf(context).top + 26.0,
-                  left: orientation == Orientation.portrait ? 0 : null,
-                  right: 0,
-                  child: Center(
-                    child: Card(
-                      margin: const EdgeInsets.all(16.0),
-                      child: InkWell(
-                        borderRadius: const BorderRadius.all(Radius.circular(20)),
-                        onTap: () {
-                          setState(() {
-                            darken = !darken;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(darken ? Icons.check_circle : Icons.circle_outlined, size: 16),
-                              const SizedBox(width: 6.0),
-                              const Text('Dark color', textAlign: TextAlign.center),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
                   bottom: MediaQuery.paddingOf(context).bottom + 16.0,
                   left: orientation == Orientation.portrait ? 0 : null,
                   right: 0,
@@ -323,7 +292,7 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
             onPressed:
                 () => Navigator.pop(
                   context,
-                  _controller.hasClients ? (_controller.page!.toInt(), darken) : null,
+                  _controller.hasClients ? (_controller.page!.toInt(), true) : null,
                 ),
           ),
         ],
@@ -484,9 +453,12 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
               right: 0,
               child: Center(
                 child: Card(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                  ),
                   margin: const EdgeInsets.all(16.0),
                   child: InkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                     onTap: () {
                       setState(() {
                         blur = !blur;
@@ -581,6 +553,9 @@ class _BackgroundTheme extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(data: baseTheme, child: child);
+    return Theme(
+      data: baseTheme.copyWith(splashFactory: Theme.of(context).splashFactory),
+      child: child,
+    );
   }
 }

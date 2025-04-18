@@ -95,6 +95,7 @@ class GeneralPrefs with _$GeneralPrefs implements Serializable {
     /// Locale to use in the app, use system locale if null
     @LocaleConverter() Locale? locale,
 
+    /// Background color theme (boolean value is not used)
     (BackgroundColor, bool)? backgroundColor,
     @BackgroundImageConverter() BackgroundImage? backgroundImage,
   }) = _GeneralPrefs;
@@ -176,12 +177,12 @@ enum BackgroundColor {
 
   const BackgroundColor(this.color, this._label);
 
-  String label(AppLocalizations l10n, bool isDark) => '$_label${isDark ? ' dark' : ''}';
+  String get label => _label;
 
   /// The base theme for the background color.
   ThemeData get baseTheme => BackgroundImage.getTheme(color);
 
-  /// Darker version of the color by 20%.
+  /// Darker version of the color by 30%.
   Color get darker => Color.lerp(color, Colors.black, 0.3)!;
 }
 

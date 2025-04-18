@@ -141,10 +141,7 @@ class _BodyState extends ConsumerState<_Body> {
                     settingsLabel: Text(context.l10n.background),
                     settingsValue:
                         generalPrefs.backgroundColor != null
-                            ? generalPrefs.backgroundColor!.$1.label(
-                              context.l10n,
-                              generalPrefs.backgroundColor!.$2,
-                            )
+                            ? generalPrefs.backgroundColor!.$1.label
                             : (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
                     onTap: () {
                       Navigator.of(context).push(BackgroundChoiceScreen.buildRoute(context));
