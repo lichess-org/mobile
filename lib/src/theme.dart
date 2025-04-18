@@ -123,10 +123,6 @@ extension CustomThemeBuildContext on BuildContext {
   return (
     light: themeLight.copyWith(
       cupertinoOverrideTheme: lightCupertino,
-      typography: Typography.material2021(
-        platform: isIOS ? TargetPlatform.iOS : TargetPlatform.android,
-        colorScheme: themeLight.colorScheme,
-      ),
       splashFactory: isIOS ? NoSplash.splashFactory : null,
       appBarTheme: _appBarTheme,
       iconTheme: IconThemeData(color: themeLight.colorScheme.onSurface.withValues(alpha: 0.7)),
@@ -144,10 +140,6 @@ extension CustomThemeBuildContext on BuildContext {
     ),
     dark: themeDark.copyWith(
       cupertinoOverrideTheme: darkCupertino,
-      typography: Typography.material2021(
-        platform: isIOS ? TargetPlatform.iOS : TargetPlatform.android,
-        colorScheme: themeDark.colorScheme,
-      ),
       splashFactory: isIOS ? NoSplash.splashFactory : null,
       appBarTheme: _appBarTheme,
       iconTheme: IconThemeData(color: themeDark.colorScheme.onSurface.withValues(alpha: 0.7)),
