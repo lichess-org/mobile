@@ -33,13 +33,13 @@ enum BottomTab {
   IconData get icon {
     switch (this) {
       case BottomTab.home:
-        return Symbols.home;
+        return Symbols.home_rounded;
       case BottomTab.puzzles:
-        return Symbols.extension;
-      case BottomTab.tools:
-        return Symbols.handyman;
+        return Symbols.extension_rounded;
       case BottomTab.watch:
-        return Symbols.live_tv;
+        return Symbols.live_tv_rounded;
+      case BottomTab.tools:
+        return Symbols.handyman_rounded;
     }
   }
 }
@@ -53,10 +53,10 @@ final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
       return homeNavigatorKey;
     case BottomTab.puzzles:
       return puzzlesNavigatorKey;
-    case BottomTab.tools:
-      return toolsNavigatorKey;
     case BottomTab.watch:
       return watchNavigatorKey;
+    case BottomTab.tools:
+      return toolsNavigatorKey;
   }
 });
 
