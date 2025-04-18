@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/styles/social_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kThumbnailSize = 75.0;
@@ -22,7 +23,12 @@ class StreamerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.mobileLiveStreamers)),
-      body: ListView.builder(
+      body: ListView.separated(
+        separatorBuilder:
+            (context, index) =>
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? const PlatformDivider(height: 1, indent: 16 + _kThumbnailSize + 10)
+                    : const SizedBox.shrink(),
         itemCount: streamers.length,
         itemBuilder:
             (context, index) => StreamerListTile(

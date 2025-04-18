@@ -13,6 +13,7 @@ class ListSection extends StatelessWidget {
     this.footer,
     this.margin,
     this.hasLeading = false,
+    this.leadingIndent,
     this.dense = false,
     this.materialFilledCard = false,
     this.backgroundColor,
@@ -28,6 +29,7 @@ class ListSection extends StatelessWidget {
        header = header ? const SizedBox.shrink() : null,
        footer = null,
        dense = false,
+       leadingIndent = null,
        materialFilledCard = false,
        backgroundColor = null,
        _isLoading = true;
@@ -37,6 +39,9 @@ class ListSection extends StatelessWidget {
 
   /// Whether the iOS tiles have a leading widget.
   final bool hasLeading;
+
+  /// Cupertino leading indent.
+  final double? leadingIndent;
 
   /// Show a header above the children rows. Typically a [Text] widget.
   final Widget? header;
@@ -138,6 +143,7 @@ class ListSection extends StatelessWidget {
                               context: context,
                               tiles: children,
                               cupertinoHasLeading: hasLeading,
+                              cupertinoLeadingIndent: leadingIndent,
                             )
                           else
                             ...children,
@@ -155,6 +161,7 @@ class ListSection extends StatelessWidget {
     required BuildContext context,
     required Iterable<Widget> tiles,
     bool cupertinoHasLeading = false,
+    double? cupertinoLeadingIndent,
   }) {
     tiles = tiles.toList();
 
@@ -166,7 +173,13 @@ class ListSection extends StatelessWidget {
     for (int i = 0; i < tiles.length; i++) {
       result.add(tiles.elementAt(i));
       if (i != tiles.length - 1) {
-        result.add(PlatformDivider(height: 0, cupertinoHasLeading: cupertinoHasLeading));
+        result.add(
+          PlatformDivider(
+            height: 0,
+            cupertinoHasLeading: cupertinoHasLeading,
+            cupertinoLeadingIndent: cupertinoLeadingIndent,
+          ),
+        );
       }
     }
     return result;
@@ -185,6 +198,7 @@ class PlatformDivider extends StatelessWidget {
     this.endIndent,
     this.color,
     this.cupertinoHasLeading = false,
+    this.cupertinoLeadingIndent,
   });
 
   final double? height;
@@ -196,6 +210,7 @@ class PlatformDivider extends StatelessWidget {
   /// Set to true if the cupertino tiles have a leading widget, to adapt the
   /// divider margin.
   final bool cupertinoHasLeading;
+  final double? cupertinoLeadingIndent;
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +225,7 @@ class PlatformDivider extends StatelessWidget {
         : Divider(
           height: height,
           thickness: thickness ?? 0.0,
-          indent: indent ?? (cupertinoHasLeading ? 16.0 + 42.0 : 16.0),
+          indent: indent ?? (cupertinoHasLeading ? 16.0 + (cupertinoLeadingIndent ?? 36.0) : 16.0),
           endIndent: endIndent,
           color: color,
         );

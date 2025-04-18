@@ -261,10 +261,15 @@ const MenuThemeData _kCupertinoMenuThemeData = MenuThemeData(
 ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
   return ListTileThemeData(
     iconColor: colorScheme.onSurface.withValues(alpha: 0.7),
+    titleTextStyle:
+        isIOS
+            ? TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: 16)
+            : null,
     subtitleTextStyle: TextStyle(
       color: colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
     ),
     contentPadding: isIOS ? const EdgeInsets.symmetric(horizontal: 16) : null,
+    visualDensity: isIOS ? VisualDensity.compact : null,
   );
 }
 

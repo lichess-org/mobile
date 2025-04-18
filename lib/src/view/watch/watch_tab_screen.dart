@@ -324,6 +324,7 @@ class _StreamerWidget extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.streamersMenu),
           hasLeading: true,
+          leadingIndent: kThumbnailImageSize + 10,
           headerTrailing: NoPaddingTextButton(
             onPressed: () => Navigator.of(context).push(StreamerScreen.buildRoute(context, data)),
             child: Text(context.l10n.more),

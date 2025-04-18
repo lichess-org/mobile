@@ -202,9 +202,10 @@ class _TournamentListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      visualDensity: VisualDensity.adaptivePlatformDensity,
       title: Row(
         children: [
-          Icon(tournament.perf.icon, size: 30, color: _iconColor(tournament)),
+          Icon(tournament.perf.icon, color: _iconColor(tournament)),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
