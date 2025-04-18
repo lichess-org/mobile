@@ -129,9 +129,7 @@ class BottomNavScaffold extends ConsumerWidget {
                 ? CupertinoTabBar(
                   height: kBottomBarHeight,
                   backgroundColor: ColorScheme.of(context).surfaceContainer,
-                  border: Border(
-                    top: BorderSide(color: Theme.of(context).dividerColor, width: 0.5),
-                  ),
+                  border: const Border(top: BorderSide(color: Colors.transparent)),
                   activeColor: ColorScheme.of(context).onSurface,
                   currentIndex: currentTab.index,
                   items: [
