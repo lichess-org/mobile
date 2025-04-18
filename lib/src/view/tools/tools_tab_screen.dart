@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
 import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 class ToolsTabScreen extends ConsumerWidget {
@@ -33,7 +32,7 @@ class ToolsTabScreen extends ConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(leading: const AccountIconButton(), title: Text(context.l10n.tools)),
-        body: const Column(children: [ConnectivityBanner(), Expanded(child: _Body())]),
+        body: const _Body(),
       ),
     );
   }

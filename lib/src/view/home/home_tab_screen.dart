@@ -48,7 +48,7 @@ class HomeTabScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
-  final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
+  final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   bool wasOnline = true;
   bool hasRefreshed = false;
@@ -126,15 +126,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             ],
           ),
           body: RefreshIndicator.adaptive(
-            key: _androidRefreshKey,
+            key: _refreshKey,
             onRefresh: () => _refreshData(isOnline: status.isOnline),
-            child: Column(
-              children: [
-                const ConnectivityBanner(),
-                Expanded(child: ListView(controller: homeScrollController, children: widgets)),
-              ],
-            ),
+            child: ListView(controller: homeScrollController, children: widgets),
           ),
+          bottomSheet: const ConnectivityBanner(),
           floatingActionButton:
               isTablet
                   ? null

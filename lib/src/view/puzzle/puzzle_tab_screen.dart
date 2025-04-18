@@ -122,6 +122,7 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
           title: Text(context.l10n.puzzles),
           actions: const [_DashboardButton(), _HistoryButton()],
         ),
+        bottomSheet: const ConnectivityBanner(),
         body:
             isTablet
                 ? Row(
@@ -138,18 +139,11 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
                     Expanded(child: ListView(children: const [PuzzleHistoryWidget()])),
                   ],
                 )
-                : Column(
-                  children: [
-                    const ConnectivityBanner(),
-                    Expanded(
-                      child: AnimatedList(
-                        key: _listKey,
-                        controller: puzzlesScrollController,
-                        initialItemCount: _angles.length,
-                        itemBuilder: buildItem,
-                      ),
-                    ),
-                  ],
+                : AnimatedList(
+                  key: _listKey,
+                  controller: puzzlesScrollController,
+                  initialItemCount: _angles.length,
+                  itemBuilder: buildItem,
                 ),
       ),
     );

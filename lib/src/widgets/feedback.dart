@@ -124,24 +124,26 @@ class ConnectivityBanner extends ConsumerWidget {
         if (data.isOnline) {
           return const SizedBox.shrink();
         }
-        return Container(
-          height: 45,
-          color: theme.colorScheme.surfaceContainer,
-          child: Padding(
-            padding: Styles.horizontalBodyPadding,
-            child: Row(
-              children: [
-                const Icon(Icons.report),
-                const SizedBox(width: 5),
-                Flexible(
-                  child: Text(
-                    'Network connectivity unavailable.',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: theme.colorScheme.onSurface),
+        return Material(
+          child: Container(
+            height: 40,
+            color: theme.colorScheme.tertiaryContainer,
+            child: Padding(
+              padding: Styles.horizontalBodyPadding,
+              child: Row(
+                children: [
+                  Icon(Icons.report_outlined, color: theme.colorScheme.onTertiaryContainer),
+                  const SizedBox(width: 5),
+                  Flexible(
+                    child: Text(
+                      'Network connectivity unavailable.',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
