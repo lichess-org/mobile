@@ -41,7 +41,10 @@ class AccountIconButton extends ConsumerWidget {
       icon:
           session == null
               ? const Icon(Icons.account_circle_outlined)
-              : CircleAvatar(child: Text(session.user.name.substring(0, 1).toUpperCase())),
+              : Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: CircleAvatar(child: Text(session.user.name.substring(0, 1).toUpperCase())),
+              ),
       tooltip: session == null ? context.l10n.signIn : session.user.name,
       onPressed: () {
         Navigator.of(context).push(AccountScreen.buildRoute(context));
