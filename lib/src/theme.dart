@@ -138,7 +138,7 @@ extension CustomThemeBuildContext on BuildContext {
       inputDecorationTheme:
           isIOS ? _makeCupertinoInputDecorationTheme(themeLight.colorScheme) : null,
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
-      menuTheme: isIOS ? _makeCupertinoMenuThemeData() : null,
+      menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
       sliderTheme: kSliderTheme,
       extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
     ),
@@ -159,7 +159,7 @@ extension CustomThemeBuildContext on BuildContext {
       inputDecorationTheme:
           isIOS ? _makeCupertinoInputDecorationTheme(themeDark.colorScheme) : null,
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
-      menuTheme: isIOS ? _makeCupertinoMenuThemeData() : null,
+      menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
       sliderTheme: kSliderTheme,
       extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
     ),
@@ -222,7 +222,14 @@ extension CustomThemeBuildContext on BuildContext {
     ),
     menuTheme:
         isIOS
-            ? _makeCupertinoMenuThemeData()
+            ? MenuThemeData(
+              style: MenuStyle(
+                elevation: const WidgetStatePropertyAll(0),
+                backgroundColor: WidgetStatePropertyAll(
+                  baseTheme.colorScheme.surfaceContainer.withValues(alpha: 0.8),
+                ),
+              ),
+            )
             : MenuThemeData(
               style: MenuStyle(
                 backgroundColor: WidgetStatePropertyAll(
@@ -251,14 +258,9 @@ extension CustomThemeBuildContext on BuildContext {
   return (light: theme, dark: theme);
 }
 
-MenuThemeData _makeCupertinoMenuThemeData() {
-  return const MenuThemeData(
-    style: MenuStyle(
-      elevation: WidgetStatePropertyAll(0),
-      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius)),
-    ),
-  );
-}
+const MenuThemeData _kCupertinoMenuThemeData = MenuThemeData(
+  style: MenuStyle(elevation: WidgetStatePropertyAll(0)),
+);
 
 ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
   return ListTileThemeData(
