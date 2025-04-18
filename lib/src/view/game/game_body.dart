@@ -236,12 +236,7 @@ class GameBody extends ConsumerWidget {
 
         final content = FocusDetector(
           onFocusRegained: () {
-            // force the game socket to connect
-            ref.read(ctrlProvider.notifier).listenToSocketEvents();
-          },
-          onFocusLost: () {
-            // we don't want to stop listening to socket events when the focus is lost, because
-            // if the socket connection is shut down, the server will assume the player left the game
+            ref.read(ctrlProvider.notifier).onFocusRegained();
           },
           child: WakelockWidget(
             shouldEnableOnFocusGained: () => gameState.game.playable,

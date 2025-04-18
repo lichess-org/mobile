@@ -7,7 +7,6 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
@@ -43,7 +42,6 @@ part 'game_controller.g.dart';
 class GameController extends _$GameController {
   final _logger = Logger('GameController');
 
-  AppLifecycleListener? _appLifecycleListener;
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   /// Periodic timer when the opponent has left the game, to display the countdown
@@ -76,12 +74,14 @@ class GameController extends _$GameController {
       _socketSubscription?.cancel();
       _opponentLeftCountdownTimer?.cancel();
       _transientMoveTimer?.cancel();
-      _appLifecycleListener?.dispose();
       _clock?.dispose();
       _onFlagThrottler.cancel();
     });
 
-    listenToSocketEvents();
+    _socketClient = _socketPool.open(gameSocketUri(gameFullId), forceReconnect: true);
+    _socketEventVersion = null;
+    _socketSubscription?.cancel();
+    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
     return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) async {
       final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
@@ -111,16 +111,6 @@ class GameController extends _$GameController {
       }
 
       if (game.playable) {
-        _appLifecycleListener = AppLifecycleListener(
-          onResume: () {
-            // socket client should never be disposed here, but in case it is
-            // we can safely skip the resync
-            if (!_socketClient.isDisposed && _socketClient.isConnected) {
-              _resyncGameData();
-            }
-          },
-        );
-
         if (game.clock != null) {
           _clock = ChessClock(
             whiteTime: game.clock!.white,
@@ -147,17 +137,21 @@ class GameController extends _$GameController {
     });
   }
 
-  /// Starts listening to game socket events.
-  void listenToSocketEvents() {
-    _socketClient = _socketPool.open(gameSocketUri(gameFullId), forceReconnect: true);
-    _socketEventVersion = null;
-    _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-  }
+  void onFocusRegained() {
+    if (_socketClient.isDisposed) {
+      assert(false, 'socket client should not be disposed here');
+      return;
+    }
 
-  /// Stops listening to game socket events.
-  void stopListeningToSocketEvents() {
-    _socketSubscription?.cancel();
+    if (!state.hasValue || !state.requireValue.game.playable) {
+      return;
+    }
+
+    if (_socketClient.route != gameSocketUri(gameFullId)) {
+      _socketClient = _socketPool.open(gameSocketUri(gameFullId), forceReconnect: true);
+    } else if (!_socketClient.isConnected) {
+      _resyncGameData();
+    }
   }
 
   void userMove(NormalMove move, {bool? isDrop, bool? isPremove}) {
