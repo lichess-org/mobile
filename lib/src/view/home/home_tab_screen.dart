@@ -35,7 +35,6 @@ import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final editModeProvider = StateProvider<bool>((ref) => false);
@@ -468,7 +467,7 @@ class _HelloWidget extends ConsumerWidget {
                 Flexible(
                   child: l10nWithWidget(
                     context.l10n.mobileGreeting,
-                    UserFullNameWidget(user: user, style: style),
+                    Text(user.name, style: style),
                     textStyle: style,
                   ),
                 )

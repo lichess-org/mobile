@@ -132,6 +132,10 @@ class User with _$User {
       }),
     );
   }
+
+  String get initials =>
+      profile?.realName?.split(' ').take(2).map((e) => e[0]).join().toUpperCase() ??
+      username[0].toUpperCase();
 }
 
 @freezed

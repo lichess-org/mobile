@@ -1,4 +1,5 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -13,6 +14,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
@@ -31,26 +33,66 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AccountIconButton extends ConsumerWidget {
+class AccountIconButton extends ConsumerStatefulWidget {
   const AccountIconButton({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    return IconButton(
-      icon:
-          session == null
-              ? const Icon(Icons.account_circle_outlined)
-              : Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: CircleAvatar(child: Text(session.user.name.substring(0, 1).toUpperCase())),
-              ),
-      tooltip: session == null ? context.l10n.signIn : session.user.name,
-      onPressed: () {
-        Navigator.of(context).push(AccountScreen.buildRoute(context));
-      },
-    );
+  ConsumerState<AccountIconButton> createState() => _AccountIconButtonState();
+}
+
+class _AccountIconButtonState extends ConsumerState<AccountIconButton> {
+  bool errorLoadingFlair = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final account = ref.watch(accountProvider);
+    return switch (account) {
+      AsyncData(:final value) => IconButton(
+        tooltip: value == null ? context.l10n.signIn : value.username,
+        icon:
+            value == null
+                ? const Icon(Icons.account_circle_outlined, size: 30)
+                : CircleAvatar(
+                  foregroundImage:
+                      value.flair != null
+                          ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
+                          : null,
+                  onForegroundImageError: (error, _) {
+                    setState(() {
+                      errorLoadingFlair = true;
+                    });
+                  },
+                  backgroundColor:
+                      value.flair == null || errorLoadingFlair
+                          ? null
+                          : ColorScheme.of(context).surfaceContainer,
+                  child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
+                ),
+        // tooltip: session == null ? context.l10n.signIn : session.user.name,
+        onPressed: () {
+          Navigator.of(context).push(AccountScreen.buildRoute(context));
+        },
+      ),
+      _ => IconButton(
+        icon: const Icon(Icons.account_circle_outlined, size: 30),
+        tooltip: context.l10n.signIn,
+        onPressed: () {
+          Navigator.of(context).push(AccountScreen.buildRoute(context));
+        },
+      ),
+    };
   }
+
+  // Color _stringToColor(String str, double luminance) {
+  //   var hash = 0;
+  //   for (var i = 0; i < str.length; i++) {
+  //     hash = str.codeUnitAt(i) + ((hash << 5) - hash);
+  //   }
+
+  //   final h = hash % 360;
+  //   final hsl = HSLColor.fromAHSL(1.0, h.toDouble(), 0.3, luminance);
+  //   return hsl.toColor();
+  // }
 }
 
 class AccountScreen extends ConsumerWidget {
