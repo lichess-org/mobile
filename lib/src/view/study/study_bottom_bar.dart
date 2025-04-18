@@ -197,7 +197,7 @@ class _NextChapterButtonState extends ConsumerState<_NextChapterButton> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? const Center(child: CircularProgressIndicator())
+        ? const Center(child: CircularProgressIndicator.adaptive())
         : BottomBarButton(
           onTap:
               widget.hasNextChapter

@@ -64,7 +64,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       ),
       body: asyncUser.when(
         data: (data) => _UserProfileListView(data.$1, isLoading, setIsLoading),
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
         error: (error, _) {
           if (error is ClientException && error.message.contains('404')) {
             return Center(

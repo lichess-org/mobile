@@ -226,7 +226,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             BroadcastPlayersTab(tournamentId: _selectedTournamentId),
           ],
         ),
-        _ => const Center(child: CircularProgressIndicator()),
+        _ => const Center(child: CircularProgressIndicator.adaptive()),
       },
       bottomNavigationBar: switch (asyncTournament) {
         AsyncData(:final value) => _BottomBar(

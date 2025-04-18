@@ -96,7 +96,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
             ],
           ),
           AsyncError(:final error) => Center(child: Text('Could not load tournaments: $error')),
-          _ => const Center(child: CircularProgressIndicator()),
+          _ => const Center(child: CircularProgressIndicator.adaptive()),
         },
       ),
     );

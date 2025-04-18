@@ -116,7 +116,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(title: const _Title(variant: Variant.standard), actions: appBarActions),
-          body: const Center(child: CircularProgressIndicator()),
+          body: const Center(child: CircularProgressIndicator.adaptive()),
         );
     }
   }

@@ -45,7 +45,7 @@ class PuzzleTabScreen extends ConsumerWidget {
     final savedBatches = ref.watch(savedBatchesProvider).valueOrNull;
 
     if (savedBatches == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator.adaptive());
     }
 
     return _MaterialTabBody(savedBatches);

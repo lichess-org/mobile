@@ -60,7 +60,7 @@ class TournamentScreen extends ConsumerWidget {
       AsyncValue(:final value?) => _Body(id: id, state: value),
       _ => Scaffold(
         appBar: AppBar(title: const SizedBox.shrink()),
-        body: const Center(child: CircularProgressIndicator()),
+        body: const Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
   }

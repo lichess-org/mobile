@@ -84,7 +84,7 @@ class OnlineBotsWidget extends ConsumerWidget {
           child: Text('Could not load online bots: $error'),
         );
       case _:
-        return const Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator.adaptive());
     }
   }
 }

@@ -81,7 +81,7 @@ class _Body extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       error: (error, stackTrace) => Center(child: Text(error.toString())),
     );
   }
