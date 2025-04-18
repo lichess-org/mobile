@@ -5,11 +5,14 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -26,7 +29,7 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-class TournamentScreen extends ConsumerWidget {
+class TournamentScreen extends ConsumerStatefulWidget {
   const TournamentScreen({required this.id});
 
   final TournamentId id;
@@ -36,20 +39,52 @@ class TournamentScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(tournamentControllerProvider(id).select((value) => value.valueOrNull?.currentGame), (
-      prevGameId,
-      currentGameId,
-    ) {
-      if (prevGameId != currentGameId && currentGameId != null) {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(GameScreen.buildRoute(context, initialGameId: currentGameId));
-      }
-    });
+  ConsumerState<TournamentScreen> createState() => _TournamentScreenState();
+}
 
-    return switch (ref.watch(tournamentControllerProvider(id))) {
+class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      rootNavPageRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    rootNavPageRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPop() {
+    if (mounted) {
+      final joined = ref.read(tournamentControllerProvider(widget.id)).valueOrNull?.hasJoined;
+      if (joined == true) {
+        ref.invalidate(myRecentGamesProvider);
+        ref.invalidate(accountProvider);
+      }
+    }
+    super.didPop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(
+      tournamentControllerProvider(widget.id).select((value) => value.valueOrNull?.currentGame),
+      (prevGameId, currentGameId) {
+        if (prevGameId != currentGameId && currentGameId != null) {
+          Navigator.of(
+            context,
+            rootNavigator: true,
+          ).push(GameScreen.buildRoute(context, initialGameId: currentGameId));
+        }
+      },
+    );
+
+    return switch (ref.watch(tournamentControllerProvider(widget.id))) {
       AsyncError(:final error) => Scaffold(
         appBar: AppBar(title: const SizedBox.shrink()),
         body: Padding(
@@ -57,7 +92,7 @@ class TournamentScreen extends ConsumerWidget {
           child: Center(child: Text('Could not load tournament: $error')),
         ),
       ),
-      AsyncValue(:final value?) => _Body(id: id, state: value),
+      AsyncValue(:final value?) => _Body(id: widget.id, state: value),
       _ => Scaffold(
         appBar: AppBar(title: const SizedBox.shrink()),
         body: const Center(child: CircularProgressIndicator.adaptive()),
