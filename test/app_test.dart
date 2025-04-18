@@ -94,8 +94,6 @@ void main() {
 
     expect(find.byType(BottomNavScaffold), findsOneWidget);
 
-    expect(find.byType(NavigationDestination), findsNWidgets(4));
-
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Puzzles'), findsOneWidget);
     expect(find.text('Tools'), findsOneWidget);

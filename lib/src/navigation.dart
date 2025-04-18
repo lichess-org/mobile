@@ -1,12 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 enum BottomTab {
   home,
@@ -30,26 +33,13 @@ enum BottomTab {
   IconData get icon {
     switch (this) {
       case BottomTab.home:
-        return Icons.home_outlined;
+        return Symbols.home;
       case BottomTab.puzzles:
-        return Icons.extension_outlined;
+        return Symbols.extension;
       case BottomTab.tools:
-        return Icons.handyman_outlined;
+        return Symbols.handyman;
       case BottomTab.watch:
-        return Icons.live_tv_outlined;
-    }
-  }
-
-  IconData get activeIcon {
-    switch (this) {
-      case BottomTab.home:
-        return Icons.home;
-      case BottomTab.puzzles:
-        return Icons.extension;
-      case BottomTab.tools:
-        return Icons.handyman;
-      case BottomTab.watch:
-        return Icons.live_tv;
+        return Symbols.live_tv;
     }
   }
 }
@@ -133,18 +123,37 @@ class BottomNavScaffold extends ConsumerWidget {
 
     return FullScreenBackground(
       child: Scaffold(
-        body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _androidTabBuilder),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: currentTab.index,
-          destinations: [
-            for (final tab in BottomTab.values)
-              NavigationDestination(
-                icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                label: tab.label(context.l10n),
-              ),
-          ],
-          onDestinationSelected: (i) => _onItemTapped(ref, i),
-        ),
+        body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _tabBuilder),
+        bottomNavigationBar:
+            Theme.of(context).platform == TargetPlatform.iOS
+                ? CupertinoTabBar(
+                  height: kBottomBarHeight,
+                  backgroundColor: ColorScheme.of(context).surfaceContainer,
+                  border: Border(
+                    top: BorderSide(color: Theme.of(context).dividerColor, width: 0.5),
+                  ),
+                  activeColor: ColorScheme.of(context).onSurface,
+                  currentIndex: currentTab.index,
+                  items: [
+                    for (final tab in BottomTab.values)
+                      BottomNavigationBarItem(
+                        icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
+                        label: tab.label(context.l10n),
+                      ),
+                  ],
+                  onTap: (i) => _onItemTapped(ref, i),
+                )
+                : NavigationBar(
+                  selectedIndex: currentTab.index,
+                  destinations: [
+                    for (final tab in BottomTab.values)
+                      NavigationDestination(
+                        icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
+                        label: tab.label(context.l10n),
+                      ),
+                  ],
+                  onDestinationSelected: (i) => _onItemTapped(ref, i),
+                ),
       ),
     );
   }
@@ -187,7 +196,7 @@ class BottomNavScaffold extends ConsumerWidget {
   }
 }
 
-Widget _androidTabBuilder(BuildContext context, int index) {
+Widget _tabBuilder(BuildContext context, int index) {
   switch (index) {
     case 0:
       return _MaterialTabView(
