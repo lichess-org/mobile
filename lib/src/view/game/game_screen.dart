@@ -194,13 +194,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                 )
                 : const LoadGameError('Could not create the game.');
 
-        final gameSocketUri = gameId != null ? GameController.gameSocketUri(gameId) : null;
+        final socketUri = gameId != null ? GameController.socketUri(gameId) : null;
 
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
-              data: (prevent) => prevent ? SocketPingRating(socketUri: gameSocketUri) : null,
+              data: (prevent) => prevent ? SocketPingRating(socketUri: socketUri) : null,
               orElse: () => null,
             ),
             title:

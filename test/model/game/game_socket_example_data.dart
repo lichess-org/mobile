@@ -139,8 +139,7 @@ String makeFullEvent(
         }
       ]
     }
-  },
-  "v": $socketVersion
+  }
 }
 ''';
 }

@@ -54,7 +54,6 @@ class AnalysisOptions with _$AnalysisOptions {
 class AnalysisController extends _$AnalysisController
     with EngineEvaluationMixin
     implements PgnTreeNotifier {
-  static Uri gameSocketUri(GameId id) => Uri(path: '/watch/$id/v6');
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
   late Root _root;

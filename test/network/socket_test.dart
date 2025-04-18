@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:fake_async/fake_async.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -12,10 +14,14 @@ final defaultSocketUri = Uri(path: kDefaultSocketRoute);
 
 SocketClient makeTestSocketClient({
   FakeWebSocketChannelFactory fakeChannelFactory = defaultFakeWebSocketChannelFactory,
+  int? version,
+  VoidCallback? onEventGapFailure,
 }) {
   final client = SocketClient(
     defaultSocketUri,
+    version: version,
     channelFactory: fakeChannelFactory,
+    onEventGapFailure: onEventGapFailure,
     getSession: () => null,
     sri: 'testSri',
     packageInfo: PackageInfo(
@@ -245,7 +251,7 @@ void main() {
     });
   });
 
-  test('should emit events', () async {
+  test('emits events', () async {
     final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
 
     final socketClient = makeTestSocketClient(
@@ -275,6 +281,107 @@ void main() {
     await testEventEmitted(socketClient, fakeChannel, randomMessage, [randomEvent]);
 
     await socketClient.close();
+  });
+
+  test('handle event gap', () {
+    fakeAsync((async) {
+      final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
+
+      int onEventGapFailureCalled = 0;
+
+      final socketClient = makeTestSocketClient(
+        fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+        version: 0,
+        onEventGapFailure: () {
+          onEventGapFailureCalled++;
+        },
+      );
+      socketClient.connect();
+
+      socketClient.stream.listen((event) {
+        // ignore the events
+      });
+      expectLater(
+        socketClient.stream,
+        emitsInOrder([
+          const SocketEvent(topic: 'test', version: 1, data: 'data'),
+          const SocketEvent(topic: 'test', version: 2, data: 'data'),
+          const SocketEvent(topic: 'test', version: 3, data: 'data'),
+          const SocketEvent(topic: 'test', version: 4, data: 'data'),
+        ]),
+      );
+
+      async.elapse(kFakeWebSocketConnectionLag);
+
+      // server sends the message
+      sendServerSocketMessages(defaultSocketUri, [
+        '{"t":"test","v":1, "d":"data"}',
+        '{"t":"test","v":2, "d":"data"}',
+        '{"t":"test","v":4, "d":"data"}',
+      ]);
+
+      async.flushMicrotasks();
+
+      async.elapse(const Duration(milliseconds: 200));
+
+      sendServerSocketMessages(defaultSocketUri, ['{"t":"test","v":3, "d":"data"}']);
+
+      async.elapse(const Duration(milliseconds: 2000));
+
+      expect(onEventGapFailureCalled, 0);
+
+      socketClient.close();
+    });
+  });
+
+  test('handle event gap failure', () {
+    fakeAsync((async) {
+      final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
+
+      int onEventGapFailureCalled = 0;
+
+      final socketClient = makeTestSocketClient(
+        fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+        version: 0,
+        onEventGapFailure: () {
+          onEventGapFailureCalled++;
+        },
+      );
+      socketClient.connect();
+
+      socketClient.stream.listen((event) {
+        // ignore the events
+      });
+      expectLater(
+        socketClient.stream,
+        emitsInOrder([
+          const SocketEvent(topic: 'test', version: 1, data: 'data'),
+          const SocketEvent(topic: 'test', version: 2, data: 'data'),
+        ]),
+      );
+
+      async.elapse(kFakeWebSocketConnectionLag);
+
+      // server sends the message
+      sendServerSocketMessages(defaultSocketUri, [
+        '{"t":"test","v":1, "d":"data"}',
+        '{"t":"test","v":2, "d":"data"}',
+        '{"t":"test","v":4, "d":"data"}',
+      ]);
+
+      async.flushMicrotasks();
+
+      expect(onEventGapFailureCalled, 0);
+
+      // wait for possibly missing events to be received
+
+      async.elapse(const Duration(milliseconds: 2000));
+
+      // check that the event gap failure was called after 2 seconds
+      expect(onEventGapFailureCalled, 1);
+
+      socketClient.close();
+    });
   });
 }
 

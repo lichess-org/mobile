@@ -39,7 +39,7 @@ class MockSoundService extends Mock implements SoundService {}
 
 void main() {
   const testGameFullId = GameFullId('qVChCOTcHSeW');
-  final testGameSocketUri = GameController.gameSocketUri(testGameFullId);
+  final testGameSocketUri = GameController.socketUri(testGameFullId);
 
   group('Loading', () {
     testWidgets('a game directly with initialGameId', (WidgetTester tester) async {
@@ -112,7 +112,7 @@ void main() {
       // wait for game socket to connect
       await tester.pump(kFakeWebSocketConnectionLag);
 
-      sendServerSocketMessages(GameController.gameSocketUri(testGameFullId), [
+      sendServerSocketMessages(GameController.socketUri(testGameFullId), [
         makeFullEvent(
           const GameId('qVChCOTc'),
           '',
@@ -225,7 +225,7 @@ void main() {
       // Wait for game screen to load
       await tester.pump(const Duration(milliseconds: 10));
 
-      sendServerSocketMessages(GameController.gameSocketUri(testGameFullId), [tournamentGameEvent]);
+      sendServerSocketMessages(GameController.socketUri(testGameFullId), [tournamentGameEvent]);
       // wait for socket message handling
       await tester.pump();
 
@@ -247,7 +247,7 @@ void main() {
       // Wait for game screen to load
       await tester.pump(const Duration(milliseconds: 10));
 
-      sendServerSocketMessages(GameController.gameSocketUri(testGameFullId), [tournamentGameEvent]);
+      sendServerSocketMessages(GameController.socketUri(testGameFullId), [tournamentGameEvent]);
       // wait for socket message handling
       await tester.pump();
 
@@ -262,7 +262,7 @@ void main() {
       // No server response yet, so should not yet show the berserk icon next to our name.
       expect(find.byIcon(LichessIcons.body_cut), findsOneWidget);
 
-      sendServerSocketMessages(GameController.gameSocketUri(testGameFullId), [
+      sendServerSocketMessages(GameController.socketUri(testGameFullId), [
         '''{"t": "berserk", "d": "white"}''',
       ]);
       // wait for socket message handling
@@ -273,7 +273,7 @@ void main() {
       expect(find.byIcon(LichessIcons.body_cut), findsNWidgets(2));
 
       // opponent berserks
-      sendServerSocketMessages(GameController.gameSocketUri(testGameFullId), [
+      sendServerSocketMessages(GameController.socketUri(testGameFullId), [
         '''{"t": "berserk", "d": "black"}''',
       ]);
       // wait for socket message handling
@@ -678,7 +678,7 @@ Future<void> playMoveWithServerAck(
   final lagStr =
       clockAck.lag != null ? ', "lag": ${(clockAck.lag!.inMilliseconds / 10).round()}' : '';
   await tester.pump(elapsedTime - const Duration(milliseconds: 1));
-  sendServerSocketMessages(GameController.gameSocketUri(gameFullId), [
+  sendServerSocketMessages(GameController.socketUri(gameFullId), [
     '{"t": "move", "v": $socketVersion, "d": {"ply": $ply, "uci": "$uci", "san": "$san", "clock": {"white": ${(clockAck.white.inMilliseconds / 1000).toStringAsFixed(2)}, "black": ${(clockAck.black.inMilliseconds / 1000).toStringAsFixed(2)}$lagStr}}}',
   ]);
   await tester.pump();
@@ -727,7 +727,7 @@ Future<void> createTestGame(
   await tester.pumpWidget(app);
   await tester.pump(const Duration(milliseconds: 10));
 
-  sendServerSocketMessages(GameController.gameSocketUri(gameFullId), [
+  sendServerSocketMessages(GameController.socketUri(gameFullId), [
     makeFullEvent(
       variant: variant,
       const GameId('qVChCOTc'),
@@ -766,10 +766,10 @@ Future<void> loadFinishedTestGame(
   // wait for socket
   await tester.pump(kFakeWebSocketConnectionLag);
 
-  sendServerSocketMessages(GameController.gameSocketUri(gameFullId), [serverFullEvent]);
+  sendServerSocketMessages(GameController.socketUri(gameFullId), [serverFullEvent]);
   await tester.pump();
 }
 
 const _finishedGameFullEvent = '''
-{"t":"full","d":{"game":{"id":"CCW6EEru","variant":{"key":"standard","name":"Standard","short":"Std"},"speed":"bullet","perf":"bullet","rated":true,"fen":"6kr/p1p2rpp/4Q3/2b1p3/8/2P5/P2N1PPP/R3R1K1 b - - 0 22","turns":43,"source":"lobby","status":{"id":31,"name":"resign"},"createdAt":1706185945680,"winner":"white","pgn":"e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 Bb6 Ba3 Nf6 Qb3 d6 Bxf7+ Kf8 O-O Qe7 Nxe5 Nxe5 dxe5 Be6 Bxe6 Nxe4 Re1 Nc5 Bxc5 Bxc5 Qxb7 Re8 Bh3 dxe5 Qf3+ Kg8 Nd2 Rf8 Qd5+ Rf7 Be6 Qxe6 Qxe6"},"white":{"user":{"name":"veloce","id":"veloce"},"rating":1789,"ratingDiff":9},"black":{"user":{"name":"chabrot","id":"chabrot"},"rating":1810,"ratingDiff":-9},"socket":0,"clock":{"running":false,"initial":120,"increment":1,"white":31.2,"black":27.42,"emerg":15,"moretime":15},"takebackable":true,"youAre":"white","prefs":{"autoQueen":2,"zen":2,"confirmResign":true,"enablePremove":true},"chat":{"lines":[]}},"v": 0}
+{"t":"full","d":{"game":{"id":"CCW6EEru","variant":{"key":"standard","name":"Standard","short":"Std"},"speed":"bullet","perf":"bullet","rated":true,"fen":"6kr/p1p2rpp/4Q3/2b1p3/8/2P5/P2N1PPP/R3R1K1 b - - 0 22","turns":43,"source":"lobby","status":{"id":31,"name":"resign"},"createdAt":1706185945680,"winner":"white","pgn":"e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 Bb6 Ba3 Nf6 Qb3 d6 Bxf7+ Kf8 O-O Qe7 Nxe5 Nxe5 dxe5 Be6 Bxe6 Nxe4 Re1 Nc5 Bxc5 Bxc5 Qxb7 Re8 Bh3 dxe5 Qf3+ Kg8 Nd2 Rf8 Qd5+ Rf7 Be6 Qxe6 Qxe6"},"white":{"user":{"name":"veloce","id":"veloce"},"rating":1789,"ratingDiff":9},"black":{"user":{"name":"chabrot","id":"chabrot"},"rating":1810,"ratingDiff":-9},"socket":0,"clock":{"running":false,"initial":120,"increment":1,"white":31.2,"black":27.42,"emerg":15,"moretime":15},"takebackable":true,"youAre":"white","prefs":{"autoQueen":2,"zen":2,"confirmResign":true,"enablePremove":true},"chat":{"lines":[]}}}
 ''';

@@ -29,6 +29,7 @@ const _kPingDelay = Duration(milliseconds: 2500);
 const _kPingMaxLag = Duration(seconds: 9);
 const _kAutoReconnectDelay = Duration(milliseconds: 3500);
 const _kResendAckDelay = Duration(milliseconds: 1500);
+const _kVersionGapRetryDelay = Duration(milliseconds: 200);
 const _kIdleTimeout = Duration(seconds: 2);
 const _kDisconnectOnBackgroundTimeout = Duration(minutes: 5);
 
@@ -73,10 +74,11 @@ Uri lichessWSUri(String unencodedPath, [Map<String, String>? queryParameters]) =
 ///   - Authorization header when a token has been stored,
 ///   - User-Agent header
 ///
-/// Handles low-level ping/pong protocol, message acks, and automatic reconnections.
+/// Handles low-level ping/pong protocol, message acks, and automatic reconnections, event versioning.
 class SocketClient {
   SocketClient(
     this.route, {
+    this.version,
     required this.channelFactory,
     required this.getSession,
     required this.packageInfo,
@@ -84,6 +86,7 @@ class SocketClient {
     required this.sri,
     this.onStreamListen,
     this.onStreamCancel,
+    this.onEventGapFailure,
     this.pingDelay = _kPingDelay,
     this.pingMaxLag = _kPingMaxLag,
     this.autoReconnectDelay = _kAutoReconnectDelay,
@@ -108,6 +111,9 @@ class SocketClient {
   /// The route to connect to.
   final Uri route;
 
+  /// The current event version if this socket is versioned.
+  int? version;
+
   /// The delay between the next ping after receiving a pong.
   final Duration pingDelay;
 
@@ -126,6 +132,9 @@ class SocketClient {
   /// Called when the last listener is removed from the socket stream.
   final VoidCallback? onStreamCancel;
 
+  /// Called when a versioned socket event gap failed to resolve after 10 retries.
+  final VoidCallback? onEventGapFailure;
+
   late final StreamController<SocketEvent> _streamController =
       StreamController<SocketEvent>.broadcast(onListen: onStreamListen, onCancel: onStreamCancel);
 
@@ -136,6 +145,7 @@ class SocketClient {
   Timer? _pingTimer;
   Timer? _reconnectTimer;
   Timer? _ackResendTimer;
+  Timer? _versionGapRetryTimer;
   int _pongCount = 0;
   DateTime _lastPing = clock_package.clock.now();
 
@@ -198,7 +208,7 @@ class SocketClient {
     _ackResendTimer = Timer.periodic(resendAckDelay, (_) => _resendAcks());
 
     final session = getSession();
-    final uri = lichessWSUri(route.path);
+    final uri = lichessWSUri(route.path, version != null ? {'v': version.toString()} : null);
     final Map<String, String> headers =
         session != null ? {'Authorization': 'Bearer ${signBearerToken(session.token)}'} : {};
     WebSocket.userAgent = makeUserAgent(packageInfo, deviceInfo, sri, session?.user);
@@ -227,7 +237,8 @@ class SocketClient {
             if (raw == '0') {
               return SocketEvent.pong;
             }
-            return SocketEvent.fromJson(jsonDecode(raw as String) as Map<String, dynamic>);
+            final event = SocketEvent.fromJson(jsonDecode(raw as String) as Map<String, dynamic>);
+            return event;
           })
           .listen(_handleEvent);
 
@@ -290,6 +301,7 @@ class SocketClient {
     _pingTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
+    _versionGapRetryTimer?.cancel();
     _streamController.close();
     _averageLag.dispose();
     isDisposed = true;
@@ -340,7 +352,33 @@ class SocketClient {
     return future;
   }
 
-  void _handleEvent(SocketEvent event) {
+  void _handleEvent(SocketEvent event, [int retries = 10]) {
+    if (event.version != null && version != null) {
+      if (event.version! <= version!) {
+        _logger.fine('Already has event ${event.version}');
+        return;
+      }
+      if (event.version! > version! + 1) {
+        if (retries > 0) {
+          _logger.warning(
+            'Version gap, retrying... event: ${event.version}, socket: $version, retries: $retries',
+          );
+          _versionGapRetryTimer?.cancel();
+          _versionGapRetryTimer = Timer(
+            _kVersionGapRetryDelay,
+            () => _handleEvent(event, retries - 1),
+          );
+        } else {
+          _logger.severe(
+            'Cannot solve event gap: version incoming ${event.version} vs current $version',
+          );
+          onEventGapFailure?.call();
+        }
+        return;
+      }
+      version = event.version;
+    }
+
     switch (event.topic) {
       case '_pong':
         _handlePong(pingDelay);
@@ -496,15 +534,21 @@ class SocketPool {
 
   /// Opens a socket connection to the given [route].
   ///
-  /// It will use an existing connection if it is already active, unless
-  /// [forceReconnect] is set to true.
+  /// It will use an existing connection if it is already active, unless [forceReconnect] is set to
+  /// true.
   /// Any other active connection will be closed.
-  SocketClient open(Uri route, {bool? forceReconnect}) {
+  SocketClient open(
+    Uri route, {
+    int? version,
+    bool? forceReconnect,
+    VoidCallback? onEventGapFailure,
+  }) {
     _currentRoute = route;
 
     if (_pool[route] == null) {
       _pool[route] = SocketClient(
         route,
+        version: version,
         channelFactory: _ref.read(webSocketChannelFactoryProvider),
         getSession: () => _ref.read(authSessionProvider),
         packageInfo: _ref.read(preloadedDataProvider).requireValue.packageInfo,
@@ -531,6 +575,7 @@ class SocketPool {
             }
           });
         },
+        onEventGapFailure: onEventGapFailure,
       );
     }
 

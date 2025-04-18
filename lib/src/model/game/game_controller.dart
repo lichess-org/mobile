@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -56,12 +57,12 @@ class GameController extends _$GameController {
   /// It will also help with lila-ws restarts.
   Timer? _transientMoveTimer;
 
+  /// Callback to be called when the socket connection is unable to solve an event gap for a while.
+  VoidCallback? _onEventGapFailure;
+
   final _onFlagThrottler = Throttler(const Duration(milliseconds: 500));
 
-  /// Last socket version received
-  int? _socketEventVersion;
-
-  static Uri gameSocketUri(GameFullId gameFullId) => Uri(path: '/play/$gameFullId/v6');
+  static Uri socketUri(GameFullId gameFullId) => Uri(path: '/play/$gameFullId/v6');
 
   SocketPool get _socketPool => ref.read(socketPoolProvider);
 
@@ -70,38 +71,26 @@ class GameController extends _$GameController {
 
   @override
   Future<GameState> build(GameFullId gameFullId) {
+    _socketClient = _openSocket();
+    _onEventGapFailure = ref.invalidateSelf;
+
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _opponentLeftCountdownTimer?.cancel();
       _transientMoveTimer?.cancel();
       _clock?.dispose();
       _onFlagThrottler.cancel();
+      _onEventGapFailure = null;
     });
 
-    _socketClient = _socketPool.open(gameSocketUri(gameFullId), forceReconnect: true);
-    _socketEventVersion = null;
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
-    return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) async {
+    return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) {
       final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
+      _socketClient.version = fullEvent.socketEventVersion;
 
-      PlayableGame game = fullEvent.game;
-
-      if (fullEvent.game.finished) {
-        if (fullEvent.game.meta.speed == Speed.correspondence) {
-          ref.read(correspondenceServiceProvider).updateGame(gameFullId, fullEvent.game);
-        }
-
-        final result = await _getPostGameData();
-        game = result.fold((data) => _mergePostGameData(game, data, rewriteSteps: true), (e, s) {
-          _logger.warning('Could not get post game data: $e', e, s);
-          return game;
-        });
-        await _storeGame(game);
-      }
-
-      _socketEventVersion = fullEvent.socketEventVersion;
+      final game = fullEvent.game;
 
       // Play "dong" sound when this is a new game and we're playing it (not spectating)
       final isMyGame = game.youAre != null;
@@ -126,6 +115,8 @@ class GameController extends _$GameController {
             }
           }
         }
+      } else if (game.finished) {
+        _onFinishedGameLoad(fullEvent.game);
       }
 
       return GameState(
@@ -147,8 +138,8 @@ class GameController extends _$GameController {
       return;
     }
 
-    if (_socketClient.route != gameSocketUri(gameFullId)) {
-      _socketClient = _socketPool.open(gameSocketUri(gameFullId), forceReconnect: true);
+    if (_socketClient.route != socketUri(gameFullId)) {
+      _socketClient = _openSocket();
     } else if (!_socketClient.isConnected) {
       _resyncGameData();
     }
@@ -414,6 +405,16 @@ class GameController extends _$GameController {
   LiveGameClock? get _liveClock =>
       _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null;
 
+  SocketClient _openSocket() {
+    return _socketPool.open(
+      socketUri(gameFullId),
+      forceReconnect: true,
+      onEventGapFailure: () {
+        _onEventGapFailure?.call();
+      },
+    );
+  }
+
   /// Update the internal clock on clock server event
   void _updateClock({
     required Duration white,
@@ -490,33 +491,45 @@ class GameController extends _$GameController {
     _socketClient.connect();
   }
 
-  void _handleSocketEvent(SocketEvent event) {
-    final currentEventVersion = _socketEventVersion;
-
-    /// We don't have a version yet, let's wait for the full event
-    if (currentEventVersion == null) {
-      return;
-    }
-
-    if (event.version != null) {
-      if (event.version! <= currentEventVersion) {
-        _logger.fine('Already handled event ${event.version}');
-        return;
-      }
-      if (event.version! > currentEventVersion + 1) {
-        _logger.warning('Event gap detected from $currentEventVersion to ${event.version}');
-        _resyncGameData();
-      }
-      _socketEventVersion = event.version;
-    }
-
-    _handleSocketTopic(event);
-  }
-
-  void _handleSocketTopic(SocketEvent event) {
+  void _handleSocketEvent(SocketEvent event, [bool hasRetried = false]) {
     if (!state.hasValue) {
-      assert(false, 'received a game SocketEvent while GameState is null');
+      if (event.version != null) {
+        _logger.warning('received $event while game state not yet available');
+        // not sure whether this can happen so log it
+        FirebaseCrashlytics.instance.recordError(
+          'received $event while game state not yet available',
+          null,
+          reason: 'versioned socket event received before game state available',
+          information: ['event.type: ${event.topic}'],
+        );
+      }
       return;
+    }
+
+    // First message sent when the socket is reconnected
+    if (event.topic == 'full') {
+      final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
+      _socketClient.version = fullEvent.socketEventVersion;
+
+      state = AsyncValue.data(
+        GameState(
+          gameFullId: gameFullId,
+          game: fullEvent.game,
+          stepCursor: fullEvent.game.steps.length - 1,
+          liveClock: _liveClock,
+          // cancel the premove to avoid playing wrong premove when the full
+          // game data is reloaded
+          premove: null,
+        ),
+      );
+
+      if (fullEvent.game.clock != null) {
+        _updateClock(
+          white: fullEvent.game.clock!.white,
+          black: fullEvent.game.clock!.black,
+          activeSide: state.requireValue.activeClockSide,
+        );
+      }
     }
 
     switch (event.topic) {
@@ -534,38 +547,9 @@ class GameController extends _$GameController {
             return;
           }
           final reloadEvent = SocketEvent(topic: data['t'] as String, data: data['d']);
-          _handleSocketTopic(reloadEvent);
+          _handleSocketEvent(reloadEvent);
         } else {
           _resyncGameData();
-        }
-
-      // Full game data, received after a (re)connection to game socket
-      case 'full':
-        final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
-
-        if (_socketEventVersion != null && fullEvent.socketEventVersion < _socketEventVersion!) {
-          return;
-        }
-        _socketEventVersion = fullEvent.socketEventVersion;
-
-        state = AsyncValue.data(
-          GameState(
-            gameFullId: gameFullId,
-            game: fullEvent.game,
-            stepCursor: fullEvent.game.steps.length - 1,
-            liveClock: _liveClock,
-            // cancel the premove to avoid playing wrong premove when the full
-            // game data is reloaded
-            premove: null,
-          ),
-        );
-
-        if (fullEvent.game.clock != null) {
-          _updateClock(
-            white: fullEvent.game.clock!.white,
-            black: fullEvent.game.clock!.black,
-            activeSide: state.requireValue.activeClockSide,
-          );
         }
 
       // Move event, received after sending a move or receiving a move from the
@@ -913,6 +897,24 @@ class GameController extends _$GameController {
     return Result.capture(
       ref.withClient((client) => GameRepository(client).getGame(gameFullId.gameId)),
     );
+  }
+
+  Future<void> _onFinishedGameLoad(PlayableGame game) async {
+    if (game.meta.speed == Speed.correspondence) {
+      ref.read(correspondenceServiceProvider).updateGame(gameFullId, game);
+    }
+
+    final result = await _getPostGameData();
+    final gameWithPostData = result.fold(
+      (data) => _mergePostGameData(game, data, rewriteSteps: true),
+      (e, s) {
+        _logger.warning('Could not get post game data: $e', e, s);
+        return game;
+      },
+    );
+    await _storeGame(gameWithPostData);
+
+    state = AsyncValue.data(state.requireValue.copyWith(game: gameWithPostData));
   }
 
   PlayableGame _mergePostGameData(
