@@ -134,7 +134,9 @@ extension CustomThemeBuildContext on BuildContext {
       inputDecorationTheme:
           isIOS ? _makeCupertinoInputDecorationTheme(themeLight.colorScheme) : null,
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
+      dialogTheme: isIOS ? _kCupertinoDialogTheme : null,
       menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
+      bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
       sliderTheme: kSliderTheme,
       extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
     ),
@@ -151,7 +153,9 @@ extension CustomThemeBuildContext on BuildContext {
       inputDecorationTheme:
           isIOS ? _makeCupertinoInputDecorationTheme(themeDark.colorScheme) : null,
       floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
+      dialogTheme: isIOS ? _kCupertinoDialogTheme : null,
       menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
+      bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
       sliderTheme: kSliderTheme,
       extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
     ),
@@ -199,7 +203,7 @@ extension CustomThemeBuildContext on BuildContext {
     listTileTheme: _makeListTileTheme(baseTheme.colorScheme, isIOS),
     cardTheme: isIOS ? _kCupertinoCardTheme : null,
     inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(baseTheme.colorScheme) : null,
-    bottomSheetTheme: BottomSheetThemeData(
+    bottomSheetTheme: (isIOS ? _kCupertinoBottomSheetTheme : const BottomSheetThemeData()).copyWith(
       backgroundColor:
           isIOS
               ? lighten(baseTheme.colorScheme.surface, 0.1).withValues(alpha: 0.9)
@@ -209,7 +213,7 @@ extension CustomThemeBuildContext on BuildContext {
       backgroundColor: baseTheme.colorScheme.secondaryFixedDim,
       foregroundColor: baseTheme.colorScheme.onSecondaryFixedVariant,
     ),
-    dialogTheme: DialogThemeData(
+    dialogTheme: (isIOS ? _kCupertinoDialogTheme : const DialogThemeData()).copyWith(
       backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
     ),
     menuTheme:
@@ -265,6 +269,16 @@ ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
 }
 
 const _appBarTheme = AppBarTheme(actionsPadding: EdgeInsets.only(right: 8.0));
+
+const _kCupertinoBottomSheetTheme = BottomSheetThemeData(
+  elevation: 0,
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(14))),
+);
+
+const _kCupertinoDialogTheme = DialogThemeData(
+  elevation: 0,
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(14))),
+);
 
 const _kCupertinoCardTheme = CardThemeData(
   elevation: 0,
