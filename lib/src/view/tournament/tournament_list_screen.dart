@@ -202,52 +202,28 @@ class _TournamentListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-      title: Row(
+      leading: Icon(tournament.perf.icon, color: _iconColor(tournament)),
+      title: Text(tournament.fullName, overflow: TextOverflow.ellipsis, maxLines: 2),
+      subtitle: Text(
+        '${tournament.timeIncrement.display} ${tournament.rated ? context.l10n.rated : context.l10n.broadcastUnrated} • ${context.l10n.nbMinutes(tournament.minutes)}',
+      ),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Icon(tournament.perf.icon, color: _iconColor(tournament)),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
+          Text(
+            '${_hourMinuteFormat.format(tournament.startsAt)} - ${_hourMinuteFormat.format(tournament.finishesAt)}',
+            style: const TextStyle(fontSize: 14),
+          ),
+          Text.rich(
+            TextSpan(
+              style: const TextStyle(color: Colors.grey),
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        tournament.fullName,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      '${_hourMinuteFormat.format(tournament.startsAt)} - ${_hourMinuteFormat.format(tournament.finishesAt)}',
-                    ),
-                  ],
+                const WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Icon(Icons.group_outlined, size: 18),
                 ),
-                DefaultTextStyle.merge(
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${tournament.timeIncrement.display} ${tournament.rated ? context.l10n.rated : context.l10n.broadcastUnrated} • ${context.l10n.nbMinutes(tournament.minutes)}',
-                      ),
-                      Text.rich(
-                        TextSpan(
-                          style: const TextStyle(color: Colors.grey),
-                          children: [
-                            const WidgetSpan(
-                              alignment: PlaceholderAlignment.middle,
-                              child: Icon(Icons.group_outlined, size: 18),
-                            ),
-                            TextSpan(text: '${tournament.nbPlayers}'),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                TextSpan(text: '${tournament.nbPlayers}', style: const TextStyle(fontSize: 14)),
               ],
             ),
           ),
