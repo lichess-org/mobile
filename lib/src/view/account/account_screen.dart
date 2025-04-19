@@ -47,31 +47,37 @@ class _AccountIconButtonState extends ConsumerState<AccountIconButton> {
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
     return switch (account) {
-      AsyncData(:final value) => IconButton(
-        tooltip: value == null ? context.l10n.signIn : value.username,
-        icon:
-            value == null
-                ? const Icon(Icons.account_circle_outlined, size: 30)
-                : CircleAvatar(
-                  foregroundImage:
-                      value.flair != null
-                          ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
-                          : null,
-                  onForegroundImageError: (error, _) {
-                    setState(() {
-                      errorLoadingFlair = true;
-                    });
-                  },
-                  backgroundColor:
-                      value.flair == null || errorLoadingFlair
-                          ? null
-                          : ColorScheme.of(context).surfaceContainer,
-                  child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
-                ),
-        // tooltip: session == null ? context.l10n.signIn : session.user.name,
-        onPressed: () {
-          Navigator.of(context).push(AccountScreen.buildRoute(context));
-        },
+      AsyncData(:final value) => Padding(
+        padding: EdgeInsets.only(left: value == null ? 0.0 : 8.0),
+        child: IconButton(
+          tooltip: value == null ? context.l10n.signIn : value.username,
+          icon:
+              value == null
+                  ? const Icon(Icons.account_circle_outlined, size: 30)
+                  : CircleAvatar(
+                    foregroundImage:
+                        value.flair != null
+                            ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
+                            : null,
+                    onForegroundImageError:
+                        value.flair != null
+                            ? (error, _) {
+                              setState(() {
+                                errorLoadingFlair = true;
+                              });
+                            }
+                            : null,
+                    backgroundColor:
+                        value.flair == null || errorLoadingFlair
+                            ? null
+                            : ColorScheme.of(context).surfaceContainer,
+                    child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
+                  ),
+          // tooltip: session == null ? context.l10n.signIn : session.user.name,
+          onPressed: () {
+            Navigator.of(context).push(AccountScreen.buildRoute(context));
+          },
+        ),
       ),
       _ => IconButton(
         icon: const Icon(Icons.account_circle_outlined, size: 30),
