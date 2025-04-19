@@ -61,7 +61,7 @@ Future<IList<Streamer>> liveStreamers(Ref ref) {
 }
 
 @riverpod
-Future<IMap<Perf, LeaderboardUser>> top1(Ref ref) {
+Future<Top1Leaderboard> top1(Ref ref) {
   return ref.withClientCacheFor(
     (client) => UserRepository(client).getTop1(),
     const Duration(hours: 12),
@@ -73,6 +73,14 @@ Future<Leaderboard> leaderboard(Ref ref) {
   return ref.withClientCacheFor(
     (client) => UserRepository(client).getLeaderboard(),
     const Duration(hours: 2),
+  );
+}
+
+@riverpod
+Future<IList<User>> onlineBots(Ref ref) {
+  return ref.withClientCacheFor(
+    (client) => UserRepository(client).getOnlineBots().then((bots) => bots.toIList()),
+    const Duration(hours: 5),
   );
 }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
@@ -12,13 +12,15 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 ///
 /// The title routes to a Leaderboard Screen with the top 10 players for each perf.
 class LeaderboardWidget extends ConsumerWidget {
+  const LeaderboardWidget({required this.top1, super.key});
+
+  final AsyncValue<Top1Leaderboard> top1;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final leaderboardState = ref.watch(top1Provider);
-
-    return leaderboardState.when(
-      data: (data) {
-        return ListSection(
+    return Shimmer(
+      child: switch (top1) {
+        AsyncData(:final value) => ListSection(
           hasLeading: true,
           header: Text(context.l10n.leaderboard),
           headerTrailing: NoPaddingTextButton(
@@ -28,27 +30,19 @@ class LeaderboardWidget extends ConsumerWidget {
             child: Text(context.l10n.more),
           ),
           children: [
-            for (final entry in data.entries)
+            for (final entry in value.entries)
               LeaderboardListTile(user: entry.value, perfIcon: entry.key.icon),
           ],
-        );
-      },
-      error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [LeaderboardWidget] could not lead leaderboard data; $error\n $stackTrace',
-        );
-        return const Padding(
+        ),
+        AsyncError() => const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load leaderboard.'),
-        );
+        ),
+        _ => ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(itemsNumber: 5, header: true, hasLeading: true),
+        ),
       },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: ListSection.loading(itemsNumber: 5, header: true, hasLeading: true),
-            ),
-          ),
     );
   }
 }

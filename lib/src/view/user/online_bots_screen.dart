@@ -4,8 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -18,13 +17,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-
-final _onlineBotsProvider = FutureProvider.autoDispose<IList<User>>((ref) {
-  return ref.withClientCacheFor(
-    (client) => UserRepository(client).getOnlineBots().then((bots) => bots.toIList()),
-    const Duration(hours: 5),
-  );
-});
 
 class OnlineBotsScreen extends StatelessWidget {
   const OnlineBotsScreen();
@@ -40,13 +32,13 @@ class OnlineBotsScreen extends StatelessWidget {
 }
 
 class OnlineBotsWidget extends ConsumerWidget {
-  const OnlineBotsWidget({super.key});
+  const OnlineBotsWidget({required this.onlineBots, super.key});
+
+  final AsyncValue<IList<User>> onlineBots;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final onlineBotsAsync = ref.watch(_onlineBotsProvider);
-
-    switch (onlineBotsAsync) {
+    switch (onlineBots) {
       case AsyncData(:final value):
         if (value.isEmpty) {
           return const SizedBox.shrink();
@@ -92,7 +84,7 @@ class OnlineBotsWidget extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final onlineBots = ref.watch(_onlineBotsProvider);
+    final onlineBots = ref.watch(onlineBotsProvider);
 
     return onlineBots.when(
       data:
@@ -152,7 +144,7 @@ class _Body extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       error: (e, s) {
         debugPrint('Could not load bots: $e');
-        return FullScreenRetryRequest(onRetry: () => ref.refresh(_onlineBotsProvider));
+        return FullScreenRetryRequest(onRetry: () => ref.refresh(onlineBotsProvider));
       },
     );
   }

@@ -1,13 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/lichess_assets.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class UserListTile extends StatelessWidget {
   const UserListTile._(
@@ -57,39 +54,18 @@ class UserListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap != null ? () => onTap?.call() : null,
-      leading: Icon(
-        isOnline == true ? Icons.cloud : Icons.cloud_off,
-        color: isOnline == true ? context.lichessColors.good : null,
-      ),
-      title: Padding(
-        padding: const EdgeInsets.only(right: 5.0),
-        child: Row(
-          children: [
-            if (isPatron == true) ...[
-              Icon(LichessIcons.patron, semanticLabel: context.l10n.patronLichessPatron),
-              const SizedBox(width: 5),
-            ],
-            if (title != null) ...[
-              Text(
-                title!,
-                style: TextStyle(color: context.lichessColors.brag, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(width: 5),
-            ],
-            Flexible(child: Text(maxLines: 1, overflow: TextOverflow.ellipsis, username)),
-            if (flair != null) ...[
-              const SizedBox(width: 5),
-              CachedNetworkImage(
-                imageUrl: lichessFlairSrc(flair!),
-                errorWidget: (_, _, _) => kEmptyWidget,
-                width: DefaultTextStyle.of(context).style.fontSize,
-                height: DefaultTextStyle.of(context).style.fontSize,
-              ),
-            ],
-          ],
+      title: UserFullNameWidget(
+        shouldShowOnline: true,
+        user: LightUser(
+          id: UserId.fromUserName(username),
+          name: username,
+          title: title,
+          flair: flair,
+          isPatron: isPatron,
+          isOnline: isOnline,
         ),
       ),
-      subtitle: userPerfs != null ? _UserRating(perfs: userPerfs!) : null,
+      trailing: userPerfs != null ? _UserRating(perfs: userPerfs!) : null,
     );
   }
 }
@@ -118,6 +94,9 @@ class _UserRating extends StatelessWidget {
     final rating = perfs[userPerfs.first]?.rating.toString() ?? '?';
     final icon = userPerfs.first.icon;
 
-    return Row(children: [Icon(icon, size: 16), const SizedBox(width: 5), Text(rating)]);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [Icon(icon, size: 16), const SizedBox(width: 5), Text(rating)],
+    );
   }
 }

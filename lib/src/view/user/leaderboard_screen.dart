@@ -90,8 +90,8 @@ class LeaderboardListTile extends StatelessWidget {
         padding: const EdgeInsets.only(right: 5.0),
         child: UserFullNameWidget(user: user.lightUser),
       ),
-      subtitle: perfIcon != null ? Text(user.rating.toString()) : null,
-      trailing: perfIcon != null ? _Progress(user.progress) : Text(user.rating.toString()),
+      trailing:
+          perfIcon != null ? _Progress(user.rating, user.progress) : Text(user.rating.toString()),
     );
   }
 
@@ -101,8 +101,9 @@ class LeaderboardListTile extends StatelessWidget {
 }
 
 class _Progress extends StatelessWidget {
-  const _Progress(this.progress);
+  const _Progress(this.rating, this.progress);
   final int progress;
+  final int rating;
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +112,8 @@ class _Progress extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: [
+        Text(rating.toString(), maxLines: 1),
+        const SizedBox(width: 5),
         Icon(
           progress > 0 ? LichessIcons.arrow_full_upperright : LichessIcons.arrow_full_lowerright,
           size: 16,
