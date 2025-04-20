@@ -114,7 +114,7 @@ class OngoingGameCarouselItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: game.speed != Speed.correspondence || game.isMyTurn ? 1.0 : 0.7,
+      opacity: game.speed != Speed.correspondence || game.isMyTurn ? 1.0 : 0.85,
       child: _BoardCarouselItem(
         fen: game.fen,
         orientation: game.orientation,
@@ -143,6 +143,7 @@ class OngoingGameCarouselItem extends StatelessWidget {
                           ? context.l10n.yourTurn
                           : context.l10n.waitingForOpponent,
                       style: TextStyle(
+                        color: Colors.white.withValues(alpha: game.isMyTurn ? 1.0 : 0.7),
                         fontSize: TextTheme.of(context).labelMedium?.fontSize,
                         fontWeight: FontWeight.w500,
                       ),
@@ -154,7 +155,9 @@ class OngoingGameCarouselItem extends StatelessWidget {
                   user: game.opponent,
                   rating: game.opponentRating,
                   aiLevel: game.opponentAiLevel,
-                  style: Styles.boardPreviewTitle,
+                  style: Styles.boardPreviewTitle.copyWith(
+                    color: Colors.white.withValues(alpha: game.isMyTurn ? 1.0 : 0.7),
+                  ),
                 ),
               ],
             ),
