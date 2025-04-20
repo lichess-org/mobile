@@ -228,4 +228,33 @@ void main() {
       expect(onEmergencyCount, 1);
     });
   });
+
+  // This bug was caused by the "have we played the emergency sound" flag not being tracked separately per side.
+  test('Regression tests for issue #1626', () {
+    fakeAsync((async) {
+      int onEmergencyCount = 0;
+      final clock = ChessClock(
+        whiteTime: const Duration(seconds: 60),
+        blackTime: const Duration(seconds: 60),
+        emergencyThreshold: const Duration(seconds: 30),
+        onEmergency: (_) {
+          onEmergencyCount++;
+        },
+      );
+      clock.start();
+      async.elapse(const Duration(seconds: 30));
+      expect(onEmergencyCount, 1);
+
+      // Switch to black. We're above 1.5x the emergency threshold, so this used to reset the flag (for both sides).
+      clock.startSide(Side.black);
+      // There's an internal 20s cooldown for the emergency callback, so wait for that.
+      async.elapse(const Duration(seconds: 20));
+      expect(onEmergencyCount, 1);
+
+      // Switch back to white, this used to incorrectly play the sound again
+      clock.startSide(Side.white);
+      async.elapse(const Duration(milliseconds: 100));
+      expect(onEmergencyCount, 1);
+    });
+  });
 }
