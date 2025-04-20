@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -112,7 +111,7 @@ class _Body extends ConsumerWidget {
                   ? kEmptyWidget
                   : ListSection(
                     header: Text(context.l10n.mobileRecentSearches),
-                    headerTrailing: NoPaddingTextButton(
+                    headerTrailing: TextButton(
                       child: Text(context.l10n.mobileClearButton),
                       onPressed: () => ref.read(searchHistoryProvider.notifier).clear(),
                     ),

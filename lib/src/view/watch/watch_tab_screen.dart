@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -193,26 +192,12 @@ class _BroadcastWidget extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(bottom: 8.0)),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    context.l10n.broadcastBroadcasts,
-                    style: Styles.sectionTitle,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(width: 6.0),
-                NoPaddingTextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(BroadcastListScreen.buildRoute(context));
-                  },
-                  child: Text(context.l10n.more),
-                ),
-              ],
+            padding: Styles.horizontalBodyPadding,
+            child: ListSectionHeader(
+              title: Text(context.l10n.broadcastBroadcasts),
+              onTap: () {
+                Navigator.of(context).push(BroadcastListScreen.buildRoute(context));
+              },
             ),
           ),
           switch (broadcastList) {
@@ -249,16 +234,12 @@ class _WatchTvWidget extends ConsumerWidget {
         return ListSection(
           header: const Text('Lichess TV'),
           hasLeading: true,
-          headerTrailing: NoPaddingTextButton(
-            onPressed:
-                () =>
-                    Navigator.of(context).push(LiveTvChannelsScreen.buildRoute(context)).then((_) {
-                      if (context.mounted) {
-                        _doRefreshDataForRef(ref);
-                      }
-                    }),
-            child: Text(context.l10n.more),
-          ),
+          onHeaderTap:
+              () => Navigator.of(context).push(LiveTvChannelsScreen.buildRoute(context)).then((_) {
+                if (context.mounted) {
+                  _doRefreshDataForRef(ref);
+                }
+              }),
           children: data
               .map((snapshot) {
                 return ListTile(
@@ -324,11 +305,8 @@ class _StreamerWidget extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.streamersMenu),
           hasLeading: true,
-          leadingIndent: kThumbnailImageSize + 10,
-          headerTrailing: NoPaddingTextButton(
-            onPressed: () => Navigator.of(context).push(StreamerScreen.buildRoute(context, data)),
-            child: Text(context.l10n.more),
-          ),
+          leadingIndent: kThumbnailImageSize + 16,
+          onHeaderTap: () => Navigator.of(context).push(StreamerScreen.buildRoute(context, data)),
           children: [
             ...data
                 .take(numberOfItems)

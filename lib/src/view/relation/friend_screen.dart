@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -95,13 +94,7 @@ class OnlineFriendsWidget extends ConsumerWidget {
         data: (data) {
           return ListSection(
             header: Text(context.l10n.nbFriendsOnline(data.length)),
-            headerTrailing:
-                data.isEmpty
-                    ? null
-                    : NoPaddingTextButton(
-                      onPressed: () => _handleTap(context, data),
-                      child: Text(context.l10n.more),
-                    ),
+            onHeaderTap: data.isEmpty ? null : () => _handleTap(context, data),
             children: [
               if (data.isEmpty)
                 ListTile(

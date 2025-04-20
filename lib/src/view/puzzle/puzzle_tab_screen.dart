@@ -225,11 +225,7 @@ class _PuzzleMenuListTile extends StatelessWidget {
         ),
         isLabelVisible: badgeLabel != null,
         label: (badgeLabel != null) ? Text(badgeLabel!) : null,
-        child: Icon(
-          icon,
-          size: Styles.mainListTileIconSize,
-          color: ColorScheme.of(context).primary,
-        ),
+        child: Icon(icon, color: ColorScheme.of(context).primary),
       ),
       title: Text(title, style: Styles.mainListTileTitle),
       subtitle: Text(subtitle, maxLines: 3),
@@ -339,13 +335,9 @@ class PuzzleHistoryWidget extends ConsumerWidget {
 
         return ListSection(
           header: showHeader ? Text(context.l10n.puzzleHistory) : null,
-          headerTrailing:
+          onHeaderTap:
               showHeader
-                  ? NoPaddingTextButton(
-                    onPressed:
-                        () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute(context)),
-                    child: Text(context.l10n.more),
-                  )
+                  ? () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute(context))
                   : null,
           children: [
             Padding(

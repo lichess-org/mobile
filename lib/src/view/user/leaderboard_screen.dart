@@ -120,10 +120,11 @@ class _Progress extends StatelessWidget {
           color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
         ),
         Text(
-          '${progress.abs()}',
+          progress.abs().toString().padRight(2),
           maxLines: 1,
           style: TextStyle(
             fontSize: 12,
+            fontFeatures: const [FontFeature.tabularFigures()],
             color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
           ),
         ),

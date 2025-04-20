@@ -34,6 +34,7 @@ import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -650,36 +651,23 @@ class PreviewGameList<T> extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 16.0)),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: Text(
-                  context.l10n.nbGamesInPlay(list.length),
-                  style: Styles.sectionTitle,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              if (list.length > maxGamesToShow) ...[
-                const SizedBox(width: 6.0),
-                NoPaddingTextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(moreScreenRouteBuilder(context));
-                  },
-                  child: Text(context.l10n.more),
-                ),
-              ],
-            ],
+    return Padding(
+      padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListSectionHeader(
+            title: Text(context.l10n.nbGamesInPlay(list.length)),
+            onTap:
+                list.length > maxGamesToShow
+                    ? () {
+                      Navigator.of(context).push(moreScreenRouteBuilder(context));
+                    }
+                    : null,
           ),
-        ),
-        for (final data in list.take(maxGamesToShow)) builder(data),
-      ],
+          for (final data in list.take(maxGamesToShow)) builder(data),
+        ],
+      ),
     );
   }
 }

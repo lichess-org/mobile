@@ -52,11 +52,7 @@ class _ToolsButton extends StatelessWidget {
     return Opacity(
       opacity: onTap == null ? 0.5 : 1.0,
       child: ListTile(
-        leading: Icon(
-          icon,
-          size: Styles.mainListTileIconSize,
-          color: ColorScheme.of(context).primary,
-        ),
+        leading: Icon(icon, color: ColorScheme.of(context).primary),
         title: Text(title, style: Styles.callout),
         trailing:
             Theme.of(context).platform == TargetPlatform.iOS

@@ -244,7 +244,6 @@ ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
       color: colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
     ),
     contentPadding: isIOS ? const EdgeInsets.symmetric(horizontal: 16) : null,
-    visualDensity: isIOS ? VisualDensity.compact : null,
   );
 }
 

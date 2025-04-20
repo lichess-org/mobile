@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 const kGameCarouselFlexWeights = [6, 2];
@@ -69,27 +69,14 @@ class _GamesCarouselState<T> extends State<GamesCarousel<T>> {
         children: [
           Padding(
             padding: Styles.horizontalBodyPadding,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    context.l10n.nbGamesInPlay(widget.list.length),
-                    style: Styles.sectionTitle,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                if (widget.list.length > 2) ...[
-                  const SizedBox(width: 6.0),
-                  NoPaddingTextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(widget.moreScreenRouteBuilder(context));
-                    },
-                    child: Text(context.l10n.more),
-                  ),
-                ],
-              ],
+            child: ListSectionHeader(
+              title: Text(context.l10n.nbGamesInPlay(widget.list.length)),
+              onTap:
+                  widget.list.length > 2
+                      ? () {
+                        Navigator.of(context).push(widget.moreScreenRouteBuilder(context));
+                      }
+                      : null,
             ),
           ),
           Padding(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 /// A platform agnostic list section.
 ///
@@ -9,6 +11,7 @@ class ListSection extends StatelessWidget {
     super.key,
     required this.children,
     this.header,
+    this.onHeaderTap,
     this.headerTrailing,
     this.footer,
     this.margin,
@@ -25,6 +28,7 @@ class ListSection extends StatelessWidget {
     this.margin,
     this.hasLeading = false,
   }) : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
+       onHeaderTap = null,
        headerTrailing = null,
        header = header ? const SizedBox.shrink() : null,
        footer = null,
@@ -46,7 +50,10 @@ class ListSection extends StatelessWidget {
   /// Show a header above the children rows. Typically a [Text] widget.
   final Widget? header;
 
-  /// A widget to show at the end of the header.
+  /// A callback to be called when the header is tapped.
+  final VoidCallback? onHeaderTap;
+
+  /// A widget to show at the end of the header (only if [onHeaderTap] is null).
   final Widget? headerTrailing;
 
   /// A widget to show at the end of the section.
@@ -116,21 +123,12 @@ class ListSection extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (header != null) ...[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: DefaultTextStyle.merge(
-                              style: Styles.sectionTitle,
-                              child: header!,
-                            ),
-                          ),
-                          if (headerTrailing != null) headerTrailing!,
-                        ],
+                    if (header != null)
+                      ListSectionHeader(
+                        title: header!,
+                        onTap: onHeaderTap,
+                        trailing: headerTrailing,
                       ),
-                      const SizedBox(height: 4.0),
-                    ],
                     (materialFilledCard ? Card.filled : Card.new)(
                       clipBehavior: Clip.hardEdge,
                       color: backgroundColor,
@@ -186,6 +184,45 @@ class ListSection extends StatelessWidget {
   }
 }
 
+/// A header for a [ListSection].
+class ListSectionHeader extends StatelessWidget {
+  const ListSectionHeader({super.key, required this.title, this.onTap, this.trailing});
+
+  final Widget title;
+
+  /// A callback to be called when the header is tapped.
+  final VoidCallback? onTap;
+
+  /// A widget to show at the end of the header (only if [onTap] is null).
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return OpacityButton(
+      onPressed: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(child: DefaultTextStyle.merge(style: Styles.sectionTitle, child: title)),
+            if (onTap != null)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(context.l10n.more, style: TextStyle(color: ColorScheme.of(context).primary)),
+                  Icon(Icons.chevron_right, size: 16, color: ColorScheme.of(context).primary),
+                ],
+              )
+            else if (trailing != null)
+              trailing!,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// Platform agnostic divider widget.
 ///
 /// Useful to show a divider between [ListTile] widgets when using the
@@ -212,6 +249,8 @@ class PlatformDivider extends StatelessWidget {
   final bool cupertinoHasLeading;
   final double? cupertinoLeadingIndent;
 
+  static const _defaultListTileLeadingWidth = 40.0;
+
   @override
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.android
@@ -225,7 +264,11 @@ class PlatformDivider extends StatelessWidget {
         : Divider(
           height: height,
           thickness: thickness ?? 0.0,
-          indent: indent ?? (cupertinoHasLeading ? 16.0 + (cupertinoLeadingIndent ?? 36.0) : 16.0),
+          indent:
+              indent ??
+              (cupertinoHasLeading
+                  ? 16.0 + (cupertinoLeadingIndent ?? _defaultListTileLeadingWidth)
+                  : 16.0),
           endIndent: endIndent,
           color: color,
         );

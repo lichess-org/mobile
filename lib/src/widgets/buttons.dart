@@ -92,24 +92,54 @@ class SemanticIconButton extends StatelessWidget {
   }
 }
 
-/// Button that explicitly reduce padding, thus does not conform to accessibility
-/// guidelines. So use sparingly.
-class NoPaddingTextButton extends StatelessWidget {
-  const NoPaddingTextButton({required this.child, required this.onPressed, super.key});
+/// Wrapper that changes child's opacity when pressed.
+class OpacityButton extends StatefulWidget {
+  const OpacityButton({
+    required this.child,
+    required this.onPressed,
+    this.semanticsLabel,
+    super.key,
+  });
 
   final VoidCallback? onPressed;
   final Widget child;
+  final String? semanticsLabel;
+
+  @override
+  State<OpacityButton> createState() => _OpacityButtonState();
+}
+
+class _OpacityButtonState extends State<OpacityButton> {
+  bool _isPressed = false;
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-      style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
-        minimumSize: Size.zero,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    return Semantics(
+      container: true,
+      enabled: widget.onPressed != null,
+      button: true,
+      label: widget.semanticsLabel,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown:
+            widget.onPressed != null
+                ? (_) {
+                  setState(() => _isPressed = true);
+                }
+                : null,
+        onTapUp: (_) {
+          setState(() => _isPressed = false);
+          widget.onPressed?.call();
+        },
+        onTapCancel: () {
+          setState(() => _isPressed = false);
+        },
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 100),
+          opacity: _isPressed ? 0.5 : 1.0,
+          child: widget.child,
+        ),
       ),
-      child: child,
     );
   }
 }

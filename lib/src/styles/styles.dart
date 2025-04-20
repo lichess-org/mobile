@@ -10,7 +10,6 @@ abstract class Styles {
   static const subtitle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
   static const callout = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
   static const mainListTileTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
-  static const mainListTileIconSize = 28.0;
   static const sectionTitle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
   static const boardPreviewTitle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
   static const subtitleOpacity = 0.7;

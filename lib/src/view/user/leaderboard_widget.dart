@@ -4,7 +4,6 @@ import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -23,12 +22,9 @@ class LeaderboardWidget extends ConsumerWidget {
         AsyncData(:final value) => ListSection(
           hasLeading: true,
           header: Text(context.l10n.leaderboard),
-          headerTrailing: NoPaddingTextButton(
-            onPressed: () {
-              Navigator.of(context).push(LeaderboardScreen.buildRoute(context));
-            },
-            child: Text(context.l10n.more),
-          ),
+          onHeaderTap: () {
+            Navigator.of(context).push(LeaderboardScreen.buildRoute(context));
+          },
           children: [
             for (final entry in value.entries)
               LeaderboardListTile(user: entry.value, perfIcon: entry.key.icon),

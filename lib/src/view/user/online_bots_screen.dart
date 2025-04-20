@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -45,12 +44,9 @@ class OnlineBotsWidget extends ConsumerWidget {
         }
         return ListSection(
           header: Text(context.l10n.onlineBots),
-          headerTrailing: NoPaddingTextButton(
-            onPressed: () {
-              Navigator.of(context).push(OnlineBotsScreen.buildRoute(context));
-            },
-            child: Text(context.l10n.more),
-          ),
+          onHeaderTap: () {
+            Navigator.of(context).push(OnlineBotsScreen.buildRoute(context));
+          },
           children: [
             for (final bot in value.where((bot) => bot.verified == true))
               ListTile(

@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -52,14 +51,11 @@ class ChallengeRequestsWidget extends ConsumerWidget {
         }
         return ListSection(
           header: Text(context.l10n.preferencesNotifyChallenge),
-          headerTrailing:
+          onHeaderTap:
               list.length > 5
-                  ? NoPaddingTextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
-                    },
-                    child: Text(context.l10n.more),
-                  )
+                  ? () {
+                    Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
+                  }
                   : null,
           hasLeading: true,
           children: [

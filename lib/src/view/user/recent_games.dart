@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -43,20 +42,17 @@ class RecentGamesWidget extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.recentGames),
           hasLeading: true,
-          headerTrailing:
+          onHeaderTap:
               nbOfGames > list.length
-                  ? NoPaddingTextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        GameHistoryScreen.buildRoute(
-                          context,
-                          user: user,
-                          isOnline: connectivity.valueOrNull?.isOnline == true,
-                        ),
-                      );
-                    },
-                    child: Text(context.l10n.more),
-                  )
+                  ? () {
+                    Navigator.of(context).push(
+                      GameHistoryScreen.buildRoute(
+                        context,
+                        user: user,
+                        isOnline: connectivity.valueOrNull?.isOnline == true,
+                      ),
+                    );
+                  }
                   : null,
           children: [for (final item in list) GameListTile(item: item)],
         );
