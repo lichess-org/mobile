@@ -7,6 +7,8 @@ import 'package:flutter/foundation.dart';
 const _emergencyDelay = Duration(seconds: 20);
 const _tickDelay = Duration(milliseconds: 100);
 
+typedef _EmergencyState = ({bool shouldTriggerEmergencyCallback, DateTime? nextEmergency});
+
 /// A chess clock.
 class ChessClock {
   ChessClock({
@@ -32,8 +34,14 @@ class ChessClock {
   Timer? _startDelayTimer;
   DateTime? _lastStarted;
   final _stopwatch = clock.stopwatch();
-  bool _shouldPlayEmergencyFeedback = true;
-  DateTime? _nextEmergency;
+  _EmergencyState _whiteEmergencyState = (
+    shouldTriggerEmergencyCallback: true,
+    nextEmergency: null,
+  );
+  _EmergencyState _blackEmergencyState = (
+    shouldTriggerEmergencyCallback: true,
+    nextEmergency: null,
+  );
 
   final ValueNotifier<Duration> _whiteTime;
   final ValueNotifier<Duration> _blackTime;
@@ -54,6 +62,17 @@ class ChessClock {
 
   /// Returns the current active side.
   Side get activeSide => _activeSide;
+
+  set _activeSideEmergencyState(_EmergencyState state) {
+    if (_activeSide == Side.white) {
+      _whiteEmergencyState = state;
+    } else {
+      _blackEmergencyState = state;
+    }
+  }
+
+  _EmergencyState get _activeSideEmergencyState =>
+      _activeSide == Side.white ? _whiteEmergencyState : _blackEmergencyState;
 
   /// Sets the time for either side.
   void setTimes({Duration? whiteTime, Duration? blackTime}) {
@@ -171,13 +190,19 @@ class ChessClock {
     final timeLeft = _activeTime.value;
     if (emergencyThreshold != null &&
         timeLeft <= emergencyThreshold! &&
-        _shouldPlayEmergencyFeedback &&
-        (_nextEmergency == null || _nextEmergency!.isBefore(clock.now()))) {
-      _shouldPlayEmergencyFeedback = false;
-      _nextEmergency = clock.now().add(_emergencyDelay);
+        _activeSideEmergencyState.shouldTriggerEmergencyCallback &&
+        (_activeSideEmergencyState.nextEmergency == null ||
+            _activeSideEmergencyState.nextEmergency!.isBefore(clock.now()))) {
+      _activeSideEmergencyState = (
+        shouldTriggerEmergencyCallback: false,
+        nextEmergency: clock.now().add(_emergencyDelay),
+      );
       onEmergency?.call(_activeSide);
     } else if (emergencyThreshold != null && timeLeft > emergencyThreshold! * 1.5) {
-      _shouldPlayEmergencyFeedback = true;
+      _activeSideEmergencyState = (
+        shouldTriggerEmergencyCallback: true,
+        nextEmergency: _activeSideEmergencyState.nextEmergency,
+      );
     }
   }
 }
