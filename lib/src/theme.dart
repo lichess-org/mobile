@@ -124,6 +124,16 @@ ThemeData _makeDefaultTheme(
             )
             : null,
     dialogTheme: isIOS ? _kCupertinoDialogTheme : null,
+    filledButtonTheme:
+        isIOS
+            ? const FilledButtonThemeData(
+              style: ButtonStyle(
+                shape: WidgetStatePropertyAll(
+                  RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                ),
+              ),
+            )
+            : null,
     menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
     bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
     sliderTheme: kSliderTheme,
