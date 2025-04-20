@@ -123,6 +123,7 @@ extension CustomThemeBuildContext on BuildContext {
   return (
     light: themeLight.copyWith(
       cupertinoOverrideTheme: lightCupertino,
+      textTheme: isIOS ? _kCupertinoDefaultTextTheme : null,
       splashFactory: isIOS ? NoSplash.splashFactory : null,
       appBarTheme: _appBarTheme,
       iconTheme: IconThemeData(color: themeLight.colorScheme.onSurface.withValues(alpha: 0.7)),
@@ -142,6 +143,7 @@ extension CustomThemeBuildContext on BuildContext {
     ),
     dark: themeDark.copyWith(
       cupertinoOverrideTheme: darkCupertino,
+      textTheme: isIOS ? _kCupertinoDefaultTextTheme : null,
       splashFactory: isIOS ? NoSplash.splashFactory : null,
       appBarTheme: _appBarTheme,
       iconTheme: IconThemeData(color: themeDark.colorScheme.onSurface.withValues(alpha: 0.7)),
@@ -181,6 +183,7 @@ extension CustomThemeBuildContext on BuildContext {
   final baseSurfaceAlpha = isBackgroundImage ? 0.5 : 0.3;
 
   final theme = baseTheme.copyWith(
+    textTheme: isIOS ? _kCupertinoDefaultTextTheme : null,
     colorScheme: baseTheme.colorScheme.copyWith(
       surface: baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha),
       surfaceContainerLowest: baseTheme.colorScheme.surfaceContainerLowest.withValues(
@@ -318,3 +321,19 @@ InputDecorationTheme _makeCupertinoInputDecorationTheme(ColorScheme colorScheme)
     ),
   );
 }
+
+// Letter spacing value taken from:
+// https://github.com/flutter/flutter/blob/ea121f8859e4b13e47a8f845e4586164519588bc/packages/flutter/lib/src/cupertino/text_theme.dart#L106
+const TextStyle _kCupertinoDefaultTextStyle = TextStyle(letterSpacing: -0.41);
+
+const TextTheme _kCupertinoDefaultTextTheme = TextTheme(
+  // titleLarge: _kCupertinoDefaultTextStyle,
+  titleMedium: _kCupertinoDefaultTextStyle,
+  titleSmall: _kCupertinoDefaultTextStyle,
+  bodyLarge: _kCupertinoDefaultTextStyle,
+  bodyMedium: _kCupertinoDefaultTextStyle,
+  bodySmall: _kCupertinoDefaultTextStyle,
+  labelLarge: _kCupertinoDefaultTextStyle,
+  labelMedium: _kCupertinoDefaultTextStyle,
+  labelSmall: _kCupertinoDefaultTextStyle,
+);
