@@ -44,9 +44,12 @@ class CreateGameOptions extends ConsumerWidget {
         _Section(
           children: [
             _CreateGamePlatformButton(
-              onTap: () {
-                Navigator.of(context).push(TournamentListScreen.buildRoute(context));
-              },
+              onTap:
+                  isOnline && !isPlayban
+                      ? () {
+                        Navigator.of(context).push(TournamentListScreen.buildRoute(context));
+                      }
+                      : null,
               icon: LichessIcons.tournament_cup,
               label: context.l10n.arenaArenaTournaments,
             ),
