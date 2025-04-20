@@ -10,19 +10,21 @@ const kSliderTheme = SliderThemeData(
   year2023: false,
 );
 
-/// Makes the app theme based on the given [generalPrefs] and [boardPrefs] and the current [context].
-({ThemeData light, ThemeData dark}) makeAppTheme(
-  BuildContext context,
-  GeneralPrefs generalPrefs,
-  BoardPrefs boardPrefs,
-) {
+ThemeData makeAppTheme(BuildContext context, GeneralPrefs generalPrefs, BoardPrefs boardPrefs) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+  final brightness =
+      generalPrefs.isForcedDarkMode
+          ? Brightness.dark
+          : switch (generalPrefs.themeMode) {
+            BackgroundThemeMode.light => Brightness.light,
+            BackgroundThemeMode.dark => Brightness.dark,
+            BackgroundThemeMode.system => MediaQuery.platformBrightnessOf(context),
+          };
 
   if (generalPrefs.backgroundColor == null && generalPrefs.backgroundImage == null) {
-    return _makeDefaultTheme(context, generalPrefs, boardPrefs, isIOS);
+    return _makeDefaultTheme(brightness, generalPrefs, boardPrefs, isIOS);
   } else {
     return _makeBackgroundImageTheme(
-      context,
       baseTheme:
           generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundColor!.$1.baseTheme,
       seedColor:
@@ -73,99 +75,63 @@ extension CustomThemeBuildContext on BuildContext {
 
 // --
 
-({ThemeData light, ThemeData dark}) _makeDefaultTheme(
-  BuildContext context,
+ThemeData _makeDefaultTheme(
+  Brightness brightness,
   GeneralPrefs generalPrefs,
   BoardPrefs boardPrefs,
   bool isIOS,
 ) {
   final boardTheme = boardPrefs.boardTheme;
-  final systemScheme = getDynamicColorSchemes();
+  final dynamicColorSchemes = getDynamicColorSchemes();
+  final systemScheme = switch (brightness) {
+    Brightness.light => dynamicColorSchemes?.light,
+    Brightness.dark => dynamicColorSchemes?.dark,
+  };
   final hasSystemColors = systemScheme != null && generalPrefs.systemColors == true;
-  final defaultLight = ColorScheme.fromSeed(
+
+  final defaultScheme = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
-    dynamicSchemeVariant: DynamicSchemeVariant.neutral,
-  );
-  final defaultDark = ColorScheme.fromSeed(
-    seedColor: boardTheme.colors.darkSquare,
-    brightness: Brightness.dark,
+    brightness: brightness,
     dynamicSchemeVariant: DynamicSchemeVariant.neutral,
   );
 
-  final themeLight =
+  final textTheme = isIOS ? kCupertinoDefaultTextTheme : null;
+
+  final theme =
       hasSystemColors
-          ? ThemeData.from(colorScheme: systemScheme.light)
-          : ThemeData.from(colorScheme: defaultLight);
-  final themeDark =
-      hasSystemColors
-          ? ThemeData.from(colorScheme: systemScheme.dark)
-          : ThemeData.from(colorScheme: defaultDark);
+          ? ThemeData.from(colorScheme: systemScheme, textTheme: textTheme)
+          : ThemeData.from(colorScheme: defaultScheme, textTheme: textTheme);
 
-  final lightCupertino = CupertinoThemeData(
-    applyThemeToAll: true,
-    primaryColor: themeLight.colorScheme.primary,
-    primaryContrastingColor: themeLight.colorScheme.onPrimary,
-    brightness: Brightness.light,
-  );
-
-  final darkCupertino = CupertinoThemeData(
-    applyThemeToAll: true,
-    primaryColor: themeDark.colorScheme.primary,
-    primaryContrastingColor: themeDark.colorScheme.onPrimary,
-    brightness: Brightness.dark,
-  );
-
-  final cupertinoFloatingActionButtonTheme = FloatingActionButtonThemeData(
-    backgroundColor: themeLight.colorScheme.secondaryFixedDim,
-    foregroundColor: themeLight.colorScheme.onSecondaryFixedVariant,
-  );
-
-  return (
-    light: themeLight.copyWith(
-      cupertinoOverrideTheme: lightCupertino,
-      textTheme: isIOS ? _kCupertinoDefaultTextTheme : null,
-      splashFactory: isIOS ? NoSplash.splashFactory : null,
-      appBarTheme: _appBarTheme,
-      iconTheme: IconThemeData(color: themeLight.colorScheme.onSurface.withValues(alpha: 0.7)),
-      listTileTheme: _makeListTileTheme(themeLight.colorScheme, isIOS),
-      cardTheme:
-          isIOS
-              ? _kCupertinoCardTheme.copyWith(color: themeLight.colorScheme.surfaceContainerHigh)
-              : null,
-      inputDecorationTheme:
-          isIOS ? _makeCupertinoInputDecorationTheme(themeLight.colorScheme) : null,
-      floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
-      dialogTheme: isIOS ? _kCupertinoDialogTheme : null,
-      menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
-      bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
-      sliderTheme: kSliderTheme,
-      extensions: [lichessCustomColors.harmonized(themeLight.colorScheme)],
+  return theme.copyWith(
+    cupertinoOverrideTheme: CupertinoThemeData(
+      applyThemeToAll: true,
+      primaryColor: theme.colorScheme.primary,
+      primaryContrastingColor: theme.colorScheme.onPrimary,
+      brightness: brightness,
     ),
-    dark: themeDark.copyWith(
-      cupertinoOverrideTheme: darkCupertino,
-      textTheme: isIOS ? _kCupertinoDefaultTextTheme : null,
-      splashFactory: isIOS ? NoSplash.splashFactory : null,
-      appBarTheme: _appBarTheme,
-      iconTheme: IconThemeData(color: themeDark.colorScheme.onSurface.withValues(alpha: 0.7)),
-      listTileTheme: _makeListTileTheme(themeDark.colorScheme, isIOS),
-      cardTheme:
-          isIOS
-              ? _kCupertinoCardTheme.copyWith(color: themeDark.colorScheme.surfaceContainerHigh)
-              : null,
-      inputDecorationTheme:
-          isIOS ? _makeCupertinoInputDecorationTheme(themeDark.colorScheme) : null,
-      floatingActionButtonTheme: isIOS ? cupertinoFloatingActionButtonTheme : null,
-      dialogTheme: isIOS ? _kCupertinoDialogTheme : null,
-      menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
-      bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
-      sliderTheme: kSliderTheme,
-      extensions: [lichessCustomColors.harmonized(themeDark.colorScheme)],
-    ),
+    splashFactory: isIOS ? NoSplash.splashFactory : null,
+    appBarTheme: _appBarTheme,
+    iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
+    listTileTheme: _makeListTileTheme(theme.colorScheme, isIOS),
+    cardTheme:
+        isIOS ? _kCupertinoCardTheme.copyWith(color: theme.colorScheme.surfaceContainerHigh) : null,
+    inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(theme.colorScheme) : null,
+    floatingActionButtonTheme:
+        isIOS
+            ? FloatingActionButtonThemeData(
+              backgroundColor: theme.colorScheme.secondaryFixedDim,
+              foregroundColor: theme.colorScheme.onSecondaryFixedVariant,
+            )
+            : null,
+    dialogTheme: isIOS ? _kCupertinoDialogTheme : null,
+    menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
+    bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
+    sliderTheme: kSliderTheme,
+    extensions: [lichessCustomColors.harmonized(theme.colorScheme)],
   );
 }
 
-({ThemeData light, ThemeData dark}) _makeBackgroundImageTheme(
-  BuildContext context, {
+ThemeData _makeBackgroundImageTheme({
   required ThemeData baseTheme,
   required Color seedColor,
   required bool isIOS,
@@ -173,17 +139,9 @@ extension CustomThemeBuildContext on BuildContext {
 }) {
   final primary = baseTheme.colorScheme.primary;
   final onPrimary = baseTheme.colorScheme.onPrimary;
-  final cupertinoTheme = CupertinoThemeData(
-    primaryColor: primary,
-    primaryContrastingColor: onPrimary,
-    brightness: Brightness.dark,
-    applyThemeToAll: true,
-  );
-
   final baseSurfaceAlpha = isBackgroundImage ? 0.5 : 0.3;
 
-  final theme = baseTheme.copyWith(
-    textTheme: isIOS ? _kCupertinoDefaultTextTheme : null,
+  return baseTheme.copyWith(
     colorScheme: baseTheme.colorScheme.copyWith(
       surface: baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha),
       surfaceContainerLowest: baseTheme.colorScheme.surfaceContainerLowest.withValues(
@@ -202,7 +160,13 @@ extension CustomThemeBuildContext on BuildContext {
       surfaceDim: baseTheme.colorScheme.surfaceDim.withValues(alpha: baseSurfaceAlpha + 1),
       surfaceBright: baseTheme.colorScheme.surfaceBright.withValues(alpha: baseSurfaceAlpha - 2),
     ),
-    cupertinoOverrideTheme: cupertinoTheme,
+    cupertinoOverrideTheme: CupertinoThemeData(
+      primaryColor: primary,
+      primaryContrastingColor: onPrimary,
+      brightness: Brightness.dark,
+      applyThemeToAll: true,
+    ),
+
     listTileTheme: _makeListTileTheme(baseTheme.colorScheme, isIOS),
     cardTheme: isIOS ? _kCupertinoCardTheme : null,
     inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(baseTheme.colorScheme) : null,
@@ -253,8 +217,6 @@ extension CustomThemeBuildContext on BuildContext {
     sliderTheme: kSliderTheme,
     extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
   );
-
-  return (light: theme, dark: theme);
 }
 
 const MenuThemeData _kCupertinoMenuThemeData = MenuThemeData(
@@ -326,7 +288,7 @@ InputDecorationTheme _makeCupertinoInputDecorationTheme(ColorScheme colorScheme)
 // https://github.com/flutter/flutter/blob/ea121f8859e4b13e47a8f845e4586164519588bc/packages/flutter/lib/src/cupertino/text_theme.dart#L106
 const TextStyle _kCupertinoDefaultTextStyle = TextStyle(letterSpacing: -0.41);
 
-const TextTheme _kCupertinoDefaultTextTheme = TextTheme(
+const TextTheme kCupertinoDefaultTextTheme = TextTheme(
   // titleLarge: _kCupertinoDefaultTextStyle,
   titleMedium: _kCupertinoDefaultTextStyle,
   titleSmall: _kCupertinoDefaultTextStyle,

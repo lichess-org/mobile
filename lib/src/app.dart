@@ -134,7 +134,7 @@ class _AppState extends ConsumerState<Application> {
   Widget build(BuildContext context) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final (light: themeLight, dark: themeDark) = makeAppTheme(context, generalPrefs, boardPrefs);
+    final theme = makeAppTheme(context, generalPrefs, boardPrefs);
 
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
@@ -148,24 +148,11 @@ class _AppState extends ConsumerState<Application> {
       supportedLocales: AppLocalizations.supportedLocales,
       title: 'lichess.org',
       locale: generalPrefs.locale,
-      theme: themeLight.copyWith(
+      theme: theme.copyWith(
         navigationBarTheme: NavigationBarTheme.of(context).copyWith(
           height: isIOS || remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
         ),
       ),
-      darkTheme: themeDark.copyWith(
-        navigationBarTheme: NavigationBarTheme.of(context).copyWith(
-          height: isIOS || remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
-        ),
-      ),
-      themeMode:
-          generalPrefs.isForcedDarkMode
-              ? ThemeMode.dark
-              : switch (generalPrefs.themeMode) {
-                BackgroundThemeMode.light => ThemeMode.light,
-                BackgroundThemeMode.dark => ThemeMode.dark,
-                BackgroundThemeMode.system => ThemeMode.system,
-              },
       onGenerateRoute:
           (settings) =>
               settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,

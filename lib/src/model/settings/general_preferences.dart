@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart'
     show BoardPrefs, BoardTheme, boardPreferencesProvider;
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -215,6 +217,7 @@ class BackgroundImage with _$BackgroundImage {
   /// Generate a base [ThemeData] from the seed color.
   static ThemeData getTheme(Color seedColor) => ThemeData.from(
     colorScheme: ColorScheme.fromSeed(seedColor: seedColor, brightness: Brightness.dark),
+    textTheme: defaultTargetPlatform == TargetPlatform.iOS ? kCupertinoDefaultTextTheme : null,
   );
 
   /// The base theme for the background image.
