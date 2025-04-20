@@ -47,6 +47,7 @@ class PlatformSearchBar extends StatelessWidget {
     return PlatformWidget(
       androidBuilder:
           (context) => SearchBar(
+            elevation: const WidgetStatePropertyAll(0),
             controller: controller,
             leading: const Icon(Icons.search),
             trailing: [
