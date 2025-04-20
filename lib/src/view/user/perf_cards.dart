@@ -80,8 +80,11 @@ class PerfCards extends StatelessWidget {
                   height: 100,
                   width: 100,
                   child: Card(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                    ),
                     child: InkWell(
-                      borderRadius: _kCardBorderRadius,
+                      borderRadius: const BorderRadius.all(Radius.circular(6.0)),
                       onTap: isPerfWithoutStats ? null : () => _handlePerfCardTap(context, perf),
                       child: Padding(
                         padding: const EdgeInsets.all(6.0),
