@@ -100,7 +100,8 @@ void main() {
       sendServerSocketMessages(Uri(path: '/lobby/socket/v5'), [
         '{"t": "redirect", "d": {"id": "qVChCOTcHSeW" }, "v": 1}',
       ]);
-      await tester.pump();
+      // wait for socket message handling
+      await tester.pump(const Duration(milliseconds: 1));
 
       // now the game controller is loading
       expect(find.byType(Chessboard), findsOneWidget);

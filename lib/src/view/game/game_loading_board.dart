@@ -385,7 +385,6 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                                   LagIndicator(
                                     lagRating: challenge.destUser!.lagRating!,
                                     size: 13.0,
-                                    showLoadingIndicator: false,
                                   ),
                                 ],
                               ],

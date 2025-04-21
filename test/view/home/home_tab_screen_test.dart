@@ -235,7 +235,7 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       await tester.pump();
 
-      expect(find.byType(ConnectivityBanner), findsOneWidget);
+      expect(find.byType(OfflineBanner), findsOneWidget);
     });
 
     testWidgets('shows Play button', (tester) async {

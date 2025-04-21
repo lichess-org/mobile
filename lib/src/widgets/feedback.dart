@@ -26,7 +26,7 @@ class SocketPingRating extends ConsumerWidget {
 
     return SemanticIconButton(
       semanticsLabel: 'PING: ${ping.averageLag.inMilliseconds}ms',
-      icon: LagIndicator(lagRating: ping.rating, size: 24.0, showLoadingIndicator: true),
+      icon: LagIndicator(lagRating: ping.rating, size: 24.0),
       onPressed: () {
         showPopover(
           context: context,
@@ -70,23 +70,14 @@ class SocketPingRating extends ConsumerWidget {
 
 /// An indicator that shows the lag rating of the connection.
 class LagIndicator extends StatelessWidget {
-  const LagIndicator({
-    required this.lagRating,
-    this.size = 20.0,
-    this.showLoadingIndicator = false,
-    super.key,
-  }) : assert(lagRating >= 0 && lagRating <= 4);
+  const LagIndicator({required this.lagRating, this.size = 20.0, super.key})
+    : assert(lagRating >= 0 && lagRating <= 4);
 
   /// The lag rating from 0 to 4.
   final int lagRating;
 
   /// Visual size of the indicator.
   final double size;
-
-  /// Whether to show a loading indicator when the lag rating is 0.
-  final bool showLoadingIndicator;
-
-  static const spinKit = SpinKitThreeBounce(color: Colors.grey, size: 15);
 
   static const materialLevels = {0: Colors.red, 1: Colors.yellow, 2: Colors.green, 3: Colors.green};
 
@@ -105,15 +96,14 @@ class LagIndicator extends StatelessWidget {
             inactiveColor: Colors.grey.withValues(alpha: 0.2),
             levels: materialLevels,
           ),
-          if (showLoadingIndicator && lagRating == 0) spinKit,
         ],
       ),
     );
   }
 }
 
-class ConnectivityBanner extends ConsumerWidget {
-  const ConnectivityBanner();
+class OfflineBanner extends ConsumerWidget {
+  const OfflineBanner();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

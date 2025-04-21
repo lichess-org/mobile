@@ -73,14 +73,14 @@ class _AppState extends ConsumerState<Application> {
         _pausedAt = DateTime.now();
       },
       onRestart: () async {
-        // Invalidate ongoing games if the app was paused for more than an hour.
+        // Invalidate ongoing games if the app was paused for more than 10 minutes.
         // In theory we shouldn't need to do this, because correspondence games are updated by
         // fcm messages, but in practice it's not always reliable.
         // See also: [CorrespondenceService].
         final online = await isOnline(ref.read(defaultClientProvider));
         if (online &&
             _pausedAt != null &&
-            DateTime.now().difference(_pausedAt!) >= const Duration(hours: 1)) {
+            DateTime.now().difference(_pausedAt!) >= const Duration(minutes: 10)) {
           ref.invalidate(ongoingGamesProvider);
         }
       },

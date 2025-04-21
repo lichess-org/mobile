@@ -73,7 +73,6 @@ class _AccountIconButtonState extends ConsumerState<AccountIconButton> {
                             : ColorScheme.of(context).surfaceContainer,
                     child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
                   ),
-          // tooltip: session == null ? context.l10n.signIn : session.user.name,
           onPressed: () {
             Navigator.of(context).push(AccountScreen.buildRoute(context));
           },
