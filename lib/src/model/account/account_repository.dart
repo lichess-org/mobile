@@ -87,7 +87,13 @@ class OngoingGames extends _$OngoingGames {
       lastMove: game.lastMove,
       secondsLeft: game.clock?.forSide(me).inSeconds,
     );
-    state = AsyncData(state.requireValue.replace(index, newGame));
+    state = AsyncData(
+      state.requireValue.replace(index, newGame).sort((a, b) {
+        if (a.isMyTurn && !b.isMyTurn) return -1;
+        if (!a.isMyTurn && b.isMyTurn) return 1;
+        return a.secondsLeft?.compareTo(b.secondsLeft ?? 0) ?? 0;
+      }),
+    );
   }
 }
 
