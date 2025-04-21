@@ -451,9 +451,7 @@ class _HelloWidget extends ConsumerWidget {
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.3,
       child: Padding(
-        padding: Styles.horizontalBodyPadding
-            .add(Styles.sectionBottomPadding)
-            .add(const EdgeInsets.only(top: 8.0)),
+        padding: Styles.bodyPadding,
         child: GestureDetector(
           onTap: () {
             ref.invalidate(accountActivityProvider);

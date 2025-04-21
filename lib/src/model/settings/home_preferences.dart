@@ -114,8 +114,8 @@ class HomePrefs with _$HomePrefs implements Serializable {
 
   static const defaults = HomePrefs(
     enabledWidgets: IListConst([
-      HomeEditableWidget.ongoingGames,
       HomeEditableWidget.hello,
+      HomeEditableWidget.ongoingGames,
       HomeEditableWidget.perfCards,
       HomeEditableWidget.quickPairing,
       HomeEditableWidget.recentGames,
