@@ -72,7 +72,7 @@ class GameController extends _$GameController {
   @override
   Future<GameState> build(GameFullId gameFullId) {
     _socketClient = _openSocket();
-    _onEventGapFailure = ref.invalidateSelf;
+    _onEventGapFailure = _reloadGame;
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
@@ -141,7 +141,7 @@ class GameController extends _$GameController {
     if (_socketClient.route != socketUri(gameFullId)) {
       _socketClient = _openSocket();
     } else if (!_socketClient.isConnected) {
-      _resyncGameData();
+      _reloadGame();
     }
   }
 
@@ -321,7 +321,7 @@ class GameController extends _$GameController {
   void onToggleChat(bool isChatEnabled) {
     if (isChatEnabled) {
       // if chat is enabled, we need to resync the game data to get the chat messages
-      _resyncGameData();
+      _reloadGame();
     }
   }
 
@@ -448,7 +448,7 @@ class GameController extends _$GameController {
       withLag: _clock != null && (moveTime == null || withLag),
     );
 
-    _transientMoveTimer = Timer(const Duration(seconds: 10), _resyncGameData);
+    _transientMoveTimer = Timer(const Duration(seconds: 10), _reloadGame);
   }
 
   /// Move feedback while playing
@@ -485,9 +485,9 @@ class GameController extends _$GameController {
     }
   }
 
-  /// Resync full game data with the server
-  void _resyncGameData() {
-    _logger.info('Resyncing game data');
+  /// Reload full game
+  void _reloadGame() {
+    _logger.info('Reloading game data');
     _socketClient.connect();
   }
 
@@ -506,36 +506,35 @@ class GameController extends _$GameController {
       return;
     }
 
-    // First message sent when the socket is reconnected
-    if (event.topic == 'full') {
-      final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
-      _socketClient.version = fullEvent.socketEventVersion;
-
-      state = AsyncValue.data(
-        GameState(
-          gameFullId: gameFullId,
-          game: fullEvent.game,
-          stepCursor: fullEvent.game.steps.length - 1,
-          liveClock: _liveClock,
-          // cancel the premove to avoid playing wrong premove when the full
-          // game data is reloaded
-          premove: null,
-        ),
-      );
-
-      if (fullEvent.game.clock != null) {
-        _updateClock(
-          white: fullEvent.game.clock!.white,
-          black: fullEvent.game.clock!.black,
-          activeSide: state.requireValue.activeClockSide,
-        );
-      }
-    }
-
     switch (event.topic) {
+      // First message sent when the socket is reconnected
+      case 'full':
+        final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
+        _socketClient.version = fullEvent.socketEventVersion;
+
+        if (fullEvent.game.clock != null) {
+          _updateClock(
+            white: fullEvent.game.clock!.white,
+            black: fullEvent.game.clock!.black,
+            activeSide: state.requireValue.activeClockSide,
+          );
+        }
+
+        state = AsyncValue.data(
+          state.requireValue.copyWith(
+            gameFullId: gameFullId,
+            game: fullEvent.game,
+            stepCursor: fullEvent.game.steps.length - 1,
+            liveClock: _liveClock,
+            // cancel the premove to avoid playing wrong premove when the full
+            // game data is reloaded
+            premove: null,
+          ),
+        );
+
       // Server asking for a resync
       case 'resync':
-        _resyncGameData();
+        _reloadGame();
 
       // Server asking for a reload, or in some cases the reload itself contains
       // another topic message
@@ -543,13 +542,13 @@ class GameController extends _$GameController {
         if (event.data is Map<String, dynamic>) {
           final data = event.data as Map<String, dynamic>;
           if (data['t'] == null) {
-            _resyncGameData();
+            _reloadGame();
             return;
           }
           final reloadEvent = SocketEvent(topic: data['t'] as String, data: data['d']);
           _handleSocketEvent(reloadEvent);
         } else {
-          _resyncGameData();
+          _reloadGame();
         }
 
       // Move event, received after sending a move or receiving a move from the
