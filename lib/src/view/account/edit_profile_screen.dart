@@ -125,6 +125,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
     'links': null,
   };
 
+  bool _hasChanges = false; // Track if any changes are made
   Future<void>? _pendingSaveProfile;
 
   @override
@@ -143,6 +144,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             maxLength: 400,
             maxLines: 6,
             textInputAction: TextInputAction.newline,
+            onChanged: () => _checkForChanges(), // Check for changes
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
@@ -150,6 +152,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
               initialValue: widget.user.profile?.country,
               onSaved: (value) {
                 _formData['flag'] = value;
+                _checkForChanges(); // Check for changes
               },
               builder: (FormFieldState<String> field) {
                 return Column(
@@ -175,6 +178,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                           (element) => element.value == selection,
                         );
                         field.didChange(country.key);
+                        _checkForChanges(); // Check for changes
                       },
                       fieldViewBuilder: (
                         BuildContext context,
@@ -211,7 +215,6 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             formData: _formData,
             maxLength: 20,
           ),
-
           _NumericField(
             label: context.l10n.xRating('FIDE'),
             initialValue: widget.user.profile?.fideRating,
@@ -321,6 +324,14 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
         ],
       ),
     );
+  }
+
+  // Method to detect if there are any changes in the form
+  void _checkForChanges() {
+    setState(() {
+      _hasChanges = _formData.entries.any((entry) =>
+          entry.value != widget.user.profile?.toJson()[entry.key]); // Compare with initial profile
+    });
   }
 }
 
@@ -435,7 +446,6 @@ class __TextFieldState extends State<_TextField> {
         onSaved: (value) {
           widget.formData[widget.formKey] = value?.trim();
         },
-
         builder: (FormFieldState<String> field) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
