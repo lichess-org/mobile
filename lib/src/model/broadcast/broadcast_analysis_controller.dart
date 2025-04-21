@@ -590,10 +590,9 @@ class BroadcastAnalysisState with _$BroadcastAnalysisState implements Evaluation
   /// If the game is new the path will be empty.
   UciPath? get broadcastLivePath => isNewOrOngoing ? broadcastPath : null;
 
-  /// In a broadcast analysis, the cloud evals are most likely available, so we always want to delay
-  /// the local engine evaluation to save battery.
+  /// In a broadcast analysis, the cloud evals are most likely available.
   @override
-  bool get delayLocalEngine => true;
+  bool get alwaysRequestCloudEval => true;
 
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>

@@ -710,14 +710,11 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
     IList<PgnComment>? pgnRootComments,
   }) = _AnalysisState;
 
+  @override
+  bool get alwaysRequestCloudEval => currentPosition.ply < 15;
+
   /// Whether the analysis is for a lichess game.
   bool get isLichessGameAnalysis => gameId != null;
-
-  /// Whether to delay the local engine evaluation.
-  ///
-  /// Cloud evaluations are most likely available for the opening moves.
-  @override
-  bool get delayLocalEngine => variant != Variant.fromPosition && currentPosition.ply < 20;
 
   /// Whether the user can request server analysis.
   ///

@@ -430,7 +430,7 @@ class PuzzleState with _$PuzzleState implements EvaluationMixinState {
   }) = _PuzzleState;
 
   @override
-  bool get delayLocalEngine => false;
+  bool get alwaysRequestCloudEval => false;
 
   @override
   bool isEngineAvailable(EngineEvaluationPrefState _) =>

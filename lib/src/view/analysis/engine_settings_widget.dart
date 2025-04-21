@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class StockfishSettingsWidget extends ConsumerWidget {
-  const StockfishSettingsWidget({
+class EngineSettingsWidget extends ConsumerWidget {
+  const EngineSettingsWidget({
     this.onToggleLocalEvaluation,
     required this.onSetEngineSearchTime,
     required this.onSetNumEvalLines,
@@ -40,6 +41,40 @@ class StockfishSettingsWidget extends ConsumerWidget {
               ),
             ],
           ),
+        ListSection(
+          header: SettingsSectionTitle(context.l10n.cloudAnalysis),
+          children: [
+            ListTile(
+              title: Text.rich(
+                TextSpan(
+                  text: 'Cloud evaluation min depth: ',
+                  style: const TextStyle(fontWeight: FontWeight.normal),
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      text: prefs.cloudEvalDepthAcceptThreshold.toString(),
+                    ),
+                    TextSpan(
+                      style: TextTheme.of(
+                        context,
+                      ).labelMedium?.copyWith(color: textShade(context, 0.7)),
+                      text: '\nEvals below this depth will be ignored.',
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: prefs.cloudEvalDepthAcceptThreshold.toDouble(),
+                values: const [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 80, 100],
+                onChangeEnd: (value) {
+                  ref
+                      .read(engineEvaluationPreferencesProvider.notifier)
+                      .setCloudEvalDepthAcceptThreshold(value.toInt());
+                },
+              ),
+            ),
+          ],
+        ),
         ListSection(
           header: const SettingsSectionTitle('Stockfish'),
           children: [

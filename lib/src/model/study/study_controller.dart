@@ -504,7 +504,7 @@ class StudyState with _$StudyState implements EvaluationMixinState {
   }) = _StudyState;
 
   @override
-  bool get delayLocalEngine => false;
+  bool get alwaysRequestCloudEval => false;
 
   /// Whether the engine is available for evaluation
   @override
