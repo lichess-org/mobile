@@ -84,7 +84,7 @@ dev_dependencies:
     sdk: flutter
   freezed: ^2.3.4
   freezed_lint: ^0.0.7
-  json_serializable: ^6.5.4
+  json_serializable: ^6.9.5
   lint: ^2.0.1
   mocktail: ^1.0.0
   mocktail_image_network: ^1.2.0
