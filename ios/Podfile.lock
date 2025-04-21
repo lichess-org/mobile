@@ -280,7 +280,7 @@ SPEC CHECKSUMS:
   sound_effect: 318f1417937eb16269c5ec424c06ee84d8ef2c74
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
-  wakelock_plus: 04623e3f525556020ebd4034310f20fe7fda8b49
+  wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
 
 PODFILE CHECKSUM: 76a583f8d75b3a8c6e4bdc97ae8783ef36cc7984
 
