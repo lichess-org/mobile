@@ -200,9 +200,6 @@ mixin EngineEvaluationMixin {
   void _handleEvalHitEvent(SocketEvent event) {
     final path = pick(event.data, 'path').asUciPathOrThrow();
     final depth = pick(event.data, 'depth').asIntOrThrow();
-    if (depth < evaluationPrefs.cloudEvalDepthAcceptThreshold) {
-      return;
-    }
 
     final pvs =
         pick(event.data, 'pvs')

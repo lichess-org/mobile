@@ -49,10 +49,6 @@ class EngineEvaluationPreferences extends _$EngineEvaluationPreferences
   Future<void> setEngineSearchTime(Duration engineSearchTime) {
     return save(state.copyWith(engineSearchTime: engineSearchTime));
   }
-
-  Future<void> setCloudEvalDepthAcceptThreshold(int cloudEvalDepthAcceptThreshold) {
-    return save(state.copyWith(cloudEvalDepthAcceptThreshold: cloudEvalDepthAcceptThreshold));
-  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -70,11 +66,6 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
       toJson: _searchTimeToJson,
     )
     required Duration engineSearchTime,
-
-    /// Only accept cloud evaluation if the depth is equal or more than this value.
-    @Assert('cloudEvalDepthAcceptThreshold == null || cloudEvalDepthAcceptThreshold >= 0')
-    @JsonKey(defaultValue: 20)
-    required int cloudEvalDepthAcceptThreshold,
   }) = _EngineEvaluationPrefState;
 
   static const defaults = EngineEvaluationPrefState(
@@ -82,7 +73,6 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
     numEvalLines: 2,
     numEngineCores: 1,
     engineSearchTime: Duration(seconds: 6),
-    cloudEvalDepthAcceptThreshold: 20,
   );
 
   factory EngineEvaluationPrefState.fromJson(Map<String, dynamic> json) {
