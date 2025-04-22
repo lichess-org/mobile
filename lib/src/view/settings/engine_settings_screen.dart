@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
+import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 
 class EngineSettingsScreen extends StatelessWidget {
   const EngineSettingsScreen({super.key});
@@ -22,7 +22,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       children: [
-        StockfishSettingsWidget(
+        EngineSettingsWidget(
           onSetEngineSearchTime: (value) {
             ref.read(engineEvaluationPreferencesProvider.notifier).setEngineSearchTime(value);
           },

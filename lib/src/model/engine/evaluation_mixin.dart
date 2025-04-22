@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -23,13 +24,11 @@ import 'package:meta/meta.dart';
 const kRequestEvalDebounceDelay = Duration(milliseconds: 250);
 
 /// The debounce delay for starting the local engine evaluation in case we assume the cloud eval
-/// will be available.
+/// will be available (broadcasts).
 ///
-/// This is superior to the `kRequestEvalDebounceDelay` to avoid running the local engine
-/// when the cloud evaluation is available. The delay is thus increased to ensure that the socket
-/// 'evalGet/evalHit' round trip gets a chance to complete before starting the local engine, even
-/// with reasonably high network latency.
-const kStartLocalEngineDebounceDelay = Duration(milliseconds: 600);
+/// This is superior to the `kRequestEvalDebounceDelay` to avoid running the local engine too soon
+/// to get a chance to get the cloud eval first.
+const kLocalEngineAfterCloudEvalDelay = Duration(milliseconds: 500);
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 abstract class EvaluationMixinState {
@@ -48,20 +47,8 @@ abstract class EvaluationMixinState {
   /// found in studies.
   Position? get currentPosition;
 
-  /// Whether to delay the local engine evaluation to give time to get the cloud eval.
-  ///
-  /// By default, this should be `false`, which means the local engine evaluation is started at the
-  /// same time as the cloud evaluation is requested, after a debounce delay.
-  ///
-  /// This is the most common use case, because most of the time the cloud eval is not available
-  /// except on opening positions.
-  ///
-  /// However, on some cases, we know the cloud evaluations are available, as for instance in a broadcast.
-  /// So this can be set to `true` to delay the local engine evaluation in order to save battery.
-  /// The local engine will be started with a higher delay which gives time to get the cloud
-  /// eval during a socket round trip. If the cloud eval is available the [EvaluationService] will
-  /// detect it and not run the local engine.
-  bool get delayLocalEngine;
+  /// Whether to always request a cloud evaluation, regardless of the current ply.
+  bool get alwaysRequestCloudEval;
 }
 
 /// A mixin to provide engine evaluation functionality to an [AsyncNotifier].
@@ -95,7 +82,7 @@ mixin EngineEvaluationMixin {
   Node get positionTree;
 
   final _cloudEvalGetDebounce = Debouncer(kRequestEvalDebounceDelay);
-  final _engineEvalDebounce = Debouncer(kStartLocalEngineDebounceDelay);
+  final _engineEvalDebounce = Debouncer(kLocalEngineAfterCloudEvalDelay);
 
   StreamSubscription<SocketEvent>? _subscription;
 
@@ -177,7 +164,7 @@ mixin EngineEvaluationMixin {
   /// This sends an `evalGet` event to the server to get the cloud evaluation and starts the local
   /// engine evaluation.
   ///
-  /// If [EvaluationMixinState.delayLocalEngine] is `true`, the local engine evaluation will be
+  /// If [EvaluationMixinState.alwaysRequestCloudEval] is `true`, the local engine evaluation will be
   /// delayed to give time to get the cloud eval.
   ///
   /// The evaluation will not be requested if the engine is not available by the context or the
@@ -191,12 +178,12 @@ mixin EngineEvaluationMixin {
 
     _cloudEvalGetDebounce(() {
       _sendEvalGetEvent();
-      if (!evaluationState.delayLocalEngine) {
+      if (!evaluationState.alwaysRequestCloudEval) {
         _startEngineEval();
       }
     });
 
-    if (evaluationState.delayLocalEngine) {
+    if (evaluationState.alwaysRequestCloudEval) {
       _engineEvalDebounce(() {
         _startEngineEval();
       });
@@ -214,6 +201,7 @@ mixin EngineEvaluationMixin {
   void _handleEvalHitEvent(SocketEvent event) {
     final path = pick(event.data, 'path').asUciPathOrThrow();
     final depth = pick(event.data, 'depth').asIntOrThrow();
+
     final pvs =
         pick(event.data, 'pvs')
             .asListOrThrow(
@@ -228,6 +216,11 @@ mixin EngineEvaluationMixin {
     bool isSameEvalString = true;
     positionTree.updateAt(path, (node) {
       final eval = CloudEval(depth: depth, pvs: pvs, position: node.position);
+      final nodeDepth = node.eval?.depth;
+      if (nodeDepth != null && nodeDepth >= depth) {
+        // don't override the local eval if it's deeper than the cloud eval
+        return;
+      }
       isSameEvalString = eval.evalString == node.eval?.evalString;
       node.eval = eval;
     });
@@ -237,11 +230,33 @@ mixin EngineEvaluationMixin {
     }
   }
 
+  bool _canCloudEval() {
+    if (evaluationState.currentPosition!.ply >= 15 && !evaluationState.alwaysRequestCloudEval) {
+      return false;
+    }
+    if (positionTree.nodeAt(evaluationState.currentPath).eval is CloudEval) return false;
+
+    // cloud eval does not support threefold repetition
+    final Set<String> fens = <String>{};
+    final nodeList = positionTree.branchesOn(evaluationState.currentPath).toList();
+    for (var i = nodeList.length - 1; i >= 0; i--) {
+      final node = nodeList[i];
+      final epd = fenToEpd(node.position.fen);
+      if (fens.contains(epd)) return false;
+      if (node.sanMove.isIrreversible(evaluationState.evaluationContext.variant)) {
+        return true;
+      }
+      fens.add(epd);
+    }
+
+    return true;
+  }
+
   void _sendEvalGetEvent() {
     if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
+    if (!_canCloudEval()) return;
     final curPosition = evaluationState.currentPosition;
     if (curPosition == null) return;
-
     final numEvalLines = evaluationPrefs.numEvalLines;
 
     socketClient?.send('evalGet', {
@@ -270,11 +285,13 @@ mixin EngineEvaluationMixin {
           final (work, eval) = tuple;
           bool isSameEvalString = true;
           positionTree.updateAt(work.path, (node) {
-            if (node.eval is CloudEval) {
-              // in case of high network latency, the cloud eval may arrive after the local eval
-              // in this case, we should not override the cloud eval with the local eval
-              _stopEngineEval();
-              return;
+            // don't override the cloud eval if it's deeper than the local eval
+            // unless the engineSearchTime pref is set to kMaxEngineSearchTime (infinity)
+            if (node.eval is CloudEval &&
+                evaluationPrefs.engineSearchTime != kMaxEngineSearchTime) {
+              if (node.eval?.depth != null && node.eval!.depth >= eval.depth) {
+                return;
+              }
             }
             isSameEvalString = eval.evalString == node.eval?.evalString;
             node.eval = eval;
@@ -283,9 +300,5 @@ mixin EngineEvaluationMixin {
             onCurrentPathEvalChanged(isSameEvalString);
           }
         });
-  }
-
-  void _stopEngineEval() {
-    _evaluationService?.stop();
   }
 }

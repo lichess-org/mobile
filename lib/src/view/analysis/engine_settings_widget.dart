@@ -7,8 +7,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class StockfishSettingsWidget extends ConsumerWidget {
-  const StockfishSettingsWidget({
+class EngineSettingsWidget extends ConsumerWidget {
+  const EngineSettingsWidget({
     this.onToggleLocalEvaluation,
     required this.onSetEngineSearchTime,
     required this.onSetNumEvalLines,

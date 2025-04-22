@@ -475,10 +475,10 @@ void main() {
         await makeEngineTestApp(tester, isCloudEvalEnabled: false);
         await playMove(tester, 'e2', 'e4');
         expect(find.byType(InlineMove), findsOne);
-        await tester.pump(kStartLocalEngineDebounceDelay + kEngineEvalEmissionThrottleDelay);
+        await tester.pump(kLocalEngineAfterCloudEvalDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.widgetWithText(InlineMove, '+0.2'), findsOne);
         await playMove(tester, 'e7', 'e5');
-        await tester.pump(kStartLocalEngineDebounceDelay + kEngineEvalEmissionThrottleDelay);
+        await tester.pump(kLocalEngineAfterCloudEvalDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.widgetWithText(InlineMove, '+0.2'), findsNWidgets(2));
       });
     });

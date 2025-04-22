@@ -43,7 +43,7 @@ void main() {
       expect(find.widgetWithText(EngineDepth, '36'), findsOne);
 
       // Wait for local engine delay
-      await tester.pump(kStartLocalEngineDebounceDelay + kEngineEvalEmissionThrottleDelay);
+      await tester.pump(kLocalEngineAfterCloudEvalDelay + kEngineEvalEmissionThrottleDelay);
       // Local engine has not even started
       expect(find.widgetWithText(EngineDepth, '36'), findsOne);
     });
@@ -66,20 +66,20 @@ void main() {
       expect(isCloudEvalDisplayed(), isFalse);
 
       // Now wait for local engine
-      await tester.pump(kStartLocalEngineDebounceDelay + kEngineEvalEmissionThrottleDelay);
+      await tester.pump(kLocalEngineAfterCloudEvalDelay + kEngineEvalEmissionThrottleDelay);
       expect(find.widgetWithText(EngineDepth, '16'), findsOne);
     });
 
     testWidgets('Cloud eval will override local engine eval', (tester) async {
       // Simulates a connection lag that will make the cloud eval come 300ms after the local engine
       final connectionLag =
-          kStartLocalEngineDebounceDelay -
+          kLocalEngineAfterCloudEvalDelay -
           kRequestEvalDebounceDelay +
           const Duration(milliseconds: 300);
       await makeEngineTestApp(tester, connectionLag: connectionLag);
 
       // Wait for local engine eval
-      await tester.pump(kStartLocalEngineDebounceDelay);
+      await tester.pump(kLocalEngineAfterCloudEvalDelay);
       expect(find.widgetWithText(EngineDepth, '15'), findsOne);
 
       // cloud eval will be available 300ms after the local engine eval
@@ -88,16 +88,16 @@ void main() {
       expect(find.widgetWithText(EngineDepth, '36'), findsOne);
     });
 
-    testWidgets('Local engine will not override cloud eval', (tester) async {
+    testWidgets('Local engine will not override cloud eval with greater depth', (tester) async {
       // Simulates a connection lag that will make the local engine come 100ms after the cloud eval
       final connectionLag =
-          kStartLocalEngineDebounceDelay -
+          kLocalEngineAfterCloudEvalDelay -
           kRequestEvalDebounceDelay +
           const Duration(milliseconds: 100);
       await makeEngineTestApp(tester, connectionLag: connectionLag);
 
       // Wait for local engine eval
-      await tester.pump(kStartLocalEngineDebounceDelay);
+      await tester.pump(kLocalEngineAfterCloudEvalDelay);
       expect(find.widgetWithText(EngineDepth, '15'), findsOne);
 
       // Cloud eval will be available 100ms after the first local engine eval emission

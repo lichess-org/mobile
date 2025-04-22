@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/analysis/stockfish_settings.dart';
+import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -114,7 +114,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
             firstChild: const SizedBox.shrink(),
-            secondChild: StockfishSettingsWidget(
+            secondChild: EngineSettingsWidget(
               onSetEngineSearchTime:
                   (value) => ref.read(controller.notifier).setEngineSearchTime(value),
               onSetNumEvalLines: (value) => ref.read(controller.notifier).setNumEvalLines(value),
