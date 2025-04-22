@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:flutter/foundation.dart' show VoidCallback;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -26,14 +27,21 @@ part 'tv_controller.g.dart';
 class TvController extends _$TvController {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
-  /// Last socket version received
-  int? _socketEventVersion;
+  VoidCallback? _onEventGapFailure;
 
   @override
-  Future<TvState> build(TvChannel? channel, (GameId id, Side orientation)? initialGame) {
+  Future<TvState> build(
+    TvChannel? channel, {
+    (GameId id, Side orientation)? initialGame,
+    UserId? userId,
+  }) {
     assert(channel != null || initialGame != null, 'Either a channel or a game must be provided');
+
+    _onEventGapFailure = () => _connectWebsocket(null);
+
     ref.onDispose(() {
       _socketSubscription?.cancel();
+      _onEventGapFailure = null;
     });
 
     return _connectWebsocket(initialGame);
@@ -57,25 +65,35 @@ class TvController extends _$TvController {
     if (game != null) {
       id = game.$1;
       orientation = game.$2;
-    } else {
+    } else if (channel != null) {
       final channels = await ref.withClient((client) => TvRepository(client).channels());
       final channelGame = channels[channel!]!;
       id = channelGame.id;
       orientation = channelGame.side ?? Side.white;
+    } else {
+      id = state.valueOrNull?.game.id ?? initialGame!.$1;
+      orientation = state.valueOrNull?.orientation ?? initialGame!.$2;
     }
 
     final socketClient = ref
         .read(socketPoolProvider)
-        .open(Uri(path: '/watch/$id/${orientation.name}/v6'), forceReconnect: true);
+        .open(
+          Uri(
+            path: '/watch/$id/${orientation.name}/v6',
+            queryParameters: userId != null ? {'userTv': userId.toString()} : null,
+          ),
+          forceReconnect: true,
+          onEventGapFailure: () {
+            _onEventGapFailure?.call();
+          },
+        );
 
     _socketSubscription?.cancel();
-    _socketEventVersion = null;
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
     return socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) {
       final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
-
-      _socketEventVersion = fullEvent.socketEventVersion;
+      socketClient.version = fullEvent.socketEventVersion;
 
       return TvState(
         game: fullEvent.game,
@@ -138,29 +156,7 @@ class TvController extends _$TvController {
   }
 
   void _handleSocketEvent(SocketEvent event) {
-    final currentEventVersion = _socketEventVersion;
-
-    /// We don't have a version yet, let's wait for the full event
-    if (currentEventVersion == null) {
-      return;
-    }
-
-    if (event.version != null) {
-      if (event.version! <= currentEventVersion) {
-        return;
-      }
-      if (event.version! > currentEventVersion + 1) {
-        _connectWebsocket(null);
-      }
-      _socketEventVersion = event.version;
-    }
-
-    _handleSocketTopic(event);
-  }
-
-  void _handleSocketTopic(SocketEvent event) {
     if (!state.hasValue) {
-      assert(false, 'received a game SocketEvent while TvState is null');
       return;
     }
 
