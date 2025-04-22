@@ -21,6 +21,14 @@ class SanMove with _$SanMove {
 
   bool get isCheck => san.contains('+');
   bool get isCapture => san.contains('x');
+
+  bool isIrreversible(Variant variant) {
+    if (isCheck) return true;
+    if (variant == Variant.crazyhouse) return false;
+    if (isCapture) return true;
+    if (san[0].toLowerCase() == san[0]) return true; // pawn move
+    return variant == Variant.threeCheck && isCheck;
+  }
 }
 
 class MoveConverter implements JsonConverter<Move, String> {
@@ -43,6 +51,11 @@ bool isPromotionPawnMove(Position position, NormalMove move) {
       position.board.roleAt(move.from) == Role.pawn &&
       ((move.to.rank == Rank.first && position.turn == Side.black) ||
           (move.to.rank == Rank.eighth && position.turn == Side.white));
+}
+
+String fenToEpd(String fen) {
+  // EPD is FEN without the halfmove clock and fullmove number
+  return fen.split(' ').take(4).join(' ');
 }
 
 /// Set of supported variants for reading a game (not playing).

@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -229,15 +230,33 @@ mixin EngineEvaluationMixin {
     }
   }
 
+  bool _canCloudEval() {
+    if (evaluationState.currentPosition!.ply >= 15 && !evaluationState.alwaysRequestCloudEval) {
+      return false;
+    }
+    if (positionTree.nodeAt(evaluationState.currentPath).eval is CloudEval) return false;
+
+    // cloud eval does not support threefold repetition
+    final Set<String> fens = <String>{};
+    final nodeList = positionTree.branchesOn(evaluationState.currentPath).toList();
+    for (var i = nodeList.length - 1; i >= 0; i--) {
+      final node = nodeList[i];
+      final epd = fenToEpd(node.position.fen);
+      if (fens.contains(epd)) return false;
+      if (node.sanMove.isIrreversible(evaluationState.evaluationContext.variant)) {
+        return true;
+      }
+      fens.add(epd);
+    }
+
+    return true;
+  }
+
   void _sendEvalGetEvent() {
     if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
+    if (!_canCloudEval()) return;
     final curPosition = evaluationState.currentPosition;
     if (curPosition == null) return;
-    if (evaluationState.currentPosition!.ply >= 15 && !evaluationState.alwaysRequestCloudEval) {
-      return;
-    }
-    if (positionTree.nodeAt(evaluationState.currentPath).eval is CloudEval) return;
-
     final numEvalLines = evaluationPrefs.numEvalLines;
 
     socketClient?.send('evalGet', {
