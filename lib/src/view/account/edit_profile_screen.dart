@@ -12,16 +12,12 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
-
 final _countries = countries.values.toList();
-
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
-
   static Route<dynamic> buildRoute(BuildContext context) {
     return buildScreenRoute(context, screen: const EditProfileScreen());
   }
-
   Future<bool?> _showBackDialog(BuildContext context) {
     return showAdaptiveDialog<bool>(
       context: context,
@@ -43,7 +39,6 @@ class EditProfileScreen extends StatelessWidget {
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +60,6 @@ class EditProfileScreen extends StatelessWidget {
     );
   }
 }
-
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -80,8 +74,7 @@ class _Body extends ConsumerWidget {
           child: Padding(
             padding: Styles.bodyPadding.copyWith(top: 0, bottom: 0),
             child: ListView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              children: [
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,              children: [
                 SizedBox(height: Styles.bodyPadding.top),
                 Text(context.l10n.allInformationIsPublicAndOptional),
                 const SizedBox(height: 16),
@@ -97,19 +90,14 @@ class _Body extends ConsumerWidget {
     );
   }
 }
-
 class _EditProfileForm extends ConsumerStatefulWidget {
   const _EditProfileForm(this.user);
-
   final User user;
-
   @override
   _EditProfileFormState createState() => _EditProfileFormState();
 }
-
 class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
   final _formKey = GlobalKey<FormState>();
-
   final _formData = <String, dynamic>{
     'flag': null,
     'location': null,
@@ -124,13 +112,13 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
     'dsbRating': null,
     'links': null,
   };
-
   bool _hasChanges = false; // Track if any changes are made
   Future<void>? _pendingSaveProfile;
-
   @override
   Widget build(BuildContext context) {
-    final String? initialLinks = widget.user.profile?.links?.map((e) => e.url).join('\r\n');
+    final String? initialLinks = widget.user.profile?.links
+        ?.map((e) => e.url)
+        .join('\r\n');
     return Form(
       key: _formKey,
       child: Column(
@@ -170,7 +158,9 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                           return const Iterable<String>.empty();
                         }
                         return _countries.where((String option) {
-                          return option.toLowerCase().contains(value.text.toLowerCase());
+                          return option.toLowerCase().contains(
+                            value.text.toLowerCase(),
+                          );
                         });
                       },
                       onSelected: (String selection) {
@@ -280,18 +270,19 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                               });
                               final future = Result.capture(
                                 ref.withClient(
-                                  (client) => AccountRepository(client).saveProfile(
-                                    _formData.map((key, value) => MapEntry(key, value.toString())),
-                                  ),
+                                  (client) =>
+                                      AccountRepository(client).saveProfile(
+                                        _formData.map(
+                                          (key, value) =>
+                                              MapEntry(key, value.toString()),
+                                        ),
+                                      ),
                                 ),
                               );
-
                               setState(() {
                                 _pendingSaveProfile = future;
                               });
-
                               final result = await future;
-
                               result.match(
                                 onError: (err, _) {
                                   if (context.mounted) {
@@ -325,16 +316,15 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
       ),
     );
   }
-
   // Method to detect if there are any changes in the form
   void _checkForChanges() {
     setState(() {
-      _hasChanges = _formData.entries.any((entry) =>
-          entry.value != widget.user.profile?.toJson()[entry.key]); // Compare with initial profile
+      _hasChanges = _formData.entries.any(
+        (entry) => entry.value != widget.user.profile?.toJson()[entry.key],
+      ); // Compare with initial profile
     });
   }
 }
-
 class _NumericField extends StatefulWidget {
   final String label;
   final int? initialValue;
@@ -348,11 +338,9 @@ class _NumericField extends StatefulWidget {
     required this.validator,
     required this.formData,
   });
-
   @override
   State<_NumericField> createState() => __NumericFieldState();
 }
-
 class __NumericFieldState extends State<_NumericField> {
   final _controller = TextEditingController();
   @override
@@ -360,13 +348,11 @@ class __NumericFieldState extends State<_NumericField> {
     _controller.text = widget.initialValue?.toString() ?? '';
     super.initState();
   }
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -398,7 +384,6 @@ class __NumericFieldState extends State<_NumericField> {
     );
   }
 }
-
 class _TextField extends StatefulWidget {
   final String label;
   final String? initialValue;
@@ -418,11 +403,9 @@ class _TextField extends StatefulWidget {
     this.maxLines,
     this.textInputAction = TextInputAction.next,
   });
-
   @override
   State<_TextField> createState() => __TextFieldState();
 }
-
 class __TextFieldState extends State<_TextField> {
   final _controller = TextEditingController();
   @override
@@ -430,13 +413,11 @@ class __TextFieldState extends State<_TextField> {
     super.initState();
     _controller.text = widget.initialValue ?? '';
   }
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
