@@ -147,10 +147,14 @@ class _OnlineFriendListTile extends ConsumerWidget {
                     (client) => UserRepository(client).getCurrentGame(user.id),
                   );
                   if (context.mounted) {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(TvScreen.buildRoute(context, gameId: game.id, user: user));
+                    Navigator.of(context, rootNavigator: true).push(
+                      TvScreen.buildRoute(
+                        context,
+                        gameId: game.id,
+                        user: user,
+                        orientation: game.playerSideOf(user.id),
+                      ),
+                    );
                   }
                 },
                 icon: const Icon(Icons.live_tv),
