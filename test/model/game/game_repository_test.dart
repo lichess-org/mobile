@@ -3,7 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
@@ -32,7 +32,7 @@ void main() {
       final repo = GameRepository(client);
 
       final result = await repo.getUserGames(const UserId('testUser'));
-      expect(result, isA<IList<LightArchivedGameWithPov>>());
+      expect(result, isA<IList<LightExportedGameWithPov>>());
       expect(result.length, 3);
       expect(result[0].game.id, const GameId('Huk88k3D'));
     });
@@ -60,7 +60,7 @@ void main() {
       final repo = GameRepository(client);
       final result = await repo.getGamesByIds(ids);
 
-      expect(result, isA<IList<LightArchivedGame>>());
+      expect(result, isA<IList<LightExportedGame>>());
       expect(result.length, 3);
       expect(result[0].id, const GameId('Huk88k3D'));
     });
@@ -84,7 +84,7 @@ void main() {
       final repo = GameRepository(client);
       final game = await repo.getGame(const GameId('qVChCOTc'));
 
-      expect(game, isA<ArchivedGame>());
+      expect(game, isA<ExportedGame>());
 
       expect(game.data.id, const GameId('qVChCOTc'));
       expect(game.meta.opening?.eco, 'C20');
@@ -107,7 +107,7 @@ void main() {
       final repo = GameRepository(client);
       final result = await repo.getGame(const GameId('1vdsvmxp'));
 
-      expect(result, isA<ArchivedGame>());
+      expect(result, isA<ExportedGame>());
       expect(result.steps[0].position is ThreeCheck, true);
     });
   });

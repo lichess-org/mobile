@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
@@ -27,7 +27,7 @@ part 'playable_game.freezed.dart';
 /// the current logged in player.
 ///
 /// See also:
-/// - [ArchivedGame] for a game that is finished and not owned by the current user.
+/// - [ExportedGame] for a game that is finished and not owned by the current user.
 @freezed
 class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements BaseGame {
   const PlayableGame._();
@@ -116,12 +116,12 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
   bool get userAnalysable =>
       finished && steps.length > 4 || (playable && (clock == null || youAre == null));
 
-  ArchivedGame toArchivedGame({required DateTime finishedAt}) {
-    return ArchivedGame(
+  ExportedGame toExportedGame({required DateTime finishedAt}) {
+    return ExportedGame(
       id: id,
       meta: meta,
       source: source,
-      data: LightArchivedGame(
+      data: LightExportedGame(
         id: id,
         variant: meta.variant,
         lastMoveAt: finishedAt,

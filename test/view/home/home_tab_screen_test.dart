@@ -153,7 +153,7 @@ void main() {
 
       final container = ProviderScope.containerOf(tester.element(find.byType(Application)));
       final storage = await container.read(gameStorageProvider.future);
-      final games = generateArchivedGames(count: 3);
+      final games = generateExportedGames(count: 3);
       for (final game in games) {
         await storage.save(game);
       }
@@ -293,7 +293,7 @@ void main() {
 
       final container = ProviderScope.containerOf(tester.element(find.byType(Application)));
       final storage = await container.read(gameStorageProvider.future);
-      final games = generateArchivedGames(count: 3);
+      final games = generateExportedGames(count: 3);
       for (final game in games) {
         await storage.save(game);
       }
@@ -317,7 +317,7 @@ void main() {
 
       final container = ProviderScope.containerOf(tester.element(find.byType(Application)));
       final storage = await container.read(gameStorageProvider.future);
-      final games = generateArchivedGames(count: 3, username: 'testUser');
+      final games = generateExportedGames(count: 3, username: 'testUser');
       for (final game in games) {
         await storage.save(game);
       }

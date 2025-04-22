@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -14,7 +14,7 @@ class GameRepository {
 
   final LichessClient client;
 
-  Future<ArchivedGame> getGame(GameId id, {bool withBookmarked = false}) {
+  Future<ExportedGame> getGame(GameId id, {bool withBookmarked = false}) {
     return client.readJson(
       Uri(
         path: '/game/export/$id',
@@ -25,7 +25,7 @@ class GameRepository {
         },
       ),
       headers: {'Accept': 'application/json'},
-      mapper: (json) => ArchivedGame.fromServerJson(json, withBookmarked: withBookmarked),
+      mapper: (json) => ExportedGame.fromServerJson(json, withBookmarked: withBookmarked),
     );
   }
 
@@ -37,7 +37,7 @@ class GameRepository {
     }
   }
 
-  Future<IList<LightArchivedGameWithPov>> getUserGames(
+  Future<IList<LightExportedGameWithPov>> getUserGames(
     UserId userId, {
     int max = 20,
     DateTime? until,
@@ -67,7 +67,7 @@ class GameRepository {
             },
           ),
           headers: {'Accept': 'application/x-ndjson'},
-          mapper: (json) => LightArchivedGame.fromServerJson(json, withBookmarked: withBookmarked),
+          mapper: (json) => LightExportedGame.fromServerJson(json, withBookmarked: withBookmarked),
         )
         .then(
           (value) =>
@@ -83,7 +83,7 @@ class GameRepository {
         );
   }
 
-  Future<IList<LightArchivedGameWithPov>> getBookmarkedGames(
+  Future<IList<LightExportedGameWithPov>> getBookmarkedGames(
     AuthSessionState session, {
     int max = 20,
     DateTime? until,
@@ -102,7 +102,7 @@ class GameRepository {
             },
           ),
           headers: {'Accept': 'application/x-ndjson'},
-          mapper: (json) => LightArchivedGame.fromServerJson(json, isBookmarked: true),
+          mapper: (json) => LightExportedGame.fromServerJson(json, isBookmarked: true),
         )
         .then(
           (value) =>
@@ -129,12 +129,12 @@ class GameRepository {
     );
   }
 
-  Future<IList<LightArchivedGame>> getGamesByIds(ISet<GameId> ids) {
+  Future<IList<LightExportedGame>> getGamesByIds(ISet<GameId> ids) {
     return client.postReadNdJsonList(
       Uri(path: '/api/games/export/_ids', queryParameters: {'moves': 'false', 'lastFen': 'true'}),
       headers: {'Accept': 'application/x-ndjson'},
       body: ids.join(','),
-      mapper: LightArchivedGame.fromServerJson,
+      mapper: LightExportedGame.fromServerJson,
     );
   }
 }

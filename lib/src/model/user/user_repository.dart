@@ -3,7 +3,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -34,11 +34,11 @@ class UserRepository {
   }
 
   /// Get the currently playing game of a user.
-  Future<ArchivedGame> getCurrentGame(UserId id) {
+  Future<ExportedGame> getCurrentGame(UserId id) {
     return client.readJson(
       Uri(path: '/api/user/$id/current-game'),
       headers: {'Accept': 'application/json'},
-      mapper: ArchivedGame.fromServerJson,
+      mapper: ExportedGame.fromServerJson,
     );
   }
 

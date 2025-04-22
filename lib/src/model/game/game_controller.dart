@@ -20,7 +20,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
@@ -888,11 +888,11 @@ class GameController extends _$GameController {
       final gameStorage = await ref.read(gameStorageProvider.future);
       final existing = await gameStorage.fetch(gameId: gameFullId.gameId);
       final finishedAt = existing?.data.lastMoveAt ?? DateTime.now();
-      await gameStorage.save(game.toArchivedGame(finishedAt: finishedAt));
+      await gameStorage.save(game.toExportedGame(finishedAt: finishedAt));
     }
   }
 
-  FutureResult<ArchivedGame> _getPostGameData() {
+  FutureResult<ExportedGame> _getPostGameData() {
     return Result.capture(
       ref.withClient((client) => GameRepository(client).getGame(gameFullId.gameId)),
     );
@@ -918,7 +918,7 @@ class GameController extends _$GameController {
 
   PlayableGame _mergePostGameData(
     PlayableGame game,
-    ArchivedGame data, {
+    ExportedGame data, {
 
     /// Whether to rewrite the steps with the clock data from the archived game
     ///

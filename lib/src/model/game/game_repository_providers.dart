@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -12,8 +12,8 @@ part 'game_repository_providers.g.dart';
 
 /// Fetches a game from the server or from the local storage if not available online.
 @riverpod
-Future<ArchivedGame> archivedGame(Ref ref, {required GameId id}) async {
-  ArchivedGame game;
+Future<ExportedGame> archivedGame(Ref ref, {required GameId id}) async {
+  ExportedGame game;
   try {
     final isLoggedIn = ref.watch(isLoggedInProvider);
     game = await ref.withClient(
@@ -32,6 +32,6 @@ Future<ArchivedGame> archivedGame(Ref ref, {required GameId id}) async {
 }
 
 @riverpod
-Future<IList<LightArchivedGame>> gamesById(Ref ref, {required ISet<GameId> ids}) {
+Future<IList<LightExportedGame>> gamesById(Ref ref, {required ISet<GameId> ids}) {
   return ref.withClient((client) => GameRepository(client).getGamesByIds(ids));
 }

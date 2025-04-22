@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
@@ -39,7 +39,7 @@ class ArchivedGameScreen extends ConsumerWidget {
     super.key,
   }) : assert(gameId != null || gameData != null);
 
-  final LightArchivedGame? gameData;
+  final LightExportedGame? gameData;
   final GameId? gameId;
 
   final Side orientation;
@@ -51,7 +51,7 @@ class ArchivedGameScreen extends ConsumerWidget {
   static Route<dynamic> buildRoute(
     BuildContext context, {
     GameId? gameId,
-    LightArchivedGame? gameData,
+    LightExportedGame? gameData,
     Side orientation = Side.white,
     int? initialCursor,
     (UserId?, GameFilterState)? gameListContext,
@@ -157,7 +157,7 @@ class _Body extends ConsumerStatefulWidget {
     required this.gameListContext,
   });
 
-  final LightArchivedGame? gameData;
+  final LightExportedGame? gameData;
   final Object? error;
   final Side orientation;
   final int? initialCursor;
@@ -252,7 +252,7 @@ class _BodyState extends ConsumerState<_Body> {
 class _GameTitle extends ConsumerWidget {
   const _GameTitle({required this.gameData});
 
-  final LightArchivedGame gameData;
+  final LightExportedGame gameData;
 
   static final _dateFormat = DateFormat.yMMMd();
 
@@ -283,7 +283,7 @@ class _BoardBody extends ConsumerWidget {
     this.initialCursor,
   });
 
-  final LightArchivedGame? archivedGameData;
+  final LightExportedGame? archivedGameData;
   final Side orientation;
   final int? initialCursor;
   final Object? error;
@@ -366,7 +366,7 @@ class _BottomBar extends ConsumerWidget {
   const _BottomBar({required this.archivedGameData, required this.orientation});
 
   final Side orientation;
-  final LightArchivedGame? archivedGameData;
+  final LightExportedGame? archivedGameData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -404,7 +404,7 @@ class _BottomBar extends ConsumerWidget {
             onTap: () {
               showAdaptiveDialog<void>(
                 context: context,
-                builder: (context) => ArchivedGameResultDialog(game: gameCursor.requireValue.$1),
+                builder: (context) => ExportedGameResultDialog(game: gameCursor.requireValue.$1),
                 barrierDismissible: true,
               );
             },

@@ -4,14 +4,14 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
-List<ArchivedGame> generateArchivedGames({int count = 100, String? username}) {
+List<ExportedGame> generateExportedGames({int count = 100, String? username}) {
   return List.generate(count, (index) {
     final id = GameId('game${index.toString().padLeft(4, '0')}');
     final whitePlayer = Player(
@@ -32,7 +32,7 @@ List<ArchivedGame> generateArchivedGames({int count = 100, String? username}) {
               : null,
       rating: username != null ? 1500 : null,
     );
-    return ArchivedGame(
+    return ExportedGame(
       id: id,
       meta: GameMeta(
         createdAt: DateTime(2021, 1, 1),
@@ -42,7 +42,7 @@ List<ArchivedGame> generateArchivedGames({int count = 100, String? username}) {
         variant: Variant.standard,
       ),
       source: GameSource.lobby,
-      data: LightArchivedGame(
+      data: LightExportedGame(
         id: id,
         variant: Variant.standard,
         lastMoveAt: DateTime(2021, 1, 1),

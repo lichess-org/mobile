@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 
 void main() {
@@ -54,11 +54,11 @@ void main() {
 ''');
     });
 
-    test('toArchivedGame', () {
+    test('toExportedGame', () {
       for (final game in [_playableGameJson, _playable960GameJson]) {
         final playableGame = PlayableGame.fromServerJson(jsonDecode(game) as Map<String, dynamic>);
         final now = DateTime.now();
-        final archivedGame = playableGame.toArchivedGame(finishedAt: now);
+        final archivedGame = playableGame.toExportedGame(finishedAt: now);
 
         expect(archivedGame.id, playableGame.id);
         expect(archivedGame.meta, playableGame.meta);
@@ -98,9 +98,9 @@ void main() {
     });
   });
 
-  group('ArchivedGame', () {
+  group('ExportedGame', () {
     test('makePgn, with clocks', () {
-      final game = ArchivedGame.fromServerJson(
+      final game = ExportedGame.fromServerJson(
         jsonDecode(_archivedGameJsonNoEvals) as Map<String, dynamic>,
       );
       expect(game.makePgn(), '''
@@ -124,7 +124,7 @@ void main() {
     });
 
     test('makePgn, with evals and clocks', () {
-      final game = ArchivedGame.fromServerJson(
+      final game = ExportedGame.fromServerJson(
         jsonDecode(_archivedGameJson) as Map<String, dynamic>,
       );
       expect(game.makePgn(), '''

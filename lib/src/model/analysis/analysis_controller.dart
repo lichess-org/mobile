@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -106,7 +106,7 @@ class AnalysisController extends _$AnalysisController
     late final ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis;
     late final Division? division;
 
-    ArchivedGame? archivedGame;
+    ExportedGame? archivedGame;
 
     if (options.gameId != null) {
       archivedGame = await ref.watch(archivedGameProvider(id: options.gameId!).future);
@@ -643,7 +643,7 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
     required GameId? gameId,
 
     /// The archived game if it's a finished lichess game.
-    ArchivedGame? archivedGame,
+    ExportedGame? archivedGame,
 
     /// The variant of the analysis.
     required Variant variant,

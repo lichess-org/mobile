@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show Response;
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -69,7 +69,7 @@ class GameShareService {
   }
 
   /// Fetches the GIF animation of a game.
-  Future<(XFile, ArchivedGame)> gameGif(GameId id, Side orientation) async {
+  Future<(XFile, ExportedGame)> gameGif(GameId id, Side orientation) async {
     final boardPreferences = _ref.read(boardPreferencesProvider);
     final boardTheme =
         boardPreferences.boardTheme == BoardTheme.system
@@ -88,7 +88,7 @@ class GameShareService {
     ]).timeout(const Duration(seconds: 1));
 
     final gifResp = resp[0] as Response;
-    final game = resp[1] as ArchivedGame;
+    final game = resp[1] as ExportedGame;
 
     if (gifResp.statusCode != 200) {
       throw Exception('Failed to get GIF');

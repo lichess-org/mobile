@@ -9,7 +9,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
@@ -35,7 +35,7 @@ const _nbPerPage = 20;
 /// If the user is not logged in, or there is no connectivity, the recent games
 /// stored locally are fetched instead.
 @riverpod
-Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
+Future<IList<LightExportedGameWithPov>> myRecentGames(Ref ref) async {
   final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   final session = ref.watch(authSessionProvider);
   if (session != null && online) {
@@ -59,7 +59,7 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(Ref ref) async {
 
 /// A provider that fetches the recent games from the server for a given user.
 @riverpod
-Future<IList<LightArchivedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
+Future<IList<LightExportedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
   return ref.withClient(
     (client) => GameRepository(client).getUserGames(userId, withBookmarked: true),
   );
@@ -87,7 +87,7 @@ Future<int> userNumberOfGames(Ref ref, LightUser? user) async {
 /// Otherwise, the game history is fetched from the local storage.
 @riverpod
 class UserGameHistory extends _$UserGameHistory {
-  final _list = <LightArchivedGameWithPov>[];
+  final _list = <LightExportedGameWithPov>[];
 
   @override
   Future<UserGameHistoryState> build(
@@ -234,7 +234,7 @@ class UserGameHistory extends _$UserGameHistory {
 @freezed
 class UserGameHistoryState with _$UserGameHistoryState {
   const factory UserGameHistoryState({
-    required IList<LightArchivedGameWithPov> gameList,
+    required IList<LightExportedGameWithPov> gameList,
     required bool isLoading,
     required GameFilterState filter,
     required bool hasMore,

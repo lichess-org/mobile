@@ -15,28 +15,29 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-part 'archived_game.freezed.dart';
-part 'archived_game.g.dart';
+part 'exported_game.freezed.dart';
+part 'exported_game.g.dart';
 
 typedef ClockData = ({Duration initial, Duration increment});
 
-/// A lichess game exported from the API.
+/// A lichess game fetched from the export API.
 ///
-/// This represents a game that is finished and can be viewed by anyone, or accessed
+/// This usually represents a game that is finished and can be viewed by anyone, or accessed
 /// offline.
+/// It can also be an ongoing game that is not owned by the current user (e.g. a game of
+/// a friend you're watching).
 ///
-/// See also [PlayableGame] for a game owned by the current user and that can be
-/// played unless finished.
+/// See [PlayableGame] for a game owned by the current user and that can be played unless finished.
 @Freezed(fromJson: true, toJson: true)
-class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps implements BaseGame {
-  const ArchivedGame._();
+class ExportedGame with _$ExportedGame, BaseGame, IndexableSteps implements BaseGame {
+  const ExportedGame._();
 
   @Assert('steps.isNotEmpty')
-  factory ArchivedGame({
+  factory ExportedGame({
     required GameId id,
     required GameMeta meta,
     // TODO refactor to not include this field
-    required LightArchivedGame data,
+    required LightExportedGame data,
     @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson) required IList<GameStep> steps,
     String? initialFen,
     required GameStatus status,
@@ -51,34 +52,34 @@ class ArchivedGame with _$ArchivedGame, BaseGame, IndexableSteps implements Base
     required Player black,
     IList<ExternalEval>? evals,
     IList<Duration>? clocks,
-  }) = _ArchivedGame;
+  }) = _ExportedGame;
 
   /// Create an archived game from the lichess api.
   ///
   /// Currently, those endpoints are supported:
   /// - GET /game/export/:id
-  factory ArchivedGame.fromServerJson(Map<String, dynamic> json, {bool withBookmarked = false}) {
+  factory ExportedGame.fromServerJson(Map<String, dynamic> json, {bool withBookmarked = false}) {
     return _archivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
   }
 
   /// Create an archived game from a local storage JSON.
-  factory ArchivedGame.fromJson(Map<String, dynamic> json) => _$ArchivedGameFromJson(json);
+  factory ExportedGame.fromJson(Map<String, dynamic> json) => _$ExportedGameFromJson(json);
 }
 
-/// A [LightArchivedGame] associated with a point of view of a player.
-typedef LightArchivedGameWithPov = ({LightArchivedGame game, Side pov});
+/// A [LightExportedGame] associated with a point of view of a player.
+typedef LightExportedGameWithPov = ({LightExportedGame game, Side pov});
 
-/// A lichess game exported from the API, with less data than [ArchivedGame].
+/// A lichess game exported from the API, with less data than [ExportedGame].
 ///
 /// This is commonly used to display a list of games.
 /// Lichess endpoints that return this data:
 /// - GET /api/games/user/:userId
 /// - GET /api/games/export/_ids
 @Freezed(fromJson: true, toJson: true)
-class LightArchivedGame with _$LightArchivedGame {
-  const LightArchivedGame._();
+class LightExportedGame with _$LightExportedGame {
+  const LightExportedGame._();
 
-  const factory LightArchivedGame({
+  const factory LightExportedGame({
     required GameId id,
 
     /// If the full game id is available, it means this is a game owned by the
@@ -101,9 +102,9 @@ class LightArchivedGame with _$LightArchivedGame {
     Side? winner,
     ClockData? clock,
     bool? bookmarked,
-  }) = _ArchivedGameData;
+  }) = _ExportedGameData;
 
-  factory LightArchivedGame.fromServerJson(
+  factory LightExportedGame.fromServerJson(
     Map<String, dynamic> json, {
 
     /// Whether to ask the server if the game is bookmarked
@@ -112,15 +113,15 @@ class LightArchivedGame with _$LightArchivedGame {
     /// Whether it is already known that the game is bookmarked
     bool isBookmarked = false,
   }) {
-    return _lightArchivedGameFromPick(
+    return _lightExportedGameFromPick(
       pick(json).required(),
       withBookmarked: withBookmarked,
       isBookmarked: isBookmarked,
     );
   }
 
-  factory LightArchivedGame.fromJson(Map<String, dynamic> json) =>
-      _$LightArchivedGameFromJson(json);
+  factory LightExportedGame.fromJson(Map<String, dynamic> json) =>
+      _$LightExportedGameFromJson(json);
 
   bool get isBookmarked => bookmarked == true;
 
@@ -145,8 +146,8 @@ IList<ExternalEval>? gameEvalsFromPick(RequiredPick pick) {
       ?.lock;
 }
 
-ArchivedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = false}) {
-  final data = _lightArchivedGameFromPick(pick, withBookmarked: withBookmarked);
+ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = false}) {
+  final data = _lightExportedGameFromPick(pick, withBookmarked: withBookmarked);
   final clocks = pick(
     'clocks',
   ).asListOrNull<Duration>((p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
@@ -154,7 +155,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
 
   final initialFen = pick('initialFen').asStringOrNull();
 
-  return ArchivedGame(
+  return ExportedGame(
     id: data.id,
     meta: GameMeta(
       createdAt: data.createdAt,
@@ -220,12 +221,12 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
   );
 }
 
-LightArchivedGame _lightArchivedGameFromPick(
+LightExportedGame _lightExportedGameFromPick(
   RequiredPick pick, {
   bool withBookmarked = false,
   bool isBookmarked = false,
 }) {
-  return LightArchivedGame(
+  return LightExportedGame(
     id: pick('id').asGameIdOrThrow(),
     fullId: pick('fullId').asGameFullIdOrNull(),
     source: pick(

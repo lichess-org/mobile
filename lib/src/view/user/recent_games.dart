@@ -1,7 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -25,7 +25,7 @@ class RecentGamesWidget extends ConsumerWidget {
   });
 
   final LightUser? user;
-  final AsyncValue<IList<LightArchivedGameWithPov>> recentGames;
+  final AsyncValue<IList<LightExportedGameWithPov>> recentGames;
   final int nbOfGames;
   final int maxGamesToShow;
 

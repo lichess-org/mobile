@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -36,7 +36,7 @@ class GameListTile extends StatelessWidget {
     this.gameListContext,
   });
 
-  final LightArchivedGameWithPov item;
+  final LightExportedGameWithPov item;
   final EdgeInsetsGeometry? padding;
   final Future<void> Function(BuildContext context)? onPressedBookmark;
 
@@ -49,7 +49,7 @@ class GameListTile extends StatelessWidget {
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
 
-    Widget getResultIcon(LightArchivedGame game, Side mySide) {
+    Widget getResultIcon(LightExportedGame game, Side mySide) {
       if (game.status == GameStatus.aborted || game.status == GameStatus.noStart) {
         return const Icon(CupertinoIcons.xmark_square_fill, color: LichessColors.grey);
       } else {
@@ -107,7 +107,7 @@ class _GameListTile extends StatelessWidget {
     this.onTap,
   });
 
-  final LightArchivedGame game;
+  final LightExportedGame game;
   final Side mySide;
   final Widget opponentTitle;
   final Future<void> Function(BuildContext context)? onPressedBookmark;
@@ -155,7 +155,7 @@ class GameContextMenu extends ConsumerWidget {
     required this.showGameSummary,
   });
 
-  final LightArchivedGame game;
+  final LightExportedGame game;
   final Side mySide;
   final Widget opponentTitle;
   final Future<void> Function(BuildContext context)? onPressedBookmark;
