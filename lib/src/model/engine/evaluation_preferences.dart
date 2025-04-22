@@ -106,5 +106,7 @@ const kAvailableEngineSearchTimes = [
   Duration(seconds: 30),
 
   /// Displayed as infinity in the UI.
-  Duration(hours: 1),
+  kMaxEngineSearchTime,
 ];
+
+const kMaxEngineSearchTime = Duration(hours: 1);

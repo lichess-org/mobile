@@ -285,11 +285,13 @@ mixin EngineEvaluationMixin {
           final (work, eval) = tuple;
           bool isSameEvalString = true;
           positionTree.updateAt(work.path, (node) {
-            if (node.eval is CloudEval) {
-              // in case of high network latency, the cloud eval may arrive after the local eval
-              // in this case, we should not override the cloud eval with the local eval
-              _stopEngineEval();
-              return;
+            // don't override the cloud eval if it's deeper than the local eval
+            // unless the engineSearchTime pref is set to kMaxEngineSearchTime (infinity)
+            if (node.eval is CloudEval &&
+                evaluationPrefs.engineSearchTime != kMaxEngineSearchTime) {
+              if (node.eval?.depth != null && node.eval!.depth >= eval.depth) {
+                return;
+              }
             }
             isSameEvalString = eval.evalString == node.eval?.evalString;
             node.eval = eval;
@@ -298,9 +300,5 @@ mixin EngineEvaluationMixin {
             onCurrentPathEvalChanged(isSameEvalString);
           }
         });
-  }
-
-  void _stopEngineEval() {
-    _evaluationService?.stop();
   }
 }

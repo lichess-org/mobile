@@ -88,7 +88,7 @@ void main() {
       expect(find.widgetWithText(EngineDepth, '36'), findsOne);
     });
 
-    testWidgets('Local engine will not override cloud eval', (tester) async {
+    testWidgets('Local engine will not override cloud eval with greater depth', (tester) async {
       // Simulates a connection lag that will make the local engine come 100ms after the cloud eval
       final connectionLag =
           kLocalEngineAfterCloudEvalDelay -
