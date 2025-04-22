@@ -185,7 +185,9 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
     white: data.white,
     black: data.black,
     steps: pick('moves').letOrThrow((it) {
-      final moves = it.asStringOrThrow().split(' ');
+      final moves = it.asStringOrThrow();
+      final movesList = moves.isEmpty ? <String>[] : moves.split(' ');
+
       // assume lichess always send initialFen with fromPosition and chess960
       Position position =
           (data.variant == Variant.fromPosition || data.variant == Variant.chess960)
@@ -194,8 +196,8 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
       int index = 0;
       final List<GameStep> steps = [GameStep(position: position)];
       Duration? clock = data.clock?.initial;
-      for (final san in moves) {
-        final stepClock = clocks?.isEmpty == true ? [clock][index] : clocks?[index];
+      for (final san in movesList) {
+        final stepClock = clocks?[index];
         index++;
         final move = position.parseSan(san);
         // assume lichess only sends correct moves
