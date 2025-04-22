@@ -195,7 +195,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
       final List<GameStep> steps = [GameStep(position: position)];
       Duration? clock = data.clock?.initial;
       for (final san in moves) {
-        final stepClock = clocks?[index];
+        final stepClock = clocks?.isEmpty == true ? [clock][index] : clocks?[index];
         index++;
         final move = position.parseSan(san);
         // assume lichess only sends correct moves

@@ -11,6 +11,9 @@ class SocketEvent with _$SocketEvent {
     required String topic,
     dynamic data,
 
+    /// Raw json data of the event.
+    Map<String, dynamic>? json,
+
     /// Version of the socket event, only for versioned socket routes.
     int? version,
   }) = _SocketEvent;
@@ -34,6 +37,6 @@ class SocketEvent with _$SocketEvent {
         data: {'nbPlayers': json['d'] as int, 'nbGames': json['r'] as int},
       );
     }
-    return SocketEvent(topic: topic, data: json['d'], version: json['v'] as int?);
+    return SocketEvent(topic: topic, json: json, data: json['d'], version: json['v'] as int?);
   }
 }

@@ -9,6 +9,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'online_friends.g.dart';
 
+typedef OnlineFriend = ({LightUser user, bool playing});
+
 @riverpod
 class OnlineFriends extends _$OnlineFriends {
   StreamSubscription<SocketEvent>? _socketSubscription;
@@ -17,7 +19,7 @@ class OnlineFriends extends _$OnlineFriends {
   late SocketClient _socketClient;
 
   @override
-  Future<IList<LightUser>> build() async {
+  Future<IList<OnlineFriend>> build() async {
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _socketOpenSubscription?.cancel();
@@ -27,7 +29,7 @@ class OnlineFriends extends _$OnlineFriends {
 
     final state = _socketClient.stream
         .firstWhere((e) => e.topic == 'following_onlines')
-        .then((event) => _parseFriendsList(event.data as List<dynamic>));
+        .then((event) => _parseFriendsList(event));
 
     await _socketClient.firstConnection;
 
@@ -68,28 +70,59 @@ class OnlineFriends extends _$OnlineFriends {
 
     switch (event.topic) {
       case 'following_onlines':
-        state = AsyncValue.data(_parseFriendsList(event.data as List<dynamic>));
+        state = AsyncValue.data(_parseFriendsList(event));
 
       case 'following_enters':
-        final data = _parseFriend(event.data.toString());
-        state = AsyncValue.data(state.requireValue.add(data));
+        final isPatron = event.json?['patron'] as bool?;
+        final user = _parseFriend(event.data.toString(), isPatron);
+        final playing = event.json?['playing'] as bool? ?? false;
+        state = AsyncValue.data(state.requireValue.add((user: user, playing: playing)));
 
       case 'following_leaves':
         final data = _parseFriend(event.data.toString());
-        state = AsyncValue.data(state.requireValue.removeWhere((v) => v.id == data.id));
+        state = AsyncValue.data(state.requireValue.removeWhere((v) => v.user.id == data.id));
+
+      case 'following_playing':
+        final data = _parseFriend(event.data.toString());
+        state = AsyncValue.data(
+          state.requireValue.map((v) {
+            if (v.user.id == data.id) {
+              return (user: v.user, playing: true);
+            }
+            return v;
+          }).toIList(),
+        );
+
+      case 'following_stopped_playing':
+        final data = _parseFriend(event.data.toString());
+        state = AsyncValue.data(
+          state.requireValue.map((v) {
+            if (v.user.id == data.id) {
+              return (user: v.user, playing: false);
+            }
+            return v;
+          }).toIList(),
+        );
     }
   }
 
   SocketPool get _socketPool => ref.read(socketPoolProvider);
 
-  LightUser _parseFriend(String friend) {
+  LightUser _parseFriend(String friend, [bool? isPatron]) {
     final splitted = friend.split(' ');
     final name = splitted.length > 1 ? splitted[1] : splitted[0];
     final title = splitted.length > 1 ? splitted[0] : null;
-    return LightUser(id: UserId.fromUserName(name), name: name, title: title);
+    return LightUser(id: UserId.fromUserName(name), name: name, title: title, isPatron: isPatron);
   }
 
-  IList<LightUser> _parseFriendsList(List<dynamic> friends) {
-    return friends.map((v) => _parseFriend(v.toString())).toIList();
+  IList<OnlineFriend> _parseFriendsList(SocketEvent event) {
+    final friends = event.data as List<dynamic>;
+    final patrons = event.json?['patrons'] as List<dynamic>? ?? [];
+    final playing = event.json?['playing'] as List<dynamic>? ?? [];
+    return friends.map((v) {
+      final user = _parseFriend(v.toString(), patrons.contains(v.toString()));
+      final isPlaying = playing.contains(user.id.toString());
+      return (user: user, playing: isPlaying);
+    }).toIList();
   }
 }

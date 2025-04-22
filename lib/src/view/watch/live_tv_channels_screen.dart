@@ -54,7 +54,7 @@ class _Body extends ConsumerWidget {
                 Navigator.of(context, rootNavigator: true).push(
                   TvScreen.buildRoute(
                     context,
-                    game.channel,
+                    channel: game.channel,
                     gameId: game.id,
                     orientation: game.orientation,
                   ),

@@ -7,12 +7,14 @@ import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -20,13 +22,12 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
-final _getFollowingAndOnlinesProvider = FutureProvider.autoDispose<(IList<User>, IList<LightUser>)>(
-  (ref) async {
-    final following = await ref.watch(followingProvider.future);
-    final onlines = await ref.watch(onlineFriendsProvider.future);
-    return (following, onlines);
-  },
-);
+final _getFollowingAndOnlinesProvider =
+    FutureProvider.autoDispose<(IList<User>, IList<OnlineFriend>)>((ref) async {
+      final following = await ref.watch(followingProvider.future);
+      final onlines = await ref.watch(onlineFriendsProvider.future);
+      return (following, onlines);
+    });
 
 class FriendScreen extends ConsumerStatefulWidget {
   const FriendScreen({super.key});
@@ -85,7 +86,7 @@ class _FollowingScreenState extends ConsumerState<FriendScreen> with TickerProvi
 class OnlineFriendsWidget extends ConsumerWidget {
   const OnlineFriendsWidget({required this.onlineFriends});
 
-  final AsyncValue<IList<LightUser>> onlineFriends;
+  final AsyncValue<IList<OnlineFriend>> onlineFriends;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -102,20 +103,7 @@ class OnlineFriendsWidget extends ConsumerWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => _handleTap(context, data),
                 ),
-              for (final user in data.take(5))
-                ListTile(
-                  title: UserFullNameWidget(user: user),
-                  onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
-                  onLongPress:
-                      () => showAdaptiveBottomSheet<void>(
-                        context: context,
-                        useRootNavigator: true,
-                        isDismissible: true,
-                        isScrollControlled: true,
-                        showDragHandle: true,
-                        builder: (context) => UserContextMenu(userId: user.id),
-                      ),
-                ),
+              for (final friend in data.take(5)) _OnlineFriendListTile(onlineFriend: friend),
             ],
           );
         },
@@ -134,8 +122,51 @@ class OnlineFriendsWidget extends ConsumerWidget {
     );
   }
 
-  void _handleTap(BuildContext context, IList<LightUser> followingOnlines) {
+  void _handleTap(BuildContext context, IList<OnlineFriend> followingOnlines) {
     Navigator.of(context).push(FriendScreen.buildRoute(context));
+  }
+}
+
+class _OnlineFriendListTile extends ConsumerWidget {
+  const _OnlineFriendListTile({required this.onlineFriend});
+
+  final OnlineFriend onlineFriend;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final (:user, :playing) = onlineFriend;
+
+    return ListTile(
+      title: UserFullNameWidget(user: user),
+      trailing:
+          playing
+              ? IconButton(
+                tooltip: context.l10n.watchGames,
+                onPressed: () async {
+                  final game = await ref.withClient(
+                    (client) => UserRepository(client).getCurrentGame(user.id),
+                  );
+                  if (context.mounted) {
+                    Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).push(TvScreen.buildRoute(context, gameId: game.id, user: user));
+                  }
+                },
+                icon: const Icon(Icons.live_tv),
+              )
+              : null,
+      onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
+      onLongPress:
+          () => showAdaptiveBottomSheet<void>(
+            context: context,
+            useRootNavigator: true,
+            isDismissible: true,
+            isScrollControlled: true,
+            showDragHandle: true,
+            builder: (context) => UserContextMenu(userId: user.id),
+          ),
+    );
   }
 }
 
@@ -156,20 +187,7 @@ class _Online extends ConsumerWidget {
                       ? const PlatformDivider(height: 1)
                       : const SizedBox.shrink(),
           itemBuilder: (context, index) {
-            final user = value[index];
-            return ListTile(
-              title: UserFullNameWidget(user: user),
-              onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
-              onLongPress:
-                  () => showAdaptiveBottomSheet<void>(
-                    context: context,
-                    useRootNavigator: true,
-                    isDismissible: true,
-                    isScrollControlled: true,
-                    showDragHandle: true,
-                    builder: (context) => UserContextMenu(userId: user.id),
-                  ),
-            );
+            return _OnlineFriendListTile(onlineFriend: value[index]);
           },
         );
       case _:
@@ -257,7 +275,7 @@ class _Following extends ConsumerWidget {
     }
   }
 
-  bool _isOnline(User user, IList<LightUser> followingOnlines) {
-    return followingOnlines.any((v) => v.id == user.id);
+  bool _isOnline(User user, IList<OnlineFriend> followingOnlines) {
+    return followingOnlines.any((v) => v.user.id == user.id);
   }
 }

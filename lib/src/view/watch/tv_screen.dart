@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -17,17 +18,24 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
-  const TvScreen({required this.channel, this.initialGame, super.key});
+  const TvScreen({this.channel, this.initialGame, this.user, super.key})
+    : assert(
+        channel != null || (initialGame != null && user != null),
+        'Either channel or initialGame and user must be provided',
+      );
 
-  final TvChannel channel;
+  final TvChannel? channel;
   final (GameId id, Side orientation)? initialGame;
+  final LightUser? user;
 
   static Route<dynamic> buildRoute(
-    BuildContext context,
-    TvChannel channel, {
+    BuildContext context, {
+    TvChannel? channel,
     GameId? gameId,
+    LightUser? user,
     Side? orientation,
   }) {
     return buildScreenRoute(
@@ -35,6 +43,7 @@ class TvScreen extends ConsumerStatefulWidget {
       screen: TvScreen(
         channel: channel,
         initialGame: gameId != null ? (gameId, orientation ?? Side.white) : null,
+        user: user,
       ),
     );
   }
@@ -62,7 +71,17 @@ class _TvScreenState extends ConsumerState<TvScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('${widget.channel.label} TV'),
+          title:
+              widget.channel?.label != null
+                  ? Text('${widget.channel!.label} TV')
+                  : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      UserFullNameWidget(user: widget.user),
+                      const SizedBox(width: 4.0),
+                      const Icon(Icons.live_tv),
+                    ],
+                  ),
           actions: const [ToggleSoundButton()],
         ),
         body: _Body(
@@ -82,9 +101,12 @@ class _Body extends ConsumerWidget {
     this.initialGame, {
     required this.whiteClockKey,
     required this.blackClockKey,
-  });
+  }) : assert(
+         channel != null || initialGame != null,
+         'Either channel or initialGame must be provided',
+       );
 
-  final TvChannel channel;
+  final TvChannel? channel;
   final (GameId id, Side orientation)? initialGame;
   final GlobalKey whiteClockKey;
   final GlobalKey blackClockKey;
@@ -192,7 +214,7 @@ class _Body extends ConsumerWidget {
 
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({required this.tvChannel, required this.game});
-  final TvChannel tvChannel;
+  final TvChannel? tvChannel;
   final (GameId id, Side orientation)? game;
 
   @override
