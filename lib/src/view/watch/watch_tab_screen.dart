@@ -255,7 +255,7 @@ class _WatchTvWidget extends ConsumerWidget {
                           .push(
                             TvScreen.buildRoute(
                               context,
-                              snapshot.channel,
+                              channel: snapshot.channel,
                               gameId: snapshot.id,
                               orientation: snapshot.player.side,
                             ),

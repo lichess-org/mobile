@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
@@ -19,7 +19,7 @@ Future<GameStorage> gameStorage(Ref ref) async {
 
 const kGameStorageTable = 'game';
 
-typedef StoredGame = ({UserId userId, DateTime lastModified, ArchivedGame game});
+typedef StoredGame = ({UserId userId, DateTime lastModified, ExportedGame game});
 
 class GameStorage {
   const GameStorage(this._db);
@@ -58,7 +58,7 @@ class GameStorage {
           return (
             userId: UserId(e['userId']! as String),
             lastModified: DateTime.parse(e['lastModified']! as String),
-            game: ArchivedGame.fromJson(json),
+            game: ExportedGame.fromJson(json),
           );
         })
         .where((e) => filter.perfs.isEmpty || filter.perfs.contains(e.game.meta.perf))
@@ -66,7 +66,7 @@ class GameStorage {
         .toIList();
   }
 
-  Future<ArchivedGame?> fetch({required GameId gameId}) async {
+  Future<ExportedGame?> fetch({required GameId gameId}) async {
     final list = await _db.query(
       kGameStorageTable,
       where: 'gameId = ?',
@@ -80,12 +80,12 @@ class GameStorage {
       if (json is! Map<String, dynamic>) {
         throw const FormatException('[GameStorage] cannot fetch game: expected an object');
       }
-      return ArchivedGame.fromJson(json);
+      return ExportedGame.fromJson(json);
     }
     return null;
   }
 
-  Future<void> save(ArchivedGame game) async {
+  Future<void> save(ExportedGame game) async {
     await _db.insert(kGameStorageTable, {
       'userId': game.me?.user?.id.toString() ?? kStorageAnonId,
       'gameId': game.id.toString(),

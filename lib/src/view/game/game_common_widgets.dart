@@ -2,7 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
@@ -15,14 +15,14 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
-/// Opens a game screen for the given [LightArchivedGame].
+/// Opens a game screen for the given [LightExportedGame].
 ///
 /// Will open [GameScreen] if the game Id is a [GameFullId], otherwise [ArchivedGameScreen].
 ///
 /// If the game is not read supported, a snackbar is shown.
 void openGameScreen(
   BuildContext context, {
-  required LightArchivedGame game,
+  required LightExportedGame game,
   required Side orientation,
   String? loadingFen,
   Move? loadingLastMove,

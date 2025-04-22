@@ -239,9 +239,9 @@ void main() {
       ''';
 
       const eventsToMatch = [
-        SocketEvent(topic: 'test1', data: 'data'),
-        SocketEvent(topic: 'test2', data: 'data'),
-        SocketEvent(topic: 'test3', data: 'data'),
+        SocketEvent(topic: 'test1', data: 'data', json: {'t': 'test1', 'd': 'data'}),
+        SocketEvent(topic: 'test2', data: 'data', json: {'t': 'test2', 'd': 'data'}),
+        SocketEvent(topic: 'test3', data: 'data', json: {'t': 'test3', 'd': 'data'}),
       ];
 
       // check that the messages in the batch were distributed
@@ -277,7 +277,7 @@ void main() {
 
     // should emit if random topic
     const randomMessage = '{"t":"test","d":"data"}';
-    const randomEvent = SocketEvent(topic: 'test', data: 'data');
+    const randomEvent = SocketEvent(topic: 'test', data: 'data', json: {'t': 'test', 'd': 'data'});
     await testEventEmitted(socketClient, fakeChannel, randomMessage, [randomEvent]);
 
     await socketClient.close();
@@ -304,10 +304,30 @@ void main() {
       expectLater(
         socketClient.stream,
         emitsInOrder([
-          const SocketEvent(topic: 'test', version: 1, data: 'data'),
-          const SocketEvent(topic: 'test', version: 2, data: 'data'),
-          const SocketEvent(topic: 'test', version: 3, data: 'data'),
-          const SocketEvent(topic: 'test', version: 4, data: 'data'),
+          const SocketEvent(
+            topic: 'test',
+            version: 1,
+            data: 'data',
+            json: {'t': 'test', 'v': 1, 'd': 'data'},
+          ),
+          const SocketEvent(
+            topic: 'test',
+            version: 2,
+            data: 'data',
+            json: {'t': 'test', 'v': 2, 'd': 'data'},
+          ),
+          const SocketEvent(
+            topic: 'test',
+            version: 3,
+            data: 'data',
+            json: {'t': 'test', 'v': 3, 'd': 'data'},
+          ),
+          const SocketEvent(
+            topic: 'test',
+            version: 4,
+            data: 'data',
+            json: {'t': 'test', 'v': 4, 'd': 'data'},
+          ),
         ]),
       );
 
@@ -355,8 +375,18 @@ void main() {
       expectLater(
         socketClient.stream,
         emitsInOrder([
-          const SocketEvent(topic: 'test', version: 1, data: 'data'),
-          const SocketEvent(topic: 'test', version: 2, data: 'data'),
+          const SocketEvent(
+            topic: 'test',
+            version: 1,
+            data: 'data',
+            json: {'t': 'test', 'v': 1, 'd': 'data'},
+          ),
+          const SocketEvent(
+            topic: 'test',
+            version: 2,
+            data: 'data',
+            json: {'t': 'test', 'v': 2, 'd': 'data'},
+          ),
         ]),
       );
 

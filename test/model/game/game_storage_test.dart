@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
@@ -66,7 +66,7 @@ IList<GameStep> _makeSteps(String pgn) {
 }
 
 const gameId = GameId('g2bzFol8');
-final game = ArchivedGame(
+final game = ExportedGame(
   id: gameId,
   meta: GameMeta(
     createdAt: DateTime(2021, 1, 1),
@@ -76,7 +76,7 @@ final game = ArchivedGame(
     variant: Variant.standard,
   ),
   source: GameSource.lobby,
-  data: LightArchivedGame(
+  data: LightExportedGame(
     id: gameId,
     variant: Variant.standard,
     lastMoveAt: DateTime(2021, 1, 1),
@@ -98,7 +98,7 @@ final game = ArchivedGame(
 
 final games = List.generate(100, (index) {
   final id = GameId('game${index.toString().padLeft(4, '0')}');
-  return ArchivedGame(
+  return ExportedGame(
     id: id,
     meta: GameMeta(
       createdAt: DateTime(2021, 1, 1),
@@ -108,7 +108,7 @@ final games = List.generate(100, (index) {
       variant: Variant.standard,
     ),
     source: GameSource.lobby,
-    data: LightArchivedGame(
+    data: LightExportedGame(
       id: id,
       variant: Variant.standard,
       lastMoveAt: DateTime(2021, 1, 1),

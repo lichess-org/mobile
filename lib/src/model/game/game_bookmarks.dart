@@ -7,7 +7,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -21,7 +21,7 @@ const _nbPerPage = 20;
 /// A provider that paginates the game bookmarks for the current app user.
 @riverpod
 class GameBookmarksPaginator extends _$GameBookmarksPaginator {
-  final _list = <LightArchivedGameWithPov>[];
+  final _list = <LightExportedGameWithPov>[];
 
   @override
   Future<GameBookmarksPaginatorState> build() async {
@@ -33,7 +33,7 @@ class GameBookmarksPaginator extends _$GameBookmarksPaginator {
 
     if (session == null) {
       return GameBookmarksPaginatorState(
-        gameList: <LightArchivedGameWithPov>[].toIList(),
+        gameList: <LightExportedGameWithPov>[].toIList(),
         isLoading: false,
         hasMore: false,
         hasError: false,
@@ -107,7 +107,7 @@ class GameBookmarksPaginator extends _$GameBookmarksPaginator {
 @freezed
 class GameBookmarksPaginatorState with _$GameBookmarksPaginatorState {
   const factory GameBookmarksPaginatorState({
-    required IList<LightArchivedGameWithPov> gameList,
+    required IList<LightExportedGameWithPov> gameList,
     required bool isLoading,
     required bool hasMore,
     required bool hasError,

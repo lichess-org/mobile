@@ -168,8 +168,8 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
   }
 }
 
-class ArchivedGameResultDialog extends StatelessWidget {
-  const ArchivedGameResultDialog({required this.game, super.key});
+class ExportedGameResultDialog extends StatelessWidget {
+  const ExportedGameResultDialog({required this.game, super.key});
 
   final BaseGame game;
 

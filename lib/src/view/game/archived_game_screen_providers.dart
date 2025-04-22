@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -43,7 +43,7 @@ bool canGoBackward(Ref ref, GameId id) {
 @riverpod
 class GameCursor extends _$GameCursor {
   @override
-  FutureOr<(ArchivedGame, int)> build(GameId id) async {
+  FutureOr<(ExportedGame, int)> build(GameId id) async {
     final data = await ref.watch(archivedGameProvider(id: id).future);
 
     return (data, data.steps.length - 1);

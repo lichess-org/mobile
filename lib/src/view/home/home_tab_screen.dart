@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
@@ -153,7 +153,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required ConnectivityStatus status,
     required AsyncValue<IList<OngoingGame>> ongoingGames,
     required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames,
-    required AsyncValue<IList<LightArchivedGameWithPov>> recentGames,
+    required AsyncValue<IList<LightExportedGameWithPov>> recentGames,
     required int nbOfGames,
   }) {
     final homePrefs = ref.watch(homePreferencesProvider);
@@ -266,7 +266,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required ConnectivityStatus status,
     required AsyncValue<IList<OngoingGame>> ongoingGames,
     required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames,
-    required AsyncValue<IList<LightArchivedGameWithPov>> recentGames,
+    required AsyncValue<IList<LightExportedGameWithPov>> recentGames,
     required int nbOfGames,
   }) {
     return [
