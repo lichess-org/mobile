@@ -57,6 +57,8 @@ class OnlineFriends extends _$OnlineFriends {
     });
     if (!_socketClient.isActive) {
       _socketClient.connect();
+    } else {
+      _socketClient.send('following_onlines', null);
     }
   }
 
