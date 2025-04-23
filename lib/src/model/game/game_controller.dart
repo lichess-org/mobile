@@ -5,10 +5,10 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -57,8 +57,8 @@ class GameController extends _$GameController {
   /// It will also help with lila-ws restarts.
   Timer? _transientMoveTimer;
 
-  /// Callback to be called when the socket connection is unable to solve an event gap for a while.
-  VoidCallback? _onEventGapFailure;
+  /// Callback to be called when a full reload is needed.
+  VoidCallback? _onFullReload;
 
   final _onFlagThrottler = Throttler(const Duration(milliseconds: 500));
 
@@ -72,15 +72,20 @@ class GameController extends _$GameController {
   @override
   Future<GameState> build(GameFullId gameFullId) {
     _socketClient = _openSocket();
-    _onEventGapFailure = _reloadGame;
+
+    _onFullReload = () {
+      _logger.warning('full reload triggered');
+      ref.invalidateSelf();
+    };
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _opponentLeftCountdownTimer?.cancel();
       _transientMoveTimer?.cancel();
       _clock?.dispose();
+      _clock = null;
       _onFlagThrottler.cancel();
-      _onEventGapFailure = null;
+      _onFullReload = null;
     });
 
     _socketSubscription?.cancel();
@@ -123,7 +128,7 @@ class GameController extends _$GameController {
         gameFullId: gameFullId,
         game: game,
         stepCursor: game.steps.length - 1,
-        liveClock: _liveClock,
+        liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
       );
     });
   }
@@ -401,16 +406,12 @@ class GameController extends _$GameController {
     _socketClient.send('rematch-no', null);
   }
 
-  /// Gets the live game clock if available.
-  LiveGameClock? get _liveClock =>
-      _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null;
-
   SocketClient _openSocket() {
     return _socketPool.open(
       socketUri(gameFullId),
       forceReconnect: true,
       onEventGapFailure: () {
-        _onEventGapFailure?.call();
+        _onFullReload?.call();
       },
     );
   }
@@ -496,7 +497,7 @@ class GameController extends _$GameController {
       if (event.version != null) {
         _logger.warning('received $event while game state not yet available');
         // not sure whether this can happen so log it
-        FirebaseCrashlytics.instance.recordError(
+        LichessBinding.instance.firebaseCrashlytics.recordError(
           'received $event while game state not yet available',
           null,
           reason: 'versioned socket event received before game state available',
@@ -522,10 +523,8 @@ class GameController extends _$GameController {
 
         state = AsyncValue.data(
           state.requireValue.copyWith(
-            gameFullId: gameFullId,
             game: fullEvent.game,
             stepCursor: fullEvent.game.steps.length - 1,
-            liveClock: _liveClock,
             // cancel the premove to avoid playing wrong premove when the full
             // game data is reloaded
             premove: null,
@@ -534,7 +533,7 @@ class GameController extends _$GameController {
 
       // Server asking for a resync
       case 'resync':
-        _reloadGame();
+        _onFullReload?.call();
 
       // Server asking for a reload, or in some cases the reload itself contains
       // another topic message

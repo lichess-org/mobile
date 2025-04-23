@@ -69,6 +69,7 @@ class GameListTile extends StatelessWidget {
             context,
             game: item.game,
             orientation: item.pov,
+            loadingFen: game.lastFen,
             loadingLastMove: game.lastMove,
             lastMoveAt: game.lastMoveAt,
             gameListContext: gameListContext,

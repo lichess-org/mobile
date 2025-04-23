@@ -142,59 +142,29 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final provider = currentGameProvider(widget.seek, widget.challenge, widget.initialGameId);
+    final provider = currentGameProvider(
+      seek: widget.seek,
+      challenge: widget.challenge,
+      game:
+          widget.initialGameId != null
+              ? (
+                gameId: widget.initialGameId!,
+                lastFen: widget.loadingFen,
+                lastMove: widget.loadingLastMove,
+                side: widget.loadingOrientation,
+              )
+              : null,
+    );
 
     switch (ref.watch(provider)) {
       case AsyncData(:final value):
-        final (gameFullId: gameId, challenge: challenge, declineReason: declineReason) = value;
+        final (game: loadedGame, challenge: challenge, declineReason: declineReason) = value;
         final shouldPreventGoingBackAsync =
-            gameId != null
-                ? ref.watch(shouldPreventGoingBackProvider(gameId))
+            loadedGame != null
+                ? ref.watch(shouldPreventGoingBackProvider(loadedGame.gameId))
                 : const AsyncValue.data(true);
-        final body =
-            gameId != null
-                ? GameBody(
-                  id: gameId,
-                  loadingBoardWidget: StandaloneGameLoadingBoard(
-                    fen: widget.loadingFen,
-                    lastMove: widget.loadingLastMove,
-                    orientation: widget.loadingOrientation,
-                  ),
-                  whiteClockKey: _whiteClockKey,
-                  blackClockKey: _blackClockKey,
-                  boardKey: _boardKey,
-                  onLoadGameCallback: (id) {
-                    if (mounted) {
-                      ref.read(provider.notifier).loadGame(id);
-                    }
-                  },
-                  onNewOpponentCallback: (game) {
-                    if (!mounted) return;
 
-                    if (widget.source == _GameSource.lobby) {
-                      ref.read(provider.notifier).newOpponent();
-                    } else {
-                      final savedSetup = ref.read(gameSetupPreferencesProvider);
-                      Navigator.of(context, rootNavigator: true).pushReplacement(
-                        GameScreen.buildRoute(
-                          context,
-                          seek: GameSeek.newOpponentFromGame(game, savedSetup),
-                        ),
-                      );
-                    }
-                  },
-                )
-                : widget.challenge != null && challenge != null
-                ? ChallengeDeclinedBoard(
-                  challenge: challenge,
-                  declineReason:
-                      declineReason != null
-                          ? declineReason.label(context.l10n)
-                          : ChallengeDeclineReason.generic.label(context.l10n),
-                )
-                : const LoadGameError('Could not create the game.');
-
-        final socketUri = gameId != null ? GameController.socketUri(gameId) : null;
+        final socketUri = loadedGame != null ? GameController.socketUri(loadedGame.gameId) : null;
 
         return Scaffold(
           resizeToAvoidBottomInset: false,
@@ -204,8 +174,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
               orElse: () => null,
             ),
             title:
-                gameId != null
-                    ? _StandaloneGameTitle(id: gameId, lastMoveAt: widget.lastMoveAt)
+                loadedGame != null
+                    ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
                     : widget.seek != null
                     ? _LobbyGameTitle(seek: widget.seek!)
                     : widget.challenge != null
@@ -213,11 +183,47 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                     : const SizedBox.shrink(),
 
             actions: [
-              if (gameId != null)
-                _GameMenu(gameId: gameId, gameListContext: widget.gameListContext),
+              if (loadedGame != null)
+                _GameMenu(gameId: loadedGame.gameId, gameListContext: widget.gameListContext),
             ],
           ),
-          body: body,
+          body:
+              loadedGame != null
+                  ? GameBody(
+                    loadedGame: loadedGame,
+                    whiteClockKey: _whiteClockKey,
+                    blackClockKey: _blackClockKey,
+                    boardKey: _boardKey,
+                    onLoadGameCallback: (id) {
+                      if (mounted) {
+                        ref.read(provider.notifier).loadGame(id);
+                      }
+                    },
+                    onNewOpponentCallback: (game) {
+                      if (!mounted) return;
+
+                      if (widget.source == _GameSource.lobby) {
+                        ref.read(provider.notifier).newOpponent();
+                      } else {
+                        final savedSetup = ref.read(gameSetupPreferencesProvider);
+                        Navigator.of(context, rootNavigator: true).pushReplacement(
+                          GameScreen.buildRoute(
+                            context,
+                            seek: GameSeek.newOpponentFromGame(game, savedSetup),
+                          ),
+                        );
+                      }
+                    },
+                  )
+                  : widget.challenge != null && challenge != null
+                  ? ChallengeDeclinedBoard(
+                    challenge: challenge,
+                    declineReason:
+                        declineReason != null
+                            ? declineReason.label(context.l10n)
+                            : ChallengeDeclineReason.generic.label(context.l10n),
+                  )
+                  : const LoadGameError('Could not create the game.'),
         );
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameScreen] could not create game; $e\n$s');
@@ -230,8 +236,6 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                   'Sorry, we could not create the game. Please try again later.',
                 );
 
-        final body = PopScope(child: message);
-
         return Scaffold(
           appBar: AppBar(
             leading: const SocketPingRating(),
@@ -242,7 +246,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                     ? _ChallengeGameTitle(challenge: widget.challenge!)
                     : const SizedBox.shrink(),
           ),
-          body: body,
+          body: PopScope(child: message),
         );
       case _:
         final loadingBoard =

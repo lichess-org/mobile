@@ -1,4 +1,4 @@
-import 'package:dartchess/dartchess.dart' show Side;
+import 'package:dartchess/dartchess.dart' show Move, Side;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -11,6 +11,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_screen_providers.g.dart';
 
+typedef LoadedGame = ({GameFullId gameId, String? lastFen, Move? lastMove, Side? side});
+typedef CurrentGameState =
+    ({LoadedGame? game, Challenge? challenge, ChallengeDeclineReason? declineReason});
+
 /// A provider that returns the currently loaded [GameFullId] for the [GameScreen].
 ///
 /// If the [gameId] is provided, it will simply return it.
@@ -18,9 +22,13 @@ part 'game_screen_providers.g.dart';
 @riverpod
 class CurrentGame extends _$CurrentGame {
   @override
-  Future<ChallengeResponse> build(GameSeek? seek, ChallengeRequest? challenge, GameFullId? gameId) {
+  Future<CurrentGameState> build({
+    GameSeek? seek,
+    ChallengeRequest? challenge,
+    ({GameFullId gameId, String? lastFen, Move? lastMove, Side? side})? game,
+  }) {
     assert(
-      gameId != null || seek != null || challenge != null,
+      game != null || seek != null || challenge != null,
       'Either a seek, challenge or a game id must be provided.',
     );
 
@@ -29,12 +37,29 @@ class CurrentGame extends _$CurrentGame {
     if (seek != null) {
       return service
           .newLobbyGame(seek)
-          .then((id) => (gameFullId: id, challenge: null, declineReason: null));
+          .then(
+            (id) => (
+              game: (gameId: id, lastFen: null, lastMove: null, side: null),
+              challenge: null,
+              declineReason: null,
+            ),
+          );
     } else if (challenge != null) {
-      return service.newRealTimeChallenge(challenge);
+      return service
+          .newRealTimeChallenge(challenge)
+          .then(
+            (data) => (
+              game:
+                  data.gameFullId != null
+                      ? (gameId: data.gameFullId!, lastFen: null, lastMove: null, side: null)
+                      : null,
+              challenge: data.challenge,
+              declineReason: data.declineReason,
+            ),
+          );
     }
 
-    return Future.value((gameFullId: gameId!, challenge: null, declineReason: null));
+    return Future.value((game: game!, challenge: null, declineReason: null));
   }
 
   /// Search for a new opponent (lobby only).
@@ -45,14 +70,24 @@ class CurrentGame extends _$CurrentGame {
       state = AsyncValue.data(
         await service
             .newLobbyGame(seek!)
-            .then((id) => (gameFullId: id, challenge: null, declineReason: null)),
+            .then(
+              (id) => (
+                game: (gameId: id, lastFen: null, lastMove: null, side: null),
+                challenge: null,
+                declineReason: null,
+              ),
+            ),
       );
     }
   }
 
   /// Load a game from its id.
   void loadGame(GameFullId id) {
-    state = AsyncValue.data((gameFullId: id, challenge: null, declineReason: null));
+    state = AsyncValue.data((
+      game: (gameId: id, lastFen: null, lastMove: null, side: null),
+      challenge: null,
+      declineReason: null,
+    ));
   }
 }
 

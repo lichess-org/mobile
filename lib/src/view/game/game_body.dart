@@ -48,17 +48,15 @@ import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 /// prevent the user from going back to the previous screen.
 class GameBody extends ConsumerWidget {
   const GameBody({
-    required this.id,
+    required this.loadedGame,
     required this.whiteClockKey,
     required this.blackClockKey,
     required this.onLoadGameCallback,
     required this.onNewOpponentCallback,
-    required this.loadingBoardWidget,
     required this.boardKey,
   });
 
-  /// The [GameFullId] of the game.
-  final GameFullId id;
+  final LoadedGame loadedGame;
 
   /// [GlobalKey] for the white clock.
   ///
@@ -85,12 +83,9 @@ class GameBody extends ConsumerWidget {
   /// Callback to load a new opponent.
   final void Function(PlayableGame game) onNewOpponentCallback;
 
-  /// Board widget to display when the game is loading.
-  final Widget loadingBoardWidget;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = gameControllerProvider(id);
+    final ctrlProvider = gameControllerProvider(loadedGame.gameId);
 
     ref.listen(
       ctrlProvider,
@@ -98,21 +93,23 @@ class GameBody extends ConsumerWidget {
     );
 
     final boardPreferences = ref.watch(boardPreferencesProvider);
-    final blindfoldMode = ref.watch(gamePreferencesProvider.select((prefs) => prefs.blindfoldMode));
-    final enableChat = ref.watch(
-      gamePreferencesProvider.select((prefs) => prefs.enableChat ?? false),
-    );
+    final gamePrefs = ref.watch(gamePreferencesProvider);
+    final blindfoldMode = gamePrefs.blindfoldMode ?? false;
+    final enableChat = gamePrefs.enableChat ?? false;
     final kidModeAsync = ref.watch(kidModeProvider);
 
-    final gameStateAsync = ref.watch(ctrlProvider);
-
-    return gameStateAsync.when(
-      data: (gameState) {
+    switch (ref.watch(ctrlProvider)) {
+      case AsyncError(error: final e, stackTrace: final s):
+        debugPrint('SEVERE: [GameBody] could not load game data; $e\n$s');
+        return const PopScope(
+          child: LoadGameError('Sorry, we could not load the game. Please try again later.'),
+        );
+      case AsyncData(value: final gameState, isRefreshing: false):
         final isChatEnabled =
             enableChat && !gameState.isZenModeActive && kidModeAsync.valueOrNull == false;
         if (isChatEnabled) {
           ref.listen(
-            chatControllerProvider(id),
+            chatControllerProvider(loadedGame.gameId),
             (prev, state) => _chatListener(prev, state, context: context, ref: ref),
           );
         }
@@ -302,7 +299,7 @@ class GameBody extends ConsumerWidget {
                     ),
                   ),
                   _GameBottomBar(
-                    id: id,
+                    id: loadedGame.gameId,
                     onLoadGameCallback: onLoadGameCallback,
                     onNewOpponentCallback: onNewOpponentCallback,
                   ),
@@ -322,28 +319,53 @@ class GameBody extends ConsumerWidget {
               child: content,
             )
             : content;
-      },
-      loading:
-          () => PopScope(
-            canPop: true,
-            child: Column(
-              children: [
-                Expanded(child: SafeArea(bottom: false, child: loadingBoardWidget)),
-                _GameBottomBar(
-                  id: id,
-                  onLoadGameCallback: onLoadGameCallback,
-                  onNewOpponentCallback: onNewOpponentCallback,
+      case AsyncData(:final value, isRefreshing: true):
+        return PopScope(
+          canPop: false,
+          child: Column(
+            children: [
+              Expanded(
+                child: SafeArea(
+                  bottom: false,
+                  child: StandaloneGameLoadingBoard(
+                    fen: value.game.lastPosition.fen,
+                    lastMove: value.game.moveAt(value.stepCursor) as NormalMove?,
+                    orientation: value.game.youAre,
+                  ),
                 ),
-              ],
-            ),
+              ),
+              _GameBottomBar(
+                id: loadedGame.gameId,
+                onLoadGameCallback: onLoadGameCallback,
+                onNewOpponentCallback: onNewOpponentCallback,
+              ),
+            ],
           ),
-      error: (e, s) {
-        debugPrint('SEVERE: [GameBody] could not load game data; $e\n$s');
-        return const PopScope(
-          child: LoadGameError('Sorry, we could not load the game. Please try again later.'),
         );
-      },
-    );
+      case final _:
+        return PopScope(
+          canPop: true,
+          child: Column(
+            children: [
+              Expanded(
+                child: SafeArea(
+                  bottom: false,
+                  child: StandaloneGameLoadingBoard(
+                    fen: loadedGame.lastFen,
+                    lastMove: loadedGame.lastMove,
+                    orientation: loadedGame.side,
+                  ),
+                ),
+              ),
+              _GameBottomBar(
+                id: loadedGame.gameId,
+                onLoadGameCallback: onLoadGameCallback,
+                onNewOpponentCallback: onNewOpponentCallback,
+              ),
+            ],
+          ),
+        );
+    }
   }
 
   void _chatListener(
@@ -375,8 +397,10 @@ class GameBody extends ConsumerWidget {
             showAdaptiveDialog<void>(
               context: context,
               builder:
-                  (context) =>
-                      GameResultDialog(id: id, onNewOpponentCallback: onNewOpponentCallback),
+                  (context) => GameResultDialog(
+                    id: loadedGame.gameId,
+                    onNewOpponentCallback: onNewOpponentCallback,
+                  ),
               barrierDismissible: true,
             );
           }
@@ -406,7 +430,7 @@ class GameBody extends ConsumerWidget {
         if (context.mounted) {
           showAdaptiveDialog<void>(
             context: context,
-            builder: (context) => _ClaimWinDialog(id: id),
+            builder: (context) => _ClaimWinDialog(id: loadedGame.gameId),
             barrierDismissible: true,
           );
         }
