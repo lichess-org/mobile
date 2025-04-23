@@ -45,10 +45,6 @@ class GameController extends _$GameController {
 
   StreamSubscription<SocketEvent>? _socketSubscription;
 
-  /// Periodic timer when the opponent has left the game, to display the countdown
-  /// until the player can claim victory.
-  Timer? _opponentLeftCountdownTimer;
-
   /// Tracks moves that were played on the board, sent to the server, possibly
   /// acked, but without a move response from the server yet.
   /// After a delay, it will trigger a reload. This might fix bugs where the
@@ -80,7 +76,6 @@ class GameController extends _$GameController {
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
-      _opponentLeftCountdownTimer?.cancel();
       _transientMoveTimer?.cancel();
       _clock?.dispose();
       _clock = null;
@@ -486,7 +481,7 @@ class GameController extends _$GameController {
     }
   }
 
-  /// Reload full game
+  /// Reload game
   void _reloadGame() {
     _logger.info('Reloading game data');
     _socketClient.connect();
@@ -521,6 +516,9 @@ class GameController extends _$GameController {
           );
         }
 
+        final isOpponentOnGame =
+            fullEvent.game.playerOf(fullEvent.game.youAre?.opposite ?? Side.white).onGame ?? false;
+
         state = AsyncValue.data(
           state.requireValue.copyWith(
             game: fullEvent.game,
@@ -528,6 +526,12 @@ class GameController extends _$GameController {
             // cancel the premove to avoid playing wrong premove when the full
             // game data is reloaded
             premove: null,
+            // cancel the promotion
+            promotionMove: null,
+            // cancel move confirmation
+            moveToConfirm: null,
+            opponentLeftCountdown:
+                isOpponentOnGame ? null : state.requireValue.opponentLeftCountdown,
           ),
         );
 
@@ -739,14 +743,12 @@ class GameController extends _$GameController {
         if (whiteOnGame != null) {
           newState = newState.copyWith.game(white: newState.game.white.setOnGame(whiteOnGame));
           if (opponent == Side.white && whiteOnGame == true) {
-            _opponentLeftCountdownTimer?.cancel();
             newState = newState.copyWith(opponentLeftCountdown: null);
           }
         }
         if (blackOnGame != null) {
           newState = newState.copyWith.game(black: newState.game.black.setOnGame(blackOnGame));
           if (opponent == Side.black && blackOnGame == true) {
-            _opponentLeftCountdownTimer?.cancel();
             newState = newState.copyWith(opponentLeftCountdown: null);
           }
         }
@@ -756,7 +758,6 @@ class GameController extends _$GameController {
       // than we can claim victory
       case 'gone':
         final isGone = event.data as bool;
-        _opponentLeftCountdownTimer?.cancel();
         GameState newState = state.requireValue;
         final youAre = newState.game.youAre;
         newState = newState.copyWith.game(
@@ -769,25 +770,9 @@ class GameController extends _$GameController {
       // before claiming victory is possible
       case 'goneIn':
         final timeLeft = Duration(seconds: event.data as int);
-        state = AsyncValue.data(state.requireValue.copyWith(opponentLeftCountdown: timeLeft));
-        _opponentLeftCountdownTimer?.cancel();
-        _opponentLeftCountdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
-          final curState = state.requireValue;
-          final opponentLeftCountdown = curState.opponentLeftCountdown;
-          if (opponentLeftCountdown == null) {
-            _opponentLeftCountdownTimer?.cancel();
-          } else if (!curState.canShowClaimWinCountdown) {
-            _opponentLeftCountdownTimer?.cancel();
-            state = AsyncValue.data(curState.copyWith(opponentLeftCountdown: null));
-          } else {
-            final newTime = opponentLeftCountdown - const Duration(seconds: 1);
-            if (newTime <= Duration.zero) {
-              _opponentLeftCountdownTimer?.cancel();
-              state = AsyncValue.data(curState.copyWith(opponentLeftCountdown: null));
-            }
-            state = AsyncValue.data(curState.copyWith(opponentLeftCountdown: newTime));
-          }
-        });
+        state = AsyncValue.data(
+          state.requireValue.copyWith(opponentLeftCountdown: (timeLeft, DateTime.now())),
+        );
 
       // Event sent when a player adds or cancels a draw offer
       case 'drawOffer':
@@ -968,7 +953,7 @@ class GameState with _$GameState {
     required int stepCursor,
     required LiveGameClock? liveClock,
     int? lastDrawOfferAtPly,
-    Duration? opponentLeftCountdown,
+    (Duration, DateTime)? opponentLeftCountdown,
 
     /// Promotion waiting to be selected (only if auto queen is disabled)
     NormalMove? promotionMove,
