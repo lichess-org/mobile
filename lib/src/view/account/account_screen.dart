@@ -55,6 +55,7 @@ class _AccountIconButtonState extends ConsumerState<AccountIconButton> {
               value == null
                   ? const Icon(Icons.account_circle_outlined, size: 30)
                   : CircleAvatar(
+                    radius: 16,
                     foregroundImage:
                         value.flair != null
                             ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
