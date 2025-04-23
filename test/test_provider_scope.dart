@@ -10,7 +10,6 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
@@ -28,7 +27,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import './fake_crashlytics.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/analysis/fake_opening_service.dart';
@@ -217,8 +215,6 @@ Future<Widget> makeTestProviderScope(
       connectivityPluginProvider.overrideWith((_) => FakeConnectivity()),
       // ignore: scoped_providers_should_specify_dependencies
       showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
-      // ignore: scoped_providers_should_specify_dependencies
-      crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       // ignore: scoped_providers_should_specify_dependencies

@@ -8,6 +8,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
@@ -369,10 +370,15 @@ class SocketClient {
             () => _handleEvent(event, retries - 1),
           );
         } else {
+          onEventGapFailure?.call();
           _logger.severe(
             'Cannot solve event gap: version incoming ${event.version} vs current $version',
           );
-          onEventGapFailure?.call();
+          LichessBinding.instance.firebaseCrashlytics.recordError(
+            'Cannot solve event gap: version incoming ${event.version} vs current $version',
+            null,
+            information: ['socket.route: $route', 'event.topic: ${event.topic}'],
+          );
         }
         return;
       }

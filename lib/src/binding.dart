@@ -71,6 +71,9 @@ abstract class LichessBinding {
   /// Wraps [FirebaseMessaging.instance].
   FirebaseMessaging get firebaseMessaging;
 
+  /// Wraps [FirebaseCrashlytics.instance].
+  FirebaseCrashlytics get firebaseCrashlytics;
+
   /// Wraps [FirebaseMessaging.onMessage].
   Stream<RemoteMessage> get firebaseMessagingOnMessage;
 
@@ -138,12 +141,12 @@ class AppLichessBinding extends LichessBinding {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
     if (kReleaseMode) {
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+      FlutterError.onError = firebaseCrashlytics.recordFlutterFatalError;
       PlatformDispatcher.instance.onError = (error, stack) {
         if (kDebugMode) {
           return false;
         } else {
-          FirebaseCrashlytics.instance.recordError(error, stack);
+          firebaseCrashlytics.recordError(error, stack);
           return true;
         }
       };
@@ -152,6 +155,9 @@ class AppLichessBinding extends LichessBinding {
 
   @override
   FirebaseMessaging get firebaseMessaging => FirebaseMessaging.instance;
+
+  @override
+  FirebaseCrashlytics get firebaseCrashlytics => FirebaseCrashlytics.instance;
 
   @override
   void firebaseMessagingOnBackgroundMessage(BackgroundMessageHandler handler) {

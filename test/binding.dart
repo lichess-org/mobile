@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
@@ -86,10 +87,16 @@ class TestLichessBinding extends LichessBinding {
     _sharedPreferences = null;
   }
 
+  FirebaseCrashlytics? _firebaseCrashlytics;
   FakeFirebaseMessaging? _firebaseMessaging;
 
   @override
   Future<void> initializeFirebase() async {}
+
+  @override
+  FirebaseCrashlytics get firebaseCrashlytics {
+    return _firebaseCrashlytics ??= FakeFirebaseCrashlytics();
+  }
 
   @override
   FakeFirebaseMessaging get firebaseMessaging {
@@ -210,6 +217,18 @@ typedef FirebaseMessagingRequestPermissionCall =
       bool provisional,
       bool sound,
     });
+
+class FakeFirebaseCrashlytics extends Fake implements FirebaseCrashlytics {
+  @override
+  Future<void> recordError(
+    dynamic exception,
+    StackTrace? stack, {
+    dynamic reason,
+    Iterable<Object> information = const [],
+    bool? printDetails,
+    bool fatal = false,
+  }) async {}
+}
 
 class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   /// Whether [requestPermission] will grant permission.

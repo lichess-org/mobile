@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../binding.dart';
 import 'fake_websocket_channel.dart';
 
 final defaultSocketUri = Uri(path: kDefaultSocketRoute);
@@ -49,6 +50,8 @@ SocketClient makeTestSocketClient({
 }
 
 void main() {
+  TestLichessBinding.ensureInitialized();
+
   group('SocketClient', () {
     test('handles ping/pong', () async {
       final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
