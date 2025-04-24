@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 const kGameCarouselFlexWeights = [6, 2];
-const kGameCarouselPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0);
+const kGameCarouselPadding = EdgeInsets.symmetric(horizontal: 8.0);
 
 /// A widget that displays a carousel of games.
 class GamesCarousel<T> extends StatefulWidget {
