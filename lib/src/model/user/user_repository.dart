@@ -262,7 +262,7 @@ Streamer _streamersFromPick(RequiredPick pick) {
     streamerName: streamer('name').asStringOrThrow(),
     headline: streamer('headline').asStringOrNull(),
     title: pick('title').asStringOrNull(),
-    image: streamer('image').asStringOrThrow(),
+    image: streamer('image').asStringOrNull(),
     twitch: streamer('twitch').asStringOrNull(),
     youTube: streamer('youTube').asStringOrNull(),
   );

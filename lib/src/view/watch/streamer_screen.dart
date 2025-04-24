@@ -69,12 +69,22 @@ class StreamerListTile extends StatelessWidget {
       }
     }
 
-    final leading = Image.network(
-      streamer.image,
-      width: thumbnailSize,
-      height: thumbnailSize,
-      fit: BoxFit.cover,
-    );
+    final leading =
+        streamer.image != null
+            ? Image.network(
+              streamer.image!,
+              width: thumbnailSize,
+              height: thumbnailSize,
+              fit: BoxFit.cover,
+            )
+            : Image.asset(
+              Theme.of(context).brightness == Brightness.light
+                  ? 'assets/images/logo-black.png'
+                  : 'assets/images/logo-white.png',
+              width: thumbnailSize,
+              height: thumbnailSize,
+              fit: BoxFit.cover,
+            );
 
     final title = Row(
       children: [

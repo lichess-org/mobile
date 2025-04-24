@@ -13,7 +13,7 @@ class Streamer with _$Streamer {
     required String platform,
     required String lang,
     required String streamerName,
-    required String image,
+    String? image,
     String? headline,
     String? title,
     bool? patron,
