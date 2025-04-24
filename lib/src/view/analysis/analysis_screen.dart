@@ -338,7 +338,7 @@ class _BottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
             onPressed: () {
-              final boardUrl = lichessUri('/${analysisState.gameId}');
+              final boardUrl = lichessUri('/${analysisState.gameId}/${analysisState.pov.name}');
               launchShareDialog(context, uri: boardUrl);
             },
           ),
