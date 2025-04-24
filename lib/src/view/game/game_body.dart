@@ -616,7 +616,7 @@ class _GameBottomBar extends ConsumerWidget {
                               ref.read(gameControllerProvider(id).notifier).resignGame();
                             }
                         : null,
-                icon: Icons.flag,
+                icon: Icons.flag_outlined,
               ),
             if (kidModeAsync.valueOrNull == false)
               BottomBarButton(
