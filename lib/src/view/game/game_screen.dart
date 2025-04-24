@@ -289,6 +289,7 @@ class _GameMenu extends ConsumerWidget {
     final isBookmarkedAsync = ref.watch(isGameBookmarkedProvider(gameId));
 
     return ContextMenuButton(
+      consumeOutsideTap: false,
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
       actions: [

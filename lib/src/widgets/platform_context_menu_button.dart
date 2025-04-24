@@ -9,18 +9,20 @@ class ContextMenuButton extends StatelessWidget {
     required this.icon,
     required this.semanticsLabel,
     required this.actions,
+    this.consumeOutsideTap = true,
     super.key,
   });
 
   final Widget icon;
   final String semanticsLabel;
   final List<Widget> actions;
+  final bool consumeOutsideTap;
 
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
       crossAxisUnconstrained: false,
-      consumeOutsideTap: true,
+      consumeOutsideTap: consumeOutsideTap,
       style: MenuStyle(
         maximumSize: WidgetStatePropertyAll(
           Size(MediaQuery.sizeOf(context).width * 0.6, MediaQuery.sizeOf(context).height * 0.8),
