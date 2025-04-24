@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -142,20 +141,11 @@ class _OnlineFriendListTile extends ConsumerWidget {
           playing
               ? IconButton(
                 tooltip: context.l10n.watchGames,
-                onPressed: () async {
-                  final game = await ref.withClient(
-                    (client) => UserRepository(client).getCurrentGame(user.id),
-                  );
-                  if (context.mounted) {
-                    Navigator.of(context, rootNavigator: true).push(
-                      TvScreen.buildRoute(
-                        context,
-                        gameId: game.id,
-                        user: user,
-                        orientation: game.playerSideOf(user.id),
-                      ),
-                    );
-                  }
+                onPressed: () {
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(TvScreen.buildRoute(context, user: user));
                 },
                 icon: const Icon(Icons.live_tv),
               )

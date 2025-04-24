@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -27,7 +28,7 @@ part 'tv_controller.g.dart';
 class TvController extends _$TvController {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
-  VoidCallback? _onEventGapFailure;
+  VoidCallback? _onReload;
 
   @override
   Future<TvState> build(
@@ -35,13 +36,13 @@ class TvController extends _$TvController {
     (GameId id, Side orientation)? initialGame,
     UserId? userId,
   }) {
-    assert(channel != null || initialGame != null, 'Either a channel or a game must be provided');
+    assert(channel != null || userId != null, 'Either a channel or a userId must be provided');
 
-    _onEventGapFailure = () => _connectWebsocket(null);
+    _onReload = ref.invalidateSelf;
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
-      _onEventGapFailure = null;
+      _onReload = null;
     });
 
     return _connectWebsocket(initialGame);
@@ -70,6 +71,10 @@ class TvController extends _$TvController {
       final channelGame = channels[channel!]!;
       id = channelGame.id;
       orientation = channelGame.side ?? Side.white;
+    } else if (userId != null) {
+      final game = await ref.withClient((client) => UserRepository(client).getCurrentGame(userId!));
+      id = game.id;
+      orientation = game.playerSideOf(userId!) ?? Side.white;
     } else {
       id = state.valueOrNull?.game.id ?? initialGame!.$1;
       orientation = state.valueOrNull?.orientation ?? initialGame!.$2;
@@ -84,7 +89,7 @@ class TvController extends _$TvController {
           ),
           forceReconnect: true,
           onEventGapFailure: () {
-            _onEventGapFailure?.call();
+            _onReload?.call();
           },
         );
 
@@ -161,6 +166,22 @@ class TvController extends _$TvController {
     }
 
     switch (event.topic) {
+      case 'resync':
+        _onReload?.call();
+      case 'reload':
+        if (event.data is Map<String, dynamic>) {
+          final data = event.data as Map<String, dynamic>;
+          if (data['t'] == null) {
+            _onReload?.call();
+            return;
+          }
+          final reloadEvent = SocketEvent(topic: data['t'] as String, data: data['d']);
+          _handleSocketEvent(reloadEvent);
+        } else {
+          _onReload?.call();
+        }
+      case 'rematchTaken':
+        _onReload?.call();
       case 'move':
         final curState = state.requireValue;
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
@@ -216,7 +237,7 @@ class TvController extends _$TvController {
       case 'tvSelect':
         final json = event.data as Map<String, dynamic>;
         final eventChannel = pick(json, 'channel').asTvChannelOrNull();
-        if (eventChannel == channel) {
+        if (eventChannel != null && eventChannel == channel) {
           final data = TvSelectEvent.fromJson(json);
           _moveToNextGame((data.id, data.orientation));
         }

@@ -22,10 +22,7 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({this.channel, this.initialGame, this.user, super.key})
-    : assert(
-        channel != null || (initialGame != null && user != null),
-        'Either channel or initialGame and user must be provided',
-      );
+    : assert(channel != null || user != null, 'Either channel or user must be provided');
 
   final TvChannel? channel;
   final (GameId id, Side orientation)? initialGame;

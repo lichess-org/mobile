@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/view/user/perf_cards.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
+import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
@@ -120,6 +121,16 @@ class _UserProfileListView extends ConsumerWidget {
           ListSection(
             hasLeading: true,
             children: [
+              ListTile(
+                title: Text(context.l10n.watchGames),
+                leading: const Icon(Icons.live_tv_outlined),
+                onTap: () {
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(TvScreen.buildRoute(context, user: user.lightUser));
+                },
+              ),
               if (user.canChallenge == true)
                 ListTile(
                   title: Text(context.l10n.challengeChallengeToPlay),
