@@ -103,12 +103,7 @@ ThemeData _makeDefaultTheme(
           : ThemeData.from(colorScheme: defaultScheme, textTheme: textTheme);
 
   return theme.copyWith(
-    cupertinoOverrideTheme: CupertinoThemeData(
-      applyThemeToAll: true,
-      primaryColor: theme.colorScheme.primary,
-      primaryContrastingColor: theme.colorScheme.onPrimary,
-      brightness: brightness,
-    ),
+    cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     appBarTheme: _appBarTheme,
     iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
@@ -124,16 +119,7 @@ ThemeData _makeDefaultTheme(
             )
             : null,
     dialogTheme: isIOS ? _kCupertinoDialogTheme : null,
-    filledButtonTheme:
-        isIOS
-            ? const FilledButtonThemeData(
-              style: ButtonStyle(
-                shape: WidgetStatePropertyAll(
-                  RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-                ),
-              ),
-            )
-            : null,
+    filledButtonTheme: isIOS ? _kCupertinoFilledButtonTheme : null,
     menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
     bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
     sliderTheme: kSliderTheme,
@@ -147,8 +133,6 @@ ThemeData _makeBackgroundImageTheme({
   required bool isIOS,
   required bool isBackgroundImage,
 }) {
-  final primary = baseTheme.colorScheme.primary;
-  final onPrimary = baseTheme.colorScheme.onPrimary;
   final baseSurfaceAlpha = isBackgroundImage ? 0.5 : 0.3;
 
   return baseTheme.copyWith(
@@ -170,13 +154,7 @@ ThemeData _makeBackgroundImageTheme({
       surfaceDim: baseTheme.colorScheme.surfaceDim.withValues(alpha: baseSurfaceAlpha + 1),
       surfaceBright: baseTheme.colorScheme.surfaceBright.withValues(alpha: baseSurfaceAlpha - 2),
     ),
-    cupertinoOverrideTheme: CupertinoThemeData(
-      primaryColor: primary,
-      primaryContrastingColor: onPrimary,
-      brightness: Brightness.dark,
-      applyThemeToAll: true,
-    ),
-
+    cupertinoOverrideTheme: _makeCupertinoThemeData(baseTheme.colorScheme, baseTheme.brightness),
     listTileTheme: _makeListTileTheme(baseTheme.colorScheme, isIOS),
     cardTheme: isIOS ? _kCupertinoCardTheme : null,
     inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(baseTheme.colorScheme) : null,
@@ -193,6 +171,7 @@ ThemeData _makeBackgroundImageTheme({
     dialogTheme: (isIOS ? _kCupertinoDialogTheme : const DialogThemeData()).copyWith(
       backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
     ),
+    filledButtonTheme: isIOS ? _kCupertinoFilledButtonTheme : null,
     menuTheme:
         isIOS
             ? MenuThemeData(
@@ -228,6 +207,14 @@ ThemeData _makeBackgroundImageTheme({
     extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
   );
 }
+
+const _kCupertinoFilledButtonTheme = FilledButtonThemeData(
+  style: ButtonStyle(
+    shape: WidgetStatePropertyAll(
+      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+    ),
+  ),
+);
 
 const MenuThemeData _kCupertinoMenuThemeData = MenuThemeData(
   style: MenuStyle(elevation: WidgetStatePropertyAll(0)),
@@ -290,6 +277,27 @@ InputDecorationTheme _makeCupertinoInputDecorationTheme(ColorScheme colorScheme)
       borderSide: BorderSide(color: colorScheme.error),
       borderRadius: const BorderRadius.all(Radius.circular(8)),
     ),
+  );
+}
+
+CupertinoThemeData _makeCupertinoThemeData(ColorScheme colorScheme, Brightness brightness) {
+  return CupertinoThemeData(
+    applyThemeToAll: true,
+    primaryColor: colorScheme.primary,
+    primaryContrastingColor: colorScheme.onPrimary,
+    textTheme: const CupertinoThemeData().textTheme.copyWith(
+      primaryColor: colorScheme.primary,
+      textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(
+        color: colorScheme.onSurface,
+      ),
+      navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
+        color: colorScheme.onSurface,
+      ),
+      navLargeTitleTextStyle: const CupertinoThemeData().textTheme.navLargeTitleTextStyle.copyWith(
+        color: colorScheme.onSurface,
+      ),
+    ),
+    brightness: brightness,
   );
 }
 
