@@ -552,7 +552,7 @@ class SocketPool {
     _currentRoute = route;
 
     if (_pool[route] == null) {
-      _pool[route] = SocketClient(
+      final newClient = SocketClient(
         route,
         version: version,
         channelFactory: _ref.read(webSocketChannelFactoryProvider),
@@ -583,15 +583,13 @@ class SocketPool {
         },
         onEventGapFailure: onEventGapFailure,
       );
+      newClient.averageLag.addListener(() {
+        if (_currentRoute == newClient.route) {
+          _averageLag.value = newClient.averageLag.value;
+        }
+      });
+      _pool[route] = newClient;
     }
-
-    final client = _pool[route]!;
-
-    client.averageLag.addListener(() {
-      if (_currentRoute == client.route) {
-        _averageLag.value = client.averageLag.value;
-      }
-    });
 
     // ensure there is only one active connection
     _pool.forEach((k, c) {
@@ -600,6 +598,7 @@ class SocketPool {
       }
     });
 
+    final client = _pool[route]!;
     if (forceReconnect == true || !client.isActive) {
       client.connect();
     }
