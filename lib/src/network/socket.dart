@@ -658,12 +658,11 @@ class SocketPing extends _$SocketPing {
   @override
   SocketPingState build({Uri? route}) {
     final pool = ref.watch(socketPoolProvider);
-    final listenable = pool.averageLag;
 
-    listenable.addListener(_listener);
+    pool.averageLag.addListener(_listener);
 
     ref.onDispose(() {
-      listenable.removeListener(_listener);
+      pool.averageLag.removeListener(_listener);
     });
 
     return _getPing(_currentRouteLag);

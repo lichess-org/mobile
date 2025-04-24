@@ -141,7 +141,7 @@ class GameController extends _$GameController {
     if (_socketClient.route != socketUri(gameFullId)) {
       _socketClient = _openSocket();
     } else if (!_socketClient.isConnected) {
-      _reloadGame();
+      _socketClient.connect();
     }
   }
 
