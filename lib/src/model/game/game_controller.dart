@@ -508,14 +508,6 @@ class GameController extends _$GameController {
         final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
         _socketClient.version = fullEvent.socketEventVersion;
 
-        if (fullEvent.game.clock != null) {
-          _updateClock(
-            white: fullEvent.game.clock!.white,
-            black: fullEvent.game.clock!.black,
-            activeSide: state.requireValue.activeClockSide,
-          );
-        }
-
         final isOpponentOnGame =
             fullEvent.game.playerOf(fullEvent.game.youAre?.opposite ?? Side.white).onGame ?? false;
 
@@ -534,6 +526,14 @@ class GameController extends _$GameController {
                 isOpponentOnGame ? null : state.requireValue.opponentLeftCountdown,
           ),
         );
+
+        if (fullEvent.game.clock != null) {
+          _updateClock(
+            white: fullEvent.game.clock!.white,
+            black: fullEvent.game.clock!.black,
+            activeSide: state.requireValue.activeClockSide,
+          );
+        }
 
       // Server asking for a resync
       case 'resync':

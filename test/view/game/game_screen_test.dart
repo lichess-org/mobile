@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -129,6 +130,103 @@ void main() {
       expect(find.text('Steven'), findsOneWidget);
       expect(find.text('Waiting for opponent to join...'), findsNothing);
       expect(find.text('3+2'), findsNothing);
+    });
+  });
+
+  group('Game action negotiation', () {
+    testWidgets('takeback', (WidgetTester tester) async {
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Nf3',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+      );
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNWidgets(32));
+
+      // black plays
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t": "move", "v": 1, "d": {"ply": 4, "uci": "b8c6", "san": "Nc6", "clock": {"white": 58, "black": 52}}}',
+      ]);
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.byKey(const Key('c6-blackknight')), findsOneWidget);
+      expect(
+        tester.widgetList<Clock>(find.byType(Clock)).last.active,
+        true,
+        reason: 'white clock is active',
+      );
+      // white clock ticking
+      await tester.pump(const Duration(seconds: 1));
+      expect(findClockWithTime('0:56'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 1));
+      expect(findClockWithTime('0:55'), findsOneWidget);
+
+      // black asks for takeback
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t":"takebackOffers","v":2,"d":{"black":true}}',
+      ]);
+      await tester.pump(const Duration(milliseconds: 1));
+
+      // see takeback button
+      expect(find.byIcon(CupertinoIcons.arrowshape_turn_up_left), findsOneWidget);
+      await tester.tap(find.byIcon(CupertinoIcons.arrowshape_turn_up_left));
+      // wait for the popup to show (cannot use pumpAndSettle because of clocks)
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.tap(find.text('Accept'));
+      await tester.pump(const Duration(milliseconds: 10));
+      // server acknowledges the takeback and ask client to reload
+      sendServerSocketMessages(testGameSocketUri, ['{"v": 3}', '{"t":"reload","v":4,"d":null}']);
+      // wait for client to reconnect
+      await tester.pump(const Duration(milliseconds: 1));
+      // socket will reconnect, wait for connection
+      await tester.pump(kFakeWebSocketConnectionLag);
+      // server sends 'full' event immediately after reconnect
+      sendServerSocketMessages(testGameSocketUri, [
+        makeFullEvent(
+          const GameId('qVChCOTc'),
+          'e4 e5 Nf3',
+          whiteUserName: 'Peter',
+          blackUserName: 'Steven',
+          youAre: Side.white,
+          socketVersion: 5,
+          clock: (
+            running: true,
+            initial: const Duration(minutes: 1),
+            increment: Duration.zero,
+            white: const Duration(seconds: 55),
+            black: const Duration(seconds: 53),
+            emerg: const Duration(seconds: 10),
+          ),
+        ),
+      ]);
+      await tester.pump(const Duration(milliseconds: 1));
+
+      // black move is cancelled
+      expect(find.byKey(const Key('c6-blackknight')), findsNothing);
+      expect(find.byKey(const Key('b8-blackknight')), findsOneWidget);
+      expect(
+        tester.widgetList<Clock>(find.byType(Clock)).first.active,
+        true,
+        reason: 'black clock is active',
+      );
+      expect(
+        tester.widgetList<Clock>(find.byType(Clock)).last.active,
+        false,
+        reason: 'white clock is not active',
+      );
+      // black clock is ticking
+      await tester.pump(const Duration(seconds: 1));
+      expect(findClockWithTime('0:52'), findsOneWidget);
+      expect(findClockWithTime('0:55'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 1));
+      expect(findClockWithTime('0:51'), findsOneWidget);
+      expect(findClockWithTime('0:55'), findsOneWidget);
     });
   });
 
