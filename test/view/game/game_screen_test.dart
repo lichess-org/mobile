@@ -163,9 +163,9 @@ void main() {
       );
       // white clock ticking
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('0:56'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '0:56'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('0:55'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '0:55'), findsOneWidget);
 
       // black asks for takeback
       sendServerSocketMessages(testGameSocketUri, [
@@ -210,23 +210,15 @@ void main() {
       // black move is cancelled
       expect(find.byKey(const Key('c6-blackknight')), findsNothing);
       expect(find.byKey(const Key('b8-blackknight')), findsOneWidget);
-      expect(
-        tester.widgetList<Clock>(find.byType(Clock)).first.active,
-        true,
-        reason: 'black clock is active',
-      );
-      expect(
-        tester.widgetList<Clock>(find.byType(Clock)).last.active,
-        false,
-        reason: 'white clock is not active',
-      );
+      expect(tester.widget<Clock>(findClock(Side.black)).active, true);
+      expect(tester.widget<Clock>(findClock(Side.white)).active, false);
       // black clock is ticking
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('0:52'), findsOneWidget);
-      expect(findClockWithTime('0:55'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '0:52'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '0:55'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('0:51'), findsOneWidget);
-      expect(findClockWithTime('0:55'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '0:51'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '0:55'), findsOneWidget);
     });
   });
 
@@ -385,7 +377,8 @@ void main() {
   group('Clock', () {
     testWidgets('loads on game start', (WidgetTester tester) async {
       await createTestGame(tester);
-      expect(findClockWithTime('3:00'), findsNWidgets(2));
+      expect(findClockWithTime(Side.white, '3:00'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '3:00'), findsOneWidget);
       expect(
         tester
             .widgetList<Clock>(find.byType(Clock))
@@ -398,7 +391,8 @@ void main() {
 
     testWidgets('ticks after the first full move', (WidgetTester tester) async {
       await createTestGame(tester);
-      expect(findClockWithTime('3:00'), findsNWidgets(2));
+      expect(findClockWithTime(Side.white, '3:00'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '3:00'), findsOneWidget);
       await playMove(tester, 'e2', 'e4');
       // at that point clock is not yet started
       expect(
@@ -414,15 +408,11 @@ void main() {
         '{"t": "move", "v": 2, "d": {"ply": 2, "uci": "e7e5", "san": "e5", "clock": {"white": 180, "black": 180}}}',
       ]);
       await tester.pump(const Duration(milliseconds: 10));
-      expect(
-        tester.widgetList<Clock>(find.byType(Clock)).last.active,
-        true,
-        reason: 'my clock is now active',
-      );
+      expect(tester.widget<Clock>(findClock(Side.white)).active, true);
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('2:59'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '2:59'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('2:58'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '2:58'), findsOneWidget);
     });
 
     testWidgets('ticks immediately when resuming game', (WidgetTester tester) async {
@@ -438,17 +428,13 @@ void main() {
           emerg: Duration(seconds: 30),
         ),
       );
-      expect(
-        tester.widgetList<Clock>(find.byType(Clock)).first.active,
-        true,
-        reason: 'black clock is already active',
-      );
-      expect(findClockWithTime('2:58'), findsOneWidget);
-      expect(findClockWithTime('2:54'), findsOneWidget);
+      expect(tester.widget<Clock>(findClock(Side.black)).active, true);
+      expect(findClockWithTime(Side.white, '2:58'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '2:54'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('2:53'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '2:53'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('2:52'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '2:52'), findsOneWidget);
     });
 
     testWidgets('switch timer side after a move', (WidgetTester tester) async {
@@ -464,43 +450,44 @@ void main() {
           emerg: Duration(seconds: 30),
         ),
       );
-      expect(tester.widgetList<Clock>(find.byType(Clock)).last.active, true);
+      expect(tester.widget<Clock>(findClock(Side.white)).active, true);
       // simulates think time of 3s
       await tester.pump(const Duration(seconds: 3));
       await playMove(tester, 'g1', 'f3');
-      expect(findClockWithTime('2:55'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '2:55'), findsOneWidget);
       expect(
-        tester.widgetList<Clock>(find.byType(Clock)).last.active,
+        tester.widget<Clock>(findClock(Side.white)).active,
         false,
         reason: 'white clock is stopped while waiting for server ack',
       );
       expect(
-        tester.widgetList<Clock>(find.byType(Clock)).first.active,
+        tester.widget<Clock>(findClock(Side.black)).active,
         true,
         reason: 'black clock is now active but not yet ticking',
       );
-      expect(findClockWithTime('3:00'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '3:00'), findsOneWidget);
       // simulates a long lag just to show the clock is not running yet
       await tester.pump(const Duration(milliseconds: 200));
-      expect(findClockWithTime('3:00'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '3:00'), findsOneWidget);
       // server ack having the white clock updated with the increment
       sendServerSocketMessages(testGameSocketUri, [
         '{"t": "move", "v": 1, "d": {"ply": 3, "uci": "g1f3", "san": "Nf3", "clock": {"white": 177, "black": 180}}}',
       ]);
       await tester.pump(const Duration(milliseconds: 10));
       // we see now the white clock has got its increment
-      expect(findClockWithTime('2:57'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '2:57'), findsOneWidget);
       await tester.pump(const Duration(milliseconds: 100));
       // black clock is ticking
-      expect(findClockWithTime('2:59'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '2:59'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('2:57'), findsOneWidget);
-      expect(findClockWithTime('2:58'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '2:57'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '2:58'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('2:57'), findsNWidgets(2));
+      expect(findClockWithTime(Side.white, '2:57'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '2:57'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('2:57'), findsOneWidget);
-      expect(findClockWithTime('2:56'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '2:57'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '2:56'), findsOneWidget);
     });
 
     testWidgets('compensates opponent lag', (WidgetTester tester) async {
@@ -534,15 +521,15 @@ void main() {
         socketVersion: ++socketVersion,
       );
       // black clock is active
-      expect(tester.widgetList<Clock>(find.byType(Clock)).first.active, true);
-      expect(findClockWithTime('0:54'), findsOneWidget);
+      expect(tester.widget<Clock>(findClock(Side.black)).active, true);
+      expect(findClockWithTime(Side.black, '0:54'), findsOneWidget);
       await tester.pump(const Duration(milliseconds: 250));
       // lag is 250ms, so clock will only start after that delay
-      expect(findClockWithTime('0:54'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '0:54'), findsOneWidget);
       await tester.pump(const Duration(milliseconds: 100));
-      expect(findClockWithTime('0:53'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '0:53'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('0:52'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '0:52'), findsOneWidget);
     });
 
     testWidgets('onEmergency', (WidgetTester tester) async {
@@ -562,11 +549,11 @@ void main() {
         overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
       );
       expect(
-        tester.widget<Clock>(findClockWithTime('0:40')).emergencyThreshold,
+        tester.widget<Clock>(findClockWithTime(Side.white, '0:40')).emergencyThreshold,
         const Duration(seconds: 30),
       );
       await tester.pump(const Duration(seconds: 10));
-      expect(findClockWithTime('0:30'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '0:30'), findsOneWidget);
       verify(() => mockSoundService.play(Sound.lowTime)).called(1);
     });
 
@@ -587,19 +574,15 @@ void main() {
           emerg: Duration(seconds: 30),
         ),
       );
-      expect(
-        tester.widgetList<Clock>(find.byType(Clock)).first.active,
-        true,
-        reason: 'black clock is active',
-      );
+      expect(tester.widget<Clock>(findClock(Side.black)).active, true);
 
-      expect(findClockWithTime('2:58'), findsOneWidget);
-      expect(findClockWithTime('2:54'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '2:58'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '2:54'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
-      expect(findClockWithTime('2:53'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '2:53'), findsOneWidget);
       await tester.pump(const Duration(minutes: 2, seconds: 53));
-      expect(findClockWithTime('2:58'), findsOneWidget);
-      expect(findClockWithTime('0:00.0'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '2:58'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '0:00.0'), findsOneWidget);
 
       expect(
         tester.widgetList<Clock>(find.byType(Clock)).first.active,
@@ -629,8 +612,8 @@ void main() {
         2,
         reason: 'both clocks are now inactive',
       );
-      expect(findClockWithTime('2:58'), findsOneWidget);
-      expect(findClockWithTime('0:00.00'), findsOneWidget);
+      expect(findClockWithTime(Side.white, '2:58'), findsOneWidget);
+      expect(findClockWithTime(Side.black, '0:00.00'), findsOneWidget);
 
       // wait for the dong
       await tester.pump(const Duration(seconds: 500));
@@ -752,10 +735,16 @@ void main() {
   });
 }
 
-Finder findClockWithTime(String text, {bool skipOffstage = true}) {
+/// Finds the clock on the specified [side].
+Finder findClock(Side side, {bool skipOffstage = true}) {
+  return find.byKey(ValueKey('${side.name}-clock'), skipOffstage: skipOffstage);
+}
+
+/// Finds the clock with the given [text] on the specified [side].
+Finder findClockWithTime(Side side, String text, {bool skipOffstage = true}) {
   return find.ancestor(
     of: find.text(text, findRichText: true, skipOffstage: skipOffstage),
-    matching: find.byType(Clock, skipOffstage: skipOffstage),
+    matching: find.byKey(ValueKey('${side.name}-clock'), skipOffstage: skipOffstage),
   );
 }
 

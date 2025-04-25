@@ -151,6 +151,7 @@ class GameBody extends ConsumerWidget {
                       valueListenable: gameState.liveClock!.black,
                       builder: (context, value, _) {
                         return Clock(
+                          key: const ValueKey('black-clock'),
                           timeLeft: value,
                           active: gameState.activeClockSide == Side.black,
                           emergencyThreshold:
@@ -201,6 +202,7 @@ class GameBody extends ConsumerWidget {
                       valueListenable: gameState.liveClock!.white,
                       builder: (context, value, _) {
                         return Clock(
+                          key: const ValueKey('white-clock'),
                           timeLeft: value,
                           active: gameState.activeClockSide == Side.white,
                           emergencyThreshold:
