@@ -508,29 +508,29 @@ class GameController extends _$GameController {
         final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
         _socketClient.version = fullEvent.socketEventVersion;
 
+        final curState = state.requireValue;
+
+        final newGame = fullEvent.game;
         final isOpponentOnGame =
-            fullEvent.game.playerOf(fullEvent.game.youAre?.opposite ?? Side.white).onGame ?? false;
+            newGame.playerOf(newGame.youAre?.opposite ?? Side.white).onGame ?? false;
+        final hasSameNumberOfSteps = newGame.steps.length == curState.game.steps.length;
 
         state = AsyncValue.data(
           state.requireValue.copyWith(
-            game: fullEvent.game,
-            stepCursor: fullEvent.game.steps.length - 1,
-            // cancel the premove to avoid playing wrong premove when the full
-            // game data is reloaded
-            premove: null,
-            // cancel the promotion
-            promotionMove: null,
-            // cancel move confirmation
-            moveToConfirm: null,
+            game: newGame,
+            stepCursor: hasSameNumberOfSteps ? curState.stepCursor : newGame.steps.length - 1,
+            premove: hasSameNumberOfSteps ? curState.premove : null,
+            promotionMove: hasSameNumberOfSteps ? curState.promotionMove : null,
+            moveToConfirm: hasSameNumberOfSteps ? curState.moveToConfirm : null,
             opponentLeftCountdown:
                 isOpponentOnGame ? null : state.requireValue.opponentLeftCountdown,
           ),
         );
 
-        if (fullEvent.game.clock != null) {
+        if (newGame.clock != null) {
           _updateClock(
-            white: fullEvent.game.clock!.white,
-            black: fullEvent.game.clock!.black,
+            white: newGame.clock!.white,
+            black: newGame.clock!.black,
             activeSide: state.requireValue.activeClockSide,
           );
         }
