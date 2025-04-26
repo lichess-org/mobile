@@ -54,11 +54,6 @@ class EvaluationService {
 
   EvaluationContext? _context;
 
-  final StreamController<EvalResult> _evalStreamController =
-      StreamController<EvalResult>.broadcast();
-
-  Stream<EvalResult> get evalStream => _evalStreamController.stream;
-
   EvaluationOptions options = EvaluationOptions(
     multiPv: 1,
     cores: defaultEngineCores,
@@ -136,7 +131,6 @@ class EvaluationService {
   /// Dispose the service.
   void _dispose() {
     disposeEngine();
-    _evalStreamController.close();
     _state.dispose();
   }
 
@@ -148,7 +142,7 @@ class EvaluationService {
   /// is emitted by the [EngineEvaluation] provider.
   ///
   /// [initEngine] must be called before calling this method.
-  void start(
+  Stream<EvalResult>? start(
     UciPath path,
     Iterable<Step> steps, {
     ClientEval? initialPositionEval,
@@ -159,11 +153,11 @@ class EvaluationService {
     final engine = _engine;
     if (context == null || engine == null) {
       assert(false, 'Engine not initialized');
-      return;
+      return null;
     }
 
     if (!engineSupportedVariants.contains(context.variant)) {
-      return;
+      return null;
     }
 
     // reset eval
@@ -190,13 +184,16 @@ class EvaluationService {
       // if the search time is greater than the current search time, don't evaluate again
       case final LocalEval localEval when localEval.searchTime >= work.searchTime:
       case CloudEval _:
-        return;
+        return null;
       case _:
         break;
     }
 
-    engine.start(work).throttle(kEngineEvalEmissionThrottleDelay, trailing: true).forEach((t) {
-      _evalStreamController.add(t);
+    final evalStream = engine
+        .start(work)
+        .throttle(kEngineEvalEmissionThrottleDelay, trailing: true);
+
+    evalStream.forEach((t) {
       final (work, eval) = t;
       if (shouldEmit(work)) {
         _state.value = (
@@ -207,6 +204,8 @@ class EvaluationService {
         );
       }
     });
+
+    return evalStream;
   }
 
   void stop() {
