@@ -293,10 +293,10 @@ mixin EngineEvaluationMixin {
     final (work, eval) = event;
     bool isSameEvalString = true;
     positionTree.updateAt(work.path, (node) {
-      // don't override the cloud eval if it's deeper than the local eval
-      // unless the engineSearchTime pref is set to kMaxEngineSearchTime (infinity)
       final nodeEval = node.eval;
-      if (nodeEval is CloudEval && evaluationPrefs.engineSearchTime != kMaxEngineSearchTime) {
+      // if the search time is set to kMaxEngineSearchTime (infinity), we don't want the cloud eval
+      // even if it is deeper
+      if (nodeEval is CloudEval && work.searchTime != kMaxEngineSearchTime) {
         if (nodeEval.depth >= eval.depth) return;
       } else if (nodeEval is LocalEval) {
         if (nodeEval.isBetter(eval)) return;
