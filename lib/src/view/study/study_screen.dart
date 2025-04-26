@@ -491,7 +491,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
     });
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-
+    final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final studyState = ref.watch(studyControllerProvider(widget.id)).requireValue;
 
     final currentNode = studyState.currentNode;
@@ -513,16 +513,20 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
           : [],
     );
 
-    final showAnnotationsOnBoard = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showAnnotations),
-    );
+    final showAnnotationsOnBoard = analysisPrefs.showAnnotations;
 
-    final showBestMoveArrow = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showBestMoveArrow),
-    );
-    final bestMoves = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMoves));
+    final showBestMoveArrow =
+        studyState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
+
+    final bestMoves =
+        showBestMoveArrow
+            ? pickBestClientEval(
+              localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
+              savedEval: currentNode.eval,
+            )?.bestMoves
+            : null;
     final ISet<Shape> bestMoveShapes =
-        showBestMoveArrow && studyState.isEngineAvailable(enginePrefs) && bestMoves != null
+        bestMoves != null
             ? computeBestMoveShapes(
               bestMoves,
               currentNode.position!.turn,
