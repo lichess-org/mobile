@@ -84,7 +84,8 @@ mixin EngineEvaluationMixin {
   final _cloudEvalGetDebounce = Debouncer(kRequestEvalDebounceDelay);
   final _engineEvalDebounce = Debouncer(kLocalEngineAfterCloudEvalDelay);
 
-  StreamSubscription<SocketEvent>? _subscription;
+  StreamSubscription<SocketEvent>? _socketSubscription;
+  StreamSubscription<EvalResult>? _engineEvalSubscription;
 
   EvaluationService? _evaluationService;
 
@@ -102,8 +103,9 @@ mixin EngineEvaluationMixin {
   /// The local engine is not started here, but only when [requestEval] is called.
   @nonVirtual
   void initEngineEvaluation() {
-    _subscription = socketClient?.stream.listen(_handleSocketEvent);
+    _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
     _evaluationService = evaluationServiceFactory();
+    _engineEvalSubscription = _evaluationService!.evalStream.listen(_handleEngineEvalEvent);
   }
 
   /// Disposes all resources related to the engine evaluation.
@@ -111,7 +113,8 @@ mixin EngineEvaluationMixin {
   void disposeEngineEvaluation() {
     _cloudEvalGetDebounce.cancel();
     _engineEvalDebounce.cancel();
-    _subscription?.cancel();
+    _socketSubscription?.cancel();
+    _engineEvalSubscription?.cancel();
     _evaluationService?.disposeEngine();
     _evaluationService = null;
   }
@@ -173,19 +176,20 @@ mixin EngineEvaluationMixin {
   /// Eval requests are debounced to avoid sending requests during a fast rewind or fast forward of
   /// moves.
   @nonVirtual
-  void requestEval() {
+  void requestEval({bool goDeeper = false}) {
     if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
 
     _cloudEvalGetDebounce(() {
       _sendEvalGetEvent();
-      if (!evaluationState.alwaysRequestCloudEval) {
-        _startEngineEval();
+      if (evaluationPrefs.engineSearchTime == kMaxEngineSearchTime ||
+          !evaluationState.alwaysRequestCloudEval) {
+        _startEngineEval(goDeeper);
       }
     });
 
     if (evaluationState.alwaysRequestCloudEval) {
       _engineEvalDebounce(() {
-        _startEngineEval();
+        _startEngineEval(goDeeper);
       });
     }
   }
@@ -267,38 +271,41 @@ mixin EngineEvaluationMixin {
     });
   }
 
-  Future<void> _startEngineEval() async {
+  Future<void> _startEngineEval([bool goDeeper = false]) async {
     final curState = evaluationState;
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
     await _evaluationService?.ensureEngineInitialized(
       evaluationState.evaluationContext,
       initOptions: evaluationPrefs.evaluationOptions,
     );
-    _evaluationService
-        ?.start(
-          curState.currentPath,
-          positionTree.branchesOn(curState.currentPath).map(Step.fromNode),
-          initialPositionEval: positionTree.eval,
-          shouldEmit: (work) => work.path == evaluationState.currentPath,
-        )
-        ?.forEach((tuple) {
-          final (work, eval) = tuple;
-          bool isSameEvalString = true;
-          positionTree.updateAt(work.path, (node) {
-            // don't override the cloud eval if it's deeper than the local eval
-            // unless the engineSearchTime pref is set to kMaxEngineSearchTime (infinity)
-            if (node.eval is CloudEval &&
-                evaluationPrefs.engineSearchTime != kMaxEngineSearchTime) {
-              if (node.eval?.depth != null && node.eval!.depth >= eval.depth) {
-                return;
-              }
-            }
-            isSameEvalString = eval.evalString == node.eval?.evalString;
-            node.eval = eval;
-          });
-          if (work.path == evaluationState.currentPath) {
-            onCurrentPathEvalChanged(isSameEvalString);
-          }
-        });
+    _evaluationService?.start(
+      curState.currentPath,
+      positionTree.branchesOn(curState.currentPath).map(Step.fromNode),
+      initialPositionEval: positionTree.eval,
+      shouldEmit: _shouldEmit,
+      goDeeper: goDeeper,
+    );
+  }
+
+  bool _shouldEmit(Work work) => work.path == evaluationState.currentPath;
+
+  void _handleEngineEvalEvent(EvalResult event) {
+    final (work, eval) = event;
+    bool isSameEvalString = true;
+    positionTree.updateAt(work.path, (node) {
+      // don't override the cloud eval if it's deeper than the local eval
+      // unless the engineSearchTime pref is set to kMaxEngineSearchTime (infinity)
+      final nodeEval = node.eval;
+      if (nodeEval is CloudEval && evaluationPrefs.engineSearchTime != kMaxEngineSearchTime) {
+        if (nodeEval.depth >= eval.depth) return;
+      } else if (nodeEval is LocalEval) {
+        if (nodeEval.isBetter(eval)) return;
+      }
+      isSameEvalString = eval.evalString == nodeEval?.evalString;
+      node.eval = eval;
+    });
+    if (work.path == evaluationState.currentPath) {
+      onCurrentPathEvalChanged(isSameEvalString);
+    }
   }
 }

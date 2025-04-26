@@ -196,7 +196,13 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
         ),
         actions: [
           if (widget.studyState.isEngineAvailable(enginePrefs))
-            EngineDepth(savedEval: widget.studyState.currentNode.eval),
+            EngineDepth(
+              savedEval: widget.studyState.currentNode.eval,
+              goDeeper:
+                  () => ref
+                      .read(studyControllerProvider(widget.id).notifier)
+                      .requestEval(goDeeper: true),
+            ),
           if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
           _StudyMenu(id: widget.id),
         ],

@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:multistockfish/multistockfish.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -26,6 +27,10 @@ final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
 final defaultEngineCores = min((Platform.numberOfProcessors / 2).ceil(), maxEngineCores);
 
 const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
+
+/// A function that returns true if the evaluation should be emitted by the [EngineEvaluation]
+/// provider.
+typedef ShouldEmitEvalFilter = bool Function(Work work);
 
 @Riverpod(keepAlive: true)
 EvaluationService evaluationService(Ref ref) {
@@ -49,13 +54,23 @@ class EvaluationService {
 
   EvaluationContext? _context;
 
+  final StreamController<EvalResult> _evalStreamController =
+      StreamController<EvalResult>.broadcast();
+
+  Stream<EvalResult> get evalStream => _evalStreamController.stream;
+
   EvaluationOptions options = EvaluationOptions(
     multiPv: 1,
     cores: defaultEngineCores,
     searchTime: const Duration(seconds: 10),
   );
 
-  static const _defaultState = (engineName: 'Stockfish', state: EngineState.initial, eval: null);
+  static const _defaultState = (
+    engineName: 'Stockfish',
+    state: EngineState.initial,
+    eval: null,
+    currentWork: null,
+  );
 
   final ValueNotifier<EngineEvaluationState> _state = ValueNotifier(_defaultState);
   ValueListenable<EngineEvaluationState> get state => _state;
@@ -88,6 +103,7 @@ class EvaluationService {
           engineName: _engine!.name,
           state: _engine!.state.value,
           eval: _state.value.eval,
+          currentWork: _state.value.currentWork,
         );
       }
     });
@@ -120,6 +136,7 @@ class EvaluationService {
   /// Dispose the service.
   void _dispose() {
     disposeEngine();
+    _evalStreamController.close();
     _state.dispose();
   }
 
@@ -131,63 +148,77 @@ class EvaluationService {
   /// is emitted by the [EngineEvaluation] provider.
   ///
   /// [initEngine] must be called before calling this method.
-  Stream<EvalResult>? start(
+  void start(
     UciPath path,
     Iterable<Step> steps, {
     ClientEval? initialPositionEval,
-
-    /// A function that returns true if the evaluation should be emitted by the
-    /// [EngineEvaluation] provider.
-    required bool Function(Work work) shouldEmit,
+    required ShouldEmitEvalFilter shouldEmit,
+    bool goDeeper = false,
   }) {
     final context = _context;
     final engine = _engine;
     if (context == null || engine == null) {
       assert(false, 'Engine not initialized');
-      return null;
+      return;
     }
 
     if (!engineSupportedVariants.contains(context.variant)) {
-      return null;
+      return;
     }
 
     // reset eval
-    _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: null);
-
-    final work = Work(
-      variant: context.variant,
-      threads: options.cores,
-      hashSize: maxMemory,
-      searchTime: options.searchTime,
-      multiPv: options.multiPv,
-      path: path,
-      initialPosition: context.initialPosition,
-      steps: IList(steps),
+    _state.value = (
+      engineName: _state.value.engineName,
+      state: _state.value.state,
+      eval: null,
+      currentWork: null,
     );
 
-    // cancel evaluation if we already have an interesting eval
-    final cachedEval = work.steps.isEmpty ? initialPositionEval : work.evalCache;
-    switch (cachedEval) {
+    _doStart(
+      Work(
+        variant: context.variant,
+        threads: options.cores,
+        hashSize: maxMemory,
+        searchTime: goDeeper ? kMaxEngineSearchTime : options.searchTime,
+        isDeeper: goDeeper,
+        multiPv: options.multiPv,
+        path: path,
+        initialPosition: context.initialPosition,
+        steps: IList(steps),
+      ),
+      shouldEmit,
+    );
+  }
+
+  void _doStart(Work work, ShouldEmitEvalFilter shouldEmit) {
+    final context = _context;
+    final engine = _engine;
+    if (context == null || engine == null) {
+      assert(false, 'Engine not initialized');
+      return;
+    }
+
+    switch (work.evalCache) {
       // if the search time is greater than the current search time, don't evaluate again
-      case final LocalEval localEval when localEval.searchTime >= options.searchTime:
+      case final LocalEval localEval when localEval.searchTime >= work.searchTime:
       case CloudEval _:
-        return null;
+        return;
       case _:
         break;
     }
 
-    final evalStream = engine
-        .start(work)
-        .throttle(kEngineEvalEmissionThrottleDelay, trailing: true);
-
-    evalStream.forEach((t) {
+    engine.start(work).throttle(kEngineEvalEmissionThrottleDelay, trailing: true).forEach((t) {
+      _evalStreamController.add(t);
       final (work, eval) = t;
       if (shouldEmit(work)) {
-        _state.value = (engineName: _state.value.engineName, state: _state.value.state, eval: eval);
+        _state.value = (
+          engineName: _state.value.engineName,
+          state: _state.value.state,
+          eval: eval,
+          currentWork: work,
+        );
       }
     });
-
-    return evalStream;
   }
 
   void stop() {
@@ -195,7 +226,8 @@ class EvaluationService {
   }
 }
 
-typedef EngineEvaluationState = ({String engineName, EngineState state, LocalEval? eval});
+typedef EngineEvaluationState =
+    ({String engineName, EngineState state, Work? currentWork, LocalEval? eval});
 
 /// A provider that holds the state of the engine and the current evaluation.
 @riverpod
@@ -249,7 +281,7 @@ Eval? pickBestEval({
 }) {
   return switch (savedEval) {
     CloudEval() => savedEval,
-    LocalEval() => localEval ?? savedEval,
+    final LocalEval eval => localEval != null && localEval.isBetter(eval) ? localEval : eval,
     null => localEval ?? serverEval,
   };
 }
@@ -266,19 +298,4 @@ ClientEval? pickBestClientEval({
       pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
 
   return eval;
-}
-
-/// A function to choose the best moves that should be displayed.
-IList<MoveWithWinningChances>? pickBestMoves({
-  /// The best moves from the local engine
-  required IList<MoveWithWinningChances>? localBestMoves,
-
-  /// The cached eval which is either a saved eval from the local evaluation or a cloud eval
-  required ClientEval? savedEval,
-}) {
-  return switch (savedEval) {
-    CloudEval() => savedEval.bestMoves,
-    LocalEval() => localBestMoves ?? savedEval.bestMoves,
-    null => localBestMoves,
-  };
 }
