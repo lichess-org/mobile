@@ -81,8 +81,8 @@ mixin EngineEvaluationMixin {
   SocketClient? get socketClient;
   Node get positionTree;
 
-  final _cloudEvalGetDebounce = Debouncer(kRequestEvalDebounceDelay);
-  final _engineEvalDebounce = Debouncer(kLocalEngineAfterCloudEvalDelay);
+  final _evalRequestDebounce = Debouncer(kRequestEvalDebounceDelay);
+  final _localEngineAfterDelayDebounce = Debouncer(kLocalEngineAfterCloudEvalDelay);
 
   StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<EvalResult>? _engineEvalSubscription;
@@ -111,8 +111,8 @@ mixin EngineEvaluationMixin {
   /// Disposes all resources related to the engine evaluation.
   @nonVirtual
   void disposeEngineEvaluation() {
-    _cloudEvalGetDebounce.cancel();
-    _engineEvalDebounce.cancel();
+    _evalRequestDebounce.cancel();
+    _localEngineAfterDelayDebounce.cancel();
     _socketSubscription?.cancel();
     _engineEvalSubscription?.cancel();
     _evaluationService?.disposeEngine();
@@ -179,8 +179,10 @@ mixin EngineEvaluationMixin {
   void requestEval({bool goDeeper = false}) {
     if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
 
-    _cloudEvalGetDebounce(() {
-      _sendEvalGetEvent();
+    _evalRequestDebounce(() {
+      if (evaluationPrefs.engineSearchTime != kMaxEngineSearchTime) {
+        _sendEvalGetEvent();
+      }
       if (evaluationPrefs.engineSearchTime == kMaxEngineSearchTime ||
           !evaluationState.alwaysRequestCloudEval) {
         _startEngineEval(goDeeper);
@@ -188,7 +190,7 @@ mixin EngineEvaluationMixin {
     });
 
     if (evaluationState.alwaysRequestCloudEval) {
-      _engineEvalDebounce(() {
+      _localEngineAfterDelayDebounce(() {
         _startEngineEval(goDeeper);
       });
     }
