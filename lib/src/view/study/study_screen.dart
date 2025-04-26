@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
@@ -7,21 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
-import 'package:lichess_mobile/src/model/study/study_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -29,14 +22,9 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
-import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:logging/logging.dart';
 
@@ -200,147 +188,9 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
                       .requestEval(goDeeper: true),
             ),
           if (tabs.length > 1) AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-          _StudyMenu(id: widget.id),
         ],
       ),
       body: _Body(id: widget.id, tabController: _tabController, tabs: tabs),
-    );
-  }
-}
-
-class _StudyMenu extends ConsumerWidget {
-  const _StudyMenu({required this.id});
-
-  final StudyId id;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    final state = ref.watch(studyControllerProvider(id)).requireValue;
-
-    return ContextMenuButton(
-      semanticsLabel: 'Study menu',
-      icon: const Icon(Icons.more_horiz),
-      actions: [
-        ContextMenuAction(
-          icon: const Icon(Icons.settings),
-          label: context.l10n.settingsSettings,
-          onPressed: () {
-            Navigator.of(context).push(StudySettingsScreen.buildRoute(context, id));
-          },
-        ),
-        if (session != null)
-          ContextMenuAction(
-            icon: Icon(state.study.liked ? Icons.favorite : Icons.favorite_border),
-            label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
-            onPressed: () {
-              ref.read(studyControllerProvider(id).notifier).toggleLike();
-            },
-          ),
-        ContextMenuAction(
-          icon: const PlatformShareIcon(),
-          label: context.l10n.studyShareAndExport,
-          onPressed: () {
-            showAdaptiveActionSheet<void>(
-              context: context,
-              actions: [
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.studyStudyUrl),
-                  onPressed: () {
-                    launchShareDialog(context, uri: lichessUri('/study/${state.study.id}'));
-                  },
-                ),
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
-                  onPressed: () {
-                    launchShareDialog(
-                      context,
-                      uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
-                    );
-                  },
-                ),
-                if (!state.gamebookActive) ...[
-                  BottomSheetAction(
-                    makeLabel: (context) => Text(context.l10n.studyStudyPgn),
-                    onPressed: () async {
-                      try {
-                        final pgn = await ref
-                            .read(studyRepositoryProvider)
-                            .getStudyPgn(state.study.id);
-                        if (context.mounted) {
-                          launchShareDialog(context, text: pgn);
-                        }
-                      } catch (e) {
-                        if (context.mounted) {
-                          showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-                        }
-                      }
-                    },
-                  ),
-                  BottomSheetAction(
-                    makeLabel: (context) => Text(context.l10n.studyChapterPgn),
-                    onPressed: () {
-                      launchShareDialog(context, text: state.pgn);
-                    },
-                  ),
-                  if (state.currentPosition != null)
-                    BottomSheetAction(
-                      makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
-                      onPressed: () async {
-                        try {
-                          final image = await ref
-                              .read(gameShareServiceProvider)
-                              .screenshotPosition(
-                                state.pov,
-                                state.currentPosition!.fen,
-                                state.lastMove,
-                              );
-                          if (context.mounted) {
-                            launchShareDialog(
-                              context,
-                              files: [image],
-                              subject: context.l10n.puzzleFromGameLink(
-                                lichessUri('/study/${state.study.id}').toString(),
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          if (context.mounted) {
-                            showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-                          }
-                        }
-                      },
-                    ),
-                  BottomSheetAction(
-                    makeLabel: (context) => const Text('GIF'),
-                    onPressed: () async {
-                      try {
-                        final gif = await ref
-                            .read(gameShareServiceProvider)
-                            .chapterGif(state.study.id, state.study.chapter.id);
-                        if (context.mounted) {
-                          launchShareDialog(
-                            context,
-                            files: [gif],
-                            subject: context.l10n.studyChapterX(
-                              state.study.currentChapterMeta.name,
-                            ),
-                          );
-                        }
-                      } catch (e) {
-                        debugPrint(e.toString());
-                        if (context.mounted) {
-                          showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-                        }
-                      }
-                    },
-                  ),
-                ],
-              ],
-            );
-          },
-        ),
-      ],
     );
   }
 }
