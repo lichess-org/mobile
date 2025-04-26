@@ -174,29 +174,17 @@ class EvaluationService {
       currentWork: null,
     );
 
-    _doStart(
-      Work(
-        variant: context.variant,
-        threads: options.cores,
-        hashSize: maxMemory,
-        searchTime: goDeeper ? kMaxEngineSearchTime : options.searchTime,
-        isDeeper: goDeeper,
-        multiPv: options.multiPv,
-        path: path,
-        initialPosition: context.initialPosition,
-        steps: IList(steps),
-      ),
-      shouldEmit,
+    final work = Work(
+      variant: context.variant,
+      threads: options.cores,
+      hashSize: maxMemory,
+      searchTime: goDeeper ? kMaxEngineSearchTime : options.searchTime,
+      isDeeper: goDeeper,
+      multiPv: options.multiPv,
+      path: path,
+      initialPosition: context.initialPosition,
+      steps: IList(steps),
     );
-  }
-
-  void _doStart(Work work, ShouldEmitEvalFilter shouldEmit) {
-    final context = _context;
-    final engine = _engine;
-    if (context == null || engine == null) {
-      assert(false, 'Engine not initialized');
-      return;
-    }
 
     switch (work.evalCache) {
       // if the search time is greater than the current search time, don't evaluate again
