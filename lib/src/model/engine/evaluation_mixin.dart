@@ -28,7 +28,7 @@ const kRequestEvalDebounceDelay = Duration(milliseconds: 250);
 ///
 /// This is superior to the `kRequestEvalDebounceDelay` to avoid running the local engine too soon
 /// to get a chance to get the cloud eval first.
-const kLocalEngineAfterCloudEvalDelay = Duration(milliseconds: 500);
+const kLocalEngineAfterCloudEvalDelay = Duration(milliseconds: 600);
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 abstract class EvaluationMixinState {
@@ -299,9 +299,15 @@ mixin EngineEvaluationMixin {
       // if the search time is set to kMaxEngineSearchTime (infinity), we don't want the cloud eval
       // even if it is deeper
       if (nodeEval is CloudEval && work.searchTime != kMaxEngineSearchTime) {
-        if (nodeEval.depth >= eval.depth) return;
+        if (nodeEval.depth >= eval.depth) {
+          _evaluationService?.stop();
+          return;
+        }
       } else if (nodeEval is LocalEval) {
-        if (nodeEval.isBetter(eval)) return;
+        if (nodeEval.isBetter(eval)) {
+          _evaluationService?.stop();
+          return;
+        }
       }
       isSameEvalString = eval.evalString == nodeEval?.evalString;
       node.eval = eval;
