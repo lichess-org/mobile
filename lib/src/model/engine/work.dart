@@ -23,6 +23,7 @@ class Work with _$Work {
     required Duration searchTime,
     required int multiPv,
     bool? threatMode,
+    bool? isDeeper,
     required Position initialPosition,
     required IList<Step> steps,
   }) = _Work;

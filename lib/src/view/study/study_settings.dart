@@ -57,6 +57,13 @@ class StudySettingsScreen extends ConsumerWidget {
                     (value) => ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
               ),
               SwitchSettingTile(
+                title: Text(context.l10n.bestMoveArrow),
+                value: analysisPrefs.showBestMoveArrow,
+                onChanged:
+                    (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleShowBestMoveArrow(),
+              ),
+              SwitchSettingTile(
                 title: Text(context.l10n.showVariationArrows),
                 value: studyPrefs.showVariationArrows,
                 onChanged:

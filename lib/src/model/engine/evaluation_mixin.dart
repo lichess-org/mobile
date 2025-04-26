@@ -28,7 +28,7 @@ const kRequestEvalDebounceDelay = Duration(milliseconds: 250);
 ///
 /// This is superior to the `kRequestEvalDebounceDelay` to avoid running the local engine too soon
 /// to get a chance to get the cloud eval first.
-const kLocalEngineAfterCloudEvalDelay = Duration(milliseconds: 500);
+const kLocalEngineAfterCloudEvalDelay = Duration(milliseconds: 600);
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 abstract class EvaluationMixinState {
@@ -81,10 +81,11 @@ mixin EngineEvaluationMixin {
   SocketClient? get socketClient;
   Node get positionTree;
 
-  final _cloudEvalGetDebounce = Debouncer(kRequestEvalDebounceDelay);
-  final _engineEvalDebounce = Debouncer(kLocalEngineAfterCloudEvalDelay);
+  final _evalRequestDebounce = Debouncer(kRequestEvalDebounceDelay);
+  final _localEngineAfterDelayDebounce = Debouncer(kLocalEngineAfterCloudEvalDelay);
 
-  StreamSubscription<SocketEvent>? _subscription;
+  StreamSubscription<SocketEvent>? _socketSubscription;
+  StreamSubscription<EvalResult>? _engineEvalSubscription;
 
   EvaluationService? _evaluationService;
 
@@ -102,16 +103,18 @@ mixin EngineEvaluationMixin {
   /// The local engine is not started here, but only when [requestEval] is called.
   @nonVirtual
   void initEngineEvaluation() {
-    _subscription = socketClient?.stream.listen(_handleSocketEvent);
+    _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
     _evaluationService = evaluationServiceFactory();
+    _engineEvalSubscription = _evaluationService!.evalStream.listen(_handleEngineEvalEvent);
   }
 
   /// Disposes all resources related to the engine evaluation.
   @nonVirtual
   void disposeEngineEvaluation() {
-    _cloudEvalGetDebounce.cancel();
-    _engineEvalDebounce.cancel();
-    _subscription?.cancel();
+    _evalRequestDebounce.cancel();
+    _localEngineAfterDelayDebounce.cancel();
+    _socketSubscription?.cancel();
+    _engineEvalSubscription?.cancel();
     _evaluationService?.disposeEngine();
     _evaluationService = null;
   }
@@ -173,19 +176,22 @@ mixin EngineEvaluationMixin {
   /// Eval requests are debounced to avoid sending requests during a fast rewind or fast forward of
   /// moves.
   @nonVirtual
-  void requestEval() {
+  void requestEval({bool goDeeper = false}) {
     if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
 
-    _cloudEvalGetDebounce(() {
-      _sendEvalGetEvent();
-      if (!evaluationState.alwaysRequestCloudEval) {
-        _startEngineEval();
+    _evalRequestDebounce(() {
+      if (evaluationPrefs.engineSearchTime != kMaxEngineSearchTime) {
+        _sendEvalGetEvent();
+      }
+      if (evaluationPrefs.engineSearchTime == kMaxEngineSearchTime ||
+          !evaluationState.alwaysRequestCloudEval) {
+        _startEngineEval(goDeeper);
       }
     });
 
     if (evaluationState.alwaysRequestCloudEval) {
-      _engineEvalDebounce(() {
-        _startEngineEval();
+      _localEngineAfterDelayDebounce(() {
+        _startEngineEval(goDeeper);
       });
     }
   }
@@ -267,38 +273,47 @@ mixin EngineEvaluationMixin {
     });
   }
 
-  Future<void> _startEngineEval() async {
+  Future<void> _startEngineEval([bool goDeeper = false]) async {
     final curState = evaluationState;
     if (!curState.isEngineAvailable(evaluationPrefs)) return;
     await _evaluationService?.ensureEngineInitialized(
       evaluationState.evaluationContext,
       initOptions: evaluationPrefs.evaluationOptions,
     );
-    _evaluationService
-        ?.start(
-          curState.currentPath,
-          positionTree.branchesOn(curState.currentPath).map(Step.fromNode),
-          initialPositionEval: positionTree.eval,
-          shouldEmit: (work) => work.path == evaluationState.currentPath,
-        )
-        ?.forEach((tuple) {
-          final (work, eval) = tuple;
-          bool isSameEvalString = true;
-          positionTree.updateAt(work.path, (node) {
-            // don't override the cloud eval if it's deeper than the local eval
-            // unless the engineSearchTime pref is set to kMaxEngineSearchTime (infinity)
-            if (node.eval is CloudEval &&
-                evaluationPrefs.engineSearchTime != kMaxEngineSearchTime) {
-              if (node.eval?.depth != null && node.eval!.depth >= eval.depth) {
-                return;
-              }
-            }
-            isSameEvalString = eval.evalString == node.eval?.evalString;
-            node.eval = eval;
-          });
-          if (work.path == evaluationState.currentPath) {
-            onCurrentPathEvalChanged(isSameEvalString);
-          }
-        });
+    _evaluationService?.start(
+      curState.currentPath,
+      positionTree.branchesOn(curState.currentPath).map(Step.fromNode),
+      initialPositionEval: positionTree.eval,
+      shouldEmit: _shouldEmit,
+      goDeeper: goDeeper,
+    );
+  }
+
+  bool _shouldEmit(Work work) => work.path == evaluationState.currentPath;
+
+  void _handleEngineEvalEvent(EvalResult event) {
+    final (work, eval) = event;
+    bool isSameEvalString = true;
+    positionTree.updateAt(work.path, (node) {
+      final nodeEval = node.eval;
+      // if the search time is set to kMaxEngineSearchTime (infinity), we don't want the cloud eval
+      // even if it is deeper
+      if (nodeEval is CloudEval && work.searchTime != kMaxEngineSearchTime) {
+        if (nodeEval.depth >= eval.depth) {
+          _evaluationService?.stop();
+          return;
+        }
+      } else if (nodeEval is LocalEval) {
+        if (nodeEval.isBetter(eval)) {
+          _evaluationService?.stop();
+          return;
+        }
+      }
+      isSameEvalString = eval.evalString == nodeEval?.evalString;
+      node.eval = eval;
+    });
+    if (work.path == evaluationState.currentPath) {
+      onCurrentPathEvalChanged(isSameEvalString);
+    }
   }
 }

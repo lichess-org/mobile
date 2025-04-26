@@ -11,15 +11,15 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:popover/popover.dart';
 
 class EngineDepth extends ConsumerWidget {
-  const EngineDepth({this.savedEval});
+  const EngineDepth({this.savedEval, this.goDeeper});
 
   final ClientEval? savedEval;
+  final VoidCallback? goDeeper;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (engineName: engineName, eval: localEval, state: engineState) = ref.watch(
-      engineEvaluationProvider,
-    );
+    final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
+        .watch(engineEvaluationProvider);
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     final loadingIndicator = SpinKitFadingFour(
@@ -46,19 +46,8 @@ class EngineDepth extends ConsumerWidget {
               ? () {
                 showPopover(
                   context: context,
-                  bodyBuilder: (context) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        switch (eval) {
-                          LocalEval() => _StockfishInfo(eval),
-                          CloudEval(:final depth) => ListTile(
-                            title: Text(context.l10n.cloudAnalysis),
-                            subtitle: Text(context.l10n.depthX('$depth')),
-                          ),
-                        },
-                      ],
-                    );
+                  bodyBuilder: (_) {
+                    return _EnginePopup(eval: eval, goDeeper: goDeeper);
                   },
                   direction: PopoverDirection.top,
                   width: 240,
@@ -229,16 +218,51 @@ class MicroChipPainter extends CustomPainter {
   bool shouldRepaint(covariant MicroChipPainter oldDelegate) => color != oldDelegate.color;
 }
 
-class _StockfishInfo extends ConsumerWidget {
-  const _StockfishInfo(this.defaultEval);
+class _EnginePopup extends ConsumerWidget {
+  const _EnginePopup({required this.eval, this.goDeeper});
 
-  final ClientEval? defaultEval;
+  final ClientEval eval;
+  final VoidCallback? goDeeper;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (engineName: engineName, eval: eval, state: engineState) = ref.watch(
-      engineEvaluationProvider,
+    final evalState = ref.watch(engineEvaluationProvider);
+    final (state: engineState, currentWork: work, engineName: _, eval: _) = evalState;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        switch (eval) {
+          LocalEval() => _StockfishInfo(evalState, eval),
+          CloudEval(:final depth) => ListTile(
+            title: Text(context.l10n.cloudAnalysis),
+            subtitle: Text(context.l10n.depthX('$depth')),
+          ),
+        },
+        if (goDeeper != null &&
+            engineState == EngineState.idle &&
+            (work == null || work.isDeeper != true))
+          ListTile(
+            leading: const SizedBox(
+              width: 44,
+              child: Center(child: Icon(Icons.add_circle_outlined)),
+            ),
+            title: Text(context.l10n.goDeeper),
+            onTap: goDeeper,
+          ),
+      ],
     );
+  }
+}
+
+class _StockfishInfo extends StatelessWidget {
+  const _StockfishInfo(this.evalState, this.defaultEval);
+
+  final EngineEvaluationState evalState;
+  final ClientEval? defaultEval;
+
+  @override
+  Widget build(BuildContext context) {
+    final (engineName: engineName, eval: eval, state: engineState, currentWork: _) = evalState;
 
     final currentEval = eval ?? defaultEval;
 

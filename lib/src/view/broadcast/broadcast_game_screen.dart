@@ -315,12 +315,10 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
 
     final bestMoves =
         showBestMoveArrow
-            ? pickBestMoves(
-              localBestMoves: ref.watch(
-                engineEvaluationProvider.select((value) => value.eval?.bestMoves),
-              ),
+            ? pickBestClientEval(
+              localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
               savedEval: currentNode.eval,
-            )
+            )?.bestMoves
             : null;
     final ISet<Shape> bestMoveShapes =
         bestMoves != null

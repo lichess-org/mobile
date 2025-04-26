@@ -108,6 +108,9 @@ class LocalEval with _$LocalEval implements ClientEval {
   double get _whiteWinningChances {
     return _toWhiteWinningChances(cp, mate);
   }
+
+  bool isBetter(LocalEval other) =>
+      depth > other.depth || (depth == other.depth && nodes > other.nodes);
 }
 
 /// The eval from an external engine, typically Lichess server side Stockfish.
