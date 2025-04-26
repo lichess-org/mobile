@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
@@ -57,12 +58,7 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final title = AutoSizeText(
-      context.l10n.broadcastBroadcasts,
-      minFontSize: 14.0,
-      overflow: TextOverflow.ellipsis,
-      maxLines: 1,
-    );
+    final title = AppBarTitleText(context.l10n.broadcastBroadcasts);
     final filterButton = SemanticIconButton(
       icon: const Icon(Icons.filter_list),
       // TODO: translate
@@ -178,12 +174,7 @@ class _BodyState extends ConsumerState<_Body> {
                     ).appBarTheme.backgroundColor?.withValues(alpha: 1),
                     automaticallyImplyLeading: false,
                     primary: false,
-                    title: AutoSizeText(
-                      section.$2,
-                      maxLines: 1,
-                      minFontSize: 14,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    title: AppBarTitleText(section.$2),
                     pinned: true,
                   ),
                 SliverPadding(

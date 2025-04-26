@@ -33,6 +33,7 @@ import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
@@ -188,12 +189,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     return Scaffold(
       appBar: AppBar(
-        title: AutoSizeText(
-          widget.studyState.currentChapterTitle,
-          maxLines: 2,
-          minFontSize: 14,
-          overflow: TextOverflow.ellipsis,
-        ),
+        title: AppBarTitleText(widget.studyState.currentChapterTitle),
         actions: [
           if (widget.studyState.isEngineAvailable(enginePrefs))
             EngineDepth(

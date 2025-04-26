@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('AnalysisScreen');
@@ -137,14 +138,7 @@ class _Title extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (!excludedIcons.contains(variant)) ...[Icon(variant.icon), const SizedBox(width: 5.0)],
-        Flexible(
-          child: AutoSizeText(
-            context.l10n.analysis,
-            minFontSize: 14,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
+        Flexible(child: AppBarTitleText(context.l10n.analysis)),
       ],
     );
   }

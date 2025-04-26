@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -381,14 +382,7 @@ class _TournamentGameTitle extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(
-          child: AutoSizeText(
-            tournament.name,
-            maxLines: 1,
-            minFontSize: 14.0,
-            maxFontSize: AppBarTheme.of(context).titleTextStyle?.fontSize ?? 20.0,
-          ),
-        ),
+        Flexible(child: AppBarTitleText(tournament.name)),
         CountdownClockBuilder(
           timeLeft: tournament.clock.timeLeft,
           clockUpdatedAt: tournament.clock.at,
@@ -436,31 +430,14 @@ class _StandaloneGameTitle extends ConsumerWidget {
             const SizedBox(width: 4.0),
             if (meta.clock != null)
               Flexible(
-                child: AutoSizeText(
+                child: AppBarTitleText(
                   '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$info',
-                  maxLines: 1,
-                  minFontSize: 14.0,
-                  maxFontSize: AppBarTheme.of(context).titleTextStyle?.fontSize ?? 20.0,
                 ),
               )
             else if (meta.daysPerTurn != null)
-              Flexible(
-                child: AutoSizeText(
-                  '${context.l10n.nbDays(meta.daysPerTurn!)}$info',
-                  maxLines: 1,
-                  minFontSize: 14.0,
-                  maxFontSize: AppBarTheme.of(context).titleTextStyle?.fontSize ?? 20.0,
-                ),
-              )
+              Flexible(child: AppBarTitleText('${context.l10n.nbDays(meta.daysPerTurn!)}$info'))
             else
-              Flexible(
-                child: AutoSizeText(
-                  '${meta.perf.title}$info',
-                  maxLines: 1,
-                  minFontSize: 14.0,
-                  maxFontSize: AppBarTheme.of(context).titleTextStyle?.fontSize ?? 20.0,
-                ),
-              ),
+              Flexible(child: AppBarTitleText('${meta.perf.title}$info')),
           ],
         );
       },

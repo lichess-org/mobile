@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -173,12 +174,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: AutoSizeText(
-          widget.broadcast.title,
-          minFontSize: 14.0,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
+        title: AppBarTitleText(widget.broadcast.title),
         bottom: TabBar(
           controller: _tabController,
           tabs: <Widget>[

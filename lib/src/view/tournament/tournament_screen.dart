@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class TournamentScreen extends ConsumerStatefulWidget {
@@ -204,7 +205,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AutoSizeText(state.tournament.fullName, maxLines: 1, minFontSize: 14.0);
+    return AppBarTitleText(state.tournament.fullName);
   }
 }
 
