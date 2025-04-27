@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_item.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker_configuration.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker_models.dart';
-import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_search_bar.dart';
-import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_section.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 typedef EmojiSearchBarBuilder =
@@ -11,6 +11,16 @@ typedef EmojiSearchBarBuilder =
       BuildContext context,
       ValueNotifier<String> keyword,
       ValueNotifier<EmojiSkinTone> skinTone,
+    );
+
+typedef EmojiSectionHeaderBuilder = Widget Function(BuildContext context, Category category);
+
+typedef EmojiItemBuilder =
+    Widget Function(
+      BuildContext context,
+      String emojiId,
+      String emoji,
+      EmojiSelectedCallback callback,
     );
 
 class EmojiPicker extends StatefulWidget {
@@ -264,5 +274,134 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
       default:
         return Icons.emoji_emotions;
     }
+  }
+}
+
+class EmojiSection extends StatelessWidget {
+  const EmojiSection({
+    super.key,
+    required this.configuration,
+    required this.emojiData,
+    required this.category,
+    required this.onEmojiSelected,
+    required this.sectionKey,
+    this.headerBuilder,
+    this.itemBuilder,
+    this.skinTone = EmojiSkinTone.none,
+  });
+
+  final Key sectionKey;
+  final EmojiPickerConfiguration configuration;
+  final EmojiData emojiData;
+  final Category category;
+  final EmojiSkinTone skinTone;
+  final EmojiSelectedCallback onEmojiSelected;
+  final EmojiSectionHeaderBuilder? headerBuilder;
+  final EmojiItemBuilder? itemBuilder;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverMainAxisGroup(
+      slivers: [
+        if (configuration.showSectionHeader)
+          PinnedHeaderSliver(
+            child:
+                headerBuilder?.call(context, category) ??
+                EmojiSectionHeader(category: category, configuration: configuration),
+          ),
+        SliverGrid.builder(
+          key: sectionKey,
+          itemCount: category.emojiIds.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: configuration.perLine,
+          ),
+          itemBuilder: (context, index) {
+            final emojiId = category.emojiIds[index];
+            final emojiSrc = emojiData.getEmojiById(emojiId);
+            return itemBuilder?.call(context, emojiId, emojiSrc, onEmojiSelected) ??
+                EmojiItem(
+                  size: configuration.emojiSize,
+                  emoji: emojiSrc,
+                  onTap: () => onEmojiSelected(emojiId, emojiSrc),
+                );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class EmojiSectionHeader extends StatelessWidget {
+  const EmojiSectionHeader({super.key, required this.category, required this.configuration});
+
+  final Category category;
+  final EmojiPickerConfiguration configuration;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 28,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      width: double.infinity,
+      color: Theme.of(context).colorScheme.surfaceContainer,
+      child: Text(category.name, style: Theme.of(context).textTheme.titleMedium),
+    );
+  }
+}
+
+class EmojiSearchBar extends StatefulWidget {
+  const EmojiSearchBar({super.key, required this.configuration, required this.onKeywordChanged});
+
+  final EmojiPickerConfiguration configuration;
+  final void Function(String keyword) onKeywordChanged;
+
+  @override
+  State<EmojiSearchBar> createState() => _EmojiSearchBarState();
+}
+
+class _EmojiSearchBarState extends State<EmojiSearchBar> {
+  final controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 48,
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+      color: Theme.of(context).colorScheme.surfaceContainer,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // search bar
+          Expanded(
+            child: TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search, size: 20),
+                hintText: context.l10n.searchSearch,
+                border: const OutlineInputBorder(),
+                contentPadding: EdgeInsets.zero,
+              ),
+              style: const TextStyle(fontSize: 15),
+              onChanged: widget.onKeywordChanged,
+            ),
+          ),
+          IconButton(
+            tooltip: context.l10n.mobileClearButton,
+            icon: const Icon(Icons.clear, size: 20),
+            onPressed: () {
+              controller.clear();
+              widget.onKeywordChanged('');
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
