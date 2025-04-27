@@ -25,8 +25,9 @@ class _EmojiSearchBarState extends State<EmojiSearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 52,
+      height: 48,
       padding: const EdgeInsets.all(4.0),
+      color: Theme.of(context).colorScheme.surfaceContainer,
       child: Row(
         children: [
           // search bar

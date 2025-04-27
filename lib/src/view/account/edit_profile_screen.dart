@@ -200,48 +200,50 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                 final flairListAsync = ref.watch(flairListProvider);
                                 switch (flairListAsync) {
                                   case AsyncData(:final value):
-                                    return Dialog(
-                                      child: ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.sizeOf(context).height * 0.5,
-                                          maxWidth: MediaQuery.sizeOf(context).width * 0.85,
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Expanded(
-                                              child: EmojiPicker(
-                                                emojiData: value,
-                                                itemBuilder: (context, emojiId, emoji, callback) {
-                                                  return EmojiItem(
-                                                    onTap: () {
-                                                      callback(emojiId, emoji);
-                                                    },
-                                                    emoji: emoji,
-                                                  );
-                                                },
-                                                onEmojiSelected: (emojiId, emoji) {
-                                                  Navigator.of(context).pop(emojiId);
-                                                },
+                                    return SafeArea(
+                                      child: Dialog(
+                                        child: ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            maxHeight: MediaQuery.sizeOf(context).height * 0.5,
+                                            maxWidth: MediaQuery.sizeOf(context).width * 0.9,
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                child: EmojiPicker(
+                                                  emojiData: value,
+                                                  itemBuilder: (context, emojiId, emoji, callback) {
+                                                    return EmojiItem(
+                                                      onTap: () {
+                                                        callback(emojiId, emoji);
+                                                      },
+                                                      emoji: emoji,
+                                                    );
+                                                  },
+                                                  onEmojiSelected: (emojiId, emoji) {
+                                                    Navigator.of(context).pop(emojiId);
+                                                  },
+                                                ),
                                               ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop('__clear__');
-                                                  },
-                                                  child: Text(context.l10n.mobileClearButton),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Text(context.l10n.cancel),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop('__clear__');
+                                                    },
+                                                    child: Text(context.l10n.mobileClearButton),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    child: Text(context.l10n.cancel),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     );
@@ -249,8 +251,8 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                     return Dialog(
                                       child: ConstrainedBox(
                                         constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.sizeOf(context).height * 0.6,
-                                          maxWidth: MediaQuery.sizeOf(context).width * 0.8,
+                                          maxHeight: MediaQuery.sizeOf(context).height * 0.5,
+                                          maxWidth: MediaQuery.sizeOf(context).width * 0.9,
                                         ),
                                         child: const Center(
                                           child: CircularProgressIndicator.adaptive(),

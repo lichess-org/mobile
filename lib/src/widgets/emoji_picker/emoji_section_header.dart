@@ -12,9 +12,9 @@ class EmojiSectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 28,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       width: double.infinity,
-      color: Theme.of(context).colorScheme.surface,
+      color: Theme.of(context).colorScheme.surfaceContainer,
       child: Text(category.name, style: Theme.of(context).textTheme.titleMedium),
     );
   }

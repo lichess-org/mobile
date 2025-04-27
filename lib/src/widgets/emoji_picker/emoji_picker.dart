@@ -148,6 +148,7 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
             .toList();
     return TabBar(
       isScrollable: true,
+      tabAlignment: TabAlignment.start,
       controller: tabController,
       tabs: tabs,
       onTap: (index) {
