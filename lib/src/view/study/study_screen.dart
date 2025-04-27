@@ -177,7 +177,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitleText(widget.studyState.currentChapterTitle),
+        title: AppBarTitleText(widget.studyState.currentChapterTitle, maxLines: 2),
         actions: [
           if (widget.studyState.isEngineAvailable(enginePrefs))
             EngineDepth(
