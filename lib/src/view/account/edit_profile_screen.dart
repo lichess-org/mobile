@@ -210,19 +210,30 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                           child: Column(
                                             children: [
                                               Expanded(
-                                                child: EmojiPicker(
-                                                  emojiData: value,
-                                                  itemBuilder: (context, emojiId, emoji, callback) {
-                                                    return EmojiItem(
-                                                      onTap: () {
-                                                        callback(emojiId, emoji);
-                                                      },
-                                                      emoji: emoji,
-                                                    );
-                                                  },
-                                                  onEmojiSelected: (emojiId, emoji) {
-                                                    Navigator.of(context).pop(emojiId);
-                                                  },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(
+                                                    vertical: 12.0,
+                                                    horizontal: 4.0,
+                                                  ),
+                                                  child: EmojiPicker(
+                                                    emojiData: value,
+                                                    itemBuilder: (
+                                                      context,
+                                                      emojiId,
+                                                      emoji,
+                                                      callback,
+                                                    ) {
+                                                      return EmojiItem(
+                                                        onTap: () {
+                                                          callback(emojiId, emoji);
+                                                        },
+                                                        emoji: emoji,
+                                                      );
+                                                    },
+                                                    onEmojiSelected: (emojiId, emoji) {
+                                                      Navigator.of(context).pop(emojiId);
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                               Row(
@@ -234,6 +245,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                                     },
                                                     child: Text(context.l10n.mobileClearButton),
                                                   ),
+                                                  const SizedBox(width: 8.0),
                                                   TextButton(
                                                     onPressed: () {
                                                       Navigator.of(context).pop();

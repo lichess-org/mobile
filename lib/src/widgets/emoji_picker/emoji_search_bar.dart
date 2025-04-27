@@ -26,9 +26,10 @@ class _EmojiSearchBarState extends State<EmojiSearchBar> {
   Widget build(BuildContext context) {
     return Container(
       height: 48,
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
       color: Theme.of(context).colorScheme.surfaceContainer,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // search bar
           Expanded(
@@ -44,10 +45,9 @@ class _EmojiSearchBarState extends State<EmojiSearchBar> {
               onChanged: widget.onKeywordChanged,
             ),
           ),
-          // clear button
           IconButton(
             tooltip: context.l10n.mobileClearButton,
-            icon: const Icon(Icons.clear),
+            icon: const Icon(Icons.clear, size: 20),
             onPressed: () {
               controller.clear();
               widget.onKeywordChanged('');
