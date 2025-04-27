@@ -192,7 +192,7 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
             builder: (_, keyword, _) {
               final emojiData = widget.emojiData.filterByKeyword(keyword);
               if (emojiData.categories.isEmpty) {
-                return Center(child: Text(widget.configuration.i18n.searchNoResult));
+                return const Center(child: Text('Oops, no emoji found'));
               }
               return builder(emojiData, skinTone);
             },
@@ -244,22 +244,22 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
 
   IconData categoryIcon(String categoryId) {
     switch (categoryId) {
+      case 'smileys':
+        return Icons.emoji_emotions;
       case 'people':
         return Icons.tag_faces;
       case 'nature':
         return Icons.eco;
-      case 'foods':
+      case 'food-drink':
         return Icons.fastfood;
       case 'activity':
         return Icons.directions_run;
-      case 'places':
+      case 'travel-places':
         return Icons.location_city;
       case 'objects':
         return Icons.lightbulb;
       case 'symbols':
         return Icons.emoji_symbols;
-      case 'flags':
-        return Icons.flag;
       default:
         return Icons.emoji_emotions;
     }

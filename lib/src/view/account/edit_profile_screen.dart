@@ -178,8 +178,8 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                     return Dialog(
                                       child: ConstrainedBox(
                                         constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.sizeOf(context).height * 0.6,
-                                          maxWidth: MediaQuery.sizeOf(context).width * 0.8,
+                                          maxHeight: MediaQuery.sizeOf(context).height * 0.5,
+                                          maxWidth: MediaQuery.sizeOf(context).width * 0.85,
                                         ),
                                         child: Column(
                                           children: [
@@ -195,6 +195,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                                   );
                                                 },
                                                 onEmojiSelected: (emojiId, emoji) {
+                                                  print('emojiId: $emojiId, emoji: $emoji');
                                                   Navigator.of(context).pop(emojiId);
                                                 },
                                               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker_configuration.dart';
 
 class EmojiSearchBar extends StatefulWidget {
@@ -34,7 +35,7 @@ class _EmojiSearchBarState extends State<EmojiSearchBar> {
               controller: controller,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search, size: 20),
-                hintText: widget.configuration.i18n.searchHintText,
+                hintText: context.l10n.searchSearch,
                 border: const OutlineInputBorder(),
                 contentPadding: EdgeInsets.zero,
               ),
@@ -44,7 +45,7 @@ class _EmojiSearchBarState extends State<EmojiSearchBar> {
           ),
           // clear button
           IconButton(
-            tooltip: widget.configuration.i18n.searchClearTooltip,
+            tooltip: context.l10n.mobileClearButton,
             icon: const Icon(Icons.clear),
             onPressed: () {
               controller.clear();

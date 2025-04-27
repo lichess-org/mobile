@@ -7,6 +7,7 @@ part 'emoji_picker_models.g.dart';
 class Category with _$Category {
   const factory Category({
     required String id,
+    required String name,
     @JsonKey(name: 'emojis') required List<String> emojiIds,
   }) = _Category;
 
