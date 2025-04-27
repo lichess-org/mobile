@@ -19,11 +19,105 @@ import 'package:result_extensions/result_extensions.dart';
 
 final _countries = countries.values.toList();
 
-class EditProfileScreen extends StatelessWidget {
+class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
     return buildScreenRoute(context, screen: const EditProfileScreen());
+  }
+
+  @override
+  ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _formData = <String, dynamic>{
+    'flag': null,
+    'location': null,
+    'bio': null,
+    'realName': null,
+    'lastName': null,
+    'fideRating': null,
+    'uscfRating': null,
+    'ecfRating': null,
+    'links': null,
+  };
+
+  bool _formHasChanges(User user) {
+    final formState = _formKey.currentState;
+    if (formState != null) {
+      if (formState.validate()) {
+        formState.save();
+        return _formData['bio'] != user.profile?.bio ||
+            _formData['flair'] != user.flair ||
+            _formData['flag'] != user.profile?.country ||
+            _formData['location'] != user.profile?.location ||
+            _formData['realName'] != user.profile?.realName ||
+            _formData['fideRating'] != user.profile?.fideRating ||
+            _formData['uscfRating'] != user.profile?.uscfRating ||
+            _formData['ecfRating'] != user.profile?.ecfRating ||
+            _formData['links'] != user.profile?.links?.map((e) => e.url).join('\r\n');
+      }
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final account = ref.watch(accountProvider);
+    switch (account) {
+      case AsyncData(:final value):
+        return Scaffold(
+          appBar: AppBar(title: Text(context.l10n.editProfile)),
+          body: PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (bool didPop, _) async {
+              if (didPop) {
+                return;
+              }
+              final NavigatorState navigator = Navigator.of(context);
+              if (value == null || !_formHasChanges(value)) {
+                return navigator.pop();
+              }
+              final bool? shouldPop = await _showBackDialog(context);
+              if (shouldPop ?? false) {
+                navigator.pop();
+              }
+            },
+            child:
+                value == null
+                    ? Center(child: Text(context.l10n.mobileMustBeLoggedIn))
+                    : GestureDetector(
+                      onTap: () => FocusScope.of(context).unfocus(),
+                      child: Padding(
+                        padding: Styles.bodyPadding.copyWith(top: 0, bottom: 0),
+                        child: ListView(
+                          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                          children: [
+                            SizedBox(height: Styles.bodyPadding.top),
+                            Text(context.l10n.allInformationIsPublicAndOptional),
+                            const SizedBox(height: 16),
+                            _EditProfileForm(value, _formKey, _formData),
+                            SizedBox(height: Styles.bodyPadding.bottom),
+                          ],
+                        ),
+                      ),
+                    ),
+          ),
+        );
+
+      case AsyncError(:final error):
+        return Scaffold(
+          appBar: AppBar(title: Text(context.l10n.editProfile)),
+          body: Center(child: Text(error.toString())),
+        );
+      case _:
+        return Scaffold(
+          appBar: AppBar(title: Text(context.l10n.editProfile)),
+          body: const Center(child: CircularProgressIndicator.adaptive()),
+        );
+    }
   }
 
   Future<bool?> _showBackDialog(BuildContext context) {
@@ -47,89 +141,20 @@ class EditProfileScreen extends StatelessWidget {
       },
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.editProfile)),
-      body: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (bool didPop, _) async {
-          if (didPop) {
-            return;
-          }
-          final NavigatorState navigator = Navigator.of(context);
-          final bool? shouldPop = await _showBackDialog(context);
-          if (shouldPop ?? false) {
-            navigator.pop();
-          }
-        },
-        child: _Body(),
-      ),
-    );
-  }
-}
-
-class _Body extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final account = ref.watch(accountProvider);
-    return account.when(
-      data: (data) {
-        if (data == null) {
-          return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
-        }
-        return GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Padding(
-            padding: Styles.bodyPadding.copyWith(top: 0, bottom: 0),
-            child: ListView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              children: [
-                SizedBox(height: Styles.bodyPadding.top),
-                Text(context.l10n.allInformationIsPublicAndOptional),
-                const SizedBox(height: 16),
-                _EditProfileForm(data),
-                SizedBox(height: Styles.bodyPadding.bottom),
-              ],
-            ),
-          ),
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-      error: (err, stack) => Center(child: Text(err.toString())),
-    );
-  }
 }
 
 class _EditProfileForm extends ConsumerStatefulWidget {
-  const _EditProfileForm(this.user);
+  const _EditProfileForm(this.user, this.formKey, this.formData);
 
   final User user;
+  final Map<String, dynamic> formData;
+  final GlobalKey<FormState> formKey;
 
   @override
   _EditProfileFormState createState() => _EditProfileFormState();
 }
 
 class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
-  final _formKey = GlobalKey<FormState>();
-
-  final _formData = <String, dynamic>{
-    'flair': null,
-    'flag': null,
-    'location': null,
-    'bio': null,
-    'firstName': null,
-    'lastName': null,
-    'fideRating': null,
-    'uscfRating': null,
-    'ecfRating': null,
-    'rcfRating': null,
-    'cfcRating': null,
-    'dsbRating': null,
-    'links': null,
-  };
-
   Future<void>? _pendingSaveProfile;
 
   @override
@@ -137,7 +162,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
     final String? initialLinks = widget.user.profile?.links?.map((e) => e.url).join('\r\n');
 
     return Form(
-      key: _formKey,
+      key: widget.formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -145,7 +170,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             label: context.l10n.biography,
             initialValue: widget.user.profile?.bio,
             formKey: 'bio',
-            formData: _formData,
+            formData: widget.formData,
             description: context.l10n.biographyDescription,
             maxLength: 400,
             maxLines: 6,
@@ -156,7 +181,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             child: FormField<String>(
               initialValue: widget.user.flair,
               onSaved: (value) {
-                _formData['flair'] = value;
+                widget.formData['flair'] = value;
               },
               builder: (FormFieldState<String> field) {
                 return Column(
@@ -195,18 +220,26 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                                   );
                                                 },
                                                 onEmojiSelected: (emojiId, emoji) {
-                                                  print('emojiId: $emojiId, emoji: $emoji');
                                                   Navigator.of(context).pop(emojiId);
                                                 },
                                               ),
                                             ),
-                                            Center(
-                                              child: TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text(context.l10n.cancel),
-                                              ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop('__clear__');
+                                                  },
+                                                  child: Text(context.l10n.mobileClearButton),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(context.l10n.cancel),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
@@ -230,7 +263,11 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                           },
                         ).then((value) {
                           if (value != null) {
-                            field.didChange(value);
+                            if (value == '__clear__') {
+                              field.didChange(null);
+                            } else {
+                              field.didChange(value);
+                            }
                           }
                         });
                       },
@@ -243,7 +280,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                         child:
                             field.value != null
                                 ? CachedNetworkImage(imageUrl: lichessFlairSrc(field.value!))
-                                : const Text('Choose a flair'),
+                                : Text(context.l10n.setFlair),
                       ),
                     ),
                   ],
@@ -256,7 +293,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             child: FormField<String>(
               initialValue: widget.user.profile?.country,
               onSaved: (value) {
-                _formData['flag'] = value;
+                widget.formData['flag'] = value;
               },
               builder: (FormFieldState<String> field) {
                 return Column(
@@ -307,7 +344,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
           _TextField(
             label: context.l10n.location,
             initialValue: widget.user.profile?.location,
-            formData: _formData,
+            formData: widget.formData,
             formKey: 'location',
             maxLength: 80,
           ),
@@ -315,7 +352,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             label: context.l10n.realName,
             initialValue: widget.user.profile?.realName,
             formKey: 'realName',
-            formData: _formData,
+            formData: widget.formData,
             maxLength: 20,
           ),
 
@@ -323,7 +360,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             label: context.l10n.xRating('FIDE'),
             initialValue: widget.user.profile?.fideRating,
             formKey: 'fideRating',
-            formData: _formData,
+            formData: widget.formData,
             validator: (value) {
               if (value != null && (value < 1400 || value > 3000)) {
                 return 'Rating must be between 1400 and 3000';
@@ -335,7 +372,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             label: context.l10n.xRating('USCF'),
             initialValue: widget.user.profile?.uscfRating,
             formKey: 'uscfRating',
-            formData: _formData,
+            formData: widget.formData,
             validator: (value) {
               if (value != null && (value < 100 || value > 3000)) {
                 return 'Rating must be between 100 and 3000';
@@ -347,7 +384,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             label: context.l10n.xRating('ECF'),
             initialValue: widget.user.profile?.ecfRating,
             formKey: 'ecfRating',
-            formData: _formData,
+            formData: widget.formData,
             validator: (value) {
               if (value != null && (value < 0 || value > 3000)) {
                 return 'Rating must be between 0 and 3000';
@@ -359,7 +396,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             label: context.l10n.socialMediaLinks,
             initialValue: initialLinks,
             formKey: 'links',
-            formData: _formData,
+            formData: widget.formData,
             maxLength: 3000,
             maxLines: 4,
             textInputAction: TextInputAction.newline,
@@ -377,15 +414,17 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                       snapshot.connectionState == ConnectionState.waiting
                           ? null
                           : () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              _formData.removeWhere((key, value) {
+                            if (widget.formKey.currentState!.validate()) {
+                              widget.formKey.currentState!.save();
+                              widget.formData.removeWhere((key, value) {
                                 return value == null;
                               });
                               final future = Result.capture(
                                 ref.withClient(
                                   (client) => AccountRepository(client).saveProfile(
-                                    _formData.map((key, value) => MapEntry(key, value.toString())),
+                                    widget.formData.map(
+                                      (key, value) => MapEntry(key, value.toString()),
+                                    ),
                                   ),
                                 ),
                               );
