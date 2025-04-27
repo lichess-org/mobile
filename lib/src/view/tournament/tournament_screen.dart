@@ -204,7 +204,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBarTitleText(state.tournament.fullName);
+    return AppBarTitleText(state.tournament.fullName, maxLines: 2);
   }
 }
 

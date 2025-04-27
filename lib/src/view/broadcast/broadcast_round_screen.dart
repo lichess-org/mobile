@@ -173,7 +173,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: AppBarTitleText(widget.broadcast.title),
+        title: AppBarTitleText(widget.broadcast.title, maxLines: 2),
         bottom: TabBar(
           controller: _tabController,
           tabs: <Widget>[
