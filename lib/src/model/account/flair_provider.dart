@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'flair_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<EmojiData> flairList(Ref ref) async {
   final list = await ref
       .read(defaultClientProvider)
