@@ -36,35 +36,32 @@ class EmojiSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget child = SliverGrid.builder(
-      key: sectionKey,
-      itemCount: category.emojiIds.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: configuration.perLine,
-      ),
-      itemBuilder: (context, index) {
-        final emojiId = category.emojiIds[index];
-        final emojiSrc = emojiData.getEmojiById(emojiId);
-        return itemBuilder?.call(context, emojiId, emojiSrc, onEmojiSelected) ??
-            EmojiItem(
-              size: configuration.emojiSize,
-              emoji: emojiSrc,
-              onTap: () => onEmojiSelected(emojiId, emojiSrc),
-            );
-      },
+    return SliverMainAxisGroup(
+      slivers: [
+        if (configuration.showSectionHeader)
+          PinnedHeaderSliver(
+            child:
+                headerBuilder?.call(context, category) ??
+                EmojiSectionHeader(category: category, configuration: configuration),
+          ),
+        SliverGrid.builder(
+          key: sectionKey,
+          itemCount: category.emojiIds.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: configuration.perLine,
+          ),
+          itemBuilder: (context, index) {
+            final emojiId = category.emojiIds[index];
+            final emojiSrc = emojiData.getEmojiById(emojiId);
+            return itemBuilder?.call(context, emojiId, emojiSrc, onEmojiSelected) ??
+                EmojiItem(
+                  size: configuration.emojiSize,
+                  emoji: emojiSrc,
+                  onTap: () => onEmojiSelected(emojiId, emojiSrc),
+                );
+          },
+        ),
+      ],
     );
-    // if (configuration.showSectionHeader) {
-    //   child = SliverStickyHeader(
-    //     header: headerBuilder != null
-    //         ? headerBuilder!(context, category)
-    //         : EmojiSectionHeader(
-    //             category: category,
-    //             configuration: configuration,
-    //           ),
-    //     sliver: child,
-    //   );
-    // }
-
-    return child;
   }
 }
