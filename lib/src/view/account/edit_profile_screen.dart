@@ -1,14 +1,18 @@
 import 'package:async/async.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/flair_provider.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/emoji_picker/widget.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -111,6 +115,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
   final _formKey = GlobalKey<FormState>();
 
   final _formData = <String, dynamic>{
+    'flair': null,
     'flag': null,
     'location': null,
     'bio': null,
@@ -130,9 +135,11 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
   @override
   Widget build(BuildContext context) {
     final String? initialLinks = widget.user.profile?.links?.map((e) => e.url).join('\r\n');
+
     return Form(
       key: _formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _TextField(
             label: context.l10n.biography,
@@ -143,6 +150,87 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             maxLength: 400,
             maxLines: 6,
             textInputAction: TextInputAction.newline,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: FormField<String>(
+              initialValue: widget.user.flair,
+              onSaved: (value) {
+                _formData['flair'] = value;
+              },
+              builder: (FormFieldState<String> field) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(context.l10n.flair, style: Styles.formLabel),
+                    const SizedBox(height: 6.0),
+                    InkWell(
+                      onTap: () {
+                        showDialog<String>(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (context) {
+                            return Consumer(
+                              builder: (context, ref, _) {
+                                final flairListAsync = ref.watch(flairListProvider);
+                                switch (flairListAsync) {
+                                  case AsyncData(:final value):
+                                    return Dialog.fullscreen(
+                                      child: Scaffold(
+                                        body: EmojiPicker(
+                                          emojiData: value,
+                                          itemBuilder: (context, emojiId, emoji, callback) {
+                                            return EmojiItem(
+                                              onTap: () {
+                                                callback(emojiId, emoji);
+                                              },
+                                              emoji: emoji,
+                                            );
+                                          },
+                                          onEmojiSelected: (emojiId, emoji) {
+                                            Navigator.of(context).pop(emojiId);
+                                          },
+                                        ),
+                                        persistentFooterButtons: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(context.l10n.cancel),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  case _:
+                                    return const Dialog.fullscreen(
+                                      child: Center(child: CircularProgressIndicator.adaptive()),
+                                    );
+                                }
+                              },
+                            );
+                          },
+                        ).then((value) {
+                          if (value != null) {
+                            field.didChange(value);
+                          }
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Theme.of(context).dividerColor),
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child:
+                            field.value != null
+                                ? CachedNetworkImage(imageUrl: lichessFlairSrc(field.value!))
+                                : const Text('Choose a flair'),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
@@ -389,14 +477,6 @@ class __NumericFieldState extends State<_NumericField> {
 }
 
 class _TextField extends StatefulWidget {
-  final String label;
-  final String? initialValue;
-  final String formKey;
-  final String? description;
-  final int? maxLength;
-  final int? maxLines;
-  final Map<String, dynamic> formData;
-  final TextInputAction textInputAction;
   const _TextField({
     required this.label,
     required this.initialValue,
@@ -407,6 +487,15 @@ class _TextField extends StatefulWidget {
     this.maxLines,
     this.textInputAction = TextInputAction.next,
   });
+
+  final String label;
+  final String? initialValue;
+  final String formKey;
+  final String? description;
+  final int? maxLength;
+  final int? maxLines;
+  final Map<String, dynamic> formData;
+  final TextInputAction textInputAction;
 
   @override
   State<_TextField> createState() => __TextFieldState();
