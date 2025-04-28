@@ -115,7 +115,9 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
 
   @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')
   const factory BoardPrefs({
+    @JsonKey(defaultValue: PieceSet.staunty, unknownEnumValue: PieceSet.staunty)
     required PieceSet pieceSet,
+    @JsonKey(defaultValue: BoardTheme.brown, unknownEnumValue: BoardTheme.brown)
     required BoardTheme boardTheme,
     bool? immersiveModeWhilePlaying,
     required bool hapticFeedback,
@@ -291,6 +293,7 @@ enum BoardTheme {
   blueMarble('Blue Marble', 'blue-marble'),
   canvas('Canvas', 'canvas'),
   leather('Leather', 'leather'),
+  ic('IC', 'ic'),
   green('Green', 'green'),
   marble('Marble', 'marble'),
   greenPlastic('Green Plastic', 'green-plastic'),
@@ -337,6 +340,8 @@ enum BoardTheme {
         return ChessboardColorScheme.brown;
       case BoardTheme.leather:
         return ChessboardColorScheme.leather;
+      case BoardTheme.ic:
+        return ChessboardColorScheme.ic;
       case BoardTheme.green:
         return ChessboardColorScheme.green;
       case BoardTheme.marble:
@@ -360,29 +365,42 @@ enum BoardTheme {
     }
   }
 
-  Widget get thumbnail =>
-      this == BoardTheme.system
-          ? SizedBox(
-            height: 44,
-            width: 44 * 6,
-            child: Row(
-              children: [
-                for (final c in const [1, 2, 3, 4, 5, 6])
-                  Container(
-                    width: 44,
-                    color:
-                        c.isEven
-                            ? BoardTheme.system.colors.darkSquare
-                            : BoardTheme.system.colors.lightSquare,
-                  ),
-              ],
+  Widget get thumbnail => switch (this) {
+    BoardTheme.system => SizedBox(
+      height: 44,
+      width: 44 * 6,
+      child: Row(
+        children: [
+          for (final c in const [1, 2, 3, 4, 5, 6])
+            Container(
+              width: 44,
+              color:
+                  c.isEven
+                      ? BoardTheme.system.colors.darkSquare
+                      : BoardTheme.system.colors.lightSquare,
             ),
-          )
-          : Image.asset(
-            'assets/board-thumbnails/$name.jpg',
-            height: 44,
-            errorBuilder: (context, o, st) => const SizedBox.shrink(),
-          );
+        ],
+      ),
+    ),
+    BoardTheme.ic => SizedBox(
+      height: 44,
+      width: 44 * 6,
+      child: Row(
+        children: [
+          for (final c in const [1, 2, 3, 4, 5, 6])
+            Container(
+              width: 44,
+              color: c.isEven ? BoardTheme.ic.colors.darkSquare : BoardTheme.ic.colors.lightSquare,
+            ),
+        ],
+      ),
+    ),
+    _ => Image.asset(
+      'assets/board-thumbnails/$name.jpg',
+      height: 44,
+      errorBuilder: (context, o, st) => const SizedBox.shrink(),
+    ),
+  };
 }
 
 enum MaterialDifferenceFormat {
