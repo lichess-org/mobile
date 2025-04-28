@@ -7,11 +7,13 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class TournamentListScreen extends ConsumerStatefulWidget {
   const TournamentListScreen({super.key});
@@ -103,10 +105,51 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   }
 }
 
+class FeaturedTournamentsWidget extends ConsumerWidget {
+  const FeaturedTournamentsWidget({required this.featured, super.key});
+
+  final AsyncValue<IList<LightTournament>> featured;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    switch (featured) {
+      case AsyncData(:final value):
+        if (value.where((t) => playSupportedVariants.contains(t.meta.variant)).isEmpty) {
+          return const SizedBox.shrink();
+        }
+        return ListSection(
+          header: Text(context.l10n.openTournaments),
+          onHeaderTap: () {
+            Navigator.of(context).push(TournamentListScreen.buildRoute(context));
+          },
+          children: [
+            for (final tournament in value)
+              if (playSupportedVariants.contains(tournament.meta.variant))
+                _TournamentListItem(tournament: tournament),
+          ],
+        );
+
+      case AsyncError(:final error):
+        debugPrint('$error');
+        return const Padding(
+          padding: Styles.bodySectionPadding,
+          child: Text('Could not load featured tournaments'),
+        );
+      case _:
+        return Shimmer(
+          child: ShimmerLoading(
+            isLoading: true,
+            child: ListSection.loading(itemsNumber: 5, header: true),
+          ),
+        );
+    }
+  }
+}
+
 class _TournamentListBody extends ConsumerStatefulWidget {
   const _TournamentListBody({required this.tournaments});
 
-  final IList<TournamentListItem> tournaments;
+  final IList<LightTournament> tournaments;
 
   @override
   ConsumerState<_TournamentListBody> createState() => _TournamentListBodyState();
@@ -117,11 +160,11 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
 
   @override
   Widget build(BuildContext context) {
-    final List<TournamentListItem> systemTours = [];
-    final List<TournamentListItem> userTours = [];
+    final List<LightTournament> systemTours = [];
+    final List<LightTournament> userTours = [];
 
     widget.tournaments
-        .where((tournament) => playSupportedVariants.contains(tournament.variant))
+        .where((tournament) => playSupportedVariants.contains(tournament.meta.variant))
         .forEach((tournament) {
           if (tournament.isSystemTournament) {
             systemTours.add(tournament);
@@ -132,16 +175,16 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
 
     final sortedSystemTours = systemTours
         .sorted((a, b) {
-          final aVariant = a.variant;
-          final bVariant = b.variant;
+          final aVariant = a.meta.variant;
+          final bVariant = b.meta.variant;
           if (aVariant == Variant.standard && bVariant != Variant.standard) {
             return -1;
           } else if (aVariant != Variant.standard && bVariant == Variant.standard) {
             return 1;
           }
 
-          final aMaxRating = a.maxRating;
-          final bMaxRating = b.maxRating;
+          final aMaxRating = a.meta.maxRating;
+          final bMaxRating = b.meta.maxRating;
           if (aMaxRating == null && bMaxRating != null) {
             return -1;
           } else if (aMaxRating != null && bMaxRating == null) {
@@ -157,7 +200,7 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
             return a.startsAt.compareTo(b.startsAt);
           }
         })
-        .sortedBy((tournament) => tournament.freq ?? TournamentFreq.hourly);
+        .sortedBy((tournament) => tournament.meta.freq ?? TournamentFreq.hourly);
 
     final tournamentListItems = [
       ...sortedSystemTours.map((tournament) => _TournamentListItem(tournament: tournament)),
@@ -181,10 +224,10 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
   }
 }
 
-Color? _iconColor(TournamentListItem tournament) {
-  return tournament.maxRating != null
+Color? _iconColor(LightTournament tournament) {
+  return tournament.meta.maxRating != null
       ? LichessColors.purple
-      : switch (tournament.freq) {
+      : switch (tournament.meta.freq) {
         TournamentFreq.hourly => LichessColors.green,
         TournamentFreq.daily => LichessColors.blue,
         TournamentFreq.monthly => LichessColors.red,
@@ -195,17 +238,17 @@ Color? _iconColor(TournamentListItem tournament) {
 class _TournamentListItem extends StatelessWidget {
   const _TournamentListItem({required this.tournament});
 
-  final TournamentListItem tournament;
+  final LightTournament tournament;
 
   static final _hourMinuteFormat = DateFormat.Hm();
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(tournament.perf.icon, color: _iconColor(tournament)),
-      title: Text(tournament.fullName, overflow: TextOverflow.ellipsis, maxLines: 2),
+      leading: Icon(tournament.meta.perf.icon, color: _iconColor(tournament)),
+      title: Text(tournament.meta.fullName, overflow: TextOverflow.ellipsis, maxLines: 2),
       subtitle: Text(
-        '${tournament.timeIncrement.display} ${tournament.rated ? context.l10n.rated : context.l10n.broadcastUnrated} • ${context.l10n.nbMinutes(tournament.minutes)}',
+        '${tournament.meta.timeIncrement.display} ${tournament.meta.rated ? context.l10n.rated : context.l10n.broadcastUnrated} • ${context.l10n.nbMinutes(tournament.meta.duration.inMinutes)}',
       ),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,

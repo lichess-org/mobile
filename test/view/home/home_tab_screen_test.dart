@@ -66,6 +66,9 @@ void main() {
                 if (request.url.path == '/api/challenge') {
                   return mockResponse(challengesList, 200);
                 }
+                if (request.url.path == '/tournament/featured') {
+                  return mockResponse('{"featured":[]}', 200);
+                }
                 return mockResponse('', 200);
               }),
             ),
@@ -127,6 +130,9 @@ void main() {
           nbUserGamesRequests++;
           return mockResponse('', 200);
         }
+        if (request.url.path == '/tournament/featured') {
+          return mockResponse('{"featured":[]}', 200);
+        }
         return mockResponse('', 200);
       });
       final app = await makeTestProviderScope(
@@ -148,7 +154,19 @@ void main() {
     });
 
     testWidgets('no session, with stored games: shows list of recent games', (tester) async {
-      final app = await makeTestProviderScope(tester, child: const Application());
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/tournament/featured') {
+          return mockResponse('{"featured":[]}', 200);
+        }
+        return mockResponse('', 200);
+      });
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        overrides: [
+          httpClientFactoryProvider.overrideWith((ref) => FakeHttpClientFactory(() => mockClient)),
+        ],
+      );
       await tester.pumpWidget(app);
 
       final container = ProviderScope.containerOf(tester.element(find.byType(Application)));
@@ -173,6 +191,9 @@ void main() {
         if (request.url.path == '/api/games/user/testuser') {
           nbUserGamesRequests++;
           return mockResponse(mockUserRecentGameResponse('testUser'), 200);
+        }
+        if (request.url.path == '/tournament/featured') {
+          return mockResponse('{"featured":[]}', 200);
         }
         return mockResponse('', 200);
       });
@@ -202,6 +223,9 @@ void main() {
         if (request.url.path == '/api/account/playing') {
           nbOngoingGamesRequests++;
           return mockResponse(mockAccountOngoingGamesResponse(), 200);
+        }
+        if (request.url.path == '/tournament/featured') {
+          return mockResponse('{"featured":[]}', 200);
         }
         return mockResponse('', 200);
       });

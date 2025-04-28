@@ -211,7 +211,7 @@ class TournamentState with _$TournamentState {
   const factory TournamentState({required Tournament tournament, required int standingsPage}) =
       _TournamentState;
 
-  String get name => tournament.fullName;
+  String get name => tournament.meta.fullName;
   TournamentId get id => tournament.id;
 
   GameFullId? get currentGame => tournament.me?.gameId;

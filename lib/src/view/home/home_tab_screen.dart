@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +11,8 @@ import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_g
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
+import 'package:lichess_mobile/src/model/tournament/tournament.dart';
+import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -29,6 +30,7 @@ import 'package:lichess_mobile/src/view/play/create_game_options.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
@@ -81,6 +83,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         final recentGames = ref.watch(myRecentGamesProvider);
         final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
         final isTablet = isTabletOrLarger(context);
+        final featuredTournaments =
+            status.isOnline
+                ? ref.watch(featuredTournamentsProvider)
+                : const AsyncValue.data(IListConst<LightTournament>([]));
 
         // Show the welcome screen if not logged in and there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
@@ -98,6 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   ongoingGames: ongoingGames,
                   offlineCorresGames: offlineCorresGames,
                   recentGames: recentGames,
+                  featuredTournaments: featuredTournaments,
                   nbOfGames: nbOfGames,
                 )
                 : _handsetWidgets(
@@ -106,6 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   ongoingGames: ongoingGames,
                   offlineCorresGames: offlineCorresGames,
                   recentGames: recentGames,
+                  featuredTournaments: featuredTournaments,
                   nbOfGames: nbOfGames,
                 );
 
@@ -154,25 +162,23 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required AsyncValue<IList<OngoingGame>> ongoingGames,
     required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames,
     required AsyncValue<IList<LightExportedGameWithPov>> recentGames,
+    required AsyncValue<IList<LightTournament>> featuredTournaments,
     required int nbOfGames,
   }) {
-    final homePrefs = ref.watch(homePreferencesProvider);
     final hasOngoingGames =
         (status.isOnline &&
             ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false)) ||
         (!status.isOnline &&
             offlineCorresGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false));
     final list = [
-      _EditableWidget(
+      const _EditableWidget(
         widget: HomeEditableWidget.hello,
         shouldShow: true,
-        index: homePrefs.enabledWidgets.indexOf(HomeEditableWidget.hello),
-        child: const _HelloWidget(),
+        child: _HelloWidget(),
       ),
       _EditableWidget(
         widget: HomeEditableWidget.perfCards,
         shouldShow: session != null && status.isOnline,
-        index: homePrefs.enabledWidgets.indexOf(HomeEditableWidget.perfCards),
         child: AccountPerfCards(
           padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
         ),
@@ -180,28 +186,27 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       _EditableWidget(
         widget: HomeEditableWidget.quickPairing,
         shouldShow: status.isOnline,
-        index: homePrefs.enabledWidgets.indexOf(HomeEditableWidget.quickPairing),
         child: const Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
       ),
       _EditableWidget(
         widget: HomeEditableWidget.ongoingGames,
         shouldShow: hasOngoingGames,
-        index: homePrefs.enabledWidgets.indexOf(HomeEditableWidget.ongoingGames),
         child:
             status.isOnline
                 ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
                 : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
       ),
       _EditableWidget(
+        widget: HomeEditableWidget.featuredTournaments,
+        shouldShow: status.isOnline,
+        child: FeaturedTournamentsWidget(featured: featuredTournaments),
+      ),
+      _EditableWidget(
         widget: HomeEditableWidget.recentGames,
-        index: homePrefs.enabledWidgets.indexOf(HomeEditableWidget.recentGames),
         shouldShow: true,
         child: RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
       ),
-    ].sortedBy((_EditableWidget widget) {
-      final i = homePrefs.enabledWidgets.indexOf(widget.widget);
-      return i != -1 ? i : HomeEditableWidget.values.length;
-    });
+    ];
     return [...list, const SizedBox(height: 54.0)];
   }
 
@@ -267,6 +272,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     required AsyncValue<IList<OngoingGame>> ongoingGames,
     required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames,
     required AsyncValue<IList<LightExportedGameWithPov>> recentGames,
+    required AsyncValue<IList<LightTournament>> featuredTournaments,
     required int nbOfGames,
   }) {
     return [
@@ -302,6 +308,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(height: 8.0),
+                FeaturedTournamentsWidget(featured: featuredTournaments),
                 RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
               ],
             ),
@@ -352,23 +359,17 @@ class _SignInWidget extends ConsumerWidget {
 ///   This parameter is only active when the user is not in edit mode, as we
 ///   always want to display the widget in edit mode.
 class _EditableWidget extends ConsumerWidget {
-  const _EditableWidget({
-    required this.child,
-    required this.widget,
-    required this.shouldShow,
-    this.index,
-  });
+  const _EditableWidget({required this.child, required this.widget, required this.shouldShow});
 
   final Widget child;
   final HomeEditableWidget widget;
   final bool shouldShow;
-  final int? index;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final enabledWidgets = ref.watch(homePreferencesProvider).enabledWidgets;
+    final disabledWidgets = ref.watch(homePreferencesProvider).disabledWidgets;
     final isEditing = ref.watch(editModeProvider);
-    final isEnabled = enabledWidgets.contains(widget);
+    final isEnabled = !disabledWidgets.contains(widget);
 
     if (!shouldShow) {
       return const SizedBox.shrink();
@@ -383,16 +384,6 @@ class _EditableWidget extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (index != null)
-                    IconButton(
-                      icon: Icon(Icons.arrow_upward, color: ColorScheme.of(context).outline),
-                      onPressed:
-                          isEnabled
-                              ? () {
-                                ref.read(homePreferencesProvider.notifier).moveUp(widget);
-                              }
-                              : null,
-                    ),
                   Checkbox.adaptive(
                     value: isEnabled,
                     onChanged:
@@ -402,16 +393,6 @@ class _EditableWidget extends ConsumerWidget {
                               ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
                             },
                   ),
-                  if (index != null)
-                    IconButton(
-                      icon: Icon(Icons.arrow_downward, color: ColorScheme.of(context).outline),
-                      onPressed:
-                          isEnabled
-                              ? () {
-                                ref.read(homePreferencesProvider.notifier).moveDown(widget);
-                              }
-                              : null,
-                    ),
                 ],
               ),
             ),

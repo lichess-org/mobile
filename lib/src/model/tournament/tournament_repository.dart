@@ -1,4 +1,5 @@
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
@@ -18,6 +19,14 @@ class TournamentRepository {
   TournamentRepository(this.client);
 
   final Client client;
+
+  Future<IList<LightTournament>> featured() {
+    return client.readJson(
+      Uri(path: '/tournament/featured'),
+      headers: {'Accept': 'application/json'},
+      mapper: (Map<String, dynamic> json) => pick(json, 'featured').asTournamentListOrThrow(),
+    );
+  }
 
   Future<TournamentLists> getTournaments() {
     return client.readJson(

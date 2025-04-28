@@ -34,9 +34,9 @@ enum TournamentFreq implements Comparable<TournamentFreq> {
 
 typedef TournamentLists =
     ({
-      IList<TournamentListItem> started,
-      IList<TournamentListItem> created,
-      IList<TournamentListItem> finished,
+      IList<LightTournament> started,
+      IList<LightTournament> created,
+      IList<LightTournament> finished,
     });
 
 typedef TournamentMe = ({int rank, GameFullId? gameId, bool? withdraw, Duration? pauseDelay});
@@ -65,8 +65,8 @@ extension TournamentExtension on Pick {
     throw PickException("value $value at $debugParsingExit can't be casted to TournamentFreq");
   }
 
-  IList<TournamentListItem> asTournamentListOrThrow() =>
-      asListOrThrow((pick) => TournamentListItem.fromServerJson(pick.asMapOrThrow())).toIList();
+  IList<LightTournament> asTournamentListOrThrow() =>
+      asListOrThrow((pick) => LightTournament.fromServerJson(pick.asMapOrThrow())).toIList();
 
   Verdict asVerdictOrThrow() {
     final requiredPick = this.required();
@@ -134,49 +134,67 @@ extension TournamentExtension on Pick {
 }
 
 @freezed
-class TournamentListItem with _$TournamentListItem {
-  const TournamentListItem._();
+class TournamentMeta with _$TournamentMeta {
+  const TournamentMeta._();
 
-  const factory TournamentListItem({
-    required TournamentId id,
+  const factory TournamentMeta({
     required String createdBy,
     required String fullName,
     required TimeIncrement timeIncrement,
     required bool rated,
-    required DateTime startsAt,
-    required DateTime finishesAt,
     required int? maxRating,
-    required int minutes,
-    required int nbPlayers,
+    required Duration duration,
     required Perf perf,
-    required int position,
     required TournamentFreq? freq,
     required Variant variant,
-    required LightUser? winner,
-  }) = _TournamentListItem;
+  }) = _TournamentMeta;
 
-  factory TournamentListItem.fromServerJson(Map<String, Object?> json) =>
-      _tournamentListItemFromPick(pick(json).required());
-
-  bool get isSystemTournament => freq != null;
+  factory TournamentMeta.fromServerJson(Map<String, Object?> json) =>
+      _tournamentMetaFromPick(pick(json).required());
 }
 
-TournamentListItem _tournamentListItemFromPick(RequiredPick pick) {
-  return TournamentListItem(
-    id: pick('id').asTournamentIdOrThrow(),
+TournamentMeta _tournamentMetaFromPick(RequiredPick pick) {
+  return TournamentMeta(
     fullName: pick('fullName').asStringOrThrow(),
     timeIncrement: pick('clock').asTimeIncrementOrThrow(),
     rated: pick('rated').asBoolOrThrow(),
     createdBy: pick('createdBy').asStringOrThrow(),
-    finishesAt: pick('finishesAt').asDateTimeFromMillisecondsOrThrow(),
     maxRating: pick('maxRating', 'rating').asIntOrNull(),
-    minutes: pick('minutes').asIntOrThrow(),
-    nbPlayers: pick('nbPlayers').asIntOrThrow(),
+    duration: pick('minutes').asDurationFromMinutesOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
-    position: pick('perf', 'position').asIntOrThrow(),
     freq: pick('schedule').letOrNull((p) => p('freq').asTournamentFreqOrThrow()),
-    startsAt: pick('startsAt').asDateTimeFromMillisecondsOrThrow(),
     variant: pick('variant').asVariantOrThrow(),
+  );
+}
+
+@freezed
+class LightTournament with _$LightTournament {
+  const LightTournament._();
+
+  const factory LightTournament({
+    required TournamentId id,
+    required TournamentMeta meta,
+    required int position,
+    required int nbPlayers,
+    required DateTime startsAt,
+    required DateTime finishesAt,
+    required LightUser? winner,
+  }) = _LightTournament;
+
+  factory LightTournament.fromServerJson(Map<String, Object?> json) =>
+      _lightTournamentFromPick(pick(json).required());
+
+  bool get isSystemTournament => meta.freq != null;
+}
+
+LightTournament _lightTournamentFromPick(RequiredPick pick) {
+  return LightTournament(
+    id: pick('id').asTournamentIdOrThrow(),
+    meta: _tournamentMetaFromPick(pick),
+    startsAt: pick('startsAt').asDateTimeFromMillisecondsOrThrow(),
+    finishesAt: pick('finishesAt').asDateTimeFromMillisecondsOrThrow(),
+    position: pick('perf', 'position').asIntOrThrow(),
+    nbPlayers: pick('nbPlayers').asIntOrThrow(),
     winner: pick('winner').asLightUserOrNull(),
   );
 }
@@ -191,18 +209,12 @@ class Tournament with _$Tournament {
 
   const factory Tournament({
     required TournamentId id,
-    required String createdBy,
-    required TimeIncrement timeIncrement,
-    required Perf perf,
-    required Variant variant,
-    required bool rated,
+    required TournamentMeta meta,
     required bool berserkable,
     required FeaturedGame? featuredGame,
-    required String fullName,
     required String? description,
     required bool? isFinished,
     required bool? isStarted,
-    required Duration duration,
     required (Duration, DateTime)? timeToStart,
     required (Duration, DateTime)? timeToFinish,
     required TournamentMe? me,
@@ -222,13 +234,9 @@ class Tournament with _$Tournament {
 Tournament _tournamentFromPick(RequiredPick pick) {
   return Tournament(
     id: pick('id').asTournamentIdOrThrow(),
-    createdBy: pick('createdBy').asStringOrThrow(),
-    duration: pick('minutes').asDurationFromMinutesOrThrow(),
-    timeIncrement: pick('clock').asTimeIncrementOrThrow(),
+    meta: _tournamentMetaFromPick(pick),
     featuredGame: pick('featured').asFeaturedGameOrNull(),
-    fullName: pick('fullName').asStringOrThrow(),
     description: pick('description').asStringOrNull(),
-    rated: pick('rated').asBoolOrFalse(),
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
     timeToStart: pick(
@@ -240,8 +248,6 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     me: pick('me').asTournamentMeOrNull(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     standing: pick('standing').asStandingPageOrNull(),
-    perf: pick('perf').asPerfOrThrow(),
-    variant: pick('variant').asVariantOrThrow(),
     berserkable: pick('berserkable').asBoolOrFalse(),
     verdicts: pick('verdicts').asVerdictsOrThrow(),
     reloadEndpoint: pick('reloadEndpoint').asStringOrNull(),

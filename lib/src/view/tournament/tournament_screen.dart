@@ -204,7 +204,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBarTitleText(state.tournament.fullName, maxLines: 2);
+    return AppBarTitleText(state.tournament.meta.fullName, maxLines: 2);
   }
 }
 
@@ -366,17 +366,17 @@ class _TournamentInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(tournament.perf.icon, size: 36),
+        Icon(tournament.meta.perf.icon, size: 36),
         const SizedBox(width: 10),
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${tournament.timeIncrement.display} • ${tournament.perf.title} • ${context.l10n.nbMinutes(tournament.duration.inMinutes)}',
+                '${tournament.meta.timeIncrement.display} • ${tournament.meta.perf.title} • ${context.l10n.nbMinutes(tournament.meta.duration.inMinutes)}',
               ),
               Text(
-                '${tournament.rated ? context.l10n.rated : context.l10n.casual} • ${context.l10n.arenaArena}',
+                '${tournament.meta.rated ? context.l10n.rated : context.l10n.casual} • ${context.l10n.arenaArena}',
               ),
               const SizedBox(height: 5),
             ],

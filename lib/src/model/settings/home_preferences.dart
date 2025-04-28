@@ -30,68 +30,21 @@ class HomePreferences extends _$HomePreferences with PreferencesStorage<HomePref
       return Future.value();
     }
     final newState = state.copyWith(
-      enabledWidgets:
-          state.enabledWidgets.contains(widget)
-              ? state.enabledWidgets.remove(widget)
-              : state.enabledWidgets.add(widget),
-    );
-    return save(newState);
-  }
-
-  Future<void> moveToTop(HomeEditableWidget widget) {
-    final newState = state.copyWith(
-      enabledWidgets: [widget, ...state.enabledWidgets.where((w) => w != widget)].lock,
-    );
-    return save(newState);
-  }
-
-  Future<void> moveToBottom(HomeEditableWidget widget) {
-    final newState = state.copyWith(
-      enabledWidgets: [...state.enabledWidgets.where((w) => w != widget), widget].lock,
-    );
-    return save(newState);
-  }
-
-  Future<void> moveUp(HomeEditableWidget widget) {
-    final index = state.enabledWidgets.indexOf(widget);
-    if (index == 0) {
-      return moveToBottom(widget);
-    }
-    final newState = state.copyWith(
-      enabledWidgets:
-          [
-            ...state.enabledWidgets.sublist(0, index - 1),
-            widget,
-            state.enabledWidgets[index - 1],
-            ...state.enabledWidgets.sublist(index + 1),
-          ].lock,
-    );
-    return save(newState);
-  }
-
-  Future<void> moveDown(HomeEditableWidget widget) {
-    final index = state.enabledWidgets.indexOf(widget);
-    if (index == state.enabledWidgets.length - 1) {
-      return moveToTop(widget);
-    }
-    final newState = state.copyWith(
-      enabledWidgets:
-          [
-            ...state.enabledWidgets.sublist(0, index),
-            state.enabledWidgets[index + 1],
-            widget,
-            ...state.enabledWidgets.sublist(index + 2),
-          ].lock,
+      disabledWidgets:
+          state.disabledWidgets.contains(widget)
+              ? state.disabledWidgets.remove(widget)
+              : state.disabledWidgets.add(widget),
     );
     return save(newState);
   }
 }
 
 enum HomeEditableWidget {
-  ongoingGames(true),
   hello(false),
   perfCards(false),
+  ongoingGames(true),
   quickPairing(false),
+  featuredTournaments(false),
   recentGames(false);
 
   String label(AppLocalizations l10n) => switch (this) {
@@ -99,6 +52,7 @@ enum HomeEditableWidget {
     HomeEditableWidget.hello => 'Hello',
     HomeEditableWidget.perfCards => 'Performance Cards',
     HomeEditableWidget.quickPairing => l10n.quickPairing,
+    HomeEditableWidget.featuredTournaments => l10n.openTournaments,
     HomeEditableWidget.recentGames => l10n.recentGames,
   };
 
@@ -110,23 +64,17 @@ enum HomeEditableWidget {
 
 @Freezed(fromJson: true, toJson: true)
 class HomePrefs with _$HomePrefs implements Serializable {
-  const factory HomePrefs({required IList<HomeEditableWidget> enabledWidgets}) = _HomePrefs;
+  const factory HomePrefs({required IList<HomeEditableWidget> disabledWidgets}) = _HomePrefs;
 
-  static const defaults = HomePrefs(
-    enabledWidgets: IListConst([
-      HomeEditableWidget.hello,
-      HomeEditableWidget.ongoingGames,
-      HomeEditableWidget.perfCards,
-      HomeEditableWidget.quickPairing,
-      HomeEditableWidget.recentGames,
-    ]),
-  );
+  static const defaults = HomePrefs(disabledWidgets: _kEmptyList);
 
   factory HomePrefs.fromJson(Map<String, dynamic> json) {
     try {
       return _$HomePrefsFromJson(json);
-    } catch (_) {
+    } catch (e) {
       return defaults;
     }
   }
 }
+
+const _kEmptyList = IListConst<HomeEditableWidget>([]);
