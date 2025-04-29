@@ -256,7 +256,7 @@ class _TournamentListItem extends StatelessWidget {
         children: [
           Text(
             '${_hourMinuteFormat.format(tournament.startsAt)} - ${_hourMinuteFormat.format(tournament.finishesAt)}',
-            style: const TextStyle(fontSize: 14),
+            style: const TextStyle(fontSize: 14, fontFeatures: [FontFeature.tabularFigures()]),
           ),
           Text.rich(
             TextSpan(
