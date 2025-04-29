@@ -3,6 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -15,12 +16,16 @@ part 'game_socket_events.freezed.dart';
 
 @freezed
 class GameFullEvent with _$GameFullEvent {
-  const factory GameFullEvent({required PlayableGame game, required int socketEventVersion}) =
-      _GameFullEvent;
+  const factory GameFullEvent({
+    required PlayableGame game,
+    IList<ChatMessage>? chat,
+    required int socketEventVersion,
+  }) = _GameFullEvent;
 
   factory GameFullEvent.fromJson(Map<String, dynamic> json) {
     return GameFullEvent(
       game: PlayableGame.fromServerJson(json),
+      chat: pick(json, 'chat', 'lines').asListOrNull((it) => ChatMessage.fromPick(it))?.lock,
       socketEventVersion: json['socket'] as int,
     );
   }

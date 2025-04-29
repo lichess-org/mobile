@@ -1,35 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/chat_controller.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
+import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-class MessageScreen extends ConsumerStatefulWidget {
-  final GameFullId id;
-  final Widget title;
-  final LightUser? me;
+class ChatScreen extends ConsumerStatefulWidget {
+  final ChatOptions options;
 
-  const MessageScreen({required this.id, required this.title, this.me});
+  const ChatScreen({required this.options});
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
-    required GameFullId id,
-    required Widget title,
-    LightUser? me,
-  }) {
-    return buildScreenRoute(context, screen: MessageScreen(id: id, title: title, me: me));
+  static Route<dynamic> buildRoute(BuildContext context, {required ChatOptions options}) {
+    return buildScreenRoute(context, screen: ChatScreen(options: options));
   }
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _MessageScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ChatScreenState();
 }
 
-class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
+class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -47,73 +40,68 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 
   @override
   void didPop() {
-    ref.read(chatControllerProvider(widget.id).notifier).markMessagesAsRead();
+    ref.read(chatControllerProvider(widget.options).notifier).markMessagesAsRead();
     super.didPop();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: widget.title, centerTitle: true),
-      body: _Body(me: widget.me, id: widget.id),
-    );
-  }
-}
-
-class _Body extends ConsumerWidget {
-  final GameFullId id;
-  final LightUser? me;
-
-  const _Body({required this.id, required this.me});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final chatStateAsync = ref.watch(chatControllerProvider(id));
-
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Expanded(
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: chatStateAsync.when(
-              data: (chatState) {
-                final selectedMessages =
-                    chatState.messages.where((m) => !m.troll && !m.deleted && !isSpam(m)).toList();
-                final messagesCount = selectedMessages.length;
-                return ListView.builder(
-                  // remove the automatic bottom padding of the ListView, which on iOS
-                  // corresponds to the safe area insets
-                  // and which is here taken care of by the _ChatBottomBar
-                  padding: MediaQuery.of(context).padding.copyWith(bottom: 0),
-                  reverse: true,
-                  itemCount: messagesCount,
-                  itemBuilder: (context, index) {
-                    final message = selectedMessages[messagesCount - index - 1];
-                    return (message.username == 'lichess')
-                        ? _MessageAction(message: message.message)
-                        : (message.username == me?.name)
-                        ? _MessageBubble(you: true, message: message.message)
-                        : _MessageBubble(you: false, message: message.message);
-                  },
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-              error: (error, _) => Center(child: Text(error.toString())),
-            ),
+    switch (ref.watch(chatControllerProvider(widget.options))) {
+      case AsyncData(:final value):
+        return Scaffold(
+          appBar: AppBar(
+            title:
+                widget.options.isPublic
+                    ? Text(context.l10n.chatRoom)
+                    : widget.options.opponent == null
+                    ? Text(context.l10n.chatRoom)
+                    : UserFullNameWidget(user: widget.options.opponent),
+            centerTitle: true,
           ),
-        ),
-        _ChatBottomBar(id: id),
-      ],
-    );
+          body: Column(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: ListView.builder(
+                    // remove the automatic bottom padding of the ListView which is here taken care
+                    // of by the _ChatBottomBar
+                    padding: MediaQuery.of(context).padding.copyWith(bottom: 0),
+                    reverse: true,
+                    itemCount: value.messages.length,
+                    itemBuilder: (context, index) {
+                      final message = value.messages[value.messages.length - index - 1];
+                      return (message.username == 'lichess')
+                          ? _MessageAction(message: message.message)
+                          : (message.username == widget.options.me?.name)
+                          ? _MessageBubble(you: true, message: message)
+                          : _MessageBubble(
+                            you: false,
+                            message: message,
+                            showUsername: widget.options.isPublic,
+                          );
+                    },
+                  ),
+                ),
+              ),
+              _ChatBottomBar(options: widget.options),
+            ],
+          ),
+        );
+      case AsyncError(:final error):
+        return Scaffold(body: Center(child: Text(error.toString())));
+      case _:
+        return const Scaffold(body: Center(child: CircularProgressIndicator.adaptive()));
+    }
   }
 }
 
 class _MessageBubble extends ConsumerWidget {
-  final bool you;
-  final String message;
+  const _MessageBubble({required this.you, required this.message, this.showUsername = false});
 
-  const _MessageBubble({required this.you, required this.message});
+  final bool you;
+  final ChatMessage message;
+  final bool showUsername;
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
       you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainerLow;
@@ -137,7 +125,21 @@ class _MessageBubble extends ConsumerWidget {
             borderRadius: BorderRadius.circular(16.0),
             color: _bubbleColor(context, brightness),
           ),
-          child: Text(message, style: TextStyle(color: _textColor(context, brightness))),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (showUsername && message.user != null)
+                UserFullNameWidget(
+                  user: message.user,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: _textColor(context, brightness),
+                  ),
+                ),
+              Text(message.message, style: TextStyle(color: _textColor(context, brightness))),
+            ],
+          ),
         ),
       ),
     );
@@ -168,8 +170,8 @@ class _MessageAction extends StatelessWidget {
 }
 
 class _ChatBottomBar extends ConsumerStatefulWidget {
-  final GameFullId id;
-  const _ChatBottomBar({required this.id});
+  final ChatOptions options;
+  const _ChatBottomBar({required this.options});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatBottomBarState();
@@ -195,7 +197,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
                 session != null && value.text.isNotEmpty
                     ? () {
                       ref
-                          .read(chatControllerProvider(widget.id).notifier)
+                          .read(chatControllerProvider(widget.options).notifier)
                           .sendMessage(_textController.text);
                       _textController.clear();
                     }

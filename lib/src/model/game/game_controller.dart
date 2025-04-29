@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -53,6 +54,8 @@ class GameController extends _$GameController {
   /// It will also help with lila-ws restarts.
   Timer? _transientMoveTimer;
 
+  Timer? _loadChatTimer;
+
   /// Callback to be called when a full reload is needed.
   VoidCallback? _onFullReload;
 
@@ -76,6 +79,7 @@ class GameController extends _$GameController {
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
+      _loadChatTimer?.cancel();
       _transientMoveTimer?.cancel();
       _clock?.dispose();
       _clock = null;
@@ -119,12 +123,30 @@ class GameController extends _$GameController {
         _onFinishedGameLoad(fullEvent.game);
       }
 
-      return GameState(
+      if (fullEvent.chat != null) {
+        scheduleMicrotask(() {});
+      }
+
+      final gameState = GameState(
         gameFullId: gameFullId,
         game: game,
         stepCursor: game.steps.length - 1,
         liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
       );
+
+      state = AsyncValue.data(gameState);
+
+      // yolo workaround to load chat messages
+      if (gameState.chatOptions != null && fullEvent.chat != null) {
+        _loadChatTimer?.cancel();
+        _loadChatTimer = Timer(const Duration(milliseconds: 50), () {
+          ref
+              .read(chatControllerProvider(gameState.chatOptions!).notifier)
+              .onMessagesLoad(fullEvent.chat!);
+        });
+      }
+
+      return gameState;
     });
   }
 
@@ -533,6 +555,12 @@ class GameController extends _$GameController {
             black: newGame.clock!.black,
             activeSide: state.requireValue.activeClockSide,
           );
+        }
+
+        if (state.requireValue.chatOptions != null && fullEvent.chat != null) {
+          ref
+              .read(chatControllerProvider(state.requireValue.chatOptions!).notifier)
+              .onMessagesLoad(fullEvent.chat!);
         }
 
       // Server asking for a resync
@@ -1075,5 +1103,15 @@ class GameState with _$GameState {
               variant: game.meta.variant,
               isComputerAnalysisAllowed: false,
             ),
+          );
+
+  ChatOptions? get chatOptions =>
+      isZenModeActive || game.meta.tournament != null
+          ? null
+          : (
+            id: gameFullId,
+            isPublic: game.meta.tournament != null,
+            me: game.youAre != null ? game.playerOf(game.youAre!).user : null,
+            opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
           );
 }
