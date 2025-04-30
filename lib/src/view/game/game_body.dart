@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -458,19 +457,6 @@ class _GameBottomBar extends ConsumerWidget {
               gamePrefs.enableChat == true &&
               gameState.chatOptions != null &&
               kidModeAsync.valueOrNull == false;
-          final chatStateAsync =
-              canShowChat ? ref.watch(chatControllerProvider(gameState.chatOptions!)) : null;
-
-          final chatUnreadLabel = chatStateAsync?.maybeWhen(
-            data:
-                (s) =>
-                    s.unreadMessages > 0
-                        ? (s.unreadMessages < 10)
-                            ? s.unreadMessages.toString()
-                            : '9+'
-                        : null,
-            orElse: () => null,
-          );
 
           return [
             BottomBarButton(
@@ -603,17 +589,7 @@ class _GameBottomBar extends ConsumerWidget {
                         : null,
                 icon: Icons.flag_outlined,
               ),
-            if (canShowChat)
-              BottomBarButton(
-                label: context.l10n.chat,
-                onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(ChatScreen.buildRoute(context, options: gameState.chatOptions!));
-                },
-                icon: Icons.chat_bubble_outline,
-                badgeLabel: chatUnreadLabel,
-              ),
+            if (canShowChat) ChatBottomBarButton(options: gameState.chatOptions!),
             RepeatButton(
               onLongPress: gameState.canGoBackward ? () => _moveBackward(ref) : null,
               child: BottomBarButton(

@@ -1,7 +1,8 @@
+import 'dart:io' show File;
+
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
@@ -12,13 +13,14 @@ part 'tournament_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 TournamentRepository tournamentRepository(Ref ref) {
-  return TournamentRepository(ref.read(lichessClientProvider));
+  return TournamentRepository(ref.read(lichessClientProvider), ref);
 }
 
 class TournamentRepository {
-  TournamentRepository(this.client);
+  TournamentRepository(this.client, Ref ref) : _ref = ref;
 
-  final Client client;
+  final Ref _ref;
+  final http.Client client;
 
   Future<IList<LightTournament>> featured() {
     return client.readJson(
@@ -44,9 +46,18 @@ class TournamentRepository {
 
   Future<Tournament> getTournament(TournamentId id) {
     return client.readJson(
-      Uri(path: '/api/tournament/$id'),
+      Uri(path: '/api/tournament/$id', queryParameters: {'chat': '1', 'socketVersion': '1'}),
       headers: {'Accept': 'application/json'},
       mapper: (Map<String, dynamic> json) => Tournament.fromServerJson(json),
+    );
+  }
+
+  Future<bool> downloadTournamentGames(TournamentId id, File file, {UserId? userId}) {
+    final client = _ref.read(defaultClientProvider);
+    return downloadFile(
+      client,
+      lichessUri('/api/tournament/$id/games', userId != null ? {'player': userId.value} : null),
+      file,
     );
   }
 

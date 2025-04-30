@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:logging/logging.dart';
+import 'package:share_plus/share_plus.dart';
 
 final _logger = Logger('AnalysisScreen');
 
@@ -342,7 +343,7 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
             onPressed: () {
               final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-              launchShareDialog(context, text: analysisState.currentPosition.fen);
+              launchShareDialog(context, ShareParams(text: analysisState.currentPosition.fen));
             },
           ),
         if (options.gameId != null)
@@ -362,8 +363,11 @@ class _BottomBar extends ConsumerWidget {
                 if (context.mounted) {
                   launchShareDialog(
                     context,
-                    files: [image],
-                    subject: context.l10n.puzzleFromGameLink(lichessUri('/$gameId').toString()),
+                    ShareParams(
+                      files: [image],
+                      fileNameOverrides: ['$gameId.gif'],
+                      subject: context.l10n.puzzleFromGameLink(lichessUri('/$gameId').toString()),
+                    ),
                   );
                 }
               } catch (e) {

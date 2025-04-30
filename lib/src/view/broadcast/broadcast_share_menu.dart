@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:share_plus/share_plus.dart';
 
 Future<void> showBroadcastShareMenu(
   BuildContext context,
@@ -15,7 +16,7 @@ Future<void> showBroadcastShareMenu(
       onPressed: () {
         launchShareDialog(
           context,
-          uri: lichessUri('/broadcast/${broadcast.tour.slug}/${broadcast.tour.id}'),
+          ShareParams(uri: lichessUri('/broadcast/${broadcast.tour.slug}/${broadcast.tour.id}')),
         );
       },
     ),
@@ -24,8 +25,10 @@ Future<void> showBroadcastShareMenu(
       onPressed: () {
         launchShareDialog(
           context,
-          uri: lichessUri(
-            '/broadcast/${broadcast.tour.slug}/${broadcast.round.slug}/${broadcast.round.id}',
+          ShareParams(
+            uri: lichessUri(
+              '/broadcast/${broadcast.tour.slug}/${broadcast.round.slug}/${broadcast.round.id}',
+            ),
           ),
         );
       },
@@ -35,8 +38,10 @@ Future<void> showBroadcastShareMenu(
       onPressed: () {
         launchShareDialog(
           context,
-          uri: lichessUri(
-            '/broadcast/${broadcast.tour.slug}/${broadcast.round.slug}/${broadcast.round.id}.pgn',
+          ShareParams(
+            uri: lichessUri(
+              '/broadcast/${broadcast.tour.slug}/${broadcast.round.slug}/${broadcast.round.id}.pgn',
+            ),
           ),
         );
       },

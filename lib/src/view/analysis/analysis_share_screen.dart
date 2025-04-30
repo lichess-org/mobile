@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:share_plus/share_plus.dart';
 
 final _dateFormatter = DateFormat('yyyy.MM.dd');
 
@@ -166,10 +167,12 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
                       onPressed: () {
                         launchShareDialog(
                           context,
-                          text:
-                              ref
-                                  .read(analysisControllerProvider(widget.options).notifier)
-                                  .makeExportPgn(),
+                          ShareParams(
+                            text:
+                                ref
+                                    .read(analysisControllerProvider(widget.options).notifier)
+                                    .makeExportPgn(),
+                          ),
                         );
                       },
                       child: Text(context.l10n.mobileShareGamePGN),

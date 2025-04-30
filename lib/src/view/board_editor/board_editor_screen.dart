@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:share_plus/share_plus.dart';
 
 class BoardEditorScreen extends ConsumerWidget {
   const BoardEditorScreen({super.key, this.initialFen});
@@ -40,7 +41,7 @@ class BoardEditorScreen extends ConsumerWidget {
         actions: [
           SemanticIconButton(
             semanticsLabel: context.l10n.mobileSharePositionAsFEN,
-            onPressed: () => launchShareDialog(context, text: boardEditorState.fen),
+            onPressed: () => launchShareDialog(context, ShareParams(text: boardEditorState.fen)),
             icon: const PlatformShareIcon(),
           ),
         ],

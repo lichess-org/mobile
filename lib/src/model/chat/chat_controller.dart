@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -17,7 +19,33 @@ part 'chat_controller.g.dart';
 const _tableName = 'chat_read_messages';
 String _storeKey(StringId id) => 'chat.$id';
 
-typedef ChatOptions = ({StringId id, LightUser? me, LightUser? opponent, bool isPublic});
+typedef ChatOptions =
+    ({StringId id, LightUser? me, LightUser? opponent, bool isPublic, bool writeable});
+
+/// Global chat data storage.
+Map<StringId, ChatData> _chatData = {};
+
+/// Loads the chat data from the server, before the [ChatController] is built.
+void setChatData(StringId id, ChatData data) {
+  // delete all data since we only want to keep the last one
+  _chatData.clear();
+  _chatData[id] = data;
+}
+
+/// A provider that gets the chat unread messages label if there are any unread messages.
+@riverpod
+Future<String?> chatUnreadLabel(Ref ref, ChatOptions options) async {
+  return ref.watch(
+    chatControllerProvider(options).selectAsync(
+      (s) =>
+          s.unreadMessages > 0
+              ? (s.unreadMessages < 10)
+                  ? s.unreadMessages.toString()
+                  : '9+'
+              : null,
+    ),
+  );
+}
 
 @riverpod
 class ChatController extends _$ChatController {
@@ -32,16 +60,26 @@ class ChatController extends _$ChatController {
       _subscription?.cancel();
     });
 
-    return ChatState(messages: IList(), unreadMessages: 0);
+    final readMessagesCount = await _getReadMessagesCount();
+
+    final messages = _selectMessages(_chatData[options.id]?.lines ?? IList());
+
+    return ChatState(messages: messages, unreadMessages: messages.length - readMessagesCount);
   }
 
-  /// Loads the chat messages from the server.
-  void onMessagesLoad(IList<ChatMessage> messages) {
-    _setMessages(messages);
+  /// Reloads the chat messages from the server.
+  Future<void> onReloadMessages(IList<ChatMessage> messages) async {
+    final readMessagesCount = await _getReadMessagesCount();
+    final newMessages = _selectMessages(messages);
+
+    state = state.whenData(
+      (s) =>
+          s.copyWith(messages: newMessages, unreadMessages: newMessages.length - readMessagesCount),
+    );
   }
 
   /// Sends a message to the chat.
-  void sendMessage(String message) {
+  void postMessage(String message) {
     ref.read(socketPoolProvider).currentClient.send('talk', message);
   }
 
@@ -84,35 +122,21 @@ class ChatController extends _$ChatController {
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<void> _setMessages(IList<ChatMessage> messages) async {
-    final readMessagesCount = await _getReadMessagesCount();
-
-    final newMessages = _selectMessages(messages);
-
-    state = state.whenData(
-      (s) =>
-          s.copyWith(messages: newMessages, unreadMessages: newMessages.length - readMessagesCount),
-    );
-  }
-
-  void _addMessage(ChatMessage message) {
-    state = state.whenData((s) {
-      final oldMessages = s.messages;
-      final newMessages = _selectMessages(oldMessages.add(message));
-      return s.copyWith(
-        messages: newMessages,
-        unreadMessages: newMessages.length - oldMessages.length,
-      );
-    });
-  }
-
   void _handleSocketEvent(SocketEvent event) {
     if (!state.hasValue) return;
 
     if (event.topic == 'message') {
       final data = event.data as Map<String, dynamic>;
       final message = ChatMessage.fromJson(data);
-      _addMessage(message);
+      state = state.whenData((s) {
+        final oldMessages = s.messages;
+        final newMessages = _selectMessages(oldMessages.add(message));
+        final unreadMessages = newMessages.length - oldMessages.length;
+        if (options.isPublic == false && unreadMessages > s.unreadMessages) {
+          ref.read(soundServiceProvider).play(Sound.confirmation, volume: 0.5);
+        }
+        return s.copyWith(messages: newMessages, unreadMessages: unreadMessages);
+      });
     }
   }
 }

@@ -1,6 +1,7 @@
+import 'dart:io';
 import 'dart:math';
 
-import 'package:dartchess/dartchess.dart';
+import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,8 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
+import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -20,6 +23,8 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -28,6 +33,8 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
+import 'package:share_plus/share_plus.dart';
 
 class TournamentScreen extends ConsumerStatefulWidget {
   const TournamentScreen({required this.id});
@@ -109,15 +116,13 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
 
     return FocusDetector(
       onFocusRegained: () {
-        ref.read(tournamentControllerProvider(id).notifier).listenToSocketEvents();
-      },
-      onFocusLost: () {
         if (context.mounted) {
-          ref.read(tournamentControllerProvider(id).notifier).stopListeningToSocketEvents();
+          ref.read(tournamentControllerProvider(id).notifier).onFocusRegained();
         }
       },
       child: Scaffold(
@@ -186,11 +191,34 @@ class _Body extends ConsumerWidget {
               const SizedBox(height: 16),
               _Standing(state),
               const SizedBox(height: 16),
-              if (state.tournament.featuredGame != null)
+              if (state.tournament.isFinished == true)
+                _TournamentCompleteWidget(state: state)
+              else if (state.tournament.featuredGame != null)
                 _FeaturedGame(state.tournament.featuredGame!),
+              if (session != null && state.joined) const SizedBox(height: 35),
             ],
           ),
         ),
+        bottomSheet:
+            session != null && state.joined && state.tournament.isFinished != true
+                ? Material(
+                  child: Container(
+                    height: 35,
+                    width: double.infinity,
+                    color: context.lichessColors.good,
+                    child: Padding(
+                      padding: Styles.horizontalBodyPadding,
+                      child: Center(
+                        child: Text(
+                          context.l10n.standByX(session.user.name),
+                          style: const TextStyle(color: Colors.white),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                : const SizedBox.shrink(),
         bottomNavigationBar: _BottomBar(state),
       ),
     );
@@ -532,6 +560,160 @@ class _FeaturedGamePlayer extends StatelessWidget {
   }
 }
 
+class _TournamentCompleteWidget extends ConsumerWidget {
+  const _TournamentCompleteWidget({required this.state});
+
+  final TournamentState state;
+
+  static const _headerStyle = TextStyle();
+  static const _valueStyle = TextStyle(fontWeight: FontWeight.bold);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+
+    final stats = state.tournament.stats;
+    if (stats == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Card(
+      child: Padding(
+        padding: Styles.bodySectionPadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(context.l10n.tournamentComplete, style: Styles.sectionTitle),
+            const SizedBox(height: 10),
+            DataTable(
+              headingRowHeight: 0,
+              dividerThickness: 0,
+              horizontalMargin: 0,
+              columns: const [
+                DataColumn(label: SizedBox.shrink()),
+                DataColumn(label: SizedBox.shrink()),
+              ],
+              rows: [
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.averageElo, style: _headerStyle)),
+                    DataCell(Text(stats.averageRating.toString(), style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.gamesPlayed, style: _headerStyle)),
+                    DataCell(Text(stats.nbGames.toString(), style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.movesPlayed, style: _headerStyle)),
+                    DataCell(Text(stats.nbMoves.toString(), style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.whiteWins, style: _headerStyle)),
+                    DataCell(Text('${stats.whiteWinRate.toStringAsFixed(2)}%', style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.blackWins, style: _headerStyle)),
+                    DataCell(Text('${stats.blackWinRate.toStringAsFixed(2)}%', style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.drawRate, style: _headerStyle)),
+                    DataCell(Text('${stats.drawRate.toStringAsFixed(2)}%', style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.arenaBerserkRate, style: _headerStyle)),
+                    DataCell(Text('${stats.berserkRate.toStringAsFixed(2)}%', style: _valueStyle)),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            LoadingButtonBuilder<File>(
+              fetchData: () => _downloadGames(ref),
+              builder: (context, snapshot, fetchData) {
+                return ListTile(
+                  leading: const Icon(Icons.download),
+                  title: Text(context.l10n.downloadAllGames),
+                  enabled: snapshot.connectionState != ConnectionState.waiting,
+                  onTap: () async {
+                    final file = await fetchData();
+                    if (context.mounted) {
+                      launchShareDialog(
+                        context,
+                        ShareParams(
+                          subject: context.l10n.downloadAllGames,
+                          fileNameOverrides: [
+                            'lichess_tournament_${state.tournament.startsAt}.${state.tournament.id}.pgn',
+                          ],
+                          files: [XFile(file.path)],
+                        ),
+                      ).then((_) {
+                        file.delete();
+                      });
+                    }
+                  },
+                );
+              },
+            ),
+            if (session != null)
+              LoadingButtonBuilder<File>(
+                fetchData: () => _downloadGames(ref, session.user),
+                builder: (context, snapshot, fetchData) {
+                  return ListTile(
+                    leading: const Icon(Icons.download),
+                    title: const Text('Download my games'),
+                    enabled: snapshot.connectionState != ConnectionState.waiting,
+                    onTap: () async {
+                      final file = await fetchData();
+                      if (context.mounted) {
+                        launchShareDialog(
+                          context,
+                          ShareParams(
+                            subject: 'Download my games',
+                            fileNameOverrides: [
+                              'lichess_tournament_${state.tournament.startsAt}.${state.tournament.id}_${session.user.name}.pgn',
+                            ],
+                            files: [XFile(file.path)],
+                          ),
+                        ).then((_) {
+                          file.delete();
+                        });
+                      }
+                    },
+                  );
+                },
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<File> _downloadGames(WidgetRef ref, [LightUser? player]) async {
+    final tempDir = await getTemporaryDirectory();
+    final file = File('${tempDir.path}/${state.tournament.id}_${player?.name ?? ''}.pgn');
+    final res = await ref
+        .read(tournamentRepositoryProvider)
+        .downloadTournamentGames(state.tournament.id, file, userId: player?.id);
+    if (res) {
+      return file;
+    } else {
+      throw Exception('Failed to download tournament games');
+    }
+  }
+}
+
 class _BottomBar extends ConsumerStatefulWidget {
   const _BottomBar(this.state);
 
@@ -546,7 +728,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoggedIn = ref.watch(authSessionProvider)?.user.id != null;
+    final session = ref.watch(authSessionProvider);
 
     ref.listen(
       tournamentControllerProvider(widget.state.id).select((value) => value.valueOrNull?.joined),
@@ -561,7 +743,18 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
 
     return BottomBar(
       children: [
-        if (isLoggedIn)
+        if (widget.state.tournament.chat != null)
+          ChatBottomBarButton(
+            options: (
+              id: widget.state.tournament.id,
+              me: session?.user,
+              opponent: null,
+              isPublic: true,
+              writeable: widget.state.tournament.chat!.writeable,
+            ),
+          ),
+
+        if (widget.state.tournament.isFinished != true && session != null)
           joinOrLeaveInProgress
               ? const Center(child: CircularProgressIndicator.adaptive())
               : BottomBarButton(
@@ -580,7 +773,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                         }
                         : null,
               )
-        else
+        else if (widget.state.tournament.isFinished != true)
           BottomBarButton(
             label: context.l10n.signIn,
             showLabel: true,

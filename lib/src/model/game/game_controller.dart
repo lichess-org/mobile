@@ -123,10 +123,6 @@ class GameController extends _$GameController {
         _onFinishedGameLoad(fullEvent.game);
       }
 
-      if (fullEvent.chat != null) {
-        scheduleMicrotask(() {});
-      }
-
       final gameState = GameState(
         gameFullId: gameFullId,
         game: game,
@@ -134,16 +130,9 @@ class GameController extends _$GameController {
         liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
       );
 
-      state = AsyncValue.data(gameState);
-
       // yolo workaround to load chat messages
-      if (gameState.chatOptions != null && fullEvent.chat != null) {
-        _loadChatTimer?.cancel();
-        _loadChatTimer = Timer(const Duration(milliseconds: 50), () {
-          ref
-              .read(chatControllerProvider(gameState.chatOptions!).notifier)
-              .onMessagesLoad(fullEvent.chat!);
-        });
+      if (gameState.chatOptions != null && fullEvent.game.chat != null) {
+        setChatData(gameState.chatOptions!.id, fullEvent.game.chat!);
       }
 
       return gameState;
@@ -557,10 +546,10 @@ class GameController extends _$GameController {
           );
         }
 
-        if (state.requireValue.chatOptions != null && fullEvent.chat != null) {
+        if (state.requireValue.chatOptions != null && fullEvent.game.chat != null) {
           ref
               .read(chatControllerProvider(state.requireValue.chatOptions!).notifier)
-              .onMessagesLoad(fullEvent.chat!);
+              .onReloadMessages(fullEvent.game.chat!.lines);
         }
 
       // Server asking for a resync
@@ -1110,7 +1099,8 @@ class GameState with _$GameState {
           ? null
           : (
             id: gameFullId,
-            isPublic: game.meta.tournament != null,
+            isPublic: false,
+            writeable: game.chat?.writeable ?? true,
             me: game.youAre != null ? game.playerOf(game.youAre!).user : null,
             opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
           );

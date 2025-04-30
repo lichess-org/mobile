@@ -6,8 +6,29 @@ import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+
+class ChatBottomBarButton extends ConsumerWidget {
+  final ChatOptions options;
+
+  const ChatBottomBarButton({required this.options, super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final chatUnreadLabel = ref.watch(chatUnreadLabelProvider(options));
+
+    return BottomBarButton(
+      label: context.l10n.chatRoom,
+      onTap: () {
+        Navigator.of(context).push(ChatScreen.buildRoute(context, options: options));
+      },
+      icon: Icons.chat_bubble_outline,
+      badgeLabel: chatUnreadLabel.valueOrNull,
+    );
+  }
+}
 
 class ChatScreen extends ConsumerStatefulWidget {
   final ChatOptions options;
@@ -84,7 +105,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
                   ),
                 ),
               ),
-              _ChatBottomBar(options: widget.options),
+              if (widget.options.writeable) _ChatBottomBar(options: widget.options),
             ],
           ),
         );
@@ -198,7 +219,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
                     ? () {
                       ref
                           .read(chatControllerProvider(widget.options).notifier)
-                          .sendMessage(_textController.text);
+                          .postMessage(_textController.text);
                       _textController.clear();
                     }
                     : null,

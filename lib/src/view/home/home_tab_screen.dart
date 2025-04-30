@@ -323,6 +323,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       ref.refresh(myRecentGamesProvider.future),
       if (isOnline) ref.refresh(accountProvider.future),
       if (isOnline) ref.refresh(ongoingGamesProvider.future),
+      if (isOnline) ref.refresh(featuredTournamentsProvider.future),
     ]);
   }
 }
