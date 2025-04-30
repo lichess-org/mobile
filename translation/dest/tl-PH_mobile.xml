@@ -33,7 +33,7 @@
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Ibahagi ang PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Ibahagi ang larong URL</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Ibahagi ng posisyon bilang FEN</string>
-  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ibahagi ang palaisipan na ito</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ibahagi ang palaisipang ito</string>
   <string name="showComments" comment="Shown in the analysis screen.">Ipakita ang mga komento</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Ipakita ang resulta</string>
   <string name="showVariations" comment="Shown in the analysis screen.">Ipakita ang mga baryasyon</string>
