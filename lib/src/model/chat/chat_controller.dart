@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -19,8 +21,7 @@ part 'chat_controller.g.dart';
 const _tableName = 'chat_read_messages';
 String _storeKey(StringId id) => 'chat.$id';
 
-typedef ChatOptions =
-    ({StringId id, LightUser? me, LightUser? opponent, bool isPublic, bool writeable});
+typedef ChatOptions = ({StringId id, LightUser? opponent, bool isPublic, bool writeable});
 
 /// Global chat data storage.
 Map<StringId, ChatData> _chatData = {};
@@ -51,6 +52,8 @@ Future<String?> chatUnreadLabel(Ref ref, ChatOptions options) async {
 class ChatController extends _$ChatController {
   StreamSubscription<SocketEvent>? _subscription;
 
+  LightUser? get _me => ref.read(authSessionProvider)?.user;
+
   @override
   Future<ChatState> build(ChatOptions options) async {
     _subscription?.cancel();
@@ -64,7 +67,10 @@ class ChatController extends _$ChatController {
 
     final messages = _selectMessages(_chatData[options.id]?.lines ?? IList());
 
-    return ChatState(messages: messages, unreadMessages: messages.length - readMessagesCount);
+    return ChatState(
+      messages: messages,
+      unreadMessages: math.max(0, messages.length - readMessagesCount),
+    );
   }
 
   /// Reloads the chat messages from the server.
@@ -95,9 +101,7 @@ class ChatController extends _$ChatController {
     return all
         .where(
           (m) =>
-              !m.deleted &&
-              (!m.troll || m.username?.toLowerCase() == options.me?.id.value) &&
-              !m.isSpam,
+              !m.deleted && (!m.troll || m.username?.toLowerCase() == _me?.id.value) && !m.isSpam,
         )
         .toIList();
   }
@@ -131,11 +135,11 @@ class ChatController extends _$ChatController {
       state = state.whenData((s) {
         final oldMessages = s.messages;
         final newMessages = _selectMessages(oldMessages.add(message));
-        final unreadMessages = newMessages.length - oldMessages.length;
-        if (options.isPublic == false && unreadMessages > s.unreadMessages) {
+        final newUnread = newMessages.length - oldMessages.length;
+        if (options.isPublic == false && newUnread > 0) {
           ref.read(soundServiceProvider).play(Sound.confirmation, volume: 0.5);
         }
-        return s.copyWith(messages: newMessages, unreadMessages: unreadMessages);
+        return s.copyWith(messages: newMessages, unreadMessages: s.unreadMessages + newUnread);
       });
     }
   }

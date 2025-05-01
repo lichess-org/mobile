@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -117,38 +118,45 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   nbOfGames: nbOfGames,
                 );
 
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('lichess.org'),
-            leading: const AccountIconButton(),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  ref.read(editModeProvider.notifier).state = !isEditing;
-                },
-                icon: Icon(isEditing ? Icons.save_outlined : Icons.app_registration),
-                tooltip: isEditing ? 'Save' : 'Edit',
-              ),
-              const _ChallengeScreenButton(),
-              const _PlayerScreenButton(),
-            ],
+        return FocusDetector(
+          onFocusRegained: () {
+            if (context.mounted) {
+              ref.invalidate(featuredTournamentsProvider);
+            }
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('lichess.org'),
+              leading: const AccountIconButton(),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    ref.read(editModeProvider.notifier).state = !isEditing;
+                  },
+                  icon: Icon(isEditing ? Icons.save_outlined : Icons.app_registration),
+                  tooltip: isEditing ? 'Save' : 'Edit',
+                ),
+                const _ChallengeScreenButton(),
+                const _PlayerScreenButton(),
+              ],
+            ),
+            body: RefreshIndicator.adaptive(
+              key: _refreshKey,
+              onRefresh: () => _refreshData(isOnline: status.isOnline),
+              child: ListView(controller: homeScrollController, children: widgets),
+            ),
+            bottomSheet: const OfflineBanner(),
+            floatingActionButton:
+                isTablet
+                    ? null
+                    : FloatingActionButton.extended(
+                      onPressed: () {
+                        Navigator.of(context).push(PlayScreen.buildRoute(context));
+                      },
+                      icon: const Icon(Icons.add),
+                      label: Text(context.l10n.play),
+                    ),
           ),
-          body: RefreshIndicator.adaptive(
-            key: _refreshKey,
-            onRefresh: () => _refreshData(isOnline: status.isOnline),
-            child: ListView(controller: homeScrollController, children: widgets),
-          ),
-          bottomSheet: const OfflineBanner(),
-          floatingActionButton:
-              isTablet
-                  ? null
-                  : FloatingActionButton.extended(
-                    onPressed: () {
-                      Navigator.of(context).push(PlayScreen.buildRoute(context));
-                    },
-                    icon: const Icon(Icons.add),
-                    label: Text(context.l10n.play),
-                  ),
         );
       },
       error: (_, _) => const CenterLoadingIndicator(),

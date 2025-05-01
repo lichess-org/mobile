@@ -42,8 +42,14 @@ class TournamentScreen extends ConsumerStatefulWidget {
 
   final TournamentId id;
 
+  static const String routeName = '/tournament';
+
   static Route<void> buildRoute(BuildContext context, TournamentId id) {
-    return buildScreenRoute(context, screen: TournamentScreen(id: id));
+    return buildScreenRoute(
+      context,
+      screen: TournamentScreen(id: id),
+      settings: const RouteSettings(name: routeName),
+    );
   }
 
   @override
@@ -84,6 +90,9 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
       tournamentControllerProvider(widget.id).select((value) => value.valueOrNull?.currentGame),
       (prevGameId, currentGameId) {
         if (prevGameId != currentGameId && currentGameId != null) {
+          Navigator.of(
+            context,
+          ).popUntil((route) => route.settings.name == TournamentScreen.routeName);
           Navigator.of(
             context,
             rootNavigator: true,
@@ -746,7 +755,6 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           ChatBottomBarButton(
             options: (
               id: widget.state.tournament.id,
-              me: session?.user,
               opponent: null,
               isPublic: true,
               writeable: widget.state.tournament.chat!.writeable,

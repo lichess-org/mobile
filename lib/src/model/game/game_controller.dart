@@ -130,9 +130,16 @@ class GameController extends _$GameController {
         liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
       );
 
+      state = AsyncValue.data(gameState);
+
       // yolo workaround to load chat messages
       if (gameState.chatOptions != null && fullEvent.game.chat != null) {
         setChatData(gameState.chatOptions!.id, fullEvent.game.chat!);
+        scheduleMicrotask(() {
+          ref
+              .read(chatControllerProvider(state.requireValue.chatOptions!).notifier)
+              .onReloadMessages(fullEvent.game.chat!.lines);
+        });
       }
 
       return gameState;
@@ -1101,7 +1108,6 @@ class GameState with _$GameState {
             id: gameFullId,
             isPublic: false,
             writeable: game.chat?.writeable ?? true,
-            me: game.youAre != null ? game.playerOf(game.youAre!).user : null,
             opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
           );
 }

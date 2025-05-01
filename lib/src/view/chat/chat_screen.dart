@@ -67,6 +67,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    final session = ref.watch(authSessionProvider);
     switch (ref.watch(chatControllerProvider(widget.options))) {
       case AsyncData(:final value):
         return Scaffold(
@@ -94,7 +95,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
                       final message = value.messages[value.messages.length - index - 1];
                       return (message.username == 'lichess')
                           ? _MessageAction(message: message.message)
-                          : (message.username == widget.options.me?.name)
+                          : (message.username == session?.user.name)
                           ? _MessageBubble(you: true, message: message)
                           : _MessageBubble(
                             you: false,

@@ -48,7 +48,7 @@ class TournamentController extends _$TournamentController {
     _socketSubscription = _socketClient!.stream.listen(_handleSocketEvent);
 
     final countdown = tournament.timeToStart ?? tournament.timeToFinish;
-    if (countdown != null) {
+    if (countdown != null && countdown.$1 > Duration.zero) {
       _reloadTimer?.cancel();
       _reloadTimer = Timer(countdown.$1, () {
         if (state.hasValue) {
@@ -59,18 +59,26 @@ class TournamentController extends _$TournamentController {
 
     _watchFeaturedGameIfChanged(previous: null, current: tournament.featuredGame?.id);
 
+    final tourState = TournamentState(tournament: tournament, standingsPage: 1);
+
+    state = AsyncValue.data(tourState);
+
     // yolo workaround to load chat messages
-    if (tournament.chat != null) {
-      setChatData(tournament.id, tournament.chat!);
+    if (tourState.chatOptions != null && tournament.chat != null) {
+      setChatData(tourState.chatOptions!.id, tournament.chat!);
+      scheduleMicrotask(() {
+        ref
+            .read(chatControllerProvider(tourState.chatOptions!).notifier)
+            .onReloadMessages(tournament.chat!.lines);
+      });
     }
 
-    return TournamentState(tournament: tournament, standingsPage: 1);
+    return tourState;
   }
 
   void onFocusRegained() {
     final currentClient = ref.read(socketPoolProvider).currentClient;
     if (currentClient.route != _socketClient?.route) {
-      ref.invalidate(chatControllerProvider);
       ref.invalidateSelf();
     }
   }
@@ -232,4 +240,14 @@ class TournamentState with _$TournamentState {
 
   /// True if the user has joined the tournament and is not withdrawn.
   bool get joined => tournament.me != null && tournament.me!.withdraw != true;
+
+  ChatOptions? get chatOptions =>
+      tournament.chat != null
+          ? (
+            id: tournament.id,
+            opponent: null,
+            isPublic: true,
+            writeable: tournament.chat!.writeable,
+          )
+          : null;
 }
