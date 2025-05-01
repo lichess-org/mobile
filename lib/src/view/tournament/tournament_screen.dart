@@ -921,15 +921,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
 
     return BottomBar(
       children: [
-        if (widget.state.tournament.chat != null)
-          ChatBottomBarButton(
-            options: (
-              id: widget.state.tournament.id,
-              opponent: null,
-              isPublic: true,
-              writeable: widget.state.tournament.chat!.writeable,
-            ),
-          ),
+        if (widget.state.chatOptions != null)
+          ChatBottomBarButton(options: widget.state.chatOptions!),
 
         if (widget.state.tournament.isFinished != true && session != null)
           joinOrLeaveInProgress
