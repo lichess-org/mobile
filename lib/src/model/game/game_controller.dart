@@ -54,8 +54,6 @@ class GameController extends _$GameController {
   /// It will also help with lila-ws restarts.
   Timer? _transientMoveTimer;
 
-  Timer? _loadChatTimer;
-
   /// Callback to be called when a full reload is needed.
   VoidCallback? _onFullReload;
 
@@ -79,7 +77,6 @@ class GameController extends _$GameController {
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
-      _loadChatTimer?.cancel();
       _transientMoveTimer?.cancel();
       _clock?.dispose();
       _clock = null;
