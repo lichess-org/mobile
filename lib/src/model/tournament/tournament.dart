@@ -224,6 +224,7 @@ class Tournament with _$Tournament {
     required Verdicts verdicts,
     required String? reloadEndpoint,
     required int socketVersion,
+    ({String text, String author})? quote,
     DateTime? startsAt,
     TournamentStats? stats,
     ChatData? chat,
@@ -261,6 +262,9 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     reloadEndpoint: pick('reloadEndpoint').asStringOrNull(),
     stats: pick('stats').letOrNull((p) => TournamentStats._fromPick(p)),
     chat: pick('chat').letOrNull((p) => chatDataFromPick(p)),
+    quote: pick(
+      'quote',
+    ).letOrNull((p) => (text: p('text').asStringOrThrow(), author: p('author').asStringOrThrow())),
   );
 }
 

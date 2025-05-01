@@ -201,7 +201,9 @@ class _Body extends ConsumerWidget {
               const SizedBox(height: 16),
               _Standing(state),
               const SizedBox(height: 16),
-              if (state.tournament.isFinished == true)
+              if (state.tournament.isStarted != true)
+                _TournamentHelp(state: state)
+              else if (state.tournament.isFinished == true)
                 _TournamentCompleteWidget(state: state)
               else if (state.tournament.featuredGame != null)
                 _FeaturedGame(state.tournament.featuredGame!),
@@ -243,6 +245,174 @@ class _Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBarTitleText(state.tournament.meta.fullName, maxLines: 2);
+  }
+}
+
+class _TournamentHelp extends StatelessWidget {
+  const _TournamentHelp({required this.state});
+
+  final TournamentState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: Styles.bodySectionPadding,
+      child: Column(
+        children: [
+          // show a famous chess quote if available
+          if (state.tournament.quote != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(color: Theme.of(context).dividerColor, width: 1),
+                        bottom: BorderSide(color: Theme.of(context).dividerColor, width: 1),
+                      ),
+                    ),
+                    child: Text(
+                      state.tournament.quote!.text,
+                      style: const TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '\u2014 ${state.tournament.quote!.author}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaIsItRated, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                if (state.tournament.meta.rated)
+                  Text(context.l10n.arenaIsRated)
+                else
+                  Text(context.l10n.arenaIsNotRated),
+              ],
+            ),
+          ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaHowAreScoresCalculated, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                Text(context.l10n.arenaHowAreScoresCalculatedAnswer),
+              ],
+            ),
+          ),
+          if (state.tournament.berserkable)
+            Padding(
+              padding: Styles.verticalBodyPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(context.l10n.arenaBerserk, style: Styles.sectionTitle),
+                  const SizedBox(height: 10),
+                  Text(context.l10n.arenaBerserkAnswer),
+                ],
+              ),
+            ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaHowIsTheWinnerDecided, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                Text(context.l10n.arenaHowIsTheWinnerDecidedAnswer),
+              ],
+            ),
+          ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaHowDoesPairingWork, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                Text(context.l10n.arenaHowDoesPairingWorkAnswer),
+              ],
+            ),
+          ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaHowDoesItEnd, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                Text(context.l10n.arenaHowDoesItEndAnswer),
+              ],
+            ),
+          ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaOtherRules, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                Text(context.l10n.arenaThereIsACountdown),
+                const SizedBox(height: 6),
+                Text(context.l10n.arenaDrawingWithinNbMoves(10)),
+                const SizedBox(height: 6),
+                Text(context.l10n.arenaDrawStreakStandard('30')),
+                const SizedBox(height: 6),
+                Text(context.l10n.arenaDrawStreakVariants),
+                DataTable(
+                  dataRowMinHeight: 40,
+                  dataRowMaxHeight: 70,
+                  columns: [
+                    DataColumn(label: Text(context.l10n.arenaVariant)),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          context.l10n.arenaMinimumGameLength,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: const [
+                    DataRow(
+                      cells: [DataCell(Text('Standard, Chess960, Horde')), DataCell(Text('30'))],
+                    ),
+                    DataRow(
+                      cells: [
+                        DataCell(Text('Antichess, Crazyhouse, King of the Hill')),
+                        DataCell(Text('20')),
+                      ],
+                    ),
+                    DataRow(
+                      cells: [
+                        DataCell(Text('Three-check, Atomic, Racing Kings')),
+                        DataCell(Text('10')),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
