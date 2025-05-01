@@ -131,7 +131,6 @@ class _BodyState extends ConsumerState<_Body> {
           children: [
             Expanded(
               child: SafeArea(
-                bottom: false,
                 child: BoardTable(
                   key: _boardKey,
                   topTable: _Player(
@@ -180,15 +179,15 @@ class _BodyState extends ConsumerState<_Body> {
                     pieceAssets:
                         overTheBoardPrefs.symmetricPieces ? PieceSet.symmetric.assets : null,
                   ),
+                  userActionsBar: _BottomBar(
+                    onFlipBoard: () {
+                      setState(() {
+                        orientation = orientation.opposite;
+                      });
+                    },
+                  ),
                 ),
               ),
-            ),
-            _BottomBar(
-              onFlipBoard: () {
-                setState(() {
-                  orientation = orientation.opposite;
-                });
-              },
             ),
           ],
         ),

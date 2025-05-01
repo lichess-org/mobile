@@ -158,6 +158,47 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       moves: game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false),
                       currentMoveIndex: gameState.stepCursor,
                       lastMove: game.moveAt(gameState.stepCursor),
+                      userActionsBar: BottomBar(
+                        children: [
+                          BottomBarButton(
+                            label: context.l10n.flipBoard,
+                            onTap: () => _flipBoard(ref),
+                            icon: CupertinoIcons.arrow_2_squarepath,
+                          ),
+                          RepeatButton(
+                            onLongPress:
+                                ref.read(_tvGameCtrl.notifier).canGoBack()
+                                    ? () => _moveBackward(ref)
+                                    : null,
+                            child: BottomBarButton(
+                              key: const ValueKey('goto-previous'),
+                              onTap:
+                                  ref.read(_tvGameCtrl.notifier).canGoBack()
+                                      ? () => _moveBackward(ref)
+                                      : null,
+                              label: 'Previous',
+                              icon: CupertinoIcons.chevron_back,
+                              showTooltip: false,
+                            ),
+                          ),
+                          RepeatButton(
+                            onLongPress:
+                                ref.read(_tvGameCtrl.notifier).canGoForward()
+                                    ? () => _moveForward(ref)
+                                    : null,
+                            child: BottomBarButton(
+                              key: const ValueKey('goto-next'),
+                              icon: CupertinoIcons.chevron_forward,
+                              label: context.l10n.next,
+                              onTap:
+                                  ref.read(_tvGameCtrl.notifier).canGoForward()
+                                      ? () => _moveForward(ref)
+                                      : null,
+                              showTooltip: false,
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   },
                   loading:
@@ -183,45 +224,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   },
                 ),
               ),
-            ),
-            BottomBar(
-              children: [
-                BottomBarButton(
-                  label: context.l10n.flipBoard,
-                  onTap: () => _flipBoard(ref),
-                  icon: CupertinoIcons.arrow_2_squarepath,
-                ),
-                RepeatButton(
-                  onLongPress:
-                      ref.read(_tvGameCtrl.notifier).canGoBack() ? () => _moveBackward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-previous'),
-                    onTap:
-                        ref.read(_tvGameCtrl.notifier).canGoBack()
-                            ? () => _moveBackward(ref)
-                            : null,
-                    label: 'Previous',
-                    icon: CupertinoIcons.chevron_back,
-                    showTooltip: false,
-                  ),
-                ),
-                RepeatButton(
-                  onLongPress:
-                      ref.read(_tvGameCtrl.notifier).canGoForward()
-                          ? () => _moveForward(ref)
-                          : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-next'),
-                    icon: CupertinoIcons.chevron_forward,
-                    label: context.l10n.next,
-                    onTap:
-                        ref.read(_tvGameCtrl.notifier).canGoForward()
-                            ? () => _moveForward(ref)
-                            : null,
-                    showTooltip: false,
-                  ),
-                ),
-              ],
             ),
           ],
         ),

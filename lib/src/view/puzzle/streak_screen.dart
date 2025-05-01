@@ -168,11 +168,14 @@ class _Body extends ConsumerWidget {
                     ],
                   ),
                 ),
+                userActionsBar: _BottomBar(
+                  initialPuzzleContext: initialPuzzleContext,
+                  streak: streak,
+                ),
               ),
             ),
           ),
         ),
-        _BottomBar(initialPuzzleContext: initialPuzzleContext, streak: streak),
       ],
     );
 

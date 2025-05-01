@@ -204,10 +204,7 @@ class _LoadPuzzleFromId extends ConsumerWidget {
             body: const Column(
               children: [
                 Expanded(
-                  child: SafeArea(
-                    bottom: false,
-                    child: BoardTable.empty(showEngineGaugePlaceholder: true),
-                  ),
+                  child: SafeArea(child: BoardTable.empty(showEngineGaugePlaceholder: true)),
                 ),
                 BottomBar.empty(),
               ],
@@ -222,7 +219,6 @@ class _LoadPuzzleFromId extends ConsumerWidget {
             children: [
               Expanded(
                 child: SafeArea(
-                  bottom: false,
                   child: BoardTable(
                     fen: kEmptyFen,
                     orientation: Side.white,
@@ -284,7 +280,6 @@ class _Body extends ConsumerWidget {
       children: [
         Expanded(
           child: SafeArea(
-            bottom: false,
             child: BoardTable(
               orientation: puzzleState.pov,
               lastMove: puzzleState.lastMove as NormalMove?,
@@ -377,12 +372,12 @@ class _Body extends ConsumerWidget {
                   ),
                 ],
               ),
+              userActionsBar: _BottomBar(
+                initialPuzzleContext: initialPuzzleContext,
+                puzzleId: puzzleState.puzzle.puzzle.id,
+              ),
             ),
           ),
-        ),
-        _BottomBar(
-          initialPuzzleContext: initialPuzzleContext,
-          puzzleId: puzzleState.puzzle.puzzle.id,
         ),
       ],
     );

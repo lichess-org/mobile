@@ -142,7 +142,6 @@ class _Body extends ConsumerWidget {
           Expanded(
             child: Center(
               child: SafeArea(
-                bottom: false,
                 child: BoardTable(
                   boardKey: boardKey,
                   orientation: stormState.pov,
@@ -169,11 +168,11 @@ class _Body extends ConsumerWidget {
                   ),
                   topTable: _TopTable(data),
                   bottomTable: _Combo(stormState.combo),
+                  userActionsBar: _BottomBar(ctrlProvider),
                 ),
               ),
             ),
           ),
-          _BottomBar(ctrlProvider),
         ],
       ),
     );
