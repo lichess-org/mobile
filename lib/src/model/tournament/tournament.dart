@@ -424,8 +424,8 @@ class TournamentStats with _$TournamentStats {
     );
   }
 
-  double get drawRate => nbDraws / nbGames;
-  double get berserkRate => nbBerserks / nbGames;
-  double get blackWinRate => nbBlackWins / nbGames;
-  double get whiteWinRate => nbWhiteWins / nbGames;
+  int get drawRate => ((nbDraws / nbGames) * 100).round();
+  int get berserkRate => ((nbBerserks / nbGames) * 100).round();
+  int get blackWinRate => ((nbBlackWins / nbGames) * 100).round();
+  int get whiteWinRate => ((nbWhiteWins / nbGames) * 100).round();
 }

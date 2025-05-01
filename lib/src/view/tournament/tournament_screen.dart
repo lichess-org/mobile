@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -615,25 +616,25 @@ class _TournamentCompleteWidget extends ConsumerWidget {
                 DataRow(
                   cells: [
                     DataCell(Text(context.l10n.whiteWins, style: _headerStyle)),
-                    DataCell(Text('${stats.whiteWinRate.toStringAsFixed(2)}%', style: _valueStyle)),
+                    DataCell(Text('${stats.whiteWinRate}%', style: _valueStyle)),
                   ],
                 ),
                 DataRow(
                   cells: [
                     DataCell(Text(context.l10n.blackWins, style: _headerStyle)),
-                    DataCell(Text('${stats.blackWinRate.toStringAsFixed(2)}%', style: _valueStyle)),
+                    DataCell(Text('${stats.blackWinRate}%', style: _valueStyle)),
                   ],
                 ),
                 DataRow(
                   cells: [
                     DataCell(Text(context.l10n.drawRate, style: _headerStyle)),
-                    DataCell(Text('${stats.drawRate.toStringAsFixed(2)}%', style: _valueStyle)),
+                    DataCell(Text('${stats.drawRate}%', style: _valueStyle)),
                   ],
                 ),
                 DataRow(
                   cells: [
                     DataCell(Text(context.l10n.arenaBerserkRate, style: _headerStyle)),
-                    DataCell(Text('${stats.berserkRate.toStringAsFixed(2)}%', style: _valueStyle)),
+                    DataCell(Text('${stats.berserkRate}%', style: _valueStyle)),
                   ],
                 ),
               ],
@@ -652,15 +653,12 @@ class _TournamentCompleteWidget extends ConsumerWidget {
                       launchShareDialog(
                         context,
                         ShareParams(
-                          subject: context.l10n.downloadAllGames,
                           fileNameOverrides: [
                             'lichess_tournament_${state.tournament.startsAt}.${state.tournament.id}.pgn',
                           ],
-                          files: [XFile(file.path)],
+                          files: [XFile(file.path, mimeType: 'text/plain')],
                         ),
-                      ).then((_) {
-                        file.delete();
-                      });
+                      );
                     }
                   },
                 );
@@ -680,15 +678,12 @@ class _TournamentCompleteWidget extends ConsumerWidget {
                         launchShareDialog(
                           context,
                           ShareParams(
-                            subject: 'Download my games',
                             fileNameOverrides: [
                               'lichess_tournament_${state.tournament.startsAt}.${state.tournament.id}_${session.user.name}.pgn',
                             ],
-                            files: [XFile(file.path)],
+                            files: [XFile(file.path, mimeType: 'text/plain')],
                           ),
-                        ).then((_) {
-                          file.delete();
-                        });
+                        );
                       }
                     },
                   );
@@ -700,9 +695,13 @@ class _TournamentCompleteWidget extends ConsumerWidget {
     );
   }
 
+  static final _dateFormat = DateFormat('yyyy-MM-dd');
+
   Future<File> _downloadGames(WidgetRef ref, [LightUser? player]) async {
     final tempDir = await getTemporaryDirectory();
-    final file = File('${tempDir.path}/${state.tournament.id}_${player?.name ?? ''}.pgn');
+    final file = File(
+      '${tempDir.path}/lichess_tournament${state.tournament.startsAt != null ? '_${_dateFormat.format(state.tournament.startsAt!)}' : ''}_${state.tournament.id}${player?.name != null ? '_${player?.name}' : ''}.pgn',
+    );
     final res = await ref
         .read(tournamentRepositoryProvider)
         .downloadTournamentGames(state.tournament.id, file, userId: player?.id);
