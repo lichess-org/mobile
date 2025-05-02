@@ -907,6 +907,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(authSessionProvider);
+    final kidModeAsync = ref.watch(kidModeProvider);
 
     ref.listen(
       tournamentControllerProvider(widget.state.id).select((value) => value.valueOrNull?.joined),
@@ -921,7 +922,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
 
     return BottomBar(
       children: [
-        if (widget.state.chatOptions != null)
+        if (widget.state.chatOptions != null && kidModeAsync.valueOrNull == false)
           ChatBottomBarButton(options: widget.state.chatOptions!),
 
         if (widget.state.tournament.isFinished != true && session != null)
