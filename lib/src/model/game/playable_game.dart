@@ -3,6 +3,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -58,6 +59,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
     bool? boosted,
     bool? isThreefoldRepetition,
     ({Duration idle, Duration timeToMove, DateTime movedAt})? expiration,
+    ChatData? chat,
 
     /// The game id of the next game if a rematch has been accepted.
     GameId? rematch,
@@ -234,6 +236,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
         movedAt: DateTime.now().subtract(idle),
       );
     }),
+    chat: pick('chat').letOrNull((p) => chatDataFromPick(p)),
     rematch: pick('game', 'rematch').asGameIdOrNull(),
   );
 }

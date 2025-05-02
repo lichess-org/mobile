@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -132,7 +131,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
         ),
         Padding(
           padding: Styles.horizontalBodyPadding,
-          child: SecondaryButton(
+          child: FilledButton(
             onPressed: () {
               ref.read(overTheBoardClockProvider.notifier).setupClock(timeIncrement);
               ref
@@ -140,7 +139,6 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                   .startNewGame(chosenVariant, timeIncrement);
               Navigator.pop(context);
             },
-            semanticsLabel: context.l10n.play,
             child: Text(context.l10n.play, style: Styles.bold),
           ),
         ),

@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:share_plus/share_plus.dart';
 
 final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
@@ -299,7 +300,10 @@ class GameContextMenu extends ConsumerWidget {
         if (!isTabletOrLarger(context)) ...[
           BottomSheetContextMenuAction(
             onPressed: () {
-              launchShareDialog(context, uri: lichessUri('/${game.id}/${orientation.name}'));
+              launchShareDialog(
+                context,
+                ShareParams(uri: lichessUri('/${game.id}/${orientation.name}')),
+              );
             },
             icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
             child: Text(context.l10n.mobileShareGameURL),
@@ -315,9 +319,12 @@ class GameContextMenu extends ConsumerWidget {
                 if (context.mounted) {
                   launchShareDialog(
                     context,
-                    files: [gif],
-                    subject:
-                        '${game.perf.title} • ${context.l10n.resVsX(game.white.fullName(context.l10n), game.black.fullName(context.l10n))}',
+                    ShareParams(
+                      files: [gif],
+                      fileNameOverrides: ['${game.id}.gif'],
+                      subject:
+                          '${game.perf.title} • ${context.l10n.resVsX(game.white.fullName(context.l10n), game.black.fullName(context.l10n))}',
+                    ),
                   );
                 }
               } catch (e) {
@@ -335,7 +342,7 @@ class GameContextMenu extends ConsumerWidget {
               try {
                 final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
                 if (context.mounted) {
-                  launchShareDialog(context, text: pgn);
+                  launchShareDialog(context, ShareParams(text: pgn));
                 }
               } catch (e) {
                 if (context.mounted) {
@@ -352,7 +359,7 @@ class GameContextMenu extends ConsumerWidget {
               try {
                 final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);
                 if (context.mounted) {
-                  launchShareDialog(context, text: pgn);
+                  launchShareDialog(context, ShareParams(text: pgn));
                 }
               } catch (e) {
                 if (context.mounted) {

@@ -706,7 +706,7 @@ void main() {
           overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
         );
         sendServerSocketMessages(testGameSocketUri, [
-          '{"t":"message","d":{"u":"Magnus","t":"Hello!"}}',
+          '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
         ]);
         await tester.pump();
         verify(
@@ -726,7 +726,7 @@ void main() {
           overrides: [soundServiceProvider.overrideWith((_) => mockSoundService)],
         );
         sendServerSocketMessages(testGameSocketUri, [
-          '{"t":"message","d":{"u":"Magnus","t":"Hello!"}}',
+          '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
         ]);
         await tester.pump();
         verifyNever(() => mockSoundService.play(Sound.confirmation));

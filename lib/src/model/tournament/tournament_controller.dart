@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
@@ -26,7 +27,7 @@ class TournamentController extends _$TournamentController {
   // so we manually have to set this timer to schedule a reload once we can join again.
   Timer? _pauseDelayTimer;
 
-  Timer? _startingTimer;
+  Timer? _reloadTimer;
 
   static Uri socketUri(TournamentId id) => Uri(path: '/tournament/$id/socket/v6');
 
@@ -37,23 +38,21 @@ class TournamentController extends _$TournamentController {
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _pauseDelayTimer?.cancel();
-      _startingTimer?.cancel();
+      _reloadTimer?.cancel();
     });
-
-    listenToSocketEvents();
 
     final tournament = await ref.read(tournamentRepositoryProvider).getTournament(id);
 
-    if (tournament.timeToStart != null) {
-      _startingTimer?.cancel();
-      _startingTimer = Timer(tournament.timeToStart!.$1, () async {
+    _socketClient = _socketPool.open(socketUri(id), version: tournament.socketVersion);
+    _socketSubscription?.cancel();
+    _socketSubscription = _socketClient!.stream.listen(_handleSocketEvent);
+
+    final countdown = tournament.timeToStart ?? tournament.timeToFinish;
+    if (countdown != null && countdown.$1 > Duration.zero) {
+      _reloadTimer?.cancel();
+      _reloadTimer = Timer(countdown.$1, () {
         if (state.hasValue) {
-          final tour = await ref
-              .read(tournamentRepositoryProvider)
-              .getTournament(state.requireValue.tournament.id);
-          state = AsyncData(
-            TournamentState(tournament: tour, standingsPage: state.requireValue.standingsPage),
-          );
+          ref.invalidateSelf();
         }
       });
     }
@@ -63,16 +62,11 @@ class TournamentController extends _$TournamentController {
     return TournamentState(tournament: tournament, standingsPage: 1);
   }
 
-  /// Start listening to the tournament socket events.
-  void listenToSocketEvents() {
-    _socketClient = _socketPool.open(socketUri(id));
-    _socketSubscription?.cancel();
-    _socketSubscription = _socketClient!.stream.listen(_handleSocketEvent);
-  }
-
-  /// Stop listening to the tournament socket events.
-  void stopListeningToSocketEvents() {
-    _socketSubscription?.cancel();
+  void onFocusRegained() {
+    final currentClient = ref.read(socketPoolProvider).currentClient;
+    if (currentClient.route != _socketClient?.route) {
+      ref.invalidateSelf();
+    }
   }
 
   void _watchFeaturedGameIfChanged({required GameId? previous, required GameId? current}) {
@@ -218,7 +212,10 @@ class TournamentState with _$TournamentState {
 
   FeaturedGame? get featuredGame => tournament.featuredGame;
 
-  bool get canJoin => tournament.me?.pauseDelay == null && tournament.verdicts.accepted;
+  bool get canJoin =>
+      tournament.me?.pauseDelay == null &&
+      tournament.verdicts.accepted &&
+      tournament.isFinished != true;
 
   int get firstRankOfPage => (standingsPage - 1) * kStandingsPageSize + 1;
   bool get hasPreviousPage => standingsPage > 1;
@@ -229,4 +226,9 @@ class TournamentState with _$TournamentState {
 
   /// True if the user has joined the tournament and is not withdrawn.
   bool get joined => tournament.me != null && tournament.me!.withdraw != true;
+
+  ChatOptions? get chatOptions =>
+      tournament.chat != null
+          ? TournamentChatOptions(id: tournament.id, writeable: tournament.chat!.writeable)
+          : null;
 }

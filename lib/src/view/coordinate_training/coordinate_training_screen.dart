@@ -347,11 +347,7 @@ class _Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FatButton(
-      semanticsLabel: label,
-      onPressed: onPressed,
-      child: Text(label, style: Styles.bold),
-    );
+    return FilledButton(onPressed: onPressed, child: Text(label, style: Styles.bold));
   }
 }
 

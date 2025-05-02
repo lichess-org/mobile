@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:share_plus/share_plus.dart';
 
 /// Opens a game screen for the given [LightExportedGame].
 ///
@@ -145,7 +146,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
       icon: const PlatformShareIcon(),
       label: context.l10n.mobileShareGameURL,
       onPressed: () {
-        launchShareDialog(context, uri: lichessUri('/$gameId/${orientation.name}'));
+        launchShareDialog(context, ShareParams(uri: lichessUri('/$gameId/${orientation.name}')));
       },
     ),
     ContextMenuAction(
@@ -155,7 +156,14 @@ List<Widget> makeFinishedGameShareContextMenuActions(
         try {
           final (gif, game) = await ref.read(gameShareServiceProvider).gameGif(gameId, orientation);
           if (context.mounted) {
-            launchShareDialog(context, files: [gif], subject: game.shareTitle(context.l10n));
+            launchShareDialog(
+              context,
+              ShareParams(
+                fileNameOverrides: ['$gameId.gif'],
+                files: [gif],
+                subject: game.shareTitle(context.l10n),
+              ),
+            );
           }
         } catch (e) {
           debugPrint(e.toString());
@@ -172,7 +180,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
         try {
           final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(gameId);
           if (context.mounted) {
-            launchShareDialog(context, text: pgn);
+            launchShareDialog(context, ShareParams(text: pgn));
           }
         } catch (e) {
           if (context.mounted) {
@@ -188,7 +196,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
         try {
           final pgn = await ref.read(gameShareServiceProvider).rawPgn(gameId);
           if (context.mounted) {
-            launchShareDialog(context, text: pgn);
+            launchShareDialog(context, ShareParams(text: pgn));
           }
         } catch (e) {
           if (context.mounted) {

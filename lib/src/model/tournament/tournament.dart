@@ -3,6 +3,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -222,10 +223,16 @@ class Tournament with _$Tournament {
     required StandingPage? standing,
     required Verdicts verdicts,
     required String? reloadEndpoint,
+    required int socketVersion,
+    ({String text, String author})? quote,
+    DateTime? startsAt,
+    TournamentStats? stats,
+    ChatData? chat,
   }) = _Tournament;
 
-  factory Tournament.fromServerJson(Map<String, Object?> json) =>
-      _tournamentFromPick(pick(json).required());
+  factory Tournament.fromServerJson(Map<String, Object?> json) {
+    return _tournamentFromPick(pick(json).required());
+  }
 
   Tournament updateFromPartialServerJson(Map<String, Object?> json) =>
       _updateTournamentFromPartialPick(this, pick(json).required());
@@ -234,9 +241,11 @@ class Tournament with _$Tournament {
 Tournament _tournamentFromPick(RequiredPick pick) {
   return Tournament(
     id: pick('id').asTournamentIdOrThrow(),
+    socketVersion: pick('socketVersion').asIntOrThrow(),
     meta: _tournamentMetaFromPick(pick),
     featuredGame: pick('featured').asFeaturedGameOrNull(),
     description: pick('description').asStringOrNull(),
+    startsAt: pick('startsAt').letOrNull((p) => DateTime.parse(p.asStringOrThrow())),
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
     timeToStart: pick(
@@ -251,6 +260,11 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     berserkable: pick('berserkable').asBoolOrFalse(),
     verdicts: pick('verdicts').asVerdictsOrThrow(),
     reloadEndpoint: pick('reloadEndpoint').asStringOrNull(),
+    stats: pick('stats').letOrNull((p) => TournamentStats._fromPick(p)),
+    chat: pick('chat').letOrNull((p) => chatDataFromPick(p)),
+    quote: pick(
+      'quote',
+    ).letOrNull((p) => (text: p('text').asStringOrThrow(), author: p('author').asStringOrThrow())),
   );
 }
 
@@ -383,4 +397,39 @@ FeaturedGame _featuredGameFromPick(RequiredPick pick) {
       ),
     ),
   );
+}
+
+@freezed
+class TournamentStats with _$TournamentStats {
+  const TournamentStats._();
+
+  const factory TournamentStats({
+    required int nbMoves,
+    required int nbGames,
+    required int nbDraws,
+    required int nbBerserks,
+    required int nbBlackWins,
+    required int nbWhiteWins,
+    required int averageRating,
+  }) = _TournamentStats;
+
+  factory TournamentStats.fromServerJson(Map<String, Object?> json) =>
+      TournamentStats._fromPick(pick(json).required());
+
+  factory TournamentStats._fromPick(RequiredPick pick) {
+    return TournamentStats(
+      nbMoves: pick('moves').asIntOrThrow(),
+      nbGames: pick('games').asIntOrThrow(),
+      nbDraws: pick('draws').asIntOrThrow(),
+      nbBerserks: pick('berserks').asIntOrThrow(),
+      nbBlackWins: pick('blackWins').asIntOrThrow(),
+      nbWhiteWins: pick('whiteWins').asIntOrThrow(),
+      averageRating: pick('averageRating').asIntOrThrow(),
+    );
+  }
+
+  int get drawRate => ((nbDraws / nbGames) * 100).round();
+  int get berserkRate => ((nbBerserks / nbGames) * 100).round();
+  int get blackWinRate => ((nbBlackWins / nbGames) * 100).round();
+  int get whiteWinRate => ((nbWhiteWins / nbGames) * 100).round();
 }

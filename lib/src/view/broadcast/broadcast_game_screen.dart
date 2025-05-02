@@ -35,6 +35,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:share_plus/share_plus.dart';
 
 class BroadcastGameScreen extends ConsumerStatefulWidget {
   final BroadcastTournamentId? tournamentId;
@@ -570,7 +571,9 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                     onPressed: () {
                       launchShareDialog(
                         context,
-                        uri: lichessUri('/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId'),
+                        ShareParams(
+                          uri: lichessUri('/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId'),
+                        ),
                       );
                     },
                   ),
@@ -582,7 +585,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                         (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
                       );
                       if (context.mounted) {
-                        launchShareDialog(context, text: pgn);
+                        launchShareDialog(context, ShareParams(text: pgn));
                       }
                     } catch (e) {
                       if (context.mounted) {
@@ -599,7 +602,10 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                           .read(gameShareServiceProvider)
                           .chapterGif(roundId, gameId);
                       if (context.mounted) {
-                        launchShareDialog(context, files: [gif]);
+                        launchShareDialog(
+                          context,
+                          ShareParams(fileNameOverrides: ['$gameId.gif'], files: [gif]),
+                        );
                       }
                     } catch (e) {
                       debugPrint(e.toString());

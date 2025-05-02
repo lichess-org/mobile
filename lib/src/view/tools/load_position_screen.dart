@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class LoadPositionScreen extends StatelessWidget {
   const LoadPositionScreen({super.key});
@@ -77,8 +76,7 @@ class _BodyState extends State<_Body> {
             padding: Styles.bodySectionBottomPadding,
             child: Column(
               children: [
-                FatButton(
-                  semanticsLabel: context.l10n.analysis,
+                FilledButton(
                   onPressed:
                       parsedInput != null
                           ? () => Navigator.of(
@@ -89,8 +87,7 @@ class _BodyState extends State<_Body> {
                   child: Text(context.l10n.analysis),
                 ),
                 const SizedBox(height: 16.0),
-                FatButton(
-                  semanticsLabel: context.l10n.boardEditor,
+                FilledButton(
                   onPressed:
                       parsedInput != null
                           ? () => Navigator.of(context, rootNavigator: true).push(

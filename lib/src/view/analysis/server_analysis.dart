@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class ServerAnalysisSummary extends ConsumerWidget {
@@ -44,11 +43,10 @@ class ServerAnalysisSummary extends ConsumerWidget {
               const Spacer(),
               Text(context.l10n.computerAnalysisDisabled),
               if (canShowGameSummary)
-                SecondaryButton(
+                FilledButton.tonal(
                   onPressed: () {
                     ref.read(ctrlProvider.notifier).toggleComputerAnalysis();
                   },
-                  semanticsLabel: context.l10n.enable,
                   child: Text(context.l10n.enable),
                 ),
               const Spacer(),
@@ -174,8 +172,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                           return FutureBuilder<void>(
                             future: pendingRequest,
                             builder: (context, snapshot) {
-                              return SecondaryButton(
-                                semanticsLabel: context.l10n.requestAComputerAnalysis,
+                              return FilledButton.tonal(
                                 onPressed:
                                     ref.watch(authSessionProvider) == null
                                         ? () {

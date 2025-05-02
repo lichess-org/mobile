@@ -192,7 +192,9 @@ String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, Li
 }
 
 /// Downloads a file from the given [url] and saves it to the [file].
-Future<void> downloadFile(
+///
+/// Returns true if the download was successful, false otherwise.
+Future<bool> downloadFile(
   Client client,
   Uri url,
   File file, {
@@ -223,6 +225,9 @@ Future<void> downloadFile(
       debugPrint('Failed to save file: $e');
     }
   }
+
+  final length = await file.length();
+  return length > 0;
 }
 
 /// A [Client] that intercepts all requests, responses, and errors using the provided callbacks.

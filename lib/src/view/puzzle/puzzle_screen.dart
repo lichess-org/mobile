@@ -45,6 +45,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PuzzleScreen extends ConsumerStatefulWidget {
   /// Creates a new puzzle screen.
@@ -562,7 +563,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           onPressed: () {
             launchShareDialog(
               context,
-              text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}').toString(),
+              ShareParams(text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}').toString()),
             );
           },
         ),

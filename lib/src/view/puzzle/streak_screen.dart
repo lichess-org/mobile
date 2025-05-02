@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:share_plus/share_plus.dart';
 
 class StreakScreen extends StatelessWidget {
   const StreakScreen({super.key});
@@ -240,7 +241,9 @@ class _BottomBar extends ConsumerWidget {
             onTap: () {
               launchShareDialog(
                 context,
-                text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}').toString(),
+                ShareParams(
+                  text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}').toString(),
+                ),
               );
             },
             label: 'Share this puzzle',

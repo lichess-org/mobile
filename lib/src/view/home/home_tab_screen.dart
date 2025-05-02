@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -51,6 +52,8 @@ class HomeTabScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
+
+  DateTime? _focusLostAt;
 
   bool wasOnline = true;
   bool hasRefreshed = false;
@@ -117,38 +120,52 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   nbOfGames: nbOfGames,
                 );
 
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('lichess.org'),
-            leading: const AccountIconButton(),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  ref.read(editModeProvider.notifier).state = !isEditing;
-                },
-                icon: Icon(isEditing ? Icons.save_outlined : Icons.app_registration),
-                tooltip: isEditing ? 'Save' : 'Edit',
-              ),
-              const _ChallengeScreenButton(),
-              const _PlayerScreenButton(),
-            ],
+        return FocusDetector(
+          onFocusLost: () {
+            _focusLostAt = DateTime.now();
+          },
+          onFocusRegained: () {
+            if (context.mounted && _focusLostAt != null) {
+              final duration = DateTime.now().difference(_focusLostAt!);
+              if (duration.inSeconds < 60) {
+                return;
+              }
+              _refreshData(isOnline: status.isOnline);
+            }
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('lichess.org'),
+              leading: const AccountIconButton(),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    ref.read(editModeProvider.notifier).state = !isEditing;
+                  },
+                  icon: Icon(isEditing ? Icons.save_outlined : Icons.app_registration),
+                  tooltip: isEditing ? 'Save' : 'Edit',
+                ),
+                const _ChallengeScreenButton(),
+                const _PlayerScreenButton(),
+              ],
+            ),
+            body: RefreshIndicator.adaptive(
+              key: _refreshKey,
+              onRefresh: () => _refreshData(isOnline: status.isOnline),
+              child: ListView(controller: homeScrollController, children: widgets),
+            ),
+            bottomSheet: const OfflineBanner(),
+            floatingActionButton:
+                isTablet
+                    ? null
+                    : FloatingActionButton.extended(
+                      onPressed: () {
+                        Navigator.of(context).push(PlayScreen.buildRoute(context));
+                      },
+                      icon: const Icon(Icons.add),
+                      label: Text(context.l10n.play),
+                    ),
           ),
-          body: RefreshIndicator.adaptive(
-            key: _refreshKey,
-            onRefresh: () => _refreshData(isOnline: status.isOnline),
-            child: ListView(controller: homeScrollController, children: widgets),
-          ),
-          bottomSheet: const OfflineBanner(),
-          floatingActionButton:
-              isTablet
-                  ? null
-                  : FloatingActionButton.extended(
-                    onPressed: () {
-                      Navigator.of(context).push(PlayScreen.buildRoute(context));
-                    },
-                    icon: const Icon(Icons.add),
-                    label: Text(context.l10n.play),
-                  ),
         );
       },
       error: (_, _) => const CenterLoadingIndicator(),
@@ -225,8 +242,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       if (Theme.of(context).platform != TargetPlatform.iOS &&
           (session == null || session.user.isPatron != true)) ...[
         Center(
-          child: SecondaryButton(
-            semanticsLabel: context.l10n.patronDonate,
+          child: FilledButton.tonal(
             onPressed: () {
               launchUrl(Uri.parse('https://lichess.org/patron'));
             },
@@ -236,8 +252,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         const SizedBox(height: 16.0),
       ],
       Center(
-        child: SecondaryButton(
-          semanticsLabel: context.l10n.aboutX('Lichess...'),
+        child: FilledButton.tonal(
           onPressed: () {
             launchUrl(Uri.parse('https://lichess.org/about'));
           },
@@ -323,6 +338,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       ref.refresh(myRecentGamesProvider.future),
       if (isOnline) ref.refresh(accountProvider.future),
       if (isOnline) ref.refresh(ongoingGamesProvider.future),
+      if (isOnline) ref.refresh(featuredTournamentsProvider.future),
     ]);
   }
 }
@@ -334,8 +350,7 @@ class _SignInWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authController = ref.watch(authControllerProvider);
 
-    return SecondaryButton(
-      semanticsLabel: context.l10n.signIn,
+    return FilledButton.tonal(
       onPressed:
           authController.isLoading
               ? null
@@ -422,12 +437,7 @@ class _HelloWidget extends ConsumerWidget {
 
     const iconSize = 24.0;
 
-    // fetch the account user to be sure we have the latest data (flair, etc.)
-    final accountUser = ref
-        .watch(accountProvider)
-        .maybeWhen(data: (data) => data?.lightUser, orElse: () => null);
-
-    final user = accountUser ?? session?.user;
+    final user = session?.user;
 
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.3,

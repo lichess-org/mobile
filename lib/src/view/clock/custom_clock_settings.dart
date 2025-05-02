@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
@@ -43,8 +42,7 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
         ),
         Padding(
           padding: Styles.horizontalBodyPadding,
-          child: FatButton(
-            semanticsLabel: context.l10n.apply,
+          child: FilledButton(
             child: Text(context.l10n.apply),
             onPressed: () => widget.onSubmit(widget.player, TimeIncrement(time, increment)),
           ),

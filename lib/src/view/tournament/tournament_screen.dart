@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'dart:math';
 
-import 'package:dartchess/dartchess.dart';
+import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -11,6 +13,8 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
+import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -20,6 +24,8 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -28,14 +34,22 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
+import 'package:share_plus/share_plus.dart';
 
 class TournamentScreen extends ConsumerStatefulWidget {
   const TournamentScreen({required this.id});
 
   final TournamentId id;
 
+  static const String routeName = '/tournament';
+
   static Route<void> buildRoute(BuildContext context, TournamentId id) {
-    return buildScreenRoute(context, screen: TournamentScreen(id: id));
+    return buildScreenRoute(
+      context,
+      screen: TournamentScreen(id: id),
+      settings: const RouteSettings(name: routeName),
+    );
   }
 
   @override
@@ -78,6 +92,9 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
         if (prevGameId != currentGameId && currentGameId != null) {
           Navigator.of(
             context,
+          ).popUntil((route) => route.settings.name == TournamentScreen.routeName);
+          Navigator.of(
+            context,
             rootNavigator: true,
           ).push(GameScreen.buildRoute(context, initialGameId: currentGameId));
         }
@@ -109,15 +126,13 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
 
     return FocusDetector(
       onFocusRegained: () {
-        ref.read(tournamentControllerProvider(id).notifier).listenToSocketEvents();
-      },
-      onFocusLost: () {
         if (context.mounted) {
-          ref.read(tournamentControllerProvider(id).notifier).stopListeningToSocketEvents();
+          ref.read(tournamentControllerProvider(id).notifier).onFocusRegained();
         }
       },
       child: Scaffold(
@@ -186,11 +201,36 @@ class _Body extends ConsumerWidget {
               const SizedBox(height: 16),
               _Standing(state),
               const SizedBox(height: 16),
-              if (state.tournament.featuredGame != null)
+              if (state.tournament.isStarted != true)
+                _TournamentHelp(state: state)
+              else if (state.tournament.isFinished == true)
+                _TournamentCompleteWidget(state: state)
+              else if (state.tournament.featuredGame != null)
                 _FeaturedGame(state.tournament.featuredGame!),
+              if (session != null && state.joined) const SizedBox(height: 35),
             ],
           ),
         ),
+        bottomSheet:
+            session != null && state.joined && state.tournament.isFinished != true
+                ? Material(
+                  child: Container(
+                    height: 35,
+                    width: double.infinity,
+                    color: context.lichessColors.good,
+                    child: Padding(
+                      padding: Styles.horizontalBodyPadding,
+                      child: Center(
+                        child: Text(
+                          context.l10n.standByX(session.user.name),
+                          style: const TextStyle(color: Colors.white),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                : const SizedBox.shrink(),
         bottomNavigationBar: _BottomBar(state),
       ),
     );
@@ -205,6 +245,174 @@ class _Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBarTitleText(state.tournament.meta.fullName, maxLines: 2);
+  }
+}
+
+class _TournamentHelp extends StatelessWidget {
+  const _TournamentHelp({required this.state});
+
+  final TournamentState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: Styles.bodySectionPadding,
+      child: Column(
+        children: [
+          // show a famous chess quote if available
+          if (state.tournament.quote != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(color: Theme.of(context).dividerColor, width: 1),
+                        bottom: BorderSide(color: Theme.of(context).dividerColor, width: 1),
+                      ),
+                    ),
+                    child: Text(
+                      state.tournament.quote!.text,
+                      style: const TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '\u2014 ${state.tournament.quote!.author}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaIsItRated, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                if (state.tournament.meta.rated)
+                  Text(context.l10n.arenaIsRated)
+                else
+                  Text(context.l10n.arenaIsNotRated),
+              ],
+            ),
+          ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaHowAreScoresCalculated, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                Text(context.l10n.arenaHowAreScoresCalculatedAnswer),
+              ],
+            ),
+          ),
+          if (state.tournament.berserkable)
+            Padding(
+              padding: Styles.verticalBodyPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(context.l10n.arenaBerserk, style: Styles.sectionTitle),
+                  const SizedBox(height: 10),
+                  Text(context.l10n.arenaBerserkAnswer),
+                ],
+              ),
+            ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaHowIsTheWinnerDecided, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                Text(context.l10n.arenaHowIsTheWinnerDecidedAnswer),
+              ],
+            ),
+          ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaHowDoesPairingWork, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                Text(context.l10n.arenaHowDoesPairingWorkAnswer),
+              ],
+            ),
+          ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaHowDoesItEnd, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                Text(context.l10n.arenaHowDoesItEndAnswer),
+              ],
+            ),
+          ),
+          Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.l10n.arenaOtherRules, style: Styles.sectionTitle),
+                const SizedBox(height: 10),
+                Text(context.l10n.arenaThereIsACountdown),
+                const SizedBox(height: 6),
+                Text(context.l10n.arenaDrawingWithinNbMoves(10)),
+                const SizedBox(height: 6),
+                Text(context.l10n.arenaDrawStreakStandard('30')),
+                const SizedBox(height: 6),
+                Text(context.l10n.arenaDrawStreakVariants),
+                DataTable(
+                  dataRowMinHeight: 40,
+                  dataRowMaxHeight: 70,
+                  columns: [
+                    DataColumn(label: Text(context.l10n.arenaVariant)),
+                    DataColumn(
+                      label: Expanded(
+                        child: Text(
+                          context.l10n.arenaMinimumGameLength,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: const [
+                    DataRow(
+                      cells: [DataCell(Text('Standard, Chess960, Horde')), DataCell(Text('30'))],
+                    ),
+                    DataRow(
+                      cells: [
+                        DataCell(Text('Antichess, Crazyhouse, King of the Hill')),
+                        DataCell(Text('20')),
+                      ],
+                    ),
+                    DataRow(
+                      cells: [
+                        DataCell(Text('Three-check, Atomic, Racing Kings')),
+                        DataCell(Text('10')),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -532,6 +740,158 @@ class _FeaturedGamePlayer extends StatelessWidget {
   }
 }
 
+class _TournamentCompleteWidget extends ConsumerWidget {
+  const _TournamentCompleteWidget({required this.state});
+
+  final TournamentState state;
+
+  static const _headerStyle = TextStyle();
+  static const _valueStyle = TextStyle(fontWeight: FontWeight.bold);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+
+    final stats = state.tournament.stats;
+    if (stats == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Card(
+      child: Padding(
+        padding: Styles.bodySectionPadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(context.l10n.tournamentComplete, style: Styles.sectionTitle),
+            const SizedBox(height: 10),
+            DataTable(
+              headingRowHeight: 0,
+              dividerThickness: 0,
+              horizontalMargin: 0,
+              columns: const [
+                DataColumn(label: SizedBox.shrink()),
+                DataColumn(label: SizedBox.shrink()),
+              ],
+              rows: [
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.averageElo, style: _headerStyle)),
+                    DataCell(Text(stats.averageRating.toString(), style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.gamesPlayed, style: _headerStyle)),
+                    DataCell(Text(stats.nbGames.toString(), style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.movesPlayed, style: _headerStyle)),
+                    DataCell(Text(stats.nbMoves.toString(), style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.whiteWins, style: _headerStyle)),
+                    DataCell(Text('${stats.whiteWinRate}%', style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.blackWins, style: _headerStyle)),
+                    DataCell(Text('${stats.blackWinRate}%', style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.drawRate, style: _headerStyle)),
+                    DataCell(Text('${stats.drawRate}%', style: _valueStyle)),
+                  ],
+                ),
+                DataRow(
+                  cells: [
+                    DataCell(Text(context.l10n.arenaBerserkRate, style: _headerStyle)),
+                    DataCell(Text('${stats.berserkRate}%', style: _valueStyle)),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            LoadingButtonBuilder<File>(
+              fetchData: () => _downloadGames(ref),
+              builder: (context, snapshot, fetchData) {
+                return ListTile(
+                  leading: const Icon(Icons.download),
+                  title: Text(context.l10n.downloadAllGames),
+                  enabled: snapshot.connectionState != ConnectionState.waiting,
+                  onTap: () async {
+                    final file = await fetchData();
+                    if (context.mounted) {
+                      launchShareDialog(
+                        context,
+                        ShareParams(
+                          fileNameOverrides: [
+                            'lichess_tournament_${state.tournament.startsAt}.${state.tournament.id}.pgn',
+                          ],
+                          files: [XFile(file.path, mimeType: 'text/plain')],
+                        ),
+                      );
+                    }
+                  },
+                );
+              },
+            ),
+            if (session != null)
+              LoadingButtonBuilder<File>(
+                fetchData: () => _downloadGames(ref, session.user),
+                builder: (context, snapshot, fetchData) {
+                  return ListTile(
+                    leading: const Icon(Icons.download),
+                    title: const Text('Download my games'),
+                    enabled: snapshot.connectionState != ConnectionState.waiting,
+                    onTap: () async {
+                      final file = await fetchData();
+                      if (context.mounted) {
+                        launchShareDialog(
+                          context,
+                          ShareParams(
+                            fileNameOverrides: [
+                              'lichess_tournament_${state.tournament.startsAt}.${state.tournament.id}_${session.user.name}.pgn',
+                            ],
+                            files: [XFile(file.path, mimeType: 'text/plain')],
+                          ),
+                        );
+                      }
+                    },
+                  );
+                },
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static final _dateFormat = DateFormat('yyyy-MM-dd');
+
+  Future<File> _downloadGames(WidgetRef ref, [LightUser? player]) async {
+    final tempDir = await getTemporaryDirectory();
+    final file = File(
+      '${tempDir.path}/lichess_tournament${state.tournament.startsAt != null ? '_${_dateFormat.format(state.tournament.startsAt!)}' : ''}_${state.tournament.id}${player?.name != null ? '_${player?.name}' : ''}.pgn',
+    );
+    final res = await ref
+        .read(tournamentRepositoryProvider)
+        .downloadTournamentGames(state.tournament.id, file, userId: player?.id);
+    if (res) {
+      return file;
+    } else {
+      throw Exception('Failed to download tournament games');
+    }
+  }
+}
+
 class _BottomBar extends ConsumerStatefulWidget {
   const _BottomBar(this.state);
 
@@ -546,7 +906,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoggedIn = ref.watch(authSessionProvider)?.user.id != null;
+    final session = ref.watch(authSessionProvider);
+    final kidModeAsync = ref.watch(kidModeProvider);
 
     ref.listen(
       tournamentControllerProvider(widget.state.id).select((value) => value.valueOrNull?.joined),
@@ -561,7 +922,10 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
 
     return BottomBar(
       children: [
-        if (isLoggedIn)
+        if (widget.state.chatOptions != null && kidModeAsync.valueOrNull == false)
+          ChatBottomBarButton(options: widget.state.chatOptions!),
+
+        if (widget.state.tournament.isFinished != true && session != null)
           joinOrLeaveInProgress
               ? const Center(child: CircularProgressIndicator.adaptive())
               : BottomBarButton(
@@ -580,7 +944,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                         }
                         : null,
               )
-        else
+        else if (widget.state.tournament.isFinished != true)
           BottomBarButton(
             label: context.l10n.signIn,
             showLabel: true,

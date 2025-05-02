@@ -2,18 +2,15 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
-import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -111,34 +108,10 @@ class GameScreen extends ConsumerStatefulWidget {
 
 enum _GameSource { lobby, challenge, game }
 
-class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
+class _GameScreenState extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
   final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      rootNavPageRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    rootNavPageRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPop() {
-    if (mounted && (widget.source == _GameSource.lobby || widget.source == _GameSource.challenge)) {
-      ref.invalidate(myRecentGamesProvider);
-      ref.invalidate(accountProvider);
-    }
-    super.didPop();
-  }
 
   @override
   Widget build(BuildContext context) {

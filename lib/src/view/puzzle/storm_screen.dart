@@ -629,8 +629,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
           const SizedBox(height: 10.0),
           Padding(
             padding: Styles.horizontalBodyPadding,
-            child: FatButton(
-              semanticsLabel: context.l10n.stormPlayAgain,
+            child: FilledButton(
               onPressed: () {
                 ref.invalidate(stormProvider);
                 Navigator.of(context).pop();

@@ -14,7 +14,7 @@ const kLichessDatabaseName = 'lichess_mobile.db';
 const puzzleTTL = Duration(days: 60);
 const corresGameTTL = Duration(days: 60);
 const gameTTL = Duration(days: 90);
-const chatReadMessagesTTL = Duration(days: 60);
+const chatReadMessagesTTL = Duration(days: 180);
 const httpLogTTL = Duration(days: 7);
 
 const kStorageAnonId = '**anonymous**';

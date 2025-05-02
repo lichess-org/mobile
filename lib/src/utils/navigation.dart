@@ -37,6 +37,11 @@ Route<T> buildScreenRoute<T>(
   BuildContext context, {
   required Widget screen,
   bool fullscreenDialog = false,
+  RouteSettings? settings,
 }) {
-  return MaterialScreenRoute<T>(screen: screen, fullscreenDialog: fullscreenDialog);
+  return MaterialScreenRoute<T>(
+    screen: screen,
+    fullscreenDialog: fullscreenDialog,
+    settings: settings,
+  );
 }

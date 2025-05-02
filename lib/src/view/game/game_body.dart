@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
@@ -21,12 +19,12 @@ import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
-import 'package:lichess_mobile/src/view/game/message_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
@@ -34,7 +32,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 /// Game body for the [GameScreen].
@@ -95,8 +92,6 @@ class GameBody extends ConsumerWidget {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
     final blindfoldMode = gamePrefs.blindfoldMode ?? false;
-    final enableChat = gamePrefs.enableChat ?? false;
-    final kidModeAsync = ref.watch(kidModeProvider);
 
     switch (ref.watch(ctrlProvider)) {
       case AsyncError(error: final e, stackTrace: final s):
@@ -105,14 +100,6 @@ class GameBody extends ConsumerWidget {
           child: LoadGameError('Sorry, we could not load the game. Please try again later.'),
         );
       case AsyncData(value: final gameState, isRefreshing: false):
-        final isChatEnabled =
-            enableChat && !gameState.isZenModeActive && kidModeAsync.valueOrNull == false;
-        if (isChatEnabled) {
-          ref.listen(
-            chatControllerProvider(loadedGame.gameId),
-            (prev, state) => _chatListener(prev, state, context: context, ref: ref),
-          );
-        }
         final youAre = gameState.game.youAre ?? Side.white;
         final archivedBlackClock = gameState.game.archivedBlackClockAt(gameState.stepCursor);
         final archivedWhiteClock = gameState.game.archivedWhiteClockAt(gameState.stepCursor);
@@ -370,18 +357,6 @@ class GameBody extends ConsumerWidget {
     }
   }
 
-  void _chatListener(
-    AsyncValue<ChatState>? prev,
-    AsyncValue<ChatState> state, {
-    required BuildContext context,
-    required WidgetRef ref,
-  }) {
-    if (prev == null || !prev.hasValue || !state.hasValue) return;
-    if (state.requireValue.unreadMessages > prev.requireValue.unreadMessages) {
-      ref.read(soundServiceProvider).play(Sound.confirmation, volume: 0.5);
-    }
-  }
-
   void _stateListener(
     AsyncValue<GameState>? prev,
     AsyncValue<GameState> state, {
@@ -389,6 +364,16 @@ class GameBody extends ConsumerWidget {
     required WidgetRef ref,
   }) {
     if (state.hasValue) {
+      if (prev?.valueOrNull?.isZenModeActive == true &&
+          state.requireValue.isZenModeActive == false) {
+        if (context.mounted) {
+          // when Zen mode is disabled, reload chat data
+          ref
+              .read(gameControllerProvider(loadedGame.gameId).notifier)
+              .onToggleChat(state.requireValue.chatOptions != null);
+        }
+      }
+
       // If the game is no longer playable, show the game end dialog.
       // We want to show it only once, whether the game is already finished on
       // first load or not.
@@ -462,34 +447,16 @@ class _GameBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
-    final gameStateAsync = ref.watch(gameControllerProvider(id));
-    final chatStateAsync =
-        gamePrefs.enableChat == true ? ref.watch(chatControllerProvider(id)) : null;
     final kidModeAsync = ref.watch(kidModeProvider);
 
-    return BottomBar(
-      children: gameStateAsync.when(
-        data: (gameState) {
-          final isChatEnabled =
-              chatStateAsync != null &&
-              !gameState.isZenModeActive &&
-              kidModeAsync.valueOrNull == false;
-
-          final chatUnreadLabel =
-              isChatEnabled
-                  ? chatStateAsync.maybeWhen(
-                    data:
-                        (s) =>
-                            s.unreadMessages > 0
-                                ? (s.unreadMessages < 10)
-                                    ? s.unreadMessages.toString()
-                                    : '9+'
-                                : null,
-                    orElse: () => null,
-                  )
-                  : null;
-
-          return [
+    switch (ref.watch(gameControllerProvider(id))) {
+      case AsyncData(value: final gameState):
+        final canShowChat =
+            gamePrefs.enableChat == true &&
+            gameState.chatOptions != null &&
+            kidModeAsync.valueOrNull == false;
+        return BottomBar(
+          children: [
             BottomBarButton(
               label: context.l10n.menu,
               onTap: () {
@@ -497,20 +464,6 @@ class _GameBottomBar extends ConsumerWidget {
               },
               icon: Icons.menu,
             ),
-            if (!gameState.game.playable)
-              BottomBarButton(
-                label: context.l10n.mobileShowResult,
-                onTap: () {
-                  showAdaptiveDialog<void>(
-                    context: context,
-                    builder:
-                        (context) =>
-                            GameResultDialog(id: id, onNewOpponentCallback: onNewOpponentCallback),
-                    barrierDismissible: true,
-                  );
-                },
-                icon: Icons.info_outline,
-              ),
             if (gameState.canBerserk)
               BottomBarButton(
                 label: context.l10n.arenaBerserk,
@@ -593,13 +546,17 @@ class _GameBottomBar extends ConsumerWidget {
               )
             else if (gameState.game.finished)
               BottomBarButton(
-                label: context.l10n.analysis,
-                icon: Icons.biotech,
+                label: context.l10n.mobileShowResult,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
+                  showAdaptiveDialog<void>(
+                    context: context,
+                    builder:
+                        (context) =>
+                            GameResultDialog(id: id, onNewOpponentCallback: onNewOpponentCallback),
+                    barrierDismissible: true,
+                  );
                 },
+                icon: Icons.info_outline,
               )
             else
               BottomBarButton(
@@ -620,25 +577,7 @@ class _GameBottomBar extends ConsumerWidget {
                         : null,
                 icon: Icons.flag_outlined,
               ),
-            if (kidModeAsync.valueOrNull == false)
-              BottomBarButton(
-                label: context.l10n.chat,
-                onTap:
-                    isChatEnabled
-                        ? () {
-                          Navigator.of(context).push(
-                            MessageScreen.buildRoute(
-                              context,
-                              title: UserFullNameWidget(user: gameState.game.opponent?.user),
-                              me: gameState.game.me?.user,
-                              id: id,
-                            ),
-                          );
-                        }
-                        : null,
-                icon: Icons.chat_bubble_outline,
-                badgeLabel: chatUnreadLabel,
-              ),
+            if (canShowChat) ChatBottomBarButton(options: gameState.chatOptions!),
             RepeatButton(
               onLongPress: gameState.canGoBackward ? () => _moveBackward(ref) : null,
               child: BottomBarButton(
@@ -661,12 +600,11 @@ class _GameBottomBar extends ConsumerWidget {
                     gameState.game.sideToMove == gameState.game.youAre,
               ),
             ),
-          ];
-        },
-        loading: () => [],
-        error: (e, s) => [],
-      ),
-    );
+          ],
+        );
+      case _:
+        return const BottomBar(children: []);
+    }
   }
 
   void _moveForward(WidgetRef ref) {
@@ -688,7 +626,8 @@ class _GameBottomBar extends ConsumerWidget {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
-        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence)
+        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence ||
+            gameState.game.finished)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () {

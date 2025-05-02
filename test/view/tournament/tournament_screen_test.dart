@@ -117,6 +117,7 @@ String makeTournamentJson({
   },
   $kFeaturedGame,
   "id": "82QbxlJb",
+  "socketVersion": 0,
   "createdBy": "lichess",
   "startsAt": "2025-04-01T17:00:25Z",
   "system": "arena",
@@ -143,6 +144,10 @@ String makeTournamentJson({
   },
   "minRatedGames": {
     "nb": 20
+  },
+  "chat": {
+    "lines": [],
+    "writeable": true
   },
   "reloadEndpoint": "https://http.lichess.org/tournament/82QbxlJb"
 }

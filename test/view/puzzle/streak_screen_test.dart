@@ -5,7 +5,6 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -228,8 +227,7 @@ void main() {
           builder:
               (context) => Scaffold(
                 appBar: AppBar(title: const Text('Test Streak Screen')),
-                body: FatButton(
-                  semanticsLabel: 'Start Streak',
+                body: FilledButton(
                   child: const Text('Start Streak'),
                   onPressed:
                       () => Navigator.of(

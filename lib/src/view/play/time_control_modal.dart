@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -180,9 +179,8 @@ class TimeControlModal extends ConsumerWidget {
                                   ),
                                 ],
                               ),
-                              FatButton(
+                              FilledButton(
                                 onPressed: custom.isInfinite ? null : () => onSelected(custom),
-                                semanticsLabel: 'OK',
                                 child: Text(context.l10n.mobileOkButton, style: Styles.bold),
                               ),
                             ],

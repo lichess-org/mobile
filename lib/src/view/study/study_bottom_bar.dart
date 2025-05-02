@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:share_plus/share_plus.dart';
 
 class StudyBottomBar extends ConsumerWidget {
   const StudyBottomBar({required this.id});
@@ -366,7 +367,10 @@ Future<void> _showStudyMenu(StudyId id, BuildContext context, WidgetRef ref) {
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.studyStudyUrl),
                 onPressed: () {
-                  launchShareDialog(context, uri: lichessUri('/study/${state.study.id}'));
+                  launchShareDialog(
+                    context,
+                    ShareParams(uri: lichessUri('/study/${state.study.id}')),
+                  );
                 },
               ),
               BottomSheetAction(
@@ -374,7 +378,9 @@ Future<void> _showStudyMenu(StudyId id, BuildContext context, WidgetRef ref) {
                 onPressed: () {
                   launchShareDialog(
                     context,
-                    uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
+                    ShareParams(
+                      uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
+                    ),
                   );
                 },
               ),
@@ -387,7 +393,7 @@ Future<void> _showStudyMenu(StudyId id, BuildContext context, WidgetRef ref) {
                           .read(studyRepositoryProvider)
                           .getStudyPgn(state.study.id);
                       if (context.mounted) {
-                        launchShareDialog(context, text: pgn);
+                        launchShareDialog(context, ShareParams(text: pgn));
                       }
                     } catch (e) {
                       if (context.mounted) {
@@ -399,7 +405,7 @@ Future<void> _showStudyMenu(StudyId id, BuildContext context, WidgetRef ref) {
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyChapterPgn),
                   onPressed: () {
-                    launchShareDialog(context, text: state.pgn);
+                    launchShareDialog(context, ShareParams(text: state.pgn));
                   },
                 ),
                 if (state.currentPosition != null)
@@ -417,9 +423,11 @@ Future<void> _showStudyMenu(StudyId id, BuildContext context, WidgetRef ref) {
                         if (context.mounted) {
                           launchShareDialog(
                             context,
-                            files: [image],
-                            subject: context.l10n.puzzleFromGameLink(
-                              lichessUri('/study/${state.study.id}').toString(),
+                            ShareParams(
+                              files: [image],
+                              subject: context.l10n.puzzleFromGameLink(
+                                lichessUri('/study/${state.study.id}').toString(),
+                              ),
                             ),
                           );
                         }
@@ -440,8 +448,13 @@ Future<void> _showStudyMenu(StudyId id, BuildContext context, WidgetRef ref) {
                       if (context.mounted) {
                         launchShareDialog(
                           context,
-                          files: [gif],
-                          subject: context.l10n.studyChapterX(state.study.currentChapterMeta.name),
+                          ShareParams(
+                            files: [gif],
+                            fileNameOverrides: ['${state.study.chapter.id}.gif'],
+                            subject: context.l10n.studyChapterX(
+                              state.study.currentChapterMeta.name,
+                            ),
+                          ),
                         );
                       }
                     } catch (e) {

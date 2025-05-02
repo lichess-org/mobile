@@ -3,60 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Platform agnostic button which is used for important actions.
-class FatButton extends StatelessWidget {
-  const FatButton({
-    required this.semanticsLabel,
-    required this.child,
-    required this.onPressed,
-    super.key,
-  });
-
-  final String semanticsLabel;
-  final VoidCallback? onPressed;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      container: true,
-      enabled: true,
-      button: true,
-      label: semanticsLabel,
-      excludeSemantics: true,
-      child: FilledButton(onPressed: onPressed, child: child),
-    );
-  }
-}
-
-/// Platform agnostic button meant for medium importance actions.
-class SecondaryButton extends StatelessWidget {
-  const SecondaryButton({
-    required this.semanticsLabel,
-    required this.child,
-    required this.onPressed,
-    this.textStyle,
-    super.key,
-  });
-
-  final String semanticsLabel;
-  final VoidCallback? onPressed;
-  final Widget child;
-  final TextStyle? textStyle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      container: true,
-      enabled: true,
-      button: true,
-      label: semanticsLabel,
-      excludeSemantics: true,
-      child: FilledButton.tonal(onPressed: onPressed, child: child),
-    );
-  }
-}
-
 /// Icon button with mandatory semantics.
 class SemanticIconButton extends StatelessWidget {
   const SemanticIconButton({
@@ -223,6 +169,47 @@ class _RepeatButtonState extends State<RepeatButton> {
       onLongPressCancel: _onPressEnd,
       onLongPressUp: _onPressEnd,
       child: widget.child,
+    );
+  }
+}
+
+class LoadingButtonBuilder<T> extends StatefulWidget {
+  const LoadingButtonBuilder({required this.builder, required this.fetchData, super.key});
+
+  final Future<T> Function() fetchData;
+
+  final Widget Function(
+    BuildContext context,
+    AsyncSnapshot<T> snapshot,
+    Future<T> Function() fetchData,
+  )
+  builder;
+
+  @override
+  State<LoadingButtonBuilder<T>> createState() => _LoadingButtonBuilderState();
+}
+
+class _LoadingButtonBuilderState<T> extends State<LoadingButtonBuilder<T>> {
+  Future<T>? _future;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<T>(
+      future: _future,
+      builder: (context, snapshot) {
+        return widget.builder(context, snapshot, () async {
+          final future = widget.fetchData();
+          setState(() {
+            _future = future;
+          });
+          try {
+            await future;
+          } finally {
+            _future = null;
+          }
+          return future;
+        });
+      },
     );
   }
 }

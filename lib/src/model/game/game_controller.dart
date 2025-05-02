@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -1075,5 +1076,13 @@ class GameState with _$GameState {
               variant: game.meta.variant,
               isComputerAnalysisAllowed: false,
             ),
+          );
+
+  GameChatOptions? get chatOptions =>
+      isZenModeActive || game.meta.tournament != null
+          ? null
+          : GameChatOptions(
+            id: gameFullId,
+            opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
           );
 }
