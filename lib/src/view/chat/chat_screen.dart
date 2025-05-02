@@ -17,7 +17,7 @@ class ChatBottomBarButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final chatUnreadLabel = ref.watch(chatUnreadLabelProvider(options));
+    final chatUnread = ref.watch(chatUnreadProvider(options));
 
     return BottomBarButton(
       label: context.l10n.chatRoom,
@@ -25,7 +25,15 @@ class ChatBottomBarButton extends ConsumerWidget {
         Navigator.of(context).push(ChatScreen.buildRoute(context, options: options));
       },
       icon: Icons.chat_bubble_outline,
-      badgeLabel: chatUnreadLabel.valueOrNull,
+      badgeLabel: switch (chatUnread) {
+        AsyncData(:final value) =>
+          value > 0
+              ? value < 10
+                  ? value.toString()
+                  : '9+'
+              : null,
+        _ => null,
+      },
     );
   }
 }

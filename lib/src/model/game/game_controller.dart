@@ -120,26 +120,12 @@ class GameController extends _$GameController {
         _onFinishedGameLoad(fullEvent.game);
       }
 
-      final gameState = GameState(
+      return GameState(
         gameFullId: gameFullId,
         game: game,
         stepCursor: game.steps.length - 1,
         liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
       );
-
-      state = AsyncValue.data(gameState);
-
-      // yolo workaround to load chat messages
-      if (gameState.chatOptions != null && fullEvent.game.chat != null) {
-        setChatData(gameState.chatOptions!.id, fullEvent.game.chat!);
-        scheduleMicrotask(() {
-          ref
-              .read(chatControllerProvider(state.requireValue.chatOptions!).notifier)
-              .onReloadMessages(fullEvent.game.chat!.lines);
-        });
-      }
-
-      return gameState;
     });
   }
 
@@ -548,12 +534,6 @@ class GameController extends _$GameController {
             black: newGame.clock!.black,
             activeSide: state.requireValue.activeClockSide,
           );
-        }
-
-        if (state.requireValue.chatOptions != null && fullEvent.game.chat != null) {
-          ref
-              .read(chatControllerProvider(state.requireValue.chatOptions!).notifier)
-              .onReloadMessages(fullEvent.game.chat!.lines);
         }
 
       // Server asking for a resync
@@ -1098,13 +1078,11 @@ class GameState with _$GameState {
             ),
           );
 
-  ChatOptions? get chatOptions =>
+  GameChatOptions? get chatOptions =>
       isZenModeActive || game.meta.tournament != null
           ? null
-          : (
+          : GameChatOptions(
             id: gameFullId,
-            isPublic: false,
-            writeable: game.chat?.writeable ?? true,
             opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
           );
 }

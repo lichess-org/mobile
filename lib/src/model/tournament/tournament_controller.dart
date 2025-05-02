@@ -59,21 +59,7 @@ class TournamentController extends _$TournamentController {
 
     _watchFeaturedGameIfChanged(previous: null, current: tournament.featuredGame?.id);
 
-    final tourState = TournamentState(tournament: tournament, standingsPage: 1);
-
-    state = AsyncValue.data(tourState);
-
-    // yolo workaround to load chat messages
-    if (tourState.chatOptions != null && tournament.chat != null) {
-      setChatData(tourState.chatOptions!.id, tournament.chat!);
-      scheduleMicrotask(() {
-        ref
-            .read(chatControllerProvider(tourState.chatOptions!).notifier)
-            .onReloadMessages(tournament.chat!.lines);
-      });
-    }
-
-    return tourState;
+    return TournamentState(tournament: tournament, standingsPage: 1);
   }
 
   void onFocusRegained() {
@@ -243,11 +229,6 @@ class TournamentState with _$TournamentState {
 
   ChatOptions? get chatOptions =>
       tournament.chat != null
-          ? (
-            id: tournament.id,
-            opponent: null,
-            isPublic: true,
-            writeable: tournament.chat!.writeable,
-          )
+          ? TournamentChatOptions(id: tournament.id, writeable: tournament.chat!.writeable)
           : null;
 }

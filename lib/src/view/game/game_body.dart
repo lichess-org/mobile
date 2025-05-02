@@ -447,18 +447,16 @@ class _GameBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
-    final gameStateAsync = ref.watch(gameControllerProvider(id));
     final kidModeAsync = ref.watch(kidModeProvider);
 
-    return BottomBar(
-      children: gameStateAsync.when(
-        data: (gameState) {
-          final canShowChat =
-              gamePrefs.enableChat == true &&
-              gameState.chatOptions != null &&
-              kidModeAsync.valueOrNull == false;
-
-          return [
+    switch (ref.watch(gameControllerProvider(id))) {
+      case AsyncData(value: final gameState):
+        final canShowChat =
+            gamePrefs.enableChat == true &&
+            gameState.chatOptions != null &&
+            kidModeAsync.valueOrNull == false;
+        return BottomBar(
+          children: [
             BottomBarButton(
               label: context.l10n.menu,
               onTap: () {
@@ -466,20 +464,6 @@ class _GameBottomBar extends ConsumerWidget {
               },
               icon: Icons.menu,
             ),
-            if (!gameState.game.playable)
-              BottomBarButton(
-                label: context.l10n.mobileShowResult,
-                onTap: () {
-                  showAdaptiveDialog<void>(
-                    context: context,
-                    builder:
-                        (context) =>
-                            GameResultDialog(id: id, onNewOpponentCallback: onNewOpponentCallback),
-                    barrierDismissible: true,
-                  );
-                },
-                icon: Icons.info_outline,
-              ),
             if (gameState.canBerserk)
               BottomBarButton(
                 label: context.l10n.arenaBerserk,
@@ -562,13 +546,17 @@ class _GameBottomBar extends ConsumerWidget {
               )
             else if (gameState.game.finished)
               BottomBarButton(
-                label: context.l10n.analysis,
-                icon: Icons.biotech,
+                label: context.l10n.mobileShowResult,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
+                  showAdaptiveDialog<void>(
+                    context: context,
+                    builder:
+                        (context) =>
+                            GameResultDialog(id: id, onNewOpponentCallback: onNewOpponentCallback),
+                    barrierDismissible: true,
+                  );
                 },
+                icon: Icons.info_outline,
               )
             else
               BottomBarButton(
@@ -612,12 +600,13 @@ class _GameBottomBar extends ConsumerWidget {
                     gameState.game.sideToMove == gameState.game.youAre,
               ),
             ),
-          ];
-        },
-        loading: () => [],
-        error: (e, s) => [],
-      ),
-    );
+          ],
+        );
+      case _:
+        return const BottomBar(children: [
+          ],
+        );
+    }
   }
 
   void _moveForward(WidgetRef ref) {
@@ -639,7 +628,8 @@ class _GameBottomBar extends ConsumerWidget {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
-        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence)
+        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence ||
+            gameState.game.finished)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () {

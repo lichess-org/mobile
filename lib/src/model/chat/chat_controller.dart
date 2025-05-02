@@ -10,6 +10,8 @@ import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,32 +23,53 @@ part 'chat_controller.g.dart';
 const _tableName = 'chat_read_messages';
 String _storeKey(StringId id) => 'chat.$id';
 
-typedef ChatOptions = ({StringId id, LightUser? opponent, bool isPublic, bool writeable});
+@immutable
+sealed class ChatOptions {
+  const ChatOptions();
 
-/// Global chat data storage.
-Map<StringId, ChatData> _chatData = {};
+  StringId get id;
+  LightUser? get opponent;
+  bool get isPublic;
+  bool get writeable;
 
-/// Loads the chat data from the server, before the [ChatController] is built.
-void setChatData(StringId id, ChatData data) {
-  // delete all data since we only want to keep the last one
-  _chatData.clear();
-  _chatData[id] = data;
+  @override
+  String toString() =>
+      'ChatOptions(id: $id, opponent: $opponent, isPublic: $isPublic, writeable: $writeable)';
 }
 
-/// A provider that gets the chat unread messages label if there are any unread messages.
+@freezed
+class GameChatOptions extends ChatOptions with _$GameChatOptions {
+  const GameChatOptions._();
+  const factory GameChatOptions({required GameFullId id, required LightUser? opponent}) =
+      _GameChatOptions;
+
+  @override
+  bool get isPublic => false;
+
+  @override
+  bool get writeable => true;
+}
+
+@freezed
+class TournamentChatOptions extends ChatOptions with _$TournamentChatOptions {
+  const TournamentChatOptions._();
+  const factory TournamentChatOptions({required TournamentId id, required bool writeable}) =
+      _TournamentChatOptions;
+
+  @override
+  LightUser? get opponent => null;
+
+  @override
+  bool get isPublic => true;
+}
+
+/// A provider that gets the chat unread messages
 @riverpod
-Future<String?> chatUnreadLabel(Ref ref, ChatOptions options) async {
-  return ref.watch(
-    chatControllerProvider(options).selectAsync(
-      (s) =>
-          s.unreadMessages > 0
-              ? (s.unreadMessages < 10)
-                  ? s.unreadMessages.toString()
-                  : '9+'
-              : null,
-    ),
-  );
+Future<int> chatUnread(Ref ref, ChatOptions options) async {
+  return ref.watch(chatControllerProvider(options).selectAsync((s) => s.unreadMessages));
 }
+
+const IList<ChatMessage> _kEmptyMessages = IListConst([]);
 
 @riverpod
 class ChatController extends _$ChatController {
@@ -63,24 +86,21 @@ class ChatController extends _$ChatController {
       _subscription?.cancel();
     });
 
-    final readMessagesCount = await _getReadMessagesCount();
+    final initialMessages = await switch (options) {
+      GameChatOptions(:final id) => ref.watch(
+        gameControllerProvider(id).selectAsync((s) => s.game.chat?.lines),
+      ),
+      TournamentChatOptions(:final id) => ref.watch(
+        tournamentControllerProvider(id).selectAsync((s) => s.tournament.chat?.lines),
+      ),
+    };
 
-    final messages = _selectMessages(_chatData[options.id]?.lines ?? IList());
+    final filteredMessages = _selectMessages(initialMessages ?? _kEmptyMessages);
+    final readMessagesCount = await _getReadMessagesCount();
 
     return ChatState(
-      messages: messages,
-      unreadMessages: math.max(0, messages.length - readMessagesCount),
-    );
-  }
-
-  /// Reloads the chat messages from the server.
-  Future<void> onReloadMessages(IList<ChatMessage> messages) async {
-    final readMessagesCount = await _getReadMessagesCount();
-    final newMessages = _selectMessages(messages);
-
-    state = state.whenData(
-      (s) =>
-          s.copyWith(messages: newMessages, unreadMessages: newMessages.length - readMessagesCount),
+      messages: filteredMessages,
+      unreadMessages: math.max(0, filteredMessages.length - readMessagesCount),
     );
   }
 
