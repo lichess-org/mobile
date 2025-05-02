@@ -603,9 +603,7 @@ class _GameBottomBar extends ConsumerWidget {
           ],
         );
       case _:
-        return const BottomBar(children: [
-          ],
-        );
+        return const BottomBar(children: []);
     }
   }
 
