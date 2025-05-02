@@ -53,6 +53,8 @@ class HomeTabScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
+  DateTime? _focusLostAt;
+
   bool wasOnline = true;
   bool hasRefreshed = false;
 
@@ -119,9 +121,16 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 );
 
         return FocusDetector(
+          onFocusLost: () {
+            _focusLostAt = DateTime.now();
+          },
           onFocusRegained: () {
-            if (context.mounted) {
-              ref.invalidate(featuredTournamentsProvider);
+            if (context.mounted && _focusLostAt != null) {
+              final duration = DateTime.now().difference(_focusLostAt!);
+              if (duration.inSeconds < 60) {
+                return;
+              }
+              _refreshData(isOnline: status.isOnline);
             }
           },
           child: Scaffold(
@@ -428,12 +437,7 @@ class _HelloWidget extends ConsumerWidget {
 
     const iconSize = 24.0;
 
-    // fetch the account user to be sure we have the latest data (flair, etc.)
-    final accountUser = ref
-        .watch(accountProvider)
-        .maybeWhen(data: (data) => data?.lightUser, orElse: () => null);
-
-    final user = accountUser ?? session?.user;
+    final user = session?.user;
 
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.3,

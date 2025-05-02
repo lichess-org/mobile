@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -62,30 +61,8 @@ class _AppState extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
   bool _firstTimeOnlineCheck = false;
 
-  AppLifecycleListener? _appLifecycleListener;
-
-  DateTime? _pausedAt;
-
   @override
   void initState() {
-    _appLifecycleListener = AppLifecycleListener(
-      onPause: () {
-        _pausedAt = DateTime.now();
-      },
-      onRestart: () async {
-        // Invalidate ongoing games if the app was paused for more than 10 minutes.
-        // In theory we shouldn't need to do this, because correspondence games are updated by
-        // fcm messages, but in practice it's not always reliable.
-        // See also: [CorrespondenceService].
-        final online = await isOnline(ref.read(defaultClientProvider));
-        if (online &&
-            _pausedAt != null &&
-            DateTime.now().difference(_pausedAt!) >= const Duration(minutes: 10)) {
-          ref.invalidate(ongoingGamesProvider);
-        }
-      },
-    );
-
     // Start services
     ref.read(notificationServiceProvider).start();
     ref.read(challengeServiceProvider).start();
@@ -122,12 +99,6 @@ class _AppState extends ConsumerState<Application> {
     });
 
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _appLifecycleListener?.dispose();
-    super.dispose();
   }
 
   @override
