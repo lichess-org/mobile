@@ -12,10 +12,11 @@ import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
   const GameResultDialog({required this.id, required this.onNewOpponentCallback, super.key});
@@ -74,23 +75,32 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             children: [
               const Padding(
                 padding: EdgeInsets.only(bottom: 15.0),
+                // TODO l10n
                 child: Text('Your opponent has offered a rematch', textAlign: TextAlign.center),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 15.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    FatButton(
-                      semanticsLabel: context.l10n.rematch,
-                      child: const Text('Accept rematch'),
+                    FilledButton.icon(
+                      icon: const Icon(Icons.check),
+                      style: FilledButton.styleFrom(
+                        foregroundColor: context.lichessColors.good,
+                        backgroundColor: context.lichessColors.good.withValues(alpha: 0.3),
+                      ),
+                      label: Text(context.l10n.accept),
                       onPressed: () {
                         ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
                       },
                     ),
-                    SecondaryButton(
-                      semanticsLabel: context.l10n.rematch,
-                      child: const Text('Decline'),
+                    FilledButton.icon(
+                      icon: const Icon(Icons.close),
+                      style: FilledButton.styleFrom(
+                        foregroundColor: context.lichessColors.error,
+                        backgroundColor: context.lichessColors.error.withValues(alpha: 0.3),
+                      ),
+                      label: Text(context.l10n.decline),
                       onPressed: () {
                         ref.read(ctrlProvider.notifier).declineRematch();
                       },
@@ -106,16 +116,14 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                   : CrossFadeState.showFirst,
         ),
         if (gameState.game.me?.offeringRematch == true)
-          SecondaryButton(
-            semanticsLabel: context.l10n.cancelRematchOffer,
+          FilledButton.tonal(
             onPressed: () {
               ref.read(ctrlProvider.notifier).declineRematch();
             },
             child: Text(context.l10n.cancelRematchOffer, textAlign: TextAlign.center),
           )
         else if (gameState.canOfferRematch)
-          SecondaryButton(
-            semanticsLabel: context.l10n.rematch,
+          FilledButton(
             onPressed:
                 _activateButtons &&
                         gameState.game.opponent?.onGame == true &&
@@ -127,8 +135,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             child: Text(context.l10n.rematch, textAlign: TextAlign.center),
           ),
         if (gameState.canGetNewOpponent)
-          SecondaryButton(
-            semanticsLabel: context.l10n.newOpponent,
+          FilledButton.tonal(
             onPressed:
                 _activateButtons
                     ? () {
@@ -138,9 +145,9 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                     : null,
             child: Text(context.l10n.newOpponent, textAlign: TextAlign.center),
           ),
-        if (gameState.tournament?.isOngoing == true)
-          SecondaryButton(
-            semanticsLabel: context.l10n.backToTournament,
+        if (gameState.tournament?.isOngoing == true) ...[
+          FilledButton.icon(
+            icon: const Icon(Icons.play_arrow),
             onPressed: () {
               // Close the dialog
               Navigator.of(context).popUntil((route) => route is! PopupRoute);
@@ -149,11 +156,27 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                 Navigator.of(context).pop(); // Pop the screen after frame
               });
             },
-            child: Text(context.l10n.backToTournament, textAlign: TextAlign.center),
+            label: Text(context.l10n.backToTournament, textAlign: TextAlign.center),
           ),
+          FilledButton.icon(
+            icon: const Icon(Icons.pause),
+            onPressed: () {
+              // Pause the tournament
+              ref
+                  .read(tournamentControllerProvider(gameState.tournament!.id).notifier)
+                  .joinOrPause();
+              // Close the dialog
+              Navigator.of(context).popUntil((route) => route is! PopupRoute);
+              // Close the game screen
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.of(context).pop(); // Pop the screen after frame
+              });
+            },
+            label: Text(context.l10n.pause, textAlign: TextAlign.center),
+          ),
+        ],
         if (gameState.game.userAnalysable)
-          SecondaryButton(
-            semanticsLabel: context.l10n.analysis,
+          FilledButton.tonal(
             onPressed: () {
               Navigator.of(
                 context,
@@ -199,13 +222,11 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         GameResult(game: game),
-        SecondaryButton(
-          semanticsLabel: context.l10n.rematch,
+        FilledButton(
           onPressed: onRematch,
           child: Text(context.l10n.rematch, textAlign: TextAlign.center),
         ),
-        SecondaryButton(
-          semanticsLabel: context.l10n.analysis,
+        FilledButton.tonal(
           onPressed: () {
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(

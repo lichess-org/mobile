@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/widget.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
@@ -422,8 +421,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             child: FutureBuilder(
               future: _pendingSaveProfile,
               builder: (context, snapshot) {
-                return FatButton(
-                  semanticsLabel: context.l10n.apply,
+                return FilledButton(
                   onPressed:
                       snapshot.connectionState == ConnectionState.waiting
                           ? null

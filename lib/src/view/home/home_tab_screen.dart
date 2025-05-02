@@ -233,8 +233,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       if (Theme.of(context).platform != TargetPlatform.iOS &&
           (session == null || session.user.isPatron != true)) ...[
         Center(
-          child: SecondaryButton(
-            semanticsLabel: context.l10n.patronDonate,
+          child: FilledButton.tonal(
             onPressed: () {
               launchUrl(Uri.parse('https://lichess.org/patron'));
             },
@@ -244,8 +243,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         const SizedBox(height: 16.0),
       ],
       Center(
-        child: SecondaryButton(
-          semanticsLabel: context.l10n.aboutX('Lichess...'),
+        child: FilledButton.tonal(
           onPressed: () {
             launchUrl(Uri.parse('https://lichess.org/about'));
           },
@@ -343,8 +341,7 @@ class _SignInWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authController = ref.watch(authControllerProvider);
 
-    return SecondaryButton(
-      semanticsLabel: context.l10n.signIn,
+    return FilledButton.tonal(
       onPressed:
           authController.isLoading
               ? null

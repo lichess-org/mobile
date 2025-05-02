@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
@@ -329,8 +328,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: FatButton(
-                      semanticsLabel: context.l10n.challengeChallengeToPlay,
+                    child: FilledButton(
                       onPressed:
                           timeControl == ChallengeTimeControlType.clock
                               ? isValidTimeControl && isValidPosition

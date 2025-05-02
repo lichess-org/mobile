@@ -188,11 +188,7 @@ class FullScreenRetryRequest extends StatelessWidget {
         children: [
           Text(context.l10n.mobileSomethingWentWrong, style: Styles.sectionTitle),
           const SizedBox(height: 10),
-          SecondaryButton(
-            onPressed: onRetry,
-            semanticsLabel: context.l10n.retry,
-            child: Text(context.l10n.retry),
-          ),
+          FilledButton.tonal(onPressed: onRetry, child: Text(context.l10n.retry)),
         ],
       ),
     );

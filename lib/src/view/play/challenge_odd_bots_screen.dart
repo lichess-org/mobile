@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
 class ChallengeOddBotsScreen extends StatelessWidget {
@@ -255,8 +254,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: FatButton(
-              semanticsLabel: context.l10n.challengeChallengeToPlay,
+            child: FilledButton(
               onPressed:
                   fen != null
                       ? () {

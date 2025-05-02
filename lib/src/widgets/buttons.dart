@@ -3,60 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Platform agnostic button which is used for important actions.
-class FatButton extends StatelessWidget {
-  const FatButton({
-    required this.semanticsLabel,
-    required this.child,
-    required this.onPressed,
-    super.key,
-  });
-
-  final String semanticsLabel;
-  final VoidCallback? onPressed;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      container: true,
-      enabled: true,
-      button: true,
-      label: semanticsLabel,
-      excludeSemantics: true,
-      child: FilledButton(onPressed: onPressed, child: child),
-    );
-  }
-}
-
-/// Platform agnostic button meant for medium importance actions.
-class SecondaryButton extends StatelessWidget {
-  const SecondaryButton({
-    required this.semanticsLabel,
-    required this.child,
-    required this.onPressed,
-    this.textStyle,
-    super.key,
-  });
-
-  final String semanticsLabel;
-  final VoidCallback? onPressed;
-  final Widget child;
-  final TextStyle? textStyle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      container: true,
-      enabled: true,
-      button: true,
-      label: semanticsLabel,
-      excludeSemantics: true,
-      child: FilledButton.tonal(onPressed: onPressed, child: child),
-    );
-  }
-}
-
 /// Icon button with mandatory semantics.
 class SemanticIconButton extends StatelessWidget {
   const SemanticIconButton({
