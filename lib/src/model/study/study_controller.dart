@@ -139,7 +139,12 @@ class StudyController extends _$StudyController
         isOnMainline: true,
         root: null,
         currentNode: StudyCurrentNode.illegalPosition(),
-        evaluationContext: EvaluationContext(variant: variant, initialPosition: _root.position),
+        // EvaluationContext needs an initial posiiton, but it doesn't matter what we pass here,
+        // since the position is illegal and `isComputerAnalysisAllowed` is false anyway.
+        evaluationContext: EvaluationContext(
+          variant: variant,
+          initialPosition: study.chapter.setup.variant.initialPosition,
+        ),
         pgnRootComments: rootComments,
         pov: orientation,
         isComputerAnalysisAllowed: false,
