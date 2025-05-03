@@ -201,7 +201,7 @@ class _Body extends ConsumerWidget {
               const SizedBox(height: 16),
               _Standing(state),
               const SizedBox(height: 16),
-              if (state.tournament.isStarted != true)
+              if (state.tournament.isStarted != true && state.tournament.isFinished != true)
                 _TournamentHelp(state: state)
               else if (state.tournament.isFinished == true)
                 _TournamentCompleteWidget(state: state)
@@ -258,6 +258,7 @@ class _TournamentHelp extends StatelessWidget {
     return Padding(
       padding: Styles.bodySectionPadding,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // show a famous chess quote if available
           if (state.tournament.quote != null)
