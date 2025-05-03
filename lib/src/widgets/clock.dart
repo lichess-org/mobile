@@ -69,11 +69,13 @@ class Clock extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
             color:
-                active
-                    ? isEmergency
-                        ? effectiveClockStyle.emergencyBackgroundColor
-                        : effectiveClockStyle.activeBackgroundColor
-                    : effectiveClockStyle.backgroundColor,
+                timeLeft > Duration.zero
+                    ? active
+                        ? isEmergency
+                            ? effectiveClockStyle.emergencyBackgroundColor
+                            : effectiveClockStyle.activeBackgroundColor
+                        : effectiveClockStyle.backgroundColor
+                    : effectiveClockStyle.emergencyBackgroundColor,
           ),
           child: Padding(
             padding: padding,
