@@ -178,11 +178,7 @@ class LoadingButtonBuilder<T> extends StatefulWidget {
 
   final Future<T> Function() fetchData;
 
-  final Widget Function(
-    BuildContext context,
-    AsyncSnapshot<T> snapshot,
-    Future<T> Function() fetchData,
-  )
+  final Widget Function(BuildContext context, bool isLoading, Future<T> Function() fetchData)
   builder;
 
   @override
@@ -197,18 +193,22 @@ class _LoadingButtonBuilderState<T> extends State<LoadingButtonBuilder<T>> {
     return FutureBuilder<T>(
       future: _future,
       builder: (context, snapshot) {
-        return widget.builder(context, snapshot, () async {
-          final future = widget.fetchData();
-          setState(() {
-            _future = future;
-          });
-          try {
-            await future;
-          } finally {
-            _future = null;
-          }
-          return future;
-        });
+        return widget.builder(
+          context,
+          snapshot.connectionState == ConnectionState.waiting,
+          () async {
+            final future = widget.fetchData();
+            setState(() {
+              _future = future;
+            });
+            try {
+              await future;
+            } finally {
+              _future = null;
+            }
+            return future;
+          },
+        );
       },
     );
   }

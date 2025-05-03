@@ -821,11 +821,11 @@ class _TournamentCompleteWidget extends ConsumerWidget {
             const SizedBox(height: 10),
             LoadingButtonBuilder<File>(
               fetchData: () => _downloadGames(ref),
-              builder: (context, snapshot, fetchData) {
+              builder: (context, isLoading, fetchData) {
                 return ListTile(
                   leading: const Icon(Icons.download),
                   title: Text(context.l10n.downloadAllGames),
-                  enabled: snapshot.connectionState != ConnectionState.waiting,
+                  enabled: !isLoading,
                   onTap: () async {
                     final file = await fetchData();
                     if (context.mounted) {
@@ -846,11 +846,11 @@ class _TournamentCompleteWidget extends ConsumerWidget {
             if (session != null)
               LoadingButtonBuilder<File>(
                 fetchData: () => _downloadGames(ref, session.user),
-                builder: (context, snapshot, fetchData) {
+                builder: (context, isLoading, fetchData) {
                   return ListTile(
                     leading: const Icon(Icons.download),
                     title: const Text('Download my games'),
-                    enabled: snapshot.connectionState != ConnectionState.waiting,
+                    enabled: !isLoading,
                     onTap: () async {
                       final file = await fetchData();
                       if (context.mounted) {
