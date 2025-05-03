@@ -24,7 +24,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
-  StreamSubscription<SocketEvent>? _subscription;
+  StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<void>? _socketOpenSubscription;
   AppLifecycleListener? _appLifecycleListener;
 
@@ -39,7 +39,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   Future<BroadcastRoundState> build(BroadcastRoundId broadcastRoundId) async {
     ref.onDispose(() {
       _key = null;
-      _subscription?.cancel();
+      _socketSubscription?.cancel();
       _socketOpenSubscription?.cancel();
       _appLifecycleListener?.dispose();
       _syncRoundDebouncer.cancel();
@@ -50,27 +50,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       (client) => BroadcastRepository(client).getRound(broadcastRoundId),
     );
 
-    _socketClient = ref
-        .watch(socketPoolProvider)
-        .open(
-          BroadcastRoundController.broadcastSocketUri(broadcastRoundId),
-          version: round.socketVersion,
-          onEventGapFailure: () {
-            _syncRound();
-          },
-        );
-
-    _subscription = _socketClient.stream.listen(_handleSocketEvent);
-
-    await _socketClient.firstConnection;
-
-    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
-      if (state.valueOrNull?.round.status == RoundStatus.live) {
-        _syncRoundDebouncer(() {
-          _syncRound();
-        });
-      }
-    });
+    await _connectSocket(version: round.socketVersion);
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
@@ -85,13 +65,44 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     return BroadcastRoundState(round: round.round, games: round.games, observedGames: ISet());
   }
 
+  Future<void> _connectSocket({required int version, bool forceReconnect = false}) async {
+    _socketClient = ref
+        .watch(socketPoolProvider)
+        .open(
+          BroadcastRoundController.broadcastSocketUri(broadcastRoundId),
+          version: version,
+          onEventGapFailure: () {
+            _syncRound();
+          },
+          forceReconnect: forceReconnect,
+        );
+
+    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
+
+    await _socketClient.firstConnection;
+
+    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
+      if (state.valueOrNull?.round.status == RoundStatus.live) {
+        _syncRoundDebouncer(() {
+          _syncRound();
+        });
+      }
+    });
+  }
+
   Future<void> _syncRound() async {
     if (state.hasValue == false) return;
 
     final key = _key;
+
     final round = await ref.withClient(
       (client) => BroadcastRepository(client).getRound(broadcastRoundId),
     );
+
+    _socketOpenSubscription?.cancel();
+    _socketSubscription?.cancel();
+    await _connectSocket(version: round.socketVersion, forceReconnect: true);
+
     // check provider is still mounted
     if (key == _key) {
       state = AsyncData(
