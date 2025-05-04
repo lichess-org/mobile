@@ -538,6 +538,11 @@ class SocketPool {
   final Map<Uri, SocketClient> _pool = {};
   final Map<Uri, Timer?> _disposeTimers = {};
 
+  late Completer<void> _clientConnection;
+
+  /// A [Future] that completes once the client is connected to the websocket.
+  Future<void> get clientConnection => _clientConnection.future;
+
   /// Opens a socket connection to the given [route].
   ///
   /// It will use an existing connection if it is already active, unless [forceReconnect] is set to
@@ -549,6 +554,7 @@ class SocketPool {
     bool? forceReconnect,
     VoidCallback? onEventGapFailure,
   }) {
+    _clientConnection = Completer<void>();
     _currentRoute = route;
 
     if (_pool[route] == null) {
@@ -600,7 +606,9 @@ class SocketPool {
 
     final client = _pool[route]!;
     if (forceReconnect == true || !client.isActive) {
-      client.connect();
+      client.connect().then((_) {
+        _clientConnection.complete();
+      });
     }
 
     return client;
