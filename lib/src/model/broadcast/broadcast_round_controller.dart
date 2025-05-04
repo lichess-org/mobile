@@ -76,9 +76,9 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       },
       forceReconnect: forceReconnect,
     );
-    await socketPool.clientConnection;
-
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
+
+    await socketPool.clientConnection;
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
       if (state.valueOrNull?.round.status == RoundStatus.live) {
         _syncRoundDebouncer(() {
