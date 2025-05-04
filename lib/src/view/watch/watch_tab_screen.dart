@@ -10,19 +10,21 @@ import 'package:lichess_mobile/src/model/tv/tv_game.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
+import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -90,8 +92,9 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
           ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
         }
       },
-      child: Scaffold(
-        appBar: AppBar(leading: const AccountIconButton(), title: Text(context.l10n.watch)),
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(leading: const AccountIconButton(), title: Text(context.l10n.watch)),
+        floatingActionButton: const FloatingPlayButton(),
         body:
             isOnline
                 ? OrientationBuilder(

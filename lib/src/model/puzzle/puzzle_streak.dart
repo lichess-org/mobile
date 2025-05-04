@@ -7,13 +7,13 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'puzzle_streak.g.dart';
 part 'puzzle_streak.freezed.dart';
+part 'puzzle_streak.g.dart';
 
 typedef Streak = IList<PuzzleId>;
 

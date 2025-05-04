@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -14,9 +14,11 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
+import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
 import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class ToolsTabScreen extends ConsumerWidget {
   const ToolsTabScreen({super.key});
@@ -30,8 +32,9 @@ class ToolsTabScreen extends ConsumerWidget {
           ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
         }
       },
-      child: Scaffold(
-        appBar: AppBar(leading: const AccountIconButton(), title: Text(context.l10n.tools)),
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(leading: const AccountIconButton(), title: Text(context.l10n.tools)),
+        floatingActionButton: const FloatingPlayButton(),
         body: const _Body(),
       ),
     );

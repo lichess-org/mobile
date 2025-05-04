@@ -105,7 +105,16 @@ ThemeData _makeDefaultTheme(
   return theme.copyWith(
     cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
-    appBarTheme: _appBarTheme,
+    appBarTheme: _appBarTheme.copyWith(
+      backgroundColor: isIOS ? theme.colorScheme.surface.withValues(alpha: 0.9) : null,
+      scrolledUnderElevation: isIOS ? 0 : null,
+      titleTextStyle:
+          isIOS
+              ? const CupertinoTextThemeData().navTitleTextStyle.copyWith(
+                color: theme.colorScheme.onSurface,
+              )
+              : null,
+    ),
     iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
     listTileTheme: _makeListTileTheme(theme.colorScheme, isIOS),
     cardTheme:
@@ -192,6 +201,7 @@ ThemeData _makeBackgroundImageTheme({
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: _appBarTheme.copyWith(
       backgroundColor: baseTheme.colorScheme.surfaceContainer.withValues(alpha: 0.0),
+      scrolledUnderElevation: isIOS ? 1 : null,
     ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     pageTransitionsTheme: PageTransitionsTheme(
@@ -231,6 +241,7 @@ ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
       color: colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
     ),
     contentPadding: isIOS ? const EdgeInsets.symmetric(horizontal: 16) : null,
+    minTileHeight: isIOS ? 48.0 : null,
   );
 }
 

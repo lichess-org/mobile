@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:logging/logging.dart';
@@ -37,8 +38,8 @@ class StudyListScreen extends ConsumerWidget {
     final filter = ref.watch(studyFilterProvider);
     final title = Text(isLoggedIn ? filter.category.l10n(context.l10n) : context.l10n.studyMenu);
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: title,
         actions: [
           SemanticIconButton(

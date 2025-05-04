@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -108,50 +109,51 @@ class _BottomTabInteraction extends ChangeNotifier {
   }
 }
 
-/// Implements a tabbed (iOS style) root layout and behavior structure.
-///
-/// This widget is intended to be used as the root of the app, and it provides
-/// the structure necessary to display tabs in iOS style. It also defines the
-/// tab bar and tab switching behavior, but does not define the contents of
-/// each tab.
-class BottomNavScaffold extends ConsumerWidget {
-  const BottomNavScaffold({super.key});
+/// Main scaffold that provides the bottom navigation bar and tab switching view.
+class MainTabScaffold extends ConsumerWidget {
+  const MainTabScaffold({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
 
+    final extendBody = Theme.of(context).platform == TargetPlatform.iOS;
+
     return FullScreenBackground(
-      child: Scaffold(
-        body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _tabBuilder),
-        bottomNavigationBar:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? CupertinoTabBar(
-                  height: kBottomBarHeight,
-                  backgroundColor: ColorScheme.of(context).surfaceContainer,
-                  border: const Border(top: BorderSide(color: Colors.transparent)),
-                  activeColor: ColorScheme.of(context).onSurface,
-                  currentIndex: currentTab.index,
-                  items: [
-                    for (final tab in BottomTab.values)
-                      BottomNavigationBarItem(
-                        icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
-                        label: tab.label(context.l10n),
-                      ),
-                  ],
-                  onTap: (i) => _onItemTapped(ref, i),
-                )
-                : NavigationBar(
-                  selectedIndex: currentTab.index,
-                  destinations: [
-                    for (final tab in BottomTab.values)
-                      NavigationDestination(
-                        icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
-                        label: tab.label(context.l10n),
-                      ),
-                  ],
-                  onDestinationSelected: (i) => _onItemTapped(ref, i),
-                ),
+      child: MainTabScaffoldProperties(
+        extendBody: extendBody,
+        child: Scaffold(
+          body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _tabBuilder),
+          extendBody: extendBody,
+          bottomNavigationBar:
+              Theme.of(context).platform == TargetPlatform.iOS
+                  ? CupertinoTabBar(
+                    height: 50,
+                    backgroundColor: ColorScheme.of(context).surface.withValues(alpha: 0.9),
+                    border: const Border(top: BorderSide(color: Colors.transparent)),
+                    activeColor: ColorScheme.of(context).onSurface,
+                    currentIndex: currentTab.index,
+                    items: [
+                      for (final tab in BottomTab.values)
+                        BottomNavigationBarItem(
+                          icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
+                          label: tab.label(context.l10n),
+                        ),
+                    ],
+                    onTap: (i) => _onItemTapped(ref, i),
+                  )
+                  : NavigationBar(
+                    selectedIndex: currentTab.index,
+                    destinations: [
+                      for (final tab in BottomTab.values)
+                        NavigationDestination(
+                          icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
+                          label: tab.label(context.l10n),
+                        ),
+                    ],
+                    onDestinationSelected: (i) => _onItemTapped(ref, i),
+                  ),
+        ),
       ),
     );
   }
@@ -192,37 +194,68 @@ class BottomNavScaffold extends ConsumerWidget {
       ref.read(currentBottomTabProvider.notifier).state = tappedTab;
     }
   }
+
+  Widget _tabBuilder(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        return _MaterialTabView(
+          navigatorKey: homeNavigatorKey,
+          tab: BottomTab.home,
+          builder: (context) => const HomeTabScreen(),
+        );
+      case 1:
+        return _MaterialTabView(
+          navigatorKey: puzzlesNavigatorKey,
+          tab: BottomTab.puzzles,
+          builder: (context) => const PuzzleTabScreen(),
+        );
+      case 2:
+        return _MaterialTabView(
+          navigatorKey: watchNavigatorKey,
+          tab: BottomTab.watch,
+          builder: (context) => const WatchTabScreen(),
+        );
+      case 3:
+        return _MaterialTabView(
+          navigatorKey: toolsNavigatorKey,
+          tab: BottomTab.tools,
+          builder: (context) => const ToolsTabScreen(),
+        );
+      default:
+        assert(false, 'Unexpected tab');
+        return const SizedBox.shrink();
+    }
+  }
 }
 
-Widget _tabBuilder(BuildContext context, int index) {
-  switch (index) {
-    case 0:
-      return _MaterialTabView(
-        navigatorKey: homeNavigatorKey,
-        tab: BottomTab.home,
-        builder: (context) => const HomeTabScreen(),
-      );
-    case 1:
-      return _MaterialTabView(
-        navigatorKey: puzzlesNavigatorKey,
-        tab: BottomTab.puzzles,
-        builder: (context) => const PuzzleTabScreen(),
-      );
-    case 2:
-      return _MaterialTabView(
-        navigatorKey: watchNavigatorKey,
-        tab: BottomTab.watch,
-        builder: (context) => const WatchTabScreen(),
-      );
-    case 3:
-      return _MaterialTabView(
-        navigatorKey: toolsNavigatorKey,
-        tab: BottomTab.tools,
-        builder: (context) => const ToolsTabScreen(),
-      );
-    default:
-      assert(false, 'Unexpected tab');
-      return const SizedBox.shrink();
+/// [InheritedWidget] providing [Scaffold] properties of the [MainTabScaffold].
+class MainTabScaffoldProperties extends InheritedWidget {
+  /// Constructs a new [MainTabScaffoldProperties].
+  const MainTabScaffoldProperties({required super.child, required this.extendBody, super.key});
+
+  /// The value of [Scaffold.extendBody] defined in the [MainTabScaffold].
+  final bool extendBody;
+
+  @override
+  bool updateShouldNotify(MainTabScaffoldProperties oldWidget) {
+    return extendBody != oldWidget.extendBody;
+  }
+
+  /// Retrieve the [MainTabScaffoldProperties] background color from the context.
+  static MainTabScaffoldProperties? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<MainTabScaffoldProperties>();
+  }
+
+  /// Returns true if the [MainTabScaffold] has an extended body.
+  static bool hasExtendedBody(BuildContext context) {
+    final properties = maybeOf(context);
+    return properties != null && properties.extendBody;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<bool>('extendBody', extendBody));
   }
 }
 
@@ -281,9 +314,8 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
         tabFocusNodes.addAll(
           List<FocusScopeNode>.generate(
             BottomTab.values.length - tabFocusNodes.length,
-            (int index) => FocusScopeNode(
-              debugLabel: '$BottomNavScaffold Tab ${index + tabFocusNodes.length}',
-            ),
+            (int index) =>
+                FocusScopeNode(debugLabel: '$MainTabScaffold Tab ${index + tabFocusNodes.length}'),
           ),
         );
       }

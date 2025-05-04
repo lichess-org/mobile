@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 final _dateFormatter = DateFormat.yMMMd();
 
@@ -70,7 +71,10 @@ class PuzzleHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text(context.l10n.puzzleHistory)), body: _Body());
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.puzzleHistory)),
+      body: _Body(),
+    );
   }
 }
 

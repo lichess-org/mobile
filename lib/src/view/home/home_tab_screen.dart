@@ -13,10 +13,10 @@ import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -29,16 +29,19 @@ import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/play/create_game_options.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
-import 'package:lichess_mobile/src/view/play/play_screen.dart';
+import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final editModeProvider = StateProvider<bool>((ref) => false);
@@ -133,8 +136,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               _refreshData(isOnline: status.isOnline);
             }
           },
-          child: Scaffold(
-            appBar: AppBar(
+          child: PlatformScaffold(
+            appBar: PlatformAppBar(
               title: const Text('lichess.org'),
               leading: const AccountIconButton(),
               actions: [
@@ -150,21 +153,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               ],
             ),
             body: RefreshIndicator.adaptive(
+              edgeOffset: MediaQuery.paddingOf(context).top + kToolbarHeight,
               key: _refreshKey,
               onRefresh: () => _refreshData(isOnline: status.isOnline),
               child: ListView(controller: homeScrollController, children: widgets),
             ),
+            floatingActionButton: const FloatingPlayButton(),
             bottomSheet: const OfflineBanner(),
-            floatingActionButton:
-                isTablet
-                    ? null
-                    : FloatingActionButton.extended(
-                      onPressed: () {
-                        Navigator.of(context).push(PlayScreen.buildRoute(context));
-                      },
-                      icon: const Icon(Icons.add),
-                      label: Text(context.l10n.play),
-                    ),
           ),
         );
       },
@@ -224,7 +219,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         child: RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
       ),
     ];
-    return [...list, const SizedBox(height: 54.0)];
+    return list;
   }
 
   List<Widget> _welcomeScreenWidgets({

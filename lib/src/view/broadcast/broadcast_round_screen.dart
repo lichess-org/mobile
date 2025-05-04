@@ -171,8 +171,8 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     AsyncValue<BroadcastTournament> asyncTournament,
     AsyncValue<BroadcastRoundState> asyncRound,
   ) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: AppBarTitleText(widget.broadcast.title, maxLines: 2),
         bottom: TabBar(
           controller: _tabController,

@@ -11,8 +11,8 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/model/notifications/notifications.dart'
     show LocalNotification, PlaybanNotification;
 import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan, User;
-import 'package:lichess_mobile/src/navigation.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

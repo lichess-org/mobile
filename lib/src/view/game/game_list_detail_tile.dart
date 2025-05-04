@@ -86,7 +86,7 @@ class GameListDetailTile extends StatelessWidget {
             gameListContext: gameListContext,
           ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final boardSize = constraints.maxWidth / 3;
