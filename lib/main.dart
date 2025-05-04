@@ -19,10 +19,6 @@ Future<void> main() async {
 
   await lichessBinding.preloadSharedPreferences();
 
-  if (defaultTargetPlatform == TargetPlatform.android) {
-    await androidDisplayInitialization(widgetsBinding);
-  }
-
   await preloadPieceImages();
 
   await setupFirstLaunch();
@@ -34,6 +30,10 @@ Future<void> main() async {
   await initializeLocalNotifications(locale);
 
   await lichessBinding.initializeFirebase();
+
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await androidDisplayInitialization(widgetsBinding);
+  }
 
   runApp(ProviderScope(observers: [ProviderLogger()], child: const AppInitializationScreen()));
 }
