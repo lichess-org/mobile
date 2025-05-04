@@ -226,7 +226,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                       if (!widget.zenMode && slicedMoves != null)
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            padding: const EdgeInsets.only(top: 16.0),
                             child: MoveList(
                               type: MoveListType.stacked,
                               slicedMoves: slicedMoves,
@@ -238,7 +238,11 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                       else
                         const Spacer(),
 
-                      if (widget.userActionsBar != null) widget.userActionsBar!,
+                      if (widget.userActionsBar != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: widget.userActionsBar,
+                        ),
 
                       widget.bottomTable,
                     ],
