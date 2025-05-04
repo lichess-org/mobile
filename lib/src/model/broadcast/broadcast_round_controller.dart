@@ -99,8 +99,8 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       (client) => BroadcastRepository(client).getRound(broadcastRoundId),
     );
 
-    _socketOpenSubscription?.cancel();
-    _socketSubscription?.cancel();
+    await _socketOpenSubscription?.cancel();
+    await _socketSubscription?.cancel();
     await _connectSocket(version: round.socketVersion, forceReconnect: true);
 
     // check provider is still mounted
