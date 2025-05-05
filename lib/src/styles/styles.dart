@@ -1,5 +1,3 @@
-import 'dart:ui' show ImageFilter;
-
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';

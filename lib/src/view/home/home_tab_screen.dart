@@ -35,13 +35,11 @@ import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final editModeProvider = StateProvider<bool>((ref) => false);
@@ -153,7 +151,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               ],
             ),
             body: RefreshIndicator.adaptive(
-              edgeOffset: MediaQuery.paddingOf(context).top + kToolbarHeight,
+              edgeOffset:
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                      : 0.0,
               key: _refreshKey,
               onRefresh: () => _refreshData(isOnline: status.isOnline),
               child: ListView(controller: homeScrollController, children: widgets),

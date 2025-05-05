@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 final _openingsProvider =
     FutureProvider.autoDispose<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)>((ref) async {
@@ -33,8 +34,8 @@ class OpeningThemeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.puzzlePuzzlesByOpenings)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.puzzlePuzzlesByOpenings)),
       body: const _Body(),
     );
   }

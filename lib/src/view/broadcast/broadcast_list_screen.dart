@@ -161,6 +161,10 @@ class _BodyState extends ConsumerState<_Body> {
     ];
 
     return RefreshIndicator.adaptive(
+      edgeOffset:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? MediaQuery.paddingOf(context).top + kToolbarHeight
+              : 0.0,
       key: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(broadcastsPaginatorProvider),
       child: CustomScrollView(

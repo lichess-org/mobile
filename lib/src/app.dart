@@ -120,9 +120,12 @@ class _AppState extends ConsumerState<Application> {
       title: 'lichess.org',
       locale: generalPrefs.locale,
       theme: theme.copyWith(
-        navigationBarTheme: NavigationBarTheme.of(context).copyWith(
-          height: isIOS || remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
-        ),
+        navigationBarTheme:
+            isIOS
+                ? null
+                : NavigationBarTheme.of(context).copyWith(
+                  height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
+                ),
       ),
       onGenerateRoute:
           (settings) =>

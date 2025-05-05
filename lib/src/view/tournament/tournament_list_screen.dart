@@ -209,6 +209,10 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
     ];
 
     return RefreshIndicator.adaptive(
+      edgeOffset:
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? MediaQuery.paddingOf(context).top + kToolbarHeight
+              : 0.0,
       key: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(tournamentsProvider),
       child: ListView.separated(

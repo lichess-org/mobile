@@ -25,7 +25,7 @@ class AppBarTitleText extends StatelessWidget {
       text,
       maxLines: maxLines,
       style: maxLines > 1 ? const TextStyle(height: 1) : null,
-      minFontSize: minFontSize ?? 14.0,
+      minFontSize: minFontSize ?? 15.0,
       maxFontSize:
           maxFontSize ??
           (maxLines > 1 ? 18 : AppBarTheme.of(context).titleTextStyle?.fontSize ?? 20.0),

@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/opening_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 @riverpod
@@ -38,8 +39,8 @@ class PuzzleThemesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.puzzlePuzzleThemes)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.puzzlePuzzleThemes)),
       body: const _Body(),
     );
   }

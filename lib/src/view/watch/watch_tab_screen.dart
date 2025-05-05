@@ -100,6 +100,10 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                 ? OrientationBuilder(
                   builder: (context, orientation) {
                     return RefreshIndicator.adaptive(
+                      edgeOffset:
+                          Theme.of(context).platform == TargetPlatform.iOS
+                              ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                              : 0.0,
                       key: _androidRefreshKey,
                       onRefresh: _refreshData,
                       child: _Body(orientation),

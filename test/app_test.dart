@@ -92,7 +92,7 @@ void main() {
 
     await tester.pumpWidget(app);
 
-    expect(find.byType(AppScaffold), findsOneWidget);
+    expect(find.byType(MainTabScaffold), findsOneWidget);
 
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Puzzles'), findsOneWidget);

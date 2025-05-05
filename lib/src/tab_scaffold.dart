@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
@@ -129,7 +128,7 @@ class MainTabScaffold extends ConsumerWidget {
               Theme.of(context).platform == TargetPlatform.iOS
                   ? CupertinoTabBar(
                     height: 50,
-                    backgroundColor: ColorScheme.of(context).surface.withValues(alpha: 0.9),
+                    backgroundColor: NavigationBarTheme.of(context).backgroundColor,
                     border: const Border(top: BorderSide(color: Colors.transparent)),
                     activeColor: ColorScheme.of(context).onSurface,
                     currentIndex: currentTab.index,

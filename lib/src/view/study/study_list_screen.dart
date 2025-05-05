@@ -56,7 +56,7 @@ class StudyListScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: SafeArea(top: false, child: _Body(filter: filter)),
+      body: _Body(filter: filter),
     );
   }
 }

@@ -230,7 +230,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           setTournamentId: setTournamentId,
           setRoundId: setRoundId,
         ),
-        _ => const BottomBar.empty(transparentBackground: false),
+        _ => const BottomBar.empty(),
       },
     );
   }
@@ -284,7 +284,6 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomBar(
-      transparentBackground: false,
       children: [
         if (tournament.group != null)
           TextButton(
