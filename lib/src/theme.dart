@@ -135,6 +135,7 @@ ThemeData _makeDefaultTheme(
             : null,
     dialogTheme: isIOS ? _kCupertinoDialogTheme : null,
     filledButtonTheme: isIOS ? _kCupertinoFilledButtonTheme : null,
+    outlinedButtonTheme: isIOS ? _kCupertinoOutlinedButtonTheme : null,
     menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
     bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
     sliderTheme: kSliderTheme,
@@ -187,6 +188,7 @@ ThemeData _makeBackgroundImageTheme({
       backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
     ),
     filledButtonTheme: isIOS ? _kCupertinoFilledButtonTheme : null,
+    outlinedButtonTheme: isIOS ? _kCupertinoOutlinedButtonTheme : null,
     menuTheme:
         isIOS
             ? MenuThemeData(
@@ -242,7 +244,15 @@ ThemeData _makeBackgroundImageTheme({
 const _kCupertinoFilledButtonTheme = FilledButtonThemeData(
   style: ButtonStyle(
     shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+    ),
+  ),
+);
+
+const _kCupertinoOutlinedButtonTheme = OutlinedButtonThemeData(
+  style: ButtonStyle(
+    shape: WidgetStatePropertyAll(
+      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
     ),
   ),
 );

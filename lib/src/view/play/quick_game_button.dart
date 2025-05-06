@@ -8,8 +8,10 @@ import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/play/custom_game_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 class QuickGameButton extends ConsumerWidget {
   const QuickGameButton();
@@ -21,64 +23,96 @@ class QuickGameButton extends ConsumerWidget {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     final isPlayban = ref.watch(accountProvider).valueOrNull?.playban != null;
 
-    return Row(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Flexible(
-          flex: kFlexGoldenRatioBase,
-          child: TextButton(
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    playPrefs.quickPairingTimeIncrement.display,
-                    style: const TextStyle(letterSpacing: 2.0),
-                  ),
-                  const Icon(Icons.keyboard_arrow_down),
-                ],
-              ),
-            ),
-            onPressed: () {
-              final double screenHeight = MediaQuery.sizeOf(context).height;
-              showAdaptiveBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                showDragHandle: true,
-                constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
-                builder: (BuildContext context) {
-                  return TimeControlModal(
-                    value: playPrefs.quickPairingTimeIncrement,
-                    onSelected: (choice) {
-                      ref
-                          .read(gameSetupPreferencesProvider.notifier)
-                          .setQuickPairingTimeIncrement(choice);
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: kFlexGoldenRatioBase,
+              child: OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(side: BorderSide.none),
+                icon: const Icon(Icons.access_time),
+                label: Text(
+                  playPrefs.quickPairingTimeIncrement.display,
+                  style: const TextStyle(letterSpacing: 2.0),
+                ),
+                onPressed: () {
+                  final double screenHeight = MediaQuery.sizeOf(context).height;
+                  showAdaptiveBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
+                    builder: (BuildContext context) {
+                      return TimeControlModal(
+                        value: playPrefs.quickPairingTimeIncrement,
+                        onSelected: (choice) {
+                          ref
+                              .read(gameSetupPreferencesProvider.notifier)
+                              .setQuickPairingTimeIncrement(choice);
+                        },
+                      );
                     },
                   );
                 },
-              );
-            },
-          ),
-        ),
-        const SizedBox(width: 8.0),
-        Expanded(
-          flex: kFlexGoldenRatio,
-          child: FilledButton(
-            onPressed:
-                isOnline && !isPlayban
-                    ? () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        GameScreen.buildRoute(
-                          context,
-                          seek: GameSeek.fastPairing(playPrefs.quickPairingTimeIncrement, session),
-                        ),
-                      );
-                    }
-                    : null,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(context.l10n.play),
+              ),
             ),
-          ),
+            const SizedBox(width: 8.0),
+            Expanded(
+              flex: kFlexGoldenRatio,
+              child: FilledButton.icon(
+                icon: const Icon(Symbols.chess_pawn_rounded),
+                onPressed:
+                    isOnline && !isPlayban
+                        ? () {
+                          // Pops the play bottom sheet
+                          Navigator.of(
+                            context,
+                          ).popUntil((route) => route is! ModalBottomSheetRoute);
+                          Navigator.of(context, rootNavigator: true).push(
+                            GameScreen.buildRoute(
+                              context,
+                              seek: GameSeek.fastPairing(
+                                playPrefs.quickPairingTimeIncrement,
+                                session,
+                              ),
+                            ),
+                          );
+                        }
+                        : null,
+                label: Text(context.l10n.play),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Expanded(flex: kFlexGoldenRatioBase, child: SizedBox.shrink()),
+            const SizedBox(width: 8.0),
+            Expanded(
+              flex: kFlexGoldenRatio,
+              child: FilledButton.tonalIcon(
+                onPressed:
+                    isOnline && !isPlayban
+                        ? () {
+                          ref.invalidate(accountProvider);
+                          showAdaptiveBottomSheet<void>(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return const CustomGameBottomSheet();
+                            },
+                          );
+                        }
+                        : null,
+                icon: const Icon(Icons.tune),
+                label: Text(context.l10n.custom),
+              ),
+            ),
+          ],
         ),
       ],
     );

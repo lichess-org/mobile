@@ -33,10 +33,6 @@ class GameSetupPreferences extends _$GameSetupPreferences
     return save(state.copyWith(quickPairingTimeIncrement: timeInc));
   }
 
-  Future<void> setCustomTimeControl(TimeControl control) {
-    return save(state.copyWith(customTimeControl: control));
-  }
-
   Future<void> setCustomTimeSeconds(int seconds) {
     return save(state.copyWith(customTimeSeconds: seconds));
   }
@@ -62,15 +58,12 @@ class GameSetupPreferences extends _$GameSetupPreferences
   }
 }
 
-enum TimeControl { realTime, correspondence }
-
 @Freezed(fromJson: true, toJson: true)
 class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
   const GameSetupPrefs._();
 
   const factory GameSetupPrefs({
     required TimeIncrement quickPairingTimeIncrement,
-    required TimeControl customTimeControl,
     required int customTimeSeconds,
     required int customIncrementSeconds,
     required int customDaysPerTurn,
@@ -81,7 +74,6 @@ class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
 
   static const defaults = GameSetupPrefs(
     quickPairingTimeIncrement: TimeIncrement(600, 0),
-    customTimeControl: TimeControl.realTime,
     customTimeSeconds: 180,
     customIncrementSeconds: 0,
     customVariant: Variant.standard,

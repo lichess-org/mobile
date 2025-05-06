@@ -64,67 +64,66 @@ class ChallengeListItem extends ConsumerWidget {
 
     final screenWidth = MediaQuery.sizeOf(context).width;
 
-    return Container(
-      color: color,
-      child: Slidable(
-        enabled: onAccept != null || onDecline != null || (isMyChallenge && onCancel != null),
-        dragStartBehavior: DragStartBehavior.start,
-        endActionPane: ActionPane(
-          motion: const StretchMotion(),
-          extentRatio: 0.6,
-          children: [
-            if (onAccept != null)
-              SlidableAction(
-                icon: Icons.check,
-                onPressed: (_) => onAccept!(),
-                spacing: 8.0,
-                backgroundColor: context.lichessColors.good,
-                foregroundColor: Colors.white,
-                label: context.l10n.accept,
-              ),
-            if (onDecline != null || (isMyChallenge && onCancel != null))
-              SlidableAction(
-                icon: Icons.close,
-                onPressed:
-                    isMyChallenge
-                        ? (_) => onCancel!()
-                        : onDecline != null
-                        ? (_) => onDecline!(null)
-                        : null,
-                spacing: 8.0,
-                backgroundColor: context.lichessColors.error,
-                foregroundColor: Colors.white,
-                label: isMyChallenge ? context.l10n.cancel : context.l10n.decline,
-              ),
-          ],
-        ),
-        child:
-            isFromPosition
-                ? ExpansionTile(
-                  childrenPadding: Styles.bodyPadding.subtract(const EdgeInsets.only(top: 8.0)),
-                  leading: leading,
-                  title: title,
-                  subtitle: subtitle,
-                  children: [
-                    if (challenge.variant == Variant.fromPosition && challenge.initialFen != null)
-                      BoardThumbnail(
-                        size: min(400, screenWidth - 2 * Styles.bodyPadding.horizontal),
-                        orientation:
-                            challenge.sideChoice == SideChoice.white ? Side.white : Side.black,
-                        fen: challenge.initialFen!,
-                        onTap: onPressed,
-                      ),
-                  ],
-                  // onTap: onPressed,
-                )
-                : ListTile(
-                  leading: leading,
-                  title: title,
-                  subtitle: subtitle,
-                  trailing: trailing,
-                  onTap: onPressed,
-                ),
+    return Slidable(
+      enabled: onAccept != null || onDecline != null || (isMyChallenge && onCancel != null),
+      dragStartBehavior: DragStartBehavior.start,
+      endActionPane: ActionPane(
+        motion: const StretchMotion(),
+        extentRatio: 0.6,
+        children: [
+          if (onAccept != null)
+            SlidableAction(
+              icon: Icons.check,
+              onPressed: (_) => onAccept!(),
+              spacing: 8.0,
+              backgroundColor: context.lichessColors.good,
+              foregroundColor: Colors.white,
+              label: context.l10n.accept,
+            ),
+          if (onDecline != null || (isMyChallenge && onCancel != null))
+            SlidableAction(
+              icon: Icons.close,
+              onPressed:
+                  isMyChallenge
+                      ? (_) => onCancel!()
+                      : onDecline != null
+                      ? (_) => onDecline!(null)
+                      : null,
+              spacing: 8.0,
+              backgroundColor: context.lichessColors.error,
+              foregroundColor: Colors.white,
+              label: isMyChallenge ? context.l10n.cancel : context.l10n.decline,
+            ),
+        ],
       ),
+      child:
+          isFromPosition
+              ? ExpansionTile(
+                backgroundColor: color,
+                childrenPadding: Styles.bodyPadding.subtract(const EdgeInsets.only(top: 8.0)),
+                leading: leading,
+                title: title,
+                subtitle: subtitle,
+                children: [
+                  if (challenge.variant == Variant.fromPosition && challenge.initialFen != null)
+                    BoardThumbnail(
+                      size: min(400, screenWidth - 2 * Styles.bodyPadding.horizontal),
+                      orientation:
+                          challenge.sideChoice == SideChoice.white ? Side.white : Side.black,
+                      fen: challenge.initialFen!,
+                      onTap: onPressed,
+                    ),
+                ],
+                // onTap: onPressed,
+              )
+              : ListTile(
+                tileColor: color,
+                leading: leading,
+                title: title,
+                subtitle: subtitle,
+                trailing: trailing,
+                onTap: onPressed,
+              ),
     );
   }
 }
