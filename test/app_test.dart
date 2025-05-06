@@ -7,8 +7,8 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 
 import 'model/auth/fake_session_storage.dart';
@@ -92,7 +92,7 @@ void main() {
 
     await tester.pumpWidget(app);
 
-    expect(find.byType(BottomNavScaffold), findsOneWidget);
+    expect(find.byType(MainTabScaffold), findsOneWidget);
 
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Puzzles'), findsOneWidget);

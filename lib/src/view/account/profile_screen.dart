@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -34,8 +35,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: account.when(
           data:
               (user) =>
@@ -59,6 +60,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
           return RefreshIndicator.adaptive(
+            edgeOffset:
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                    : 0.0,
             key: _refreshIndicatorKey,
             onRefresh: () async => ref.refresh(accountProvider),
             child: ListView(

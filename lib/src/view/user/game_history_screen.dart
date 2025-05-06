@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
 // TODO l10n
@@ -122,8 +123,8 @@ class GameHistoryScreen extends ConsumerWidget {
       ],
     );
 
-    return Scaffold(
-      appBar: AppBar(title: title, actions: [filterBtn, displayModeButton]),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: title, actions: [filterBtn, displayModeButton]),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }

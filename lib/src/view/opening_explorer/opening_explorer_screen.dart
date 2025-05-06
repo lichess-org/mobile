@@ -225,7 +225,6 @@ class _BottomBar extends ConsumerWidget {
     };
 
     return BottomBar(
-      transparentBackground: false,
       children: [
         BottomBarButton(
           label: dbLabel,

@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -337,8 +338,8 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
       },
     );
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(context.l10n.preferencesPreferences),
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),

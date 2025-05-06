@@ -7,7 +7,7 @@ part 'http_log_paginator.freezed.dart';
 part 'http_log_paginator.g.dart';
 
 /// The number of HTTP logs to fetch per page.
-const _pageSize = 12;
+const _pageSize = 20;
 
 /// A Riverpod controller for managing HTTP logs.
 ///

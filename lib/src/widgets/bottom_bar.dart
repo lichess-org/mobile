@@ -10,10 +10,9 @@ class BottomBar extends StatelessWidget {
     required this.children,
     this.mainAxisAlignment = MainAxisAlignment.spaceAround,
     this.expandChildren = true,
-    this.transparentBackground = true,
   });
 
-  const BottomBar.empty({this.transparentBackground = true})
+  const BottomBar.empty()
     : children = const [],
       expandChildren = true,
       mainAxisAlignment = MainAxisAlignment.spaceAround;
@@ -27,15 +26,11 @@ class BottomBar extends StatelessWidget {
   /// Whether to expand the children to fill the available space. Defaults to true.
   final bool expandChildren;
 
-  /// Whether to make the bar transparent. Defaults to true.
-  final bool transparentBackground;
-
   @override
   Widget build(BuildContext context) {
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.4,
       child: BottomAppBar(
-        color: transparentBackground ? Colors.transparent : null,
         height: kBottomBarHeight,
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
         child: Row(

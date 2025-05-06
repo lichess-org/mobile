@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
-import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
+import 'package:lichess_mobile/src/view/play/correspondence_challenges_screen.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
-import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 /// A widget that displays the options for creating a game.
@@ -18,47 +17,37 @@ class CreateGameOptions extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
-    final isPlayban = ref.watch(accountProvider).valueOrNull?.playban != null;
 
     return Column(
       children: [
-        _Section(
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              child: QuickGameButton(),
-            ),
-            _CreateGamePlatformButton(
-              onTap:
-                  isOnline && !isPlayban
-                      ? () {
-                        ref.invalidate(accountProvider);
-                        Navigator.of(context).push(CreateCustomGameScreen.buildRoute(context));
-                      }
-                      : null,
-              icon: Icons.tune,
-              label: context.l10n.custom,
-            ),
-          ],
+        const Card.filled(
+          margin: Styles.bodySectionPadding,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: QuickGameButton(),
+          ),
         ),
         _Section(
           children: [
             _CreateGamePlatformButton(
               onTap:
-                  isOnline && !isPlayban
+                  isOnline
                       ? () {
-                        Navigator.of(context).push(TournamentListScreen.buildRoute(context));
+                        // Pops the play bottom sheet
+                        Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                        Navigator.of(
+                          context,
+                          rootNavigator: true,
+                        ).push(CorrespondenceChallengesScreen.buildRoute(context));
                       }
                       : null,
-              icon: LichessIcons.tournament_cup,
-              label: context.l10n.arenaArenaTournaments,
+              icon: Perf.correspondence.icon,
+              label: context.l10n.correspondence,
             ),
-          ],
-        ),
-        _Section(
-          children: [
             _CreateGamePlatformButton(
               onTap: () {
+                // Pops the play bottom sheet
+                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
                 Navigator.of(
                   context,
                   rootNavigator: true,
@@ -81,7 +70,7 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListSection(hasLeading: true, children: children);
+    return ListSection(hasLeading: true, materialFilledCard: true, children: children);
   }
 }
 
@@ -100,7 +89,6 @@ class _CreateGamePlatformButton extends StatelessWidget {
       opacity: onTap == null ? 0.5 : 1.0,
       child: ListTile(
         leading: Icon(icon, size: 28),
-        trailing: const Icon(Icons.chevron_right),
         title: Text(label, style: Styles.mainListTileTitle),
         onTap: onTap,
       ),

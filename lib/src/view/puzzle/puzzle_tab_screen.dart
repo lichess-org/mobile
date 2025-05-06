@@ -13,15 +13,16 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/account_screen.dart';
+import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -32,6 +33,7 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const _kNumberOfHistoryItemsOnHandset = 8;
@@ -116,13 +118,14 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
           ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
           leading: const AccountIconButton(),
           title: Text(context.l10n.puzzles),
           actions: const [_DashboardButton(), _HistoryButton()],
         ),
         bottomSheet: const OfflineBanner(),
+        floatingActionButton: const FloatingPlayButton(),
         body:
             isTablet
                 ? Row(
@@ -406,7 +409,10 @@ class _HistoryButton extends ConsumerWidget {
         .whenIs(
           online:
               () => () {
-                Navigator.of(context).push(PuzzleHistoryScreen.buildRoute(context));
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(PuzzleHistoryScreen.buildRoute(context));
               },
           offline: () => null,
         );

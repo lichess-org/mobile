@@ -13,9 +13,9 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_service.d
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -120,15 +120,18 @@ class _AppState extends ConsumerState<Application> {
       title: 'lichess.org',
       locale: generalPrefs.locale,
       theme: theme.copyWith(
-        navigationBarTheme: NavigationBarTheme.of(context).copyWith(
-          height: isIOS || remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
-        ),
+        navigationBarTheme:
+            isIOS
+                ? null
+                : NavigationBarTheme.of(context).copyWith(
+                  height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
+                ),
       ),
       onGenerateRoute:
           (settings) =>
               settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,
       onGenerateInitialRoutes: (initialRoute) {
-        final homeRoute = buildScreenRoute<void>(context, screen: const BottomNavScaffold());
+        final homeRoute = buildScreenRoute<void>(context, screen: const MainTabScaffold());
         return <Route<dynamic>?>[
           homeRoute,
           resolveAppLinkUri(context, Uri.parse(initialRoute)),

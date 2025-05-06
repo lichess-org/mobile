@@ -105,7 +105,26 @@ ThemeData _makeDefaultTheme(
   return theme.copyWith(
     cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
-    appBarTheme: _appBarTheme,
+    appBarTheme: _appBarTheme.copyWith(
+      backgroundColor: isIOS ? theme.colorScheme.surface.withValues(alpha: 0.9) : null,
+      scrolledUnderElevation: isIOS ? 0 : null,
+      titleTextStyle:
+          isIOS
+              ? const CupertinoTextThemeData().navTitleTextStyle.copyWith(
+                color: theme.colorScheme.onSurface,
+              )
+              : null,
+    ),
+    navigationBarTheme:
+        isIOS
+            ? NavigationBarThemeData(
+              backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.9),
+            )
+            : null,
+    bottomAppBarTheme: BottomAppBarTheme(
+      color: theme.colorScheme.surface.withValues(alpha: 0.9),
+      elevation: isIOS ? 0 : null,
+    ),
     iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
     listTileTheme: _makeListTileTheme(theme.colorScheme, isIOS),
     cardTheme:
@@ -120,6 +139,7 @@ ThemeData _makeDefaultTheme(
             : null,
     dialogTheme: isIOS ? _kCupertinoDialogTheme : null,
     filledButtonTheme: isIOS ? _kCupertinoFilledButtonTheme : null,
+    outlinedButtonTheme: isIOS ? _kCupertinoOutlinedButtonTheme : null,
     menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
     bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
     sliderTheme: kSliderTheme,
@@ -172,6 +192,7 @@ ThemeData _makeBackgroundImageTheme({
       backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
     ),
     filledButtonTheme: isIOS ? _kCupertinoFilledButtonTheme : null,
+    outlinedButtonTheme: isIOS ? _kCupertinoOutlinedButtonTheme : null,
     menuTheme:
         isIOS
             ? MenuThemeData(
@@ -191,7 +212,30 @@ ThemeData _makeBackgroundImageTheme({
             ),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: _appBarTheme.copyWith(
-      backgroundColor: baseTheme.colorScheme.surfaceContainer.withValues(alpha: 0.0),
+      backgroundColor: isBackgroundImage ? null : seedColor.withValues(alpha: 0.9),
+      scrolledUnderElevation: isIOS ? 0 : null,
+      titleTextStyle:
+          isIOS
+              ? const CupertinoTextThemeData().navTitleTextStyle.copyWith(
+                color: baseTheme.colorScheme.onSurface,
+              )
+              : null,
+    ),
+    navigationBarTheme:
+        isIOS
+            ? NavigationBarThemeData(
+              backgroundColor:
+                  isBackgroundImage
+                      ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
+                      : seedColor.withValues(alpha: 0.9),
+            )
+            : null,
+    bottomAppBarTheme: BottomAppBarTheme(
+      color:
+          isBackgroundImage
+              ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
+              : seedColor.withValues(alpha: 0.9),
+      elevation: isIOS ? 0 : null,
     ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     pageTransitionsTheme: PageTransitionsTheme(
@@ -211,7 +255,15 @@ ThemeData _makeBackgroundImageTheme({
 const _kCupertinoFilledButtonTheme = FilledButtonThemeData(
   style: ButtonStyle(
     shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+    ),
+  ),
+);
+
+const _kCupertinoOutlinedButtonTheme = OutlinedButtonThemeData(
+  style: ButtonStyle(
+    shape: WidgetStatePropertyAll(
+      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
     ),
   ),
 );
@@ -231,6 +283,7 @@ ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
       color: colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
     ),
     contentPadding: isIOS ? const EdgeInsets.symmetric(horizontal: 16) : null,
+    minTileHeight: isIOS ? 48.0 : null,
   );
 }
 

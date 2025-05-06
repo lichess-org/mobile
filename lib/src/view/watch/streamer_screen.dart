@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kThumbnailSize = 75.0;
@@ -21,8 +22,8 @@ class StreamerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.mobileLiveStreamers)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.mobileLiveStreamers)),
       body: ListView.separated(
         separatorBuilder:
             (context, index) =>
