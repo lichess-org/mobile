@@ -49,6 +49,18 @@ class EngineEvaluationPreferences extends _$EngineEvaluationPreferences
   Future<void> setEngineSearchTime(Duration engineSearchTime) {
     return save(state.copyWith(engineSearchTime: engineSearchTime));
   }
+
+  Future<void> setEvaluationFunction(EvaluationFunctionPref evaluationFunction) {
+    return save(state.copyWith(evaluationFunction: evaluationFunction));
+  }
+}
+
+enum EvaluationFunctionPref {
+  /// Handcrafted evaluation function.
+  hce,
+
+  /// Neural network evaluation function.
+  nnue,
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -66,6 +78,11 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
       toJson: _searchTimeToJson,
     )
     required Duration engineSearchTime,
+    @JsonKey(
+      defaultValue: EvaluationFunctionPref.nnue,
+      unknownEnumValue: EvaluationFunctionPref.nnue,
+    )
+    required EvaluationFunctionPref evaluationFunction,
   }) = _EngineEvaluationPrefState;
 
   static const defaults = EngineEvaluationPrefState(
@@ -73,14 +90,19 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
     numEvalLines: 2,
     numEngineCores: 1,
     engineSearchTime: Duration(seconds: 6),
+    evaluationFunction: EvaluationFunctionPref.nnue,
   );
 
   factory EngineEvaluationPrefState.fromJson(Map<String, dynamic> json) {
     return _$EngineEvaluationPrefStateFromJson(json);
   }
 
-  EvaluationOptions get evaluationOptions =>
-      EvaluationOptions(multiPv: numEvalLines, cores: numEngineCores, searchTime: engineSearchTime);
+  EvaluationOptions get evaluationOptions => EvaluationOptions(
+    multiPv: numEvalLines,
+    cores: numEngineCores,
+    searchTime: engineSearchTime,
+    evaluationFunction: evaluationFunction,
+  );
 }
 
 Duration _searchTimeDefault() {

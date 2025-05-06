@@ -13,27 +13,27 @@ class EngineSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: const Text('Engine')), body: _Body());
-  }
-}
-
-class _Body extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ListView(
-      children: [
-        EngineSettingsWidget(
-          onSetEngineSearchTime: (value) {
-            ref.read(engineEvaluationPreferencesProvider.notifier).setEngineSearchTime(value);
-          },
-          onSetEngineCores: (value) {
-            ref.read(engineEvaluationPreferencesProvider.notifier).setEngineCores(value);
-          },
-          onSetNumEvalLines: (value) {
-            ref.read(engineEvaluationPreferencesProvider.notifier).setNumEvalLines(value);
-          },
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(title: const Text('Engine')),
+      body: ListView(
+        children: [
+          Consumer(
+            builder: (context, ref, _) {
+              return EngineSettingsWidget(
+                onSetEngineSearchTime: (value) {
+                  ref.read(engineEvaluationPreferencesProvider.notifier).setEngineSearchTime(value);
+                },
+                onSetEngineCores: (value) {
+                  ref.read(engineEvaluationPreferencesProvider.notifier).setEngineCores(value);
+                },
+                onSetNumEvalLines: (value) {
+                  ref.read(engineEvaluationPreferencesProvider.notifier).setNumEvalLines(value);
+                },
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

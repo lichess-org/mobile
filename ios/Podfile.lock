@@ -113,7 +113,7 @@ PODS:
     - GoogleUtilities/Privacy
   - image_picker_ios (0.0.1):
     - Flutter
-  - multistockfish_chess (0.1.0):
+  - multistockfish_chess (0.2.0):
     - Flutter
   - multistockfish_variant (0.1.0):
     - Flutter
@@ -267,7 +267,7 @@ SPEC CHECKSUMS:
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
-  multistockfish_chess: 046697ad499235e95901830d6e24c99da50ad83d
+  multistockfish_chess: 1bbb4caeddb71744c9726ff1555e0818ac49b1a2
   multistockfish_variant: 77ee0d81c68a9b72f3d0e1794f879ab972ea80b6
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   objective_c: 89e720c30d716b036faf9c9684022048eee1eee2

@@ -57,7 +57,8 @@ dependencies:
   material_color_utilities: ^0.11.1
   material_symbols_icons: ^4.2811.0
   meta: ^1.8.0
-  multistockfish: ^0.1.0
+  multistockfish:
+    path: ../dart-multistockfish/pkgs/multistockfish
   package_info_plus: ^8.0.0
   path: ^1.8.2
   path_provider: ^2.1.5
