@@ -65,6 +65,12 @@ void main() {
       // cannot interact with board
       expect(tester.widget<Chessboard>(find.byType(Chessboard)).game, null);
 
+      // moves are not loaded
+      expect(
+        tester.widget<BottomBarButton>(find.byKey(const ValueKey('cursor-back'))).onTap,
+        isNull,
+      );
+
       // wait for game steps loading
       await tester.pump(const Duration(milliseconds: 100));
       // wait for move list ensureVisible animation to finish

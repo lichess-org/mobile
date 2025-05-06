@@ -308,6 +308,7 @@ class _BoardBody extends ConsumerWidget {
       orientation: (isBoardTurned ? orientation.opposite : orientation),
       fen: initialCursor == null ? gameData.lastFen ?? kEmptyBoardFEN : kEmptyBoardFEN,
       moves: const [],
+      userActionsBar: _BottomBar(archivedGameData: archivedGameData, orientation: orientation),
     );
 
     return gameCursor.when(
