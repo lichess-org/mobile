@@ -125,6 +125,7 @@ class _SectionChoices extends ConsumerWidget {
                           showModalBottomSheet<void>(
                             context: context,
                             useRootNavigator: true,
+                            isScrollControlled: true,
                             builder: (context) {
                               return const CustomGameBottomSheet();
                             },
