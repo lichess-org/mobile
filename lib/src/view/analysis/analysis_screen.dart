@@ -235,7 +235,6 @@ class _BottomBar extends ConsumerWidget {
     final evalPrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return BottomBar(
-      transparentBackground: false,
       children: [
         BottomBarButton(
           label: context.l10n.menu,

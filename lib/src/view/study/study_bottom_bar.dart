@@ -53,7 +53,6 @@ class _AnalysisBottomBar extends ConsumerWidget {
         state.canGoBack ? ref.read(studyControllerProvider(id).notifier).userPrevious : null;
 
     return BottomBar(
-      transparentBackground: false,
       children: [
         BottomBarButton(
           label: context.l10n.menu,

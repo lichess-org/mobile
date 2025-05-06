@@ -121,6 +121,10 @@ ThemeData _makeDefaultTheme(
               backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.9),
             )
             : null,
+    bottomAppBarTheme: BottomAppBarTheme(
+      color: theme.colorScheme.surface.withValues(alpha: 0.9),
+      elevation: isIOS ? 0 : null,
+    ),
     iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
     listTileTheme: _makeListTileTheme(theme.colorScheme, isIOS),
     cardTheme:
@@ -226,6 +230,13 @@ ThemeData _makeBackgroundImageTheme({
                       : seedColor.withValues(alpha: 0.9),
             )
             : null,
+    bottomAppBarTheme: BottomAppBarTheme(
+      color:
+          isBackgroundImage
+              ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
+              : seedColor.withValues(alpha: 0.9),
+      elevation: isIOS ? 0 : null,
+    ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     pageTransitionsTheme: PageTransitionsTheme(
       builders: {
