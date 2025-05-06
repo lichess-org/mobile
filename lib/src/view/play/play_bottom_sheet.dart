@@ -35,6 +35,7 @@ class PlayBottomSheet extends ConsumerWidget {
     final playban = ref.watch(accountProvider).valueOrNull?.playban;
 
     return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.only(top: 32.0, bottom: 16.0),
       children: [
         if (playban != null)
           Padding(padding: Styles.bodySectionPadding, child: PlaybanMessage(playban: playban)),
