@@ -294,12 +294,16 @@ mixin EngineEvaluationMixin {
             // even if it is deeper
             if (nodeEval is CloudEval && work.searchTime != kMaxEngineSearchTime) {
               if (nodeEval.depth >= eval.depth) {
-                _evaluationService?.stop();
+                if (work.isDeeper != true) {
+                  _evaluationService?.stop();
+                }
                 return;
               }
             } else if (nodeEval is LocalEval) {
               if (nodeEval.isBetter(eval)) {
-                _evaluationService?.stop();
+                if (work.isDeeper != true) {
+                  _evaluationService?.stop();
+                }
                 return;
               }
             }
