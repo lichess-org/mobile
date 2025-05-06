@@ -33,6 +33,7 @@ class TimeControlModal extends ConsumerWidget {
     }
 
     return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       children: [
         Padding(padding: _horizontalPadding, child: SettingsSectionTitle(context.l10n.timeControl)),
         const SizedBox(height: 4.0),
