@@ -172,7 +172,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     AsyncValue<BroadcastRoundState> asyncRound,
   ) {
     return PlatformScaffold(
-      extendBody: true,
+      extendBody: Theme.of(context).platform == TargetPlatform.iOS,
       appBar: PlatformAppBar(
         title: AppBarTitleText(widget.broadcast.title, maxLines: 2),
         bottom: TabBar(
