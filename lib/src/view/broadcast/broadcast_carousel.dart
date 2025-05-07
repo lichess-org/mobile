@@ -266,12 +266,16 @@ class _BroadcastCarouselItemState extends State<BroadcastCarouselItem> {
               Image(
                 image: imageProvider,
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  if (wasSynchronouslyLoaded) {
-                    return child;
-                  }
                   return AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
-                    opacity: frame == null ? 0 : 1,
+                    opacity:
+                        wasSynchronouslyLoaded
+                            ? _tapDown
+                                ? 1.0
+                                : kDefaultCardOpacity
+                            : frame == null
+                            ? 0
+                            : 1,
                     child: child,
                   );
                 },
