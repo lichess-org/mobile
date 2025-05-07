@@ -128,6 +128,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
 
 class _Title extends StatelessWidget {
   const _Title({required this.variant});
+
   final Variant variant;
 
   static const excludedIcons = [Variant.standard, Variant.fromPosition];
@@ -297,6 +298,7 @@ class _BottomBar extends ConsumerWidget {
 
   void _moveForward(WidgetRef ref) =>
       ref.read(analysisControllerProvider(options).notifier).userNext();
+
   void _moveBackward(WidgetRef ref) =>
       ref.read(analysisControllerProvider(options).notifier).userPrevious();
 
@@ -326,6 +328,14 @@ class _BottomBar extends ConsumerWidget {
               Navigator.of(
                 context,
               ).push(BoardEditorScreen.buildRoute(context, initialFen: boardFen));
+            },
+          ),
+        if (analysisState.gameId != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
+            onPressed: () {
+              final boardUrl = lichessUri('/${analysisState.gameId}/${analysisState.pov.name}');
+              launchShareDialog(context, uri: boardUrl);
             },
           ),
         // PGN share can be used to quickly analyze a position, so engine must be allowed to access
