@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
@@ -10,9 +12,10 @@ class BottomBar extends StatelessWidget {
     required this.children,
     this.mainAxisAlignment = MainAxisAlignment.spaceAround,
     this.expandChildren = true,
+    this.cupertinoTransparent = false,
   });
 
-  const BottomBar.empty()
+  const BottomBar.empty({this.cupertinoTransparent = false})
     : children = const [],
       expandChildren = true,
       mainAxisAlignment = MainAxisAlignment.spaceAround;
@@ -26,20 +29,34 @@ class BottomBar extends StatelessWidget {
   /// Whether to expand the children to fill the available space. Defaults to true.
   final bool expandChildren;
 
+  /// Whether to use a transparent background on iOS. Defaults to false.
+  final bool cupertinoTransparent;
+
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.withClampedTextScaling(
-      maxScaleFactor: 1.4,
-      child: BottomAppBar(
-        height: kBottomBarHeight,
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-        child: Row(
-          mainAxisAlignment: mainAxisAlignment,
-          children:
-              expandChildren ? children.map((child) => Expanded(child: child)).toList() : children,
-        ),
+    Widget bar = BottomAppBar(
+      color:
+          Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent
+              ? (BottomAppBarTheme.of(context).color ?? ColorScheme.of(context).surface).withValues(
+                alpha: 0.9,
+              )
+              : null,
+      height: kBottomBarHeight,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+      child: Row(
+        mainAxisAlignment: mainAxisAlignment,
+        children:
+            expandChildren ? children.map((child) => Expanded(child: child)).toList() : children,
       ),
     );
+
+    if (Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent) {
+      bar = ClipRect(
+        child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), child: bar),
+      );
+    }
+
+    return MediaQuery.withClampedTextScaling(maxScaleFactor: 1.4, child: bar);
   }
 }
 

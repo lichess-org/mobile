@@ -33,6 +33,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 import 'package:share_plus/share_plus.dart';
@@ -102,16 +103,16 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
     );
 
     return switch (ref.watch(tournamentControllerProvider(widget.id))) {
-      AsyncError(:final error) => Scaffold(
-        appBar: AppBar(title: const SizedBox.shrink()),
+      AsyncError(:final error) => PlatformScaffold(
+        appBar: PlatformAppBar(title: const SizedBox.shrink()),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(child: Text('Could not load tournament: $error')),
         ),
       ),
       AsyncValue(:final value?) => _Body(id: widget.id, state: value),
-      _ => Scaffold(
-        appBar: AppBar(title: const SizedBox.shrink()),
+      _ => PlatformScaffold(
+        appBar: PlatformAppBar(title: const SizedBox.shrink()),
         body: const Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
@@ -135,8 +136,9 @@ class _Body extends ConsumerWidget {
           ref.read(tournamentControllerProvider(id).notifier).onFocusRegained();
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
+      child: PlatformScaffold(
+        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        appBar: PlatformAppBar(
           title: _Title(state: state),
           actions: [
             if (state.tournament.isFinished != true)
@@ -922,6 +924,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     );
 
     return BottomBar(
+      cupertinoTransparent: true,
       children: [
         if (widget.state.chatOptions != null && kidModeAsync.valueOrNull == false)
           ChatBottomBarButton(options: widget.state.chatOptions!),

@@ -119,6 +119,7 @@ class FeaturedTournamentsWidget extends ConsumerWidget {
           return const SizedBox.shrink();
         }
         return ListSection(
+          hasLeading: true,
           header: Text(context.l10n.openTournaments),
           onHeaderTap: () {
             Navigator.of(context).push(TournamentListScreen.buildRoute(context));

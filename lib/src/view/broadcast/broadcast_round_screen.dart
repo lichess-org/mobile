@@ -285,6 +285,7 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomBar(
+      cupertinoTransparent: true,
       children: [
         if (tournament.group != null)
           TextButton(

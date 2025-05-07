@@ -122,7 +122,7 @@ ThemeData _makeDefaultTheme(
             )
             : null,
     bottomAppBarTheme: BottomAppBarTheme(
-      color: theme.colorScheme.surface.withValues(alpha: 0.9),
+      color: theme.colorScheme.surface,
       elevation: isIOS ? 0 : null,
     ),
     iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
@@ -234,7 +234,7 @@ ThemeData _makeBackgroundImageTheme({
       color:
           isBackgroundImage
               ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
-              : seedColor.withValues(alpha: 0.9),
+              : seedColor,
       elevation: isIOS ? 0 : null,
     ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
