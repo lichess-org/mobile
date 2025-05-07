@@ -55,6 +55,9 @@ class PlatformAppBarLoadingIndicator extends StatelessWidget {
 
 /// A wrapper around [Scaffold] that sets properties to handle app bar and bottom navigation bar
 /// transparency on iOS.
+///
+/// Limitations:
+/// - It does not work with a [CustomScrollView] and [SliverAppBar] as the body.
 class PlatformScaffold extends StatelessWidget {
   const PlatformScaffold({
     super.key,

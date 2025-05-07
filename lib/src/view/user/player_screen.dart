@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/online_bots_screen.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 
 class PlayerScreen extends ConsumerWidget {
@@ -32,7 +33,10 @@ class PlayerScreen extends ConsumerWidget {
           ref.read(onlineFriendsProvider.notifier).stopWatchingFriends();
         }
       },
-      child: Scaffold(appBar: AppBar(title: Text(context.l10n.players)), body: _Body()),
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(title: Text(context.l10n.players)),
+        body: _Body(),
+      ),
     );
   }
 }

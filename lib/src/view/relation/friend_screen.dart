@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
@@ -60,8 +61,8 @@ class _FollowingScreenState extends ConsumerState<FriendScreen> with TickerProvi
 
     switch (followingAndOnlines) {
       case AsyncData(:final value):
-        return Scaffold(
-          appBar: AppBar(
+        return PlatformScaffold(
+          appBar: PlatformAppBar(
             title: Text(context.l10n.friends),
             bottom: TabBar(
               controller: _tabController,
@@ -74,8 +75,8 @@ class _FollowingScreenState extends ConsumerState<FriendScreen> with TickerProvi
           body: TabBarView(controller: _tabController, children: const [_Online(), _Following()]),
         );
       case _:
-        return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.friends)),
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.friends)),
           body: const CenterLoadingIndicator(),
         );
     }
@@ -205,59 +206,57 @@ class _Following extends ConsumerWidget {
             if (following.isEmpty) {
               return Center(child: Text(context.l10n.mobileNotFollowingAnyUser));
             }
-            return SafeArea(
-              child: ListView.separated(
-                itemCount: following.length,
-                separatorBuilder:
-                    (context, index) =>
-                        Theme.of(context).platform == TargetPlatform.iOS
-                            ? const PlatformDivider(height: 1)
-                            : const SizedBox.shrink(),
-                itemBuilder: (context, index) {
-                  final user = following[index];
-                  return Slidable(
-                    dragStartBehavior: DragStartBehavior.start,
-                    endActionPane: ActionPane(
-                      motion: const StretchMotion(),
-                      extentRatio: 0.3,
-                      children: [
-                        SlidableAction(
-                          onPressed: (BuildContext context) async {
-                            final oldState = following;
+            return ListView.separated(
+              itemCount: following.length,
+              separatorBuilder:
+                  (context, index) =>
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? const PlatformDivider(height: 1)
+                          : const SizedBox.shrink(),
+              itemBuilder: (context, index) {
+                final user = following[index];
+                return Slidable(
+                  dragStartBehavior: DragStartBehavior.start,
+                  endActionPane: ActionPane(
+                    motion: const StretchMotion(),
+                    extentRatio: 0.3,
+                    children: [
+                      SlidableAction(
+                        onPressed: (BuildContext context) async {
+                          final oldState = following;
+                          setState(() {
+                            following = following.removeWhere((v) => v.id == user.id);
+                          });
+                          try {
+                            await ref.withClient(
+                              (client) => RelationRepository(client).unfollow(user.id),
+                            );
+                          } catch (_) {
                             setState(() {
-                              following = following.removeWhere((v) => v.id == user.id);
+                              following = oldState;
                             });
-                            try {
-                              await ref.withClient(
-                                (client) => RelationRepository(client).unfollow(user.id),
-                              );
-                            } catch (_) {
-                              setState(() {
-                                following = oldState;
-                              });
-                            }
-                          },
-                          backgroundColor: context.lichessColors.error,
-                          foregroundColor: Colors.white,
-                          icon: Icons.person_remove,
-                          // TODO translate
-                          label: 'Unfollow',
-                        ),
-                      ],
-                    ),
-                    child: UserListTile.fromUser(
-                      user,
-                      _isOnline(user, value.$2),
-                      onTap:
-                          () => {
-                            Navigator.of(
-                              context,
-                            ).push(UserScreen.buildRoute(context, user.lightUser)),
-                          },
-                    ),
-                  );
-                },
-              ),
+                          }
+                        },
+                        backgroundColor: context.lichessColors.error,
+                        foregroundColor: Colors.white,
+                        icon: Icons.person_remove,
+                        // TODO translate
+                        label: 'Unfollow',
+                      ),
+                    ],
+                  ),
+                  child: UserListTile.fromUser(
+                    user,
+                    _isOnline(user, value.$2),
+                    onTap:
+                        () => {
+                          Navigator.of(
+                            context,
+                          ).push(UserScreen.buildRoute(context, user.lightUser)),
+                        },
+                  ),
+                );
+              },
             );
           },
         );
