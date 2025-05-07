@@ -60,7 +60,6 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
             footer: const Padding(
               padding: EdgeInsets.only(top: 8.0),
               child: Text.rich(
-                textAlign: TextAlign.justify,
                 TextSpan(
                   text: 'Stockfish NNUE',
                   style: TextStyle(fontWeight: FontWeight.bold),

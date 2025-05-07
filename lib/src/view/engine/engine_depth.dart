@@ -58,7 +58,7 @@ class EngineDepth extends ConsumerWidget {
                     return _EnginePopup(eval: eval, goDeeper: goDeeper);
                   },
                   direction: PopoverDirection.top,
-                  width: 250,
+                  width: 260,
                   backgroundColor:
                       DialogTheme.of(context).backgroundColor ??
                       ColorScheme.of(context).surfaceContainerHigh,
