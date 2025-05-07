@@ -17,6 +17,16 @@ class EngineDepth extends ConsumerWidget {
   final ClientEval? savedEval;
   final VoidCallback? goDeeper;
 
+  static Color nnueColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.light
+          ? darken(context.lichessColors.brag, 0.2)
+          : context.lichessColors.brag;
+
+  static Color hceColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.light
+          ? darken(context.lichessColors.good, 0.2)
+          : context.lichessColors.good;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
@@ -29,8 +39,8 @@ class EngineDepth extends ConsumerWidget {
                 'Stockfish' // while loading name is 'Stockfish'
             ? Colors.grey
             : isNNUE
-            ? context.lichessColors.brag
-            : context.lichessColors.good;
+            ? nnueColor(context)
+            : hceColor(context);
     const textColor = Colors.white;
 
     final loadingIndicator = SpinKitFadingFour(color: textColor.withValues(alpha: 0.7), size: 10);
@@ -282,7 +292,7 @@ class _StockfishInfo extends StatelessWidget {
     final fixedEngineName =
         engineName.startsWith('Fairy-Stockfish') ? 'Fairy-Stockfish' : engineName;
 
-    final color = isNNUE ? context.lichessColors.brag : context.lichessColors.good;
+    final color = isNNUE ? EngineDepth.nnueColor(context) : EngineDepth.hceColor(context);
 
     final trailingTextStyle = TextStyle(fontWeight: FontWeight.bold, color: color);
 
