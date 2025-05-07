@@ -335,7 +335,7 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
             onPressed: () {
               final boardUrl = lichessUri('/${analysisState.gameId}/${analysisState.pov.name}');
-              launchShareDialog(context, uri: boardUrl);
+              launchShareDialog(context, ShareParams(uri: boardUrl));
             },
           ),
         // PGN share can be used to quickly analyze a position, so engine must be allowed to access
