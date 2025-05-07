@@ -6,9 +6,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:http/http.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
@@ -18,6 +18,9 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:multistockfish/multistockfish.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -35,6 +38,8 @@ const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fro
 /// A function that returns true if the evaluation should be emitted by the [EngineEvaluation]
 /// provider.
 typedef ShouldEmitEvalFilter = bool Function(Work work);
+
+typedef NNUEFiles = ({File bigNet, File smallNet});
 
 @Riverpod(keepAlive: true)
 EvaluationService evaluationService(Ref ref) {
@@ -59,6 +64,12 @@ class EvaluationService {
 
   EvaluationContext? _context;
 
+  final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
+
+  ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
+  bool get isDownloadingNNUEFiles =>
+      nnueDownloadProgress.value > 0.0 && nnueDownloadProgress.value < 1.0;
+
   EvaluationOptions options = EvaluationOptions(
     evaluationFunction: EvaluationFunctionPref.hce,
     multiPv: 1,
@@ -76,15 +87,30 @@ class EvaluationService {
   final ValueNotifier<EngineEvaluationState> _state = ValueNotifier(_defaultState);
   ValueListenable<EngineEvaluationState> get state => _state;
 
-  Future<Engine> _engineFactory(EvaluationFunctionPref pref) async {
+  /// Get the NNUE files paths.
+  NNUEFiles get nnueFiles {
+    final appSupportDirectory = _ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
+    if (appSupportDirectory == null) {
+      throw Exception('App support directory is null.');
+    }
+
+    final bigNetFile = File('${appSupportDirectory.path}/${Stockfish.defaultBigNetFile}');
+    final smallNetFile = File('${appSupportDirectory.path}/${Stockfish.defaultSmallNetFile}');
+
+    return (bigNet: bigNetFile, smallNet: smallNetFile);
+  }
+
+  Engine _engineFactory(EvaluationFunctionPref pref) {
     switch (pref) {
       case EvaluationFunctionPref.nnue:
         try {
-          final nnueFiles = await _ref.read(_stockfishNNUEFilesProvider.future);
+          if (!checkNNUEFilesExist()) {
+            throw Exception('NNUE files not found.');
+          }
           return StockfishEngine(
             StockfishFlavor.chess,
-            bigNetPath: nnueFiles.bigNetPath,
-            smallNetPath: nnueFiles.smallNetPath,
+            bigNetPath: nnueFiles.bigNet.path,
+            smallNetPath: nnueFiles.smallNet.path,
           );
         } catch (e, st) {
           debugPrint('Failed to load NNUE files: $e\n$st');
@@ -106,7 +132,7 @@ class EvaluationService {
     await disposeEngine();
     _context = context;
     if (initOptions != null) options = initOptions;
-    _engine = await _engineFactory(options.evaluationFunction);
+    _engine = _engineFactory(options.evaluationFunction);
     _engine!.state.addListener(() {
       debugPrint('Engine state: ${_engine?.state.value}');
       if (_engine?.state.value == EngineState.initial ||
@@ -231,6 +257,88 @@ class EvaluationService {
   void stop() {
     _engine?.stop();
   }
+
+  /// Check if the NNUE files are present in the app support directory.
+  bool checkNNUEFilesExist() {
+    final (:bigNet, :smallNet) = nnueFiles;
+
+    return bigNet.existsSync() && smallNet.existsSync();
+  }
+
+  Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
+    final (:bigNet, :smallNet) = nnueFiles;
+
+    // delete any existing nnue files before downloading
+    await deleteNNUEFiles();
+
+    Future<bool> doDownload() {
+      final client = _ref.read(defaultClientProvider);
+      return downloadFiles(
+        client,
+        [StockfishEngine.bigNetUrl, StockfishEngine.smallNetUrl],
+        [bigNet, smallNet],
+        onProgress: (received, length) {
+          _nnueDownloadProgress.value = received / length;
+        },
+      );
+    }
+
+    final connectivityResult = await _ref.read(connectivityPluginProvider).checkConnectivity();
+    final onWifi = connectivityResult.contains(ConnectivityResult.wifi);
+    if (onWifi == false) {
+      if (inBackground) {
+        throw Exception('Cannot download in background on mobile data.');
+      } else {
+        final context = _ref.read(currentNavigatorKeyProvider).currentContext;
+        if (context == null || !context.mounted) return false;
+        final isOk = await showAdaptiveDialog<bool>(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) {
+            return AlertDialog.adaptive(
+              content: const Text('Are you sure you want to download the NNUE files (79MB)?'),
+              actions: [
+                PlatformDialogAction(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+                PlatformDialogAction(
+                  child: Text(context.l10n.cancel),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+        if (isOk == true) {
+          return doDownload();
+        } else {
+          return Future.value(false);
+        }
+      }
+    } else {
+      return doDownload();
+    }
+  }
+
+  Future<void> deleteNNUEFiles() async {
+    final appSupportDirectory = _ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
+    if (appSupportDirectory == null) {
+      throw Exception('App support directory is null.');
+    }
+
+    // delete any existing nnue files before downloading
+    await for (final entity in appSupportDirectory.list(followLinks: false)) {
+      if (entity is File && entity.path.endsWith('.nnue')) {
+        debugPrint('Deleting existing nnue ${entity.path}');
+        await entity.delete();
+      }
+    }
+  }
 }
 
 typedef EngineEvaluationState =
@@ -306,56 +414,4 @@ ClientEval? pickBestClientEval({
       pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
 
   return eval;
-}
-
-typedef NNUEFiles = ({String bigNetPath, String smallNetPath});
-
-/// Fetches and saves locally the Stockfish NNUE files from the server.
-@riverpod
-Future<NNUEFiles> _stockfishNNUEFiles(Ref ref) async {
-  final link = ref.keepAlive();
-
-  final appSupportDirectory = ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
-
-  if (appSupportDirectory == null) {
-    throw Exception('App support directory is null.');
-  }
-
-  final bigNetFile = File('${appSupportDirectory.path}/${Stockfish.defaultBigNetFile}');
-  final smallNetFile = File('${appSupportDirectory.path}/${Stockfish.defaultSmallNetFile}');
-
-  if (await bigNetFile.exists() && await smallNetFile.exists()) {
-    return (bigNetPath: bigNetFile.path, smallNetPath: smallNetFile.path);
-  }
-
-  try {
-    // delete any existing nnue files before downloading
-    await for (final entity in appSupportDirectory.list(followLinks: false)) {
-      if (entity is File && entity.path.endsWith('.nnue')) {
-        debugPrint('Deleting existing nnue ${entity.path}');
-        await entity.delete();
-      }
-    }
-
-    final connectivityResult = await ref.read(connectivityPluginProvider).checkConnectivity();
-    final downloadAllowed = connectivityResult.contains(ConnectivityResult.wifi);
-    if (downloadAllowed == false) {
-      link.close();
-      throw Exception('Cannot download in background on mobile data.');
-    }
-
-    final client = ref.read(defaultClientProvider);
-
-    await Future.wait([
-      downloadFile(client, StockfishEngine.bigNetUrl, bigNetFile),
-      downloadFile(client, StockfishEngine.smallNetUrl, smallNetFile),
-    ]);
-    return (bigNetPath: bigNetFile.path, smallNetPath: smallNetFile.path);
-  } on SocketException catch (_) {
-    link.close();
-    rethrow;
-  } on ClientException catch (_) {
-    link.close();
-    rethrow;
-  }
 }
