@@ -36,6 +36,23 @@ class PlatformShareIcon extends StatelessWidget {
   }
 }
 
+/// A platform-aware circular loading indicator to be used in [AppBar.actions].
+class PlatformAppBarLoadingIndicator extends StatelessWidget {
+  const PlatformAppBarLoadingIndicator({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(right: 16),
+      child: SizedBox(
+        height: 24,
+        width: 24,
+        child: Center(child: CircularProgressIndicator.adaptive()),
+      ),
+    );
+  }
+}
+
 /// A wrapper around [Scaffold] that sets properties to handle app bar and bottom navigation bar
 /// transparency on iOS.
 class PlatformScaffold extends StatelessWidget {
@@ -63,10 +80,8 @@ class PlatformScaffold extends StatelessWidget {
     // the bottom navigation bar.
     final hasExtendedBodyParentScaffold = MainTabScaffoldProperties.hasExtendedBody(context);
 
-    final appBarBg = AppBarTheme.of(context).backgroundColor ?? ColorScheme.of(context).surface;
-
     return Scaffold(
-      extendBodyBehindAppBar: appBarBg.a != 1.0,
+      extendBodyBehindAppBar: Theme.of(context).platform == TargetPlatform.iOS,
       extendBody: extendBody ?? hasExtendedBodyParentScaffold,
       appBar: appBar,
       body: body,
