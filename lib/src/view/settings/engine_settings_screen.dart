@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -126,8 +127,8 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                       subtitle: const Text('79MB'),
                       enabled: !isLoading,
                       onTap: () async {
-                        await fetchData();
-                        if (context.mounted) {
+                        final downloaded = await fetchData();
+                        if (context.mounted && downloaded) {
                           setState(() {
                             _hasNNUEFiles = true;
                           });
@@ -156,7 +157,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                               },
                             ),
                             PlatformDialogAction(
-                              child: const Text('Cancel'),
+                              child: Text(context.l10n.cancel),
                               onPressed: () {
                                 Navigator.of(context).pop(false);
                               },
@@ -208,7 +209,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
     return false;
   }
 
-  Future<void> downloadNNUEFiles() async {
+  Future<bool> downloadNNUEFiles() async {
     final appSupportDirectory = ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
     if (appSupportDirectory == null) {
       throw Exception('App support directory is null.');
@@ -220,9 +221,9 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
     // delete any existing nnue files before downloading
     await deleteNNUEFiles();
 
-    Future<void> doDownload() async {
+    Future<bool> doDownload() {
       final client = ref.read(defaultClientProvider);
-      await downloadFiles(
+      return downloadFiles(
         client,
         [StockfishEngine.bigNetUrl, StockfishEngine.smallNetUrl],
         [bigNetFile, smallNetFile],
@@ -249,7 +250,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                 },
               ),
               PlatformDialogAction(
-                child: const Text('Cancel'),
+                child: Text(context.l10n.cancel),
                 onPressed: () {
                   Navigator.of(context).pop(false);
                 },
@@ -261,11 +262,13 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
       if (isOk == true) {
         return doDownload();
       } else {
-        return Future.value();
+        return Future.value(false);
       }
     } else if (mounted) {
       return doDownload();
     }
+
+    return Future.value(false);
   }
 
   Future<void> deleteNNUEFiles() async {

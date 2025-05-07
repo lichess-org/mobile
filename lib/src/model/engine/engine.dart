@@ -139,6 +139,7 @@ class StockfishEngine implements Engine {
           _name = name;
         });
       } catch (e, s) {
+        _stockfish = null;
         _log.severe('error loading stockfish', e, s);
         _state.value = EngineState.error;
       }
