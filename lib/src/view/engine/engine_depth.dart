@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:popover/popover.dart';
@@ -16,21 +17,38 @@ class EngineDepth extends ConsumerWidget {
   final ClientEval? savedEval;
   final VoidCallback? goDeeper;
 
+  static Color nnueColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.light
+          ? darken(context.lichessColors.brag, 0.2)
+          : context.lichessColors.brag;
+
+  static Color hceColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.light
+          ? darken(context.lichessColors.good, 0.2)
+          : context.lichessColors.good;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
         .watch(engineEvaluationProvider);
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
-    final loadingIndicator = SpinKitFadingFour(
-      color: ColorScheme.of(context).onSecondary.withValues(alpha: 0.7),
-      size: 10,
-    );
+    final isNNUE = !engineName.contains('Fairy-Stockfish');
+    final color =
+        engineName ==
+                'Stockfish' // while loading name is 'Stockfish'
+            ? Colors.grey
+            : isNNUE
+            ? nnueColor(context)
+            : hceColor(context);
+    const textColor = Colors.white;
+
+    final loadingIndicator = SpinKitFadingFour(color: textColor.withValues(alpha: 0.7), size: 10);
 
     const microChipSize = 28.0;
-    final iconTextStyle = TextStyle(
-      color: ColorScheme.of(context).onSecondary,
-      fontFeatures: const [FontFeature.tabularFigures()],
+    const iconTextStyle = TextStyle(
+      color: textColor,
+      fontFeatures: [FontFeature.tabularFigures()],
       fontSize: 11,
     );
 
@@ -50,7 +68,7 @@ class EngineDepth extends ConsumerWidget {
                     return _EnginePopup(eval: eval, goDeeper: goDeeper);
                   },
                   direction: PopoverDirection.top,
-                  width: 240,
+                  width: 260,
                   backgroundColor:
                       DialogTheme.of(context).backgroundColor ??
                       ColorScheme.of(context).surfaceContainerHigh,
@@ -67,14 +85,14 @@ class EngineDepth extends ConsumerWidget {
         textStyle: const TextStyle(fontSize: 8),
         isLabelVisible: eval is CloudEval,
         child: AnimatedOpacity(
-          opacity: engineState == EngineState.computing ? 1.0 : 0.7,
+          opacity: engineState == EngineState.computing ? 1.0 : 0.8,
           duration: const Duration(milliseconds: 150),
           child: Stack(
             alignment: Alignment.center,
             children: [
               CustomPaint(
                 size: const Size(microChipSize, microChipSize),
-                painter: MicroChipPainter(ColorScheme.of(context).secondary),
+                painter: MicroChipPainter(color),
               ),
               SizedBox(
                 width: microChipSize,
@@ -268,14 +286,22 @@ class _StockfishInfo extends StatelessWidget {
 
     final knps = engineState == EngineState.computing ? ', ${eval?.knps.round()}kn/s' : '';
     final depth = currentEval?.depth ?? 0;
+    final isNNUE = !engineName.contains('Fairy-Stockfish');
 
-    // default name is Stockfish 11 64 POPCNT, so we remove the POPCNT part
-    final fixedEngineName = engineName.startsWith('Stockfish 11') ? 'Stockfish 11' : engineName;
+    // remove Fairy-Stockfish version from engine name
+    final fixedEngineName =
+        engineName.startsWith('Fairy-Stockfish') ? 'Fairy-Stockfish' : engineName;
+
+    final color = isNNUE ? EngineDepth.nnueColor(context) : EngineDepth.hceColor(context);
+
+    final trailingTextStyle = TextStyle(fontWeight: FontWeight.bold, color: color);
 
     return ListTile(
       leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
       title: Text(fixedEngineName),
       subtitle: Text(context.l10n.depthX('$depth$knps')),
+      trailing:
+          isNNUE ? Text('NNUE', style: trailingTextStyle) : Text('HCE', style: trailingTextStyle),
     );
   }
 }

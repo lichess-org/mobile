@@ -9,11 +9,8 @@ class FakeStockfishFactory extends StockfishFactory {
   const FakeStockfishFactory();
 
   @override
-  Stockfish call({
-    StockfishFlavor flavor = StockfishFlavor.chess,
-    String? bigNetPath,
-    String? smallNetPath,
-  }) => FakeStockfish(flavor);
+  Stockfish call(StockfishFlavor flavor, {String? bigNetPath, String? smallNetPath}) =>
+      FakeStockfish(flavor);
 }
 
 /// A fake implementation of [Stockfish].

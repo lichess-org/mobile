@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
@@ -44,12 +45,26 @@ abstract class Engine {
   Future<void> dispose();
 }
 
+const _nnueDownloadUrl = '$kLichessCDNHost/assets/lifat/nnue/';
+
 /// A concrete implementation of [Engine] that uses Stockfish as the underlying engine.
 class StockfishEngine implements Engine {
-  StockfishEngine(this.flavor) : _protocol = UCIProtocol();
+  StockfishEngine(this.flavor, {String? smallNetPath, String? bigNetPath})
+    : _protocol = UCIProtocol(),
+      _smallNetPath = smallNetPath,
+      _bigNetPath = bigNetPath,
+      assert(
+        flavor != StockfishFlavor.chess || smallNetPath != null && bigNetPath != null,
+        'NNUE paths must be provided for chess flavor',
+      );
+
+  static final bigNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.defaultBigNetFile}');
+  static final smallNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.defaultSmallNetFile}');
 
   final StockfishFlavor flavor;
   final UCIProtocol _protocol;
+  final String? _smallNetPath;
+  final String? _bigNetPath;
 
   Stockfish? _stockfish;
   String _name = 'Stockfish';
@@ -87,7 +102,11 @@ class StockfishEngine implements Engine {
 
     if (_stockfish == null) {
       try {
-        final stockfish = LichessBinding.instance.stockfishFactory(flavor: flavor);
+        final stockfish = LichessBinding.instance.stockfishFactory(
+          flavor,
+          smallNetPath: _smallNetPath,
+          bigNetPath: _bigNetPath,
+        );
         _stockfish = stockfish;
 
         _state.value = EngineState.loading;
@@ -120,6 +139,7 @@ class StockfishEngine implements Engine {
           _name = name;
         });
       } catch (e, s) {
+        _stockfish = null;
         _log.severe('error loading stockfish', e, s);
         _state.value = EngineState.error;
       }
@@ -177,5 +197,13 @@ class StockfishEngine implements Engine {
 class StockfishFactory {
   const StockfishFactory();
 
-  Stockfish call({StockfishFlavor flavor = StockfishFlavor.chess}) => Stockfish(flavor: flavor);
+  Stockfish call(
+    StockfishFlavor flavor, {
+
+    /// Full path to the small net file for NNUE evaluation.
+    String? smallNetPath,
+
+    /// Full path to the big net file for NNUE evaluation.
+    String? bigNetPath,
+  }) => Stockfish(flavor: flavor, smallNetPath: smallNetPath, bigNetPath: bigNetPath);
 }

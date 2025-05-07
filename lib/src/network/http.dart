@@ -230,6 +230,49 @@ Future<bool> downloadFile(
   return length > 0;
 }
 
+/// Downloads multiple files from the given [urls] and saves them to the corresponding [files].
+///
+/// [onProgress] will aggregate the progress of all downloads.
+Future<bool> downloadFiles(
+  Client client,
+  List<Uri> urls,
+  List<File> files, {
+  void Function(int received, int length)? onProgress,
+}) async {
+  if (urls.length != files.length) {
+    throw ArgumentError('Urls and files must have the same length.');
+  }
+
+  // aggregrate progress of all files
+  final Map<Uri, int> fileLengths = {};
+  final Map<Uri, int> fileReceived = {};
+  final results = await Future.wait(
+    urls.asMap().entries.map((entry) {
+      final index = entry.key;
+      final url = entry.value;
+      final file = files[index];
+
+      return downloadFile(
+        client,
+        url,
+        file,
+        onProgress: (received, length) {
+          fileReceived[url] = received;
+          fileLengths[url] = length;
+          // only call onProgress if all files lengths are known
+          if (fileLengths.length == urls.length) {
+            final totalReceived = fileReceived.values.fold(0, (a, b) => a + b);
+            final totalLength = fileLengths.values.fold(0, (a, b) => a + b);
+            onProgress?.call(totalReceived, totalLength);
+          }
+        },
+      );
+    }),
+  );
+
+  return results.every((result) => result);
+}
+
 /// A [Client] that intercepts all requests, responses, and errors using the provided callbacks.
 ///
 /// This client wraps around another [Client] and intercepts the requests, responses,
