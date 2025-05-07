@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
@@ -93,10 +92,7 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
           ),
     );
 
-    return PlatformScaffold(
-      body: _Body(filter),
-      appBar: PlatformAppBar(title: title, actions: [filterButton]),
-    );
+    return Scaffold(body: _Body(filter), appBar: AppBar(title: title, actions: [filterButton]));
   }
 }
 
@@ -161,10 +157,6 @@ class _BodyState extends ConsumerState<_Body> {
     ];
 
     return RefreshIndicator.adaptive(
-      edgeOffset:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? MediaQuery.paddingOf(context).top + kToolbarHeight
-              : 0.0,
       key: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(broadcastsPaginatorProvider),
       child: CustomScrollView(
