@@ -232,7 +232,6 @@ class GameBody extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: SafeArea(
-                      bottom: false,
                       child: BoardTable(
                         key: boardKey,
                         boardSettingsOverrides: BoardSettingsOverrides(
@@ -284,13 +283,13 @@ class GameBody extends ConsumerWidget {
                           ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
                         },
                         zenMode: gameState.isZenModeActive,
+                        userActionsBar: _GameBottomBar(
+                          id: loadedGame.gameId,
+                          onLoadGameCallback: onLoadGameCallback,
+                          onNewOpponentCallback: onNewOpponentCallback,
+                        ),
                       ),
                     ),
-                  ),
-                  _GameBottomBar(
-                    id: loadedGame.gameId,
-                    onLoadGameCallback: onLoadGameCallback,
-                    onNewOpponentCallback: onNewOpponentCallback,
                   ),
                 ],
               ),
@@ -315,7 +314,6 @@ class GameBody extends ConsumerWidget {
             children: [
               Expanded(
                 child: SafeArea(
-                  bottom: false,
                   child: StandaloneGameLoadingBoard(
                     fen: value.game.lastPosition.fen,
                     lastMove: value.game.moveAt(value.stepCursor) as NormalMove?,
@@ -338,7 +336,6 @@ class GameBody extends ConsumerWidget {
             children: [
               Expanded(
                 child: SafeArea(
-                  bottom: false,
                   child: StandaloneGameLoadingBoard(
                     fen: loadedGame.lastFen,
                     lastMove: loadedGame.lastMove,

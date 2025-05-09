@@ -32,7 +32,6 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
       children: [
         Expanded(
           child: SafeArea(
-            bottom: false,
             child: BoardTable(
               orientation: Side.white,
               fen: kEmptyFen,
@@ -141,7 +140,6 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
       children: [
         Expanded(
           child: SafeArea(
-            bottom: false,
             child: BoardTable(
               orientation: Side.white,
               fen: kEmptyFen,
@@ -306,7 +304,6 @@ class LoadGameError extends StatelessWidget {
       children: [
         Expanded(
           child: SafeArea(
-            bottom: false,
             child: BoardTable(
               orientation: Side.white,
               fen: kEmptyFen,
@@ -347,7 +344,6 @@ class ChallengeDeclinedBoard extends StatelessWidget {
       children: [
         Expanded(
           child: SafeArea(
-            bottom: false,
             child: BoardTable(
               orientation: Side.white,
               fen: kEmptyFen,

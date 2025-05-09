@@ -53,6 +53,7 @@ class BoardTable extends ConsumerStatefulWidget {
     this.showEngineGaugePlaceholder = false,
     this.boardKey,
     this.zenMode = false,
+    this.userActionsBar,
     super.key,
   }) : assert(
          fen != null || interactiveBoardParams != null,
@@ -74,7 +75,8 @@ class BoardTable extends ConsumerStatefulWidget {
       onSelectMove = null,
       boardOverlay = null,
       boardKey = null,
-      zenMode = false;
+      zenMode = false,
+      userActionsBar = null;
 
   final String? fen;
 
@@ -122,6 +124,10 @@ class BoardTable extends ConsumerStatefulWidget {
 
   /// If true, the move list will be hidden
   final bool zenMode;
+
+  /// Optional widget that contains various user actions, usually a `BottomBar`.
+  /// Displayed below the board, or below the move list if landscape mode is used.
+  final Widget? userActionsBar;
 
   @override
   ConsumerState<BoardTable> createState() => _BoardTableState();
@@ -220,7 +226,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                       if (!widget.zenMode && slicedMoves != null)
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            padding: const EdgeInsets.only(top: 16.0),
                             child: MoveList(
                               type: MoveListType.stacked,
                               slicedMoves: slicedMoves,
@@ -231,6 +237,13 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                         )
                       else
                         const Spacer(),
+
+                      if (widget.userActionsBar != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: widget.userActionsBar,
+                        ),
+
                       widget.bottomTable,
                     ],
                   ),
@@ -309,6 +322,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   child: widget.bottomTable,
                 ),
               ),
+              if (widget.userActionsBar != null) widget.userActionsBar!,
             ],
           );
         }
