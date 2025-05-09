@@ -43,6 +43,7 @@ class BoardTable extends ConsumerStatefulWidget {
     this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
     this.bottomTable = const SizedBox.shrink(),
+    this.landscapeMoveList,
     this.shapes,
     this.engineGauge,
     this.moves,
@@ -67,6 +68,7 @@ class BoardTable extends ConsumerStatefulWidget {
       interactiveBoardParams = null,
       lastMove = null,
       boardSettingsOverrides = null,
+      landscapeMoveList = null,
       topTable = const SizedBox.shrink(),
       bottomTable = const SizedBox.shrink(),
       shapes = null,
@@ -100,6 +102,11 @@ class BoardTable extends ConsumerStatefulWidget {
 
   /// Widget that will appear at the bottom of the board.
   final Widget bottomTable;
+
+  /// Optional widget that will be displayed on the right side of the board on landscape mode.
+  ///
+  /// If provided, it will override the [moves] parameter.
+  final Widget? landscapeMoveList;
 
   /// Optional engine gauge that will be displayed next to the board.
   final EngineGaugeParams? engineGauge;
@@ -223,7 +230,20 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       widget.topTable,
-                      if (!widget.zenMode && slicedMoves != null)
+                      if (widget.landscapeMoveList != null)
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: widget.landscapeMoveList,
+                          ),
+                        )
+                      else if (widget.zenMode)
+                        const MoveList(
+                          type: MoveListType.inline,
+                          slicedMoves: [],
+                          currentMoveIndex: 0,
+                        )
+                      else if (!widget.zenMode && slicedMoves != null)
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(top: 16.0),

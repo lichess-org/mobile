@@ -44,6 +44,7 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -277,110 +278,128 @@ class _Body extends ConsumerWidget {
     final currentEvalBest = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMove));
     final evalBestMove = (currentEvalBest ?? puzzleState.node.eval?.bestMove) as NormalMove?;
 
-    return Column(
-      children: [
-        Expanded(
-          child: SafeArea(
-            child: BoardTable(
-              orientation: puzzleState.pov,
-              lastMove: puzzleState.lastMove as NormalMove?,
-              interactiveBoardParams: (
-                variant: Variant.standard,
-                position: puzzleState.currentPosition,
-                playerSide:
-                    puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
-                        ? PlayerSide.none
-                        : puzzleState.mode == PuzzleMode.view
-                        ? PlayerSide.both
-                        : puzzleState.pov == Side.white
-                        ? PlayerSide.white
-                        : PlayerSide.black,
-                promotionMove: puzzleState.promotionMove,
-                onMove: (move, {isDrop}) {
-                  ref.read(ctrlProvider.notifier).onUserMove(move);
-                },
-                onPromotionSelection: (role) {
-                  ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-                },
-                premovable: null,
+    return SafeArea(
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          return BoardTable(
+            orientation: puzzleState.pov,
+            lastMove: puzzleState.lastMove as NormalMove?,
+            interactiveBoardParams: (
+              variant: Variant.standard,
+              position: puzzleState.currentPosition,
+              playerSide:
+                  puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
+                      ? PlayerSide.none
+                      : puzzleState.mode == PuzzleMode.view
+                      ? PlayerSide.both
+                      : puzzleState.pov == Side.white
+                      ? PlayerSide.white
+                      : PlayerSide.black,
+              promotionMove: puzzleState.promotionMove,
+              onMove: (move, {isDrop}) {
+                ref.read(ctrlProvider.notifier).onUserMove(move);
+              },
+              onPromotionSelection: (role) {
+                ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+              },
+              premovable: null,
+            ),
+            shapes:
+                puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
+                    ? ISet([
+                      Arrow(
+                        color: const Color(0x66003088),
+                        orig: evalBestMove.from,
+                        dest: evalBestMove.to,
+                      ),
+                    ])
+                    : puzzleState.hintSquare != null
+                    ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
+                    : null,
+            engineGauge:
+                puzzleState.isEngineAvailable(enginePrefs)
+                    ? (
+                      isLocalEngineAvailable: true,
+                      orientation: puzzleState.pov,
+                      position: puzzleState.currentPosition,
+                      savedEval: puzzleState.node.eval,
+                      serverEval: puzzleState.node.serverEval,
+                    )
+                    : null,
+            showEngineGaugePlaceholder: true,
+            topTable: Center(
+              child: PuzzleFeedbackWidget(
+                puzzle: puzzleState.puzzle,
+                state: puzzleState,
+                onStreak: false,
               ),
-              shapes:
-                  puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
-                      ? ISet([
-                        Arrow(
-                          color: const Color(0x66003088),
-                          orig: evalBestMove.from,
-                          dest: evalBestMove.to,
-                        ),
-                      ])
-                      : puzzleState.hintSquare != null
-                      ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
-                      : null,
-              engineGauge:
-                  puzzleState.isEngineAvailable(enginePrefs)
-                      ? (
-                        isLocalEngineAvailable: true,
-                        orientation: puzzleState.pov,
-                        position: puzzleState.currentPosition,
-                        savedEval: puzzleState.node.eval,
-                        serverEval: puzzleState.node.serverEval,
-                      )
-                      : null,
-              showEngineGaugePlaceholder: true,
-              topTable: Center(
-                child: PuzzleFeedbackWidget(
-                  puzzle: puzzleState.puzzle,
-                  state: puzzleState,
-                  onStreak: false,
+            ),
+            bottomTable: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (puzzleState.glicko != null)
+                  RatingPrefAware(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Row(
+                        children: [
+                          Text(context.l10n.rating),
+                          const SizedBox(width: 5.0),
+                          TweenAnimationBuilder<double>(
+                            tween: Tween<double>(
+                              begin: puzzleState.glicko!.rating,
+                              end:
+                                  puzzleState.nextContext?.glicko?.rating ??
+                                  puzzleState.glicko!.rating,
+                            ),
+                            duration: const Duration(milliseconds: 500),
+                            builder: (context, double rating, _) {
+                              return Text(
+                                rating.truncate().toString(),
+                                style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                PuzzleSessionWidget(
+                  initialPuzzleContext: initialPuzzleContext,
+                  ctrlProvider: ctrlProvider,
                 ),
-              ),
-              bottomTable: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (puzzleState.glicko != null)
-                    RatingPrefAware(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: Row(
+              ],
+            ),
+            landscapeMoveList:
+                orientation == Orientation.landscape
+                    ? Card(
+                      clipBehavior: Clip.hardEdge,
+                      margin: EdgeInsets.zero,
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.zero,
+                        child: Column(
                           children: [
-                            Text(context.l10n.rating),
-                            const SizedBox(width: 5.0),
-                            TweenAnimationBuilder<double>(
-                              tween: Tween<double>(
-                                begin: puzzleState.glicko!.rating,
-                                end:
-                                    puzzleState.nextContext?.glicko?.rating ??
-                                    puzzleState.glicko!.rating,
-                              ),
-                              duration: const Duration(milliseconds: 500),
-                              builder: (context, double rating, _) {
-                                return Text(
-                                  rating.truncate().toString(),
-                                  style: const TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                );
-                              },
+                            DebouncedPgnTreeView(
+                              root: puzzleState.root,
+                              currentPath: puzzleState.currentPath,
+                              pgnRootComments: null,
+                              shouldShowComputerAnalysis: false,
+                              shouldShowComments: false,
+                              shouldShowAnnotations: false,
+                              displayMode: PgnTreeDisplayMode.twoColumn,
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  PuzzleSessionWidget(
-                    initialPuzzleContext: initialPuzzleContext,
-                    ctrlProvider: ctrlProvider,
-                  ),
-                ],
-              ),
-              userActionsBar: _BottomBar(
-                initialPuzzleContext: initialPuzzleContext,
-                puzzleId: puzzleState.puzzle.puzzle.id,
-              ),
+                    )
+                    : null,
+            userActionsBar: _BottomBar(
+              initialPuzzleContext: initialPuzzleContext,
+              puzzleId: puzzleState.puzzle.puzzle.id,
             ),
-          ),
-        ),
-      ],
+          );
+        },
+      ),
     );
   }
 }
