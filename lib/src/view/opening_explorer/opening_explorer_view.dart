@@ -25,12 +25,16 @@ class OpeningExplorerView extends ConsumerStatefulWidget {
     required this.onMoveSelected,
     this.opening,
     this.scrollable = true,
+    this.shouldDisplayGames = true,
   });
 
   final Position position;
   final Opening? opening;
   final void Function(NormalMove) onMoveSelected;
   final bool scrollable;
+
+  /// Whether to display recent and top games in the explorer.
+  final bool shouldDisplayGames;
 
   @override
   ConsumerState<OpeningExplorerView> createState() => _OpeningExplorerState();
@@ -109,7 +113,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
             onMoveSelected: widget.onMoveSelected,
             isIndexing: value.isIndexing,
           ),
-          if (topGames != null && topGames.isNotEmpty) ...[
+          if (widget.shouldDisplayGames && topGames != null && topGames.isNotEmpty) ...[
             OpeningExplorerHeaderTile(
               key: const Key('topGamesHeader'),
               child: Text(context.l10n.topGames),
@@ -123,7 +127,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
               );
             }, growable: false),
           ],
-          if (recentGames != null && recentGames.isNotEmpty) ...[
+          if (widget.shouldDisplayGames && recentGames != null && recentGames.isNotEmpty) ...[
             OpeningExplorerHeaderTile(
               key: const Key('recentGamesHeader'),
               child: Text(context.l10n.recentGames),
