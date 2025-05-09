@@ -32,8 +32,10 @@ class QuickGameButton extends ConsumerWidget {
             Expanded(
               flex: kFlexGoldenRatioBase,
               child: OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(side: BorderSide.none),
-                icon: const Icon(Icons.access_time),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Theme.of(context).dividerColor),
+                ),
+                icon: Icon(playPrefs.quickPairingTimeIncrement.speed.icon),
                 label: Text(
                   playPrefs.quickPairingTimeIncrement.display,
                   style: const TextStyle(letterSpacing: 2.0),
