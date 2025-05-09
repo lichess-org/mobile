@@ -87,11 +87,7 @@ class _CreateGamePlatformButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Opacity(
       opacity: onTap == null ? 0.5 : 1.0,
-      child: ListTile(
-        leading: Icon(icon, size: 28),
-        title: Text(label, style: Styles.mainListTileTitle),
-        onTap: onTap,
-      ),
+      child: ListTile(leading: Icon(icon), title: Text(label), onTap: onTap),
     );
   }
 }
