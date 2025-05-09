@@ -256,7 +256,7 @@ class AccountScreen extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.memory_outlined),
-                title: const Text('Engine'),
+                title: const Text('Chess engine'),
                 trailing:
                     Theme.of(context).platform == TargetPlatform.iOS
                         ? const Icon(Icons.chevron_right)

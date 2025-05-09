@@ -50,17 +50,19 @@ class EngineEvaluationPreferences extends _$EngineEvaluationPreferences
     return save(state.copyWith(engineSearchTime: engineSearchTime));
   }
 
-  Future<void> setEvaluationFunction(EvaluationFunctionPref evaluationFunction) {
-    return save(state.copyWith(evaluationFunction: evaluationFunction));
+  Future<void> setEvaluationFunction(ChessEnginePref enginePref) {
+    return save(state.copyWith(enginePref: enginePref));
   }
 }
 
-enum EvaluationFunctionPref {
-  /// Handcrafted evaluation function.
-  hce,
+enum ChessEnginePref {
+  sf16,
+  sfLatest;
 
-  /// Neural network evaluation function.
-  nnue,
+  String get label => switch (this) {
+    ChessEnginePref.sf16 => 'Stockfish 16',
+    ChessEnginePref.sfLatest => 'Stockfish 17.1 (79MB)',
+  };
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -78,8 +80,8 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
       toJson: _searchTimeToJson,
     )
     required Duration engineSearchTime,
-    @JsonKey(defaultValue: EvaluationFunctionPref.hce, unknownEnumValue: EvaluationFunctionPref.hce)
-    required EvaluationFunctionPref evaluationFunction,
+    @JsonKey(defaultValue: ChessEnginePref.sf16, unknownEnumValue: ChessEnginePref.sf16)
+    required ChessEnginePref enginePref,
   }) = _EngineEvaluationPrefState;
 
   static const defaults = EngineEvaluationPrefState(
@@ -87,7 +89,7 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
     numEvalLines: 2,
     numEngineCores: 1,
     engineSearchTime: Duration(seconds: 6),
-    evaluationFunction: EvaluationFunctionPref.hce,
+    enginePref: ChessEnginePref.sf16,
   );
 
   factory EngineEvaluationPrefState.fromJson(Map<String, dynamic> json) {
@@ -98,7 +100,7 @@ class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Seri
     multiPv: numEvalLines,
     cores: numEngineCores,
     searchTime: engineSearchTime,
-    evaluationFunction: evaluationFunction,
+    enginePref: enginePref,
   );
 }
 

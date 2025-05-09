@@ -115,6 +115,8 @@ PODS:
     - Flutter
   - multistockfish_chess (0.2.0):
     - Flutter
+  - multistockfish_sf16 (0.1.0):
+    - Flutter
   - multistockfish_variant (0.1.0):
     - Flutter
   - nanopb (3.30910.0):
@@ -162,6 +164,7 @@ DEPENDENCIES:
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - multistockfish_chess (from `.symlinks/plugins/multistockfish_chess/ios`)
+  - multistockfish_sf16 (from `.symlinks/plugins/multistockfish_sf16/ios`)
   - multistockfish_variant (from `.symlinks/plugins/multistockfish_variant/ios`)
   - objective_c (from `.symlinks/plugins/objective_c/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -220,6 +223,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   multistockfish_chess:
     :path: ".symlinks/plugins/multistockfish_chess/ios"
+  multistockfish_sf16:
+    :path: ".symlinks/plugins/multistockfish_sf16/ios"
   multistockfish_variant:
     :path: ".symlinks/plugins/multistockfish_variant/ios"
   objective_c:
@@ -268,6 +273,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
   multistockfish_chess: 1bbb4caeddb71744c9726ff1555e0818ac49b1a2
+  multistockfish_sf16: 1badef36caaf09a347dcc5ebec8a16a3c29ed41a
   multistockfish_variant: 77ee0d81c68a9b72f3d0e1794f879ab972ea80b6
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   objective_c: 89e720c30d716b036faf9c9684022048eee1eee2

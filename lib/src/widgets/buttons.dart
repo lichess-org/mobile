@@ -174,10 +174,15 @@ class _RepeatButtonState extends State<RepeatButton> {
 }
 
 class LoadingButtonBuilder<T> extends StatefulWidget {
-  const LoadingButtonBuilder({required this.builder, required this.fetchData, super.key});
+  const LoadingButtonBuilder({
+    required this.builder,
+    required this.fetchData,
+    this.initialFuture,
+    super.key,
+  });
 
+  final Future<T>? initialFuture;
   final Future<T> Function() fetchData;
-
   final Widget Function(BuildContext context, bool isLoading, Future<T> Function() fetchData)
   builder;
 
@@ -187,6 +192,20 @@ class LoadingButtonBuilder<T> extends StatefulWidget {
 
 class _LoadingButtonBuilderState<T> extends State<LoadingButtonBuilder<T>> {
   Future<T>? _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = widget.initialFuture;
+  }
+
+  @override
+  void didUpdateWidget(LoadingButtonBuilder<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialFuture != widget.initialFuture) {
+      _future = widget.initialFuture;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

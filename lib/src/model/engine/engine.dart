@@ -54,12 +54,12 @@ class StockfishEngine implements Engine {
       _smallNetPath = smallNetPath,
       _bigNetPath = bigNetPath,
       assert(
-        flavor != StockfishFlavor.chess || smallNetPath != null && bigNetPath != null,
+        flavor != StockfishFlavor.latestNoNNUE || smallNetPath != null && bigNetPath != null,
         'NNUE paths must be provided for chess flavor',
       );
 
-  static final bigNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.defaultBigNetFile}');
-  static final smallNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.defaultSmallNetFile}');
+  static final bigNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.latestBigNNUE}');
+  static final smallNetUrl = Uri.parse('$_nnueDownloadUrl${Stockfish.latestSmallNNUE}');
 
   final StockfishFlavor flavor;
   final UCIProtocol _protocol;

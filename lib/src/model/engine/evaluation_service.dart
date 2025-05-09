@@ -71,7 +71,7 @@ class EvaluationService {
       nnueDownloadProgress.value > 0.0 && nnueDownloadProgress.value < 1.0;
 
   EvaluationOptions options = EvaluationOptions(
-    evaluationFunction: EvaluationFunctionPref.hce,
+    enginePref: ChessEnginePref.sf16,
     multiPv: 1,
     cores: defaultEngineCores,
     searchTime: const Duration(seconds: 10),
@@ -94,30 +94,31 @@ class EvaluationService {
       throw Exception('App support directory is null.');
     }
 
-    final bigNetFile = File('${appSupportDirectory.path}/${Stockfish.defaultBigNetFile}');
-    final smallNetFile = File('${appSupportDirectory.path}/${Stockfish.defaultSmallNetFile}');
+    final bigNetFile = File('${appSupportDirectory.path}/${Stockfish.latestBigNNUE}');
+    final smallNetFile = File('${appSupportDirectory.path}/${Stockfish.latestSmallNNUE}');
 
     return (bigNet: bigNetFile, smallNet: smallNetFile);
   }
 
-  Engine _engineFactory(EvaluationFunctionPref pref) {
+  Engine _engineFactory(ChessEnginePref pref) {
+    // TODO support variants
     switch (pref) {
-      case EvaluationFunctionPref.nnue:
+      case ChessEnginePref.sfLatest:
         try {
           if (!checkNNUEFilesExist()) {
             throw Exception('NNUE files not found.');
           }
           return StockfishEngine(
-            StockfishFlavor.chess,
+            StockfishFlavor.latestNoNNUE,
             bigNetPath: nnueFiles.bigNet.path,
             smallNetPath: nnueFiles.smallNet.path,
           );
         } catch (e, st) {
           debugPrint('Failed to load NNUE files: $e\n$st');
-          return StockfishEngine(StockfishFlavor.variant);
+          return StockfishEngine(StockfishFlavor.sf16);
         }
-      case EvaluationFunctionPref.hce:
-        return StockfishEngine(StockfishFlavor.variant);
+      case ChessEnginePref.sf16:
+        return StockfishEngine(StockfishFlavor.sf16);
     }
   }
 
@@ -132,7 +133,7 @@ class EvaluationService {
     await disposeEngine();
     _context = context;
     if (initOptions != null) options = initOptions;
-    _engine = _engineFactory(options.evaluationFunction);
+    _engine = _engineFactory(options.enginePref);
     _engine!.state.addListener(() {
       debugPrint('Engine state: ${_engine?.state.value}');
       if (_engine?.state.value == EngineState.initial ||
@@ -377,7 +378,7 @@ class EvaluationContext with _$EvaluationContext {
 @freezed
 class EvaluationOptions with _$EvaluationOptions {
   const factory EvaluationOptions({
-    required EvaluationFunctionPref evaluationFunction,
+    required ChessEnginePref enginePref,
     required int multiPv,
     required int cores,
     required Duration searchTime,

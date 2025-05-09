@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -24,6 +25,9 @@ class EngineSettingsScreen extends ConsumerStatefulWidget {
 
 class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
   bool _hasNNUEFiles = false;
+  Future<bool>? _downloadNNUEFilesFuture;
+
+  late final ValueListenable<double> _downloadProgress;
 
   @override
   void initState() {
@@ -31,7 +35,27 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
       _hasNNUEFiles = ref.read(evaluationServiceProvider).checkNNUEFilesExist();
     });
 
+    _downloadProgress = ref.read(evaluationServiceProvider).nnueDownloadProgress;
+    _downloadProgress.addListener(_onDownloadProgressChanged);
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _downloadProgress.removeListener(_onDownloadProgressChanged);
+    super.dispose();
+  }
+
+  Future<void> _onDownloadProgressChanged() async {
+    if (_downloadProgress.value == 1.0 && _downloadNNUEFilesFuture != null) {
+      final downloaded = await _downloadNNUEFilesFuture!;
+      if (mounted && downloaded) {
+        setState(() {
+          _hasNNUEFiles = true;
+        });
+      }
+    }
   }
 
   @override
@@ -39,63 +63,38 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Engine')),
+      appBar: AppBar(title: const Text('Chess engine')),
       body: ListView(
         children: [
           ListSection(
-            footer: const Padding(
-              padding: EdgeInsets.only(top: 8.0),
-              child: Text.rich(
-                TextSpan(
-                  text: 'Stockfish HCE',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  children: [
-                    TextSpan(
-                      text: ' is an engine using handcrafted evaluation. ',
-                      style: TextStyle(fontWeight: FontWeight.normal),
-                    ),
-                    TextSpan(
-                      text: ' Stockfish NNUE',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(
-                      text: ' is the modern engine using a neural network.',
-                      style: TextStyle(fontWeight: FontWeight.normal),
-                    ),
-                    TextSpan(
-                      text: 'The NNUE engine is stronger but downloading a 79MB file is required.',
-                      style: TextStyle(fontWeight: FontWeight.normal),
-                    ),
-                  ],
-                ),
-              ),
-            ),
             children: [
               SettingsListTile(
                 settingsLabel: const Text('Engine'),
-                settingsValue:
-                    prefs.evaluationFunction == EvaluationFunctionPref.hce
-                        ? 'Stockfish HCE'
-                        : 'Stockfish NNUE',
+                settingsValue: prefs.enginePref.label,
                 onTap: () {
                   showChoicePicker(
                     context,
-                    choices: EvaluationFunctionPref.values,
-                    selectedItem: prefs.evaluationFunction,
-                    labelBuilder:
-                        (t) => Text(
-                          t == EvaluationFunctionPref.hce ? 'Stockfish HCE' : 'Stockfish NNUE',
-                        ),
-                    onSelectedItemChanged: (EvaluationFunctionPref? value) {
+                    choices: ChessEnginePref.values,
+                    selectedItem: prefs.enginePref,
+                    labelBuilder: (ChessEnginePref t) => Text(t.label),
+                    onSelectedItemChanged: (ChessEnginePref? value) {
                       ref
                           .read(engineEvaluationPreferencesProvider.notifier)
-                          .setEvaluationFunction(value ?? EvaluationFunctionPref.nnue);
+                          .setEvaluationFunction(value ?? ChessEnginePref.sf16);
+                      if (value == ChessEnginePref.sfLatest && !_hasNNUEFiles) {
+                        setState(() {
+                          _downloadNNUEFilesFuture = ref
+                              .read(evaluationServiceProvider)
+                              .downloadNNUEFiles(inBackground: false);
+                        });
+                      }
                     },
                   );
                 },
               ),
-              if (prefs.evaluationFunction == EvaluationFunctionPref.nnue && !_hasNNUEFiles)
+              if (prefs.enginePref == ChessEnginePref.sfLatest && !_hasNNUEFiles)
                 LoadingButtonBuilder(
+                  initialFuture: _downloadNNUEFilesFuture,
                   fetchData:
                       () => ref
                           .read(evaluationServiceProvider)
@@ -105,19 +104,13 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                       trailing:
                           isLoading
                               ? AnimatedBuilder(
-                                animation: ref.read(evaluationServiceProvider).nnueDownloadProgress,
+                                animation: _downloadProgress,
                                 builder: (_, _) {
-                                  return CircularProgressIndicator(
-                                    value:
-                                        ref
-                                            .read(evaluationServiceProvider)
-                                            .nnueDownloadProgress
-                                            .value,
-                                  );
+                                  return CircularProgressIndicator(value: _downloadProgress.value);
                                 },
                               )
                               : const Icon(Icons.download),
-                      title: const Text('Download NNUE files'),
+                      title: Text(isLoading ? 'Downloading NNUE files' : 'Download NNUE files'),
                       subtitle: const Text('79MB'),
                       enabled: !isLoading,
                       onTap: () async {
@@ -131,7 +124,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                     );
                   },
                 )
-              else if (_hasNNUEFiles)
+              else if (prefs.enginePref == ChessEnginePref.sfLatest && _hasNNUEFiles)
                 ListTile(
                   trailing: const Icon(Icons.check),
                   title: const Text('NNUE files downloaded'),
