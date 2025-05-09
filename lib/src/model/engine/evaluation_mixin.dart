@@ -176,17 +176,19 @@ mixin EngineEvaluationMixin {
   void requestEval({bool goDeeper = false}) {
     if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
 
+    final delayLocalEngine =
+        evaluationState.alwaysRequestCloudEval &&
+        evaluationPrefs.engineSearchTime != kMaxEngineSearchTime;
+
     _evalRequestDebounce(() {
-      if (evaluationPrefs.engineSearchTime != kMaxEngineSearchTime) {
-        _sendEvalGetEvent();
-      }
-      if (evaluationPrefs.engineSearchTime == kMaxEngineSearchTime ||
-          !evaluationState.alwaysRequestCloudEval) {
+      _sendEvalGetEvent();
+
+      if (!delayLocalEngine) {
         _startEngineEval(goDeeper);
       }
     });
 
-    if (evaluationState.alwaysRequestCloudEval) {
+    if (delayLocalEngine) {
       _localEngineAfterDelayDebounce(() {
         _startEngineEval(goDeeper);
       });
@@ -257,6 +259,7 @@ mixin EngineEvaluationMixin {
 
   void _sendEvalGetEvent() {
     if (!evaluationState.isEngineAvailable(evaluationPrefs)) return;
+    if (evaluationPrefs.engineSearchTime == kMaxEngineSearchTime) return;
     if (!_canCloudEval()) return;
     final curPosition = evaluationState.currentPosition;
     if (curPosition == null) return;
@@ -290,18 +293,16 @@ mixin EngineEvaluationMixin {
           bool isSameEvalString = true;
           positionTree.updateAt(work.path, (node) {
             final nodeEval = node.eval;
-            // if the search time is set to kMaxEngineSearchTime (infinity), we don't want the cloud eval
-            // even if it is deeper
-            if (nodeEval is CloudEval && work.searchTime != kMaxEngineSearchTime) {
+            if (nodeEval is CloudEval) {
               if (nodeEval.depth >= eval.depth) {
-                if (work.isDeeper != true) {
+                if (work.isDeeper != true && work.searchTime != kMaxEngineSearchTime) {
                   _evaluationService?.stop();
                 }
                 return;
               }
             } else if (nodeEval is LocalEval) {
               if (nodeEval.isBetter(eval)) {
-                if (work.isDeeper != true) {
+                if (work.isDeeper != true && work.searchTime != kMaxEngineSearchTime) {
                   _evaluationService?.stop();
                 }
                 return;
