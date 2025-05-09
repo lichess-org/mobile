@@ -337,17 +337,14 @@ class PuzzleHistoryWidget extends ConsumerWidget {
             isTablet ? _kNumberOfHistoryItemsOnTablet : _kNumberOfHistoryItemsOnHandset;
 
         return ListSection(
+          backgroundColor: Colors.transparent,
+          clipBehavior: Clip.none,
           header: showHeader ? Text(context.l10n.puzzleHistory) : null,
           onHeaderTap:
               showHeader
                   ? () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute(context))
                   : null,
-          children: [
-            Padding(
-              padding: Styles.horizontalBodyPadding,
-              child: PuzzleHistoryPreview(recentActivity.take(maxItems).toIList(), maxRows: 5),
-            ),
-          ],
+          children: [PuzzleHistoryPreview(recentActivity.take(maxItems).toIList(), maxRows: 5)],
         );
       },
       error: (e, s) {
