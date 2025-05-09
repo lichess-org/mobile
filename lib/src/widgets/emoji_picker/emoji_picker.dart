@@ -256,23 +256,23 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
   IconData categoryIcon(String categoryId) {
     switch (categoryId) {
       case 'smileys':
-        return Icons.emoji_emotions;
+        return Icons.emoji_emotions_outlined;
       case 'people':
-        return Icons.tag_faces;
+        return Icons.tag_faces_outlined;
       case 'nature':
-        return Icons.eco;
+        return Icons.park_outlined;
       case 'food-drink':
-        return Icons.fastfood;
+        return Icons.lunch_dining_outlined;
       case 'activity':
-        return Icons.directions_run;
+        return Icons.sports_basketball_outlined;
       case 'travel-places':
-        return Icons.location_city;
+        return Icons.directions_car_outlined;
       case 'objects':
-        return Icons.lightbulb;
+        return Icons.lightbulb_outlined;
       case 'symbols':
-        return Icons.emoji_symbols;
+        return Icons.emoji_symbols_outlined;
       default:
-        return Icons.emoji_emotions;
+        return Icons.emoji_emotions_outlined;
     }
   }
 }
@@ -343,7 +343,7 @@ class EmojiSectionHeader extends StatelessWidget {
       height: 28,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       width: double.infinity,
-      color: Theme.of(context).colorScheme.surfaceContainer,
+      color: Theme.of(context).colorScheme.surfaceContainer.withValues(alpha: 1.0),
       child: Text(category.name, style: Theme.of(context).textTheme.titleMedium),
     );
   }
@@ -374,7 +374,7 @@ class _EmojiSearchBarState extends State<EmojiSearchBar> {
     return Container(
       height: 48,
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-      color: Theme.of(context).colorScheme.surfaceContainer,
+      color: Theme.of(context).colorScheme.surfaceContainer.withValues(alpha: 1.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
