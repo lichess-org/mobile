@@ -19,6 +19,7 @@ class ListSection extends StatelessWidget {
     this.leadingIndent,
     this.dense = false,
     this.materialFilledCard = false,
+    this.clipBehavior = Clip.hardEdge,
     this.backgroundColor,
   }) : _isLoading = false;
 
@@ -35,6 +36,7 @@ class ListSection extends StatelessWidget {
        dense = false,
        leadingIndent = null,
        materialFilledCard = false,
+       clipBehavior = Clip.hardEdge,
        backgroundColor = null,
        _isLoading = true;
 
@@ -64,6 +66,8 @@ class ListSection extends StatelessWidget {
   /// Whether the card should have a filled background.
   final bool materialFilledCard;
 
+  final Clip clipBehavior;
+
   /// Use it to set [ListTileTheme.dense] property.
   final bool dense;
 
@@ -82,7 +86,7 @@ class ListSection extends StatelessWidget {
               ? Column(
                 children: [
                   (materialFilledCard == true ? Card.filled : Card.new)(
-                    clipBehavior: Clip.hardEdge,
+                    clipBehavior: clipBehavior,
                     margin: margin ?? Styles.bodySectionPadding,
                     color: backgroundColor,
                     child: Column(
@@ -130,7 +134,7 @@ class ListSection extends StatelessWidget {
                         trailing: headerTrailing,
                       ),
                     (materialFilledCard ? Card.filled : Card.new)(
-                      clipBehavior: Clip.hardEdge,
+                      clipBehavior: clipBehavior,
                       color: backgroundColor,
                       margin: EdgeInsets.zero,
                       child: Column(
