@@ -186,7 +186,6 @@ class _BodyState extends ConsumerState<_Body> {
       children: [
         Expanded(
           child: SafeArea(
-            bottom: false,
             child: BoardTable(
               orientation: isBoardTurned ? youAre!.opposite : youAre!,
               lastMove: game.moveAt(stepCursor) as NormalMove?,
@@ -213,93 +212,93 @@ class _BodyState extends ConsumerState<_Body> {
               onSelectMove: (moveIndex) {
                 // ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
               },
-            ),
-          ),
-        ),
-        BottomBar(
-          children: [
-            BottomBarButton(
-              label: context.l10n.flipBoard,
-              onTap: () {
-                setState(() {
-                  isBoardTurned = !isBoardTurned;
-                });
-              },
-              icon: CupertinoIcons.arrow_2_squarepath,
-            ),
-            BottomBarButton(
-              label: context.l10n.analysis,
-              onTap: () {
-                Navigator.of(context).push(
-                  AnalysisScreen.buildRoute(
-                    context,
-                    AnalysisOptions(
-                      orientation: game.youAre!,
-                      standalone: (
-                        pgn: game.makePgn(),
-                        isComputerAnalysisAllowed: false,
-                        variant: game.variant,
-                      ),
-                      initialMoveCursor: stepCursor,
+              userActionsBar: BottomBar(
+                children: [
+                  BottomBarButton(
+                    label: context.l10n.flipBoard,
+                    onTap: () {
+                      setState(() {
+                        isBoardTurned = !isBoardTurned;
+                      });
+                    },
+                    icon: CupertinoIcons.arrow_2_squarepath,
+                  ),
+                  BottomBarButton(
+                    label: context.l10n.analysis,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        AnalysisScreen.buildRoute(
+                          context,
+                          AnalysisOptions(
+                            orientation: game.youAre!,
+                            standalone: (
+                              pgn: game.makePgn(),
+                              isComputerAnalysisAllowed: false,
+                              variant: game.variant,
+                            ),
+                            initialMoveCursor: stepCursor,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: Icons.biotech,
+                  ),
+                  BottomBarButton(
+                    label: 'Go to the next game',
+                    icon: Icons.skip_next,
+                    onTap: offlineOngoingGames.maybeWhen(
+                      data: (games) {
+                        final nextTurn = games
+                            .whereNot((g) => g.$2.id == game.id)
+                            .firstWhereOrNull((g) => g.$2.isMyTurn);
+                        return nextTurn != null
+                            ? () {
+                              widget.onGameChanged(nextTurn);
+                            }
+                            : null;
+                      },
+                      orElse: () => null,
                     ),
                   ),
-                );
-              },
-              icon: Icons.biotech,
-            ),
-            BottomBarButton(
-              label: 'Go to the next game',
-              icon: Icons.skip_next,
-              onTap: offlineOngoingGames.maybeWhen(
-                data: (games) {
-                  final nextTurn = games
-                      .whereNot((g) => g.$2.id == game.id)
-                      .firstWhereOrNull((g) => g.$2.isMyTurn);
-                  return nextTurn != null
-                      ? () {
-                        widget.onGameChanged(nextTurn);
-                      }
-                      : null;
-                },
-                orElse: () => null,
+                  BottomBarButton(
+                    label: context.l10n.mobileCorrespondenceClearSavedMove,
+                    onTap:
+                        game.registeredMoveAtPgn != null
+                            ? () {
+                              showConfirmDialog<void>(
+                                context,
+                                title: Text(context.l10n.mobileCorrespondenceClearSavedMove),
+                                isDestructiveAction: true,
+                                onConfirm: () => deleteRegisteredMove(),
+                              );
+                            }
+                            : null,
+                    icon: Icons.save,
+                  ),
+                  RepeatButton(
+                    onLongPress: canGoBackward ? () => moveBackward() : null,
+                    child: BottomBarButton(
+                      onTap: canGoBackward ? () => moveBackward() : null,
+                      label: 'Previous',
+                      icon: CupertinoIcons.chevron_back,
+                      showTooltip: false,
+                    ),
+                  ),
+                  Expanded(
+                    child: RepeatButton(
+                      onLongPress: canGoForward ? () => moveForward() : null,
+                      child: BottomBarButton(
+                        onTap: canGoForward ? () => moveForward() : null,
+                        label: context.l10n.next,
+                        icon: CupertinoIcons.chevron_forward,
+                        showTooltip: false,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            BottomBarButton(
-              label: context.l10n.mobileCorrespondenceClearSavedMove,
-              onTap:
-                  game.registeredMoveAtPgn != null
-                      ? () {
-                        showConfirmDialog<void>(
-                          context,
-                          title: Text(context.l10n.mobileCorrespondenceClearSavedMove),
-                          isDestructiveAction: true,
-                          onConfirm: () => deleteRegisteredMove(),
-                        );
-                      }
-                      : null,
-              icon: Icons.save,
-            ),
-            RepeatButton(
-              onLongPress: canGoBackward ? () => moveBackward() : null,
-              child: BottomBarButton(
-                onTap: canGoBackward ? () => moveBackward() : null,
-                label: 'Previous',
-                icon: CupertinoIcons.chevron_back,
-                showTooltip: false,
-              ),
-            ),
-            Expanded(
-              child: RepeatButton(
-                onLongPress: canGoForward ? () => moveForward() : null,
-                child: BottomBarButton(
-                  onTap: canGoForward ? () => moveForward() : null,
-                  label: context.l10n.next,
-                  icon: CupertinoIcons.chevron_forward,
-                  showTooltip: false,
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ],
     );

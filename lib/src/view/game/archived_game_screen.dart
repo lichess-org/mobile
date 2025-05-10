@@ -230,7 +230,6 @@ class _BodyState extends ConsumerState<_Body> {
         ],
       ),
       body: SafeArea(
-        bottom: false,
         child: Column(
           children: [
             Expanded(
@@ -241,7 +240,6 @@ class _BodyState extends ConsumerState<_Body> {
                 error: widget.error,
               ),
             ),
-            _BottomBar(archivedGameData: widget.gameData, orientation: widget.orientation),
           ],
         ),
       ),
@@ -310,6 +308,7 @@ class _BoardBody extends ConsumerWidget {
       orientation: (isBoardTurned ? orientation.opposite : orientation),
       fen: initialCursor == null ? gameData.lastFen ?? kEmptyBoardFEN : kEmptyBoardFEN,
       moves: const [],
+      userActionsBar: _BottomBar(archivedGameData: archivedGameData, orientation: orientation),
     );
 
     return gameCursor.when(
@@ -351,6 +350,7 @@ class _BoardBody extends ConsumerWidget {
           onSelectMove: (moveIndex) {
             ref.read(gameCursorProvider(gameData.id).notifier).cursorAt(moveIndex);
           },
+          userActionsBar: _BottomBar(archivedGameData: archivedGameData, orientation: orientation),
         );
       },
       loading: () => loadingBoard,
