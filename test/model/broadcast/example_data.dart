@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 const Map<(BroadcastTournamentId, BroadcastRoundId), String> broadcastRoundMockResponses = {
   (BroadcastTournamentId('RAIoMC7L'), BroadcastRoundId('6VuqTjes')): '''
 {
+  "socketVersion":1,
   "round": {
     "id": "6VuqTjes",
     "name": "Round 4.1",
