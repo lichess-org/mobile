@@ -59,17 +59,14 @@ class CreateGameOptions extends ConsumerWidget {
         _Section(
           children: [
             _CreateGamePlatformButton(
-              onTap:
-                  isOnline
-                      ? () {
-                        // Pops the play bottom sheet
-                        Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                        Navigator.of(
-                          context,
-                          rootNavigator: true,
-                        ).push(OverTheBoardScreen.buildRoute(context));
-                      }
-                      : null,
+              onTap: () {
+                // Pops the play bottom sheet
+                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(OverTheBoardScreen.buildRoute(context));
+              },
               icon: Icons.table_restaurant_outlined,
               label: 'Over the board',
             ),
