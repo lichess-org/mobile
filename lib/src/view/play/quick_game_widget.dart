@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/view/play/common_play_widgets.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:material_symbols_icons/symbols.dart';
 
 class QuickGameWidget extends ConsumerWidget {
   const QuickGameWidget();
