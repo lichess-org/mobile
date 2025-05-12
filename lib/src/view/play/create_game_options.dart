@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/correspondence_challenges_screen.dart';
@@ -20,12 +18,9 @@ class CreateGameOptions extends ConsumerWidget {
 
     return Column(
       children: [
-        const Card.filled(
-          margin: Styles.bodySectionPadding,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: QuickGameButton(),
-          ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: QuickGameButton(),
         ),
         _Section(
           children: [
@@ -53,7 +48,7 @@ class CreateGameOptions extends ConsumerWidget {
                   rootNavigator: true,
                 ).push(OverTheBoardScreen.buildRoute(context));
               },
-              icon: LichessIcons.chess_board,
+              icon: Icons.table_restaurant_outlined,
               label: 'Over the board',
             ),
           ],

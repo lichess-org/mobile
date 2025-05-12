@@ -52,12 +52,12 @@ class GameSeek with _$GameSeek {
   factory GameSeek.custom(GameSetupPrefs setup, User? account) {
     return GameSeek(
       clock: (
-        Duration(seconds: setup.customTimeSeconds),
-        Duration(seconds: setup.customIncrementSeconds),
+        Duration(seconds: setup.timeIncrement.time),
+        Duration(seconds: setup.timeIncrement.increment),
       ),
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      ratingRange: account != null ? setup.ratingRangeFromCustom(account) : null,
+      ratingRange: account != null ? setup.realTimeRatingRange(account) : null,
     );
   }
 
@@ -67,7 +67,7 @@ class GameSeek with _$GameSeek {
       days: setup.customDaysPerTurn,
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      ratingRange: account != null ? setup.ratingRangeFromCustom(account) : null,
+      ratingRange: account != null ? setup.correspondenceRatingRange(account) : null,
     );
   }
 

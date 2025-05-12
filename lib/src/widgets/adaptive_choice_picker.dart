@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 /// Otherwise, it shows a [CupertinoPicker].
 Future<void> showChoicePicker<T>(
   BuildContext context, {
+  Widget? title,
   required List<T> choices,
   required T selectedItem,
   required Widget Function(T choice) labelBuilder,
@@ -21,6 +22,7 @@ Future<void> showChoicePicker<T>(
         context: context,
         builder: (context) {
           return AlertDialog(
+            title: title,
             clipBehavior: Clip.hardEdge,
             contentPadding: const EdgeInsets.only(top: 16.0, bottom: 24.0, left: 0, right: 0),
             scrollable: true,
@@ -65,6 +67,7 @@ Future<void> showChoicePicker<T>(
           context: context,
           builder: (context) {
             return CupertinoActionSheet(
+              title: title,
               actions:
                   choices.map((value) {
                     return CupertinoActionSheetAction(

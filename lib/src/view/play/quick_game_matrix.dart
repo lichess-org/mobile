@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
-import 'package:lichess_mobile/src/view/play/custom_game_bottom_sheet.dart';
+import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/playban.dart';
 
 const _kMatrixSpacing = 8.0;
@@ -127,7 +127,7 @@ class _SectionChoices extends ConsumerWidget {
                             useRootNavigator: true,
                             isScrollControlled: true,
                             builder: (context) {
-                              return const CustomGameBottomSheet();
+                              return const PlayBottomSheet();
                             },
                           );
                         }

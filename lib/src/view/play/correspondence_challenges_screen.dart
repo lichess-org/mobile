@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
-import 'package:lichess_mobile/src/view/play/custom_game_bottom_sheet.dart';
+import 'package:lichess_mobile/src/view/play/create_correspondence_game_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -93,7 +93,7 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return const CustomGameBottomSheet(timeControl: TimeControl.correspondence);
+                        return const CreateCorrespondenceGameBottomSheet();
                       },
                     );
                   },
