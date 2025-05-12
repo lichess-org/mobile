@@ -29,7 +29,7 @@ class GameSetupPreferences extends _$GameSetupPreferences
     return fetch();
   }
 
-  Future<void> setQuickPairingTimeIncrement(TimeIncrement timeInc) {
+  Future<void> setTimeIncrement(TimeIncrement timeInc) {
     return save(state.copyWith(timeIncrement: timeInc));
   }
 

@@ -40,6 +40,8 @@ class TimeIncrement implements Comparable<TimeIncrement> {
     }
   }
 
+  bool get isCustom => presets.contains(this) == false;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -58,6 +60,25 @@ class TimeIncrement implements Comparable<TimeIncrement> {
   int compareTo(TimeIncrement other) {
     return estimatedDuration.compareTo(other.estimatedDuration);
   }
+
+  static const presets = [
+    TimeIncrement(0, 1),
+    TimeIncrement(60, 0),
+    TimeIncrement(60, 1),
+    TimeIncrement(120, 1),
+    TimeIncrement(180, 0),
+    TimeIncrement(180, 2),
+    TimeIncrement(300, 0),
+    TimeIncrement(300, 3),
+    TimeIncrement(600, 0),
+    TimeIncrement(600, 5),
+    TimeIncrement(900, 0),
+    TimeIncrement(900, 10),
+    TimeIncrement(1500, 0),
+    TimeIncrement(1800, 0),
+    TimeIncrement(1800, 20),
+    TimeIncrement(3600, 0),
+  ];
 }
 
 /// Displays a chess clock time in minutes from an amount of seconds

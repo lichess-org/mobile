@@ -67,7 +67,6 @@ class ClockSettings extends ConsumerWidget {
                           showAdaptiveBottomSheet<void>(
                             context: context,
                             isScrollControlled: true,
-                            showDragHandle: true,
                             constraints: BoxConstraints(
                               maxHeight: screenHeight - (screenHeight / 10),
                             ),
@@ -77,7 +76,7 @@ class ClockSettings extends ConsumerWidget {
                               );
                               return TimeControlModal(
                                 excludeUltraBullet: true,
-                                value: TimeIncrement(
+                                timeIncrement: TimeIncrement(
                                   options.whiteTime.inSeconds,
                                   options.whiteIncrement.inSeconds,
                                 ),
