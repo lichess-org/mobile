@@ -156,8 +156,7 @@ class QuickGameWidget extends ConsumerWidget {
               ),
             ],
           ),
-        FilledButton.icon(
-          icon: const Icon(Symbols.chess_pawn_rounded),
+        FilledButton(
           onPressed:
               isOnline && !isPlayban
                   ? () {
@@ -171,7 +170,7 @@ class QuickGameWidget extends ConsumerWidget {
                     );
                   }
                   : null,
-          label: Text(context.l10n.play),
+          child: Text(context.l10n.createAGame),
         ),
       ],
     );
