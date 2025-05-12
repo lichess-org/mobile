@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class ChallengeRequestsScreen extends StatelessWidget {
   const ChallengeRequestsScreen({super.key});
@@ -32,70 +31,31 @@ class ChallengeRequestsScreen extends StatelessWidget {
   }
 }
 
-class ChallengeRequestsWidget extends ConsumerWidget {
-  const ChallengeRequestsWidget({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
-    if (session == null) {
-      return const SizedBox.shrink();
-    }
-
-    final challenges = ref.watch(challengesProvider);
-    switch (challenges) {
-      case AsyncData(:final value):
-        final list = value.inward.addAll(value.outward);
-        if (list.isEmpty) {
-          return const SizedBox.shrink();
-        }
-        return ListSection(
-          header: Text(context.l10n.preferencesNotifyChallenge),
-          onHeaderTap:
-              list.length > 5
-                  ? () {
-                    Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
-                  }
-                  : null,
-          hasLeading: true,
-          children: [
-            for (final challenge in list.take(5))
-              if (challenge.challenger?.user != null)
-                _ChallengeListItem(
-                  challenge: challenge,
-                  challengerUser: challenge.challenger!.user,
-                  session: session,
-                ),
-          ],
-        );
-      case AsyncError():
-        return const Padding(
-          padding: Styles.bodySectionPadding,
-          child: Text('Error loading challenges.'),
-        );
-      case _:
-        return Shimmer(
-          child: ShimmerLoading(
-            isLoading: true,
-            child: ListSection.loading(itemsNumber: 5, header: true),
-          ),
-        );
-    }
-  }
-}
-
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final challenges = ref.watch(challengesProvider);
+    final challengesAsync = ref.watch(challengesProvider);
     final session = ref.watch(authSessionProvider);
 
-    return challenges.when(
-      data: (challenges) {
+    switch (challengesAsync) {
+      case AsyncError():
+        return const SafeArea(child: Center(child: Text('Error loading challenges.')));
+      case AsyncData(value: final challenges):
         final list = challenges.inward.addAll(challenges.outward);
 
         if (list.isEmpty) {
-          return Center(child: Text(context.l10n.nothingToSeeHere));
+          return SafeArea(
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.info_outline, size: 30),
+                  const SizedBox(width: 8),
+                  Text(context.l10n.noChallenges, style: TextTheme.of(context).headlineSmall),
+                ],
+              ),
+            ),
+          );
         }
 
         return ListView.separated(
@@ -111,12 +71,9 @@ class _Body extends ConsumerWidget {
             return _ChallengeListItem(challenge: challenge, challengerUser: user, session: session);
           },
         );
-      },
-      loading: () {
-        return const Center(child: CircularProgressIndicator.adaptive());
-      },
-      error: (error, stack) => const Center(child: Text('Error loading challenges')),
-    );
+      case _:
+        return const SafeArea(child: Center(child: CircularProgressIndicator.adaptive()));
+    }
   }
 }
 

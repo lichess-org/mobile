@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
-import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
+import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/user/perf_cards.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/user/user_activity.dart';
@@ -31,6 +31,31 @@ class UserScreen extends ConsumerStatefulWidget {
 
   static Route<dynamic> buildRoute(BuildContext context, LightUser user) {
     return buildScreenRoute(context, screen: UserScreen(user: user));
+  }
+
+  static void challengeUser(User user, {required BuildContext context, required WidgetRef ref}) {
+    final session = ref.read(authSessionProvider);
+    if (session == null) {
+      showSnackBar(
+        context,
+        context.l10n.challengeRegisterToSendChallenges,
+        type: SnackBarType.error,
+      );
+      return;
+    }
+    final isOddBot = oddBots.contains(user.lightUser.name.toLowerCase());
+    if (isOddBot) {
+      Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(context, user.lightUser));
+    } else {
+      showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        useRootNavigator: true,
+        builder: (context) {
+          return CreateChallengeBottomSheet(user.lightUser);
+        },
+      );
+    }
   }
 
   @override
@@ -135,14 +160,7 @@ class _UserProfileListView extends ConsumerWidget {
                 ListTile(
                   title: Text(context.l10n.challengeChallengeToPlay),
                   leading: const Icon(LichessIcons.crossed_swords),
-                  onTap: () {
-                    final isOddBot = oddBots.contains(user.lightUser.name.toLowerCase());
-                    Navigator.of(context).push(
-                      isOddBot
-                          ? ChallengeOddBotsScreen.buildRoute(context, user.lightUser)
-                          : CreateChallengeScreen.buildRoute(context, user.lightUser),
-                    );
-                  },
+                  onTap: () => UserScreen.challengeUser(user, context: context, ref: ref),
                 ),
               if (user.followable == true && user.following != true)
                 ListTile(

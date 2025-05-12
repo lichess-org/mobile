@@ -699,35 +699,28 @@ class _ChallengeScreenButton extends ConsumerWidget {
     final challenges = ref.watch(challengesProvider);
 
     final inwardCount = challenges.valueOrNull?.inward.length ?? 0;
-    final outwardCount = challenges.valueOrNull?.outward.length ?? 0;
 
-    if (inwardCount == 0 && outwardCount == 0) {
-      return const SizedBox.shrink();
-    }
-
-    return connectivity.maybeWhen(
-      data:
-          (connectivity) => SemanticIconButton(
-            icon: Badge.count(
-              count: inwardCount,
-              isLabelVisible: inwardCount > 0,
-              child: const Icon(LichessIcons.crossed_swords, size: 18.0),
-            ),
-            semanticsLabel: context.l10n.preferencesNotifyChallenge,
-            onPressed:
-                !connectivity.isOnline
-                    ? null
-                    : () {
-                      ref.invalidate(challengesProvider);
-                      Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
-                    },
-          ),
-      orElse:
-          () => SemanticIconButton(
-            icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
-            semanticsLabel: context.l10n.preferencesNotifyChallenge,
-            onPressed: null,
-          ),
-    );
+    return switch (connectivity) {
+      AsyncData(:final value) => SemanticIconButton(
+        icon: Badge.count(
+          count: inwardCount,
+          isLabelVisible: inwardCount > 0,
+          child: const Icon(LichessIcons.crossed_swords, size: 18.0),
+        ),
+        semanticsLabel: context.l10n.preferencesNotifyChallenge,
+        onPressed:
+            !value.isOnline
+                ? null
+                : () {
+                  ref.invalidate(challengesProvider);
+                  Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
+                },
+      ),
+      _ => SemanticIconButton(
+        icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
+        semanticsLabel: context.l10n.preferencesNotifyChallenge,
+        onPressed: null,
+      ),
+    };
   }
 }

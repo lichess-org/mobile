@@ -104,13 +104,14 @@ class PlatformScaffold extends StatelessWidget {
 }
 
 class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
-  PlatformAppBar({super.key, this.leading, this.title, this.actions, this.bottom})
+  PlatformAppBar({super.key, this.leading, this.title, this.actions, this.bottom, this.centerTitle})
     : preferredSize = _PreferredAppBarSize(kToolbarHeight, bottom?.preferredSize.height);
 
   final Widget? leading;
   final Widget? title;
   final List<Widget>? actions;
   final PreferredSizeWidget? bottom;
+  final bool? centerTitle;
 
   @override
   final Size preferredSize;
@@ -123,7 +124,7 @@ class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: leading,
       actions: actions,
       bottom: bottom,
-      centerTitle: isIOS,
+      centerTitle: centerTitle,
     );
 
     return isIOS

@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
-import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
+import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -157,11 +157,18 @@ void _challengeBot(User bot, {required BuildContext context, required WidgetRef 
     return;
   }
   final isOddBot = oddBots.contains(bot.lightUser.name.toLowerCase());
-  Navigator.of(context).push(
-    isOddBot
-        ? ChallengeOddBotsScreen.buildRoute(context, bot.lightUser)
-        : CreateChallengeScreen.buildRoute(context, bot.lightUser),
-  );
+  if (isOddBot) {
+    Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(context, bot.lightUser));
+  } else {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      builder: (context) {
+        return CreateChallengeBottomSheet(bot.lightUser);
+      },
+    );
+  }
 }
 
 class _BotRatings extends StatelessWidget {
