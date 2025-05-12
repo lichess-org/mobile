@@ -32,6 +32,9 @@ sealed class ClientEval extends Eval {
   /// The depth of the search.
   int get depth;
 
+  /// The number of nodes searched.
+  int get nodes;
+
   /// The principal variations.
   IList<PvData> get pvs;
 
@@ -53,8 +56,12 @@ sealed class ClientEval extends Eval {
 class CloudEval with _$CloudEval implements ClientEval {
   CloudEval._();
 
-  factory CloudEval({required int depth, required Position position, required IList<PvData> pvs}) =
-      _CloudEval;
+  factory CloudEval({
+    required int depth,
+    required int nodes,
+    required Position position,
+    required IList<PvData> pvs,
+  }) = _CloudEval;
 
   @override
   String get evalString => _evalString(cp, mate);

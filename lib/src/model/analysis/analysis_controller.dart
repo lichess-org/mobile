@@ -711,7 +711,7 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
   }) = _AnalysisState;
 
   @override
-  bool get alwaysRequestCloudEval => currentPosition.ply < 15;
+  bool get alwaysRequestCloudEval => false;
 
   /// Whether the analysis is for a lichess game.
   bool get isLichessGameAnalysis => gameId != null;

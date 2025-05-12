@@ -231,56 +231,51 @@ class _EnginePopup extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final evalState = ref.watch(engineEvaluationProvider);
-    final (state: engineState, currentWork: work, engineName: _, eval: _) = evalState;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        switch (eval) {
-          LocalEval() => _StockfishInfo(evalState, eval),
-          CloudEval(:final depth) => ListTile(
-            title: Text(context.l10n.cloudAnalysis),
-            subtitle: Text(context.l10n.depthX('$depth')),
-          ),
-        },
-        if (goDeeper != null &&
-            engineState == EngineState.idle &&
-            (work == null || work.isDeeper != true))
-          ListTile(
-            leading: const SizedBox(
-              width: 44,
-              child: Center(child: Icon(Icons.add_circle_outlined)),
-            ),
-            title: Text(context.l10n.goDeeper),
-            onTap: goDeeper,
-          ),
-      ],
-    );
-  }
-}
+    final (state: engineState, currentWork: work, engineName: engineName, eval: evalStateEval) =
+        evalState;
+    final bool canGoDeeper =
+        goDeeper != null &&
+        engineState == EngineState.idle &&
+        (work == null || work.isDeeper != true);
 
-class _StockfishInfo extends StatelessWidget {
-  const _StockfishInfo(this.evalState, this.defaultEval);
+    final currentEval = engineState == EngineState.computing ? evalStateEval ?? eval : eval;
 
-  final EngineEvaluationState evalState;
-  final ClientEval? defaultEval;
+    if (currentEval is CloudEval) {
+      return ListTile(
+        contentPadding: const EdgeInsets.only(left: 16.0),
+        title: Text(context.l10n.cloudAnalysis),
+        subtitle: Text(context.l10n.depthX('${eval.depth}')),
+        trailing:
+            canGoDeeper
+                ? IconButton(
+                  icon: const Icon(Icons.add_circle_outlined),
+                  onPressed: goDeeper,
+                  tooltip: context.l10n.goDeeper,
+                )
+                : null,
+      );
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    final (engineName: engineName, eval: eval, state: engineState, currentWork: _) = evalState;
-
-    final currentEval = eval ?? defaultEval;
-
-    final knps = engineState == EngineState.computing ? ', ${eval?.knps.round()}kn/s' : '';
-    final depth = currentEval?.depth ?? 0;
+    final knps = engineState == EngineState.computing ? ', ${evalStateEval?.knps.round()}kn/s' : '';
+    final depth = currentEval.depth;
 
     // remove Fairy-Stockfish version from engine name
     final fixedEngineName =
         engineName.startsWith('Fairy-Stockfish') ? 'Fairy-Stockfish' : engineName;
 
     return ListTile(
+      contentPadding: const EdgeInsets.only(left: 16.0),
       leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
       title: Text(fixedEngineName),
       subtitle: Text(context.l10n.depthX('$depth$knps')),
+      trailing:
+          canGoDeeper
+              ? IconButton(
+                icon: const Icon(Icons.add_circle_outlined),
+                onPressed: goDeeper,
+                tooltip: context.l10n.goDeeper,
+              )
+              : null,
     );
   }
 }

@@ -100,6 +100,7 @@ Future<void> makeEngineTestApp(
                     't': 'evalHit',
                     'd': {
                       'path': data['path'],
+                      'knodes': '119234',
                       'depth': '36',
                       'pvs': [
                         for (var i = 0; i < max(1, numEvalLines); i++)
