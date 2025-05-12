@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/correspondence_challenges_screen.dart';
-import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
+import 'package:lichess_mobile/src/view/play/quick_game_widget.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 /// A widget that displays the options for creating a game.
@@ -20,7 +22,7 @@ class CreateGameOptions extends ConsumerWidget {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: QuickGameButton(),
+          child: QuickGameWidget(),
         ),
         _Section(
           children: [
@@ -40,14 +42,34 @@ class CreateGameOptions extends ConsumerWidget {
               label: context.l10n.correspondence,
             ),
             _CreateGamePlatformButton(
-              onTap: () {
-                // Pops the play bottom sheet
-                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(OverTheBoardScreen.buildRoute(context));
-              },
+              onTap:
+                  isOnline
+                      ? () {
+                        // Pops the play bottom sheet
+                        Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+
+                        Navigator.of(context).push(TournamentListScreen.buildRoute(context));
+                      }
+                      : null,
+              icon: LichessIcons.tournament_cup,
+              label: context.l10n.arenaArenaTournaments,
+            ),
+          ],
+        ),
+        _Section(
+          children: [
+            _CreateGamePlatformButton(
+              onTap:
+                  isOnline
+                      ? () {
+                        // Pops the play bottom sheet
+                        Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                        Navigator.of(
+                          context,
+                          rootNavigator: true,
+                        ).push(OverTheBoardScreen.buildRoute(context));
+                      }
+                      : null,
               icon: Icons.table_restaurant_outlined,
               label: 'Over the board',
             ),

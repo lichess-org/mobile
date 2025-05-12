@@ -14,8 +14,8 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-class QuickGameButton extends ConsumerWidget {
-  const QuickGameButton();
+class QuickGameWidget extends ConsumerWidget {
+  const QuickGameWidget();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -68,7 +68,10 @@ class QuickGameButton extends ConsumerWidget {
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Theme.of(context).dividerColor),
                 ),
-                icon: Icon(playPrefs.customVariant.icon),
+                icon:
+                    playPrefs.customVariant != Variant.standard
+                        ? Icon(playPrefs.customVariant.icon)
+                        : null,
                 label: Text(playPrefs.customVariant.label),
                 onPressed: () {
                   showChoicePicker(
