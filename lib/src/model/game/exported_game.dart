@@ -54,7 +54,7 @@ class ExportedGame with _$ExportedGame, BaseGame, IndexableSteps implements Base
     IList<Duration>? clocks,
   }) = _ExportedGame;
 
-  /// Create an archived game from the lichess api.
+  /// Create an exported game from the lichess api.
   ///
   /// Currently, those endpoints are supported:
   /// - GET /game/export/:id
@@ -62,7 +62,7 @@ class ExportedGame with _$ExportedGame, BaseGame, IndexableSteps implements Base
     return _archivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
   }
 
-  /// Create an archived game from a local storage JSON.
+  /// Create an exported game from a local storage JSON.
   factory ExportedGame.fromJson(Map<String, dynamic> json) => _$ExportedGameFromJson(json);
 }
 

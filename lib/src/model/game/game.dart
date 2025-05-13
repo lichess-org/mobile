@@ -23,7 +23,7 @@ part 'game.g.dart';
 
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
-/// Common interface for playable and archived games.
+/// Common interface for playable and exported games.
 abstract mixin class BaseGame {
   GameId get id;
 
