@@ -158,7 +158,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             },
             label: Text(context.l10n.backToTournament, textAlign: TextAlign.center),
           ),
-          FilledButton.icon(
+          FilledButton.tonalIcon(
             icon: const Icon(Icons.pause),
             onPressed: () {
               // Pause the tournament
