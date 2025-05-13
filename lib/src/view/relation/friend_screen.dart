@@ -136,52 +136,31 @@ class _OnlineFriendListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final (:user, :playing) = onlineFriend;
 
-    return Slidable(
-      dragStartBehavior: DragStartBehavior.start,
-      endActionPane: ActionPane(
-        motion: const StretchMotion(),
-        extentRatio: 0.5,
-        children: [
-          SlidableAction(
-            onPressed: (BuildContext context) {
-              Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(TvScreen.buildRoute(context, user: user));
-            },
-            backgroundColor: ColorScheme.of(context).tertiaryContainer,
-            foregroundColor: ColorScheme.of(context).onTertiaryContainer,
-            icon: Icons.live_tv_outlined,
-            label: context.l10n.watchGames,
+    return ListTile(
+      title: UserFullNameWidget(user: user),
+      trailing:
+          playing
+              ? IconButton(
+                tooltip: context.l10n.watchGames,
+                onPressed: () {
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(TvScreen.buildRoute(context, user: user));
+                },
+                icon: const Icon(Icons.live_tv),
+              )
+              : null,
+      onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
+      onLongPress:
+          () => showAdaptiveBottomSheet<void>(
+            context: context,
+            useRootNavigator: true,
+            isDismissible: true,
+            isScrollControlled: true,
+            showDragHandle: true,
+            builder: (context) => UserContextMenu(userId: user.id),
           ),
-        ],
-      ),
-      child: ListTile(
-        title: UserFullNameWidget(user: user),
-        trailing:
-            playing
-                ? IconButton(
-                  tooltip: context.l10n.watchGames,
-                  onPressed: () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(TvScreen.buildRoute(context, user: user));
-                  },
-                  icon: const Icon(Icons.live_tv),
-                )
-                : null,
-        onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
-        onLongPress:
-            () => showAdaptiveBottomSheet<void>(
-              context: context,
-              useRootNavigator: true,
-              isDismissible: true,
-              isScrollControlled: true,
-              showDragHandle: true,
-              builder: (context) => UserContextMenu(userId: user.id),
-            ),
-      ),
     );
   }
 }
