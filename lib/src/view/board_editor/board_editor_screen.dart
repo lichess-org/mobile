@@ -285,6 +285,12 @@ class _BottomBar extends ConsumerWidget {
                 context: context,
                 actions: [
                   BottomSheetAction(
+                    makeLabel: (context) => Text(context.l10n.startPosition),
+                    onPressed: () {
+                      ref.read(editorController.notifier).loadFen(kInitialEPD);
+                    },
+                  ),
+                  BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.loadPosition),
                     onPressed: () {
                       final notifier = ref.read(editorController.notifier);
