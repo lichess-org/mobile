@@ -171,42 +171,44 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     AsyncValue<BroadcastTournament> asyncTournament,
     AsyncValue<BroadcastRoundState> asyncRound,
   ) {
-    return PlatformScaffold(
-      extendBody: Theme.of(context).platform == TargetPlatform.iOS,
-      appBar: PlatformAppBar(
-        title: AppBarTitleText(widget.broadcast.title, maxLines: 2),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(text: context.l10n.broadcastOverview),
-            Tab(text: context.l10n.broadcastBoards),
-            Tab(text: context.l10n.players),
+    return switch (asyncRound) {
+      AsyncData(value: final _) => PlatformScaffold(
+        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        appBar: PlatformAppBar(
+          title: AppBarTitleText(widget.broadcast.title, maxLines: 2),
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: <Widget>[
+              Tab(text: context.l10n.broadcastOverview),
+              Tab(text: context.l10n.broadcastBoards),
+              Tab(text: context.l10n.players),
+            ],
+          ),
+          actions: [
+            SemanticIconButton(
+              icon: const Icon(Icons.settings),
+              onPressed:
+                  () => showAdaptiveBottomSheet<void>(
+                    context: context,
+                    isDismissible: true,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    builder:
+                        (_) => _BroadcastSettingsBottomSheet(
+                          filter,
+                          onGameFilterChange: setGameFilter,
+                        ),
+                  ),
+              semanticsLabel: context.l10n.settingsSettings,
+            ),
+            SemanticIconButton(
+              icon: const PlatformShareIcon(),
+              semanticsLabel: context.l10n.studyShareAndExport,
+              onPressed: () => showBroadcastShareMenu(context, widget.broadcast),
+            ),
           ],
         ),
-        actions: [
-          SemanticIconButton(
-            icon: const Icon(Icons.settings),
-            onPressed:
-                () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  isDismissible: true,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  builder:
-                      (_) =>
-                          _BroadcastSettingsBottomSheet(filter, onGameFilterChange: setGameFilter),
-                ),
-            semanticsLabel: context.l10n.settingsSettings,
-          ),
-          SemanticIconButton(
-            icon: const PlatformShareIcon(),
-            semanticsLabel: context.l10n.studyShareAndExport,
-            onPressed: () => showBroadcastShareMenu(context, widget.broadcast),
-          ),
-        ],
-      ),
-      body: switch (asyncRound) {
-        AsyncData(value: final _) => TabBarView(
+        body: TabBarView(
           controller: _tabController,
           children: <Widget>[
             BroadcastOverviewTab(broadcast: widget.broadcast, tournamentId: _selectedTournamentId),
@@ -222,18 +224,22 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             BroadcastPlayersTab(tournamentId: _selectedTournamentId),
           ],
         ),
-        _ => const Center(child: CircularProgressIndicator.adaptive()),
-      },
-      bottomNavigationBar: switch (asyncTournament) {
-        AsyncData(:final value) => _BottomBar(
-          tournament: value,
-          roundId: _selectedRoundId ?? value.defaultRoundId,
-          setTournamentId: setTournamentId,
-          setRoundId: setRoundId,
-        ),
-        _ => const BottomBar.empty(),
-      },
-    );
+        bottomNavigationBar: switch (asyncTournament) {
+          AsyncData(:final value) => _BottomBar(
+            tournament: value,
+            roundId: _selectedRoundId ?? value.defaultRoundId,
+            setTournamentId: setTournamentId,
+            setRoundId: setRoundId,
+          ),
+          _ => const BottomBar.empty(),
+        },
+      ),
+      _ => PlatformScaffold(
+        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        appBar: PlatformAppBar(title: AppBarTitleText(widget.broadcast.title, maxLines: 2)),
+        body: const Center(child: CircularProgressIndicator.adaptive()),
+      ),
+    };
   }
 
   @override
