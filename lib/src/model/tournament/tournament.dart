@@ -45,95 +45,6 @@ typedef TournamentMe = ({int rank, GameFullId? gameId, bool? withdraw, Duration?
 const int kStandingsPageSize = 10;
 typedef StandingPage = ({int page, IList<StandingPlayer> players});
 
-extension TournamentExtension on Pick {
-  TimeIncrement asTimeIncrementOrThrow() {
-    final requiredPick = this.required();
-    return TimeIncrement(
-      requiredPick('limit').asIntOrThrow(),
-      requiredPick('increment').asIntOrThrow(),
-    );
-  }
-
-  TournamentFreq asTournamentFreqOrThrow() {
-    final value = this.required().value;
-    if (value is TournamentFreq) {
-      return value;
-    }
-    if (value is String) {
-      final freq = TournamentFreq.nameMap[value];
-      if (freq != null) return freq;
-    }
-    throw PickException("value $value at $debugParsingExit can't be casted to TournamentFreq");
-  }
-
-  IList<LightTournament> asTournamentListOrThrow() =>
-      asListOrThrow((pick) => LightTournament.fromServerJson(pick.asMapOrThrow())).toIList();
-
-  Verdict asVerdictOrThrow() {
-    final requiredPick = this.required();
-    return (
-      condition: requiredPick('condition').asStringOrThrow(),
-      ok: requiredPick('verdict').asStringOrThrow() == 'ok',
-    );
-  }
-
-  Verdicts asVerdictsOrThrow() {
-    final requiredPick = this.required();
-    return (
-      list:
-          requiredPick('list')
-              .asListOrThrow((pick) => pick.asVerdictOrThrow())
-              .where(
-                // we don't want to show the condition specific to the bot players
-                // since it makes no sense a a bot player use the app
-                (v) => v.condition != 'Bot players are not allowed',
-              )
-              .toIList(),
-      accepted: requiredPick('accepted').asBoolOrThrow(),
-    );
-  }
-
-  TournamentMe? asTournamentMeOrNull() {
-    if (value == null) return null;
-    try {
-      final requiredPick = this.required();
-      return (
-        rank: requiredPick('rank').asIntOrThrow(),
-        gameId: requiredPick('fullId').asGameFullIdOrNull(),
-        withdraw: requiredPick('withdraw').asBoolOrNull(),
-        pauseDelay: requiredPick('pauseDelay').asDurationFromSecondsOrNull(),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
-  StandingPage? asStandingPageOrNull() {
-    if (value == null) return null;
-    try {
-      final requiredPick = this.required();
-      return (
-        page: requiredPick('page').asIntOrThrow(),
-        players:
-            requiredPick(
-              'players',
-            ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
-      );
-    } catch (_) {
-      return null;
-    }
-  }
-
-  FeaturedGame? asFeaturedGameOrNull() {
-    if (value == null) return null;
-    try {
-      return _featuredGameFromPick(this.required());
-    } catch (_) {
-      return null;
-    }
-  }
-}
-
 @freezed
 class TournamentMeta with _$TournamentMeta {
   const TournamentMeta._();
@@ -180,12 +91,18 @@ class LightTournament with _$LightTournament {
     required DateTime startsAt,
     required DateTime finishesAt,
     required LightUser? winner,
+    bool? isTeamBattle,
   }) = _LightTournament;
 
   factory LightTournament.fromServerJson(Map<String, Object?> json) =>
       _lightTournamentFromPick(pick(json).required());
 
+  factory LightTournament.fromPick(RequiredPick pick) => _lightTournamentFromPick(pick);
+
   bool get isSystemTournament => meta.freq != null;
+
+  // TODO: add support for team battle
+  bool get isSupportedInApp => playSupportedVariants.contains(meta.variant) && isTeamBattle != true;
 }
 
 LightTournament _lightTournamentFromPick(RequiredPick pick) {
@@ -197,6 +114,8 @@ LightTournament _lightTournamentFromPick(RequiredPick pick) {
     position: pick('perf', 'position').asIntOrThrow(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     winner: pick('winner').asLightUserOrNull(),
+    // TODO add support for team battle; for now we just test if the field is not empty
+    isTeamBattle: pick('teamBattle').asMapOrNull<String, dynamic>()?.isNotEmpty,
   );
 }
 
@@ -432,4 +351,93 @@ class TournamentStats with _$TournamentStats {
   int get berserkRate => ((nbBerserks / nbGames) * 100).round();
   int get blackWinRate => ((nbBlackWins / nbGames) * 100).round();
   int get whiteWinRate => ((nbWhiteWins / nbGames) * 100).round();
+}
+
+extension TournamentExtension on Pick {
+  TimeIncrement asTimeIncrementOrThrow() {
+    final requiredPick = this.required();
+    return TimeIncrement(
+      requiredPick('limit').asIntOrThrow(),
+      requiredPick('increment').asIntOrThrow(),
+    );
+  }
+
+  TournamentFreq asTournamentFreqOrThrow() {
+    final value = this.required().value;
+    if (value is TournamentFreq) {
+      return value;
+    }
+    if (value is String) {
+      final freq = TournamentFreq.nameMap[value];
+      if (freq != null) return freq;
+    }
+    throw PickException("value $value at $debugParsingExit can't be casted to TournamentFreq");
+  }
+
+  IList<LightTournament> asTournamentListOrThrow() =>
+      asListOrThrow(LightTournament.fromPick).toIList();
+
+  Verdict asVerdictOrThrow() {
+    final requiredPick = this.required();
+    return (
+      condition: requiredPick('condition').asStringOrThrow(),
+      ok: requiredPick('verdict').asStringOrThrow() == 'ok',
+    );
+  }
+
+  Verdicts asVerdictsOrThrow() {
+    final requiredPick = this.required();
+    return (
+      list:
+          requiredPick('list')
+              .asListOrThrow((pick) => pick.asVerdictOrThrow())
+              .where(
+                // we don't want to show the condition specific to the bot players
+                // since it makes no sense a a bot player use the app
+                (v) => v.condition != 'Bot players are not allowed',
+              )
+              .toIList(),
+      accepted: requiredPick('accepted').asBoolOrThrow(),
+    );
+  }
+
+  TournamentMe? asTournamentMeOrNull() {
+    if (value == null) return null;
+    try {
+      final requiredPick = this.required();
+      return (
+        rank: requiredPick('rank').asIntOrThrow(),
+        gameId: requiredPick('fullId').asGameFullIdOrNull(),
+        withdraw: requiredPick('withdraw').asBoolOrNull(),
+        pauseDelay: requiredPick('pauseDelay').asDurationFromSecondsOrNull(),
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  StandingPage? asStandingPageOrNull() {
+    if (value == null) return null;
+    try {
+      final requiredPick = this.required();
+      return (
+        page: requiredPick('page').asIntOrThrow(),
+        players:
+            requiredPick(
+              'players',
+            ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  FeaturedGame? asFeaturedGameOrNull() {
+    if (value == null) return null;
+    try {
+      return _featuredGameFromPick(this.required());
+    } catch (_) {
+      return null;
+    }
+  }
 }

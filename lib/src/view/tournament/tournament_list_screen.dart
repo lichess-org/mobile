@@ -115,7 +115,7 @@ class FeaturedTournamentsWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     switch (featured) {
       case AsyncData(:final value):
-        if (value.where((t) => playSupportedVariants.contains(t.meta.variant)).isEmpty) {
+        if (value.where((t) => t.isSupportedInApp).isEmpty) {
           return const SizedBox.shrink();
         }
         return ListSection(
@@ -165,15 +165,13 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
     final List<LightTournament> systemTours = [];
     final List<LightTournament> userTours = [];
 
-    widget.tournaments
-        .where((tournament) => playSupportedVariants.contains(tournament.meta.variant))
-        .forEach((tournament) {
-          if (tournament.isSystemTournament) {
-            systemTours.add(tournament);
-          } else {
-            userTours.add(tournament);
-          }
-        });
+    widget.tournaments.where((tournament) => tournament.isSupportedInApp).forEach((tournament) {
+      if (tournament.isSystemTournament) {
+        systemTours.add(tournament);
+      } else {
+        userTours.add(tournament);
+      }
+    });
 
     final sortedSystemTours = systemTours
         .sorted((a, b) {

@@ -36,6 +36,9 @@ void main() {
       // Should not display unsupported variants
       expect(find.text('Hourly Crazyhouse Arena'), findsNothing);
 
+      // Should not display team battle tournaments
+      expect(find.text('Team Battle Arena'), findsNothing);
+
       await tester.tap(find.text('Completed'));
       // Wait for tab switch animation
       await tester.pumpAndSettle();
@@ -154,6 +157,41 @@ const kTournamentApiResponse = '''
         "freq": "hourly",
         "speed": "bullet"
       }
+    },
+    {
+        "clock": {
+            "increment": 0,
+            "limit": 60
+        },
+        "createdBy": "lichess",
+        "startsAt": 1741593602500,
+        "finishesAt": 1741595222500,
+        "fullName": "Team Battle Arena",
+        "id": "aG14a2eI",
+        "minRatedGames": {
+            "nb": 20
+        },
+        "minutes": 27,
+        "nbPlayers": 0,
+        "perf": {
+            "icon": "T",
+            "key": "bullet",
+            "name": "Bullet",
+            "position": 0
+        },
+        "rated": true,
+        "secondsToStart": 18997,
+        "status": 10,
+        "system": "arena",
+        "teamBattle": {
+          "teams": ["teamId1", "teamId2"],
+          "nbLeaders": 2
+        },
+        "variant": {
+            "key": "standard",
+            "name": "Standard",
+            "short": "Std"
+        }
     }
   ],
   "finished": [
