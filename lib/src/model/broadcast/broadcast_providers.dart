@@ -9,8 +9,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_providers.g.dart';
 
-/// This provider is used to get a list of tournaments broadcasts.
-/// It implements pagination with a maximum number of pages of 20.
+/// A provider that fetches a paginated list of broadcasts.
 @riverpod
 class BroadcastsPaginator extends _$BroadcastsPaginator {
   @override
@@ -26,7 +25,7 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
     final broadcastList = state.requireValue;
     final nextPage = broadcastList.nextPage;
 
-    if (nextPage == null || nextPage > 20) return;
+    if (nextPage == null) return;
 
     state = const AsyncLoading();
 
@@ -38,6 +37,38 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
       active: broadcastList.active,
       past: broadcastList.past.addAll(broadcastListNewPage.past),
       nextPage: broadcastListNewPage.nextPage,
+    ));
+  }
+}
+
+/// A provider that fetches a paginated list of broadcasts matching the [searchTerm].
+@riverpod
+class BroadcastsSearchPaginator extends _$BroadcastsSearchPaginator {
+  @override
+  Future<BroadcastSearchList> build(String searchTerm) async {
+    final broadcastSearchList = await ref.withClient(
+      (client) => BroadcastRepository(client).searchBroadcasts(searchTerm: searchTerm),
+    );
+
+    return broadcastSearchList;
+  }
+
+  Future<void> next() async {
+    final broadcastSearchList = state.requireValue;
+    final nextPage = broadcastSearchList.nextPage;
+
+    if (nextPage == null) return;
+
+    state = const AsyncLoading();
+
+    final broadcastSearchListNewPage = await ref.withClient(
+      (client) =>
+          BroadcastRepository(client).searchBroadcasts(searchTerm: searchTerm, page: nextPage),
+    );
+
+    state = AsyncData((
+      broadcasts: broadcastSearchList.broadcasts.addAll(broadcastSearchListNewPage.broadcasts),
+      nextPage: broadcastSearchListNewPage.nextPage,
     ));
   }
 }
