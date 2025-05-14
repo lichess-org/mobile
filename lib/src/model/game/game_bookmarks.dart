@@ -99,7 +99,7 @@ class GameBookmarksPaginator extends _$GameBookmarksPaginator {
 }
 
 @freezed
-class GameBookmarksPaginatorState with _$GameBookmarksPaginatorState {
+sealed class GameBookmarksPaginatorState with _$GameBookmarksPaginatorState {
   const factory GameBookmarksPaginatorState({
     required IList<LightExportedGameWithPov> gameList,
     required bool isLoading,

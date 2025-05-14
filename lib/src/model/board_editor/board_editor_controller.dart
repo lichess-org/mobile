@@ -151,7 +151,7 @@ class BoardEditorController extends _$BoardEditorController {
 enum CastlingRight { whiteKing, whiteQueen, blackKing, blackQueen }
 
 @freezed
-class BoardEditorState with _$BoardEditorState {
+sealed class BoardEditorState with _$BoardEditorState {
   const BoardEditorState._();
 
   const factory BoardEditorState({

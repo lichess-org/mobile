@@ -87,7 +87,7 @@ class PuzzleActivity extends _$PuzzleActivity {
 }
 
 @freezed
-class PuzzleActivityState with _$PuzzleActivityState {
+sealed class PuzzleActivityState with _$PuzzleActivityState {
   const factory PuzzleActivityState({
     required Map<DateTime, IList<PuzzleHistoryEntry>> historyByDay,
     required bool isLoading,

@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'position.freezed.dart';
 
 @freezed
-class Position with _$Position {
+sealed class Position with _$Position {
   const factory Position({required String name, required String fen, required String eco}) =
       _Position;
 

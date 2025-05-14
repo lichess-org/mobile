@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 part 'ongoing_game.freezed.dart';
 
 @freezed
-class OngoingGame with _$OngoingGame {
+sealed class OngoingGame with _$OngoingGame {
   factory OngoingGame({
     required GameId id,
     required GameFullId fullId,
