@@ -199,7 +199,7 @@ class TournamentController extends _$TournamentController {
 }
 
 @freezed
-class TournamentState with _$TournamentState {
+sealed class TournamentState with _$TournamentState {
   const TournamentState._();
 
   const factory TournamentState({required Tournament tournament, required int standingsPage}) =

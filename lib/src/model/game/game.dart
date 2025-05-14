@@ -289,7 +289,7 @@ sealed class ServerGamePrefs with _$ServerGamePrefs {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class TournamentMeta with _$TournamentMeta {
+sealed class TournamentMeta with _$TournamentMeta {
   const TournamentMeta._();
 
   const factory TournamentMeta({

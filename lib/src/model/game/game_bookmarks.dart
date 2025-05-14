@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -105,5 +104,5 @@ sealed class GameBookmarksPaginatorState with _$GameBookmarksPaginatorState {
     required bool isLoading,
     required bool hasMore,
     required bool hasError,
-  }) = _UserGameHistoryState;
+  }) = _GameBookmarksPaginatorState;
 }

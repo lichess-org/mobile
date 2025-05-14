@@ -84,7 +84,7 @@ class HttpLogStorage {
 
 /// Represents an HTTP log entry.
 @Freezed(fromJson: true, toJson: true)
-class HttpLogEntry with _$HttpLogEntry {
+sealed class HttpLogEntry with _$HttpLogEntry {
   const HttpLogEntry._();
 
   const factory HttpLogEntry({
@@ -116,7 +116,7 @@ Uri _urlFromJson(String url) => Uri.parse(url);
 /// - `items`: A required list of `HttpLog` items.
 /// - `next`: An optional integer representing the next cursor.
 @Freezed(fromJson: true, toJson: true)
-class HttpLog with _$HttpLog {
+sealed class HttpLog with _$HttpLog {
   const factory HttpLog({required IList<HttpLogEntry> items, required int? next}) = _HttpLog;
 
   factory HttpLog.fromJson(Map<String, dynamic> json) => _$HttpLogFromJson(json);
