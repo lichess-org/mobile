@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -10,7 +9,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_bookmarks.freezed.dart';
@@ -62,33 +60,29 @@ class GameBookmarksPaginator extends _$GameBookmarksPaginator {
 
     final currentVal = state.requireValue;
     state = AsyncData(currentVal.copyWith(isLoading: true));
-    Result.capture(
-      ref.withClient(
+    try {
+      final value = await ref.withClient(
         (client) => GameRepository(
           client,
         ).getBookmarkedGames(session, max: _nbPerPage, until: _list.last.game.createdAt),
-      ),
-    ).fold(
-      (value) {
-        if (value.isEmpty) {
-          state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
-          return;
-        }
+      );
+      if (value.isEmpty) {
+        state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
+        return;
+      }
 
-        _list.addAll(value);
+      _list.addAll(value);
 
-        state = AsyncData(
-          currentVal.copyWith(
-            gameList: _list.toIList(),
-            isLoading: false,
-            hasMore: value.length == _nbPerPage,
-          ),
-        );
-      },
-      (error, stackTrace) {
-        state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
-      },
-    );
+      state = AsyncData(
+        currentVal.copyWith(
+          gameList: _list.toIList(),
+          isLoading: false,
+          hasMore: value.length == _nbPerPage,
+        ),
+      );
+    } catch (e) {
+      state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
+    }
   }
 
   void removeBookmark(GameId id) {

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -8,7 +7,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_activity.freezed.dart';
@@ -58,36 +56,32 @@ class PuzzleActivity extends _$PuzzleActivity {
     return map;
   }
 
-  void getNext() {
+  Future<void> getNext() async {
     if (!state.hasValue) return;
 
     final currentVal = state.requireValue;
     if (currentVal.hasMore && _list.length < _maxPuzzles) {
       state = AsyncData(currentVal.copyWith(isLoading: true));
-      Result.capture(
-        ref.withClient(
+      try {
+        final value = await ref.withClient(
           (client) => PuzzleRepository(client).puzzleActivity(_nbPerPage, before: _list.last.date),
-        ),
-      ).fold(
-        (value) {
-          if (value.isEmpty) {
-            state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
-            return;
-          }
-          _list.addAll(value);
-          state = AsyncData(
-            PuzzleActivityState(
-              historyByDay: _groupByDay(_list),
-              isLoading: false,
-              hasMore: true,
-              hasError: false,
-            ),
-          );
-        },
-        (error, stackTrace) {
-          state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
-        },
-      );
+        );
+        if (value.isEmpty) {
+          state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
+          return;
+        }
+        _list.addAll(value);
+        state = AsyncData(
+          PuzzleActivityState(
+            historyByDay: _groupByDay(_list),
+            isLoading: false,
+            hasMore: true,
+            hasError: false,
+          ),
+        );
+      } catch (error) {
+        state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
+      }
     }
   }
 }

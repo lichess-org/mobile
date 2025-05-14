@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -34,7 +33,6 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_controller.freezed.dart';
@@ -700,18 +698,15 @@ class GameController extends _$GameController {
         state = AsyncValue.data(newState);
 
         if (!newState.game.aborted) {
-          _getPostGameData().then((result) {
-            result.fold(
-              (data) {
+          _getPostGameData()
+              .then((data) {
                 final game = _mergePostGameData(state.requireValue.game, data);
                 state = AsyncValue.data(state.requireValue.copyWith(game: game));
                 _storeGame(game);
-              },
-              (e, s) {
+              })
+              .catchError((Object e, StackTrace s) {
                 _logger.warning('Could not get post game data', e, s);
-              },
-            );
-          });
+              });
         }
 
       case 'clockInc':
@@ -877,10 +872,8 @@ class GameController extends _$GameController {
     }
   }
 
-  FutureResult<ExportedGame> _getPostGameData() {
-    return Result.capture(
-      ref.withClient((client) => GameRepository(client).getGame(gameFullId.gameId)),
-    );
+  Future<ExportedGame> _getPostGameData() {
+    return ref.withClient((client) => GameRepository(client).getGame(gameFullId.gameId));
   }
 
   Future<void> _onFinishedGameLoad(PlayableGame game) async {
@@ -888,14 +881,14 @@ class GameController extends _$GameController {
       ref.read(correspondenceServiceProvider).updateGame(gameFullId, game);
     }
 
-    final result = await _getPostGameData();
-    final gameWithPostData = result.fold(
-      (data) => _mergePostGameData(game, data, rewriteSteps: true),
-      (e, s) {
-        _logger.warning('Could not get post game data: $e', e, s);
-        return game;
-      },
-    );
+    PlayableGame gameWithPostData = game;
+    try {
+      final result = await _getPostGameData();
+      gameWithPostData = _mergePostGameData(game, result, rewriteSteps: true);
+    } catch (e, s) {
+      _logger.warning('Could not get post game data', e, s);
+    }
+
     await _storeGame(gameWithPostData);
 
     state = AsyncValue.data(state.requireValue.copyWith(game: gameWithPostData));

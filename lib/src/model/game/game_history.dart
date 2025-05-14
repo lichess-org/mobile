@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -19,7 +18,6 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_history.freezed.dart';
@@ -154,60 +152,58 @@ class UserGameHistory extends _$UserGameHistory {
     final prefs = ref.read(gameHistoryPreferencesProvider);
     final currentVal = state.requireValue;
     state = AsyncData(currentVal.copyWith(isLoading: true));
-    Result.capture(
-      userId != null
-          ? ref.withClient(
-            (client) => GameRepository(client).getUserGames(
-              userId!,
-              max: _nbPerPage,
-              until: _list.last.game.createdAt,
-              filter: currentVal.filter,
-              withBookmarked: true,
-              withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
-            ),
-          )
-          : currentVal.online && currentVal.session != null
-          ? ref.withClient(
-            (client) => GameRepository(client).getUserGames(
-              currentVal.session!.user.id,
-              max: _nbPerPage,
-              until: _list.last.game.createdAt,
-              filter: currentVal.filter,
-              withBookmarked: true,
-              withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
-            ),
-          )
-          : (await ref.watch(gameStorageProvider.future))
-              .page(max: _nbPerPage, until: _list.last.game.createdAt)
-              .then(
-                (value) =>
-                    value
-                        // we can assume that `youAre` is not null either for logged
-                        // in users or for anonymous users
-                        .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
-                        .toIList(),
-              ),
-    ).fold(
-      (value) {
-        if (value.isEmpty) {
-          state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
-          return;
-        }
+    try {
+      final value =
+          await (userId != null
+              ? ref.withClient(
+                (client) => GameRepository(client).getUserGames(
+                  userId!,
+                  max: _nbPerPage,
+                  until: _list.last.game.createdAt,
+                  filter: currentVal.filter,
+                  withBookmarked: true,
+                  withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
+                ),
+              )
+              : currentVal.online && currentVal.session != null
+              ? ref.withClient(
+                (client) => GameRepository(client).getUserGames(
+                  currentVal.session!.user.id,
+                  max: _nbPerPage,
+                  until: _list.last.game.createdAt,
+                  filter: currentVal.filter,
+                  withBookmarked: true,
+                  withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
+                ),
+              )
+              : (await ref.watch(gameStorageProvider.future))
+                  .page(max: _nbPerPage, until: _list.last.game.createdAt)
+                  .then(
+                    (value) =>
+                        value
+                            // we can assume that `youAre` is not null either for logged
+                            // in users or for anonymous users
+                            .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
+                            .toIList(),
+                  ));
 
-        _list.addAll(value);
+      if (value.isEmpty) {
+        state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
+        return;
+      }
 
-        state = AsyncData(
-          currentVal.copyWith(
-            gameList: _list.toIList(),
-            isLoading: false,
-            hasMore: value.length == _nbPerPage,
-          ),
-        );
-      },
-      (error, stackTrace) {
-        state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
-      },
-    );
+      _list.addAll(value);
+
+      state = AsyncData(
+        currentVal.copyWith(
+          gameList: _list.toIList(),
+          isLoading: false,
+          hasMore: value.length == _nbPerPage,
+        ),
+      );
+    } catch (error, _) {
+      state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
+    }
   }
 
   void toggleBookmark(GameId id) {
