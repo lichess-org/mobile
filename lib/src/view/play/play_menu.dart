@@ -6,13 +6,12 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/correspondence_challenges_screen.dart';
-import 'package:lichess_mobile/src/view/play/quick_game_widget.dart';
+import 'package:lichess_mobile/src/view/play/create_game_widget.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
-/// A widget that displays the options for creating a game.
-class CreateGameOptions extends ConsumerWidget {
-  const CreateGameOptions();
+class PlayMenu extends ConsumerWidget {
+  const PlayMenu();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,7 +21,7 @@ class CreateGameOptions extends ConsumerWidget {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: QuickGameWidget(),
+          child: CreateGameWidget(),
         ),
         _Section(
           children: [

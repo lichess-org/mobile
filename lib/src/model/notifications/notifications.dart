@@ -201,6 +201,7 @@ class PlaybanNotification extends LocalNotification {
       'playban',
       importance: Importance.max,
       priority: Priority.max,
+      autoCancel: false,
     ),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );

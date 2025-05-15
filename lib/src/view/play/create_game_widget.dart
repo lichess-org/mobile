@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
@@ -13,15 +13,13 @@ import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
-class QuickGameWidget extends ConsumerWidget {
-  const QuickGameWidget();
+class CreateGameWidget extends ConsumerWidget {
+  const CreateGameWidget();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
-    final session = ref.watch(authSessionProvider);
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
-    final isPlayban = ref.watch(accountProvider).valueOrNull?.playban != null;
     final account = ref.watch(accountProvider).valueOrNull;
     final userPerf = account?.perfs[playPrefs.realTimePerf];
     final canUseRatingRange = userPerf != null && userPerf.provisional != true;
@@ -157,15 +155,19 @@ class QuickGameWidget extends ConsumerWidget {
           ),
         FilledButton(
           onPressed:
-              isOnline && !isPlayban
+              isOnline
                   ? () {
                     // Pops the play bottom sheet
                     Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+
+                    final playban = ref.read(accountProvider).valueOrNull?.playban;
+                    if (playban != null) {
+                      ref.read(accountServiceProvider).showPlaybanDialog(playban);
+                      return;
+                    }
+
                     Navigator.of(context, rootNavigator: true).push(
-                      GameScreen.buildRoute(
-                        context,
-                        seek: GameSeek.fastPairing(playPrefs.timeIncrement, session),
-                      ),
+                      GameScreen.buildRoute(context, seek: GameSeek.custom(playPrefs, account)),
                     );
                   }
                   : null,
