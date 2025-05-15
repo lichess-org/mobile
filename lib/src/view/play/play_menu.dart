@@ -10,9 +10,8 @@ import 'package:lichess_mobile/src/view/play/create_game_widget.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
-/// A widget that displays the options for creating a game.
-class CreateGameOptions extends ConsumerWidget {
-  const CreateGameOptions();
+class PlayMenu extends ConsumerWidget {
+  const PlayMenu();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

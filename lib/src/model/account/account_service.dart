@@ -33,6 +33,7 @@ class AccountService {
 
   ProviderSubscription<AsyncValue<User?>>? _accountProviderSubscription;
   StreamSubscription<(NotificationResponse, LocalNotification)>? _notificationResponseSubscription;
+  Timer? _refreshTimer;
 
   final Ref _ref;
 
@@ -49,7 +50,12 @@ class AccountService {
       if (playban != null && lastPlaybanNotificationDate != playban.date) {
         _savePlaybanNotificationDate(playban.date);
         _ref.read(notificationServiceProvider).show(PlaybanNotification(playban));
+        _refreshTimer?.cancel();
+        _refreshTimer = Timer(playban.duration, () {
+          _ref.invalidate(accountProvider);
+        });
       } else if (playban == null && lastPlaybanNotificationDate != null) {
+        _refreshTimer?.cancel();
         _ref
             .read(notificationServiceProvider)
             .cancel(lastPlaybanNotificationDate.toIso8601String().hashCode);
@@ -61,7 +67,7 @@ class AccountService {
       final (_, notification) = data;
       switch (notification) {
         case PlaybanNotification(:final playban):
-          _onPlaybanNotificationResponse(playban);
+          showPlaybanDialog(playban);
         case _:
           break;
       }
@@ -77,11 +83,12 @@ class AccountService {
   }
 
   void dispose() {
+    _refreshTimer?.cancel();
     _accountProviderSubscription?.close();
     _notificationResponseSubscription?.cancel();
   }
 
-  Future<void> _onPlaybanNotificationResponse(TemporaryBan playban) async {
+  Future<void> showPlaybanDialog(TemporaryBan playban) async {
     final context = _ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
 

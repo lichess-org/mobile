@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/play/create_game_options.dart';
-import 'package:lichess_mobile/src/view/play/playban.dart';
+import 'package:lichess_mobile/src/view/play/play_menu.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
@@ -32,15 +29,9 @@ class PlayBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playban = ref.watch(accountProvider).valueOrNull?.playban;
-
-    return BottomSheetScrollableContainer(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      children: [
-        if (playban != null)
-          Padding(padding: Styles.bodySectionPadding, child: PlaybanMessage(playban: playban)),
-        const CreateGameOptions(),
-      ],
+    return const BottomSheetScrollableContainer(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      children: [PlayMenu()],
     );
   }
 }
