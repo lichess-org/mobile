@@ -159,7 +159,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               onRefresh: () => _refreshData(isOnline: status.isOnline),
               child: ListView(controller: homeScrollController, children: widgets),
             ),
-            floatingActionButton: const FloatingPlayButton(),
+            floatingActionButton: isTablet ? null : const FloatingPlayButton(),
             bottomSheet: const OfflineBanner(),
           ),
         );

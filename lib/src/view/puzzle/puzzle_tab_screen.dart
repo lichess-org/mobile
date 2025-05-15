@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/account_screen.dart';
-import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -125,7 +124,6 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
           actions: const [_DashboardButton(), _HistoryButton()],
         ),
         bottomSheet: const OfflineBanner(),
-        floatingActionButton: const FloatingPlayButton(),
         body:
             isTablet
                 ? Row(
