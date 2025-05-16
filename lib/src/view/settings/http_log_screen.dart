@@ -176,7 +176,7 @@ class HttpLogTile extends StatelessWidget {
       ),
       title: Text(
         httpLog.requestUrl.host == kLichessHost
-            ? httpLog.requestUrl.path
+            ? Uri(path: httpLog.requestUrl.path, query: httpLog.requestUrl.query).toString()
             : httpLog.requestUrl.toString(),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
