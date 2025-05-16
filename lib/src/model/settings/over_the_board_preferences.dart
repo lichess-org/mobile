@@ -34,7 +34,7 @@ class OverTheBoardPreferences extends _$OverTheBoardPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable {
+sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable {
   const OverTheBoardPrefs._();
 
   const factory OverTheBoardPrefs({

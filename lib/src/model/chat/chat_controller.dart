@@ -38,7 +38,7 @@ sealed class ChatOptions {
 }
 
 @freezed
-class GameChatOptions extends ChatOptions with _$GameChatOptions {
+abstract class GameChatOptions extends ChatOptions with _$GameChatOptions {
   const GameChatOptions._();
   const factory GameChatOptions({required GameFullId id, required LightUser? opponent}) =
       _GameChatOptions;
@@ -51,7 +51,7 @@ class GameChatOptions extends ChatOptions with _$GameChatOptions {
 }
 
 @freezed
-class TournamentChatOptions extends ChatOptions with _$TournamentChatOptions {
+abstract class TournamentChatOptions extends ChatOptions with _$TournamentChatOptions {
   const TournamentChatOptions._();
   const factory TournamentChatOptions({required TournamentId id, required bool writeable}) =
       _TournamentChatOptions;
@@ -166,7 +166,7 @@ class ChatController extends _$ChatController {
 }
 
 @freezed
-class ChatState with _$ChatState {
+sealed class ChatState with _$ChatState {
   const ChatState._();
 
   const factory ChatState({required IList<ChatMessage> messages, required int unreadMessages}) =

@@ -547,22 +547,18 @@ class _StreakWidget extends StatelessWidget {
             );
           }
 
-          final Text valueText = streak.map(
-            timeStreak: (UserTimeStreak streak) {
-              return Text(
-                streak.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
-                style: valueStyle,
-                textAlign: TextAlign.center,
-              );
-            },
-            gameStreak: (UserGameStreak streak) {
-              return Text(
-                context.l10n.nbGames(streak.gamesPlayed),
-                style: valueStyle,
-                textAlign: TextAlign.center,
-              );
-            },
-          );
+          final valueText = switch (streak) {
+            UserTimeStreak(:final timePlayed) => Text(
+              timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
+              style: valueStyle,
+              textAlign: TextAlign.center,
+            ),
+            UserGameStreak(:final gamesPlayed) => Text(
+              context.l10n.nbGames(gamesPlayed),
+              style: valueStyle,
+              textAlign: TextAlign.center,
+            ),
+          };
 
           return Expanded(
             child: Column(

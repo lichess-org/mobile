@@ -19,7 +19,7 @@ part 'game_seek.freezed.dart';
 /// See corresponding API docs:
 /// https://lichess.org/api#tag/Board/operation/apiBoardSeek
 @freezed
-class GameSeek with _$GameSeek {
+sealed class GameSeek with _$GameSeek {
   const GameSeek._();
 
   @Assert(

@@ -11,7 +11,7 @@ part 'puzzle_theme.freezed.dart';
 part 'puzzle_theme.g.dart';
 
 @freezed
-class PuzzleThemeData with _$PuzzleThemeData {
+sealed class PuzzleThemeData with _$PuzzleThemeData {
   const factory PuzzleThemeData({
     required int count,
     required String? desc,

@@ -63,7 +63,7 @@ enum HomeEditableWidget {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class HomePrefs with _$HomePrefs implements Serializable {
+sealed class HomePrefs with _$HomePrefs implements Serializable {
   const factory HomePrefs({required IList<HomeEditableWidget> disabledWidgets}) = _HomePrefs;
 
   static const defaults = HomePrefs(disabledWidgets: _kEmptyList);

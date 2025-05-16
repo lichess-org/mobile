@@ -34,7 +34,7 @@ class GameHistoryPreferences extends _$GameHistoryPreferences
 enum GameHistoryDisplayMode { compact, detail }
 
 @Freezed(fromJson: true, toJson: true)
-class GameHistoryPrefs with _$GameHistoryPrefs implements Serializable {
+sealed class GameHistoryPrefs with _$GameHistoryPrefs implements Serializable {
   const GameHistoryPrefs._();
 
   const factory GameHistoryPrefs({

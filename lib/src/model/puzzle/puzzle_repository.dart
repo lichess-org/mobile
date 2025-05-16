@@ -198,7 +198,7 @@ class PuzzleRepository {
 }
 
 @freezed
-class PuzzleBatchResponse with _$PuzzleBatchResponse {
+sealed class PuzzleBatchResponse with _$PuzzleBatchResponse {
   const factory PuzzleBatchResponse({
     required IList<Puzzle> puzzles,
     PuzzleGlicko? glicko,
@@ -207,7 +207,7 @@ class PuzzleBatchResponse with _$PuzzleBatchResponse {
 }
 
 @freezed
-class PuzzleStreakResponse with _$PuzzleStreakResponse {
+sealed class PuzzleStreakResponse with _$PuzzleStreakResponse {
   const factory PuzzleStreakResponse({
     required Puzzle puzzle,
     required Streak streak,
@@ -222,7 +222,7 @@ class PuzzleStreakResponse with _$PuzzleStreakResponse {
 }
 
 @freezed
-class PuzzleStormResponse with _$PuzzleStormResponse {
+sealed class PuzzleStormResponse with _$PuzzleStormResponse {
   const factory PuzzleStormResponse({
     required IList<LitePuzzle> puzzles,
     required String? key,

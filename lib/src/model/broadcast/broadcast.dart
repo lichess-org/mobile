@@ -52,7 +52,7 @@ enum BroadcastResult {
 }
 
 @freezed
-class Broadcast with _$Broadcast {
+sealed class Broadcast with _$Broadcast {
   const Broadcast._();
 
   const factory Broadcast({
@@ -72,7 +72,7 @@ class Broadcast with _$Broadcast {
 }
 
 @freezed
-class BroadcastTournament with _$BroadcastTournament {
+sealed class BroadcastTournament with _$BroadcastTournament {
   const factory BroadcastTournament({
     required BroadcastTournamentData data,
     required IList<BroadcastRound> rounds,
@@ -82,7 +82,7 @@ class BroadcastTournament with _$BroadcastTournament {
 }
 
 @freezed
-class BroadcastTournamentData with _$BroadcastTournamentData {
+sealed class BroadcastTournamentData with _$BroadcastTournamentData {
   const factory BroadcastTournamentData({
     required BroadcastTournamentId id,
     required String name,
@@ -111,7 +111,7 @@ typedef BroadcastTournamentDates = ({DateTime startsAt, DateTime? endsAt});
 typedef BroadcastTournamentGroup = ({BroadcastTournamentId id, String name});
 
 @freezed
-class BroadcastRound with _$BroadcastRound {
+sealed class BroadcastRound with _$BroadcastRound {
   const factory BroadcastRound({
     required BroadcastRoundId id,
     required String name,
@@ -135,7 +135,7 @@ typedef BroadcastRoundResponse =
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
 
 @freezed
-class BroadcastGame with _$BroadcastGame {
+sealed class BroadcastGame with _$BroadcastGame {
   const BroadcastGame._();
 
   const factory BroadcastGame({
@@ -158,7 +158,7 @@ class BroadcastGame with _$BroadcastGame {
 }
 
 @freezed
-class BroadcastPlayer with _$BroadcastPlayer {
+sealed class BroadcastPlayer with _$BroadcastPlayer {
   const BroadcastPlayer._();
 
   const factory BroadcastPlayer({
@@ -173,7 +173,7 @@ class BroadcastPlayer with _$BroadcastPlayer {
 }
 
 @freezed
-class BroadcastPlayerWithClock with _$BroadcastPlayerWithClock {
+sealed class BroadcastPlayerWithClock with _$BroadcastPlayerWithClock {
   const factory BroadcastPlayerWithClock({
     required BroadcastPlayer player,
     required Duration? clock,
@@ -181,7 +181,7 @@ class BroadcastPlayerWithClock with _$BroadcastPlayerWithClock {
 }
 
 @freezed
-class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallResult {
+sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallResult {
   const factory BroadcastPlayerWithOverallResult({
     required BroadcastPlayer player,
     required int played,
@@ -203,7 +203,7 @@ typedef BroadcastPlayerWithGameResults =
 enum BroadcastPoints { one, half, zero }
 
 @freezed
-class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
+sealed class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
   const factory BroadcastPlayerGameResult({
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,

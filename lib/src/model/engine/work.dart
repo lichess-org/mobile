@@ -12,7 +12,7 @@ typedef EvalResult = (Work, LocalEval);
 
 /// A work item for the engine.
 @freezed
-class Work with _$Work {
+sealed class Work with _$Work {
   const Work._();
 
   const factory Work({
@@ -38,7 +38,7 @@ class Work with _$Work {
 }
 
 @freezed
-class Step with _$Step {
+sealed class Step with _$Step {
   const Step._();
 
   const factory Step({required Position position, required SanMove sanMove, ClientEval? eval}) =

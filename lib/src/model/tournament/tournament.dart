@@ -46,7 +46,7 @@ const int kStandingsPageSize = 10;
 typedef StandingPage = ({int page, IList<StandingPlayer> players});
 
 @freezed
-class TournamentMeta with _$TournamentMeta {
+sealed class TournamentMeta with _$TournamentMeta {
   const TournamentMeta._();
 
   const factory TournamentMeta({
@@ -80,7 +80,7 @@ TournamentMeta _tournamentMetaFromPick(RequiredPick pick) {
 }
 
 @freezed
-class LightTournament with _$LightTournament {
+sealed class LightTournament with _$LightTournament {
   const LightTournament._();
 
   const factory LightTournament({
@@ -124,7 +124,7 @@ typedef Verdicts = ({IList<Verdict> list, bool accepted});
 typedef Verdict = ({String condition, bool ok});
 
 @freezed
-class Tournament with _$Tournament {
+sealed class Tournament with _$Tournament {
   const Tournament._();
 
   const factory Tournament({
@@ -214,7 +214,7 @@ Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick 
 typedef StandingSheet = ({bool fire, IList<int> scores});
 
 @freezed
-class StandingPlayer with _$StandingPlayer {
+sealed class StandingPlayer with _$StandingPlayer {
   const StandingPlayer._();
 
   const factory StandingPlayer({
@@ -251,7 +251,7 @@ StandingPlayer _standingPlayerFromPick(RequiredPick pick) {
 }
 
 @freezed
-class FeaturedPlayer with _$FeaturedPlayer {
+sealed class FeaturedPlayer with _$FeaturedPlayer {
   const FeaturedPlayer._();
 
   const factory FeaturedPlayer({
@@ -279,7 +279,7 @@ FeaturedPlayer _featuredPlayerFromPick(RequiredPick pick) {
 typedef FeaturedGameClocks = ({Duration white, Duration black});
 
 @freezed
-class FeaturedGame with _$FeaturedGame {
+sealed class FeaturedGame with _$FeaturedGame {
   const FeaturedGame._();
 
   const factory FeaturedGame({
@@ -319,7 +319,7 @@ FeaturedGame _featuredGameFromPick(RequiredPick pick) {
 }
 
 @freezed
-class TournamentStats with _$TournamentStats {
+sealed class TournamentStats with _$TournamentStats {
   const TournamentStats._();
 
   const factory TournamentStats({

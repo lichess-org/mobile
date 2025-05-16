@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'material_diff.freezed.dart';
 
 @freezed
-class MaterialDiffSide with _$MaterialDiffSide {
+sealed class MaterialDiffSide with _$MaterialDiffSide {
   const factory MaterialDiffSide({
     required IMap<Role, int> pieces,
     required int score,
@@ -23,7 +23,7 @@ const IMap<Role, int> pieceScores = IMapConst({
 });
 
 @freezed
-class MaterialDiff with _$MaterialDiff {
+sealed class MaterialDiff with _$MaterialDiff {
   const MaterialDiff._();
 
   const factory MaterialDiff({required MaterialDiffSide black, required MaterialDiffSide white}) =

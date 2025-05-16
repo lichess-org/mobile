@@ -13,7 +13,7 @@ typedef UCIMove = String;
 
 /// Represents a [Move] with its associated SAN.
 @Freezed(fromJson: true, toJson: true)
-class SanMove with _$SanMove {
+sealed class SanMove with _$SanMove {
   const SanMove._();
   const factory SanMove(String san, @MoveConverter() Move move) = _SanMove;
 
@@ -182,7 +182,7 @@ sealed class Opening {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class LightOpening with _$LightOpening implements Opening {
+sealed class LightOpening with _$LightOpening implements Opening {
   const LightOpening._();
   const factory LightOpening({required String eco, required String name}) = _LightOpening;
 
@@ -190,14 +190,14 @@ class LightOpening with _$LightOpening implements Opening {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class Division with _$Division {
+sealed class Division with _$Division {
   const factory Division({double? middlegame, double? endgame}) = _Division;
 
   factory Division.fromJson(Map<String, dynamic> json) => _$DivisionFromJson(json);
 }
 
 @freezed
-class FullOpening with _$FullOpening implements Opening {
+sealed class FullOpening with _$FullOpening implements Opening {
   const FullOpening._();
   const factory FullOpening({
     required String eco,

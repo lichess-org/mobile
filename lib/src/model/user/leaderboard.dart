@@ -10,7 +10,7 @@ part 'leaderboard.freezed.dart';
 typedef Top1Leaderboard = IMap<Perf, LeaderboardUser>;
 
 @freezed
-class Leaderboard with _$Leaderboard {
+sealed class Leaderboard with _$Leaderboard {
   const factory Leaderboard({
     required List<LeaderboardUser> bullet,
     required List<LeaderboardUser> blitz,
@@ -29,7 +29,7 @@ class Leaderboard with _$Leaderboard {
 }
 
 @freezed
-class LeaderboardUser with _$LeaderboardUser {
+sealed class LeaderboardUser with _$LeaderboardUser {
   const LeaderboardUser._();
 
   const factory LeaderboardUser({

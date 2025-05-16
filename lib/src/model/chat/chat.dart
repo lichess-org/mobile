@@ -16,7 +16,7 @@ ChatData chatDataFromPick(RequiredPick pick) {
 }
 
 @freezed
-class ChatMessage with _$ChatMessage {
+sealed class ChatMessage with _$ChatMessage {
   const ChatMessage._();
 
   const factory ChatMessage({

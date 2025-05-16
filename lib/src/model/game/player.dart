@@ -7,7 +7,7 @@ part 'player.freezed.dart';
 part 'player.g.dart';
 
 @Freezed(fromJson: true, toJson: true)
-class Player with _$Player {
+sealed class Player with _$Player {
   const Player._();
 
   const factory Player({
@@ -65,7 +65,7 @@ class Player with _$Player {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PlayerAnalysis with _$PlayerAnalysis {
+sealed class PlayerAnalysis with _$PlayerAnalysis {
   const factory PlayerAnalysis({
     required int inaccuracies,
     required int mistakes,

@@ -110,7 +110,7 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
 }
 
 @Freezed(fromJson: true, toJson: true)
-class BoardPrefs with _$BoardPrefs implements Serializable {
+sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   const BoardPrefs._();
 
   @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')

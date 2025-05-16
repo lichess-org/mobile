@@ -4,7 +4,7 @@ part 'socket.freezed.dart';
 
 /// A socket event.
 @freezed
-class SocketEvent with _$SocketEvent {
+sealed class SocketEvent with _$SocketEvent {
   const SocketEvent._();
 
   const factory SocketEvent({

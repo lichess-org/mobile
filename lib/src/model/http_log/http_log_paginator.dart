@@ -62,7 +62,7 @@ class HttpLogPaginator extends _$HttpLogPaginator {
 }
 
 @freezed
-class HttpLogState with _$HttpLogState {
+sealed class HttpLogState with _$HttpLogState {
   const HttpLogState._();
 
   const factory HttpLogState({required IList<AsyncValue<HttpLog>> data}) = _HttpLogState;

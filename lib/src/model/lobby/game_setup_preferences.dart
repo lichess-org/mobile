@@ -51,7 +51,7 @@ class GameSetupPreferences extends _$GameSetupPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
+sealed class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
   const GameSetupPrefs._();
 
   const factory GameSetupPrefs({

@@ -11,7 +11,7 @@ part 'puzzle.freezed.dart';
 part 'puzzle.g.dart';
 
 @Freezed(fromJson: true, toJson: true)
-class Puzzle with _$Puzzle {
+sealed class Puzzle with _$Puzzle {
   const Puzzle._();
 
   const factory Puzzle({
@@ -41,7 +41,7 @@ class Puzzle with _$Puzzle {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleData with _$PuzzleData {
+sealed class PuzzleData with _$PuzzleData {
   const PuzzleData._();
 
   const factory PuzzleData({
@@ -59,7 +59,7 @@ class PuzzleData with _$PuzzleData {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleGlicko with _$PuzzleGlicko {
+sealed class PuzzleGlicko with _$PuzzleGlicko {
   const PuzzleGlicko._();
 
   const factory PuzzleGlicko({
@@ -72,13 +72,13 @@ class PuzzleGlicko with _$PuzzleGlicko {
 }
 
 @freezed
-class PuzzleRound with _$PuzzleRound {
+sealed class PuzzleRound with _$PuzzleRound {
   const factory PuzzleRound({required PuzzleId id, required int ratingDiff, required bool win}) =
       _PuzzleRound;
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleGame with _$PuzzleGame {
+sealed class PuzzleGame with _$PuzzleGame {
   const factory PuzzleGame({
     required GameId id,
     required Perf perf,
@@ -92,7 +92,7 @@ class PuzzleGame with _$PuzzleGame {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleGamePlayer with _$PuzzleGamePlayer {
+sealed class PuzzleGamePlayer with _$PuzzleGamePlayer {
   const factory PuzzleGamePlayer({required Side side, required String name, String? title}) =
       _PuzzleGamePlayer;
 
@@ -100,7 +100,7 @@ class PuzzleGamePlayer with _$PuzzleGamePlayer {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleSolution with _$PuzzleSolution {
+sealed class PuzzleSolution with _$PuzzleSolution {
   const factory PuzzleSolution({required PuzzleId id, required bool win, required bool rated}) =
       _PuzzleSolution;
 
@@ -108,7 +108,7 @@ class PuzzleSolution with _$PuzzleSolution {
 }
 
 @freezed
-class PuzzlePreview with _$PuzzlePreview {
+sealed class PuzzlePreview with _$PuzzlePreview {
   const factory PuzzlePreview({
     required Side orientation,
     required String initialFen,
@@ -127,7 +127,7 @@ class PuzzlePreview with _$PuzzlePreview {
 }
 
 @Freezed(fromJson: true)
-class LitePuzzle with _$LitePuzzle {
+sealed class LitePuzzle with _$LitePuzzle {
   const LitePuzzle._();
 
   const factory LitePuzzle({
@@ -148,7 +148,7 @@ class LitePuzzle with _$LitePuzzle {
 }
 
 @freezed
-class PuzzleDashboard with _$PuzzleDashboard {
+sealed class PuzzleDashboard with _$PuzzleDashboard {
   const factory PuzzleDashboard({
     required PuzzleDashboardData global,
     required IList<PuzzleDashboardData> themes,
@@ -156,7 +156,7 @@ class PuzzleDashboard with _$PuzzleDashboard {
 }
 
 @freezed
-class PuzzleDashboardData with _$PuzzleDashboardData {
+sealed class PuzzleDashboardData with _$PuzzleDashboardData {
   const factory PuzzleDashboardData({
     required int nb,
     required int firstWins,
@@ -167,7 +167,7 @@ class PuzzleDashboardData with _$PuzzleDashboardData {
 }
 
 @freezed
-class PuzzleHistoryEntry with _$PuzzleHistoryEntry {
+sealed class PuzzleHistoryEntry with _$PuzzleHistoryEntry {
   const PuzzleHistoryEntry._();
   const factory PuzzleHistoryEntry({
     required bool win,

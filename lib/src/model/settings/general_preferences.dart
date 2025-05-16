@@ -75,7 +75,7 @@ class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<Ge
 }
 
 @Freezed(fromJson: true, toJson: true)
-class GeneralPrefs with _$GeneralPrefs implements Serializable {
+sealed class GeneralPrefs with _$GeneralPrefs implements Serializable {
   const GeneralPrefs._();
 
   @Assert('masterVolume >= 0 && masterVolume <= 1')
@@ -189,7 +189,7 @@ enum BackgroundColor {
 }
 
 @freezed
-class BackgroundImage with _$BackgroundImage {
+sealed class BackgroundImage with _$BackgroundImage {
   const BackgroundImage._();
 
   const factory BackgroundImage({

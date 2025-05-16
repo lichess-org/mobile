@@ -91,7 +91,7 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Serializable {
+sealed class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Serializable {
   const OpeningExplorerPrefs._();
 
   const factory OpeningExplorerPrefs({
@@ -114,7 +114,7 @@ class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Serializable {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class MasterDb with _$MasterDb {
+sealed class MasterDb with _$MasterDb {
   const MasterDb._();
 
   const factory MasterDb({required int sinceYear}) = _MasterDb;
@@ -135,7 +135,7 @@ class MasterDb with _$MasterDb {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class LichessDb with _$LichessDb {
+sealed class LichessDb with _$LichessDb {
   const LichessDb._();
 
   const factory LichessDb({
@@ -173,7 +173,7 @@ class LichessDb with _$LichessDb {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PlayerDb with _$PlayerDb {
+sealed class PlayerDb with _$PlayerDb {
   const PlayerDb._();
 
   const factory PlayerDb({
