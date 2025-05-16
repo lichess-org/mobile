@@ -43,6 +43,7 @@ class BoardTable extends ConsumerStatefulWidget {
     this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
     this.bottomTable = const SizedBox.shrink(),
+    this.landscapeMoveList,
     this.shapes,
     this.engineGauge,
     this.moves,
@@ -53,6 +54,7 @@ class BoardTable extends ConsumerStatefulWidget {
     this.showEngineGaugePlaceholder = false,
     this.boardKey,
     this.zenMode = false,
+    this.userActionsBar,
     super.key,
   }) : assert(
          fen != null || interactiveBoardParams != null,
@@ -66,6 +68,7 @@ class BoardTable extends ConsumerStatefulWidget {
       interactiveBoardParams = null,
       lastMove = null,
       boardSettingsOverrides = null,
+      landscapeMoveList = null,
       topTable = const SizedBox.shrink(),
       bottomTable = const SizedBox.shrink(),
       shapes = null,
@@ -74,7 +77,8 @@ class BoardTable extends ConsumerStatefulWidget {
       onSelectMove = null,
       boardOverlay = null,
       boardKey = null,
-      zenMode = false;
+      zenMode = false,
+      userActionsBar = null;
 
   final String? fen;
 
@@ -99,6 +103,11 @@ class BoardTable extends ConsumerStatefulWidget {
   /// Widget that will appear at the bottom of the board.
   final Widget bottomTable;
 
+  /// Optional widget that will be displayed on the right side of the board on landscape mode.
+  ///
+  /// If provided, it will override the [moves] parameter.
+  final Widget? landscapeMoveList;
+
   /// Optional engine gauge that will be displayed next to the board.
   final EngineGaugeParams? engineGauge;
 
@@ -122,6 +131,10 @@ class BoardTable extends ConsumerStatefulWidget {
 
   /// If true, the move list will be hidden
   final bool zenMode;
+
+  /// Optional widget that contains various user actions, usually a `BottomBar`.
+  /// Displayed below the board, or below the move list if landscape mode is used.
+  final Widget? userActionsBar;
 
   @override
   ConsumerState<BoardTable> createState() => _BoardTableState();
@@ -217,10 +230,23 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       widget.topTable,
-                      if (!widget.zenMode && slicedMoves != null)
+                      if (widget.landscapeMoveList != null)
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: widget.landscapeMoveList,
+                          ),
+                        )
+                      else if (widget.zenMode)
+                        const MoveList(
+                          type: MoveListType.inline,
+                          slicedMoves: [],
+                          currentMoveIndex: 0,
+                        )
+                      else if (!widget.zenMode && slicedMoves != null)
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
                             child: MoveList(
                               type: MoveListType.stacked,
                               slicedMoves: slicedMoves,
@@ -231,6 +257,13 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                         )
                       else
                         const Spacer(),
+
+                      if (widget.userActionsBar != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: widget.userActionsBar,
+                        ),
+
                       widget.bottomTable,
                     ],
                   ),
@@ -309,6 +342,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   child: widget.bottomTable,
                 ),
               ),
+              if (widget.userActionsBar != null) widget.userActionsBar!,
             ],
           );
         }

@@ -107,6 +107,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       puzzle: context.puzzle,
       glicko: context.glicko,
       mode: PuzzleMode.load,
+      root: _gameTree.view,
       initialPosition: _gameTree.position,
       initialPath: initialPath,
       currentPath: UciPath.empty,
@@ -200,7 +201,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
     _mergeSolution();
 
-    state = state.copyWith(node: _gameTree.branchAt(state.currentPath).view);
+    state = state.copyWith(root: _gameTree.view, node: _gameTree.branchAt(state.currentPath).view);
 
     _onFailOrWin(PuzzleResult.lose);
 
@@ -280,6 +281,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
         _mergeSolution();
         state = state.copyWith(
           mode: PuzzleMode.view,
+          root: _gameTree.view,
           node: _gameTree.branchAt(state.currentPath).view,
         );
       }
@@ -345,6 +347,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
     state = state.copyWith(
       mode: firstMove ? PuzzleMode.play : state.mode,
       currentPath: path,
+      root: _gameTree.view,
       node: newNode,
       lastMove: sanMove.move,
       promotionMove: null,
@@ -416,6 +419,7 @@ class PuzzleState with _$PuzzleState implements EvaluationMixinState {
     required UciPath currentPath,
     required Side pov,
     required ViewBranch node,
+    required ViewNode root,
     Move? lastMove,
     NormalMove? promotionMove,
     PuzzleResult? result,
