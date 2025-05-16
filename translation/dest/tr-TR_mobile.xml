@@ -8,7 +8,6 @@
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Bir oyuna katıl</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Geri bildirimde bulun</string>
   <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Merhaba, %s</string>
-  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">Merhaba</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Varyasyonu gizle</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ana sayfa</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Canlı yayıncılar</string>
