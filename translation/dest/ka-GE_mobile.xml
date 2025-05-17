@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">დარწმუნებული ხარ?</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">გააუქმე სვლის დაბრუნების შეთავაზება</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">გასუფთავება</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">მთავარი</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">დიახ</string>
+</resources>
