@@ -13,10 +13,10 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -141,7 +141,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       materialDiff: game.lastMaterialDiffAt(Side.white),
                     );
 
-                    return BoardTable(
+                    return GameLayout(
                       orientation: gameState.orientation,
                       fen: position.fen,
                       boardSettingsOverrides: const BoardSettingsOverrides(
@@ -203,7 +203,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   },
                   loading:
                       () => const Shimmer(
-                        child: BoardTable(
+                        child: GameLayout(
                           topTable: LoadingPlayerWidget(),
                           bottomTable: LoadingPlayerWidget(),
                           orientation: Side.white,
@@ -213,7 +213,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       ),
                   error: (err, stackTrace) {
                     debugPrint('SEVERE: [TvScreen] could not load stream; $err\n$stackTrace');
-                    return const BoardTable(
+                    return const GameLayout(
                       topTable: kEmptyWidget,
                       bottomTable: kEmptyWidget,
                       orientation: Side.white,

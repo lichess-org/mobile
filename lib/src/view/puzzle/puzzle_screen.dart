@@ -40,9 +40,9 @@ import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -140,7 +140,7 @@ class _LoadNextPuzzle extends ConsumerWidget {
             angle: angle,
             initialPuzzleContext: null,
             body: const Center(
-              child: BoardTable(
+              child: GameLayout(
                 fen: kEmptyFen,
                 orientation: Side.white,
                 errorMessage: 'No more puzzles. Go online to get more.',
@@ -167,7 +167,7 @@ class _LoadNextPuzzle extends ConsumerWidget {
           angle: angle,
           initialPuzzleContext: null,
           body: Center(
-            child: BoardTable(fen: kEmptyFen, orientation: Side.white, errorMessage: e.toString()),
+            child: GameLayout(fen: kEmptyFen, orientation: Side.white, errorMessage: e.toString()),
           ),
         );
       },
@@ -206,7 +206,7 @@ class _LoadPuzzleFromId extends ConsumerWidget {
             body: const Column(
               children: [
                 Expanded(
-                  child: SafeArea(child: BoardTable.empty(showEngineGaugePlaceholder: true)),
+                  child: SafeArea(child: GameLayout.empty(showEngineGaugePlaceholder: true)),
                 ),
                 BottomBar.empty(),
               ],
@@ -221,7 +221,7 @@ class _LoadPuzzleFromId extends ConsumerWidget {
             children: [
               Expanded(
                 child: SafeArea(
-                  child: BoardTable(
+                  child: GameLayout(
                     fen: kEmptyFen,
                     orientation: Side.white,
                     errorMessage: e.toString(),
@@ -281,7 +281,7 @@ class _Body extends ConsumerWidget {
     return SafeArea(
       child: OrientationBuilder(
         builder: (context, orientation) {
-          return BoardTable(
+          return GameLayout(
             orientation: puzzleState.pov,
             lastMove: puzzleState.lastMove as NormalMove?,
             interactiveBoardParams: (

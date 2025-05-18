@@ -7,9 +7,9 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -32,7 +32,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
       children: [
         Expanded(
           child: SafeArea(
-            child: BoardTable(
+            child: GameLayout(
               orientation: Side.white,
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
@@ -140,7 +140,7 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
       children: [
         Expanded(
           child: SafeArea(
-            child: BoardTable(
+            child: GameLayout(
               orientation: Side.white,
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
@@ -235,7 +235,7 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer(
-      child: BoardTable(
+      child: GameLayout(
         orientation: orientation ?? Side.white,
         fen: fen ?? kEmptyFen,
         lastMove: lastMove as NormalMove?,
@@ -304,7 +304,7 @@ class LoadGameError extends StatelessWidget {
       children: [
         Expanded(
           child: SafeArea(
-            child: BoardTable(
+            child: GameLayout(
               orientation: Side.white,
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
@@ -344,7 +344,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
       children: [
         Expanded(
           child: SafeArea(
-            child: BoardTable(
+            child: GameLayout(
               orientation: Side.white,
               fen: kEmptyFen,
               topTable: const SizedBox.shrink(),

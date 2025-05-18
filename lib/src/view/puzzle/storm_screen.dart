@@ -22,10 +22,10 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -74,7 +74,7 @@ class _Load extends ConsumerWidget {
       error: (e, s) {
         debugPrint('SEVERE: [PuzzleStormScreen] could not load streak; $e\n$s');
         return Center(
-          child: BoardTable(
+          child: GameLayout(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
             fen: kEmptyFen,
@@ -142,7 +142,7 @@ class _Body extends ConsumerWidget {
           Expanded(
             child: Center(
               child: SafeArea(
-                child: BoardTable(
+                child: GameLayout(
                   boardKey: boardKey,
                   orientation: stormState.pov,
                   lastMove: stormState.lastMove as NormalMove?,

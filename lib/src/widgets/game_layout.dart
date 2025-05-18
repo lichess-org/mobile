@@ -33,9 +33,9 @@ typedef InteractiveBoardParams =
 /// An optional move list can be displayed above the top table space.
 ///
 /// An optional overlay or error message can be displayed on top of the board.
-class BoardTable extends ConsumerStatefulWidget {
+class GameLayout extends ConsumerStatefulWidget {
   /// Creates a board table with the given values.
-  const BoardTable({
+  const GameLayout({
     required this.orientation,
     this.fen,
     this.interactiveBoardParams,
@@ -62,7 +62,7 @@ class BoardTable extends ConsumerStatefulWidget {
        );
 
   /// Creates an empty board table (useful for loading).
-  const BoardTable.empty({this.moves, this.showEngineGaugePlaceholder = false, this.errorMessage})
+  const GameLayout.empty({this.moves, this.showEngineGaugePlaceholder = false, this.errorMessage})
     : orientation = Side.white,
       fen = kEmptyFen,
       interactiveBoardParams = null,
@@ -137,10 +137,10 @@ class BoardTable extends ConsumerStatefulWidget {
   final Widget? userActionsBar;
 
   @override
-  ConsumerState<BoardTable> createState() => _BoardTableState();
+  ConsumerState<GameLayout> createState() => _GameLayoutState();
 }
 
-class _BoardTableState extends ConsumerState<BoardTable> {
+class _GameLayoutState extends ConsumerState<GameLayout> {
   ISet<Shape> userShapes = ISet();
 
   @override

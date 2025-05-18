@@ -20,9 +20,9 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 
 class OfflineCorrespondenceGameScreen extends StatefulWidget {
   const OfflineCorrespondenceGameScreen({required this.initialGame, super.key});
@@ -186,7 +186,7 @@ class _BodyState extends ConsumerState<_Body> {
       children: [
         Expanded(
           child: SafeArea(
-            child: BoardTable(
+            child: GameLayout(
               orientation: isBoardTurned ? youAre!.opposite : youAre!,
               lastMove: game.moveAt(stepCursor) as NormalMove?,
               interactiveBoardParams: (

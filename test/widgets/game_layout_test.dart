@@ -5,7 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 
 import '../test_helpers.dart';
 import '../test_provider_scope.dart';
@@ -19,7 +19,7 @@ void main() {
         key: ValueKey(surface),
         tester,
         child: const MaterialApp(
-          home: BoardTable(
+          home: GameLayout(
             orientation: Side.white,
             fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
             topTable: Row(
@@ -66,7 +66,7 @@ void main() {
         key: ValueKey(surface),
         tester,
         child: const MaterialApp(
-          home: BoardTable(
+          home: GameLayout(
             orientation: Side.white,
             fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
             topTable: Row(
