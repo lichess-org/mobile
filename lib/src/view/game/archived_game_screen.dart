@@ -21,10 +21,10 @@ import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
@@ -230,7 +230,6 @@ class _BodyState extends ConsumerState<_Body> {
         ],
       ),
       body: SafeArea(
-        bottom: false,
         child: Column(
           children: [
             Expanded(
@@ -241,7 +240,6 @@ class _BodyState extends ConsumerState<_Body> {
                 error: widget.error,
               ),
             ),
-            _BottomBar(archivedGameData: widget.gameData, orientation: widget.orientation),
           ],
         ),
       ),
@@ -293,7 +291,7 @@ class _BoardBody extends ConsumerWidget {
     final gameData = archivedGameData;
 
     if (gameData == null) {
-      return BoardTable.empty(moves: const [], errorMessage: error?.toString());
+      return GameLayout.empty(moves: const [], errorMessage: error?.toString());
     }
 
     if (initialCursor != null) {
@@ -306,10 +304,11 @@ class _BoardBody extends ConsumerWidget {
 
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
-    final loadingBoard = BoardTable(
+    final loadingBoard = GameLayout(
       orientation: (isBoardTurned ? orientation.opposite : orientation),
       fen: initialCursor == null ? gameData.lastFen ?? kEmptyBoardFEN : kEmptyBoardFEN,
       moves: const [],
+      userActionsBar: _BottomBar(archivedGameData: archivedGameData, orientation: orientation),
     );
 
     return gameCursor.when(
@@ -340,7 +339,7 @@ class _BoardBody extends ConsumerWidget {
 
         final position = game.positionAt(cursor);
 
-        return BoardTable(
+        return GameLayout(
           orientation: (isBoardTurned ? orientation.opposite : orientation),
           fen: position.fen,
           lastMove: game.moveAt(cursor) as NormalMove?,
@@ -351,6 +350,7 @@ class _BoardBody extends ConsumerWidget {
           onSelectMove: (moveIndex) {
             ref.read(gameCursorProvider(gameData.id).notifier).cursorAt(moveIndex);
           },
+          userActionsBar: _BottomBar(archivedGameData: archivedGameData, orientation: orientation),
         );
       },
       loading: () => loadingBoard,
