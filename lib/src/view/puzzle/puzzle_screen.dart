@@ -167,7 +167,11 @@ class _LoadNextPuzzle extends ConsumerWidget {
           angle: angle,
           initialPuzzleContext: null,
           body: Center(
-            child: PuzzleLayout(fen: kEmptyFen, orientation: Side.white, errorMessage: e.toString()),
+            child: PuzzleLayout(
+              fen: kEmptyFen,
+              orientation: Side.white,
+              errorMessage: e.toString(),
+            ),
           ),
         );
       },
@@ -370,29 +374,26 @@ class _Body extends ConsumerWidget {
                 ),
               ],
             ),
-            landscapeMoveList:
-                orientation == Orientation.landscape
-                    ? Card(
-                      clipBehavior: Clip.hardEdge,
-                      margin: EdgeInsets.zero,
-                      child: SingleChildScrollView(
-                        padding: EdgeInsets.zero,
-                        child: Column(
-                          children: [
-                            DebouncedPgnTreeView(
-                              root: puzzleState.root,
-                              currentPath: puzzleState.currentPath,
-                              pgnRootComments: null,
-                              shouldShowComputerAnalysis: false,
-                              shouldShowComments: false,
-                              shouldShowAnnotations: false,
-                              displayMode: PgnTreeDisplayMode.twoColumn,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    : null,
+            landscapeMoveList: Card(
+              clipBehavior: Clip.hardEdge,
+              margin: EdgeInsets.zero,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.zero,
+                child: Column(
+                  children: [
+                    DebouncedPgnTreeView(
+                      root: puzzleState.root,
+                      currentPath: puzzleState.currentPath,
+                      pgnRootComments: null,
+                      shouldShowComputerAnalysis: false,
+                      shouldShowComments: false,
+                      shouldShowAnnotations: false,
+                      displayMode: PgnTreeDisplayMode.twoColumn,
+                    ),
+                  ],
+                ),
+              ),
+            ),
             userActionsBar: _BottomBar(
               initialPuzzleContext: initialPuzzleContext,
               puzzleId: puzzleState.puzzle.puzzle.id,

@@ -21,7 +21,6 @@ typedef InteractiveBoardParams =
       Premovable? premovable,
     });
 
-
 /// Layout for puzzle screens that adapts to screen size and aspect ratio
 class PuzzleLayout extends ConsumerStatefulWidget {
   /// Creates a puzzle layout with the given values.
@@ -32,7 +31,7 @@ class PuzzleLayout extends ConsumerStatefulWidget {
     this.lastMove,
     this.topTable = const SizedBox.shrink(),
     this.bottomTable = const SizedBox.shrink(),
-    this.landscapeMoveList,
+    this.landscapeMoveList = const SizedBox.shrink(),
     this.shapes,
     this.engineGauge,
     this.errorMessage,
@@ -51,7 +50,7 @@ class PuzzleLayout extends ConsumerStatefulWidget {
       fen = kEmptyFen,
       interactiveBoardParams = null,
       lastMove = null,
-      landscapeMoveList = null,
+      landscapeMoveList = const SizedBox.shrink(),
       topTable = const SizedBox.shrink(),
       bottomTable = const SizedBox.shrink(),
       shapes = null,
@@ -80,10 +79,8 @@ class PuzzleLayout extends ConsumerStatefulWidget {
   /// Widget that will appear at the bottom of the board.
   final Widget bottomTable;
 
-  /// Optional widget that will be displayed on the right side of the board on landscape mode.
-  ///
-  /// If provided, it will override the [moves] parameter.
-  final Widget? landscapeMoveList;
+  /// Widget that will be displayed on the right side of the board on landscape mode.
+  final Widget landscapeMoveList;
 
   /// Optional engine gauge that will be displayed next to the board.
   final EngineGaugeParams? engineGauge;
@@ -185,23 +182,19 @@ class _PuzzleLayoutState extends ConsumerState<PuzzleLayout> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       widget.topTable,
-                      if (widget.landscapeMoveList != null)
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 16.0),
-                            child: widget.landscapeMoveList,
-                          ),
-                        )
-                      else
-                        const Spacer(),
+                      widget.bottomTable,
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: widget.landscapeMoveList,
+                        ),
+                      ),
 
                       if (widget.userActionsBar != null)
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16.0),
                           child: widget.userActionsBar,
                         ),
-
-                      widget.bottomTable,
                     ],
                   ),
                 ),
