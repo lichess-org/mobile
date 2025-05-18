@@ -1,5 +1,4 @@
 import 'package:chessground/chessground.dart';
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/widgets/move_list.dart';
+import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 
 typedef InteractiveBoardParams =
     ({
@@ -22,34 +21,23 @@ typedef InteractiveBoardParams =
       Premovable? premovable,
     });
 
-/// Layout for game screens that adapts to screen size and aspect ratio
-///
-/// On portrait mode, the board will be displayed in the middle of the screen,
-/// with the table spaces on top and bottom.
-/// On landscape mode, the board will be displayed on the left side of the screen,
-/// with the table spaces on the right side.
-///
-/// An optional move list can be displayed above the top table space.
-///
-/// An optional overlay or error message can be displayed on top of the board.
-class GameLayout extends ConsumerStatefulWidget {
-  /// Creates a game layout with the given values.
-  const GameLayout({
+
+/// Layout for puzzle screens that adapts to screen size and aspect ratio
+class PuzzleLayout extends ConsumerStatefulWidget {
+  /// Creates a puzzle layout with the given values.
+  const PuzzleLayout({
     required this.orientation,
     this.fen,
     this.interactiveBoardParams,
     this.lastMove,
-    this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
     this.bottomTable = const SizedBox.shrink(),
+    this.landscapeMoveList,
     this.shapes,
-    this.moves,
-    this.currentMoveIndex = 0,
-    this.onSelectMove,
-    this.boardOverlay,
+    this.engineGauge,
     this.errorMessage,
+    this.showEngineGaugePlaceholder = false,
     this.boardKey,
-    this.zenMode = false,
     this.userActionsBar,
     super.key,
   }) : assert(
@@ -57,21 +45,18 @@ class GameLayout extends ConsumerStatefulWidget {
          'Either a fen or interactiveBoardParams must be provided',
        );
 
-  /// Creates an empty game layout (useful for loading).
-  const GameLayout.empty({this.moves, this.errorMessage})
+  /// Creates an empty puzzle layout (useful for loading).
+  const PuzzleLayout.empty({this.showEngineGaugePlaceholder = false, this.errorMessage})
     : orientation = Side.white,
       fen = kEmptyFen,
       interactiveBoardParams = null,
       lastMove = null,
-      boardSettingsOverrides = null,
+      landscapeMoveList = null,
       topTable = const SizedBox.shrink(),
       bottomTable = const SizedBox.shrink(),
       shapes = null,
-      currentMoveIndex = 0,
-      onSelectMove = null,
-      boardOverlay = null,
+      engineGauge = null,
       boardKey = null,
-      zenMode = false,
       userActionsBar = null;
 
   final String? fen;
@@ -81,8 +66,6 @@ class GameLayout extends ConsumerStatefulWidget {
   final Side orientation;
 
   final Move? lastMove;
-
-  final BoardSettingsOverrides? boardSettingsOverrides;
 
   final ISet<Shape>? shapes;
 
@@ -97,33 +80,29 @@ class GameLayout extends ConsumerStatefulWidget {
   /// Widget that will appear at the bottom of the board.
   final Widget bottomTable;
 
-  /// Optional list of moves that will be displayed on top of the board.
-  final List<String>? moves;
+  /// Optional widget that will be displayed on the right side of the board on landscape mode.
+  ///
+  /// If provided, it will override the [moves] parameter.
+  final Widget? landscapeMoveList;
 
-  /// Index of the current move in the [moves] list.
-  final int currentMoveIndex;
-
-  /// Callback that will be called when a move is selected from the [moves] list.
-  final void Function(int moveIndex)? onSelectMove;
+  /// Optional engine gauge that will be displayed next to the board.
+  final EngineGaugeParams? engineGauge;
 
   /// Optional error message that will be displayed on top of the board.
   final String? errorMessage;
 
-  /// Optional widget that will be displayed on top of the board.
-  final Widget? boardOverlay;
-
-  /// If true, the move list will be hidden
-  final bool zenMode;
+  /// Whether to show the engine gauge placeholder.
+  final bool showEngineGaugePlaceholder;
 
   /// Optional widget that contains various user actions, usually a `BottomBar`.
   /// Displayed below the board, or below the move list if landscape mode is used.
   final Widget? userActionsBar;
 
   @override
-  ConsumerState<GameLayout> createState() => _GameLayoutState();
+  ConsumerState<PuzzleLayout> createState() => _PuzzleLayoutState();
 }
 
-class _GameLayoutState extends ConsumerState<GameLayout> {
+class _PuzzleLayoutState extends ConsumerState<PuzzleLayout> {
   ISet<Shape> userShapes = ISet();
 
   @override
@@ -149,13 +128,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           ),
         );
 
-        final settings =
-            widget.boardSettingsOverrides != null
-                ? widget.boardSettingsOverrides!.merge(defaultSettings)
-                : defaultSettings;
-
         final shapes = userShapes.union(widget.shapes ?? ISet());
-        final slicedMoves = widget.moves?.asMap().entries.slices(2);
 
         final fen = widget.interactiveBoardParams?.position.fen ?? widget.fen!;
         final gameData =
@@ -192,11 +165,19 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   gameData: gameData,
                   lastMove: widget.lastMove,
                   shapes: shapes,
-                  settings: settings,
+                  settings: defaultSettings,
                   boardKey: widget.boardKey,
-                  boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
                 ),
+                if (widget.engineGauge != null) ...[
+                  const SizedBox(width: 4.0),
+                  EngineGauge(
+                    params: widget.engineGauge!,
+                    displayMode: EngineGaugeDisplayMode.vertical,
+                  ),
+                ] else if (widget.showEngineGaugePlaceholder) ...[
+                  const SizedBox(width: kEvalGaugeSize + 4.0),
+                ],
                 const SizedBox(width: 16.0),
                 Expanded(
                   child: Column(
@@ -204,16 +185,11 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       widget.topTable,
-                      if (!widget.zenMode && slicedMoves != null)
+                      if (widget.landscapeMoveList != null)
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(top: 16.0),
-                            child: MoveList(
-                              type: MoveListType.stacked,
-                              slicedMoves: slicedMoves,
-                              currentMoveIndex: widget.currentMoveIndex,
-                              onSelectMove: widget.onSelectMove,
-                            ),
+                            child: widget.landscapeMoveList,
                           ),
                         )
                       else
@@ -237,25 +213,10 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           final double boardSize =
               isTablet ? defaultBoardSize - kTabletBoardTableSidePadding * 2 : defaultBoardSize;
 
-          // vertical space left on portrait mode to check if we can display the
-          // move list
-          final verticalSpaceLeftBoardOnPortrait = constraints.biggest.height - boardSize;
-
           return Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (slicedMoves != null && verticalSpaceLeftBoardOnPortrait >= 130)
-                if (widget.zenMode)
-                  // display empty move list to keep the layout consistent in zen mode
-                  const MoveList(type: MoveListType.inline, slicedMoves: [], currentMoveIndex: 0)
-                else
-                  MoveList(
-                    type: MoveListType.inline,
-                    slicedMoves: slicedMoves,
-                    currentMoveIndex: widget.currentMoveIndex,
-                    onSelectMove: widget.onSelectMove,
-                  ),
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.symmetric(
@@ -264,6 +225,19 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   child: widget.topTable,
                 ),
               ),
+              if (widget.engineGauge != null)
+                Padding(
+                  padding:
+                      isTablet
+                          ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                          : EdgeInsets.zero,
+                  child: EngineGauge(
+                    params: widget.engineGauge!,
+                    displayMode: EngineGaugeDisplayMode.horizontal,
+                  ),
+                )
+              else if (widget.showEngineGaugePlaceholder)
+                const SizedBox(height: kEvalGaugeSize),
               Padding(
                 padding:
                     isTablet
@@ -276,9 +250,8 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   gameData: gameData,
                   lastMove: widget.lastMove,
                   shapes: shapes,
-                  settings: settings,
+                  settings: defaultSettings,
                   boardKey: widget.boardKey,
-                  boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
                 ),
               ),
@@ -331,7 +304,6 @@ class _BoardWidget extends StatelessWidget {
     this.lastMove,
     this.shapes,
     required this.settings,
-    this.boardOverlay,
     this.error,
     this.boardKey,
   });
@@ -344,7 +316,6 @@ class _BoardWidget extends StatelessWidget {
   final ISet<Shape>? shapes;
   final ChessboardSettings settings;
   final String? error;
-  final Widget? boardOverlay;
   final GlobalKey? boardKey;
 
   @override
@@ -360,26 +331,7 @@ class _BoardWidget extends StatelessWidget {
       settings: settings,
     );
 
-    if (boardOverlay != null) {
-      return SizedBox.square(
-        dimension: size,
-        child: Stack(
-          children: [
-            board,
-            SizedBox.square(
-              dimension: size,
-              child: Center(
-                child: SizedBox(
-                  width: (size / 8) * 6.6,
-                  height: (size / 8) * 4.6,
-                  child: boardOverlay,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    } else if (error != null) {
+    if (error != null) {
       return SizedBox.square(
         dimension: size,
         child: Stack(children: [board, _ErrorWidget(errorMessage: error!, boardSize: size)]),

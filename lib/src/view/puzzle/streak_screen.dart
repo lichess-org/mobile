@@ -20,9 +20,9 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_layout.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:share_plus/share_plus.dart';
@@ -57,7 +57,7 @@ class _Load extends ConsumerWidget {
       case AsyncValue(:final error?, :final stackTrace):
         debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
         return Center(
-          child: GameLayout(
+          child: PuzzleLayout(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
             fen: kEmptyFen,
@@ -104,7 +104,7 @@ class _Body extends ConsumerWidget {
         Expanded(
           child: Center(
             child: SafeArea(
-              child: GameLayout(
+              child: PuzzleLayout(
                 orientation: puzzleState.pov,
                 lastMove: puzzleState.lastMove as NormalMove?,
                 interactiveBoardParams: (
