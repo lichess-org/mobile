@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_settings.dart';
 import 'package:lichess_mobile/src/view/clock/custom_clock_settings.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 
@@ -233,7 +232,7 @@ class ClockTile extends ConsumerWidget {
                 onPressed:
                     clockState.started
                         ? null
-                        : () => showAdaptiveBottomSheet<void>(
+                        : () => showModalBottomSheet<void>(
                           context: context,
                           builder:
                               (BuildContext context) => CustomClockSettings(

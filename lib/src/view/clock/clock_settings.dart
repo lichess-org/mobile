@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 
 const _iconSize = 38.0;
 const _kIconPadding = EdgeInsets.all(10.0);
@@ -64,7 +63,7 @@ class ClockSettings extends ConsumerWidget {
                     buttonsEnabled
                         ? () {
                           final double screenHeight = MediaQuery.sizeOf(context).height;
-                          showAdaptiveBottomSheet<void>(
+                          showModalBottomSheet<void>(
                             context: context,
                             isScrollControlled: true,
                             constraints: BoxConstraints(

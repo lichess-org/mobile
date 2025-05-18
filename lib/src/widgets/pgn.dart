@@ -1248,7 +1248,7 @@ class InlineMove extends ConsumerWidget {
       borderRadius: borderRadius,
       onTap: () => params.notifier.userJump(path),
       onLongPress: () {
-        showAdaptiveBottomSheet<void>(
+        showModalBottomSheet<void>(
           context: context,
           isDismissible: true,
           isScrollControlled: true,

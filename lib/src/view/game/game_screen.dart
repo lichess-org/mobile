@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -270,7 +269,7 @@ class _GameMenu extends ConsumerWidget {
           icon: const Icon(Icons.settings),
           label: context.l10n.settingsSettings,
           onPressed:
-              () => showAdaptiveBottomSheet<void>(
+              () => showModalBottomSheet<void>(
                 context: context,
                 isDismissible: true,
                 isScrollControlled: true,

@@ -630,7 +630,7 @@ class _PuzzleSettingsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SemanticIconButton(
       onPressed:
-          () => showAdaptiveBottomSheet<void>(
+          () => showModalBottomSheet<void>(
             context: context,
             isDismissible: true,
             isScrollControlled: true,

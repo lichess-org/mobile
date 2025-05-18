@@ -124,7 +124,7 @@ class _GameListTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       onLongPress: () {
-        showAdaptiveBottomSheet<void>(
+        showModalBottomSheet<void>(
           context: context,
           useRootNavigator: true,
           isDismissible: true,

@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_filters.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -350,7 +349,7 @@ class _BottomBar extends ConsumerWidget {
         BottomBarButton(
           label: 'Filters',
           onTap:
-              () => showAdaptiveBottomSheet<void>(
+              () => showModalBottomSheet<void>(
                 context: context,
                 builder: (BuildContext context) => BoardEditorFilters(initialFen: initialFen),
                 showDragHandle: true,

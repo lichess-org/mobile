@@ -42,7 +42,7 @@ class CoordinateTrainingScreen extends StatelessWidget {
                 icon: const Icon(Icons.settings),
                 semanticsLabel: context.l10n.settingsSettings,
                 onPressed:
-                    () => showAdaptiveBottomSheet<void>(
+                    () => showModalBottomSheet<void>(
                       context: context,
                       showDragHandle: true,
                       builder: (BuildContext context) => const _CoordinateTrainingMenu(),
@@ -462,7 +462,7 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
 }
 
 Future<void> _coordinateTrainingSettingsBuilder(BuildContext context) {
-  return showAdaptiveBottomSheet<void>(
+  return showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext context) => const SettingsBottomSheet(),
   );

@@ -43,7 +43,7 @@ class CreateGameWidget extends ConsumerWidget {
                 ),
                 onPressed: () {
                   final double screenHeight = MediaQuery.sizeOf(context).height;
-                  showAdaptiveBottomSheet<void>(
+                  showModalBottomSheet<void>(
                     context: context,
                     isScrollControlled: true,
                     constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
@@ -121,7 +121,7 @@ class CreateGameWidget extends ConsumerWidget {
                   onPressed:
                       canUseRatingRange
                           ? () {
-                            showAdaptiveBottomSheet<void>(
+                            showModalBottomSheet<void>(
                               context: context,
                               isScrollControlled: true,
                               builder: (BuildContext context) {

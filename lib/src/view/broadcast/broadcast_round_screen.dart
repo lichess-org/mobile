@@ -188,7 +188,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             SemanticIconButton(
               icon: const Icon(Icons.settings),
               onPressed:
-                  () => showAdaptiveBottomSheet<void>(
+                  () => showModalBottomSheet<void>(
                     context: context,
                     isDismissible: true,
                     isScrollControlled: true,
@@ -296,7 +296,7 @@ class _BottomBar extends ConsumerWidget {
         if (tournament.group != null)
           TextButton(
             onPressed:
-                () => showAdaptiveBottomSheet<void>(
+                () => showModalBottomSheet<void>(
                   context: context,
                   showDragHandle: true,
                   isScrollControlled: true,
@@ -326,7 +326,7 @@ class _BottomBar extends ConsumerWidget {
           ),
         TextButton(
           onPressed:
-              () => showAdaptiveBottomSheet<void>(
+              () => showModalBottomSheet<void>(
                 context: context,
                 showDragHandle: true,
                 isScrollControlled: true,

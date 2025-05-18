@@ -63,7 +63,7 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
       // TODO: translate
       semanticsLabel: 'Filter broadcasts',
       onPressed:
-          () => showAdaptiveBottomSheet<void>(
+          () => showModalBottomSheet<void>(
             context: context,
             isScrollControlled: true,
             constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),

@@ -47,7 +47,7 @@ class StudyListScreen extends ConsumerWidget {
             // TODO: translate
             semanticsLabel: 'Filter studies',
             onPressed:
-                () => showAdaptiveBottomSheet<void>(
+                () => showModalBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
                   showDragHandle: true,
@@ -238,7 +238,7 @@ class _StudyListItem extends StatelessWidget {
             rootNavigator: true,
           ).push(StudyScreen.buildRoute(context, study.id)),
       onLongPress: () {
-        showAdaptiveBottomSheet<void>(
+        showModalBottomSheet<void>(
           context: context,
           useRootNavigator: true,
           isDismissible: true,

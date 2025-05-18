@@ -83,7 +83,7 @@ class GameHistoryScreen extends ConsumerWidget {
       ),
       semanticsLabel: context.l10n.filterGames,
       onPressed:
-          () => showAdaptiveBottomSheet<GameFilterState>(
+          () => showModalBottomSheet<GameFilterState>(
             context: context,
             isScrollControlled: true,
             builder:

@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 
 void showConfigureGameSheet(BuildContext context, {required bool isDismissible}) {
   final double screenHeight = MediaQuery.sizeOf(context).height;
-  showAdaptiveBottomSheet<void>(
+  showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
@@ -148,7 +148,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
 }
 
 void showConfigureDisplaySettings(BuildContext context) {
-  showAdaptiveBottomSheet<void>(
+  showModalBottomSheet<void>(
     context: context,
     isDismissible: true,
     showDragHandle: true,

@@ -12,7 +12,7 @@ class FloatingPlayButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        showAdaptiveBottomSheet<void>(
+        showModalBottomSheet<void>(
           context: context,
           isScrollControlled: true,
           builder: (context) => const PlayBottomSheet(),

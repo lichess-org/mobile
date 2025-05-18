@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -153,7 +152,7 @@ class _OnlineFriendListTile extends ConsumerWidget {
               : null,
       onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
       onLongPress:
-          () => showAdaptiveBottomSheet<void>(
+          () => showModalBottomSheet<void>(
             context: context,
             useRootNavigator: true,
             isDismissible: true,

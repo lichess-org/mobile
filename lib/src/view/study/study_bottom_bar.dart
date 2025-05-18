@@ -246,7 +246,7 @@ class _ChapterButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomBarButton(
       onTap:
-          () => showAdaptiveBottomSheet<void>(
+          () => showModalBottomSheet<void>(
             context: context,
             showDragHandle: true,
             isScrollControlled: true,

@@ -77,7 +77,7 @@ class GameSettings extends ConsumerWidget {
               title: const Text('Board settings'),
               trailing: const Icon(CupertinoIcons.chevron_right),
               onTap: () {
-                showAdaptiveBottomSheet<void>(
+                showModalBottomSheet<void>(
                   context: context,
                   isDismissible: true,
                   isScrollControlled: true,

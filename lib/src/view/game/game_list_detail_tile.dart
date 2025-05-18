@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -56,7 +55,7 @@ class GameListDetailTile extends StatelessWidget {
 
     return InkWell(
       onLongPress: () {
-        showAdaptiveBottomSheet<void>(
+        showModalBottomSheet<void>(
           context: context,
           useRootNavigator: true,
           isDismissible: true,
