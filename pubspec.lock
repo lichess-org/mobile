@@ -1305,10 +1305,10 @@ packages:
     dependency: "direct main"
     description:
       name: result_extensions
-      sha256: fb9255281e89228a217fd6175164cf83877d59b7583100d24b2a1de445e1b94f
+      sha256: "4b62cb20c79d2980bf86a47caa21958d0b4bd093c90d87ff0bcb2042d709a7c2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.0"
   riverpod:
     dependency: transitive
     description:

@@ -63,7 +63,7 @@ dependencies:
   path_provider: ^2.1.5
   popover: ^0.3.0
   pub_semver: ^2.1.4
-  result_extensions: ^0.1.0
+  result_extensions: ^0.2.0
   riverpod_annotation: ^2.3.0
   share_plus: ^11.0.0
   shared_preferences: ^2.1.0
