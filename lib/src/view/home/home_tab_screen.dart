@@ -42,7 +42,20 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final editModeProvider = StateProvider<bool>((ref) => false);
+class _EditModeNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  @override
+  set state(bool value) {
+    super.state = value;
+  }
+}
+
+final editModeProvider = NotifierProvider.autoDispose<_EditModeNotifier, bool>(
+  _EditModeNotifier.new,
+  name: 'editModeProvider',
+);
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});

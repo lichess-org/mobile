@@ -16,7 +16,22 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
-final daysProvider = StateProvider<Days>((ref) => Days.month);
+class _DaysNotifier extends Notifier<Days> {
+  @override
+  Days build() {
+    return Days.month;
+  }
+
+  @override
+  set state(Days value) {
+    super.state = value;
+  }
+}
+
+final daysProvider = NotifierProvider.autoDispose<_DaysNotifier, Days>(
+  _DaysNotifier.new,
+  name: 'daysProvider',
+);
 
 class PuzzleDashboardScreen extends StatelessWidget {
   const PuzzleDashboardScreen({super.key});
