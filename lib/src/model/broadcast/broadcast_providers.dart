@@ -13,24 +13,19 @@ part 'broadcast_providers.g.dart';
 @riverpod
 class BroadcastsPaginator extends _$BroadcastsPaginator {
   @override
-  Future<BroadcastList> build() async {
-    final broadcastList = await ref.withClient(
-      (client) => BroadcastRepository(client).getBroadcasts(),
-    );
-
-    return broadcastList;
+  Future<BroadcastList> build() {
+    return ref.withClient((client) => BroadcastRepository(client).getBroadcasts());
   }
 
+  /// This function should be called only if there are more pages.
   Future<void> next() async {
     final broadcastList = state.requireValue;
     final nextPage = broadcastList.nextPage;
 
-    if (nextPage == null || nextPage > 20) return;
-
-    state = const AsyncLoading();
+    assert(nextPage != null && nextPage <= 20);
 
     final broadcastListNewPage = await ref.withClient(
-      (client) => BroadcastRepository(client).getBroadcasts(page: nextPage),
+      (client) => BroadcastRepository(client).getBroadcasts(page: nextPage!),
     );
 
     state = AsyncData((
@@ -45,25 +40,22 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
 @riverpod
 class BroadcastsSearchPaginator extends _$BroadcastsSearchPaginator {
   @override
-  Future<BroadcastSearchList> build(String searchTerm) async {
-    final broadcastSearchList = await ref.withClient(
+  Future<BroadcastSearchList> build(String searchTerm) {
+    return ref.withClient(
       (client) => BroadcastRepository(client).searchBroadcasts(searchTerm: searchTerm),
     );
-
-    return broadcastSearchList;
   }
 
+  /// This function should be called only if there are more pages.
   Future<void> next() async {
     final broadcastSearchList = state.requireValue;
     final nextPage = broadcastSearchList.nextPage;
 
-    if (nextPage == null || nextPage > 20) return;
-
-    state = const AsyncLoading();
+    assert(nextPage != null && nextPage <= 20);
 
     final broadcastSearchListNewPage = await ref.withClient(
       (client) =>
-          BroadcastRepository(client).searchBroadcasts(searchTerm: searchTerm, page: nextPage),
+          BroadcastRepository(client).searchBroadcasts(searchTerm: searchTerm, page: nextPage!),
     );
 
     state = AsyncData((
