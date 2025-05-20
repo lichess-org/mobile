@@ -196,6 +196,11 @@ class SocketClient {
   /// A [Future] that completes when the first connection is established.
   Future<void> get firstConnection => _firstConnection.future;
 
+  late Completer<void> clientConnectionCompleter;
+
+  /// A [Future] that completes once the client is connected to the websocket.
+  Future<void> get connection => clientConnectionCompleter.future;
+
   /// Connect or reconnect the WebSocket.
   Future<void> connect() async {
     if (isDisposed) {
@@ -538,11 +543,6 @@ class SocketPool {
   final Map<Uri, SocketClient> _pool = {};
   final Map<Uri, Timer?> _disposeTimers = {};
 
-  late Completer<void> _clientConnection;
-
-  /// A [Future] that completes once the client is connected to the websocket.
-  Future<void> get clientConnection => _clientConnection.future;
-
   /// Opens a socket connection to the given [route].
   ///
   /// It will use an existing connection if it is already active, unless [forceReconnect] is set to
@@ -554,7 +554,6 @@ class SocketPool {
     bool? forceReconnect,
     VoidCallback? onEventGapFailure,
   }) {
-    _clientConnection = Completer<void>();
     _currentRoute = route;
 
     if (_pool[route] == null) {
@@ -605,9 +604,10 @@ class SocketPool {
     });
 
     final client = _pool[route]!;
+    client.clientConnectionCompleter = Completer();
     if (forceReconnect == true || !client.isActive) {
       client.connect().then((_) {
-        _clientConnection.complete();
+        client.clientConnectionCompleter.complete();
       });
     }
 

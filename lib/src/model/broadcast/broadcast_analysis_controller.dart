@@ -8,6 +8,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
@@ -85,6 +86,8 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       _syncDebouncer.cancel();
       disposeEngineEvaluation();
     });
+
+    await ref.watch(broadcastRoundControllerProvider(roundId).future);
 
     _socketClient = ref
         .watch(socketPoolProvider)

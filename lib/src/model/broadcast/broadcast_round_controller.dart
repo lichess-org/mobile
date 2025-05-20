@@ -66,19 +66,19 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   }
 
   Future<void> _connectSocket({required int version, bool forceReconnect = false}) async {
-    final socketPool = ref.watch(socketPoolProvider);
-
-    _socketClient = socketPool.open(
-      BroadcastRoundController.broadcastSocketUri(broadcastRoundId),
-      version: version,
-      onEventGapFailure: () {
-        _syncRound();
-      },
-      forceReconnect: forceReconnect,
-    );
+    _socketClient = ref
+        .watch(socketPoolProvider)
+        .open(
+          BroadcastRoundController.broadcastSocketUri(broadcastRoundId),
+          version: version,
+          onEventGapFailure: () {
+            _syncRound();
+          },
+          forceReconnect: forceReconnect,
+        );
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
-    await socketPool.clientConnection;
+    await _socketClient.connection;
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
       if (state.valueOrNull?.round.status == RoundStatus.live) {
         _syncRoundDebouncer(() {
