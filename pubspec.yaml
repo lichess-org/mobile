@@ -42,7 +42,7 @@ dependencies:
     sdk: flutter
   flutter_markdown: ^0.7.3+1
   flutter_native_splash: ^2.3.5
-  flutter_riverpod: ^2.3.4
+  flutter_riverpod: ^3.0.0-dev.15
   flutter_secure_storage: ^9.2.0
   flutter_slidable: ^4.0.0
   flutter_spinkit: ^5.2.0
@@ -65,7 +65,7 @@ dependencies:
   popover: ^0.3.0
   pub_semver: ^2.1.4
   result_extensions: ^0.2.0
-  riverpod_annotation: ^2.3.0
+  riverpod_annotation: ^3.0.0-dev.15
   share_plus: ^11.0.0
   shared_preferences: ^2.1.0
   signal_strength_indicator: ^0.4.1
@@ -89,8 +89,8 @@ dev_dependencies:
   lint: ^2.0.1
   mocktail: ^1.0.0
   mocktail_image_network: ^1.2.0
-  riverpod_generator: ^2.1.0
-  riverpod_lint: ^2.3.3
+  riverpod_generator: ^3.0.0-dev.15
+  riverpod_lint: ^3.0.0-dev.15
   sqflite_common_ffi: ^2.2.3
   stream_channel: ^2.1.2
 
