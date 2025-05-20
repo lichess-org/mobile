@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show Response;
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
