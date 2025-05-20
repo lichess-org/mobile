@@ -31,7 +31,7 @@
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Oculta a Interface de Usuario mentres xogas. Emprega esta opción se che molestan os xestos de navegación do sistema ós bordos da pantalla. Aplícase ás pantallas da partida e á de Puzzle Storm.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Axustes</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Compartir PGN</string>
-  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartir a URL da partida</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartir o URL da partida</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Compartir a posición coma FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Compartir este crebacabezas</string>
   <string name="showComments" comment="Shown in the analysis screen.">Amosar comentarios</string>
