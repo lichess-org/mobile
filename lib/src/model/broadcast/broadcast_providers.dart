@@ -25,7 +25,7 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
     final broadcastList = state.requireValue;
     final nextPage = broadcastList.nextPage;
 
-    if (nextPage == null) return;
+    if (nextPage == null || nextPage > 20) return;
 
     state = const AsyncLoading();
 
@@ -57,7 +57,7 @@ class BroadcastsSearchPaginator extends _$BroadcastsSearchPaginator {
     final broadcastSearchList = state.requireValue;
     final nextPage = broadcastSearchList.nextPage;
 
-    if (nextPage == null) return;
+    if (nextPage == null || nextPage > 20) return;
 
     state = const AsyncLoading();
 

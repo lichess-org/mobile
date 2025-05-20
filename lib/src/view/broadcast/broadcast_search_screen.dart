@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -24,14 +26,14 @@ class _BroadcastSearchScreenState extends State<BroadcastSearchScreen> {
 
   void onSubmitted(String term) {
     setState(() {
-      searchTerm = term;
+      searchTerm = term.trim();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final searchBar = PlatformSearchBar(
-      hintText: 'Search broadcasts', // TODO translate
+      hintText: context.l10n.searchSearch,
       autoFocus: true,
       onSubmitted: onSubmitted,
     );
@@ -41,7 +43,17 @@ class _BroadcastSearchScreenState extends State<BroadcastSearchScreen> {
         toolbarHeight: 80, // Custom height to fit the search bar
         title: searchBar,
       ),
-      body: (searchTerm != null) ? _Body(searchTerm!) : kEmptyWidget,
+      body:
+          (searchTerm != null)
+              ? (searchTerm!.isNotEmpty)
+                  ? _Body(searchTerm!)
+                  : const Center(
+                    child: Text(
+                      'Search is empty', // TODO: translate
+                      style: Styles.centeredMessage,
+                    ),
+                  )
+              : kEmptyWidget,
     );
   }
 }
@@ -87,26 +99,37 @@ class _BodyState extends ConsumerState<_Body> {
     final broadcastList = ref.watch(broadcastsSearchPaginatorProvider(widget.searchTerm));
 
     return SafeArea(
-      child: switch (broadcastList) {
-        AsyncValue(:final value?) => ListView.separated(
-          controller: _scrollController,
-          separatorBuilder:
-              (context, index) => PlatformDivider(
-                height: 1,
-                indent: BroadcastListTile.thumbnailSizeFromContext(context) + 16.0 + 10.0,
-              ),
-          itemCount: value.broadcasts.length,
-          itemBuilder:
-              (context, index) =>
-                  (broadcastList.isLoading && index >= value.broadcasts.length - 1)
-                      ? const Shimmer(
-                        child: ShimmerLoading(isLoading: true, child: BroadcastListTile.loading()),
-                      )
-                      : BroadcastListTile(broadcast: value.broadcasts[index]),
-        ),
-        AsyncError(:final error) => Center(child: Text('Cannot load round data: $error')),
-        _ => const Center(child: CircularProgressIndicator.adaptive()),
-      },
+      child: broadcastList.when(
+        data: (value) {
+          final broadcasts = value.broadcasts;
+
+          return (broadcasts.isNotEmpty)
+              ? ListView.separated(
+                controller: _scrollController,
+                separatorBuilder:
+                    (context, index) => PlatformDivider(
+                      height: 1,
+                      indent: BroadcastListTile.thumbnailSizeFromContext(context) + 16.0 + 10.0,
+                    ),
+                itemCount: broadcasts.length,
+                itemBuilder:
+                    (context, index) =>
+                        (broadcastList.isLoading && index >= broadcasts.length - 1)
+                            ? const Shimmer(
+                              child: ShimmerLoading(
+                                isLoading: true,
+                                child: BroadcastListTile.loading(),
+                              ),
+                            )
+                            : BroadcastListTile(broadcast: broadcasts[index]),
+              )
+              : Center(
+                child: Text(context.l10n.mobileNoSearchResults, style: Styles.centeredMessage),
+              );
+        },
+        error: (_, _) => const Center(child: Text('Could not load round data')),
+        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      ),
     );
   }
 }

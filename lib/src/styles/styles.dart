@@ -18,6 +18,7 @@ abstract class Styles {
   static const formError = TextStyle(color: LichessColors.red);
   static const formDescription = TextStyle(fontSize: 12);
   static const linkStyle = TextStyle(color: Colors.blueAccent, decoration: TextDecoration.none);
+  static const centeredMessage = TextStyle(color: Colors.grey, fontSize: 20.0);
 
   // padding
   static const bodyPadding = EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);

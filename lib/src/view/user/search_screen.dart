@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/user/search_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -142,12 +143,12 @@ class _UserList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final autoComplete = ref.watch(autoCompleteUserProvider(term));
-    return SingleChildScrollView(
-      child: autoComplete.when(
-        data:
-            (userList) =>
-                userList.isNotEmpty
-                    ? ListSection(
+    return autoComplete.when(
+      data:
+          (userList) =>
+              userList.isNotEmpty
+                  ? SingleChildScrollView(
+                    child: ListSection(
                       header: Row(
                         children: [
                           const Icon(Icons.person),
@@ -169,24 +170,16 @@ class _UserList extends ConsumerWidget {
                                 ),
                               )
                               .toList(),
-                    )
-                    : Column(
-                      children: [
-                        const SizedBox(height: 16.0),
-                        Center(child: Text(context.l10n.mobileNoSearchResults)),
-                      ],
                     ),
-        error: (e, _) {
-          debugPrint('Error loading search results: $e');
-          return const Column(
-            children: [
-              SizedBox(height: 16.0),
-              Center(child: Text('Could not load search results.')),
-            ],
-          );
-        },
-        loading: () => const Column(children: [SizedBox(height: 16.0), CenterLoadingIndicator()]),
-      ),
+                  )
+                  : Center(
+                    child: Text(context.l10n.mobileNoSearchResults, style: Styles.centeredMessage),
+                  ),
+      error: (e, _) {
+        debugPrint('Error loading search results: $e');
+        return const Center(child: Text('Could not load search results.'));
+      },
+      loading: () => const Center(child: CenterLoadingIndicator()),
     );
   }
 }
