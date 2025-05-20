@@ -43,7 +43,7 @@ class AccountService {
     final prefs = LichessBinding.instance.sharedPreferences;
 
     _accountProviderSubscription = _ref.listen(accountProvider, (_, account) {
-      final playban = account.valueOrNull?.playban;
+      final playban = account.value?.playban;
       final storedDate = prefs.getString(_storageKey);
       final lastPlaybanNotificationDate = storedDate != null ? DateTime.parse(storedDate) : null;
 

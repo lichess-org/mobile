@@ -258,7 +258,7 @@ class StudyController extends _$StudyController
   }
 
   void onPromotionSelection(Role? role) {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state == null) return;
 
     if (role == null) {
@@ -283,7 +283,7 @@ class StudyController extends _$StudyController
   }
 
   void userNext() {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state!.currentNode.children.isEmpty) return;
     _setPath(
       state.currentPath + _root.nodeAt(state.currentPath).children.first.id,
@@ -315,7 +315,7 @@ class StudyController extends _$StudyController
   }
 
   void toggleBoard() {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state != null) {
       this.state = AsyncValue.data(state.copyWith(pov: state.pov.opposite));
     }
@@ -365,7 +365,7 @@ class StudyController extends _$StudyController
 
   @override
   void promoteVariation(UciPath path, bool toMainline) {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state == null) return;
     _root.promoteAt(path, toMainline: toMainline);
     this.state = AsyncValue.data(
@@ -389,7 +389,7 @@ class StudyController extends _$StudyController
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
   }) {
-    final state = this.state.valueOrNull;
+    final state = this.state.value;
     if (state == null) return;
 
     final pathChange = state.currentPath != path;

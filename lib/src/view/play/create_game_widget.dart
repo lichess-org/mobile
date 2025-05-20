@@ -19,8 +19,8 @@ class CreateGameWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
-    final account = ref.watch(accountProvider).valueOrNull;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
+    final account = ref.watch(accountProvider).value;
     final userPerf = account?.perfs[playPrefs.realTimePerf];
     final canUseRatingRange = userPerf != null && userPerf.provisional != true;
 
@@ -157,7 +157,7 @@ class CreateGameWidget extends ConsumerWidget {
                   // Pops the play bottom sheet
                   Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
 
-                  final playban = ref.read(accountProvider).valueOrNull?.playban;
+                  final playban = ref.read(accountProvider).value?.playban;
                   if (playban != null) {
                     ref.read(accountServiceProvider).showPlaybanDialog(playban);
                     return;

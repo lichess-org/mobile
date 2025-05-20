@@ -98,7 +98,7 @@ class AccountScreen extends ConsumerWidget {
     final authController = ref.watch(authControllerProvider);
     final account = ref.watch(accountProvider);
     final userSession = ref.watch(authSessionProvider);
-    final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
+    final LightUser? user = account.value?.lightUser ?? userSession?.user;
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 

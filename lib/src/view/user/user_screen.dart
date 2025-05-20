@@ -120,7 +120,7 @@ class _UserProfileListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recentGames = ref.watch(userRecentGamesProvider(userId: user.id));
-    final nbOfGames = ref.watch(userNumberOfGamesProvider(user.lightUser)).valueOrNull ?? 0;
+    final nbOfGames = ref.watch(userNumberOfGamesProvider(user.lightUser)).value ?? 0;
     final session = ref.watch(authSessionProvider);
 
     if (user.disabled == true) {

@@ -48,7 +48,7 @@ class RecentGamesWidget extends ConsumerWidget {
                     GameHistoryScreen.buildRoute(
                       context,
                       user: user,
-                      isOnline: connectivity.valueOrNull?.isOnline == true,
+                      isOnline: connectivity.value?.isOnline == true,
                     ),
                   );
                 }

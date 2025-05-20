@@ -76,7 +76,7 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
   @override
   void didPop() {
     if (mounted) {
-      final joined = ref.read(tournamentControllerProvider(widget.id)).valueOrNull?.hasJoined;
+      final joined = ref.read(tournamentControllerProvider(widget.id)).value?.hasJoined;
       if (joined == true) {
         ref.invalidate(myRecentGamesProvider);
         ref.invalidate(accountProvider);
@@ -88,7 +88,7 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
   @override
   Widget build(BuildContext context) {
     ref.listen(
-      tournamentControllerProvider(widget.id).select((value) => value.valueOrNull?.currentGame),
+      tournamentControllerProvider(widget.id).select((value) => value.value?.currentGame),
       (prevGameId, currentGameId) {
         if (prevGameId != currentGameId && currentGameId != null) {
           Navigator.of(
@@ -900,7 +900,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     final kidModeAsync = ref.watch(kidModeProvider);
 
     ref.listen(
-      tournamentControllerProvider(widget.state.id).select((value) => value.valueOrNull?.joined),
+      tournamentControllerProvider(widget.state.id).select((value) => value.value?.joined),
       (prevJoined, joined) {
         if (prevJoined != joined) {
           setState(() {
@@ -913,7 +913,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     return BottomBar(
       cupertinoTransparent: true,
       children: [
-        if (widget.state.chatOptions != null && kidModeAsync.valueOrNull == false)
+        if (widget.state.chatOptions != null && kidModeAsync.value == false)
           ChatBottomBarButton(options: widget.state.chatOptions!),
 
         if (widget.state.tournament.isFinished != true && session != null)

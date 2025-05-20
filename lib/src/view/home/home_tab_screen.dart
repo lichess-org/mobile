@@ -85,7 +85,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         final ongoingGames = ref.watch(ongoingGamesProvider);
         final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
         final recentGames = ref.watch(myRecentGamesProvider);
-        final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
+        final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
         final isTablet = isTabletOrLarger(context);
         final featuredTournaments = status.isOnline
             ? ref.watch(featuredTournamentsProvider)
@@ -708,7 +708,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
     final connectivity = ref.watch(connectivityChangesProvider);
     final challenges = ref.watch(challengesProvider);
 
-    final inwardCount = challenges.valueOrNull?.inward.length ?? 0;
+    final inwardCount = challenges.value?.inward.length ?? 0;
 
     return switch (connectivity) {
       AsyncData(:final value) => SemanticIconButton(

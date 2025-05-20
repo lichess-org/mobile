@@ -76,8 +76,8 @@ class TvController extends _$TvController {
       id = game.id;
       orientation = game.playerSideOf(userId!) ?? Side.white;
     } else {
-      id = state.valueOrNull?.game.id ?? initialGame!.$1;
-      orientation = state.valueOrNull?.orientation ?? initialGame!.$2;
+      id = state.value?.game.id ?? initialGame!.$1;
+      orientation = state.value?.orientation ?? initialGame!.$2;
     }
 
     final socketClient = ref

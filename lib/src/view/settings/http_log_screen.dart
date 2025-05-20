@@ -57,7 +57,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
       appBar: AppBar(
         title: const Text('HTTP Logs'),
         actions: [
-          if (asyncState.valueOrNull?.isDeleteButtonVisible == true)
+          if (asyncState.value?.isDeleteButtonVisible == true)
             IconButton(
               // TODO localize
               tooltip: 'Clear all logs',
@@ -76,7 +76,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
       body: _HttpLogList(
         scrollController: _scrollController,
         refreshIndicatorKey: _refreshIndicatorKey,
-        logs: asyncState.valueOrNull?.logs.toList() ?? [],
+        logs: asyncState.value?.logs.toList() ?? [],
         onRefresh: _onRefresh,
       ),
     );

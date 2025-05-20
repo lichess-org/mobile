@@ -95,7 +95,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     await _socketClient.firstConnection;
 
     _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
-      if (state.valueOrNull?.isNewOrOngoing == true) {
+      if (state.value?.isNewOrOngoing == true) {
         _syncDebouncer(() {
           _reloadPgn();
         });
@@ -104,7 +104,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () {
-        if (state.valueOrNull?.isNewOrOngoing == true) {
+        if (state.value?.isNewOrOngoing == true) {
           _syncDebouncer(() {
             _reloadPgn();
           });
