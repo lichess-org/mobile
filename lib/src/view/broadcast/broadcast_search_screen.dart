@@ -100,6 +100,7 @@ class _BodyState extends ConsumerState<_Body> {
 
     return SafeArea(
       child: broadcastList.when(
+        skipLoadingOnReload: true,
         data: (value) {
           final broadcasts = value.broadcasts;
 
