@@ -36,7 +36,6 @@ class PuzzleLayout extends ConsumerStatefulWidget {
     this.engineGauge,
     this.errorMessage,
     this.showEngineGaugePlaceholder = false,
-    this.boardKey,
     this.userActionsBar,
     super.key,
   }) : assert(
@@ -55,7 +54,6 @@ class PuzzleLayout extends ConsumerStatefulWidget {
       bottomTable = const SizedBox.shrink(),
       shapes = null,
       engineGauge = null,
-      boardKey = null,
       userActionsBar = null;
 
   final String? fen;
@@ -67,11 +65,6 @@ class PuzzleLayout extends ConsumerStatefulWidget {
   final Move? lastMove;
 
   final ISet<Shape>? shapes;
-
-  /// [GlobalKey] for the board.
-  ///
-  /// Used to set gestures exclusion on android.
-  final GlobalKey? boardKey;
 
   /// Widget that will appear at the top of the board.
   final Widget topTable;
@@ -163,7 +156,6 @@ class _PuzzleLayoutState extends ConsumerState<PuzzleLayout> {
                   lastMove: widget.lastMove,
                   shapes: shapes,
                   settings: defaultSettings,
-                  boardKey: widget.boardKey,
                   error: widget.errorMessage,
                 ),
                 if (widget.engineGauge != null) ...[
@@ -244,7 +236,6 @@ class _PuzzleLayoutState extends ConsumerState<PuzzleLayout> {
                   lastMove: widget.lastMove,
                   shapes: shapes,
                   settings: defaultSettings,
-                  boardKey: widget.boardKey,
                   error: widget.errorMessage,
                 ),
               ),
@@ -298,7 +289,6 @@ class _BoardWidget extends StatelessWidget {
     this.shapes,
     required this.settings,
     this.error,
-    this.boardKey,
   });
 
   final double size;
@@ -309,12 +299,10 @@ class _BoardWidget extends StatelessWidget {
   final ISet<Shape>? shapes;
   final ChessboardSettings settings;
   final String? error;
-  final GlobalKey? boardKey;
 
   @override
   Widget build(BuildContext context) {
     final board = Chessboard(
-      key: boardKey,
       size: size,
       fen: fen,
       orientation: orientation,
@@ -356,38 +344,6 @@ class _ErrorWidget extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class BoardSettingsOverrides {
-  const BoardSettingsOverrides({
-    this.animationDuration,
-    this.autoQueenPromotion,
-    this.autoQueenPromotionOnPremove,
-    this.blindfoldMode,
-    this.drawShape,
-    this.pieceOrientationBehavior,
-    this.pieceAssets,
-  });
-
-  final Duration? animationDuration;
-  final bool? autoQueenPromotion;
-  final bool? autoQueenPromotionOnPremove;
-  final bool? blindfoldMode;
-  final DrawShapeOptions? drawShape;
-  final PieceOrientationBehavior? pieceOrientationBehavior;
-  final PieceAssets? pieceAssets;
-
-  ChessboardSettings merge(ChessboardSettings settings) {
-    return settings.copyWith(
-      animationDuration: animationDuration,
-      autoQueenPromotion: autoQueenPromotion,
-      autoQueenPromotionOnPremove: autoQueenPromotionOnPremove,
-      blindfoldMode: blindfoldMode,
-      drawShape: drawShape,
-      pieceOrientationBehavior: pieceOrientationBehavior,
-      pieceAssets: pieceAssets,
     );
   }
 }
