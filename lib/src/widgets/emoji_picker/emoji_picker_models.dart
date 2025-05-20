@@ -4,7 +4,7 @@ part 'emoji_picker_models.freezed.dart';
 part 'emoji_picker_models.g.dart';
 
 @Freezed(toJson: true, fromJson: true)
-class Category with _$Category {
+sealed class Category with _$Category {
   const factory Category({
     required String id,
     required String name,
@@ -15,14 +15,14 @@ class Category with _$Category {
 }
 
 @Freezed(toJson: true, fromJson: true)
-class Skin with _$Skin {
+sealed class Skin with _$Skin {
   const factory Skin({required String src}) = _Skin;
 
   factory Skin.fromJson(Map<String, dynamic> json) => _$SkinFromJson(json);
 }
 
 @Freezed(toJson: true, fromJson: true)
-class Emoji with _$Emoji {
+sealed class Emoji with _$Emoji {
   const factory Emoji({
     required String id,
     required String name,
@@ -34,7 +34,7 @@ class Emoji with _$Emoji {
 }
 
 @Freezed(toJson: true, fromJson: true)
-class EmojiData with _$EmojiData {
+sealed class EmojiData with _$EmojiData {
   const EmojiData._(); // Added constructor
 
   const factory EmojiData({

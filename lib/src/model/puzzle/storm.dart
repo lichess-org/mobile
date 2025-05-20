@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 part 'storm.freezed.dart';
 
 @freezed
-class PuzzleStormHighScore with _$PuzzleStormHighScore {
+sealed class PuzzleStormHighScore with _$PuzzleStormHighScore {
   const factory PuzzleStormHighScore({
     required int allTime,
     required int day,
@@ -17,7 +17,7 @@ class PuzzleStormHighScore with _$PuzzleStormHighScore {
 }
 
 @freezed
-class StormRunStats with _$StormRunStats {
+sealed class StormRunStats with _$StormRunStats {
   const StormRunStats._();
   const factory StormRunStats({
     required int moves,
@@ -59,7 +59,7 @@ class StormFilter {
 enum StormNewHighType { day, week, month, allTime }
 
 @freezed
-class StormDashboard with _$StormDashboard {
+sealed class StormDashboard with _$StormDashboard {
   const factory StormDashboard({
     required PuzzleStormHighScore highScore,
     required IList<StormDayScore> dayHighscores,
@@ -67,7 +67,7 @@ class StormDashboard with _$StormDashboard {
 }
 
 @freezed
-class StormDayScore with _$StormDayScore {
+sealed class StormDayScore with _$StormDayScore {
   const factory StormDayScore({
     required DateTime day,
     required int runs,
@@ -78,7 +78,7 @@ class StormDayScore with _$StormDayScore {
 }
 
 @freezed
-class StormNewHigh with _$StormNewHigh {
+sealed class StormNewHigh with _$StormNewHigh {
   const factory StormNewHigh({required StormNewHighType key, required int prev}) = _StormNewHigh;
 }
 

@@ -191,7 +191,7 @@ class PuzzleBatchStorage {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleBatch with _$PuzzleBatch {
+sealed class PuzzleBatch with _$PuzzleBatch {
   const factory PuzzleBatch({
     required IList<PuzzleSolution> solved,
     required IList<Puzzle> unsolved,

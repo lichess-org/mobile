@@ -96,7 +96,7 @@ class OverTheBoardClock extends _$OverTheBoardClock {
 }
 
 @freezed
-class OverTheBoardClockState with _$OverTheBoardClockState {
+sealed class OverTheBoardClockState with _$OverTheBoardClockState {
   const OverTheBoardClockState._();
 
   const factory OverTheBoardClockState({

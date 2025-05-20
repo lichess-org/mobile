@@ -12,7 +12,7 @@ part 'opening_explorer.g.dart';
 enum OpeningDatabase { master, lichess, player }
 
 @Freezed(fromJson: true)
-class OpeningExplorerEntry with _$OpeningExplorerEntry {
+sealed class OpeningExplorerEntry with _$OpeningExplorerEntry {
   const OpeningExplorerEntry._();
 
   const factory OpeningExplorerEntry({
@@ -34,7 +34,7 @@ class OpeningExplorerEntry with _$OpeningExplorerEntry {
 }
 
 @Freezed(fromJson: true)
-class OpeningMove with _$OpeningMove {
+sealed class OpeningMove with _$OpeningMove {
   const OpeningMove._();
 
   const factory OpeningMove({
@@ -57,7 +57,7 @@ class OpeningMove with _$OpeningMove {
 }
 
 @Freezed(fromJson: true)
-class OpeningExplorerGame with _$OpeningExplorerGame {
+sealed class OpeningExplorerGame with _$OpeningExplorerGame {
   factory OpeningExplorerGame({
     required GameId id,
     required ({String name, int rating}) white,
@@ -99,7 +99,7 @@ class OpeningExplorerGame with _$OpeningExplorerGame {
 enum GameMode { casual, rated }
 
 @freezed
-class OpeningExplorerCacheKey with _$OpeningExplorerCacheKey {
+sealed class OpeningExplorerCacheKey with _$OpeningExplorerCacheKey {
   const factory OpeningExplorerCacheKey({
     required String fen,
     required OpeningExplorerPrefs prefs,

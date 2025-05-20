@@ -20,7 +20,7 @@ class GameFilter extends _$GameFilter {
 }
 
 @freezed
-class GameFilterState with _$GameFilterState {
+sealed class GameFilterState with _$GameFilterState {
   const GameFilterState._();
 
   const factory GameFilterState({@Default(ISet<Perf>.empty()) ISet<Perf> perfs, Side? side}) =

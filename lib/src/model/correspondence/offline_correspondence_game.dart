@@ -18,7 +18,7 @@ part 'offline_correspondence_game.g.dart';
 /// This is always a game of the current user, so [youAre], [me] and [opponent]
 /// are always guaranteed to be non-null.
 @Freezed(fromJson: true, toJson: true)
-class OfflineCorrespondenceGame
+sealed class OfflineCorrespondenceGame
     with _$OfflineCorrespondenceGame, BaseGame, IndexableSteps
     implements BaseGame {
   const OfflineCorrespondenceGame._();

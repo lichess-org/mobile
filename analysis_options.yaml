@@ -16,7 +16,6 @@ analyzer:
     strict-raw-types: true
   exclude:
     - "**/*.g.dart"
-    - "**/*.freezed.dart"
     - lib/src/styles/lichess_icons.dart
     - lib/src/styles/social_icons.dart
     - lib/firebase_options.dart

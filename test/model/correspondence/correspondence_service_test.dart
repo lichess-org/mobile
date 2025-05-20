@@ -10,14 +10,13 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:mocktail/mocktail.dart';
 
 import '../../binding.dart';
+import '../../example_data.dart';
 import '../../test_container.dart';
 import '../auth/fake_session_storage.dart';
 
 class NotificationDisplayMock extends Mock implements FlutterLocalNotificationsPlugin {}
 
 class CorrespondenceGameStorageMock extends Mock implements CorrespondenceGameStorage {}
-
-class OfflineCorrespondenceGameFake extends Fake implements OfflineCorrespondenceGame {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +25,7 @@ void main() {
   final correspondenceGameStorageMock = CorrespondenceGameStorageMock();
 
   setUpAll(() {
-    registerFallbackValue(OfflineCorrespondenceGameFake());
+    registerFallbackValue(offlineCorrespondenceGame);
   });
 
   tearDown(() {
