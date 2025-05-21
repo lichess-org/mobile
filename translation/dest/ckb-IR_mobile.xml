@@ -26,21 +26,21 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">مەتەڵەکان شیکار بکە کە پەیوەندییان بە دەستپێکە دڵخوازەکانتەوە ھەیە، یان شێوازێک ھەڵبژێرە.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">مەتەڵەکان</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">دوایین گەڕانەکان</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">تێبینیە گرنگرکان</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">دۆخی ڕازاندنەوەی شاشە</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">شاردنەوەی سیستەمی UI لەکاتی یاریکردندا. ئەگەر ئاماژەکانی گواستنەوەی سیستەمەکە لە لێوارەکانی شاشە بێزاریکردی، ئەمە بەکاربهێنە. بۆ شاشەکانی یاری و مەتەڵەکان دەگونجێت.</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">رێکخستن</string>
-  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">بەشکردن بە PNG</string>
-  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">بەشکردنی لینکی یاری</string>
-  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">پۆستەکە وەک FEN هاوبەش بکە</string>
-  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">ئەم مەتەڵە بڵاوبکەرەوە</string>
-  <string name="showComments" comment="Shown in the analysis screen.">کۆمێنتەکان پیشان بدە</string>
-  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">ئەنجامەکە پێشان بدە</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">زنجیرە جوڵە پێشنیارکراوەکان نیشان بدە</string>
-  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">هەڵەیەک ڕوویدا.</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">کاردانەوەی بەرکەوتن</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">دۆخی پڕاوپڕی شاشە</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">شاردنەوەی ڕووکاری سیستەم لەکاتی یاریکردندا. ئەمە بەکاربھێنە ئەگەر ئاماژەکانی ڕێدۆزیی سیستەمەکە لە لێواری شاشەکە بێزارت دەکەن. ئەمە شاشەکانی یاری و مەتەڵ دەگرێتەوە.</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ڕێکخسنەکان</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">ھاوبەشکردنی PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">ھاوبەشکردنی بەستەری یاری</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">شوێنەکە وەک FEN ھاوبەشی پێبکە</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">ئەم مەتەڵە ھاوبەشی پێبکە</string>
+  <string name="showComments" comment="Shown in the analysis screen.">لێدوانەکان پیشان بدە</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">ئەنجام پیشان بدە</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">زنجیرە جووڵە پێشنیارکراوەکان پیشان بدە</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">ھەڵەیەک ڕوویدا.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">ڕەنگەکانی سیستەم</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">ڕووکار</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">ئامرازەکان</string>
-  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">چاوەڕێی بەشداریکردنی لایەنی بەرامبەر...</string>
-  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">سەیکردن</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">چاوەڕێی بەشداریکردنی ڕکابەر...</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">سەیرکردن</string>
 </resources>
