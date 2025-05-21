@@ -1463,10 +1463,10 @@ packages:
     dependency: "direct main"
     description:
       name: sound_effect
-      sha256: b14eddb28b9b6bb343cf13d06175f4a62c6020fb908a16c0e1bfe528752e67cb
+      sha256: "24e7a251af6abb1ac1ee17e3d2b6cbcbb612827470a510f2800a24ff9bfb07c6"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
   source_gen:
     dependency: transitive
     description:
