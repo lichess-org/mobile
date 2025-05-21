@@ -448,6 +448,7 @@ class _GameBottomBar extends ConsumerWidget {
             gameState.chatOptions != null &&
             kidModeAsync.valueOrNull == false;
         return BottomBar(
+          maintainBottomViewPadding: true,
           children: [
             BottomBarButton(
               label: context.l10n.menu,
