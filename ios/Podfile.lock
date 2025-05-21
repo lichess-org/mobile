@@ -139,7 +139,7 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - sound_effect (0.1.0):
+  - sound_effect (0.1.1):
     - Flutter
   - sqflite_darwin (0.0.4):
     - Flutter
@@ -283,7 +283,7 @@ SPEC CHECKSUMS:
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
-  sound_effect: 318f1417937eb16269c5ec424c06ee84d8ef2c74
+  sound_effect: d9c2291bda247120d8d1b50c2f7f5c6dc5a6bacd
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
   wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
