@@ -98,7 +98,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             recentGames.maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
 
         final widgets = shouldShowWelcomeScreen
-            ? _welcomeScreenWidgets(session: session, status: status, isTablet: isTablet)
+            ? _welcomeScreenWidgets(
+                session: session,
+                status: status,
+                featuredTournaments: featuredTournaments,
+                isTablet: isTablet,
+              )
             : isTablet
             ? _tabletWidgets(
                 session: session,
@@ -222,6 +227,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   List<Widget> _welcomeScreenWidgets({
     required AuthSessionState? session,
     required ConnectivityStatus status,
+    required AsyncValue<IList<LightTournament>> featuredTournaments,
     required bool isTablet,
   }) {
     final welcomeWidgets = [
@@ -257,8 +263,15 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       if (isTablet)
         Row(
           children: [
-            const Flexible(child: _TabletCreateAGameSection()),
-            Flexible(child: Column(children: welcomeWidgets)),
+            const Expanded(child: _TabletCreateAGameSection()),
+            Expanded(
+              child: Column(
+                children: [
+                  ...welcomeWidgets,
+                  FeaturedTournamentsWidget(featured: featuredTournaments),
+                ],
+              ),
+            ),
           ],
         )
       else ...[
@@ -269,6 +282,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
           ),
         ...welcomeWidgets,
+        if (status.isOnline)
+          _EditableWidget(
+            widget: HomeEditableWidget.featuredTournaments,
+            shouldShow: true,
+            child: FeaturedTournamentsWidget(featured: featuredTournaments),
+          ),
       ],
     ];
   }
