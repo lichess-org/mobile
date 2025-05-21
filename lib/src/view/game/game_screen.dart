@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -201,6 +202,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             : const LoadGameError('Sorry, we could not create the game. Please try again later.');
 
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: const SocketPingRating(),
             title: widget.seek != null
@@ -222,9 +224,15 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 widget.challenge!,
                 () => ref.read(createGameServiceProvider).cancelChallenge(),
               )
-            : const StandaloneGameLoadingBoard();
+            : const Column(
+                children: [
+                  Expanded(child: SafeArea(bottom: false, child: StandaloneGameLoadingBoard())),
+                  BottomBar.empty(maintainBottomViewPadding: true),
+                ],
+              );
 
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: const SocketPingRating(),
             title: widget.seek != null

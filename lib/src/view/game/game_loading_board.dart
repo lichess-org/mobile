@@ -259,6 +259,7 @@ class LoadingPlayerWidget extends StatelessWidget {
       isLoading: true,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Flexible(
             flex: 6,

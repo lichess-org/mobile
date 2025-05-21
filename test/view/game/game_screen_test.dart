@@ -55,10 +55,17 @@ void main() {
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNothing);
 
+      final initialBoardPosition = tester.getTopLeft(find.byType(Chessboard));
+
       // now the game controller is loading and screen doesn't have changed yet
       await tester.pump(const Duration(milliseconds: 10));
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNothing);
+      expect(
+        tester.getTopLeft(find.byType(Chessboard)),
+        initialBoardPosition,
+        reason: 'board position should not change',
+      );
 
       await tester.pump(kFakeWebSocketConnectionLag);
 
@@ -76,6 +83,11 @@ void main() {
       expect(find.byType(PieceWidget), findsNWidgets(32));
       expect(find.text('Peter'), findsOneWidget);
       expect(find.text('Steven'), findsOneWidget);
+      expect(
+        tester.getTopLeft(find.byType(Chessboard)),
+        initialBoardPosition,
+        reason: 'board position should not change',
+      );
     });
 
     testWidgets('a game from the pool with a seek', (WidgetTester tester) async {
@@ -94,6 +106,8 @@ void main() {
       expect(find.text('3+2'), findsOneWidget);
       expect(find.widgetWithText(BottomBarButton, 'Cancel'), findsOneWidget);
 
+      final initialBoardPosition = tester.getTopLeft(find.byType(Chessboard));
+
       // waiting for the game
       await tester.pump(const Duration(seconds: 2));
 
@@ -110,6 +124,11 @@ void main() {
       expect(find.text('Waiting for opponent to join...'), findsNothing);
       expect(find.text('3+2'), findsNothing);
       expect(find.widgetWithText(BottomBarButton, 'Cancel'), findsNothing);
+      expect(
+        tester.getTopLeft(find.byType(Chessboard)),
+        initialBoardPosition,
+        reason: 'board position should not change',
+      );
 
       // wait for game socket to connect
       await tester.pump(kFakeWebSocketConnectionLag);
@@ -130,6 +149,11 @@ void main() {
       expect(find.text('Steven'), findsOneWidget);
       expect(find.text('Waiting for opponent to join...'), findsNothing);
       expect(find.text('3+2'), findsNothing);
+      expect(
+        tester.getTopLeft(find.byType(Chessboard)),
+        initialBoardPosition,
+        reason: 'board position should not change',
+      );
     });
   });
 
