@@ -235,13 +235,23 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer(
-      child: BoardTable(
-        orientation: orientation ?? Side.white,
-        fen: fen ?? kEmptyFen,
-        lastMove: lastMove as NormalMove?,
-        topTable: const LoadingPlayerWidget(),
-        bottomTable: const LoadingPlayerWidget(),
-        moves: const [],
+      child: Column(
+        children: [
+          Expanded(
+            child: SafeArea(
+              bottom: false,
+              child: BoardTable(
+                orientation: orientation ?? Side.white,
+                fen: fen ?? kEmptyFen,
+                lastMove: lastMove as NormalMove?,
+                topTable: const LoadingPlayerWidget(),
+                bottomTable: const LoadingPlayerWidget(),
+                moves: const [],
+              ),
+            ),
+          ),
+          const BottomBar.empty(maintainBottomViewPadding: true),
+        ],
       ),
     );
   }
