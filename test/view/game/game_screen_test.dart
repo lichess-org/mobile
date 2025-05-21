@@ -61,6 +61,11 @@ void main() {
       await tester.pump(const Duration(milliseconds: 10));
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNothing);
+      expect(
+        tester.getTopLeft(find.byType(Chessboard)),
+        initialBoardPosition,
+        reason: 'board position should not change',
+      );
 
       await tester.pump(kFakeWebSocketConnectionLag);
 
@@ -119,6 +124,11 @@ void main() {
       expect(find.text('Waiting for opponent to join...'), findsNothing);
       expect(find.text('3+2'), findsNothing);
       expect(find.widgetWithText(BottomBarButton, 'Cancel'), findsNothing);
+      expect(
+        tester.getTopLeft(find.byType(Chessboard)),
+        initialBoardPosition,
+        reason: 'board position should not change',
+      );
 
       // wait for game socket to connect
       await tester.pump(kFakeWebSocketConnectionLag);
