@@ -73,7 +73,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePuzzleStormFilterNothingToShow => 'Nic k zobrazení, prosím změn filtry';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nic k zobrazení. Zahrajte si nějaké běhy úlohových bouří.';
+  String get mobilePuzzleStormNothingToShow =>
+      'Nic k zobrazení. Zahrajte si nějaké běhy úlohových bouří.';
 
   @override
   String get mobilePuzzleStormSubtitle => 'Vyřeš co nejvíce úloh za 3 minuty.';
@@ -82,7 +83,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'Ztratíte aktuální sérii a vaše skóre bude uloženo.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Hraj úlohy z tvých oblíbených zahájení, nebo si vyber styl.';
+  String get mobilePuzzleThemesSubtitle =>
+      'Hraj úlohy z tvých oblíbených zahájení, nebo si vyber styl.';
 
   @override
   String get mobilePuzzlesTab => 'Úlohy';
@@ -97,7 +99,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Režim bez rušení';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Schovat systémové UI při hře. Použijte toto nastavení, pokud vám vadí systémová navigační gesta na okrajích obrazovky. Platí pro obrazovky her a úlohových bouří.';
+  String get mobileSettingsImmersiveModeSubtitle =>
+      'Schovat systémové UI při hře. Použijte toto nastavení, pokud vám vadí systémová navigační gesta na okrajích obrazovky. Platí pro obrazovky her a úlohových bouří.';
 
   @override
   String get mobileSettingsTab => 'Nastavení';
@@ -399,13 +402,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaIsItRated => 'Započítává se turnaj do ratingu?';
 
   @override
-  String get arenaWillBeNotified => 'Upozorníme Vás, až turnaj začne. Během čekání můžete klidně hrát v jiné záložce prohlížeče.';
+  String get arenaWillBeNotified =>
+      'Upozorníme Vás, až turnaj začne. Během čekání můžete klidně hrát v jiné záložce prohlížeče.';
 
   @override
-  String get arenaIsRated => 'Tento turnaj je hodnocený a odehrané partie budou mít vliv na Váš rating.';
+  String get arenaIsRated =>
+      'Tento turnaj je hodnocený a odehrané partie budou mít vliv na Váš rating.';
 
   @override
-  String get arenaIsNotRated => 'Tento turnaj není hodnocený a odehrané partie nebudou mít vliv na Váš rating.';
+  String get arenaIsNotRated =>
+      'Tento turnaj není hodnocený a odehrané partie nebudou mít vliv na Váš rating.';
 
   @override
   String get arenaSomeRated => 'Některé turnaje jsou hodnoceny a budou mít vliv na váš rating.';
@@ -414,37 +420,43 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Jak se počítají turnajové body?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Výhra je v základu hodnocena 2 body, remíza 1 bodem a za prohru nezískáte žádný bod. \nJestliže ale vyhrajete dvě hry v řadě, začne Vám \"dvojitá\" série - poznáte ji podle ikony ohně u Vašeho jména.\nDokud budete vyhrávat, budou následující hry ohodnoceny dvojnásobným počtem bodů.\n\nNapříklad - dvě výhry následované remízou budou ohodnoceny 6 body: 2 + 2 + (2*1)';
+  String get arenaHowAreScoresCalculatedAnswer =>
+      'Výhra je v základu hodnocena 2 body, remíza 1 bodem a za prohru nezískáte žádný bod. \nJestliže ale vyhrajete dvě hry v řadě, začne Vám \"dvojitá\" série - poznáte ji podle ikony ohně u Vašeho jména.\nDokud budete vyhrávat, budou následující hry ohodnoceny dvojnásobným počtem bodů.\n\nNapříklad - dvě výhry následované remízou budou ohodnoceny 6 body: 2 + 2 + (2*1)';
 
   @override
   String get arenaBerserk => 'Tlačítko Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Pokud hráč stiskne před začátkem partie tlačítko \"Berserk\", ztratí polovinu svého času na hodinách, ale pokud vyhraje, získá za partii o 1 bod navíc.\n\nBerserk v partiích hraných s přídavkem rovněž zruší hráči tento přídavek (např. partie hraná 4+2 se změní na 2+0, výjimkou je časová kontrola 1+2, kterou Berserk změní na 1+0)\n\nTlačítko Berserk není přístupné pro partie s nulovým základním časem (0+1, 0+2).\n\nHráč získá za Berserk bod navíc pouze v případě, že partie měla alespoň 7 tahů.';
+  String get arenaBerserkAnswer =>
+      'Pokud hráč stiskne před začátkem partie tlačítko \"Berserk\", ztratí polovinu svého času na hodinách, ale pokud vyhraje, získá za partii o 1 bod navíc.\n\nBerserk v partiích hraných s přídavkem rovněž zruší hráči tento přídavek (např. partie hraná 4+2 se změní na 2+0, výjimkou je časová kontrola 1+2, kterou Berserk změní na 1+0)\n\nTlačítko Berserk není přístupné pro partie s nulovým základním časem (0+1, 0+2).\n\nHráč získá za Berserk bod navíc pouze v případě, že partie měla alespoň 7 tahů.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Kdo se stane vítězem?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Hráč s nejvyšším počtem bodů na konci stanoveného časového limitu pro turnaj se stane jeho vítězem.';
+  String get arenaHowIsTheWinnerDecidedAnswer =>
+      'Hráč s nejvyšším počtem bodů na konci stanoveného časového limitu pro turnaj se stane jeho vítězem.';
 
   @override
   String get arenaHowDoesPairingWork => 'Jak funguje párování?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Na začátku turnaje jsou hráči spárováni podle svých ratingů.\nJakmile skončíte svou partii, vraťte se do turnajové místnosti - budete spárováni s hráčem, který má podobný rating jako Vy. Díky tomu budete na další spárování čekat velmi krátce, ale pravděpodobně nebudete hrát se všemi ostatními hráči v turnaji.\nHrajte rychle a vraťte se vždy co nejdříve do turnajové místnosti - stihnete tak odehrát více her a získat více bodů.';
+  String get arenaHowDoesPairingWorkAnswer =>
+      'Na začátku turnaje jsou hráči spárováni podle svých ratingů.\nJakmile skončíte svou partii, vraťte se do turnajové místnosti - budete spárováni s hráčem, který má podobný rating jako Vy. Díky tomu budete na další spárování čekat velmi krátce, ale pravděpodobně nebudete hrát se všemi ostatními hráči v turnaji.\nHrajte rychle a vraťte se vždy co nejdříve do turnajové místnosti - stihnete tak odehrát více her a získat více bodů.';
 
   @override
   String get arenaHowDoesItEnd => 'Jak turnaj končí?';
 
   @override
-  String get arenaHowDoesItEndAnswer => 'Turnaj má hodiny s časovým odpočtem. Jakmile dosáhnou nuly, je žebříček turnaje zmrazen a je vyhlášen vítěz. Nedokončené hry se musí dohrát, ale nezapočítávají se již do turnajových výsledků.';
+  String get arenaHowDoesItEndAnswer =>
+      'Turnaj má hodiny s časovým odpočtem. Jakmile dosáhnou nuly, je žebříček turnaje zmrazen a je vyhlášen vítěz. Nedokončené hry se musí dohrát, ale nezapočítávají se již do turnajových výsledků.';
 
   @override
   String get arenaOtherRules => 'Další důležitá pravidla';
 
   @override
-  String get arenaThereIsACountdown => 'Než uděláte svůj první tah, běží časový odpočet. Pokud nestihnete během odpočtu udělat svůj první tah, partii prohrajete.';
+  String get arenaThereIsACountdown =>
+      'Než uděláte svůj první tah, běží časový odpočet. Pokud nestihnete během odpočtu udělat svůj první tah, partii prohrajete.';
 
   @override
   String get arenaThisIsPrivate => 'Toto je soukromý turnaj';
@@ -460,7 +472,8 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get arenaDrawStreakVariants => 'Minimální délka hry pro bodovanou remízu se liší podle varianty. Níže uvedená tabulka uvádí hotnotu pro danou variantu.';
+  String get arenaDrawStreakVariants =>
+      'Minimální délka hry pro bodovanou remízu se liší podle varianty. Níže uvedená tabulka uvádí hotnotu pro danou variantu.';
 
   @override
   String get arenaVariant => 'Varianta';
@@ -478,7 +491,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaCustomStartDate => 'Vlastní datum zahájení';
 
   @override
-  String get arenaCustomStartDateHelp => 'Ve vašem vlastním časovém pásmu. Přepíše nastavení \"Čas před zahájením turnaje\"';
+  String get arenaCustomStartDateHelp =>
+      'Ve vašem vlastním časovém pásmu. Přepíše nastavení \"Čas před zahájením turnaje\"';
 
   @override
   String get arenaAllowBerserk => 'Povolit Berserk';
@@ -493,7 +507,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaArenaStreaks => 'Série v aréně';
 
   @override
-  String get arenaArenaStreaksHelp => 'Po dvou výhrách, další po sobě jdoucí výhry udělují 4 body místo 2.';
+  String get arenaArenaStreaksHelp =>
+      'Po dvou výhrách, další po sobě jdoucí výhry udělují 4 body místo 2.';
 
   @override
   String get arenaNoBerserkAllowed => 'Berserk mód není povolen';
@@ -523,10 +538,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaPickYourTeam => 'Vyber si tým';
 
   @override
-  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Který tým budeš reprezentovat v této bitvě?';
+  String get arenaWhichTeamWillYouRepresentInThisBattle =>
+      'Který tým budeš reprezentovat v této bitvě?';
 
   @override
-  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Musíš se připojit k jednomu z těchto týmů!';
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate =>
+      'Musíš se připojit k jednomu z těchto týmů!';
 
   @override
   String get arenaCreated => 'Vytvořeno';
@@ -541,7 +558,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaTournamentStats => 'Turnajové statistiky';
 
   @override
-  String get arenaRankAvgHelp => 'Průměrný rank je procento umístění. Nižší je lepší.\n\nNapříklad, umístíte se 3 v turnaji o 100 hráčích tak rank je 3%. Umístíte se 10 v turnaji o 1000 hráčích task rank je 1%.';
+  String get arenaRankAvgHelp =>
+      'Průměrný rank je procento umístění. Nižší je lepší.\n\nNapříklad, umístíte se 3 v turnaji o 100 hráčích tak rank je 3%. Umístíte se 10 v turnaji o 1000 hráčích task rank je 1%.';
 
   @override
   String get arenaMedians => 'mediány';
@@ -632,7 +650,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastHowToUseLichessBroadcasts => 'Jak používat Lichess vysílání.';
 
   @override
-  String get broadcastTheNewRoundHelp => 'Nové kolo bude mít stejné členy a přispěvatele jako to předchozí.';
+  String get broadcastTheNewRoundHelp =>
+      'Nové kolo bude mít stejné členy a přispěvatele jako to předchozí.';
 
   @override
   String get broadcastAddRound => 'Přidat kolo';
@@ -667,7 +686,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastSourceSingleUrl => 'PGN Zdrojová URL adresa';
 
   @override
-  String get broadcastSourceUrlHelp => 'URL adresa, kterou bude Lichess kontrolovat pro získání PGN aktualizací. Musí být veřejně přístupná z internetu.';
+  String get broadcastSourceUrlHelp =>
+      'URL adresa, kterou bude Lichess kontrolovat pro získání PGN aktualizací. Musí být veřejně přístupná z internetu.';
 
   @override
   String get broadcastSourceGameIds => 'Až 64 ID Lichess her, oddělených mezerama.';
@@ -696,7 +716,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Definitivně smazat kolo a jeho hry.';
 
   @override
-  String get broadcastDeleteAllGamesOfThisRound => 'Smazat všechny hry v tomto kole. Zdroj musí být aktivní aby bylo možno je znovu vytvořit.';
+  String get broadcastDeleteAllGamesOfThisRound =>
+      'Smazat všechny hry v tomto kole. Zdroj musí být aktivní aby bylo možno je znovu vytvořit.';
 
   @override
   String get broadcastEditRoundStudy => 'Upravit studie kola';
@@ -705,7 +726,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastDeleteTournament => 'Smazat tento turnaj';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Opravdu smazat celý turnaj, všechna kola a hry.';
+  String get broadcastDefinitivelyDeleteTournament =>
+      'Opravdu smazat celý turnaj, všechna kola a hry.';
 
   @override
   String get broadcastShowScores => 'Zobraz skóre hráču dle herních výsledků';
@@ -753,7 +775,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastOverview => 'Přehled';
 
   @override
-  String get broadcastSubscribeTitle => 'Přihlaste se k odběru, abyste byli informováni o začátku každého kola. V předvolbách účtu můžete přepnout mezi zvukovými nebo push oznámeními pro vysílání.';
+  String get broadcastSubscribeTitle =>
+      'Přihlaste se k odběru, abyste byli informováni o začátku každého kola. V předvolbách účtu můžete přepnout mezi zvukovými nebo push oznámeními pro vysílání.';
 
   @override
   String get broadcastUploadImage => 'Nahrát obrázek turnaje';
@@ -847,7 +870,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastBackToLiveMove => 'Back to live move';
 
   @override
-  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
+  String get broadcastSinceHideResults =>
+      'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String get broadcastLiveboard => 'Live board';
@@ -928,13 +952,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get challengeDeclineLater => 'Teď nemohu, požádejte mne prosím později.';
 
   @override
-  String get challengeDeclineTooFast => 'Toto časové tempo je na mne příliš rychlé, vyzvi mně prosím na pomalejší.';
+  String get challengeDeclineTooFast =>
+      'Toto časové tempo je na mne příliš rychlé, vyzvi mně prosím na pomalejší.';
 
   @override
-  String get challengeDeclineTooSlow => 'Vyzvi mne prosím k delší partii, toto časové tempo je na mne moc rychlé.';
+  String get challengeDeclineTooSlow =>
+      'Vyzvi mne prosím k delší partii, toto časové tempo je na mne moc rychlé.';
 
   @override
-  String get challengeDeclineTimeControl => 'V tuto chvíli nepřijímám výzvy s tímto časovým tempem.';
+  String get challengeDeclineTimeControl =>
+      'V tuto chvíli nepřijímám výzvy s tímto časovým tempem.';
 
   @override
   String get challengeDeclineRated => 'Vyzvěte mě raději k hodnocené partii.';
@@ -981,7 +1008,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get perfStatProvisional => 'prozatímní';
 
   @override
-  String get perfStatNotEnoughRatedGames => 'Nebyl odebrán dostatečný počet hodnocených her pro odhad spolehlivého ratingu.';
+  String get perfStatNotEnoughRatedGames =>
+      'Nebyl odebrán dostatečný počet hodnocených her pro odhad spolehlivého ratingu.';
 
   @override
   String perfStatProgressOverLastXGames(String param) {
@@ -1123,10 +1151,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesShowFlairs => 'Zobrazovat ikony hráčů';
 
   @override
-  String get preferencesExplainShowPlayerRatings => 'Toto umožňuje skrýt rating z webových stránek, což pomůže soustředit se pouze na šachy. Hodnocené hry budou mít stále dopad na Váš rating.';
+  String get preferencesExplainShowPlayerRatings =>
+      'Toto umožňuje skrýt rating z webových stránek, což pomůže soustředit se pouze na šachy. Hodnocené hry budou mít stále dopad na Váš rating.';
 
   @override
-  String get preferencesDisplayBoardResizeHandle => 'Zobrazit tlačítko pro změnu velikosti šachovnice';
+  String get preferencesDisplayBoardResizeHandle =>
+      'Zobrazit tlačítko pro změnu velikosti šachovnice';
 
   @override
   String get preferencesOnlyOnInitialPosition => 'Jen v základním postavení';
@@ -1171,7 +1201,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesBothClicksAndDrag => 'Obojí';
 
   @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Předtahy (hraní během protivníkova tahu)';
+  String get preferencesPremovesPlayingDuringOpponentTurn =>
+      'Předtahy (hraní během protivníkova tahu)';
 
   @override
   String get preferencesTakebacksWithOpponentApproval => 'Vrácení tahu (s protihráčovým souhlasem)';
@@ -1183,13 +1214,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Automaticky vyměnit za dámu';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Podržte klávesu <ctrl> při proměně figury pro dočasné pozastavení možnosti automatické proměny';
+  String get preferencesExplainPromoteToQueenAutomatically =>
+      'Podržte klávesu <ctrl> při proměně figury pro dočasné pozastavení možnosti automatické proměny';
 
   @override
   String get preferencesWhenPremoving => 'Při předtahu';
 
   @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automaticky vyžádat remízu při trojím opakování pozice';
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically =>
+      'Automaticky vyžádat remízu při trojím opakování pozice';
 
   @override
   String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Když zbývající čas < 30 sekund';
@@ -1198,7 +1231,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Potvrzení tahu';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Může být zakázáno během hry v menu šachovnice';
+  String get preferencesExplainCanThenBeTemporarilyDisabled =>
+      'Může být zakázáno během hry v menu šachovnice';
 
   @override
   String get preferencesInCorrespondenceGames => 'V korespondenčním šachu';
@@ -1228,7 +1262,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesSnapArrowsToValidMoves => 'Přichytit šipky k platným tahům';
 
   @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Řekněte \"Good game, well played\" (překlad: \"Dobrá hra, pěkně zahráno\") po porážce nebo remíze';
+  String get preferencesSayGgWpAfterLosingOrDrawing =>
+      'Řekněte \"Good game, well played\" (překlad: \"Dobrá hra, pěkně zahráno\") po porážce nebo remíze';
 
   @override
   String get preferencesYourPreferencesHaveBeenSaved => 'Vaše nastavení bylo uloženo.';
@@ -1237,7 +1272,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesScrollOnTheBoardToReplayMoves => 'Rolováním na šachovnici přehrát tahy';
 
   @override
-  String get preferencesCorrespondenceEmailNotification => 'Denní e-mailové oznámení se seznamem vašich korespondenčních her';
+  String get preferencesCorrespondenceEmailNotification =>
+      'Denní e-mailové oznámení se seznamem vašich korespondenčních her';
 
   @override
   String get preferencesNotifyStreamStart => 'Streamer vysílá živě';
@@ -1327,7 +1363,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleDownVote => 'Špatná úloha';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Vaše hodnocení hádanky se nezmění. Hádanky nejsou soutěží. Hodnocení pomáhá vybírat nejlepší hádanky pro vaši aktuální dovednost.';
+  String get puzzleYourPuzzleRatingWillNotChange =>
+      'Vaše hodnocení hádanky se nezmění. Hádanky nejsou soutěží. Hodnocení pomáhá vybírat nejlepší hádanky pro vaši aktuální dovednost.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'Najděte nejlepší tah za bílého.';
@@ -1374,10 +1411,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzlePuzzlesByOpenings => 'Úlohy podle zahájení';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Zahájení, které jste hráli nejvíce v hodnocených hrách';
+  String get puzzleOpeningsYouPlayedTheMost =>
+      'Zahájení, které jste hráli nejvíce v hodnocených hrách';
 
   @override
-  String get puzzleUseFindInPage => 'Použijte „Hledání na stránce“ v menu prohlížeče a najděte svoje oblíbené zahájení!';
+  String get puzzleUseFindInPage =>
+      'Použijte „Hledání na stránce“ v menu prohlížeče a najděte svoje oblíbené zahájení!';
 
   @override
   String get puzzleUseCtrlF => 'Použijte Ctrl+F pro vyhledání vašeho oblíbeného zahájení!';
@@ -1453,7 +1492,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleFailed => 'nezdařilo se';
 
   @override
-  String get puzzleStreakDescription => 'Vyřešte postupně těžší hádanky a vytvořte vítěznou sérii. Není tu žádný limit, takže si dejte na na čas. Jeden špatný tah a je to, hra skončí! Můžete ale přeskočit jeden tah za běh.';
+  String get puzzleStreakDescription =>
+      'Vyřešte postupně těžší hádanky a vytvořte vítěznou sérii. Není tu žádný limit, takže si dejte na na čas. Jeden špatný tah a je to, hra skončí! Můžete ale přeskočit jeden tah za běh.';
 
   @override
   String puzzleYourStreakX(String param) {
@@ -1461,7 +1501,8 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get puzzleStreakSkipExplanation => 'Přeskočit tento krok pro zachování své série! Funguje pouze jednou za běh.';
+  String get puzzleStreakSkipExplanation =>
+      'Přeskočit tento krok pro zachování své série! Funguje pouze jednou za běh.';
 
   @override
   String get puzzleContinueTheStreak => 'Pokračovat v sérii';
@@ -1484,7 +1525,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Hledat hádanky';
 
   @override
-  String get puzzleFromMyGamesNone => 'V databázi nemáte žádné úlohy, ale Lichess vás stále velmi miluje.\nHrajte rapid a klasické hry ke zvýšení šance na přidání vlastní úlohy!';
+  String get puzzleFromMyGamesNone =>
+      'V databázi nemáte žádné úlohy, ale Lichess vás stále velmi miluje.\nHrajte rapid a klasické hry ke zvýšení šance na přidání vlastní úlohy!';
 
   @override
   String puzzleFromXGamesFound(String param1, String param2) {
@@ -1577,43 +1619,50 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeAdvancedPawn => 'Postouplý pěšec';
 
   @override
-  String get puzzleThemeAdvancedPawnDescription => 'Jeden z Vašich pěšců je hluboko v poli protihráče, a možná hrozí proměnou.';
+  String get puzzleThemeAdvancedPawnDescription =>
+      'Jeden z Vašich pěšců je hluboko v poli protihráče, a možná hrozí proměnou.';
 
   @override
   String get puzzleThemeAdvantage => 'Výhoda';
 
   @override
-  String get puzzleThemeAdvantageDescription => 'Využijte své šance získat rozhodující výhodu. (200cp ≤ eval ≤ 600cp)';
+  String get puzzleThemeAdvantageDescription =>
+      'Využijte své šance získat rozhodující výhodu. (200cp ≤ eval ≤ 600cp)';
 
   @override
   String get puzzleThemeAnastasiaMate => 'Anastáziin mat';
 
   @override
-  String get puzzleThemeAnastasiaMateDescription => 'Jezdec a věž nebo královna se spojí, aby obklíčili protihráčova krále mezi krajem šachovnice a přátelskou figurou.';
+  String get puzzleThemeAnastasiaMateDescription =>
+      'Jezdec a věž nebo královna se spojí, aby obklíčili protihráčova krále mezi krajem šachovnice a přátelskou figurou.';
 
   @override
   String get puzzleThemeArabianMate => 'Arabský mat';
 
   @override
-  String get puzzleThemeArabianMateDescription => 'Jezdec a věž dají mat soupeřovu králi na kraji šachovnice.';
+  String get puzzleThemeArabianMateDescription =>
+      'Jezdec a věž dají mat soupeřovu králi na kraji šachovnice.';
 
   @override
   String get puzzleThemeAttackingF2F7 => 'Útok na f2 či f7';
 
   @override
-  String get puzzleThemeAttackingF2F7Description => 'Útok zaměřený na pěšce f2, resp. f7, například jako při tzv. Šustrmatu (Ovčáckém matu).';
+  String get puzzleThemeAttackingF2F7Description =>
+      'Útok zaměřený na pěšce f2, resp. f7, například jako při tzv. Šustrmatu (Ovčáckém matu).';
 
   @override
   String get puzzleThemeAttraction => 'Zavlečení';
 
   @override
-  String get puzzleThemeAttractionDescription => 'Výměna nebo obětování figur, která podpoří nebo vynutí figuru protihráče postoupit na pole, jenž umožňuje další taktický postup.';
+  String get puzzleThemeAttractionDescription =>
+      'Výměna nebo obětování figur, která podpoří nebo vynutí figuru protihráče postoupit na pole, jenž umožňuje další taktický postup.';
 
   @override
   String get puzzleThemeBackRankMate => 'Mat na poslední řadě';
 
   @override
-  String get puzzleThemeBackRankMateDescription => 'Mat krále na poslední řadě, kde je uvězněn vlastními figurami.';
+  String get puzzleThemeBackRankMateDescription =>
+      'Mat krále na poslední řadě, kde je uvězněn vlastními figurami.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Střelcové koncovky';
@@ -1625,7 +1674,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeBodenMate => 'Bodenův mat';
 
   @override
-  String get puzzleThemeBodenMateDescription => 'Dva útočící střelci na různých diagonálách dají mat soupeřovu králi, jež je zablokován svými figurami.';
+  String get puzzleThemeBodenMateDescription =>
+      'Dva útočící střelci na různých diagonálách dají mat soupeřovu králi, jež je zablokován svými figurami.';
 
   @override
   String get puzzleThemeCastling => 'Rošáda';
@@ -1637,67 +1687,78 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeCapturingDefender => 'Odstranění obránce';
 
   @override
-  String get puzzleThemeCapturingDefenderDescription => 'Sebrání figury, která brání jinou figuru, a poté dalším tahem dobereme tuto nechráněnou figuru.';
+  String get puzzleThemeCapturingDefenderDescription =>
+      'Sebrání figury, která brání jinou figuru, a poté dalším tahem dobereme tuto nechráněnou figuru.';
 
   @override
   String get puzzleThemeCrushing => 'Potrestání';
 
   @override
-  String get puzzleThemeCrushingDescription => 'Odhalte chybu soupeře a získejte drtivou výhodu. (eval ≥ 600cp)';
+  String get puzzleThemeCrushingDescription =>
+      'Odhalte chybu soupeře a získejte drtivou výhodu. (eval ≥ 600cp)';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat dvěma střelci';
 
   @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Dva útočící střelci na různých diagonálách dají mat soupeřovu králi.';
+  String get puzzleThemeDoubleBishopMateDescription =>
+      'Dva útočící střelci na různých diagonálách dají mat soupeřovu králi.';
 
   @override
   String get puzzleThemeDovetailMate => 'Coziův mat';
 
   @override
-  String get puzzleThemeDovetailMateDescription => 'Dáma matuje sousedícího krále, jehož jediná dvě ústupová pole blokují přátelské figurky.';
+  String get puzzleThemeDovetailMateDescription =>
+      'Dáma matuje sousedícího krále, jehož jediná dvě ústupová pole blokují přátelské figurky.';
 
   @override
   String get puzzleThemeEquality => 'Vyrovnání pozice';
 
   @override
-  String get puzzleThemeEqualityDescription => 'Zremízování či zisk vyrovnané pozice z dříve prohrané pozice. (eval ≤ 200cp)';
+  String get puzzleThemeEqualityDescription =>
+      'Zremízování či zisk vyrovnané pozice z dříve prohrané pozice. (eval ≤ 200cp)';
 
   @override
   String get puzzleThemeKingsideAttack => 'Útok na královském křídle';
 
   @override
-  String get puzzleThemeKingsideAttackDescription => 'Útok na soupeřova krále poté, co udělal malou rošádu.';
+  String get puzzleThemeKingsideAttackDescription =>
+      'Útok na soupeřova krále poté, co udělal malou rošádu.';
 
   @override
   String get puzzleThemeClearance => 'Uvolnění';
 
   @override
-  String get puzzleThemeClearanceDescription => 'Tah, často s tempem, který uvolní pole, sloupec nebo diagonálu pro následný taktický úder.';
+  String get puzzleThemeClearanceDescription =>
+      'Tah, často s tempem, který uvolní pole, sloupec nebo diagonálu pro následný taktický úder.';
 
   @override
   String get puzzleThemeDefensiveMove => 'Obranný tah';
 
   @override
-  String get puzzleThemeDefensiveMoveDescription => 'Přesný tah nebo pořadí tahů, které jsou potřebné k tomu, aby nedošlo ke ztrátě materiálu nebo jiné výhody.';
+  String get puzzleThemeDefensiveMoveDescription =>
+      'Přesný tah nebo pořadí tahů, které jsou potřebné k tomu, aby nedošlo ke ztrátě materiálu nebo jiné výhody.';
 
   @override
   String get puzzleThemeDeflection => 'Zavlečení';
 
   @override
-  String get puzzleThemeDeflectionDescription => 'Tah, který odvádí soupeřovu figuru od jejích jiných povinností, jako například bránění klíčového pole. Občas nazýváno také jako \"přetížení\".';
+  String get puzzleThemeDeflectionDescription =>
+      'Tah, který odvádí soupeřovu figuru od jejích jiných povinností, jako například bránění klíčového pole. Občas nazýváno také jako \"přetížení\".';
 
   @override
   String get puzzleThemeDiscoveredAttack => 'Odtažný útok';
 
   @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Tah figurou (například jezdcem) z cesty jiné, dalekonosné, které blokovala působnost (například věži).';
+  String get puzzleThemeDiscoveredAttackDescription =>
+      'Tah figurou (například jezdcem) z cesty jiné, dalekonosné, které blokovala působnost (například věži).';
 
   @override
   String get puzzleThemeDoubleCheck => 'Dvojný šach';
 
   @override
-  String get puzzleThemeDoubleCheckDescription => 'Šach dvěma figurami zároveň, často důsledkem odtahu. Obě figury dávají šach soupeřovu králi.';
+  String get puzzleThemeDoubleCheckDescription =>
+      'Šach dvěma figurami zároveň, často důsledkem odtahu. Obě figury dávají šach soupeřovu králi.';
 
   @override
   String get puzzleThemeEndgame => 'Koncovka';
@@ -1706,55 +1767,64 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Taktický obrat během poslední fáze hry.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Taktický prvek obsahující braní mimochodem, v rámci kterého může pěšec vzít pěšce soupeřova, který prošel přes ohrožené pole pomocí tahu o dvě pole z druhé řady.';
+  String get puzzleThemeEnPassantDescription =>
+      'Taktický prvek obsahující braní mimochodem, v rámci kterého může pěšec vzít pěšce soupeřova, který prošel přes ohrožené pole pomocí tahu o dvě pole z druhé řady.';
 
   @override
   String get puzzleThemeExposedKing => 'Ohrožený král';
 
   @override
-  String get puzzleThemeExposedKingDescription => 'Taktika zahrnují krále s pár obránci okolo něj, obvykle vedoucí k matu.';
+  String get puzzleThemeExposedKingDescription =>
+      'Taktika zahrnují krále s pár obránci okolo něj, obvykle vedoucí k matu.';
 
   @override
   String get puzzleThemeFork => 'Vidlička';
 
   @override
-  String get puzzleThemeForkDescription => 'Tah, kterým tažená figura útočí na dvě protivníkovy figury najednou.';
+  String get puzzleThemeForkDescription =>
+      'Tah, kterým tažená figura útočí na dvě protivníkovy figury najednou.';
 
   @override
   String get puzzleThemeHangingPiece => 'Visící figura';
 
   @override
-  String get puzzleThemeHangingPieceDescription => 'Taktika zahrnující nechráněnou nebo nedostatečně chráněnou a zdarma získatelnou protivníkovu figuru.';
+  String get puzzleThemeHangingPieceDescription =>
+      'Taktika zahrnující nechráněnou nebo nedostatečně chráněnou a zdarma získatelnou protivníkovu figuru.';
 
   @override
   String get puzzleThemeHookMate => 'Hákový mat';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Mat věží, jezdcem a pěšcem spolu s pěšcem nepřátelským, který blokuje ústup králi.';
+  String get puzzleThemeHookMateDescription =>
+      'Mat věží, jezdcem a pěšcem spolu s pěšcem nepřátelským, který blokuje ústup králi.';
 
   @override
   String get puzzleThemeInterference => 'Překrytí';
 
   @override
-  String get puzzleThemeInterferenceDescription => 'Tah figurou na pole mezi dvě soupeřovy figury, aby jedna z nich byla nechráněná, například tah jezdcem na chráněné pole mezi dvě soupeřovy věže.';
+  String get puzzleThemeInterferenceDescription =>
+      'Tah figurou na pole mezi dvě soupeřovy figury, aby jedna z nich byla nechráněná, například tah jezdcem na chráněné pole mezi dvě soupeřovy věže.';
 
   @override
   String get puzzleThemeIntermezzo => 'Intermezzo';
 
   @override
-  String get puzzleThemeIntermezzoDescription => 'Namísto zahrání očekávaného tahu je nejdřív zahrán tah představující bezprostřední hrozbu (např. šach či napadení), na který musí soupeř odpovědět. Tomuto motivu se také říká Zwischenzug.';
+  String get puzzleThemeIntermezzoDescription =>
+      'Namísto zahrání očekávaného tahu je nejdřív zahrán tah představující bezprostřední hrozbu (např. šach či napadení), na který musí soupeř odpovědět. Tomuto motivu se také říká Zwischenzug.';
 
   @override
   String get puzzleThemeKillBoxMate => 'Kill box mate';
 
   @override
-  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+  String get puzzleThemeKillBoxMateDescription =>
+      'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
 
   @override
-  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+  String get puzzleThemeVukovicMateDescription =>
+      'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Jezdcové koncovky';
@@ -1778,7 +1848,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeMasterVsMaster => 'Úlohy z mistrovských partií';
 
   @override
-  String get puzzleThemeMasterVsMasterDescription => 'Úlohy z partií šachistů s oficiálním titulem.';
+  String get puzzleThemeMasterVsMasterDescription =>
+      'Úlohy z partií šachistů s oficiálním titulem.';
 
   @override
   String get puzzleThemeMate => 'Mat';
@@ -1844,7 +1915,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemePin => 'Vazba';
 
   @override
-  String get puzzleThemePinDescription => 'Taktika zahrnující vazby, kde se figura nemůže pohnout bez odhalení útoku na figuru vyšší hodnoty.';
+  String get puzzleThemePinDescription =>
+      'Taktika zahrnující vazby, kde se figura nemůže pohnout bez odhalení útoku na figuru vyšší hodnoty.';
 
   @override
   String get puzzleThemePromotion => 'Proměna figury';
@@ -1862,19 +1934,22 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeQueenRookEndgame => 'Královna a věž';
 
   @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Konec hry jen s královnami, věžemi a pěšci.';
+  String get puzzleThemeQueenRookEndgameDescription =>
+      'Konec hry jen s královnami, věžemi a pěšci.';
 
   @override
   String get puzzleThemeQueensideAttack => 'Útok na dámském křídle';
 
   @override
-  String get puzzleThemeQueensideAttackDescription => 'Útok na soupeřova krále poté, co udělal dlouhou rošádu.';
+  String get puzzleThemeQueensideAttackDescription =>
+      'Útok na soupeřova krále poté, co udělal dlouhou rošádu.';
 
   @override
   String get puzzleThemeQuietMove => 'Tichý tah';
 
   @override
-  String get puzzleThemeQuietMoveDescription => 'Tah, který není ani šach ani braní, ale připraví nevyhnutelnou hrozbu na další tah.';
+  String get puzzleThemeQuietMoveDescription =>
+      'Tah, který není ani šach ani braní, ale připraví nevyhnutelnou hrozbu na další tah.';
 
   @override
   String get puzzleThemeRookEndgame => 'Věžové koncovky';
@@ -1886,7 +1961,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeSacrifice => 'Oběť';
 
   @override
-  String get puzzleThemeSacrificeDescription => 'Taktika zahrnující krátkodobé vzdání materiálu, s cílem získat opět výhodu po vynucené sekvenci tahů.';
+  String get puzzleThemeSacrificeDescription =>
+      'Taktika zahrnující krátkodobé vzdání materiálu, s cílem získat opět výhodu po vynucené sekvenci tahů.';
 
   @override
   String get puzzleThemeShort => 'Krátká úloha';
@@ -1898,13 +1974,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeSkewer => 'Napíchnutí';
 
   @override
-  String get puzzleThemeSkewerDescription => 'Motiv zahrnující útok na figuru vyšší hodnoty, která útoku uhne, ale dovolí tak útok nebo sebrání figury nižší hodnoty za ní, opak vazby.';
+  String get puzzleThemeSkewerDescription =>
+      'Motiv zahrnující útok na figuru vyšší hodnoty, která útoku uhne, ale dovolí tak útok nebo sebrání figury nižší hodnoty za ní, opak vazby.';
 
   @override
   String get puzzleThemeSmotheredMate => 'Dušený mat';
 
   @override
-  String get puzzleThemeSmotheredMateDescription => 'Mat jezdcem, během kterého nepřátelský král nemůže utéct, protože je blokován (dušen) vlastními figurami.';
+  String get puzzleThemeSmotheredMateDescription =>
+      'Mat jezdcem, během kterého nepřátelský král nemůže utéct, protože je blokován (dušen) vlastními figurami.';
 
   @override
   String get puzzleThemeSuperGM => 'Úlohy Super GM';
@@ -1916,13 +1994,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeTrappedPiece => 'Chycená figura';
 
   @override
-  String get puzzleThemeTrappedPieceDescription => 'Figura nemůže ustoupit, protože má omezenou působnost.';
+  String get puzzleThemeTrappedPieceDescription =>
+      'Figura nemůže ustoupit, protože má omezenou působnost.';
 
   @override
   String get puzzleThemeUnderPromotion => 'Minoritní proměna';
 
   @override
-  String get puzzleThemeUnderPromotionDescription => 'Proměna na jezdce, střelce či věž, jelikož proměna na dámu je v dané pozici špatná.';
+  String get puzzleThemeUnderPromotionDescription =>
+      'Proměna na jezdce, střelce či věž, jelikož proměna na dámu je v dané pozici špatná.';
 
   @override
   String get puzzleThemeVeryLong => 'Velmi dlouhá úloha';
@@ -1934,25 +2014,29 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeXRayAttack => 'Rentgenový útok';
 
   @override
-  String get puzzleThemeXRayAttackDescription => 'Figura útočí nebo chrání pole skrze nepřátelskou figuru.';
+  String get puzzleThemeXRayAttackDescription =>
+      'Figura útočí nebo chrání pole skrze nepřátelskou figuru.';
 
   @override
   String get puzzleThemeZugzwang => 'Zugzwang';
 
   @override
-  String get puzzleThemeZugzwangDescription => 'Soupeř musí zahrát jakýkoliv tah, přičemž všechny zhoršují jeho pozici a zlepšují naší pozici.';
+  String get puzzleThemeZugzwangDescription =>
+      'Soupeř musí zahrát jakýkoliv tah, přičemž všechny zhoršují jeho pozici a zlepšují naší pozici.';
 
   @override
   String get puzzleThemeMix => 'Mix úloh';
 
   @override
-  String get puzzleThemeMixDescription => 'Troška od všeho. Nevíte co čekat, čili jste na vše připraveni! Jako v normální partii.';
+  String get puzzleThemeMixDescription =>
+      'Troška od všeho. Nevíte co čekat, čili jste na vše připraveni! Jako v normální partii.';
 
   @override
   String get puzzleThemePlayerGames => 'Z vašich her';
 
   @override
-  String get puzzleThemePlayerGamesDescription => 'Vyhledejte úlohy vygenerované z vašich her, nebo z her jiného hráče.';
+  String get puzzleThemePlayerGamesDescription =>
+      'Vyhledejte úlohy vygenerované z vašich her, nebo z her jiného hráče.';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
@@ -1972,7 +2056,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Váš účet je spravován a nemůže být zrušen.';
 
   @override
-  String get settingsCantOpenSimilarAccount => 'Nebudete moci založit nový účet se stejným jménem, a to ani když se bude lišit velikost písmen.';
+  String get settingsCantOpenSimilarAccount =>
+      'Nebudete moci založit nový účet se stejným jménem, a to ani když se bude lišit velikost písmen.';
 
   @override
   String get settingsCancelKeepAccount => 'Cancel and keep my account';
@@ -2097,7 +2182,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get blackPlays => 'Černý na tahu';
 
   @override
-  String get opponentLeftChoices => 'Soupeř opustil hru. Můžete vynutit remízu nebo jeho vzdání partie či na něj počkat.';
+  String get opponentLeftChoices =>
+      'Soupeř opustil hru. Můžete vynutit remízu nebo jeho vzdání partie či na něj počkat.';
 
   @override
   String get forceResignation => 'Vynutit vzdání partie';
@@ -2109,7 +2195,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get talkInChat => 'Pro povídání v chatu pište sem';
 
   @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'První kdo přijde pomocí tohoto odkazu, bude s Vámi hrát';
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou =>
+      'První kdo přijde pomocí tohoto odkazu, bude s Vámi hrát';
 
   @override
   String get whiteResigned => 'Bílý se vzdal';
@@ -2253,7 +2340,8 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding => 'DTZ50\'\' s zaokrouhlením na základě počtu půltahů do dalšího braní nebo tahu pěšcem';
+  String get dtzWithRounding =>
+      'DTZ50\'\' s zaokrouhlením na základě počtu půltahů do dalšího braní nebo tahu pěšcem';
 
   @override
   String get noGameFound => 'Žádná hra nenalezena';
@@ -2262,7 +2350,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get maxDepthReached => 'Maximální hloubka dosažena!';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Možná zkuste vybrat více her z menu preferencí?';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu =>
+      'Možná zkuste vybrat více her z menu preferencí?';
 
   @override
   String get openings => 'Zahájení';
@@ -2294,7 +2383,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get lossOr50MovesByPriorMistake => 'Prohra nebo 50 tahů po předchozí chybě';
 
   @override
-  String get unknownDueToRounding => 'Výhra/prohra zaručena pouze v případě, že byla dodržena doporučená série tahů z tablebase od posledního braní nebo tahu pěšcem, vzhledem k možnému zaokrouhlení hodnot DTZ v tabulkách Syzygy.';
+  String get unknownDueToRounding =>
+      'Výhra/prohra zaručena pouze v případě, že byla dodržena doporučená série tahů z tablebase od posledního braní nebo tahu pěšcem, vzhledem k možnému zaokrouhlení hodnot DTZ v tabulkách Syzygy.';
 
   @override
   String get allSet => 'Vše nastaveno!';
@@ -2402,7 +2492,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get signUp => 'Registrace';
 
   @override
-  String get computersAreNotAllowedToPlay => 'Počítačová asistence není během hraní povolena. Nepoužívejte během hraní šachové programy, databáze nebo nápovědu jiných hráčů.';
+  String get computersAreNotAllowedToPlay =>
+      'Počítačová asistence není během hraní povolena. Nepoužívejte během hraní šachové programy, databáze nebo nápovědu jiných hráčů.';
 
   @override
   String get games => 'Partie';
@@ -2479,13 +2570,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get changeUsername => 'Změnit uživatelské jméno';
 
   @override
-  String get changeUsernameNotSame => 'Můžete změnit pouze velikost písmen. Např. z \"petrnovak\" na \"PetrNovak\".';
+  String get changeUsernameNotSame =>
+      'Můžete změnit pouze velikost písmen. Např. z \"petrnovak\" na \"PetrNovak\".';
 
   @override
-  String get changeUsernameDescription => 'Změňte své uživatelské jméno. To lze provést pouze jednou, a můžete změnit pouze velikost písmen.';
+  String get changeUsernameDescription =>
+      'Změňte své uživatelské jméno. To lze provést pouze jednou, a můžete změnit pouze velikost písmen.';
 
   @override
-  String get signupUsernameHint => 'Zvolte si vhodné a nezávadné uživatelské jméno. Později ho nelze změnit a účty s nevhodnými uživatelskými jmény budou uzavřeny!';
+  String get signupUsernameHint =>
+      'Zvolte si vhodné a nezávadné uživatelské jméno. Později ho nelze změnit a účty s nevhodnými uživatelskými jmény budou uzavřeny!';
 
   @override
   String get signupEmailHint => 'Bude použit pouze pro obnovení hesla.';
@@ -2515,7 +2609,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get error_namePassword => 'Nepoužívejte prosím své uživatelské jméno jako heslo.';
 
   @override
-  String get blankedPassword => 'Použili jste stejné heslo na jiném webu, který byl kompromitován. Abychom zajistili bezpečnost vašeho Lichess účtu, potřebujeme nastavit nové heslo. Děkujeme za pochopení.';
+  String get blankedPassword =>
+      'Použili jste stejné heslo na jiném webu, který byl kompromitován. Abychom zajistili bezpečnost vašeho Lichess účtu, potřebujeme nastavit nové heslo. Děkujeme za pochopení.';
 
   @override
   String get youAreLeavingLichess => 'Odcházíte z Lichess';
@@ -2529,10 +2624,12 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get passwordSuggestion => 'Nenastavujte heslo navržené někým jiným. Využijí toho k ukradení Vašeho účtu.';
+  String get passwordSuggestion =>
+      'Nenastavujte heslo navržené někým jiným. Využijí toho k ukradení Vašeho účtu.';
 
   @override
-  String get emailSuggestion => 'Nenastavujte e-mailovou adresu navrženou někým jiným. Použijí to ke krádeži Vašeho účtu.';
+  String get emailSuggestion =>
+      'Nenastavujte e-mailovou adresu navrženou někým jiným. Použijí to ke krádeži Vašeho účtu.';
 
   @override
   String get emailConfirmHelp => 'Pomoc s potvrzovacím e-mailem';
@@ -2563,7 +2660,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Počkejte 5 minut a obnovte vaši e-mailovou schránku.';
 
   @override
-  String get checkSpamFolder => 'Také zkontrolujte složku nevyžádané pošty. Pokud ano, označte mail jako vyžádaný.';
+  String get checkSpamFolder =>
+      'Také zkontrolujte složku nevyžádané pošty. Pokud ano, označte mail jako vyžádaný.';
 
   @override
   String get emailForSignupHelp => 'Pokud všechno ostatní selže, pošlete nám tento e-mail:';
@@ -2803,7 +2901,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get backToTournament => 'Zpět k turnaji';
 
   @override
-  String get noDrawBeforeSwissLimit => 'Nemůžete remízovat dříve, než se odehraje 30 tahů švýcarského turnaje.';
+  String get noDrawBeforeSwissLimit =>
+      'Nemůžete remízovat dříve, než se odehraje 30 tahů švýcarského turnaje.';
 
   @override
   String get thematic => 'Tématický';
@@ -2852,7 +2951,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get backToGame => 'Zpět do hry';
 
   @override
-  String get siteDescription => 'Šachy online zdarma. Hrajte šachy přímo ve Vašem prohlížeči, bez registrace, bez reklam, bez dalšího stahování. Hrajte proti počítači, kamarádům nebo náhodně vybraným soupeřům.';
+  String get siteDescription =>
+      'Šachy online zdarma. Hrajte šachy přímo ve Vašem prohlížeči, bez registrace, bez reklam, bez dalšího stahování. Hrajte proti počítači, kamarádům nebo náhodně vybraným soupeřům.';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
@@ -2921,19 +3021,23 @@ class AppLocalizationsCs extends AppLocalizations {
   String get importGame => 'Importuj hru';
 
   @override
-  String get importGameExplanation => 'Vložení partie ve formátu PGN Vám umožní přehrání partie, získáte počítačovou analýzu, chat ke hře a URL ke sdílení hry.';
+  String get importGameExplanation =>
+      'Vložení partie ve formátu PGN Vám umožní přehrání partie, získáte počítačovou analýzu, chat ke hře a URL ke sdílení hry.';
 
   @override
-  String get importGameCaveat => 'Varianty budou vymazány. Chcete-li je ponechat, importujte PGN prostřednictvím studie.';
+  String get importGameCaveat =>
+      'Varianty budou vymazány. Chcete-li je ponechat, importujte PGN prostřednictvím studie.';
 
   @override
-  String get importGameDataPrivacyWarning => 'K této PGN má přístup kdokoli. Chcete-li hru naimportovat soukromě, použijte studii.';
+  String get importGameDataPrivacyWarning =>
+      'K této PGN má přístup kdokoli. Chcete-li hru naimportovat soukromě, použijte studii.';
 
   @override
   String get thisIsAChessCaptcha => 'Toto je šachové CAPTCHA.';
 
   @override
-  String get clickOnTheBoardToMakeYourMove => 'Kliknutím na šachovnici zadejte váš tah a dokažte, že jste človek.';
+  String get clickOnTheBoardToMakeYourMove =>
+      'Kliknutím na šachovnici zadejte váš tah a dokažte, že jste človek.';
 
   @override
   String get captcha_fail => 'Prosím vyřešte šachovou captcha.';
@@ -3043,10 +3147,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get safeTournamentName => 'Vyberte \"bezpečné\" jméno turnaje.';
 
   @override
-  String get inappropriateNameWarning => 'Cokoli i mírně nevhodného může způsobit uzavření vašeho účtu.';
+  String get inappropriateNameWarning =>
+      'Cokoli i mírně nevhodného může způsobit uzavření vašeho účtu.';
 
   @override
-  String get emptyTournamentName => 'Pokud jméno turnaje nevyplníte, bude pojmenován po náhodném velmistrovi.';
+  String get emptyTournamentName =>
+      'Pokud jméno turnaje nevyplníte, bude pojmenován po náhodném velmistrovi.';
 
   @override
   String get makePrivateTournament => 'Udělejte turnaj soukromý a omezte přístup heslem';
@@ -3176,7 +3282,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get flair => 'Ikona';
 
   @override
-  String get youCanHideFlair => 'Existuje nastavení které schová všechny uživatelské ikony za jménem po celém webu.';
+  String get youCanHideFlair =>
+      'Existuje nastavení které schová všechny uživatelské ikony za jménem po celém webu.';
 
   @override
   String get biography => 'O mně';
@@ -3239,7 +3346,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get descPrivate => 'Soukromý popis';
 
   @override
-  String get descPrivateHelp => 'Text, který uvidí pouze členové týmu, kteří poté uvidí jenom tento text.';
+  String get descPrivateHelp =>
+      'Text, který uvidí pouze členové týmu, kteří poté uvidí jenom tento text.';
 
   @override
   String get no => 'Ne';
@@ -3308,16 +3416,19 @@ class AppLocalizationsCs extends AppLocalizations {
   String get other => 'Jiné';
 
   @override
-  String get reportCheatBoostHelp => 'Zde vlož odkaz na hru(hry) a napiš co dělal tento uživatel. Nepiš pouze \"on podváděl\", ale napiš proč si myslíš že podváděl.';
+  String get reportCheatBoostHelp =>
+      'Zde vlož odkaz na hru(hry) a napiš co dělal tento uživatel. Nepiš pouze \"on podváděl\", ale napiš proč si myslíš že podváděl.';
 
   @override
-  String get reportUsernameHelp => 'Vysvětli co je urážlivého na jeho u6ivatelském jménu. Nepiš pouze \"Je urážlivé/nevhodné\", ale řekni i důvod proč to tak je, zejména pokud je urážka zatemněná, nebo je v jiném jazyce než v angličtině, nebo je ve slangu či jde o historickou nebokulturní referenci.';
+  String get reportUsernameHelp =>
+      'Vysvětli co je urážlivého na jeho u6ivatelském jménu. Nepiš pouze \"Je urážlivé/nevhodné\", ale řekni i důvod proč to tak je, zejména pokud je urážka zatemněná, nebo je v jiném jazyce než v angličtině, nebo je ve slangu či jde o historickou nebokulturní referenci.';
 
   @override
   String get reportProcessedFasterInEnglish => 'Nahlášení bude rychlejší pokud bude v angličtině.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Prosím, uveďte alespoň jeden link na partii, ve které se podvádělo.';
+  String get error_provideOneCheatedGameLink =>
+      'Prosím, uveďte alespoň jeden link na partii, ve které se podvádělo.';
 
   @override
   String by(String param) {
@@ -3464,7 +3575,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get allInformationIsPublicAndOptional => 'Všechny informace jsou veřejné a nepovinné.';
 
   @override
-  String get biographyDescription => 'Napiš o sobě - co máš na šachu rád, oblíbená zahájení, partie, hráči…';
+  String get biographyDescription =>
+      'Napiš o sobě - co máš na šachu rád, oblíbená zahájení, partie, hráči…';
 
   @override
   String get listBlockedPlayers => 'Seznam hráčů, které jste zablokoval(a).';
@@ -3512,7 +3624,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get error_email => 'Emailová adresa je neplatná';
 
   @override
-  String get error_email_acceptable => 'Tato emailová adresa je nepřijatelná. Prosím, zkontrolujte ji a zkuste to znovu.';
+  String get error_email_acceptable =>
+      'Tato emailová adresa je nepřijatelná. Prosím, zkontrolujte ji a zkuste to znovu.';
 
   @override
   String get error_email_unique => 'E-mailová adresa je neplatná nebo je již obsazena';
@@ -3640,7 +3753,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get hostANewSimul => 'Vytvoř novou simultánku';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Zaregistruj se abys mohl založit nebo se připojit k simulaci';
+  String get signUpToHostOrJoinASimul =>
+      'Zaregistruj se abys mohl založit nebo se připojit k simulaci';
 
   @override
   String get noSimulFound => 'Simultánka nenalezena';
@@ -3658,25 +3772,30 @@ class AppLocalizationsCs extends AppLocalizations {
   String get aboutSimulImage => 'Z 50 soupeřů, Fisher vyhrál 47, remízoval 2 a prohrál 1.';
 
   @override
-  String get aboutSimulRealLife => 'Koncept je převzat z realných v akcí, kde se host pohybuje po kruhu a vždy odehraje jeden tah.';
+  String get aboutSimulRealLife =>
+      'Koncept je převzat z realných v akcí, kde se host pohybuje po kruhu a vždy odehraje jeden tah.';
 
   @override
-  String get aboutSimulRules => 'Když simultánka začne, každý hráč začne hrát s hostem, který dostane bílé figurky. Simultánka končí, když jsou všechny hry ukončeny.';
+  String get aboutSimulRules =>
+      'Když simultánka začne, každý hráč začne hrát s hostem, který dostane bílé figurky. Simultánka končí, když jsou všechny hry ukončeny.';
 
   @override
-  String get aboutSimulSettings => 'Simultánka je vždy neformální. Je nemožné nabízet odvety, vracení tahu a přidávat čas.';
+  String get aboutSimulSettings =>
+      'Simultánka je vždy neformální. Je nemožné nabízet odvety, vracení tahu a přidávat čas.';
 
   @override
   String get create => 'Vytvořte';
 
   @override
-  String get whenCreateSimul => 'Když vytvoříte simultánku, budete hrát proti více hráčům najednou.';
+  String get whenCreateSimul =>
+      'Když vytvoříte simultánku, budete hrát proti více hráčům najednou.';
 
   @override
   String get simulVariantsHint => 'Pokud vyberete více variant, každý ze soupeřů si může vybrat.';
 
   @override
-  String get simulClockHint => 'Nastavení Fisherových hodin. Čím víc hráčů přijmete, tím víc času budete potřebovat.';
+  String get simulClockHint =>
+      'Nastavení Fisherových hodin. Čím víc hráčů přijmete, tím víc času budete potřebovat.';
 
   @override
   String get simulAddExtraTime => 'Můžete si přidat více času, abyste  tu simultánku lépe zvládli.';
@@ -3685,7 +3804,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get simulHostExtraTime => 'Hostův bonusový čas';
 
   @override
-  String get simulAddExtraTimePerPlayer => 'Přidat extra čas za každého hráče který se přidá do simultánky.';
+  String get simulAddExtraTimePerPlayer =>
+      'Přidat extra čas za každého hráče který se přidá do simultánky.';
 
   @override
   String get simulHostExtraTimePerPlayer => 'Extra čas pro hostitele za každého hráče';
@@ -3724,7 +3844,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get keyEnterOrExitVariation => 'Zobraz variantu';
 
   @override
-  String get keyRequestComputerAnalysis => 'Vyžádejte si počítačovou analýzu, poučte se ze svých chyb';
+  String get keyRequestComputerAnalysis =>
+      'Vyžádejte si počítačovou analýzu, poučte se ze svých chyb';
 
   @override
   String get keyNextLearnFromYourMistakes => 'Další (poučit se z chyb)';
@@ -3769,7 +3890,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get tournamentHomeTitle => 'Šachové turnaje nabízejí různé časové možnosti a varianty';
 
   @override
-  String get tournamentHomeDescription => 'Zahrajte si rychlý šachový turnaj! Připojte se k oficiálnímu plánovanému turnaji, nebo si vytvořte vlastní. Bullet, Blitz, Klasické, Chess960(Fisherovky), Král v centru, Tři šachy a další možnosti jsou k dispozici pro nekonečnou šachovou zábavu.';
+  String get tournamentHomeDescription =>
+      'Zahrajte si rychlý šachový turnaj! Připojte se k oficiálnímu plánovanému turnaji, nebo si vytvořte vlastní. Bullet, Blitz, Klasické, Chess960(Fisherovky), Král v centru, Tři šachy a další možnosti jsou k dispozici pro nekonečnou šachovou zábavu.';
 
   @override
   String get tournamentNotFound => 'Turnaj nenalezen';
@@ -3778,7 +3900,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get tournamentDoesNotExist => 'Tento turnaj neexistuje.';
 
   @override
-  String get tournamentMayHaveBeenCanceled => 'Možná byl zrušen, jestliže jej opustili všichni hráči před jeho začátkem.';
+  String get tournamentMayHaveBeenCanceled =>
+      'Možná byl zrušen, jestliže jej opustili všichni hráči před jeho začátkem.';
 
   @override
   String get returnToTournamentsHomepage => 'Návrat na stránku turnajů';
@@ -3826,10 +3949,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get checkYourEmail => 'Zkontrolujte svoji emailovou složku';
 
   @override
-  String get weHaveSentYouAnEmailClickTheLink => 'Zaslali jsme vám email. Klikněte na odkaz v emailu pro aktivaci vašeho účtu.';
+  String get weHaveSentYouAnEmailClickTheLink =>
+      'Zaslali jsme vám email. Klikněte na odkaz v emailu pro aktivaci vašeho účtu.';
 
   @override
-  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Pokud email nenaleznete v doručené poště, zkontrolujte další místa, kde by mohl být, jako spam, zprávy ze sociálních sítí, koš nebo jiné složky.';
+  String get ifYouDoNotSeeTheEmailCheckOtherPlaces =>
+      'Pokud email nenaleznete v doručené poště, zkontrolujte další místa, kde by mohl být, jako spam, zprávy ze sociálních sítí, koš nebo jiné složky.';
 
   @override
   String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
@@ -3879,13 +4004,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get crosstable => 'Výsledky';
 
   @override
-  String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'K pohybu v partii můžete také použít scrollovací kolečko myši nad šachovnicí.';
+  String get youCanAlsoScrollOverTheBoardToMoveInTheGame =>
+      'K pohybu v partii můžete také použít scrollovací kolečko myši nad šachovnicí.';
 
   @override
-  String get scrollOverComputerVariationsToPreviewThem => 'Najetím na varianty počítače zobrazíte jejich náhled.';
+  String get scrollOverComputerVariationsToPreviewThem =>
+      'Najetím na varianty počítače zobrazíte jejich náhled.';
 
   @override
-  String get analysisShapesHowTo => 'Kliknutím se shiftem či kliknutím pravým tlačítkem lze kreslit do šachovnice kolečka a šipky.';
+  String get analysisShapesHowTo =>
+      'Kliknutím se shiftem či kliknutím pravým tlačítkem lze kreslit do šachovnice kolečka a šipky.';
 
   @override
   String get letOtherPlayersMessageYou => 'Povolit zprávy od ostatních hráčů';
@@ -3912,7 +4040,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get kidModeIsEnabled => 'Dětský režim je povolen.';
 
   @override
-  String get kidModeExplanation => 'To je pro bezpečnost. V dětském režimu je jakákoli komunikace zablokována. Zapněte to pro děti a studenty, pro ochranu před ostatními na Internetu.';
+  String get kidModeExplanation =>
+      'To je pro bezpečnost. V dětském režimu je jakákoli komunikace zablokována. Zapněte to pro děti a studenty, pro ochranu před ostatními na Internetu.';
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
@@ -3920,7 +4049,8 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get askYourChessTeacherAboutLiftingKidMode => 'Váš účet je spravován. Požádejte svého šachového učitele o zrušení dětského režimu.';
+  String get askYourChessTeacherAboutLiftingKidMode =>
+      'Váš účet je spravován. Požádejte svého šachového učitele o zrušení dětského režimu.';
 
   @override
   String get enableKidMode => 'Povolit dětský režim';
@@ -4036,7 +4166,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get usernameSuffixInvalid => 'Uživatelské jméno musí končit písmenem nebo číslem.';
 
   @override
-  String get usernameCharsInvalid => 'Uživatelské jméno musí obsahovat pouze písmena, číslice, podtržítka a pomlčky.';
+  String get usernameCharsInvalid =>
+      'Uživatelské jméno musí obsahovat pouze písmena, číslice, podtržítka a pomlčky.';
 
   @override
   String get usernameUnacceptable => 'Toto uživatelské jméno není přijatelné.';
@@ -4199,7 +4330,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get addCurrentVariation => 'Přidat současnou variantu';
 
   @override
-  String get playVariationToCreateConditionalPremoves => 'Hrajte variantu k vytvoření podmíněných předtahů';
+  String get playVariationToCreateConditionalPremoves =>
+      'Hrajte variantu k vytvoření podmíněných předtahů';
 
   @override
   String get noConditionalPremoves => 'Žádné podmíněné předtahy';
@@ -4261,7 +4393,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get currentMatchScore => 'Současné výsledky zápasů';
 
   @override
-  String get agreementAssistance => 'Přísahám, že nikdy nevyužiji jiné pomoci při mých hrách (počítače, knihy, databáze nebo jiné osoby).';
+  String get agreementAssistance =>
+      'Přísahám, že nikdy nevyužiji jiné pomoci při mých hrách (počítače, knihy, databáze nebo jiné osoby).';
 
   @override
   String get agreementNice => 'Přísahám, že budu vždy respektovat ostatní hráče.';
@@ -4362,7 +4495,8 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get youCannotPostYetPlaySomeGames => 'Zatím nemůžete přidávat příspěvky na fóra. Zahrajte si nějaké hry!';
+  String get youCannotPostYetPlaySomeGames =>
+      'Zatím nemůžete přidávat příspěvky na fóra. Zahrajte si nějaké hry!';
 
   @override
   String get subscribe => 'Odebírat';
@@ -4415,7 +4549,8 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get lostAgainstTOSViolator => 'Prohráli jste proti hráči, jež porušil Podmínky použití Lichess';
+  String get lostAgainstTOSViolator =>
+      'Prohráli jste proti hráči, jež porušil Podmínky použití Lichess';
 
   @override
   String refundXpointsTimeControlY(String param1, String param2) {
@@ -4444,7 +4579,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get tournDescription => 'Popis turnaje';
 
   @override
-  String get tournDescriptionHelp => 'Je tu něco co by ste chtěli sdělit účastníkům? Skuste to ve skratce. Markdown odkazy jsou k dispozici: [name](https://url)';
+  String get tournDescriptionHelp =>
+      'Je tu něco co by ste chtěli sdělit účastníkům? Skuste to ve skratce. Markdown odkazy jsou k dispozici: [name](https://url)';
 
   @override
   String get ratedFormHelp => 'Hry jsou hodnoceny a mají dopad na hodnocení hráče';
@@ -4545,7 +4681,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get reopenYourAccount => 'Znovu otevřít svůj účet';
 
   @override
-  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
+  String get reopenYourAccountDescription =>
+      'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
   String get emailAssociatedToaccount => 'E-mailová adresa přidružená k tomuto účtu';
@@ -4598,7 +4735,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get showMeEverything => 'Ukaž mi všechno';
 
   @override
-  String get lichessPatronInfo => 'Lichess je bezplatný a zcela svobodný/nezávislý softvér s otevřeným zdrojovým kódem.\nVeškeré provozní náklady, vývoj a obsah jsou financovány výhradně z příspěvků uživatelů.';
+  String get lichessPatronInfo =>
+      'Lichess je bezplatný a zcela svobodný/nezávislý softvér s otevřeným zdrojovým kódem.\nVeškeré provozní náklady, vývoj a obsah jsou financovány výhradně z příspěvků uživatelů.';
 
   @override
   String get nothingToSeeHere => 'Momentálně zde není nic k vidění.';
@@ -5321,7 +5459,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get stormSkipHelp => 'V každém závodě můžete přeskočit jeden tah:';
 
   @override
-  String get stormSkipExplanation => 'Přeskočte tento tah pro zachování své série! Funguje pouze jednou za závod.';
+  String get stormSkipExplanation =>
+      'Přeskočte tento tah pro zachování své série! Funguje pouze jednou za závod.';
 
   @override
   String get stormFailedPuzzles => 'Neúspěšné úlohy';
@@ -5439,7 +5578,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyInviteToTheStudy => 'Pozvat do studie';
 
   @override
-  String get studyPleaseOnlyInvitePeopleYouKnow => 'Prosím zvěte pouze lidi, které znáte a kteří se chtějí aktivně připojit k této studii.';
+  String get studyPleaseOnlyInvitePeopleYouKnow =>
+      'Prosím zvěte pouze lidi, které znáte a kteří se chtějí aktivně připojit k této studii.';
 
   @override
   String get studySearchByUsername => 'Hledat podle uživatelského jména';
@@ -5484,19 +5624,23 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyAnnotateWithGlyphs => 'Popsat glyfy';
 
   @override
-  String get studyTheChapterIsTooShortToBeAnalysed => 'Kapitola je moc krátká na to, aby mohla být zanalyzována.';
+  String get studyTheChapterIsTooShortToBeAnalysed =>
+      'Kapitola je moc krátká na to, aby mohla být zanalyzována.';
 
   @override
-  String get studyOnlyContributorsCanRequestAnalysis => 'Pouze přispěvatelé mohou požádat o počítačovou analýzu.';
+  String get studyOnlyContributorsCanRequestAnalysis =>
+      'Pouze přispěvatelé mohou požádat o počítačovou analýzu.';
 
   @override
   String get studyGetAFullComputerAnalysis => 'Získejte plnou počítačovou analýzu hlavní varianty.';
 
   @override
-  String get studyMakeSureTheChapterIsComplete => 'Ujistěte se, že je kapitola úplná. O analýzu můžete požádat pouze jednou.';
+  String get studyMakeSureTheChapterIsComplete =>
+      'Ujistěte se, že je kapitola úplná. O analýzu můžete požádat pouze jednou.';
 
   @override
-  String get studyAllSyncMembersRemainOnTheSamePosition => 'Všichni SYNCHRONIZOVANÍ členové zůstávají na stejné pozici';
+  String get studyAllSyncMembersRemainOnTheSamePosition =>
+      'Všichni SYNCHRONIZOVANÍ členové zůstávají na stejné pozici';
 
   @override
   String get studyShareChanges => 'Sdílet změny s diváky a uložit je na server';
@@ -5538,7 +5682,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyCurrentChapterUrl => 'URL aktuální kapitoly';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Tento odkaz můžete vložit např. do diskusního fóra';
+  String get studyYouCanPasteThisInTheForumToEmbed =>
+      'Tento odkaz můžete vložit např. do diskusního fóra';
 
   @override
   String get studyStartAtInitialPosition => 'Začít ve výchozí pozici';
@@ -5601,10 +5746,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyDeleteChapter => 'Odstranit kapitolu';
 
   @override
-  String get studyDeleteThisChapter => 'Opravdu chcete odstranit tuto kapitolu? Kapitola bude navždy ztracena!';
+  String get studyDeleteThisChapter =>
+      'Opravdu chcete odstranit tuto kapitolu? Kapitola bude navždy ztracena!';
 
   @override
-  String get studyClearAllCommentsInThisChapter => 'Vymazat všechny komentáře a výtvory v této kapitole?';
+  String get studyClearAllCommentsInThisChapter =>
+      'Vymazat všechny komentáře a výtvory v této kapitole?';
 
   @override
   String get studyRightUnderTheBoard => 'Přímo pod šachovnicí';
@@ -5719,7 +5866,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyClearChat => 'Vyčistit chat';
 
   @override
-  String get studyDeleteTheStudyChatHistory => 'Opravdu chcete vymazat historii chatu? Operaci nelze vrátit!';
+  String get studyDeleteTheStudyChatHistory =>
+      'Opravdu chcete vymazat historii chatu? Operaci nelze vrátit!';
 
   @override
   String get studyDeleteStudy => 'Smazat studii';
@@ -5849,13 +5997,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText =>
+      'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
 
   @override
   String get studySharedAndSaveTitle => 'Shared and saved';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText =>
+      'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
 
   @override
   String get studyStudyMembersTitle => 'Study members';
@@ -5874,7 +6024,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyStudyChaptersTitle => 'Study chapters';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText =>
+      'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
 
   @override
   String get studyCommentPositionTitle => 'Comment on a position';
@@ -5888,25 +6039,29 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyAnnotatePositionTitle => 'Annotate a position';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText =>
+      'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
 
   @override
   String get studyConclusionTitle => 'Thanks for your time';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText =>
+      'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
   String get studyCreateChapterTitle => 'Let\'s create a study chapter';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText =>
+      'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
 
   @override
   String get studyFromInitialPositionTitle => 'From initial position';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText =>
+      'Just a board setup for a new game.<br>Suited to explore openings.';
 
   @override
   String get studyCustomPositionTitle => 'Custom position';
@@ -5918,28 +6073,33 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText =>
+      'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText =>
+      'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
 
   @override
   String get studyFromPgnGameTitle => 'From a PGN game';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText =>
+      'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Studies support variants';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText =>
+      'Yes, you can study crazyhouse<br>and all lichess variants!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText =>
+      'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {

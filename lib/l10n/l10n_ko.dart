@@ -97,7 +97,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSettingsImmersiveMode => '전체 화면 모드';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => '플레이 중 시스템 UI를 숨깁니다. 화면 가장자리의 시스템 내비게이션 제스처가 불편하다면 사용하세요. 대국과 퍼즐 스톰 화면에서 적용됩니다.';
+  String get mobileSettingsImmersiveModeSubtitle =>
+      '플레이 중 시스템 UI를 숨깁니다. 화면 가장자리의 시스템 내비게이션 제스처가 불편하다면 사용하세요. 대국과 퍼즐 스톰 화면에서 적용됩니다.';
 
   @override
   String get mobileSettingsTab => '설정';
@@ -177,11 +178,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String activitySolvedNbPuzzles(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '전술 문제 $count개를 해결함',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '전술 문제 $count개를 해결함');
     return '$_temp0';
   }
 
@@ -207,31 +204,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String activityPlayedNbMoves(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '수 $count개를 둠',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '수 $count개를 둠');
     return '$_temp0';
   }
 
   @override
   String activityInNbCorrespondenceGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count개의 통신 대국에서',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count개의 통신 대국에서');
     return '$_temp0';
   }
 
   @override
   String activityCompletedNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count번의 통신 대국을 완료함',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count번의 통신 대국을 완료함');
     return '$_temp0';
   }
 
@@ -247,61 +232,37 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String activityFollowedNbPlayers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 명을 팔로우 개시',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 명을 팔로우 개시');
     return '$_temp0';
   }
 
   @override
   String activityGainedNbFollowers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 명의 신규 팔로워를 얻음',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 명의 신규 팔로워를 얻음');
     return '$_temp0';
   }
 
   @override
   String activityHostedNbSimuls(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 번의 동시대국을 주최함',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 번의 동시대국을 주최함');
     return '$_temp0';
   }
 
   @override
   String activityJoinedNbSimuls(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 번의 동시대국에 참가함',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 번의 동시대국에 참가함');
     return '$_temp0';
   }
 
   @override
   String activityCreatedNbStudies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '새 연구 $count개 작성함',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '새 연구 $count개 작성함');
     return '$_temp0';
   }
 
   @override
   String activityCompetedInNbTournaments(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 번 토너먼트에 참가함',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 번 토너먼트에 참가함');
     return '$_temp0';
   }
 
@@ -317,21 +278,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String activityCompetedInNbSwissTournaments(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 번 토너먼트에 참가함',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 번 토너먼트에 참가함');
     return '$_temp0';
   }
 
   @override
   String activityJoinedNbTeams(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 팀에 참가함',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 팀에 참가함');
     return '$_temp0';
   }
 
@@ -360,31 +313,36 @@ class AppLocalizationsKo extends AppLocalizations {
   String get arenaHowAreScoresCalculated => '점수는 어떻게 계산되나요?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => '승리하면 기본 점수 2점, 비기면 1점, 패할 시 0점을 얻습니다.\n두 게임을 연속적으로 이기면 불꽃 모양의 아이콘을 얻으며, 더블 포인트 기록을 시작합니다.\n다음 게임들에서는 질때까지 두 배의 점수를 얻습니다.\n말인 즉슨, 이기면 4점, 비기면 2점, 지는 경우는 전과 같이 0점으로 취급됩니다.\n\n예를 들어, 두 번 승리 후 한 번 비길 경우에는 6점을 얻습니다: 2 + 2 (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer =>
+      '승리하면 기본 점수 2점, 비기면 1점, 패할 시 0점을 얻습니다.\n두 게임을 연속적으로 이기면 불꽃 모양의 아이콘을 얻으며, 더블 포인트 기록을 시작합니다.\n다음 게임들에서는 질때까지 두 배의 점수를 얻습니다.\n말인 즉슨, 이기면 4점, 비기면 2점, 지는 경우는 전과 같이 0점으로 취급됩니다.\n\n예를 들어, 두 번 승리 후 한 번 비길 경우에는 6점을 얻습니다: 2 + 2 (2 x 1)';
 
   @override
   String get arenaBerserk => '버서크（Berserk）';
 
   @override
-  String get arenaBerserkAnswer => '게임을 시작할 때, 옆의 \"버서크 (berserk)\" 버튼을 클릭하면, 가진 시간이 절반으로 깎이는 대신에 이길 경우 1점의 보너스 점수를 얻을 수 있습니다.\n\n추가 초가 있는 시간 제한에서는 추가 초도 사라집니다. (단, 1+2 는 예외로, 1+0이 됩니다.)\n\n시간 제한이 \"0분 플러스 추가 초\" 일 경우 (예: 0+1,0+2), 버서크에 돌입할 수 없습니다.\n\n버서크로 인한 보너스 점수를 얻기 위해서는 적어도 7수를 두어야 합니다.';
+  String get arenaBerserkAnswer =>
+      '게임을 시작할 때, 옆의 \"버서크 (berserk)\" 버튼을 클릭하면, 가진 시간이 절반으로 깎이는 대신에 이길 경우 1점의 보너스 점수를 얻을 수 있습니다.\n\n추가 초가 있는 시간 제한에서는 추가 초도 사라집니다. (단, 1+2 는 예외로, 1+0이 됩니다.)\n\n시간 제한이 \"0분 플러스 추가 초\" 일 경우 (예: 0+1,0+2), 버서크에 돌입할 수 없습니다.\n\n버서크로 인한 보너스 점수를 얻기 위해서는 적어도 7수를 두어야 합니다.';
 
   @override
   String get arenaHowIsTheWinnerDecided => '승자는 어떻게 결정합니까?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => '토너먼트의 예정된 종료시각에 가장 많은 점수를 가지고 있는 플레이어가 승자로 결정됩니다.\n\n두 플레이어가 같은 점수일 경우에는, 토너먼트 내에서의 퍼포먼스 레이팅으로 승자를 가릅니다.';
+  String get arenaHowIsTheWinnerDecidedAnswer =>
+      '토너먼트의 예정된 종료시각에 가장 많은 점수를 가지고 있는 플레이어가 승자로 결정됩니다.\n\n두 플레이어가 같은 점수일 경우에는, 토너먼트 내에서의 퍼포먼스 레이팅으로 승자를 가릅니다.';
 
   @override
   String get arenaHowDoesPairingWork => '대전 매칭은 어떻게 이루어집니까?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => '토너먼트가 시작할 때에는, 레이팅을 기준으로 플레이어들이 매칭됩니다.\n게임을 끝내면 바로 토너먼토 로비에 돌아오십시오. 그러면 자신의 토너먼트 순위와 제일 가까운 플레이어와 매칭될 것입니다. 이 방법에 따르면 기다리는 시간이 최소화되지만, 토너먼트 내의 모든 플레이어와 만날 수 없을 수도 있습니다.\n빠르게 두고 로비에 나와 많은 게임을 플레이하여 더 많은 점수를 얻으십시오.';
+  String get arenaHowDoesPairingWorkAnswer =>
+      '토너먼트가 시작할 때에는, 레이팅을 기준으로 플레이어들이 매칭됩니다.\n게임을 끝내면 바로 토너먼토 로비에 돌아오십시오. 그러면 자신의 토너먼트 순위와 제일 가까운 플레이어와 매칭될 것입니다. 이 방법에 따르면 기다리는 시간이 최소화되지만, 토너먼트 내의 모든 플레이어와 만날 수 없을 수도 있습니다.\n빠르게 두고 로비에 나와 많은 게임을 플레이하여 더 많은 점수를 얻으십시오.';
 
   @override
   String get arenaHowDoesItEnd => '토너먼트는 어떻게 종료됩니까?';
 
   @override
-  String get arenaHowDoesItEndAnswer => '토너먼트에는 시간 제한이 있습니다. 남은 시간이 0이 되었을 때, 토너먼트 순위가 결정되고, 승자가 발표됩니다. 이 경우에, 진행중인 게임은 끝까지 두실 수 있지만, 토너먼트의 결과에는 영향을 주지 않습니다.';
+  String get arenaHowDoesItEndAnswer =>
+      '토너먼트에는 시간 제한이 있습니다. 남은 시간이 0이 되었을 때, 토너먼트 순위가 결정되고, 승자가 발표됩니다. 이 경우에, 진행중인 게임은 끝까지 두실 수 있지만, 토너먼트의 결과에는 영향을 주지 않습니다.';
 
   @override
   String get arenaOtherRules => '그 외 중요한 규칙';
@@ -406,7 +364,8 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get arenaDrawStreakVariants => '승점을 얻을 수 있는 비긴 게임의 최소 길이는 게임 종류에 따라 다릅니다. 아래 표에는 각 게임 종류에 따른 최소 값이 있습니다.';
+  String get arenaDrawStreakVariants =>
+      '승점을 얻을 수 있는 비긴 게임의 최소 길이는 게임 종류에 따라 다릅니다. 아래 표에는 각 게임 종류에 따른 최소 값이 있습니다.';
 
   @override
   String get arenaVariant => '게임 종류';
@@ -487,7 +446,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get arenaTournamentStats => '토너먼트 통계';
 
   @override
-  String get arenaRankAvgHelp => '백분위 순위는 말 그대로 순위의 백분율입니다. 즉, 백분위 순위는 낮을수록 더 높은 순위를 의미합니다. \n\n예를 들어, 100명의 참가자가 참여하는 토너먼트에서 3위를 차지하면 3%가 되고, 1000명의 참가자가 참여하는 토너먼트에서 10위를 차지하면 1%가 됩니다.';
+  String get arenaRankAvgHelp =>
+      '백분위 순위는 말 그대로 순위의 백분율입니다. 즉, 백분위 순위는 낮을수록 더 높은 순위를 의미합니다. \n\n예를 들어, 100명의 참가자가 참여하는 토너먼트에서 3위를 차지하면 3%가 되고, 1000명의 참가자가 참여하는 토너먼트에서 10위를 차지하면 1%가 됩니다.';
 
   @override
   String get arenaMedians => '중앙값';
@@ -539,11 +499,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String arenaViewAllXTeams(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '모두 $count개 팀 보기',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '모두 $count개 팀 보기');
     return '$_temp0';
   }
 
@@ -607,7 +563,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastSourceSingleUrl => 'PGN Source URL';
 
   @override
-  String get broadcastSourceUrlHelp => 'Lichess가 PGN 업데이트를 받기 위해 확인할 URL입니다. 인터넷에서 공개적으로 액세스 할 수 있어야 합니다.';
+  String get broadcastSourceUrlHelp =>
+      'Lichess가 PGN 업데이트를 받기 위해 확인할 URL입니다. 인터넷에서 공개적으로 액세스 할 수 있어야 합니다.';
 
   @override
   String get broadcastSourceGameIds => '공간으로 나눠진 64개까지의 Lichess 경기 ID.';
@@ -636,7 +593,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => '라운드와 해당 게임을 완전히 삭제합니다.';
 
   @override
-  String get broadcastDeleteAllGamesOfThisRound => '이 라운드의 모든 게임을 삭제합니다. 다시 생성하려면 소스가 활성화되어 있어야 합니다.';
+  String get broadcastDeleteAllGamesOfThisRound =>
+      '이 라운드의 모든 게임을 삭제합니다. 다시 생성하려면 소스가 활성화되어 있어야 합니다.';
 
   @override
   String get broadcastEditRoundStudy => '경기 연구 편집';
@@ -693,7 +651,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastOverview => '개요';
 
   @override
-  String get broadcastSubscribeTitle => '라운드가 시작될 때 알림을 받으려면 구독하세요. 계정 설정에서 방송을 위한 벨이나 알림 푸시를 토글할 수 있습니다.';
+  String get broadcastSubscribeTitle =>
+      '라운드가 시작될 때 알림을 받으려면 구독하세요. 계정 설정에서 방송을 위한 벨이나 알림 푸시를 토글할 수 있습니다.';
 
   @override
   String get broadcastUploadImage => '토너먼트 사진 업로드';
@@ -787,18 +746,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastBackToLiveMove => '실시간 수로 돌아가기';
 
   @override
-  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
+  String get broadcastSinceHideResults =>
+      'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String get broadcastLiveboard => 'Live board';
 
   @override
   String broadcastNbBroadcasts(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 방송',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 방송');
     return '$_temp0';
   }
 
@@ -1060,7 +1016,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesShowFlairs => '플레이어 아이콘 보기';
 
   @override
-  String get preferencesExplainShowPlayerRatings => '체스에 집중할 수 있도록 웹사이트에서 레이팅을 모두 숨깁니다. 경기는 여전히 레이팅에 반영될 것이며, 눈으로 보이는 정보에만 영향을 줍니다.';
+  String get preferencesExplainShowPlayerRatings =>
+      '체스에 집중할 수 있도록 웹사이트에서 레이팅을 모두 숨깁니다. 경기는 여전히 레이팅에 반영될 것이며, 눈으로 보이는 정보에만 영향을 줍니다.';
 
   @override
   String get preferencesDisplayBoardResizeHandle => '보드 크기 재조정 핸들 보이기';
@@ -1120,7 +1077,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => '퀸으로 자동 승진';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => '일시적으로 자동 승진을 끄기 위해 승진하는 동안 <ctrl>를 누르세요';
+  String get preferencesExplainPromoteToQueenAutomatically =>
+      '일시적으로 자동 승진을 끄기 위해 승진하는 동안 <ctrl>를 누르세요';
 
   @override
   String get preferencesWhenPremoving => '미리두기 때만';
@@ -1165,7 +1123,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesSnapArrowsToValidMoves => '적법한 움직임에만 화살표를 그림';
 
   @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => '패배하거나 무승부 시 \"Good game, well played\"라고 말합니다.';
+  String get preferencesSayGgWpAfterLosingOrDrawing =>
+      '패배하거나 무승부 시 \"Good game, well played\"라고 말합니다.';
 
   @override
   String get preferencesYourPreferencesHaveBeenSaved => '설정이 저장되었습니다.';
@@ -1264,7 +1223,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleDownVote => '퍼즐 비추천';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange => '당신의 퍼즐 레이팅은 바뀌지 않을 것입니다. 퍼즐은 경쟁이 아니라는 걸 기억하세요. 레이팅은 당신의 현재 수준에 맞는 퍼즐을 선택하도록 돕습니다.';
+  String get puzzleYourPuzzleRatingWillNotChange =>
+      '당신의 퍼즐 레이팅은 바뀌지 않을 것입니다. 퍼즐은 경쟁이 아니라는 걸 기억하세요. 레이팅은 당신의 현재 수준에 맞는 퍼즐을 선택하도록 돕습니다.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => '백의 최선 수를 찾아보세요.';
@@ -1390,7 +1350,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleFailed => '실패함';
 
   @override
-  String get puzzleStreakDescription => '점점 더 어려워지는 퍼즐을 풀고 연승을 쌓으세요. 시간 제한은 없습니다. 한번의 잘못된 수 만으로 게임이 끝납니다! 그러나 세션당 한 수를 건너 뛸 수 있습니다.';
+  String get puzzleStreakDescription =>
+      '점점 더 어려워지는 퍼즐을 풀고 연승을 쌓으세요. 시간 제한은 없습니다. 한번의 잘못된 수 만으로 게임이 끝납니다! 그러나 세션당 한 수를 건너 뛸 수 있습니다.';
 
   @override
   String puzzleYourStreakX(String param) {
@@ -1421,7 +1382,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleSearchPuzzles => '퍼즐 찾기';
 
   @override
-  String get puzzleFromMyGamesNone => '데이터베이스에 퍼즐이 없습니다만, Lichess는 여전히 당신을 사랑합니다.\n래피드나 클래시컬 게임을 플레이해서 당신의 퍼즐이 추가될 확률을 높이세요!';
+  String get puzzleFromMyGamesNone =>
+      '데이터베이스에 퍼즐이 없습니다만, Lichess는 여전히 당신을 사랑합니다.\n래피드나 클래시컬 게임을 플레이해서 당신의 퍼즐이 추가될 확률을 높이세요!';
 
   @override
   String puzzleFromXGamesFound(String param1, String param2) {
@@ -1447,11 +1409,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count회 플레이',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count회 플레이');
     return '$_temp0';
   }
 
@@ -1477,21 +1435,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 플레이함',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 플레이함');
     return '$_temp0';
   }
 
   @override
   String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 다시 풀기',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 다시 풀기');
     return '$_temp0';
   }
 
@@ -1511,7 +1461,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeAnastasiaMate => '아나스타시아 메이트';
 
   @override
-  String get puzzleThemeAnastasiaMateDescription => '나이트와 룩 또는 퀸이 힘을 합쳐 상대 킹을 보드 가장자리와 자신의 기물 사이의 함정에 빠트립니다.';
+  String get puzzleThemeAnastasiaMateDescription =>
+      '나이트와 룩 또는 퀸이 힘을 합쳐 상대 킹을 보드 가장자리와 자신의 기물 사이의 함정에 빠트립니다.';
 
   @override
   String get puzzleThemeArabianMate => '아라비안 메이트';
@@ -1559,7 +1510,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeCapturingDefender => '보호하는 기물을 제거하세요.';
 
   @override
-  String get puzzleThemeCapturingDefenderDescription => '다른 기물을 방어중인 기물을 잡아서 다음 수에 더 이상 방어되지 않는 기물을 잡을 수 있게 됩니다.';
+  String get puzzleThemeCapturingDefenderDescription =>
+      '다른 기물을 방어중인 기물을 잡아서 다음 수에 더 이상 방어되지 않는 기물을 잡을 수 있게 됩니다.';
 
   @override
   String get puzzleThemeCrushing => '박살내기';
@@ -1577,13 +1529,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeDovetailMate => '도브테일 메이트';
 
   @override
-  String get puzzleThemeDovetailMateDescription => '퀸이 킹 바로 옆에서 메이트를 합니다. 유일하게 빠져나갈 수 있는 두 칸은 자신의 기물에게 막혀 있습니다.';
+  String get puzzleThemeDovetailMateDescription =>
+      '퀸이 킹 바로 옆에서 메이트를 합니다. 유일하게 빠져나갈 수 있는 두 칸은 자신의 기물에게 막혀 있습니다.';
 
   @override
   String get puzzleThemeEquality => '동등함';
 
   @override
-  String get puzzleThemeEqualityDescription => '불리한 상황에서 벗어나 무승부 또는 균형잡힌 포지션으로 만드세요. (eval ≤ 200cp)';
+  String get puzzleThemeEqualityDescription =>
+      '불리한 상황에서 벗어나 무승부 또는 균형잡힌 포지션으로 만드세요. (eval ≤ 200cp)';
 
   @override
   String get puzzleThemeKingsideAttack => '킹사이드 공격';
@@ -1607,19 +1561,22 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeDeflection => '굴절';
 
   @override
-  String get puzzleThemeDeflectionDescription => '중요한 칸을 수비하는 등 다른 역할을 수행하는 상대 기물의 주의를 분산시키는 수입니다. \"과부하\"라고도 불립니다.';
+  String get puzzleThemeDeflectionDescription =>
+      '중요한 칸을 수비하는 등 다른 역할을 수행하는 상대 기물의 주의를 분산시키는 수입니다. \"과부하\"라고도 불립니다.';
 
   @override
   String get puzzleThemeDiscoveredAttack => '디스커버드 어택';
 
   @override
-  String get puzzleThemeDiscoveredAttackDescription => '장거리 기물(예: 룩)의 길을 막고 있는 기물(예: 나이트)을 이동시켜 공격합니다.';
+  String get puzzleThemeDiscoveredAttackDescription =>
+      '장거리 기물(예: 룩)의 길을 막고 있는 기물(예: 나이트)을 이동시켜 공격합니다.';
 
   @override
   String get puzzleThemeDoubleCheck => '더블 체크';
 
   @override
-  String get puzzleThemeDoubleCheckDescription => '움직인 기물과 그 뒤에 있던 기물이 모두 상대 킹을 공격한 디스커버 어택의 결과로, 두 기물이 동시에 체크를 합니다.';
+  String get puzzleThemeDoubleCheckDescription =>
+      '움직인 기물과 그 뒤에 있던 기물이 모두 상대 킹을 공격한 디스커버 어택의 결과로, 두 기물이 동시에 체크를 합니다.';
 
   @override
   String get puzzleThemeEndgame => '엔드게임';
@@ -1628,7 +1585,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeEndgameDescription => '게임 종반부에서의 전략';
 
   @override
-  String get puzzleThemeEnPassantDescription => '앙파상 규칙을 포함한 전술입니다. 상대 폰이 처음에 두 칸 이동해서 내 폰을 지나쳤을 경우, 그 폰을 잡을 수 있습니다.';
+  String get puzzleThemeEnPassantDescription =>
+      '앙파상 규칙을 포함한 전술입니다. 상대 폰이 처음에 두 칸 이동해서 내 폰을 지나쳤을 경우, 그 폰을 잡을 수 있습니다.';
 
   @override
   String get puzzleThemeExposedKing => '노출된 킹';
@@ -1658,25 +1616,29 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeInterference => '간섭';
 
   @override
-  String get puzzleThemeInterferenceDescription => '상대의 두 기물 사이에 기물을 집어넣어 그 기물들을 지켜지지 않게 만듭니다. 두 룩 사이의 나이트처럼요.';
+  String get puzzleThemeInterferenceDescription =>
+      '상대의 두 기물 사이에 기물을 집어넣어 그 기물들을 지켜지지 않게 만듭니다. 두 룩 사이의 나이트처럼요.';
 
   @override
   String get puzzleThemeIntermezzo => '사잇수';
 
   @override
-  String get puzzleThemeIntermezzoDescription => '예상되는 플레이를 하는 대신, 먼저 상대가 즉시 해결해야 하는 또 다른 위협을 끼워 넣습니다. \"Zwischenzug\"나 \"In between\"이라고도 합니다.';
+  String get puzzleThemeIntermezzoDescription =>
+      '예상되는 플레이를 하는 대신, 먼저 상대가 즉시 해결해야 하는 또 다른 위협을 끼워 넣습니다. \"Zwischenzug\"나 \"In between\"이라고도 합니다.';
 
   @override
   String get puzzleThemeKillBoxMate => '킬 박스 체크메이트';
 
   @override
-  String get puzzleThemeKillBoxMateDescription => '킹 옆에서는 룩이 체크를 넣고, 퀸이 그 룩을 지켜주면서 킹의 도주로를 차단하는 체크메이트 패턴입니다. 룩과 퀸이 3 x 3 \"킬 박스\" 안에서 킹을 공격합니다.';
+  String get puzzleThemeKillBoxMateDescription =>
+      '킹 옆에서는 룩이 체크를 넣고, 퀸이 그 룩을 지켜주면서 킹의 도주로를 차단하는 체크메이트 패턴입니다. 룩과 퀸이 3 x 3 \"킬 박스\" 안에서 킹을 공격합니다.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic mate';
 
   @override
-  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+  String get puzzleThemeVukovicMateDescription =>
+      'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
 
   @override
   String get puzzleThemeKnightEndgame => '나이트 엔딩';
@@ -1820,13 +1782,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeSkewer => '스큐어';
 
   @override
-  String get puzzleThemeSkewerDescription => '높은 가치의 기물을 공격해 길을 비키게 만들고, 그 뒤에 있는 낮은 가치의 기물을 잡는 전술입니다. 핀의 반대죠.';
+  String get puzzleThemeSkewerDescription =>
+      '높은 가치의 기물을 공격해 길을 비키게 만들고, 그 뒤에 있는 낮은 가치의 기물을 잡는 전술입니다. 핀의 반대죠.';
 
   @override
   String get puzzleThemeSmotheredMate => '질식 체크메이트';
 
   @override
-  String get puzzleThemeSmotheredMateDescription => '자신의 기물에 둘러쌓여(또는 \"질식되어\") 움직일 수 없는 킹을 나이트로 체크메이트 시키는 것 입니다.';
+  String get puzzleThemeSmotheredMateDescription =>
+      '자신의 기물에 둘러쌓여(또는 \"질식되어\") 움직일 수 없는 킹을 나이트로 체크메이트 시키는 것 입니다.';
 
   @override
   String get puzzleThemeSuperGM => '슈퍼GM 게임';
@@ -2324,7 +2288,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get signUp => '회원 가입';
 
   @override
-  String get computersAreNotAllowedToPlay => '컴퓨터나 컴퓨터를 사용하는 플레이어들은 대국이 금지되어 있습니다. 대국 중 체스 엔진이나, 데이터베이스나, 다른 사람들로부터 도움을 받지 마십시오. 이와 더불어 다중 계정 소유는 최대한 사용을 지양하여 주시고 지나치게 많은 계정들을 사용할 시 계정들이 차단될 수 있습니다.';
+  String get computersAreNotAllowedToPlay =>
+      '컴퓨터나 컴퓨터를 사용하는 플레이어들은 대국이 금지되어 있습니다. 대국 중 체스 엔진이나, 데이터베이스나, 다른 사람들로부터 도움을 받지 마십시오. 이와 더불어 다중 계정 소유는 최대한 사용을 지양하여 주시고 지나치게 많은 계정들을 사용할 시 계정들이 차단될 수 있습니다.';
 
   @override
   String get games => '대국';
@@ -2407,7 +2372,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get changeUsernameDescription => '사용자명 변경하기: 대/소문자만의 변경이 허용되며, 단 한번만 가능합니다.';
 
   @override
-  String get signupUsernameHint => '사용자 이름이 어린이를 포함해 모두에게 적절한지 확인하세요. 나중에 변경할 수 없으며 부적절한 사용자 이름을 가진 계정은 폐쇄됩니다!';
+  String get signupUsernameHint =>
+      '사용자 이름이 어린이를 포함해 모두에게 적절한지 확인하세요. 나중에 변경할 수 없으며 부적절한 사용자 이름을 가진 계정은 폐쇄됩니다!';
 
   @override
   String get signupEmailHint => '비밀번호 초기화를 위해서만 사용됩니다.';
@@ -2437,7 +2403,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get error_namePassword => '사용자 이름을 비밀번호로 사용하지 마세요.';
 
   @override
-  String get blankedPassword => '당신이 다른 사이트에서 동일한 비밀번호를 사용했으며, 해당 사이트가 유출되었습니다. Lichess 계정의 안전을 위해 새 비밀번호를 설정해 주세요. 양해해 주셔서 감사합니다.';
+  String get blankedPassword =>
+      '당신이 다른 사이트에서 동일한 비밀번호를 사용했으며, 해당 사이트가 유출되었습니다. Lichess 계정의 안전을 위해 새 비밀번호를 설정해 주세요. 양해해 주셔서 감사합니다.';
 
   @override
   String get youAreLeavingLichess => 'Lichess에서 나갑니다';
@@ -2774,7 +2741,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backToGame => '대국으로 돌아가기';
 
   @override
-  String get siteDescription => '회원 가입, 광고, 플러그인 없이 즐길 수 있는 깔끔한 구성의 무료 온라인 체스 게임입니다. 컴퓨터, 친구 또는 무작위로 고른 상대와 함께 체스를 즐겨보세요.';
+  String get siteDescription =>
+      '회원 가입, 광고, 플러그인 없이 즐길 수 있는 깔끔한 구성의 무료 온라인 체스 게임입니다. 컴퓨터, 친구 또는 무작위로 고른 상대와 함께 체스를 즐겨보세요.';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
@@ -2843,7 +2811,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get importGame => '대국 불러오기';
 
   @override
-  String get importGameExplanation => '체스 대국의 PGN 을 붙여 넣으면, 복기와 컴퓨터 분석을 진행할 수 있고, 채팅을 칠 수도 있으며, 대국을 공유할 수 있는 URL 링크도 생성할 수 있습니다.';
+  String get importGameExplanation =>
+      '체스 대국의 PGN 을 붙여 넣으면, 복기와 컴퓨터 분석을 진행할 수 있고, 채팅을 칠 수도 있으며, 대국을 공유할 수 있는 URL 링크도 생성할 수 있습니다.';
 
   @override
   String get importGameCaveat => '변형은 지워집니다. 변형을 유지하려면 연구를 통해 PGN을 가져오세요.';
@@ -3230,10 +3199,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get other => '기타';
 
   @override
-  String get reportCheatBoostHelp => '대국 URL 주소를 붙여넣으시고 해당 사용자가 무엇을 잘못했는지 설명해 주세요. 그냥 \"그들이 부정행위를 했어요\" 라고만 말하지 말고, 어떻게 당신이 이 결론에 도달하게 됐는지 알려주세요.';
+  String get reportCheatBoostHelp =>
+      '대국 URL 주소를 붙여넣으시고 해당 사용자가 무엇을 잘못했는지 설명해 주세요. 그냥 \"그들이 부정행위를 했어요\" 라고만 말하지 말고, 어떻게 당신이 이 결론에 도달하게 됐는지 알려주세요.';
 
   @override
-  String get reportUsernameHelp => '왜 이 사용자의 이름이 불쾌한지 설명해주세요. 그저 \"불쾌해요/부적절해요\"라고만 말하지 마세요, 대신 왜 이런 결론에 도달했는지 말씀해 주세요. 단어가 난해하거나, 영어가 아니거나, 은어이거나, 문화적/역사적 배경이 있는 경우 특히 중요합니다.';
+  String get reportUsernameHelp =>
+      '왜 이 사용자의 이름이 불쾌한지 설명해주세요. 그저 \"불쾌해요/부적절해요\"라고만 말하지 마세요, 대신 왜 이런 결론에 도달했는지 말씀해 주세요. 단어가 난해하거나, 영어가 아니거나, 은어이거나, 문화적/역사적 배경이 있는 경우 특히 중요합니다.';
 
   @override
   String get reportProcessedFasterInEnglish => '귀하의 신고가 영어로 적혀있을 경우 빠르게 처리될 것입니다.';
@@ -3691,7 +3662,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tournamentHomeTitle => '다양한 시간 제한과 변형을 지원하는 체스 토너먼트';
 
   @override
-  String get tournamentHomeDescription => '빠른 체스 토너먼트를 즐겨 보세요! 공식 일정이 잡힌 토너먼트에 참가할 수도, 당신만의 토너먼트를 만들 수도 있습니다. 불릿, 블리츠, 클래식, 체스960, 언덕의 왕, 3체크를 비롯하여 다양한 게임방식을 즐길 수 있습니다.';
+  String get tournamentHomeDescription =>
+      '빠른 체스 토너먼트를 즐겨 보세요! 공식 일정이 잡힌 토너먼트에 참가할 수도, 당신만의 토너먼트를 만들 수도 있습니다. 불릿, 블리츠, 클래식, 체스960, 언덕의 왕, 3체크를 비롯하여 다양한 게임방식을 즐길 수 있습니다.';
 
   @override
   String get tournamentNotFound => '토너먼트를 찾을 수 없습니다';
@@ -3751,7 +3723,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get weHaveSentYouAnEmailClickTheLink => '메일을 보냈습니다. 메일에서 링크를 클릭해서 계정을 활성화해 주세요.';
 
   @override
-  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => '메일을 확인할 수 없다면, 스팸 메일함이나 다른 폴더에 메일이 있지 않은지 확인해 주세요.';
+  String get ifYouDoNotSeeTheEmailCheckOtherPlaces =>
+      '메일을 확인할 수 없다면, 스팸 메일함이나 다른 폴더에 메일이 있지 않은지 확인해 주세요.';
 
   @override
   String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
@@ -3834,7 +3807,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get kidModeIsEnabled => '어린이 모드가 활성화되었습니다.';
 
   @override
-  String get kidModeExplanation => '이 모드는 안전에 관한 것입니다. 어린이 모드에서는 모든 통신이 비활성화됩니다. 당신의 아이들이나 학생들을 다른 인터넷 사용자들에서 보호하려면 이 모드를 켜십시오.';
+  String get kidModeExplanation =>
+      '이 모드는 안전에 관한 것입니다. 어린이 모드에서는 모든 통신이 비활성화됩니다. 당신의 아이들이나 학생들을 다른 인터넷 사용자들에서 보호하려면 이 모드를 켜십시오.';
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
@@ -3842,7 +3816,8 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get askYourChessTeacherAboutLiftingKidMode => '당신의 계정은 관리되고 있습니다. 어린이 모드 해제에 대해서는 체스 선생님께 문의하세요.';
+  String get askYourChessTeacherAboutLiftingKidMode =>
+      '당신의 계정은 관리되고 있습니다. 어린이 모드 해제에 대해서는 체스 선생님께 문의하세요.';
 
   @override
   String get enableKidMode => '어린이 모드 활성화하기';
@@ -4366,7 +4341,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tournDescription => '토너먼트 설명';
 
   @override
-  String get tournDescriptionHelp => '참가자에게 하고 싶은 말이 있나요? 짧게 작성해주세요. 마크다운 링크가 가능합니다: [name](https://url)';
+  String get tournDescriptionHelp =>
+      '참가자에게 하고 싶은 말이 있나요? 짧게 작성해주세요. 마크다운 링크가 가능합니다: [name](https://url)';
 
   @override
   String get ratedFormHelp => '레이팅 게임을 합니다\n플레이어 레이팅에 영향을 줍니다';
@@ -4520,7 +4496,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get showMeEverything => '모두 보기';
 
   @override
-  String get lichessPatronInfo => 'Lichess는 비영리 기구이며 완전한 무료/자유 오픈소스 소프트웨어입니다.\n모든 운영 비용, 개발, 컨텐츠 조달은 전적으로 사용자들의 기부로 이루어집니다.';
+  String get lichessPatronInfo =>
+      'Lichess는 비영리 기구이며 완전한 무료/자유 오픈소스 소프트웨어입니다.\n모든 운영 비용, 개발, 컨텐츠 조달은 전적으로 사용자들의 기부로 이루어집니다.';
 
   @override
   String get nothingToSeeHere => '지금은 여기에 볼 것이 없습니다.';
@@ -4540,91 +4517,55 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String mateInXHalfMoves(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count개의 반수 후 체크메이트',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count개의 반수 후 체크메이트');
     return '$_temp0';
   }
 
   @override
   String nbBlunders(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 블런더',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 블런더');
     return '$_temp0';
   }
 
   @override
   String numberBlunders(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 블런더',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 블런더');
     return '$_temp0';
   }
 
   @override
   String nbMistakes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 실수',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 실수');
     return '$_temp0';
   }
 
   @override
   String numberMistakes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 실수',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 실수');
     return '$_temp0';
   }
 
   @override
   String nbInaccuracies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 부정확한 수',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 부정확한 수');
     return '$_temp0';
   }
 
   @override
   String numberInaccuracies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 부정확한 수',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 부정확한 수');
     return '$_temp0';
   }
 
   @override
   String nbPlayers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '플레이어 $count명',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '플레이어 $count명');
     return '$_temp0';
   }
 
   @override
   String nbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '게임 $count개',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '게임 $count개');
     return '$_temp0';
   }
 
@@ -4640,41 +4581,25 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String nbBookmarks(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count개의 즐겨찾기',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count개의 즐겨찾기');
     return '$_temp0';
   }
 
   @override
   String nbDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count일',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count일');
     return '$_temp0';
   }
 
   @override
   String nbHours(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count시간',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count시간');
     return '$_temp0';
   }
 
   @override
   String nbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count분',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count분');
     return '$_temp0';
   }
 
@@ -4690,121 +4615,73 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String nbPuzzles(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '퍼즐 $count개',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '퍼즐 $count개');
     return '$_temp0';
   }
 
   @override
   String nbGamesWithYou(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '나와 $count번 대국 함',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '나와 $count번 대국 함');
     return '$_temp0';
   }
 
   @override
   String nbRated(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '공식 대국 $count 회',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '공식 대국 $count 회');
     return '$_temp0';
   }
 
   @override
   String nbWins(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count번 승리',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count번 승리');
     return '$_temp0';
   }
 
   @override
   String nbLosses(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count번 패배',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count번 패배');
     return '$_temp0';
   }
 
   @override
   String nbDraws(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count번 비김',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count번 비김');
     return '$_temp0';
   }
 
   @override
   String nbPlaying(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '현재 두고 있는 대국 $count개',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '현재 두고 있는 대국 $count개');
     return '$_temp0';
   }
 
   @override
   String giveNbSeconds(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count초 더 주기',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count초 더 주기');
     return '$_temp0';
   }
 
   @override
   String nbTournamentPoints(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 토너먼트 점수',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 토너먼트 점수');
     return '$_temp0';
   }
 
   @override
   String nbStudies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 연구',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 연구');
     return '$_temp0';
   }
 
   @override
   String nbSimuls(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 다면기',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 다면기');
     return '$_temp0';
   }
 
   @override
   String moreThanNbRatedGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '레이팅전 $count 국 이상',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '레이팅전 $count 국 이상');
     return '$_temp0';
   }
 
@@ -4840,91 +4717,55 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String nbImportedGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '불러온 대국 $count개',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '불러온 대국 $count개');
     return '$_temp0';
   }
 
   @override
   String nbFriendsOnline(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count명의 친구들이 접속중',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count명의 친구들이 접속중');
     return '$_temp0';
   }
 
   @override
   String nbFollowers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '팔로워 $count명',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '팔로워 $count명');
     return '$_temp0';
   }
 
   @override
   String nbFollowing(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '팔로잉 $count명',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '팔로잉 $count명');
     return '$_temp0';
   }
 
   @override
   String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count분 미만',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count분 미만');
     return '$_temp0';
   }
 
   @override
   String nbGamesInPlay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count개의 대국 진행 중',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count개의 대국 진행 중');
     return '$_temp0';
   }
 
   @override
   String maximumNbCharacters(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '최대 $count자.',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '최대 $count자.');
     return '$_temp0';
   }
 
   @override
   String blocks(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '차단한 사람 $count명',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '차단한 사람 $count명');
     return '$_temp0';
   }
 
   @override
   String nbForumPosts(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 포럼 글',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 포럼 글');
     return '$_temp0';
   }
 
@@ -4940,11 +4781,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String availableInNbLanguages(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count개의 언어를 지원합니다!',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count개의 언어를 지원합니다!');
     return '$_temp0';
   }
 
@@ -4960,21 +4797,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String nbSeconds(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count초',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count초');
     return '$_temp0';
   }
 
   @override
   String andSaveNbPremoveLines(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 종류의 조건 수를 설정',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 종류의 조건 수를 설정');
     return '$_temp0';
   }
 
@@ -5139,11 +4968,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String stormXRuns(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count번 도전',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count번 도전');
     return '$_temp0';
   }
 
@@ -5630,13 +5455,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText =>
+      'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
 
   @override
   String get studySharedAndSaveTitle => 'Shared and saved';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText =>
+      'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
 
   @override
   String get studyStudyMembersTitle => 'Study members';
@@ -5655,7 +5482,8 @@ class AppLocalizationsKo extends AppLocalizations {
   String get studyStudyChaptersTitle => 'Study chapters';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText =>
+      'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
 
   @override
   String get studyCommentPositionTitle => 'Comment on a position';
@@ -5669,25 +5497,29 @@ class AppLocalizationsKo extends AppLocalizations {
   String get studyAnnotatePositionTitle => 'Annotate a position';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText =>
+      'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
 
   @override
   String get studyConclusionTitle => 'Thanks for your time';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText =>
+      'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
   String get studyCreateChapterTitle => 'Let\'s create a study chapter';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText =>
+      'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
 
   @override
   String get studyFromInitialPositionTitle => 'From initial position';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText =>
+      'Just a board setup for a new game.<br>Suited to explore openings.';
 
   @override
   String get studyCustomPositionTitle => 'Custom position';
@@ -5699,56 +5531,49 @@ class AppLocalizationsKo extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText =>
+      'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText =>
+      'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
 
   @override
   String get studyFromPgnGameTitle => 'From a PGN game';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText =>
+      'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Studies support variants';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText =>
+      'Yes, you can study crazyhouse<br>and all lichess variants!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText =>
+      'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
   String studyNbChapters(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 챕터',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 챕터');
     return '$_temp0';
   }
 
   @override
   String studyNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 게임',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 게임');
     return '$_temp0';
   }
 
   @override
   String studyNbMembers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '멤버 $count명',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '멤버 $count명');
     return '$_temp0';
   }
 
@@ -5773,151 +5598,91 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String timeagoInNbSeconds(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count초 후',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count초 후');
     return '$_temp0';
   }
 
   @override
   String timeagoInNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count분 후',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count분 후');
     return '$_temp0';
   }
 
   @override
   String timeagoInNbHours(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count시간 후',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count시간 후');
     return '$_temp0';
   }
 
   @override
   String timeagoInNbDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count일 후',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count일 후');
     return '$_temp0';
   }
 
   @override
   String timeagoInNbWeeks(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count주 후',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count주 후');
     return '$_temp0';
   }
 
   @override
   String timeagoInNbMonths(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count개월 후',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count개월 후');
     return '$_temp0';
   }
 
   @override
   String timeagoInNbYears(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count년 후',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count년 후');
     return '$_temp0';
   }
 
   @override
   String timeagoNbMinutesAgo(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count분 전',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count분 전');
     return '$_temp0';
   }
 
   @override
   String timeagoNbHoursAgo(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count시간 전',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count시간 전');
     return '$_temp0';
   }
 
   @override
   String timeagoNbDaysAgo(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count일 전',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count일 전');
     return '$_temp0';
   }
 
   @override
   String timeagoNbWeeksAgo(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count주 전',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count주 전');
     return '$_temp0';
   }
 
   @override
   String timeagoNbMonthsAgo(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count개월 전',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count개월 전');
     return '$_temp0';
   }
 
   @override
   String timeagoNbYearsAgo(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count년 전',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count년 전');
     return '$_temp0';
   }
 
   @override
   String timeagoNbMinutesRemaining(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count분 남음',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count분 남음');
     return '$_temp0';
   }
 
   @override
   String timeagoNbHoursRemaining(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count시간 남음',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count시간 남음');
     return '$_temp0';
   }
 }
