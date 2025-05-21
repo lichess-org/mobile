@@ -46,13 +46,12 @@ class StudyListScreen extends ConsumerWidget {
             icon: const Icon(Icons.filter_list),
             // TODO: translate
             semanticsLabel: 'Filter studies',
-            onPressed:
-                () => showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
-                ),
+            onPressed: () => showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              showDragHandle: true,
+              builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
+            ),
           ),
         ],
       ),
@@ -80,8 +79,8 @@ class _StudyFilterSheet extends ConsumerWidget {
             choices: StudyCategory.values,
             choiceSelected: (choice) => filter.category == choice,
             choiceLabel: (category) => Text(category.l10n(context.l10n)),
-            onSelected:
-                (value, selected) => ref.read(studyFilterProvider.notifier).setCategory(value),
+            onSelected: (value, selected) =>
+                ref.read(studyFilterProvider.notifier).setCategory(value),
           ),
           const PlatformDivider(thickness: 1, indent: 0),
           const SizedBox(height: 10.0),
@@ -170,11 +169,10 @@ class _BodyState extends ConsumerState<_Body> {
       padding: Styles.bodySectionPadding,
       child: PlatformSearchBar(
         controller: _searchController,
-        onClear:
-            () => setState(() {
-              search = null;
-              _searchController.clear();
-            }),
+        onClear: () => setState(() {
+          search = null;
+          _searchController.clear();
+        }),
         hintText: search ?? context.l10n.searchSearch,
         onSubmitted: (term) {
           setState(() {
@@ -190,16 +188,13 @@ class _BodyState extends ConsumerState<_Body> {
           shrinkWrap: true,
           itemCount: studies.studies.length + 1,
           controller: _scrollController,
-          separatorBuilder:
-              (context, index) =>
-                  index == 0
-                      ? const SizedBox.shrink()
-                      : Theme.of(context).platform == TargetPlatform.iOS
-                      ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-                      : const PlatformDivider(height: 1, color: Colors.transparent),
-          itemBuilder:
-              (context, index) =>
-                  index == 0 ? searchBar : _StudyListItem(study: studies.studies[index - 1]),
+          separatorBuilder: (context, index) => index == 0
+              ? const SizedBox.shrink()
+              : Theme.of(context).platform == TargetPlatform.iOS
+              ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+              : const PlatformDivider(height: 1, color: Colors.transparent),
+          itemBuilder: (context, index) =>
+              index == 0 ? searchBar : _StudyListItem(study: studies.studies[index - 1]),
         );
       },
       loading: () {
@@ -232,11 +227,10 @@ class _StudyListItem extends StatelessWidget {
         children: [Text(study.name, overflow: TextOverflow.ellipsis, maxLines: 2)],
       ),
       subtitle: _StudySubtitle(study: study),
-      onTap:
-          () => Navigator.of(
-            context,
-            rootNavigator: true,
-          ).push(StudyScreen.buildRoute(context, study.id)),
+      onTap: () => Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(StudyScreen.buildRoute(context, study.id)),
       onLongPress: () {
         showModalBottomSheet<void>(
           context: context,
@@ -352,11 +346,11 @@ class _StudyFlair extends StatelessWidget {
 
     return (flair != null)
         ? CachedNetworkImage(
-          imageUrl: lichessFlairSrc(flair!),
-          errorWidget: (_, _, _) => iconIfNoFlair,
-          width: size,
-          height: size,
-        )
+            imageUrl: lichessFlairSrc(flair!),
+            errorWidget: (_, _, _) => iconIfNoFlair,
+            width: size,
+            height: size,
+          )
         : iconIfNoFlair;
   }
 }

@@ -163,15 +163,14 @@ ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
       speed: data.speed,
       perf: data.perf,
       rated: data.rated,
-      clock:
-          data.clock != null
-              ? (
-                initial: data.clock!.initial,
-                increment: data.clock!.increment,
-                emergency: null,
-                moreTime: null,
-              )
-              : null,
+      clock: data.clock != null
+          ? (
+              initial: data.clock!.initial,
+              increment: data.clock!.increment,
+              emergency: null,
+              moreTime: null,
+            )
+          : null,
       opening: data.opening,
       division: division,
     ),
@@ -190,10 +189,9 @@ ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
       final movesList = moves.isEmpty ? <String>[] : moves.split(' ');
 
       // assume lichess always send initialFen with fromPosition and chess960
-      Position position =
-          (data.variant == Variant.fromPosition || data.variant == Variant.chess960)
-              ? Chess.fromSetup(Setup.parseFen(initialFen!))
-              : data.variant.initialPosition;
+      Position position = (data.variant == Variant.fromPosition || data.variant == Variant.chess960)
+          ? Chess.fromSetup(Setup.parseFen(initialFen!))
+          : data.variant.initialPosition;
       int index = 0;
       final List<GameStep> steps = [GameStep(position: position)];
       Duration? clock = data.clock?.initial;
@@ -247,12 +245,11 @@ LightExportedGame _lightExportedGameFromPick(
     lastMove: pick('lastMove').asUciMoveOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
     opening: pick('opening').letOrNull(_openingFromPick),
-    bookmarked:
-        isBookmarked
-            ? true
-            : withBookmarked
-            ? pick('bookmarked').asBoolOrFalse()
-            : null,
+    bookmarked: isBookmarked
+        ? true
+        : withBookmarked
+        ? pick('bookmarked').asBoolOrFalse()
+        : null,
   );
 }
 

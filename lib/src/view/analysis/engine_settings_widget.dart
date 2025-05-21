@@ -51,10 +51,9 @@ class EngineSettingsWidget extends ConsumerWidget {
                   children: [
                     TextSpan(
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text:
-                          prefs.engineSearchTime.inSeconds == 3600
-                              ? '∞'
-                              : '${prefs.engineSearchTime.inSeconds}s',
+                      text: prefs.engineSearchTime.inSeconds == 3600
+                          ? '∞'
+                          : '${prefs.engineSearchTime.inSeconds}s',
                     ),
                   ],
                 ),

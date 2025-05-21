@@ -141,8 +141,8 @@ class NotificationService {
 
     // Get any messages which caused the application to open from
     // a terminated state.
-    final RemoteMessage? initialMessage =
-        await LichessBinding.instance.firebaseMessaging.getInitialMessage();
+    final RemoteMessage? initialMessage = await LichessBinding.instance.firebaseMessaging
+        .getInitialMessage();
 
     if (initialMessage != null) {
       _handleFcmMessageOpenedApp(initialMessage);

@@ -61,29 +61,27 @@ class GameListDetailTile extends StatelessWidget {
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder:
-              (context) => GameContextMenu(
-                opponentTitle: UserFullNameWidget.player(
-                  user: opponent.user,
-                  aiLevel: opponent.aiLevel,
-                  rating: opponent.rating,
-                ),
-                game: game,
-                mySide: mySide,
-                showGameSummary: false,
-                onPressedBookmark: onPressedBookmark,
-              ),
+          builder: (context) => GameContextMenu(
+            opponentTitle: UserFullNameWidget.player(
+              user: opponent.user,
+              aiLevel: opponent.aiLevel,
+              rating: opponent.rating,
+            ),
+            game: game,
+            mySide: mySide,
+            showGameSummary: false,
+            onPressedBookmark: onPressedBookmark,
+          ),
         );
       },
-      onTap:
-          () => openGameScreen(
-            context,
-            game: item.game,
-            orientation: item.pov,
-            loadingLastMove: game.lastMove,
-            lastMoveAt: game.lastMoveAt,
-            gameListContext: gameListContext,
-          ),
+      onTap: () => openGameScreen(
+        context,
+        game: item.game,
+        orientation: item.pov,
+        loadingLastMove: game.lastMove,
+        lastMoveAt: game.lastMoveAt,
+        gameListContext: gameListContext,
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         child: LayoutBuilder(
@@ -169,12 +167,11 @@ class GameListDetailTile extends StatelessWidget {
                                     ),
                                     style: TextStyle(
                                       fontSize: subtitleFontSize,
-                                      color:
-                                          game.winner == null
-                                              ? customColors?.brag
-                                              : game.winner == mySide
-                                              ? customColors?.good
-                                              : customColors?.error,
+                                      color: game.winner == null
+                                          ? customColors?.brag
+                                          : game.winner == mySide
+                                          ? customColors?.good
+                                          : customColors?.error,
                                     ),
                                     children: [
                                       if (me.ratingDiff != null)

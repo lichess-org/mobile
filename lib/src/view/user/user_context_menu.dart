@@ -28,8 +28,9 @@ class UserContextMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
 
-    final AsyncValue<User> userAsync =
-        user != null ? AsyncData(user!) : ref.watch(userProvider(id: userId!));
+    final AsyncValue<User> userAsync = user != null
+        ? AsyncData(user!)
+        : ref.watch(userProvider(id: userId!));
 
     switch (userAsync) {
       case AsyncData(:final value):

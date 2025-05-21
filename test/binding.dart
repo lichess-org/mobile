@@ -207,16 +207,15 @@ class FakeSharedPreferences implements SharedPreferencesWithCache {
   }
 }
 
-typedef FirebaseMessagingRequestPermissionCall =
-    ({
-      bool alert,
-      bool announcement,
-      bool badge,
-      bool carPlay,
-      bool criticalAlert,
-      bool provisional,
-      bool sound,
-    });
+typedef FirebaseMessagingRequestPermissionCall = ({
+  bool alert,
+  bool announcement,
+  bool badge,
+  bool carPlay,
+  bool criticalAlert,
+  bool provisional,
+  bool sound,
+});
 
 class FakeFirebaseCrashlytics extends Fake implements FirebaseCrashlytics {
   @override
@@ -285,23 +284,25 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
     ));
     return _notificationSettings = NotificationSettings(
       alert: alert ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
-      announcement:
-          announcement ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
-      authorizationStatus:
-          _willGrantPermission ? AuthorizationStatus.authorized : AuthorizationStatus.denied,
+      announcement: announcement
+          ? AppleNotificationSetting.enabled
+          : AppleNotificationSetting.disabled,
+      authorizationStatus: _willGrantPermission
+          ? AuthorizationStatus.authorized
+          : AuthorizationStatus.denied,
       badge: badge ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
       carPlay: carPlay ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
       lockScreen: AppleNotificationSetting.enabled,
       notificationCenter: AppleNotificationSetting.enabled,
       showPreviews: AppleShowPreviewSetting.whenAuthenticated,
       timeSensitive: AppleNotificationSetting.disabled,
-      criticalAlert:
-          criticalAlert ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
+      criticalAlert: criticalAlert
+          ? AppleNotificationSetting.enabled
+          : AppleNotificationSetting.disabled,
       sound: sound ? AppleNotificationSetting.enabled : AppleNotificationSetting.disabled,
-      providesAppNotificationSettings:
-          providesAppNotificationSettings
-              ? AppleNotificationSetting.enabled
-              : AppleNotificationSetting.disabled,
+      providesAppNotificationSettings: providesAppNotificationSettings
+          ? AppleNotificationSetting.enabled
+          : AppleNotificationSetting.disabled,
     );
   }
 

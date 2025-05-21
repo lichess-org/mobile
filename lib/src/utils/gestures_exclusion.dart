@@ -134,20 +134,18 @@ class GesturesExclusion {
       return;
     }
 
-    final rectsAsMaps =
-        rects
-            .map(
-              (r) =>
-                  r.hasNaN || r.isInfinite
-                      ? null
-                      : {
-                        'left': r.left.floor(),
-                        'top': r.top.floor(),
-                        'right': r.right.floor(),
-                        'bottom': r.bottom.floor(),
-                      },
-            )
-            .toList();
+    final rectsAsMaps = rects
+        .map(
+          (r) => r.hasNaN || r.isInfinite
+              ? null
+              : {
+                  'left': r.left.floor(),
+                  'top': r.top.floor(),
+                  'right': r.right.floor(),
+                  'bottom': r.bottom.floor(),
+                },
+        )
+        .toList();
 
     try {
       await _channel.invokeMethod<void>('setSystemGestureExclusionRects', rectsAsMaps);

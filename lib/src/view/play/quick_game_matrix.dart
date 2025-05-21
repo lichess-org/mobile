@@ -22,8 +22,9 @@ class QuickGameMatrix extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playban = ref.watch(accountProvider).valueOrNull?.playban;
     final brightness = Theme.of(context).brightness;
-    final logoColor =
-        brightness == Brightness.light ? const Color(0x0F000000) : const Color(0x80FFFFFF);
+    final logoColor = brightness == Brightness.light
+        ? const Color(0x0F000000)
+        : const Color(0x80FFFFFF);
     final scaffoldOpacity = Theme.of(context).scaffoldBackgroundColor.a;
 
     if (playban != null) {
@@ -36,16 +37,15 @@ class QuickGameMatrix extends ConsumerWidget {
         Text(context.l10n.quickPairing, style: Styles.sectionTitle),
         const SizedBox(height: 6.0),
         Container(
-          decoration:
-              scaffoldOpacity != 0
-                  ? BoxDecoration(
-                    image: DecorationImage(
-                      colorFilter: ColorFilter.mode(logoColor, BlendMode.modulate),
-                      image: const AssetImage('assets/images/logo-transp.png'),
-                      fit: BoxFit.contain,
-                    ),
-                  )
-                  : null,
+          decoration: scaffoldOpacity != 0
+              ? BoxDecoration(
+                  image: DecorationImage(
+                    colorFilter: ColorFilter.mode(logoColor, BlendMode.modulate),
+                    image: const AssetImage('assets/images/logo-transp.png'),
+                    fit: BoxFit.contain,
+                  ),
+                )
+              : null,
           child: const Column(
             children: [
               _SectionChoices(
@@ -78,36 +78,34 @@ class _SectionChoices extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
-    final choiceWidgets =
-        choices
-            .mapIndexed((index, choice) {
-              return [
-                Expanded(
-                  child: _ChoiceChip(
-                    key: ValueKey(choice),
-                    label: Text(
-                      choice.display,
-                      style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
-                    ),
-                    speed: choice.speed,
-                    onTap:
-                        isOnline
-                            ? () {
-                              Navigator.of(context, rootNavigator: true).push(
-                                GameScreen.buildRoute(
-                                  context,
-                                  seek: GameSeek.fastPairing(choice, session),
-                                ),
-                              );
-                            }
-                            : null,
-                  ),
+    final choiceWidgets = choices
+        .mapIndexed((index, choice) {
+          return [
+            Expanded(
+              child: _ChoiceChip(
+                key: ValueKey(choice),
+                label: Text(
+                  choice.display,
+                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
                 ),
-                if (index < choices.length - 1) const SizedBox(width: _kMatrixSpacing),
-              ];
-            })
-            .flattened
-            .toList();
+                speed: choice.speed,
+                onTap: isOnline
+                    ? () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          GameScreen.buildRoute(
+                            context,
+                            seek: GameSeek.fastPairing(choice, session),
+                          ),
+                        );
+                      }
+                    : null,
+              ),
+            ),
+            if (index < choices.length - 1) const SizedBox(width: _kMatrixSpacing),
+          ];
+        })
+        .flattened
+        .toList();
 
     return IntrinsicHeight(
       child: Row(
@@ -119,19 +117,18 @@ class _SectionChoices extends ConsumerWidget {
             Expanded(
               child: _ChoiceChip(
                 label: Text(context.l10n.custom),
-                onTap:
-                    isOnline
-                        ? () {
-                          showModalBottomSheet<void>(
-                            context: context,
-                            useRootNavigator: true,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return const PlayBottomSheet();
-                            },
-                          );
-                        }
-                        : null,
+                onTap: isOnline
+                    ? () {
+                        showModalBottomSheet<void>(
+                          context: context,
+                          useRootNavigator: true,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return const PlayBottomSheet();
+                          },
+                        );
+                      }
+                    : null,
               ),
             ),
           ],
@@ -153,12 +150,11 @@ class _ChoiceChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scaffoldOpacity = Theme.of(context).scaffoldBackgroundColor.a;
-    final bgColor =
-        Theme.of(context).brightness == Brightness.dark
-            ? scaffoldOpacity > 0
-                ? Colors.white10
-                : ColorScheme.of(context).surfaceContainerLow
-            : ColorScheme.of(context).surfaceContainerHighest.withValues(alpha: 0.50);
+    final bgColor = Theme.of(context).brightness == Brightness.dark
+        ? scaffoldOpacity > 0
+              ? Colors.white10
+              : ColorScheme.of(context).surfaceContainerLow
+        : ColorScheme.of(context).surfaceContainerHighest.withValues(alpha: 0.50);
 
     return Opacity(
       opacity: onTap != null ? 1.0 : 0.5,

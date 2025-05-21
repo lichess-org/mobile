@@ -16,16 +16,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'preloaded_data.g.dart';
 
-typedef PreloadedData =
-    ({
-      PackageInfo packageInfo,
-      BaseDeviceInfo deviceInfo,
-      AuthSessionState? userSession,
-      String sri,
-      int engineMaxMemoryInMb,
-      Directory? appDocumentsDirectory,
-      Directory? appSupportDirectory,
-    });
+typedef PreloadedData = ({
+  PackageInfo packageInfo,
+  BaseDeviceInfo deviceInfo,
+  AuthSessionState? userSession,
+  String sri,
+  int engineMaxMemoryInMb,
+  Directory? appDocumentsDirectory,
+  Directory? appSupportDirectory,
+});
 
 @Riverpod(keepAlive: true)
 Future<PreloadedData> preloadedData(Ref ref) async {

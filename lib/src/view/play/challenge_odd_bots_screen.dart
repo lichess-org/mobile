@@ -110,10 +110,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
     //special bots have a shorter range of time controls, to prevent an error of the slider we need to check if the time stored in the preferences is within the range of the slider
     int seconds =
         (preferences.clock.time.inSeconds < 60 || preferences.clock.time.inSeconds > 15 * 60)
-            ? 300
-            : preferences.clock.time.inSeconds;
-    int incrementSeconds =
-        preferences.clock.increment.inSeconds > 10 ? 10 : preferences.clock.increment.inSeconds;
+        ? 300
+        : preferences.clock.time.inSeconds;
+    int incrementSeconds = preferences.clock.increment.inSeconds > 10
+        ? 10
+        : preferences.clock.increment.inSeconds;
 
     return Center(
       child: ListView(
@@ -192,12 +193,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
           ),
           LayoutBuilder(
             builder: (context, constraints) {
-              final crossAxisCount =
-                  constraints.maxWidth > 600
-                      ? 4
-                      : constraints.maxWidth > 450
-                      ? 3
-                      : 2;
+              final crossAxisCount = constraints.maxWidth > 600
+                  ? 4
+                  : constraints.maxWidth > 450
+                  ? 3
+                  : 2;
               const sidePadding = 16.0;
               const double borderWidth = 3.0;
               final boardWidth =
@@ -218,35 +218,34 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                   rowSizes: List.generate(rowCount, (_) => auto),
                   rowGap: 16,
                   columnGap: sidePadding,
-                  children:
-                      userBotFens.map((botFen) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              fen = botFen.fen;
-                              sideChoice =
-                                  botFen.side == Side.white ? SideChoice.white : SideChoice.black;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color:
-                                    fen == botFen.fen
-                                        ? ColorScheme.of(context).primary
-                                        : Colors.transparent,
-                                width: borderWidth,
-                              ),
-                              borderRadius: BorderRadius.circular(borderRadius),
-                            ),
-                            child: BoardThumbnail(
-                              size: boardWidth,
-                              orientation: botFen.side,
-                              fen: botFen.fen,
-                            ),
+                  children: userBotFens.map((botFen) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          fen = botFen.fen;
+                          sideChoice = botFen.side == Side.white
+                              ? SideChoice.white
+                              : SideChoice.black;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: fen == botFen.fen
+                                ? ColorScheme.of(context).primary
+                                : Colors.transparent,
+                            width: borderWidth,
                           ),
-                        );
-                      }).toList(),
+                          borderRadius: BorderRadius.circular(borderRadius),
+                        ),
+                        child: BoardThumbnail(
+                          size: boardWidth,
+                          orientation: botFen.side,
+                          fen: botFen.fen,
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               );
             },
@@ -255,28 +254,27 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: FilledButton(
-              onPressed:
-                  fen != null
-                      ? () {
-                        Navigator.of(context, rootNavigator: true).push(
-                          GameScreen.buildRoute(
-                            context,
-                            challenge: ChallengeRequest(
-                              destUser: widget.bot,
-                              variant: Variant.fromPosition,
-                              timeControl: ChallengeTimeControlType.clock,
-                              clock: (
-                                time: Duration(seconds: seconds),
-                                increment: Duration(seconds: incrementSeconds),
-                              ),
-                              rated: false,
-                              sideChoice: sideChoice,
-                              initialFen: fen,
+              onPressed: fen != null
+                  ? () {
+                      Navigator.of(context, rootNavigator: true).push(
+                        GameScreen.buildRoute(
+                          context,
+                          challenge: ChallengeRequest(
+                            destUser: widget.bot,
+                            variant: Variant.fromPosition,
+                            timeControl: ChallengeTimeControlType.clock,
+                            clock: (
+                              time: Duration(seconds: seconds),
+                              increment: Duration(seconds: incrementSeconds),
                             ),
+                            rated: false,
+                            sideChoice: sideChoice,
+                            initialFen: fen,
                           ),
-                        );
-                      }
-                      : null,
+                        ),
+                      );
+                    }
+                  : null,
               child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
             ),
           ),

@@ -342,8 +342,12 @@ class EvaluationService {
   }
 }
 
-typedef EngineEvaluationState =
-    ({String engineName, EngineState state, Work? currentWork, LocalEval? eval});
+typedef EngineEvaluationState = ({
+  String engineName,
+  EngineState state,
+  Work? currentWork,
+  LocalEval? eval,
+});
 
 /// A provider that holds the state of the engine and the current evaluation.
 @riverpod

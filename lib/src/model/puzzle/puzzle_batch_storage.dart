@@ -162,13 +162,12 @@ class PuzzleBatchStorage {
       final angle = map['angle'] as String?;
       final raw = map['data'] as String?;
 
-      final openingKey =
-          angle != null
-              ? switch (PuzzleAngle.fromKey(angle)) {
-                PuzzleTheme(themeKey: _) => null,
-                PuzzleOpening(key: final key) => key,
-              }
-              : null;
+      final openingKey = angle != null
+          ? switch (PuzzleAngle.fromKey(angle)) {
+              PuzzleTheme(themeKey: _) => null,
+              PuzzleOpening(key: final key) => key,
+            }
+          : null;
 
       if (openingKey != null) {
         int? count;

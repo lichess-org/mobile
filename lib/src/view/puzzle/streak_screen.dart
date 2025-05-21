@@ -112,12 +112,12 @@ class _Body extends ConsumerWidget {
                   position: puzzleState.currentPosition,
                   playerSide:
                       puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
-                          ? PlayerSide.none
-                          : puzzleState.mode == PuzzleMode.view
-                          ? PlayerSide.both
-                          : puzzleState.pov == Side.white
-                          ? PlayerSide.white
-                          : PlayerSide.black,
+                      ? PlayerSide.none
+                      : puzzleState.mode == PuzzleMode.view
+                      ? PlayerSide.both
+                      : puzzleState.pov == Side.white
+                      ? PlayerSide.white
+                      : PlayerSide.black,
                   promotionMove: puzzleState.promotionMove,
                   onMove: (move, {isDrop, captured}) {
                     ref.read(ctrlProvider.notifier).onUserMove(move);
@@ -186,13 +186,12 @@ class _Body extends ConsumerWidget {
         final NavigatorState navigator = Navigator.of(context);
         final shouldPop = await showAdaptiveDialog<bool>(
           context: context,
-          builder:
-              (context) => YesNoDialog(
-                title: Text(context.l10n.mobileAreYouSure),
-                content: const Text('No worries, your score will be saved locally.'),
-                onYes: () => Navigator.of(context).pop(true),
-                onNo: () => Navigator.of(context).pop(false),
-              ),
+          builder: (context) => YesNoDialog(
+            title: Text(context.l10n.mobileAreYouSure),
+            content: const Text('No worries, your score will be saved locally.'),
+            onYes: () => Navigator.of(context).pop(true),
+            onNo: () => Navigator.of(context).pop(false),
+          ),
         );
         if (shouldPop ?? false) {
           navigator.pop();
@@ -228,13 +227,12 @@ class _BottomBar extends ConsumerWidget {
             icon: Icons.skip_next,
             label: context.l10n.skipThisMove,
             showLabel: true,
-            onTap:
-                streak.hasSkipped || puzzleState.mode == PuzzleMode.view
-                    ? null
-                    : () {
-                      ref.read(ctrlProvider.notifier).skipMove();
-                      ref.read(puzzleStreakControllerProvider.notifier).skipMove();
-                    },
+            onTap: streak.hasSkipped || puzzleState.mode == PuzzleMode.view
+                ? null
+                : () {
+                    ref.read(ctrlProvider.notifier).skipMove();
+                    ref.read(puzzleStreakControllerProvider.notifier).skipMove();
+                  },
           ),
         if (streak.finished)
           BottomBarButton(
@@ -272,8 +270,9 @@ class _BottomBar extends ConsumerWidget {
           ),
         if (streak.finished)
           BottomBarButton(
-            onTap:
-                puzzleState.canGoBack ? () => ref.read(ctrlProvider.notifier).userPrevious() : null,
+            onTap: puzzleState.canGoBack
+                ? () => ref.read(ctrlProvider.notifier).userPrevious()
+                : null,
             label: 'Previous',
             icon: CupertinoIcons.chevron_back,
           ),
@@ -285,10 +284,9 @@ class _BottomBar extends ConsumerWidget {
           ),
         if (streak.finished)
           BottomBarButton(
-            onTap:
-                ref.read(puzzleStreakControllerProvider).isLoading == false
-                    ? () => ref.invalidate(puzzleStreakControllerProvider)
-                    : null,
+            onTap: ref.read(puzzleStreakControllerProvider).isLoading == false
+                ? () => ref.invalidate(puzzleStreakControllerProvider)
+                : null,
             highlighted: true,
             label: context.l10n.puzzleNewStreak,
             icon: CupertinoIcons.play_arrow_solid,
@@ -300,17 +298,16 @@ class _BottomBar extends ConsumerWidget {
   Future<void> _streakInfoDialogBuilder(BuildContext context) {
     return showAdaptiveDialog(
       context: context,
-      builder:
-          (context) => AlertDialog.adaptive(
-            title: Text(context.l10n.aboutX('Puzzle Streak')),
-            content: Text(context.l10n.puzzleStreakDescription),
-            actions: [
-              PlatformDialogAction(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(context.l10n.mobileOkButton),
-              ),
-            ],
+      builder: (context) => AlertDialog.adaptive(
+        title: Text(context.l10n.aboutX('Puzzle Streak')),
+        content: Text(context.l10n.puzzleStreakDescription),
+        actions: [
+          PlatformDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.mobileOkButton),
           ),
+        ],
+      ),
     );
   }
 }

@@ -763,8 +763,9 @@ Future<void> playMoveWithServerAck(
 }) async {
   await playMove(tester, from, to, orientation: orientation);
   final uci = '$from$to';
-  final lagStr =
-      clockAck.lag != null ? ', "lag": ${(clockAck.lag!.inMilliseconds / 10).round()}' : '';
+  final lagStr = clockAck.lag != null
+      ? ', "lag": ${(clockAck.lag!.inMilliseconds / 10).round()}'
+      : '';
   await tester.pump(elapsedTime - const Duration(milliseconds: 1));
   sendServerSocketMessages(GameController.socketUri(gameFullId), [
     '{"t": "move", "v": $socketVersion, "d": {"ply": $ply, "uci": "$uci", "san": "$san", "clock": {"white": ${(clockAck.white.inMilliseconds / 1000).toStringAsFixed(2)}, "black": ${(clockAck.black.inMilliseconds / 1000).toStringAsFixed(2)}$lagStr}}}',

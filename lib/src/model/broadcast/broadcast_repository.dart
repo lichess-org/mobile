@@ -119,12 +119,11 @@ BroadcastTournamentGroup _tournamentGroupFromPick(RequiredPick pick) {
 BroadcastRound _roundFromPick(RequiredPick pick) {
   final live = pick('ongoing').asBoolOrFalse();
   final finished = pick('finished').asBoolOrFalse();
-  final status =
-      live
-          ? RoundStatus.live
-          : finished
-          ? RoundStatus.finished
-          : RoundStatus.upcoming;
+  final status = live
+      ? RoundStatus.live
+      : finished
+      ? RoundStatus.finished
+      : RoundStatus.upcoming;
 
   return BroadcastRound(
     id: pick('id').asBroadcastRoundIdOrThrow(),

@@ -144,8 +144,9 @@ class CorrespondenceService {
         .then((games) => games.map((e) => e.$2).toList());
 
     WebSocket.userAgent = ref.read(userAgentProvider);
-    final Map<String, String> wsHeaders =
-        _session != null ? {'Authorization': 'Bearer ${signBearerToken(_session!.token)}'} : {};
+    final Map<String, String> wsHeaders = _session != null
+        ? {'Authorization': 'Bearer ${signBearerToken(_session!.token)}'}
+        : {};
 
     int movesPlayed = 0;
 

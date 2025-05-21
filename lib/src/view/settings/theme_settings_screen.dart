@@ -33,13 +33,13 @@ class ThemeSettingsScreen extends ConsumerWidget {
 }
 
 String shapeColorL10n(BuildContext context, ShapeColor shapeColor) =>
-// TODO add l10n
-switch (shapeColor) {
-  ShapeColor.green => 'Green',
-  ShapeColor.red => 'Red',
-  ShapeColor.blue => 'Blue',
-  ShapeColor.yellow => 'Yellow',
-};
+    // TODO add l10n
+    switch (shapeColor) {
+      ShapeColor.green => 'Green',
+      ShapeColor.red => 'Red',
+      ShapeColor.blue => 'Blue',
+      ShapeColor.yellow => 'Yellow',
+    };
 
 class _Body extends ConsumerStatefulWidget {
   const _Body();
@@ -139,10 +139,9 @@ class _BodyState extends ConsumerState<_Body> {
                   SettingsListTile(
                     icon: const Icon(Icons.wallpaper),
                     settingsLabel: Text(context.l10n.background),
-                    settingsValue:
-                        generalPrefs.backgroundColor != null
-                            ? generalPrefs.backgroundColor!.$1.label
-                            : (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
+                    settingsValue: generalPrefs.backgroundColor != null
+                        ? generalPrefs.backgroundColor!.$1.label
+                        : (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
                     onTap: () {
                       Navigator.of(context).push(BackgroundChoiceScreen.buildRoute(context));
                     },
@@ -182,18 +181,15 @@ class _BodyState extends ConsumerState<_Body> {
                         context,
                         choices: ShapeColor.values,
                         selectedItem: boardPrefs.shapeColor,
-                        labelBuilder:
-                            (t) => Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(text: shapeColorL10n(context, t)),
-                                  const TextSpan(text: '   '),
-                                  WidgetSpan(
-                                    child: Container(width: 15, height: 15, color: t.color),
-                                  ),
-                                ],
-                              ),
-                            ),
+                        labelBuilder: (t) => Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(text: shapeColorL10n(context, t)),
+                              const TextSpan(text: '   '),
+                              WidgetSpan(child: Container(width: 15, height: 15, color: t.color)),
+                            ],
+                          ),
+                        ),
                         onSelectedItemChanged: (ShapeColor? value) {
                           ref
                               .read(boardPreferencesProvider.notifier)
@@ -268,18 +264,17 @@ class _BodyState extends ConsumerState<_Body> {
                       opacity: hasAjustedColors ? 1.0 : 0.5,
                       child: Text(context.l10n.boardReset),
                     ),
-                    onTap:
-                        hasAjustedColors
-                            ? () {
-                              setState(() {
-                                brightness = kBoardDefaultBrightnessFilter;
-                                hue = kBoardDefaultHueFilter;
-                              });
-                              ref
-                                  .read(boardPreferencesProvider.notifier)
-                                  .adjustColors(brightness: brightness, hue: hue);
-                            }
-                            : null,
+                    onTap: hasAjustedColors
+                        ? () {
+                            setState(() {
+                              brightness = kBoardDefaultBrightnessFilter;
+                              hue = kBoardDefaultHueFilter;
+                            });
+                            ref
+                                .read(boardPreferencesProvider.notifier)
+                                .adjustColors(brightness: brightness, hue: hue);
+                          }
+                        : null,
                   ),
                 ],
               ),
@@ -316,15 +311,14 @@ class _BoardPreview extends StatelessWidget {
         orientation: Side.white,
         lastMove: const NormalMove(from: Square.e2, to: Square.e4),
         fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
-        shapes:
-            <Shape>{
-              Circle(color: boardPrefs.shapeColor.color, orig: Square.fromName('b8')),
-              Arrow(
-                color: boardPrefs.shapeColor.color,
-                orig: Square.fromName('b8'),
-                dest: Square.fromName('c6'),
-              ),
-            }.lock,
+        shapes: <Shape>{
+          Circle(color: boardPrefs.shapeColor.color, orig: Square.fromName('b8')),
+          Arrow(
+            color: boardPrefs.shapeColor.color,
+            orig: Square.fromName('b8'),
+            dest: Square.fromName('c6'),
+          ),
+        }.lock,
         settings: boardPrefs.toBoardSettings().copyWith(
           brightness: brightness,
           hue: hue,

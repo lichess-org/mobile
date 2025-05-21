@@ -56,15 +56,14 @@ class _Body extends ConsumerWidget {
           child: PlatformSearchBar(
             hintText: context.l10n.searchSearch,
             focusNode: AlwaysDisabledFocusNode(),
-            onTap:
-                () => Navigator.of(context).push(
-                  SearchScreen.buildRoute(
-                    context,
-                    onUserTap: (user) {
-                      Navigator.of(context).push(UserScreen.buildRoute(context, user));
-                    },
-                  ),
-                ),
+            onTap: () => Navigator.of(context).push(
+              SearchScreen.buildRoute(
+                context,
+                onUserTap: (user) {
+                  Navigator.of(context).push(UserScreen.buildRoute(context, user));
+                },
+              ),
+            ),
           ),
         ),
         if (session != null) OnlineFriendsWidget(onlineFriends: onlineFriends),

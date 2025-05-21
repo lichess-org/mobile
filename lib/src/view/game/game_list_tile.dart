@@ -65,16 +65,15 @@ class GameListTile extends StatelessWidget {
     return _GameListTile(
       game: game,
       mySide: youAre,
-      onTap:
-          () => openGameScreen(
-            context,
-            game: item.game,
-            orientation: item.pov,
-            loadingFen: game.lastFen,
-            loadingLastMove: game.lastMove,
-            lastMoveAt: game.lastMoveAt,
-            gameListContext: gameListContext,
-          ),
+      onTap: () => openGameScreen(
+        context,
+        game: item.game,
+        orientation: item.pov,
+        loadingFen: game.lastFen,
+        loadingLastMove: game.lastMove,
+        lastMoveAt: game.lastMoveAt,
+        gameListContext: gameListContext,
+      ),
       icon: game.perf.icon,
       opponentTitle: UserFullNameWidget.player(
         user: opponent.user,
@@ -130,14 +129,13 @@ class _GameListTile extends StatelessWidget {
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder:
-              (context) => GameContextMenu(
-                game: game,
-                mySide: mySide,
-                showGameSummary: true,
-                opponentTitle: opponentTitle,
-                onPressedBookmark: onPressedBookmark,
-              ),
+          builder: (context) => GameContextMenu(
+            game: game,
+            mySide: mySide,
+            showGameSummary: true,
+            opponentTitle: opponentTitle,
+            onPressedBookmark: onPressedBookmark,
+          ),
         );
       },
       leading: icon != null ? Icon(icon) : null,
@@ -241,12 +239,11 @@ class GameContextMenu extends ConsumerWidget {
                                     winner: game.winner,
                                   ),
                                   style: TextStyle(
-                                    color:
-                                        game.winner == null
-                                            ? customColors?.brag
-                                            : game.winner == mySide
-                                            ? customColors?.good
-                                            : customColors?.error,
+                                    color: game.winner == null
+                                        ? customColors?.brag
+                                        : game.winner == mySide
+                                        ? customColors?.good
+                                        : customColors?.error,
                                   ),
                                 ),
                               if (game.opening != null)
@@ -271,23 +268,22 @@ class GameContextMenu extends ConsumerWidget {
           ),
         BottomSheetContextMenuAction(
           icon: Icons.biotech,
-          onPressed:
-              game.variant.isReadSupported
-                  ? () {
-                    Navigator.of(context).push(
-                      AnalysisScreen.buildRoute(
-                        context,
-                        AnalysisOptions(orientation: orientation, gameId: game.id),
-                      ),
-                    );
-                  }
-                  : () {
-                    showSnackBar(
+          onPressed: game.variant.isReadSupported
+              ? () {
+                  Navigator.of(context).push(
+                    AnalysisScreen.buildRoute(
                       context,
-                      'This variant is not supported yet.',
-                      type: SnackBarType.info,
-                    );
-                  },
+                      AnalysisOptions(orientation: orientation, gameId: game.id),
+                    ),
+                  );
+                }
+              : () {
+                  showSnackBar(
+                    context,
+                    'This variant is not supported yet.',
+                    type: SnackBarType.info,
+                  );
+                },
           child: Text(context.l10n.analysis),
         ),
         if (isLoggedIn && onPressedBookmark != null)

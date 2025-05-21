@@ -122,8 +122,7 @@ sealed class CoordinateTrainingState with _$CoordinateTrainingState {
 
   bool get trainingActive => elapsed != null;
 
-  double? get timeFractionElapsed =>
-      (elapsed != null && timeLimit != null)
-          ? elapsed!.inMilliseconds / timeLimit!.inMilliseconds
-          : null;
+  double? get timeFractionElapsed => (elapsed != null && timeLimit != null)
+      ? elapsed!.inMilliseconds / timeLimit!.inMilliseconds
+      : null;
 }

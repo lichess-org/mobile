@@ -135,32 +135,31 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: FilledButton(
-                    onPressed:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : () async {
-                              setState(() {
-                                _pendingCreateGame = ref
-                                    .read(createGameServiceProvider)
-                                    .newCorrespondenceGame(
-                                      GameSeek.correspondence(preferences, account),
-                                    );
-                              });
+                    onPressed: snapshot.connectionState == ConnectionState.waiting
+                        ? null
+                        : () async {
+                            setState(() {
+                              _pendingCreateGame = ref
+                                  .read(createGameServiceProvider)
+                                  .newCorrespondenceGame(
+                                    GameSeek.correspondence(preferences, account),
+                                  );
+                            });
 
-                              try {
-                                await _pendingCreateGame;
-                              } finally {
-                                setState(() {
-                                  _pendingCreateGame = null;
-                                });
-                              }
-                              if (context.mounted) {
-                                ref.invalidate(correspondenceChallengesProvider);
-                                Navigator.of(
-                                  context,
-                                ).popUntil((route) => route is! ModalBottomSheetRoute);
-                              }
-                            },
+                            try {
+                              await _pendingCreateGame;
+                            } finally {
+                              setState(() {
+                                _pendingCreateGame = null;
+                              });
+                            }
+                            if (context.mounted) {
+                              ref.invalidate(correspondenceChallengesProvider);
+                              Navigator.of(
+                                context,
+                              ).popUntil((route) => route is! ModalBottomSheetRoute);
+                            }
+                          },
                     child: Text(context.l10n.createAGame),
                   ),
                 );

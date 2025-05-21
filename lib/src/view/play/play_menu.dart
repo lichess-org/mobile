@@ -26,30 +26,28 @@ class PlayMenu extends ConsumerWidget {
         _Section(
           children: [
             _CreateGamePlatformButton(
-              onTap:
-                  isOnline
-                      ? () {
-                        // Pops the play bottom sheet
-                        Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                        Navigator.of(
-                          context,
-                          rootNavigator: true,
-                        ).push(CorrespondenceChallengesScreen.buildRoute(context));
-                      }
-                      : null,
+              onTap: isOnline
+                  ? () {
+                      // Pops the play bottom sheet
+                      Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                      Navigator.of(
+                        context,
+                        rootNavigator: true,
+                      ).push(CorrespondenceChallengesScreen.buildRoute(context));
+                    }
+                  : null,
               icon: Perf.correspondence.icon,
               label: context.l10n.correspondence,
             ),
             _CreateGamePlatformButton(
-              onTap:
-                  isOnline
-                      ? () {
-                        // Pops the play bottom sheet
-                        Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+              onTap: isOnline
+                  ? () {
+                      // Pops the play bottom sheet
+                      Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
 
-                        Navigator.of(context).push(TournamentListScreen.buildRoute(context));
-                      }
-                      : null,
+                      Navigator.of(context).push(TournamentListScreen.buildRoute(context));
+                    }
+                  : null,
               icon: LichessIcons.tournament_cup,
               label: context.l10n.arenaArenaTournaments,
             ),

@@ -284,15 +284,14 @@ class BroadcastPlayerRow extends StatelessWidget {
               width: scoreWidth,
               child: Padding(
                 padding: _kTableRowPadding,
-                child:
-                    (score != null)
-                        ? Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
-                          ),
-                        )
-                        : Align(alignment: Alignment.centerRight, child: Text(played.toString())),
+                child: (score != null)
+                    ? Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${score.toStringAsFixed((score == score.roundToDouble()) ? 0 : 1)} / $played',
+                        ),
+                      )
+                    : Align(alignment: Alignment.centerRight, child: Text(played.toString())),
               ),
             ),
           ],

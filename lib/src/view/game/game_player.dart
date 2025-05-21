@@ -74,10 +74,9 @@ class GamePlayer extends StatelessWidget {
       children: [
         if (!zenMode)
           Row(
-            mainAxisAlignment:
-                clockPosition == ClockPosition.right
-                    ? MainAxisAlignment.start
-                    : MainAxisAlignment.end,
+            mainAxisAlignment: clockPosition == ClockPosition.right
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.end,
             children: [
               if (tournament?.ranks != null)
                 Text(
@@ -106,10 +105,9 @@ class GamePlayer extends StatelessWidget {
                   style: TextStyle(
                     fontSize: playerFontSize,
                     fontWeight: player.user?.title == 'BOT' ? null : FontWeight.bold,
-                    color:
-                        player.user?.title == 'BOT'
-                            ? context.lichessColors.fancy
-                            : context.lichessColors.brag,
+                    color: player.user?.title == 'BOT'
+                        ? context.lichessColors.fancy
+                        : context.lichessColors.brag,
                   ),
                 ),
                 const SizedBox(width: 5),
@@ -141,12 +139,11 @@ class GamePlayer extends StatelessWidget {
                           TextSpan(
                             text: ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
                             style: TextStyle(
-                              color:
-                                  player.ratingDiff! > 0
-                                      ? context.lichessColors.good
-                                      : player.ratingDiff! == 0
-                                      ? context.lichessColors.brag
-                                      : context.lichessColors.error,
+                              color: player.ratingDiff! > 0
+                                  ? context.lichessColors.good
+                                  : player.ratingDiff! == 0
+                                  ? context.lichessColors.brag
+                                  : context.lichessColors.error,
                             ),
                           ),
                       ],
@@ -199,22 +196,20 @@ class GamePlayer extends StatelessWidget {
             flex: 7,
             child: Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child:
-                  shouldLinkToUserProfile
-                      ? GestureDetector(
-                        onTap:
-                            player.user != null
-                                ? () {
-                                  Navigator.of(context).push(
-                                    mePlaying
-                                        ? ProfileScreen.buildRoute(context)
-                                        : UserScreen.buildRoute(context, player.user!),
-                                  );
-                                }
-                                : null,
-                        child: playerWidget,
-                      )
-                      : playerWidget,
+              child: shouldLinkToUserProfile
+                  ? GestureDetector(
+                      onTap: player.user != null
+                          ? () {
+                              Navigator.of(context).push(
+                                mePlaying
+                                    ? ProfileScreen.buildRoute(context)
+                                    : UserScreen.buildRoute(context, player.user!),
+                              );
+                            }
+                          : null,
+                      child: playerWidget,
+                    )
+                  : playerWidget,
             ),
           ),
         if (clock != null && clockPosition == ClockPosition.right) Flexible(flex: 3, child: clock!),
@@ -325,9 +320,9 @@ class _MoveExpirationState extends ConsumerState<MoveExpiration> {
 
     return secs <= 20
         ? Text(
-          context.l10n.nbSecondsToPlayTheFirstMove(secs),
-          style: TextStyle(color: widget.mePlaying && emerg ? context.lichessColors.error : null),
-        )
+            context.l10n.nbSecondsToPlayTheFirstMove(secs),
+            style: TextStyle(color: widget.mePlaying && emerg ? context.lichessColors.error : null),
+          )
         : const Text('');
   }
 }
@@ -343,26 +338,25 @@ class MaterialDifferenceDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final IMap<Role, int> piecesToRender =
-        materialDiff != null
-            ? (materialDifferenceFormat == MaterialDifferenceFormat.capturedPieces
-                ? materialDiff!.capturedPieces
-                : materialDiff!.pieces)
-            : IMap();
+    final IMap<Role, int> piecesToRender = materialDiff != null
+        ? (materialDifferenceFormat == MaterialDifferenceFormat.capturedPieces
+              ? materialDiff!.capturedPieces
+              : materialDiff!.pieces)
+        : IMap();
 
     return materialDifferenceFormat?.visible ?? true
         ? Row(
-          children: [
-            for (final role in Role.values)
-              for (int i = 0; i < (piecesToRender.get(role) ?? 0); i++)
-                Icon(_iconByRole[role], size: 13, color: textShade(context, 0.5)),
-            const SizedBox(width: 3),
-            Text(
-              style: TextStyle(fontSize: 13, color: textShade(context, 0.5)),
-              materialDiff != null && materialDiff!.score > 0 ? '+${materialDiff!.score}' : '',
-            ),
-          ],
-        )
+            children: [
+              for (final role in Role.values)
+                for (int i = 0; i < (piecesToRender.get(role) ?? 0); i++)
+                  Icon(_iconByRole[role], size: 13, color: textShade(context, 0.5)),
+              const SizedBox(width: 3),
+              Text(
+                style: TextStyle(fontSize: 13, color: textShade(context, 0.5)),
+                materialDiff != null && materialDiff!.score > 0 ? '+${materialDiff!.score}' : '',
+              ),
+            ],
+          )
         : const SizedBox.shrink();
   }
 }

@@ -80,62 +80,60 @@ class _BodyState extends ConsumerState<_Body> {
 
         return list.isEmpty
             ? const Padding(
-              padding: EdgeInsets.symmetric(vertical: 32.0),
-              child: Center(child: Text('No games found')),
-            )
+                padding: EdgeInsets.symmetric(vertical: 32.0),
+                child: Center(child: Text('No games found')),
+              )
             : ListView.separated(
-              controller: _scrollController,
-              separatorBuilder:
-                  (context, index) =>
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-                          : const SizedBox.shrink(),
-              itemCount: list.length + (state.isLoading ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (state.isLoading && index == list.length) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 32.0),
-                    child: CenterLoadingIndicator(),
-                  );
-                } else if (state.hasError && state.hasMore && index == list.length) {
-                  // TODO: add a retry button
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 32.0),
-                    child: Center(child: Text('Could not load more games')),
-                  );
-                }
+                controller: _scrollController,
+                separatorBuilder: (context, index) =>
+                    Theme.of(context).platform == TargetPlatform.iOS
+                    ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                    : const SizedBox.shrink(),
+                itemCount: list.length + (state.isLoading ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (state.isLoading && index == list.length) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32.0),
+                      child: CenterLoadingIndicator(),
+                    );
+                  } else if (state.hasError && state.hasMore && index == list.length) {
+                    // TODO: add a retry button
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32.0),
+                      child: Center(child: Text('Could not load more games')),
+                    );
+                  }
 
-                final game = list[index].game;
-                final pov = list[index].pov;
+                  final game = list[index].game;
+                  final pov = list[index].pov;
 
-                Future<void> onRemoveBookmark(BuildContext context) async {
-                  try {
-                    await ref
-                        .read(accountServiceProvider)
-                        .setGameBookmark(game.id, bookmark: false);
-                    ref.read(gameBookmarksPaginatorProvider.notifier).removeBookmark(game.id);
-                  } on Exception catch (_) {
-                    if (context.mounted) {
-                      showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
+                  Future<void> onRemoveBookmark(BuildContext context) async {
+                    try {
+                      await ref
+                          .read(accountServiceProvider)
+                          .setGameBookmark(game.id, bookmark: false);
+                      ref.read(gameBookmarksPaginatorProvider.notifier).removeBookmark(game.id);
+                    } on Exception catch (_) {
+                      if (context.mounted) {
+                        showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
+                      }
                     }
                   }
-                }
 
-                final gameTile = GameListTile(
-                  item: list[index],
-                  onPressedBookmark: onRemoveBookmark,
-                );
+                  final gameTile = GameListTile(
+                    item: list[index],
+                    onPressedBookmark: onRemoveBookmark,
+                  );
 
-                return Slidable(
-                  startActionPane: ActionPane(
-                    motion: const StretchMotion(),
-                    children: [
-                      SlidableAction(
-                        backgroundColor: ColorScheme.of(context).tertiaryContainer,
-                        foregroundColor: ColorScheme.of(context).onTertiaryContainer,
-                        onPressed:
-                            game.variant.isReadSupported
-                                ? (_) {
+                  return Slidable(
+                    startActionPane: ActionPane(
+                      motion: const StretchMotion(),
+                      children: [
+                        SlidableAction(
+                          backgroundColor: ColorScheme.of(context).tertiaryContainer,
+                          foregroundColor: ColorScheme.of(context).onTertiaryContainer,
+                          onPressed: game.variant.isReadSupported
+                              ? (_) {
                                   Navigator.of(context, rootNavigator: true).push(
                                     AnalysisScreen.buildRoute(
                                       context,
@@ -143,33 +141,33 @@ class _BodyState extends ConsumerState<_Body> {
                                     ),
                                   );
                                 }
-                                : (_) {
+                              : (_) {
                                   showSnackBar(
                                     context,
                                     'This variant is not supported yet.',
                                     type: SnackBarType.info,
                                   );
                                 },
-                        icon: Icons.biotech,
-                        label: context.l10n.analysis,
-                      ),
-                    ],
-                  ),
-                  endActionPane: ActionPane(
-                    motion: const ScrollMotion(),
-                    children: [
-                      SlidableAction(
-                        backgroundColor: context.lichessColors.error,
-                        onPressed: onRemoveBookmark,
-                        icon: Icons.bookmark_remove_outlined,
-                        label: 'Unbookmark',
-                      ),
-                    ],
-                  ),
-                  child: gameTile,
-                );
-              },
-            );
+                          icon: Icons.biotech,
+                          label: context.l10n.analysis,
+                        ),
+                      ],
+                    ),
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          backgroundColor: context.lichessColors.error,
+                          onPressed: onRemoveBookmark,
+                          icon: Icons.bookmark_remove_outlined,
+                          label: 'Unbookmark',
+                        ),
+                      ],
+                    ),
+                    child: gameTile,
+                  );
+                },
+              );
       },
       error: (e, s) {
         debugPrint('SEVERE: [GameBookmarksScreen] could not load bookmarks');

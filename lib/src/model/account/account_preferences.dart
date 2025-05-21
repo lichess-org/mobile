@@ -9,26 +9,25 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_preferences.g.dart';
 
-typedef AccountPrefState =
-    ({
-      // game display
-      Zen zenMode,
-      PieceNotation pieceNotation,
-      ShowRatings showRatings,
-      // game behavior
-      BooleanPref premove,
-      AutoQueen autoQueen,
-      AutoThreefold autoThreefold,
-      Takeback takeback,
-      BooleanPref confirmResign,
-      SubmitMove submitMove,
-      // clock
-      Moretime moretime,
-      BooleanPref clockSound,
-      // privacy
-      BooleanPref follow,
-      Challenge challenge,
-    });
+typedef AccountPrefState = ({
+  // game display
+  Zen zenMode,
+  PieceNotation pieceNotation,
+  ShowRatings showRatings,
+  // game behavior
+  BooleanPref premove,
+  AutoQueen autoQueen,
+  AutoThreefold autoThreefold,
+  Takeback takeback,
+  BooleanPref confirmResign,
+  SubmitMove submitMove,
+  // clock
+  Moretime moretime,
+  BooleanPref clockSound,
+  // privacy
+  BooleanPref follow,
+  Challenge challenge,
+});
 
 /// A provider that tells if the user wants to see ratings in the app.
 @Riverpod(keepAlive: true)

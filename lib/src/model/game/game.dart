@@ -58,20 +58,18 @@ abstract mixin class BaseGame {
   Player get black;
 
   /// Player of the playing point of view. Null if spectating.
-  Player? get me =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? white
-          : black;
+  Player? get me => youAre == null
+      ? null
+      : youAre == Side.white
+      ? white
+      : black;
 
   /// Opponent from the playing point of view. Null if spectating.
-  Player? get opponent =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? black
-          : white;
+  Player? get opponent => youAre == null
+      ? null
+      : youAre == Side.white
+      ? black
+      : white;
 
   Position get lastPosition;
 
@@ -94,8 +92,8 @@ abstract mixin class BaseGame {
 
   ({PlayerAnalysis white, PlayerAnalysis black})? get serverAnalysis =>
       white.analysis != null && black.analysis != null
-          ? (white: white.analysis!, black: black.analysis!)
-          : null;
+      ? (white: white.analysis!, black: black.analysis!)
+      : null;
 
   /// Converts the game to a tree representation
   Root makeTree() {
@@ -108,12 +106,11 @@ abstract mixin class BaseGame {
     for (var i = 1; i < steps.length; i++) {
       final step = steps[i];
       final eval = evals?.elementAtOrNull(i - 1);
-      final pgnEval =
-          eval?.cp != null
-              ? PgnEvaluation.pawns(pawns: cpToPawns(eval!.cp!), depth: eval.depth)
-              : eval?.mate != null
-              ? PgnEvaluation.mate(mate: eval!.mate, depth: eval.depth)
-              : null;
+      final pgnEval = eval?.cp != null
+          ? PgnEvaluation.pawns(pawns: cpToPawns(eval!.cp!), depth: eval.depth)
+          : eval?.mate != null
+          ? PgnEvaluation.mate(mate: eval!.mate, depth: eval.depth)
+          : null;
       final clock = clocks?.elementAtOrNull(i - 1);
       Duration? emt;
       if (clock != null) {
@@ -131,10 +128,9 @@ abstract mixin class BaseGame {
         }
       }
 
-      final comment =
-          eval != null || clock != null
-              ? PgnComment(text: eval?.judgment?.comment, clock: clock, emt: emt, eval: pgnEval)
-              : null;
+      final comment = eval != null || clock != null
+          ? PgnComment(text: eval?.judgment?.comment, clock: clock, emt: emt, eval: pgnEval)
+          : null;
       final nag = eval?.judgment != null ? _judgmentNameToNag(eval!.judgment!.name) : null;
       final nextNode = Branch(
         sanMove: step.sanMove!,
@@ -186,14 +182,13 @@ abstract mixin class BaseGame {
             black.user?.name ??
             black.name ??
             (black.aiLevel != null ? 'Stockfish level ${black.aiLevel}' : 'Anonymous'),
-        'Result':
-            status.value >= GameStatus.mate.value
-                ? winner == null
-                    ? '½-½'
-                    : winner == Side.white
-                    ? '1-0'
-                    : '0-1'
-                : '*',
+        'Result': status.value >= GameStatus.mate.value
+            ? winner == null
+                  ? '½-½'
+                  : winner == Side.white
+                  ? '1-0'
+                  : '0-1'
+            : '*',
         if (white.rating != null) 'WhiteElo': white.rating!.toString(),
         if (black.rating != null) 'BlackElo': black.rating!.toString(),
         if (white.ratingDiff != null)

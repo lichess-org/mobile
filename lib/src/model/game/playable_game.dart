@@ -80,8 +80,8 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
   Duration? clockOf(Side side) {
     return clock != null
         ? side == Side.white
-            ? clock!.white
-            : clock!.black
+              ? clock!.white
+              : clock!.black
         : null;
   }
 
@@ -137,10 +137,9 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
         status: status,
         white: white,
         black: black,
-        clock:
-            meta.clock != null
-                ? (initial: meta.clock!.initial, increment: meta.clock!.increment)
-                : null,
+        clock: meta.clock != null
+            ? (initial: meta.clock!.initial, increment: meta.clock!.increment)
+            : null,
         opening: meta.opening,
       ),
       initialFen: initialFen,
@@ -184,10 +183,9 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   final initialFen = requiredGamePick('initialFen').asStringOrNull();
 
   // assume lichess always send initialFen with fromPosition and chess960
-  Position position =
-      (meta.variant == Variant.fromPosition || meta.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(initialFen!))
-          : meta.variant.initialPosition;
+  Position position = (meta.variant == Variant.fromPosition || meta.variant == Variant.chess960)
+      ? Chess.fromSetup(Setup.parseFen(initialFen!))
+      : meta.variant.initialPosition;
 
   final steps = [GameStep(position: position)];
   final pgn = pick('game', 'pgn').asStringOrNull();

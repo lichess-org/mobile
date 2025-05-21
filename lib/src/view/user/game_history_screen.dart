@@ -62,14 +62,13 @@ class GameHistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
     final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user));
-    final title =
-        filtersInUse.count == 0
-            ? nbGamesAsync.when(
-              data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
-              loading: () => const ButtonLoadingIndicator(),
-              error: (e, s) => Text(context.l10n.mobileAllGames),
-            )
-            : Text(filtersInUse.selectionLabel(context.l10n));
+    final title = filtersInUse.count == 0
+        ? nbGamesAsync.when(
+            data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+            loading: () => const ButtonLoadingIndicator(),
+            error: (e, s) => Text(context.l10n.mobileAllGames),
+          )
+        : Text(filtersInUse.selectionLabel(context.l10n));
     final filterBtn = SemanticIconButton(
       icon: Badge.count(
         backgroundColor: ColorScheme.of(context).secondary,
@@ -82,15 +81,14 @@ class GameHistoryScreen extends ConsumerWidget {
         child: const Icon(Icons.filter_list),
       ),
       semanticsLabel: context.l10n.filterGames,
-      onPressed:
-          () => showModalBottomSheet<GameFilterState>(
+      onPressed: () =>
+          showModalBottomSheet<GameFilterState>(
             context: context,
             isScrollControlled: true,
-            builder:
-                (_) => _FilterGames(
-                  filter: ref.read(gameFilterProvider(filter: gameFilter)),
-                  user: user,
-                ),
+            builder: (_) => _FilterGames(
+              filter: ref.read(gameFilterProvider(filter: gameFilter)),
+              user: user,
+            ),
           ).then((value) {
             if (value != null) {
               ref.read(gameFilterProvider(filter: gameFilter).notifier).setFilter(value);
@@ -209,75 +207,73 @@ class _BodyState extends ConsumerState<_Body> {
 
         return list.isEmpty
             ? const Padding(
-              padding: EdgeInsets.symmetric(vertical: 32.0),
-              child: Center(child: Text('No games found')),
-            )
+                padding: EdgeInsets.symmetric(vertical: 32.0),
+                child: Center(child: Text('No games found')),
+              )
             : ListView.separated(
-              controller: _scrollController,
-              separatorBuilder:
-                  (context, index) =>
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? PlatformDivider(
-                            height: 1,
-                            cupertinoHasLeading: true,
-                            indent: displayMode == GameHistoryDisplayMode.detail ? 0 : null,
-                          )
-                          : const SizedBox.shrink(),
-              itemCount: list.length + (state.isLoading ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (state.isLoading && index == list.length) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 32.0),
-                    child: CenterLoadingIndicator(),
-                  );
-                } else if (state.hasError && state.hasMore && index == list.length) {
-                  // TODO: add a retry button
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 32.0),
-                    child: Center(child: Text('Could not load more games')),
-                  );
-                }
+                controller: _scrollController,
+                separatorBuilder: (context, index) =>
+                    Theme.of(context).platform == TargetPlatform.iOS
+                    ? PlatformDivider(
+                        height: 1,
+                        cupertinoHasLeading: true,
+                        indent: displayMode == GameHistoryDisplayMode.detail ? 0 : null,
+                      )
+                    : const SizedBox.shrink(),
+                itemCount: list.length + (state.isLoading ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (state.isLoading && index == list.length) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32.0),
+                      child: CenterLoadingIndicator(),
+                    );
+                  } else if (state.hasError && state.hasMore && index == list.length) {
+                    // TODO: add a retry button
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32.0),
+                      child: Center(child: Text('Could not load more games')),
+                    );
+                  }
 
-                final game = list[index].game;
-                final pov = list[index].pov;
+                  final game = list[index].game;
+                  final pov = list[index].pov;
 
-                Future<void> onPressedBookmark(BuildContext context) async {
-                  try {
-                    await ref
-                        .read(accountServiceProvider)
-                        .setGameBookmark(game.id, bookmark: !game.bookmarked!);
-                    ref.read(gameListProvider.notifier).toggleBookmark(game.id);
-                  } on Exception catch (_) {
-                    if (context.mounted) {
-                      showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
+                  Future<void> onPressedBookmark(BuildContext context) async {
+                    try {
+                      await ref
+                          .read(accountServiceProvider)
+                          .setGameBookmark(game.id, bookmark: !game.bookmarked!);
+                      ref.read(gameListProvider.notifier).toggleBookmark(game.id);
+                    } on Exception catch (_) {
+                      if (context.mounted) {
+                        showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
+                      }
                     }
                   }
-                }
 
-                final item = list[index];
-                final gameTile = switch (displayMode) {
-                  GameHistoryDisplayMode.compact => GameListTile(
-                    item: item,
-                    onPressedBookmark: onPressedBookmark,
-                    gameListContext: (widget.user?.id, gameFilterState),
-                  ),
-                  GameHistoryDisplayMode.detail => GameListDetailTile(
-                    item: item,
-                    onPressedBookmark: onPressedBookmark,
-                    gameListContext: (widget.user?.id, gameFilterState),
-                  ),
-                };
+                  final item = list[index];
+                  final gameTile = switch (displayMode) {
+                    GameHistoryDisplayMode.compact => GameListTile(
+                      item: item,
+                      onPressedBookmark: onPressedBookmark,
+                      gameListContext: (widget.user?.id, gameFilterState),
+                    ),
+                    GameHistoryDisplayMode.detail => GameListDetailTile(
+                      item: item,
+                      onPressedBookmark: onPressedBookmark,
+                      gameListContext: (widget.user?.id, gameFilterState),
+                    ),
+                  };
 
-                return Slidable(
-                  startActionPane: ActionPane(
-                    motion: const StretchMotion(),
-                    children: [
-                      SlidableAction(
-                        backgroundColor: ColorScheme.of(context).tertiaryContainer,
-                        foregroundColor: ColorScheme.of(context).onTertiaryContainer,
-                        onPressed:
-                            game.variant.isReadSupported
-                                ? (_) {
+                  return Slidable(
+                    startActionPane: ActionPane(
+                      motion: const StretchMotion(),
+                      children: [
+                        SlidableAction(
+                          backgroundColor: ColorScheme.of(context).tertiaryContainer,
+                          foregroundColor: ColorScheme.of(context).onTertiaryContainer,
+                          onPressed: game.variant.isReadSupported
+                              ? (_) {
                                   Navigator.of(context, rootNavigator: true).push(
                                     AnalysisScreen.buildRoute(
                                       context,
@@ -285,42 +281,39 @@ class _BodyState extends ConsumerState<_Body> {
                                     ),
                                   );
                                 }
-                                : (_) {
+                              : (_) {
                                   showSnackBar(
                                     context,
                                     'This variant is not supported yet.',
                                     type: SnackBarType.info,
                                   );
                                 },
-                        icon: Icons.biotech,
-                        label: context.l10n.analysis,
-                      ),
-                    ],
-                  ),
-                  endActionPane:
-                      isLoggedIn
-                          ? ActionPane(
+                          icon: Icons.biotech,
+                          label: context.l10n.analysis,
+                        ),
+                      ],
+                    ),
+                    endActionPane: isLoggedIn
+                        ? ActionPane(
                             motion: const StretchMotion(),
                             children: [
                               SlidableAction(
-                                backgroundColor:
-                                    game.isBookmarked
-                                        ? context.lichessColors.error
-                                        : context.lichessColors.brag,
+                                backgroundColor: game.isBookmarked
+                                    ? context.lichessColors.error
+                                    : context.lichessColors.brag,
                                 onPressed: onPressedBookmark,
-                                icon:
-                                    game.isBookmarked
-                                        ? Icons.bookmark_remove_outlined
-                                        : Icons.bookmark_add_outlined,
+                                icon: game.isBookmarked
+                                    ? Icons.bookmark_remove_outlined
+                                    : Icons.bookmark_add_outlined,
                                 label: game.isBookmarked ? 'Unbookmark' : 'Bookmark',
                               ),
                             ],
                           )
-                          : null,
-                  child: gameTile,
-                );
-              },
-            );
+                        : null,
+                    child: gameTile,
+                  );
+                },
+              );
       },
       error: (e, s) {
         debugPrint('SEVERE: [GameHistoryScreen] could not load game list');
@@ -373,16 +366,15 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
     final session = ref.read(authSessionProvider);
     final userId = widget.user?.id ?? session?.user.id;
 
-    final Widget filters =
-        userId != null
-            ? ref
-                .watch(userProvider(id: userId))
-                .when(
-                  data: (user) => perfFilter(availablePerfs(user)),
-                  loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-                  error: (_, _) => perfFilter(gamePerfs),
-                )
-            : perfFilter(gamePerfs);
+    final Widget filters = userId != null
+        ? ref
+              .watch(userProvider(id: userId))
+              .when(
+                data: (user) => perfFilter(availablePerfs(user)),
+                loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+                error: (_, _) => perfFilter(gamePerfs),
+              )
+        : perfFilter(gamePerfs);
 
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.all(16.0),
@@ -396,15 +388,13 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
           filterType: FilterType.singleChoice,
           choices: Side.values,
           choiceSelected: (choice) => filter.side == choice,
-          choiceLabel:
-              (t) => switch (t) {
-                Side.white => Text(context.l10n.white),
-                Side.black => Text(context.l10n.black),
-              },
-          onSelected:
-              (value, selected) => setState(() {
-                filter = filter.copyWith(side: selected ? value : null);
-              }),
+          choiceLabel: (t) => switch (t) {
+            Side.white => Text(context.l10n.white),
+            Side.black => Text(context.l10n.black),
+          },
+          onSelected: (value, selected) => setState(() {
+            filter = filter.copyWith(side: selected ? value : null);
+          }),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -444,11 +434,10 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
     choices: choices,
     choiceSelected: (choice) => filter.perfs.contains(choice),
     choiceLabel: (t) => Text(t.shortTitle),
-    onSelected:
-        (value, selected) => setState(() {
-          filter = filter.copyWith(
-            perfs: selected ? filter.perfs.add(value) : filter.perfs.remove(value),
-          );
-        }),
+    onSelected: (value, selected) => setState(() {
+      filter = filter.copyWith(
+        perfs: selected ? filter.perfs.add(value) : filter.perfs.remove(value),
+      );
+    }),
   );
 }

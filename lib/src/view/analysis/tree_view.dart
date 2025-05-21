@@ -33,10 +33,9 @@ class AnalysisTreeView extends ConsumerWidget {
             shouldShowComputerAnalysis: enableComputerAnalysis,
             shouldShowComments: enableComputerAnalysis && prefs.showPgnComments,
             shouldShowAnnotations: enableComputerAnalysis && prefs.showAnnotations,
-            displayMode:
-                prefs.inlineNotation
-                    ? PgnTreeDisplayMode.inlineNotation
-                    : PgnTreeDisplayMode.twoColumn,
+            displayMode: prefs.inlineNotation
+                ? PgnTreeDisplayMode.inlineNotation
+                : PgnTreeDisplayMode.twoColumn,
           ),
           if (analysisState.archivedGame != null)
             Padding(

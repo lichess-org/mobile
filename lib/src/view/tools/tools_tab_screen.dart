@@ -55,10 +55,9 @@ class _ToolsButton extends StatelessWidget {
       child: ListTile(
         leading: Icon(icon, color: ColorScheme.of(context).primary),
         title: Text(title, style: Styles.callout),
-        trailing:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? const Icon(Icons.chevron_right)
-                : null,
+        trailing: Theme.of(context).platform == TargetPlatform.iOS
+            ? const Icon(Icons.chevron_right)
+            : null,
         onTap: onTap,
       ),
     );
@@ -84,75 +83,65 @@ class _Body extends ConsumerWidget {
           _ToolsButton(
             icon: Icons.biotech,
             title: context.l10n.analysis,
-            onTap:
-                () => Navigator.of(context, rootNavigator: true).push(
-                  AnalysisScreen.buildRoute(
-                    context,
-                    const AnalysisOptions(
-                      orientation: Side.white,
-                      standalone: (
-                        pgn: '',
-                        isComputerAnalysisAllowed: true,
-                        variant: Variant.standard,
-                      ),
-                    ),
-                  ),
+            onTap: () => Navigator.of(context, rootNavigator: true).push(
+              AnalysisScreen.buildRoute(
+                context,
+                const AnalysisOptions(
+                  orientation: Side.white,
+                  standalone: (pgn: '', isComputerAnalysisAllowed: true, variant: Variant.standard),
                 ),
+              ),
+            ),
           ),
           _ToolsButton(
             icon: Icons.explore_outlined,
             title: context.l10n.openingExplorer,
-            onTap:
-                isOnline
-                    ? () => Navigator.of(context, rootNavigator: true).push(
-                      OpeningExplorerScreen.buildRoute(
-                        context,
-                        const AnalysisOptions(
-                          orientation: Side.white,
-                          standalone: (
-                            pgn: '',
-                            isComputerAnalysisAllowed: false,
-                            variant: Variant.standard,
-                          ),
+            onTap: isOnline
+                ? () => Navigator.of(context, rootNavigator: true).push(
+                    OpeningExplorerScreen.buildRoute(
+                      context,
+                      const AnalysisOptions(
+                        orientation: Side.white,
+                        standalone: (
+                          pgn: '',
+                          isComputerAnalysisAllowed: false,
+                          variant: Variant.standard,
                         ),
                       ),
-                    )
-                    : null,
+                    ),
+                  )
+                : null,
           ),
           _ToolsButton(
             icon: LichessIcons.study,
             title: context.l10n.studyMenu,
-            onTap:
-                isOnline
-                    ? () => Navigator.of(context).push(StudyListScreen.buildRoute(context))
-                    : null,
+            onTap: isOnline
+                ? () => Navigator.of(context).push(StudyListScreen.buildRoute(context))
+                : null,
           ),
           _ToolsButton(
             icon: Icons.edit_outlined,
             title: context.l10n.boardEditor,
-            onTap:
-                () => Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(BoardEditorScreen.buildRoute(context)),
+            onTap: () => Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push(BoardEditorScreen.buildRoute(context)),
           ),
           _ToolsButton(
             icon: Icons.where_to_vote_outlined,
             title: 'Coordinate Training', // TODO l10n
-            onTap:
-                () => Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(CoordinateTrainingScreen.buildRoute(context)),
+            onTap: () => Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push(CoordinateTrainingScreen.buildRoute(context)),
           ),
           _ToolsButton(
             icon: Icons.alarm,
             title: context.l10n.clock,
-            onTap:
-                () => Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(ClockToolScreen.buildRoute(context)),
+            onTap: () => Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push(ClockToolScreen.buildRoute(context)),
           ),
         ],
       ),

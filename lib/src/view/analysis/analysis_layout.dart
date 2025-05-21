@@ -94,16 +94,15 @@ class _AppBarAnalysisTabIndicatorState extends State<AppBarAnalysisTabIndicator>
       onPressed: () {
         showAdaptiveActionSheet<void>(
           context: context,
-          actions:
-              widget.tabs.map((tab) {
-                return BottomSheetAction(
-                  leading: Icon(tab.icon),
-                  makeLabel: (context) => Text(tab.l10n(context.l10n)),
-                  onPressed: () {
-                    widget.controller.animateTo(widget.tabs.indexOf(tab));
-                  },
-                );
-              }).toList(),
+          actions: widget.tabs.map((tab) {
+            return BottomSheetAction(
+              leading: Icon(tab.icon),
+              makeLabel: (context) => Text(tab.l10n(context.l10n)),
+              onPressed: () {
+                widget.controller.animateTo(widget.tabs.indexOf(tab));
+              },
+            );
+          }).toList(),
         );
       },
     );
@@ -184,10 +183,9 @@ class AnalysisLayout extends StatelessWidget {
             bottom: false,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final orientation =
-                    constraints.maxWidth > constraints.maxHeight
-                        ? Orientation.landscape
-                        : Orientation.portrait;
+                final orientation = constraints.maxWidth > constraints.maxHeight
+                    ? Orientation.landscape
+                    : Orientation.portrait;
                 final isTablet = isTabletOrLarger(context);
                 const tabletBoardRadius = Styles.boardBorderRadius;
 
@@ -203,7 +201,7 @@ class AnalysisLayout extends StatelessWidget {
                       (sideWidth >= 250
                           ? defaultBoardSize
                           : constraints.biggest.longestSide / kGoldenRatio -
-                              (kTabletBoardTableSidePadding * 2)) -
+                                (kTabletBoardTableSidePadding * 2)) -
                       headerAndFooterHeight;
                   return Padding(
                     padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
@@ -217,13 +215,12 @@ class AnalysisLayout extends StatelessWidget {
                                 // This key is used to preserve the state of the board header when the pov changes
                                 key: ValueKey(pov.opposite),
                                 decoration: BoxDecoration(
-                                  borderRadius:
-                                      isTablet
-                                          ? tabletBoardRadius.copyWith(
-                                            bottomLeft: Radius.zero,
-                                            bottomRight: Radius.zero,
-                                          )
-                                          : null,
+                                  borderRadius: isTablet
+                                      ? tabletBoardRadius.copyWith(
+                                          bottomLeft: Radius.zero,
+                                          bottomRight: Radius.zero,
+                                        )
+                                      : null,
                                 ),
                                 clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
                                 child: SizedBox(
@@ -244,13 +241,12 @@ class AnalysisLayout extends StatelessWidget {
                                 // This key is used to preserve the state of the board footer when the pov changes
                                 key: ValueKey(pov),
                                 decoration: BoxDecoration(
-                                  borderRadius:
-                                      isTablet
-                                          ? tabletBoardRadius.copyWith(
-                                            topLeft: Radius.zero,
-                                            topRight: Radius.zero,
-                                          )
-                                          : null,
+                                  borderRadius: isTablet
+                                      ? tabletBoardRadius.copyWith(
+                                          topLeft: Radius.zero,
+                                          topRight: Radius.zero,
+                                        )
+                                      : null,
                                 ),
                                 clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
                                 height: kAnalysisBoardHeaderOrFooterHeight,
@@ -287,10 +283,9 @@ class AnalysisLayout extends StatelessWidget {
                   final defaultBoardSize = constraints.biggest.shortestSide;
                   final remainingHeight = constraints.maxHeight - defaultBoardSize;
                   final isSmallScreen = remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                  final boardSize =
-                      isTablet || isSmallScreen
-                          ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                          : defaultBoardSize;
+                  final boardSize = isTablet || isSmallScreen
+                      ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                      : defaultBoardSize;
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -301,10 +296,9 @@ class AnalysisLayout extends StatelessWidget {
                         engineGaugeBuilder!(context, Orientation.portrait),
                       if (engineLines != null) engineLines!,
                       Padding(
-                        padding:
-                            isTablet
-                                ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                                : EdgeInsets.zero,
+                        padding: isTablet
+                            ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                            : EdgeInsets.zero,
                         child: Column(
                           children: [
                             if (boardHeader != null)
@@ -312,13 +306,12 @@ class AnalysisLayout extends StatelessWidget {
                               Container(
                                 key: ValueKey(pov.opposite),
                                 decoration: BoxDecoration(
-                                  borderRadius:
-                                      isTablet
-                                          ? tabletBoardRadius.copyWith(
-                                            bottomLeft: Radius.zero,
-                                            bottomRight: Radius.zero,
-                                          )
-                                          : null,
+                                  borderRadius: isTablet
+                                      ? tabletBoardRadius.copyWith(
+                                          bottomLeft: Radius.zero,
+                                          bottomRight: Radius.zero,
+                                        )
+                                      : null,
                                 ),
                                 clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
                                 height: kAnalysisBoardHeaderOrFooterHeight,
@@ -336,13 +329,12 @@ class AnalysisLayout extends StatelessWidget {
                                 // This key is used to preserve the state of the board footer when the pov changes
                                 key: ValueKey(pov),
                                 decoration: BoxDecoration(
-                                  borderRadius:
-                                      isTablet
-                                          ? tabletBoardRadius.copyWith(
-                                            topLeft: Radius.zero,
-                                            topRight: Radius.zero,
-                                          )
-                                          : null,
+                                  borderRadius: isTablet
+                                      ? tabletBoardRadius.copyWith(
+                                          topLeft: Radius.zero,
+                                          topRight: Radius.zero,
+                                        )
+                                      : null,
                                 ),
                                 clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
                                 height: kAnalysisBoardHeaderOrFooterHeight,
@@ -353,12 +345,9 @@ class AnalysisLayout extends StatelessWidget {
                       ),
                       Expanded(
                         child: Padding(
-                          padding:
-                              isTablet
-                                  ? const EdgeInsets.symmetric(
-                                    horizontal: kTabletBoardTableSidePadding,
-                                  )
-                                  : EdgeInsets.zero,
+                          padding: isTablet
+                              ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                              : EdgeInsets.zero,
                           child: Container(
                             decoration: BoxDecoration(
                               color: ColorScheme.of(context).surfaceContainerLowest,

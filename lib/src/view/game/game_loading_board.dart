@@ -87,28 +87,27 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
               future: _cancelGameCreationFuture,
               builder: (context, snapshot) {
                 return BottomBarButton(
-                  onTap:
-                      snapshot.connectionState == ConnectionState.waiting
-                          ? null
-                          : () async {
-                            setState(() {
-                              _cancelGameCreationFuture = widget.cancelGameCreation();
-                            });
-                            try {
-                              await _cancelGameCreationFuture;
-                            } catch (_) {
-                              if (context.mounted) {
-                                showSnackBar(
-                                  context,
-                                  'Error cancelling game creation',
-                                  type: SnackBarType.error,
-                                );
-                              }
-                            }
+                  onTap: snapshot.connectionState == ConnectionState.waiting
+                      ? null
+                      : () async {
+                          setState(() {
+                            _cancelGameCreationFuture = widget.cancelGameCreation();
+                          });
+                          try {
+                            await _cancelGameCreationFuture;
+                          } catch (_) {
                             if (context.mounted) {
-                              Navigator.of(context, rootNavigator: true).pop();
+                              showSnackBar(
+                                context,
+                                'Error cancelling game creation',
+                                type: SnackBarType.error,
+                              );
                             }
-                          },
+                          }
+                          if (context.mounted) {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          }
+                        },
                   label: context.l10n.cancel,
                   showLabel: true,
                   icon: CupertinoIcons.xmark,
@@ -192,28 +191,27 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
               future: _cancelChallengeFuture,
               builder: (context, snapshot) {
                 return BottomBarButton(
-                  onTap:
-                      snapshot.connectionState == ConnectionState.waiting
-                          ? null
-                          : () async {
-                            setState(() {
-                              _cancelChallengeFuture = widget.cancelChallenge();
-                            });
-                            try {
-                              await _cancelChallengeFuture;
-                            } catch (_) {
-                              if (context.mounted) {
-                                showSnackBar(
-                                  context,
-                                  'Error cancelling challenge',
-                                  type: SnackBarType.error,
-                                );
-                              }
-                            }
+                  onTap: snapshot.connectionState == ConnectionState.waiting
+                      ? null
+                      : () async {
+                          setState(() {
+                            _cancelChallengeFuture = widget.cancelChallenge();
+                          });
+                          try {
+                            await _cancelChallengeFuture;
+                          } catch (_) {
                             if (context.mounted) {
-                              Navigator.of(context, rootNavigator: true).pop();
+                              showSnackBar(
+                                context,
+                                'Error cancelling challenge',
+                                type: SnackBarType.error,
+                              );
                             }
-                          },
+                          }
+                          if (context.mounted) {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          }
+                        },
                   label: context.l10n.cancel,
                   showLabel: true,
                   icon: CupertinoIcons.xmark,

@@ -146,33 +146,32 @@ class HttpLogTile extends StatelessWidget {
       dense: true,
       leading: SizedBox(
         width: 40,
-        child:
-            httpLog.hasResponse
-                ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+        child: httpLog.hasResponse
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    httpLog.responseCode!.toString(),
+                    style: TextStyle(
+                      color: httpLog.responseCode! >= 400 ? context.lichessColors.error : null,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  if (httpLog.elapsed != null)
                     Text(
-                      httpLog.responseCode!.toString(),
+                      '${httpLog.elapsed!.inMilliseconds}ms',
                       style: TextStyle(
-                        color: httpLog.responseCode! >= 400 ? context.lichessColors.error : null,
+                        color: textShade(context, 0.7),
                         fontFeatures: const [FontFeature.tabularFigures()],
-                        fontSize: 12,
+                        fontSize: 10,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    if (httpLog.elapsed != null)
-                      Text(
-                        '${httpLog.elapsed!.inMilliseconds}ms',
-                        style: TextStyle(
-                          color: textShade(context, 0.7),
-                          fontFeatures: const [FontFeature.tabularFigures()],
-                          fontSize: 10,
-                        ),
-                      ),
-                  ],
-                )
-                : const Icon(Icons.error_outline, color: Colors.grey),
+                ],
+              )
+            : const Icon(Icons.error_outline, color: Colors.grey),
       ),
       title: Text(
         httpLog.requestUrl.host == kLichessHost
@@ -183,12 +182,11 @@ class HttpLogTile extends StatelessWidget {
         style: TextStyle(
           fontSize: 14,
           letterSpacing: -0.15,
-          color:
-              httpLog.hasResponse
-                  ? httpLog.responseCode! >= 400
-                      ? context.lichessColors.error
-                      : null
-                  : textShade(context, 0.7),
+          color: httpLog.hasResponse
+              ? httpLog.responseCode! >= 400
+                    ? context.lichessColors.error
+                    : null
+              : textShade(context, 0.7),
         ),
       ),
       subtitle: Text(

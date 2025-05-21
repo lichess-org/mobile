@@ -30,10 +30,9 @@ class HomePreferences extends _$HomePreferences with PreferencesStorage<HomePref
       return Future.value();
     }
     final newState = state.copyWith(
-      disabledWidgets:
-          state.disabledWidgets.contains(widget)
-              ? state.disabledWidgets.remove(widget)
-              : state.disabledWidgets.add(widget),
+      disabledWidgets: state.disabledWidgets.contains(widget)
+          ? state.disabledWidgets.remove(widget)
+          : state.disabledWidgets.add(widget),
     );
     return save(newState);
   }

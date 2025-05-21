@@ -23,7 +23,8 @@ import '../../test_provider_scope.dart';
 String standingPlayersToJson(List<StandingPlayer> players) {
   return players
       .map(
-        (player) => '''
+        (player) =>
+            '''
       {
         "name": "${player.user.name}",
         "rank": ${player.rank},
@@ -160,7 +161,8 @@ String makeReloadedTournamentJson({
   required int nbPlayers,
   TournamentMe? me,
   String featuredGameJson = '',
-}) => '''
+}) =>
+    '''
 {
   "nbPlayers": $nbPlayers,
   "duels": [ ],

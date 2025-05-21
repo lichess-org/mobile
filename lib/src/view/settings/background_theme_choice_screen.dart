@@ -29,7 +29,10 @@ class BackgroundChoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text(context.l10n.background)), body: _Body());
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.background)),
+      body: _Body(),
+    );
   }
 }
 
@@ -39,8 +42,10 @@ const itemsByRow = 3;
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appDocumentsDirectory =
-        ref.read(preloadedDataProvider).requireValue.appDocumentsDirectory;
+    final appDocumentsDirectory = ref
+        .read(preloadedDataProvider)
+        .requireValue
+        .appDocumentsDirectory;
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final viewport = MediaQuery.sizeOf(context);
@@ -54,10 +59,9 @@ class _Body extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.image_outlined),
                 title: const Text('Pick an image'),
-                trailing:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? const Icon(Icons.chevron_right)
-                        : null,
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const Icon(Icons.chevron_right)
+                    : null,
                 onTap: () async {
                   final ImagePicker picker = ImagePicker();
                   final maxDimension = max(viewport.width, viewport.height) * devicePixelRatio;
@@ -93,19 +97,18 @@ class _Body extends ConsumerWidget {
                       Navigator.of(context, rootNavigator: true)
                           .push(
                             MaterialPageRoute<BackgroundImage?>(
-                              builder:
-                                  (_) => ConfirmImageBackgroundScreen(
-                                    boardPrefs: boardPrefs,
-                                    image: image,
-                                    baseColor: baseColor,
-                                    meanLuminance: meanLuminance,
-                                    viewport: viewport,
-                                    imageSize: Size(
-                                      decodedImage.width.toDouble(),
-                                      decodedImage.height.toDouble(),
-                                    ),
-                                    appDocumentsDirectory: appDocumentsDirectory,
-                                  ),
+                              builder: (_) => ConfirmImageBackgroundScreen(
+                                boardPrefs: boardPrefs,
+                                image: image,
+                                baseColor: baseColor,
+                                meanLuminance: meanLuminance,
+                                viewport: viewport,
+                                imageSize: Size(
+                                  decodedImage.width.toDouble(),
+                                  decodedImage.height.toDouble(),
+                                ),
+                                appDocumentsDirectory: appDocumentsDirectory,
+                              ),
                               fullscreenDialog: true,
                             ),
                           )
@@ -147,30 +150,28 @@ class _Body extends ConsumerWidget {
                 final t = colorChoices[index];
 
                 return GestureDetector(
-                  onTap:
-                      () => Navigator.of(context, rootNavigator: true)
-                          .push(
-                            MaterialPageRoute<(int, bool)?>(
-                              builder:
-                                  (_) => ConfirmColorBackgroundScreen(
-                                    boardPrefs: boardPrefs,
-                                    initialIndex: index,
-                                  ),
-                              fullscreenDialog: true,
-                            ),
-                          )
-                          .then((value) {
-                            if (context.mounted) {
-                              if (value != null) {
-                                final (index, _) = value;
-                                final selected = colorChoices[index];
-                                ref
-                                    .read(generalPreferencesProvider.notifier)
-                                    .setBackground(backgroundColor: (selected, true));
-                                Navigator.pop(context);
-                              }
-                            }
-                          }),
+                  onTap: () => Navigator.of(context, rootNavigator: true)
+                      .push(
+                        MaterialPageRoute<(int, bool)?>(
+                          builder: (_) => ConfirmColorBackgroundScreen(
+                            boardPrefs: boardPrefs,
+                            initialIndex: index,
+                          ),
+                          fullscreenDialog: true,
+                        ),
+                      )
+                      .then((value) {
+                        if (context.mounted) {
+                          if (value != null) {
+                            final (index, _) = value;
+                            final selected = colorChoices[index];
+                            ref
+                                .read(generalPreferencesProvider.notifier)
+                                .setBackground(backgroundColor: (selected, true));
+                            Navigator.pop(context);
+                          }
+                        }
+                      }),
                   child: SizedBox.expand(child: ColoredBox(color: t.darker)),
                 );
               },
@@ -227,10 +228,9 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
       child: Scaffold(
         body: LayoutBuilder(
           builder: (context, constraints) {
-            final orientation =
-                constraints.maxWidth > constraints.maxHeight
-                    ? Orientation.landscape
-                    : Orientation.portrait;
+            final orientation = constraints.maxWidth > constraints.maxHeight
+                ? Orientation.landscape
+                : Orientation.portrait;
             final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
             return Stack(
               children: [
@@ -248,19 +248,17 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                 Positioned.fill(
                   child: IgnorePointer(
                     child: Align(
-                      alignment:
-                          orientation == Orientation.portrait
-                              ? Alignment.center
-                              : Alignment.centerLeft,
+                      alignment: orientation == Orientation.portrait
+                          ? Alignment.center
+                          : Alignment.centerLeft,
                       child: Padding(
                         padding: EdgeInsets.only(
                           left: orientation == Orientation.portrait ? 0 : 16.0,
                         ),
                         child: Chessboard.fixed(
-                          size:
-                              orientation == Orientation.portrait
-                                  ? constraints.maxWidth
-                                  : constraints.maxHeight - landscapeBoardPadding * 2,
+                          size: orientation == Orientation.portrait
+                              ? constraints.maxWidth
+                              : constraints.maxHeight - landscapeBoardPadding * 2,
                           fen: kInitialFEN,
                           orientation: Side.white,
                           settings: widget.boardPrefs.toBoardSettings(),
@@ -289,11 +287,10 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
           ),
           TextButton(
             child: Text(context.l10n.accept),
-            onPressed:
-                () => Navigator.pop(
-                  context,
-                  _controller.hasClients ? (_controller.page!.toInt(), true) : null,
-                ),
+            onPressed: () => Navigator.pop(
+              context,
+              _controller.hasClients ? (_controller.page!.toInt(), true) : null,
+            ),
           ),
         ],
       ),
@@ -327,12 +324,11 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
   Orientation get imageOrientation =>
       imageSize.width > imageSize.height ? Orientation.landscape : Orientation.portrait;
 
-  BoxFit get boxFit =>
-      imageOrientation == viewportOrientation
-          ? BoxFit.cover
-          : imageOrientation == Orientation.portrait
-          ? BoxFit.fitWidth
-          : BoxFit.fitHeight;
+  BoxFit get boxFit => imageOrientation == viewportOrientation
+      ? BoxFit.cover
+      : imageOrientation == Orientation.portrait
+      ? BoxFit.fitWidth
+      : BoxFit.fitHeight;
 
   Size get imageFitSize => FullScreenBackgroundImage.imageFitSize(boxFit, imageSize, viewport);
 
@@ -356,12 +352,11 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
   @override
   void initState() {
     super.initState();
-    final initialMatrix =
-        widget.imageOrientation == widget.viewportOrientation
-            ? Matrix4.identity()
-            : widget.imageOrientation == Orientation.landscape
-            ? widget.centerWidthMatrix
-            : widget.centerHeightMatrix;
+    final initialMatrix = widget.imageOrientation == widget.viewportOrientation
+        ? Matrix4.identity()
+        : widget.imageOrientation == Orientation.landscape
+        ? widget.centerWidthMatrix
+        : widget.centerHeightMatrix;
     _controller = TransformationController(initialMatrix);
     _controller.addListener(() {
       _transformationMatrix = _controller.value;
@@ -422,10 +417,9 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
             ),
             Positioned.fill(
               child: Align(
-                alignment:
-                    widget.viewportOrientation == Orientation.portrait
-                        ? Alignment.center
-                        : Alignment.centerLeft,
+                alignment: widget.viewportOrientation == Orientation.portrait
+                    ? Alignment.center
+                    : Alignment.centerLeft,
                 child: IgnorePointer(
                   child: Opacity(
                     opacity: showBoard ? 1 : 0,
@@ -434,10 +428,9 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                         left: widget.viewportOrientation == Orientation.portrait ? 0 : 16.0,
                       ),
                       child: Chessboard.fixed(
-                        size:
-                            widget.viewportOrientation == Orientation.portrait
-                                ? widget.viewport.width
-                                : widget.viewport.height - landscapeBoardPadding * 2,
+                        size: widget.viewportOrientation == Orientation.portrait
+                            ? widget.viewport.width
+                            : widget.viewport.height - landscapeBoardPadding * 2,
                         fen: kInitialFEN,
                         orientation: Side.white,
                         settings: widget.boardPrefs.toBoardSettings(),
@@ -488,12 +481,11 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                 children: [
                   TextButton(
                     child: Text(showBoard ? 'Hide board' : 'Show board'),
-                    onPressed:
-                        () => {
-                          setState(() {
-                            showBoard = !showBoard;
-                          }),
-                        },
+                    onPressed: () => {
+                      setState(() {
+                        showBoard = !showBoard;
+                      }),
+                    },
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,

@@ -114,27 +114,25 @@ Future<void> makeEngineTestApp(
         ),
       ),
     ],
-    home:
-        broadcastGame != null
-            ? BroadcastGameScreen(
-              tournamentId: broadcastGame.$1,
-              roundId: broadcastGame.$2,
-              gameId: broadcastGame.$3,
-            )
-            : AnalysisScreen(
-              options: AnalysisOptions(
-                orientation: Side.white,
-                gameId: gameId,
-                standalone:
-                    gameId == null
-                        ? (
-                          pgn: '',
-                          isComputerAnalysisAllowed: isComputerAnalysisAllowed,
-                          variant: Variant.standard,
-                        )
-                        : null,
-              ),
+    home: broadcastGame != null
+        ? BroadcastGameScreen(
+            tournamentId: broadcastGame.$1,
+            roundId: broadcastGame.$2,
+            gameId: broadcastGame.$3,
+          )
+        : AnalysisScreen(
+            options: AnalysisOptions(
+              orientation: Side.white,
+              gameId: gameId,
+              standalone: gameId == null
+                  ? (
+                      pgn: '',
+                      isComputerAnalysisAllowed: isComputerAnalysisAllowed,
+                      variant: Variant.standard,
+                    )
+                  : null,
             ),
+          ),
   );
 
   await tester.pumpWidget(app);

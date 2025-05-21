@@ -42,18 +42,17 @@ class RecentGamesWidget extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.recentGames),
           hasLeading: true,
-          onHeaderTap:
-              nbOfGames > list.length
-                  ? () {
-                    Navigator.of(context).push(
-                      GameHistoryScreen.buildRoute(
-                        context,
-                        user: user,
-                        isOnline: connectivity.valueOrNull?.isOnline == true,
-                      ),
-                    );
-                  }
-                  : null,
+          onHeaderTap: nbOfGames > list.length
+              ? () {
+                  Navigator.of(context).push(
+                    GameHistoryScreen.buildRoute(
+                      context,
+                      user: user,
+                      isOnline: connectivity.valueOrNull?.isOnline == true,
+                    ),
+                  );
+                }
+              : null,
           children: [for (final item in list) GameListTile(item: item)],
         );
       },
@@ -64,13 +63,12 @@ class RecentGamesWidget extends ConsumerWidget {
           child: Text('Could not load recent games.'),
         );
       },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: ListSection.loading(itemsNumber: 10, header: true, hasLeading: true),
-            ),
-          ),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(itemsNumber: 10, header: true, hasLeading: true),
+        ),
+      ),
     );
   }
 }

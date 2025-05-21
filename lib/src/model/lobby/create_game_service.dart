@@ -17,8 +17,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'create_game_service.g.dart';
 
-typedef ChallengeResponse =
-    ({GameFullId? gameFullId, Challenge? challenge, ChallengeDeclineReason? declineReason});
+typedef ChallengeResponse = ({
+  GameFullId? gameFullId,
+  Challenge? challenge,
+  ChallengeDeclineReason? declineReason,
+});
 
 /// A provider for the [CreateGameService].
 @riverpod

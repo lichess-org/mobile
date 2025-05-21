@@ -18,15 +18,13 @@ const _kTableRowPadding = EdgeInsets.symmetric(
 );
 const _kHeaderTextStyle = TextStyle(fontSize: 12);
 
-Color _whiteBoxColor(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.dark
-        ? Colors.white.withValues(alpha: 0.8)
-        : Colors.white;
+Color _whiteBoxColor(BuildContext context) => Theme.of(context).brightness == Brightness.dark
+    ? Colors.white.withValues(alpha: 0.8)
+    : Colors.white;
 
-Color _blackBoxColor(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.light
-        ? Colors.black.withValues(alpha: 0.7)
-        : Colors.black;
+Color _blackBoxColor(BuildContext context) => Theme.of(context).brightness == Brightness.light
+    ? Colors.black.withValues(alpha: 0.7)
+    : Colors.black;
 
 class OpeningNameHeader extends StatelessWidget {
   const OpeningNameHeader({required this.opening, super.key});
@@ -39,10 +37,9 @@ class OpeningNameHeader extends StatelessWidget {
       padding: _kTableRowPadding,
       decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
       child: GestureDetector(
-        onTap:
-            opening.name == context.l10n.startPosition
-                ? null
-                : () => launchUrl(Uri.parse('https://lichess.org/opening/${opening.name}')),
+        onTap: opening.name == context.l10n.startPosition
+            ? null
+            : () => launchUrl(Uri.parse('https://lichess.org/opening/${opening.name}')),
         child: Row(
           children: [
             if (opening.name != context.l10n.startPosition) ...[
@@ -180,8 +177,9 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
         if (moves.isNotEmpty)
           TableRow(
             decoration: BoxDecoration(
-              color:
-                  moves.length.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
+              color: moves.length.isEven
+                  ? context.lichessTheme.rowEven
+                  : context.lichessTheme.rowOdd,
             ),
             children: [
               Container(

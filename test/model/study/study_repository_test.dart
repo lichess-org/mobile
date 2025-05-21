@@ -419,28 +419,26 @@ void main() {
             gamebook: true,
             features: (computer: false, explorer: false),
           ),
-          hints:
-              [
-                'The white king is not very safe. Can black increase the pressure on the king?',
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-              ].lock,
-          deviationComments:
-              [
-                null,
-                "Black has to be quick to jump on the initiative of white's king being vulnerable.",
-                null,
-                null,
-                null,
-                'Keep the initiative going! Go for the king!',
-                null,
-                null,
-              ].lock,
+          hints: [
+            'The white king is not very safe. Can black increase the pressure on the king?',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+          ].lock,
+          deviationComments: [
+            null,
+            "Black has to be quick to jump on the initiative of white's king being vulnerable.",
+            null,
+            null,
+            null,
+            'Keep the initiative going! Go for the king!',
+            null,
+            null,
+          ].lock,
         ),
       );
     });

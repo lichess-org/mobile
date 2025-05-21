@@ -208,16 +208,15 @@ mixin EngineEvaluationMixin {
     final nodes = pick(event.data, 'knodes').asIntOrThrow() * 1000;
     final depth = pick(event.data, 'depth').asIntOrThrow();
 
-    final pvs =
-        pick(event.data, 'pvs')
-            .asListOrThrow(
-              (pv) => PvData(
-                moves: pv('moves').asStringOrThrow().split(' ').toIList(),
-                cp: pv('cp').asIntOrNull(),
-                mate: pv('mate').asIntOrNull(),
-              ),
-            )
-            .toIList();
+    final pvs = pick(event.data, 'pvs')
+        .asListOrThrow(
+          (pv) => PvData(
+            moves: pv('moves').asStringOrThrow().split(' ').toIList(),
+            cp: pv('cp').asIntOrNull(),
+            mate: pv('mate').asIntOrNull(),
+          ),
+        )
+        .toIList();
 
     bool isSameEvalString = true;
     positionTree.updateAt(path, (node) {

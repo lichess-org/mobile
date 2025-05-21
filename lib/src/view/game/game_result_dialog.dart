@@ -110,10 +110,9 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
               ),
             ],
           ),
-          crossFadeState:
-              gameState.game.opponent?.offeringRematch ?? false
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
+          crossFadeState: gameState.game.opponent?.offeringRematch ?? false
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
         ),
         if (gameState.game.me?.offeringRematch == true)
           FilledButton.tonal(
@@ -126,23 +125,22 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
           FilledButton(
             onPressed:
                 _activateButtons &&
-                        gameState.game.opponent?.onGame == true &&
-                        gameState.game.opponent?.offeringRematch != true
-                    ? () {
-                      ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
-                    }
-                    : null,
+                    gameState.game.opponent?.onGame == true &&
+                    gameState.game.opponent?.offeringRematch != true
+                ? () {
+                    ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+                  }
+                : null,
             child: Text(context.l10n.rematch, textAlign: TextAlign.center),
           ),
         if (gameState.canGetNewOpponent)
           FilledButton.tonal(
-            onPressed:
-                _activateButtons
-                    ? () {
-                      Navigator.of(context).popUntil((route) => route is! PopupRoute);
-                      widget.onNewOpponentCallback(gameState.game);
-                    }
-                    : null,
+            onPressed: _activateButtons
+                ? () {
+                    Navigator.of(context).popUntil((route) => route is! PopupRoute);
+                    widget.onNewOpponentCallback(gameState.game);
+                  }
+                : null,
             child: Text(context.l10n.newOpponent, textAlign: TextAlign.center),
           ),
         if (gameState.tournament?.isOngoing == true) ...[
@@ -258,10 +256,9 @@ class GameResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showWinner =
-        game.winner != null
-            ? ' • ${game.winner == Side.white ? context.l10n.whiteIsVictorious : context.l10n.blackIsVictorious}'
-            : '';
+    final showWinner = game.winner != null
+        ? ' • ${game.winner == Side.white ? context.l10n.whiteIsVictorious : context.l10n.blackIsVictorious}'
+        : '';
 
     return Column(
       mainAxisSize: MainAxisSize.min,

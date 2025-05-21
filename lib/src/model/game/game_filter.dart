@@ -29,20 +29,18 @@ sealed class GameFilterState with _$GameFilterState {
   /// Returns a translated label of the selected filters.
   String selectionLabel(AppLocalizations l10n) {
     final fields = [side, perfs];
-    final labels =
-        fields
-            .map(
-              (field) =>
-                  field is ISet<Perf>
-                      ? field.map((e) => e.shortTitle).join(', ')
-                      : (field as Side?) != null
-                      ? field == Side.white
-                          ? l10n.white
-                          : l10n.black
-                      : null,
-            )
-            .where((label) => label != null && label.isNotEmpty)
-            .toList();
+    final labels = fields
+        .map(
+          (field) => field is ISet<Perf>
+              ? field.map((e) => e.shortTitle).join(', ')
+              : (field as Side?) != null
+              ? field == Side.white
+                    ? l10n.white
+                    : l10n.black
+              : null,
+        )
+        .where((label) => label != null && label.isNotEmpty)
+        .toList();
     return labels.isEmpty ? 'All' : labels.join(', ');
   }
 

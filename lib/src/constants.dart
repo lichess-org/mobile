@@ -48,8 +48,9 @@ const kFlexGoldenRatioBase = 100000000000;
 const kFlexGoldenRatio = 161803398875;
 
 /// Use same box shadows as material widgets with elevation 1.
-final List<BoxShadow> boardShadows =
-    defaultTargetPlatform == TargetPlatform.iOS ? <BoxShadow>[] : kElevationToShadow[1]!;
+final List<BoxShadow> boardShadows = defaultTargetPlatform == TargetPlatform.iOS
+    ? <BoxShadow>[]
+    : kElevationToShadow[1]!;
 
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();

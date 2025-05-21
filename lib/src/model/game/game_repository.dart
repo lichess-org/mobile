@@ -70,16 +70,15 @@ class GameRepository {
           mapper: (json) => LightExportedGame.fromServerJson(json, withBookmarked: withBookmarked),
         )
         .then(
-          (value) =>
-              value
-                  .map(
-                    (e) => (
-                      game: e,
-                      // we know here user is not null for at least one of the players
-                      pov: e.white.user?.id == userId ? Side.white : Side.black,
-                    ),
-                  )
-                  .toIList(),
+          (value) => value
+              .map(
+                (e) => (
+                  game: e,
+                  // we know here user is not null for at least one of the players
+                  pov: e.white.user?.id == userId ? Side.white : Side.black,
+                ),
+              )
+              .toIList(),
         );
   }
 
@@ -105,16 +104,15 @@ class GameRepository {
           mapper: (json) => LightExportedGame.fromServerJson(json, isBookmarked: true),
         )
         .then(
-          (value) =>
-              value
-                  .map(
-                    (e) => (
-                      game: e,
-                      // we know here user is not null for at least one of the players
-                      pov: e.white.user?.id == session.user.id ? Side.white : Side.black,
-                    ),
-                  )
-                  .toIList(),
+          (value) => value
+              .map(
+                (e) => (
+                  game: e,
+                  // we know here user is not null for at least one of the players
+                  pov: e.white.user?.id == session.user.id ? Side.white : Side.black,
+                ),
+              )
+              .toIList(),
         );
   }
 

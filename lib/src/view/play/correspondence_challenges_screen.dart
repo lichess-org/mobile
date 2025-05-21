@@ -79,8 +79,9 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
           body: Center(child: Text('Could not load correspondence challenges')),
         );
       case AsyncData(value: final challenges):
-        final supportedChallenges =
-            challenges.where((challenge) => challenge.variant.isPlaySupported).toList();
+        final supportedChallenges = challenges
+            .where((challenge) => challenge.variant.isPlaySupported)
+            .toList();
         return Scaffold(
           appBar: AppBar(
             title: Text(context.l10n.correspondence),
@@ -105,11 +106,9 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
             onRefresh: () => ref.refresh(correspondenceChallengesProvider.future),
             child: ListView.separated(
               itemCount: supportedChallenges.length,
-              separatorBuilder:
-                  (context, index) =>
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-                          : const SizedBox.shrink(),
+              separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+                  ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                  : const SizedBox.shrink(),
               itemBuilder: (context, index) {
                 final challenge = supportedChallenges[index];
                 final isMySeek = UserId.fromUserName(challenge.username) == session?.user.id;
@@ -121,29 +120,27 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
                     name: challenge.username,
                     title: challenge.title,
                   ),
-                  onPressed:
-                      isMySeek
-                          ? null
-                          : session == null
-                          ? () {
-                            showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
-                          }
-                          : () {
-                            showConfirmDialog<void>(
-                              context,
-                              title: Text(context.l10n.accept),
-                              isDestructiveAction: true,
-                              onConfirm: () {
-                                socketClient.send('joinSeek', challenge.id.toString());
-                              },
-                            );
-                          },
-                  onCancel:
-                      isMySeek
-                          ? () {
-                            socketClient.send('cancelSeek', challenge.id.toString());
-                          }
-                          : null,
+                  onPressed: isMySeek
+                      ? null
+                      : session == null
+                      ? () {
+                          showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                        }
+                      : () {
+                          showConfirmDialog<void>(
+                            context,
+                            title: Text(context.l10n.accept),
+                            isDestructiveAction: true,
+                            onConfirm: () {
+                              socketClient.send('joinSeek', challenge.id.toString());
+                            },
+                          );
+                        },
+                  onCancel: isMySeek
+                      ? () {
+                          socketClient.send('cancelSeek', challenge.id.toString());
+                        }
+                      : null,
                 );
               },
             ),

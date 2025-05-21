@@ -15,20 +15,21 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 @riverpod
-final _themesProvider = FutureProvider.autoDispose<
-  (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)
->((ref) async {
-  final connectivity = await ref.watch(connectivityChangesProvider.future);
-  final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
-  IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
-  try {
-    onlineThemes = await ref.watch(puzzleThemesProvider.future);
-  } catch (e) {
-    onlineThemes = null;
-  }
-  final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
-  return (connectivity.isOnline, savedThemes, onlineThemes, savedOpenings.isNotEmpty);
-});
+final _themesProvider =
+    FutureProvider.autoDispose<
+      (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)
+    >((ref) async {
+      final connectivity = await ref.watch(connectivityChangesProvider.future);
+      final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
+      IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
+      try {
+        onlineThemes = await ref.watch(puzzleThemesProvider.future);
+      } catch (e) {
+        onlineThemes = null;
+      }
+      final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
+      return (connectivity.isOnline, savedThemes, onlineThemes, savedOpenings.isNotEmpty);
+    });
 
 class PuzzleThemesScreen extends StatelessWidget {
   const PuzzleThemesScreen({super.key});
@@ -69,12 +70,11 @@ class _Body extends ConsumerWidget {
                 child: ExpansionTile(
                   title: Text(context.l10n.puzzleByOpenings),
                   trailing: const Icon(Icons.keyboard_arrow_right),
-                  onExpansionChanged:
-                      openingsAvailable
-                          ? (expanded) {
-                            Navigator.of(context).push(OpeningThemeScreen.buildRoute(context));
-                          }
-                          : null,
+                  onExpansionChanged: openingsAvailable
+                      ? (expanded) {
+                          Navigator.of(context).push(OpeningThemeScreen.buildRoute(context));
+                        }
+                      : null,
                 ),
               ),
             ),
@@ -123,48 +123,42 @@ class _Category extends ConsumerWidget {
         children: [
           ListSection(
             hasLeading: true,
-            children:
-                themes.map((theme) {
-                  final isThemeAvailable = hasConnectivity || savedThemes.containsKey(theme);
+            children: themes.map((theme) {
+              final isThemeAvailable = hasConnectivity || savedThemes.containsKey(theme);
 
-                  return Opacity(
-                    opacity: isThemeAvailable ? 1 : 0.5,
-                    child: ListTile(
-                      leading: Icon(theme.icon),
-                      trailing:
-                          hasConnectivity && onlineThemes?.containsKey(theme) == true
-                              ? Padding(
-                                padding: const EdgeInsets.only(left: 6.0),
-                                child: Text(
-                                  '${onlineThemes![theme]!.count}',
-                                  style: themeCountStyle,
-                                ),
-                              )
-                              : savedThemes.containsKey(theme)
-                              ? Padding(
-                                padding: const EdgeInsets.only(left: 6.0),
-                                child: Text('${savedThemes[theme]!}', style: themeCountStyle),
-                              )
-                              : null,
-                      title: Text(theme.l10n(context.l10n).name),
-                      subtitle: Text(
-                        theme.l10n(context.l10n).description,
-                        maxLines: 10,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-                      ),
-                      onTap:
-                          isThemeAvailable
-                              ? () {
-                                Navigator.of(
-                                  context,
-                                  rootNavigator: true,
-                                ).push(PuzzleScreen.buildRoute(context, angle: PuzzleTheme(theme)));
-                              }
-                              : null,
-                    ),
-                  );
-                }).toList(),
+              return Opacity(
+                opacity: isThemeAvailable ? 1 : 0.5,
+                child: ListTile(
+                  leading: Icon(theme.icon),
+                  trailing: hasConnectivity && onlineThemes?.containsKey(theme) == true
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 6.0),
+                          child: Text('${onlineThemes![theme]!.count}', style: themeCountStyle),
+                        )
+                      : savedThemes.containsKey(theme)
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 6.0),
+                          child: Text('${savedThemes[theme]!}', style: themeCountStyle),
+                        )
+                      : null,
+                  title: Text(theme.l10n(context.l10n).name),
+                  subtitle: Text(
+                    theme.l10n(context.l10n).description,
+                    maxLines: 10,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                  ),
+                  onTap: isThemeAvailable
+                      ? () {
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).push(PuzzleScreen.buildRoute(context, angle: PuzzleTheme(theme)));
+                        }
+                      : null,
+                ),
+              );
+            }).toList(),
           ),
         ],
       ),

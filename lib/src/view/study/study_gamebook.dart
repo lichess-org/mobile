@@ -17,7 +17,10 @@ class StudyGamebook extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [_Comment(id: id), _Hint(id: id)],
+        children: [
+          _Comment(id: id),
+          _Hint(id: id),
+        ],
       ),
     );
   }
@@ -79,11 +82,10 @@ class _HintState extends ConsumerState<_Hint> {
     return hint == null
         ? const SizedBox.shrink()
         : SizedBox(
-          height: 40,
-          child:
-              showHint
-                  ? Center(child: Text(hint))
-                  : TextButton(
+            height: 40,
+            child: showHint
+                ? Center(child: Text(hint))
+                : TextButton(
                     onPressed: () {
                       setState(() {
                         showHint = true;
@@ -91,7 +93,7 @@ class _HintState extends ConsumerState<_Hint> {
                     },
                     child: Text(context.l10n.getAHint),
                   ),
-        );
+          );
   }
 }
 

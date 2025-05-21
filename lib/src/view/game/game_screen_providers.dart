@@ -12,8 +12,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'game_screen_providers.g.dart';
 
 typedef LoadedGame = ({GameFullId gameId, String? lastFen, Move? lastMove, Side? side});
-typedef CurrentGameState =
-    ({LoadedGame? game, Challenge? challenge, ChallengeDeclineReason? declineReason});
+typedef CurrentGameState = ({
+  LoadedGame? game,
+  Challenge? challenge,
+  ChallengeDeclineReason? declineReason,
+});
 
 /// A provider that returns the currently loaded [GameFullId] for the [GameScreen].
 ///
@@ -49,10 +52,9 @@ class CurrentGame extends _$CurrentGame {
           .newRealTimeChallenge(challenge)
           .then(
             (data) => (
-              game:
-                  data.gameFullId != null
-                      ? (gameId: data.gameFullId!, lastFen: null, lastMove: null, side: null)
-                      : null,
+              game: data.gameFullId != null
+                  ? (gameId: data.gameFullId!, lastFen: null, lastMove: null, side: null)
+                  : null,
               challenge: data.challenge,
               declineReason: data.declineReason,
             ),

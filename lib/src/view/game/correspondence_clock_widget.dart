@@ -92,12 +92,11 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
 
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
-    final daysStr =
-        days > 1
-            ? context.l10n.nbDays(days)
-            : days == 1
-            ? context.l10n.oneDay
-            : '';
+    final daysStr = days > 1
+        ? context.l10n.nbDays(days)
+        : days == 1
+        ? context.l10n.oneDay
+        : '';
 
     final hoursStr = days > 0 && hours > 0 ? ' ${context.l10n.nbHours(hours)}' : '';
 
@@ -128,10 +127,9 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
                     TextSpan(
                       text: ':',
                       style: TextStyle(
-                        color:
-                            widget.active && timeLeft.inSeconds.remainder(2) == 0
-                                ? clockStyle.activeTextColor.withValues(alpha: 0.5)
-                                : null,
+                        color: widget.active && timeLeft.inSeconds.remainder(2) == 0
+                            ? clockStyle.activeTextColor.withValues(alpha: 0.5)
+                            : null,
                       ),
                     ),
                     TextSpan(text: mins.toString().padLeft(2, '0')),

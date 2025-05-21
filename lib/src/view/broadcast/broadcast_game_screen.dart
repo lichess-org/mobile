@@ -102,17 +102,16 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final title =
-        (widget.title != null)
-            ? Text(widget.title!, overflow: TextOverflow.ellipsis, maxLines: 1)
-            : switch (ref.watch(broadcastGameScreenTitleProvider(widget.roundId))) {
-              AsyncData(value: final title) => Text(
-                title,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-              _ => const SizedBox.shrink(),
-            };
+    final title = (widget.title != null)
+        ? Text(widget.title!, overflow: TextOverflow.ellipsis, maxLines: 1)
+        : switch (ref.watch(broadcastGameScreenTitleProvider(widget.roundId))) {
+            AsyncData(value: final title) => Text(
+              title,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+            _ => const SizedBox.shrink(),
+          };
     final asyncEval = ref.watch(broadcastGameEvalProvider(widget.roundId, widget.gameId));
     final asyncIsEngineAvailable = ref.watch(
       isBroadcastEngineAvailableProvider(widget.roundId, widget.gameId),
@@ -174,9 +173,8 @@ class _Body extends ConsumerWidget {
           smallBoard: analysisPrefs.smallBoard,
           pov: pov,
           tabController: tabController,
-          boardBuilder:
-              (context, boardSize, borderRadius) =>
-                  _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
+          boardBuilder: (context, boardSize, borderRadius) =>
+              _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
           boardHeader: _PlayerWidget(
             tournamentId: tournamentId,
             roundId: roundId,
@@ -189,15 +187,14 @@ class _Body extends ConsumerWidget {
             gameId: gameId,
             widgetPosition: _PlayerWidgetPosition.bottom,
           ),
-          engineGaugeBuilder:
-              state.hasAvailableEval(enginePrefs) && showEvaluationGauge
-                  ? (context, orientation) {
-                    return orientation == Orientation.portrait
-                        ? EngineGauge(
+          engineGaugeBuilder: state.hasAvailableEval(enginePrefs) && showEvaluationGauge
+              ? (context, orientation) {
+                  return orientation == Orientation.portrait
+                      ? EngineGauge(
                           displayMode: EngineGaugeDisplayMode.horizontal,
                           params: engineGaugeParams,
                         )
-                        : Container(
+                      : Container(
                           clipBehavior: Clip.hardEdge,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
                           child: EngineGauge(
@@ -205,19 +202,17 @@ class _Body extends ConsumerWidget {
                             params: engineGaugeParams,
                           ),
                         );
-                  }
-                  : null,
-          engineLines:
-              isLocalEvaluationEnabled && numEvalLines > 0
-                  ? EngineLines(
-                    savedEval: currentNode.eval,
-                    isGameOver: currentNode.position.isGameOver,
-                    onTapMove:
-                        ref
-                            .read(broadcastAnalysisControllerProvider(roundId, gameId).notifier)
-                            .onUserMove,
-                  )
-                  : null,
+                }
+              : null,
+          engineLines: isLocalEvaluationEnabled && numEvalLines > 0
+              ? EngineLines(
+                  savedEval: currentNode.eval,
+                  isGameOver: currentNode.position.isGameOver,
+                  onTapMove: ref
+                      .read(broadcastAnalysisControllerProvider(roundId, gameId).notifier)
+                      .onUserMove,
+                )
+              : null,
           bottomBar: _BroadcastGameBottomBar(
             roundId: roundId,
             gameId: gameId,
@@ -258,10 +253,9 @@ class _BroadcastGameTreeView extends ConsumerWidget {
         shouldShowAnnotations:
             analysisPrefs.enableComputerAnalysis && analysisPrefs.showAnnotations,
         notifier: ref.read(ctrlProvider.notifier),
-        displayMode:
-            analysisPrefs.inlineNotation
-                ? PgnTreeDisplayMode.inlineNotation
-                : PgnTreeDisplayMode.twoColumn,
+        displayMode: analysisPrefs.inlineNotation
+            ? PgnTreeDisplayMode.inlineNotation
+            : PgnTreeDisplayMode.twoColumn,
       ),
     );
   }
@@ -314,21 +308,15 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
         broadcastAnalysisState.isComputerAnalysisEnabled && analysisPrefs.showAnnotations;
     final currentNode = broadcastAnalysisState.currentNode;
 
-    final bestMoves =
-        showBestMoveArrow
-            ? pickBestClientEval(
-              localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
-              savedEval: currentNode.eval,
-            )?.bestMoves
-            : null;
-    final ISet<Shape> bestMoveShapes =
-        bestMoves != null
-            ? computeBestMoveShapes(
-              bestMoves,
-              currentNode.position.turn,
-              boardPrefs.pieceSet.assets,
-            )
-            : ISet();
+    final bestMoves = showBestMoveArrow
+        ? pickBestClientEval(
+            localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
+            savedEval: currentNode.eval,
+          )?.bestMoves
+        : null;
+    final ISet<Shape> bestMoveShapes = bestMoves != null
+        ? computeBestMoveShapes(bestMoves, currentNode.position.turn, boardPrefs.pieceSet.assets)
+        : ISet();
 
     final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
@@ -341,23 +329,21 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
       game: boardPrefs.toGameData(
         variant: Variant.standard,
         position: broadcastAnalysisState.position,
-        playerSide:
-            broadcastAnalysisState.position.isGameOver
-                ? PlayerSide.none
-                : broadcastAnalysisState.position.turn == Side.white
-                ? PlayerSide.white
-                : PlayerSide.black,
+        playerSide: broadcastAnalysisState.position.isGameOver
+            ? PlayerSide.none
+            : broadcastAnalysisState.position.turn == Side.white
+            ? PlayerSide.white
+            : PlayerSide.black,
         promotionMove: broadcastAnalysisState.promotionMove,
         onMove: (move, {isDrop, captured}) => ref.read(ctrlProvider.notifier).onUserMove(move),
         onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       ),
       shapes: userShapes.union(bestMoveShapes),
-      annotations:
-          sanMove != null && annotation != null
-              ? altCastles.containsKey(sanMove.move.uci)
-                  ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
-                  : IMap({sanMove.move.to: annotation})
-              : null,
+      annotations: sanMove != null && annotation != null
+          ? altCastles.containsKey(sanMove.move.uci)
+                ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
+                : IMap({sanMove.move.to: annotation})
+          : null,
       settings: boardPrefs.toBoardSettings().copyWith(
         borderRadius: widget.borderRadius,
         boxShadow: widget.borderRadius != null ? boardShadows : const <BoxShadow>[],
@@ -409,8 +395,9 @@ class _PlayerWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(broadcastRoundGameProvider(roundId, gameId))) {
       case AsyncValue(value: final game?, hasValue: true):
-        final broadcastAnalysisState =
-            ref.watch(broadcastAnalysisControllerProvider(roundId, gameId)).requireValue;
+        final broadcastAnalysisState = ref
+            .watch(broadcastAnalysisControllerProvider(roundId, gameId))
+            .requireValue;
 
         final isCursorOnLiveMove =
             broadcastAnalysisState.currentPath == broadcastAnalysisState.broadcastLivePath;
@@ -457,34 +444,31 @@ class _PlayerWidget extends ConsumerWidget {
                 if (liveClock != null || pastClock != null)
                   Container(
                     height: kAnalysisBoardHeaderOrFooterHeight,
-                    color:
-                        isClockActive
-                            ? ColorScheme.of(context).tertiaryContainer
-                            : (side == sideToMove)
-                            ? ColorScheme.of(context).secondaryContainer
-                            : Colors.transparent,
+                    color: isClockActive
+                        ? ColorScheme.of(context).tertiaryContainer
+                        : (side == sideToMove)
+                        ? ColorScheme.of(context).secondaryContainer
+                        : Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
                       child: Center(
-                        child:
-                            liveClock != null
-                                ? CountdownClockBuilder(
-                                  timeLeft: liveClock,
-                                  active: isClockActive,
-                                  builder:
-                                      (context, timeLeft) => _Clock(
-                                        timeLeft: timeLeft,
-                                        isSideToMove: side == sideToMove,
-                                        isClockActive: isClockActive,
-                                      ),
-                                  tickInterval: const Duration(seconds: 1),
-                                  clockUpdatedAt: game.updatedClockAt,
-                                )
-                                : _Clock(
-                                  timeLeft: pastClock!,
+                        child: liveClock != null
+                            ? CountdownClockBuilder(
+                                timeLeft: liveClock,
+                                active: isClockActive,
+                                builder: (context, timeLeft) => _Clock(
+                                  timeLeft: timeLeft,
                                   isSideToMove: side == sideToMove,
-                                  isClockActive: false,
+                                  isClockActive: isClockActive,
                                 ),
+                                tickInterval: const Duration(seconds: 1),
+                                clockUpdatedAt: game.updatedClockAt,
+                              )
+                            : _Clock(
+                                timeLeft: pastClock!,
+                                isSideToMove: side == sideToMove,
+                                isClockActive: false,
+                              ),
                       ),
                     ),
                   ),
@@ -512,12 +496,11 @@ class _Clock extends StatelessWidget {
     return Text(
       timeLeft.toHoursMinutesSeconds(),
       style: TextStyle(
-        color:
-            isClockActive
-                ? ColorScheme.of(context).onTertiaryContainer
-                : isSideToMove
-                ? ColorScheme.of(context).onSecondaryContainer
-                : null,
+        color: isClockActive
+            ? ColorScheme.of(context).onTertiaryContainer
+            : isSideToMove
+            ? ColorScheme.of(context).onSecondaryContainer
+            : null,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
     );
@@ -629,16 +612,16 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                   label: context.l10n.toggleLocalEvaluation,
                   onTap:
                       analysisPrefs.enableComputerAnalysis &&
-                              snapshot.connectionState != ConnectionState.waiting
-                          ? () async {
-                            toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
-                            try {
-                              await toggleFuture;
-                            } finally {
-                              toggleFuture = null;
-                            }
+                          snapshot.connectionState != ConnectionState.waiting
+                      ? () async {
+                          toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
+                          try {
+                            await toggleFuture;
+                          } finally {
+                            toggleFuture = null;
                           }
-                          : null,
+                        }
+                      : null,
                   icon: CupertinoIcons.gauge,
                   highlighted: broadcastAnalysisState.isEngineAvailable(enginePrefs),
                 );

@@ -221,25 +221,24 @@ class _SectionChoices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final choiceWidgets =
-        choices
-            .mapIndexed((index, choice) {
-              return [
-                Expanded(
-                  child: _ChoiceChip(
-                    key: ValueKey(choice),
-                    label: Text(choice.display, style: Styles.bold),
-                    selected: selected == choice,
-                    onSelected: (bool selected) {
-                      if (selected) onSelected(choice);
-                    },
-                  ),
-                ),
-                if (index < choices.length - 1) spacing,
-              ];
-            })
-            .flattened
-            .toList();
+    final choiceWidgets = choices
+        .mapIndexed((index, choice) {
+          return [
+            Expanded(
+              child: _ChoiceChip(
+                key: ValueKey(choice),
+                label: Text(choice.display, style: Styles.bold),
+                selected: selected == choice,
+                onSelected: (bool selected) {
+                  if (selected) onSelected(choice);
+                },
+              ),
+            ),
+            if (index < choices.length - 1) spacing,
+          ];
+        })
+        .flattened
+        .toList();
 
     if (choices.length < 4) {
       final placeHolders = [
@@ -252,7 +251,11 @@ class _SectionChoices extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [title, const SizedBox(height: 4), Row(children: choiceWidgets)],
+      children: [
+        title,
+        const SizedBox(height: 4),
+        Row(children: choiceWidgets),
+      ],
     );
   }
 }
@@ -273,10 +276,9 @@ class _ChoiceChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color:
-            selected
-                ? ColorScheme.of(context).primaryContainer
-                : ColorScheme.of(context).surfaceContainerLow,
+        color: selected
+            ? ColorScheme.of(context).primaryContainer
+            : ColorScheme.of(context).surfaceContainerLow,
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         border: Border.fromBorderSide(
           BorderSide(
@@ -293,10 +295,9 @@ class _ChoiceChip extends StatelessWidget {
           child: Center(
             child: DefaultTextStyle.merge(
               style: Styles.timeControl.copyWith(
-                color:
-                    selected
-                        ? ColorScheme.of(context).onPrimaryContainer
-                        : ColorScheme.of(context).onSurfaceVariant,
+                color: selected
+                    ? ColorScheme.of(context).onPrimaryContainer
+                    : ColorScheme.of(context).onSurfaceVariant,
               ),
               child: label,
             ),

@@ -86,60 +86,56 @@ class _Body extends ConsumerWidget {
     final onlineBots = ref.watch(onlineBotsProvider);
 
     return onlineBots.when(
-      data:
-          (data) => ListView.separated(
-            itemCount: data.length,
-            separatorBuilder:
-                (context, index) =>
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? const PlatformDivider()
-                        : const SizedBox.shrink(),
-            itemBuilder: (context, index) {
-              final bot = data[index];
-              return ListTile(
-                isThreeLine: true,
-                trailing:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (bot.verified == true) ...[
-                              const Icon(Icons.verified_outlined),
-                              const SizedBox(width: 5),
-                            ],
-                            const Icon(Icons.chevron_right),
-                          ],
-                        )
-                        : bot.verified == true
-                        ? const Icon(Icons.verified_outlined)
-                        : null,
-                title: UserFullNameWidget(
-                  user: bot.lightUser,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
-                subtitle: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _BotRatings(bot: bot),
-                    Text(bot.profile?.bio ?? '', maxLines: 2, overflow: TextOverflow.ellipsis),
-                  ],
-                ),
-                onTap: () {
-                  _challengeBot(bot, context: context, ref: ref);
-                },
-                onLongPress: () {
-                  showModalBottomSheet<void>(
-                    context: context,
-                    useRootNavigator: true,
-                    isDismissible: true,
-                    isScrollControlled: true,
-                    showDragHandle: true,
-                    builder: (context) => UserContextMenu(user: bot),
-                  );
-                },
+      data: (data) => ListView.separated(
+        itemCount: data.length,
+        separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+            ? const PlatformDivider()
+            : const SizedBox.shrink(),
+        itemBuilder: (context, index) {
+          final bot = data[index];
+          return ListTile(
+            isThreeLine: true,
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (bot.verified == true) ...[
+                        const Icon(Icons.verified_outlined),
+                        const SizedBox(width: 5),
+                      ],
+                      const Icon(Icons.chevron_right),
+                    ],
+                  )
+                : bot.verified == true
+                ? const Icon(Icons.verified_outlined)
+                : null,
+            title: UserFullNameWidget(
+              user: bot.lightUser,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            subtitle: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _BotRatings(bot: bot),
+                Text(bot.profile?.bio ?? '', maxLines: 2, overflow: TextOverflow.ellipsis),
+              ],
+            ),
+            onTap: () {
+              _challengeBot(bot, context: context, ref: ref);
+            },
+            onLongPress: () {
+              showModalBottomSheet<void>(
+                context: context,
+                useRootNavigator: true,
+                isDismissible: true,
+                isScrollControlled: true,
+                showDragHandle: true,
+                builder: (context) => UserContextMenu(user: bot),
               );
             },
-          ),
+          );
+        },
+      ),
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       error: (e, s) {
         debugPrint('Could not load bots: $e');
@@ -180,27 +176,26 @@ class _BotRatings extends StatelessWidget {
     return RatingPrefAware(
       orElse: const SizedBox.shrink(),
       child: Row(
-        children:
-            [Perf.blitz, Perf.rapid, Perf.classical].map((perf) {
-              final rating = bot.perfs[perf]?.rating;
-              final nbGames = bot.perfs[perf]?.games ?? 0;
-              return Padding(
-                padding: const EdgeInsets.only(right: 16.0, top: 4.0, bottom: 4.0),
-                child: Row(
-                  children: [
-                    Icon(perf.icon, size: 16),
-                    const SizedBox(width: 4.0),
-                    if (rating != null && nbGames > 0)
-                      Text(
-                        '$rating',
-                        style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-                      )
-                    else
-                      const Text('  -  '),
-                  ],
-                ),
-              );
-            }).toList(),
+        children: [Perf.blitz, Perf.rapid, Perf.classical].map((perf) {
+          final rating = bot.perfs[perf]?.rating;
+          final nbGames = bot.perfs[perf]?.games ?? 0;
+          return Padding(
+            padding: const EdgeInsets.only(right: 16.0, top: 4.0, bottom: 4.0),
+            child: Row(
+              children: [
+                Icon(perf.icon, size: 16),
+                const SizedBox(width: 4.0),
+                if (rating != null && nbGames > 0)
+                  Text(
+                    '$rating',
+                    style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                  )
+                else
+                  const Text('  -  '),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }

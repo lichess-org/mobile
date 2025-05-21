@@ -74,17 +74,16 @@ class _TvScreenState extends ConsumerState<TvScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title:
-              widget.channel?.label != null
-                  ? Text('${widget.channel!.label} TV')
-                  : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      UserFullNameWidget(user: widget.user),
-                      const SizedBox(width: 4.0),
-                      const Icon(Icons.live_tv),
-                    ],
-                  ),
+          title: widget.channel?.label != null
+              ? Text('${widget.channel!.label} TV')
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    UserFullNameWidget(user: widget.user),
+                    const SizedBox(width: 4.0),
+                    const Icon(Icons.live_tv),
+                  ],
+                ),
           actions: const [ToggleSoundButton()],
         ),
         body: Column(
@@ -99,45 +98,41 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     final blackPlayerWidget = GamePlayer(
                       game: game.copyWith(black: game.black.setOnGame(true)),
                       side: Side.black,
-                      clock:
-                          gameState.game.clock != null
-                              ? CountdownClockBuilder(
-                                key: _blackClockKey,
-                                timeLeft: gameState.game.clock!.black,
-                                delay:
-                                    gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
-                                clockUpdatedAt: gameState.game.clock!.at,
-                                active: gameState.activeClockSide == Side.black,
-                                builder: (context, timeLeft) {
-                                  return Clock(
-                                    timeLeft: timeLeft,
-                                    active: gameState.activeClockSide == Side.black,
-                                  );
-                                },
-                              )
-                              : null,
+                      clock: gameState.game.clock != null
+                          ? CountdownClockBuilder(
+                              key: _blackClockKey,
+                              timeLeft: gameState.game.clock!.black,
+                              delay: gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
+                              clockUpdatedAt: gameState.game.clock!.at,
+                              active: gameState.activeClockSide == Side.black,
+                              builder: (context, timeLeft) {
+                                return Clock(
+                                  timeLeft: timeLeft,
+                                  active: gameState.activeClockSide == Side.black,
+                                );
+                              },
+                            )
+                          : null,
                       materialDiff: game.lastMaterialDiffAt(Side.black),
                     );
                     final whitePlayerWidget = GamePlayer(
                       game: game.copyWith(white: game.white.setOnGame(true)),
                       side: Side.white,
-                      clock:
-                          gameState.game.clock != null
-                              ? CountdownClockBuilder(
-                                key: _whiteClockKey,
-                                timeLeft: gameState.game.clock!.white,
-                                clockUpdatedAt: gameState.game.clock!.at,
-                                delay:
-                                    gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
-                                active: gameState.activeClockSide == Side.white,
-                                builder: (context, timeLeft) {
-                                  return Clock(
-                                    timeLeft: timeLeft,
-                                    active: gameState.activeClockSide == Side.white,
-                                  );
-                                },
-                              )
-                              : null,
+                      clock: gameState.game.clock != null
+                          ? CountdownClockBuilder(
+                              key: _whiteClockKey,
+                              timeLeft: gameState.game.clock!.white,
+                              clockUpdatedAt: gameState.game.clock!.at,
+                              delay: gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
+                              active: gameState.activeClockSide == Side.white,
+                              builder: (context, timeLeft) {
+                                return Clock(
+                                  timeLeft: timeLeft,
+                                  active: gameState.activeClockSide == Side.white,
+                                );
+                              },
+                            )
+                          : null,
                       materialDiff: game.lastMaterialDiffAt(Side.white),
                     );
 
@@ -147,29 +142,26 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       boardSettingsOverrides: const BoardSettingsOverrides(
                         animationDuration: Duration.zero,
                       ),
-                      topTable:
-                          gameState.orientation == Side.white
-                              ? blackPlayerWidget
-                              : whitePlayerWidget,
-                      bottomTable:
-                          gameState.orientation == Side.white
-                              ? whitePlayerWidget
-                              : blackPlayerWidget,
+                      topTable: gameState.orientation == Side.white
+                          ? blackPlayerWidget
+                          : whitePlayerWidget,
+                      bottomTable: gameState.orientation == Side.white
+                          ? whitePlayerWidget
+                          : blackPlayerWidget,
                       moves: game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false),
                       currentMoveIndex: gameState.stepCursor,
                       lastMove: game.moveAt(gameState.stepCursor),
                     );
                   },
-                  loading:
-                      () => const Shimmer(
-                        child: BoardTable(
-                          topTable: LoadingPlayerWidget(),
-                          bottomTable: LoadingPlayerWidget(),
-                          orientation: Side.white,
-                          fen: kEmptyFEN,
-                          moves: [],
-                        ),
-                      ),
+                  loading: () => const Shimmer(
+                    child: BoardTable(
+                      topTable: LoadingPlayerWidget(),
+                      bottomTable: LoadingPlayerWidget(),
+                      orientation: Side.white,
+                      fen: kEmptyFEN,
+                      moves: [],
+                    ),
+                  ),
                   error: (err, stackTrace) {
                     debugPrint('SEVERE: [TvScreen] could not load stream; $err\n$stackTrace');
                     return const BoardTable(
@@ -192,32 +184,30 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   icon: CupertinoIcons.arrow_2_squarepath,
                 ),
                 RepeatButton(
-                  onLongPress:
-                      ref.read(_tvGameCtrl.notifier).canGoBack() ? () => _moveBackward(ref) : null,
+                  onLongPress: ref.read(_tvGameCtrl.notifier).canGoBack()
+                      ? () => _moveBackward(ref)
+                      : null,
                   child: BottomBarButton(
                     key: const ValueKey('goto-previous'),
-                    onTap:
-                        ref.read(_tvGameCtrl.notifier).canGoBack()
-                            ? () => _moveBackward(ref)
-                            : null,
+                    onTap: ref.read(_tvGameCtrl.notifier).canGoBack()
+                        ? () => _moveBackward(ref)
+                        : null,
                     label: 'Previous',
                     icon: CupertinoIcons.chevron_back,
                     showTooltip: false,
                   ),
                 ),
                 RepeatButton(
-                  onLongPress:
-                      ref.read(_tvGameCtrl.notifier).canGoForward()
-                          ? () => _moveForward(ref)
-                          : null,
+                  onLongPress: ref.read(_tvGameCtrl.notifier).canGoForward()
+                      ? () => _moveForward(ref)
+                      : null,
                   child: BottomBarButton(
                     key: const ValueKey('goto-next'),
                     icon: CupertinoIcons.chevron_forward,
                     label: context.l10n.next,
-                    onTap:
-                        ref.read(_tvGameCtrl.notifier).canGoForward()
-                            ? () => _moveForward(ref)
-                            : null,
+                    onTap: ref.read(_tvGameCtrl.notifier).canGoForward()
+                        ? () => _moveForward(ref)
+                        : null,
                     showTooltip: false,
                   ),
                 ),

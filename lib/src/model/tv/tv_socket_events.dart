@@ -46,12 +46,11 @@ FinishSocketEvent _finishEventFromPick(RequiredPick pick) {
   final winner = pick('win').asStringOrNull();
   return FinishSocketEvent(
     id: pick('id').asGameIdOrThrow(),
-    winner:
-        winner == 'w'
-            ? Side.white
-            : winner == 'b'
-            ? Side.black
-            : null,
+    winner: winner == 'w'
+        ? Side.white
+        : winner == 'b'
+        ? Side.black
+        : null,
   );
 }
 

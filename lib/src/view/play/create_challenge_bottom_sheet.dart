@@ -88,8 +88,8 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                       ChallengeTimeControlType.correspondence,
                     ],
                     selectedItem: preferences.timeControl,
-                    labelBuilder:
-                        (ChallengeTimeControlType timeControl) => Text(switch (timeControl) {
+                    labelBuilder: (ChallengeTimeControlType timeControl) =>
+                        Text(switch (timeControl) {
                           ChallengeTimeControlType.clock => context.l10n.realTime,
                           ChallengeTimeControlType.correspondence => context.l10n.correspondence,
                           ChallengeTimeControlType.unlimited => context.l10n.unlimited,
@@ -303,10 +303,9 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: FilledButton(
-                    onPressed:
-                        timeControl == ChallengeTimeControlType.clock
-                            ? isValidTimeControl && isValidPosition
-                                ? () {
+                    onPressed: timeControl == ChallengeTimeControlType.clock
+                        ? isValidTimeControl && isValidPosition
+                              ? () {
                                   Navigator.of(
                                     context,
                                   ).popUntil((route) => route is! ModalBottomSheetRoute);
@@ -322,36 +321,36 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                     ),
                                   );
                                 }
-                                : null
-                            : timeControl == ChallengeTimeControlType.correspondence &&
-                                snapshot.connectionState != ConnectionState.waiting
-                            ? () async {
-                              final createGameService = ref.read(createGameServiceProvider);
-                              _pendingCorrespondenceChallenge = createGameService
-                                  .newCorrespondenceChallenge(
-                                    preferences.makeRequest(
-                                      widget.user,
-                                      preferences.variant != Variant.fromPosition
-                                          ? null
-                                          : fromPositionFenInput,
-                                    ),
-                                  );
+                              : null
+                        : timeControl == ChallengeTimeControlType.correspondence &&
+                              snapshot.connectionState != ConnectionState.waiting
+                        ? () async {
+                            final createGameService = ref.read(createGameServiceProvider);
+                            _pendingCorrespondenceChallenge = createGameService
+                                .newCorrespondenceChallenge(
+                                  preferences.makeRequest(
+                                    widget.user,
+                                    preferences.variant != Variant.fromPosition
+                                        ? null
+                                        : fromPositionFenInput,
+                                  ),
+                                );
 
-                              await _pendingCorrespondenceChallenge!;
+                            await _pendingCorrespondenceChallenge!;
 
-                              if (!context.mounted) return;
+                            if (!context.mounted) return;
 
-                              Navigator.of(
-                                context,
-                              ).popUntil((route) => route is! ModalBottomSheetRoute);
+                            Navigator.of(
+                              context,
+                            ).popUntil((route) => route is! ModalBottomSheetRoute);
 
-                              showSnackBar(
-                                context,
-                                'Challenge created. You can access it from the home tab.',
-                                type: SnackBarType.success,
-                              );
-                            }
-                            : null,
+                            showSnackBar(
+                              context,
+                              'Challenge created. You can access it from the home tab.',
+                              type: SnackBarType.success,
+                            );
+                          }
+                        : null,
                     child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
                   ),
                 );

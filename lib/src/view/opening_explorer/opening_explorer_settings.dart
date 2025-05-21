@@ -27,10 +27,9 @@ class OpeningExplorerSettings extends ConsumerWidget {
                 (key) => ChoiceChip(
                   label: Text(key),
                   selected: prefs.masterDb.sinceYear == MasterDb.datesMap[key],
-                  onSelected:
-                      (_) => ref
-                          .read(openingExplorerPreferencesProvider.notifier)
-                          .setMasterDbSince(MasterDb.datesMap[key]!),
+                  onSelected: (_) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .setMasterDbSince(MasterDb.datesMap[key]!),
                 ),
               )
               .toList(growable: false),
@@ -52,10 +51,9 @@ class OpeningExplorerSettings extends ConsumerWidget {
                   ),
                   tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).title,
                   selected: prefs.lichessDb.speeds.contains(speed),
-                  onSelected:
-                      (_) => ref
-                          .read(openingExplorerPreferencesProvider.notifier)
-                          .toggleLichessDbSpeed(speed),
+                  onSelected: (_) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .toggleLichessDbSpeed(speed),
                 ),
               )
               .toList(growable: false),
@@ -69,17 +67,15 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .map(
                 (rating) => FilterChip(
                   label: Text(rating.toString()),
-                  tooltip:
-                      rating == 400
-                          ? '400-1000'
-                          : rating == 2500
-                          ? '2500+'
-                          : '$rating-${rating + 200}',
+                  tooltip: rating == 400
+                      ? '400-1000'
+                      : rating == 2500
+                      ? '2500+'
+                      : '$rating-${rating + 200}',
                   selected: prefs.lichessDb.ratings.contains(rating),
-                  onSelected:
-                      (_) => ref
-                          .read(openingExplorerPreferencesProvider.notifier)
-                          .toggleLichessDbRating(rating),
+                  onSelected: (_) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .toggleLichessDbRating(rating),
                 ),
               )
               .toList(growable: false),
@@ -94,10 +90,9 @@ class OpeningExplorerSettings extends ConsumerWidget {
                 (key) => ChoiceChip(
                   label: Text(key),
                   selected: prefs.lichessDb.since == LichessDb.datesMap[key],
-                  onSelected:
-                      (_) => ref
-                          .read(openingExplorerPreferencesProvider.notifier)
-                          .setLichessDbSince(LichessDb.datesMap[key]!),
+                  onSelected: (_) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .setLichessDbSince(LichessDb.datesMap[key]!),
                 ),
               )
               .toList(growable: false),
@@ -112,20 +107,18 @@ class OpeningExplorerSettings extends ConsumerWidget {
             style: const TextStyle(fontWeight: FontWeight.normal),
             children: [
               TextSpan(
-                recognizer:
-                    TapGestureRecognizer()
-                      ..onTap =
-                          () => Navigator.of(context).push(
-                            SearchScreen.buildRoute(
-                              context,
-                              onUserTap: (user) {
-                                ref
-                                    .read(openingExplorerPreferencesProvider.notifier)
-                                    .setPlayerDbUsernameOrId(user.name);
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => Navigator.of(context).push(
+                    SearchScreen.buildRoute(
+                      context,
+                      onUserTap: (user) {
+                        ref
+                            .read(openingExplorerPreferencesProvider.notifier)
+                            .setPlayerDbUsernameOrId(user.name);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -149,10 +142,8 @@ class OpeningExplorerSettings extends ConsumerWidget {
                     Side.black => const Text('Black'),
                   },
                   selected: prefs.playerDb.side == side,
-                  onSelected:
-                      (_) => ref
-                          .read(openingExplorerPreferencesProvider.notifier)
-                          .setPlayerDbSide(side),
+                  onSelected: (_) =>
+                      ref.read(openingExplorerPreferencesProvider.notifier).setPlayerDbSide(side),
                 ),
               )
               .toList(growable: false),
@@ -171,10 +162,9 @@ class OpeningExplorerSettings extends ConsumerWidget {
                   ),
                   tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).title,
                   selected: prefs.playerDb.speeds.contains(speed),
-                  onSelected:
-                      (_) => ref
-                          .read(openingExplorerPreferencesProvider.notifier)
-                          .togglePlayerDbSpeed(speed),
+                  onSelected: (_) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .togglePlayerDbSpeed(speed),
                 ),
               )
               .toList(growable: false),
@@ -192,10 +182,9 @@ class OpeningExplorerSettings extends ConsumerWidget {
                     GameMode.rated => 'Rated',
                   }),
                   selected: prefs.playerDb.gameModes.contains(gameMode),
-                  onSelected:
-                      (_) => ref
-                          .read(openingExplorerPreferencesProvider.notifier)
-                          .togglePlayerDbGameMode(gameMode),
+                  onSelected: (_) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .togglePlayerDbGameMode(gameMode),
                 ),
               )
               .toList(growable: false),
@@ -210,10 +199,9 @@ class OpeningExplorerSettings extends ConsumerWidget {
                 (key) => ChoiceChip(
                   label: Text(key),
                   selected: prefs.playerDb.since == PlayerDb.datesMap[key],
-                  onSelected:
-                      (_) => ref
-                          .read(openingExplorerPreferencesProvider.notifier)
-                          .setPlayerDbSince(PlayerDb.datesMap[key]!),
+                  onSelected: (_) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .setPlayerDbSince(PlayerDb.datesMap[key]!),
                 ),
               )
               .toList(growable: false),
@@ -231,26 +219,23 @@ class OpeningExplorerSettings extends ConsumerWidget {
               ChoiceChip(
                 label: const Text('Masters'),
                 selected: prefs.db == OpeningDatabase.master,
-                onSelected:
-                    (_) => ref
-                        .read(openingExplorerPreferencesProvider.notifier)
-                        .setDatabase(OpeningDatabase.master),
+                onSelected: (_) => ref
+                    .read(openingExplorerPreferencesProvider.notifier)
+                    .setDatabase(OpeningDatabase.master),
               ),
               ChoiceChip(
                 label: const Text('Lichess'),
                 selected: prefs.db == OpeningDatabase.lichess,
-                onSelected:
-                    (_) => ref
-                        .read(openingExplorerPreferencesProvider.notifier)
-                        .setDatabase(OpeningDatabase.lichess),
+                onSelected: (_) => ref
+                    .read(openingExplorerPreferencesProvider.notifier)
+                    .setDatabase(OpeningDatabase.lichess),
               ),
               ChoiceChip(
                 label: Text(context.l10n.player),
                 selected: prefs.db == OpeningDatabase.player,
-                onSelected:
-                    (_) => ref
-                        .read(openingExplorerPreferencesProvider.notifier)
-                        .setDatabase(OpeningDatabase.player),
+                onSelected: (_) => ref
+                    .read(openingExplorerPreferencesProvider.notifier)
+                    .setDatabase(OpeningDatabase.player),
               ),
             ],
           ),

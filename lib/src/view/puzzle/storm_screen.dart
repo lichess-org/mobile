@@ -123,15 +123,14 @@ class _Body extends ConsumerWidget {
         final NavigatorState navigator = Navigator.of(context);
         final shouldPop = await showAdaptiveDialog<bool>(
           context: context,
-          builder:
-              (context) => YesNoDialog(
-                title: Text(context.l10n.mobileAreYouSure),
-                content: Text(context.l10n.mobilePuzzleStormConfirmEndRun),
-                onYes: () {
-                  return Navigator.of(context).pop(true);
-                },
-                onNo: () => Navigator.of(context).pop(false),
-              ),
+          builder: (context) => YesNoDialog(
+            title: Text(context.l10n.mobileAreYouSure),
+            content: Text(context.l10n.mobilePuzzleStormConfirmEndRun),
+            onYes: () {
+              return Navigator.of(context).pop(true);
+            },
+            onNo: () => Navigator.of(context).pop(false),
+          ),
         );
         if (shouldPop ?? false) {
           navigator.pop();
@@ -153,18 +152,17 @@ class _Body extends ConsumerWidget {
                     variant: Variant.standard,
                     playerSide:
                         !stormState.firstMovePlayed ||
-                                stormState.mode == StormMode.ended ||
-                                stormState.position.isGameOver
-                            ? PlayerSide.none
-                            : stormState.pov == Side.white
-                            ? PlayerSide.white
-                            : PlayerSide.black,
+                            stormState.mode == StormMode.ended ||
+                            stormState.position.isGameOver
+                        ? PlayerSide.none
+                        : stormState.pov == Side.white
+                        ? PlayerSide.white
+                        : PlayerSide.black,
                     promotionMove: stormState.promotionMove,
-                    onMove:
-                        (move, {isDrop, captured}) =>
-                            ref.read(ctrlProvider.notifier).onUserMove(move),
-                    onPromotionSelection:
-                        (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
+                    onMove: (move, {isDrop, captured}) =>
+                        ref.read(ctrlProvider.notifier).onUserMove(move),
+                    onPromotionSelection: (role) =>
+                        ref.read(ctrlProvider.notifier).onPromotionSelection(role),
                     premovable: null,
                   ),
                   topTable: _TopTable(data),
@@ -180,12 +178,12 @@ class _Body extends ConsumerWidget {
 
     return Theme.of(context).platform == TargetPlatform.android
         ? AndroidGesturesExclusionWidget(
-          boardKey: boardKey,
-          shouldExcludeGesturesOnFocusGained:
-              () => stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
-          shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
-          child: content,
-        )
+            boardKey: boardKey,
+            shouldExcludeGesturesOnFocusGained: () =>
+                stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
+            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+            child: content,
+          )
         : content;
   }
 }
@@ -210,7 +208,10 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
                 TextSpan(
                   text: 'Each correct ',
                   children: [
-                    TextSpan(text: 'move', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(
+                      text: 'move',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     TextSpan(
                       text:
                           ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
@@ -380,101 +381,92 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
     );
     return AnimatedBuilder(
       animation: _controller,
-      builder:
-          (context, child) => LayoutBuilder(
-            builder: (context, constraints) {
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          widget.combo.current.toString(),
-                          style: const TextStyle(
-                            fontSize: 26,
-                            height: 1.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(context.l10n.stormCombo),
-                      ],
+      builder: (context, child) => LayoutBuilder(
+        builder: (context, constraints) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.combo.current.toString(),
+                      style: const TextStyle(
+                        fontSize: 26,
+                        height: 1.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: constraints.maxWidth * 0.65,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 25,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              boxShadow:
-                                  _controller.value == 1.0
-                                      ? [
-                                        BoxShadow(
-                                          color: indicatorColor.withValues(alpha: 0.3),
-                                          blurRadius: 10.0,
-                                          spreadRadius: 2.0,
-                                        ),
-                                      ]
-                                      : [],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-                              child: LinearProgressIndicator(
-                                value: _controller.value,
-                                valueColor: AlwaysStoppedAnimation<Color>(indicatorColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children:
-                              StormCombo.levelBonus.mapIndexed((index, level) {
-                                final isCurrentLevel = index < lvl;
-                                return AnimatedContainer(
-                                  alignment: Alignment.center,
-                                  curve: Curves.easeIn,
-                                  duration: const Duration(milliseconds: 1000),
-                                  width: 28 * MediaQuery.textScalerOf(context).scale(14) / 14,
-                                  height: 24 * MediaQuery.textScalerOf(context).scale(14) / 14,
-                                  decoration:
-                                      isCurrentLevel
-                                          ? BoxDecoration(
-                                            color: comboShades[index],
-                                            borderRadius: const BorderRadius.all(
-                                              Radius.circular(3.0),
-                                            ),
-                                          )
-                                          : null,
-                                  child: Text(
-                                    '${level}s',
-                                    style: TextStyle(
-                                      color:
-                                          isCurrentLevel
-                                              ? ColorScheme.of(context).onSecondary
-                                              : null,
-                                    ),
+                    Text(context.l10n.stormCombo),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: constraints.maxWidth * 0.65,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 25,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: _controller.value == 1.0
+                              ? [
+                                  BoxShadow(
+                                    color: indicatorColor.withValues(alpha: 0.3),
+                                    blurRadius: 10.0,
+                                    spreadRadius: 2.0,
                                   ),
-                                );
-                              }).toList(),
+                                ]
+                              : [],
                         ),
-                      ],
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                          child: LinearProgressIndicator(
+                            value: _controller.value,
+                            valueColor: AlwaysStoppedAnimation<Color>(indicatorColor),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 10.0),
-                ],
-              );
-            },
-          ),
+                    const SizedBox(height: 4),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: StormCombo.levelBonus.mapIndexed((index, level) {
+                        final isCurrentLevel = index < lvl;
+                        return AnimatedContainer(
+                          alignment: Alignment.center,
+                          curve: Curves.easeIn,
+                          duration: const Duration(milliseconds: 1000),
+                          width: 28 * MediaQuery.textScalerOf(context).scale(14) / 14,
+                          height: 24 * MediaQuery.textScalerOf(context).scale(14) / 14,
+                          decoration: isCurrentLevel
+                              ? BoxDecoration(
+                                  color: comboShades[index],
+                                  borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                                )
+                              : null,
+                          child: Text(
+                            '${level}s',
+                            style: TextStyle(
+                              color: isCurrentLevel ? ColorScheme.of(context).onSecondary : null,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10.0),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -523,14 +515,13 @@ class _BottomBar extends ConsumerWidget {
             icon: LichessIcons.flag,
             label: context.l10n.stormEndRun.split('(').first.trimRight(),
             showLabel: true,
-            onTap:
-                stormState.puzzleIndex >= 1
-                    ? () {
-                      if (stormState.clock.startAt != null) {
-                        stormState.clock.sendEnd();
-                      }
+            onTap: stormState.puzzleIndex >= 1
+                ? () {
+                    if (stormState.clock.startAt != null) {
+                      stormState.clock.sendEnd();
                     }
-                    : null,
+                  }
+                : null,
           ),
         if (stormState.mode == StormMode.ended && stormState.stats != null)
           BottomBarButton(
@@ -581,29 +572,24 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
   @override
   Widget build(BuildContext context) {
     final puzzleList = widget.stats.historyFilter(filter);
-    final highScoreWidgets =
-        widget.stats.newHigh != null
-            ? [
-              const SizedBox(height: 16),
-              Card(
-                margin: Styles.bodySectionPadding,
-                child: ListTile(
-                  leading: Icon(
-                    LichessIcons.storm,
-                    size: 46,
-                    color: ColorScheme.of(context).primary,
-                  ),
-                  title: Text(
-                    newHighTitle(context, widget.stats.newHigh!),
-                    style: Styles.sectionTitle,
-                  ),
-                  subtitle: Text(
-                    context.l10n.stormPreviousHighscoreWasX(widget.stats.newHigh!.prev.toString()),
-                  ),
+    final highScoreWidgets = widget.stats.newHigh != null
+        ? [
+            const SizedBox(height: 16),
+            Card(
+              margin: Styles.bodySectionPadding,
+              child: ListTile(
+                leading: Icon(LichessIcons.storm, size: 46, color: ColorScheme.of(context).primary),
+                title: Text(
+                  newHighTitle(context, widget.stats.newHigh!),
+                  style: Styles.sectionTitle,
+                ),
+                subtitle: Text(
+                  context.l10n.stormPreviousHighscoreWasX(widget.stats.newHigh!.prev.toString()),
                 ),
               ),
-            ]
-            : null;
+            ),
+          ]
+        : null;
 
     return SafeArea(
       child: ListView(
@@ -653,8 +639,8 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                       child: SemanticIconButton(
                         semanticsLabel: context.l10n.stormFailedPuzzles,
                         icon: const Icon(Icons.close),
-                        onPressed:
-                            () => setState(() => filter = filter.copyWith(failed: !filter.failed)),
+                        onPressed: () =>
+                            setState(() => filter = filter.copyWith(failed: !filter.failed)),
                         color: filter.failed ? ColorScheme.of(context).primary : null,
                       ),
                     ),
@@ -664,8 +650,8 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                       child: SemanticIconButton(
                         semanticsLabel: context.l10n.stormSlowPuzzles,
                         icon: const Icon(Icons.hourglass_bottom),
-                        onPressed:
-                            () => setState(() => filter = filter.copyWith(slow: !filter.slow)),
+                        onPressed: () =>
+                            setState(() => filter = filter.copyWith(slow: !filter.slow)),
                         color: filter.slow ? ColorScheme.of(context).primary : null,
                       ),
                     ),

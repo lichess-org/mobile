@@ -37,13 +37,12 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
     return ongoingGames.maybeWhen(
-      data:
-          (data) => ListView(
-            children: [
-              const SizedBox(height: 8.0),
-              ...data.map((game) => OngoingGamePreview(game: game)),
-            ],
-          ),
+      data: (data) => ListView(
+        children: [
+          const SizedBox(height: 8.0),
+          ...data.map((game) => OngoingGamePreview(game: game)),
+        ],
+      ),
       orElse: () => const SizedBox.shrink(),
     );
   }

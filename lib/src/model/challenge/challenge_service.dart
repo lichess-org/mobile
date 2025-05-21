@@ -42,14 +42,13 @@ class ChallengeService {
   StreamSubscription<(NotificationResponse, LocalNotification)>? _notificationResponseSubscription;
 
   /// The stream of challenge events that are received from the server.
-  static Stream<ChallengesList> get stream =>
-      socketGlobalStream.map((event) {
-        if (event.topic != 'challenges') return null;
-        final listPick = pick(event.data).required();
-        final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
-        final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
-        return (inward: inward.lock, outward: outward.lock);
-      }).whereNotNull();
+  static Stream<ChallengesList> get stream => socketGlobalStream.map((event) {
+    if (event.topic != 'challenges') return null;
+    final listPick = pick(event.data).required();
+    final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
+    final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
+    return (inward: inward.lock, outward: outward.lock);
+  }).whereNotNull();
 
   /// Start listening to events.
   void start() {
@@ -134,18 +133,17 @@ class ChallengeService {
         if (context == null || !context.mounted) break;
         showAdaptiveActionSheet<void>(
           context: context,
-          actions:
-              ChallengeDeclineReason.values
-                  .map(
-                    (reason) => BottomSheetAction(
-                      makeLabel: (context) => Text(reason.label(context.l10n)),
-                      onPressed: () {
-                        final repo = ref.read(challengeRepositoryProvider);
-                        repo.decline(challengeId, reason: reason);
-                      },
-                    ),
-                  )
-                  .toList(),
+          actions: ChallengeDeclineReason.values
+              .map(
+                (reason) => BottomSheetAction(
+                  makeLabel: (context) => Text(reason.label(context.l10n)),
+                  onPressed: () {
+                    final repo = ref.read(challengeRepositoryProvider);
+                    repo.decline(challengeId, reason: reason);
+                  },
+                ),
+              )
+              .toList(),
         );
 
       case null:

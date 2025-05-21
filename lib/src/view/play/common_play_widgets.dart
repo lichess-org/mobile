@@ -45,92 +45,88 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
     final isRatingRangeAvailable = widget.perf.provisional != true;
     return Opacity(
       opacity: isRatingRangeAvailable ? 1 : 0.5,
-      child:
-          isRatingRangeAvailable
-              ? ListTile(
-                title: Text(context.l10n.ratingRange),
-                subtitle: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Flexible(
-                      child: NonLinearSlider(
-                        value: _subtract,
-                        values: kSubtractingRatingRange,
-                        onChange: (num value) {
-                          setState(() {
-                            _subtract = value.toInt();
-                          });
-                        },
-                        onChangeEnd:
-                            isRatingRangeAvailable
-                                ? (num value) {
-                                  widget.onRatingDeltaChange(
-                                    value.toInt(),
-                                    value == 0 && _add == 0 ? kAddingRatingRange[1] : _add,
-                                  );
-                                }
-                                : null,
+      child: isRatingRangeAvailable
+          ? ListTile(
+              title: Text(context.l10n.ratingRange),
+              subtitle: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Flexible(
+                    child: NonLinearSlider(
+                      value: _subtract,
+                      values: kSubtractingRatingRange,
+                      onChange: (num value) {
+                        setState(() {
+                          _subtract = value.toInt();
+                        });
+                      },
+                      onChangeEnd: isRatingRangeAvailable
+                          ? (num value) {
+                              widget.onRatingDeltaChange(
+                                value.toInt(),
+                                value == 0 && _add == 0 ? kAddingRatingRange[1] : _add,
+                              );
+                            }
+                          : null,
+                    ),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 44.0,
+                        child: Center(child: Text('${_subtract == 0 ? '-' : ''}$_subtract')),
                       ),
+                      const SizedBox(width: 8.0),
+                      const Text('/'),
+                      const SizedBox(width: 8.0),
+                      SizedBox(width: 44.0, child: Center(child: Text('+$_add'))),
+                    ],
+                  ),
+                  Flexible(
+                    child: NonLinearSlider(
+                      value: _add,
+                      values: kAddingRatingRange,
+                      onChange: (num value) {
+                        setState(() {
+                          _add = value.toInt();
+                        });
+                      },
+                      onChangeEnd: isRatingRangeAvailable
+                          ? (num value) {
+                              widget.onRatingDeltaChange(
+                                value == 0 && _subtract == 0
+                                    ? kSubtractingRatingRange[kSubtractingRatingRange.length - 2]
+                                    : _subtract,
+                                value.toInt(),
+                              );
+                            }
+                          : null,
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          width: 44.0,
-                          child: Center(child: Text('${_subtract == 0 ? '-' : ''}$_subtract')),
-                        ),
-                        const SizedBox(width: 8.0),
-                        const Text('/'),
-                        const SizedBox(width: 8.0),
-                        SizedBox(width: 44.0, child: Center(child: Text('+$_add'))),
-                      ],
-                    ),
-                    Flexible(
-                      child: NonLinearSlider(
-                        value: _add,
-                        values: kAddingRatingRange,
-                        onChange: (num value) {
-                          setState(() {
-                            _add = value.toInt();
-                          });
-                        },
-                        onChangeEnd:
-                            isRatingRangeAvailable
-                                ? (num value) {
-                                  widget.onRatingDeltaChange(
-                                    value == 0 && _subtract == 0
-                                        ? kSubtractingRatingRange[kSubtractingRatingRange.length -
-                                            2]
-                                        : _subtract,
-                                    value.toInt(),
-                                  );
-                                }
-                                : null,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-              : ListTile(
-                title: Text(context.l10n.ratingRange),
-                subtitle: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Flexible(child: NonLinearSlider(value: -500, values: kSubtractingRatingRange)),
-                    const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(width: 44.0, child: Center(child: Text('-500'))),
-                        SizedBox(width: 8.0),
-                        Text('/'),
-                        SizedBox(width: 8.0),
-                        SizedBox(width: 44.0, child: Center(child: Text('+500'))),
-                      ],
-                    ),
-                    Flexible(child: NonLinearSlider(value: 500, values: kAddingRatingRange)),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            )
+          : ListTile(
+              title: Text(context.l10n.ratingRange),
+              subtitle: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Flexible(child: NonLinearSlider(value: -500, values: kSubtractingRatingRange)),
+                  const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(width: 44.0, child: Center(child: Text('-500'))),
+                      SizedBox(width: 8.0),
+                      Text('/'),
+                      SizedBox(width: 8.0),
+                      SizedBox(width: 44.0, child: Center(child: Text('+500'))),
+                    ],
+                  ),
+                  Flexible(child: NonLinearSlider(value: 500, values: kAddingRatingRange)),
+                ],
+              ),
+            ),
     );
   }
 }

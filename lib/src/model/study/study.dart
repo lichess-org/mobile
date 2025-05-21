@@ -79,10 +79,9 @@ Study _studyFromPick(RequiredPick pick) {
       sticky: study('features', 'sticky').asBoolOrFalse(),
     ),
     topics: study('topics').asListOrThrow((pick) => pick.asStringOrThrow()).lock,
-    chapters:
-        study(
-          'chapters',
-        ).asListOrThrow((pick) => StudyChapterMeta.fromJson(pick.asMapOrThrow())).lock,
+    chapters: study(
+      'chapters',
+    ).asListOrThrow((pick) => StudyChapterMeta.fromJson(pick.asMapOrThrow())).lock,
     chapter: StudyChapter.fromJson(study('chapter').asMapOrThrow()),
     hints: hints.lock,
     deviationComments: deviationComments.lock,

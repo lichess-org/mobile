@@ -49,11 +49,10 @@ class PuzzleSession extends _$PuzzleSession {
   Future<void> setRatingDiffs(Iterable<PuzzleRound> rounds) async {
     await _update((d) {
       final newState = d.copyWith(
-        attempts:
-            d.attempts.map((a) {
-              final round = rounds.firstWhereOrNull((r) => r.id == a.id);
-              return round != null ? a.copyWith(ratingDiff: round.ratingDiff) : a;
-            }).toIList(),
+        attempts: d.attempts.map((a) {
+          final round = rounds.firstWhereOrNull((r) => r.id == a.id);
+          return round != null ? a.copyWith(ratingDiff: round.ratingDiff) : a;
+        }).toIList(),
       );
       state = newState;
       return newState;

@@ -34,20 +34,20 @@ void openGameScreen(
     Navigator.of(context, rootNavigator: true).push(
       game.fullId != null
           ? GameScreen.buildRoute(
-            context,
-            initialGameId: game.fullId,
-            loadingOrientation: orientation,
-            loadingFen: loadingFen,
-            loadingLastMove: loadingLastMove,
-            lastMoveAt: lastMoveAt,
-            gameListContext: gameListContext,
-          )
+              context,
+              initialGameId: game.fullId,
+              loadingOrientation: orientation,
+              loadingFen: loadingFen,
+              loadingLastMove: loadingLastMove,
+              lastMoveAt: lastMoveAt,
+              gameListContext: gameListContext,
+            )
           : ArchivedGameScreen.buildRoute(
-            context,
-            gameData: game,
-            orientation: orientation,
-            gameListContext: gameListContext,
-          ),
+              context,
+              gameData: game,
+              orientation: orientation,
+              gameListContext: gameListContext,
+            ),
     );
   } else {
     showSnackBar(context, 'This variant is not supported yet.', type: SnackBarType.info);
@@ -97,37 +97,36 @@ class _GameBookmarkContextMenuActionState extends ConsumerState<GameBookmarkCont
           dismissOnPress: false,
           icon: Icon(_bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined),
           label: _bookmarked ? 'Unbookmark' : 'Bookmark',
-          onPressed:
-              snapshot.connectionState == ConnectionState.waiting
-                  ? null
-                  : () async {
-                    try {
-                      final future = widget.onToggleBookmark();
+          onPressed: snapshot.connectionState == ConnectionState.waiting
+              ? null
+              : () async {
+                  try {
+                    final future = widget.onToggleBookmark();
+                    setState(() {
+                      _pendingBookmarkAction = future;
+                    });
+                    await future;
+                    if (context.mounted) {
                       setState(() {
-                        _pendingBookmarkAction = future;
+                        _bookmarked = !_bookmarked;
                       });
-                      await future;
-                      if (context.mounted) {
-                        setState(() {
-                          _bookmarked = !_bookmarked;
-                        });
-                        if (widget.gameListContext != null) {
-                          final historyProvider = userGameHistoryProvider(
-                            widget.gameListContext!.$1,
-                            isOnline: true,
-                            filter: widget.gameListContext!.$2,
-                          );
-                          if (ref.exists(historyProvider)) {
-                            ref.read(historyProvider.notifier).toggleBookmark(widget.id);
-                          }
+                      if (widget.gameListContext != null) {
+                        final historyProvider = userGameHistoryProvider(
+                          widget.gameListContext!.$1,
+                          isOnline: true,
+                          filter: widget.gameListContext!.$2,
+                        );
+                        if (ref.exists(historyProvider)) {
+                          ref.read(historyProvider.notifier).toggleBookmark(widget.id);
                         }
                       }
-                    } catch (_) {
-                      if (context.mounted) {
-                        showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
-                      }
                     }
-                  },
+                  } catch (_) {
+                    if (context.mounted) {
+                      showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
+                    }
+                  }
+                },
         );
       },
     );

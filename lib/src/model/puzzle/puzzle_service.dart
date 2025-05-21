@@ -87,16 +87,15 @@ class PuzzleService {
   }) {
     return Result.release(
       _syncAndLoadData(userId, angle).map(
-        (data) =>
-            data.$1 != null && data.$1!.unsolved.isNotEmpty
-                ? PuzzleContext(
-                  puzzle: data.$1!.unsolved[0],
-                  angle: angle,
-                  userId: userId,
-                  glicko: data.$2,
-                  rounds: data.$3,
-                )
-                : null,
+        (data) => data.$1 != null && data.$1!.unsolved.isNotEmpty
+            ? PuzzleContext(
+                puzzle: data.$1!.unsolved[0],
+                angle: angle,
+                userId: userId,
+                glicko: data.$2,
+                rounds: data.$3,
+              )
+            : null,
       ),
     );
   }
@@ -170,11 +169,11 @@ class PuzzleService {
         (client) => Result.capture(
           solved.isNotEmpty && userId != null
               ? PuzzleRepository(
-                client,
-              ).solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
+                  client,
+                ).solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
               : PuzzleRepository(
-                client,
-              ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
+                  client,
+                ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
         ),
       );
 

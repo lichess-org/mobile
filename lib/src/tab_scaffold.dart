@@ -124,34 +124,33 @@ class MainTabScaffold extends ConsumerWidget {
         child: Scaffold(
           body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _tabBuilder),
           extendBody: extendBody,
-          bottomNavigationBar:
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? CupertinoTabBar(
-                    height: 50,
-                    backgroundColor: NavigationBarTheme.of(context).backgroundColor,
-                    border: const Border(top: BorderSide(color: Colors.transparent)),
-                    activeColor: ColorScheme.of(context).onSurface,
-                    currentIndex: currentTab.index,
-                    items: [
-                      for (final tab in BottomTab.values)
-                        BottomNavigationBarItem(
-                          icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
-                          label: tab.label(context.l10n),
-                        ),
-                    ],
-                    onTap: (i) => _onItemTapped(ref, i),
-                  )
-                  : NavigationBar(
-                    selectedIndex: currentTab.index,
-                    destinations: [
-                      for (final tab in BottomTab.values)
-                        NavigationDestination(
-                          icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
-                          label: tab.label(context.l10n),
-                        ),
-                    ],
-                    onDestinationSelected: (i) => _onItemTapped(ref, i),
-                  ),
+          bottomNavigationBar: Theme.of(context).platform == TargetPlatform.iOS
+              ? CupertinoTabBar(
+                  height: 50,
+                  backgroundColor: NavigationBarTheme.of(context).backgroundColor,
+                  border: const Border(top: BorderSide(color: Colors.transparent)),
+                  activeColor: ColorScheme.of(context).onSurface,
+                  currentIndex: currentTab.index,
+                  items: [
+                    for (final tab in BottomTab.values)
+                      BottomNavigationBarItem(
+                        icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
+                        label: tab.label(context.l10n),
+                      ),
+                  ],
+                  onTap: (i) => _onItemTapped(ref, i),
+                )
+              : NavigationBar(
+                  selectedIndex: currentTab.index,
+                  destinations: [
+                    for (final tab in BottomTab.values)
+                      NavigationDestination(
+                        icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
+                        label: tab.label(context.l10n),
+                      ),
+                  ],
+                  onDestinationSelected: (i) => _onItemTapped(ref, i),
+                ),
         ),
       ),
     );
@@ -438,12 +437,11 @@ class _MaterialTabViewState extends ConsumerState<_MaterialTabView> {
     final currentTab = ref.watch(currentBottomTabProvider);
     final enablePopHandler = currentTab == widget.tab;
     return NavigatorPopHandler(
-      onPopWithResult:
-          enablePopHandler
-              ? (_) {
-                widget.navigatorKey?.currentState?.maybePop();
-              }
-              : null,
+      onPopWithResult: enablePopHandler
+          ? (_) {
+              widget.navigatorKey?.currentState?.maybePop();
+            }
+          : null,
       enabled: enablePopHandler,
       child: Navigator(
         key: widget.navigatorKey,

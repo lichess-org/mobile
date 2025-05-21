@@ -128,30 +128,27 @@ class AnalysisController extends _$AnalysisController
 
     final game = PgnGame.parsePgn(
       pgn,
-      initHeaders:
-          () =>
-              options.isLichessGameAnalysis
-                  ? {}
-                  : {
-                    'Event': '?',
-                    'Site': '?',
-                    'Date': _dateFormat.format(DateTime.now()),
-                    'Round': '?',
-                    'White': '?',
-                    'Black': '?',
-                    'Result': '*',
-                    'WhiteElo': '?',
-                    'BlackElo': '?',
-                  },
+      initHeaders: () => options.isLichessGameAnalysis
+          ? {}
+          : {
+              'Event': '?',
+              'Site': '?',
+              'Date': _dateFormat.format(DateTime.now()),
+              'Round': '?',
+              'White': '?',
+              'Black': '?',
+              'Result': '*',
+              'WhiteElo': '?',
+              'BlackElo': '?',
+            },
     );
 
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-    final isComputerAnalysisAllowed =
-        options.isLichessGameAnalysis
-            ? pgnHeaders['Result'] != '*'
-            : options.standalone!.isComputerAnalysisAllowed;
+    final isComputerAnalysisAllowed = options.isLichessGameAnalysis
+        ? pgnHeaders['Result'] != '*'
+        : options.standalone!.isComputerAnalysisAllowed;
 
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
 
@@ -451,8 +448,9 @@ class AnalysisController extends _$AnalysisController
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView =
-        shouldForceShowVariation || shouldRecomputeRootView ? _root.view : curState.root;
+    final rootView = shouldForceShowVariation || shouldRecomputeRootView
+        ? _root.view
+        : curState.root;
 
     final isForward = path.size > curState.currentPath.size;
     if (currentNode is Branch) {
@@ -538,10 +536,9 @@ class AnalysisController extends _$AnalysisController
       state = AsyncData(
         state.requireValue.copyWith(
           acplChartData: _makeAcplChartData(),
-          playersAnalysis:
-              event.$2.analysis != null
-                  ? (white: event.$2.analysis!.white, black: event.$2.analysis!.black)
-                  : null,
+          playersAnalysis: event.$2.analysis != null
+              ? (white: event.$2.analysis!.white, black: event.$2.analysis!.black)
+              : null,
           root: _root.view,
         ),
       );
@@ -552,12 +549,11 @@ class AnalysisController extends _$AnalysisController
     final eval = n2['eval'] as Map<String, dynamic>?;
     final cp = eval?['cp'] as int?;
     final mate = eval?['mate'] as int?;
-    final pgnEval =
-        cp != null
-            ? PgnEvaluation.pawns(pawns: cpToPawns(cp))
-            : mate != null
-            ? PgnEvaluation.mate(mate: mate)
-            : null;
+    final pgnEval = cp != null
+        ? PgnEvaluation.pawns(pawns: cpToPawns(cp))
+        : mate != null
+        ? PgnEvaluation.mate(mate: mate)
+        : null;
     final glyphs = n2['glyphs'] as List<dynamic>?;
     final glyph = glyphs?.first as Map<String, dynamic>?;
     final comments = n2['comments'] as List<dynamic>?;
@@ -614,20 +610,19 @@ class AnalysisController extends _$AnalysisController
           final (isCheckmate, side, eval) = el;
           return eval != null
               ? ExternalEval(
-                cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
-                mate: eval.mate,
-                depth: eval.depth,
-              )
+                  cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
+                  mate: eval.mate,
+                  depth: eval.depth,
+                )
               : ExternalEval(
-                cp: null,
-                // hack to display checkmate as the max eval
-                mate:
-                    isCheckmate
-                        ? side == Side.white
+                  cp: null,
+                  // hack to display checkmate as the max eval
+                  mate: isCheckmate
+                      ? side == Side.white
                             ? -1
                             : 1
-                        : null,
-              );
+                      : null,
+                );
         })
         .toList(growable: false);
     return list.isEmpty ? null : IList(list);
@@ -806,10 +801,10 @@ sealed class AnalysisCurrentNode with _$AnalysisCurrentNode {
     final pgnEval = lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
     return pgnEval != null
         ? ExternalEval(
-          cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
-          mate: pgnEval.mate,
-          depth: pgnEval.depth,
-        )
+            cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
+            mate: pgnEval.mate,
+            depth: pgnEval.depth,
+          )
         : null;
   }
 }

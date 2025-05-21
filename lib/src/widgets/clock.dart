@@ -68,14 +68,13 @@ class Clock extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            color:
-                timeLeft > Duration.zero
-                    ? active
-                        ? isEmergency
+            color: timeLeft > Duration.zero
+                ? active
+                      ? isEmergency
                             ? effectiveClockStyle.emergencyBackgroundColor
                             : effectiveClockStyle.activeBackgroundColor
-                        : effectiveClockStyle.backgroundColor
-                    : effectiveClockStyle.emergencyBackgroundColor,
+                      : effectiveClockStyle.backgroundColor
+                : effectiveClockStyle.emergencyBackgroundColor,
           ),
           child: Padding(
             padding: padding,
@@ -83,17 +82,15 @@ class Clock extends StatelessWidget {
               maxScaleFactor: kMaxClockTextScaleFactor,
               child: RichText(
                 text: TextSpan(
-                  text:
-                      hours > 0
-                          ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
-                          : '$minsDisplay:$secs',
+                  text: hours > 0
+                      ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
+                      : '$minsDisplay:$secs',
                   style: TextStyle(
-                    color:
-                        active
-                            ? isEmergency
-                                ? effectiveClockStyle.emergencyTextColor
-                                : effectiveClockStyle.activeTextColor
-                            : effectiveClockStyle.textColor,
+                    color: active
+                        ? isEmergency
+                              ? effectiveClockStyle.emergencyTextColor
+                              : effectiveClockStyle.activeTextColor
+                        : effectiveClockStyle.textColor,
                     fontSize: _kClockFontSize * fontScaleFactor,
                     height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 1.0 : null,
                     fontFeatures: const [FontFeature.tabularFigures()],
@@ -141,12 +138,12 @@ class ClockStyle {
   factory ClockStyle.defaultStyle(Brightness brightness, ColorScheme colorScheme) => ClockStyle(
     backgroundColor: colorScheme.surface,
     textColor: colorScheme.outline,
-    activeBackgroundColor:
-        brightness == Brightness.dark ? colorScheme.inverseSurface : colorScheme.tertiaryContainer,
-    activeTextColor:
-        brightness == Brightness.dark
-            ? colorScheme.onInverseSurface
-            : colorScheme.onTertiaryContainer,
+    activeBackgroundColor: brightness == Brightness.dark
+        ? colorScheme.inverseSurface
+        : colorScheme.tertiaryContainer,
+    activeTextColor: brightness == Brightness.dark
+        ? colorScheme.onInverseSurface
+        : colorScheme.onTertiaryContainer,
     emergencyBackgroundColor: colorScheme.errorContainer,
     emergencyTextColor: colorScheme.onErrorContainer,
   );
