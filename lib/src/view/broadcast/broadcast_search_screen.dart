@@ -108,7 +108,7 @@ class _BodyState extends ConsumerState<_Body> {
                   controller: _scrollController,
                   separatorBuilder: (context, index) => PlatformDivider(
                     height: 1,
-                    indent: BroadcastListTile.thumbnailSizeFromContext(context) + 16.0 + 10.0,
+                    indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
                   ),
                   itemCount: broadcasts.length,
                   itemBuilder: (context, index) =>

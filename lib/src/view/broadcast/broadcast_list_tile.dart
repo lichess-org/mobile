@@ -53,7 +53,7 @@ class BroadcastListTile extends StatelessWidget {
 
   final bool _isLoading;
 
-  static double thumbnailSizeFromContext(BuildContext context) {
+  static double thumbnailSize(BuildContext context) {
     return isTabletOrLarger(context) ? _kTabletThumbnailSize : _kHandsetThumbnailSize;
   }
 
@@ -61,7 +61,7 @@ class BroadcastListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final thumbnailSize = thumbnailSizeFromContext(context);
+    final thumbnailSize = BroadcastListTile.thumbnailSize(context);
 
     if (_isLoading) {
       return Padding(

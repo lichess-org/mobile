@@ -179,7 +179,7 @@ class _BodyState extends ConsumerState<_Body> {
                   sliver: SliverList.separated(
                     separatorBuilder: (context, index) => PlatformDivider(
                       height: 1,
-                      indent: BroadcastListTile.thumbnailSizeFromContext(context) + 16.0 + 10.0,
+                      indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
                     ),
                     itemCount: section.$3.length,
                     itemBuilder: (context, index) =>
