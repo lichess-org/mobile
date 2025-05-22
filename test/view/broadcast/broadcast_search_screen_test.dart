@@ -36,10 +36,9 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      final textFieldFinder =
-          debugDefaultTargetPlatformOverride == TargetPlatform.iOS
-              ? find.byType(CupertinoSearchTextField)
-              : find.byType(SearchBar);
+      final textFieldFinder = debugDefaultTargetPlatformOverride == TargetPlatform.iOS
+          ? find.byType(CupertinoSearchTextField)
+          : find.byType(SearchBar);
 
       await tester.enterText(textFieldFinder, 'world championship');
       await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -63,10 +62,9 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      final textFieldFinder =
-          debugDefaultTargetPlatformOverride == TargetPlatform.iOS
-              ? find.byType(CupertinoSearchTextField)
-              : find.byType(SearchBar);
+      final textFieldFinder = debugDefaultTargetPlatformOverride == TargetPlatform.iOS
+          ? find.byType(CupertinoSearchTextField)
+          : find.byType(SearchBar);
 
       await tester.enterText(textFieldFinder, 'azerty');
       await tester.testTextInput.receiveAction(TextInputAction.done);

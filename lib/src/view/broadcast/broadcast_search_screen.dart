@@ -43,17 +43,16 @@ class _BroadcastSearchScreenState extends State<BroadcastSearchScreen> {
         toolbarHeight: 80, // Custom height to fit the search bar
         title: searchBar,
       ),
-      body:
-          (searchTerm != null)
-              ? (searchTerm!.isNotEmpty)
-                  ? _Body(searchTerm!)
-                  : const Center(
+      body: (searchTerm != null)
+          ? (searchTerm!.isNotEmpty)
+                ? _Body(searchTerm!)
+                : const Center(
                     child: Text(
                       'Search is empty', // TODO: translate
                       style: Styles.centeredMessage,
                     ),
                   )
-              : kEmptyWidget,
+          : kEmptyWidget,
     );
   }
 }
@@ -106,27 +105,25 @@ class _BodyState extends ConsumerState<_Body> {
 
           return (broadcasts.isNotEmpty)
               ? ListView.separated(
-                controller: _scrollController,
-                separatorBuilder:
-                    (context, index) => PlatformDivider(
-                      height: 1,
-                      indent: BroadcastListTile.thumbnailSizeFromContext(context) + 16.0 + 10.0,
-                    ),
-                itemCount: broadcasts.length,
-                itemBuilder:
-                    (context, index) =>
-                        (broadcastList.isLoading && index >= broadcasts.length - 1)
-                            ? const Shimmer(
-                              child: ShimmerLoading(
-                                isLoading: true,
-                                child: BroadcastListTile.loading(),
-                              ),
-                            )
-                            : BroadcastListTile(broadcast: broadcasts[index]),
-              )
+                  controller: _scrollController,
+                  separatorBuilder: (context, index) => PlatformDivider(
+                    height: 1,
+                    indent: BroadcastListTile.thumbnailSizeFromContext(context) + 16.0 + 10.0,
+                  ),
+                  itemCount: broadcasts.length,
+                  itemBuilder: (context, index) =>
+                      (broadcastList.isLoading && index >= broadcasts.length - 1)
+                      ? const Shimmer(
+                          child: ShimmerLoading(
+                            isLoading: true,
+                            child: BroadcastListTile.loading(),
+                          ),
+                        )
+                      : BroadcastListTile(broadcast: broadcasts[index]),
+                )
               : Center(
-                child: Text(context.l10n.mobileNoSearchResults, style: Styles.centeredMessage),
-              );
+                  child: Text(context.l10n.mobileNoSearchResults, style: Styles.centeredMessage),
+                );
         },
         error: (_, _) => const Center(child: Text('Could not load round data')),
         loading: () => const Center(child: CircularProgressIndicator.adaptive()),

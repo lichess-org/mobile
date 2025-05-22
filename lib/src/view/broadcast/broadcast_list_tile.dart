@@ -127,16 +127,15 @@ class BroadcastListTile extends StatelessWidget {
 
     final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
 
-    final leading =
-        broadcast.tour.imageUrl != null
-            ? Image.network(
-              broadcast.tour.imageUrl!,
-              width: thumbnailSize,
-              cacheWidth: (thumbnailSize * devicePixelRatio).toInt(),
-              fit: BoxFit.cover,
-              errorBuilder: (context, _, _) => const Icon(LichessIcons.radio_tower_lichess),
-            )
-            : Image(image: _kDefaultBroadcastImage, width: thumbnailSize);
+    final leading = broadcast.tour.imageUrl != null
+        ? Image.network(
+            broadcast.tour.imageUrl!,
+            width: thumbnailSize,
+            cacheWidth: (thumbnailSize * devicePixelRatio).toInt(),
+            fit: BoxFit.cover,
+            errorBuilder: (context, _, _) => const Icon(LichessIcons.radio_tower_lichess),
+          )
+        : Image(image: _kDefaultBroadcastImage, width: thumbnailSize);
 
     final title = Text(broadcast.title, maxLines: 2, overflow: TextOverflow.ellipsis);
 
