@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 
 /// A bottom bar that can be used in a [Scaffold.bottomNavigationBar].
 ///
@@ -13,9 +14,10 @@ class BottomBar extends StatelessWidget {
     this.mainAxisAlignment = MainAxisAlignment.spaceAround,
     this.expandChildren = true,
     this.cupertinoTransparent = false,
+    this.maintainBottomViewPadding = false,
   });
 
-  const BottomBar.empty({this.cupertinoTransparent = false})
+  const BottomBar.empty({this.cupertinoTransparent = false, this.maintainBottomViewPadding = false})
     : children = const [],
       expandChildren = true,
       mainAxisAlignment = MainAxisAlignment.spaceAround;
@@ -32,21 +34,34 @@ class BottomBar extends StatelessWidget {
   /// Whether to use a transparent background on iOS. Defaults to false.
   final bool cupertinoTransparent;
 
+  /// Whether to maintain the bottom view padding. Defaults to false.
+  ///
+  /// This is useful to avoid UI shifts when immersive mode is enabled on Android.
+  ///
+  /// See
+  /// - [SafeArea.maintainBottomViewPadding] and
+  /// - [AndroidGesturesExclusionWidget] for more information.
+  final bool maintainBottomViewPadding;
+
   @override
   Widget build(BuildContext context) {
-    Widget bar = BottomAppBar(
-      color:
-          Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent
-              ? (BottomAppBarTheme.of(context).color ?? ColorScheme.of(context).surface).withValues(
+    Widget bar = SafeArea(
+      top: false,
+      maintainBottomViewPadding: maintainBottomViewPadding,
+      child: BottomAppBar(
+        color: Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent
+            ? (BottomAppBarTheme.of(context).color ?? ColorScheme.of(context).surface).withValues(
                 alpha: 0.9,
               )
-              : null,
-      height: kBottomBarHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-      child: Row(
-        mainAxisAlignment: mainAxisAlignment,
-        children:
-            expandChildren ? children.map((child) => Expanded(child: child)).toList() : children,
+            : null,
+        height: kBottomBarHeight,
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+        child: Row(
+          mainAxisAlignment: mainAxisAlignment,
+          children: expandChildren
+              ? children.map((child) => Expanded(child: child)).toList()
+              : children,
+        ),
       ),
     );
 
@@ -142,10 +157,9 @@ class BottomBarButton extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.zero,
           onTap: onTap,
-          child:
-              blink
-                  ? _AnimatedInvertBackground(color: primary.withValues(alpha: 0.2), child: child)
-                  : child,
+          child: blink
+              ? _AnimatedInvertBackground(color: primary.withValues(alpha: 0.2), child: child)
+              : child,
         ),
       ),
     );

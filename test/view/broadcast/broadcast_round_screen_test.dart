@@ -239,8 +239,9 @@ void main() {
       // Load the players
       await tester.pump();
 
-      final playersList =
-          tester.widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow)).toList();
+      final playersList = tester
+          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
+          .toList();
 
       expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
       expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
@@ -248,8 +249,9 @@ void main() {
       await tester.tap(find.text('Score'));
       await tester.pump();
 
-      final playersListReversed =
-          tester.widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow)).toList();
+      final playersListReversed = tester
+          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
+          .toList();
 
       expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
       expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
@@ -287,8 +289,9 @@ void main() {
       await tester.tap(find.text('Elo'));
       await tester.pump();
 
-      final playersList =
-          tester.widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow)).toList();
+      final playersList = tester
+          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
+          .toList();
 
       expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
       expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
@@ -296,8 +299,9 @@ void main() {
       await tester.tap(find.text('Elo'));
       await tester.pump();
 
-      final playersListReversed =
-          tester.widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow)).toList();
+      final playersListReversed = tester
+          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
+          .toList();
 
       expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
       expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
@@ -335,8 +339,9 @@ void main() {
       await tester.tap(find.text('Player'));
       await tester.pump();
 
-      final playersList =
-          tester.widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow)).toList();
+      final playersList = tester
+          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
+          .toList();
 
       expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
       expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
@@ -344,8 +349,9 @@ void main() {
       await tester.tap(find.text('Player'));
       await tester.pump();
 
-      final playersListReversed =
-          tester.widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow)).toList();
+      final playersListReversed = tester
+          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
+          .toList();
 
       expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
       expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
@@ -385,8 +391,9 @@ void main() {
       await tester.tap(find.text('Games'));
       await tester.pump();
 
-      final playersList =
-          tester.widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow)).toList();
+      final playersList = tester
+          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
+          .toList();
 
       expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
       expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
@@ -394,8 +401,9 @@ void main() {
       await tester.tap(find.text('Games'));
       await tester.pump();
 
-      final playersListReversed =
-          tester.widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow)).toList();
+      final playersListReversed = tester
+          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
+          .toList();
 
       expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
       expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');

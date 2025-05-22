@@ -50,11 +50,10 @@ class StudyRepository {
         final paginator = pick(json, 'paginator').asMapOrThrow<String, dynamic>();
 
         return (
-          studies:
-              pick(
-                paginator,
-                'currentPageResults',
-              ).asListOrThrow((pick) => StudyPageData.fromJson(pick.asMapOrThrow())).toIList(),
+          studies: pick(
+            paginator,
+            'currentPageResults',
+          ).asListOrThrow((pick) => StudyPageData.fromJson(pick.asMapOrThrow())).toIList(),
           nextPage: pick(paginator, 'nextPage').asIntOrNull(),
         );
       },

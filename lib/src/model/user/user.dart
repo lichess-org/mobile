@@ -114,10 +114,9 @@ sealed class User with _$User {
       perfs: IMap({
         for (final entry in receivedPerfsMap.entries)
           if (Perf.nameMap.containsKey(entry.key))
-            Perf.nameMap.get(entry.key)!:
-                (['storm', 'streak'].contains(entry.key))
-                    ? UserPerf.fromJsonStreak(entry.value)
-                    : UserPerf.fromJson(entry.value),
+            Perf.nameMap.get(entry.key)!: (['storm', 'streak'].contains(entry.key))
+                ? UserPerf.fromJsonStreak(entry.value)
+                : UserPerf.fromJson(entry.value),
       }),
       followable: pick('followable').asBoolOrNull(),
       following: pick('following').asBoolOrNull(),
@@ -405,10 +404,9 @@ sealed class UserPerfGame with _$UserPerfGame {
     String? opponentTitle,
   }) = _UserPerfGame;
 
-  LightUser? get opponent =>
-      opponentId != null && opponentName != null
-          ? LightUser(id: UserId(opponentId!), name: opponentName!, title: opponentTitle)
-          : null;
+  LightUser? get opponent => opponentId != null && opponentName != null
+      ? LightUser(id: UserId(opponentId!), name: opponentName!, title: opponentTitle)
+      : null;
 }
 
 @immutable

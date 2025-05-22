@@ -156,14 +156,13 @@ class _Body extends ConsumerWidget {
                       clockUpdatedAt: timeLeft.$2,
                       active: true,
                       tickInterval: const Duration(seconds: 1),
-                      builder:
-                          (BuildContext context, Duration timeLeft) => Text(
-                            '${timeLeft.toHoursMinutesSeconds()} ',
-                            style: const TextStyle(
-                              fontSize: 16.0,
-                              fontFeatures: [FontFeature.tabularFigures()],
-                            ),
-                          ),
+                      builder: (BuildContext context, Duration timeLeft) => Text(
+                        '${timeLeft.toHoursMinutesSeconds()} ',
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -213,26 +212,25 @@ class _Body extends ConsumerWidget {
             ],
           ),
         ),
-        bottomSheet:
-            session != null && state.joined && state.tournament.isFinished != true
-                ? Material(
-                  child: Container(
-                    height: 35,
-                    width: double.infinity,
-                    color: context.lichessColors.good,
-                    child: Padding(
-                      padding: Styles.horizontalBodyPadding,
-                      child: Center(
-                        child: Text(
-                          context.l10n.standByX(session.user.name),
-                          style: const TextStyle(color: Colors.white),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+        bottomSheet: session != null && state.joined && state.tournament.isFinished != true
+            ? Material(
+                child: Container(
+                  height: 35,
+                  width: double.infinity,
+                  color: context.lichessColors.good,
+                  child: Padding(
+                    padding: Styles.horizontalBodyPadding,
+                    child: Center(
+                      child: Text(
+                        context.l10n.standByX(session.user.name),
+                        style: const TextStyle(color: Colors.white),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
-                )
-                : const SizedBox.shrink(),
+                ),
+              )
+            : const SizedBox.shrink(),
         bottomNavigationBar: _BottomBar(state),
       ),
     );
@@ -456,10 +454,9 @@ class _StandingPlayer extends StatelessWidget {
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
       visualDensity: VisualDensity.compact,
       tileColor: player.rank.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
-      leading:
-          player.withdraw
-              ? Icon(Icons.pause, color: textShade(context, 0.3), size: 20)
-              : Text(player.rank.toString().padLeft(2).padRight(3), textAlign: TextAlign.center),
+      leading: player.withdraw
+          ? Icon(Icons.pause, color: textShade(context, 0.3), size: 20)
+          : Text(player.rank.toString().padLeft(2).padRight(3), textAlign: TextAlign.center),
       title: UserFullNameWidget(
         user: player.user,
         rating: player.rating,
@@ -498,12 +495,11 @@ class _Scores extends StatelessWidget {
               softWrap: false,
               '$score',
               style: TextStyle(
-                color:
-                    score >= 4
-                        ? LichessColors.brag
-                        : score > 1
-                        ? LichessColors.good
-                        : textShade(context, 0.5),
+                color: score >= 4
+                    ? LichessColors.brag
+                    : score > 1
+                    ? LichessColors.good
+                    : textShade(context, 0.5),
                 letterSpacing: 0.5,
                 fontFeatures: const [FontFeature.tabularFigures()],
               ),
@@ -524,16 +520,12 @@ class _StandingControls extends ConsumerWidget {
     return Row(
       children: [
         SemanticIconButton(
-          onPressed:
-              state.hasPreviousPage
-                  ? ref
-                      .read(tournamentControllerProvider(state.id).notifier)
-                      .loadPreviousStandingsPage
-                  : null,
-          onLongPress:
-              state.hasPreviousPage
-                  ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
-                  : null,
+          onPressed: state.hasPreviousPage
+              ? ref.read(tournamentControllerProvider(state.id).notifier).loadPreviousStandingsPage
+              : null,
+          onLongPress: state.hasPreviousPage
+              ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
+              : null,
           semanticsLabel: 'Previous',
           icon: const Icon(Icons.chevron_left),
         ),
@@ -545,14 +537,12 @@ class _StandingControls extends ConsumerWidget {
           ),
         ),
         SemanticIconButton(
-          onPressed:
-              state.hasNextPage
-                  ? ref.read(tournamentControllerProvider(state.id).notifier).loadNextStandingsPage
-                  : null,
-          onLongPress:
-              state.hasNextPage
-                  ? ref.read(tournamentControllerProvider(state.id).notifier).loadLastStandingsPage
-                  : null,
+          onPressed: state.hasNextPage
+              ? ref.read(tournamentControllerProvider(state.id).notifier).loadNextStandingsPage
+              : null,
+          onLongPress: state.hasNextPage
+              ? ref.read(tournamentControllerProvider(state.id).notifier).loadLastStandingsPage
+              : null,
           semanticsLabel: context.l10n.studyNext,
           icon: const Icon(Icons.chevron_right),
         ),
@@ -615,12 +605,11 @@ class _Verdicts extends ConsumerWidget {
       children: [
         Icon(
           isLoggedIn && verdicts.accepted ? Icons.check : Icons.lock,
-          color:
-              isLoggedIn
-                  ? verdicts.accepted
-                      ? context.lichessColors.good
-                      : context.lichessColors.error
-                  : null,
+          color: isLoggedIn
+              ? verdicts.accepted
+                    ? context.lichessColors.good
+                    : context.lichessColors.error
+              : null,
           size: 30.0,
         ),
         const SizedBox(width: 10),
@@ -632,12 +621,11 @@ class _Verdicts extends ConsumerWidget {
                 Text(
                   verdict.condition,
                   style: TextStyle(
-                    color:
-                        isLoggedIn
-                            ? verdict.ok
-                                ? context.lichessColors.good
-                                : context.lichessColors.error
-                            : null,
+                    color: isLoggedIn
+                        ? verdict.ok
+                              ? context.lichessColors.good
+                              : context.lichessColors.error
+                        : null,
                   ),
                 ),
             ],
@@ -719,14 +707,13 @@ class _FeaturedGamePlayer extends StatelessWidget {
             CountdownClockBuilder(
               timeLeft: game.clockOf(side)!,
               active: clockActive,
-              builder:
-                  (context, timeLeft) => Text(
-                    timeLeft.toHoursMinutesSeconds(),
-                    style: TextStyle(
-                      color: clockActive ? Colors.orange[900] : null,
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                    ),
-                  ),
+              builder: (context, timeLeft) => Text(
+                timeLeft.toHoursMinutesSeconds(),
+                style: TextStyle(
+                  color: clockActive ? Colors.orange[900] : null,
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
+              ),
             )
           else
             Text(
@@ -933,12 +920,11 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           joinOrLeaveInProgress
               ? const Center(child: CircularProgressIndicator.adaptive())
               : BottomBarButton(
-                label: widget.state.joined ? context.l10n.pause : context.l10n.join,
-                icon: widget.state.joined ? Icons.pause : Icons.play_arrow,
-                showLabel: true,
-                onTap:
-                    widget.state.canJoin
-                        ? () {
+                  label: widget.state.joined ? context.l10n.pause : context.l10n.join,
+                  icon: widget.state.joined ? Icons.pause : Icons.play_arrow,
+                  showLabel: true,
+                  onTap: widget.state.canJoin
+                      ? () {
                           ref
                               .read(tournamentControllerProvider(widget.state.id).notifier)
                               .joinOrPause();
@@ -946,8 +932,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                             joinOrLeaveInProgress = true;
                           });
                         }
-                        : null,
-              )
+                      : null,
+                )
         else if (widget.state.tournament.isFinished != true)
           BottomBarButton(
             label: context.l10n.signIn,

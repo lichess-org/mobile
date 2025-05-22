@@ -23,15 +23,15 @@ enum BroadcastResult {
     return (result == null)
         ? BroadcastResult.noResultPgnTag
         : switch (result) {
-          '½-½' => BroadcastResult.draw,
-          '1-0' => BroadcastResult.whiteWins,
-          '0-1' => BroadcastResult.blackWins,
-          '0-0' => BroadcastResult.canceled,
-          '½-0' => BroadcastResult.whiteHalfWins,
-          '0-½' => BroadcastResult.blackHalfWins,
-          '*' => BroadcastResult.newOrOngoing,
-          _ => throw FormatException("value $result can't be interpreted as a broadcast result"),
-        };
+            '½-½' => BroadcastResult.draw,
+            '1-0' => BroadcastResult.whiteWins,
+            '0-1' => BroadcastResult.blackWins,
+            '0-0' => BroadcastResult.canceled,
+            '½-0' => BroadcastResult.whiteHalfWins,
+            '0-½' => BroadcastResult.blackHalfWins,
+            '*' => BroadcastResult.newOrOngoing,
+            _ => throw FormatException("value $result can't be interpreted as a broadcast result"),
+          };
   }
 
   String resultToString(Side side) {
@@ -97,16 +97,15 @@ sealed class BroadcastTournamentData with _$BroadcastTournamentData {
   }) = _BroadcastTournamentData;
 }
 
-typedef BroadcastTournamentInformation =
-    ({
-      String? format,
-      String? timeControl,
-      String? players,
-      String? location,
-      BroadcastTournamentDates? dates,
-      Uri? website,
-      Uri? standings,
-    });
+typedef BroadcastTournamentInformation = ({
+  String? format,
+  String? timeControl,
+  String? players,
+  String? location,
+  BroadcastTournamentDates? dates,
+  Uri? website,
+  Uri? standings,
+});
 
 typedef BroadcastTournamentDates = ({DateTime startsAt, DateTime? endsAt});
 
@@ -125,14 +124,13 @@ sealed class BroadcastRound with _$BroadcastRound {
   }) = _BroadcastRound;
 }
 
-typedef BroadcastRoundResponse =
-    ({
-      String? groupName,
-      IList<BroadcastTournamentGroup>? group,
-      BroadcastTournamentData tournament,
-      BroadcastRound round,
-      BroadcastRoundGames games,
-    });
+typedef BroadcastRoundResponse = ({
+  String? groupName,
+  IList<BroadcastTournamentGroup>? group,
+  BroadcastTournamentData tournament,
+  BroadcastRound round,
+  BroadcastRoundGames games,
+});
 
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
 
@@ -195,12 +193,11 @@ sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallR
 
 typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
 
-typedef BroadcastPlayerWithGameResults =
-    ({
-      BroadcastPlayerWithOverallResult playerWithOverallResult,
-      BroadcastFideData fideData,
-      IList<BroadcastPlayerGameResult> games,
-    });
+typedef BroadcastPlayerWithGameResults = ({
+  BroadcastPlayerWithOverallResult playerWithOverallResult,
+  BroadcastFideData fideData,
+  IList<BroadcastPlayerGameResult> games,
+});
 
 enum BroadcastPoints { one, half, zero }
 

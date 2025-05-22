@@ -427,12 +427,11 @@ class GameController extends _$GameController {
 
   void _sendMoveToSocket(Move move, {required bool isPremove, required bool withLag}) {
     final thinkTime = _clock?.stop();
-    final moveTime =
-        _clock != null
-            ? isPremove == true
-                ? Duration.zero
-                : thinkTime
-            : null;
+    final moveTime = _clock != null
+        ? isPremove == true
+              ? Duration.zero
+              : thinkTime
+        : null;
     _socketClient.send(
       'move',
       {
@@ -521,8 +520,9 @@ class GameController extends _$GameController {
             premove: hasSameNumberOfSteps ? curState.premove : null,
             promotionMove: hasSameNumberOfSteps ? curState.promotionMove : null,
             moveToConfirm: hasSameNumberOfSteps ? curState.moveToConfirm : null,
-            opponentLeftCountdown:
-                isOpponentOnGame ? null : state.requireValue.opponentLeftCountdown,
+            opponentLeftCountdown: isOpponentOnGame
+                ? null
+                : state.requireValue.opponentLeftCountdown,
           ),
         );
 
@@ -596,13 +596,12 @@ class GameController extends _$GameController {
         }
 
         if (data.clock != null) {
-          final lag =
-              newState.game.playable && newState.game.isMyTurn
-                  // my own clock doesn't need to be compensated for
-                  ? Duration.zero
-                  // server will send the lag only if it's more than 10ms
-                  // default lag of 10ms is also used by web client
-                  : data.clock?.lag ?? const Duration(milliseconds: 10);
+          final lag = newState.game.playable && newState.game.isMyTurn
+              // my own clock doesn't need to be compensated for
+              ? Duration.zero
+              // server will send the lag only if it's more than 10ms
+              // default lag of 10ms is also used by web client
+              : data.clock?.lag ?? const Duration(milliseconds: 10);
 
           _updateClock(
             white: data.clock!.white,
@@ -721,10 +720,9 @@ class GameController extends _$GameController {
           _clock?.setTime(side, newClock);
 
           // sync game clock object even if it's not used to display the clock
-          final newState =
-              side == Side.white
-                  ? curState.copyWith.game.clock!(white: newClock)
-                  : curState.copyWith.game.clock!(black: newClock);
+          final newState = side == Side.white
+              ? curState.copyWith.game.clock!(white: newClock)
+              : curState.copyWith.game.clock!(black: newClock);
           state = AsyncValue.data(newState);
         }
 
@@ -776,8 +774,9 @@ class GameController extends _$GameController {
         final curState = state.requireValue;
         state = AsyncValue.data(
           curState.copyWith(
-            lastDrawOfferAtPly:
-                side != null && side == curState.game.youAre ? curState.game.lastPly : null,
+            lastDrawOfferAtPly: side != null && side == curState.game.youAre
+                ? curState.game.lastPly
+                : null,
             game: curState.game.copyWith(
               white: curState.game.white.copyWith(
                 offeringDraw: side == null ? null : side == Side.white,
@@ -907,21 +906,17 @@ class GameController extends _$GameController {
     IList<GameStep> newSteps = game.steps;
     if (rewriteSteps && game.meta.clock != null && data.clocks != null) {
       final initialTime = game.meta.clock!.initial;
-      newSteps =
-          game.steps.mapIndexed((index, element) {
-            if (index == 0) {
-              return element.copyWith(
-                archivedWhiteClock: initialTime,
-                archivedBlackClock: initialTime,
-              );
-            }
-            final prevClock = index > 1 ? data.clocks![index - 2] : initialTime;
-            final stepClock = data.clocks![index - 1];
-            return element.copyWith(
-              archivedWhiteClock: index.isOdd ? stepClock : prevClock,
-              archivedBlackClock: index.isEven ? stepClock : prevClock,
-            );
-          }).toIList();
+      newSteps = game.steps.mapIndexed((index, element) {
+        if (index == 0) {
+          return element.copyWith(archivedWhiteClock: initialTime, archivedBlackClock: initialTime);
+        }
+        final prevClock = index > 1 ? data.clocks![index - 2] : initialTime;
+        final stepClock = data.clocks![index - 1];
+        return element.copyWith(
+          archivedWhiteClock: index.isOdd ? stepClock : prevClock,
+          archivedBlackClock: index.isEven ? stepClock : prevClock,
+        );
+      }).toIList();
     }
 
     return game.copyWith(
@@ -1054,28 +1049,26 @@ sealed class GameState with _$GameState {
 
   String get analysisPgn => game.makePgn();
 
-  AnalysisOptions get analysisOptions =>
-      game.finished
-          ? AnalysisOptions(
-            orientation: game.youAre ?? Side.white,
-            initialMoveCursor: stepCursor,
-            gameId: gameFullId.gameId,
-          )
-          : AnalysisOptions(
-            orientation: game.youAre ?? Side.white,
-            initialMoveCursor: stepCursor,
-            standalone: (
-              pgn: game.makePgn(),
-              variant: game.meta.variant,
-              isComputerAnalysisAllowed: false,
-            ),
-          );
+  AnalysisOptions get analysisOptions => game.finished
+      ? AnalysisOptions(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          gameId: gameFullId.gameId,
+        )
+      : AnalysisOptions(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          standalone: (
+            pgn: game.makePgn(),
+            variant: game.meta.variant,
+            isComputerAnalysisAllowed: false,
+          ),
+        );
 
-  GameChatOptions? get chatOptions =>
-      isZenModeActive || game.meta.tournament != null
-          ? null
-          : GameChatOptions(
-            id: gameFullId,
-            opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
-          );
+  GameChatOptions? get chatOptions => isZenModeActive || game.meta.tournament != null
+      ? null
+      : GameChatOptions(
+          id: gameFullId,
+          opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
+        );
 }

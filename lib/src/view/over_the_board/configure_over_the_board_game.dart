@@ -75,16 +75,14 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
               onTap: () {
                 showChoicePicker<Variant>(
                   context,
-                  choices:
-                      playSupportedVariants
-                          .where((variant) => variant != Variant.fromPosition)
-                          .toList(),
+                  choices: playSupportedVariants
+                      .where((variant) => variant != Variant.fromPosition)
+                      .toList(),
                   selectedItem: chosenVariant,
                   labelBuilder: (Variant variant) => Text(variant.label),
-                  onSelectedItemChanged:
-                      (Variant variant) => setState(() {
-                        chosenVariant = variant;
-                      }),
+                  onSelectedItemChanged: (Variant variant) => setState(() {
+                    chosenVariant = variant;
+                  }),
                 );
               },
             ),
@@ -170,14 +168,14 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
         SwitchSettingTile(
           title: const Text('Use symmetric pieces'),
           value: prefs.symmetricPieces,
-          onChanged:
-              (_) => ref.read(overTheBoardPreferencesProvider.notifier).toggleSymmetricPieces(),
+          onChanged: (_) =>
+              ref.read(overTheBoardPreferencesProvider.notifier).toggleSymmetricPieces(),
         ),
         SwitchSettingTile(
           title: const Text('Flip pieces and opponent info after move'),
           value: prefs.flipPiecesAfterMove,
-          onChanged:
-              (_) => ref.read(overTheBoardPreferencesProvider.notifier).toggleFlipPiecesAfterMove(),
+          onChanged: (_) =>
+              ref.read(overTheBoardPreferencesProvider.notifier).toggleFlipPiecesAfterMove(),
         ),
       ],
     );

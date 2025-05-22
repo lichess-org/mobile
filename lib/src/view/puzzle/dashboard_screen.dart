@@ -173,15 +173,13 @@ class PuzzleChart extends StatelessWidget {
               RadarDataSet(
                 fillColor: chartColor.withValues(alpha: 0.2),
                 borderColor: chartColor,
-                dataEntries:
-                    puzzleData
-                        .map((theme) => RadarEntry(value: theme.performance.toDouble()))
-                        .toList(),
+                dataEntries: puzzleData
+                    .map((theme) => RadarEntry(value: theme.performance.toDouble()))
+                    .toList(),
               ),
             ],
-            getTitle:
-                (index, angle) =>
-                    RadarChartTitle(text: puzzleData[index].theme.l10n(context.l10n).name),
+            getTitle: (index, angle) =>
+                RadarChartTitle(text: puzzleData[index].theme.l10n(context.l10n).name),
             titleTextStyle: const TextStyle(fontSize: 10),
             titlePositionPercentageOffset: 0.09,
             tickCount: 3,
@@ -202,18 +200,17 @@ class DaysSelector extends ConsumerWidget {
     final day = ref.watch(daysProvider);
     return session != null
         ? TextButton(
-          onPressed:
-              () => showChoicePicker(
-                context,
-                choices: Days.values,
-                selectedItem: day,
-                labelBuilder: (t) => Text(_daysL10n(context, t)),
-                onSelectedItemChanged: (newDay) {
-                  ref.read(daysProvider.notifier).state = newDay;
-                },
-              ),
-          child: Text(_daysL10n(context, day)),
-        )
+            onPressed: () => showChoicePicker(
+              context,
+              choices: Days.values,
+              selectedItem: day,
+              labelBuilder: (t) => Text(_daysL10n(context, t)),
+              onSelectedItemChanged: (newDay) {
+                ref.read(daysProvider.notifier).state = newDay;
+              },
+            ),
+            child: Text(_daysL10n(context, day)),
+          )
         : const SizedBox.shrink();
   }
 }

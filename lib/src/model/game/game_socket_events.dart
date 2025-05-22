@@ -159,10 +159,9 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
     final glyph = glyphs?.first as Map<String, dynamic>?;
     final comments = node['comments'] as List<dynamic>?;
     final comment = comments?.first as Map<String, dynamic>?;
-    final judgment =
-        glyph != null && comment != null
-            ? (name: _nagToJugdmentName(glyph['id'] as int), comment: comment['text'] as String)
-            : null;
+    final judgment = glyph != null && comment != null
+        ? (name: _nagToJugdmentName(glyph['id'] as int), comment: comment['text'] as String)
+        : null;
 
     final variation = nextVariation;
 

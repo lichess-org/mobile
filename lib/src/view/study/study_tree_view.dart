@@ -40,10 +40,9 @@ class StudyTreeView extends ConsumerWidget {
                   pgnRootComments: studyState.pgnRootComments,
                   notifier: ref.read(studyControllerProvider(id).notifier),
                   shouldShowAnnotations: analysisPrefs.showAnnotations,
-                  displayMode:
-                      analysisPrefs.inlineNotation
-                          ? PgnTreeDisplayMode.inlineNotation
-                          : PgnTreeDisplayMode.twoColumn,
+                  displayMode: analysisPrefs.inlineNotation
+                      ? PgnTreeDisplayMode.inlineNotation
+                      : PgnTreeDisplayMode.twoColumn,
                 ),
               ),
             ],

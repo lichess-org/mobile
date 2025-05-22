@@ -90,10 +90,9 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
       orientation: widget.orientation,
       lastMove: widget.lastMove as NormalMove?,
       enableCoordinates: false,
-      borderRadius:
-          (widget.showEvaluationBar)
-              ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
-              : Styles.boardBorderRadius,
+      borderRadius: (widget.showEvaluationBar)
+          ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
+          : Styles.boardBorderRadius,
       boxShadow: (widget.showEvaluationBar) ? [] : boardShadows,
       pieceAssets: boardPrefs.pieceSet.assets,
       colorScheme: boardPrefs.boardTheme.colors,
@@ -102,60 +101,57 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
       brightness: boardPrefs.brightness,
     );
 
-    final boardWithMaybeEvalBar =
-        widget.showEvaluationBar
-            ? DecoratedBox(
-              decoration: BoxDecoration(boxShadow: boardShadows),
-              child: Row(
-                children: [
-                  board,
-                  Expanded(
-                    child:
-                        (widget.whiteWinningChances != null)
-                            ? _BoardThumbnailEvalGauge(
-                              height: widget.size,
-                              whiteWinnigChances: widget.whiteWinningChances!,
-                            )
-                            : Container(
-                              height: widget.size,
-                              decoration: BoxDecoration(
-                                borderRadius: Styles.boardBorderRadius.copyWith(
-                                  topLeft: Radius.zero,
-                                  bottomLeft: Radius.zero,
-                                ),
-                                color: Colors.grey.withValues(alpha: 0.6),
-                              ),
+    final boardWithMaybeEvalBar = widget.showEvaluationBar
+        ? DecoratedBox(
+            decoration: BoxDecoration(boxShadow: boardShadows),
+            child: Row(
+              children: [
+                board,
+                Expanded(
+                  child: (widget.whiteWinningChances != null)
+                      ? _BoardThumbnailEvalGauge(
+                          height: widget.size,
+                          whiteWinnigChances: widget.whiteWinningChances!,
+                        )
+                      : Container(
+                          height: widget.size,
+                          decoration: BoxDecoration(
+                            borderRadius: Styles.boardBorderRadius.copyWith(
+                              topLeft: Radius.zero,
+                              bottomLeft: Radius.zero,
                             ),
-                  ),
-                ],
-              ),
-            )
-            : board;
+                            color: Colors.grey.withValues(alpha: 0.6),
+                          ),
+                        ),
+                ),
+              ],
+            ),
+          )
+        : board;
 
-    final maybeTappableBoard =
-        widget.onTap != null
-            ? GestureDetector(
-              onTap: widget.onTap,
-              onTapDown: (_) => _onTapDown(),
-              onTapCancel: _onTapCancel,
-              onTapUp: (_) => _onTapCancel(),
-              child: AnimatedScale(
-                scale: scale,
-                duration: const Duration(milliseconds: 100),
-                child: boardWithMaybeEvalBar,
-              ),
-            )
-            : boardWithMaybeEvalBar;
+    final maybeTappableBoard = widget.onTap != null
+        ? GestureDetector(
+            onTap: widget.onTap,
+            onTapDown: (_) => _onTapDown(),
+            onTapCancel: _onTapCancel,
+            onTapUp: (_) => _onTapCancel(),
+            child: AnimatedScale(
+              scale: scale,
+              duration: const Duration(milliseconds: 100),
+              child: boardWithMaybeEvalBar,
+            ),
+          )
+        : boardWithMaybeEvalBar;
 
     return widget.header != null || widget.footer != null
         ? Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (widget.header != null) widget.header!,
-            maybeTappableBoard,
-            if (widget.footer != null) widget.footer!,
-          ],
-        )
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (widget.header != null) widget.header!,
+              maybeTappableBoard,
+              if (widget.footer != null) widget.footer!,
+            ],
+          )
         : maybeTappableBoard;
   }
 }

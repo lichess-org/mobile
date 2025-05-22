@@ -224,18 +224,16 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: Builder(
-          builder:
-              (context) => Scaffold(
-                appBar: AppBar(title: const Text('Test Streak Screen')),
-                body: FilledButton(
-                  child: const Text('Start Streak'),
-                  onPressed:
-                      () => Navigator.of(
-                        context,
-                        rootNavigator: true,
-                      ).push(buildScreenRoute<void>(context, screen: const StreakScreen())),
-                ),
-              ),
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Test Streak Screen')),
+            body: FilledButton(
+              child: const Text('Start Streak'),
+              onPressed: () => Navigator.of(
+                context,
+                rootNavigator: true,
+              ).push(buildScreenRoute<void>(context, screen: const StreakScreen())),
+            ),
+          ),
         ),
         overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );

@@ -37,15 +37,14 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineGames.maybeWhen(
-      data:
-          (data) => ListView(
-            children: [
-              const SizedBox(height: 8.0),
-              ...data.map(
-                (game) => OfflineCorrespondenceGamePreview(game: game.$2, lastModified: game.$1),
-              ),
-            ],
+      data: (data) => ListView(
+        children: [
+          const SizedBox(height: 8.0),
+          ...data.map(
+            (game) => OfflineCorrespondenceGamePreview(game: game.$2, lastModified: game.$1),
           ),
+        ],
+      ),
       orElse: () => const SizedBox.shrink(),
     );
   }

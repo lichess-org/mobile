@@ -116,13 +116,12 @@ class _LoadGame extends ConsumerWidget {
           gameListContext: gameListContext,
         );
       },
-      loading:
-          () => _Body(
-            gameData: null,
-            orientation: orientation,
-            initialCursor: initialCursor,
-            gameListContext: gameListContext,
-          ),
+      loading: () => _Body(
+        gameData: null,
+        orientation: orientation,
+        initialCursor: initialCursor,
+        gameListContext: gameListContext,
+      ),
       error: (error, stackTrace) {
         debugPrint('SEVERE: [ArchivedGameScreen] could not load game; $error\n$stackTrace');
         switch (error) {
@@ -196,10 +195,9 @@ class _BodyState extends ConsumerState<_Body> {
 
     return Scaffold(
       appBar: AppBar(
-        title:
-            widget.gameData != null
-                ? _GameTitle(gameData: widget.gameData!)
-                : const SizedBox.shrink(),
+        title: widget.gameData != null
+            ? _GameTitle(gameData: widget.gameData!)
+            : const SizedBox.shrink(),
         actions: [
           if (widget.gameData == null && widget.error == null)
             const PlatformAppBarLoadingIndicator(),
@@ -411,22 +409,21 @@ class _BottomBar extends ConsumerWidget {
           ),
         BottomBarButton(
           label: context.l10n.analysis,
-          onTap:
-              gameCursor.hasValue
-                  ? () {
-                    final cursor = gameCursor.requireValue.$2;
-                    Navigator.of(context).push(
-                      AnalysisScreen.buildRoute(
-                        context,
-                        AnalysisOptions(
-                          orientation: orientation,
-                          gameId: gameData.id,
-                          initialMoveCursor: cursor,
-                        ),
+          onTap: gameCursor.hasValue
+              ? () {
+                  final cursor = gameCursor.requireValue.$2;
+                  Navigator.of(context).push(
+                    AnalysisScreen.buildRoute(
+                      context,
+                      AnalysisOptions(
+                        orientation: orientation,
+                        gameId: gameData.id,
+                        initialMoveCursor: cursor,
                       ),
-                    );
-                  }
-                  : null,
+                    ),
+                  );
+                }
+              : null,
           icon: Icons.biotech,
         ),
         RepeatButton(

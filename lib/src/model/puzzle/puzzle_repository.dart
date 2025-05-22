@@ -371,14 +371,11 @@ PuzzleDashboard _puzzleDashboardFromPick(RequiredPick pick) => PuzzleDashboard(
     performance: pick('global')('performance').asIntOrThrow(),
     theme: PuzzleThemeKey.mix,
   ),
-  themes:
-      pick('themes')
-          .asMapOrThrow<String, Map<String, dynamic>>()
-          .keys
-          .map(
-            (key) => _puzzleDashboardDataFromPick(pick('themes')(key)('results').required(), key),
-          )
-          .toIList(),
+  themes: pick('themes')
+      .asMapOrThrow<String, Map<String, dynamic>>()
+      .keys
+      .map((key) => _puzzleDashboardDataFromPick(pick('themes')(key)('results').required(), key))
+      .toIList(),
 );
 
 PuzzleDashboardData _puzzleDashboardDataFromPick(RequiredPick results, String themeKey) =>

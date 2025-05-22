@@ -15,7 +15,10 @@ class BoardChoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text(context.l10n.board)), body: const _Body());
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.board)),
+      body: const _Body(),
+    );
   }
 }
 
@@ -28,8 +31,9 @@ class _Body extends ConsumerWidget {
 
     final hasSystemColors = getCorePalette() != null;
 
-    final choices =
-        BoardTheme.values.where((t) => t != BoardTheme.system || hasSystemColors).toList();
+    final choices = BoardTheme.values
+        .where((t) => t != BoardTheme.system || hasSystemColors)
+        .toList();
 
     void onChanged(BoardTheme? value) =>
         ref.read(boardPreferencesProvider.notifier).setBoardTheme(value ?? BoardTheme.brown);
@@ -48,11 +52,9 @@ class _Body extends ConsumerWidget {
             onTap: () => onChanged(t),
           );
         },
-        separatorBuilder:
-            (_, _) =>
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? const PlatformDivider()
-                    : const SizedBox.shrink(),
+        separatorBuilder: (_, _) => Theme.of(context).platform == TargetPlatform.iOS
+            ? const PlatformDivider()
+            : const SizedBox.shrink(),
         itemCount: choices.length,
       ),
     );

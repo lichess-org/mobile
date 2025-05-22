@@ -81,81 +81,76 @@ class ListSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.64,
-      child:
-          _isLoading
-              ? Column(
+      child: _isLoading
+          ? Column(
+              children: [
+                (materialFilledCard == true ? Card.filled : Card.new)(
+                  clipBehavior: clipBehavior,
+                  margin: margin ?? Styles.bodySectionPadding,
+                  color: backgroundColor,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: materialVerticalPadding),
+                      if (header != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                          child: Container(
+                            width: double.infinity,
+                            height: 25,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(Radius.circular(16)),
+                            ),
+                          ),
+                        ),
+                      for (int i = 0; i < children.length; i++)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                          child: Container(
+                            width: double.infinity,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: materialVerticalPadding),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          : Padding(
+              padding: margin ?? Styles.bodySectionPadding,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  (materialFilledCard == true ? Card.filled : Card.new)(
+                  if (header != null)
+                    ListSectionHeader(title: header!, onTap: onHeaderTap, trailing: headerTrailing),
+                  (materialFilledCard ? Card.filled : Card.new)(
                     clipBehavior: clipBehavior,
-                    margin: margin ?? Styles.bodySectionPadding,
                     color: backgroundColor,
+                    margin: EdgeInsets.zero,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: materialVerticalPadding),
-                        if (header != null)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                            child: Container(
-                              width: double.infinity,
-                              height: 25,
-                              decoration: const BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.all(Radius.circular(16)),
-                              ),
-                            ),
-                          ),
-                        for (int i = 0; i < children.length; i++)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-                            child: Container(
-                              width: double.infinity,
-                              height: 50,
-                              decoration: const BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                            ),
-                          ),
-                        const SizedBox(height: materialVerticalPadding),
+                        if (Theme.of(context).platform == TargetPlatform.iOS)
+                          ..._divideTiles(
+                            context: context,
+                            tiles: children,
+                            cupertinoHasLeading: hasLeading,
+                            cupertinoLeadingIndent: leadingIndent,
+                          )
+                        else
+                          ...children,
                       ],
                     ),
                   ),
+                  if (footer != null) footer!,
                 ],
-              )
-              : Padding(
-                padding: margin ?? Styles.bodySectionPadding,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (header != null)
-                      ListSectionHeader(
-                        title: header!,
-                        onTap: onHeaderTap,
-                        trailing: headerTrailing,
-                      ),
-                    (materialFilledCard ? Card.filled : Card.new)(
-                      clipBehavior: clipBehavior,
-                      color: backgroundColor,
-                      margin: EdgeInsets.zero,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (Theme.of(context).platform == TargetPlatform.iOS)
-                            ..._divideTiles(
-                              context: context,
-                              tiles: children,
-                              cupertinoHasLeading: hasLeading,
-                              cupertinoLeadingIndent: leadingIndent,
-                            )
-                          else
-                            ...children,
-                        ],
-                      ),
-                    ),
-                    if (footer != null) footer!,
-                  ],
-                ),
               ),
+            ),
     );
   }
 
@@ -209,7 +204,9 @@ class ListSectionHeader extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Flexible(child: DefaultTextStyle.merge(style: Styles.sectionTitle, child: title)),
+            Flexible(
+              child: DefaultTextStyle.merge(style: Styles.sectionTitle, child: title),
+            ),
             if (onTap != null)
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -259,23 +256,23 @@ class PlatformDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.android
         ? Divider(
-          height: height,
-          thickness: thickness,
-          indent: indent,
-          endIndent: endIndent,
-          color: color,
-        )
+            height: height,
+            thickness: thickness,
+            indent: indent,
+            endIndent: endIndent,
+            color: color,
+          )
         : Divider(
-          height: height,
-          thickness: thickness ?? 0.0,
-          indent:
-              indent ??
-              (cupertinoHasLeading
-                  ? 16.0 + (cupertinoLeadingIndent ?? _defaultListTileLeadingWidth)
-                  : 16.0),
-          endIndent: endIndent,
-          color: color,
-        );
+            height: height,
+            thickness: thickness ?? 0.0,
+            indent:
+                indent ??
+                (cupertinoHasLeading
+                    ? 16.0 + (cupertinoLeadingIndent ?? _defaultListTileLeadingWidth)
+                    : 16.0),
+            endIndent: endIndent,
+            color: color,
+          );
   }
 }
 

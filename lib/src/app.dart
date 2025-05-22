@@ -120,16 +120,14 @@ class _AppState extends ConsumerState<Application> {
       title: 'lichess.org',
       locale: generalPrefs.locale,
       theme: theme.copyWith(
-        navigationBarTheme:
-            isIOS
-                ? null
-                : NavigationBarTheme.of(context).copyWith(
-                  height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
-                ),
+        navigationBarTheme: isIOS
+            ? null
+            : NavigationBarTheme.of(context).copyWith(
+                height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
+              ),
       ),
-      onGenerateRoute:
-          (settings) =>
-              settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,
+      onGenerateRoute: (settings) =>
+          settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,
       onGenerateInitialRoutes: (initialRoute) {
         final homeRoute = buildScreenRoute<void>(context, screen: const MainTabScaffold());
         return <Route<dynamic>?>[

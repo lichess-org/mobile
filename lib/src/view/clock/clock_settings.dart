@@ -42,12 +42,11 @@ class ClockSettings extends ConsumerWidget {
                 padding: _kIconPadding,
                 tooltip: context.l10n.reset,
                 iconSize: _iconSize,
-                onPressed:
-                    buttonsEnabled
-                        ? () {
-                          ref.read(clockToolControllerProvider.notifier).reset();
-                        }
-                        : null,
+                onPressed: buttonsEnabled
+                    ? () {
+                        ref.read(clockToolControllerProvider.notifier).reset();
+                      }
+                    : null,
                 icon: const Icon(Icons.refresh),
               ),
             ),
@@ -59,36 +58,35 @@ class ClockSettings extends ConsumerWidget {
                 padding: _kIconPadding,
                 tooltip: context.l10n.settingsSettings,
                 iconSize: _iconSize,
-                onPressed:
-                    buttonsEnabled
-                        ? () {
-                          final double screenHeight = MediaQuery.sizeOf(context).height;
-                          showModalBottomSheet<void>(
-                            context: context,
-                            isScrollControlled: true,
-                            constraints: BoxConstraints(
-                              maxHeight: screenHeight - (screenHeight / 10),
-                            ),
-                            builder: (BuildContext context) {
-                              final options = ref.watch(
-                                clockToolControllerProvider.select((value) => value.options),
-                              );
-                              return TimeControlModal(
-                                excludeUltraBullet: true,
-                                timeIncrement: TimeIncrement(
-                                  options.whiteTime.inSeconds,
-                                  options.whiteIncrement.inSeconds,
-                                ),
-                                onSelected: (choice) {
-                                  ref
-                                      .read(clockToolControllerProvider.notifier)
-                                      .updateOptions(choice);
-                                },
-                              );
-                            },
-                          );
-                        }
-                        : null,
+                onPressed: buttonsEnabled
+                    ? () {
+                        final double screenHeight = MediaQuery.sizeOf(context).height;
+                        showModalBottomSheet<void>(
+                          context: context,
+                          isScrollControlled: true,
+                          constraints: BoxConstraints(
+                            maxHeight: screenHeight - (screenHeight / 10),
+                          ),
+                          builder: (BuildContext context) {
+                            final options = ref.watch(
+                              clockToolControllerProvider.select((value) => value.options),
+                            );
+                            return TimeControlModal(
+                              excludeUltraBullet: true,
+                              timeIncrement: TimeIncrement(
+                                options.whiteTime.inSeconds,
+                                options.whiteIncrement.inSeconds,
+                              ),
+                              onSelected: (choice) {
+                                ref
+                                    .read(clockToolControllerProvider.notifier)
+                                    .updateOptions(choice);
+                              },
+                            );
+                          },
+                        );
+                      }
+                    : null,
                 icon: const Icon(Icons.settings),
               ),
             ),
@@ -114,10 +112,9 @@ class ClockSettings extends ConsumerWidget {
                 iconSize: _iconSize,
                 // TODO: translate
                 tooltip: 'Flip clock',
-                onPressed:
-                    () => ref
-                        .read(clockToolControllerProvider.notifier)
-                        .toggleOrientation(clockOrientation.toggle),
+                onPressed: () => ref
+                    .read(clockToolControllerProvider.notifier)
+                    .toggleOrientation(clockOrientation.toggle),
                 icon: const Icon(Icons.screen_rotation),
               ),
             ),
@@ -151,35 +148,33 @@ class _PlayResumeButton extends ConsumerWidget {
     final state = ref.watch(clockToolControllerProvider);
 
     return ColoredBox(
-      color:
-          !state.started
-              ? Theme.of(context).colorScheme.surfaceContainerHighest
-              : Colors.transparent,
-      child:
-          !state.started
-              ? IconButton(
-                padding: _kIconPadding,
-                color: Theme.of(context).colorScheme.primary,
-                tooltip: context.l10n.play,
-                iconSize: iconSize,
-                onPressed: () => controller.start(),
-                icon: const Icon(Icons.play_arrow),
-              )
-              : state.paused
-              ? IconButton(
-                padding: _kIconPadding,
-                tooltip: context.l10n.resume,
-                iconSize: iconSize,
-                onPressed: () => controller.resume(),
-                icon: const Icon(Icons.play_arrow),
-              )
-              : IconButton(
-                padding: _kIconPadding,
-                tooltip: context.l10n.pause,
-                iconSize: iconSize,
-                onPressed: () => controller.pause(),
-                icon: const Icon(Icons.pause),
-              ),
+      color: !state.started
+          ? Theme.of(context).colorScheme.surfaceContainerHighest
+          : Colors.transparent,
+      child: !state.started
+          ? IconButton(
+              padding: _kIconPadding,
+              color: Theme.of(context).colorScheme.primary,
+              tooltip: context.l10n.play,
+              iconSize: iconSize,
+              onPressed: () => controller.start(),
+              icon: const Icon(Icons.play_arrow),
+            )
+          : state.paused
+          ? IconButton(
+              padding: _kIconPadding,
+              tooltip: context.l10n.resume,
+              iconSize: iconSize,
+              onPressed: () => controller.resume(),
+              icon: const Icon(Icons.play_arrow),
+            )
+          : IconButton(
+              padding: _kIconPadding,
+              tooltip: context.l10n.pause,
+              iconSize: iconSize,
+              onPressed: () => controller.pause(),
+              icon: const Icon(Icons.pause),
+            ),
     );
   }
 }

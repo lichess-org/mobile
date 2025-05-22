@@ -35,12 +35,9 @@ sealed class StormRunStats with _$StormRunStats {
   IList<PuzzleHistoryEntry> historyFilter(StormFilter filter) {
     return history
         .where(
-          (e) =>
-              (filter.slow && filter.failed)
-                  ? (!e.win && slowPuzzleIds.any((id) => id == e.id))
-                  : (filter.slow
-                      ? slowPuzzleIds.any((id) => id == e.id)
-                      : (!filter.failed || !e.win)),
+          (e) => (filter.slow && filter.failed)
+              ? (!e.win && slowPuzzleIds.any((id) => id == e.id))
+              : (filter.slow ? slowPuzzleIds.any((id) => id == e.id) : (!filter.failed || !e.win)),
         )
         .toIList();
   }

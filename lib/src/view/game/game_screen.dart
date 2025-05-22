@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -117,24 +118,22 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     final provider = currentGameProvider(
       seek: widget.seek,
       challenge: widget.challenge,
-      game:
-          widget.initialGameId != null
-              ? (
-                gameId: widget.initialGameId!,
-                lastFen: widget.loadingFen,
-                lastMove: widget.loadingLastMove,
-                side: widget.loadingOrientation,
-              )
-              : null,
+      game: widget.initialGameId != null
+          ? (
+              gameId: widget.initialGameId!,
+              lastFen: widget.loadingFen,
+              lastMove: widget.loadingLastMove,
+              side: widget.loadingOrientation,
+            )
+          : null,
     );
 
     switch (ref.watch(provider)) {
       case AsyncData(:final value):
         final (game: loadedGame, challenge: challenge, declineReason: declineReason) = value;
-        final shouldPreventGoingBackAsync =
-            loadedGame != null
-                ? ref.watch(shouldPreventGoingBackProvider(loadedGame.gameId))
-                : const AsyncValue.data(true);
+        final shouldPreventGoingBackAsync = loadedGame != null
+            ? ref.watch(shouldPreventGoingBackProvider(loadedGame.gameId))
+            : const AsyncValue.data(true);
 
         final socketUri = loadedGame != null ? GameController.socketUri(loadedGame.gameId) : null;
 
@@ -145,104 +144,102 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               data: (prevent) => prevent ? SocketPingRating(socketUri: socketUri) : null,
               orElse: () => null,
             ),
-            title:
-                loadedGame != null
-                    ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
-                    : widget.seek != null
-                    ? _LobbyGameTitle(seek: widget.seek!)
-                    : widget.challenge != null
-                    ? _ChallengeGameTitle(challenge: widget.challenge!)
-                    : const SizedBox.shrink(),
+            title: loadedGame != null
+                ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
+                : widget.seek != null
+                ? _LobbyGameTitle(seek: widget.seek!)
+                : widget.challenge != null
+                ? _ChallengeGameTitle(challenge: widget.challenge!)
+                : const SizedBox.shrink(),
 
             actions: [
               if (loadedGame != null)
                 _GameMenu(gameId: loadedGame.gameId, gameListContext: widget.gameListContext),
             ],
           ),
-          body:
-              loadedGame != null
-                  ? GameBody(
-                    loadedGame: loadedGame,
-                    whiteClockKey: _whiteClockKey,
-                    blackClockKey: _blackClockKey,
-                    boardKey: _boardKey,
-                    onLoadGameCallback: (id) {
-                      if (mounted) {
-                        ref.read(provider.notifier).loadGame(id);
-                      }
-                    },
-                    onNewOpponentCallback: (game) {
-                      if (!mounted) return;
+          body: loadedGame != null
+              ? GameBody(
+                  loadedGame: loadedGame,
+                  whiteClockKey: _whiteClockKey,
+                  blackClockKey: _blackClockKey,
+                  boardKey: _boardKey,
+                  onLoadGameCallback: (id) {
+                    if (mounted) {
+                      ref.read(provider.notifier).loadGame(id);
+                    }
+                  },
+                  onNewOpponentCallback: (game) {
+                    if (!mounted) return;
 
-                      if (widget.source == _GameSource.lobby) {
-                        ref.read(provider.notifier).newOpponent();
-                      } else {
-                        final savedSetup = ref.read(gameSetupPreferencesProvider);
-                        Navigator.of(context, rootNavigator: true).pushReplacement(
-                          GameScreen.buildRoute(
-                            context,
-                            seek: GameSeek.newOpponentFromGame(game, savedSetup),
-                          ),
-                        );
-                      }
-                    },
-                  )
-                  : widget.challenge != null && challenge != null
-                  ? ChallengeDeclinedBoard(
-                    challenge: challenge,
-                    declineReason:
-                        declineReason != null
-                            ? declineReason.label(context.l10n)
-                            : ChallengeDeclineReason.generic.label(context.l10n),
-                  )
-                  : const LoadGameError('Could not create the game.'),
+                    if (widget.source == _GameSource.lobby) {
+                      ref.read(provider.notifier).newOpponent();
+                    } else {
+                      final savedSetup = ref.read(gameSetupPreferencesProvider);
+                      Navigator.of(context, rootNavigator: true).pushReplacement(
+                        GameScreen.buildRoute(
+                          context,
+                          seek: GameSeek.newOpponentFromGame(game, savedSetup),
+                        ),
+                      );
+                    }
+                  },
+                )
+              : widget.challenge != null && challenge != null
+              ? ChallengeDeclinedBoard(
+                  challenge: challenge,
+                  declineReason: declineReason != null
+                      ? declineReason.label(context.l10n)
+                      : ChallengeDeclineReason.generic.label(context.l10n),
+                )
+              : const LoadGameError('Could not create the game.'),
         );
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameScreen] could not create game; $e\n$s');
 
         // lichess sends a 400 response if user has disallowed challenges
-        final message =
-            e is ServerException && e.statusCode == 400
-                ? LoadGameError('Could not create the game: ${e.jsonError?['error'] as String?}')
-                : const LoadGameError(
-                  'Sorry, we could not create the game. Please try again later.',
-                );
+        final message = e is ServerException && e.statusCode == 400
+            ? LoadGameError('Could not create the game: ${e.jsonError?['error'] as String?}')
+            : const LoadGameError('Sorry, we could not create the game. Please try again later.');
 
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: const SocketPingRating(),
-            title:
-                widget.seek != null
-                    ? _LobbyGameTitle(seek: widget.seek!)
-                    : widget.challenge != null
-                    ? _ChallengeGameTitle(challenge: widget.challenge!)
-                    : const SizedBox.shrink(),
+            title: widget.seek != null
+                ? _LobbyGameTitle(seek: widget.seek!)
+                : widget.challenge != null
+                ? _ChallengeGameTitle(challenge: widget.challenge!)
+                : const SizedBox.shrink(),
           ),
           body: PopScope(child: message),
         );
       case _:
-        final loadingBoard =
-            widget.seek != null
-                ? LobbyScreenLoadingContent(
-                  widget.seek!,
-                  () => ref.read(createGameServiceProvider).cancelSeek(),
-                )
-                : widget.challenge != null
-                ? ChallengeLoadingContent(
-                  widget.challenge!,
-                  () => ref.read(createGameServiceProvider).cancelChallenge(),
-                )
-                : const StandaloneGameLoadingBoard();
+        final loadingBoard = widget.seek != null
+            ? LobbyScreenLoadingContent(
+                widget.seek!,
+                () => ref.read(createGameServiceProvider).cancelSeek(),
+              )
+            : widget.challenge != null
+            ? ChallengeLoadingContent(
+                widget.challenge!,
+                () => ref.read(createGameServiceProvider).cancelChallenge(),
+              )
+            : const Column(
+                children: [
+                  Expanded(child: SafeArea(bottom: false, child: StandaloneGameLoadingBoard())),
+                  BottomBar.empty(maintainBottomViewPadding: true),
+                ],
+              );
 
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: const SocketPingRating(),
-            title:
-                widget.seek != null
-                    ? _LobbyGameTitle(seek: widget.seek!)
-                    : widget.challenge != null
-                    ? _ChallengeGameTitle(challenge: widget.challenge!)
-                    : const SizedBox.shrink(),
+            title: widget.seek != null
+                ? _LobbyGameTitle(seek: widget.seek!)
+                : widget.challenge != null
+                ? _ChallengeGameTitle(challenge: widget.challenge!)
+                : const SizedBox.shrink(),
           ),
           body: PopScope(canPop: false, child: loadingBoard),
         );
@@ -268,32 +265,31 @@ class _GameMenu extends ConsumerWidget {
         ContextMenuAction(
           icon: const Icon(Icons.settings),
           label: context.l10n.settingsSettings,
-          onPressed:
-              () => showModalBottomSheet<void>(
-                context: context,
-                isDismissible: true,
-                isScrollControlled: true,
-                showDragHandle: true,
-                builder: (_) => GameSettings(id: gameId),
-              ),
+          onPressed: () => showModalBottomSheet<void>(
+            context: context,
+            isDismissible: true,
+            isScrollControlled: true,
+            showDragHandle: true,
+            builder: (_) => GameSettings(id: gameId),
+          ),
         ),
         const ToggleSoundContextMenuAction(),
         GameBookmarkContextMenuAction(
           id: gameId.gameId,
           bookmarked: isBookmarkedAsync.valueOrNull ?? false,
-          onToggleBookmark:
-              () => ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
+          onToggleBookmark: () =>
+              ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
           gameListContext: gameListContext,
         ),
         ...(switch (ref.watch(gameShareDataProvider(gameId))) {
           AsyncData(:final value) =>
             value.finished
                 ? makeFinishedGameShareContextMenuActions(
-                  context,
-                  ref,
-                  gameId: gameId.gameId,
-                  orientation: value.pov ?? Side.white,
-                )
+                    context,
+                    ref,
+                    gameId: gameId.gameId,
+                    orientation: value.pov ?? Side.white,
+                  )
                 : [],
           _ => [],
         }),
@@ -359,13 +355,12 @@ class _TournamentGameTitle extends ConsumerWidget {
           clockUpdatedAt: tournament.clock.at,
           active: true,
           tickInterval: const Duration(seconds: 1),
-          builder:
-              (BuildContext context, Duration timeLeft) => Center(
-                child: Text(
-                  '${timeLeft.toHoursMinutesSeconds()} ',
-                  style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
-                ),
-              ),
+          builder: (BuildContext context, Duration timeLeft) => Center(
+            child: Text(
+              '${timeLeft.toHoursMinutesSeconds()} ',
+              style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
+            ),
+          ),
         ),
       ],
     );
@@ -412,22 +407,21 @@ class _StandaloneGameTitle extends ConsumerWidget {
           ],
         );
       },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: SizedBox(
-                height: 24.0,
-                width: 200.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: SizedBox(
+            height: 24.0,
+            width: 200.0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(10.0),
               ),
             ),
           ),
+        ),
+      ),
       error: (error, _) => const SizedBox.shrink(),
     );
   }

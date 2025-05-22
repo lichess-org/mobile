@@ -33,12 +33,11 @@ enum TournamentFreq implements Comparable<TournamentFreq> {
   }
 }
 
-typedef TournamentLists =
-    ({
-      IList<LightTournament> started,
-      IList<LightTournament> created,
-      IList<LightTournament> finished,
-    });
+typedef TournamentLists = ({
+  IList<LightTournament> started,
+  IList<LightTournament> created,
+  IList<LightTournament> finished,
+});
 
 typedef TournamentMe = ({int rank, GameFullId? gameId, bool? withdraw, Duration? pauseDelay});
 
@@ -193,10 +192,9 @@ Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick 
     // Sometimes a new FEN comes in via the websocket, but the API reload response
     // still has the FEN of the previous move, leading to sync issues.
     // So only copy the whole game here if it's a new ID.
-    featuredGame:
-        tournament.featuredGame?.id != newFeaturedGameId
-            ? pick('featured').asFeaturedGameOrNull()
-            : tournament.featuredGame,
+    featuredGame: tournament.featuredGame?.id != newFeaturedGameId
+        ? pick('featured').asFeaturedGameOrNull()
+        : tournament.featuredGame,
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
     timeToStart: pick(
@@ -243,8 +241,10 @@ StandingPlayer _standingPlayerFromPick(RequiredPick pick) {
     rank: pick('rank').asIntOrThrow(),
     sheet: (
       fire: pick('sheet', 'fire').asBoolOrFalse(),
-      scores:
-          pick('sheet', 'scores').asStringOrThrow().characters.map((e) => int.parse(e)).toIList(),
+      scores: pick(
+        'sheet',
+        'scores',
+      ).asStringOrThrow().characters.map((e) => int.parse(e)).toIList(),
     ),
     withdraw: pick('withdraw').asBoolOrFalse(),
   );
@@ -388,15 +388,14 @@ extension TournamentExtension on Pick {
   Verdicts asVerdictsOrThrow() {
     final requiredPick = this.required();
     return (
-      list:
-          requiredPick('list')
-              .asListOrThrow((pick) => pick.asVerdictOrThrow())
-              .where(
-                // we don't want to show the condition specific to the bot players
-                // since it makes no sense a a bot player use the app
-                (v) => v.condition != 'Bot players are not allowed',
-              )
-              .toIList(),
+      list: requiredPick('list')
+          .asListOrThrow((pick) => pick.asVerdictOrThrow())
+          .where(
+            // we don't want to show the condition specific to the bot players
+            // since it makes no sense a a bot player use the app
+            (v) => v.condition != 'Bot players are not allowed',
+          )
+          .toIList(),
       accepted: requiredPick('accepted').asBoolOrThrow(),
     );
   }
@@ -422,10 +421,9 @@ extension TournamentExtension on Pick {
       final requiredPick = this.required();
       return (
         page: requiredPick('page').asIntOrThrow(),
-        players:
-            requiredPick(
-              'players',
-            ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
+        players: requiredPick(
+          'players',
+        ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
       );
     } catch (_) {
       return null;

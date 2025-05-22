@@ -102,7 +102,10 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       case AsyncData(:final value):
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(title: _Title(variant: value.variant), actions: appBarActions),
+          appBar: AppBar(
+            title: _Title(variant: value.variant),
+            actions: appBarActions,
+          ),
           body: _Body(
             options: widget.options,
             controller: _tabController,
@@ -119,7 +122,10 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       case _:
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(title: const _Title(variant: Variant.standard), actions: appBarActions),
+          appBar: AppBar(
+            title: const _Title(variant: Variant.standard),
+            actions: appBarActions,
+          ),
           body: const Center(child: CircularProgressIndicator.adaptive()),
         );
     }
@@ -170,22 +176,20 @@ class _Body extends ConsumerWidget {
       smallBoard: analysisPrefs.smallBoard,
       tabController: controller,
       pov: pov,
-      boardBuilder:
-          (context, boardSize, borderRadius) => AnalysisBoard(
-            options,
-            boardSize,
-            borderRadius: borderRadius,
-            enableDrawingShapes: enableDrawingShapes,
-          ),
-      engineGaugeBuilder:
-          analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
-              ? (context, orientation) {
-                return orientation == Orientation.portrait
-                    ? EngineGauge(
+      boardBuilder: (context, boardSize, borderRadius) => AnalysisBoard(
+        options,
+        boardSize,
+        borderRadius: borderRadius,
+        enableDrawingShapes: enableDrawingShapes,
+      ),
+      engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
+          ? (context, orientation) {
+              return orientation == Orientation.portrait
+                  ? EngineGauge(
                       displayMode: EngineGaugeDisplayMode.horizontal,
                       params: analysisState.engineGaugeParams(enginePrefs),
                     )
-                    : Container(
+                  : Container(
                       clipBehavior: Clip.hardEdge,
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
                       child: EngineGauge(
@@ -193,27 +197,25 @@ class _Body extends ConsumerWidget {
                         params: analysisState.engineGaugeParams(enginePrefs),
                       ),
                     );
-              }
-              : null,
-      engineLines:
-          isEngineAvailable && numEvalLines > 0
-              ? EngineLines(
-                onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                savedEval: currentNode.eval,
-                isGameOver: currentNode.position.isGameOver,
-              )
-              : null,
+            }
+          : null,
+      engineLines: isEngineAvailable && numEvalLines > 0
+          ? EngineLines(
+              onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
+              savedEval: currentNode.eval,
+              isGameOver: currentNode.position.isGameOver,
+            )
+          : null,
       bottomBar: _BottomBar(options: options),
       children: [
         OpeningExplorerView(
           shouldDisplayGames: analysisState.isComputerAnalysisAllowed,
           position: currentNode.position,
-          opening:
-              kOpeningAllowedVariants.contains(analysisState.variant)
-                  ? analysisState.currentNode.isRoot
-                      ? LightOpening(eco: '', name: context.l10n.startPosition)
-                      : analysisState.currentNode.opening ?? analysisState.currentBranchOpening
-                  : null,
+          opening: kOpeningAllowedVariants.contains(analysisState.variant)
+              ? analysisState.currentNode.isRoot
+                    ? LightOpening(eco: '', name: context.l10n.startPosition)
+                    : analysisState.currentNode.opening ?? analysisState.currentBranchOpening
+              : null,
           onMoveSelected: (move) {
             ref.read(ctrlProvider.notifier).onUserMove(move);
           },
@@ -256,16 +258,16 @@ class _BottomBar extends ConsumerWidget {
                     label: context.l10n.toggleLocalEvaluation,
                     onTap:
                         analysisState.isEngineAllowed &&
-                                snapshot.connectionState != ConnectionState.waiting
-                            ? () async {
-                              toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
-                              try {
-                                await toggleFuture;
-                              } finally {
-                                toggleFuture = null;
-                              }
+                            snapshot.connectionState != ConnectionState.waiting
+                        ? () async {
+                            toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
+                            try {
+                              await toggleFuture;
+                            } finally {
+                              toggleFuture = null;
                             }
-                            : null,
+                          }
+                        : null,
                     icon: CupertinoIcons.gauge,
                     highlighted: analysisState.isEngineAvailable(evalPrefs),
                   );

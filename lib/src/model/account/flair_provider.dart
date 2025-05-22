@@ -42,14 +42,13 @@ Map<String, dynamic> _makeEmojiData(String list) {
   }
 
   final data = {
-    'categories':
-        categories.map((category) {
-          return {
-            'id': category[0],
-            'name': category[1],
-            'emojis': lines.where((line) => line.startsWith(category[0])).toList(),
-          };
-        }).toList(),
+    'categories': categories.map((category) {
+      return {
+        'id': category[0],
+        'name': category[1],
+        'emojis': lines.where((line) => line.startsWith(category[0])).toList(),
+      };
+    }).toList(),
     'emojis': <String, dynamic>{for (final line in lines) line: emojiData(line)},
   };
 

@@ -87,10 +87,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         final recentGames = ref.watch(myRecentGamesProvider);
         final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
         final isTablet = isTabletOrLarger(context);
-        final featuredTournaments =
-            status.isOnline
-                ? ref.watch(featuredTournamentsProvider)
-                : const AsyncValue.data(IListConst<LightTournament>([]));
+        final featuredTournaments = status.isOnline
+            ? ref.watch(featuredTournamentsProvider)
+            : const AsyncValue.data(IListConst<LightTournament>([]));
 
         // Show the welcome screen if not logged in and there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
@@ -98,28 +97,32 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             session == null &&
             recentGames.maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
 
-        final widgets =
-            shouldShowWelcomeScreen
-                ? _welcomeScreenWidgets(session: session, status: status, isTablet: isTablet)
-                : isTablet
-                ? _tabletWidgets(
-                  session: session,
-                  status: status,
-                  ongoingGames: ongoingGames,
-                  offlineCorresGames: offlineCorresGames,
-                  recentGames: recentGames,
-                  featuredTournaments: featuredTournaments,
-                  nbOfGames: nbOfGames,
-                )
-                : _handsetWidgets(
-                  session: session,
-                  status: status,
-                  ongoingGames: ongoingGames,
-                  offlineCorresGames: offlineCorresGames,
-                  recentGames: recentGames,
-                  featuredTournaments: featuredTournaments,
-                  nbOfGames: nbOfGames,
-                );
+        final widgets = shouldShowWelcomeScreen
+            ? _welcomeScreenWidgets(
+                session: session,
+                status: status,
+                featuredTournaments: featuredTournaments,
+                isTablet: isTablet,
+              )
+            : isTablet
+            ? _tabletWidgets(
+                session: session,
+                status: status,
+                ongoingGames: ongoingGames,
+                offlineCorresGames: offlineCorresGames,
+                recentGames: recentGames,
+                featuredTournaments: featuredTournaments,
+                nbOfGames: nbOfGames,
+              )
+            : _handsetWidgets(
+                session: session,
+                status: status,
+                ongoingGames: ongoingGames,
+                offlineCorresGames: offlineCorresGames,
+                recentGames: recentGames,
+                featuredTournaments: featuredTournaments,
+                nbOfGames: nbOfGames,
+              );
 
         return FocusDetector(
           onFocusLost: () {
@@ -151,10 +154,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               ],
             ),
             body: RefreshIndicator.adaptive(
-              edgeOffset:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                      : 0.0,
+              edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                  ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                  : 0.0,
               key: _refreshKey,
               onRefresh: () => _refreshData(isOnline: status.isOnline),
               child: ListView(controller: homeScrollController, children: widgets),
@@ -204,10 +206,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       _EditableWidget(
         widget: HomeEditableWidget.ongoingGames,
         shouldShow: hasOngoingGames,
-        child:
-            status.isOnline
-                ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
-                : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
+        child: status.isOnline
+            ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
+            : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
       ),
       _EditableWidget(
         widget: HomeEditableWidget.featuredTournaments,
@@ -226,6 +227,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   List<Widget> _welcomeScreenWidgets({
     required AuthSessionState? session,
     required ConnectivityStatus status,
+    required AsyncValue<IList<LightTournament>> featuredTournaments,
     required bool isTablet,
   }) {
     final welcomeWidgets = [
@@ -261,8 +263,15 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       if (isTablet)
         Row(
           children: [
-            const Flexible(child: _TabletCreateAGameSection()),
-            Flexible(child: Column(children: welcomeWidgets)),
+            const Expanded(child: _TabletCreateAGameSection()),
+            Expanded(
+              child: Column(
+                children: [
+                  ...welcomeWidgets,
+                  FeaturedTournamentsWidget(featured: featuredTournaments),
+                ],
+              ),
+            ),
           ],
         )
       else ...[
@@ -273,6 +282,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
           ),
         ...welcomeWidgets,
+        if (status.isOnline)
+          _EditableWidget(
+            widget: HomeEditableWidget.featuredTournaments,
+            shouldShow: true,
+            child: FeaturedTournamentsWidget(featured: featuredTournaments),
+          ),
       ],
     ];
   }
@@ -347,10 +362,9 @@ class _SignInWidget extends ConsumerWidget {
     final authController = ref.watch(authControllerProvider);
 
     return FilledButton.tonal(
-      onPressed:
-          authController.isLoading
-              ? null
-              : () => ref.read(authControllerProvider.notifier).signIn(),
+      onPressed: authController.isLoading
+          ? null
+          : () => ref.read(authControllerProvider.notifier).signIn(),
       child: Text(context.l10n.signIn),
     );
   }
@@ -388,28 +402,29 @@ class _EditableWidget extends ConsumerWidget {
 
     return isEditing
         ? Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Checkbox.adaptive(
-                    value: isEnabled,
-                    onChanged:
-                        widget.alwaysEnabled
-                            ? null
-                            : (_) {
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Checkbox.adaptive(
+                      value: isEnabled,
+                      onChanged: widget.alwaysEnabled
+                          ? null
+                          : (_) {
                               ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
                             },
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(child: IgnorePointer(ignoring: isEditing, child: child)),
-          ],
-        )
+              Expanded(
+                child: IgnorePointer(ignoring: isEditing, child: child),
+              ),
+            ],
+          )
         : widget.alwaysEnabled || isEnabled
         ? child
         : const SizedBox.shrink();
@@ -546,24 +561,23 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
               OfflineCorrespondenceGameScreen.buildRoute(context, initialGame: (el.$1, el.$2)),
             );
           },
-          builder:
-              (el) => OngoingGameCarouselItem(
-                game: OngoingGame(
-                  id: el.$2.id,
-                  fullId: el.$2.fullId,
-                  orientation: el.$2.orientation,
-                  fen: el.$2.lastPosition.fen,
-                  perf: el.$2.perf,
-                  speed: el.$2.speed,
-                  variant: el.$2.variant,
-                  opponent: el.$2.opponent!.user,
-                  isMyTurn: el.$2.isMyTurn,
-                  opponentRating: el.$2.opponent!.rating,
-                  opponentAiLevel: el.$2.opponent!.aiLevel,
-                  lastMove: el.$2.lastMove,
-                  secondsLeft: el.$2.myTimeLeft(el.$1)?.inSeconds,
-                ),
-              ),
+          builder: (el) => OngoingGameCarouselItem(
+            game: OngoingGame(
+              id: el.$2.id,
+              fullId: el.$2.fullId,
+              orientation: el.$2.orientation,
+              fen: el.$2.lastPosition.fen,
+              perf: el.$2.perf,
+              speed: el.$2.speed,
+              variant: el.$2.variant,
+              opponent: el.$2.opponent!.user,
+              isMyTurn: el.$2.isMyTurn,
+              opponentRating: el.$2.opponent!.rating,
+              opponentAiLevel: el.$2.opponent!.aiLevel,
+              lastMove: el.$2.lastMove,
+              secondsLeft: el.$2.myTimeLeft(el.$1)?.inSeconds,
+            ),
+          ),
           moreScreenRouteBuilder: OfflineCorrespondenceGamesScreen.buildRoute,
           maxGamesToShow: maxGamesToShow,
         );
@@ -643,12 +657,11 @@ class PreviewGameList<T> extends StatelessWidget {
         children: [
           ListSectionHeader(
             title: Text(context.l10n.nbGamesInPlay(list.length)),
-            onTap:
-                list.length > maxGamesToShow
-                    ? () {
-                      Navigator.of(context).push(moreScreenRouteBuilder(context));
-                    }
-                    : null,
+            onTap: list.length > maxGamesToShow
+                ? () {
+                    Navigator.of(context).push(moreScreenRouteBuilder(context));
+                  }
+                : null,
           ),
           for (final data in list.take(maxGamesToShow)) builder(data),
         ],
@@ -665,23 +678,20 @@ class _PlayerScreenButton extends ConsumerWidget {
     final connectivity = ref.watch(connectivityChangesProvider);
 
     return connectivity.maybeWhen(
-      data:
-          (connectivity) => SemanticIconButton(
-            icon: const Icon(Icons.group_outlined),
-            semanticsLabel: context.l10n.players,
-            onPressed:
-                !connectivity.isOnline
-                    ? null
-                    : () {
-                      Navigator.of(context).push(PlayerScreen.buildRoute(context));
-                    },
-          ),
-      orElse:
-          () => SemanticIconButton(
-            icon: const Icon(Icons.group_outlined),
-            semanticsLabel: context.l10n.players,
-            onPressed: null,
-          ),
+      data: (connectivity) => SemanticIconButton(
+        icon: const Icon(Icons.group_outlined),
+        semanticsLabel: context.l10n.players,
+        onPressed: !connectivity.isOnline
+            ? null
+            : () {
+                Navigator.of(context).push(PlayerScreen.buildRoute(context));
+              },
+      ),
+      orElse: () => SemanticIconButton(
+        icon: const Icon(Icons.group_outlined),
+        semanticsLabel: context.l10n.players,
+        onPressed: null,
+      ),
     );
   }
 }
@@ -708,13 +718,12 @@ class _ChallengeScreenButton extends ConsumerWidget {
           child: const Icon(LichessIcons.crossed_swords, size: 18.0),
         ),
         semanticsLabel: context.l10n.preferencesNotifyChallenge,
-        onPressed:
-            !value.isOnline
-                ? null
-                : () {
-                  ref.invalidate(challengesProvider);
-                  Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
-                },
+        onPressed: !value.isOnline
+            ? null
+            : () {
+                ref.invalidate(challengesProvider);
+                Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
+              },
       ),
       _ => SemanticIconButton(
         icon: const Icon(LichessIcons.crossed_swords, size: 18.0),

@@ -71,12 +71,11 @@ class _GamesCarouselState<T> extends State<GamesCarousel<T>> {
             padding: Styles.horizontalBodyPadding,
             child: ListSectionHeader(
               title: Text(context.l10n.nbGamesInPlay(widget.list.length)),
-              onTap:
-                  widget.list.length > 2
-                      ? () {
-                        Navigator.of(context).push(widget.moreScreenRouteBuilder(context));
-                      }
-                      : null,
+              onTap: widget.list.length > 2
+                  ? () {
+                      Navigator.of(context).push(widget.moreScreenRouteBuilder(context));
+                    }
+                  : null,
             ),
           ),
           Padding(
@@ -136,9 +135,9 @@ class OngoingGameCarouselItem extends StatelessWidget {
                     Text(
                       game.secondsLeft != null && game.isMyTurn
                           ? relativeDate(
-                            context.l10n,
-                            DateTime.now().add(Duration(seconds: game.secondsLeft!)),
-                          )
+                              context.l10n,
+                              DateTime.now().add(Duration(seconds: game.secondsLeft!)),
+                            )
                           : game.isMyTurn
                           ? context.l10n.yourTurn
                           : context.l10n.waitingForOpponent,
@@ -201,8 +200,12 @@ class _BoardCarouselItem extends ConsumerWidget {
     final hsl = HSLColor.fromColor(backgroundColor);
     final hue = (hsl.hue + boardPrefs.hue) % 360;
 
-    final backgroundColorWithHueFilter =
-        HSLColor.fromAHSL(1.0, hue, hsl.saturation, hsl.lightness).toColor();
+    final backgroundColorWithHueFilter = HSLColor.fromAHSL(
+      1.0,
+      hue,
+      hsl.saturation,
+      hsl.lightness,
+    ).toColor();
 
     final screenWidth = MediaQuery.sizeOf(context).width;
     final totalFlex = kGameCarouselFlexWeights.reduce((a, b) => a + b);

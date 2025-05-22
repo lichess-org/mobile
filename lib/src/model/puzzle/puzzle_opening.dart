@@ -5,8 +5,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_opening.g.dart';
 
-typedef PuzzleOpeningFamily =
-    ({String key, String name, int count, IList<PuzzleOpeningData> openings});
+typedef PuzzleOpeningFamily = ({
+  String key,
+  String name,
+  int count,
+  IList<PuzzleOpeningData> openings,
+});
 
 typedef PuzzleOpeningData = ({String key, String name, int count});
 

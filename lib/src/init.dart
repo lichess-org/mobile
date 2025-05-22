@@ -129,11 +129,10 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
     ) {
       final CorePalette? palette = value[0] as CorePalette?;
       final schemes = value[1] as dynamic;
-      final ColorSchemes? colorSchemes =
-          schemes != null
-              // ignore: avoid_dynamic_calls
-              ? (light: schemes.light as ColorScheme, dark: schemes.dark as ColorScheme)
-              : null;
+      final ColorSchemes? colorSchemes = schemes != null
+          // ignore: avoid_dynamic_calls
+          ? (light: schemes.light as ColorScheme, dark: schemes.dark as ColorScheme)
+          : null;
 
       setSystemColors(palette, colorSchemes);
     });

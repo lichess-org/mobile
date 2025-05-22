@@ -79,9 +79,9 @@ void main() {
           archivedGame.data.clock,
           playableGame.meta.clock != null
               ? (
-                initial: playableGame.meta.clock!.initial,
-                increment: playableGame.meta.clock!.increment,
-              )
+                  initial: playableGame.meta.clock!.initial,
+                  increment: playableGame.meta.clock!.increment,
+                )
               : null,
         );
         expect(archivedGame.initialFen, playableGame.initialFen);

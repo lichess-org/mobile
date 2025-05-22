@@ -88,7 +88,8 @@ void main() {
 }
 
 const testPerf = Perf.rapid;
-final userPerfStatsResponse = '''
+final userPerfStatsResponse =
+    '''
 {
   "user": {
     "name": "testOpponentName"

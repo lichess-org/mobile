@@ -56,8 +56,9 @@ class ClockToolController extends _$ClockToolController {
   void onClockEmergency() {
     final activeSide = state.activeSide;
     if (_hasPlayedLowTimeSound[activeSide]!) return;
-    final activeSideTime =
-        activeSide == Side.white ? _clock.whiteTime.value : _clock.blackTime.value;
+    final activeSideTime = activeSide == Side.white
+        ? _clock.whiteTime.value
+        : _clock.blackTime.value;
     if (activeSideTime <= _emergencyThreshold) {
       ref.read(soundServiceProvider).play(Sound.lowTime);
       _hasPlayedLowTimeSound[activeSide] = true;
@@ -120,10 +121,12 @@ class ClockToolController extends _$ClockToolController {
     final options = ClockOptions(
       whiteTime: player == Side.white ? Duration(seconds: clock.time) : state.options.whiteTime,
       blackTime: player == Side.black ? Duration(seconds: clock.time) : state.options.blackTime,
-      whiteIncrement:
-          player == Side.white ? Duration(seconds: clock.increment) : state.options.whiteIncrement,
-      blackIncrement:
-          player == Side.black ? Duration(seconds: clock.increment) : state.options.blackIncrement,
+      whiteIncrement: player == Side.white
+          ? Duration(seconds: clock.increment)
+          : state.options.whiteIncrement,
+      blackIncrement: player == Side.black
+          ? Duration(seconds: clock.increment)
+          : state.options.blackIncrement,
     );
     _clock.setTimes(whiteTime: options.whiteTime, blackTime: options.blackTime);
     state = ClockState(

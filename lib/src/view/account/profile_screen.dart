@@ -38,9 +38,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: account.when(
-          data:
-              (user) =>
-                  user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user.lightUser),
+          data: (user) =>
+              user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user.lightUser),
           loading: () => const SizedBox.shrink(),
           error: (error, _) => const SizedBox.shrink(),
         ),
@@ -60,10 +59,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
           return RefreshIndicator.adaptive(
-            edgeOffset:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                    : 0.0,
+            edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                : 0.0,
             key: _refreshIndicatorKey,
             onRefresh: () async => ref.refresh(accountProvider),
             child: ListView(
@@ -119,33 +117,31 @@ class AccountPerfCards extends ConsumerWidget {
           return const SizedBox.shrink();
         }
       },
-      loading:
-          () => Shimmer(
-            child: Padding(
-              padding: padding ?? Styles.bodySectionPadding,
-              child: SizedBox(
-                height: 106,
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 3.0),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  separatorBuilder: (context, index) => const SizedBox(width: 10),
-                  itemBuilder:
-                      (context, index) => ShimmerLoading(
-                        isLoading: true,
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
+      loading: () => Shimmer(
+        child: Padding(
+          padding: padding ?? Styles.bodySectionPadding,
+          child: SizedBox(
+            height: 106,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(vertical: 3.0),
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              separatorBuilder: (context, index) => const SizedBox(width: 10),
+              itemBuilder: (context, index) => ShimmerLoading(
+                isLoading: true,
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                 ),
               ),
             ),
           ),
+        ),
+      ),
       error: (error, stack) => const SizedBox.shrink(),
     );
   }

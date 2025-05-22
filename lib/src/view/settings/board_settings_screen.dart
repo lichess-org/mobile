@@ -137,23 +137,21 @@ class _Body extends ConsumerWidget {
             ),
             if (Theme.of(context).platform == TargetPlatform.android && !isTabletOrLarger(context))
               androidVersionAsync.maybeWhen(
-                data:
-                    (version) =>
-                        version != null && version.sdkInt >= 29
-                            ? SwitchSettingTile(
-                              title: Text(context.l10n.mobileSettingsImmersiveMode),
-                              subtitle: Text(
-                                context.l10n.mobileSettingsImmersiveModeSubtitle,
-                                maxLines: 5,
-                              ),
-                              value: boardPrefs.immersiveModeWhilePlaying ?? false,
-                              onChanged: (value) {
-                                ref
-                                    .read(boardPreferencesProvider.notifier)
-                                    .toggleImmersiveModeWhilePlaying();
-                              },
-                            )
-                            : const SizedBox.shrink(),
+                data: (version) => version != null && version.sdkInt >= 29
+                    ? SwitchSettingTile(
+                        title: Text(context.l10n.mobileSettingsImmersiveMode),
+                        subtitle: Text(
+                          context.l10n.mobileSettingsImmersiveModeSubtitle,
+                          maxLines: 5,
+                        ),
+                        value: boardPrefs.immersiveModeWhilePlaying ?? false,
+                        onChanged: (value) {
+                          ref
+                              .read(boardPreferencesProvider.notifier)
+                              .toggleImmersiveModeWhilePlaying();
+                        },
+                      )
+                    : const SizedBox.shrink(),
                 orElse: () => const SizedBox.shrink(),
               ),
             SettingsListTile(
@@ -166,10 +164,9 @@ class _Body extends ConsumerWidget {
                   choices: ClockPosition.values,
                   selectedItem: boardPrefs.clockPosition,
                   labelBuilder: (t) => Text(t.label),
-                  onSelectedItemChanged:
-                      (ClockPosition? value) => ref
-                          .read(boardPreferencesProvider.notifier)
-                          .setClockPosition(value ?? ClockPosition.right),
+                  onSelectedItemChanged: (ClockPosition? value) => ref
+                      .read(boardPreferencesProvider.notifier)
+                      .setClockPosition(value ?? ClockPosition.right),
                 );
               },
             ),
@@ -196,12 +193,11 @@ class _Body extends ConsumerWidget {
                   choices: MaterialDifferenceFormat.values,
                   selectedItem: boardPrefs.materialDifferenceFormat,
                   labelBuilder: (t) => Text(t.label),
-                  onSelectedItemChanged:
-                      (MaterialDifferenceFormat? value) => ref
-                          .read(boardPreferencesProvider.notifier)
-                          .setMaterialDifferenceFormat(
-                            value ?? MaterialDifferenceFormat.materialDifference,
-                          ),
+                  onSelectedItemChanged: (MaterialDifferenceFormat? value) => ref
+                      .read(boardPreferencesProvider.notifier)
+                      .setMaterialDifferenceFormat(
+                        value ?? MaterialDifferenceFormat.materialDifference,
+                      ),
                 );
               },
             ),

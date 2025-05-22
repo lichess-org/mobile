@@ -31,10 +31,9 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      final textFieldFinder =
-          debugDefaultTargetPlatformOverride == TargetPlatform.iOS
-              ? find.byType(CupertinoSearchTextField)
-              : find.byType(SearchBar);
+      final textFieldFinder = debugDefaultTargetPlatformOverride == TargetPlatform.iOS
+          ? find.byType(CupertinoSearchTextField)
+          : find.byType(SearchBar);
 
       await tester.enterText(textFieldFinder, 'joh');
 
@@ -67,10 +66,9 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      final textFieldFinder =
-          debugDefaultTargetPlatformOverride == TargetPlatform.iOS
-              ? find.byType(CupertinoSearchTextField)
-              : find.byType(SearchBar);
+      final textFieldFinder = debugDefaultTargetPlatformOverride == TargetPlatform.iOS
+          ? find.byType(CupertinoSearchTextField)
+          : find.byType(SearchBar);
 
       await tester.enterText(textFieldFinder, 'johnny');
       // await debouce call

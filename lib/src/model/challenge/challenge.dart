@@ -88,19 +88,17 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
 
     final variantStr = variant == Variant.standard ? '' : ' • ${variant.label}';
 
-    final sidePiece =
-        sideChoice == SideChoice.black
-            ? '♔ '
-            : sideChoice == SideChoice.white
-            ? '♚ '
-            : '';
+    final sidePiece = sideChoice == SideChoice.black
+        ? '♔ '
+        : sideChoice == SideChoice.white
+        ? '♚ '
+        : '';
 
-    final side =
-        sideChoice == SideChoice.black
-            ? l10n.white
-            : sideChoice == SideChoice.white
-            ? l10n.black
-            : l10n.randomColor;
+    final side = sideChoice == SideChoice.black
+        ? l10n.white
+        : sideChoice == SideChoice.white
+        ? l10n.black
+        : l10n.randomColor;
 
     final mode = rated ? l10n.rated : l10n.casual;
 
@@ -319,11 +317,9 @@ extension ChallengeExtension on Pick {
     if (value is String) {
       return ChallengeDeclineReason.values.firstWhere(
         (element) => element.name.toLowerCase() == value,
-        orElse:
-            () =>
-                throw PickException(
-                  "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
-                ),
+        orElse: () => throw PickException(
+          "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
+        ),
       );
     }
     throw PickException(

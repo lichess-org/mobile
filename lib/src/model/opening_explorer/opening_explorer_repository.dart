@@ -54,14 +54,12 @@ class OpeningExplorer extends _$OpeningExplorer {
 
         _openingExplorerSubscription = openingExplorerStream.listen(
           (openingExplorer) => state = AsyncValue.data((entry: openingExplorer, isIndexing: true)),
-          onDone:
-              () =>
-                  state.value != null
-                      ? state = AsyncValue.data((entry: state.value!.entry, isIndexing: false))
-                      : state = AsyncValue.error(
-                        'No opening explorer data returned for player ${prefs.playerDb.username}',
-                        StackTrace.current,
-                      ),
+          onDone: () => state.value != null
+              ? state = AsyncValue.data((entry: state.value!.entry, isIndexing: false))
+              : state = AsyncValue.error(
+                  'No opening explorer data returned for player ${prefs.playerDb.username}',
+                  StackTrace.current,
+                ),
         );
         return null;
     }

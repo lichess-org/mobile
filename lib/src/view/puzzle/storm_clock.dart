@@ -103,10 +103,9 @@ class _ClockState extends State<StormClockWidget> with SingleTickerProviderState
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        color:
-            isActive
-                ? effectiveClockStyle.activeBackgroundColor
-                : effectiveClockStyle.backgroundColor,
+        color: isActive
+            ? effectiveClockStyle.activeBackgroundColor
+            : effectiveClockStyle.backgroundColor,
       ),
       padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
       child: MediaQuery.withClampedTextScaling(
@@ -122,10 +121,9 @@ class _ClockState extends State<StormClockWidget> with SingleTickerProviderState
                     child: Text(
                       '${currentBonusSeconds! > 0 ? '+' : ''}$currentBonusSeconds',
                       style: TextStyle(
-                        color:
-                            currentBonusSeconds! < 0
-                                ? context.lichessColors.error
-                                : context.lichessColors.good,
+                        color: currentBonusSeconds! < 0
+                            ? context.lichessColors.error
+                            : context.lichessColors.good,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                         fontFeatures: const [FontFeature.tabularFigures()],
@@ -147,10 +145,9 @@ class _ClockState extends State<StormClockWidget> with SingleTickerProviderState
                   return Text(
                     '$minutes:$seconds',
                     style: TextStyle(
-                      color:
-                          currentBonusSeconds! < 0
-                              ? context.lichessColors.error
-                              : context.lichessColors.good,
+                      color: currentBonusSeconds! < 0
+                          ? context.lichessColors.error
+                          : context.lichessColors.good,
                       fontSize: _kClockFontSize,
                       fontFeatures: const [FontFeature.tabularFigures()],
                     ),
@@ -161,10 +158,9 @@ class _ClockState extends State<StormClockWidget> with SingleTickerProviderState
               Text(
                 '$minutes:$seconds',
                 style: TextStyle(
-                  color:
-                      isActive
-                          ? effectiveClockStyle.activeTextColor
-                          : effectiveClockStyle.textColor,
+                  color: isActive
+                      ? effectiveClockStyle.activeTextColor
+                      : effectiveClockStyle.textColor,
                   fontSize: _kClockFontSize,
                   fontFeatures: const [FontFeature.tabularFigures()],
                 ),

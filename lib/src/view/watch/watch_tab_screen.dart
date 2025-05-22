@@ -93,22 +93,20 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(leading: const AccountIconButton(), title: Text(context.l10n.watch)),
-        body:
-            isOnline
-                ? OrientationBuilder(
-                  builder: (context, orientation) {
-                    return RefreshIndicator.adaptive(
-                      edgeOffset:
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                              : 0.0,
-                      key: _androidRefreshKey,
-                      onRefresh: _refreshData,
-                      child: _Body(orientation),
-                    );
-                  },
-                )
-                : offlineWidget,
+        body: isOnline
+            ? OrientationBuilder(
+                builder: (context, orientation) {
+                  return RefreshIndicator.adaptive(
+                    edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                        ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                        : 0.0,
+                    key: _androidRefreshKey,
+                    onRefresh: _refreshData,
+                    child: _Body(orientation),
+                  );
+                },
+              )
+            : offlineWidget,
       ),
     );
   }
@@ -239,8 +237,8 @@ class _WatchTvWidget extends ConsumerWidget {
         return ListSection(
           header: const Text('Lichess TV'),
           hasLeading: true,
-          onHeaderTap:
-              () => Navigator.of(context).push(LiveTvChannelsScreen.buildRoute(context)).then((_) {
+          onHeaderTap: () =>
+              Navigator.of(context).push(LiveTvChannelsScreen.buildRoute(context)).then((_) {
                 if (context.mounted) {
                   _doRefreshDataForRef(ref);
                 }
@@ -255,21 +253,20 @@ class _WatchTvWidget extends ConsumerWidget {
                     aiLevel: snapshot.player.asPlayer.aiLevel,
                     rating: snapshot.player.rating,
                   ),
-                  onTap:
-                      () => Navigator.of(context, rootNavigator: true)
-                          .push(
-                            TvScreen.buildRoute(
-                              context,
-                              channel: snapshot.channel,
-                              gameId: snapshot.id,
-                              orientation: snapshot.player.side,
-                            ),
-                          )
-                          .then((_) {
-                            if (context.mounted) {
-                              _doRefreshDataForRef(ref);
-                            }
-                          }),
+                  onTap: () => Navigator.of(context, rootNavigator: true)
+                      .push(
+                        TvScreen.buildRoute(
+                          context,
+                          channel: snapshot.channel,
+                          gameId: snapshot.id,
+                          orientation: snapshot.player.side,
+                        ),
+                      )
+                      .then((_) {
+                        if (context.mounted) {
+                          _doRefreshDataForRef(ref);
+                        }
+                      }),
                 );
               })
               .toList(growable: false),
@@ -282,13 +279,12 @@ class _WatchTvWidget extends ConsumerWidget {
           child: Text('Could not load TV channels'),
         );
       },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: ListSection.loading(itemsNumber: 4, header: true, hasLeading: true),
-            ),
-          ),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(itemsNumber: 4, header: true, hasLeading: true),
+        ),
+      ),
     );
   }
 }
@@ -326,17 +322,12 @@ class _StreamerWidget extends ConsumerWidget {
           child: Text('Could not load live streamers'),
         );
       },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: ListSection.loading(
-                itemsNumber: numberOfItems,
-                header: true,
-                hasLeading: true,
-              ),
-            ),
-          ),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(itemsNumber: numberOfItems, header: true, hasLeading: true),
+        ),
+      ),
     );
   }
 }

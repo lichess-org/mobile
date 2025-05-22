@@ -107,27 +107,25 @@ class _Body extends ConsumerWidget {
       final searchHistory = ref.watch(searchHistoryProvider).history;
       return SafeArea(
         child: SingleChildScrollView(
-          child:
-              searchHistory.isEmpty
-                  ? kEmptyWidget
-                  : ListSection(
-                    header: Text(context.l10n.mobileRecentSearches),
-                    headerTrailing: TextButton(
-                      child: Text(context.l10n.mobileClearButton),
-                      onPressed: () => ref.read(searchHistoryProvider.notifier).clear(),
-                    ),
-                    hasLeading: true,
-                    children:
-                        searchHistory
-                            .map(
-                              (term) => ListTile(
-                                leading: const Icon(Icons.history),
-                                title: Text(term),
-                                onTap: () => onRecentSearchTap(term),
-                              ),
-                            )
-                            .toList(),
+          child: searchHistory.isEmpty
+              ? kEmptyWidget
+              : ListSection(
+                  header: Text(context.l10n.mobileRecentSearches),
+                  headerTrailing: TextButton(
+                    child: Text(context.l10n.mobileClearButton),
+                    onPressed: () => ref.read(searchHistoryProvider.notifier).clear(),
                   ),
+                  hasLeading: true,
+                  children: searchHistory
+                      .map(
+                        (term) => ListTile(
+                          leading: const Icon(Icons.history),
+                          title: Text(term),
+                          onTap: () => onRecentSearchTap(term),
+                        ),
+                      )
+                      .toList(),
+                ),
         ),
       );
     }
@@ -143,38 +141,34 @@ class _UserList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final autoComplete = ref.watch(autoCompleteUserProvider(term));
+
     return autoComplete.when(
-      data:
-          (userList) =>
-              userList.isNotEmpty
-                  ? SingleChildScrollView(
-                    child: ListSection(
-                      header: Row(
-                        children: [
-                          const Icon(Icons.person),
-                          const SizedBox(width: 8),
-                          Text(context.l10n.mobilePlayersMatchingSearchTerm(term)),
-                        ],
+      data: (userList) => userList.isNotEmpty
+          ? SingleChildScrollView(
+              child: ListSection(
+                header: Row(
+                  children: [
+                    const Icon(Icons.person),
+                    const SizedBox(width: 8),
+                    Text(context.l10n.mobilePlayersMatchingSearchTerm(term)),
+                  ],
+                ),
+                hasLeading: true,
+                children: userList
+                    .map(
+                      (user) => UserListTile.fromLightUser(
+                        user,
+                        onTap: () {
+                          if (onUserTap != null) {
+                            onUserTap!.call(user);
+                          }
+                        },
                       ),
-                      hasLeading: true,
-                      children:
-                          userList
-                              .map(
-                                (user) => UserListTile.fromLightUser(
-                                  user,
-                                  onTap: () {
-                                    if (onUserTap != null) {
-                                      onUserTap!.call(user);
-                                    }
-                                  },
-                                ),
-                              )
-                              .toList(),
-                    ),
-                  )
-                  : Center(
-                    child: Text(context.l10n.mobileNoSearchResults, style: Styles.centeredMessage),
-                  ),
+                    )
+                    .toList(),
+              ),
+            )
+          : Center(child: Text(context.l10n.mobileNoSearchResults, style: Styles.centeredMessage)),
       error: (e, _) {
         debugPrint('Error loading search results: $e');
         return const Center(child: Text('Could not load search results.'));

@@ -45,12 +45,11 @@ Future<IList<LightExportedGameWithPov>> myRecentGames(Ref ref) async {
     return storage
         .page(userId: session?.user.id, max: kNumberOfRecentGames)
         .then(
-          (value) =>
-              value
-                  // we can assume that `youAre` is not null either for logged
-                  // in users or for anonymous users
-                  .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
-                  .toIList(),
+          (value) => value
+              // we can assume that `youAre` is not null either for logged
+              // in users or for anonymous users
+              .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
+              .toIList(),
         );
   }
 }
@@ -111,26 +110,24 @@ class UserGameHistory extends _$UserGameHistory {
     final storage = await ref.watch(gameStorageProvider.future);
 
     final id = userId ?? session?.user.id;
-    final recentGames =
-        id != null && online
-            ? ref.withClient(
-              (client) => GameRepository(client).getUserGames(
-                id,
-                filter: filter,
-                withBookmarked: true,
-                withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
-              ),
-            )
-            : storage
-                .page(userId: id, filter: filter)
-                .then(
-                  (value) =>
-                      value
-                          // we can assume that `youAre` is not null either for logged
-                          // in users or for anonymous users
-                          .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
-                          .toIList(),
-                );
+    final recentGames = id != null && online
+        ? ref.withClient(
+            (client) => GameRepository(client).getUserGames(
+              id,
+              filter: filter,
+              withBookmarked: true,
+              withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
+            ),
+          )
+        : storage
+              .page(userId: id, filter: filter)
+              .then(
+                (value) => value
+                    // we can assume that `youAre` is not null either for logged
+                    // in users or for anonymous users
+                    .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
+                    .toIList(),
+              );
 
     _list.addAll(await recentGames);
 
@@ -153,39 +150,37 @@ class UserGameHistory extends _$UserGameHistory {
     final currentVal = state.requireValue;
     state = AsyncData(currentVal.copyWith(isLoading: true));
     try {
-      final value =
-          await (userId != null
-              ? ref.withClient(
-                (client) => GameRepository(client).getUserGames(
-                  userId!,
-                  max: _nbPerPage,
-                  until: _list.last.game.createdAt,
-                  filter: currentVal.filter,
-                  withBookmarked: true,
-                  withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
-                ),
-              )
-              : currentVal.online && currentVal.session != null
-              ? ref.withClient(
-                (client) => GameRepository(client).getUserGames(
-                  currentVal.session!.user.id,
-                  max: _nbPerPage,
-                  until: _list.last.game.createdAt,
-                  filter: currentVal.filter,
-                  withBookmarked: true,
-                  withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
-                ),
-              )
-              : (await ref.watch(gameStorageProvider.future))
-                  .page(max: _nbPerPage, until: _list.last.game.createdAt)
-                  .then(
-                    (value) =>
-                        value
-                            // we can assume that `youAre` is not null either for logged
-                            // in users or for anonymous users
-                            .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
-                            .toIList(),
-                  ));
+      final value = await (userId != null
+          ? ref.withClient(
+              (client) => GameRepository(client).getUserGames(
+                userId!,
+                max: _nbPerPage,
+                until: _list.last.game.createdAt,
+                filter: currentVal.filter,
+                withBookmarked: true,
+                withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
+              ),
+            )
+          : currentVal.online && currentVal.session != null
+          ? ref.withClient(
+              (client) => GameRepository(client).getUserGames(
+                currentVal.session!.user.id,
+                max: _nbPerPage,
+                until: _list.last.game.createdAt,
+                filter: currentVal.filter,
+                withBookmarked: true,
+                withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
+              ),
+            )
+          : (await ref.watch(gameStorageProvider.future))
+                .page(max: _nbPerPage, until: _list.last.game.createdAt)
+                .then(
+                  (value) => value
+                      // we can assume that `youAre` is not null either for logged
+                      // in users or for anonymous users
+                      .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
+                      .toIList(),
+                ));
 
       if (value.isEmpty) {
         state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));

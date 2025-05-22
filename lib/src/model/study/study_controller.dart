@@ -518,16 +518,15 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState {
 
   bool get isOpeningExplorerAvailable => !gamebookActive && study.chapter.features.explorer;
 
-  EngineGaugeParams? engineGaugeParams(EngineEvaluationPrefState prefs) =>
-      isEngineAvailable(prefs)
-          ? (
-            isLocalEngineAvailable: isEngineAvailable(prefs),
-            orientation: pov,
-            position: currentPosition!,
-            savedEval: currentNode.eval,
-            serverEval: null,
-          )
-          : null;
+  EngineGaugeParams? engineGaugeParams(EngineEvaluationPrefState prefs) => isEngineAvailable(prefs)
+      ? (
+          isLocalEngineAvailable: isEngineAvailable(prefs),
+          orientation: pov,
+          position: currentPosition!,
+          savedEval: currentNode.eval,
+          serverEval: null,
+        )
+      : null;
 
   @override
   Position? get currentPosition => currentNode.position;

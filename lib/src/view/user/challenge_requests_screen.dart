@@ -60,8 +60,8 @@ class _Body extends ConsumerWidget {
 
         return ListView.separated(
           itemCount: list.length,
-          separatorBuilder:
-              (context, index) => const PlatformDivider(height: 1, cupertinoHasLeading: true),
+          separatorBuilder: (context, index) =>
+              const PlatformDivider(height: 1, cupertinoHasLeading: true),
           itemBuilder: (context, index) {
             final challenge = list[index];
             final user = challenge.challenger?.user;
@@ -111,8 +111,9 @@ class _ChallengeListItem extends ConsumerWidget {
     void confirmDialog() {
       showAdaptiveActionSheet<void>(
         context: context,
-        title:
-            challenge.variant.isPlaySupported ? const Text('Do you accept the challenge?') : null,
+        title: challenge.variant.isPlaySupported
+            ? const Text('Do you accept the challenge?')
+            : null,
         actions: [
           if (challenge.variant.isPlaySupported)
             BottomSheetAction(
@@ -142,22 +143,20 @@ class _ChallengeListItem extends ConsumerWidget {
     return ChallengeListItem(
       challenge: challenge,
       challengerUser: challengerUser,
-      onPressed:
-          challenge.direction == ChallengeDirection.inward
-              ? session == null
-                  ? showMissingAccountMessage
-                  : confirmDialog
-              : null,
+      onPressed: challenge.direction == ChallengeDirection.inward
+          ? session == null
+                ? showMissingAccountMessage
+                : confirmDialog
+          : null,
       onAccept:
           challenge.direction == ChallengeDirection.outward || !challenge.variant.isPlaySupported
-              ? null
-              : session == null
-              ? showMissingAccountMessage
-              : acceptChallenge,
-      onCancel:
-          challenge.direction == ChallengeDirection.outward
-              ? () => ref.read(challengeRepositoryProvider).cancel(challenge.id)
-              : null,
+          ? null
+          : session == null
+          ? showMissingAccountMessage
+          : acceptChallenge,
+      onCancel: challenge.direction == ChallengeDirection.outward
+          ? () => ref.read(challengeRepositoryProvider).cancel(challenge.id)
+          : null,
       onDecline: challenge.direction == ChallengeDirection.inward ? declineChallenge : null,
     );
   }

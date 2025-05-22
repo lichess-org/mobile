@@ -45,10 +45,10 @@ Future<void> showChoicePicker<T>(
                     .toList(growable: false);
                 return choiceWidgets.length >= 10
                     ? SizedBox(
-                      width: double.maxFinite,
-                      height: deviceHeight * 0.6,
-                      child: ListView(shrinkWrap: true, children: choiceWidgets),
-                    )
+                        width: double.maxFinite,
+                        height: deviceHeight * 0.6,
+                        child: ListView(shrinkWrap: true, children: choiceWidgets),
+                      )
                     : ListBody(children: choiceWidgets);
               },
             ),
@@ -68,18 +68,17 @@ Future<void> showChoicePicker<T>(
           builder: (context) {
             return CupertinoActionSheet(
               title: title,
-              actions:
-                  choices.map((value) {
-                    return CupertinoActionSheetAction(
-                      onPressed: () {
-                        if (onSelectedItemChanged != null) {
-                          onSelectedItemChanged(value);
-                        }
-                        Navigator.of(context).pop();
-                      },
-                      child: labelBuilder(value),
-                    );
-                  }).toList(),
+              actions: choices.map((value) {
+                return CupertinoActionSheetAction(
+                  onPressed: () {
+                    if (onSelectedItemChanged != null) {
+                      onSelectedItemChanged(value);
+                    }
+                    Navigator.of(context).pop();
+                  },
+                  child: labelBuilder(value),
+                );
+              }).toList(),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
                 onPressed: () => Navigator.of(context).pop(),
@@ -110,10 +109,9 @@ Future<void> showChoicePicker<T>(
                   scrollController: FixedExtentScrollController(
                     initialItem: choices.indexWhere((t) => t == selectedItem),
                   ),
-                  children:
-                      choices.map((value) {
-                        return Center(child: labelBuilder(value));
-                      }).toList(),
+                  children: choices.map((value) {
+                    return Center(child: labelBuilder(value));
+                  }).toList(),
                   onSelectedItemChanged: (_) {},
                 ),
               ),
@@ -161,29 +159,28 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
             );
           },
         ),
-        actions:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? [
-                  CupertinoDialogAction(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(context.l10n.cancel),
-                  ),
-                  CupertinoDialogAction(
-                    isDefaultAction: true,
-                    child: Text(context.l10n.mobileOkButton),
-                    onPressed: () => Navigator.of(context).pop(items),
-                  ),
-                ]
-                : [
-                  TextButton(
-                    child: Text(context.l10n.cancel),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                  TextButton(
-                    child: Text(context.l10n.mobileOkButton),
-                    onPressed: () => Navigator.of(context).pop(items),
-                  ),
-                ],
+        actions: Theme.of(context).platform == TargetPlatform.iOS
+            ? [
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(context.l10n.cancel),
+                ),
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: Text(context.l10n.mobileOkButton),
+                  onPressed: () => Navigator.of(context).pop(items),
+                ),
+              ]
+            : [
+                TextButton(
+                  child: Text(context.l10n.cancel),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                TextButton(
+                  child: Text(context.l10n.mobileOkButton),
+                  onPressed: () => Navigator.of(context).pop(items),
+                ),
+              ],
       );
     },
   );

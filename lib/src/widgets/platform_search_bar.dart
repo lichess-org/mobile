@@ -45,35 +45,33 @@ class PlatformSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
-      androidBuilder:
-          (context) => SearchBar(
-            elevation: const WidgetStatePropertyAll(0),
-            controller: controller,
-            leading: const Icon(Icons.search),
-            trailing: [
-              if (controller?.text.isNotEmpty == true)
-                IconButton(
-                  onPressed: onClear ?? () => controller?.clear(),
-                  tooltip: 'Clear',
-                  icon: const Icon(Icons.close),
-                ),
-            ],
-            onTap: onTap,
-            focusNode: focusNode,
-            onSubmitted: onSubmitted,
-            hintText: hintText,
-            autoFocus: autoFocus,
-          ),
-      iosBuilder:
-          (context) => CupertinoSearchTextField(
-            controller: controller,
-            onTap: onTap,
-            focusNode: focusNode,
-            onSuffixTap: onClear,
-            onSubmitted: onSubmitted,
-            placeholder: hintText,
-            autofocus: autoFocus,
-          ),
+      androidBuilder: (context) => SearchBar(
+        elevation: const WidgetStatePropertyAll(0),
+        controller: controller,
+        leading: const Icon(Icons.search),
+        trailing: [
+          if (controller?.text.isNotEmpty == true)
+            IconButton(
+              onPressed: onClear ?? () => controller?.clear(),
+              tooltip: 'Clear',
+              icon: const Icon(Icons.close),
+            ),
+        ],
+        onTap: onTap,
+        focusNode: focusNode,
+        onSubmitted: onSubmitted,
+        hintText: hintText,
+        autoFocus: autoFocus,
+      ),
+      iosBuilder: (context) => CupertinoSearchTextField(
+        controller: controller,
+        onTap: onTap,
+        focusNode: focusNode,
+        onSuffixTap: onClear,
+        onSubmitted: onSubmitted,
+        placeholder: hintText,
+        autofocus: autoFocus,
+      ),
     );
   }
 }

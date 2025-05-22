@@ -166,40 +166,33 @@ class _UserProfileListView extends ConsumerWidget {
                 ListTile(
                   leading: const Icon(Icons.person_add),
                   title: Text(context.l10n.follow),
-                  onTap:
-                      isLoading
-                          ? null
-                          : () =>
-                              userAction((client) => RelationRepository(client).follow(user.id)),
+                  onTap: isLoading
+                      ? null
+                      : () => userAction((client) => RelationRepository(client).follow(user.id)),
                 )
               else if (user.following == true)
                 ListTile(
                   leading: const Icon(Icons.person_remove),
                   title: Text(context.l10n.unfollow),
-                  onTap:
-                      isLoading
-                          ? null
-                          : () =>
-                              userAction((client) => RelationRepository(client).unfollow(user.id)),
+                  onTap: isLoading
+                      ? null
+                      : () => userAction((client) => RelationRepository(client).unfollow(user.id)),
                 ),
               if (user.following != true && user.blocking != true)
                 ListTile(
                   leading: const Icon(Icons.block),
                   title: Text(context.l10n.block),
-                  onTap:
-                      isLoading
-                          ? null
-                          : () => userAction((client) => RelationRepository(client).block(user.id)),
+                  onTap: isLoading
+                      ? null
+                      : () => userAction((client) => RelationRepository(client).block(user.id)),
                 )
               else if (user.blocking == true)
                 ListTile(
                   leading: const Icon(Icons.block),
                   title: Text(context.l10n.unblock),
-                  onTap:
-                      isLoading
-                          ? null
-                          : () =>
-                              userAction((client) => RelationRepository(client).unblock(user.id)),
+                  onTap: isLoading
+                      ? null
+                      : () => userAction((client) => RelationRepository(client).unblock(user.id)),
                 ),
               ListTile(
                 leading: const Icon(Icons.report_problem),

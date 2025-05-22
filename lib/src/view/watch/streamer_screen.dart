@@ -25,19 +25,16 @@ class StreamerScreen extends StatelessWidget {
     return PlatformScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.mobileLiveStreamers)),
       body: ListView.separated(
-        separatorBuilder:
-            (context, index) =>
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? const PlatformDivider(height: 1, indent: 16 + _kThumbnailSize + 10)
-                    : const SizedBox.shrink(),
+        separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+            ? const PlatformDivider(height: 1, indent: 16 + _kThumbnailSize + 10)
+            : const SizedBox.shrink(),
         itemCount: streamers.length,
-        itemBuilder:
-            (context, index) => StreamerListTile(
-              thumbnailSize: _kThumbnailSize,
-              streamer: streamers[index],
-              isPreview: false,
-              maxSubtitleLines: 4,
-            ),
+        itemBuilder: (context, index) => StreamerListTile(
+          thumbnailSize: _kThumbnailSize,
+          streamer: streamers[index],
+          isPreview: false,
+          maxSubtitleLines: 4,
+        ),
       ),
     );
   }
@@ -70,22 +67,21 @@ class StreamerListTile extends StatelessWidget {
       }
     }
 
-    final leading =
-        streamer.image != null
-            ? Image.network(
-              streamer.image!,
-              width: thumbnailSize,
-              height: thumbnailSize,
-              fit: BoxFit.cover,
-            )
-            : Image.asset(
-              Theme.of(context).brightness == Brightness.light
-                  ? 'assets/images/logo-black.png'
-                  : 'assets/images/logo-white.png',
-              width: thumbnailSize,
-              height: thumbnailSize,
-              fit: BoxFit.cover,
-            );
+    final leading = streamer.image != null
+        ? Image.network(
+            streamer.image!,
+            width: thumbnailSize,
+            height: thumbnailSize,
+            fit: BoxFit.cover,
+          )
+        : Image.asset(
+            Theme.of(context).brightness == Brightness.light
+                ? 'assets/images/logo-black.png'
+                : 'assets/images/logo-white.png',
+            width: thumbnailSize,
+            height: thumbnailSize,
+            fit: BoxFit.cover,
+          );
 
     final title = Row(
       children: [
@@ -116,38 +112,38 @@ class StreamerListTile extends StatelessWidget {
 
     return isPreview
         ? ListTile(
-          onTap: onTap,
-          leading: leading,
-          title: title,
-          subtitle: subtitle,
-          trailing: trailing,
-        )
+            onTap: onTap,
+            leading: leading,
+            title: title,
+            subtitle: subtitle,
+            trailing: trailing,
+          )
         : InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                leading,
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DefaultTextStyle.merge(
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        child: title,
-                      ),
-                      subtitle,
-                    ],
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  leading,
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        DefaultTextStyle.merge(
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          child: title,
+                        ),
+                        subtitle,
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                trailing,
-              ],
+                  const SizedBox(width: 10),
+                  trailing,
+                ],
+              ),
             ),
-          ),
-        );
+          );
   }
 }

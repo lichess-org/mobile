@@ -45,28 +45,27 @@ class BroadcastBoardsTab extends ConsumerWidget {
       AsyncData(:final value) =>
         value.games.isEmpty
             ? Padding(
-              padding: Styles.bodyPadding,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Icon(Icons.info, size: 30),
-                  const SizedBox(height: 8.0),
-                  Text(context.l10n.broadcastNoBoardsYet, textAlign: TextAlign.center),
-                ],
-              ),
-            )
+                padding: Styles.bodyPadding,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.info, size: 30),
+                    const SizedBox(height: 8.0),
+                    Text(context.l10n.broadcastNoBoardsYet, textAlign: TextAlign.center),
+                  ],
+                ),
+              )
             : BroadcastPreview(
-              games:
-                  showOnlyOngoingGames
-                      ? value.games.values.where((game) => game.isOngoing).toIList()
-                      : value.games.values.toIList(),
-              tournamentId: tournamentId,
-              roundId: roundId,
-              title: value.round.name,
-              tournamentSlug: tournamentSlug,
-              roundSlug: value.round.slug,
-            ),
+                games: showOnlyOngoingGames
+                    ? value.games.values.where((game) => game.isOngoing).toIList()
+                    : value.games.values.toIList(),
+                tournamentId: tournamentId,
+                roundId: roundId,
+                title: value.round.name,
+                tournamentSlug: tournamentSlug,
+                roundSlug: value.round.slug,
+              ),
       AsyncError(:final error) => Center(
         child: Center(child: Text('Could not load broadcast: $error')),
       ),
@@ -241,13 +240,9 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
         orientation: Side.white,
         fen: widget.game.fen,
         showEvaluationBar: widget.showEvaluationBar,
-        whiteWinningChances:
-            (widget.game.cp != null || widget.game.mate != null)
-                ? ExternalEval(
-                  cp: widget.game.cp,
-                  mate: widget.game.mate,
-                ).winningChances(Side.white)
-                : null,
+        whiteWinningChances: (widget.game.cp != null || widget.game.mate != null)
+            ? ExternalEval(cp: widget.game.cp, mate: widget.game.mate).winningChances(Side.white)
+            : null,
         lastMove: widget.game.lastMove,
         size: widget.boardSize,
         header: _PlayerWidget(
@@ -328,14 +323,13 @@ class _PlayerWidget extends StatelessWidget {
                 CountdownClockBuilder(
                   timeLeft: clock,
                   active: isClockActive,
-                  builder:
-                      (context, timeLeft) => Text(
-                        timeLeft.toHoursMinutesSeconds(),
-                        style: TextStyle(
-                          color: isClockActive ? Colors.orange[900] : null,
-                          fontFeatures: const [FontFeature.tabularFigures()],
-                        ),
-                      ),
+                  builder: (context, timeLeft) => Text(
+                    timeLeft.toHoursMinutesSeconds(),
+                    style: TextStyle(
+                      color: isClockActive ? Colors.orange[900] : null,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
                   tickInterval: const Duration(seconds: 1),
                   clockUpdatedAt: game.updatedClockAt,
                 ),

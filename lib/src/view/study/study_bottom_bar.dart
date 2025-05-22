@@ -47,10 +47,12 @@ class _AnalysisBottomBar extends ConsumerWidget {
       return const BottomBar(children: []);
     }
 
-    final onGoForward =
-        state.canGoNext ? ref.read(studyControllerProvider(id).notifier).userNext : null;
-    final onGoBack =
-        state.canGoBack ? ref.read(studyControllerProvider(id).notifier).userPrevious : null;
+    final onGoForward = state.canGoNext
+        ? ref.read(studyControllerProvider(id).notifier).userNext
+        : null;
+    final onGoBack = state.canGoBack
+        ? ref.read(studyControllerProvider(id).notifier).userPrevious
+        : null;
 
     return BottomBar(
       children: [
@@ -164,20 +166,19 @@ class _GamebookBottomBar extends ConsumerWidget {
             ),
             if (!state.isIntroductoryChapter)
               BottomBarButton(
-                onTap:
-                    () => Navigator.of(context, rootNavigator: true).push(
-                      AnalysisScreen.buildRoute(
-                        context,
-                        AnalysisOptions(
-                          orientation: state.pov,
-                          standalone: (
-                            pgn: state.pgn,
-                            isComputerAnalysisAllowed: true,
-                            variant: state.variant,
-                          ),
-                        ),
+                onTap: () => Navigator.of(context, rootNavigator: true).push(
+                  AnalysisScreen.buildRoute(
+                    context,
+                    AnalysisOptions(
+                      orientation: state.pov,
+                      standalone: (
+                        pgn: state.pgn,
+                        isComputerAnalysisAllowed: true,
+                        variant: state.variant,
                       ),
                     ),
+                  ),
+                ),
                 icon: Icons.biotech,
                 label: context.l10n.analysis,
                 showLabel: true,
@@ -222,18 +223,17 @@ class _NextChapterButtonState extends ConsumerState<_NextChapterButton> {
     return isLoading
         ? const Center(child: CircularProgressIndicator.adaptive())
         : BottomBarButton(
-          onTap:
-              widget.hasNextChapter
-                  ? () {
+            onTap: widget.hasNextChapter
+                ? () {
                     ref.read(studyControllerProvider(widget.id).notifier).nextChapter();
                     setState(() => isLoading = true);
                   }
-                  : null,
-          icon: Icons.play_arrow,
-          label: context.l10n.studyNextChapter,
-          showLabel: true,
-          blink: widget.blink,
-        );
+                : null,
+            icon: Icons.play_arrow,
+            label: context.l10n.studyNextChapter,
+            showLabel: true,
+            blink: widget.blink,
+          );
   }
 }
 
@@ -245,26 +245,21 @@ class _ChapterButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomBarButton(
-      onTap:
-          () => showModalBottomSheet<void>(
-            context: context,
-            showDragHandle: true,
-            isScrollControlled: true,
-            isDismissible: true,
-            builder:
-                (_) => DraggableScrollableSheet(
-                  initialChildSize: 0.6,
-                  maxChildSize: 0.6,
-                  snap: true,
-                  expand: false,
-                  builder: (context, scrollController) {
-                    return _StudyChaptersMenu(
-                      id: state.study.id,
-                      scrollController: scrollController,
-                    );
-                  },
-                ),
-          ),
+      onTap: () => showModalBottomSheet<void>(
+        context: context,
+        showDragHandle: true,
+        isScrollControlled: true,
+        isDismissible: true,
+        builder: (_) => DraggableScrollableSheet(
+          initialChildSize: 0.6,
+          maxChildSize: 0.6,
+          snap: true,
+          expand: false,
+          builder: (context, scrollController) {
+            return _StudyChaptersMenu(id: state.study.id, scrollController: scrollController);
+          },
+        ),
+      ),
       label: context.l10n.studyNbChapters(state.study.chapters.length),
       showLabel: true,
       icon: Icons.menu_book,
@@ -349,9 +344,8 @@ Future<void> _showStudyMenu(StudyId id, BuildContext context, WidgetRef ref) {
       if (session != null)
         BottomSheetAction(
           leading: Icon(state.study.liked ? Icons.favorite : Icons.favorite_border),
-          makeLabel:
-              (context) =>
-                  Text(state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike),
+          makeLabel: (context) =>
+              Text(state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike),
           onPressed: () {
             ref.read(studyControllerProvider(id).notifier).toggleLike();
           },

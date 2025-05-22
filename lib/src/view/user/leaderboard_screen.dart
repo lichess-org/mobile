@@ -23,7 +23,10 @@ class LeaderboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text(context.l10n.leaderboard)), body: const _Body());
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.leaderboard)),
+      body: const _Body(),
+    );
   }
 }
 
@@ -90,8 +93,9 @@ class LeaderboardListTile extends StatelessWidget {
         padding: const EdgeInsets.only(right: 5.0),
         child: UserFullNameWidget(user: user.lightUser),
       ),
-      trailing:
-          perfIcon != null ? _Progress(user.rating, user.progress) : Text(user.rating.toString()),
+      trailing: perfIcon != null
+          ? _Progress(user.rating, user.progress)
+          : Text(user.rating.toString()),
     );
   }
 

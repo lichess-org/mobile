@@ -16,21 +16,19 @@ List<ExportedGame> generateExportedGames({int count = 100, String? username}) {
   return List.generate(count, (index) {
     final id = GameId('game${index.toString().padLeft(4, '0')}');
     final whitePlayer = Player(
-      user:
-          username != null && index.isEven
-              ? LightUser(id: UserId.fromUserName(username), name: username)
-              : username != null
-              ? const LightUser(id: UserId('whiteId'), name: 'White')
-              : null,
+      user: username != null && index.isEven
+          ? LightUser(id: UserId.fromUserName(username), name: username)
+          : username != null
+          ? const LightUser(id: UserId('whiteId'), name: 'White')
+          : null,
       rating: username != null ? 1500 : null,
     );
     final blackPlayer = Player(
-      user:
-          username != null && index.isOdd
-              ? LightUser(id: UserId.fromUserName(username), name: username)
-              : username != null
-              ? const LightUser(id: UserId('blackId'), name: 'Black')
-              : null,
+      user: username != null && index.isOdd
+          ? LightUser(id: UserId.fromUserName(username), name: username)
+          : username != null
+          ? const LightUser(id: UserId('blackId'), name: 'Black')
+          : null,
       rating: username != null ? 1500 : null,
     );
     return ExportedGame(
@@ -60,12 +58,11 @@ List<ExportedGame> generateExportedGames({int count = 100, String? username}) {
       status: GameStatus.started,
       white: whitePlayer,
       black: blackPlayer,
-      youAre:
-          username != null
-              ? index.isEven
-                  ? Side.white
-                  : Side.black
-              : null,
+      youAre: username != null
+          ? index.isEven
+                ? Side.white
+                : Side.black
+          : null,
     );
   });
 }
@@ -108,8 +105,14 @@ final offlineCorrespondenceGame = OfflineCorrespondenceGame(
   variant: Variant.standard,
   speed: Speed.correspondence,
   perf: Perf.classical,
-  white: const Player(user: LightUser(id: UserId('whiteId'), name: 'White'), rating: 1500),
-  black: const Player(user: LightUser(id: UserId('blackId'), name: 'Black'), rating: 1500),
+  white: const Player(
+    user: LightUser(id: UserId('whiteId'), name: 'White'),
+    rating: 1500,
+  ),
+  black: const Player(
+    user: LightUser(id: UserId('blackId'), name: 'Black'),
+    rating: 1500,
+  ),
   youAre: Side.white,
   daysPerTurn: 3,
 );

@@ -12,16 +12,15 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 
-typedef InteractiveBoardParams =
-    ({
-      Variant variant,
-      Position position,
-      PlayerSide playerSide,
-      NormalMove? promotionMove,
-      void Function(NormalMove, {bool? isDrop}) onMove,
-      void Function(Role? role) onPromotionSelection,
-      Premovable? premovable,
-    });
+typedef InteractiveBoardParams = ({
+  Variant variant,
+  Position position,
+  PlayerSide playerSide,
+  NormalMove? promotionMove,
+  void Function(NormalMove, {bool? isDrop}) onMove,
+  void Function(Role? role) onPromotionSelection,
+  Premovable? premovable,
+});
 
 /// Board layout that adapts to screen size and aspect ratio.
 ///
@@ -136,10 +135,9 @@ class _BoardTableState extends ConsumerState<BoardTable> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final orientation =
-            constraints.maxWidth > constraints.maxHeight
-                ? Orientation.landscape
-                : Orientation.portrait;
+        final orientation = constraints.maxWidth > constraints.maxHeight
+            ? Orientation.landscape
+            : Orientation.portrait;
         final isTablet = isTabletOrLarger(context);
 
         final defaultSettings = boardPrefs.toBoardSettings().copyWith(
@@ -153,37 +151,33 @@ class _BoardTableState extends ConsumerState<BoardTable> {
           ),
         );
 
-        final settings =
-            widget.boardSettingsOverrides != null
-                ? widget.boardSettingsOverrides!.merge(defaultSettings)
-                : defaultSettings;
+        final settings = widget.boardSettingsOverrides != null
+            ? widget.boardSettingsOverrides!.merge(defaultSettings)
+            : defaultSettings;
 
         final shapes = userShapes.union(widget.shapes ?? ISet());
         final slicedMoves = widget.moves?.asMap().entries.slices(2);
 
         final fen = widget.interactiveBoardParams?.position.fen ?? widget.fen!;
-        final gameData =
-            widget.interactiveBoardParams != null
-                ? boardPrefs.toGameData(
-                  variant: widget.interactiveBoardParams!.variant,
-                  position: widget.interactiveBoardParams!.position,
-                  playerSide: widget.interactiveBoardParams!.playerSide,
-                  promotionMove: widget.interactiveBoardParams!.promotionMove,
-                  onMove: widget.interactiveBoardParams!.onMove,
-                  onPromotionSelection: widget.interactiveBoardParams!.onPromotionSelection,
-                  premovable: widget.interactiveBoardParams!.premovable,
-                )
-                : null;
+        final gameData = widget.interactiveBoardParams != null
+            ? boardPrefs.toGameData(
+                variant: widget.interactiveBoardParams!.variant,
+                position: widget.interactiveBoardParams!.position,
+                playerSide: widget.interactiveBoardParams!.playerSide,
+                promotionMove: widget.interactiveBoardParams!.promotionMove,
+                onMove: widget.interactiveBoardParams!.onMove,
+                onPromotionSelection: widget.interactiveBoardParams!.onPromotionSelection,
+                premovable: widget.interactiveBoardParams!.premovable,
+              )
+            : null;
 
         if (orientation == Orientation.landscape) {
           final defaultBoardSize =
               constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
           final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
-          final boardSize =
-              sideWidth >= 250
-                  ? defaultBoardSize
-                  : constraints.biggest.longestSide / kGoldenRatio -
-                      (kTabletBoardTableSidePadding * 2);
+          final boardSize = sideWidth >= 250
+              ? defaultBoardSize
+              : constraints.biggest.longestSide / kGoldenRatio - (kTabletBoardTableSidePadding * 2);
           return Padding(
             padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
             child: Row(
@@ -240,8 +234,9 @@ class _BoardTableState extends ConsumerState<BoardTable> {
           );
         } else {
           final defaultBoardSize = constraints.biggest.shortestSide;
-          final double boardSize =
-              isTablet ? defaultBoardSize - kTabletBoardTableSidePadding * 2 : defaultBoardSize;
+          final double boardSize = isTablet
+              ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+              : defaultBoardSize;
 
           // vertical space left on portrait mode to check if we can display the
           // move list
@@ -272,10 +267,9 @@ class _BoardTableState extends ConsumerState<BoardTable> {
               ),
               if (widget.engineGauge != null)
                 Padding(
-                  padding:
-                      isTablet
-                          ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                          : EdgeInsets.zero,
+                  padding: isTablet
+                      ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                      : EdgeInsets.zero,
                   child: EngineGauge(
                     params: widget.engineGauge!,
                     displayMode: EngineGaugeDisplayMode.horizontal,
@@ -284,10 +278,9 @@ class _BoardTableState extends ConsumerState<BoardTable> {
               else if (widget.showEngineGaugePlaceholder)
                 const SizedBox(height: kEvalGaugeSize),
               Padding(
-                padding:
-                    isTablet
-                        ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                        : EdgeInsets.zero,
+                padding: isTablet
+                    ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                    : EdgeInsets.zero,
                 child: _BoardWidget(
                   size: boardSize,
                   fen: fen,
@@ -400,7 +393,12 @@ class _BoardWidget extends StatelessWidget {
     } else if (error != null) {
       return SizedBox.square(
         dimension: size,
-        child: Stack(children: [board, _ErrorWidget(errorMessage: error!, boardSize: size)]),
+        child: Stack(
+          children: [
+            board,
+            _ErrorWidget(errorMessage: error!, boardSize: size),
+          ],
+        ),
       );
     }
 

@@ -50,21 +50,15 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
         analysisState.isComputerAnalysisAllowedAndEnabled && analysisPrefs.showAnnotations;
     final currentNode = analysisState.currentNode;
 
-    final bestMoves =
-        showBestMoveArrow
-            ? pickBestClientEval(
-              localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
-              savedEval: currentNode.eval,
-            )?.bestMoves
-            : null;
-    final ISet<Shape> bestMoveShapes =
-        bestMoves != null
-            ? computeBestMoveShapes(
-              bestMoves,
-              currentNode.position.turn,
-              boardPrefs.pieceSet.assets,
-            )
-            : ISet();
+    final bestMoves = showBestMoveArrow
+        ? pickBestClientEval(
+            localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
+            savedEval: currentNode.eval,
+          )?.bestMoves
+        : null;
+    final ISet<Shape> bestMoveShapes = bestMoves != null
+        ? computeBestMoveShapes(bestMoves, currentNode.position.turn, boardPrefs.pieceSet.assets)
+        : ISet();
 
     final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
@@ -77,26 +71,23 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
       game: boardPrefs.toGameData(
         variant: analysisState.variant,
         position: analysisState.currentPosition,
-        playerSide:
-            analysisState.currentPosition.isGameOver
-                ? PlayerSide.none
-                : analysisState.currentPosition.turn == Side.white
-                ? PlayerSide.white
-                : PlayerSide.black,
+        playerSide: analysisState.currentPosition.isGameOver
+            ? PlayerSide.none
+            : analysisState.currentPosition.turn == Side.white
+            ? PlayerSide.white
+            : PlayerSide.black,
         promotionMove: analysisState.promotionMove,
-        onMove:
-            (move, {isDrop, captured}) => ref
-                .read(ctrlProvider.notifier)
-                .onUserMove(move, shouldReplace: widget.shouldReplaceChildOnUserMove),
+        onMove: (move, {isDrop, captured}) => ref
+            .read(ctrlProvider.notifier)
+            .onUserMove(move, shouldReplace: widget.shouldReplaceChildOnUserMove),
         onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       ),
       shapes: userShapes.union(bestMoveShapes),
-      annotations:
-          sanMove != null && annotation != null
-              ? altCastles.containsKey(sanMove.move.uci)
-                  ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
-                  : IMap({sanMove.move.to: annotation})
-              : null,
+      annotations: sanMove != null && annotation != null
+          ? altCastles.containsKey(sanMove.move.uci)
+                ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
+                : IMap({sanMove.move.to: annotation})
+          : null,
       settings: boardPrefs.toBoardSettings().copyWith(
         borderRadius: widget.borderRadius,
         boxShadow: widget.borderRadius != null ? boardShadows : const <BoxShadow>[],

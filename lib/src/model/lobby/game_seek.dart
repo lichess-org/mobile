@@ -75,8 +75,9 @@ sealed class GameSeek with _$GameSeek {
   /// the same time control, variant and rated status.
   factory GameSeek.newOpponentFromGame(PlayableGame game, GameSetupPrefs setup) {
     return GameSeek(
-      clock:
-          game.meta.clock != null ? (game.meta.clock!.initial, game.meta.clock!.increment) : null,
+      clock: game.meta.clock != null
+          ? (game.meta.clock!.initial, game.meta.clock!.increment)
+          : null,
       rated: game.meta.rated,
       variant: game.meta.variant,
       ratingDelta: game.source == GameSource.lobby ? setup.customRatingDelta : null,

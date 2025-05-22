@@ -38,11 +38,10 @@ class _EngineLinesState extends ConsumerState<EngineLines> {
 
     final evalOrLastEval = eval ?? lastEval;
 
-    final content =
-        widget.isGameOver
-            ? emptyLines
-            : (evalOrLastEval != null
-                ? evalOrLastEval.pvs
+    final content = widget.isGameOver
+        ? emptyLines
+        : (evalOrLastEval != null
+              ? evalOrLastEval.pvs
                     .take(numEvalLines)
                     .map(
                       (pv) => Engineline(
@@ -52,7 +51,7 @@ class _EngineLinesState extends ConsumerState<EngineLines> {
                       ),
                     )
                     .toList()
-                : emptyLines);
+              : emptyLines);
 
     if (content.length < numEvalLines) {
       final padding = List.filled(numEvalLines - content.length, const Engineline.empty());
@@ -118,10 +117,9 @@ class Engineline extends ConsumerWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color:
-                      pvData.winningSide == Side.black
-                          ? EngineGauge.backgroundColor(context)
-                          : EngineGauge.valueColor(context),
+                  color: pvData.winningSide == Side.black
+                      ? EngineGauge.backgroundColor(context)
+                      : EngineGauge.valueColor(context),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),

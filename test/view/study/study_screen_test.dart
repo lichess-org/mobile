@@ -186,7 +186,9 @@ void main() {
       final mockRepository = MockStudyRepository();
       when(() => mockRepository.getStudy(id: testId)).thenAnswer(
         (_) async => (
-          makeStudy(chapter: makeChapter(id: const StudyChapterId('1'), orientation: Side.black)),
+          makeStudy(
+            chapter: makeChapter(id: const StudyChapterId('1'), orientation: Side.black),
+          ),
           '',
         ),
       );

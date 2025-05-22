@@ -104,10 +104,9 @@ class LiveTvChannels extends _$LiveTvChannels {
         if (snapshots.isNotEmpty) {
           state = AsyncValue.data(
             state.requireValue.updateAll(
-              (key, value) =>
-                  value.id == fenEvent.id
-                      ? value.copyWith(fen: fenEvent.fen, lastMove: fenEvent.lastMove)
-                      : value,
+              (key, value) => value.id == fenEvent.id
+                  ? value.copyWith(fen: fenEvent.fen, lastMove: fenEvent.lastMove)
+                  : value,
             ),
           );
         }

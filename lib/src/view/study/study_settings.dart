@@ -44,60 +44,56 @@ class StudySettingsScreen extends ConsumerWidget {
               SwitchSettingTile(
                 title: Text(context.l10n.inlineNotation),
                 value: analysisPrefs.inlineNotation,
-                onChanged:
-                    (value) =>
-                        ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                onChanged: (value) =>
+                    ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
                 // TODO: translate
                 title: const Text('Small board'),
                 value: analysisPrefs.smallBoard,
-                onChanged:
-                    (value) => ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+                onChanged: (value) =>
+                    ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.bestMoveArrow),
                 value: analysisPrefs.showBestMoveArrow,
-                onChanged:
-                    (value) =>
-                        ref.read(analysisPreferencesProvider.notifier).toggleShowBestMoveArrow(),
+                onChanged: (value) =>
+                    ref.read(analysisPreferencesProvider.notifier).toggleShowBestMoveArrow(),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.showVariationArrows),
                 value: studyPrefs.showVariationArrows,
-                onChanged:
-                    (value) =>
-                        ref.read(studyPreferencesProvider.notifier).toggleShowVariationArrows(),
+                onChanged: (value) =>
+                    ref.read(studyPreferencesProvider.notifier).toggleShowVariationArrows(),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.toggleGlyphAnnotations),
                 value: analysisPrefs.showAnnotations,
-                onChanged:
-                    (_) => ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
+                onChanged: (_) =>
+                    ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
               ),
             ],
           ),
           if (isComputerAnalysisAllowed)
             EngineSettingsWidget(
               onToggleLocalEvaluation: () => ref.read(studyController.notifier).toggleEngine(),
-              onSetEngineSearchTime:
-                  (value) => ref.read(studyController.notifier).setEngineSearchTime(value),
-              onSetNumEvalLines:
-                  (value) => ref.read(studyController.notifier).setNumEvalLines(value),
+              onSetEngineSearchTime: (value) =>
+                  ref.read(studyController.notifier).setEngineSearchTime(value),
+              onSetNumEvalLines: (value) =>
+                  ref.read(studyController.notifier).setNumEvalLines(value),
               onSetEngineCores: (value) => ref.read(studyController.notifier).setEngineCores(value),
             ),
           ListSection(
             children: [
               ListTile(
                 title: Text(context.l10n.openingExplorer),
-                onTap:
-                    () => showModalBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      showDragHandle: true,
-                      isDismissible: true,
-                      builder: (_) => const OpeningExplorerSettings(),
-                    ),
+                onTap: () => showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  isDismissible: true,
+                  builder: (_) => const OpeningExplorerSettings(),
+                ),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.sound),

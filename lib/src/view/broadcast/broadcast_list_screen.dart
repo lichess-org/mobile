@@ -57,34 +57,32 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
       icon: const Icon(Icons.filter_list),
       // TODO: translate
       semanticsLabel: 'Filter broadcasts',
-      onPressed:
-          () => showModalBottomSheet<void>(
-            context: context,
-            isScrollControlled: true,
-            constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
-            builder:
-                (_) => StatefulBuilder(
-                  builder: (context, setLocalState) {
-                    return BottomSheetScrollableContainer(
-                      padding: const EdgeInsets.all(16.0),
-                      children: [
-                        const SizedBox(height: 16.0),
-                        Filter<_BroadcastFilter>(
-                          filterType: FilterType.singleChoice,
-                          choices: _BroadcastFilter.values,
-                          choiceSelected: (choice) => filter == choice,
-                          choiceLabel: (category) => Text(category.l10n(context.l10n)),
-                          onSelected: (value, selected) {
-                            setLocalState(() => filter = value);
-                            setState(() => filter = value);
-                          },
-                        ),
-                        const SizedBox(height: 16.0),
-                      ],
-                    );
+      onPressed: () => showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
+        builder: (_) => StatefulBuilder(
+          builder: (context, setLocalState) {
+            return BottomSheetScrollableContainer(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                const SizedBox(height: 16.0),
+                Filter<_BroadcastFilter>(
+                  filterType: FilterType.singleChoice,
+                  choices: _BroadcastFilter.values,
+                  choiceSelected: (choice) => filter == choice,
+                  choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                  onSelected: (value, selected) {
+                    setLocalState(() => filter = value);
+                    setState(() => filter = value);
                   },
                 ),
-          ),
+                const SizedBox(height: 16.0),
+              ],
+            );
+          },
+        ),
+      ),
     );
 
     return Scaffold(
@@ -179,24 +177,22 @@ class _BodyState extends ConsumerState<_Body> {
                 SliverPadding(
                   padding: Styles.sectionBottomPadding,
                   sliver: SliverList.separated(
-                    separatorBuilder:
-                        (context, index) => PlatformDivider(
-                          height: 1,
-                          indent: BroadcastListTile.thumbnailSizeFromContext(context) + 16.0 + 10.0,
-                        ),
+                    separatorBuilder: (context, index) => PlatformDivider(
+                      height: 1,
+                      indent: BroadcastListTile.thumbnailSizeFromContext(context) + 16.0 + 10.0,
+                    ),
                     itemCount: section.$3.length,
-                    itemBuilder:
-                        (context, index) =>
-                            (section.$1 == 'past' &&
-                                    broadcastList.isLoading &&
-                                    index >= section.$3.length - 1)
-                                ? const Shimmer(
-                                  child: ShimmerLoading(
-                                    isLoading: true,
-                                    child: BroadcastListTile.loading(),
-                                  ),
-                                )
-                                : BroadcastListTile(broadcast: section.$3[index]),
+                    itemBuilder: (context, index) =>
+                        (section.$1 == 'past' &&
+                            broadcastList.isLoading &&
+                            index >= section.$3.length - 1)
+                        ? const Shimmer(
+                            child: ShimmerLoading(
+                              isLoading: true,
+                              child: BroadcastListTile.loading(),
+                            ),
+                          )
+                        : BroadcastListTile(broadcast: section.$3[index]),
                   ),
                 ),
               ],

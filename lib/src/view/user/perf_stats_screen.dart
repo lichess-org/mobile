@@ -45,13 +45,18 @@ class PerfStatsScreen extends StatelessWidget {
   final Perf perf;
 
   static Route<dynamic> buildRoute(BuildContext context, {required User user, required Perf perf}) {
-    return buildScreenRoute(context, screen: PerfStatsScreen(user: user, perf: perf));
+    return buildScreenRoute(
+      context,
+      screen: PerfStatsScreen(user: user, perf: perf),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: _Title(user: user, perf: perf)),
+      appBar: AppBar(
+        title: _Title(user: user, perf: perf),
+      ),
       body: _Body(user: user, perf: perf),
     );
   }
@@ -95,18 +100,17 @@ class _Title extends StatelessWidget {
           actions: allPerfs
               .map((p) {
                 return BottomSheetAction(
-                  makeLabel:
-                      (context) => Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(p.icon),
-                          const SizedBox(width: 6),
-                          Text(
-                            context.l10n.perfStatPerfStats(p.title),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                  makeLabel: (context) => Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(p.icon),
+                      const SizedBox(width: 6),
+                      Text(
+                        context.l10n.perfStatPerfStats(p.title),
+                        overflow: TextOverflow.ellipsis,
                       ),
+                    ],
+                  ),
                   onPressed: () {
                     Navigator.of(
                       context,
@@ -190,14 +194,14 @@ class _Body extends ConsumerWidget {
                       Text(
                         (loggedInUser != null && loggedInUser.user.id == user.id)
                             ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
-                              '${data.percentile!.toStringAsFixed(2)}%',
-                              perf.title,
-                            )
+                                '${data.percentile!.toStringAsFixed(2)}%',
+                                perf.title,
+                              )
                             : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
-                              user.username,
-                              '${data.percentile!.toStringAsFixed(2)}%',
-                              perf.title,
-                            ),
+                                user.username,
+                                '${data.percentile!.toStringAsFixed(2)}%',
+                                perf.title,
+                              ),
                         style: TextStyle(color: textShade(context, 0.7)),
                       ),
                     subStatSpace,
@@ -210,12 +214,11 @@ class _Body extends ConsumerWidget {
                       if (data.rank != null)
                         StatCard(
                           context.l10n.rank,
-                          value:
-                              data.rank == null
-                                  ? '?'
-                                  : NumberFormat.decimalPattern(
-                                    Intl.getCurrentLocale(),
-                                  ).format(data.rank),
+                          value: data.rank == null
+                              ? '?'
+                              : NumberFormat.decimalPattern(
+                                  Intl.getCurrentLocale(),
+                                ).format(data.rank),
                         ),
                       StatCard(
                         context.l10n.perfStatRatingDeviation('').replaceAll(': .', ''),
@@ -453,15 +456,15 @@ class _RatingWidget extends StatelessWidget {
     return (rating == null)
         ? const Text('?', style: TextStyle(fontSize: _defaultValueFontSize))
         : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              rating.toString(),
-              style: TextStyle(fontSize: _defaultValueFontSize, color: color),
-            ),
-            _UserGameWidget(game),
-          ],
-        );
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                rating.toString(),
+                style: TextStyle(fontSize: _defaultValueFontSize, color: color),
+              ),
+              _UserGameWidget(game),
+            ],
+          );
   }
 }
 
@@ -490,14 +493,13 @@ class _PercentageValueWidget extends StatelessWidget {
           _getPercentageString(value, denominator),
           style: TextStyle(
             fontSize: _defaultValueFontSize,
-            color:
-                color == null
-                    ? isShaded
-                        ? textShade(context, _customOpacity / 2)
-                        : textShade(context, _customOpacity)
-                    : isShaded
-                    ? color!.withValues(alpha: _customOpacity / 2)
-                    : color!.withValues(alpha: _customOpacity),
+            color: color == null
+                ? isShaded
+                      ? textShade(context, _customOpacity / 2)
+                      : textShade(context, _customOpacity)
+                : isShaded
+                ? color!.withValues(alpha: _customOpacity / 2)
+                : color!.withValues(alpha: _customOpacity),
           ),
         ),
       ],
@@ -652,13 +654,12 @@ class _GameListTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       title: playerTitle,
-      subtitle:
-          subtitle != null
-              ? DefaultTextStyle.merge(
-                child: subtitle!,
-                style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-              )
-              : null,
+      subtitle: subtitle != null
+          ? DefaultTextStyle.merge(
+              child: subtitle!,
+              style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+            )
+          : null,
     );
   }
 }
@@ -728,15 +729,12 @@ class _EloChartState extends State<_EloChart> {
       }
     }
 
-    _allFlSpot =
-        pointsHistoryRatingCompleted
-            .map(
-              (element) => FlSpot(
-                element.date.difference(_firstDate).inDays.toDouble(),
-                element.elo.toDouble(),
-              ),
-            )
-            .toList();
+    _allFlSpot = pointsHistoryRatingCompleted
+        .map(
+          (element) =>
+              FlSpot(element.date.difference(_firstDate).inDays.toDouble(), element.elo.toDouble()),
+        )
+        .toList();
 
     if (_dateIsInRange(DateRange.threeMonths)) {
       _selectedRange = DateRange.threeMonths;

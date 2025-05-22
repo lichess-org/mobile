@@ -65,10 +65,9 @@ class CreateGameWidget extends ConsumerWidget {
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Theme.of(context).dividerColor),
                 ),
-                icon:
-                    playPrefs.customVariant != Variant.standard
-                        ? Icon(playPrefs.customVariant.icon)
-                        : null,
+                icon: playPrefs.customVariant != Variant.standard
+                    ? Icon(playPrefs.customVariant.icon)
+                    : null,
                 label: Text(playPrefs.customVariant.label),
                 onPressed: () {
                   showChoicePicker(
@@ -99,8 +98,9 @@ class CreateGameWidget extends ConsumerWidget {
                       context,
                       title: Text(context.l10n.mode),
                       choices: [context.l10n.casual, context.l10n.rated],
-                      selectedItem:
-                          playPrefs.customRated ? context.l10n.rated : context.l10n.casual,
+                      selectedItem: playPrefs.customRated
+                          ? context.l10n.rated
+                          : context.l10n.casual,
                       labelBuilder: (String label) => Text(label),
                       onSelectedItemChanged: (String label) {
                         ref
@@ -118,59 +118,57 @@ class CreateGameWidget extends ConsumerWidget {
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: Theme.of(context).dividerColor),
                   ),
-                  onPressed:
-                      canUseRatingRange
-                          ? () {
-                            showModalBottomSheet<void>(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (BuildContext context) {
-                                return BottomSheetScrollableContainer(
-                                  padding: const EdgeInsets.only(top: 32.0, bottom: 16.0),
-                                  children: [
-                                    PlayRatingRange(
-                                      perf: userPerf,
-                                      ratingDelta: playPrefs.customRatingDelta,
-                                      onRatingDeltaChange: (int subtract, int add) {
-                                        ref
-                                            .read(gameSetupPreferencesProvider.notifier)
-                                            .setCustomRatingRange(subtract, add);
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                          : null,
-                  child:
-                      canUseRatingRange
-                          ? Text(
-                            '${playPrefs.customRatingDelta.$1 == 0 ? '-' : ''}${playPrefs.customRatingDelta.$1} / +${playPrefs.customRatingDelta.$2}',
-                          )
-                          : const Text('-500 / +500'),
+                  onPressed: canUseRatingRange
+                      ? () {
+                          showModalBottomSheet<void>(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (BuildContext context) {
+                              return BottomSheetScrollableContainer(
+                                padding: const EdgeInsets.only(top: 32.0, bottom: 16.0),
+                                children: [
+                                  PlayRatingRange(
+                                    perf: userPerf,
+                                    ratingDelta: playPrefs.customRatingDelta,
+                                    onRatingDeltaChange: (int subtract, int add) {
+                                      ref
+                                          .read(gameSetupPreferencesProvider.notifier)
+                                          .setCustomRatingRange(subtract, add);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      : null,
+                  child: canUseRatingRange
+                      ? Text(
+                          '${playPrefs.customRatingDelta.$1 == 0 ? '-' : ''}${playPrefs.customRatingDelta.$1} / +${playPrefs.customRatingDelta.$2}',
+                        )
+                      : const Text('-500 / +500'),
                 ),
               ),
             ],
           ),
         FilledButton(
-          onPressed:
-              isOnline
-                  ? () {
-                    // Pops the play bottom sheet
-                    Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+          onPressed: isOnline
+              ? () {
+                  // Pops the play bottom sheet
+                  Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
 
-                    final playban = ref.read(accountProvider).valueOrNull?.playban;
-                    if (playban != null) {
-                      ref.read(accountServiceProvider).showPlaybanDialog(playban);
-                      return;
-                    }
-
-                    Navigator.of(context, rootNavigator: true).push(
-                      GameScreen.buildRoute(context, seek: GameSeek.custom(playPrefs, account)),
-                    );
+                  final playban = ref.read(accountProvider).valueOrNull?.playban;
+                  if (playban != null) {
+                    ref.read(accountServiceProvider).showPlaybanDialog(playban);
+                    return;
                   }
-                  : null,
+
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(GameScreen.buildRoute(context, seek: GameSeek.custom(playPrefs, account)));
+                }
+              : null,
           child: Text(context.l10n.createAGame),
         ),
       ],

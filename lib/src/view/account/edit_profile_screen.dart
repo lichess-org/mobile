@@ -84,25 +84,24 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 navigator.pop();
               }
             },
-            child:
-                value == null
-                    ? Center(child: Text(context.l10n.mobileMustBeLoggedIn))
-                    : GestureDetector(
-                      onTap: () => FocusScope.of(context).unfocus(),
-                      child: Padding(
-                        padding: Styles.bodyPadding.copyWith(top: 0, bottom: 0),
-                        child: ListView(
-                          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                          children: [
-                            SizedBox(height: Styles.bodyPadding.top),
-                            Text(context.l10n.allInformationIsPublicAndOptional),
-                            const SizedBox(height: 16),
-                            _EditProfileForm(value, _formKey, _formData),
-                            SizedBox(height: Styles.bodyPadding.bottom),
-                          ],
-                        ),
+            child: value == null
+                ? Center(child: Text(context.l10n.mobileMustBeLoggedIn))
+                : GestureDetector(
+                    onTap: () => FocusScope.of(context).unfocus(),
+                    child: Padding(
+                      padding: Styles.bodyPadding.copyWith(top: 0, bottom: 0),
+                      child: ListView(
+                        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                        children: [
+                          SizedBox(height: Styles.bodyPadding.top),
+                          Text(context.l10n.allInformationIsPublicAndOptional),
+                          const SizedBox(height: 16),
+                          _EditProfileForm(value, _formKey, _formData),
+                          SizedBox(height: Styles.bodyPadding.bottom),
+                        ],
                       ),
                     ),
+                  ),
           ),
         );
 
@@ -216,19 +215,15 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                                   ),
                                                   child: EmojiPicker(
                                                     emojiData: value,
-                                                    itemBuilder: (
-                                                      context,
-                                                      emojiId,
-                                                      emoji,
-                                                      callback,
-                                                    ) {
-                                                      return EmojiItem(
-                                                        onTap: () {
-                                                          callback(emojiId, emoji);
+                                                    itemBuilder:
+                                                        (context, emojiId, emoji, callback) {
+                                                          return EmojiItem(
+                                                            onTap: () {
+                                                              callback(emojiId, emoji);
+                                                            },
+                                                            emoji: emoji,
+                                                          );
                                                         },
-                                                        emoji: emoji,
-                                                      );
-                                                    },
                                                     onEmojiSelected: (emojiId, emoji) {
                                                       Navigator.of(context).pop(emojiId);
                                                     },
@@ -290,10 +285,9 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                           border: Border.all(color: Theme.of(context).dividerColor),
                           borderRadius: BorderRadius.circular(4.0),
                         ),
-                        child:
-                            field.value != null
-                                ? CachedNetworkImage(imageUrl: lichessFlairSrc(field.value!))
-                                : Text(context.l10n.setFlair),
+                        child: field.value != null
+                            ? CachedNetworkImage(imageUrl: lichessFlairSrc(field.value!))
+                            : Text(context.l10n.setFlair),
                       ),
                     ),
                   ],
@@ -315,10 +309,9 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                     Text(context.l10n.countryRegion, style: Styles.formLabel),
                     const SizedBox(height: 6.0),
                     Autocomplete<String>(
-                      initialValue:
-                          field.value != null
-                              ? TextEditingValue(text: countries[field.value]!)
-                              : null,
+                      initialValue: field.value != null
+                          ? TextEditingValue(text: countries[field.value]!)
+                          : null,
                       optionsBuilder: (TextEditingValue value) {
                         if (value.text.isEmpty) {
                           return const Iterable<String>.empty();
@@ -333,21 +326,22 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                         );
                         field.didChange(country.key);
                       },
-                      fieldViewBuilder: (
-                        BuildContext context,
-                        TextEditingController textEditingController,
-                        FocusNode focusNode,
-                        VoidCallback onFieldSubmitted,
-                      ) {
-                        return TextField(
-                          controller: textEditingController,
-                          textInputAction: TextInputAction.next,
-                          focusNode: focusNode,
-                          onSubmitted: (String value) {
-                            onFieldSubmitted();
+                      fieldViewBuilder:
+                          (
+                            BuildContext context,
+                            TextEditingController textEditingController,
+                            FocusNode focusNode,
+                            VoidCallback onFieldSubmitted,
+                          ) {
+                            return TextField(
+                              controller: textEditingController,
+                              textInputAction: TextInputAction.next,
+                              focusNode: focusNode,
+                              onSubmitted: (String value) {
+                                onFieldSubmitted();
+                              },
+                            );
                           },
-                        );
-                      },
                     ),
                   ],
                 );
@@ -422,55 +416,54 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
               future: _pendingSaveProfile,
               builder: (context, snapshot) {
                 return FilledButton(
-                  onPressed:
-                      snapshot.connectionState == ConnectionState.waiting
-                          ? null
-                          : () async {
-                            if (widget.formKey.currentState!.validate()) {
-                              widget.formKey.currentState!.save();
-                              widget.formData.removeWhere((key, value) {
-                                return value == null;
-                              });
-                              final future = Result.capture(
-                                ref.withClient(
-                                  (client) => AccountRepository(client).saveProfile(
-                                    widget.formData.map(
-                                      (key, value) => MapEntry(key, value.toString()),
-                                    ),
+                  onPressed: snapshot.connectionState == ConnectionState.waiting
+                      ? null
+                      : () async {
+                          if (widget.formKey.currentState!.validate()) {
+                            widget.formKey.currentState!.save();
+                            widget.formData.removeWhere((key, value) {
+                              return value == null;
+                            });
+                            final future = Result.capture(
+                              ref.withClient(
+                                (client) => AccountRepository(client).saveProfile(
+                                  widget.formData.map(
+                                    (key, value) => MapEntry(key, value.toString()),
                                   ),
                                 ),
-                              );
+                              ),
+                            );
 
-                              setState(() {
-                                _pendingSaveProfile = future;
-                              });
+                            setState(() {
+                              _pendingSaveProfile = future;
+                            });
 
-                              final result = await future;
+                            final result = await future;
 
-                              result.match(
-                                onError: (err, _) {
-                                  if (context.mounted) {
-                                    showSnackBar(
-                                      context,
-                                      'Something went wrong',
-                                      type: SnackBarType.error,
-                                    );
-                                  }
-                                },
-                                onSuccess: (_) {
-                                  if (context.mounted) {
-                                    ref.invalidate(accountProvider);
-                                    showSnackBar(
-                                      context,
-                                      context.l10n.success,
-                                      type: SnackBarType.success,
-                                    );
-                                    Navigator.of(context).pop();
-                                  }
-                                },
-                              );
-                            }
-                          },
+                            result.match(
+                              onError: (err, _) {
+                                if (context.mounted) {
+                                  showSnackBar(
+                                    context,
+                                    'Something went wrong',
+                                    type: SnackBarType.error,
+                                  );
+                                }
+                              },
+                              onSuccess: (_) {
+                                if (context.mounted) {
+                                  ref.invalidate(accountProvider);
+                                  showSnackBar(
+                                    context,
+                                    context.l10n.success,
+                                    type: SnackBarType.success,
+                                  );
+                                  Navigator.of(context).pop();
+                                }
+                              },
+                            );
+                          }
+                        },
                   child: Text(context.l10n.apply),
                 );
               },

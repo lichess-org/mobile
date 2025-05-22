@@ -183,10 +183,9 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       colorScheme: boardTheme.colors,
       brightness: brightness,
       hue: hue,
-      border:
-          showBorder
-              ? BoardBorder(color: darken(boardTheme.colors.darkSquare, 0.2), width: 16.0)
-              : null,
+      border: showBorder
+          ? BoardBorder(color: darken(boardTheme.colors.darkSquare, 0.2), width: 16.0)
+          : null,
       showValidMoves: showLegalMoves,
       showLastMove: boardHighlights,
       enableCoordinates: coordinates,
@@ -374,10 +373,9 @@ enum BoardTheme {
           for (final c in const [1, 2, 3, 4, 5, 6])
             Container(
               width: 44,
-              color:
-                  c.isEven
-                      ? BoardTheme.system.colors.darkSquare
-                      : BoardTheme.system.colors.lightSquare,
+              color: c.isEven
+                  ? BoardTheme.system.colors.darkSquare
+                  : BoardTheme.system.colors.lightSquare,
             ),
         ],
       ),

@@ -66,20 +66,18 @@ class _Body extends ConsumerWidget {
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final orientation =
-                    constraints.maxWidth > constraints.maxHeight
-                        ? Orientation.landscape
-                        : Orientation.portrait;
+                final orientation = constraints.maxWidth > constraints.maxHeight
+                    ? Orientation.landscape
+                    : Orientation.portrait;
                 if (orientation == Orientation.landscape) {
                   final sideWidth =
                       constraints.biggest.longestSide - constraints.biggest.shortestSide;
                   final defaultBoardSize =
                       constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-                  final boardSize =
-                      sideWidth >= 250
-                          ? defaultBoardSize
-                          : constraints.biggest.longestSide / kGoldenRatio -
-                              (kTabletBoardTableSidePadding * 2);
+                  final boardSize = sideWidth >= 250
+                      ? defaultBoardSize
+                      : constraints.biggest.longestSide / kGoldenRatio -
+                            (kTabletBoardTableSidePadding * 2);
                   return Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -125,16 +123,14 @@ class _Body extends ConsumerWidget {
                   final defaultBoardSize = constraints.biggest.shortestSide;
                   final remainingHeight = constraints.maxHeight - defaultBoardSize;
                   final isSmallScreen = remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                  final boardSize =
-                      isTablet || isSmallScreen
-                          ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                          : defaultBoardSize;
+                  final boardSize = isTablet || isSmallScreen
+                      ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                      : defaultBoardSize;
 
                   return ListView(
-                    padding:
-                        isTablet
-                            ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                            : EdgeInsets.zero,
+                    padding: isTablet
+                        ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                        : EdgeInsets.zero,
                     children: [
                       GestureDetector(
                         // disable scrolling when dragging the board
@@ -147,10 +143,9 @@ class _Body extends ConsumerWidget {
                       ),
                       OpeningExplorerView(
                         position: state.currentPosition,
-                        opening:
-                            state.currentNode.isRoot
-                                ? LightOpening(eco: '', name: context.l10n.startPosition)
-                                : state.currentNode.opening ?? state.currentBranchOpening,
+                        opening: state.currentNode.isRoot
+                            ? LightOpening(eco: '', name: context.l10n.startPosition)
+                            : state.currentNode.opening ?? state.currentBranchOpening,
                         onMoveSelected: (move) {
                           ref.read(analysisControllerProvider(options).notifier).onUserMove(move);
                         },
@@ -228,14 +223,13 @@ class _BottomBar extends ConsumerWidget {
         BottomBarButton(
           label: dbLabel,
           showLabel: true,
-          onTap:
-              () => showModalBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                showDragHandle: true,
-                isDismissible: true,
-                builder: (_) => const OpeningExplorerSettings(),
-              ),
+          onTap: () => showModalBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            showDragHandle: true,
+            isDismissible: true,
+            builder: (_) => const OpeningExplorerSettings(),
+          ),
           icon: Icons.tune,
         ),
         BottomBarButton(

@@ -24,8 +24,10 @@ class FullScreenBackground extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
-    final appDocumentsDirectory =
-        ref.read(preloadedDataProvider).requireValue.appDocumentsDirectory;
+    final appDocumentsDirectory = ref
+        .read(preloadedDataProvider)
+        .requireValue
+        .appDocumentsDirectory;
 
     if (generalPrefs.backgroundImage != null && appDocumentsDirectory != null) {
       return FullScreenBackgroundImage(
@@ -106,27 +108,25 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
   }
 
   void _updateMatrix(Size viewport) {
-    final matrix =
-        viewport == pickedImageViewport ? widget.backgroundImage.transform : Matrix4.identity();
+    final matrix = viewport == pickedImageViewport
+        ? widget.backgroundImage.transform
+        : Matrix4.identity();
     _controller.value = matrix;
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewportOrientation =
-        widget.viewport.width > widget.viewport.height
-            ? Orientation.landscape
-            : Orientation.portrait;
-    final imageOrientation =
-        widget.backgroundImage.width > widget.backgroundImage.height
-            ? Orientation.landscape
-            : Orientation.portrait;
-    final boxFit =
-        imageOrientation == viewportOrientation
-            ? BoxFit.cover
-            : imageOrientation == Orientation.portrait
-            ? BoxFit.fitWidth
-            : BoxFit.fitHeight;
+    final viewportOrientation = widget.viewport.width > widget.viewport.height
+        ? Orientation.landscape
+        : Orientation.portrait;
+    final imageOrientation = widget.backgroundImage.width > widget.backgroundImage.height
+        ? Orientation.landscape
+        : Orientation.portrait;
+    final boxFit = imageOrientation == viewportOrientation
+        ? BoxFit.cover
+        : imageOrientation == Orientation.portrait
+        ? BoxFit.fitWidth
+        : BoxFit.fitHeight;
 
     final imageFitSize = FullScreenBackgroundImage.imageFitSize(
       boxFit,

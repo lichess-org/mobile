@@ -61,7 +61,10 @@ class PuzzleScreen extends ConsumerStatefulWidget {
     required PuzzleAngle angle,
     PuzzleId? puzzleId,
   }) {
-    return buildScreenRoute(context, screen: PuzzleScreen(angle: angle, puzzleId: puzzleId));
+    return buildScreenRoute(
+      context,
+      screen: PuzzleScreen(angle: angle, puzzleId: puzzleId),
+    );
   }
 
   @override
@@ -112,13 +115,14 @@ class _Title extends ConsumerWidget {
         key == PuzzleThemeKey.mix
             ? Text(context.l10n.puzzleDesc)
             : Text(key.l10n(context.l10n).name),
-      PuzzleOpening(key: final key) => ref
-          .watch(puzzleOpeningNameProvider(key))
-          .when(
-            data: (data) => Text(data),
-            loading: () => const SizedBox.shrink(),
-            error: (_, _) => Text(key.replaceAll('_', ' ')),
-          ),
+      PuzzleOpening(key: final key) =>
+        ref
+            .watch(puzzleOpeningNameProvider(key))
+            .when(
+              data: (data) => Text(data),
+              loading: () => const SizedBox.shrink(),
+              error: (_, _) => Text(key.replaceAll('_', ' ')),
+            ),
     };
   }
 }
@@ -154,12 +158,11 @@ class _LoadNextPuzzle extends ConsumerWidget {
           );
         }
       },
-      loading:
-          () => _PuzzleScaffold(
-            angle: angle,
-            initialPuzzleContext: null,
-            body: const Center(child: CircularProgressIndicator.adaptive()),
-          ),
+      loading: () => _PuzzleScaffold(
+        angle: angle,
+        initialPuzzleContext: null,
+        body: const Center(child: CircularProgressIndicator.adaptive()),
+      ),
       error: (e, s) {
         debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s');
         return _PuzzleScaffold(
@@ -198,22 +201,21 @@ class _LoadPuzzleFromId extends ConsumerWidget {
           body: _Body(initialPuzzleContext: initialPuzzleContext),
         );
       },
-      loading:
-          () => _PuzzleScaffold(
-            angle: angle,
-            initialPuzzleContext: null,
-            body: const Column(
-              children: [
-                Expanded(
-                  child: SafeArea(
-                    bottom: false,
-                    child: BoardTable.empty(showEngineGaugePlaceholder: true),
-                  ),
-                ),
-                BottomBar.empty(),
-              ],
+      loading: () => _PuzzleScaffold(
+        angle: angle,
+        initialPuzzleContext: null,
+        body: const Column(
+          children: [
+            Expanded(
+              child: SafeArea(
+                bottom: false,
+                child: BoardTable.empty(showEngineGaugePlaceholder: true),
+              ),
             ),
-          ),
+            BottomBar.empty(),
+          ],
+        ),
+      ),
       error: (e, s) {
         debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s');
         return _PuzzleScaffold(
@@ -294,12 +296,12 @@ class _Body extends ConsumerWidget {
                 position: puzzleState.currentPosition,
                 playerSide:
                     puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
-                        ? PlayerSide.none
-                        : puzzleState.mode == PuzzleMode.view
-                        ? PlayerSide.both
-                        : puzzleState.pov == Side.white
-                        ? PlayerSide.white
-                        : PlayerSide.black,
+                    ? PlayerSide.none
+                    : puzzleState.mode == PuzzleMode.view
+                    ? PlayerSide.both
+                    : puzzleState.pov == Side.white
+                    ? PlayerSide.white
+                    : PlayerSide.black,
                 promotionMove: puzzleState.promotionMove,
                 onMove: (move, {isDrop}) {
                   ref.read(ctrlProvider.notifier).onUserMove(move);
@@ -309,28 +311,26 @@ class _Body extends ConsumerWidget {
                 },
                 premovable: null,
               ),
-              shapes:
-                  puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
-                      ? ISet([
-                        Arrow(
-                          color: const Color(0x66003088),
-                          orig: evalBestMove.from,
-                          dest: evalBestMove.to,
-                        ),
-                      ])
-                      : puzzleState.hintSquare != null
-                      ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
-                      : null,
-              engineGauge:
-                  puzzleState.isEngineAvailable(enginePrefs)
-                      ? (
-                        isLocalEngineAvailable: true,
-                        orientation: puzzleState.pov,
-                        position: puzzleState.currentPosition,
-                        savedEval: puzzleState.node.eval,
-                        serverEval: puzzleState.node.serverEval,
-                      )
-                      : null,
+              shapes: puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
+                  ? ISet([
+                      Arrow(
+                        color: const Color(0x66003088),
+                        orig: evalBestMove.from,
+                        dest: evalBestMove.to,
+                      ),
+                    ])
+                  : puzzleState.hintSquare != null
+                  ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
+                  : null,
+              engineGauge: puzzleState.isEngineAvailable(enginePrefs)
+                  ? (
+                      isLocalEngineAvailable: true,
+                      orientation: puzzleState.pov,
+                      position: puzzleState.currentPosition,
+                      savedEval: puzzleState.node.eval,
+                      serverEval: puzzleState.node.serverEval,
+                    )
+                  : null,
               showEngineGaugePlaceholder: true,
               topTable: Center(
                 child: PuzzleFeedbackWidget(
@@ -459,10 +459,9 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                 label: context.l10n.getAHint,
                 showLabel: true,
                 highlighted: puzzleState.hintSquare != null,
-                onTap:
-                    snapshot.connectionState == ConnectionState.done
-                        ? () => ref.read(ctrlProvider.notifier).toggleHint()
-                        : null,
+                onTap: snapshot.connectionState == ConnectionState.done
+                    ? () => ref.read(ctrlProvider.notifier).toggleHint()
+                    : null,
               );
             },
           ),
@@ -474,10 +473,9 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                 icon: Icons.help,
                 label: context.l10n.viewTheSolution,
                 showLabel: true,
-                onTap:
-                    snapshot.connectionState == ConnectionState.done
-                        ? () => ref.read(ctrlProvider.notifier).viewSolution()
-                        : null,
+                onTap: snapshot.connectionState == ConnectionState.done
+                    ? () => ref.read(ctrlProvider.notifier).viewSolution()
+                    : null,
               );
             },
           ),
@@ -497,17 +495,16 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                 future: toggleFuture,
                 builder: (context, snapshot) {
                   return BottomBarButton(
-                    onTap:
-                        snapshot.connectionState != ConnectionState.waiting
-                            ? () async {
-                              toggleFuture = ref.read(ctrlProvider.notifier).toggleEvaluation();
-                              try {
-                                await toggleFuture;
-                              } finally {
-                                toggleFuture = null;
-                              }
+                    onTap: snapshot.connectionState != ConnectionState.waiting
+                        ? () async {
+                            toggleFuture = ref.read(ctrlProvider.notifier).toggleEvaluation();
+                            try {
+                              await toggleFuture;
+                            } finally {
+                              toggleFuture = null;
                             }
-                            : null,
+                          }
+                        : null,
                     label: context.l10n.toggleLocalEvaluation,
                     icon: CupertinoIcons.gauge,
                     highlighted: puzzleState.isEngineAvailable(enginePrefs),
@@ -541,10 +538,9 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           ),
         if (puzzleState.mode == PuzzleMode.view)
           BottomBarButton(
-            onTap:
-                puzzleState.mode == PuzzleMode.view && puzzleState.nextContext != null
-                    ? () => ref.read(ctrlProvider.notifier).onLoadPuzzle(puzzleState.nextContext!)
-                    : null,
+            onTap: puzzleState.mode == PuzzleMode.view && puzzleState.nextContext != null
+                ? () => ref.read(ctrlProvider.notifier).onLoadPuzzle(puzzleState.nextContext!)
+                : null,
             highlighted: true,
             label: context.l10n.puzzleContinueTraining,
             icon: CupertinoIcons.play_arrow_solid,
@@ -576,10 +572,9 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                 AnalysisOptions(
                   orientation: puzzleState.pov,
                   standalone: (
-                    pgn:
-                        ref
-                            .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
-                            .makePgn(),
+                    pgn: ref
+                        .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
+                        .makePgn(),
                     isComputerAnalysisAllowed: true,
                     variant: Variant.standard,
                   ),
@@ -590,8 +585,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           },
         ),
         BottomSheetAction(
-          makeLabel:
-              (context) => Text(context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value)),
+          makeLabel: (context) =>
+              Text(context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value)),
           onPressed: () async {
             final game = await ref.read(
               archivedGameProvider(id: puzzleState.puzzle.game.id).future,
@@ -629,15 +624,14 @@ class _PuzzleSettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SemanticIconButton(
-      onPressed:
-          () => showModalBottomSheet<void>(
-            context: context,
-            isDismissible: true,
-            isScrollControlled: true,
-            showDragHandle: true,
-            constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
-            builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),
-          ),
+      onPressed: () => showModalBottomSheet<void>(
+        context: context,
+        isDismissible: true,
+        isScrollControlled: true,
+        showDragHandle: true,
+        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+        builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),
+      ),
       semanticsLabel: context.l10n.settingsSettings,
       icon: const Icon(Icons.settings),
     );
@@ -674,34 +668,33 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                   return SettingsListTile(
                     settingsLabel: Text(context.l10n.puzzleDifficultyLevel),
                     settingsValue: puzzleDifficultyL10n(context, difficulty),
-                    onTap:
-                        puzzleState.isChangingDifficulty
-                            ? null
-                            : () {
-                              showChoicePicker(
-                                context,
-                                choices: PuzzleDifficulty.values,
-                                selectedItem: difficulty,
-                                labelBuilder: (t) => Text(puzzleDifficultyL10n(context, t)),
-                                onSelectedItemChanged: (PuzzleDifficulty? d) {
-                                  if (d != null) {
-                                    setState(() {
-                                      selectedDifficulty = d;
-                                    });
-                                  }
-                                },
-                              ).then((_) async {
-                                if (selectedDifficulty == difficulty) {
-                                  return;
+                    onTap: puzzleState.isChangingDifficulty
+                        ? null
+                        : () {
+                            showChoicePicker(
+                              context,
+                              choices: PuzzleDifficulty.values,
+                              selectedItem: difficulty,
+                              labelBuilder: (t) => Text(puzzleDifficultyL10n(context, t)),
+                              onSelectedItemChanged: (PuzzleDifficulty? d) {
+                                if (d != null) {
+                                  setState(() {
+                                    selectedDifficulty = d;
+                                  });
                                 }
-                                final nextContext = await ref
-                                    .read(ctrlProvider.notifier)
-                                    .changeDifficulty(selectedDifficulty);
-                                if (context.mounted && nextContext != null) {
-                                  ref.read(ctrlProvider.notifier).onLoadPuzzle(nextContext);
-                                }
-                              });
-                            },
+                              },
+                            ).then((_) async {
+                              if (selectedDifficulty == difficulty) {
+                                return;
+                              }
+                              final nextContext = await ref
+                                  .read(ctrlProvider.notifier)
+                                  .changeDifficulty(selectedDifficulty);
+                              if (context.mounted && nextContext != null) {
+                                ref.read(ctrlProvider.notifier).onLoadPuzzle(nextContext);
+                              }
+                            });
+                          },
                   );
                 },
               ),

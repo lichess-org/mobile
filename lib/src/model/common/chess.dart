@@ -247,8 +247,8 @@ extension ChessExtension on Pick {
           : value == 'black'
           ? Side.black
           : throw PickException(
-            "value $value at $debugParsingExit can't be casted to Side: invalid string.",
-          );
+              "value $value at $debugParsingExit can't be casted to Side: invalid string.",
+            );
     }
     throw PickException("value $value at $debugParsingExit can't be casted to Side");
   }

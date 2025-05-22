@@ -36,17 +36,15 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                   SwitchSettingTile(
                     title: Text(context.l10n.inlineNotation),
                     value: prefs.inlineNotation,
-                    onChanged:
-                        (value) =>
-                            ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                    onChanged: (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
                   ),
                   SwitchSettingTile(
                     // TODO: translate
                     title: const Text('Small board'),
                     value: prefs.smallBoard,
-                    onChanged:
-                        (value) =>
-                            ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+                    onChanged: (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
                   ),
                 ],
               ),
@@ -63,48 +61,37 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                     ),
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 300),
-                      crossFadeState:
-                          value.isComputerAnalysisAllowedAndEnabled
-                              ? CrossFadeState.showSecond
-                              : CrossFadeState.showFirst,
+                      crossFadeState: value.isComputerAnalysisAllowedAndEnabled
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
                       firstChild: const SizedBox.shrink(),
                       secondChild: Column(
                         children: [
                           SwitchSettingTile(
                             title: Text(context.l10n.evaluationGauge),
                             value: prefs.showEvaluationGauge,
-                            onChanged:
-                                (value) =>
-                                    ref
-                                        .read(analysisPreferencesProvider.notifier)
-                                        .toggleShowEvaluationGauge(),
+                            onChanged: (value) => ref
+                                .read(analysisPreferencesProvider.notifier)
+                                .toggleShowEvaluationGauge(),
                           ),
                           SwitchSettingTile(
                             title: Text(context.l10n.toggleGlyphAnnotations),
                             value: prefs.showAnnotations,
-                            onChanged:
-                                (_) =>
-                                    ref
-                                        .read(analysisPreferencesProvider.notifier)
-                                        .toggleAnnotations(),
+                            onChanged: (_) =>
+                                ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
                           ),
                           SwitchSettingTile(
                             title: Text(context.l10n.mobileShowComments),
                             value: prefs.showPgnComments,
-                            onChanged:
-                                (_) =>
-                                    ref
-                                        .read(analysisPreferencesProvider.notifier)
-                                        .togglePgnComments(),
+                            onChanged: (_) =>
+                                ref.read(analysisPreferencesProvider.notifier).togglePgnComments(),
                           ),
                           SwitchSettingTile(
                             title: Text(context.l10n.bestMoveArrow),
                             value: prefs.showBestMoveArrow,
-                            onChanged:
-                                (value) =>
-                                    ref
-                                        .read(analysisPreferencesProvider.notifier)
-                                        .toggleShowBestMoveArrow(),
+                            onChanged: (value) => ref
+                                .read(analysisPreferencesProvider.notifier)
+                                .toggleShowBestMoveArrow(),
                           ),
                         ],
                       ),
@@ -113,10 +100,9 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                 ),
               AnimatedCrossFade(
                 duration: const Duration(milliseconds: 300),
-                crossFadeState:
-                    value.isComputerAnalysisAllowedAndEnabled
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
+                crossFadeState: value.isComputerAnalysisAllowedAndEnabled
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
                 firstChild: const SizedBox.shrink(),
                 secondChild: EngineSettingsWidget(
                   onSetEngineSearchTime: (value) {
@@ -134,14 +120,13 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                 children: [
                   ListTile(
                     title: Text(context.l10n.openingExplorer),
-                    onTap:
-                        () => showModalBottomSheet<void>(
-                          context: context,
-                          isScrollControlled: true,
-                          showDragHandle: true,
-                          isDismissible: true,
-                          builder: (_) => const OpeningExplorerSettings(),
-                        ),
+                    onTap: () => showModalBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      showDragHandle: true,
+                      isDismissible: true,
+                      builder: (_) => const OpeningExplorerSettings(),
+                    ),
                   ),
                 ],
               ),

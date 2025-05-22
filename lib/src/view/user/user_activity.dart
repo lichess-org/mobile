@@ -22,10 +22,9 @@ class UserActivityWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activity =
-        user != null
-            ? ref.watch(userActivityProvider(id: user!.id))
-            : ref.watch(accountActivityProvider);
+    final activity = user != null
+        ? ref.watch(userActivityProvider(id: user!.id))
+        : ref.watch(accountActivityProvider);
 
     return activity.when(
       data: (data) {
@@ -36,21 +35,22 @@ class UserActivityWidget extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.activityActivity, style: Styles.sectionTitle),
           hasLeading: true,
-          children:
-              nonEmptyActivities.take(10).map((entry) => UserActivityEntry(entry: entry)).toList(),
+          children: nonEmptyActivities
+              .take(10)
+              .map((entry) => UserActivityEntry(entry: entry))
+              .toList(),
         );
       },
       error: (error, stackTrace) {
         debugPrint('SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace');
         return const Text('Could not load user activity');
       },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: ListSection.loading(itemsNumber: 10, header: true, hasLeading: true),
-            ),
-          ),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(itemsNumber: 10, header: true, hasLeading: true),
+        ),
+      ),
     );
   }
 }
@@ -97,10 +97,9 @@ class UserActivityEntry extends ConsumerWidget {
                         gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
                             ? LichessIcons.arrow_full_upperright
                             : LichessIcons.arrow_full_lowerright,
-                        color:
-                            gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
-                                ? greenColor
-                                : redColor,
+                        color: gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
+                            ? greenColor
+                            : redColor,
                         size: 12,
                       ),
                       Text(
@@ -108,10 +107,9 @@ class UserActivityEntry extends ConsumerWidget {
                             .abs()
                             .toString(),
                         style: TextStyle(
-                          color:
-                              gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
-                                  ? greenColor
-                                  : redColor,
+                          color: gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
+                              ? greenColor
+                              : redColor,
                           fontSize: 11,
                         ),
                       ),
@@ -139,19 +137,17 @@ class UserActivityEntry extends ConsumerWidget {
                       entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
                           ? LichessIcons.arrow_full_upperright
                           : LichessIcons.arrow_full_lowerright,
-                      color:
-                          entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
-                              ? greenColor
-                              : redColor,
+                      color: entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
+                          ? greenColor
+                          : redColor,
                       size: 12,
                     ),
                     Text(
                       (entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore).abs().toString(),
                       style: TextStyle(
-                        color:
-                            entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
-                                ? greenColor
-                                : redColor,
+                        color: entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
+                            ? greenColor
+                            : redColor,
                         fontSize: 11,
                       ),
                     ),
@@ -206,18 +202,17 @@ class UserActivityEntry extends ConsumerWidget {
           _UserActivityListTile(
             leading: const Icon(Icons.emoji_events, size: leadingIconSize),
             title: context.l10n.activityCompetedInNbTournaments(entry.tournamentNb!),
-            subtitle:
-                entry.bestTournament != null
-                    ? Text(
-                      context.l10n.activityRankedInTournament(
-                        entry.bestTournament!.rank,
-                        entry.bestTournament!.rankPercent.toString(),
-                        entry.bestTournament!.nbGames.toString(),
-                        entry.bestTournament!.name,
-                      ),
-                      maxLines: 2,
-                    )
-                    : emptySubtitle,
+            subtitle: entry.bestTournament != null
+                ? Text(
+                    context.l10n.activityRankedInTournament(
+                      entry.bestTournament!.rank,
+                      entry.bestTournament!.rankPercent.toString(),
+                      entry.bestTournament!.nbGames.toString(),
+                      entry.bestTournament!.name,
+                    ),
+                    maxLines: 2,
+                  )
+                : emptySubtitle,
           ),
         if (entry.followInNb != null)
           _UserActivityListTile(
