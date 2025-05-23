@@ -21,20 +21,25 @@ void main() {
       await tester.pumpAndSettle();
 
       final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
-      final controllerProvider = coordinateTrainingControllerProvider;
 
       final trainingPrefsNotifier = container.read(coordinateTrainingPreferencesProvider.notifier);
       trainingPrefsNotifier.setMode(TrainingMode.findSquare);
       await tester.pumpAndSettle();
 
-      expect(container.read(controllerProvider).score, 0);
-      expect(container.read(controllerProvider).currentCoord, isNotNull);
-      expect(container.read(controllerProvider).nextCoord, isNotNull);
-      expect(container.read(controllerProvider).trainingActive, true);
+      expect(container.read(coordinateTrainingControllerProvider).score, 0);
+      expect(container.read(coordinateTrainingControllerProvider).currentCoord, isNotNull);
+      expect(container.read(coordinateTrainingControllerProvider).nextCoord, isNotNull);
+      expect(container.read(coordinateTrainingControllerProvider).trainingActive, true);
 
       // Current and next coordinate prompt should be displayed
-      expect(find.text(container.read(controllerProvider).currentCoord!.name), findsOneWidget);
-      expect(find.text(container.read(controllerProvider).nextCoord!.name), findsOneWidget);
+      expect(
+        find.text(container.read(coordinateTrainingControllerProvider).currentCoord!.name),
+        findsOneWidget,
+      );
+      expect(
+        find.text(container.read(coordinateTrainingControllerProvider).nextCoord!.name),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Tap wrong square', (tester) async {
@@ -49,20 +54,18 @@ void main() {
       await tester.tap(find.text('Start Training'));
       await tester.pumpAndSettle();
 
-      final controllerProvider = coordinateTrainingControllerProvider;
-
-      final currentCoord = container.read(controllerProvider).currentCoord;
-      final nextCoord = container.read(controllerProvider).nextCoord;
+      final currentCoord = container.read(coordinateTrainingControllerProvider).currentCoord;
+      final nextCoord = container.read(coordinateTrainingControllerProvider).nextCoord;
 
       final wrongCoord = Square.values[(currentCoord! + 1) % Square.values.length];
 
       await tester.tapAt(squareOffset(wrongCoord, tester.getRect(find.byType(Chessboard))));
       await tester.pump();
 
-      expect(container.read(controllerProvider).score, 0);
-      expect(container.read(controllerProvider).currentCoord, currentCoord);
-      expect(container.read(controllerProvider).nextCoord, nextCoord);
-      expect(container.read(controllerProvider).trainingActive, true);
+      expect(container.read(coordinateTrainingControllerProvider).score, 0);
+      expect(container.read(coordinateTrainingControllerProvider).currentCoord, currentCoord);
+      expect(container.read(coordinateTrainingControllerProvider).nextCoord, nextCoord);
+      expect(container.read(coordinateTrainingControllerProvider).trainingActive, true);
 
       expect(find.byKey(ValueKey('${wrongCoord.name}-highlight')), findsOneWidget);
 
@@ -79,13 +82,11 @@ void main() {
       trainingPrefsNotifier.setMode(TrainingMode.findSquare);
       trainingPrefsNotifier.setSideChoice(SideChoice.white);
 
-      final controllerProvider = coordinateTrainingControllerProvider;
-
       await tester.tap(find.text('Start Training'));
       await tester.pumpAndSettle();
 
-      final currentCoord = container.read(controllerProvider).currentCoord;
-      final nextCoord = container.read(controllerProvider).nextCoord;
+      final currentCoord = container.read(coordinateTrainingControllerProvider).currentCoord;
+      final nextCoord = container.read(coordinateTrainingControllerProvider).nextCoord;
 
       await tester.tapAt(squareOffset(currentCoord!, tester.getRect(find.byType(Chessboard))));
 
@@ -93,15 +94,21 @@ void main() {
 
       expect(find.byKey(ValueKey('${currentCoord.name}-highlight')), findsOneWidget);
 
-      expect(container.read(controllerProvider).score, 1);
-      expect(container.read(controllerProvider).currentCoord, nextCoord);
-      expect(container.read(controllerProvider).trainingActive, true);
+      expect(container.read(coordinateTrainingControllerProvider).score, 1);
+      expect(container.read(coordinateTrainingControllerProvider).currentCoord, nextCoord);
+      expect(container.read(coordinateTrainingControllerProvider).trainingActive, true);
 
       await tester.pumpAndSettle(const Duration(milliseconds: 300));
       expect(find.byKey(ValueKey('${currentCoord.name}-highlight')), findsNothing);
 
-      expect(find.text(container.read(controllerProvider).currentCoord!.name), findsOneWidget);
-      expect(find.text(container.read(controllerProvider).nextCoord!.name), findsOneWidget);
+      expect(
+        find.text(container.read(coordinateTrainingControllerProvider).currentCoord!.name),
+        findsOneWidget,
+      );
+      expect(
+        find.text(container.read(coordinateTrainingControllerProvider).nextCoord!.name),
+        findsOneWidget,
+      );
     });
   });
 }

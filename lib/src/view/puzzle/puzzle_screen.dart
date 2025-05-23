@@ -652,7 +652,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final puzzleState = ref.watch(ctrlProvider);
     final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).value?.isOnline ?? false;
     return BottomSheetScrollableContainer(
       children: [
         ListSection(

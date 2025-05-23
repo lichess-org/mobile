@@ -57,7 +57,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
           }
           final recentGames = ref.watch(myRecentGamesProvider);
-          final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
+          final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
           return RefreshIndicator.adaptive(
             edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                 ? MediaQuery.paddingOf(context).top + kToolbarHeight

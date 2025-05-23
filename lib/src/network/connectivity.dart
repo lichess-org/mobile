@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -83,7 +82,7 @@ class ConnectivityChanges extends _$ConnectivityChanges {
 
     if (newIsOnline != wasOnline) {
       _logger.info('Connectivity status: $result, isOnline: $isOnline');
-      state = AsyncValue.data((isOnline: newIsOnline, appState: state.valueOrNull?.appState));
+      state = AsyncValue.data((isOnline: newIsOnline, appState: state.value?.appState));
     }
   }
 

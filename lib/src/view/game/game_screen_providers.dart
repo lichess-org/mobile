@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart' show Move, Side;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';

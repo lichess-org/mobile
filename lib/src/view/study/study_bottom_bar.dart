@@ -42,7 +42,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(studyControllerProvider(id)).valueOrNull;
+    final state = ref.watch(studyControllerProvider(id)).value;
     if (state == null) {
       return const BottomBar(children: []);
     }
