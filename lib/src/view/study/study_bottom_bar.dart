@@ -250,9 +250,9 @@ class _ChapterButton extends ConsumerWidget {
         showDragHandle: true,
         isScrollControlled: true,
         isDismissible: true,
+        constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
         builder: (_) => DraggableScrollableSheet(
           initialChildSize: 0.6,
-          maxChildSize: 0.6,
           snap: true,
           expand: false,
           builder: (context, scrollController) {

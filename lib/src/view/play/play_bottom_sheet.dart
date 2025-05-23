@@ -14,6 +14,7 @@ class FloatingPlayButton extends StatelessWidget {
       onPressed: () {
         showModalBottomSheet<void>(
           context: context,
+          useRootNavigator: true,
           isScrollControlled: true,
           builder: (context) => const PlayBottomSheet(),
         );

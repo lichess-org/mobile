@@ -191,7 +191,6 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                 context: context,
                 isDismissible: true,
                 isScrollControlled: true,
-                showDragHandle: true,
                 builder: (_) =>
                     _BroadcastSettingsBottomSheet(filter, onGameFilterChange: setGameFilter),
               ),
@@ -296,10 +295,9 @@ class _BottomBar extends ConsumerWidget {
               showDragHandle: true,
               isScrollControlled: true,
               isDismissible: true,
+              constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
               builder: (_) => DraggableScrollableSheet(
                 initialChildSize: 0.4,
-                maxChildSize: 0.4,
-                minChildSize: 0.1,
                 snap: true,
                 expand: false,
                 builder: (context, scrollController) {
@@ -324,9 +322,9 @@ class _BottomBar extends ConsumerWidget {
             showDragHandle: true,
             isScrollControlled: true,
             isDismissible: true,
+            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
             builder: (_) => DraggableScrollableSheet(
               initialChildSize: 0.6,
-              maxChildSize: 0.6,
               snap: true,
               expand: false,
               builder: (context, scrollController) {
@@ -505,48 +503,43 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
   Widget build(BuildContext context) {
     final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
 
-    return DraggableScrollableSheet(
-      initialChildSize: .6,
-      expand: false,
-      builder: (context, scrollController) => ListView(
-        controller: scrollController,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SettingsSectionTitle(context.l10n.filterGames),
-                const SizedBox(height: 6),
-                Filter<_BroadcastGameFilter>(
-                  filterType: FilterType.singleChoice,
-                  choices: _BroadcastGameFilter.values,
-                  choiceSelected: (choice) => filter == choice,
-                  choiceLabel: (category) => Text(category.l10n(context.l10n)),
-                  onSelected: (value, selected) {
-                    setState(() => filter = value);
-                    widget.onGameFilterChange.call(value);
-                  },
-                ),
-              ],
-            ),
-          ),
-          ListSection(
-            header: SettingsSectionTitle(context.l10n.preferencesDisplay),
-            materialFilledCard: true,
+    return BottomSheetScrollableContainer(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              SwitchSettingTile(
-                title: Text(context.l10n.evaluationGauge),
-                value: broadcastPreferences.showEvaluationBar,
-                onChanged: (value) {
-                  ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
+              SettingsSectionTitle(context.l10n.filterGames),
+              const SizedBox(height: 6),
+              Filter<_BroadcastGameFilter>(
+                filterType: FilterType.singleChoice,
+                choices: _BroadcastGameFilter.values,
+                choiceSelected: (choice) => filter == choice,
+                choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                onSelected: (value, selected) {
+                  setState(() => filter = value);
+                  widget.onGameFilterChange.call(value);
                 },
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        ListSection(
+          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
+          materialFilledCard: true,
+          children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.evaluationGauge),
+              value: broadcastPreferences.showEvaluationBar,
+              onChanged: (value) {
+                ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
