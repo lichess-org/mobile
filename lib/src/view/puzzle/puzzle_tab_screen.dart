@@ -454,11 +454,7 @@ class DailyPuzzle extends ConsumerWidget {
                   ),
                 ],
               ),
-              Icon(
-                Icons.today,
-                size: 34,
-                color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
-              ),
+              Icon(Icons.today, size: 34, color: context.lichessColors.brag.withValues(alpha: 0.7)),
               Text(
                 data.puzzle.sideToMove == Side.white
                     ? context.l10n.whitePlays
