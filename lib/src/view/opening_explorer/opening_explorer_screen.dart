@@ -132,13 +132,15 @@ class _Body extends ConsumerWidget {
                         ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
                         : EdgeInsets.zero,
                     children: [
-                      GestureDetector(
-                        // disable scrolling when dragging the board
-                        onVerticalDragStart: (_) {},
-                        child: AnalysisBoard(
-                          options,
-                          boardSize,
-                          shouldReplaceChildOnUserMove: true,
+                      Center(
+                        child: GestureDetector(
+                          // disable scrolling when dragging the board
+                          onVerticalDragStart: (_) {},
+                          child: AnalysisBoard(
+                            options,
+                            boardSize,
+                            shouldReplaceChildOnUserMove: true,
+                          ),
                         ),
                       ),
                       OpeningExplorerView(
