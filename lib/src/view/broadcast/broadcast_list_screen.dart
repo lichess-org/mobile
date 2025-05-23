@@ -92,7 +92,11 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
 
     return Scaffold(
       body: _Body(filter),
-      appBar: AppBar(title: title, actions: [filterButton]),
+      appBar: AppBar(
+        backgroundColor: ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 1),
+        title: title,
+        actions: [filterButton],
+      ),
     );
   }
 }
@@ -169,9 +173,10 @@ class _BodyState extends ConsumerState<_Body> {
               slivers: [
                 if (section.$3.isNotEmpty)
                   SliverAppBar(
-                    backgroundColor: Theme.of(
+                    centerTitle: false,
+                    backgroundColor: ColorScheme.of(
                       context,
-                    ).appBarTheme.backgroundColor?.withValues(alpha: 1),
+                    ).surfaceContainerHigh.withValues(alpha: 1),
                     automaticallyImplyLeading: false,
                     primary: false,
                     title: AppBarTitleText(section.$2),
