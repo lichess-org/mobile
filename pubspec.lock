@@ -976,12 +976,11 @@ packages:
   l10n_esperanto:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "62d45c60f7840a4591318bb477172136c999f946"
-      url: "https://github.com/veloce/l10n_esperanto.git"
-    source: git
-    version: "2.0.12"
+      name: l10n_esperanto
+      sha256: "8c51f136fe86dd8ee65a4da0245a29fe08bbfd69cccbb4c73ddd842060b8cc90"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.13"
   leak_tracker:
     dependency: transitive
     description:
