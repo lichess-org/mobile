@@ -1,35 +1,12 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
-
-class FakeImageColorWorker implements ImageColorWorker {
-  @override
-  void close() {}
-
-  @override
-  bool get closed => false;
-
-  @override
-  Future<ImageColors?> getImageColors(Uint32List image) {
-    return Future.value(null);
-  }
-}
-
-class FakeBroadcastImageWorkerFactory implements BroadcastImageWorkerFactory {
-  @override
-  Future<ImageColorWorker> spawn() {
-    return Future.value(FakeImageColorWorker());
-  }
-}
 
 final client = MockClient((request) {
   if (request.url.path == '/api/broadcast/top') {
@@ -48,12 +25,7 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const BroadcastListScreen(),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-          broadcastImageWorkerFactoryProvider.overrideWith(
-            (ref) => FakeBroadcastImageWorkerFactory(),
-          ),
-        ],
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
 
       await tester.pumpWidget(app);
@@ -70,12 +42,7 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const BroadcastListScreen(),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
-          broadcastImageWorkerFactoryProvider.overrideWith(
-            (ref) => FakeBroadcastImageWorkerFactory(),
-          ),
-        ],
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
 
       await tester.pumpWidget(app);

@@ -22,7 +22,7 @@ final client = MockClient((request) {
 
 void main() {
   group('SearchScreen', () {
-    testWidgets('should see search results', (WidgetTester tester) async {
+    testWidgets('should see search results', variant: kPlatformVariant, (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const SearchScreen(),
@@ -53,9 +53,11 @@ void main() {
 
       // await debouce call for saving search history
       await tester.pump(const Duration(seconds: 2));
-    }, variant: kPlatformVariant);
+    });
 
-    testWidgets('should see "no result" when search finds nothing', (WidgetTester tester) async {
+    testWidgets('should see "no result" when search finds nothing', variant: kPlatformVariant, (
+      tester,
+    ) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const SearchScreen(),
@@ -82,7 +84,7 @@ void main() {
 
       // await debouce call for saving search history
       await tester.pump(const Duration(seconds: 2));
-    }, variant: kPlatformVariant);
+    });
   });
 }
 

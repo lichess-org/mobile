@@ -7,6 +7,8 @@ part 'broadcast.freezed.dart';
 
 typedef BroadcastList = ({IList<Broadcast> active, IList<Broadcast> past, int? nextPage});
 
+typedef BroadcastSearchList = ({IList<Broadcast> broadcasts, int? nextPage});
+
 enum BroadcastResult {
   whiteWins,
   blackWins,
