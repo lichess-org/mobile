@@ -88,17 +88,39 @@ ThemeData _makeDefaultTheme(
   };
   final hasSystemColors = systemScheme != null && generalPrefs.systemColors == true;
 
-  final defaultScheme = ColorScheme.fromSeed(
+  final neutralScheme = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
     brightness: brightness,
     dynamicSchemeVariant: DynamicSchemeVariant.neutral,
+  );
+  final defaultScheme = ColorScheme.fromSeed(
+    seedColor: boardTheme.colors.darkSquare,
+    brightness: brightness,
+  );
+  // makes a theme with neutral surfaces and default colors
+  final boardScheme = defaultScheme.copyWith(
+    surface: neutralScheme.surface,
+    onSurface: neutralScheme.onSurface,
+    surfaceDim: neutralScheme.surfaceDim,
+    surfaceBright: neutralScheme.surfaceBright,
+    surfaceContainer: neutralScheme.surfaceContainer,
+    surfaceContainerLowest: neutralScheme.surfaceContainerLowest,
+    surfaceContainerLow: neutralScheme.surfaceContainerLow,
+    surfaceContainerHigh: neutralScheme.surfaceContainerHigh,
+    surfaceContainerHighest: neutralScheme.surfaceContainerHighest,
+    onSurfaceVariant: neutralScheme.onSurfaceVariant,
+    inverseSurface: neutralScheme.inverseSurface,
+    onInverseSurface: neutralScheme.onInverseSurface,
+    shadow: neutralScheme.shadow,
+    scrim: neutralScheme.scrim,
+    surfaceTint: neutralScheme.surfaceTint,
   );
 
   final textTheme = isIOS ? kCupertinoDefaultTextTheme : null;
 
   final theme = hasSystemColors
       ? ThemeData.from(colorScheme: systemScheme, textTheme: textTheme)
-      : ThemeData.from(colorScheme: defaultScheme, textTheme: textTheme);
+      : ThemeData.from(colorScheme: boardScheme, textTheme: textTheme);
 
   return theme.copyWith(
     cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
