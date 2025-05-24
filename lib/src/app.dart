@@ -80,6 +80,8 @@ class _AppState extends ConsumerState<Application> {
         if (nbMovesPlayed > 0) {
           ref.invalidate(ongoingGamesProvider);
         }
+
+        // TODO sync forecasts
       }
 
       // Perform actions once when the app comes online.

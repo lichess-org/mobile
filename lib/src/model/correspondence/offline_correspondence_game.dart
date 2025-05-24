@@ -30,6 +30,7 @@ class OfflineCorrespondenceGame
     required GameMeta meta,
     @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson) required IList<GameStep> steps,
     CorrespondenceClockData? clock,
+    CorrespondenceForecast? forecast,
     String? initialFen,
     required bool rated,
     required GameStatus status,
