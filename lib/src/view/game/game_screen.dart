@@ -11,8 +11,10 @@ import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
@@ -127,23 +129,68 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             )
           : null,
     );
+    final boardPreferences = ref.watch(boardPreferencesProvider);
 
     switch (ref.watch(provider)) {
       case AsyncData(:final value):
         final (game: loadedGame, challenge: challenge, declineReason: declineReason) = value;
-        final shouldPreventGoingBackAsync = loadedGame != null
-            ? ref.watch(shouldPreventGoingBackProvider(loadedGame.gameId))
-            : const AsyncValue.data(true);
+        final isRealTimePlayingGame =
+            (loadedGame != null
+                    ? ref.watch(isRealTimePlayableGameProvider(loadedGame.gameId))
+                    : const AsyncValue.data(true))
+                .valueOrNull ??
+            false;
 
         final socketUri = loadedGame != null ? GameController.socketUri(loadedGame.gameId) : null;
+
+        final body = PopScope(
+          canPop: isRealTimePlayingGame != true,
+          child: SafeArea(
+            // view padding can change on Android when immersive mode is enabled, so to prevent any
+            // board vertical shift, we set `maintainBottomViewPadding` to true.
+            maintainBottomViewPadding: true,
+            child: loadedGame != null
+                ? GameBody(
+                    loadedGame: loadedGame,
+                    whiteClockKey: _whiteClockKey,
+                    blackClockKey: _blackClockKey,
+                    boardKey: _boardKey,
+                    onLoadGameCallback: (id) {
+                      if (mounted) {
+                        ref.read(provider.notifier).loadGame(id);
+                      }
+                    },
+                    onNewOpponentCallback: (game) {
+                      if (!mounted) return;
+
+                      if (widget.source == _GameSource.lobby) {
+                        ref.read(provider.notifier).newOpponent();
+                      } else {
+                        final savedSetup = ref.read(gameSetupPreferencesProvider);
+                        Navigator.of(context, rootNavigator: true).pushReplacement(
+                          GameScreen.buildRoute(
+                            context,
+                            seek: GameSeek.newOpponentFromGame(game, savedSetup),
+                          ),
+                        );
+                      }
+                    },
+                  )
+                : widget.challenge != null && challenge != null
+                ? ChallengeDeclinedBoard(
+                    challenge: challenge,
+                    declineReason: declineReason != null
+                        ? declineReason.label(context.l10n)
+                        : ChallengeDeclineReason.generic.label(context.l10n),
+                  )
+                : const LoadGameError('Could not create the game.'),
+          ),
+        );
 
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
-              data: (prevent) => prevent ? SocketPingRating(socketUri: socketUri) : null,
-              orElse: () => null,
-            ),
+            leading: isRealTimePlayingGame ? SocketPingRating(socketUri: socketUri) : null,
             title: loadedGame != null
                 ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
                 : widget.seek != null
@@ -157,46 +204,19 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 _GameMenu(gameId: loadedGame.gameId, gameListContext: widget.gameListContext),
             ],
           ),
-          body: loadedGame != null
-              ? GameBody(
-                  loadedGame: loadedGame,
-                  whiteClockKey: _whiteClockKey,
-                  blackClockKey: _blackClockKey,
+          body: Theme.of(context).platform == TargetPlatform.android
+              ? AndroidGesturesExclusionWidget(
                   boardKey: _boardKey,
-                  onLoadGameCallback: (id) {
-                    if (mounted) {
-                      ref.read(provider.notifier).loadGame(id);
-                    }
-                  },
-                  onNewOpponentCallback: (game) {
-                    if (!mounted) return;
-
-                    if (widget.source == _GameSource.lobby) {
-                      ref.read(provider.notifier).newOpponent();
-                    } else {
-                      final savedSetup = ref.read(gameSetupPreferencesProvider);
-                      Navigator.of(context, rootNavigator: true).pushReplacement(
-                        GameScreen.buildRoute(
-                          context,
-                          seek: GameSeek.newOpponentFromGame(game, savedSetup),
-                        ),
-                      );
-                    }
-                  },
+                  shouldExcludeGesturesOnFocusGained: () => isRealTimePlayingGame,
+                  shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+                  child: body,
                 )
-              : widget.challenge != null && challenge != null
-              ? ChallengeDeclinedBoard(
-                  challenge: challenge,
-                  declineReason: declineReason != null
-                      ? declineReason.label(context.l10n)
-                      : ChallengeDeclineReason.generic.label(context.l10n),
-                )
-              : const LoadGameError('Could not create the game.'),
+              : body,
         );
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameScreen] could not create game; $e\n$s');
 
-        // lichess sends a 400 response if user has disallowed challenges
+        // lichess sends a 400 response if user has not allowed challenges
         final message = e is ServerException && e.statusCode == 400
             ? LoadGameError('Could not create the game: ${e.jsonError?['error'] as String?}')
             : const LoadGameError('Sorry, we could not create the game. Please try again later.');
@@ -226,8 +246,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               )
             : const Column(
                 children: [
-                  Expanded(child: SafeArea(bottom: false, child: StandaloneGameLoadingBoard())),
-                  BottomBar.empty(maintainBottomViewPadding: true),
+                  Expanded(child: StandaloneGameLoadingBoard()),
+                  BottomBar.empty(),
                 ],
               );
 

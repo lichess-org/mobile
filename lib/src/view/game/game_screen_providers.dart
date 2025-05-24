@@ -122,7 +122,7 @@ Future<({bool finished, Side? pov})> gameShareData(Ref ref, GameFullId gameId) {
 }
 
 @riverpod
-Future<bool> shouldPreventGoingBack(Ref ref, GameFullId gameId) {
+Future<bool> isRealTimePlayableGame(Ref ref, GameFullId gameId) {
   return ref.watch(
     gameControllerProvider(
       gameId,
