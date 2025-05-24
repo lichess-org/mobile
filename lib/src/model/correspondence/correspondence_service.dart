@@ -250,6 +250,7 @@ class CorrespondenceService {
         youAre: game.youAre,
         daysPerTurn: game.meta.daysPerTurn,
         clock: game.correspondenceClock,
+        forecast: game.correspondenceForecast,
         winner: game.winner,
         isThreefoldRepetition: game.isThreefoldRepetition,
       ),

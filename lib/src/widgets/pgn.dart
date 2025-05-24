@@ -80,12 +80,14 @@ Annotation? makeAnnotation(Iterable<int>? nags) {
 const kFastReplayDebounceDelay = Duration(milliseconds: 150);
 
 /// Callbacks for interaction with [DebouncedPgnTreeView]
-abstract class PgnTreeNotifier {
+mixin PgnTreeNotifier {
   void expandVariations(UciPath path);
   void collapseVariations(UciPath path);
   void promoteVariation(UciPath path, bool toMainLine);
   void deleteFromHere(UciPath path);
   void userJump(UciPath path);
+  void addConditionalPremove(UciPath path) {}
+  void removeConditionalPremove(UciPath path) {}
 }
 
 enum PgnTreeDisplayMode {
@@ -122,6 +124,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
     this.shouldShowAnnotations = true,
     this.shouldShowComments = true,
     this.displayMode = PgnTreeDisplayMode.twoColumn,
+    this.conditionalPremovesAllowed = false,
   });
 
   /// Root of the PGN tree to display
@@ -155,6 +158,11 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
 
   /// Whether to show comments associated with the moves.
   final bool shouldShowComments;
+
+  /// Whether the user can add/remove conditional premoves in the tree view.
+  ///
+  /// Moves that are part of a conditional premove branch will be highlighted.
+  final bool conditionalPremovesAllowed;
 
   @override
   ConsumerState<DebouncedPgnTreeView> createState() => _DebouncedPgnTreeViewState();
@@ -248,6 +256,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
         shouldShowComputerAnalysis: widget.shouldShowComputerAnalysis,
         shouldShowAnnotations: widget.shouldShowAnnotations,
         shouldShowComments: widget.shouldShowComments,
+        conditionalPremovesAllowed: widget.conditionalPremovesAllowed,
         currentMoveKey: currentMoveKey,
         pathToCurrentMove: pathToCurrentMove,
         pathToBroadcastLiveMove: pathToBroadcastLiveMove,
@@ -277,6 +286,9 @@ typedef _PgnTreeViewParams = ({
 
   /// Whether to show comments associated with the moves.
   bool shouldShowComments,
+
+  /// Whether we show the conditional premoves in the tree view and allow to add/remove them.
+  bool conditionalPremovesAllowed,
 
   /// How the moves in the tree should be displayed.
   PgnTreeDisplayMode displayMode,
@@ -1249,7 +1261,7 @@ class InlineMove extends ConsumerWidget {
           isScrollControlled: true,
           showDragHandle: true,
           builder: (context) => _MoveContextMenu(
-            notifier: params.notifier,
+            params: params,
             title: ply.isOdd
                 ? '${(ply / 2).ceil()}. $moveWithNag'
                 : '${(ply / 2).ceil()}... $moveWithNag',
@@ -1273,7 +1285,10 @@ class InlineMove extends ConsumerWidget {
                   TextSpan(
                     text: moveWithNag,
                     style: moveTextStyle.copyWith(
-                      color: _textColor(context, isCurrentMove ? 1 : 0.9, nag: nag),
+                      color: branch.isPremove
+                          // TODO different colors for different premove branches?
+                          ? LichessColors.brag
+                          : _textColor(context, isCurrentMove ? 1 : 0.9, nag: nag),
                     ),
                   ),
                 ],
@@ -1300,14 +1315,14 @@ class _MoveContextMenu extends ConsumerWidget {
     required this.path,
     required this.branch,
     required this.lineInfo,
-    required this.notifier,
+    required this.params,
   });
 
   final String title;
   final UciPath path;
   final ViewBranch branch;
   final _LineInfo lineInfo;
-  final PgnTreeNotifier notifier;
+  final _PgnTreeViewParams params;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1365,24 +1380,39 @@ class _MoveContextMenu extends ConsumerWidget {
           BottomSheetContextMenuAction(
             icon: Icons.subtitles_off,
             child: Text(context.l10n.collapseVariations),
-            onPressed: () => notifier.collapseVariations(lineInfo.pathToLine),
+            onPressed: () => params.notifier.collapseVariations(lineInfo.pathToLine),
           ),
           BottomSheetContextMenuAction(
             icon: Icons.expand_less,
             child: Text(context.l10n.promoteVariation),
-            onPressed: () => notifier.promoteVariation(path, false),
+            onPressed: () => params.notifier.promoteVariation(path, false),
           ),
           BottomSheetContextMenuAction(
             icon: Icons.check,
             child: Text(context.l10n.makeMainLine),
-            onPressed: () => notifier.promoteVariation(path, true),
+            onPressed: () => params.notifier.promoteVariation(path, true),
           ),
         ],
         BottomSheetContextMenuAction(
           icon: Icons.delete,
           child: Text(context.l10n.deleteFromHere),
-          onPressed: () => notifier.deleteFromHere(path),
+          onPressed: () => params.notifier.deleteFromHere(path),
         ),
+        if (params.conditionalPremovesAllowed)
+          if (branch.isPremove)
+            BottomSheetContextMenuAction(
+              icon: Icons.delete,
+              child: const Text('Remove Premove'),
+              onPressed: () => params.notifier.removeConditionalPremove(path),
+            )
+          // TODO this makes only sense if it's one of our moves, not the opponent's
+          // Also, need to check that ply is high enough! we can't add premoves for plys that have already been played.
+          else
+            BottomSheetContextMenuAction(
+              icon: Icons.plus_one_outlined,
+              child: Text(context.l10n.addCurrentVariation),
+              onPressed: () => params.notifier.addConditionalPremove(path),
+            ),
       ],
     );
   }

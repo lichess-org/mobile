@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -19,6 +20,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -35,6 +37,16 @@ final _dateFormat = DateFormat('yyyy.MM.dd');
 
 typedef StandaloneAnalysis = ({String pgn, Variant variant, bool isComputerAnalysisAllowed});
 
+typedef ConditionalPremoves = ({
+  /// Current saved set of premove branches, these are stored on the server.
+  IList<IList<CorrespondenceForecastStep>> initialSteps,
+
+  /// The current ply number of the active game.
+  int currentPly,
+
+  GameFullId gameFullId,
+});
+
 @freezed
 sealed class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
@@ -45,15 +57,14 @@ sealed class AnalysisOptions with _$AnalysisOptions {
     StandaloneAnalysis? standalone,
     GameId? gameId,
     int? initialMoveCursor,
+    ConditionalPremoves? conditionalPremoves,
   }) = _AnalysisOptions;
 
   bool get isLichessGameAnalysis => gameId != null;
 }
 
 @riverpod
-class AnalysisController extends _$AnalysisController
-    with EngineEvaluationMixin
-    implements PgnTreeNotifier {
+class AnalysisController extends _$AnalysisController with EngineEvaluationMixin, PgnTreeNotifier {
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
   late Root _root;
@@ -192,6 +203,23 @@ class AnalysisController extends _$AnalysisController
     final currentPath = options.initialMoveCursor == null ? _root.mainlinePath : path;
     final currentNode = _root.nodeAt(currentPath);
 
+    if (options.conditionalPremoves != null) {
+      // Premove paths are saved on the server, so if the user has already added some premoves on web,
+      // we need to add them to our tree here as well.
+      final lastMainlineNode = _root.mainline.last;
+      final mainlinePath = _root.mainlinePath;
+
+      for (final steps in options.conditionalPremoves!.initialSteps) {
+        var position = lastMainlineNode.position;
+        final nodes = <Branch>[];
+        for (final step in steps) {
+          position = position.playUnchecked(step.sanMove.move);
+          nodes.add(Branch(position: position, sanMove: step.sanMove, isPremove: true));
+        }
+        _root.addNodesAt(mainlinePath, nodes);
+      }
+    }
+
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
@@ -323,6 +351,33 @@ class AnalysisController extends _$AnalysisController
   void toggleBoard() {
     final curState = state.requireValue;
     state = AsyncData(curState.copyWith(pov: curState.pov.opposite));
+  }
+
+  @override
+  void addConditionalPremove(UciPath path) {
+    for (final branch in _root.branchesOn(path)) {
+      if (branch.position.ply > options.conditionalPremoves!.currentPly) {
+        branch.isPremove = true;
+      }
+    }
+
+    state = AsyncData(state.requireValue.copyWith(root: _root.view));
+  }
+
+  @override
+  void removeConditionalPremove(UciPath path) {
+    final branch = _root.branchAt(path)!;
+    branch.updateAll((node) => (node as Branch).isPremove = false);
+
+    // Remove premove for all parent nodes, but only if they're also part of another premove branch
+    for (final branch in _root.branchesOn(path.penultimate).toList().reversed) {
+      if (branch.children.where((c) => c.isPremove).length > 1) {
+        break;
+      }
+      branch.isPremove = false;
+    }
+
+    state = AsyncData(state.requireValue.copyWith(root: _root.view));
   }
 
   @override

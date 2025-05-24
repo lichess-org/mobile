@@ -28,9 +28,7 @@ part 'study_controller.freezed.dart';
 part 'study_controller.g.dart';
 
 @riverpod
-class StudyController extends _$StudyController
-    with EngineEvaluationMixin
-    implements PgnTreeNotifier {
+class StudyController extends _$StudyController with EngineEvaluationMixin, PgnTreeNotifier {
   late Root _root;
 
   Timer? _opponentFirstMoveTimer;

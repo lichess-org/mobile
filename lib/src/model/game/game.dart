@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:deep_pick/deep_pick.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -17,6 +18,8 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:result_extensions/result_extensions.dart';
 
 part 'game.freezed.dart';
 part 'game.g.dart';
@@ -58,18 +61,20 @@ abstract mixin class BaseGame {
   Player get black;
 
   /// Player of the playing point of view. Null if spectating.
-  Player? get me => youAre == null
-      ? null
-      : youAre == Side.white
-      ? white
-      : black;
+  Player? get me =>
+      youAre == null
+          ? null
+          : youAre == Side.white
+          ? white
+          : black;
 
   /// Opponent from the playing point of view. Null if spectating.
-  Player? get opponent => youAre == null
-      ? null
-      : youAre == Side.white
-      ? black
-      : white;
+  Player? get opponent =>
+      youAre == null
+          ? null
+          : youAre == Side.white
+          ? black
+          : white;
 
   Position get lastPosition;
 
@@ -92,8 +97,8 @@ abstract mixin class BaseGame {
 
   ({PlayerAnalysis white, PlayerAnalysis black})? get serverAnalysis =>
       white.analysis != null && black.analysis != null
-      ? (white: white.analysis!, black: black.analysis!)
-      : null;
+          ? (white: white.analysis!, black: black.analysis!)
+          : null;
 
   /// Converts the game to a tree representation
   Root makeTree() {
@@ -106,11 +111,12 @@ abstract mixin class BaseGame {
     for (var i = 1; i < steps.length; i++) {
       final step = steps[i];
       final eval = evals?.elementAtOrNull(i - 1);
-      final pgnEval = eval?.cp != null
-          ? PgnEvaluation.pawns(pawns: cpToPawns(eval!.cp!), depth: eval.depth)
-          : eval?.mate != null
-          ? PgnEvaluation.mate(mate: eval!.mate, depth: eval.depth)
-          : null;
+      final pgnEval =
+          eval?.cp != null
+              ? PgnEvaluation.pawns(pawns: cpToPawns(eval!.cp!), depth: eval.depth)
+              : eval?.mate != null
+              ? PgnEvaluation.mate(mate: eval!.mate, depth: eval.depth)
+              : null;
       final clock = clocks?.elementAtOrNull(i - 1);
       Duration? emt;
       if (clock != null) {
@@ -128,9 +134,10 @@ abstract mixin class BaseGame {
         }
       }
 
-      final comment = eval != null || clock != null
-          ? PgnComment(text: eval?.judgment?.comment, clock: clock, emt: emt, eval: pgnEval)
-          : null;
+      final comment =
+          eval != null || clock != null
+              ? PgnComment(text: eval?.judgment?.comment, clock: clock, emt: emt, eval: pgnEval)
+              : null;
       final nag = eval?.judgment != null ? _judgmentNameToNag(eval!.judgment!.name) : null;
       final nextNode = Branch(
         sanMove: step.sanMove!,
@@ -182,13 +189,14 @@ abstract mixin class BaseGame {
             black.user?.name ??
             black.name ??
             (black.aiLevel != null ? 'Stockfish level ${black.aiLevel}' : 'Anonymous'),
-        'Result': status.value >= GameStatus.mate.value
-            ? winner == null
-                  ? '½-½'
-                  : winner == Side.white
-                  ? '1-0'
-                  : '0-1'
-            : '*',
+        'Result':
+            status.value >= GameStatus.mate.value
+                ? winner == null
+                    ? '½-½'
+                    : winner == Side.white
+                    ? '1-0'
+                    : '0-1'
+                : '*',
         if (white.rating != null) 'WhiteElo': white.rating!.toString(),
         if (black.rating != null) 'BlackElo': black.rating!.toString(),
         if (white.ratingDiff != null)
@@ -348,6 +356,58 @@ sealed class CorrespondenceClockData with _$CorrespondenceClockData {
   factory CorrespondenceClockData.fromJson(Map<String, dynamic> json) =>
       _$CorrespondenceClockDataFromJson(json);
 }
+
+@freezed
+sealed class CorrespondenceForecast with _$CorrespondenceForecast {
+  const CorrespondenceForecast._();
+  const factory CorrespondenceForecast({
+    required bool onMyTurn,
+    required IList<IList<CorrespondenceForecastStep>> steps,
+  }) = _CorrespondenceForecast;
+
+  factory CorrespondenceForecast.fromJson(Map<String, dynamic> json) =>
+      forecastFromPick(pick(json).required());
+
+  String toJson() => jsonEncode({
+    'onMyTurn': onMyTurn,
+    'steps': steps
+        .map(
+          (forecast) => forecast
+              .mapIndexed(
+                (i, step) => {
+                  'ply': step.ply,
+                  'uci': step.sanMove.move.uci,
+                  'san': step.sanMove.san,
+                  'fen': step.fen,
+                },
+              )
+              .toList(growable: false),
+        )
+        .toList(growable: false),
+  });
+}
+
+CorrespondenceForecast forecastFromPick(RequiredPick pick) => CorrespondenceForecast(
+  onMyTurn: pick('onMyTurn').asBoolOrFalse(),
+  steps: IList(
+    pick('steps').asListOrThrow(
+      (pick) => IList(
+        pick.asListOrThrow(
+          (pick) => (
+            ply: pick('ply').asIntOrThrow(),
+            sanMove: SanMove(
+              pick('san').asStringOrThrow(),
+              Move.parse(pick('uci').asStringOrThrow())!,
+            ),
+            fen: pick('fen').asStringOrThrow(),
+          ),
+        ),
+      ),
+    ),
+  ),
+);
+
+typedef CorrespondenceForecastStep = ({int ply, SanMove sanMove, String fen});
 
 @freezed
 sealed class GameStep with _$GameStep {
