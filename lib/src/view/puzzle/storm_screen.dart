@@ -52,139 +52,126 @@ class _StormScreenState extends ConsumerState<StormScreen> {
           actions: [_StormDashboardButton(), const ToggleSoundButton()],
           title: const Text('Puzzle Storm'),
         ),
-        body: _Load(_boardKey),
+        body: _Body(_boardKey),
       ),
     );
   }
 }
 
-class _Load extends ConsumerWidget {
-  const _Load(this.boardKey);
+class _Body extends ConsumerWidget {
+  const _Body(this.boardKey);
 
   final GlobalKey boardKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final storm = ref.watch(stormProvider);
-    return storm.when(
-      data: (data) {
-        return _Body(data: data, boardKey: boardKey);
-      },
-      loading: () => const CenterLoadingIndicator(),
-      error: (e, s) {
-        debugPrint('SEVERE: [PuzzleStormScreen] could not load streak; $e\n$s');
+
+    switch (storm) {
+      case AsyncData(value: final PuzzleStormResponse data):
+        final ctrlProvider = stormControllerProvider(data.puzzles, data.timestamp);
+        final boardPreferences = ref.watch(boardPreferencesProvider);
+        final stormState = ref.watch(ctrlProvider);
+
+        ref.listen(ctrlProvider, (prev, state) {
+          if (prev?.mode != StormMode.ended && state.mode == StormMode.ended) {
+            Future.delayed(const Duration(milliseconds: 200), () {
+              if (context.mounted) {
+                _showStats(context, ref.read(ctrlProvider).stats!);
+              }
+            });
+          }
+
+          if (state.mode == StormMode.ended) {
+            clearAndroidBoardGesturesExclusion();
+          }
+        });
+
+        final content = PopScope(
+          canPop: stormState.mode != StormMode.running,
+          onPopInvokedWithResult: (bool didPop, _) async {
+            if (didPop) {
+              return;
+            }
+            final NavigatorState navigator = Navigator.of(context);
+            final shouldPop = await showAdaptiveDialog<bool>(
+              context: context,
+              builder: (context) => YesNoDialog(
+                title: Text(context.l10n.mobileAreYouSure),
+                content: Text(context.l10n.mobilePuzzleStormConfirmEndRun),
+                onYes: () {
+                  return Navigator.of(context).pop(true);
+                },
+                onNo: () => Navigator.of(context).pop(false),
+              ),
+            );
+            if (shouldPop ?? false) {
+              navigator.pop();
+            }
+          },
+          child: SafeArea(
+            // view padding can change on Android when immersive mode is enabled, so to prevent any
+            // board vertical shift, we set `maintainBottomViewPadding` to true.
+            maintainBottomViewPadding: true,
+            child: Column(
+              children: [
+                Expanded(
+                  child: BoardTable(
+                    boardKey: boardKey,
+                    orientation: stormState.pov,
+                    lastMove: stormState.lastMove as NormalMove?,
+                    fen: stormState.position.fen,
+                    interactiveBoardParams: (
+                      position: stormState.position,
+                      variant: Variant.standard,
+                      playerSide:
+                          !stormState.firstMovePlayed ||
+                              stormState.mode == StormMode.ended ||
+                              stormState.position.isGameOver
+                          ? PlayerSide.none
+                          : stormState.pov == Side.white
+                          ? PlayerSide.white
+                          : PlayerSide.black,
+                      promotionMove: stormState.promotionMove,
+                      onMove: (move, {isDrop, captured}) =>
+                          ref.read(ctrlProvider.notifier).onUserMove(move),
+                      onPromotionSelection: (role) =>
+                          ref.read(ctrlProvider.notifier).onPromotionSelection(role),
+                      premovable: null,
+                    ),
+                    topTable: _TopTable(data),
+                    bottomTable: _Combo(stormState.combo),
+                  ),
+                ),
+                _BottomBar(ctrlProvider),
+              ],
+            ),
+          ),
+        );
+
+        return Theme.of(context).platform == TargetPlatform.android
+            ? AndroidGesturesExclusionWidget(
+                boardKey: boardKey,
+                shouldExcludeGesturesOnFocusGained: () =>
+                    stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
+                shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+                child: content,
+              )
+            : content;
+      case AsyncError(:final error, :final stackTrace):
+        debugPrint('SEVERE: [PuzzleStormScreen] could not load storm; $error\n$stackTrace');
         return Center(
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
             fen: kEmptyFen,
             orientation: Side.white,
-            errorMessage: e.toString(),
+            errorMessage: 'An error occurred while loading the storm: $error',
           ),
         );
-      },
-    );
-  }
-}
-
-class _Body extends ConsumerWidget {
-  const _Body({required this.data, required this.boardKey});
-
-  final PuzzleStormResponse data;
-
-  final GlobalKey boardKey;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = stormControllerProvider(data.puzzles, data.timestamp);
-    final boardPreferences = ref.watch(boardPreferencesProvider);
-    final stormState = ref.watch(ctrlProvider);
-
-    ref.listen(ctrlProvider, (prev, state) {
-      if (prev?.mode != StormMode.ended && state.mode == StormMode.ended) {
-        Future.delayed(const Duration(milliseconds: 200), () {
-          if (context.mounted) {
-            _showStats(context, ref.read(ctrlProvider).stats!);
-          }
-        });
-      }
-
-      if (state.mode == StormMode.ended) {
-        clearAndroidBoardGesturesExclusion();
-      }
-    });
-
-    final content = PopScope(
-      canPop: stormState.mode != StormMode.running,
-      onPopInvokedWithResult: (bool didPop, _) async {
-        if (didPop) {
-          return;
-        }
-        final NavigatorState navigator = Navigator.of(context);
-        final shouldPop = await showAdaptiveDialog<bool>(
-          context: context,
-          builder: (context) => YesNoDialog(
-            title: Text(context.l10n.mobileAreYouSure),
-            content: Text(context.l10n.mobilePuzzleStormConfirmEndRun),
-            onYes: () {
-              return Navigator.of(context).pop(true);
-            },
-            onNo: () => Navigator.of(context).pop(false),
-          ),
-        );
-        if (shouldPop ?? false) {
-          navigator.pop();
-        }
-      },
-      child: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: SafeArea(
-                bottom: false,
-                child: BoardTable(
-                  boardKey: boardKey,
-                  orientation: stormState.pov,
-                  lastMove: stormState.lastMove as NormalMove?,
-                  fen: stormState.position.fen,
-                  interactiveBoardParams: (
-                    position: stormState.position,
-                    variant: Variant.standard,
-                    playerSide:
-                        !stormState.firstMovePlayed ||
-                            stormState.mode == StormMode.ended ||
-                            stormState.position.isGameOver
-                        ? PlayerSide.none
-                        : stormState.pov == Side.white
-                        ? PlayerSide.white
-                        : PlayerSide.black,
-                    promotionMove: stormState.promotionMove,
-                    onMove: (move, {isDrop, captured}) =>
-                        ref.read(ctrlProvider.notifier).onUserMove(move),
-                    onPromotionSelection: (role) =>
-                        ref.read(ctrlProvider.notifier).onPromotionSelection(role),
-                    premovable: null,
-                  ),
-                  topTable: _TopTable(data),
-                  bottomTable: _Combo(stormState.combo),
-                ),
-              ),
-            ),
-          ),
-          _BottomBar(ctrlProvider),
-        ],
-      ),
-    );
-
-    return Theme.of(context).platform == TargetPlatform.android
-        ? AndroidGesturesExclusionWidget(
-            boardKey: boardKey,
-            shouldExcludeGesturesOnFocusGained: () =>
-                stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
-            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
-            child: content,
-          )
-        : content;
+      case _:
+        return const CenterLoadingIndicator();
+    }
   }
 }
 
