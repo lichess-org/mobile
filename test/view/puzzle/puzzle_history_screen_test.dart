@@ -149,6 +149,10 @@ void main() {
     await tester.pageBack();
     await tester.pumpAndSettle();
 
+    // should see a confirmation dialog to leave the puzzle screen
+    await tester.tap(find.text('Yes'));
+    await tester.pumpAndSettle();
+
     expect(find.byType(PuzzleHistoryScreen), findsOneWidget);
     expect(
       find.byWidgetPredicate(

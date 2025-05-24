@@ -12,8 +12,10 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -80,15 +82,26 @@ class _Load extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body({required this.initialPuzzleContext, required this.streak});
 
   final PuzzleContext initialPuzzleContext;
   final PuzzleStreak streak;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, isPuzzleStreak: true);
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleStreakScreen');
+
+  @override
+  Widget build(BuildContext context) {
+    final boardPreferences = ref.watch(boardPreferencesProvider);
+    final ctrlProvider = puzzleControllerProvider(
+      widget.initialPuzzleContext,
+      isPuzzleStreak: true,
+    );
     final puzzleState = ref.watch(ctrlProvider);
 
     ref.listen(ctrlProvider, (previous, next) {
@@ -99,12 +112,35 @@ class _Body extends ConsumerWidget {
       }
     });
 
-    final content = Column(
-      children: [
-        Expanded(
-          child: Center(
-            child: SafeArea(
+    final content = PopScope(
+      canPop: widget.streak.index == 0 || widget.streak.finished,
+      onPopInvokedWithResult: (bool didPop, _) async {
+        if (didPop) {
+          return;
+        }
+        final NavigatorState navigator = Navigator.of(context);
+        final shouldPop = await showAdaptiveDialog<bool>(
+          context: context,
+          builder: (context) => YesNoDialog(
+            title: Text(context.l10n.mobileAreYouSure),
+            content: const Text('No worries, your score will be saved locally.'),
+            onYes: () => Navigator.of(context).pop(true),
+            onNo: () => Navigator.of(context).pop(false),
+          ),
+        );
+        if (shouldPop ?? false) {
+          navigator.pop();
+        }
+      },
+      child: SafeArea(
+        // view padding can change on Android when immersive mode is enabled, so to prevent any
+        // board vertical shift, we set `maintainBottomViewPadding` to true.
+        maintainBottomViewPadding: true,
+        child: Column(
+          children: [
+            Expanded(
               child: BoardTable(
+                boardKey: _boardKey,
                 orientation: puzzleState.pov,
                 lastMove: puzzleState.lastMove as NormalMove?,
                 interactiveBoardParams: (
@@ -154,7 +190,7 @@ class _Body extends ConsumerWidget {
                               ),
                               const SizedBox(width: 8.0),
                               Text(
-                                streak.index.toString(),
+                                widget.streak.index.toString(),
                                 style: TextStyle(
                                   fontSize: 30.0,
                                   fontWeight: FontWeight.bold,
@@ -171,34 +207,20 @@ class _Body extends ConsumerWidget {
                 ),
               ),
             ),
-          ),
+            _BottomBar(initialPuzzleContext: widget.initialPuzzleContext, streak: widget.streak),
+          ],
         ),
-        _BottomBar(initialPuzzleContext: initialPuzzleContext, streak: streak),
-      ],
+      ),
     );
 
-    return PopScope(
-      canPop: streak.index == 0 || streak.finished,
-      onPopInvokedWithResult: (bool didPop, _) async {
-        if (didPop) {
-          return;
-        }
-        final NavigatorState navigator = Navigator.of(context);
-        final shouldPop = await showAdaptiveDialog<bool>(
-          context: context,
-          builder: (context) => YesNoDialog(
-            title: Text(context.l10n.mobileAreYouSure),
-            content: const Text('No worries, your score will be saved locally.'),
-            onYes: () => Navigator.of(context).pop(true),
-            onNo: () => Navigator.of(context).pop(false),
-          ),
-        );
-        if (shouldPop ?? false) {
-          navigator.pop();
-        }
-      },
-      child: content,
-    );
+    return Theme.of(context).platform == TargetPlatform.android
+        ? AndroidGesturesExclusionWidget(
+            boardKey: _boardKey,
+            shouldExcludeGesturesOnFocusGained: () => puzzleState.mode != PuzzleMode.view,
+            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+            child: content,
+          )
+        : content;
   }
 }
 
