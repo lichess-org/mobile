@@ -61,14 +61,15 @@ class GamePlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final remaingHeight = estimateRemainingHeightLeftBoard(context);
-    final playerFontSize = remaingHeight <= kSmallRemainingHeightLeftBoardThreshold ? 14.0 : 16.0;
+    final remaingHeight = estimateHeightMinusBoard(context);
+    final playerFontSize = remaingHeight <= kSmallHeightMinusBoard ? 15.0 : 16.0;
 
     final player = game.playerOf(side);
 
     final tournament = game.meta.tournament;
 
     final playerWidget = Column(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -170,8 +171,6 @@ class GamePlayer extends StatelessWidget {
             materialDiff: materialDiff,
             materialDifferenceFormat: materialDifferenceFormat,
           ),
-        // to avoid shifts use an empty text widget
-        const Text('', style: TextStyle(fontSize: 13)),
       ],
     );
 
@@ -352,7 +351,11 @@ class MaterialDifferenceDisplay extends StatelessWidget {
                   Icon(_iconByRole[role], size: 13, color: textShade(context, 0.5)),
               const SizedBox(width: 3),
               Text(
-                style: TextStyle(fontSize: 13, color: textShade(context, 0.5)),
+                // a text font size of 14 is used to ensure that the text will take more vertical space
+                // than the icons
+                // this is a trick to make sure the player name widget will not shift, since the text
+                // widget is always present (contrary to the icons)
+                style: TextStyle(fontSize: 14, color: textShade(context, 0.5)),
                 materialDiff != null && materialDiff!.score > 0 ? '+${materialDiff!.score}' : '',
               ),
             ],

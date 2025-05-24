@@ -90,7 +90,7 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
     final colorScheme = ColorScheme.of(context);
     final clockStyle = ClockStyle.defaultStyle(brightness, colorScheme);
 
-    final remainingHeight = estimateRemainingHeightLeftBoard(context);
+    final remainingHeight = estimateHeightMinusBoard(context);
 
     final daysStr = days > 1
         ? context.l10n.nbDays(days)
@@ -118,7 +118,7 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
                 style: TextStyle(
                   color: widget.active ? clockStyle.activeTextColor : clockStyle.textColor,
                   fontSize: 18,
-                  height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 1.0 : null,
+                  height: remainingHeight < kSmallHeightMinusBoard ? 1.0 : null,
                   fontFeatures: days == 0 ? const [FontFeature.tabularFigures()] : null,
                 ),
                 children: [

@@ -96,6 +96,10 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
     return save(state.copyWith(clockPosition: clockPosition));
   }
 
+  Future<void> toggleMoveListDisplay() {
+    return save(state.copyWith(moveListDisplay: !state.moveListDisplay));
+  }
+
   Future<void> toggleEnableShapeDrawings() {
     return save(state.copyWith(enableShapeDrawings: !state.enableShapeDrawings));
   }
@@ -139,6 +143,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       unknownEnumValue: CastlingMethod.kingOverRook,
     )
     required CastlingMethod castlingMethod,
+    @JsonKey(defaultValue: true) required bool moveListDisplay,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
@@ -163,6 +168,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     pieceAnimation: true,
     materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     clockPosition: ClockPosition.right,
+    moveListDisplay: true,
     pieceShiftMethod: PieceShiftMethod.either,
     castlingMethod: CastlingMethod.kingOverRook,
     enableShapeDrawings: true,
@@ -259,6 +265,18 @@ IMap<Square, ISet<Square>> _makeLegalMoves(
     }
   }
   return IMap(result);
+}
+
+enum MoveListDisplay {
+  always,
+  never,
+  onSlowGames;
+
+  String l10n(AppLocalizations l10n) => switch (this) {
+    MoveListDisplay.always => l10n.always,
+    MoveListDisplay.never => l10n.never,
+    MoveListDisplay.onSlowGames => l10n.onSlowGames,
+  };
 }
 
 /// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
 /// Returns the estimated height of screen after removing the height of the board
-double estimateRemainingHeightLeftBoard(BuildContext context) {
+double estimateHeightMinusBoard(BuildContext context) {
   final size = MediaQuery.sizeOf(context);
-  final padding = MediaQuery.paddingOf(context);
-  final safeViewportHeight = size.height - padding.top - padding.bottom;
   final boardSize = size.width;
-  return safeViewportHeight - boardSize - kToolbarHeight - kBottomBarHeight;
+  return size.height - boardSize - kToolbarHeight - kBottomBarHeight;
 }
 
 // ignore: avoid_classes_with_only_static_members

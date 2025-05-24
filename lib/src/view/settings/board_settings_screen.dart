@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -43,6 +44,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final remainingHeight = estimateHeightMinusBoard(context);
 
     final androidVersionAsync = ref.watch(androidVersionProvider);
 
@@ -153,6 +155,14 @@ class _Body extends ConsumerWidget {
                       )
                     : const SizedBox.shrink(),
                 orElse: () => const SizedBox.shrink(),
+              ),
+            if (remainingHeight >= kSmallHeightMinusBoard)
+              SwitchSettingTile(
+                title: Text(context.l10n.preferencesMoveListWhilePlaying),
+                value: boardPrefs.moveListDisplay,
+                onChanged: (value) {
+                  ref.read(boardPreferencesProvider.notifier).toggleMoveListDisplay();
+                },
               ),
             SettingsListTile(
               //TODO Add l10n
