@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
-/// Returns the estimated height of screen after removing the height of the board
+/// Returns the estimated height of what is left after removing the height of the board from the screen.
+///
+/// This function uses the top-level MediaQuery to ensure that computed height is consistent regardless of the context used.
 double estimateHeightMinusBoard(BuildContext context) {
-  final size = MediaQuery.sizeOf(context);
+  // Use the top-level MediaQuery to ensure we get always the same `viewPadding` regardless of the context.
+  final topLevelMediaQuery = MediaQueryData.fromView(View.of(context));
+  final size = topLevelMediaQuery.size;
+  final viewPadding = topLevelMediaQuery.viewPadding;
   final boardSize = size.width;
-  return size.height - boardSize - kToolbarHeight - kBottomBarHeight;
+  return size.height - viewPadding.vertical - boardSize - kToolbarHeight - kBottomBarHeight;
 }
 
 // ignore: avoid_classes_with_only_static_members
