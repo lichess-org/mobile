@@ -267,18 +267,6 @@ IMap<Square, ISet<Square>> _makeLegalMoves(
   return IMap(result);
 }
 
-enum MoveListDisplay {
-  always,
-  never,
-  onSlowGames;
-
-  String l10n(AppLocalizations l10n) => switch (this) {
-    MoveListDisplay.always => l10n.always,
-    MoveListDisplay.never => l10n.never,
-    MoveListDisplay.onSlowGames => l10n.onSlowGames,
-  };
-}
-
 /// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178
 enum ShapeColor {
   green,
