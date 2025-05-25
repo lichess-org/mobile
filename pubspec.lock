@@ -346,7 +346,7 @@ packages:
     source: hosted
     version: "0.7.5"
   custom_lint_visitor:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: custom_lint_visitor
       sha256: "36282d85714af494ee2d7da8c8913630aa6694da99f104fb2ed4afcf8fc857d8"
@@ -570,10 +570,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_appauth
-      sha256: "61cc577797bbc66dce7f9d09b469a2755f06393d19473605e236bf2c58008957"
+      sha256: b09fa8e3eaba12ec341c69ec45063e06eb565304e24cc35caaf105bbae2e955c
       url: "https://pub.dev"
     source: hosted
-    version: "9.0.0"
+    version: "9.0.1"
   flutter_appauth_platform_interface:
     dependency: transitive
     description:
@@ -1057,10 +1057,10 @@ packages:
     dependency: "direct main"
     description:
       name: material_symbols_icons
-      sha256: d45b6c36c3effa8cb51b1afb8698107d5ff1f88fa4631428f34a8a01abc295d7
+      sha256: "7c50901b39d1ad645ee25d920aed008061e1fd541a897b4ebf2c01d966dbf16b"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2815.0"
+    version: "4.2815.1"
   meta:
     dependency: "direct main"
     description:
