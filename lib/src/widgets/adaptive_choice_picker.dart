@@ -139,23 +139,27 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
         scrollable: true,
         content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: choices
-                  .map((choice) {
-                    return CheckboxListTile.adaptive(
-                      title: labelBuilder(choice),
-                      value: items.contains(choice),
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            items = value ? items.union({choice}) : items.difference({choice});
-                          });
-                        }
-                      },
-                    );
-                  })
-                  .toList(growable: false),
+            // Material ancestor is needed for CheckboxListTile.adaptive to work on iOS
+            return Material(
+              type: MaterialType.transparency,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: choices
+                    .map((choice) {
+                      return CheckboxListTile.adaptive(
+                        title: labelBuilder(choice),
+                        value: items.contains(choice),
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              items = value ? items.union({choice}) : items.difference({choice});
+                            });
+                          }
+                        },
+                      );
+                    })
+                    .toList(growable: false),
+              ),
             );
           },
         ),
