@@ -27,5 +27,4 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Carian terkini</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Maklum balas haptik</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Mod Imersif</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Sembunyikan UI sistem semasa bermain. Gunakan ini jika anda terganggu oleh isyarat navigasi sistem di tepi skrin. Berlaku untuk skrin permainan dan Ribut Teka-teki.</string>
 </resources>
