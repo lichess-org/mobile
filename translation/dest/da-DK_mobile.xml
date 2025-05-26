@@ -28,7 +28,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Seneste søgninger</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Haptisk feedback</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Fordybelsestilstand</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Skjul systemets brugergrænseflade, mens du spiller. Brug denne funktion, hvis du er generet af systemets navigationsbevægelser i kanterne af skærmen. Gælder for parti- og Puzzle Storm-skærme.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Indstillinger</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Del PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Del partiets URL</string>
