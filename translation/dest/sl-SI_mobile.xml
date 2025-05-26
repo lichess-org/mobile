@@ -27,7 +27,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Nedavna iskanja</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Vibriranje ob dotiku</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Interaktivni način</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Skrij sistemski vmesnik med igranjem. Uporabite, če vas motijo navigacijske poteze ob robovih zaslona. Velja za igro in Puzzle Storm.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Nastavitve</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Deli PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Deli igro URL</string>
