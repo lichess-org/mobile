@@ -28,7 +28,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Procuras recentes</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Vibración ó mover</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Pantalla completa</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Oculta a Interface de Usuario mentres xogas. Emprega esta opción se che molestan os xestos de navegación do sistema ós bordos da pantalla. Aplícase ás pantallas da partida e á de Puzzle Storm.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Axustes</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Compartir PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartir o URL da partida</string>
