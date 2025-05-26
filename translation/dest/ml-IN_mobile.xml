@@ -27,7 +27,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">സമീപകാല തിരയലുകൾ</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">സ്പർശന പ്രതികരണം</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">ആഴത്തിലുള്ള അനുഭവരീതി</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">ഉപയോക്തൃസമ്പർക്കമുഖം കളിക്കുമ്പോഴു് ഒളിപ്പിക്കുക. ദൃശ്യപ്രതലത്തിന്റെ അതിരിലുള്ള വ്യവസ്ഥയിന്റെ ഗതിനർണയ ആംഗ്യഭാഷകൾ നിന്നു് താങ്ങൾക്കു് പ്രശ്നമുണ്ടെങ്കിൽ ഇതു് ഉപയോഗിക്കൂ. ഈ പ്രവർത്തനം വെരും കളിയും പസ്സിൽ കൊടുങ്കാറ്റു്  ദൃശ്യപ്രതലത്തിൽ മാത്രം ചെയ്യാനൊക്കും.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ക്രമീകരണം</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN പങ്കിടുക</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">കളി വിലാസം (URL) പങ്കിടുക</string>
