@@ -27,7 +27,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">சமீபத்திய தேடல்கள்</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">ஹாப்டிக் பின்னூட்டம்</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">மூழ்கும் முறை</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">விளையாடும் போது கணினி UI ஐ மறை. திரையின் விளிம்புகளில் கணினியின் வழிசெலுத்தல் சைகைகளால் நீங்கள் தொந்தரவு செய்தால் இதைப் பயன்படுத்தவும். விளையாட்டு மற்றும் புதிர் புயல் திரைகளுக்கு பொருந்தும்.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">அமைப்புகள்</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN ஐப் பகிரவும்</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">விளையாட்டு URL ஐப் பகிரவும்</string>
