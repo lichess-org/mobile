@@ -27,7 +27,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Senaste sökningar</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Vibration</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Expanderat läge</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Dölj systemgränssnittet medan du spelar. Använd detta om du är störd av systemets navigationsgester i kanterna på skärmen. Gäller för partier och Pussel-Storm.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Inställn.</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Dela PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Dela parti-URL</string>
