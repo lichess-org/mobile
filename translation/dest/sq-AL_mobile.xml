@@ -28,7 +28,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Kërkime së fundi</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Dridhje gjatë lëvizjesh</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Modaliteti zhytës</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Fshih ndërfaqen e përdoruesit të sistemit gjatë lojës. Përdoreni këtë nëse jeni të shqetësuar nga gjestet e navigimit të sistemit në skajet e ekranit. Zbatohet për ekranet e lojërave dhe stuhi enigmë.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Rregullime</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Ndani PGN me të tjerë</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Ndani URL loje me të tjerë</string>
