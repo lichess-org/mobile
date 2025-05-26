@@ -277,12 +277,14 @@ class _ChoiceChip extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: selected
-            ? ColorScheme.of(context).primaryContainer
+            ? ColorScheme.of(context).secondaryContainer
             : ColorScheme.of(context).surfaceContainerLow,
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         border: Border.fromBorderSide(
           BorderSide(
-            color: selected ? ColorScheme.of(context).primary : Theme.of(context).dividerColor,
+            color: selected
+                ? ColorScheme.of(context).secondaryContainer
+                : Theme.of(context).dividerColor,
             width: 1.0,
           ),
         ),
