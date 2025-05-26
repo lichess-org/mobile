@@ -27,7 +27,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">हाल के सर्च</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">हैप्टिक फीडबैक</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">इमर्सिव मोड</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">खेलते वक्त सिस्टम यूआई छुपा दें। अगर आप स्क्रीन के किनारे के सिस्टम नेविगेशन जेस्चर्स से तंग होते है तो इसका इस्तेमाल करें। गेम और पजल स्टॉर्म के स्क्रीन्स पे अप्लाए होगा।</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">सेटिंग</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">पीजीएन शेयर करें</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">गेम यूआरएल शेयर करें</string>
