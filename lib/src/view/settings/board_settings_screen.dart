@@ -155,7 +155,7 @@ class _Body extends ConsumerWidget {
                     : const SizedBox.shrink(),
                 orElse: () => const SizedBox.shrink(),
               ),
-            if (isShortVerticalScreen(context))
+            if (!isShortVerticalScreen(context))
               SwitchSettingTile(
                 title: Text(context.l10n.preferencesMoveListWhilePlaying),
                 value: boardPrefs.moveListDisplay,
