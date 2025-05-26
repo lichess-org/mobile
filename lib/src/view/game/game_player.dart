@@ -62,7 +62,7 @@ class GamePlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final remaingHeight = estimateHeightMinusBoard(context);
-    final playerFontSize = remaingHeight <= kSmallHeightMinusBoard ? 15.0 : 16.0;
+    final playerFontSize = remaingHeight < kSmallHeightMinusBoard ? 15.0 : 16.0;
 
     final player = game.playerOf(side);
 
