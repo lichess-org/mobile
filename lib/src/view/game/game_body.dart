@@ -328,7 +328,7 @@ class GameBody extends ConsumerWidget {
     required WidgetRef ref,
   }) {
     if (state.hasValue) {
-      if (prev?.valueOrNull?.isZenModeActive == true &&
+      if (prev?.value?.isZenModeActive == true &&
           state.requireValue.isZenModeActive == false) {
         if (context.mounted) {
           // when Zen mode is disabled, reload chat data
@@ -358,7 +358,7 @@ class GameBody extends ConsumerWidget {
       }
 
       // true when the game was loaded, playable, and just finished
-      if (prev?.valueOrNull?.game.playable == true && state.requireValue.game.playable == false) {
+      if (prev?.value?.game.playable == true && state.requireValue.game.playable == false) {
         clearAndroidBoardGesturesExclusion();
       }
       // true when the game was not loaded: handles rematches
@@ -417,7 +417,7 @@ class _GameBottomBar extends ConsumerWidget {
         final canShowChat =
             gamePrefs.enableChat == true &&
             gameState.chatOptions != null &&
-            kidModeAsync.valueOrNull == false;
+            kidModeAsync.value == false;
         return BottomBar(
           children: [
             BottomBarButton(

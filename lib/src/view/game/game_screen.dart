@@ -296,7 +296,7 @@ class _GameMenu extends ConsumerWidget {
         const ToggleSoundContextMenuAction(),
         GameBookmarkContextMenuAction(
           id: gameId.gameId,
-          bookmarked: isBookmarkedAsync.valueOrNull ?? false,
+          bookmarked: isBookmarkedAsync.value ?? false,
           onToggleBookmark: () =>
               ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
           gameListContext: gameListContext,

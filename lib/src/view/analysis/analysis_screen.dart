@@ -90,9 +90,9 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final appBarActions = [
-      if (asyncState.valueOrNull?.isEngineAvailable(enginePrefs) == true)
+      if (asyncState.value?.isEngineAvailable(enginePrefs) == true)
         EngineDepth(
-          savedEval: asyncState.valueOrNull?.currentNode.eval,
+          savedEval: asyncState.value?.currentNode.eval,
           goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
         ),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),

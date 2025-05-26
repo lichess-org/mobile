@@ -44,7 +44,22 @@ enum BottomTab {
   }
 }
 
-final currentBottomTabProvider = StateProvider<BottomTab>((ref) => BottomTab.home);
+class _BottomTabNotifier extends Notifier<BottomTab> {
+  @override
+  BottomTab build() {
+    return BottomTab.home;
+  }
+
+  @override
+  set state(BottomTab tab) {
+    state = tab;
+  }
+}
+
+final currentBottomTabProvider = NotifierProvider.autoDispose<_BottomTabNotifier, BottomTab>(
+  _BottomTabNotifier.new,
+  name: 'currentBottomTabProvider',
+);
 
 final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
   final currentTab = ref.watch(currentBottomTabProvider);

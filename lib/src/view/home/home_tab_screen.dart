@@ -42,7 +42,20 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final editModeProvider = StateProvider<bool>((ref) => false);
+class _EditModeNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  @override
+  set state(bool value) {
+    super.state = value;
+  }
+}
+
+final editModeProvider = NotifierProvider.autoDispose<_EditModeNotifier, bool>(
+  _EditModeNotifier.new,
+  name: 'editModeProvider',
+);
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});
@@ -85,7 +98,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         final ongoingGames = ref.watch(ongoingGamesProvider);
         final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
         final recentGames = ref.watch(myRecentGamesProvider);
-        final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
+        final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
         final isTablet = isTabletOrLarger(context);
         final featuredTournaments = status.isOnline
             ? ref.watch(featuredTournamentsProvider)
@@ -708,7 +721,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
     final connectivity = ref.watch(connectivityChangesProvider);
     final challenges = ref.watch(challengesProvider);
 
-    final inwardCount = challenges.valueOrNull?.inward.length ?? 0;
+    final inwardCount = challenges.value?.inward.length ?? 0;
 
     return switch (connectivity) {
       AsyncData(:final value) => SemanticIconButton(

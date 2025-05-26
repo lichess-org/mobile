@@ -118,7 +118,7 @@ class _BodyState extends ConsumerState<_Body> {
   bool requestedNextPage = false;
 
   StudyListPaginatorProvider get paginatorProvider =>
-      StudyListPaginatorProvider(filter: widget.filter, search: search);
+      studyListPaginatorProvider(filter: widget.filter, search: search);
 
   @override
   void initState() {
