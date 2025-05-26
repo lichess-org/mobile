@@ -28,7 +28,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Viimeisimmät haut</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Kosketuspalaute</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Kokoruututila</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Piilota laitteen käyttöliittymä pelatessasi. Valitse tämä, jos laitteesi navigointieleet näytön laidoilla ovat sinulle häiriöksi. Asetus vaikuttaa peli- ja Puzzle Storm -näkymiin.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Asetukset</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Jaa PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Jaa pelin URL</string>
