@@ -8,6 +8,7 @@
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Joindre une partie</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Commentaires</string>
   <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Bonjour %s</string>
+  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">Bonjour</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Masquer les variantes</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Accueil</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Diffuseurs en direct</string>
@@ -27,7 +28,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recherches récentes</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Mode vibration</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Mode plein écran</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Masquer l\'interface système durant la partie. À utiliser lorsque les gestes pour naviguer dans l\'interface système sur les bords de l\'écran vous gênent. S\'applique en jeu et pour les séries de problèmes.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Paramètres</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Partager le PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Partager l\'URL de la partie</string>
