@@ -28,7 +28,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Последние запросы</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Виброотклик</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Полноэкранный режим</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Скрывать интерфейс во время игры. Воспользуйтесь, если вам мешает навигация по краям экрана. Применяется в режиме партий и задач.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Настройки</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Поделиться PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Поделиться ссылкой на игру</string>
