@@ -1105,26 +1105,26 @@ packages:
     dependency: transitive
     description:
       name: multistockfish_chess
-      sha256: "64a722c96d79ee0e29813bf697ca9bf874551f57a7093ed61956092cef81490a"
+      sha256: "963ab3e9d0d85ef5e5e10cef18152aca2b72a4c809c557d81191f9956ab4765c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.1"
   multistockfish_sf16:
     dependency: transitive
     description:
       name: multistockfish_sf16
-      sha256: "8e87925fb498dfd1b15cdbbb37ce30e9abfb716537b3c367e3c4114e13f0328d"
+      sha256: b32eb392d8036668b0f0fd9ed53fff65a12efcf4178e58205147aab27df1b1a9
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
   multistockfish_variant:
     dependency: transitive
     description:
       name: multistockfish_variant
-      sha256: "68e6213a2ae68223b24cac209e538bcf10f43909230ea106408940d519ca7bba"
+      sha256: "24ef2781ae65d6ccdcd95c4b000dbdcdba8368b9fa2f02810eb7f932e6698dc4"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
   nm:
     dependency: transitive
     description:
