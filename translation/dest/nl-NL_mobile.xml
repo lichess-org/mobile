@@ -28,7 +28,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recente zoekopdrachten</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Haptische feedback</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Volledig scherm-modus</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Systeem-UI verbergen tijdens het spelen. Gebruik dit als je last hebt van de navigatiegebaren aan de randen van het scherm. Dit is van toepassing op spel- en Puzzle Storm schermen.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Instellingen</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN delen</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Partij URL delen</string>
