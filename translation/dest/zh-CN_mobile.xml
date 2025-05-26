@@ -28,7 +28,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">最近搜索</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">震动反馈</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">沉浸模式</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">下棋时隐藏系统界面。 如果您的操作受到屏幕边缘的系统导航手势干扰，请使用此功能。 适用于棋局和 Puzzle Storm 界面。</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">设置</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">分享 PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">分享棋局链接</string>
