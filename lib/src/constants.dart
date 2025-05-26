@@ -59,8 +59,8 @@ const kTabletBoardTableSidePadding = 16.0;
 const kBottomBarHeight = 56.0;
 const kMaterialPopupMenuMaxWidth = 500.0;
 
-/// The threshold to detect screens with a small remaining height left board.
-const kSmallRemainingHeightLeftBoardThreshold = 160;
+/// The threshold to detect screens with a small remaining height minus board.
+const kSmallHeightMinusBoard = 170;
 
 // annotations
 class _AllowedWidgetReturn {

@@ -211,7 +211,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       widget.topTable,
-                      if (!widget.zenMode && slicedMoves != null)
+                      if (boardPrefs.moveListDisplay && !widget.zenMode && slicedMoves != null)
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -246,7 +246,9 @@ class _BoardTableState extends ConsumerState<BoardTable> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (slicedMoves != null && verticalSpaceLeftBoardOnPortrait >= 130)
+              if (boardPrefs.moveListDisplay &&
+                  slicedMoves != null &&
+                  verticalSpaceLeftBoardOnPortrait >= kSmallHeightMinusBoard)
                 if (widget.zenMode)
                   // display empty move list to keep the layout consistent in zen mode
                   const MoveList(type: MoveListType.inline, slicedMoves: [], currentMoveIndex: 0)

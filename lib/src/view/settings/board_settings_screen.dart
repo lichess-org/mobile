@@ -154,6 +154,14 @@ class _Body extends ConsumerWidget {
                     : const SizedBox.shrink(),
                 orElse: () => const SizedBox.shrink(),
               ),
+            if (!isShortVerticalScreen(context))
+              SwitchSettingTile(
+                title: Text(context.l10n.preferencesMoveListWhilePlaying),
+                value: boardPrefs.moveListDisplay,
+                onChanged: (value) {
+                  ref.read(boardPreferencesProvider.notifier).toggleMoveListDisplay();
+                },
+              ),
             SettingsListTile(
               //TODO Add l10n
               settingsLabel: const Text('Clock position'),

@@ -64,7 +64,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: OrientationBuilder(
         builder: (context, orientation) {
-          final remainingSpace = estimateRemainingHeightLeftBoard(context);
+          final remainingSpace = estimateHeightMinusBoard(context);
           final estimatedTableHeight = remainingSpace / 2;
           const estimatedRatingWidgetHeight = 33.0;
           final estimatedWidgetHeight = estimatedTableHeight - estimatedRatingWidgetHeight;

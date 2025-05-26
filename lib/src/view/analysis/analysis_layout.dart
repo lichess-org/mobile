@@ -282,7 +282,7 @@ class AnalysisLayout extends StatelessWidget {
                 } else {
                   final defaultBoardSize = constraints.biggest.shortestSide;
                   final remainingHeight = constraints.maxHeight - defaultBoardSize;
-                  final isSmallScreen = remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
+                  final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
                   final boardSize = isTablet || isSmallScreen
                       ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                       : defaultBoardSize;

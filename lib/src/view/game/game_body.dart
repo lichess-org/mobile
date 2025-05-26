@@ -96,9 +96,7 @@ class GameBody extends ConsumerWidget {
     switch (ref.watch(ctrlProvider)) {
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameBody] could not load game data; $e\n$s');
-        return const PopScope(
-          child: LoadGameError('Sorry, we could not load the game. Please try again later.'),
-        );
+        return const LoadGameError('Sorry, we could not load the game. Please try again later.');
       case AsyncData(value: final gameState, isRefreshing: false):
         final youAre = gameState.game.youAre ?? Side.white;
         final archivedBlackClock = gameState.game.archivedBlackClockAt(gameState.stepCursor);
@@ -216,136 +214,109 @@ class GameBody extends ConsumerWidget {
             ? Duration.zero
             : boardPreferences.pieceAnimationDuration;
 
-        final content = FocusDetector(
+        return FocusDetector(
           onFocusRegained: () {
             ref.read(ctrlProvider.notifier).onFocusRegained();
           },
           child: WakelockWidget(
             shouldEnableOnFocusGained: () => gameState.game.playable,
-            child: PopScope(
-              canPop: gameState.game.meta.speed == Speed.correspondence || !gameState.game.playable,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SafeArea(
-                      bottom: false,
-                      child: BoardTable(
-                        key: boardKey,
-                        boardSettingsOverrides: BoardSettingsOverrides(
-                          animationDuration: animationDuration,
-                          autoQueenPromotion: gameState.canAutoQueen,
-                          autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
-                          blindfoldMode: blindfoldMode,
-                        ),
-                        orientation: isBoardTurned ? youAre.opposite : youAre,
-                        lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
-                        interactiveBoardParams: (
-                          variant: gameState.game.meta.variant,
-                          position: gameState.currentPosition,
-                          playerSide: gameState.game.playable && !gameState.isReplaying
-                              ? youAre == Side.white
-                                    ? PlayerSide.white
-                                    : PlayerSide.black
-                              : PlayerSide.none,
-                          promotionMove: gameState.promotionMove,
-                          onMove: (move, {isDrop}) {
-                            ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
-                          },
-                          onPromotionSelection: (role) {
-                            ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-                          },
-                          premovable: gameState.canPremove
-                              ? (
-                                  onSetPremove: (move) {
-                                    ref.read(ctrlProvider.notifier).setPremove(move);
-                                  },
-                                  premove: gameState.premove,
-                                )
-                              : null,
-                        ),
-                        topTable: topPlayer,
-                        bottomTable:
-                            gameState.canShowClaimWinCountdown &&
-                                gameState.opponentLeftCountdown != null
-                            ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
-                            : bottomPlayer,
-                        moves: gameState.game.steps
-                            .skip(1)
-                            .map((e) => e.sanMove!.san)
-                            .toList(growable: false),
-                        currentMoveIndex: gameState.stepCursor,
-                        onSelectMove: (moveIndex) {
-                          ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
-                        },
-                        zenMode: gameState.isZenModeActive,
-                      ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: BoardTable(
+                    key: boardKey,
+                    boardSettingsOverrides: BoardSettingsOverrides(
+                      animationDuration: animationDuration,
+                      autoQueenPromotion: gameState.canAutoQueen,
+                      autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
+                      blindfoldMode: blindfoldMode,
                     ),
+                    orientation: isBoardTurned ? youAre.opposite : youAre,
+                    lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
+                    interactiveBoardParams: (
+                      variant: gameState.game.meta.variant,
+                      position: gameState.currentPosition,
+                      playerSide: gameState.game.playable && !gameState.isReplaying
+                          ? youAre == Side.white
+                                ? PlayerSide.white
+                                : PlayerSide.black
+                          : PlayerSide.none,
+                      promotionMove: gameState.promotionMove,
+                      onMove: (move, {isDrop}) {
+                        ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
+                      },
+                      onPromotionSelection: (role) {
+                        ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+                      },
+                      premovable: gameState.canPremove
+                          ? (
+                              onSetPremove: (move) {
+                                ref.read(ctrlProvider.notifier).setPremove(move);
+                              },
+                              premove: gameState.premove,
+                            )
+                          : null,
+                    ),
+                    topTable: topPlayer,
+                    bottomTable:
+                        gameState.canShowClaimWinCountdown &&
+                            gameState.opponentLeftCountdown != null
+                        ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
+                        : bottomPlayer,
+                    moves: gameState.game.steps
+                        .skip(1)
+                        .map((e) => e.sanMove!.san)
+                        .toList(growable: false),
+                    currentMoveIndex: gameState.stepCursor,
+                    onSelectMove: (moveIndex) {
+                      ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
+                    },
+                    zenMode: gameState.isZenModeActive,
                   ),
-                  _GameBottomBar(
-                    id: loadedGame.gameId,
-                    onLoadGameCallback: onLoadGameCallback,
-                    onNewOpponentCallback: onNewOpponentCallback,
-                  ),
-                ],
-              ),
+                ),
+                _GameBottomBar(
+                  id: loadedGame.gameId,
+                  onLoadGameCallback: onLoadGameCallback,
+                  onNewOpponentCallback: onNewOpponentCallback,
+                ),
+              ],
             ),
           ),
         );
 
-        return Theme.of(context).platform == TargetPlatform.android
-            ? AndroidGesturesExclusionWidget(
-                boardKey: boardKey,
-                shouldExcludeGesturesOnFocusGained: () =>
-                    gameState.game.meta.speed != Speed.correspondence && gameState.game.playable,
-                shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
-                child: content,
-              )
-            : content;
       case AsyncData(:final value, isRefreshing: true):
-        return PopScope(
-          canPop: false,
-          child: Column(
-            children: [
-              Expanded(
-                child: SafeArea(
-                  bottom: false,
-                  child: StandaloneGameLoadingBoard(
-                    fen: value.game.lastPosition.fen,
-                    lastMove: value.game.moveAt(value.stepCursor) as NormalMove?,
-                    orientation: value.game.youAre,
-                  ),
-                ),
+        return Column(
+          children: [
+            Expanded(
+              child: StandaloneGameLoadingBoard(
+                fen: value.game.lastPosition.fen,
+                lastMove: value.game.moveAt(value.stepCursor) as NormalMove?,
+                orientation: value.game.youAre,
               ),
-              _GameBottomBar(
-                id: loadedGame.gameId,
-                onLoadGameCallback: onLoadGameCallback,
-                onNewOpponentCallback: onNewOpponentCallback,
-              ),
-            ],
-          ),
+            ),
+            _GameBottomBar(
+              id: loadedGame.gameId,
+              onLoadGameCallback: onLoadGameCallback,
+              onNewOpponentCallback: onNewOpponentCallback,
+            ),
+          ],
         );
       case final _:
-        return PopScope(
-          canPop: true,
-          child: Column(
-            children: [
-              Expanded(
-                child: SafeArea(
-                  bottom: false,
-                  child: StandaloneGameLoadingBoard(
-                    fen: loadedGame.lastFen,
-                    lastMove: loadedGame.lastMove,
-                    orientation: loadedGame.side,
-                  ),
-                ),
+        return Column(
+          children: [
+            Expanded(
+              child: StandaloneGameLoadingBoard(
+                fen: loadedGame.lastFen,
+                lastMove: loadedGame.lastMove,
+                orientation: loadedGame.side,
               ),
-              _GameBottomBar(
-                id: loadedGame.gameId,
-                onLoadGameCallback: onLoadGameCallback,
-                onNewOpponentCallback: onNewOpponentCallback,
-              ),
-            ],
-          ),
+            ),
+            _GameBottomBar(
+              id: loadedGame.gameId,
+              onLoadGameCallback: onLoadGameCallback,
+              onNewOpponentCallback: onNewOpponentCallback,
+            ),
+          ],
         );
     }
   }
@@ -448,7 +419,6 @@ class _GameBottomBar extends ConsumerWidget {
             gameState.chatOptions != null &&
             kidModeAsync.valueOrNull == false;
         return BottomBar(
-          maintainBottomViewPadding: true,
           children: [
             BottomBarButton(
               label: context.l10n.menu,
@@ -591,7 +561,7 @@ class _GameBottomBar extends ConsumerWidget {
           ],
         );
       case _:
-        return const BottomBar.empty(maintainBottomViewPadding: true);
+        return const BottomBar.empty();
     }
   }
 

@@ -96,6 +96,10 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
     return save(state.copyWith(clockPosition: clockPosition));
   }
 
+  Future<void> toggleMoveListDisplay() {
+    return save(state.copyWith(moveListDisplay: !state.moveListDisplay));
+  }
+
   Future<void> toggleEnableShapeDrawings() {
     return save(state.copyWith(enableShapeDrawings: !state.enableShapeDrawings));
   }
@@ -139,6 +143,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       unknownEnumValue: CastlingMethod.kingOverRook,
     )
     required CastlingMethod castlingMethod,
+    @JsonKey(defaultValue: true) required bool moveListDisplay,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
@@ -163,6 +168,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     pieceAnimation: true,
     materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     clockPosition: ClockPosition.right,
+    moveListDisplay: true,
     pieceShiftMethod: PieceShiftMethod.either,
     castlingMethod: CastlingMethod.kingOverRook,
     enableShapeDrawings: true,

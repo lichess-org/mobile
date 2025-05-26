@@ -26,6 +26,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -45,6 +46,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 
 class PuzzleScreen extends ConsumerStatefulWidget {
@@ -72,6 +74,8 @@ class PuzzleScreen extends ConsumerStatefulWidget {
 }
 
 class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
+  final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleScreen');
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -98,8 +102,8 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return widget.puzzleId != null
-        ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
-        : _LoadNextPuzzle(angle: widget.angle);
+        ? _LoadPuzzleFromId(boardKey: _boardKey, angle: widget.angle, id: widget.puzzleId!)
+        : _LoadNextPuzzle(boardKey: _boardKey, angle: widget.angle);
   }
 }
 
@@ -128,17 +132,18 @@ class _Title extends ConsumerWidget {
 }
 
 class _LoadNextPuzzle extends ConsumerWidget {
-  const _LoadNextPuzzle({required this.angle});
+  const _LoadNextPuzzle({required this.boardKey, required this.angle});
 
   final PuzzleAngle angle;
+  final GlobalKey boardKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nextPuzzle = ref.watch(nextPuzzleProvider(angle));
 
-    return nextPuzzle.when(
-      data: (data) {
-        if (data == null) {
+    switch (nextPuzzle) {
+      case AsyncData(:final value):
+        if (value == null) {
           return _PuzzleScaffold(
             angle: angle,
             initialPuzzleContext: null,
@@ -153,43 +158,47 @@ class _LoadNextPuzzle extends ConsumerWidget {
         } else {
           return _PuzzleScaffold(
             angle: angle,
-            initialPuzzleContext: data,
-            body: _Body(initialPuzzleContext: data),
+            initialPuzzleContext: value,
+            body: _Body(boardKey: boardKey, initialPuzzleContext: value),
           );
         }
-      },
-      loading: () => _PuzzleScaffold(
-        angle: angle,
-        initialPuzzleContext: null,
-        body: const Center(child: CircularProgressIndicator.adaptive()),
-      ),
-      error: (e, s) {
-        debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s');
+      case AsyncError(:final error, :final stackTrace):
+        debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $error\n$stackTrace');
         return _PuzzleScaffold(
           angle: angle,
           initialPuzzleContext: null,
           body: Center(
-            child: BoardTable(fen: kEmptyFen, orientation: Side.white, errorMessage: e.toString()),
+            child: BoardTable(
+              fen: kEmptyFen,
+              orientation: Side.white,
+              errorMessage: error.toString(),
+            ),
           ),
         );
-      },
-    );
+      case _:
+        return _PuzzleScaffold(
+          angle: angle,
+          initialPuzzleContext: null,
+          body: const Center(child: CircularProgressIndicator.adaptive()),
+        );
+    }
   }
 }
 
 class _LoadPuzzleFromId extends ConsumerWidget {
-  const _LoadPuzzleFromId({required this.angle, required this.id});
+  const _LoadPuzzleFromId({required this.boardKey, required this.angle, required this.id});
 
   final PuzzleAngle angle;
   final PuzzleId id;
+  final GlobalKey boardKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle = ref.watch(puzzleProvider(id));
     final session = ref.watch(authSessionProvider);
 
-    return puzzle.when(
-      data: (data) {
+    switch (puzzle) {
+      case AsyncData(value: final data):
         final initialPuzzleContext = PuzzleContext(
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
           puzzle: data,
@@ -198,47 +207,38 @@ class _LoadPuzzleFromId extends ConsumerWidget {
         return _PuzzleScaffold(
           angle: angle,
           initialPuzzleContext: initialPuzzleContext,
-          body: _Body(initialPuzzleContext: initialPuzzleContext),
+          body: _Body(boardKey: boardKey, initialPuzzleContext: initialPuzzleContext),
         );
-      },
-      loading: () => _PuzzleScaffold(
-        angle: angle,
-        initialPuzzleContext: null,
-        body: const Column(
-          children: [
-            Expanded(
-              child: SafeArea(
-                bottom: false,
-                child: BoardTable.empty(showEngineGaugePlaceholder: true),
-              ),
-            ),
-            BottomBar.empty(),
-          ],
-        ),
-      ),
-      error: (e, s) {
-        debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s');
+      case AsyncError(:final error, :final stackTrace):
+        debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $error\n$stackTrace');
         return _PuzzleScaffold(
           angle: angle,
           initialPuzzleContext: null,
           body: Column(
             children: [
               Expanded(
-                child: SafeArea(
-                  bottom: false,
-                  child: BoardTable(
-                    fen: kEmptyFen,
-                    orientation: Side.white,
-                    errorMessage: e.toString(),
-                  ),
+                child: BoardTable(
+                  fen: kEmptyFen,
+                  orientation: Side.white,
+                  errorMessage: error.toString(),
                 ),
               ),
               const SizedBox(height: kBottomBarHeight),
             ],
           ),
         );
-      },
-    );
+      case _:
+        return _PuzzleScaffold(
+          angle: angle,
+          initialPuzzleContext: null,
+          body: const Column(
+            children: [
+              Expanded(child: BoardTable.empty(showEngineGaugePlaceholder: true)),
+              BottomBar.empty(),
+            ],
+          ),
+        );
+    }
   }
 }
 
@@ -271,122 +271,159 @@ class _PuzzleScaffold extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.initialPuzzleContext});
+  const _Body({required this.boardKey, required this.initialPuzzleContext});
 
+  final GlobalKey boardKey;
   final PuzzleContext initialPuzzleContext;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final boardPreferences = ref.watch(boardPreferencesProvider);
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final currentEvalBest = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMove));
     final evalBestMove = (currentEvalBest ?? puzzleState.node.eval?.bestMove) as NormalMove?;
 
-    return Column(
-      children: [
-        Expanded(
-          child: SafeArea(
-            bottom: false,
-            child: BoardTable(
-              orientation: puzzleState.pov,
-              lastMove: puzzleState.lastMove as NormalMove?,
-              interactiveBoardParams: (
-                variant: Variant.standard,
-                position: puzzleState.currentPosition,
-                playerSide:
-                    puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
-                    ? PlayerSide.none
-                    : puzzleState.mode == PuzzleMode.view
-                    ? PlayerSide.both
-                    : puzzleState.pov == Side.white
-                    ? PlayerSide.white
-                    : PlayerSide.black,
-                promotionMove: puzzleState.promotionMove,
-                onMove: (move, {isDrop}) {
-                  ref.read(ctrlProvider.notifier).onUserMove(move);
-                },
-                onPromotionSelection: (role) {
-                  ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-                },
-                premovable: null,
-              ),
-              shapes: puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
-                  ? ISet([
-                      Arrow(
-                        color: const Color(0x66003088),
-                        orig: evalBestMove.from,
-                        dest: evalBestMove.to,
-                      ),
-                    ])
-                  : puzzleState.hintSquare != null
-                  ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
-                  : null,
-              engineGauge: puzzleState.isEngineAvailable(enginePrefs)
-                  ? (
-                      isLocalEngineAvailable: true,
-                      orientation: puzzleState.pov,
-                      position: puzzleState.currentPosition,
-                      savedEval: puzzleState.node.eval,
-                      serverEval: puzzleState.node.serverEval,
-                    )
-                  : null,
-              showEngineGaugePlaceholder: true,
-              topTable: Center(
-                child: PuzzleFeedbackWidget(
-                  puzzle: puzzleState.puzzle,
-                  state: puzzleState,
-                  onStreak: false,
+    final content = PopScope(
+      canPop: puzzleState.mode == PuzzleMode.view,
+      onPopInvokedWithResult: (bool didPop, _) async {
+        if (didPop) {
+          return;
+        }
+        final NavigatorState navigator = Navigator.of(context);
+        final shouldPop = await showAdaptiveDialog<bool>(
+          context: context,
+          builder: (context) => YesNoDialog(
+            title: Text(context.l10n.mobileAreYouSure),
+            content: Text(context.l10n.mobilePuzzleStormConfirmEndRun),
+            onYes: () {
+              return Navigator.of(context).pop(true);
+            },
+            onNo: () => Navigator.of(context).pop(false),
+          ),
+        );
+        if (shouldPop ?? false) {
+          navigator.pop();
+        }
+      },
+      child: SafeArea(
+        // view padding can change on Android when immersive mode is enabled, so to prevent any
+        // board vertical shift, we set `maintainBottomViewPadding` to true.
+        maintainBottomViewPadding: true,
+        child: Column(
+          children: [
+            Expanded(
+              child: BoardTable(
+                boardKey: boardKey,
+                orientation: puzzleState.pov,
+                lastMove: puzzleState.lastMove as NormalMove?,
+                interactiveBoardParams: (
+                  variant: Variant.standard,
+                  position: puzzleState.currentPosition,
+                  playerSide:
+                      puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
+                      ? PlayerSide.none
+                      : puzzleState.mode == PuzzleMode.view
+                      ? PlayerSide.both
+                      : puzzleState.pov == Side.white
+                      ? PlayerSide.white
+                      : PlayerSide.black,
+                  promotionMove: puzzleState.promotionMove,
+                  onMove: (move, {isDrop}) {
+                    ref.read(ctrlProvider.notifier).onUserMove(move);
+                  },
+                  onPromotionSelection: (role) {
+                    ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+                  },
+                  premovable: null,
                 ),
-              ),
-              bottomTable: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (puzzleState.glicko != null)
-                    RatingPrefAware(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: Row(
-                          children: [
-                            Text(context.l10n.rating),
-                            const SizedBox(width: 5.0),
-                            TweenAnimationBuilder<double>(
-                              tween: Tween<double>(
-                                begin: puzzleState.glicko!.rating,
-                                end:
-                                    puzzleState.nextContext?.glicko?.rating ??
-                                    puzzleState.glicko!.rating,
+                shapes: puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
+                    ? ISet([
+                        Arrow(
+                          color: const Color(0x66003088),
+                          orig: evalBestMove.from,
+                          dest: evalBestMove.to,
+                        ),
+                      ])
+                    : puzzleState.hintSquare != null
+                    ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
+                    : null,
+                engineGauge: puzzleState.isEngineAvailable(enginePrefs)
+                    ? (
+                        isLocalEngineAvailable: true,
+                        orientation: puzzleState.pov,
+                        position: puzzleState.currentPosition,
+                        savedEval: puzzleState.node.eval,
+                        serverEval: puzzleState.node.serverEval,
+                      )
+                    : null,
+                showEngineGaugePlaceholder: true,
+                topTable: Center(
+                  child: PuzzleFeedbackWidget(
+                    puzzle: puzzleState.puzzle,
+                    state: puzzleState,
+                    onStreak: false,
+                  ),
+                ),
+                bottomTable: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (puzzleState.glicko != null)
+                      RatingPrefAware(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 6.0),
+                          child: Row(
+                            children: [
+                              Text(context.l10n.rating),
+                              const SizedBox(width: 5.0),
+                              TweenAnimationBuilder<double>(
+                                tween: Tween<double>(
+                                  begin: puzzleState.glicko!.rating,
+                                  end:
+                                      puzzleState.nextContext?.glicko?.rating ??
+                                      puzzleState.glicko!.rating,
+                                ),
+                                duration: const Duration(milliseconds: 500),
+                                builder: (context, double rating, _) {
+                                  return Text(
+                                    rating.truncate().toString(),
+                                    style: const TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
                               ),
-                              duration: const Duration(milliseconds: 500),
-                              builder: (context, double rating, _) {
-                                return Text(
-                                  rating.truncate().toString(),
-                                  style: const TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
+                    PuzzleSessionWidget(
+                      initialPuzzleContext: initialPuzzleContext,
+                      ctrlProvider: ctrlProvider,
                     ),
-                  PuzzleSessionWidget(
-                    initialPuzzleContext: initialPuzzleContext,
-                    ctrlProvider: ctrlProvider,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
+            _BottomBar(
+              initialPuzzleContext: initialPuzzleContext,
+              puzzleId: puzzleState.puzzle.puzzle.id,
+            ),
+          ],
         ),
-        _BottomBar(
-          initialPuzzleContext: initialPuzzleContext,
-          puzzleId: puzzleState.puzzle.puzzle.id,
-        ),
-      ],
+      ),
     );
+
+    return Theme.of(context).platform == TargetPlatform.android
+        ? AndroidGesturesExclusionWidget(
+            boardKey: boardKey,
+            shouldExcludeGesturesOnFocusGained: () => puzzleState.mode != PuzzleMode.view,
+            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+            child: content,
+          )
+        : content;
   }
 }
 
