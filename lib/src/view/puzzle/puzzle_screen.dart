@@ -372,7 +372,7 @@ class _Body extends ConsumerWidget {
                     if (puzzleState.glicko != null)
                       RatingPrefAware(
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
+                          padding: const EdgeInsets.only(top: 6.0),
                           child: Row(
                             children: [
                               Text(context.l10n.rating),
