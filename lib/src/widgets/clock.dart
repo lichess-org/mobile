@@ -51,7 +51,6 @@ class Clock extends StatelessWidget {
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final showTenths = timeLeft < _showTenthsThreshold;
     final isEmergency = emergencyThreshold != null && timeLeft <= emergencyThreshold!;
-    final remainingHeight = estimateHeightMinusBoard(context);
 
     final hoursDisplay = padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
     final minsDisplay = padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
@@ -92,7 +91,7 @@ class Clock extends StatelessWidget {
                               : effectiveClockStyle.activeTextColor
                         : effectiveClockStyle.textColor,
                     fontSize: _kClockFontSize * fontScaleFactor,
-                    height: remainingHeight < kSmallHeightMinusBoard ? 1.0 : null,
+                    height: isShortVerticalScreen(context) ? 1.0 : null,
                     fontFeatures: const [FontFeature.tabularFigures()],
                   ),
                   children: [

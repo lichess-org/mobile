@@ -44,7 +44,6 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final remainingHeight = estimateHeightMinusBoard(context);
 
     final androidVersionAsync = ref.watch(androidVersionProvider);
 
@@ -156,7 +155,7 @@ class _Body extends ConsumerWidget {
                     : const SizedBox.shrink(),
                 orElse: () => const SizedBox.shrink(),
               ),
-            if (remainingHeight >= kSmallHeightMinusBoard)
+            if (isShortVerticalScreen(context))
               SwitchSettingTile(
                 title: Text(context.l10n.preferencesMoveListWhilePlaying),
                 value: boardPrefs.moveListDisplay,

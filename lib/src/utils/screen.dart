@@ -13,6 +13,11 @@ double estimateHeightMinusBoard(BuildContext context) {
   return size.height - viewPadding.vertical - boardSize - kToolbarHeight - kBottomBarHeight;
 }
 
+/// Returns true if the device has a short amount of vertical space on board screens.
+bool isShortVerticalScreen(BuildContext context) {
+  return estimateHeightMinusBoard(context) < kSmallHeightMinusBoard;
+}
+
 // ignore: avoid_classes_with_only_static_members
 abstract class FormFactor {
   static const double desktop = 900;

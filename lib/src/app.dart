@@ -108,7 +108,6 @@ class _AppState extends ConsumerState<Application> {
     final theme = makeAppTheme(context, generalPrefs, boardPrefs);
 
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    final remainingHeight = estimateHeightMinusBoard(context);
 
     return MaterialApp(
       localizationsDelegates: const [
@@ -124,7 +123,7 @@ class _AppState extends ConsumerState<Application> {
             ? null
             : NavigationBarTheme.of(
                 context,
-              ).copyWith(height: remainingHeight < kSmallHeightMinusBoard ? 60 : null),
+              ).copyWith(height: isShortVerticalScreen(context) ? 60 : null),
       ),
       onGenerateRoute: (settings) =>
           settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,
