@@ -28,7 +28,6 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Kürzlich Gsuechts</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Rückmäldig mit Vibration</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Ibettete Modus</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">UI-Syschtem während em schpille usblände. Benutz die Option, wänn dich d\'Navigationsgeschte, vum Sysychtem, am Bildschirmrand störed. Das gilt für Schpiel- und Puzzle Storm-Bildschirm.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ischtelle</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Teil s\'PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Teil d\'Schpiel-URL</string>
