@@ -1,9 +1,8 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -16,16 +15,12 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 final _dateFormatter = DateFormat.yMMMd();
 
 class UserActivityWidget extends ConsumerWidget {
-  const UserActivityWidget({this.user, super.key});
+  const UserActivityWidget({required this.activity, super.key});
 
-  final User? user;
+  final AsyncValue<IList<UserActivity>> activity;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activity = user != null
-        ? ref.watch(userActivityProvider(id: user!.id))
-        : ref.watch(accountActivityProvider);
-
     return activity.when(
       data: (data) {
         final nonEmptyActivities = data.where((entry) => entry.isNotEmpty);

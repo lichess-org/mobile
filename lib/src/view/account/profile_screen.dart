@@ -1,7 +1,12 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -29,12 +34,19 @@ class ProfileScreen extends ConsumerStatefulWidget {
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
+final _accountActivityProvider = FutureProvider.autoDispose<IList<UserActivity>>((ref) {
+  final session = ref.watch(authSessionProvider);
+  if (session == null) return IList();
+  return ref.withClient((client) => UserRepository(client).getActivity(session.user.id));
+}, name: 'userActivityProvider');
+
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
+    final activity = ref.watch(_accountActivityProvider);
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: account.when(
@@ -63,7 +75,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ? MediaQuery.paddingOf(context).top + kToolbarHeight
                 : 0.0,
             key: _refreshIndicatorKey,
-            onRefresh: () async => ref.refresh(accountProvider),
+            onRefresh: () => Future.wait([
+              ref.refresh(accountProvider.future),
+              ref.refresh(_accountActivityProvider.future),
+              ref.refresh(myRecentGamesProvider.future),
+            ]),
             child: ListView(
               children: [
                 UserProfileWidget(user: user),
@@ -86,7 +102,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ],
                   ),
-                const UserActivityWidget(),
+                UserActivityWidget(activity: activity),
                 RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
               ],
             ),

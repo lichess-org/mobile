@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -38,16 +37,6 @@ Future<LightUser?> accountUser(Ref ref) async {
 @riverpod
 Future<bool> kidMode(Ref ref) async {
   return ref.watch(accountProvider.selectAsync((user) => user?.kid ?? false));
-}
-
-@riverpod
-Future<IList<UserActivity>> accountActivity(Ref ref) async {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return IList();
-  return ref.withClientCacheFor(
-    (client) => UserRepository(client).getActivity(session.user.id),
-    const Duration(hours: 1),
-  );
 }
 
 /// A provider that fetches the ongoing games for the current user.

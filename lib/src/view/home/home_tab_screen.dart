@@ -460,7 +460,6 @@ class _HelloWidget extends ConsumerWidget {
         padding: Styles.bodyPadding,
         child: GestureDetector(
           onTap: () {
-            ref.invalidate(accountActivityProvider);
             Navigator.of(context).push(ProfileScreen.buildRoute(context));
           },
           child: Row(

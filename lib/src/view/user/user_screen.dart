@@ -1,10 +1,13 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -110,6 +113,11 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 }
 
+final _userActivityProvider = FutureProvider.autoDispose.family<IList<UserActivity>, UserId>(
+  (ref, id) => ref.withClient((client) => UserRepository(client).getActivity(id)),
+  name: 'userActivityProvider',
+);
+
 class _UserProfileListView extends ConsumerWidget {
   const _UserProfileListView(this.user, this.isLoading, this.setIsLoading);
   final User user;
@@ -120,6 +128,7 @@ class _UserProfileListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recentGames = ref.watch(userRecentGamesProvider(userId: user.id));
+    final activity = ref.watch(_userActivityProvider(user.id));
     final nbOfGames = ref.watch(userNumberOfGamesProvider(user.lightUser)).valueOrNull ?? 0;
     final session = ref.watch(authSessionProvider);
 
@@ -203,7 +212,7 @@ class _UserProfileListView extends ConsumerWidget {
               ),
             ],
           ),
-        UserActivityWidget(user: user),
+        UserActivityWidget(activity: activity),
         RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: user.lightUser),
       ],
     );
