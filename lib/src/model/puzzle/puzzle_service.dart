@@ -60,6 +60,9 @@ sealed class PuzzleContext with _$PuzzleContext {
 
     /// List of solved puzzle results if available.
     IList<PuzzleRound>? rounds,
+
+    /// If true, will force all puzzles of the run to be solved in casual mode.
+    bool? casualRun,
   }) = _PuzzleContext;
 }
 
@@ -157,13 +160,12 @@ class PuzzleService {
 
     final deficit = max(0, queueLength - unsolved.length);
 
-    if (deficit > 0) {
-      _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
+    if (deficit > 0 || solved.isNotEmpty) {
+      _log.fine('Will sync puzzles with lichess (deficit: $deficit, solved: ${solved.length})');
 
       final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
 
       // anonymous users can't solve puzzles so we just download the deficit
-      // we send the request even if the deficit is 0 to get the glicko rating
       final batchResponse = _ref.withClient(
         (client) => Result.capture(
           solved.isNotEmpty && userId != null

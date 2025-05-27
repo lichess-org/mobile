@@ -47,28 +47,42 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 
 class PuzzleScreen extends ConsumerStatefulWidget {
   /// Creates a new puzzle screen.
   ///
   /// If [puzzle] or [puzzleId] are provided, the screen will load the puzzle with that id. Otherwise, it will load the next puzzle from the queue.
-  const PuzzleScreen({required this.angle, this.puzzle, this.puzzleId, super.key});
+  const PuzzleScreen({
+    required this.angle,
+    this.puzzle,
+    this.puzzleId,
+    this.openCasualRun = false,
+    super.key,
+  });
 
   final PuzzleAngle angle;
   final Puzzle? puzzle;
   final PuzzleId? puzzleId;
+
+  /// If true, all puzzles played in this run will be casual puzzles. (Only if [puzzleId] is provided.)
+  final bool openCasualRun;
 
   static Route<dynamic> buildRoute(
     BuildContext context, {
     required PuzzleAngle angle,
     PuzzleId? puzzleId,
     Puzzle? puzzle,
+    bool openCasualRun = false,
   }) {
     return buildScreenRoute(
       context,
-      screen: PuzzleScreen(angle: angle, puzzleId: puzzleId, puzzle: puzzle),
+      screen: PuzzleScreen(
+        angle: angle,
+        puzzleId: puzzleId,
+        puzzle: puzzle,
+        openCasualRun: openCasualRun,
+      ),
     );
   }
 
@@ -107,7 +121,12 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
     return widget.puzzle != null
         ? _LoadPuzzleFromPuzzle(boardKey: _boardKey, angle: widget.angle, puzzle: widget.puzzle!)
         : widget.puzzleId != null
-        ? _LoadPuzzleFromId(boardKey: _boardKey, angle: widget.angle, id: widget.puzzleId!)
+        ? _LoadPuzzleFromId(
+            boardKey: _boardKey,
+            angle: widget.angle,
+            id: widget.puzzleId!,
+            openCasualRun: widget.openCasualRun,
+          )
         : _LoadNextPuzzle(boardKey: _boardKey, angle: widget.angle);
   }
 }
@@ -225,11 +244,17 @@ class _LoadPuzzleFromPuzzle extends ConsumerWidget {
 }
 
 class _LoadPuzzleFromId extends ConsumerWidget {
-  const _LoadPuzzleFromId({required this.boardKey, required this.angle, required this.id});
+  const _LoadPuzzleFromId({
+    required this.boardKey,
+    required this.angle,
+    required this.id,
+    this.openCasualRun = false,
+  });
 
   final PuzzleAngle angle;
   final PuzzleId id;
   final GlobalKey boardKey;
+  final bool openCasualRun;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -242,6 +267,7 @@ class _LoadPuzzleFromId extends ConsumerWidget {
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
           puzzle: data,
           userId: session?.user.id,
+          casualRun: openCasualRun ? true : null,
         );
         return _PuzzleScaffold(
           angle: angle,
@@ -297,6 +323,11 @@ class _PuzzleScaffold extends StatelessWidget {
     return WakelockWidget(
       child: Scaffold(
         appBar: AppBar(
+          leading: BackButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
           actions: [
             const ToggleSoundButton(),
             if (initialPuzzleContext != null) _PuzzleSettingsButton(initialPuzzleContext!),
@@ -326,26 +357,6 @@ class _Body extends ConsumerWidget {
 
     final content = PopScope(
       canPop: puzzleState.mode == PuzzleMode.view,
-      onPopInvokedWithResult: (bool didPop, _) async {
-        if (didPop) {
-          return;
-        }
-        final NavigatorState navigator = Navigator.of(context);
-        final shouldPop = await showAdaptiveDialog<bool>(
-          context: context,
-          builder: (context) => YesNoDialog(
-            title: Text(context.l10n.mobileAreYouSure),
-            content: Text(context.l10n.mobilePuzzleStormConfirmEndRun),
-            onYes: () {
-              return Navigator.of(context).pop(true);
-            },
-            onNo: () => Navigator.of(context).pop(false),
-          ),
-        );
-        if (shouldPop ?? false) {
-          navigator.pop();
-        }
-      },
       child: SafeArea(
         // view padding can change on Android when immersive mode is enabled, so to prevent any
         // board vertical shift, we set `maintainBottomViewPadding` to true.
@@ -721,7 +732,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final signedIn = ref.watch(authSessionProvider)?.user.id != null;
+    final session = ref.watch(authSessionProvider);
     final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
     final rated = ref.watch(puzzlePreferencesProvider.select((value) => value.rated));
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
@@ -779,13 +790,16 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                 ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
               },
             ),
-            if (signedIn)
+            if (session != null)
               SwitchSettingTile(
                 title: Text(context.l10n.rated),
-                value: rated,
-                onChanged: (value) {
-                  ref.read(puzzlePreferencesProvider.notifier).setRated(value);
-                },
+                // ignore: avoid_bool_literals_in_conditional_expressions
+                value: initialPuzzleContext.casualRun == true ? false : rated,
+                onChanged: initialPuzzleContext.casualRun == true
+                    ? null
+                    : (value) {
+                        ref.read(puzzlePreferencesProvider.notifier).setRated(value);
+                      },
               ),
             ListTile(
               title: const Text('Board settings'),

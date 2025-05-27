@@ -293,6 +293,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
           win: state.result == PuzzleResult.win,
           rated:
               initialContext.userId != null &&
+              initialContext.casualRun != true &&
               !state.hintShown &&
               ref.read(puzzlePreferencesProvider).rated,
         ),

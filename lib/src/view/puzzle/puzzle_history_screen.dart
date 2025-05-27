@@ -22,10 +22,16 @@ final _dateFormatter = DateFormat.yMMMd();
 
 /// Shows a short preview of the puzzle history.
 class PuzzleHistoryPreview extends ConsumerWidget {
-  const PuzzleHistoryPreview(this.history, {this.maxRows, super.key});
+  const PuzzleHistoryPreview(
+    this.history, {
+    this.maxRows,
+    this.shouldOpenCasualPuzzleRun,
+    super.key,
+  });
 
   final IList<PuzzleHistoryEntry> history;
   final int? maxRows;
+  final bool? shouldOpenCasualPuzzleRun;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,6 +50,7 @@ class PuzzleHistoryPreview extends ConsumerWidget {
                   context,
                   angle: const PuzzleTheme(PuzzleThemeKey.mix),
                   puzzleId: e.id,
+                  openCasualRun: shouldOpenCasualPuzzleRun ?? false,
                 ),
               );
             },

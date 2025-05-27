@@ -564,14 +564,21 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
             const SizedBox(height: 16),
             Card(
               margin: Styles.bodySectionPadding,
-              child: ListTile(
-                leading: Icon(LichessIcons.storm, size: 46, color: ColorScheme.of(context).primary),
-                title: Text(
-                  newHighTitle(context, widget.stats.newHigh!),
-                  style: Styles.sectionTitle,
-                ),
-                subtitle: Text(
-                  context.l10n.stormPreviousHighscoreWasX(widget.stats.newHigh!.prev.toString()),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ListTile(
+                  leading: Icon(
+                    LichessIcons.storm,
+                    size: 46,
+                    color: ColorScheme.of(context).primary,
+                  ),
+                  title: Text(
+                    newHighTitle(context, widget.stats.newHigh!),
+                    style: Styles.sectionTitle,
+                  ),
+                  subtitle: Text(
+                    context.l10n.stormPreviousHighscoreWasX(widget.stats.newHigh!.prev.toString()),
+                  ),
                 ),
               ),
             ),
@@ -646,7 +653,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                 ),
                 const SizedBox(height: 3.0),
                 if (puzzleList.isNotEmpty)
-                  PuzzleHistoryPreview(puzzleList)
+                  PuzzleHistoryPreview(puzzleList, shouldOpenCasualPuzzleRun: true)
                 else
                   Center(child: Text(context.l10n.mobilePuzzleStormFilterNothingToShow)),
               ],
