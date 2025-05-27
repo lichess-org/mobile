@@ -168,7 +168,9 @@ class _UserList extends ConsumerWidget {
                     .toList(),
               ),
             )
-          : Center(child: Text(context.l10n.mobileNoSearchResults, style: Styles.centeredMessage)),
+          : Center(
+              child: Text(context.l10n.mobileNoSearchResults, style: Styles.noResultTextStyle),
+            ),
       error: (e, _) {
         debugPrint('Error loading search results: $e');
         return const Center(child: Text('Could not load search results.'));

@@ -49,9 +49,9 @@ class _Body extends ConsumerWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.info_outline, size: 30),
+                  const Icon(Icons.info_outline, size: 25, color: Colors.grey),
                   const SizedBox(width: 8),
-                  Text(context.l10n.noChallenges, style: TextTheme.of(context).headlineSmall),
+                  Text(context.l10n.noChallenges, style: Styles.noResultTextStyle),
                 ],
               ),
             ),

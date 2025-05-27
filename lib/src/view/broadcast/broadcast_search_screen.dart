@@ -49,7 +49,7 @@ class _BroadcastSearchScreenState extends State<BroadcastSearchScreen> {
                 : const Center(
                     child: Text(
                       'Search is empty', // TODO: translate
-                      style: Styles.centeredMessage,
+                      style: Styles.noResultTextStyle,
                     ),
                   )
           : kEmptyWidget,
@@ -122,7 +122,7 @@ class _BodyState extends ConsumerState<_Body> {
                       : BroadcastListTile(broadcast: broadcasts[index]),
                 )
               : Center(
-                  child: Text(context.l10n.mobileNoSearchResults, style: Styles.centeredMessage),
+                  child: Text(context.l10n.mobileNoSearchResults, style: Styles.noResultTextStyle),
                 );
         },
         error: (_, _) => const Center(child: Text('Could not load round data')),

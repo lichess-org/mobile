@@ -71,7 +71,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   static const offlineWidget = Center(
-    child: Text('No internet connection.', style: Styles.centeredMessage),
+    child: Text('No internet connection.', style: Styles.noResultTextStyle),
   );
 
   @override
