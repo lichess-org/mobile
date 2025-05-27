@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
@@ -78,8 +79,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
     final session = ref.watch(authSessionProvider);
     switch (ref.watch(chatControllerProvider(widget.options))) {
       case AsyncData(:final value):
-        return Scaffold(
-          appBar: AppBar(
+        return PlatformScaffold(
+          appBar: PlatformAppBar(
             title: widget.options.isPublic
                 ? Text(context.l10n.chatRoom)
                 : widget.options.opponent == null
@@ -118,9 +119,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
           ),
         );
       case AsyncError(:final error):
-        return Scaffold(body: Center(child: Text(error.toString())));
+        return PlatformScaffold(body: Center(child: Text(error.toString())));
       case _:
-        return const Scaffold(body: Center(child: CircularProgressIndicator.adaptive()));
+        return const PlatformScaffold(body: Center(child: CircularProgressIndicator.adaptive()));
     }
   }
 }
@@ -133,7 +134,7 @@ class _MessageBubble extends ConsumerWidget {
   final bool showUsername;
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
-      you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainerLow;
+      you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainer;
 
   Color _textColor(BuildContext context, Brightness brightness) =>
       you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;
