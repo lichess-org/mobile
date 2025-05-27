@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 
 /// A simple widget that builds different things on different platforms.
@@ -129,7 +130,13 @@ class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return isIOS
         ? ClipRect(
-            child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), child: appBar),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: kCupertinoBarBlurSigma,
+                sigmaY: kCupertinoBarBlurSigma,
+              ),
+              child: appBar,
+            ),
           )
         : appBar;
   }

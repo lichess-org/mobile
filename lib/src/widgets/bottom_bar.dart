@@ -37,7 +37,7 @@ class BottomBar extends StatelessWidget {
     Widget bar = BottomAppBar(
       color: Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent
           ? (BottomAppBarTheme.of(context).color ?? ColorScheme.of(context).surface).withValues(
-              alpha: 0.9,
+              alpha: kCupertinoBarOpacity,
             )
           : null,
       height: kBottomBarHeight,
@@ -52,7 +52,10 @@ class BottomBar extends StatelessWidget {
 
     if (Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent) {
       bar = ClipRect(
-        child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), child: bar),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: kCupertinoBarBlurSigma, sigmaY: kCupertinoBarBlurSigma),
+          child: bar,
+        ),
       );
     }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -126,7 +127,9 @@ ThemeData _makeDefaultTheme(
     cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     appBarTheme: _appBarTheme.copyWith(
-      backgroundColor: isIOS ? theme.colorScheme.surface.withValues(alpha: 0.9) : null,
+      backgroundColor: isIOS
+          ? theme.colorScheme.surface.withValues(alpha: kCupertinoBarOpacity)
+          : null,
       scrolledUnderElevation: isIOS ? 0 : null,
       titleTextStyle: isIOS
           ? const CupertinoTextThemeData().navTitleTextStyle.copyWith(
@@ -135,7 +138,9 @@ ThemeData _makeDefaultTheme(
           : null,
     ),
     navigationBarTheme: isIOS
-        ? NavigationBarThemeData(backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.9))
+        ? NavigationBarThemeData(
+            backgroundColor: theme.colorScheme.surface.withValues(alpha: kCupertinoBarOpacity),
+          )
         : null,
     bottomAppBarTheme: BottomAppBarTheme(
       color: theme.colorScheme.surface,
@@ -226,7 +231,7 @@ ThemeData _makeBackgroundImageTheme({
           ),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: _appBarTheme.copyWith(
-      backgroundColor: isBackgroundImage ? null : seedColor.withValues(alpha: 0.9),
+      backgroundColor: isBackgroundImage ? null : seedColor.withValues(alpha: kCupertinoBarOpacity),
       scrolledUnderElevation: isIOS ? 0 : null,
       titleTextStyle: isIOS
           ? const CupertinoTextThemeData().navTitleTextStyle.copyWith(
@@ -238,7 +243,7 @@ ThemeData _makeBackgroundImageTheme({
         ? NavigationBarThemeData(
             backgroundColor: isBackgroundImage
                 ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
-                : seedColor.withValues(alpha: 0.9),
+                : seedColor.withValues(alpha: kCupertinoBarOpacity),
           )
         : null,
     bottomAppBarTheme: BottomAppBarTheme(

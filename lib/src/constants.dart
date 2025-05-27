@@ -36,6 +36,8 @@ const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
 
 // UI
+const double kCupertinoBarBlurSigma = 30.0;
+const double kCupertinoBarOpacity = 0.8;
 
 const kDefaultSeedColor = Color.fromARGB(255, 191, 128, 29);
 
