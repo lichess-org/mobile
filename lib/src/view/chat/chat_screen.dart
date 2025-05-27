@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
@@ -79,8 +78,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
     final session = ref.watch(authSessionProvider);
     switch (ref.watch(chatControllerProvider(widget.options))) {
       case AsyncData(:final value):
-        return PlatformScaffold(
-          appBar: PlatformAppBar(
+        return Scaffold(
+          appBar: AppBar(
             title: widget.options.isPublic
                 ? Text(context.l10n.chatRoom)
                 : widget.options.opponent == null
@@ -96,7 +95,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
                   child: ListView.builder(
                     // remove the automatic bottom padding of the ListView which is here taken care
                     // of by the _ChatBottomBar
-                    padding: MediaQuery.of(context).padding.copyWith(bottom: 0),
+                    padding: MediaQuery.paddingOf(context).copyWith(bottom: 0),
                     reverse: true,
                     itemCount: value.messages.length,
                     itemBuilder: (context, index) {
@@ -119,9 +118,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
           ),
         );
       case AsyncError(:final error):
-        return PlatformScaffold(body: Center(child: Text(error.toString())));
+        return Scaffold(body: Center(child: Text(error.toString())));
       case _:
-        return const PlatformScaffold(body: Center(child: CircularProgressIndicator.adaptive()));
+        return const Scaffold(body: Center(child: CircularProgressIndicator.adaptive()));
     }
   }
 }
@@ -134,7 +133,7 @@ class _MessageBubble extends ConsumerWidget {
   final bool showUsername;
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
-      you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainer;
+      you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainerHigh;
 
   Color _textColor(BuildContext context, Brightness brightness) =>
       you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;
