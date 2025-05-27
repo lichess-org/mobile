@@ -28,6 +28,7 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">最近の検索</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">振動フィードバック</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">没入モード</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">プレイ中にシステムの UI を非表示にします。画面端のナビゲーションなどがじゃまだと思う場合に使ってください。対局とタクティクス問題に適用されます。</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">設定</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN を共有</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">ゲーム URLを共有</string>
