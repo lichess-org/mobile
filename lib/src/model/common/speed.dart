@@ -34,6 +34,23 @@ enum Speed {
     }
   }
 
+  String get label {
+    switch (this) {
+      case Speed.ultraBullet:
+        return 'UltraBullet';
+      case Speed.bullet:
+        return 'Bullet';
+      case Speed.blitz:
+        return 'Blitz';
+      case Speed.rapid:
+        return 'Rapid';
+      case Speed.classical:
+        return 'Classical';
+      case Speed.correspondence:
+        return 'Correspondence';
+    }
+  }
+
   static final IMap<String, Speed> nameMap = IMap(Speed.values.asNameMap());
 }
 

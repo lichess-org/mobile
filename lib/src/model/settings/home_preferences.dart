@@ -65,7 +65,7 @@ enum HomeEditableWidget {
 sealed class HomePrefs with _$HomePrefs implements Serializable {
   const factory HomePrefs({required IList<HomeEditableWidget> disabledWidgets}) = _HomePrefs;
 
-  static const defaults = HomePrefs(disabledWidgets: _kEmptyList);
+  static const defaults = HomePrefs(disabledWidgets: _defaultList);
 
   factory HomePrefs.fromJson(Map<String, dynamic> json) {
     try {
@@ -76,4 +76,4 @@ sealed class HomePrefs with _$HomePrefs implements Serializable {
   }
 }
 
-const _kEmptyList = IListConst<HomeEditableWidget>([]);
+const _defaultList = IListConst<HomeEditableWidget>([HomeEditableWidget.quickPairing]);

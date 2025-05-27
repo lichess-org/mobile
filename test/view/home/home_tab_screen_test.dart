@@ -97,17 +97,6 @@ void main() {
       );
     });
 
-    testWidgets('shows quick pairing matrix', (tester) async {
-      final app = await makeTestProviderScope(tester, child: const Application());
-      await tester.pumpWidget(app);
-
-      // wait for connectivity
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump();
-
-      expect(find.byType(QuickGameMatrix), findsOneWidget);
-    });
-
     testWidgets('no session, no stored game: shows welcome screen ', (tester) async {
       final app = await makeTestProviderScope(tester, child: const Application());
       await tester.pumpWidget(app);

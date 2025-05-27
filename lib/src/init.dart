@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -12,7 +13,7 @@ import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
@@ -33,9 +34,13 @@ Future<void> setupFirstLaunch() async {
   final appVersion = Version.parse(pInfo.version);
   final installedVersion = prefs.getString('installed_version');
 
-  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 14, 0)) {
-    // TODO remove this migration code after a few releases
-    _migrateThemeSettings();
+  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 15, 12)) {
+    // keep quick game matrix for already installed apps, since it was removed by default in 0.15.12
+    final homePrefs = prefs.getString(PrefCategory.home.storageKey);
+    if (homePrefs == null) {
+      const empty = HomePrefs(disabledWidgets: IListConst<HomeEditableWidget>([]));
+      prefs.setString(PrefCategory.home.storageKey, jsonEncode(empty.toJson()));
+    }
   }
 
   if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
@@ -58,30 +63,6 @@ Future<void> setupFirstLaunch() async {
     }
 
     await prefs.setBool('first_run', false);
-  }
-}
-
-Future<void> _migrateThemeSettings() async {
-  if (getCorePalette() == null) {
-    return;
-  }
-  final prefs = LichessBinding.instance.sharedPreferences;
-  try {
-    final stored = LichessBinding.instance.sharedPreferences.getString(
-      PrefCategory.general.storageKey,
-    );
-    if (stored == null) {
-      return;
-    }
-    final generalPrefs = GeneralPrefs.fromJson(jsonDecode(stored) as Map<String, dynamic>);
-    final migrated = generalPrefs.copyWith(
-      systemColors:
-          // ignore: deprecated_member_use_from_same_package
-          generalPrefs.appThemeSeed == AppThemeSeed.system,
-    );
-    await prefs.setString(PrefCategory.general.storageKey, jsonEncode(migrated.toJson()));
-  } catch (e) {
-    _logger.warning('Failed to migrate theme settings: $e');
   }
 }
 

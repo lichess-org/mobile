@@ -84,10 +84,11 @@ class _SectionChoices extends ConsumerWidget {
             Expanded(
               child: _ChoiceChip(
                 key: ValueKey(choice),
-                label: Text(
+                title: Text(
                   choice.display,
                   style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
                 ),
+                subtitle: Text(choice.speed.label, style: const TextStyle(fontSize: 14.0)),
                 speed: choice.speed,
                 onTap: isOnline
                     ? () {
@@ -116,7 +117,7 @@ class _SectionChoices extends ConsumerWidget {
             const SizedBox(width: _kMatrixSpacing),
             Expanded(
               child: _ChoiceChip(
-                label: Text(context.l10n.custom),
+                title: Text(context.l10n.custom),
                 onTap: isOnline
                     ? () {
                         showModalBottomSheet<void>(
@@ -139,9 +140,16 @@ class _SectionChoices extends ConsumerWidget {
 }
 
 class _ChoiceChip extends StatelessWidget {
-  const _ChoiceChip({required this.label, this.speed, required this.onTap, super.key});
+  const _ChoiceChip({
+    required this.title,
+    this.subtitle,
+    this.speed,
+    required this.onTap,
+    super.key,
+  });
 
-  final Widget label;
+  final Widget title;
+  final Widget? subtitle;
   final Speed? speed;
   final void Function()? onTap;
 
@@ -165,12 +173,16 @@ class _ChoiceChip extends StatelessWidget {
           onTap: onTap,
           splashColor: Theme.of(context).primaryColor.withValues(alpha: 0.5),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: DefaultTextStyle.merge(
               style: TextStyle(
                 color: Theme.of(context).textTheme.labelMedium?.color?.withValues(alpha: 0.8),
               ),
-              child: Center(child: label),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [title, if (subtitle != null) subtitle!],
+              ),
             ),
           ),
         ),

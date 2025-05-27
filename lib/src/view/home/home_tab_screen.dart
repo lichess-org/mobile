@@ -232,7 +232,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }) {
     final welcomeWidgets = [
       Padding(
-        padding: Styles.horizontalBodyPadding,
+        padding: Styles.bodySectionPadding,
         child: LichessMessage(style: TextTheme.of(context).bodyLarge, textAlign: TextAlign.center),
       ),
       const SizedBox(height: 24.0),
@@ -267,8 +267,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             Expanded(
               child: Column(
                 children: [
-                  ...welcomeWidgets,
                   FeaturedTournamentsWidget(featured: featuredTournaments),
+                  ...welcomeWidgets,
                 ],
               ),
             ),
@@ -281,13 +281,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             shouldShow: true,
             child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
           ),
-        ...welcomeWidgets,
         if (status.isOnline)
           _EditableWidget(
             widget: HomeEditableWidget.featuredTournaments,
             shouldShow: true,
             child: FeaturedTournamentsWidget(featured: featuredTournaments),
           ),
+        ...welcomeWidgets,
       ],
     ];
   }
