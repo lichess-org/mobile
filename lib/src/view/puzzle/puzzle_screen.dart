@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
@@ -52,20 +53,22 @@ import 'package:share_plus/share_plus.dart';
 class PuzzleScreen extends ConsumerStatefulWidget {
   /// Creates a new puzzle screen.
   ///
-  /// If [puzzleId] is provided, the screen will load the puzzle with that id. Otherwise, it will load the next puzzle from the queue.
-  const PuzzleScreen({required this.angle, this.puzzleId, super.key});
+  /// If [puzzle] or [puzzleId] are provided, the screen will load the puzzle with that id. Otherwise, it will load the next puzzle from the queue.
+  const PuzzleScreen({required this.angle, this.puzzle, this.puzzleId, super.key});
 
   final PuzzleAngle angle;
+  final Puzzle? puzzle;
   final PuzzleId? puzzleId;
 
   static Route<dynamic> buildRoute(
     BuildContext context, {
     required PuzzleAngle angle,
     PuzzleId? puzzleId,
+    Puzzle? puzzle,
   }) {
     return buildScreenRoute(
       context,
-      screen: PuzzleScreen(angle: angle, puzzleId: puzzleId),
+      screen: PuzzleScreen(angle: angle, puzzleId: puzzleId, puzzle: puzzle),
     );
   }
 
@@ -101,19 +104,32 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return widget.puzzleId != null
+    return widget.puzzle != null
+        ? _LoadPuzzleFromPuzzle(boardKey: _boardKey, angle: widget.angle, puzzle: widget.puzzle!)
+        : widget.puzzleId != null
         ? _LoadPuzzleFromId(boardKey: _boardKey, angle: widget.angle, id: widget.puzzleId!)
         : _LoadNextPuzzle(boardKey: _boardKey, angle: widget.angle);
   }
 }
 
 class _Title extends ConsumerWidget {
-  const _Title({required this.angle});
+  const _Title({required this.angle, this.initialPuzzleContext});
 
   final PuzzleAngle angle;
+  final PuzzleContext? initialPuzzleContext;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    bool isDailyPuzzle = false;
+    if (initialPuzzleContext != null) {
+      isDailyPuzzle =
+          ref.watch(puzzleControllerProvider(initialPuzzleContext!)).puzzle.isDailyPuzzle == true;
+    }
+
+    if (isDailyPuzzle) {
+      return Text(context.l10n.puzzleDailyPuzzle);
+    }
+
     return switch (angle) {
       PuzzleTheme(themeKey: final key) =>
         key == PuzzleThemeKey.mix
@@ -182,6 +198,29 @@ class _LoadNextPuzzle extends ConsumerWidget {
           body: const Center(child: CircularProgressIndicator.adaptive()),
         );
     }
+  }
+}
+
+class _LoadPuzzleFromPuzzle extends ConsumerWidget {
+  const _LoadPuzzleFromPuzzle({required this.boardKey, required this.angle, required this.puzzle});
+
+  final PuzzleAngle angle;
+  final Puzzle puzzle;
+  final GlobalKey boardKey;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    final initialPuzzleContext = PuzzleContext(
+      angle: const PuzzleTheme(PuzzleThemeKey.mix),
+      puzzle: puzzle,
+      userId: session?.user.id,
+    );
+    return _PuzzleScaffold(
+      angle: angle,
+      initialPuzzleContext: initialPuzzleContext,
+      body: _Body(boardKey: boardKey, initialPuzzleContext: initialPuzzleContext),
+    );
   }
 }
 
@@ -262,7 +301,7 @@ class _PuzzleScaffold extends StatelessWidget {
             const ToggleSoundButton(),
             if (initialPuzzleContext != null) _PuzzleSettingsButton(initialPuzzleContext!),
           ],
-          title: _Title(angle: angle),
+          title: _Title(angle: angle, initialPuzzleContext: initialPuzzleContext),
         ),
         body: body,
       ),
@@ -687,7 +726,6 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final rated = ref.watch(puzzlePreferencesProvider.select((value) => value.rated));
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
-    final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     return BottomSheetScrollableContainer(
@@ -696,7 +734,6 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
           materialFilledCard: true,
           children: [
             if (initialPuzzleContext.userId != null &&
-                !isDailyPuzzle &&
                 puzzleState.mode != PuzzleMode.view &&
                 isOnline)
               StatefulBuilder(

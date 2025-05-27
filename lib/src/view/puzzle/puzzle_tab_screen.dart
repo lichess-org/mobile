@@ -468,7 +468,7 @@ class DailyPuzzle extends ConsumerWidget {
               PuzzleScreen.buildRoute(
                 context,
                 angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                puzzleId: data.puzzle.id,
+                puzzle: data,
               ),
             );
           },

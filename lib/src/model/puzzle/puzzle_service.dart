@@ -111,17 +111,16 @@ class PuzzleService {
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     puzzleStorage.save(puzzle: puzzle);
-    final data = await batchStorage.fetch(userId: userId, angle: angle);
-    if (data != null) {
-      await batchStorage.save(
-        userId: userId,
-        angle: angle,
-        data: PuzzleBatch(
-          solved: IList([...data.solved, solution]),
-          unsolved: data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
-        ),
-      );
-    }
+    const emptyBatch = PuzzleBatch(solved: IListConst([]), unsolved: IListConst([]));
+    final data = await batchStorage.fetch(userId: userId, angle: angle) ?? emptyBatch;
+    await batchStorage.save(
+      userId: userId,
+      angle: angle,
+      data: PuzzleBatch(
+        solved: IList([...data.solved, solution]),
+        unsolved: data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
+      ),
+    );
     return nextPuzzle(userId: userId, angle: angle);
   }
 
