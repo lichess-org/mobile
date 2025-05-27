@@ -246,7 +246,7 @@ class _BroadcastGameTreeView extends ConsumerWidget {
       child: DebouncedPgnTreeView(
         root: state.root,
         currentPath: state.currentPath,
-        broadcastLivePath: state.broadcastLivePath,
+        livePath: state.broadcastLivePath,
         pgnRootComments: state.pgnRootComments,
         shouldShowComputerAnalysis: analysisPrefs.enableComputerAnalysis,
         shouldShowComments: analysisPrefs.enableComputerAnalysis && analysisPrefs.showPgnComments,

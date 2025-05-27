@@ -115,7 +115,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   const DebouncedPgnTreeView({
     required this.root,
     required this.currentPath,
-    this.broadcastLivePath,
+    this.livePath,
     required this.pgnRootComments,
     required this.notifier,
     this.shouldShowComputerAnalysis = true,
@@ -130,8 +130,8 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   /// Path to the currently selected move in the tree
   final UciPath currentPath;
 
-  /// Path to the last live move in the tree if it is a broadcast game
-  final UciPath? broadcastLivePath;
+  /// Path to the last live move in the tree if it is an ongoing game (usually broadcast or correspondence).
+  final UciPath? livePath;
 
   /// Comments associated with the root node
   final IList<PgnComment>? pgnRootComments;
@@ -167,8 +167,9 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   /// Path to the currently selected move in the tree. When widget.currentPath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every played move.
   late UciPath pathToCurrentMove;
 
-  /// Path to the last live move in the tree if it is a broadcast game. When widget.broadcastLivePath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every received move.
-  late UciPath? pathToBroadcastLiveMove;
+  /// Path to the last live move in the tree if it is an ongoing game (usually broadcast or correspondence).
+  /// When widget.livePath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every received move.
+  late UciPath? pathToLiveMove;
 
   Timer? _scrollTimer;
 
@@ -176,7 +177,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   void initState() {
     super.initState();
     pathToCurrentMove = widget.currentPath;
-    pathToBroadcastLiveMove = widget.broadcastLivePath;
+    pathToLiveMove = widget.livePath;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollTimer?.cancel();
       _scrollTimer = Timer(const Duration(milliseconds: 500), () {
@@ -202,17 +203,16 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   void didUpdateWidget(covariant DebouncedPgnTreeView oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.currentPath != widget.currentPath ||
-        oldWidget.broadcastLivePath != widget.broadcastLivePath) {
-      // debouncing the current and broadcast live path changes to avoid rebuilding when using
+    if (oldWidget.currentPath != widget.currentPath || oldWidget.livePath != widget.livePath) {
+      // debouncing the current and live path changes to avoid rebuilding when using
       // the fast replay buttons or when receiving a lot of broadcast moves in a short time
       _debounce(() {
         setState(() {
           if (oldWidget.currentPath != widget.currentPath) {
             pathToCurrentMove = widget.currentPath;
           }
-          if (oldWidget.broadcastLivePath != widget.broadcastLivePath) {
-            pathToBroadcastLiveMove = widget.broadcastLivePath;
+          if (oldWidget.livePath != widget.livePath) {
+            pathToLiveMove = widget.livePath;
           }
         });
         if (oldWidget.currentPath != widget.currentPath) {
@@ -250,7 +250,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
         shouldShowComments: widget.shouldShowComments,
         currentMoveKey: currentMoveKey,
         pathToCurrentMove: pathToCurrentMove,
-        pathToBroadcastLiveMove: pathToBroadcastLiveMove,
+        pathToLiveMove: pathToLiveMove,
         displayMode: widget.displayMode,
         notifier: widget.notifier,
       ),
@@ -266,8 +266,8 @@ typedef _PgnTreeViewParams = ({
   /// Path to the currently selected move in the tree.
   UciPath pathToCurrentMove,
 
-  /// Path to the last live move in the tree if it is a broadcast game
-  UciPath? pathToBroadcastLiveMove,
+  /// Path to the last live move in the tree if it is an ongoing game (usually broadcast or correspondence).
+  UciPath? pathToLiveMove,
 
   /// Whether to show analysis variations.
   bool shouldShowComputerAnalysis,
@@ -1192,7 +1192,7 @@ class InlineMove extends ConsumerWidget {
 
   bool get isCurrentMove => params.pathToCurrentMove == path;
 
-  bool get isBroadcastLiveMove => params.pathToBroadcastLiveMove == path;
+  bool get isLiveMove => params.pathToLiveMove == path;
 
   BoxDecoration? _boxDecoration(BuildContext context, bool isCurrentMove, bool isLiveMove) {
     return (isCurrentMove || isLiveMove)
@@ -1261,7 +1261,7 @@ class InlineMove extends ConsumerWidget {
       },
       child: Container(
         padding: kInlineMovePadding,
-        decoration: _boxDecoration(context, isCurrentMove, isBroadcastLiveMove),
+        decoration: _boxDecoration(context, isCurrentMove, isLiveMove),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

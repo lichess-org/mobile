@@ -28,6 +28,7 @@ class AnalysisTreeView extends ConsumerWidget {
           DebouncedPgnTreeView(
             root: analysisState.root,
             currentPath: analysisState.currentPath,
+            livePath: analysisState.pathToLiveMove,
             pgnRootComments: analysisState.pgnRootComments,
             notifier: ref.read(ctrlProvider.notifier),
             shouldShowComputerAnalysis: enableComputerAnalysis,
