@@ -2,6 +2,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/home_preferences.dart';
+import 'package:lichess_mobile/src/model/account/home_widgets.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -10,7 +12,6 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_game_stor
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
-import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -41,8 +42,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-final editModeProvider = StateProvider<bool>((ref) => false);
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});
@@ -76,7 +75,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     });
 
     final connectivity = ref.watch(connectivityChangesProvider);
-    final isEditing = ref.watch(editModeProvider);
+    final isEditing = ref.watch(homeWidgetsEditModeProvider);
 
     return connectivity.when(
       skipLoadingOnReload: true,
@@ -141,17 +140,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             appBar: PlatformAppBar(
               title: const Text('lichess.org'),
               leading: const AccountIconButton(),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    ref.read(editModeProvider.notifier).state = !isEditing;
-                  },
-                  icon: Icon(isEditing ? Icons.save_outlined : Icons.app_registration),
-                  tooltip: isEditing ? 'Save' : 'Edit',
-                ),
-                const _ChallengeScreenButton(),
-                const _PlayerScreenButton(),
-              ],
+              actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
             ),
             body: RefreshIndicator.adaptive(
               edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
@@ -161,6 +150,21 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               onRefresh: () => _refreshData(isOnline: status.isOnline),
               child: ListView(controller: homeScrollController, children: widgets),
             ),
+            bottomNavigationBar: isEditing
+                ? BottomAppBar(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            ref.read(homeWidgetsEditModeProvider.notifier).state = false;
+                          },
+                          child: Text(context.l10n.save),
+                        ),
+                      ],
+                    ),
+                  )
+                : null,
             floatingActionButton: isTablet ? null : const FloatingPlayButton(),
             bottomSheet: const OfflineBanner(),
           ),
@@ -393,7 +397,7 @@ class _EditableWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final disabledWidgets = ref.watch(homePreferencesProvider).disabledWidgets;
-    final isEditing = ref.watch(editModeProvider);
+    final isEditing = ref.watch(homeWidgetsEditModeProvider);
     final isEnabled = !disabledWidgets.contains(widget);
 
     if (!shouldShow) {

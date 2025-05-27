@@ -65,6 +65,7 @@ class PlatformScaffold extends StatelessWidget {
     this.body,
     this.appBar,
     this.floatingActionButton,
+    this.persistentFooterButtons,
     this.bottomSheet,
     this.bottomNavigationBar,
     this.extendBody,
@@ -73,6 +74,7 @@ class PlatformScaffold extends StatelessWidget {
   final PlatformAppBar? appBar;
   final Widget? body;
   final Widget? floatingActionButton;
+  final List<Widget>? persistentFooterButtons;
   final Widget? bottomSheet;
   final Widget? bottomNavigationBar;
   final bool? extendBody;
@@ -89,6 +91,7 @@ class PlatformScaffold extends StatelessWidget {
       extendBody: extendBody ?? hasExtendedBodyParentScaffold,
       appBar: appBar,
       body: body,
+      persistentFooterButtons: persistentFooterButtons,
       floatingActionButton: floatingActionButton,
       bottomSheet: bottomSheet,
       bottomNavigationBar:

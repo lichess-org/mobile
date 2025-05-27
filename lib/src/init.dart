@@ -10,10 +10,13 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
+import 'package:lichess_mobile/src/model/account/home_preferences.dart';
+import 'package:lichess_mobile/src/model/account/home_widgets.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
@@ -30,22 +33,8 @@ final _logger = Logger('Init');
 Future<void> setupFirstLaunch() async {
   final prefs = LichessBinding.instance.sharedPreferences;
   final pInfo = await PackageInfo.fromPlatform();
-
   final appVersion = Version.parse(pInfo.version);
   final installedVersion = prefs.getString('installed_version');
-
-  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 15, 12)) {
-    // keep quick game matrix for already installed apps, since it was removed by default in 0.15.12
-    final homePrefs = prefs.getString(PrefCategory.home.storageKey);
-    if (homePrefs == null) {
-      const empty = HomePrefs(disabledWidgets: IListConst<HomeEditableWidget>([]));
-      prefs.setString(PrefCategory.home.storageKey, jsonEncode(empty.toJson()));
-    }
-  }
-
-  if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
-    prefs.setString('installed_version', appVersion.canonicalizedVersion);
-  }
 
   if (prefs.getBool('first_run') ?? true) {
     // Clear secure storage on first run because it is not deleted on app uninstall
@@ -63,6 +52,27 @@ Future<void> setupFirstLaunch() async {
     }
 
     await prefs.setBool('first_run', false);
+  }
+
+  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 15, 12)) {
+    // keep quick game matrix for already installed apps, since it was removed by default in 0.15.12
+    // and home preferences are migrated to session preferences
+    final homePrefs = prefs.getString(PrefCategory.home.storageKey);
+    if (homePrefs == null) {
+      final storedSession = await SecureStorage.instance.read(key: kSessionStorageKey);
+      final session = storedSession != null
+          ? AuthSessionState.fromJson(jsonDecode(storedSession) as Map<String, dynamic>)
+          : null;
+      const empty = HomePrefs(disabledWidgets: IListConst<HomeEditableWidget>([]));
+      prefs.setString(
+        SessionPreferencesStorage.key(PrefCategory.home.storageKey, session),
+        jsonEncode(empty.toJson()),
+      );
+    }
+  }
+
+  if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
+    prefs.setString('installed_version', appVersion.canonicalizedVersion);
   }
 }
 

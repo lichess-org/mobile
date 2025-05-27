@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/home_widgets.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
@@ -13,6 +14,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
@@ -229,6 +231,21 @@ class AccountScreen extends ConsumerWidget {
                     : null,
                 onTap: () {
                   Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.app_registration),
+                title: const Text('Home widgets'),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const Icon(Icons.chevron_right)
+                    : null,
+                onTap: () {
+                  // Switch to home tab
+                  ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+                  // Pop all the way back to the home tab
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  // Set edit mode
+                  ref.read(homeWidgetsEditModeProvider.notifier).state = true;
                 },
               ),
               ListTile(
