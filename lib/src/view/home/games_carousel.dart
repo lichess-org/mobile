@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
+const _kDefaultCardOpacity = 0.9;
 const kGameCarouselFlexWeights = [6, 2];
 const kGameCarouselPadding = EdgeInsets.symmetric(horizontal: 8.0);
 
@@ -80,7 +81,7 @@ class _GamesCarouselState<T> extends State<GamesCarousel<T>> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: AspectRatio(
-              aspectRatio: 1.2,
+              aspectRatio: 1.15,
               child: CarouselView.weighted(
                 controller: _controller,
                 padding: kGameCarouselPadding,
@@ -111,8 +112,17 @@ class OngoingGameCarouselItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final timeLeft = game.secondsLeft != null
+        ? relativeDate(context.l10n, DateTime.now().add(Duration(seconds: game.secondsLeft!)))
+        : null;
+    final timeTextStyle = TextStyle(
+      color: Colors.white.withValues(alpha: game.isMyTurn ? 1.0 : 0.7),
+      fontSize: TextTheme.of(context).labelMedium?.fontSize,
+      fontWeight: FontWeight.w500,
+    );
+
     return Opacity(
-      opacity: game.isRealTime || game.isMyTurn ? 1.0 : 0.8,
+      opacity: game.isRealTime || game.isMyTurn ? _kDefaultCardOpacity : 0.7,
       child: _BoardCarouselItem(
         isRealTimeGame: game.isRealTime,
         fen: game.fen,
@@ -128,25 +138,12 @@ class OngoingGameCarouselItem extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    if (game.isMyTurn) ...const [
-                      Icon(Icons.timer, size: 16.0, color: Colors.white),
-                      SizedBox(width: 4.0),
-                    ],
-                    Text(
-                      game.secondsLeft != null && game.isMyTurn
-                          ? relativeDate(
-                              context.l10n,
-                              DateTime.now().add(Duration(seconds: game.secondsLeft!)),
-                            )
-                          : game.isMyTurn
-                          ? context.l10n.yourTurn
-                          : context.l10n.waitingForOpponent,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: game.isMyTurn ? 1.0 : 0.7),
-                        fontSize: TextTheme.of(context).labelMedium?.fontSize,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                    if (game.isMyTurn) ...[
+                      const Icon(Icons.timer, size: 16.0, color: Colors.white),
+                      const SizedBox(width: 4.0),
+                      if (timeLeft != null) Text(timeLeft, style: timeTextStyle),
+                    ] else
+                      Text(context.l10n.waitingForOpponent, style: timeTextStyle),
                   ],
                 ),
                 const SizedBox(height: 4.0),
@@ -224,39 +221,24 @@ class _BoardCarouselItem extends ConsumerWidget {
         minWidth: boardSize,
         child: Stack(
           children: [
-            ShaderMask(
-              blendMode: BlendMode.dstOut,
-              shaderCallback: (bounds) {
-                return LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    backgroundColorWithHueFilter.withValues(alpha: 0.25),
-                    backgroundColorWithHueFilter.withValues(alpha: 1.0),
-                  ],
-                  stops: const [0.3, 1.00],
-                  tileMode: TileMode.clamp,
-                ).createShader(bounds);
-              },
-              child: SizedBox(
-                height: boardSize,
-                child: StaticChessboard(
-                  hue: boardPrefs.hue,
-                  brightness: boardPrefs.brightness,
-                  size: boardSize,
-                  fen: fen,
-                  orientation: orientation,
-                  lastMove: lastMove,
-                  enableCoordinates: false,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    topRight: Radius.circular(10.0),
-                  ),
-                  pieceAssets: boardPrefs.pieceSet.assets,
-                  colorScheme: isRealTimeGame
-                      ? realTimeColors(context)
-                      : boardPrefs.boardTheme.colors,
+            SizedBox(
+              height: boardSize,
+              child: StaticChessboard(
+                hue: boardPrefs.hue,
+                brightness: boardPrefs.brightness,
+                size: boardSize,
+                fen: fen,
+                orientation: orientation,
+                lastMove: lastMove,
+                enableCoordinates: false,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  topRight: Radius.circular(10.0),
                 ),
+                pieceAssets: boardPrefs.pieceSet.assets,
+                colorScheme: isRealTimeGame
+                    ? realTimeColors(context)
+                    : boardPrefs.boardTheme.colors,
               ),
             ),
             Positioned(

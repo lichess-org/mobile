@@ -49,13 +49,15 @@ class _Body extends ConsumerWidget {
 }
 
 class OngoingGamePreview extends ConsumerWidget {
-  const OngoingGamePreview({required this.game, super.key});
+  const OngoingGamePreview({required this.game, this.padding, super.key});
 
   final OngoingGame game;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
+      padding: padding,
       orientation: game.orientation,
       lastMove: game.lastMove,
       fen: game.fen,
@@ -72,14 +74,16 @@ class OngoingGamePreview extends ConsumerWidget {
           Icon(
             game.perf.icon,
             size: 34,
-            color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
+            color: game.isMyTurn
+                ? context.lichessColors.brag
+                : DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.5),
           ),
-          if (game.secondsLeft != null && game.secondsLeft! > 0)
-            Text(game.isMyTurn ? context.l10n.yourTurn : context.l10n.waitingForOpponent),
           if (game.isMyTurn && game.secondsLeft != null)
             Text(
               relativeDate(context.l10n, DateTime.now().add(Duration(seconds: game.secondsLeft!))),
-            ),
+            )
+          else
+            Text(game.isMyTurn ? context.l10n.yourTurn : context.l10n.waitingForOpponent),
         ],
       ),
       onTap: () {
