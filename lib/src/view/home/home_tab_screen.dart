@@ -601,17 +601,25 @@ class _OngoingGamesPreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return games.maybeWhen(
-      data: (data) {
+    switch (games) {
+      case AsyncData(:final value):
+        if (value.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        final realTime = value.where((game) => game.isRealTime);
+        final correspondence = value.where((game) => !game.isRealTime);
+        final list = [...realTime, ...correspondence].lock;
+
         return PreviewGameList(
-          list: data,
+          list: list,
           maxGamesToShow: maxGamesToShow,
-          builder: (el) => OngoingGamePreview(game: el),
+          builder: (el) =>
+              OngoingGamePreview(game: el, padding: const EdgeInsets.symmetric(vertical: 8.0)),
           moreScreenRouteBuilder: OngoingGamesScreen.buildRoute,
         );
-      },
-      orElse: () => const SizedBox.shrink(),
-    );
+      case _:
+        return const SizedBox.shrink();
+    }
   }
 }
 

@@ -640,7 +640,7 @@ class GameController extends _$GameController {
         }
 
         if (curState.game.meta.speed == Speed.correspondence) {
-          ref.read(correspondenceServiceProvider).updateGame(gameFullId, newState.game);
+          ref.read(correspondenceServiceProvider).updateStoredGame(gameFullId, newState.game);
         }
 
         if (!curState.isReplaying &&
@@ -691,7 +691,7 @@ class GameController extends _$GameController {
         }
 
         if (curState.game.meta.speed == Speed.correspondence) {
-          ref.read(correspondenceServiceProvider).updateGame(gameFullId, newState.game);
+          ref.read(correspondenceServiceProvider).updateStoredGame(gameFullId, newState.game);
         }
 
         state = AsyncValue.data(newState);
@@ -877,7 +877,7 @@ class GameController extends _$GameController {
 
   Future<void> _onFinishedGameLoad(PlayableGame game) async {
     if (game.meta.speed == Speed.correspondence) {
-      ref.read(correspondenceServiceProvider).updateGame(gameFullId, game);
+      ref.read(correspondenceServiceProvider).updateStoredGame(gameFullId, game);
     }
 
     PlayableGame gameWithPostData = game;

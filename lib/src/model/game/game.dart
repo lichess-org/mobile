@@ -342,11 +342,14 @@ sealed class GameMeta with _$GameMeta {
 
 @Freezed(fromJson: true, toJson: true)
 sealed class CorrespondenceClockData with _$CorrespondenceClockData {
+  const CorrespondenceClockData._();
   const factory CorrespondenceClockData({required Duration white, required Duration black}) =
       _CorrespondenceClockData;
 
   factory CorrespondenceClockData.fromJson(Map<String, dynamic> json) =>
       _$CorrespondenceClockDataFromJson(json);
+
+  Duration forSide(Side side) => side == Side.white ? white : black;
 }
 
 @freezed

@@ -122,7 +122,7 @@ class CorrespondenceService {
 
         await Future.wait([
           for (final playableGame in playableGames)
-            updateGame(
+            updateStoredGame(
               ongoingGames.firstWhere((e) => e.id == playableGame.id).fullId,
               playableGame,
             ),
@@ -206,7 +206,7 @@ class CorrespondenceService {
           )).save(gameToSync.copyWith(registeredMoveAtPgn: null));
         } else {
           _log.info('Cannot play game ${gameToSync.id} move because its state has changed');
-          updateGame(gameToSync.fullId, playableGame);
+          updateStoredGame(gameToSync.fullId, playableGame);
         }
       } catch (e, s) {
         _log.severe('Failed to sync correspondence game ${gameToSync.id}', e, s);
@@ -225,14 +225,11 @@ class CorrespondenceService {
     PlayableGame game, {
     required bool fromBackground,
   }) async {
-    await updateGame(fullId, game);
+    await updateStoredGame(fullId, game);
   }
 
-  /// Updates a correspondence game.
-  ///
-  /// Will update the game in the ongoing games provider and save it to the storage.
-  Future<void> updateGame(GameFullId fullId, PlayableGame game) async {
-    ref.read(ongoingGamesProvider.notifier).updateGame(fullId, game);
+  /// Updates a stored correspondence game.
+  Future<void> updateStoredGame(GameFullId fullId, PlayableGame game) async {
     return (await ref.read(correspondenceGameStorageProvider.future)).save(
       OfflineCorrespondenceGame(
         id: game.id,
