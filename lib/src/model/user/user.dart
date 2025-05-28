@@ -318,7 +318,7 @@ sealed class UserActivity with _$UserActivity {
     UserActivityScore? puzzles,
     UserActivityStreak? streak,
     UserActivityStreak? storm,
-    UserActivityScore? correspondenceEnds,
+    IMap<Perf, UserActivityScore>? correspondenceEnds,
     int? correspondenceMovesNb,
     int? correspondenceGamesNb,
   }) = _UserActivity;

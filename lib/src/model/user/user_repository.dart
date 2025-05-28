@@ -125,6 +125,16 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
         Perf.nameMap.get(entry.key)!: UserActivityScore.fromJson(entry.value),
   });
 
+  final correspondenceEnds = IMap({
+    for (final entry in pick(
+      'correspondenceEnds',
+    ).asMapOrEmpty<String, Map<String, dynamic>>().entries)
+      if (Perf.nameMap.containsKey(entry.key))
+        Perf.nameMap.get(entry.key)!: UserActivityScore.fromJson(
+          entry.value['score'] as Map<String, dynamic>,
+        ),
+  });
+
   final bestTour = pick(
     'tournaments',
     'best',
@@ -141,7 +151,7 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
     puzzles: pick('puzzles', 'score').letOrNull(UserActivityScore.fromPick),
     streak: pick('streak').letOrNull(UserActivityStreak.fromPick),
     storm: pick('storm').letOrNull(UserActivityStreak.fromPick),
-    correspondenceEnds: pick('correspondenceEnds', 'score').letOrNull(UserActivityScore.fromPick),
+    correspondenceEnds: correspondenceEnds.isEmpty ? null : correspondenceEnds,
     correspondenceMovesNb: pick('correspondenceMoves', 'nb').asIntOrNull(),
     correspondenceGamesNb: pick(
       'correspondenceMoves',

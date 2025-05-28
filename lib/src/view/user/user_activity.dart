@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -171,20 +172,28 @@ class UserActivityEntry extends ConsumerWidget {
             trailing: BriefGameResultBox(win: entry.storm!.score, draw: 0, loss: 0),
           ),
         if (entry.correspondenceEnds != null)
-          _UserActivityListTile(
-            leading: const Icon(LichessIcons.correspondence, size: leadingIconSize),
-            title: context.l10n.activityCompletedNbGames(
-              entry.correspondenceEnds!.win +
-                  entry.correspondenceEnds!.draw +
-                  entry.correspondenceEnds!.loss,
+          for (final corresEndEntry in entry.correspondenceEnds!.entries)
+            _UserActivityListTile(
+              leading: Icon(corresEndEntry.key.icon, size: leadingIconSize),
+              title: corresEndEntry.key == Perf.correspondence
+                  ? context.l10n.activityCompletedNbGames(
+                      corresEndEntry.value.win +
+                          corresEndEntry.value.draw +
+                          corresEndEntry.value.loss,
+                    )
+                  : context.l10n.activityCompletedNbVariantGames(
+                      corresEndEntry.value.win +
+                          corresEndEntry.value.draw +
+                          corresEndEntry.value.loss,
+                      corresEndEntry.key.title,
+                    ),
+              subtitle: emptySubtitle,
+              trailing: BriefGameResultBox(
+                win: corresEndEntry.value.win,
+                draw: corresEndEntry.value.draw,
+                loss: corresEndEntry.value.loss,
+              ),
             ),
-            subtitle: emptySubtitle,
-            trailing: BriefGameResultBox(
-              win: entry.correspondenceEnds!.win,
-              draw: entry.correspondenceEnds!.draw,
-              loss: entry.correspondenceEnds!.loss,
-            ),
-          ),
         if (entry.correspondenceMovesNb != null && entry.correspondenceGamesNb != null)
           _UserActivityListTile(
             leading: const Icon(LichessIcons.correspondence, size: leadingIconSize),
