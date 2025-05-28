@@ -86,10 +86,10 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                 ),
           actions: const [ToggleSoundButton()],
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: SafeArea(
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
                 child: asyncGame.when(
                   data: (gameState) {
                     final game = gameState.game;
@@ -175,45 +175,45 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   },
                 ),
               ),
-            ),
-            BottomBar(
-              children: [
-                BottomBarButton(
-                  label: context.l10n.flipBoard,
-                  onTap: () => _flipBoard(ref),
-                  icon: CupertinoIcons.arrow_2_squarepath,
-                ),
-                RepeatButton(
-                  onLongPress: ref.read(_tvGameCtrl.notifier).canGoBack()
-                      ? () => _moveBackward(ref)
-                      : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-previous'),
-                    onTap: ref.read(_tvGameCtrl.notifier).canGoBack()
+              BottomBar(
+                children: [
+                  BottomBarButton(
+                    label: context.l10n.flipBoard,
+                    onTap: () => _flipBoard(ref),
+                    icon: CupertinoIcons.arrow_2_squarepath,
+                  ),
+                  RepeatButton(
+                    onLongPress: ref.read(_tvGameCtrl.notifier).canGoBack()
                         ? () => _moveBackward(ref)
                         : null,
-                    label: 'Previous',
-                    icon: CupertinoIcons.chevron_back,
-                    showTooltip: false,
+                    child: BottomBarButton(
+                      key: const ValueKey('goto-previous'),
+                      onTap: ref.read(_tvGameCtrl.notifier).canGoBack()
+                          ? () => _moveBackward(ref)
+                          : null,
+                      label: 'Previous',
+                      icon: CupertinoIcons.chevron_back,
+                      showTooltip: false,
+                    ),
                   ),
-                ),
-                RepeatButton(
-                  onLongPress: ref.read(_tvGameCtrl.notifier).canGoForward()
-                      ? () => _moveForward(ref)
-                      : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-next'),
-                    icon: CupertinoIcons.chevron_forward,
-                    label: context.l10n.next,
-                    onTap: ref.read(_tvGameCtrl.notifier).canGoForward()
+                  RepeatButton(
+                    onLongPress: ref.read(_tvGameCtrl.notifier).canGoForward()
                         ? () => _moveForward(ref)
                         : null,
-                    showTooltip: false,
+                    child: BottomBarButton(
+                      key: const ValueKey('goto-next'),
+                      icon: CupertinoIcons.chevron_forward,
+                      label: context.l10n.next,
+                      onTap: ref.read(_tvGameCtrl.notifier).canGoForward()
+                          ? () => _moveForward(ref)
+                          : null,
+                      showTooltip: false,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
