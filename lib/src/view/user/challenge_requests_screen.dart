@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -45,16 +46,7 @@ class _Body extends ConsumerWidget {
 
         if (list.isEmpty) {
           return SafeArea(
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.info_outline, size: 25, color: Colors.grey),
-                  const SizedBox(width: 8),
-                  Text(context.l10n.noChallenges, style: Styles.noResultTextStyle),
-                ],
-              ),
-            ),
+            child: Center(child: Text(context.l10n.noChallenges, style: Styles.noResultTextStyle)),
           );
         }
 
@@ -91,11 +83,7 @@ class _ChallengeListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Future<void> acceptChallenge() async {
-      final challengeRepo = ref.read(challengeRepositoryProvider);
-      await challengeRepo.accept(challenge.id);
-      final fullId = await challengeRepo
-          .show(challenge.id)
-          .then((challenge) => challenge.gameFullId);
+      final fullId = await ref.read(challengeServiceProvider).acceptChallenge(challenge.id);
       if (!context.mounted) return;
       Navigator.of(
         context,
@@ -108,7 +96,26 @@ class _ChallengeListItem extends ConsumerWidget {
       ref.read(notificationServiceProvider).cancel(challenge.id.value.hashCode);
     }
 
-    void confirmDialog() {
+    void showDeclineDialog() {
+      showAdaptiveActionSheet<ChallengeDeclineReason>(
+        context: context,
+        title: Text(context.l10n.decline),
+        actions: ChallengeDeclineReason.values
+            .map(
+              (reason) => BottomSheetAction(
+                makeLabel: (context) => Text(reason.label(context.l10n)),
+                leading: Icon(Icons.close, color: context.lichessColors.error),
+                isDestructiveAction: true,
+                onPressed: () {
+                  declineChallenge(reason);
+                },
+              ),
+            )
+            .toList(),
+      );
+    }
+
+    void showConfirmDialog() {
       showAdaptiveActionSheet<void>(
         context: context,
         title: challenge.variant.isPlaySupported
@@ -122,15 +129,11 @@ class _ChallengeListItem extends ConsumerWidget {
               isDefaultAction: true,
               onPressed: acceptChallenge,
             ),
-          ...ChallengeDeclineReason.values.map(
-            (reason) => BottomSheetAction(
-              makeLabel: (context) => Text(reason.label(context.l10n)),
-              leading: Icon(Icons.close, color: context.lichessColors.error),
-              isDestructiveAction: true,
-              onPressed: () {
-                declineChallenge(reason);
-              },
-            ),
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.decline),
+            leading: Icon(Icons.clear, color: context.lichessColors.error),
+            isDestructiveAction: true,
+            onPressed: showDeclineDialog,
           ),
         ],
       );
@@ -146,7 +149,7 @@ class _ChallengeListItem extends ConsumerWidget {
       onPressed: challenge.direction == ChallengeDirection.inward
           ? session == null
                 ? showMissingAccountMessage
-                : confirmDialog
+                : showConfirmDialog
           : null,
       onAccept:
           challenge.direction == ChallengeDirection.outward || !challenge.variant.isPlaySupported

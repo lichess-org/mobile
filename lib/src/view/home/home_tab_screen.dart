@@ -723,6 +723,11 @@ class _ChallengeScreenButton extends ConsumerWidget {
     final challenges = ref.watch(challengesProvider);
 
     final inwardCount = challenges.valueOrNull?.inward.length ?? 0;
+    final outwardCount = challenges.valueOrNull?.outward.length ?? 0;
+
+    if (inwardCount == 0 && outwardCount == 0) {
+      return const SizedBox.shrink();
+    }
 
     return switch (connectivity) {
       AsyncData(:final value) => SemanticIconButton(
