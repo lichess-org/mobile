@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
@@ -641,6 +642,7 @@ class GameController extends _$GameController {
 
         if (curState.game.meta.speed == Speed.correspondence) {
           ref.read(correspondenceServiceProvider).updateStoredGame(gameFullId, newState.game);
+          ref.read(ongoingGamesProvider.notifier).updateGame(gameFullId, newState.game);
         }
 
         if (!curState.isReplaying &&
@@ -692,6 +694,7 @@ class GameController extends _$GameController {
 
         if (curState.game.meta.speed == Speed.correspondence) {
           ref.read(correspondenceServiceProvider).updateStoredGame(gameFullId, newState.game);
+          ref.read(ongoingGamesProvider.notifier).updateGame(gameFullId, newState.game);
         }
 
         state = AsyncValue.data(newState);
