@@ -67,7 +67,9 @@ String relativeDate(AppLocalizations l10n, DateTime date, {bool shortDate = true
   }
   return diff.inDays == 0
       ? diff.inHours == 0
-            ? l10n.timeagoInNbMinutes(diff.inMinutes)
+            ? diff.inMinutes == 0
+                  ? l10n.timeagoInNbSeconds(diff.inSeconds)
+                  : l10n.timeagoInNbMinutes(diff.inMinutes)
             : l10n.timeagoInNbHours(diff.inHours)
       : diff.inDays.abs() <= 7
       ? l10n.timeagoInNbDays(diff.inDays)

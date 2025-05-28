@@ -513,15 +513,18 @@ class _OngoingGamesCarousel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return games.maybeWhen(
-      data: (data) {
-        if (data.isEmpty) {
+    switch (games) {
+      case AsyncData(:final value):
+        if (value.isEmpty) {
           return const SizedBox.shrink();
         }
+        final realTime = value.where((game) => game.isRealTime);
+        final correspondence = value.where((game) => !game.isRealTime);
+        final list = [...realTime, ...correspondence].lock;
         return GamesCarousel<OngoingGame>(
-          list: data,
+          list: list,
           onTap: (index) {
-            final game = data[index];
+            final game = list[index];
             Navigator.of(context, rootNavigator: true).push(
               GameScreen.buildRoute(
                 context,
@@ -536,9 +539,9 @@ class _OngoingGamesCarousel extends ConsumerWidget {
           moreScreenRouteBuilder: OngoingGamesScreen.buildRoute,
           maxGamesToShow: maxGamesToShow,
         );
-      },
-      orElse: () => const SizedBox.shrink(),
-    );
+      case _:
+        return const SizedBox.shrink();
+    }
   }
 }
 

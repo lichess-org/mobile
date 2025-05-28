@@ -51,7 +51,7 @@ class OngoingGames extends _$OngoingGames {
       (client) => AccountRepository(client).getOngoingGames(nb: 50),
       // cache is useful to reduce the number of requests to the server because this is used by
       // both the correspondence service to sync games and the home screen to display ongoing games
-      const Duration(hours: 1),
+      const Duration(minutes: 10),
     );
   }
 
@@ -119,7 +119,7 @@ class AccountRepository {
         }
         return list
             .map((e) => _ongoingGameFromJson(e as Map<String, dynamic>))
-            .where((e) => e.variant.isReadSupported)
+            .where((e) => e.variant.isPlaySupported)
             .toIList();
       },
     );

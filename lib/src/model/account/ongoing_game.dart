@@ -10,6 +10,8 @@ part 'ongoing_game.freezed.dart';
 
 @freezed
 sealed class OngoingGame with _$OngoingGame {
+  const OngoingGame._();
+
   factory OngoingGame({
     required GameId id,
     required GameFullId fullId,
@@ -25,4 +27,6 @@ sealed class OngoingGame with _$OngoingGame {
     Move? lastMove,
     int? secondsLeft,
   }) = _OngoingGame;
+
+  bool get isRealTime => speed != Speed.correspondence;
 }
