@@ -164,6 +164,12 @@ ThemeData _makeDefaultTheme(
     menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
     bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
     sliderTheme: kSliderTheme,
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
     extensions: [lichessCustomColors.harmonized(theme.colorScheme)],
   );
 }
@@ -253,12 +259,12 @@ ThemeData _makeBackgroundImageTheme({
       elevation: isIOS ? 0 : null,
     ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
-    pageTransitionsTheme: PageTransitionsTheme(
+    pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
-        TargetPlatform.android: ZoomPageTransitionsBuilder(
-          backgroundColor: seedColor.withValues(alpha: 0),
+        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(
+          backgroundColor: Colors.transparent,
         ),
-        TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       },
     ),
 
