@@ -277,13 +277,12 @@ class _GameMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isBookmarkedAsync = ref.watch(isGameBookmarkedProvider(gameId));
 
-    return ContextMenuButton(
-      consumeOutsideTap: false,
+    return ContextMenuIconButton(
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
       actions: [
         ContextMenuAction(
-          icon: const Icon(Icons.settings),
+          icon: Icons.settings,
           label: context.l10n.settingsSettings,
           onPressed: () => showModalBottomSheet<void>(
             context: context,

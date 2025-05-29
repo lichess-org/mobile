@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -95,7 +94,7 @@ class _GameBookmarkContextMenuActionState extends ConsumerState<GameBookmarkCont
       builder: (context, snapshot) {
         return ContextMenuAction(
           dismissOnPress: false,
-          icon: Icon(_bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined),
+          icon: _bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
           label: _bookmarked ? 'Unbookmark' : 'Bookmark',
           onPressed: snapshot.connectionState == ConnectionState.waiting
               ? null
@@ -142,14 +141,16 @@ List<Widget> makeFinishedGameShareContextMenuActions(
 }) {
   return [
     ContextMenuAction(
-      icon: const PlatformShareIcon(),
+      icon: Theme.of(context).platform == TargetPlatform.iOS
+          ? Icons.ios_share_outlined
+          : Icons.share_outlined,
       label: context.l10n.mobileShareGameURL,
       onPressed: () {
         launchShareDialog(context, ShareParams(uri: lichessUri('/$gameId/${orientation.name}')));
       },
     ),
     ContextMenuAction(
-      icon: const Icon(Icons.gif_outlined),
+      icon: Icons.gif_outlined,
       label: context.l10n.gameAsGIF,
       onPressed: () async {
         try {
@@ -173,7 +174,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
       },
     ),
     ContextMenuAction(
-      icon: const Icon(Icons.text_snippet_outlined),
+      icon: Icons.text_snippet_outlined,
       label: 'PGN: ${context.l10n.downloadAnnotated}',
       onPressed: () async {
         try {
@@ -189,7 +190,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
       },
     ),
     ContextMenuAction(
-      icon: const Icon(Icons.description_outlined),
+      icon: Icons.description_outlined,
       label: 'PGN: ${context.l10n.downloadRaw}',
       onPressed: () async {
         try {

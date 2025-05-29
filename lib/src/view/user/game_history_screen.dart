@@ -96,12 +96,13 @@ class GameHistoryScreen extends ConsumerWidget {
           }),
     );
 
-    final displayModeButton = ContextMenuButton(
+    final displayModeButton = ContextMenuIconButton(
+      consumeOutsideTap: true,
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
       actions: [
         ContextMenuAction(
-          icon: const Icon(Icons.ballot_outlined),
+          icon: Icons.ballot_outlined,
           label: 'Detailed view',
           onPressed: () {
             ref
@@ -110,7 +111,7 @@ class GameHistoryScreen extends ConsumerWidget {
           },
         ),
         ContextMenuAction(
-          icon: const Icon(Icons.list_outlined),
+          icon: Icons.list_outlined,
           label: 'Compact view',
           onPressed: () {
             ref

@@ -114,11 +114,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
         );
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load analysis: $error', stackTrace);
-        return FullScreenRetryRequest(
-          onRetry: () {
-            ref.invalidate(ctrlProvider);
-          },
-        );
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(ctrlProvider));
       case _:
         return Scaffold(
           resizeToAvoidBottomInset: false,
