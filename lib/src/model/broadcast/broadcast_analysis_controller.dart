@@ -31,8 +31,7 @@ part 'broadcast_analysis_controller.g.dart';
 
 @riverpod
 class BroadcastAnalysisController extends _$BroadcastAnalysisController
-    with EngineEvaluationMixin
-    implements PgnTreeNotifier {
+    with EngineEvaluationMixin, PgnTreeNotifier {
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
