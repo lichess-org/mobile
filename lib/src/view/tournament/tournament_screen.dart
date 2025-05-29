@@ -217,12 +217,16 @@ class _Body extends ConsumerWidget {
                 child: Container(
                   height: 35,
                   width: double.infinity,
-                  color: context.lichessColors.good,
+                  color: state.tournament.pairingsClosed
+                      ? context.lichessColors.primary
+                      : context.lichessColors.good,
                   child: Padding(
                     padding: Styles.horizontalBodyPadding,
                     child: Center(
                       child: Text(
-                        context.l10n.standByX(session.user.name),
+                        state.tournament.pairingsClosed
+                            ? context.l10n.arenaTournamentPairingsAreNowClosed
+                            : context.l10n.standByX(session.user.name),
                         style: const TextStyle(color: Colors.white),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -914,7 +918,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
       cupertinoTransparent: true,
       children: [
         if (widget.state.chatOptions != null && kidModeAsync.valueOrNull == false)
-          ChatBottomBarButton(options: widget.state.chatOptions!),
+          ChatBottomBarButton(options: widget.state.chatOptions!, showLabel: true),
 
         if (widget.state.tournament.isFinished != true && session != null)
           joinOrLeaveInProgress

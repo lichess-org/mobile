@@ -11,9 +11,10 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
-  final ChatOptions options;
+  const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
 
-  const ChatBottomBarButton({required this.options, super.key});
+  final ChatOptions options;
+  final bool showLabel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,6 +22,7 @@ class ChatBottomBarButton extends ConsumerWidget {
 
     return BottomBarButton(
       label: context.l10n.chatRoom,
+      showLabel: showLabel,
       onTap: () {
         Navigator.of(context).push(ChatScreen.buildRoute(context, options: options));
       },

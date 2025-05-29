@@ -106,7 +106,7 @@ class TournamentController extends _$TournamentController {
   }
 
   Future<void> _reload({required int standingsPage}) async {
-    _logger.fine('Refreshing tournament standings page $standingsPage');
+    _logger.fine('Refreshing tournament data (with standings page $standingsPage)');
 
     if (!state.hasValue) {
       return;

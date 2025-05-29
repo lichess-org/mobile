@@ -136,6 +136,7 @@ sealed class Tournament with _$Tournament {
     required bool? isStarted,
     required (Duration, DateTime)? timeToStart,
     required (Duration, DateTime)? timeToFinish,
+    required bool pairingsClosed,
     required TournamentMe? me,
     required int nbPlayers,
     required StandingPage? standing,
@@ -172,6 +173,7 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     timeToFinish: pick(
       'secondsToFinish',
     ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
+    pairingsClosed: pick('pairingsClosed').asBoolOrFalse(),
     me: pick('me').asTournamentMeOrNull(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     standing: pick('standing').asStandingPageOrNull(),
@@ -197,6 +199,7 @@ Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick 
         : tournament.featuredGame,
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
+    pairingsClosed: pick('pairingsClosed').asBoolOrFalse(),
     timeToStart: pick(
       'secondsToStart',
     ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
