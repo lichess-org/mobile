@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class BottomSheetScrollableContainer extends StatelessWidget {
   const BottomSheetScrollableContainer({
     required this.children,
-    this.padding = const EdgeInsets.only(bottom: 16.0),
+    this.padding = const EdgeInsets.symmetric(vertical: 16.0),
     this.scrollController,
   });
 

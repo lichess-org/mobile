@@ -48,6 +48,7 @@ class StudyListScreen extends ConsumerWidget {
             semanticsLabel: 'Filter studies',
             onPressed: () => showModalBottomSheet<void>(
               context: context,
+              useRootNavigator: true,
               isScrollControlled: true,
               showDragHandle: true,
               builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
@@ -237,7 +238,6 @@ class _StudyListItem extends StatelessWidget {
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
-          showDragHandle: true,
           constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
           builder: (context) => _ContextMenu(study: study),
         );
@@ -256,6 +256,13 @@ class _ContextMenu extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.all(16.0),
       children: [
+        Text(
+          study.name,
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(height: 1.1, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16.0),
         _StudyChapters(study: study),
         const SizedBox(height: 10.0),
         _StudyMembers(study: study),
@@ -271,24 +278,14 @@ class _StudyChapters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListSection(
+      // crossAxisAlignment: CrossAxisAlignment.start,
+      margin: EdgeInsets.zero,
       children: [
         ...study.chapters.map(
-          (chapter) => Text.rich(
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            TextSpan(
-              children: [
-                WidgetSpan(
-                  child: Icon(
-                    Icons.circle_outlined,
-                    size: DefaultTextStyle.of(context).style.fontSize,
-                  ),
-                ),
-                TextSpan(text: ' $chapter'),
-              ],
-            ),
+          (chapter) => ListTile(
+            dense: true,
+            title: Text(chapter, maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
         ),
       ],
@@ -303,29 +300,21 @@ class _StudyMembers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListSection(
+      header: Text(
+        context.l10n.studyMembers,
+
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: textShade(context, 0.5)),
+      ),
+      margin: EdgeInsets.zero,
       children: [
         ...study.members.map(
-          (member) => Text.rich(
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            TextSpan(
-              children: [
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Icon(
-                    member.role == 'w' ? LichessIcons.radio_tower_lichess : Icons.remove_red_eye,
-                    size: DefaultTextStyle.of(context).style.fontSize,
-                  ),
-                ),
-                const TextSpan(text: ' '),
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.bottom,
-                  child: UserFullNameWidget(user: member.user, showFlair: false),
-                ),
-              ],
+          (member) => ListTile(
+            dense: true,
+            leading: Icon(
+              member.role == 'w' ? LichessIcons.radio_tower_lichess : Icons.remove_red_eye,
             ),
+            title: UserFullNameWidget(user: member.user, showFlair: false),
           ),
         ),
       ],
