@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_faq.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -80,6 +81,13 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
       child: PlatformScaffold(
         appBar: PlatformAppBar(
           title: Text(context.l10n.arenaArenaTournaments),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.help_outline),
+              tooltip: context.l10n.tournamentFAQ,
+              onPressed: () => Navigator.of(context).push(TournamentFAQScreen.buildRoute(context)),
+            ),
+          ],
           bottom: TabBar(
             controller: _tabController,
             tabs: <Widget>[
