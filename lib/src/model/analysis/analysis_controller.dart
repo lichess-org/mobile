@@ -146,8 +146,10 @@ class AnalysisController extends _$AnalysisController
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
+    final isGameFinished = pgnHeaders['Result'] != '*';
+
     final isComputerAnalysisAllowed = options.isLichessGameAnalysis
-        ? pgnHeaders['Result'] != '*'
+        ? isGameFinished
         : options.standalone!.isComputerAnalysisAllowed;
 
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
@@ -208,6 +210,7 @@ class AnalysisController extends _$AnalysisController
       gameId: options.gameId,
       archivedGame: archivedGame,
       currentPath: currentPath,
+      pathToLiveMove: isGameFinished ? null : _root.mainlinePath,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
@@ -655,6 +658,9 @@ sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState 
 
     /// The path to the current node in the analysis view.
     required UciPath currentPath,
+
+    /// If this is a correspondence game, the path to the last move that has been played.
+    required UciPath? pathToLiveMove,
 
     /// Whether the current path is on the mainline.
     required bool isOnMainline,
