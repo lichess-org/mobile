@@ -12,6 +12,8 @@ const double kEvalGaugeFontSize = 11.0;
 
 enum EngineGaugeDisplayMode { vertical, horizontal }
 
+enum EngineLinesShowState { expanded, collapsed }
+
 typedef EngineGaugeParams = ({
   bool isLocalEngineAvailable,
 
@@ -29,11 +31,21 @@ typedef EngineGaugeParams = ({
 });
 
 class EngineGauge extends ConsumerWidget {
-  const EngineGauge({required this.displayMode, required this.params});
+  const EngineGauge({
+    required this.displayMode,
+    required this.params,
+    this.engineLinesState,
+    this.onTap,
+    super.key,
+  });
 
   final EngineGaugeDisplayMode displayMode;
 
+  final EngineLinesShowState? engineLinesState;
+
   final EngineGaugeParams params;
+
+  final VoidCallback? onTap;
 
   static Color backgroundColor(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
@@ -55,11 +67,15 @@ class EngineGauge extends ConsumerWidget {
       serverEval: params.serverEval,
     );
 
-    return _EvalGauge(
-      displayMode: displayMode,
-      position: params.position,
-      orientation: params.orientation,
-      eval: eval,
+    return GestureDetector(
+      onTap: onTap,
+      child: _EvalGauge(
+        displayMode: displayMode,
+        position: params.position,
+        orientation: params.orientation,
+        engineLinesState: engineLinesState,
+        eval: eval,
+      ),
     );
   }
 }
@@ -69,10 +85,12 @@ class _EvalGauge extends StatefulWidget {
     required this.position,
     required this.displayMode,
     required this.orientation,
+    this.engineLinesState,
     this.eval,
   });
 
   final EngineGaugeDisplayMode displayMode;
+  final EngineLinesShowState? engineLinesState;
   final Position position;
   final Eval? eval;
   final Side orientation;
@@ -153,19 +171,38 @@ class _EvalGaugeState extends State<_EvalGauge> {
                       ),
                 child: widget.displayMode == EngineGaugeDisplayMode.vertical
                     ? const SizedBox.shrink()
-                    : Align(
-                        alignment: toValue >= 0.5 ? Alignment.centerLeft : Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Text(
-                            evalDisplay ?? '',
-                            style: TextStyle(
-                              color: toValue >= 0.5 ? Colors.black : Colors.white,
-                              fontSize: kEvalGaugeFontSize,
-                              fontWeight: FontWeight.bold,
+                    : Stack(
+                        children: [
+                          Align(
+                            alignment: toValue >= 0.5
+                                ? Alignment.centerLeft
+                                : Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Text(
+                                evalDisplay ?? '',
+                                style: TextStyle(
+                                  color: toValue >= 0.5 ? Colors.black : Colors.white,
+                                  fontSize: kEvalGaugeFontSize,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          if (widget.engineLinesState != null)
+                            Align(
+                              alignment: toValue >= 0.5
+                                  ? Alignment.centerRight
+                                  : Alignment.centerLeft,
+                              child: Icon(
+                                widget.engineLinesState == EngineLinesShowState.expanded
+                                    ? Icons.arrow_drop_up
+                                    : Icons.arrow_drop_down,
+                                color: Colors.grey,
+                                size: 24.0,
+                              ),
+                            ),
+                        ],
                       ),
               ),
             ),

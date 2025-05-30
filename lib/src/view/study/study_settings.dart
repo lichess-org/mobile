@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
@@ -29,7 +28,6 @@ class StudySettingsScreen extends ConsumerWidget {
       studyController.select((s) => s.requireValue.isComputerAnalysisAllowed),
     );
 
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final studyPrefs = ref.watch(studyPreferencesProvider);
     final isSoundEnabled = ref.watch(
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
@@ -43,22 +41,22 @@ class StudySettingsScreen extends ConsumerWidget {
             children: [
               SwitchSettingTile(
                 title: Text(context.l10n.inlineNotation),
-                value: analysisPrefs.inlineNotation,
+                value: studyPrefs.inlineNotation,
                 onChanged: (value) =>
-                    ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                    ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
                 // TODO: translate
                 title: const Text('Small board'),
-                value: analysisPrefs.smallBoard,
+                value: studyPrefs.smallBoard,
                 onChanged: (value) =>
-                    ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+                    ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.bestMoveArrow),
-                value: analysisPrefs.showBestMoveArrow,
+                value: studyPrefs.showBestMoveArrow,
                 onChanged: (value) =>
-                    ref.read(analysisPreferencesProvider.notifier).toggleShowBestMoveArrow(),
+                    ref.read(studyPreferencesProvider.notifier).toggleShowBestMoveArrow(),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.showVariationArrows),
@@ -68,9 +66,8 @@ class StudySettingsScreen extends ConsumerWidget {
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.toggleGlyphAnnotations),
-                value: analysisPrefs.showAnnotations,
-                onChanged: (_) =>
-                    ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
+                value: studyPrefs.showAnnotations,
+                onChanged: (_) => ref.read(studyPreferencesProvider.notifier).toggleAnnotations(),
               ),
             ],
           ),

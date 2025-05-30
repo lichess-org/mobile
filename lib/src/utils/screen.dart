@@ -2,20 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
 /// Returns the estimated height of what is left after removing the height of the board from the screen.
-///
-/// This function uses the top-level MediaQuery to ensure that computed height is consistent regardless of the context used.
-double estimateHeightMinusBoard(BuildContext context) {
-  // Use the top-level MediaQuery to ensure we get always the same `viewPadding` regardless of the context.
-  final topLevelMediaQuery = MediaQueryData.fromView(View.of(context));
-  final size = topLevelMediaQuery.size;
-  final viewPadding = topLevelMediaQuery.viewPadding;
+double estimateHeightMinusBoard(MediaQueryData mediaQuery) {
+  final size = mediaQuery.size;
+  final viewPadding = mediaQuery.viewPadding;
   final boardSize = size.width;
   return size.height - viewPadding.vertical - boardSize - kToolbarHeight - kBottomBarHeight;
 }
 
+/// Returns the estimated height of what is left after removing the height of the board from the screen.
+///
+/// This function uses the top-level MediaQuery to ensure that computed height is consistent regardless of the context used.
+double estimateHeightMinusBoardFromContext(BuildContext context) {
+  // Use the top-level MediaQuery to ensure we get always the same `viewPadding` regardless of the context.
+  final topLevelMediaQuery = MediaQueryData.fromView(View.of(context));
+  return estimateHeightMinusBoard(topLevelMediaQuery);
+}
+
 /// Returns true if the device has a short amount of vertical space on board screens.
 bool isShortVerticalScreen(BuildContext context) {
-  return estimateHeightMinusBoard(context) < kSmallHeightMinusBoard;
+  return estimateHeightMinusBoardFromContext(context) < kSmallHeightMinusBoard;
 }
 
 // ignore: avoid_classes_with_only_static_members

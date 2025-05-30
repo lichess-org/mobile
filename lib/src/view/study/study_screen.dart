@@ -5,7 +5,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -53,7 +52,7 @@ class _StudyScreenLoader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final studyPrefs = ref.watch(studyPreferencesProvider);
     switch (ref.watch(studyControllerProvider(id))) {
       case AsyncData(:final value):
         return _StudyScreen(id: id, studyState: value);
@@ -64,7 +63,7 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
-              smallBoard: analysisPrefs.smallBoard,
+              smallBoard: studyPrefs.smallBoard,
               pov: Side.white,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
@@ -101,7 +100,7 @@ class _StudyScreenLoader extends ConsumerWidget {
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
-              smallBoard: analysisPrefs.smallBoard,
+              smallBoard: studyPrefs.smallBoard,
               pov: Side.white,
               boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
                 size: boardSize,
@@ -201,14 +200,14 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(id)).requireValue;
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final studyPrefs = ref.watch(studyPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final variant = studyState.variant;
     if (!variant.isReadSupported) {
       return DefaultTabController(
         length: 1,
         child: AnalysisLayout(
-          smallBoard: analysisPrefs.smallBoard,
+          smallBoard: studyPrefs.smallBoard,
 
           pov: Side.white,
           boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
@@ -220,7 +219,7 @@ class _Body extends ConsumerWidget {
       );
     }
 
-    final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
+    final showEvaluationGauge = studyPrefs.showEvaluationGauge;
     final numEvalLines = enginePrefs.numEvalLines;
 
     final gamebookActive = studyState.gamebookActive;
@@ -233,7 +232,7 @@ class _Body extends ConsumerWidget {
     final bottomChild = gamebookActive ? StudyGamebook(id) : StudyTreeView(id);
 
     return AnalysisLayout(
-      smallBoard: analysisPrefs.smallBoard,
+      smallBoard: studyPrefs.smallBoard,
       tabController: tabController,
       pov: pov,
       boardBuilder: (context, boardSize, borderRadius) =>
@@ -245,6 +244,12 @@ class _Body extends ConsumerWidget {
                   ? EngineGauge(
                       displayMode: EngineGaugeDisplayMode.horizontal,
                       params: engineGaugeParams,
+                      engineLinesState: studyPrefs.showEngineLines
+                          ? EngineLinesShowState.expanded
+                          : EngineLinesShowState.collapsed,
+                      onTap: () {
+                        ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines();
+                      },
                     )
                   : Container(
                       clipBehavior: Clip.hardEdge,
@@ -328,7 +333,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
     });
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final studyPrefs = ref.watch(studyPreferencesProvider);
     final studyState = ref.watch(studyControllerProvider(widget.id)).requireValue;
 
     final currentNode = studyState.currentNode;
@@ -350,10 +355,10 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
           : [],
     );
 
-    final showAnnotationsOnBoard = analysisPrefs.showAnnotations;
+    final showAnnotationsOnBoard = studyPrefs.showAnnotations;
 
     final showBestMoveArrow =
-        studyState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
+        studyState.isEngineAvailable(enginePrefs) && studyPrefs.showBestMoveArrow;
 
     final bestMoves = showBestMoveArrow
         ? pickBestClientEval(

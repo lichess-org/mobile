@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -45,6 +46,14 @@ Future<void> makeEngineTestApp(
       ),
       PrefCategory.analysis.storageKey: jsonEncode(
         AnalysisPrefs.defaults
+            .copyWith(
+              enableComputerAnalysis: isComputerAnalysisEnabled,
+              showBestMoveArrow: showBestMoveArrow,
+            )
+            .toJson(),
+      ),
+      PrefCategory.broadcast.storageKey: jsonEncode(
+        BroadcastPrefs.defaults
             .copyWith(
               enableComputerAnalysis: isComputerAnalysisEnabled,
               showBestMoveArrow: showBestMoveArrow,

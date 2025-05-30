@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -159,9 +159,9 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(broadcastAnalysisControllerProvider(roundId, gameId))) {
       case AsyncValue(value: final state?, hasValue: true):
-        final analysisPrefs = ref.watch(analysisPreferencesProvider);
+        final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
         final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-        final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
+        final showEvaluationGauge = broadcastPrefs.showEvaluationGauge;
         final numEvalLines = enginePrefs.numEvalLines;
 
         final engineGaugeParams = state.engineGaugeParams(enginePrefs);
@@ -170,7 +170,7 @@ class _Body extends ConsumerWidget {
         final pov = state.pov;
 
         return AnalysisLayout(
-          smallBoard: analysisPrefs.smallBoard,
+          smallBoard: broadcastPrefs.smallBoard,
           pov: pov,
           tabController: tabController,
           boardBuilder: (context, boardSize, borderRadius) =>
@@ -193,6 +193,12 @@ class _Body extends ConsumerWidget {
                       ? EngineGauge(
                           displayMode: EngineGaugeDisplayMode.horizontal,
                           params: engineGaugeParams,
+                          engineLinesState: broadcastPrefs.showEngineLines
+                              ? EngineLinesShowState.expanded
+                              : EngineLinesShowState.collapsed,
+                          onTap: () {
+                            ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines();
+                          },
                         )
                       : Container(
                           clipBehavior: Clip.hardEdge,
@@ -240,7 +246,7 @@ class _BroadcastGameTreeView extends ConsumerWidget {
     final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
     final state = ref.watch(ctrlProvider).requireValue;
 
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
 
     return SingleChildScrollView(
       child: DebouncedPgnTreeView(
@@ -248,12 +254,12 @@ class _BroadcastGameTreeView extends ConsumerWidget {
         currentPath: state.currentPath,
         livePath: state.broadcastLivePath,
         pgnRootComments: state.pgnRootComments,
-        shouldShowComputerAnalysis: analysisPrefs.enableComputerAnalysis,
-        shouldShowComments: analysisPrefs.enableComputerAnalysis && analysisPrefs.showPgnComments,
+        shouldShowComputerAnalysis: broadcastPrefs.enableComputerAnalysis,
+        shouldShowComments: broadcastPrefs.enableComputerAnalysis && broadcastPrefs.showPgnComments,
         shouldShowAnnotations:
-            analysisPrefs.enableComputerAnalysis && analysisPrefs.showAnnotations,
+            broadcastPrefs.enableComputerAnalysis && broadcastPrefs.showAnnotations,
         notifier: ref.read(ctrlProvider.notifier),
-        displayMode: analysisPrefs.inlineNotation
+        displayMode: broadcastPrefs.inlineNotation
             ? PgnTreeDisplayMode.inlineNotation
             : PgnTreeDisplayMode.twoColumn,
       ),
@@ -299,13 +305,13 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
     final ctrlProvider = broadcastAnalysisControllerProvider(widget.roundId, widget.gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final showBestMoveArrow =
-        broadcastAnalysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
+        broadcastAnalysisState.isEngineAvailable(enginePrefs) && broadcastPrefs.showBestMoveArrow;
     final showAnnotations =
-        broadcastAnalysisState.isComputerAnalysisEnabled && analysisPrefs.showAnnotations;
+        broadcastAnalysisState.isComputerAnalysisEnabled && broadcastPrefs.showAnnotations;
     final currentNode = broadcastAnalysisState.currentNode;
 
     final bestMoves = showBestMoveArrow
@@ -522,7 +528,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
@@ -611,7 +617,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                 return BottomBarButton(
                   label: context.l10n.toggleLocalEvaluation,
                   onTap:
-                      analysisPrefs.enableComputerAnalysis &&
+                      broadcastPrefs.enableComputerAnalysis &&
                           snapshot.connectionState != ConnectionState.waiting
                       ? () async {
                           toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();

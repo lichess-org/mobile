@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -28,7 +28,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = broadcastAnalysisControllerProvider(roundId, gameId);
 
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.settingsSettings)),
@@ -38,16 +38,16 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
             children: [
               SwitchSettingTile(
                 title: Text(context.l10n.inlineNotation),
-                value: analysisPrefs.inlineNotation,
+                value: broadcastPrefs.inlineNotation,
                 onChanged: (value) =>
-                    ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                    ref.read(broadcastPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
                 // TODO: translate
                 title: const Text('Small board'),
-                value: analysisPrefs.smallBoard,
+                value: broadcastPrefs.smallBoard,
                 onChanged: (value) =>
-                    ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+                    ref.read(broadcastPreferencesProvider.notifier).toggleSmallBoard(),
               ),
             ],
           ),
@@ -56,14 +56,14 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
             children: [
               SwitchSettingTile(
                 title: Text(context.l10n.enable),
-                value: analysisPrefs.enableComputerAnalysis,
+                value: broadcastPrefs.enableComputerAnalysis,
                 onChanged: (_) {
                   ref.read(controller.notifier).toggleComputerAnalysis();
                 },
               ),
               AnimatedCrossFade(
                 duration: const Duration(milliseconds: 300),
-                crossFadeState: analysisPrefs.enableComputerAnalysis
+                crossFadeState: broadcastPrefs.enableComputerAnalysis
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
                 firstChild: const SizedBox.shrink(),
@@ -71,28 +71,28 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                   children: [
                     SwitchSettingTile(
                       title: Text(context.l10n.evaluationGauge),
-                      value: analysisPrefs.showEvaluationGauge,
+                      value: broadcastPrefs.showEvaluationGauge,
                       onChanged: (value) => ref
-                          .read(analysisPreferencesProvider.notifier)
+                          .read(broadcastPreferencesProvider.notifier)
                           .toggleShowEvaluationGauge(),
                     ),
                     SwitchSettingTile(
                       title: Text(context.l10n.toggleGlyphAnnotations),
-                      value: analysisPrefs.showAnnotations,
+                      value: broadcastPrefs.showAnnotations,
                       onChanged: (_) =>
-                          ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
+                          ref.read(broadcastPreferencesProvider.notifier).toggleAnnotations(),
                     ),
                     SwitchSettingTile(
                       title: Text(context.l10n.mobileShowComments),
-                      value: analysisPrefs.showPgnComments,
+                      value: broadcastPrefs.showPgnComments,
                       onChanged: (_) =>
-                          ref.read(analysisPreferencesProvider.notifier).togglePgnComments(),
+                          ref.read(broadcastPreferencesProvider.notifier).togglePgnComments(),
                     ),
                     SwitchSettingTile(
                       title: Text(context.l10n.bestMoveArrow),
-                      value: analysisPrefs.showBestMoveArrow,
+                      value: broadcastPrefs.showBestMoveArrow,
                       onChanged: (value) =>
-                          ref.read(analysisPreferencesProvider.notifier).toggleShowBestMoveArrow(),
+                          ref.read(broadcastPreferencesProvider.notifier).toggleShowBestMoveArrow(),
                     ),
                   ],
                 ),
@@ -101,7 +101,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
           ),
           AnimatedCrossFade(
             duration: const Duration(milliseconds: 300),
-            crossFadeState: analysisPrefs.enableComputerAnalysis
+            crossFadeState: broadcastPrefs.enableComputerAnalysis
                 ? CrossFadeState.showSecond
                 : CrossFadeState.showFirst,
             firstChild: const SizedBox.shrink(),

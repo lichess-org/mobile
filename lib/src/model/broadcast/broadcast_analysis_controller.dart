@@ -6,7 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -127,7 +127,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
-    final prefs = ref.read(analysisPreferencesProvider);
+    final prefs = ref.read(broadcastPreferencesProvider);
 
     final broadcastState = BroadcastAnalysisState(
       id: gameId,
@@ -420,7 +420,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   ///
   /// Acts both on engine evaluation and server analysis.
   Future<void> toggleComputerAnalysis() async {
-    await ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
+    await ref.read(broadcastPreferencesProvider.notifier).toggleEnableComputerAnalysis();
 
     final curState = state.requireValue;
     final engineWasAvailable = curState.isEngineAvailable(evaluationPrefs);

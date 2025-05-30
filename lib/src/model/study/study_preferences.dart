@@ -26,15 +26,61 @@ class StudyPreferences extends _$StudyPreferences with PreferencesStorage<StudyP
   Future<void> toggleShowVariationArrows() {
     return save(state.copyWith(showVariationArrows: !state.showVariationArrows));
   }
+
+  Future<void> toggleShowEvaluationGauge() {
+    return save(state.copyWith(showEvaluationGauge: !state.showEvaluationGauge));
+  }
+
+  Future<void> toggleShowEngineLines() {
+    return save(state.copyWith(showEngineLines: !state.showEngineLines));
+  }
+
+  Future<void> toggleAnnotations() {
+    return save(state.copyWith(showAnnotations: !state.showAnnotations));
+  }
+
+  Future<void> togglePgnComments() {
+    return save(state.copyWith(showPgnComments: !state.showPgnComments));
+  }
+
+  Future<void> toggleShowBestMoveArrow() {
+    return save(state.copyWith(showBestMoveArrow: !state.showBestMoveArrow));
+  }
+
+  Future<void> toggleInlineNotation() {
+    return save(state.copyWith(inlineNotation: !state.inlineNotation));
+  }
+
+  Future<void> toggleSmallBoard() {
+    return save(state.copyWith(smallBoard: !state.smallBoard));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class StudyPrefs with _$StudyPrefs implements Serializable {
   const StudyPrefs._();
 
-  const factory StudyPrefs({required bool showVariationArrows}) = _StudyPrefs;
+  const factory StudyPrefs({
+    required bool showVariationArrows,
+    @JsonKey(defaultValue: true) required bool showEvaluationGauge,
+    @JsonKey(defaultValue: false) required bool showEngineLines,
+    @JsonKey(defaultValue: true) required bool showBestMoveArrow,
+    @JsonKey(defaultValue: true) required bool showAnnotations,
+    @JsonKey(defaultValue: true) required bool showPgnComments,
+    @JsonKey(defaultValue: false) required bool inlineNotation,
+    @JsonKey(defaultValue: false) required bool smallBoard,
+  }) = _StudyPrefs;
 
-  static const defaults = StudyPrefs(showVariationArrows: false);
+  static const defaults = StudyPrefs(
+    showVariationArrows: false,
+    showEvaluationGauge: true,
+    showEngineLines: false,
+    showBestMoveArrow: true,
+    showAnnotations: true,
+    showPgnComments: true,
+    inlineNotation: false,
+    smallBoard: false,
+  );
 
   factory StudyPrefs.fromJson(Map<String, dynamic> json) {
     return _$StudyPrefsFromJson(json);
