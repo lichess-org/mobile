@@ -30,7 +30,8 @@ class BoardSettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: showCloseButton ? const CloseButton() : null,
-        title: Text(context.l10n.preferencesGameBehavior),
+        // TODO translate
+        title: const Text('Board settings'),
       ),
       body: const _Body(),
     );
@@ -51,6 +52,124 @@ class _Body extends ConsumerWidget {
         ListSection(
           hasLeading: false,
           children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
+              value: boardPrefs.magnifyDraggedPiece,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleMagnifyDraggedPiece();
+              },
+            ),
+            SettingsListTile(
+              settingsLabel: const Text('Dragged piece target shape'),
+              settingsValue: dragTargetKindLabel(boardPrefs.dragTargetKind),
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: DragTargetKind.values,
+                  selectedItem: boardPrefs.dragTargetKind,
+                  labelBuilder: (t) => Text(dragTargetKindLabel(t)),
+                  onSelectedItemChanged: (DragTargetKind? value) {
+                    ref
+                        .read(boardPreferencesProvider.notifier)
+                        .setDragTargetKind(value ?? DragTargetKind.circle);
+                  },
+                );
+              },
+            ),
+            SwitchSettingTile(
+              // TODO translate
+              title: const Text('Touch feedback'),
+              value: boardPrefs.hapticFeedback,
+              subtitle: const Text(
+                // TODO translate
+                'When enabled, the device will vibrate shortly when you move or capture a piece.',
+                maxLines: 5,
+              ),
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
+              },
+            ),
+            SwitchSettingTile(
+              title: Text(context.l10n.preferencesPieceAnimation),
+              value: boardPrefs.pieceAnimation,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
+              },
+            ),
+            if (Theme.of(context).platform == TargetPlatform.android && !isTabletOrLarger(context))
+              androidVersionAsync.maybeWhen(
+                data: (version) => version != null && version.sdkInt >= 29
+                    ? SwitchSettingTile(
+                        title: Text(context.l10n.mobileSettingsImmersiveMode),
+                        subtitle: Text(
+                          context.l10n.mobileSettingsImmersiveModeSubtitle,
+                          maxLines: 5,
+                        ),
+                        value: boardPrefs.immersiveModeWhilePlaying ?? false,
+                        onChanged: (value) {
+                          ref
+                              .read(boardPreferencesProvider.notifier)
+                              .toggleImmersiveModeWhilePlaying();
+                        },
+                      )
+                    : const SizedBox.shrink(),
+                orElse: () => const SizedBox.shrink(),
+              ),
+            SwitchSettingTile(
+              title: Text(context.l10n.preferencesPieceDestinations),
+              value: boardPrefs.showLegalMoves,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleShowLegalMoves();
+              },
+            ),
+            SwitchSettingTile(
+              title: Text(context.l10n.preferencesBoardHighlights),
+              value: boardPrefs.boardHighlights,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleBoardHighlights();
+              },
+            ),
+            if (!isShortVerticalScreen(context))
+              SwitchSettingTile(
+                title: Text(context.l10n.preferencesMoveListWhilePlaying),
+                value: boardPrefs.moveListDisplay,
+                onChanged: (value) {
+                  ref.read(boardPreferencesProvider.notifier).toggleMoveListDisplay();
+                },
+              ),
+            SettingsListTile(
+              settingsLabel: const Text('Material'), //TODO: l10n
+              settingsValue: boardPrefs.materialDifferenceFormat.l10n(AppLocalizations.of(context)),
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: MaterialDifferenceFormat.values,
+                  selectedItem: boardPrefs.materialDifferenceFormat,
+                  labelBuilder: (t) => Text(t.label),
+                  onSelectedItemChanged: (MaterialDifferenceFormat? value) => ref
+                      .read(boardPreferencesProvider.notifier)
+                      .setMaterialDifferenceFormat(
+                        value ?? MaterialDifferenceFormat.materialDifference,
+                      ),
+                );
+              },
+            ),
+            SettingsListTile(
+              //TODO Add l10n
+              settingsLabel: const Text('Clock position'),
+              settingsValue: boardPrefs.clockPosition.label,
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: ClockPosition.values,
+                  selectedItem: boardPrefs.clockPosition,
+                  labelBuilder: (t) => Text(t.label),
+                  onSelectedItemChanged: (ClockPosition? value) => ref
+                      .read(boardPreferencesProvider.notifier)
+                      .setClockPosition(value ?? ClockPosition.right),
+                );
+              },
+            ),
             SettingsListTile(
               settingsLabel: Text(context.l10n.preferencesHowDoYouMovePieces),
               settingsValue: pieceShiftMethodl10n(context, boardPrefs.pieceShiftMethod),
@@ -84,128 +203,6 @@ class _Body extends ConsumerWidget {
                         .read(boardPreferencesProvider.notifier)
                         .setCastlingMethod(value ?? CastlingMethod.kingOverRook);
                   },
-                );
-              },
-            ),
-            SwitchSettingTile(
-              title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
-              value: boardPrefs.magnifyDraggedPiece,
-              onChanged: (value) {
-                ref.read(boardPreferencesProvider.notifier).toggleMagnifyDraggedPiece();
-              },
-            ),
-            SettingsListTile(
-              // TODO translate
-              settingsLabel: const Text('Drag target'),
-              explanation:
-                  // TODO translate
-                  'How the target square is highlighted when dragging a piece.',
-              settingsValue: dragTargetKindLabel(boardPrefs.dragTargetKind),
-              onTap: () {
-                showChoicePicker(
-                  context,
-                  choices: DragTargetKind.values,
-                  selectedItem: boardPrefs.dragTargetKind,
-                  labelBuilder: (t) => Text(dragTargetKindLabel(t)),
-                  onSelectedItemChanged: (DragTargetKind? value) {
-                    ref
-                        .read(boardPreferencesProvider.notifier)
-                        .setDragTargetKind(value ?? DragTargetKind.circle);
-                  },
-                );
-              },
-            ),
-            SwitchSettingTile(
-              // TODO translate
-              title: const Text('Touch feedback'),
-              value: boardPrefs.hapticFeedback,
-              subtitle: const Text(
-                // TODO translate
-                'Vibrate when moving pieces or capturing them.',
-                maxLines: 5,
-              ),
-              onChanged: (value) {
-                ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
-              },
-            ),
-            SwitchSettingTile(
-              title: Text(context.l10n.preferencesPieceAnimation),
-              value: boardPrefs.pieceAnimation,
-              onChanged: (value) {
-                ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
-              },
-            ),
-            if (Theme.of(context).platform == TargetPlatform.android && !isTabletOrLarger(context))
-              androidVersionAsync.maybeWhen(
-                data: (version) => version != null && version.sdkInt >= 29
-                    ? SwitchSettingTile(
-                        title: Text(context.l10n.mobileSettingsImmersiveMode),
-                        subtitle: Text(
-                          context.l10n.mobileSettingsImmersiveModeSubtitle,
-                          maxLines: 5,
-                        ),
-                        value: boardPrefs.immersiveModeWhilePlaying ?? false,
-                        onChanged: (value) {
-                          ref
-                              .read(boardPreferencesProvider.notifier)
-                              .toggleImmersiveModeWhilePlaying();
-                        },
-                      )
-                    : const SizedBox.shrink(),
-                orElse: () => const SizedBox.shrink(),
-              ),
-            if (!isShortVerticalScreen(context))
-              SwitchSettingTile(
-                title: Text(context.l10n.preferencesMoveListWhilePlaying),
-                value: boardPrefs.moveListDisplay,
-                onChanged: (value) {
-                  ref.read(boardPreferencesProvider.notifier).toggleMoveListDisplay();
-                },
-              ),
-            SettingsListTile(
-              //TODO Add l10n
-              settingsLabel: const Text('Clock position'),
-              settingsValue: boardPrefs.clockPosition.label,
-              onTap: () {
-                showChoicePicker(
-                  context,
-                  choices: ClockPosition.values,
-                  selectedItem: boardPrefs.clockPosition,
-                  labelBuilder: (t) => Text(t.label),
-                  onSelectedItemChanged: (ClockPosition? value) => ref
-                      .read(boardPreferencesProvider.notifier)
-                      .setClockPosition(value ?? ClockPosition.right),
-                );
-              },
-            ),
-            SwitchSettingTile(
-              title: Text(context.l10n.preferencesPieceDestinations),
-              value: boardPrefs.showLegalMoves,
-              onChanged: (value) {
-                ref.read(boardPreferencesProvider.notifier).toggleShowLegalMoves();
-              },
-            ),
-            SwitchSettingTile(
-              title: Text(context.l10n.preferencesBoardHighlights),
-              value: boardPrefs.boardHighlights,
-              onChanged: (value) {
-                ref.read(boardPreferencesProvider.notifier).toggleBoardHighlights();
-              },
-            ),
-            SettingsListTile(
-              settingsLabel: const Text('Material'), //TODO: l10n
-              settingsValue: boardPrefs.materialDifferenceFormat.l10n(AppLocalizations.of(context)),
-              onTap: () {
-                showChoicePicker(
-                  context,
-                  choices: MaterialDifferenceFormat.values,
-                  selectedItem: boardPrefs.materialDifferenceFormat,
-                  labelBuilder: (t) => Text(t.label),
-                  onSelectedItemChanged: (MaterialDifferenceFormat? value) => ref
-                      .read(boardPreferencesProvider.notifier)
-                      .setMaterialDifferenceFormat(
-                        value ?? MaterialDifferenceFormat.materialDifference,
-                      ),
                 );
               },
             ),
