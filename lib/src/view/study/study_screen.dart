@@ -263,7 +263,11 @@ class _Body extends ConsumerWidget {
                     );
             }
           : null,
-      engineLines: isComputerAnalysisAllowed && isLocalEvaluationEnabled && numEvalLines > 0
+      engineLines:
+          isComputerAnalysisAllowed &&
+              studyPrefs.showEngineLines &&
+              isLocalEvaluationEnabled &&
+              numEvalLines > 0
           ? EngineLines(
               savedEval: currentNode.eval,
               isGameOver: currentNode.position?.isGameOver ?? false,

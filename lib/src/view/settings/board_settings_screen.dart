@@ -60,7 +60,7 @@ class _Body extends ConsumerWidget {
               },
             ),
             SettingsListTile(
-              settingsLabel: const Text('Dragged piece target shape'),
+              settingsLabel: const Text('Dragged piece target'),
               settingsValue: dragTargetKindLabel(boardPrefs.dragTargetKind),
               onTap: () {
                 showChoicePicker(

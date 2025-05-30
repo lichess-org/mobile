@@ -212,7 +212,8 @@ class _Body extends ConsumerWidget {
                         );
                 }
               : null,
-          engineLines: isLocalEvaluationEnabled && numEvalLines > 0
+          engineLines:
+              isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
               ? EngineLines(
                   savedEval: currentNode.eval,
                   isGameOver: currentNode.position.isGameOver,
