@@ -55,8 +55,7 @@ Future<void> setupFirstLaunch() async {
   }
 
   if (installedVersion != null && Version.parse(installedVersion) < Version(0, 15, 12)) {
-    // keep quick game matrix for already installed apps, since it was removed by default in 0.15.12
-    // and home preferences are migrated to session preferences
+    // migrate home preferences to session preferences
     final homePrefs = prefs.getString(PrefCategory.home.storageKey);
     if (homePrefs == null) {
       final storedSession = await SecureStorage.instance.read(key: kSessionStorageKey);
@@ -64,10 +63,13 @@ Future<void> setupFirstLaunch() async {
           ? AuthSessionState.fromJson(jsonDecode(storedSession) as Map<String, dynamic>)
           : null;
       const empty = HomePrefs(disabledWidgets: IListConst<HomeEditableWidget>([]));
+      // keep quick game matrix for already installed apps, since it was removed by default in 0.15.12
       prefs.setString(
         SessionPreferencesStorage.key(PrefCategory.home.storageKey, session),
         jsonEncode(empty.toJson()),
       );
+    } else {
+      prefs.setString(SessionPreferencesStorage.key(PrefCategory.home.storageKey, null), homePrefs);
     }
   }
 
