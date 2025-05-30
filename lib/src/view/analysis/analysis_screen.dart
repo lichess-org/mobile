@@ -174,16 +174,20 @@ class _Body extends ConsumerWidget {
     Widget? boardFooter;
     Widget? boardHeader;
     if (analysisState.archivedGame != null) {
+      final hasClock =
+          analysisState.isOnMainline &&
+          analysisState.currentPosition.ply < analysisState.archivedGame!.steps.length;
       final footerPlayer = analysisState.archivedGame!.playerOf(pov);
       final headerPlayer = analysisState.archivedGame!.playerOf(pov.opposite);
-      final footerClock = analysisState.archivedGame!.archivedClockOf(
-        pov,
-        analysisState.currentPosition.ply,
-      );
-      final headerClock = analysisState.archivedGame!.archivedClockOf(
-        pov.opposite,
-        analysisState.currentPosition.ply,
-      );
+      final footerClock = hasClock
+          ? analysisState.archivedGame!.archivedClockOf(pov, analysisState.currentPosition.ply)
+          : null;
+      final headerClock = hasClock
+          ? analysisState.archivedGame!.archivedClockOf(
+              pov.opposite,
+              analysisState.currentPosition.ply,
+            )
+          : null;
       boardFooter = _PlayerWidget(
         player: footerPlayer,
         clock: footerClock,
