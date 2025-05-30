@@ -288,7 +288,6 @@ class _GameMenu extends ConsumerWidget {
             context: context,
             isDismissible: true,
             isScrollControlled: true,
-            showDragHandle: true,
             builder: (_) => GameSettings(id: gameId),
           ),
         ),

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -23,8 +22,10 @@ class GameSettings extends ConsumerWidget {
     final userPrefsAsync = ref.watch(userGamePrefsProvider(id));
 
     return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.only(bottom: 16),
       children: [
         ListSection(
+          header: Text(context.l10n.settingsSettings),
           materialFilledCard: true,
           children: [
             ...userPrefsAsync.maybeWhen(
@@ -75,12 +76,13 @@ class GameSettings extends ConsumerWidget {
             ListTile(
               // TODO translate
               title: const Text('Board settings'),
-              trailing: const Icon(CupertinoIcons.chevron_right),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 showModalBottomSheet<void>(
                   context: context,
                   isDismissible: true,
                   isScrollControlled: true,
+                  constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
                   builder: (_) => const BoardSettingsScreen(showCloseButton: true),
                 );
               },

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -29,14 +28,38 @@ class StudySettingsScreen extends ConsumerWidget {
     );
 
     final studyPrefs = ref.watch(studyPreferencesProvider);
-    final isSoundEnabled = ref.watch(
-      generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
-    );
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.settingsSettings)),
       body: ListView(
         children: [
+          ListSection(
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.inlineNotation),
+                value: studyPrefs.inlineNotation,
+                onChanged: (value) =>
+                    ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
+              ),
+              SwitchSettingTile(
+                // TODO: translate
+                title: const Text('Smaller board'),
+                value: studyPrefs.smallBoard,
+                onChanged: (value) =>
+                    ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),
+              ),
+              ListTile(
+                title: Text(context.l10n.openingExplorer),
+                onTap: () => showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  isDismissible: true,
+                  builder: (_) => const OpeningExplorerSettings(),
+                ),
+              ),
+            ],
+          ),
           ListSection(
             children: [
               SwitchSettingTile(
@@ -67,44 +90,6 @@ class StudySettingsScreen extends ConsumerWidget {
                   ref.read(studyController.notifier).setNumEvalLines(value),
               onSetEngineCores: (value) => ref.read(studyController.notifier).setEngineCores(value),
             ),
-          ListSection(
-            children: [
-              ListTile(
-                title: Text(context.l10n.openingExplorer),
-                onTap: () => showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  isDismissible: true,
-                  builder: (_) => const OpeningExplorerSettings(),
-                ),
-              ),
-              SwitchSettingTile(
-                title: Text(context.l10n.sound),
-                value: isSoundEnabled,
-                onChanged: (value) {
-                  ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
-                },
-              ),
-            ],
-          ),
-          ListSection(
-            children: [
-              SwitchSettingTile(
-                title: Text(context.l10n.inlineNotation),
-                value: studyPrefs.inlineNotation,
-                onChanged: (value) =>
-                    ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
-              ),
-              SwitchSettingTile(
-                // TODO: translate
-                title: const Text('Small board'),
-                value: studyPrefs.smallBoard,
-                onChanged: (value) =>
-                    ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),
-              ),
-            ],
-          ),
         ],
       ),
     );

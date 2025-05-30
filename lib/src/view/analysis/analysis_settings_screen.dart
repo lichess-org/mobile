@@ -31,6 +31,33 @@ class AnalysisSettingsScreen extends ConsumerWidget {
           appBar: AppBar(title: Text(context.l10n.settingsSettings)),
           body: ListView(
             children: [
+              ListSection(
+                children: [
+                  SwitchSettingTile(
+                    title: Text(context.l10n.inlineNotation),
+                    value: prefs.inlineNotation,
+                    onChanged: (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                  ),
+                  SwitchSettingTile(
+                    // TODO: translate
+                    title: const Text('Small board'),
+                    value: prefs.smallBoard,
+                    onChanged: (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+                  ),
+                  ListTile(
+                    title: Text(context.l10n.openingExplorer),
+                    onTap: () => showModalBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      showDragHandle: true,
+                      isDismissible: true,
+                      builder: (_) => const OpeningExplorerSettings(),
+                    ),
+                  ),
+                ],
+              ),
               if (value.isComputerAnalysisAllowed)
                 ListSection(
                   header: SettingsSectionTitle(context.l10n.computerAnalysis),
@@ -98,37 +125,6 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                     ref.read(ctrlProvider.notifier).setNumEvalLines(value);
                   },
                 ),
-              ),
-              ListSection(
-                children: [
-                  ListTile(
-                    title: Text(context.l10n.openingExplorer),
-                    onTap: () => showModalBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      showDragHandle: true,
-                      isDismissible: true,
-                      builder: (_) => const OpeningExplorerSettings(),
-                    ),
-                  ),
-                ],
-              ),
-              ListSection(
-                children: [
-                  SwitchSettingTile(
-                    title: Text(context.l10n.inlineNotation),
-                    value: prefs.inlineNotation,
-                    onChanged: (value) =>
-                        ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
-                  ),
-                  SwitchSettingTile(
-                    // TODO: translate
-                    title: const Text('Small board'),
-                    value: prefs.smallBoard,
-                    onChanged: (value) =>
-                        ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
-                  ),
-                ],
               ),
             ],
           ),
