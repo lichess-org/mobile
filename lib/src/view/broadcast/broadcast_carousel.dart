@@ -18,7 +18,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
@@ -420,12 +419,13 @@ class _BroadcastCardContent extends StatelessWidget {
                 ),
                 const Spacer(),
               ],
-              ContextMenuButton(
+              ContextMenuIconButton(
+                consumeOutsideTap: true,
                 semanticsLabel: context.l10n.menu,
                 icon: Icon(Icons.more_horiz, color: titleColor?.withValues(alpha: 0.5)),
                 actions: [
                   ContextMenuAction(
-                    icon: const Icon(Icons.info),
+                    icon: Icons.info,
                     label: context.l10n.broadcastOverview,
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
@@ -438,7 +438,7 @@ class _BroadcastCardContent extends StatelessWidget {
                     },
                   ),
                   ContextMenuAction(
-                    icon: const Icon(LichessIcons.chess_board),
+                    icon: LichessIcons.chess_board,
                     label: context.l10n.broadcastBoards,
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
@@ -451,7 +451,7 @@ class _BroadcastCardContent extends StatelessWidget {
                     },
                   ),
                   ContextMenuAction(
-                    icon: const Icon(Icons.people),
+                    icon: Icons.people,
                     label: context.l10n.players,
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).push(
@@ -464,7 +464,9 @@ class _BroadcastCardContent extends StatelessWidget {
                     },
                   ),
                   ContextMenuAction(
-                    icon: const PlatformShareIcon(),
+                    icon: Theme.of(context).platform == TargetPlatform.iOS
+                        ? Icons.ios_share_outlined
+                        : Icons.share_outlined,
                     label: context.l10n.studyShareAndExport,
                     onPressed: () {
                       showBroadcastShareMenu(context, broadcast);

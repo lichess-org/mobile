@@ -202,7 +202,8 @@ class _BodyState extends ConsumerState<_Body> {
           if (widget.gameData == null && widget.error == null)
             const PlatformAppBarLoadingIndicator(),
           if (widget.gameData != null)
-            ContextMenuButton(
+            ContextMenuIconButton(
+              consumeOutsideTap: true,
               icon: const Icon(Icons.more_horiz),
               semanticsLabel: context.l10n.menu,
               actions: [

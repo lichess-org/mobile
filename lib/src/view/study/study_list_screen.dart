@@ -13,18 +13,15 @@ import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/filter.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:logging/logging.dart';
-
-final _logger = Logger('StudyListScreen');
 
 /// A screen that displays a paginated list of studies
-class StudyListScreen extends ConsumerWidget {
+class StudyListScreen extends ConsumerStatefulWidget {
   const StudyListScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
@@ -32,94 +29,23 @@ class StudyListScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isLoggedIn = ref.watch(authSessionProvider)?.user.id != null;
-
-    final filter = ref.watch(studyFilterProvider);
-    final title = Text(isLoggedIn ? filter.category.l10n(context.l10n) : context.l10n.studyMenu);
-
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: title,
-        actions: [
-          SemanticIconButton(
-            icon: const Icon(Icons.filter_list),
-            // TODO: translate
-            semanticsLabel: 'Filter studies',
-            onPressed: () => showModalBottomSheet<void>(
-              context: context,
-              useRootNavigator: true,
-              isScrollControlled: true,
-              showDragHandle: true,
-              builder: (_) => _StudyFilterSheet(isLoggedIn: isLoggedIn),
-            ),
-          ),
-        ],
-      ),
-      body: _Body(filter: filter),
-    );
-  }
+  ConsumerState<StudyListScreen> createState() => _StudyListScreenState();
 }
 
-class _StudyFilterSheet extends ConsumerWidget {
-  const _StudyFilterSheet({required this.isLoggedIn});
+class _StudyListScreenState extends ConsumerState<StudyListScreen> {
+  StudyCategory category = StudyCategory.all;
+  StudyListOrder order = StudyListOrder.hot;
 
-  final bool isLoggedIn;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filter = ref.watch(studyFilterProvider);
-
-    return BottomSheetScrollableContainer(
-      padding: const EdgeInsets.all(16.0),
-      children: [
-        // If we're not logged in, the only category available is "All"
-        if (isLoggedIn) ...[
-          Filter<StudyCategory>(
-            filterType: FilterType.singleChoice,
-            choices: StudyCategory.values,
-            choiceSelected: (choice) => filter.category == choice,
-            choiceLabel: (category) => Text(category.l10n(context.l10n)),
-            onSelected: (value, selected) =>
-                ref.read(studyFilterProvider.notifier).setCategory(value),
-          ),
-          const PlatformDivider(thickness: 1, indent: 0),
-          const SizedBox(height: 10.0),
-        ],
-        Filter<StudyListOrder>(
-          // TODO mobile l10n
-          filterName: 'Sort by',
-          filterType: FilterType.singleChoice,
-          choices: StudyListOrder.values,
-          choiceSelected: (choice) => filter.order == choice,
-          choiceLabel: (order) => Text(order.l10n(context.l10n)),
-          onSelected: (value, selected) => ref.read(studyFilterProvider.notifier).setOrder(value),
-        ),
-      ],
-    );
-  }
-}
-
-class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.filter});
-
-  final StudyFilterState filter;
-
-  @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body> {
   String? search;
 
-  final _searchController = SearchController();
+  final _searchController = TextEditingController();
 
   final _scrollController = ScrollController(keepScrollOffset: true);
 
   bool requestedNextPage = false;
 
   StudyListPaginatorProvider get paginatorProvider =>
-      StudyListPaginatorProvider(filter: widget.filter, search: search);
+      StudyListPaginatorProvider(category: category, order: order, search: search);
 
   @override
   void initState() {
@@ -152,6 +78,8 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
+    final sessionUser = ref.watch(authSessionProvider)?.user;
+
     ref.listen(paginatorProvider, (prev, next) {
       if (prev?.value?.nextPage != next.value?.nextPage) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -183,9 +111,100 @@ class _BodyState extends ConsumerState<_Body> {
       ),
     );
 
-    return studiesAsync.when(
-      data: (studies) {
-        return ListView.separated(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: Text(sessionUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
+        actions: [
+          ContextMenuIconButton(
+            icon: const Icon(Icons.sort_outlined),
+            semanticsLabel: 'Sort studies',
+            actions: [
+              ContextMenuAction(
+                icon: order == StudyListOrder.hot ? Icons.check : null,
+                label: context.l10n.studyHot,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.hot;
+                }),
+              ),
+              ContextMenuAction(
+                icon: order == StudyListOrder.newest ? Icons.check : null,
+                label: context.l10n.studyDateAddedNewest,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.newest;
+                }),
+              ),
+              ContextMenuAction(
+                icon: order == StudyListOrder.updated ? Icons.check : null,
+                label: context.l10n.studyRecentlyUpdated,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.updated;
+                }),
+              ),
+              ContextMenuAction(
+                icon: order == StudyListOrder.popular ? Icons.check : null,
+                label: context.l10n.studyMostPopular,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.popular;
+                }),
+              ),
+            ],
+          ),
+        ],
+        bottom: sessionUser != null
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(50.0),
+                child: SizedBox(
+                  height: 50.0,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 6.0),
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: StudyCategory.values.length,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      separatorBuilder: (context, index) => const SizedBox(width: 8.0),
+                      itemBuilder: (context, index) {
+                        final cat = StudyCategory.values[index];
+                        return ChoiceChip(
+                          showCheckmark: false,
+                          label: Text(cat.l10n(context.l10n)),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                          selected: category == cat,
+                          onSelected: (selected) {
+                            if (selected) {
+                              setState(() {
+                                category = cat;
+                                if ([
+                                  StudyCategory.mine,
+                                  StudyCategory.public,
+                                  StudyCategory.private,
+                                ].contains(cat)) {
+                                  search = null;
+                                  _searchController.value = TextEditingValue(
+                                    text: 'owner:${sessionUser.id} ',
+                                  );
+                                } else if (cat == StudyCategory.member) {
+                                  search = null;
+                                  _searchController.value = TextEditingValue(
+                                    text: 'member:${sessionUser.id} ',
+                                  );
+                                } else {
+                                  search = null;
+                                  _searchController.clear();
+                                }
+                              });
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              )
+            : null,
+      ),
+      body: switch (studiesAsync) {
+        AsyncData(value: final studies) => ListView.separated(
           shrinkWrap: true,
           itemCount: studies.studies.length + 1,
           controller: _scrollController,
@@ -196,19 +215,14 @@ class _BodyState extends ConsumerState<_Body> {
               : const PlatformDivider(height: 1, color: Colors.transparent),
           itemBuilder: (context, index) =>
               index == 0 ? searchBar : _StudyListItem(study: studies.studies[index - 1]),
-        );
-      },
-      loading: () {
-        return Column(
+        ),
+        AsyncError() => FullScreenRetryRequest(onRetry: () => ref.invalidate(paginatorProvider)),
+        _ => Column(
           children: [
             searchBar,
             const Expanded(child: Center(child: CircularProgressIndicator.adaptive())),
           ],
-        );
-      },
-      error: (error, stack) {
-        _logger.severe('Error loading studies', error, stack);
-        return Center(child: Text(context.l10n.studyMenu));
+        ),
       },
     );
   }
