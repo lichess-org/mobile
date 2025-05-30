@@ -181,12 +181,12 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
                                 ].contains(cat)) {
                                   search = null;
                                   _searchController.value = TextEditingValue(
-                                    text: 'owner:${sessionUser.id}',
+                                    text: 'owner:${sessionUser.id} ',
                                   );
                                 } else if (cat == StudyCategory.member) {
                                   search = null;
                                   _searchController.value = TextEditingValue(
-                                    text: 'member:${sessionUser.id}',
+                                    text: 'member:${sessionUser.id} ',
                                   );
                                 } else {
                                   search = null;
