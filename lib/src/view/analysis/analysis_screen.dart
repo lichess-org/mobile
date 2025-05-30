@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -183,51 +184,15 @@ class _Body extends ConsumerWidget {
         pov.opposite,
         analysisState.currentPosition.ply,
       );
-      boardFooter = Container(
-        color: ColorScheme.of(context).surfaceContainer,
-        padding: const EdgeInsets.only(left: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (footerPlayer.user != null)
-              UserFullNameWidget.player(
-                user: footerPlayer.user,
-                rating: footerPlayer.rating,
-                provisional: footerPlayer.provisional,
-                aiLevel: footerPlayer.aiLevel,
-              )
-            else
-              Text(footerPlayer.fullName(context.l10n)),
-            if (footerClock != null)
-              _Clock(
-                timeLeft: footerClock,
-                isSideToMove: analysisState.currentPosition.turn == pov,
-              ),
-          ],
-        ),
+      boardFooter = _PlayerWidget(
+        player: footerPlayer,
+        clock: footerClock,
+        isSideToMove: analysisState.currentPosition.turn == pov,
       );
-      boardHeader = Container(
-        color: ColorScheme.of(context).surfaceContainer,
-        padding: const EdgeInsets.only(left: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (headerPlayer.user != null)
-              UserFullNameWidget.player(
-                user: headerPlayer.user,
-                rating: headerPlayer.rating,
-                provisional: headerPlayer.provisional,
-                aiLevel: headerPlayer.aiLevel,
-              )
-            else
-              Text(headerPlayer.fullName(context.l10n)),
-            if (headerClock != null)
-              _Clock(
-                timeLeft: headerClock,
-                isSideToMove: analysisState.currentPosition.turn == pov.opposite,
-              ),
-          ],
-        ),
+      boardHeader = _PlayerWidget(
+        player: headerPlayer,
+        clock: headerClock,
+        isSideToMove: analysisState.currentPosition.turn == pov.opposite,
       );
     }
 
@@ -296,6 +261,38 @@ class _Body extends ConsumerWidget {
   }
 }
 
+class _PlayerWidget extends StatelessWidget {
+  const _PlayerWidget({required this.player, required this.clock, required this.isSideToMove});
+
+  final Player player;
+  final Duration? clock;
+  final bool isSideToMove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: kAnalysisBoardHeaderOrFooterHeight,
+      color: ColorScheme.of(context).surfaceContainer,
+      padding: const EdgeInsets.only(left: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          if (player.user != null)
+            UserFullNameWidget.player(
+              user: player.user,
+              rating: player.rating,
+              provisional: player.provisional,
+              aiLevel: player.aiLevel,
+            )
+          else
+            Text(player.fullName(context.l10n)),
+          if (clock != null) _Clock(timeLeft: clock!, isSideToMove: isSideToMove),
+        ],
+      ),
+    );
+  }
+}
+
 class _Clock extends StatelessWidget {
   const _Clock({required this.timeLeft, required this.isSideToMove});
 
@@ -304,11 +301,19 @@ class _Clock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      timeLeft.toHoursMinutesSeconds(),
-      style: TextStyle(
-        color: ColorScheme.of(context).onSurface.withValues(alpha: isSideToMove ? 1.0 : 0.5),
-        fontFeatures: const [FontFeature.tabularFigures()],
+    final colorScheme = ColorScheme.of(context);
+    return Container(
+      height: kAnalysisBoardHeaderOrFooterHeight,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      color: isSideToMove ? colorScheme.secondaryContainer : null,
+      child: Center(
+        child: Text(
+          timeLeft.toHoursMinutesSeconds(),
+          style: TextStyle(
+            color: isSideToMove ? colorScheme.onSecondaryContainer : null,
+            fontFeatures: const [FontFeature.tabularFigures()],
+          ),
+        ),
       ),
     );
   }
