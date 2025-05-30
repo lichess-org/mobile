@@ -41,7 +41,7 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                   ),
                   SwitchSettingTile(
                     // TODO: translate
-                    title: const Text('Small board'),
+                    title: const Text('Smaller board'),
                     value: prefs.smallBoard,
                     onChanged: (value) =>
                         ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
