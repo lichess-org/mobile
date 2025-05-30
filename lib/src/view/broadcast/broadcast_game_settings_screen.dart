@@ -35,23 +35,6 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
       body: ListView(
         children: [
           ListSection(
-            children: [
-              SwitchSettingTile(
-                title: Text(context.l10n.inlineNotation),
-                value: broadcastPrefs.inlineNotation,
-                onChanged: (value) =>
-                    ref.read(broadcastPreferencesProvider.notifier).toggleInlineNotation(),
-              ),
-              SwitchSettingTile(
-                // TODO: translate
-                title: const Text('Small board'),
-                value: broadcastPrefs.smallBoard,
-                onChanged: (value) =>
-                    ref.read(broadcastPreferencesProvider.notifier).toggleSmallBoard(),
-              ),
-            ],
-          ),
-          ListSection(
             header: SettingsSectionTitle(context.l10n.computerAnalysis),
             children: [
               SwitchSettingTile(
@@ -123,6 +106,23 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                   isDismissible: true,
                   builder: (_) => const OpeningExplorerSettings(),
                 ),
+              ),
+            ],
+          ),
+          ListSection(
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.inlineNotation),
+                value: broadcastPrefs.inlineNotation,
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleInlineNotation(),
+              ),
+              SwitchSettingTile(
+                // TODO: translate
+                title: const Text('Small board'),
+                value: broadcastPrefs.smallBoard,
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleSmallBoard(),
               ),
             ],
           ),

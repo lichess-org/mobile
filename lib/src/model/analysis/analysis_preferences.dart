@@ -63,7 +63,7 @@ sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   const factory AnalysisPrefs({
     @JsonKey(defaultValue: true) required bool enableComputerAnalysis,
     required bool showEvaluationGauge,
-    @JsonKey(defaultValue: false) required bool showEngineLines,
+    @JsonKey(defaultValue: true) required bool showEngineLines,
     required bool showBestMoveArrow,
     required bool showAnnotations,
     required bool showPgnComments,
@@ -74,7 +74,7 @@ sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   static const defaults = AnalysisPrefs(
     enableComputerAnalysis: true,
     showEvaluationGauge: true,
-    showEngineLines: false,
+    showEngineLines: true,
     showBestMoveArrow: true,
     showAnnotations: true,
     showPgnComments: true,

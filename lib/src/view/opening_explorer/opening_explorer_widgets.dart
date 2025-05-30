@@ -3,11 +3,12 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kTableRowVerticalPadding = 10.0;
@@ -348,11 +349,13 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(
-            ArchivedGameScreen.buildRoute(
+            AnalysisScreen.buildRoute(
               context,
-              gameId: widget.game.id,
-              orientation: Side.white,
-              initialCursor: widget.ply,
+              AnalysisOptions(
+                orientation: Side.white,
+                gameId: widget.game.id,
+                initialMoveCursor: widget.ply,
+              ),
             ),
           );
         },

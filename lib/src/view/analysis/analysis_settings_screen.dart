@@ -31,23 +31,6 @@ class AnalysisSettingsScreen extends ConsumerWidget {
           appBar: AppBar(title: Text(context.l10n.settingsSettings)),
           body: ListView(
             children: [
-              ListSection(
-                children: [
-                  SwitchSettingTile(
-                    title: Text(context.l10n.inlineNotation),
-                    value: prefs.inlineNotation,
-                    onChanged: (value) =>
-                        ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
-                  ),
-                  SwitchSettingTile(
-                    // TODO: translate
-                    title: const Text('Small board'),
-                    value: prefs.smallBoard,
-                    onChanged: (value) =>
-                        ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
-                  ),
-                ],
-              ),
               if (value.isComputerAnalysisAllowed)
                 ListSection(
                   header: SettingsSectionTitle(context.l10n.computerAnalysis),
@@ -127,6 +110,23 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                       isDismissible: true,
                       builder: (_) => const OpeningExplorerSettings(),
                     ),
+                  ),
+                ],
+              ),
+              ListSection(
+                children: [
+                  SwitchSettingTile(
+                    title: Text(context.l10n.inlineNotation),
+                    value: prefs.inlineNotation,
+                    onChanged: (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                  ),
+                  SwitchSettingTile(
+                    // TODO: translate
+                    title: const Text('Small board'),
+                    value: prefs.smallBoard,
+                    onChanged: (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
                   ),
                 ],
               ),

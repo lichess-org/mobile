@@ -34,7 +34,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_session_widget.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
@@ -680,11 +679,13 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             );
             if (context.mounted) {
               Navigator.of(context).push(
-                ArchivedGameScreen.buildRoute(
+                AnalysisScreen.buildRoute(
                   context,
-                  gameData: game.data,
-                  orientation: puzzleState.pov,
-                  initialCursor: puzzleState.puzzle.puzzle.initialPly + 1,
+                  AnalysisOptions(
+                    orientation: puzzleState.pov,
+                    gameId: game.id,
+                    initialMoveCursor: puzzleState.puzzle.puzzle.initialPly + 1,
+                  ),
                 ),
               );
             }

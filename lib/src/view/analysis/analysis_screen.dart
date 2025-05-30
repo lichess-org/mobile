@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -27,6 +28,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -168,6 +170,67 @@ class _Body extends ConsumerWidget {
     final currentNode = analysisState.currentNode;
     final pov = analysisState.pov;
 
+    Widget? boardFooter;
+    Widget? boardHeader;
+    if (analysisState.archivedGame != null) {
+      final footerPlayer = analysisState.archivedGame!.playerOf(pov);
+      final headerPlayer = analysisState.archivedGame!.playerOf(pov.opposite);
+      final footerClock = analysisState.archivedGame!.archivedClockOf(
+        pov,
+        analysisState.currentPosition.ply,
+      );
+      final headerClock = analysisState.archivedGame!.archivedClockOf(
+        pov.opposite,
+        analysisState.currentPosition.ply,
+      );
+      boardFooter = Container(
+        color: ColorScheme.of(context).surfaceContainer,
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (footerPlayer.user != null)
+              UserFullNameWidget.player(
+                user: footerPlayer.user,
+                rating: footerPlayer.rating,
+                provisional: footerPlayer.provisional,
+                aiLevel: footerPlayer.aiLevel,
+              )
+            else
+              Text(footerPlayer.fullName(context.l10n)),
+            if (footerClock != null)
+              _Clock(
+                timeLeft: footerClock,
+                isSideToMove: analysisState.currentPosition.turn == pov,
+              ),
+          ],
+        ),
+      );
+      boardHeader = Container(
+        color: ColorScheme.of(context).surfaceContainer,
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (headerPlayer.user != null)
+              UserFullNameWidget.player(
+                user: headerPlayer.user,
+                rating: headerPlayer.rating,
+                provisional: headerPlayer.provisional,
+                aiLevel: headerPlayer.aiLevel,
+              )
+            else
+              Text(headerPlayer.fullName(context.l10n)),
+            if (headerClock != null)
+              _Clock(
+                timeLeft: headerClock,
+                isSideToMove: analysisState.currentPosition.turn == pov.opposite,
+              ),
+          ],
+        ),
+      );
+    }
+
     return AnalysisLayout(
       smallBoard: analysisPrefs.smallBoard,
       tabController: controller,
@@ -178,15 +241,19 @@ class _Body extends ConsumerWidget {
         borderRadius: borderRadius,
         enableDrawingShapes: enableDrawingShapes,
       ),
+      boardHeader: boardHeader,
+      boardFooter: boardFooter,
       engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
           ? (context, orientation) {
               return orientation == Orientation.portrait
                   ? EngineGauge(
                       displayMode: EngineGaugeDisplayMode.horizontal,
                       params: analysisState.engineGaugeParams(enginePrefs),
-                      engineLinesState: analysisPrefs.showEngineLines
-                          ? EngineLinesShowState.expanded
-                          : EngineLinesShowState.collapsed,
+                      engineLinesState: analysisState.isEngineAvailable(enginePrefs)
+                          ? analysisPrefs.showEngineLines
+                                ? EngineLinesShowState.expanded
+                                : EngineLinesShowState.collapsed
+                          : null,
                       onTap: () {
                         ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
                       },
@@ -225,6 +292,24 @@ class _Body extends ConsumerWidget {
         AnalysisTreeView(options),
         if (options.gameId != null) ServerAnalysisSummary(options),
       ],
+    );
+  }
+}
+
+class _Clock extends StatelessWidget {
+  const _Clock({required this.timeLeft, required this.isSideToMove});
+
+  final Duration timeLeft;
+  final bool isSideToMove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      timeLeft.toHoursMinutesSeconds(),
+      style: TextStyle(
+        color: ColorScheme.of(context).onSurface.withValues(alpha: isSideToMove ? 1.0 : 0.5),
+        fontFeatures: const [FontFeature.tabularFigures()],
+      ),
     );
   }
 }
@@ -335,14 +420,20 @@ class _BottomBar extends ConsumerWidget {
               ).push(BoardEditorScreen.buildRoute(context, initialFen: boardFen));
             },
           ),
-        if (analysisState.gameId != null)
+        if (analysisState.gameId != null || analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
-            onPressed: () {
-              final boardUrl = lichessUri('/${analysisState.gameId}/${analysisState.pov.name}');
-              launchShareDialog(context, ShareParams(uri: boardUrl));
-            },
+            makeLabel: (context) => Text(context.l10n.studyShareAndExport),
+            onPressed: () => _showShareMenu(context, ref),
           ),
+      ],
+    );
+  }
+
+  Future<void> _showShareMenu(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
         // PGN share can be used to quickly analyze a position, so engine must be allowed to access
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
@@ -360,7 +451,14 @@ class _BottomBar extends ConsumerWidget {
               launchShareDialog(context, ShareParams(text: analysisState.currentPosition.fen));
             },
           ),
-        if (options.gameId != null)
+        if (options.gameId != null) ...[
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
+            onPressed: () {
+              final boardUrl = lichessUri('/${analysisState.gameId}/${analysisState.pov.name}');
+              launchShareDialog(context, ShareParams(uri: boardUrl));
+            },
+          ),
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
             onPressed: () async {
@@ -391,6 +489,66 @@ class _BottomBar extends ConsumerWidget {
               }
             },
           ),
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.gameAsGIF),
+            onPressed: () async {
+              try {
+                final gameId = options.gameId!;
+                final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+                final (gif, game) = await ref
+                    .read(gameShareServiceProvider)
+                    .gameGif(gameId, analysisState.pov);
+                if (context.mounted) {
+                  launchShareDialog(
+                    context,
+                    ShareParams(
+                      fileNameOverrides: ['$gameId.gif'],
+                      files: [gif],
+                      subject: game.shareTitle(context.l10n),
+                    ),
+                  );
+                }
+              } catch (e) {
+                debugPrint(e.toString());
+                if (context.mounted) {
+                  showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+                }
+              }
+            },
+          ),
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.downloadAnnotated),
+            onPressed: () async {
+              try {
+                final gameId = options.gameId!;
+                final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(gameId);
+                if (context.mounted) {
+                  launchShareDialog(context, ShareParams(text: pgn));
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+                }
+              }
+            },
+          ),
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.downloadRaw),
+            onPressed: () async {
+              try {
+                final gameId = options.gameId!;
+                final pgn = await ref.read(gameShareServiceProvider).rawPgn(gameId);
+                if (context.mounted) {
+                  launchShareDialog(context, ShareParams(text: pgn));
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+                }
+              }
+            },
+          ),
+        ],
       ],
     );
   }

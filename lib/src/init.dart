@@ -179,10 +179,10 @@ Future<void> _screenSizeBasedInitialization() async {
   );
   final isSmallScreen = estimateHeightMinusBoard(mediaQueryData) < kSmallHeightMinusBoard;
 
-  final analysisPrefs = AnalysisPrefs.defaults.copyWith(smallBoard: isSmallScreen);
+  final analysisPrefs = AnalysisPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
   await prefs.setString(PrefCategory.analysis.storageKey, jsonEncode(analysisPrefs.toJson()));
-  final studyPrefs = StudyPrefs.defaults.copyWith(smallBoard: isSmallScreen);
+  final studyPrefs = StudyPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
   await prefs.setString(PrefCategory.study.storageKey, jsonEncode(studyPrefs.toJson()));
-  final broadcastPrefs = BroadcastPrefs.defaults.copyWith(smallBoard: isSmallScreen);
+  final broadcastPrefs = BroadcastPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
   await prefs.setString(PrefCategory.broadcast.storageKey, jsonEncode(broadcastPrefs.toJson()));
 }

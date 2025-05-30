@@ -244,9 +244,11 @@ class _Body extends ConsumerWidget {
                   ? EngineGauge(
                       displayMode: EngineGaugeDisplayMode.horizontal,
                       params: engineGaugeParams,
-                      engineLinesState: studyPrefs.showEngineLines
-                          ? EngineLinesShowState.expanded
-                          : EngineLinesShowState.collapsed,
+                      engineLinesState: studyState.isEngineAvailable(enginePrefs)
+                          ? studyPrefs.showEngineLines
+                                ? EngineLinesShowState.expanded
+                                : EngineLinesShowState.collapsed
+                          : null,
                       onTap: () {
                         ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines();
                       },

@@ -40,19 +40,6 @@ class StudySettingsScreen extends ConsumerWidget {
           ListSection(
             children: [
               SwitchSettingTile(
-                title: Text(context.l10n.inlineNotation),
-                value: studyPrefs.inlineNotation,
-                onChanged: (value) =>
-                    ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
-              ),
-              SwitchSettingTile(
-                // TODO: translate
-                title: const Text('Small board'),
-                value: studyPrefs.smallBoard,
-                onChanged: (value) =>
-                    ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),
-              ),
-              SwitchSettingTile(
                 title: Text(context.l10n.bestMoveArrow),
                 value: studyPrefs.showBestMoveArrow,
                 onChanged: (value) =>
@@ -98,6 +85,23 @@ class StudySettingsScreen extends ConsumerWidget {
                 onChanged: (value) {
                   ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
                 },
+              ),
+            ],
+          ),
+          ListSection(
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.inlineNotation),
+                value: studyPrefs.inlineNotation,
+                onChanged: (value) =>
+                    ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
+              ),
+              SwitchSettingTile(
+                // TODO: translate
+                title: const Text('Small board'),
+                value: studyPrefs.smallBoard,
+                onChanged: (value) =>
+                    ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),
               ),
             ],
           ),
