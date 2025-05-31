@@ -18,9 +18,9 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">好</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">包含\"%s\"名称的棋手</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">放大正在拖动的棋子</string>
-  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">你想结束这组吗？</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">你想结束这组谜题风暴吗？</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">没有结果，请更改筛选条件</string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">没有记录。 请下几组 Puzzle Storm。</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">没有记录。 请下几组谜题风暴。</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">在 3 分钟内解决尽可能多的谜题。</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">你将失去你目前的连胜，你的分数将被保存。</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">从你最喜欢的开局解决谜题，或选择一个主题。</string>
@@ -28,6 +28,7 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">最近搜索</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">震动反馈</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">沉浸模式</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">下棋时隐藏系统界面。 如果您的操作受到屏幕边缘的系统导航手势干扰，请使用此功能。 适用于棋局和谜题风暴界面。</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">设置</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">分享 PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">分享棋局链接</string>
