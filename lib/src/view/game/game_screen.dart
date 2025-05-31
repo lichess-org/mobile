@@ -7,11 +7,11 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
@@ -47,7 +47,6 @@ class GameScreen extends ConsumerStatefulWidget {
     this.loadingLastMove,
     this.loadingOrientation,
     this.lastMoveAt,
-    this.gameListContext,
     super.key,
   }) : assert(
          initialGameId != null || seek != null || challenge != null,
@@ -64,9 +63,6 @@ class GameScreen extends ConsumerStatefulWidget {
 
   /// The date of the last move played in the game. If null, the game is in progress.
   final DateTime? lastMoveAt;
-
-  /// The context of the game list that opened this screen, if available.
-  final (UserId?, GameFilterState)? gameListContext;
 
   _GameSource get source {
     if (initialGameId != null) {
@@ -87,7 +83,6 @@ class GameScreen extends ConsumerStatefulWidget {
     Move? loadingLastMove,
     Side? loadingOrientation,
     DateTime? lastMoveAt,
-    (UserId?, GameFilterState)? gameListContext,
   }) {
     return buildScreenRoute(
       context,
@@ -99,7 +94,6 @@ class GameScreen extends ConsumerStatefulWidget {
         loadingLastMove: loadingLastMove,
         loadingOrientation: loadingOrientation,
         lastMoveAt: lastMoveAt,
-        gameListContext: gameListContext,
       ),
     );
   }
@@ -199,10 +193,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 ? _ChallengeGameTitle(challenge: widget.challenge!)
                 : const SizedBox.shrink(),
 
-            actions: [
-              if (loadedGame != null)
-                _GameMenu(gameId: loadedGame.gameId, gameListContext: widget.gameListContext),
-            ],
+            actions: [if (loadedGame != null) _GameMenu(gameId: loadedGame.gameId)],
           ),
           body: Theme.of(context).platform == TargetPlatform.android
               ? AndroidGesturesExclusionWidget(
@@ -268,10 +259,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 }
 
 class _GameMenu extends ConsumerWidget {
-  const _GameMenu({required this.gameId, this.gameListContext});
+  const _GameMenu({required this.gameId});
 
   final GameFullId gameId;
-  final (UserId?, GameFilterState)? gameListContext;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -288,17 +278,18 @@ class _GameMenu extends ConsumerWidget {
             context: context,
             isDismissible: true,
             isScrollControlled: true,
-            showDragHandle: true,
             builder: (_) => GameSettings(id: gameId),
           ),
         ),
-        const ToggleSoundContextMenuAction(),
+        ToggleSoundContextMenuAction(
+          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
+          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+        ),
         GameBookmarkContextMenuAction(
           id: gameId.gameId,
           bookmarked: isBookmarkedAsync.valueOrNull ?? false,
           onToggleBookmark: () =>
               ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
-          gameListContext: gameListContext,
         ),
         ...(switch (ref.watch(gameShareDataProvider(gameId))) {
           AsyncData(:final value) =>

@@ -4,9 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
-import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -19,13 +17,10 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 /// A list tile that shows more detailed game info than [GameListTile].
 class GameListDetailTile extends StatelessWidget {
-  const GameListDetailTile({required this.item, this.onPressedBookmark, this.gameListContext});
+  const GameListDetailTile({required this.item, this.onPressedBookmark});
 
   final LightExportedGameWithPov item;
   final Future<void> Function(BuildContext context)? onPressedBookmark;
-
-  /// The context of the game list that opened this screen, if available.
-  final (UserId?, GameFilterState)? gameListContext;
 
   Side get mySide => item.pov;
 
@@ -80,7 +75,6 @@ class GameListDetailTile extends StatelessWidget {
         orientation: item.pov,
         loadingLastMove: game.lastMove,
         lastMoveAt: game.lastMoveAt,
-        gameListContext: gameListContext,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),

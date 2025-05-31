@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
@@ -21,7 +22,7 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -624,10 +625,13 @@ class _GameListWidget extends ConsumerWidget {
               final gameData = list.firstWhereOrNull((g) => g.id == game.gameId);
               if (context.mounted && gameData != null && gameData.variant.isReadSupported) {
                 Navigator.of(context, rootNavigator: true).push(
-                  ArchivedGameScreen.buildRoute(
+                  AnalysisScreen.buildRoute(
                     context,
-                    gameData: gameData,
-                    orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,
+                    AnalysisOptions(
+                      orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,
+                      gameId: gameData.id,
+                      initialMoveCursor: 0,
+                    ),
                   ),
                 );
               } else if (context.mounted && gameData != null) {

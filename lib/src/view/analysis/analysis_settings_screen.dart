@@ -41,10 +41,20 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                   ),
                   SwitchSettingTile(
                     // TODO: translate
-                    title: const Text('Small board'),
+                    title: const Text('Smaller board'),
                     value: prefs.smallBoard,
                     onChanged: (value) =>
                         ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+                  ),
+                  ListTile(
+                    title: Text(context.l10n.openingExplorer),
+                    onTap: () => showModalBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      showDragHandle: true,
+                      isDismissible: true,
+                      builder: (_) => const OpeningExplorerSettings(),
+                    ),
                   ),
                 ],
               ),
@@ -115,20 +125,6 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                     ref.read(ctrlProvider.notifier).setNumEvalLines(value);
                   },
                 ),
-              ),
-              ListSection(
-                children: [
-                  ListTile(
-                    title: Text(context.l10n.openingExplorer),
-                    onTap: () => showModalBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      showDragHandle: true,
-                      isDismissible: true,
-                      builder: (_) => const OpeningExplorerSettings(),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

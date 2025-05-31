@@ -1,15 +1,14 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
-import 'package:lichess_mobile/src/model/game/game_filter.dart';
-import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
@@ -17,7 +16,7 @@ import 'package:share_plus/share_plus.dart';
 
 /// Opens a game screen for the given [LightExportedGame].
 ///
-/// Will open [GameScreen] if the game Id is a [GameFullId], otherwise [ArchivedGameScreen].
+/// Will open [GameScreen] if the game Id is a [GameFullId], otherwise [AnalysisScreen].
 ///
 /// If the game is not read supported, a snackbar is shown.
 void openGameScreen(
@@ -27,7 +26,6 @@ void openGameScreen(
   String? loadingFen,
   Move? loadingLastMove,
   DateTime? lastMoveAt,
-  (UserId?, GameFilterState)? gameListContext,
 }) {
   if (game.variant.isReadSupported) {
     Navigator.of(context, rootNavigator: true).push(
@@ -39,13 +37,10 @@ void openGameScreen(
               loadingFen: loadingFen,
               loadingLastMove: loadingLastMove,
               lastMoveAt: lastMoveAt,
-              gameListContext: gameListContext,
             )
-          : ArchivedGameScreen.buildRoute(
+          : AnalysisScreen.buildRoute(
               context,
-              gameData: game,
-              orientation: orientation,
-              gameListContext: gameListContext,
+              AnalysisOptions(orientation: orientation, gameId: game.id, initialMoveCursor: 0),
             ),
     );
   } else {
@@ -53,12 +48,11 @@ void openGameScreen(
   }
 }
 
-class GameBookmarkContextMenuAction extends ConsumerStatefulWidget {
+class GameBookmarkContextMenuAction extends StatefulWidget {
   const GameBookmarkContextMenuAction({
     required this.id,
     required this.bookmarked,
     required this.onToggleBookmark,
-    this.gameListContext,
     super.key,
   });
 
@@ -66,18 +60,11 @@ class GameBookmarkContextMenuAction extends ConsumerStatefulWidget {
   final bool bookmarked;
   final Future<void> Function() onToggleBookmark;
 
-  /// The context of the game list that opened this screen, if available.
-  ///
-  /// It is used to invalidate the user game history, if the game was loaded from a user's game history.
-  /// If the [UserId] is null, it means the game was not loaded from the current logged in user's game history.
-  final (UserId?, GameFilterState)? gameListContext;
-
   @override
-  ConsumerState<GameBookmarkContextMenuAction> createState() =>
-      _GameBookmarkContextMenuActionState();
+  State<GameBookmarkContextMenuAction> createState() => _GameBookmarkContextMenuActionState();
 }
 
-class _GameBookmarkContextMenuActionState extends ConsumerState<GameBookmarkContextMenuAction> {
+class _GameBookmarkContextMenuActionState extends State<GameBookmarkContextMenuAction> {
   Future<void>? _pendingBookmarkAction;
   late bool _bookmarked;
 
@@ -93,9 +80,8 @@ class _GameBookmarkContextMenuActionState extends ConsumerState<GameBookmarkCont
       future: _pendingBookmarkAction,
       builder: (context, snapshot) {
         return ContextMenuAction(
-          dismissOnPress: false,
           icon: _bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
-          label: _bookmarked ? 'Unbookmark' : 'Bookmark',
+          label: _bookmarked ? 'Remove bookmark' : context.l10n.bookmarkThisGame,
           onPressed: snapshot.connectionState == ConnectionState.waiting
               ? null
               : () async {
@@ -109,16 +95,6 @@ class _GameBookmarkContextMenuActionState extends ConsumerState<GameBookmarkCont
                       setState(() {
                         _bookmarked = !_bookmarked;
                       });
-                      if (widget.gameListContext != null) {
-                        final historyProvider = userGameHistoryProvider(
-                          widget.gameListContext!.$1,
-                          isOnline: true,
-                          filter: widget.gameListContext!.$2,
-                        );
-                        if (ref.exists(historyProvider)) {
-                          ref.read(historyProvider.notifier).toggleBookmark(widget.id);
-                        }
-                      }
                     }
                   } catch (_) {
                     if (context.mounted) {
@@ -175,7 +151,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
     ),
     ContextMenuAction(
       icon: Icons.text_snippet_outlined,
-      label: 'PGN: ${context.l10n.downloadAnnotated}',
+      label: context.l10n.downloadAnnotated,
       onPressed: () async {
         try {
           final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(gameId);
@@ -191,7 +167,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
     ),
     ContextMenuAction(
       icon: Icons.description_outlined,
-      label: 'PGN: ${context.l10n.downloadRaw}',
+      label: context.l10n.downloadRaw,
       onPressed: () async {
         try {
           final pgn = await ref.read(gameShareServiceProvider).rawPgn(gameId);

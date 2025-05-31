@@ -116,6 +116,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
         title: Text(sessionUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
         actions: [
           ContextMenuIconButton(
+            consumeOutsideTap: true,
             icon: const Icon(Icons.sort_outlined),
             semanticsLabel: 'Sort studies',
             actions: [

@@ -142,6 +142,7 @@ class AccountScreen extends ConsumerWidget {
                       ? const Icon(Icons.chevron_right)
                       : null,
                   onTap: () {
+                    ref.invalidate(accountProvider);
                     Navigator.of(context).push(ProfileScreen.buildRoute(context));
                   },
                 ),
@@ -249,7 +250,7 @@ class AccountScreen extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Symbols.chess_pawn),
-                title: Text(context.l10n.preferencesGameBehavior, overflow: TextOverflow.ellipsis),
+                title: const Text('Board settings', overflow: TextOverflow.ellipsis),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const Icon(Icons.chevron_right)
                     : null,

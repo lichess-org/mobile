@@ -27,13 +27,65 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
   Future<void> toggleEvaluationBar() {
     return save(state.copyWith(showEvaluationBar: !state.showEvaluationBar));
   }
+
+  Future<void> toggleEnableComputerAnalysis() {
+    return save(state.copyWith(enableComputerAnalysis: !state.enableComputerAnalysis));
+  }
+
+  Future<void> toggleShowEvaluationGauge() {
+    return save(state.copyWith(showEvaluationGauge: !state.showEvaluationGauge));
+  }
+
+  Future<void> toggleShowEngineLines() {
+    return save(state.copyWith(showEngineLines: !state.showEngineLines));
+  }
+
+  Future<void> toggleAnnotations() {
+    return save(state.copyWith(showAnnotations: !state.showAnnotations));
+  }
+
+  Future<void> togglePgnComments() {
+    return save(state.copyWith(showPgnComments: !state.showPgnComments));
+  }
+
+  Future<void> toggleShowBestMoveArrow() {
+    return save(state.copyWith(showBestMoveArrow: !state.showBestMoveArrow));
+  }
+
+  Future<void> toggleInlineNotation() {
+    return save(state.copyWith(inlineNotation: !state.inlineNotation));
+  }
+
+  Future<void> toggleSmallBoard() {
+    return save(state.copyWith(smallBoard: !state.smallBoard));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable {
-  const factory BroadcastPrefs({required bool showEvaluationBar}) = _BroadcastPrefs;
+  const factory BroadcastPrefs({
+    required bool showEvaluationBar,
+    @JsonKey(defaultValue: true) required bool enableComputerAnalysis,
+    @JsonKey(defaultValue: true) required bool showEvaluationGauge,
+    @JsonKey(defaultValue: true) required bool showEngineLines,
+    @JsonKey(defaultValue: true) required bool showBestMoveArrow,
+    @JsonKey(defaultValue: true) required bool showAnnotations,
+    @JsonKey(defaultValue: true) required bool showPgnComments,
+    @JsonKey(defaultValue: false) required bool inlineNotation,
+    @JsonKey(defaultValue: false) required bool smallBoard,
+  }) = _BroadcastPrefs;
 
-  static const defaults = BroadcastPrefs(showEvaluationBar: true);
+  static const defaults = BroadcastPrefs(
+    showEvaluationBar: true,
+    enableComputerAnalysis: true,
+    showEvaluationGauge: true,
+    showEngineLines: true,
+    showBestMoveArrow: true,
+    showAnnotations: true,
+    showPgnComments: true,
+    inlineNotation: false,
+    smallBoard: false,
+  );
 
   factory BroadcastPrefs.fromJson(Map<String, dynamic> json) => _$BroadcastPrefsFromJson(json);
 }

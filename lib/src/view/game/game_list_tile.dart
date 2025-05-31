@@ -5,9 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
-import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -30,19 +28,11 @@ final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
 /// A list tile for a game in a game list.
 class GameListTile extends StatelessWidget {
-  const GameListTile({
-    required this.item,
-    this.padding,
-    this.onPressedBookmark,
-    this.gameListContext,
-  });
+  const GameListTile({required this.item, this.padding, this.onPressedBookmark});
 
   final LightExportedGameWithPov item;
   final EdgeInsetsGeometry? padding;
   final Future<void> Function(BuildContext context)? onPressedBookmark;
-
-  /// The context of the game list that opened this screen, if available.
-  final (UserId?, GameFilterState)? gameListContext;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +62,6 @@ class GameListTile extends StatelessWidget {
         loadingFen: game.lastFen,
         loadingLastMove: game.lastMove,
         lastMoveAt: game.lastMoveAt,
-        gameListContext: gameListContext,
       ),
       icon: game.perf.icon,
       opponentTitle: UserFullNameWidget.player(
@@ -291,7 +280,7 @@ class GameContextMenu extends ConsumerWidget {
             onPressed: () => onPressedBookmark?.call(context),
             icon: game.isBookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
             closeOnPressed: true,
-            child: Text(game.isBookmarked ? 'Unbookmark this game' : context.l10n.bookmarkThisGame),
+            child: Text(game.isBookmarked ? 'Remove bookmark' : context.l10n.bookmarkThisGame),
           ),
         if (!isTabletOrLarger(context)) ...[
           BottomSheetContextMenuAction(

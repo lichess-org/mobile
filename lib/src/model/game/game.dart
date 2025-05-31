@@ -227,6 +227,10 @@ mixin IndexableSteps on BaseGame {
 
   Duration? archivedBlackClockAt(int cursor) => steps[cursor].archivedBlackClock;
 
+  Duration? archivedClockOf(Side side, int cursor) {
+    return side == Side.white ? steps[cursor].archivedWhiteClock : steps[cursor].archivedBlackClock;
+  }
+
   Move? get lastMove {
     return steps.last.sanMove?.move;
   }

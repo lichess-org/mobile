@@ -35,6 +35,12 @@ class AccountService {
   StreamSubscription<(NotificationResponse, LocalNotification)>? _notificationResponseSubscription;
   Timer? _refreshTimer;
 
+  /// Stream of bookmark changes for the current user.
+  final StreamController<(GameId, bool)> _bookmarkChangesController = StreamController.broadcast();
+
+  /// Stream of bookmark changes for the current user.
+  Stream<(GameId, bool)> get bookmarkChanges => _bookmarkChangesController.stream;
+
   final Ref _ref;
 
   static const _storageKey = 'account.playban_notification_date';
@@ -86,6 +92,7 @@ class AccountService {
     _refreshTimer?.cancel();
     _accountProviderSubscription?.close();
     _notificationResponseSubscription?.cancel();
+    _bookmarkChangesController.close();
   }
 
   Future<void> showPlaybanDialog(TemporaryBan playban) async {
@@ -117,6 +124,6 @@ class AccountService {
 
     await _ref.withClient((client) => AccountRepository(client).bookmark(id, bookmark: bookmark));
 
-    _ref.invalidate(accountProvider);
+    _bookmarkChangesController.add((id, bookmark));
   }
 }

@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
@@ -86,6 +87,8 @@ Future<int> userNumberOfGames(Ref ref, LightUser? user) async {
 class UserGameHistory extends _$UserGameHistory {
   final _list = <LightExportedGameWithPov>[];
 
+  StreamSubscription<(GameId, bool)>? _bookmarkChangesSubscription;
+
   @override
   Future<UserGameHistoryState> build(
     UserId? userId, {
@@ -99,8 +102,17 @@ class UserGameHistory extends _$UserGameHistory {
     required bool isOnline,
     GameFilterState filter = const GameFilterState(),
   }) async {
+    _bookmarkChangesSubscription?.cancel();
+    _bookmarkChangesSubscription = ref.read(accountServiceProvider).bookmarkChanges.listen((data) {
+      final (id, bookmarked) = data;
+      if (state.hasValue) {
+        setBookmark(id, bookmarked: bookmarked);
+      }
+    });
+
     ref.cacheFor(const Duration(minutes: 5));
     ref.onDispose(() {
+      _bookmarkChangesSubscription?.cancel();
       _list.clear();
     });
 
@@ -201,7 +213,7 @@ class UserGameHistory extends _$UserGameHistory {
     }
   }
 
-  void toggleBookmark(GameId id) {
+  void setBookmark(GameId id, {required bool bookmarked}) {
     if (!state.hasValue) return;
 
     final gameList = state.requireValue.gameList;
@@ -213,10 +225,7 @@ class UserGameHistory extends _$UserGameHistory {
 
     state = AsyncData(
       state.requireValue.copyWith(
-        gameList: gameList.replace(index, (
-          game: game.copyWith(bookmarked: !game.isBookmarked),
-          pov: pov,
-        )),
+        gameList: gameList.replace(index, (game: game.copyWith(bookmarked: bookmarked), pov: pov)),
       ),
     );
   }
