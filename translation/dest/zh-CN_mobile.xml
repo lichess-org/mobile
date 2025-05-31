@@ -21,7 +21,7 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">你想结束这组谜题风暴吗？</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">没有结果，请更改筛选条件</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">没有记录。 请下几组谜题风暴。</string>
-  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">在 3 分钟内解决尽可能多的谜题。</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">在 3 分钟内解开尽可能多的谜题。</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">你将失去你目前的连胜，你的分数将被保存。</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">从你最喜欢的开局解决谜题，或选择一个主题。</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">谜题</string>
