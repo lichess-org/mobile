@@ -278,7 +278,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         padding: Styles.bodySectionPadding,
         child: LichessMessage(style: TextTheme.of(context).bodyLarge, textAlign: TextAlign.center),
       ),
-      const SizedBox(height: 24.0),
+      const SizedBox(height: 8.0),
       if (session == null) ...[const Center(child: _SignInWidget()), const SizedBox(height: 16.0)],
       if (Theme.of(context).platform != TargetPlatform.iOS &&
           (session == null || session.user.isPatron != true)) ...[
@@ -310,14 +310,15 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             Expanded(
               child: Column(
                 children: [
-                  FeaturedTournamentsWidget(featured: featuredTournaments),
                   ...welcomeWidgets,
+                  FeaturedTournamentsWidget(featured: featuredTournaments),
                 ],
               ),
             ),
           ],
         )
       else ...[
+        ...welcomeWidgets,
         if (status.isOnline)
           const _EditableWidget(
             widget: HomeEditableWidget.quickPairing,
@@ -330,7 +331,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             shouldShow: true,
             child: FeaturedTournamentsWidget(featured: featuredTournaments),
           ),
-        ...welcomeWidgets,
       ],
     ];
   }
@@ -404,7 +404,7 @@ class _SignInWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authController = ref.watch(authControllerProvider);
 
-    return FilledButton.tonal(
+    return FilledButton(
       onPressed: authController.isLoading
           ? null
           : () => ref.read(authControllerProvider.notifier).signIn(),

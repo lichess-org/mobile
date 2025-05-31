@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/view/play/playban.dart';
 const _kMatrixSpacing = 8.0;
 
 class QuickGameMatrix extends ConsumerWidget {
-  const QuickGameMatrix();
+  const QuickGameMatrix({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
