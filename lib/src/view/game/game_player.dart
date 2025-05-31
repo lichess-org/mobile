@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
@@ -195,17 +196,24 @@ class GamePlayer extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(right: 16.0),
               child: shouldLinkToUserProfile
-                  ? GestureDetector(
-                      onTap: player.user != null
-                          ? () {
-                              Navigator.of(context).push(
-                                mePlaying
-                                    ? ProfileScreen.buildRoute(context)
-                                    : UserScreen.buildRoute(context, player.user!),
-                              );
-                            }
-                          : null,
-                      child: playerWidget,
+                  ? Consumer(
+                      builder: (context, ref, _) {
+                        return GestureDetector(
+                          onTap: player.user != null
+                              ? () {
+                                  if (mePlaying) {
+                                    ref.invalidate(accountProvider);
+                                  }
+                                  Navigator.of(context).push(
+                                    mePlaying
+                                        ? ProfileScreen.buildRoute(context)
+                                        : UserScreen.buildRoute(context, player.user!),
+                                  );
+                                }
+                              : null,
+                          child: playerWidget,
+                        );
+                      },
                     )
                   : playerWidget,
             ),

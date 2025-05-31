@@ -142,6 +142,7 @@ class AccountScreen extends ConsumerWidget {
                       ? const Icon(Icons.chevron_right)
                       : null,
                   onTap: () {
+                    ref.invalidate(accountProvider);
                     Navigator.of(context).push(ProfileScreen.buildRoute(context));
                   },
                 ),

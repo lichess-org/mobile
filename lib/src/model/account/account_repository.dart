@@ -23,10 +23,7 @@ Future<User?> account(Ref ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return null;
 
-  return ref.withClientCacheFor(
-    (client) => AccountRepository(client).getProfile(),
-    const Duration(hours: 1),
-  );
+  return ref.withClient((client) => AccountRepository(client).getProfile());
 }
 
 @riverpod

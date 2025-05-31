@@ -42,6 +42,7 @@ class ContextMenuIconButton extends StatelessWidget {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     maxHeight: MediaQuery.sizeOf(context).height * 0.8,
+                    minWidth: MediaQuery.sizeOf(context).width * 0.4,
                     maxWidth: MediaQuery.sizeOf(context).width * 0.6,
                   ),
                   child: IntrinsicHeight(
@@ -54,7 +55,7 @@ class ContextMenuIconButton extends StatelessWidget {
                           child: CupertinoScrollbar(
                             child: SingleChildScrollView(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   actions.first,
                                   for (final Widget action in actions.skip(1))
@@ -258,35 +259,32 @@ class _CupertinoContextMenuActionState extends State<_CupertinoContextMenuAction
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: MouseCursor.defer,
-      child: GestureDetector(
-        key: _globalKey,
-        onTapDown: onTapDown,
-        onTapUp: onTapUp,
-        onTapCancel: onTapCancel,
-        onTap: widget.onPressed,
-        behavior: HitTestBehavior.opaque,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: _kButtonHeight),
-          child: Semantics(
-            button: true,
-            child: ColoredBox(
-              color: _isPressed
-                  ? ColorScheme.of(context).surfaceContainerHighest
-                  : ColorScheme.of(context).surfaceContainer,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(15.5, 8.0, 17.5, 8.0),
-                child: DefaultTextStyle(
-                  style: _textStyle,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Flexible(child: widget.child),
-                      if (widget.trailingIcon != null)
-                        Icon(widget.trailingIcon, color: _textStyle.color, size: 21.0),
-                    ],
-                  ),
+    return GestureDetector(
+      key: _globalKey,
+      onTapDown: onTapDown,
+      onTapUp: onTapUp,
+      onTapCancel: onTapCancel,
+      onTap: widget.onPressed,
+      behavior: HitTestBehavior.opaque,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: _kButtonHeight),
+        child: Semantics(
+          button: true,
+          child: ColoredBox(
+            color: _isPressed
+                ? ColorScheme.of(context).surfaceContainerHighest
+                : ColorScheme.of(context).surfaceContainer,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(15.5, 8.0, 17.5, 8.0),
+              child: DefaultTextStyle(
+                style: _textStyle,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Flexible(child: widget.child),
+                    if (widget.trailingIcon != null)
+                      Icon(widget.trailingIcon, color: _textStyle.color, size: 21.0),
+                  ],
                 ),
               ),
             ),

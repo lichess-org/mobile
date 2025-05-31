@@ -716,7 +716,6 @@ class _PuzzleSettingsButton extends StatelessWidget {
         context: context,
         isDismissible: true,
         isScrollControlled: true,
-        showDragHandle: true,
         constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
         builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),
       ),
@@ -741,8 +740,10 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.only(bottom: 16),
       children: [
         ListSection(
+          header: Text(context.l10n.settingsSettings),
           materialFilledCard: true,
           children: [
             if (initialPuzzleContext.userId != null &&

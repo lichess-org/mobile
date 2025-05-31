@@ -6,9 +6,8 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -23,12 +22,15 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
+import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
+import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
@@ -99,6 +101,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
           goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
         ),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
+      _AnalysisMenu(options: widget.options, state: asyncState),
     ];
 
     switch (asyncState) {
@@ -106,6 +109,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
+            centerTitle: false,
             title: _Title(variant: value.variant),
             actions: appBarActions,
           ),
@@ -122,12 +126,62 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
+            centerTitle: false,
             title: const _Title(variant: Variant.standard),
             actions: appBarActions,
           ),
           body: const Center(child: CircularProgressIndicator.adaptive()),
         );
     }
+  }
+}
+
+class _AnalysisMenu extends ConsumerWidget {
+  const _AnalysisMenu({required this.options, required this.state});
+
+  final AnalysisOptions options;
+  final AsyncValue<AnalysisState> state;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ContextMenuIconButton(
+      icon: const Icon(Icons.more_horiz),
+      semanticsLabel: context.l10n.menu,
+      actions: [
+        ContextMenuAction(
+          icon: Icons.settings,
+          label: context.l10n.settingsSettings,
+          onPressed: () => Navigator.of(
+            context,
+          ).push(AnalysisSettingsScreen.buildRoute(context, options: options)),
+        ),
+        ToggleSoundContextMenuAction(
+          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
+          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+        ),
+        ...(switch (state) {
+          AsyncData(:final value) =>
+            value.archivedGame != null
+                ? [
+                    GameBookmarkContextMenuAction(
+                      id: value.archivedGame!.id,
+                      bookmarked: value.archivedGame!.data.bookmarked ?? false,
+                      onToggleBookmark: () =>
+                          ref.read(analysisControllerProvider(options).notifier).toggleBookmark(),
+                    ),
+                    if (value.archivedGame!.finished)
+                      ...makeFinishedGameShareContextMenuActions(
+                        context,
+                        ref,
+                        gameId: value.archivedGame!.id,
+                        orientation: value.pov,
+                      ),
+                  ]
+                : [],
+          _ => [],
+        }),
+      ],
+    );
   }
 }
 
@@ -407,14 +461,6 @@ class _BottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.settingsSettings),
-          onPressed: () {
-            Navigator.of(
-              context,
-            ).push(AnalysisSettingsScreen.buildRoute(context, options: options));
-          },
-        ),
-        BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
@@ -460,104 +506,6 @@ class _BottomBar extends ConsumerWidget {
               launchShareDialog(context, ShareParams(text: analysisState.currentPosition.fen));
             },
           ),
-        if (options.gameId != null) ...[
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
-            onPressed: () {
-              final boardUrl = lichessUri('/${analysisState.gameId}/${analysisState.pov.name}');
-              launchShareDialog(context, ShareParams(uri: boardUrl));
-            },
-          ),
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
-            onPressed: () async {
-              final gameId = options.gameId!;
-              final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-              try {
-                final image = await ref
-                    .read(gameShareServiceProvider)
-                    .screenshotPosition(
-                      analysisState.pov,
-                      analysisState.currentPosition.fen,
-                      analysisState.lastMove,
-                    );
-                if (context.mounted) {
-                  launchShareDialog(
-                    context,
-                    ShareParams(
-                      files: [image],
-                      fileNameOverrides: ['$gameId.gif'],
-                      subject: context.l10n.puzzleFromGameLink(lichessUri('/$gameId').toString()),
-                    ),
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-                }
-              }
-            },
-          ),
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.gameAsGIF),
-            onPressed: () async {
-              try {
-                final gameId = options.gameId!;
-                final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-                final (gif, game) = await ref
-                    .read(gameShareServiceProvider)
-                    .gameGif(gameId, analysisState.pov);
-                if (context.mounted) {
-                  launchShareDialog(
-                    context,
-                    ShareParams(
-                      fileNameOverrides: ['$gameId.gif'],
-                      files: [gif],
-                      subject: game.shareTitle(context.l10n),
-                    ),
-                  );
-                }
-              } catch (e) {
-                debugPrint(e.toString());
-                if (context.mounted) {
-                  showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-                }
-              }
-            },
-          ),
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.downloadAnnotated),
-            onPressed: () async {
-              try {
-                final gameId = options.gameId!;
-                final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(gameId);
-                if (context.mounted) {
-                  launchShareDialog(context, ShareParams(text: pgn));
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-                }
-              }
-            },
-          ),
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.downloadRaw),
-            onPressed: () async {
-              try {
-                final gameId = options.gameId!;
-                final pgn = await ref.read(gameShareServiceProvider).rawPgn(gameId);
-                if (context.mounted) {
-                  launchShareDialog(context, ShareParams(text: pgn));
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-                }
-              }
-            },
-          ),
-        ],
       ],
     );
   }

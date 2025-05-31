@@ -244,7 +244,6 @@ class _BodyState extends ConsumerState<_Body> {
                       await ref
                           .read(accountServiceProvider)
                           .setGameBookmark(game.id, bookmark: !game.bookmarked!);
-                      ref.read(gameListProvider.notifier).toggleBookmark(game.id);
                     } on Exception catch (_) {
                       if (context.mounted) {
                         showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
@@ -257,12 +256,10 @@ class _BodyState extends ConsumerState<_Body> {
                     GameHistoryDisplayMode.compact => GameListTile(
                       item: item,
                       onPressedBookmark: onPressedBookmark,
-                      gameListContext: (widget.user?.id, gameFilterState),
                     ),
                     GameHistoryDisplayMode.detail => GameListDetailTile(
                       item: item,
                       onPressedBookmark: onPressedBookmark,
-                      gameListContext: (widget.user?.id, gameFilterState),
                     ),
                   };
 
@@ -299,14 +296,15 @@ class _BodyState extends ConsumerState<_Body> {
                             motion: const StretchMotion(),
                             children: [
                               SlidableAction(
-                                backgroundColor: game.isBookmarked
-                                    ? context.lichessColors.error
-                                    : context.lichessColors.brag,
+                                backgroundColor: context.lichessColors.brag,
                                 onPressed: onPressedBookmark,
                                 icon: game.isBookmarked
                                     ? Icons.bookmark_remove_outlined
                                     : Icons.bookmark_add_outlined,
-                                label: game.isBookmarked ? 'Unbookmark' : 'Bookmark',
+                                // TODO l10n
+                                label: game.isBookmarked
+                                    ? 'Remove bookmark'
+                                    : context.l10n.bookmarkThisGame,
                               ),
                             ],
                           )

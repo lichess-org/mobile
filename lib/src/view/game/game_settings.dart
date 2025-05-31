@@ -78,13 +78,9 @@ class GameSettings extends ConsumerWidget {
               title: const Text('Board settings'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  isDismissible: true,
-                  isScrollControlled: true,
-                  constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
-                  builder: (_) => const BoardSettingsScreen(showCloseButton: true),
-                );
+                Navigator.of(
+                  context,
+                ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
               },
             ),
           ],

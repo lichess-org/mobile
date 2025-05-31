@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
@@ -427,6 +428,22 @@ class AnalysisController extends _$AnalysisController
   String makeCurrentNodePgn() {
     final nodes = _root.branchesOn(state.requireValue.currentPath);
     return nodes.map((node) => node.sanMove.san).join(' ');
+  }
+
+  Future<void> toggleBookmark() async {
+    if (state.hasValue) {
+      final game = state.requireValue.archivedGame;
+      if (game == null) return;
+      final toggledBookmark = !(game.data.bookmarked ?? false);
+      await ref.read(accountServiceProvider).setGameBookmark(game.id, bookmark: toggledBookmark);
+      state = AsyncValue.data(
+        state.requireValue.copyWith(
+          archivedGame: state.requireValue.archivedGame?.copyWith(
+            data: game.data.copyWith(bookmarked: toggledBookmark),
+          ),
+        ),
+      );
+    }
   }
 
   void _setPath(
