@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -21,6 +22,7 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
@@ -44,13 +46,40 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeTabScreen extends ConsumerStatefulWidget {
-  const HomeTabScreen({super.key});
+  const HomeTabScreen({super.key, this.editModeEnabled = false});
+
+  final bool editModeEnabled;
+
+  static Route<dynamic> buildRoute(BuildContext context, {bool editModeEnabled = false}) {
+    return buildScreenRoute(context, screen: HomeTabScreen(editModeEnabled: editModeEnabled));
+  }
 
   @override
   ConsumerState<HomeTabScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
+class _IsEditingHome extends InheritedWidget {
+  const _IsEditingHome({required super.child, required this.isEditingWidgets});
+
+  final bool isEditingWidgets;
+
+  @override
+  bool updateShouldNotify(_IsEditingHome oldWidget) {
+    return isEditingWidgets != oldWidget.isEditingWidgets;
+  }
+
+  static _IsEditingHome? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<_IsEditingHome>();
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<bool>('isEditingWidgets', isEditingWidgets));
+  }
+}
+
+class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
   DateTime? _focusLostAt;
@@ -75,7 +104,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     });
 
     final connectivity = ref.watch(connectivityChangesProvider);
-    final isEditing = ref.watch(homeWidgetsEditModeProvider);
 
     return connectivity.when(
       skipLoadingOnReload: true,
@@ -123,6 +151,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 nbOfGames: nbOfGames,
               );
 
+        final content = ListView(controller: homeScrollController, children: widgets);
+
         return FocusDetector(
           onFocusLost: () {
             _focusLostAt = DateTime.now();
@@ -136,37 +166,46 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               _refreshData(isOnline: status.isOnline);
             }
           },
-          child: PlatformScaffold(
-            appBar: PlatformAppBar(
-              title: const Text('lichess.org'),
-              leading: const AccountIconButton(),
-              actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
-            ),
-            body: RefreshIndicator.adaptive(
-              edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                  ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                  : 0.0,
-              key: _refreshKey,
-              onRefresh: () => _refreshData(isOnline: status.isOnline),
-              child: ListView(controller: homeScrollController, children: widgets),
-            ),
-            bottomNavigationBar: isEditing
-                ? BottomAppBar(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            ref.read(homeWidgetsEditModeProvider.notifier).state = false;
-                          },
-                          child: Text(context.l10n.save),
-                        ),
-                      ],
+          child: _IsEditingHome(
+            isEditingWidgets: widget.editModeEnabled,
+            child: PlatformScaffold(
+              appBar: widget.editModeEnabled
+                  ? PlatformAppBar(title: const Text('Home widgets'))
+                  : PlatformAppBar(
+                      title: const Text('lichess.org'),
+                      leading: const AccountIconButton(),
+                      actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
                     ),
-                  )
-                : null,
-            floatingActionButton: isTablet ? null : const FloatingPlayButton(),
-            bottomSheet: const OfflineBanner(),
+              body: widget.editModeEnabled
+                  ? content
+                  : RefreshIndicator.adaptive(
+                      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                          ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                          : 0.0,
+                      key: _refreshKey,
+                      onRefresh: () => _refreshData(isOnline: status.isOnline),
+                      child: content,
+                    ),
+              bottomNavigationBar: widget.editModeEnabled
+                  ? BottomAppBar(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    )
+                  : null,
+              floatingActionButton: widget.editModeEnabled || isTablet
+                  ? null
+                  : const FloatingPlayButton(),
+              bottomSheet: widget.editModeEnabled ? null : const OfflineBanner(),
+            ),
           ),
         );
       },
@@ -397,7 +436,7 @@ class _EditableWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final disabledWidgets = ref.watch(homePreferencesProvider).disabledWidgets;
-    final isEditing = ref.watch(homeWidgetsEditModeProvider);
+    final isEditing = _IsEditingHome.maybeOf(context)?.isEditingWidgets ?? false;
     final isEnabled = !disabledWidgets.contains(widget);
 
     if (!shouldShow) {

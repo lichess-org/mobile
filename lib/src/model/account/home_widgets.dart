@@ -1,11 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-
-/// Provider for managing the edit mode state of home widgets.
-final homeWidgetsEditModeProvider = NotifierProvider.autoDispose<_EditModeNotifier, bool>(
-  _EditModeNotifier.new,
-  name: 'homeWidgetsEditModeProvider',
-);
 
 /// Enum representing the editable widgets on the home screen.
 enum HomeEditableWidget {
@@ -29,14 +22,4 @@ enum HomeEditableWidget {
 
   /// True if the widget should always be enabled and cannot be disabled.
   final bool alwaysEnabled;
-}
-
-class _EditModeNotifier extends AutoDisposeNotifier<bool> {
-  @override
-  bool build() => false;
-
-  @override
-  set state(bool value) {
-    super.state = value;
-  }
 }
