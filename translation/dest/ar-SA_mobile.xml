@@ -29,7 +29,7 @@
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">التعليقات اللمسية</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">وضع ملء الشاشة</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">الإعدادات</string>
-  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">شارك الPGN</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">شارك PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">شارك رابط المباراة</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">مشاركة الموضع ك FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">شارك هذا اللغز</string>
