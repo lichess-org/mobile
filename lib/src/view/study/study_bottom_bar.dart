@@ -94,13 +94,14 @@ class _GamebookBottomBar extends ConsumerWidget {
         _ChapterButton(state: state),
         ...switch (state.gamebookState) {
           GamebookState.findTheMove => [
-            if (!state.currentNode.isRoot)
-              BottomBarButton(
-                onTap: ref.read(studyControllerProvider(id).notifier).reset,
-                icon: Icons.skip_previous,
-                label: 'Back',
-                showLabel: true,
-              ),
+            BottomBarButton(
+              onTap: !state.currentNode.isRoot
+                  ? ref.read(studyControllerProvider(id).notifier).reset
+                  : null,
+              icon: Icons.skip_previous,
+              label: context.l10n.studyBack,
+              showLabel: true,
+            ),
             BottomBarButton(
               icon: Icons.help,
               label: context.l10n.viewTheSolution,
@@ -110,6 +111,14 @@ class _GamebookBottomBar extends ConsumerWidget {
           ],
           GamebookState.startLesson || GamebookState.correctMove => [
             BottomBarButton(
+              onTap: !state.currentNode.isRoot
+                  ? ref.read(studyControllerProvider(id).notifier).reset
+                  : null,
+              icon: Icons.skip_previous,
+              label: context.l10n.studyBack,
+              showLabel: true,
+            ),
+            BottomBarButton(
               onTap: ref.read(studyControllerProvider(id).notifier).userNext,
               icon: Icons.play_arrow,
               label: context.l10n.studyNext,
@@ -118,6 +127,14 @@ class _GamebookBottomBar extends ConsumerWidget {
             ),
           ],
           GamebookState.incorrectMove => [
+            BottomBarButton(
+              onTap: !state.currentNode.isRoot
+                  ? ref.read(studyControllerProvider(id).notifier).reset
+                  : null,
+              icon: Icons.skip_previous,
+              label: context.l10n.studyBack,
+              showLabel: true,
+            ),
             BottomBarButton(
               onTap: ref.read(studyControllerProvider(id).notifier).userPrevious,
               label: context.l10n.retry,
