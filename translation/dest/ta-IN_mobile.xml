@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">அனைத்து விளையாட்டுகள்</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">நீங்கள் உறுதியாக இருக்கிறீர்களா?</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">திரும்பப் பெறுவதற்கான சலுகையை ரத்துசெய்</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">தெளிவு</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">சேமிக்கப்பட்ட நகர்வை அழிக்கவும்</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">ஒரு விளையாட்டில் சேரவும்</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">பின்னூட்டம்</string>
+  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">வணக்கம், %s</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">மாறுபாட்டை மறை</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">வீடு</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">நேரடி ஸ்ட்ரீமர்கள்</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">இந்தப் பக்கத்தைப் பார்க்க நீங்கள் உள்நுழைந்திருக்க வேண்டும்.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">முடிவுகள் இல்லை</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">நீங்கள் எந்த பயனரையும் பின்தொடரவில்லை.</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">சரி</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" கொண்ட வீரர்கள்</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">இழுக்கப்பட்ட துண்டை பெரிதாக்கவும்</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">இந்த ஓட்டத்தை முடிக்க விரும்புகிறீர்களா?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">காட்டுவதற்கு எதுவும் இல்லை, வடிகட்டிகளை மாற்றவும்</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">காட்ட எதுவும் இல்லை. புதிர் புயலின் சில ரன்களை விளையாடுங்கள்.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 நிமிடங்களில் முடிந்தவரை பல புதிர்களை தீர்க்கவும்.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">உங்கள் தற்போதைய தொடரை இழப்பீர்கள், மேலும் உங்கள் மதிப்பெண் சேமிக்கப்படும்.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">உங்களுக்குப் பிடித்த திறப்புகளிலிருந்து புதிர்களை விளையாடுங்கள் அல்லது தீம் ஒன்றைத் தேர்ந்தெடுக்கவும்.</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">புதிர்கள்</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">சமீபத்திய தேடல்கள்</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">ஹாப்டிக் பின்னூட்டம்</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">மூழ்கும் முறை</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">அமைப்புகள்</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN ஐப் பகிரவும்</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">விளையாட்டு URL ஐப் பகிரவும்</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">நிலையை FEN ஆகப் பகிரவும்</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">இந்தப் புதிரைப் பகிரவும்</string>
+  <string name="showComments" comment="Shown in the analysis screen.">கருத்துகளைக் காட்டு</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">முடிவைக் காட்டு</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">மாறுபாடுகளைக் காட்டு</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">ஏதோ தவறாகிவிட்டது.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">கணினி வண்ணங்கள்</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">தீம்</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">கருவிகள்</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">எதிரணி சேர்வதற்காக காத்திருக்கிறது...</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">பார்</string>
+</resources>

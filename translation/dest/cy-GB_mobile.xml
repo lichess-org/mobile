@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Y gemau i gyd</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Wyt ti\'n siwr?</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Ymuno â gêm</string>
+  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Helo, %s</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Hafan</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Chwaraewyr gyda \"%s\"</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Rhannu PNG</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Rhannu URL gêm</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Dangos sylwadau</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Dangos canlyniad</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Dangos amrywiadau</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Wnaeth rhywbeth o\'i le.</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">Thema</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Offer</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Aros i gwrthwynebwr ymuno...</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Gwyliwch</string>
+</resources>
