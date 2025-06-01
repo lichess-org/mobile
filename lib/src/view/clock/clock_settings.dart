@@ -17,7 +17,7 @@ class ClockSettings extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(clockToolControllerProvider);
-    final buttonsEnabled = !state.started || state.paused;
+    final buttonsEnabled = !state.started || state.paused || state.flagged != null;
     final clockOrientation = state.clockOrientation;
 
     final isSoundEnabled = ref.watch(
