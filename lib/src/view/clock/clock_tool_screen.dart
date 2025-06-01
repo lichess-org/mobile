@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -76,7 +77,19 @@ class _BodyState extends ConsumerState<_Body> {
                 clockState: state,
               ),
             ),
-            ClockSettings(orientation: orientation),
+            Opacity(
+              opacity: 0.8,
+              child: SizedBox(
+                width: orientation == Orientation.portrait ? double.infinity : 98,
+                height: orientation == Orientation.portrait ? 98 : double.infinity,
+                child: Padding(
+                  padding: orientation == Orientation.portrait
+                      ? const EdgeInsets.symmetric(vertical: 8.0)
+                      : const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ClockSettings(orientation: orientation),
+                ),
+              ),
+            ),
             Expanded(
               child: ClockTile(
                 position: TilePosition.bottom,
@@ -109,147 +122,168 @@ class ClockTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = ColorScheme.of(context);
-    final activeColor = colorScheme.primaryFixedDim;
-    final activeTextColor = colorScheme.onPrimaryFixed;
-    final pausedColor = activeColor.withValues(alpha: 0.5);
+    final activeColor = darken(colorScheme.primaryFixedDim, 0.2);
     final backgroundColor = clockState.isFlagged(playerType)
-        ? colorScheme.error
-        : !clockState.paused && clockState.isPlayersTurn(playerType)
+        ? darken(colorScheme.error, 0.1)
+        : clockState.isPlayersTurn(playerType)
         ? activeColor
-        : clockState.activeSide == playerType
-        ? pausedColor
-        : colorScheme.surface;
+        : colorScheme.surfaceContainerHighest;
+
+    final textColor = clockState.isFlagged(playerType)
+        ? Colors.white
+        : clockState.isPlayersTurn(playerType)
+        ? Colors.white
+        : colorScheme.onSurface;
 
     final clockStyle = ClockStyle(
-      textColor: clockState.activeSide == playerType ? activeTextColor : colorScheme.onSurface,
-      activeTextColor: activeTextColor,
+      textColor: textColor,
+      activeTextColor: Colors.white,
       emergencyTextColor: Colors.white,
       backgroundColor: Colors.transparent,
       activeBackgroundColor: Colors.transparent,
-      emergencyBackgroundColor: const Color(0xFF673431),
+      emergencyBackgroundColor: Colors.transparent,
     );
 
     final clockOrientation = ref.watch(clockToolControllerProvider).clockOrientation;
 
-    return RotatedBox(
-      quarterTurns: clockOrientation.isPortrait
-          ? (position == TilePosition.top
-                ? clockOrientation.oppositeQuarterTurns
-                : clockOrientation.quarterTurns)
-          : clockOrientation.quarterTurns,
-      child: Stack(
-        alignment: Alignment.center,
-        fit: StackFit.expand,
-        children: [
-          Material(
-            color: backgroundColor,
-            child: InkWell(
-              splashFactory: NoSplash.splashFactory,
-              onTap: !clockState.started
-                  ? () {
-                      ref
-                          .read(clockToolControllerProvider.notifier)
-                          .setBottomPlayer(
-                            position == TilePosition.bottom ? Side.white : Side.black,
-                          );
-                    }
-                  : null,
-              onTapDown: clockState.started && clockState.isPlayersMoveAllowed(playerType)
-                  ? (_) {
-                      ref.read(clockToolControllerProvider.notifier).onTap(playerType);
-                    }
-                  : null,
-              child: Padding(
-                padding: const EdgeInsets.all(48),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: FittedBox(
-                        child: AnimatedCrossFade(
-                          duration: const Duration(milliseconds: 300),
-                          firstChild: _ClockDisplay(
-                            clockState: clockState,
-                            playerType: playerType,
-                            clockStyle: clockStyle,
+    return AnimatedOpacity(
+      opacity: clockState.paused ? 0.8 : 1.0,
+      duration: const Duration(milliseconds: 200),
+      child: RotatedBox(
+        quarterTurns: clockOrientation.isPortrait
+            ? (position == TilePosition.top
+                  ? clockOrientation.oppositeQuarterTurns
+                  : clockOrientation.quarterTurns)
+            : clockOrientation.quarterTurns,
+        child: Stack(
+          alignment: Alignment.center,
+          fit: StackFit.expand,
+          children: [
+            Material(
+              color: backgroundColor,
+              child: InkWell(
+                splashFactory: NoSplash.splashFactory,
+                onTapDown: !clockState.started
+                    ? (_) {
+                        ref
+                            .read(clockToolControllerProvider.notifier)
+                            .setBottomPlayer(
+                              position == TilePosition.bottom ? Side.black : Side.white,
+                            );
+                        ref.read(clockToolControllerProvider.notifier).start();
+                      }
+                    : clockState.started && clockState.isPlayersMoveAllowed(playerType)
+                    ? (_) {
+                        ref.read(clockToolControllerProvider.notifier).onTap(playerType);
+                      }
+                    : null,
+                child: Padding(
+                  padding: const EdgeInsets.all(48),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: FittedBox(
+                          child: AnimatedCrossFade(
+                            duration: const Duration(milliseconds: 300),
+                            firstChild: _ClockDisplay(
+                              clockState: clockState,
+                              playerType: playerType,
+                              clockStyle: clockStyle,
+                            ),
+                            secondChild: const Icon(Icons.flag),
+                            crossFadeState: clockState.isFlagged(playerType)
+                                ? CrossFadeState.showSecond
+                                : CrossFadeState.showFirst,
                           ),
-                          secondChild: const Icon(Icons.flag),
-                          crossFadeState: clockState.isFlagged(playerType)
-                              ? CrossFadeState.showSecond
-                              : CrossFadeState.showFirst,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: 24,
-            right: 24,
-            child: Text(
-              '${context.l10n.stormMoves}: ${clockState.getMovesCount(playerType)}',
-              style: TextStyle(
-                fontSize: 13,
-                color: !clockState.paused && clockState.isPlayersTurn(playerType)
-                    ? clockStyle.activeTextColor
-                    : clockStyle.textColor,
-              ),
-            ),
-          ),
-          if (orientation == Orientation.portrait && clockOrientation.isPortrait)
             Positioned(
               top: 24,
-              left: 24,
-              child: RotatedBox(
-                quarterTurns: 2,
-                child: _ClockDisplay(
-                  clockState: clockState,
-                  playerType: playerType,
-                  clockStyle: clockStyle,
+              right: 24,
+              child: Text(
+                '${context.l10n.stormMoves}: ${clockState.getMovesCount(playerType)}',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: !clockState.paused && clockState.isPlayersTurn(playerType)
+                      ? clockStyle.activeTextColor
+                      : clockStyle.textColor,
                 ),
               ),
             ),
-          Positioned(
-            bottom: MediaQuery.paddingOf(context).bottom + 48.0,
-            child: AnimatedOpacity(
-              opacity: clockState.started ? 0 : 1.0,
-              duration: const Duration(milliseconds: 300),
-              child: SemanticIconButton(
-                semanticsLabel: context.l10n.settingsSettings,
-                iconSize: 32,
-                icon: const Icon(Icons.tune),
-                color: clockStyle.textColor,
-                onPressed: clockState.started
-                    ? null
-                    : () => showModalBottomSheet<void>(
-                        context: context,
-                        builder: (BuildContext context) => CustomClockSettings(
-                          player: playerType,
-                          clock: playerType == Side.white
-                              ? TimeIncrement.fromDurations(
-                                  clockState.options.whiteTime,
-                                  clockState.options.whiteIncrement,
-                                )
-                              : TimeIncrement.fromDurations(
-                                  clockState.options.blackTime,
-                                  clockState.options.blackIncrement,
+            if (orientation == Orientation.portrait && clockOrientation.isPortrait)
+              Positioned(
+                top: 24,
+                left: 24,
+                child: RotatedBox(
+                  quarterTurns: 2,
+                  child: _ClockDisplay(
+                    clockState: clockState,
+                    playerType: playerType,
+                    clockStyle: clockStyle,
+                  ),
+                ),
+              ),
+            Positioned(
+              bottom: MediaQuery.paddingOf(context).bottom + 48.0,
+              child: IgnorePointer(
+                ignoring: clockState.started,
+                child: AnimatedOpacity(
+                  opacity: clockState.started ? 0 : 1.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SemanticIconButton(
+                        semanticsLabel: context.l10n.settingsSettings,
+                        iconSize: 32,
+                        icon: const Icon(Icons.tune),
+                        color: clockStyle.textColor,
+                        onPressed: clockState.started
+                            ? null
+                            : () => showModalBottomSheet<void>(
+                                context: context,
+                                builder: (BuildContext context) => CustomClockSettings(
+                                  player: playerType,
+                                  clock: playerType == Side.white
+                                      ? TimeIncrement.fromDurations(
+                                          clockState.options.whiteTime,
+                                          clockState.options.whiteIncrement,
+                                        )
+                                      : TimeIncrement.fromDurations(
+                                          clockState.options.blackTime,
+                                          clockState.options.blackIncrement,
+                                        ),
+                                  onSubmit: (Side player, TimeIncrement clock) {
+                                    Navigator.of(context).pop();
+                                    ref
+                                        .read(clockToolControllerProvider.notifier)
+                                        .updateOptionsCustom(clock, player);
+                                  },
                                 ),
-                          onSubmit: (Side player, TimeIncrement clock) {
-                            Navigator.of(context).pop();
-                            ref
-                                .read(clockToolControllerProvider.notifier)
-                                .updateOptionsCustom(clock, player);
-                          },
-                        ),
+                              ),
                       ),
+                      if (clockState.options.hasIncrement(playerType)) ...[
+                        const SizedBox(width: 8),
+                        Text(
+                          '+${clockState.options.getIncrement(playerType)}',
+                          style: TextStyle(fontSize: 28, color: clockStyle.textColor),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -204,6 +204,14 @@ sealed class ClockOptions with _$ClockOptions {
     whiteIncrement: Duration(seconds: playerTop.increment),
     blackIncrement: Duration(seconds: playerBottom.increment),
   );
+
+  int getIncrement(Side playerType) {
+    return playerType == Side.white ? whiteIncrement.inSeconds : blackIncrement.inSeconds;
+  }
+
+  bool hasIncrement(Side playerType) {
+    return getIncrement(playerType) > 0;
+  }
 }
 
 @freezed
