@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
@@ -70,13 +69,52 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
           firstCurve: Curves.easeOutExpo,
           secondCurve: Curves.easeInExpo,
           sizeCurve: Curves.easeInOut,
-          firstChild: const SizedBox.shrink(),
+          firstChild: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (gameState.game.me?.offeringRematch == true) ...[
+                Flexible(
+                  flex: 3,
+                  child: Text(
+                    maxLines: 2,
+                    context.l10n.rematchOfferSent,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const Spacer(),
+                IconButton.outlined(
+                  onPressed: () {
+                    ref.read(ctrlProvider.notifier).declineRematch();
+                  },
+                  tooltip: context.l10n.cancelRematchOffer,
+                  icon: const Icon(Icons.cancel),
+                ),
+              ] else if (gameState.canOfferRematch)
+                Expanded(
+                  child: FilledButton(
+                    onPressed:
+                        _activateButtons &&
+                            gameState.game.opponent?.onGame == true &&
+                            gameState.game.opponent?.offeringRematch != true
+                        ? () {
+                            ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+                          }
+                        : null,
+                    child: Text(context.l10n.rematch),
+                  ),
+                )
+              else
+                const SizedBox.shrink(),
+            ],
+          ),
           secondChild: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(bottom: 15.0),
-                // TODO l10n
-                child: Text('Your opponent has offered a rematch', textAlign: TextAlign.center),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15.0),
+                child: Text(
+                  context.l10n.yourOpponentWantsToPlayANewGameWithYou,
+                  textAlign: TextAlign.center,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 15.0),
@@ -85,11 +123,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                   children: [
                     FilledButton.icon(
                       icon: const Icon(Icons.check),
-                      style: FilledButton.styleFrom(
-                        foregroundColor: context.lichessColors.good,
-                        backgroundColor: context.lichessColors.good.withValues(alpha: 0.3),
-                      ),
-                      label: Text(context.l10n.accept),
+                      label: Text(context.l10n.yes),
                       onPressed: () {
                         ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
                       },
@@ -97,10 +131,10 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                     FilledButton.icon(
                       icon: const Icon(Icons.close),
                       style: FilledButton.styleFrom(
-                        foregroundColor: context.lichessColors.error,
-                        backgroundColor: context.lichessColors.error.withValues(alpha: 0.3),
+                        foregroundColor: ColorScheme.of(context).onError,
+                        backgroundColor: ColorScheme.of(context).error,
                       ),
-                      label: Text(context.l10n.decline),
+                      label: Text(context.l10n.no),
                       onPressed: () {
                         ref.read(ctrlProvider.notifier).declineRematch();
                       },
@@ -114,25 +148,6 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
         ),
-        if (gameState.game.me?.offeringRematch == true)
-          FilledButton.tonal(
-            onPressed: () {
-              ref.read(ctrlProvider.notifier).declineRematch();
-            },
-            child: Text(context.l10n.cancelRematchOffer, textAlign: TextAlign.center),
-          )
-        else if (gameState.canOfferRematch)
-          FilledButton(
-            onPressed:
-                _activateButtons &&
-                    gameState.game.opponent?.onGame == true &&
-                    gameState.game.opponent?.offeringRematch != true
-                ? () {
-                    ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
-                  }
-                : null,
-            child: Text(context.l10n.rematch, textAlign: TextAlign.center),
-          ),
         if (gameState.canGetNewOpponent)
           FilledButton.tonal(
             onPressed: _activateButtons
