@@ -117,7 +117,7 @@ class ClockTile extends ConsumerWidget {
     final colorScheme = ColorScheme.of(context);
     final activeColor = darken(colorScheme.primaryFixedDim, 0.2);
     final backgroundColor = clockState.isFlagged(playerType)
-        ? darken(colorScheme.error, 0.1)
+        ? context.lichessColors.error
         : clockState.isPlayersTurn(playerType)
         ? activeColor
         : colorScheme.surfaceContainerHighest;
