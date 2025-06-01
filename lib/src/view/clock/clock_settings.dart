@@ -70,8 +70,8 @@ class ClockSettings extends ConsumerWidget {
                           return TimeControlModal(
                             excludeUltraBullet: true,
                             timeIncrement: TimeIncrement(
-                              options.whiteTime.inSeconds,
-                              options.whiteIncrement.inSeconds,
+                              options.bottomTime.inSeconds,
+                              options.bottomIncrement.inSeconds,
                             ),
                             onSelected: (choice) {
                               ref.read(clockToolControllerProvider.notifier).updateOptions(choice);

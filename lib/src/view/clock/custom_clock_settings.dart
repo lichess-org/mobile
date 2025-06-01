@@ -1,5 +1,5 @@
-import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -11,9 +11,9 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 class CustomClockSettings extends StatefulWidget {
   const CustomClockSettings({required this.onSubmit, required this.player, required this.clock});
 
-  final Side player;
+  final ClockSide player;
   final TimeIncrement clock;
-  final void Function(Side player, TimeIncrement clock) onSubmit;
+  final void Function(ClockSide player, TimeIncrement clock) onSubmit;
 
   @override
   State<CustomClockSettings> createState() => _CustomClockSettingsState();

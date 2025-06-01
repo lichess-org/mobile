@@ -1,4 +1,3 @@
-import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,8 +27,6 @@ class ClockToolScreen extends StatelessWidget {
     );
   }
 }
-
-enum TilePosition { bottom, top }
 
 class _Body extends ConsumerStatefulWidget {
   const _Body();
@@ -71,9 +68,8 @@ class _BodyState extends ConsumerState<_Body> {
           children: [
             Expanded(
               child: ClockTile(
-                position: TilePosition.top,
                 orientation: orientation,
-                playerType: state.bottomPlayer.opposite,
+                playerType: ClockSide.top,
                 clockState: state,
               ),
             ),
@@ -92,9 +88,8 @@ class _BodyState extends ConsumerState<_Body> {
             ),
             Expanded(
               child: ClockTile(
-                position: TilePosition.bottom,
                 orientation: orientation,
-                playerType: state.bottomPlayer,
+                playerType: ClockSide.bottom,
                 clockState: state,
               ),
             ),
@@ -107,15 +102,13 @@ class _BodyState extends ConsumerState<_Body> {
 
 class ClockTile extends ConsumerWidget {
   const ClockTile({
-    required this.position,
     required this.playerType,
     required this.clockState,
     required this.orientation,
     super.key,
   });
 
-  final TilePosition position;
-  final Side playerType;
+  final ClockSide playerType;
   final ClockState clockState;
   final Orientation orientation;
 
@@ -151,7 +144,7 @@ class ClockTile extends ConsumerWidget {
       duration: const Duration(milliseconds: 200),
       child: RotatedBox(
         quarterTurns: clockOrientation.isPortrait
-            ? (position == TilePosition.top
+            ? (playerType == ClockSide.top
                   ? clockOrientation.oppositeQuarterTurns
                   : clockOrientation.quarterTurns)
             : clockOrientation.quarterTurns,
@@ -165,14 +158,9 @@ class ClockTile extends ConsumerWidget {
                 splashFactory: NoSplash.splashFactory,
                 onTapDown: !clockState.started
                     ? (_) {
-                        ref
-                            .read(clockToolControllerProvider.notifier)
-                            .setBottomPlayer(
-                              position == TilePosition.bottom ? Side.black : Side.white,
-                            );
-                        ref.read(clockToolControllerProvider.notifier).start();
+                        ref.read(clockToolControllerProvider.notifier).start(playerType);
                       }
-                    : clockState.started && clockState.isPlayersMoveAllowed(playerType)
+                    : clockState.isPlayersMoveAllowed(playerType)
                     ? (_) {
                         ref.read(clockToolControllerProvider.notifier).onTap(playerType);
                       }
@@ -252,16 +240,16 @@ class ClockTile extends ConsumerWidget {
                                 context: context,
                                 builder: (BuildContext context) => CustomClockSettings(
                                   player: playerType,
-                                  clock: playerType == Side.white
+                                  clock: playerType == ClockSide.top
                                       ? TimeIncrement.fromDurations(
-                                          clockState.options.whiteTime,
-                                          clockState.options.whiteIncrement,
+                                          clockState.options.topTime,
+                                          clockState.options.topIncrement,
                                         )
                                       : TimeIncrement.fromDurations(
-                                          clockState.options.blackTime,
-                                          clockState.options.blackIncrement,
+                                          clockState.options.bottomTime,
+                                          clockState.options.bottomIncrement,
                                         ),
-                                  onSubmit: (Side player, TimeIncrement clock) {
+                                  onSubmit: (ClockSide player, TimeIncrement clock) {
                                     Navigator.of(context).pop();
                                     ref
                                         .read(clockToolControllerProvider.notifier)
@@ -297,7 +285,7 @@ class _ClockDisplay extends StatelessWidget {
   });
 
   final ClockState clockState;
-  final Side playerType;
+  final ClockSide playerType;
   final ClockStyle clockStyle;
 
   @override
