@@ -121,20 +121,24 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    FilledButton.icon(
+                    IconButton.filled(
                       icon: const Icon(Icons.check),
-                      label: Text(context.l10n.yes),
+                      style: FilledButton.styleFrom(
+                        foregroundColor: ColorScheme.of(context).onPrimary,
+                        backgroundColor: ColorScheme.of(context).primary,
+                      ),
+                      tooltip: context.l10n.accept,
                       onPressed: () {
                         ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
                       },
                     ),
-                    FilledButton.icon(
+                    IconButton.filled(
                       icon: const Icon(Icons.close),
                       style: FilledButton.styleFrom(
                         foregroundColor: ColorScheme.of(context).onError,
                         backgroundColor: ColorScheme.of(context).error,
                       ),
-                      label: Text(context.l10n.no),
+                      tooltip: context.l10n.decline,
                       onPressed: () {
                         ref.read(ctrlProvider.notifier).declineRematch();
                       },
