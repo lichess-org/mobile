@@ -51,7 +51,12 @@ class TournamentController extends _$TournamentController {
     if (countdown != null && countdown.$1 > Duration.zero) {
       _reloadTimer?.cancel();
       _reloadTimer = Timer(countdown.$1, () {
-        if (state.hasValue) {
+        // we don't invalidate if the tournament screen is not focused (in that case the socket won't
+        // be active) because riverpod would still reload the provider which would make the tournament
+        // socket to open, effectively closing all other sockets (which we don't want).
+        // riverpod 3.0 will mitigate this issue since off-screen providers will have their subscriptions
+        // paused.
+        if (state.hasValue && _socketClient?.isActive == true) {
           ref.invalidateSelf();
         }
       });
