@@ -99,8 +99,6 @@ class GameBody extends ConsumerWidget {
         return const LoadGameError('Sorry, we could not load the game. Please try again later.');
       case AsyncData(value: final gameState, isRefreshing: false):
         final youAre = gameState.game.youAre ?? Side.white;
-        final archivedBlackClock = gameState.game.archivedBlackClockAt(gameState.stepCursor);
-        final archivedWhiteClock = gameState.game.archivedWhiteClockAt(gameState.stepCursor);
 
         final black = GamePlayer(
           game: gameState.game,
@@ -124,9 +122,7 @@ class GameBody extends ConsumerWidget {
                   },
                 )
               : null,
-          clock: archivedBlackClock != null
-              ? Clock(timeLeft: archivedBlackClock, active: false)
-              : gameState.liveClock != null
+          clock: gameState.liveClock != null
               ? RepaintBoundary(
                   child: ValueListenableBuilder(
                     key: blackClockKey,
@@ -173,9 +169,7 @@ class GameBody extends ConsumerWidget {
                   },
                 )
               : null,
-          clock: archivedWhiteClock != null
-              ? Clock(timeLeft: archivedWhiteClock, active: false)
-              : gameState.liveClock != null
+          clock: gameState.liveClock != null
               ? RepaintBoundary(
                   child: ValueListenableBuilder(
                     key: whiteClockKey,

@@ -99,23 +99,23 @@ class GameController extends _$GameController {
         ref.read(soundServiceProvider).play(Sound.dong);
       }
 
-      if (game.playable) {
-        if (game.clock != null) {
-          _clock = ChessClock(
-            whiteTime: game.clock!.white,
-            blackTime: game.clock!.black,
-            emergencyThreshold: game.meta.clock?.emergency,
-            onEmergency: onClockEmergency,
-            onFlag: onFlag,
-          );
-          if (game.clock!.running) {
-            final pos = game.lastPosition;
-            if (pos.fullmoves > 1) {
-              _clock!.startSide(pos.turn);
-            }
+      if (game.clock != null) {
+        _clock = ChessClock(
+          whiteTime: game.clock!.white,
+          blackTime: game.clock!.black,
+          emergencyThreshold: game.meta.clock?.emergency,
+          onEmergency: onClockEmergency,
+          onFlag: onFlag,
+        );
+        if (game.clock!.running) {
+          final pos = game.lastPosition;
+          if (pos.fullmoves > 1) {
+            _clock!.startSide(pos.turn);
           }
         }
-      } else if (game.finished) {
+      }
+
+      if (game.finished) {
         _onFinishedGameLoad(fullEvent.game);
       }
 

@@ -85,11 +85,13 @@ class Clock extends StatelessWidget {
                       ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
                       : '$minsDisplay:$secs',
                   style: TextStyle(
-                    color: active
-                        ? isEmergency
-                              ? effectiveClockStyle.emergencyTextColor
-                              : effectiveClockStyle.activeTextColor
-                        : effectiveClockStyle.textColor,
+                    color: timeLeft > Duration.zero
+                        ? active
+                              ? isEmergency
+                                    ? effectiveClockStyle.emergencyTextColor
+                                    : effectiveClockStyle.activeTextColor
+                              : effectiveClockStyle.textColor
+                        : effectiveClockStyle.emergencyTextColor,
                     fontSize: _kClockFontSize * fontScaleFactor,
                     height: isShortVerticalScreen(context) ? 1.0 : null,
                     fontFeatures: const [FontFeature.tabularFigures()],
