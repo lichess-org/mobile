@@ -274,9 +274,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     required bool isTablet,
   }) {
     final welcomeWidgets = [
+      const _HelloWidget(),
       Padding(
         padding: Styles.bodySectionPadding,
-        child: LichessMessage(style: TextTheme.of(context).bodyLarge, textAlign: TextAlign.center),
+        child: LichessMessage(style: TextTheme.of(context).bodyLarge),
       ),
       const SizedBox(height: 8.0),
       if (session == null) ...[const Center(child: _SignInWidget()), const SizedBox(height: 16.0)],
