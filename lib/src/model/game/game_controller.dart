@@ -1066,6 +1066,15 @@ sealed class GameState with _$GameState {
             variant: game.meta.variant,
             isComputerAnalysisAllowed: false,
           ),
+          conditionalPremovesOptions:
+              game.playable && game.meta.speed == Speed.correspondence && game.youAre != null
+              ? (
+                  initialSteps: game.correspondenceForecast?.steps ?? const IList.empty(),
+                  currentPly: game.lastPly,
+                  gameFullId: gameFullId,
+                  ourSide: game.youAre!,
+                )
+              : null,
         );
 
   GameChatOptions? get chatOptions => isZenModeActive || game.meta.tournament != null
