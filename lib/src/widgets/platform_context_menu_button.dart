@@ -49,7 +49,11 @@ class ContextMenuIconButton extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(13.0)),
                       child: ColoredBox(
-                        color: ColorScheme.of(context).surfaceContainer,
+                        color:
+                            MenuTheme.of(
+                              context,
+                            ).style?.backgroundColor?.resolve({WidgetState.focused}) ??
+                            ColorScheme.of(context).surfaceContainer,
                         child: ScrollConfiguration(
                           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                           child: CupertinoScrollbar(
