@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,8 +77,8 @@ class _BodyState extends ConsumerState<_Body> {
             Opacity(
               opacity: 0.8,
               child: SizedBox(
-                width: orientation == Orientation.portrait ? double.infinity : 98,
-                height: orientation == Orientation.portrait ? 98 : double.infinity,
+                width: orientation == Orientation.portrait ? double.infinity : 88,
+                height: orientation == Orientation.portrait ? 88 : double.infinity,
                 child: Padding(
                   padding: orientation == Orientation.portrait
                       ? const EdgeInsets.symmetric(vertical: 8.0)
@@ -115,23 +116,23 @@ class ClockTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = ColorScheme.of(context);
-    final activeColor = darken(colorScheme.primaryFixedDim, 0.2);
+    final activeColor = darken(colorScheme.primaryFixedDim, 0.25);
     final backgroundColor = clockState.isFlagged(playerType)
-        ? colorScheme.errorContainer
+        ? context.lichessColors.error.withValues(alpha: 0.7)
         : clockState.isPlayersTurn(playerType)
         ? activeColor
         : colorScheme.surfaceContainerHighest;
 
     final textColor = clockState.isFlagged(playerType)
-        ? Colors.white
+        ? Colors.white70
         : clockState.isPlayersTurn(playerType)
-        ? Colors.white
-        : colorScheme.onSurface;
+        ? Colors.white70
+        : colorScheme.onSurface.withValues(alpha: 0.7);
 
     final clockStyle = ClockStyle(
       textColor: textColor,
       activeTextColor: Colors.white,
-      emergencyTextColor: Colors.white,
+      emergencyTextColor: Colors.white70,
       backgroundColor: Colors.transparent,
       activeBackgroundColor: Colors.transparent,
       emergencyBackgroundColor: Colors.transparent,
@@ -181,7 +182,10 @@ class ClockTile extends ConsumerWidget {
                               playerType: playerType,
                               clockStyle: clockStyle,
                             ),
-                            secondChild: const Icon(Icons.flag),
+                            secondChild: const Icon(
+                              CupertinoIcons.flag_fill,
+                              color: Colors.white70,
+                            ),
                             crossFadeState: clockState.isFlagged(playerType)
                                 ? CrossFadeState.showSecond
                                 : CrossFadeState.showFirst,
@@ -196,13 +200,15 @@ class ClockTile extends ConsumerWidget {
             Positioned(
               top: 24,
               right: 24,
-              child: Text(
-                '${context.l10n.stormMoves}: ${clockState.getMovesCount(playerType)}',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: !clockState.paused && clockState.isPlayersTurn(playerType)
-                      ? clockStyle.activeTextColor
-                      : clockStyle.textColor,
+              child: IgnorePointer(
+                child: Text(
+                  '${context.l10n.stormMoves}: ${clockState.getMovesCount(playerType)}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: !clockState.paused && clockState.isPlayersTurn(playerType)
+                        ? clockStyle.activeTextColor
+                        : clockStyle.textColor,
+                  ),
                 ),
               ),
             ),
@@ -210,12 +216,14 @@ class ClockTile extends ConsumerWidget {
               Positioned(
                 top: 24,
                 left: 24,
-                child: RotatedBox(
-                  quarterTurns: 2,
-                  child: _ClockDisplay(
-                    clockState: clockState,
-                    playerType: playerType,
-                    clockStyle: clockStyle,
+                child: IgnorePointer(
+                  child: RotatedBox(
+                    quarterTurns: 2,
+                    child: _ClockDisplay(
+                      clockState: clockState,
+                      playerType: playerType,
+                      clockStyle: clockStyle,
+                    ),
                   ),
                 ),
               ),

@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -10,7 +9,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class TimeControlModal extends ConsumerWidget {
+class TimeControlModal extends StatelessWidget {
   const TimeControlModal({
     required this.timeIncrement,
     required this.onSelected,
@@ -27,7 +26,7 @@ class TimeControlModal extends ConsumerWidget {
   static const _sectionSpacing = SizedBox(height: 16.0);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     void onSelected(TimeIncrement choice) {
       Navigator.pop(context);
       this.onSelected(choice);
@@ -144,9 +143,6 @@ class TimeControlModal extends ConsumerWidget {
                                     setState(() {
                                       custom = TimeIncrement(value.toInt(), custom.increment);
                                     });
-                                    ref
-                                        .read(gameSetupPreferencesProvider.notifier)
-                                        .setTimeIncrement(custom);
                                   },
                                 ),
                               ),
@@ -178,9 +174,6 @@ class TimeControlModal extends ConsumerWidget {
                                     setState(() {
                                       custom = TimeIncrement(custom.time, value.toInt());
                                     });
-                                    ref
-                                        .read(gameSetupPreferencesProvider.notifier)
-                                        .setTimeIncrement(custom);
                                   },
                                 ),
                               ),

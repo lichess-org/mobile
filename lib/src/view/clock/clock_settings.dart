@@ -163,7 +163,7 @@ class _PlayResumeButton extends ConsumerWidget {
             padding: _kIconPadding,
             tooltip: context.l10n.pause,
             iconSize: iconSize,
-            onPressed: () => controller.pause(),
+            onPressed: state.flagged != null ? null : () => controller.pause(),
             icon: const Icon(Icons.pause),
           );
   }
