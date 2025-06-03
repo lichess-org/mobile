@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -62,8 +61,8 @@ class UserActivityEntry extends ConsumerWidget {
     const leadingIconSize = 26.0;
     final emptySubtitle = theme.platform == TargetPlatform.iOS ? const SizedBox.shrink() : null;
 
-    final redColor = theme.extension<CustomColors>()?.error;
-    final greenColor = theme.extension<CustomColors>()?.good;
+    final redColor = context.lichessColors.error;
+    final greenColor = context.lichessColors.good;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -303,22 +302,12 @@ class BriefGameResultBox extends StatelessWidget {
             ((win != 0 ? 1 : 0) + (draw != 0 ? 1 : 0) + (loss != 0 ? 1 : 0) - 1) * _spaceWidth,
         child: Row(
           children: [
-            if (win != 0)
-              _ResultBox(
-                number: win,
-                color: Theme.of(context).extension<CustomColors>()?.good ?? LichessColors.green,
-              ),
+            if (win != 0) _ResultBox(number: win, color: context.lichessColors.good),
             if (win != 0 && draw != 0) const SizedBox(width: _spaceWidth),
             if (draw != 0) _ResultBox(number: draw, color: context.lichessColors.brag),
             if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
               const SizedBox(width: _spaceWidth),
-            if (loss != 0)
-              _ResultBox(
-                number: loss,
-                color:
-                    Theme.of(context).extension<CustomColors>()?.error ??
-                    context.lichessColors.error,
-              ),
+            if (loss != 0) _ResultBox(number: loss, color: context.lichessColors.error),
           ],
         ),
       ),

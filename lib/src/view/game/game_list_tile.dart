@@ -155,8 +155,6 @@ class GameContextMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = mySide;
 
-    final customColors = Theme.of(context).extension<CustomColors>();
-
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return BottomSheetScrollableContainer(
@@ -229,10 +227,10 @@ class GameContextMenu extends ConsumerWidget {
                                   ),
                                   style: TextStyle(
                                     color: game.winner == null
-                                        ? customColors?.brag
+                                        ? context.lichessColors.brag
                                         : game.winner == mySide
-                                        ? customColors?.good
-                                        : customColors?.error,
+                                        ? context.lichessColors.good
+                                        : context.lichessColors.error,
                                   ),
                                 ),
                               if (game.opening != null)

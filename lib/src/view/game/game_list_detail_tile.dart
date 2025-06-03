@@ -34,8 +34,6 @@ class GameListDetailTile extends StatelessWidget {
     final titleFontSize = isTablet ? 24.0 : 16.0;
     final subtitleFontSize = isTablet ? 18.0 : 12.0;
 
-    final customColors = Theme.of(context).extension<CustomColors>();
-
     final moveList = game.moves?.split(' ');
 
     final dateStyle = TextStyle(
@@ -162,10 +160,10 @@ class GameListDetailTile extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: subtitleFontSize,
                                       color: game.winner == null
-                                          ? customColors?.brag
+                                          ? context.lichessColors.brag
                                           : game.winner == mySide
-                                          ? customColors?.good
-                                          : customColors?.error,
+                                          ? context.lichessColors.good
+                                          : context.lichessColors.error,
                                     ),
                                     children: [
                                       if (me.ratingDiff != null)

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 const _kClockFontSize = 26.0;
@@ -57,7 +58,8 @@ class Clock extends StatelessWidget {
 
     final brightness = Theme.of(context).brightness;
     final colorScheme = ColorScheme.of(context);
-    final effectiveClockStyle = clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme);
+    final effectiveClockStyle =
+        clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme, context.lichessColors);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -136,7 +138,11 @@ class ClockStyle {
   final Color activeBackgroundColor;
   final Color emergencyBackgroundColor;
 
-  factory ClockStyle.defaultStyle(Brightness brightness, ColorScheme colorScheme) => ClockStyle(
+  factory ClockStyle.defaultStyle(
+    Brightness brightness,
+    ColorScheme colorScheme,
+    LichessCustomColors lichessColors,
+  ) => ClockStyle(
     backgroundColor: colorScheme.surface,
     textColor: colorScheme.outline,
     activeBackgroundColor: brightness == Brightness.dark
@@ -145,8 +151,10 @@ class ClockStyle {
     activeTextColor: brightness == Brightness.dark
         ? colorScheme.onInverseSurface
         : colorScheme.onTertiaryContainer,
-    emergencyBackgroundColor: colorScheme.errorContainer,
-    emergencyTextColor: colorScheme.onErrorContainer,
+    emergencyBackgroundColor: lichessColors.error.withValues(
+      alpha: brightness == Brightness.dark ? 0.6 : 0.4,
+    ),
+    emergencyTextColor: brightness == Brightness.dark ? Colors.white60 : Colors.black87,
   );
 }
 

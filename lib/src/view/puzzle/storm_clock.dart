@@ -95,7 +95,11 @@ class _ClockState extends State<StormClockWidget> with SingleTickerProviderState
   Widget build(BuildContext build) {
     final brightness = Theme.of(context).brightness;
     final colorScheme = ColorScheme.of(context);
-    final effectiveClockStyle = ClockStyle.defaultStyle(brightness, colorScheme);
+    final effectiveClockStyle = ClockStyle.defaultStyle(
+      brightness,
+      colorScheme,
+      context.lichessColors,
+    );
 
     final minutes = time.inMinutes.remainder(60).toString().padLeft(2, '0');
     final seconds = time.inSeconds.remainder(60).toString().padLeft(2, '0');

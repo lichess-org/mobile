@@ -57,8 +57,8 @@ Color lighten(Color c, [double amount = .1]) {
 }
 
 @immutable
-class CustomColors extends ThemeExtension<CustomColors> {
-  const CustomColors({
+class LichessCustomColors extends ThemeExtension<LichessCustomColors> {
+  const LichessCustomColors({
     required this.cyan,
     required this.brag,
     required this.good,
@@ -77,7 +77,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
   final Color primary;
 
   @override
-  CustomColors copyWith({
+  LichessCustomColors copyWith({
     Color? cyan,
     Color? brag,
     Color? good,
@@ -86,7 +86,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     Color? purple,
     Color? primary,
   }) {
-    return CustomColors(
+    return LichessCustomColors(
       cyan: cyan ?? this.cyan,
       brag: brag ?? this.brag,
       good: good ?? this.good,
@@ -98,11 +98,11 @@ class CustomColors extends ThemeExtension<CustomColors> {
   }
 
   @override
-  CustomColors lerp(ThemeExtension<CustomColors>? other, double t) {
-    if (other is! CustomColors) {
+  LichessCustomColors lerp(ThemeExtension<LichessCustomColors>? other, double t) {
+    if (other is! LichessCustomColors) {
       return this;
     }
-    return CustomColors(
+    return LichessCustomColors(
       cyan: Color.lerp(cyan, other.cyan, t) ?? cyan,
       brag: Color.lerp(brag, other.brag, t) ?? brag,
       good: Color.lerp(good, other.good, t) ?? good,
@@ -113,7 +113,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     );
   }
 
-  CustomColors harmonized(ColorScheme colorScheme) {
+  LichessCustomColors harmonized(ColorScheme colorScheme) {
     return copyWith(
       cyan: cyan.harmonizeWith(colorScheme.primary),
       brag: brag.harmonizeWith(colorScheme.primary),
@@ -126,7 +126,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
   }
 }
 
-const lichessCustomColors = CustomColors(
+const lichessCustomColors = LichessCustomColors(
   cyan: LichessColors.cyan,
   brag: LichessColors.brag,
   good: LichessColors.good,
@@ -137,5 +137,6 @@ const lichessCustomColors = CustomColors(
 );
 
 extension CustomColorsBuildContext on BuildContext {
-  CustomColors get lichessColors => Theme.of(this).extension<CustomColors>() ?? lichessCustomColors;
+  LichessCustomColors get lichessColors =>
+      Theme.of(this).extension<LichessCustomColors>() ?? lichessCustomColors;
 }

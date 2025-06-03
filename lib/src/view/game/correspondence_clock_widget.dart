@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
@@ -88,7 +89,7 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final brightness = Theme.of(context).brightness;
     final colorScheme = ColorScheme.of(context);
-    final clockStyle = ClockStyle.defaultStyle(brightness, colorScheme);
+    final clockStyle = ClockStyle.defaultStyle(brightness, colorScheme, context.lichessColors);
 
     final daysStr = days > 1
         ? context.l10n.nbDays(days)
