@@ -160,7 +160,7 @@ class ClockToolController extends _$ClockToolController {
       bottomMoves: 0,
     );
     _clock.stop();
-    _clock.setTimes(blackTime: state.options.topTime, whiteTime: state.options.topTime);
+    _clock.setTimes(blackTime: state.options.topTime, whiteTime: state.options.bottomTime);
     // Reset low time sound flags for both players
     _hasPlayedLowTimeSound[ClockSide.top] = false;
     _hasPlayedLowTimeSound[ClockSide.bottom] = false;
