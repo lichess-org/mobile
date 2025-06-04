@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/model/common/service/wake_lock_service.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({this.channel, this.initialGame, this.user, super.key})
@@ -58,6 +59,28 @@ class _TvScreenState extends ConsumerState<TvScreen> {
 
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnTvScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnTvScreen');
+  WakeLockService? _wakeLockService;
+
+  @override
+  void initState() {
+    super.initState();
+    _enableWakeLock();
+  }
+
+  @override
+  void dispose() {
+    _disableWakeLock();
+    super.dispose();
+  }
+
+  Future<void> _enableWakeLock() async {
+    _wakeLockService = ref.read(wakeLockServiceProvider);
+    await _wakeLockService?.enable();
+  }
+
+  Future<void> _disableWakeLock() async {
+    await _wakeLockService?.disable();
+  }
 
   @override
   Widget build(BuildContext context) {

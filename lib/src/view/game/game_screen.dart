@@ -29,6 +29,8 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:flutter/foundation.dart';
+import 'package:lichess_mobile/src/model/common/service/wake_lock_service.dart';
 
 /// Screen to play a game, or to show a challenge or to show current user's past games.
 ///
@@ -108,6 +110,28 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
   final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
+  WakeLockService? _wakeLockService;
+
+  @override
+  void initState() {
+    super.initState();
+    _enableWakeLock();
+  }
+
+  @override
+  void dispose() {
+    _disableWakeLock();
+    super.dispose();
+  }
+
+  Future<void> _enableWakeLock() async {
+    _wakeLockService = ref.read(wakeLockServiceProvider);
+    await _wakeLockService?.enable();
+  }
+
+  Future<void> _disableWakeLock() async {
+    await _wakeLockService?.disable();
+  }
 
   @override
   Widget build(BuildContext context) {

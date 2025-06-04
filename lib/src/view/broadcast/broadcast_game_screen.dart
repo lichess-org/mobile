@@ -36,6 +36,7 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:lichess_mobile/src/model/common/service/wake_lock_service.dart';
 
 class BroadcastGameScreen extends ConsumerStatefulWidget {
   final BroadcastTournamentId? tournamentId;
@@ -84,6 +85,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
     with SingleTickerProviderStateMixin {
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
+  WakeLockService? _wakeLockService;
 
   @override
   void initState() {
@@ -92,12 +94,23 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
     tabs = [AnalysisTab.opening, AnalysisTab.moves];
 
     _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
+    _enableWakeLock();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _disableWakeLock();
     super.dispose();
+  }
+
+  Future<void> _enableWakeLock() async {
+    _wakeLockService = ref.read(wakeLockServiceProvider);
+    await _wakeLockService?.enable();
+  }
+
+  Future<void> _disableWakeLock() async {
+    await _wakeLockService?.disable();
   }
 
   @override
