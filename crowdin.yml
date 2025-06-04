@@ -1,3 +1,5 @@
 files:
-  - source: /translation/source
-    translation: /translation/dest/%locale%_%original_file_name%
+  - source: /translation/source/*.xml
+    translation: /translation/dest/%file_name%/%locale%.%file_extension%
+    translate_attributes: 0
+    update_option: update_without_changes
