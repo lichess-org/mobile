@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/service/wake_lock_service.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -109,27 +108,15 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
   final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
-  WakeLockService? _wakeLockService;
 
   @override
   void initState() {
     super.initState();
-    _enableWakeLock();
   }
 
   @override
   void dispose() {
-    _disableWakeLock();
     super.dispose();
-  }
-
-  Future<void> _enableWakeLock() async {
-    _wakeLockService = ref.read(wakeLockServiceProvider);
-    await _wakeLockService?.enable();
-  }
-
-  Future<void> _disableWakeLock() async {
-    await _wakeLockService?.disable();
   }
 
   @override
