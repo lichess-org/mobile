@@ -5,5 +5,5 @@ base_path: "."
 preserve_hierarchy: true
 
 files:
-  - source: /translation/source/*.xml
-    translation: /translation/dest/%locale%_%original_file_name%
+  - source: translation/source/*.xml
+    translation: translation/dest/%locale%_%original_file_name%
