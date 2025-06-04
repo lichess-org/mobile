@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
@@ -191,28 +192,31 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           ),
         );
 
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            leading: isRealTimePlayingGame ? SocketPingRating(socketUri: socketUri) : null,
-            title: loadedGame != null
-                ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
-                : widget.seek != null
-                ? _LobbyGameTitle(seek: widget.seek!)
-                : widget.challenge != null
-                ? _ChallengeGameTitle(challenge: widget.challenge!)
-                : const SizedBox.shrink(),
+        return WakelockWidget(
+          shouldEnableOnFocusGained: () => loadedGame != null,
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              leading: isRealTimePlayingGame ? SocketPingRating(socketUri: socketUri) : null,
+              title: loadedGame != null
+                  ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
+                  : widget.seek != null
+                  ? _LobbyGameTitle(seek: widget.seek!)
+                  : widget.challenge != null
+                  ? _ChallengeGameTitle(challenge: widget.challenge!)
+                  : const SizedBox.shrink(),
 
-            actions: [if (loadedGame != null) _GameMenu(gameId: loadedGame.gameId)],
+              actions: [if (loadedGame != null) _GameMenu(gameId: loadedGame.gameId)],
+            ),
+            body: Theme.of(context).platform == TargetPlatform.android
+                ? AndroidGesturesExclusionWidget(
+                    boardKey: _boardKey,
+                    shouldExcludeGesturesOnFocusGained: () => isRealTimePlayingGame,
+                    shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+                    child: body,
+                  )
+                : body,
           ),
-          body: Theme.of(context).platform == TargetPlatform.android
-              ? AndroidGesturesExclusionWidget(
-                  boardKey: _boardKey,
-                  shouldExcludeGesturesOnFocusGained: () => isRealTimePlayingGame,
-                  shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
-                  child: body,
-                )
-              : body,
         );
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameScreen] could not create game; $e\n$s');

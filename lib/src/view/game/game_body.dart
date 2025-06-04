@@ -212,69 +212,65 @@ class GameBody extends ConsumerWidget {
           onFocusRegained: () {
             ref.read(ctrlProvider.notifier).onFocusRegained();
           },
-          child: WakelockWidget(
-            shouldEnableOnFocusGained: () => gameState.game.playable,
-            child: Column(
-              children: [
-                Expanded(
-                  child: BoardTable(
-                    key: boardKey,
-                    boardSettingsOverrides: BoardSettingsOverrides(
-                      animationDuration: animationDuration,
-                      autoQueenPromotion: gameState.canAutoQueen,
-                      autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
-                      blindfoldMode: blindfoldMode,
-                    ),
-                    orientation: isBoardTurned ? youAre.opposite : youAre,
-                    lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
-                    interactiveBoardParams: (
-                      variant: gameState.game.meta.variant,
-                      position: gameState.currentPosition,
-                      playerSide: gameState.game.playable && !gameState.isReplaying
-                          ? youAre == Side.white
-                                ? PlayerSide.white
-                                : PlayerSide.black
-                          : PlayerSide.none,
-                      promotionMove: gameState.promotionMove,
-                      onMove: (move, {isDrop}) {
-                        ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
-                      },
-                      onPromotionSelection: (role) {
-                        ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-                      },
-                      premovable: gameState.canPremove
-                          ? (
-                              onSetPremove: (move) {
-                                ref.read(ctrlProvider.notifier).setPremove(move);
-                              },
-                              premove: gameState.premove,
-                            )
-                          : null,
-                    ),
-                    topTable: topPlayer,
-                    bottomTable:
-                        gameState.canShowClaimWinCountdown &&
-                            gameState.opponentLeftCountdown != null
-                        ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
-                        : bottomPlayer,
-                    moves: gameState.game.steps
-                        .skip(1)
-                        .map((e) => e.sanMove!.san)
-                        .toList(growable: false),
-                    currentMoveIndex: gameState.stepCursor,
-                    onSelectMove: (moveIndex) {
-                      ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
-                    },
-                    zenMode: gameState.isZenModeActive,
+          child: Column(
+            children: [
+              Expanded(
+                child: BoardTable(
+                  key: boardKey,
+                  boardSettingsOverrides: BoardSettingsOverrides(
+                    animationDuration: animationDuration,
+                    autoQueenPromotion: gameState.canAutoQueen,
+                    autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
+                    blindfoldMode: blindfoldMode,
                   ),
+                  orientation: isBoardTurned ? youAre.opposite : youAre,
+                  lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
+                  interactiveBoardParams: (
+                    variant: gameState.game.meta.variant,
+                    position: gameState.currentPosition,
+                    playerSide: gameState.game.playable && !gameState.isReplaying
+                        ? youAre == Side.white
+                              ? PlayerSide.white
+                              : PlayerSide.black
+                        : PlayerSide.none,
+                    promotionMove: gameState.promotionMove,
+                    onMove: (move, {isDrop}) {
+                      ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
+                    },
+                    onPromotionSelection: (role) {
+                      ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+                    },
+                    premovable: gameState.canPremove
+                        ? (
+                            onSetPremove: (move) {
+                              ref.read(ctrlProvider.notifier).setPremove(move);
+                            },
+                            premove: gameState.premove,
+                          )
+                        : null,
+                  ),
+                  topTable: topPlayer,
+                  bottomTable:
+                      gameState.canShowClaimWinCountdown && gameState.opponentLeftCountdown != null
+                      ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
+                      : bottomPlayer,
+                  moves: gameState.game.steps
+                      .skip(1)
+                      .map((e) => e.sanMove!.san)
+                      .toList(growable: false),
+                  currentMoveIndex: gameState.stepCursor,
+                  onSelectMove: (moveIndex) {
+                    ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
+                  },
+                  zenMode: gameState.isZenModeActive,
                 ),
-                _GameBottomBar(
-                  id: loadedGame.gameId,
-                  onLoadGameCallback: onLoadGameCallback,
-                  onNewOpponentCallback: onNewOpponentCallback,
-                ),
-              ],
-            ),
+              ),
+              _GameBottomBar(
+                id: loadedGame.gameId,
+                onLoadGameCallback: onLoadGameCallback,
+                onNewOpponentCallback: onNewOpponentCallback,
+              ),
+            ],
           ),
         );
 
