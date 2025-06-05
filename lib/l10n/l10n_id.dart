@@ -9,6 +9,13 @@ class AppLocalizationsId extends AppLocalizations {
   AppLocalizationsId([String locale = 'id']) : super(locale);
 
   @override
+  String get mobileAccountPreferences => 'Account preferences';
+
+  @override
+  String get mobileAccountPreferencesHelp =>
+      'These preferences are applied to your account on the Lichess server and will be used across all devices.';
+
+  @override
   String get mobileAllGames => 'Semua permainan';
 
   @override

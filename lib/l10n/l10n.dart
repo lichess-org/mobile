@@ -195,6 +195,18 @@ abstract class AppLocalizations {
     Locale('zh', 'TW'),
   ];
 
+  /// No description provided for @mobileAccountPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Account preferences'**
+  String get mobileAccountPreferences;
+
+  /// No description provided for @mobileAccountPreferencesHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'These preferences are applied to your account on the Lichess server and will be used across all devices.'**
+  String get mobileAccountPreferencesHelp;
+
   /// No description provided for @mobileAllGames.
   ///
   /// In en, this message translates to:

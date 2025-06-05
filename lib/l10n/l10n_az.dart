@@ -9,6 +9,13 @@ class AppLocalizationsAz extends AppLocalizations {
   AppLocalizationsAz([String locale = 'az']) : super(locale);
 
   @override
+  String get mobileAccountPreferences => 'Account preferences';
+
+  @override
+  String get mobileAccountPreferencesHelp =>
+      'These preferences are applied to your account on the Lichess server and will be used across all devices.';
+
+  @override
   String get mobileAllGames => 'Bütün oyunlar';
 
   @override

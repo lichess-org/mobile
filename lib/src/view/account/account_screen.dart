@@ -147,7 +147,7 @@ class AccountScreen extends ConsumerWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.manage_accounts_outlined),
-                  title: Text(context.l10n.preferencesPreferences),
+                  title: Text(context.l10n.mobileAccountPreferences),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const Icon(Icons.chevron_right)
                       : null,

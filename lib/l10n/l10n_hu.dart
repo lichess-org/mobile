@@ -9,6 +9,13 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
+  String get mobileAccountPreferences => 'Account preferences';
+
+  @override
+  String get mobileAccountPreferencesHelp =>
+      'These preferences are applied to your account on the Lichess server and will be used across all devices.';
+
+  @override
   String get mobileAllGames => 'Összes játszma';
 
   @override

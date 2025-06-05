@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Account preferences</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">These preferences are applied to your account on the Lichess server and will be used across all devices.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">All games</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Are you sure?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Board settings</string>
