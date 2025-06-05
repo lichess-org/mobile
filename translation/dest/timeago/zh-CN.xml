@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="justNow">刚刚</string>
+  <plurals name="inNbSeconds">
+    <item quantity="other">在 %s 秒内</item>
+  </plurals>
+  <plurals name="inNbMinutes">
+    <item quantity="other">在 %s 分钟内</item>
+  </plurals>
+  <plurals name="inNbHours">
+    <item quantity="other">在 %s 小时内</item>
+  </plurals>
+  <plurals name="inNbDays">
+    <item quantity="other">在 %s 天内</item>
+  </plurals>
+  <plurals name="inNbWeeks">
+    <item quantity="other">在 %s 周内</item>
+  </plurals>
+  <plurals name="inNbMonths">
+    <item quantity="other">在 %s 月内</item>
+  </plurals>
+  <plurals name="inNbYears">
+    <item quantity="other">在 %s 年内</item>
+  </plurals>
+  <string name="rightNow">刚刚</string>
+  <plurals name="nbMinutesAgo">
+    <item quantity="other">%s 分钟前</item>
+  </plurals>
+  <plurals name="nbHoursAgo">
+    <item quantity="other">%s 小时前</item>
+  </plurals>
+  <plurals name="nbDaysAgo">
+    <item quantity="other">%s 天前</item>
+  </plurals>
+  <plurals name="nbWeeksAgo">
+    <item quantity="other">%s 周前</item>
+  </plurals>
+  <plurals name="nbMonthsAgo">
+    <item quantity="other">%s 月前</item>
+  </plurals>
+  <plurals name="nbYearsAgo">
+    <item quantity="other">%s 年前</item>
+  </plurals>
+  <plurals name="nbMinutesRemaining">
+    <item quantity="other">还剩 %s 分钟</item>
+  </plurals>
+  <plurals name="nbHoursRemaining">
+    <item quantity="other">还剩 %s 小时</item>
+  </plurals>
+  <string name="completed">已完成</string>
+</resources>

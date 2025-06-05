@@ -41,7 +41,7 @@
   "mobileRecentSearches": "Recent searches",
   "mobileSettingsHapticFeedback": "Haptic feedback",
   "mobileSettingsImmersiveMode": "Immersive mode",
-  "mobileSettingsImmersiveModeSubtitle": "Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.",
+  "mobileSettingsImmersiveModeSubtitle": "Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and puzzle screens.",
   "mobileSettingsTab": "Settings",
   "mobileShareGamePGN": "Share PGN",
   "mobileShareGameURL": "Share game URL",
@@ -814,27 +814,8 @@
   "puzzleNewStreak": "New streak",
   "puzzleFromMyGames": "From my games",
   "puzzleLookupOfPlayer": "Lookup puzzles from a player's games",
-  "puzzleFromXGames": "Puzzles from {param}' games",
-  "@puzzleFromXGames": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
   "puzzleSearchPuzzles": "Search puzzles",
   "puzzleFromMyGamesNone": "You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!",
-  "puzzleFromXGamesFound": "{param1} puzzles found in {param2} games",
-  "@puzzleFromXGamesFound": {
-    "placeholders": {
-      "param1": {
-        "type": "String"
-      },
-      "param2": {
-        "type": "String"
-      }
-    }
-  },
   "puzzlePuzzleDashboardDescription": "Train, analyse, improve",
   "puzzlePercentSolved": "{param} solved",
   "@puzzlePercentSolved": {
@@ -868,6 +849,17 @@
     "placeholders": {
       "count": {
         "type": "int"
+      }
+    }
+  },
+  "puzzlePuzzlesFoundInUserGames": "{count, plural, =1{One puzzle found in games by {param2}} other{{count} puzzles found in games by {param2}}}",
+  "@puzzlePuzzlesFoundInUserGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "param2": {
+        "type": "String"
       }
     }
   },
@@ -1062,6 +1054,7 @@
   "asBlack": "as black",
   "randomColor": "Random side",
   "createAGame": "Create a game",
+  "createTheGame": "Create the game",
   "whiteIsVictorious": "White is victorious",
   "blackIsVictorious": "Black is victorious",
   "youPlayTheWhitePieces": "You play the white pieces",
@@ -1117,6 +1110,7 @@
   "expandVariations": "Expand variations",
   "forceVariation": "Force variation",
   "copyVariationPgn": "Copy variation PGN",
+  "copyMainLinePgn": "Copy mainline PGN",
   "move": "Move",
   "variantLoss": "Variant loss",
   "variantWin": "Variant win",
@@ -1204,6 +1198,14 @@
   "drawByMutualAgreement": "Draw by mutual agreement",
   "fiftyMovesWithoutProgress": "Fifty moves without progress",
   "currentGames": "Current games",
+  "joinedX": "Joined {param}",
+  "@joinedX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "viewInFullSize": "View in full size",
   "logOut": "Sign out",
   "signIn": "Sign in",
@@ -1247,7 +1249,7 @@
   "changeUsername": "Change username",
   "changeUsernameNotSame": "Only the case of the letters can change. For example \"johndoe\" to \"JohnDoe\".",
   "changeUsernameDescription": "Change your username. This can only be done once and you are only allowed to change the case of the letters in your username.",
-  "signupUsernameHint": "Make sure to choose a family-friendly username. You cannot change it later and any accounts with inappropriate usernames will get closed!",
+  "signupUsernameHint": "Make sure to choose a username that's appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!",
   "signupEmailHint": "We will only use it for password reset.",
   "password": "Password",
   "changePassword": "Change password",
@@ -1399,10 +1401,15 @@
   "openingExplorerAndTablebase": "Opening explorer & tablebase",
   "takeback": "Takeback",
   "proposeATakeback": "Propose a takeback",
+  "whiteProposesTakeback": "White proposes takeback",
+  "blackProposesTakeback": "Black proposes takeback",
   "takebackPropositionSent": "Takeback sent",
-  "takebackPropositionDeclined": "Takeback declined",
-  "takebackPropositionAccepted": "Takeback accepted",
-  "takebackPropositionCanceled": "Takeback cancelled",
+  "whiteDeclinesTakeback": "White declines takeback",
+  "blackDeclinesTakeback": "Black declines takeback",
+  "whiteAcceptsTakeback": "White accepts takeback",
+  "blackAcceptsTakeback": "Black accepts takeback",
+  "whiteCancelsTakeback": "White cancels takeback",
+  "blackCancelsTakeback": "Black cancels takeback",
   "yourOpponentProposesATakeback": "Your opponent proposes a takeback",
   "bookmarkThisGame": "Bookmark this game",
   "tournament": "Tournament",
@@ -1951,6 +1958,7 @@
   "really": "really",
   "contribute": "Contribute",
   "termsOfService": "Terms of Service",
+  "titleVerification": "Title verification",
   "sourceCode": "Source Code",
   "simultaneousExhibitions": "Simultaneous exhibitions",
   "host": "Host",
@@ -2583,6 +2591,9 @@
   "lichessPatronInfo": "Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.",
   "nothingToSeeHere": "Nothing to see here at the moment.",
   "stats": "Stats",
+  "accessibility": "Accessibility",
+  "enableBlindMode": "Enable blind mode",
+  "disableBlindMode": "Disable blind mode",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {
@@ -3313,6 +3324,9 @@
   "studyVariantsAreSupportedTitle": "Studies support variants",
   "studyVariantsAreSupportedText": "Yes, you can study crazyhouse<br>and all lichess variants!",
   "studyChapterConclusionText": "Chapters are saved forever.<br>Have fun organizing your chess content!",
+  "studyDoubleDefeat": "Double defeat",
+  "studyBlackDefeatWhiteCanNotWin": "Black defeat, but White can't win",
+  "studyWhiteDefeatBlackCanNotWin": "White defeat, but Black can't win",
   "studyNbChapters": "{count, plural, =1{{count} Chapter} other{{count} Chapters}}",
   "@studyNbChapters": {
     "placeholders": {

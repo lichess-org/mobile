@@ -960,10 +960,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get contactContactLichess => 'Contacte Lichess';
 
   @override
-  String get patronDonate => 'Donar';
+  String get patronDonate => 'Donate';
 
   @override
-  String get patronLichessPatron => 'Patró de Lichess';
+  String get patronLichessPatron => 'Lichess Patron';
 
   @override
   String perfStatPerfStats(String param) {
@@ -1489,21 +1489,11 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Cercar problemes de les partides d\'un jugador';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Problemes de les partides de $param';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Cercar problemes';
 
   @override
   String get puzzleFromMyGamesNone =>
       'No hi ha problemes teus a la base de dates, però Lichess t\'estima molt igualment.\nJuga partides ràpides i clàssiques per augmentar les possibilitats que se n\'hi afegeixi algun!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 problemes trobats en $param2 partides';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Entrena, analitza, millora';
@@ -1552,6 +1542,17 @@ class AppLocalizationsCa extends AppLocalizations {
       locale: localeName,
       other: '$count punts per sobre el teu nivell de problemes',
       one: '$count punt per sobre el teu nivell de problemes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count problemes trobats en partides de $param2',
+      one: 'Un problema trobat en partides de $param2',
     );
     return '$_temp0';
   }
@@ -2105,6 +2106,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get createAGame => 'Crea una partida';
 
   @override
+  String get createTheGame => 'Crea la partida';
+
+  @override
   String get whiteIsVictorious => 'Guanyen les blanques';
 
   @override
@@ -2252,6 +2256,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get copyVariationPgn => 'Copia el PGN de la variació';
+
+  @override
+  String get copyMainLinePgn => 'Copiar el PGN de la línia principal';
 
   @override
   String get move => 'Moviment';
@@ -2445,6 +2452,11 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get currentGames => 'Partides en joc';
+
+  @override
+  String joinedX(String param) {
+    return 'Ha entrat a $param';
+  }
 
   @override
   String get viewInFullSize => 'Veure a mida completa';
@@ -2848,16 +2860,31 @@ class AppLocalizationsCa extends AppLocalizations {
   String get proposeATakeback => 'Proposa desfer la jugada';
 
   @override
+  String get whiteProposesTakeback => 'El blanc proposa desfer la jugada';
+
+  @override
+  String get blackProposesTakeback => 'El negre proposa desfer la jugada';
+
+  @override
   String get takebackPropositionSent => 'La proposta de desfer la jugada s\'ha enviat';
 
   @override
-  String get takebackPropositionDeclined => 'La proposta de desfer la jugada s\'ha rebutjat';
+  String get whiteDeclinesTakeback => 'El blanc refusa la proposta de desfer la jugada';
 
   @override
-  String get takebackPropositionAccepted => 'La proposta de desfer la jugada s\'ha acceptat';
+  String get blackDeclinesTakeback => 'El negre refusa la proposta de desfer la jugada';
 
   @override
-  String get takebackPropositionCanceled => 'La proposta de desfer la jugada s\'ha cancel·lat';
+  String get whiteAcceptsTakeback => 'El blanc accepta la proposta de desfer la jugada';
+
+  @override
+  String get blackAcceptsTakeback => 'El negre accepta la proposta de desfer la jugada';
+
+  @override
+  String get whiteCancelsTakeback => 'El blanc cancel·la la proposta de desfer la jugada';
+
+  @override
+  String get blackCancelsTakeback => 'El negre cancel·la la proposta de desfer la jugada';
 
   @override
   String get yourOpponentProposesATakeback => 'El teu adversari proposa desfer la jugada';
@@ -3713,6 +3740,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get termsOfService => 'Condicions del servei';
+
+  @override
+  String get titleVerification => 'Verificació del títol';
 
   @override
   String get sourceCode => 'Codi font';
@@ -4736,6 +4766,15 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get stats => 'Estadístiques';
+
+  @override
+  String get accessibility => 'Accessibilitat';
+
+  @override
+  String get enableBlindMode => 'Activar el mode cec';
+
+  @override
+  String get disableBlindMode => 'Desactivar el mode cec';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6000,6 +6039,15 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get studyChapterConclusionText =>
       'Els capítols es guarden per sempre.<br>Passa-t\'ho bé organitzant el teu material d\'escacs!';
+
+  @override
+  String get studyDoubleDefeat => 'Doble derrota';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'El negre ha perdut però el blanc no pot guanyar';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'El blanc ha perdut però el negre no pot guanyar';
 
   @override
   String studyNbChapters(int count) {

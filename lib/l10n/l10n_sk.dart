@@ -101,7 +101,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Skrytie používateľského rozhrania systému počas hrania. Túto funkciu použite, ak vám prekážajú navigačné gestá systému na okrajoch obrazovky. Vzťahuje sa na obrazovku počas partie a Puzzle Storm.';
+      'Skrytie používateľského rozhrania systému počas hrania. Túto funkciu použite, ak vám prekážajú navigačné gestá systému na okrajoch obrazovky. Platí pre obrazovky s partiami a úlohami.';
 
   @override
   String get mobileSettingsTab => 'Nastavenia';
@@ -595,10 +595,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Na účasť v turnaji je potrebný oficiálny titul';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'Párovanie hráčov v turnaji je už uzavreté.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Miera besnenia';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -876,7 +876,7 @@ class AppLocalizationsSk extends AppLocalizations {
       'Keďže ste sa rozhodli skryť výsledky, všetky náhľadové šachovnice sú prázdne, aby sme Vám neprezradili priveľa.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Aktuálna pozícia';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -896,8 +896,10 @@ class AppLocalizationsSk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count sledujúcich',
+      many: '$count sledujúcich',
+      few: '$count sledujúci',
+      one: '$count sledujúci',
     );
     return '$_temp0';
   }
@@ -1166,7 +1168,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get preferencesInGameOnly => 'Iba pri partii';
 
   @override
-  String get preferencesExceptInGame => 'S výnimkou počas partie';
+  String get preferencesExceptInGame => 'Nie počas partie';
 
   @override
   String get preferencesChessClock => 'Šachové hodiny';
@@ -1520,21 +1522,11 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Vyhľadávanie úloh z partií hráča';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Úlohy z partí hráča $param';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Hľadať úlohy';
 
   @override
   String get puzzleFromMyGamesNone =>
       'Nemáte v databáze žiadne úlohy z vlastných partií, ale Lichess Vás má aj tak veľmi rád.\n\nHrajte rapid a klasické partie, aby ste zvýšili svoje šance na pridanie úlohy z Vašej vlastnej partie!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 úloh nájdených v $param2 partiách';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trénujte, analyzujte, zlepšujte sa';
@@ -1589,6 +1581,19 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'O $count bodov vyššia ako Váš rating úloh',
       few: 'O $count body vyššia ako Váš rating úloh',
       one: 'O jeden bodov vyššia ako Váš rating úloh',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Medzi partiami od $param2 sa našlo $count úloh',
+      many: 'Medzi partiami od $param2 sa našlo $count úloh',
+      few: 'Medzi partiami od $param2 sa našli $count úlohy',
+      one: 'Medzi partiami od $param2 sa našla jedna úloha',
     );
     return '$_temp0';
   }
@@ -2142,6 +2147,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get createAGame => 'Vytvoriť partiu';
 
   @override
+  String get createTheGame => 'Vytvoriť partiu';
+
+  @override
   String get whiteIsVictorious => 'Biely zvíťazil';
 
   @override
@@ -2273,7 +2281,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get promoteVariation => 'Povýšiť variant';
 
   @override
-  String get makeMainLine => 'Povýšiť na hlavnú variantu';
+  String get makeMainLine => 'Povýšiť na hlavný variant';
 
   @override
   String get deleteFromHere => 'Vymazať odtiaľto';
@@ -2285,10 +2293,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get expandVariations => 'Ukázať varianty';
 
   @override
-  String get forceVariation => 'Povýšiť variant';
+  String get forceVariation => 'Vynútiť variant';
 
   @override
   String get copyVariationPgn => 'Kopírovať PGN variantu';
+
+  @override
+  String get copyMainLinePgn => 'Kopírovať PNG hlavného variantu';
 
   @override
   String get move => 'Ťah';
@@ -2481,6 +2492,11 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get currentGames => 'Práve prebiehajúce partie';
+
+  @override
+  String joinedX(String param) {
+    return 'Účet registrovaný $param';
+  }
 
   @override
   String get viewInFullSize => 'Zobraziť v plnej veľkosti';
@@ -2879,16 +2895,31 @@ class AppLocalizationsSk extends AppLocalizations {
   String get proposeATakeback => 'Ponúknuť vrátenie ťahu';
 
   @override
+  String get whiteProposesTakeback => 'Biely žiada o vrátenie ťahu';
+
+  @override
+  String get blackProposesTakeback => 'Čierny žiada o vrátenie ťahu';
+
+  @override
   String get takebackPropositionSent => 'Ponuka na návrat zaslaná';
 
   @override
-  String get takebackPropositionDeclined => 'Ponuka na návrat odmietnutá';
+  String get whiteDeclinesTakeback => 'Biely odmieta vrátenie ťahu';
 
   @override
-  String get takebackPropositionAccepted => 'Ponuka na návrat prijatá';
+  String get blackDeclinesTakeback => 'Čierny odmieta vrátenie ťahu';
 
   @override
-  String get takebackPropositionCanceled => 'Ponuka na návrat zrušená';
+  String get whiteAcceptsTakeback => 'Biely prijíma vrátenie ťahu';
+
+  @override
+  String get blackAcceptsTakeback => 'Čierny prijíma vrátenie ťahu';
+
+  @override
+  String get whiteCancelsTakeback => 'Biely zrušil vrátenie ťahu';
+
+  @override
+  String get blackCancelsTakeback => 'Čierny zrušil vrátenie ťahu';
 
   @override
   String get yourOpponentProposesATakeback => 'Váš súper navrhuje vrátiť ťah';
@@ -3188,7 +3219,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get createdBy => 'Vytvorené';
 
   @override
-  String get startingIn => 'Starting in';
+  String get startingIn => 'Začína o';
 
   @override
   String standByX(String param) {
@@ -3744,6 +3775,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get termsOfService => 'Podmienky služby';
+
+  @override
+  String get titleVerification => 'Overenie titulu';
 
   @override
   String get sourceCode => 'Zdrojový kód';
@@ -4763,6 +4797,15 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get stats => 'Štatistiky';
+
+  @override
+  String get accessibility => 'Dostupnosť';
+
+  @override
+  String get enableBlindMode => 'Povoliť režim naslepo';
+
+  @override
+  String get disableBlindMode => 'Zrušiť režim naslepo';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6056,70 +6099,80 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'Anotovať pozíciu';
 
   @override
   String get studyAnnotatePositionText =>
-      'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+      'Kliknite na tlačidlo !? alebo kliknite pravým tlačidlom myši na zoznam ťahov vpravo.<br>Anotačné glyfy sú zdieľané a uložené.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Vďaka za Váš čas';
 
   @override
   String get studyConclusionText =>
-      'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+      'Svoje <a href=\'/study/mine/hot\'>predchádzajúce štúdie</a> nájdete na stránke svojho profilu.<br>K dispozícii je aj <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blogový príspevok o štúdiách</a>.<br>Zdatní používatelia si môžu stlačiť „?“ a zobraziť klávesové skratky.<br>Príjemnú zábavu!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'Vytvorme kapitolu štúdie';
 
   @override
   String get studyCreateChapterText =>
-      'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+      'Štúdia môže mať niekoľko kapitol.<br>Každá kapitola má svoj vlastný strom ťahov,<br>a môže byť vytvorená rôznymi spôsobmi.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Z počiatočnej pozície';
 
   @override
   String get studyFromInitialPositionText =>
-      'Just a board setup for a new game.<br>Suited to explore openings.';
+      'Len nastavenie šachovnice pre novú partiu.<br>Vhodné na štúdium otvorení.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Vlastná pozícia';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText =>
+      'Nastavte si šachovnicu podľa seba.<br>Vhodné na štúdium koncoviek.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Nehrať existujúcu lichess partiu';
 
   @override
   String get studyLoadExistingLichessGameText =>
-      'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+      'Vložte URL adresu lichess partie<br>(napríklad lichess.org/7fHIU0XI)<br>na načítanie ťahov partie v kapitole.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'Z reťazca FEN';
 
   @override
   String get studyFromFenStringText =>
-      'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+      'Vloženie pozície vo formáte FEN<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>na spustenie kapitoly od pozície.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'Z PGN partie';
 
   @override
   String get studyFromPgnGameText =>
-      'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+      'Vložiť partiu vo formáte PGN.<br>aby sa načítali ťahy, komentáre a varianty v kapitole.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'Štúdie podporujú varianty';
 
   @override
   String get studyVariantsAreSupportedText =>
-      'Yes, you can study crazyhouse<br>and all lichess variants!';
+      'Áno, môžete študovať crazyhouse<br>a všetky lichess varianty!';
 
   @override
   String get studyChapterConclusionText =>
-      'Chapters are saved forever.<br>Have fun organizing your chess content!';
+      'Kapitoly sú uložené navždy.<br>Nech Vás organizovanie svojho šachového obsahu baví!';
+
+  @override
+  String get studyDoubleDefeat => 'Dvojitá prehra';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'Čierny porazený, ale biely nedokáže vyhrať';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'Biely porazený, ale čierny nedokáže vyhrať';
 
   @override
   String studyNbChapters(int count) {

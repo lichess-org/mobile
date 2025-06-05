@@ -35,7 +35,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Xin chào';
+  String get mobileGreetingWithoutName => 'Chào bạn';
 
   @override
   String get mobileHideVariation => 'Ẩn các biến';
@@ -101,7 +101,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Ẩn UI hệ thống trong khi chơi. Sử dụng điều này nếu bạn bị làm phiền bởi các cử chỉ điều hướng của hệ thống ở các cạnh của màn hình. Áp dụng cho màn hình ván đấu và Puzzle Strom.';
+      'Ẩn giao diện hệ thống trong khi chơi. Dùng tuỳ chọn này nếu bạn bị các cử chỉ điều hướng của hệ thống ở các cạnh của màn hình làm phiền. Áp dụng cho màn hình ván đấu và câu đố.';
 
   @override
   String get mobileSettingsTab => 'Cài đặt';
@@ -537,10 +537,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Yêu cầu có một danh hiệu chính thức để tham gia giải đấu';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'Đã đóng việc xếp cặp đấu.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Tỉ lệ Berserk';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -1451,21 +1451,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Tìm câu đố từ các ván đấu của người khác';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Câu đố từ ván cờ của $param';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Tìm câu đố';
 
   @override
   String get puzzleFromMyGamesNone =>
       'Bạn không có câu đố nào trong dữ liệu, nhưng Lichess vẫn rất yêu mến bạn.\n\nHãy chơi thêm nhiều ván cờ nhanh và cờ chậm để có cơ hội có một câu đố từ ván cờ của riêng bạn!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return 'Đã tìm được $param1 câu đố trong các ván đấu của $param2';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Rèn luyện, phân tích, cải thiện';
@@ -1511,6 +1501,16 @@ class AppLocalizationsVi extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Trên $count điểm hệ số câu đố của bạn',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Đã tìm thấy $count câu đố trong các ván đấu của $param2',
     );
     return '$_temp0';
   }
@@ -2050,6 +2050,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get createAGame => 'Tạo một ván cờ';
 
   @override
+  String get createTheGame => 'Khởi tạo ván cờ';
+
+  @override
   String get whiteIsVictorious => 'Bên Trắng thắng';
 
   @override
@@ -2196,6 +2199,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get copyVariationPgn => 'Sao chép biến PGN';
+
+  @override
+  String get copyMainLinePgn => 'Sao chép PGN chính';
 
   @override
   String get move => 'Nước cờ';
@@ -2386,6 +2392,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get currentGames => 'Các ván cờ đang diễn ra';
+
+  @override
+  String joinedX(String param) {
+    return 'Tham gia hôm $param';
+  }
 
   @override
   String get viewInFullSize => 'Xem ở kích thước đầy đủ';
@@ -2784,16 +2795,31 @@ class AppLocalizationsVi extends AppLocalizations {
   String get proposeATakeback => 'Đề nghị lùi một nước';
 
   @override
+  String get whiteProposesTakeback => 'Trắng yêu cầu đi lại';
+
+  @override
+  String get blackProposesTakeback => 'Đen yêu cầu đi lại';
+
+  @override
   String get takebackPropositionSent => 'Đã gửi đề nghị lùi một nước';
 
   @override
-  String get takebackPropositionDeclined => 'Đề nghị lùi một nước bị từ chối';
+  String get whiteDeclinesTakeback => 'Trắng từ chối đi lại';
 
   @override
-  String get takebackPropositionAccepted => 'Đề nghị lùi một nước được chấp thuận';
+  String get blackDeclinesTakeback => 'Đen từ chối đi lại';
 
   @override
-  String get takebackPropositionCanceled => 'Hủy đề nghị lùi một nước';
+  String get whiteAcceptsTakeback => 'Trắng chấp nhận đi lại';
+
+  @override
+  String get blackAcceptsTakeback => 'Đen chấp nhận đi lại';
+
+  @override
+  String get whiteCancelsTakeback => 'Trắng huỷ đi lại';
+
+  @override
+  String get blackCancelsTakeback => 'Đen huỷ đi lại';
 
   @override
   String get yourOpponentProposesATakeback => 'Đối thủ của bạn đề nghị lùi một nước';
@@ -3092,7 +3118,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get createdBy => 'Tạo bởi';
 
   @override
-  String get startingIn => 'Starting in';
+  String get startingIn => 'Bắt đầu trong';
 
   @override
   String standByX(String param) {
@@ -3648,6 +3674,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get termsOfService => 'Điều khoản Dịch vụ';
+
+  @override
+  String get titleVerification => 'Xác nhận danh hiệu';
 
   @override
   String get sourceCode => 'Mã Nguồn';
@@ -4673,6 +4702,15 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get stats => 'Thống kê';
+
+  @override
+  String get accessibility => 'Hỗ trợ tiếp cận';
+
+  @override
+  String get enableBlindMode => 'Bật chế độ mù';
+
+  @override
+  String get disableBlindMode => 'Tắt chế độ mù';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5811,6 +5849,15 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get studyChapterConclusionText =>
       'Các chương được lưu mãi mãi.<br>Hãy vui vẻ tổ chức nội dung cờ vua của bạn!';
+
+  @override
+  String get studyDoubleDefeat => 'Đôi bại';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'Bên Đen thua, nhưng bên Trắng không thể thắng';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'Bên Trắng thua, nhưng bên Đen không thể thắng';
 
   @override
   String studyNbChapters(int count) {

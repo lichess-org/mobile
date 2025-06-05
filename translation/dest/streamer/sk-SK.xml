@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="lichessStreamers">Lichess streameri</string>
+  <string name="lichessStreamer">Lichess streamer</string>
+  <string name="live">NAŽIVO!</string>
+  <string name="offline">OFFLINE</string>
+  <string name="currentlyStreaming">Práve streamujú: %s</string>
+  <string name="lastStream">Posledný stream %s</string>
+  <string name="becomeStreamer">Staňte sa Lichess streamerom</string>
+  <string name="doYouHaveStream">Máte Twitch alebo YouTube kanál?</string>
+  <string name="hereWeGo">Ideme na to!</string>
+  <string name="allStreamers">Všetci streameri</string>
+  <string name="editPage">Upravenie stránky streamera</string>
+  <string name="yourPage">Vaša streamerská stránka</string>
+  <string name="downloadKit">Stiahnite si streamerskú súpravu</string>
+  <string name="xIsStreaming">%s vysiela</string>
+  <string name="rules">Pravidlá streamovania</string>
+  <string name="rule1">Zahrňte kľúčové slovo \"lichess.org\" v názve Vášho streamu a požite kategóriu \"Šach\" keď streamujete na Lichessi.</string>
+  <string name="rule2">Odstráňte kľúčové slovo keď nestreamujete z Lichessu.</string>
+  <string name="rule3">Lichess automaticky rozozná tvoj stream a poskytne ti nasledujúce výhody:</string>
+  <string name="rule4" comment="the resulting message is: Read our streaming Fairplay FAQ to ensure a fair play for everyone in your stream">Aby sme počas Vášho streamu zabezpečili fair play pre všetkých, prečítajte so naše %s.</string>
+  <string name="streamingFairplayFAQ">Časté otázky: Fariplay pri streamovaní</string>
+  <string name="perks">Benefity streamovania s kľúčovým slovom</string>
+  <string name="perk1">Dostanete ohnivú streamerskú ikonku na Váš Lichess profil.</string>
+  <string name="perk2">Dostanete sa na vrchol zoznamu streamerov.</string>
+  <string name="perk3">Upozorníte svojich Lichess sledovateľov.</string>
+  <string name="perk4">Váš stream bude ukázaný vo vašich hrách, turnajoch a štúdiách.</string>
+  <string name="approved">Váš stream je schválený.</string>
+  <string name="pendingReview">Váš stream je preskúmavaný moderátormi.</string>
+  <string name="pleaseFillIn">Prosím vyplňte Vaše streamerské informácie a nahrajte obrázok.</string>
+  <string name="whenReady" comment="whenReady&#10;&#10;%s is &quot;request a moderator review&quot;">Keď budete pripravený byť uvedený ako Lichess streamer, %s</string>
+  <string name="submitForReview" comment="Appears on a button when editing the page which lets you be listed as a streamer: https://lichess.org/streamer/edit&#10;&#10;As this is public, any changes to a streamer page are first sent to the Lichess team for review.">Odoslať na preskúmanie</string>
+  <string name="streamerLanguageSettings">Stránka streamera Lichess oslovuje publikum prostredníctvom jazyka, ktorý poskytuje streamovacia platforma. Nastavte správny predvolený jazyk pre svoje šachové streamy v aplikácii alebo službe, ktorú používate na vysielanie.</string>
+  <string name="twitchUsername">Vaše Twitch používateľské meno alebo link</string>
+  <string name="twitchOrYouTubeRequired" comment="A notice when creating/editing your streamer page (https://lichess.org/streamer/edit), denoting that you can only be listed if you stream from a Twitch or YouTube channel.">Vyžaduje sa buď Twitch alebo YouTube</string>
+  <string name="twitchOrYouTubeMustBeVerified" comment="For background: The &quot;streamer badge&quot; refers to the microphone icon on the streamer's profile (https://lichess.org/@/Lichess).&#10;The listing is the streamer's page that appears at https://lichess.org/streamer">Zmeny v službách Twitch a YouTube musia byť overené.
+ 
+ Váš odznak a zaradenie na zoznam streamerov budú pozastavené, kým bude prebiehať kontrola. Môže to trvať až 72 hodín.</string>
+  <string name="youTubeChannelId">ID Vášho YouTube kanála</string>
+  <string name="streamerName">Vaše streamerské meno na Lichessi</string>
+  <plurals name="keepItShort">
+    <item quantity="one">Buďte struční: maximálne %s znak</item>
+    <item quantity="few">Buďte struční: maximálne %s znaky</item>
+    <item quantity="many">Buďte struční: maximálne %s znakov</item>
+    <item quantity="other">Buďte struční: maximálne %s znakov</item>
+  </plurals>
+  <string name="visibility">Viditeľnosť na streamerskej stránke</string>
+  <string name="whenApproved">Ak budete schválený moderátormi</string>
+  <string name="headline">Titulok</string>
+  <string name="tellUsAboutTheStream">Povedzte nám o Vašom streame v jednej vete</string>
+  <string name="longDescription">Dlhý popis</string>
+  <string name="xStreamerPicture">Obrázok streamera %s</string>
+  <string name="changePicture">Zmeniť/zmazať váš obrázok</string>
+  <string name="uploadPicture">Nahrať obrázok</string>
+  <string name="maxSize">Maximálna veľkosť: %s</string>
+</resources>

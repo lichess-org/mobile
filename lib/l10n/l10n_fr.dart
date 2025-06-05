@@ -102,7 +102,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Masquer l\'interface système durant la partie. À utiliser lorsque les gestes pour naviguer dans l\'interface système sur les bords de l\'écran vous gênent. S\'applique en jeu et pour les séries de problèmes.';
+      'Masquer l\'interface utilisateur durant la partie. Utilisez cette option lorsque les gestes pour naviguer dans l\'interface utilisateur sur les bords de l\'écran vous gênent. S\'applique aux parties et aux problèmes.';
 
   @override
   String get mobileSettingsTab => 'Paramètres';
@@ -1294,13 +1294,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get preferencesBlindfold => 'Partie à l\'aveugle';
 
   @override
-  String get puzzlePuzzles => 'Problèmes';
+  String get puzzlePuzzles => 'Puzzles';
 
   @override
-  String get puzzlePuzzleThemes => 'Thèmes des problèmes';
+  String get puzzlePuzzleThemes => 'Puzzle Themes';
 
   @override
-  String get puzzleRecommended => 'Recommandé';
+  String get puzzleRecommended => 'Recommended';
 
   @override
   String get puzzlePhases => 'Phases';
@@ -1309,231 +1309,219 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleMotifs => 'Motifs';
 
   @override
-  String get puzzleAdvanced => 'Avancé';
+  String get puzzleAdvanced => 'Advanced';
 
   @override
-  String get puzzleLengths => 'Longueurs';
+  String get puzzleLengths => 'Lengths';
 
   @override
-  String get puzzleMates => 'Mats';
+  String get puzzleMates => 'Mates';
 
   @override
-  String get puzzleGoals => 'Objectifs';
+  String get puzzleGoals => 'Goals';
 
   @override
-  String get puzzleOrigin => 'Origine';
+  String get puzzleOrigin => 'Origin';
 
   @override
-  String get puzzleSpecialMoves => 'Coups spéciaux';
+  String get puzzleSpecialMoves => 'Special moves';
 
   @override
-  String get puzzleDidYouLikeThisPuzzle => 'Avez-vous aimé ce problème ?';
+  String get puzzleDidYouLikeThisPuzzle => 'Did you like this puzzle?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Votez pour afficher le suivant !';
+  String get puzzleVoteToLoadNextOne => 'Vote to load the next one!';
 
   @override
-  String get puzzleUpVote => 'Voter pour ce problème';
+  String get puzzleUpVote => 'Up vote puzzle';
 
   @override
-  String get puzzleDownVote => 'Voter contre ce problème';
+  String get puzzleDownVote => 'Down vote puzzle';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange =>
-      'Votre classement ne changera pas. Notez que les problèmes ne sont pas une compétition. Le classement aide à sélectionner les meilleurs problèmes en fonction de votre niveau.';
+      'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.';
 
   @override
-  String get puzzleFindTheBestMoveForWhite => 'Trouvez le meilleur coup pour les Blancs.';
+  String get puzzleFindTheBestMoveForWhite => 'Find the best move for white.';
 
   @override
-  String get puzzleFindTheBestMoveForBlack => 'Trouvez le meilleur coup pour les Noirs.';
+  String get puzzleFindTheBestMoveForBlack => 'Find the best move for black.';
 
   @override
-  String get puzzleToGetPersonalizedPuzzles => 'Pour obtenir des problèmes personnalisés :';
+  String get puzzleToGetPersonalizedPuzzles => 'To get personalized puzzles:';
 
   @override
   String puzzlePuzzleId(String param) {
-    return 'Problème $param';
+    return 'Puzzle $param';
   }
 
   @override
-  String get puzzlePuzzleOfTheDay => 'Problème du jour';
+  String get puzzlePuzzleOfTheDay => 'Puzzle of the day';
 
   @override
-  String get puzzleDailyPuzzle => 'Problème du jour';
+  String get puzzleDailyPuzzle => 'Daily Puzzle';
 
   @override
-  String get puzzleClickToSolve => 'Cliquez pour résoudre';
+  String get puzzleClickToSolve => 'Click to solve';
 
   @override
-  String get puzzleGoodMove => 'Bon coup';
+  String get puzzleGoodMove => 'Good move';
 
   @override
-  String get puzzleBestMove => 'Meilleur coup  !';
+  String get puzzleBestMove => 'Best move!';
 
   @override
-  String get puzzleKeepGoing => 'Continuez…';
+  String get puzzleKeepGoing => 'Keep going…';
 
   @override
-  String get puzzlePuzzleSuccess => 'Succès !';
+  String get puzzlePuzzleSuccess => 'Success!';
 
   @override
-  String get puzzlePuzzleComplete => 'Problème terminé !';
+  String get puzzlePuzzleComplete => 'Puzzle complete!';
 
   @override
-  String get puzzleByOpenings => 'Par ouverture';
+  String get puzzleByOpenings => 'By openings';
 
   @override
-  String get puzzlePuzzlesByOpenings => 'Problèmes par ouverture';
+  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost =>
-      'Ouvertures que vous avez le plus jouées dans des parties classées';
+  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
 
   @override
   String get puzzleUseFindInPage =>
-      'Utilisez la fonction « Rechercher dans la page » du navigateur pour trouver votre ouverture préférée !';
+      'Use \"Find in page\" in the browser menu to find your favourite opening!';
 
   @override
-  String get puzzleUseCtrlF =>
-      'Appuyez sur les touches Ctrl+f pour trouver votre ouverture préférée !';
+  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
 
   @override
-  String get puzzleNotTheMove => 'Ce n\'est pas le coup !';
+  String get puzzleNotTheMove => 'That\'s not the move!';
 
   @override
-  String get puzzleTrySomethingElse => 'Essayez autre chose.';
+  String get puzzleTrySomethingElse => 'Try something else.';
 
   @override
   String puzzleRatingX(String param) {
-    return 'Classement : $param';
+    return 'Rating: $param';
   }
 
   @override
-  String get puzzleHidden => 'masqué';
+  String get puzzleHidden => 'hidden';
 
   @override
   String puzzleFromGameLink(String param) {
-    return 'Tiré de la partie $param';
+    return 'From game $param';
   }
 
   @override
-  String get puzzleContinueTraining => 'Continuer l\'entraînement';
+  String get puzzleContinueTraining => 'Continue training';
 
   @override
-  String get puzzleDifficultyLevel => 'Niveau de difficulté';
+  String get puzzleDifficultyLevel => 'Difficulty level';
 
   @override
   String get puzzleNormal => 'Normal';
 
   @override
-  String get puzzleEasier => 'Plus facile';
+  String get puzzleEasier => 'Easier';
 
   @override
-  String get puzzleEasiest => 'Le plus facile';
+  String get puzzleEasiest => 'Easiest';
 
   @override
-  String get puzzleHarder => 'Plus difficile';
+  String get puzzleHarder => 'Harder';
 
   @override
-  String get puzzleHardest => 'Le plus difficile';
+  String get puzzleHardest => 'Hardest';
 
   @override
-  String get puzzleExample => 'Exemple';
+  String get puzzleExample => 'Example';
 
   @override
-  String get puzzleAddAnotherTheme => 'Ajouter un autre thème';
+  String get puzzleAddAnotherTheme => 'Add another theme';
 
   @override
-  String get puzzleNextPuzzle => 'Problème suivant';
+  String get puzzleNextPuzzle => 'Next puzzle';
 
   @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Passer immédiatement au problème suivant';
+  String get puzzleJumpToNextPuzzleImmediately => 'Jump to next puzzle immediately';
 
   @override
-  String get puzzlePuzzleDashboard => 'Tableau de bord des problèmes';
+  String get puzzlePuzzleDashboard => 'Puzzle Dashboard';
 
   @override
-  String get puzzleImprovementAreas => 'Aspects à améliorer';
+  String get puzzleImprovementAreas => 'Improvement areas';
 
   @override
-  String get puzzleStrengths => 'Points forts';
+  String get puzzleStrengths => 'Strengths';
 
   @override
-  String get puzzleHistory => 'Historique des problèmes';
+  String get puzzleHistory => 'Puzzle history';
 
   @override
-  String get puzzleSolved => 'résolu';
+  String get puzzleSolved => 'solved';
 
   @override
-  String get puzzleFailed => 'non résolu';
+  String get puzzleFailed => 'incorrect';
 
   @override
   String get puzzleStreakDescription =>
-      'Résolvez des problèmes de plus en plus difficiles et obtenez une série de victoires. Prenez votre temps, il n\'y a pas de pendule. Un mauvais coup et c\'est terminé ! Mais vous pouvez passer un coup par session.';
+      'Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it\'s game over! But you can skip one move per session.';
 
   @override
   String puzzleYourStreakX(String param) {
-    return 'Votre série gagnante : $param';
+    return 'Your streak: $param';
   }
 
   @override
   String get puzzleStreakSkipExplanation =>
-      'Sautez ce coup pour préserver votre série gagnante! Possible une seule fois par session.';
+      'Skip this move to preserve your streak! Only works once per run.';
 
   @override
-  String get puzzleContinueTheStreak => 'Continuer la série';
+  String get puzzleContinueTheStreak => 'Continue the streak';
 
   @override
-  String get puzzleNewStreak => 'Nouvelle série';
+  String get puzzleNewStreak => 'New streak';
 
   @override
-  String get puzzleFromMyGames => 'De mes parties';
+  String get puzzleFromMyGames => 'From my games';
 
   @override
-  String get puzzleLookupOfPlayer => 'Rechercher des problèmes à partir des parties d\'un joueur';
+  String get puzzleLookupOfPlayer => 'Lookup puzzles from a player\'s games';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Problèmes tirés des parties de $param\'';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Rechercher des problèmes';
+  String get puzzleSearchPuzzles => 'Search puzzles';
 
   @override
   String get puzzleFromMyGamesNone =>
-      'Vous n\'avez pas de problèmes dans la base de données, mais Lichess vous aime toujours.\nJouez des parties rapides et classiques pour augmenter vos chances qu\'une de vos parties soit utilisée comme problème !';
+      'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
 
   @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 problèmes trouvés dans $param2 parties';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'S\'entraîner, analyser, s\'améliorer';
+  String get puzzlePuzzleDashboardDescription => 'Train, analyse, improve';
 
   @override
   String puzzlePercentSolved(String param) {
-    return '$param des problèmes résolus';
+    return '$param solved';
   }
 
   @override
-  String get puzzleNoPuzzlesToShow => 'Rien à afficher - faites d\'abord quelques problèmes !';
+  String get puzzleNoPuzzlesToShow => 'Nothing to show, go play some puzzles first!';
 
   @override
-  String get puzzleImprovementAreasDescription => 'Faites ces problèmes pour progresser !';
+  String get puzzleImprovementAreasDescription => 'Train these to optimize your progress!';
 
   @override
-  String get puzzleStrengthDescription => 'Vous avez le plus de succès dans ces thèmes.';
+  String get puzzleStrengthDescription => 'You perform the best in these themes';
 
   @override
   String puzzlePlayedXTimes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Joué $count fois',
-      one: 'Joué $count fois',
+      other: 'Played $count times',
+      one: 'Played $count time',
     );
     return '$_temp0';
   }
@@ -1543,8 +1531,8 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count points en dessous de votre classement de problème',
-      one: 'Un point en dessous de votre classement de problème',
+      other: '$count points below your puzzle rating',
+      one: 'One point below your puzzle rating',
     );
     return '$_temp0';
   }
@@ -1554,31 +1542,32 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count points au dessus de votre classement de problème',
-      one: 'Un point au dessus de votre classement de problème',
+      other: '$count points above your puzzle rating',
+      one: 'One point above your puzzle rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count puzzles found in games by $param2',
+      one: 'One puzzle found in games by $param2',
     );
     return '$_temp0';
   }
 
   @override
   String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count problèmes faits',
-      one: '$count problème fait',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count played');
     return '$_temp0';
   }
 
   @override
   String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count problèmes à refaire',
-      one: '$count problème à refaire',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count to replay');
     return '$_temp0';
   }
 
@@ -2045,7 +2034,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Ce compte a été fermé.';
 
   @override
-  String get playWithAFriend => 'Jouer avec un(e) ami(e)';
+  String get playWithAFriend => 'Jouer avec un·e ami·e';
 
   @override
   String get playWithTheMachine => 'Jouer contre l\'ordinateur';
@@ -2112,6 +2101,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get createAGame => 'Créer une partie';
+
+  @override
+  String get createTheGame => 'Créer la partie';
 
   @override
   String get whiteIsVictorious => 'Victoire des Blancs';
@@ -2261,6 +2253,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get copyVariationPgn => 'Copier le PGN de la variante';
+
+  @override
+  String get copyMainLinePgn => 'Copier la ligne principale (PGN)';
 
   @override
   String get move => 'Coup';
@@ -2436,7 +2431,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get claimADraw => 'Revendiquer la partie nulle';
 
   @override
-  String get drawClaimed => 'Nulle réclamée';
+  String get drawClaimed => 'Offre de nulle';
 
   @override
   String get offerDraw => 'Proposer la nulle';
@@ -2452,6 +2447,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get currentGames => 'Parties en cours';
+
+  @override
+  String joinedX(String param) {
+    return 'Inscription : $param';
+  }
 
   @override
   String get viewInFullSize => 'Agrandir';
@@ -2856,16 +2856,31 @@ class AppLocalizationsFr extends AppLocalizations {
   String get proposeATakeback => 'Proposer l\'annulation du coup';
 
   @override
+  String get whiteProposesTakeback => 'Les Blancs offrent de reprendre le coup.';
+
+  @override
+  String get blackProposesTakeback => 'Les Noirs offrent de reprendre le coup.';
+
+  @override
   String get takebackPropositionSent => 'Annulation du coup proposée';
 
   @override
-  String get takebackPropositionDeclined => 'Annulation du coup déclinée';
+  String get whiteDeclinesTakeback => 'Les Blancs refusent de reprendre le coup.';
 
   @override
-  String get takebackPropositionAccepted => 'Annulation du coup acceptée';
+  String get blackDeclinesTakeback => 'Les Noirs refusent de reprendre le coup.';
 
   @override
-  String get takebackPropositionCanceled => 'Annulation du coup annulée';
+  String get whiteAcceptsTakeback => 'Les Blancs acceptent de reprendre le coup.';
+
+  @override
+  String get blackAcceptsTakeback => 'Les Noirs acceptent de reprendre le coup.';
+
+  @override
+  String get whiteCancelsTakeback => 'Les Blancs retirent l\'offre de reprendre le coup.';
+
+  @override
+  String get blackCancelsTakeback => 'Les Noirs retirent l\'offre de reprendre le coup.';
 
   @override
   String get yourOpponentProposesATakeback => 'Votre adversaire propose l\'annulation du coup';
@@ -3722,6 +3737,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get termsOfService => 'Conditions d\'utilisation';
+
+  @override
+  String get titleVerification => 'Vérification du titre';
 
   @override
   String get sourceCode => 'Code source';
@@ -4761,6 +4779,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get stats => 'Statistiques';
+
+  @override
+  String get accessibility => 'Accessibilité';
+
+  @override
+  String get enableBlindMode => 'Activer le mode pour non-voyant';
+
+  @override
+  String get disableBlindMode => 'Désactiver le mode pour non-voyant';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6033,6 +6060,17 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get studyChapterConclusionText =>
       'Les chapitres sont sauvegardés indéfiniment.<br>Amusez-vous à organiser votre contenu d\'échecs!';
+
+  @override
+  String get studyDoubleDefeat => 'Double défaite';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin =>
+      'Défaite des noirs, mais les blancs ne peuvent pas gagner';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin =>
+      'Défaite des blancs, mais les noirs ne peuvent pas gagner';
 
   @override
   String studyNbChapters(int count) {

@@ -140,7 +140,6 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
     Locale('af'),
     Locale('ar'),
     Locale('az'),
@@ -153,6 +152,7 @@ abstract class AppLocalizations {
     Locale('da'),
     Locale('de'),
     Locale('el'),
+    Locale('en'),
     Locale('en', 'US'),
     Locale('eo'),
     Locale('es'),
@@ -366,7 +366,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobileSettingsImmersiveModeSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.'**
+  /// **'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.'**
   String get mobileSettingsImmersiveModeSubtitle;
 
   /// No description provided for @mobileSettingsTab.
@@ -2565,12 +2565,6 @@ abstract class AppLocalizations {
   /// **'Lookup puzzles from a player\'s games'**
   String get puzzleLookupOfPlayer;
 
-  /// No description provided for @puzzleFromXGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzles from {param}\' games'**
-  String puzzleFromXGames(String param);
-
   /// No description provided for @puzzleSearchPuzzles.
   ///
   /// In en, this message translates to:
@@ -2582,12 +2576,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!'**
   String get puzzleFromMyGamesNone;
-
-  /// No description provided for @puzzleFromXGamesFound.
-  ///
-  /// In en, this message translates to:
-  /// **'{param1} puzzles found in {param2} games'**
-  String puzzleFromXGamesFound(String param1, String param2);
 
   /// No description provided for @puzzlePuzzleDashboardDescription.
   ///
@@ -2636,6 +2624,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}'**
   String puzzleNbPointsAboveYourPuzzleRating(int count);
+
+  /// No description provided for @puzzlePuzzlesFoundInUserGames.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One puzzle found in games by {param2}} other{{count} puzzles found in games by {param2}}}'**
+  String puzzlePuzzlesFoundInUserGames(int count, String param2);
 
   /// No description provided for @puzzleNbPlayed.
   ///
@@ -3597,6 +3591,12 @@ abstract class AppLocalizations {
   /// **'Create a game'**
   String get createAGame;
 
+  /// No description provided for @createTheGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Create the game'**
+  String get createTheGame;
+
   /// No description provided for @whiteIsVictorious.
   ///
   /// In en, this message translates to:
@@ -3884,6 +3884,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy variation PGN'**
   String get copyVariationPgn;
+
+  /// No description provided for @copyMainLinePgn.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy mainline PGN'**
+  String get copyMainLinePgn;
 
   /// No description provided for @move.
   ///
@@ -4245,6 +4251,12 @@ abstract class AppLocalizations {
   /// **'Current games'**
   String get currentGames;
 
+  /// No description provided for @joinedX.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined {param}'**
+  String joinedX(String param);
+
   /// No description provided for @viewInFullSize.
   ///
   /// In en, this message translates to:
@@ -4446,7 +4458,7 @@ abstract class AppLocalizations {
   /// No description provided for @signupUsernameHint.
   ///
   /// In en, this message translates to:
-  /// **'Make sure to choose a family-friendly username. You cannot change it later and any accounts with inappropriate usernames will get closed!'**
+  /// **'Make sure to choose a username that\'s appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!'**
   String get signupUsernameHint;
 
   /// No description provided for @signupEmailHint.
@@ -4977,29 +4989,59 @@ abstract class AppLocalizations {
   /// **'Propose a takeback'**
   String get proposeATakeback;
 
+  /// No description provided for @whiteProposesTakeback.
+  ///
+  /// In en, this message translates to:
+  /// **'White proposes takeback'**
+  String get whiteProposesTakeback;
+
+  /// No description provided for @blackProposesTakeback.
+  ///
+  /// In en, this message translates to:
+  /// **'Black proposes takeback'**
+  String get blackProposesTakeback;
+
   /// No description provided for @takebackPropositionSent.
   ///
   /// In en, this message translates to:
   /// **'Takeback sent'**
   String get takebackPropositionSent;
 
-  /// No description provided for @takebackPropositionDeclined.
+  /// No description provided for @whiteDeclinesTakeback.
   ///
   /// In en, this message translates to:
-  /// **'Takeback declined'**
-  String get takebackPropositionDeclined;
+  /// **'White declines takeback'**
+  String get whiteDeclinesTakeback;
 
-  /// No description provided for @takebackPropositionAccepted.
+  /// No description provided for @blackDeclinesTakeback.
   ///
   /// In en, this message translates to:
-  /// **'Takeback accepted'**
-  String get takebackPropositionAccepted;
+  /// **'Black declines takeback'**
+  String get blackDeclinesTakeback;
 
-  /// No description provided for @takebackPropositionCanceled.
+  /// No description provided for @whiteAcceptsTakeback.
   ///
   /// In en, this message translates to:
-  /// **'Takeback cancelled'**
-  String get takebackPropositionCanceled;
+  /// **'White accepts takeback'**
+  String get whiteAcceptsTakeback;
+
+  /// No description provided for @blackAcceptsTakeback.
+  ///
+  /// In en, this message translates to:
+  /// **'Black accepts takeback'**
+  String get blackAcceptsTakeback;
+
+  /// No description provided for @whiteCancelsTakeback.
+  ///
+  /// In en, this message translates to:
+  /// **'White cancels takeback'**
+  String get whiteCancelsTakeback;
+
+  /// No description provided for @blackCancelsTakeback.
+  ///
+  /// In en, this message translates to:
+  /// **'Black cancels takeback'**
+  String get blackCancelsTakeback;
 
   /// No description provided for @yourOpponentProposesATakeback.
   ///
@@ -6530,6 +6572,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Terms of Service'**
   String get termsOfService;
+
+  /// No description provided for @titleVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Title verification'**
+  String get titleVerification;
 
   /// No description provided for @sourceCode.
   ///
@@ -8343,6 +8391,24 @@ abstract class AppLocalizations {
   /// **'Stats'**
   String get stats;
 
+  /// No description provided for @accessibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility'**
+  String get accessibility;
+
+  /// No description provided for @enableBlindMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable blind mode'**
+  String get enableBlindMode;
+
+  /// No description provided for @disableBlindMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable blind mode'**
+  String get disableBlindMode;
+
   /// No description provided for @opponentLeftCounter.
   ///
   /// In en, this message translates to:
@@ -10017,6 +10083,24 @@ abstract class AppLocalizations {
   /// **'Chapters are saved forever.<br>Have fun organizing your chess content!'**
   String get studyChapterConclusionText;
 
+  /// No description provided for @studyDoubleDefeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Double defeat'**
+  String get studyDoubleDefeat;
+
+  /// No description provided for @studyBlackDefeatWhiteCanNotWin.
+  ///
+  /// In en, this message translates to:
+  /// **'Black defeat, but White can\'t win'**
+  String get studyBlackDefeatWhiteCanNotWin;
+
+  /// No description provided for @studyWhiteDefeatBlackCanNotWin.
+  ///
+  /// In en, this message translates to:
+  /// **'White defeat, but Black can\'t win'**
+  String get studyWhiteDefeatBlackCanNotWin;
+
   /// No description provided for @studyNbChapters.
   ///
   /// In en, this message translates to:
@@ -10160,7 +10244,6 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 
   @override
   bool isSupported(Locale locale) => <String>[
-    'en',
     'af',
     'ar',
     'az',
@@ -10173,6 +10256,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
     'da',
     'de',
     'el',
+    'en',
     'eo',
     'es',
     'et',
@@ -10247,8 +10331,6 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en':
-      return AppLocalizationsEn();
     case 'af':
       return AppLocalizationsAf();
     case 'ar':
@@ -10273,6 +10355,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsDe();
     case 'el':
       return AppLocalizationsEl();
+    case 'en':
+      return AppLocalizationsEn();
     case 'eo':
       return AppLocalizationsEo();
     case 'es':

@@ -98,7 +98,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      '対局中にシステム用の UI を隠します。画面端のナビゲーションなどがじゃまな人はこれを使ってください。対局と問題ストームの画面に適用されます。';
+      'プレイ中にシステムの UI を非表示にします。画面端のナビゲーションなどがじゃまだと思う場合に使ってください。対局とタクティクス問題に適用されます。';
 
   @override
   String get mobileSettingsTab => '設定';
@@ -749,7 +749,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastSinceHideResults => '結果を非表示にするよう選択したため、結果が見えないようプレビューボードはすべて空白です。';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => '現局面';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1367,21 +1367,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'ある人の対局から取った問題を検索';
 
   @override
-  String puzzleFromXGames(String param) {
-    return '$param の対局からの問題';
-  }
-
-  @override
   String get puzzleSearchPuzzles => '問題を検索';
 
   @override
   String get puzzleFromMyGamesNone =>
       'あなたの対局からの問題はまだありませんが、Lichess はあなたの参加を歓迎します。自分の対局が使われる可能性を増やすには、ラピッドかクラシカルでプレイしてください！';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 問がヒット（全 $param2 局中）';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => '練習、分析、上達';
@@ -1422,6 +1412,16 @@ class AppLocalizationsJa extends AppLocalizations {
       count,
       locale: localeName,
       other: 'あなたのレーティングより $count 点上',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 問（$param2 の対局から）が見つかりました',
     );
     return '$_temp0';
   }
@@ -1924,6 +1924,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get createAGame => '対局を作成する';
 
   @override
+  String get createTheGame => '対局を作成';
+
+  @override
   String get whiteIsVictorious => '白の勝ちです';
 
   @override
@@ -2068,6 +2071,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get copyVariationPgn => '手順の PGN をコピー';
+
+  @override
+  String get copyMainLinePgn => '主手順の PGN をコピー';
 
   @override
   String get move => '手';
@@ -2255,6 +2261,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get currentGames => '現在対局中';
+
+  @override
+  String joinedX(String param) {
+    return '参加日：$param';
+  }
 
   @override
   String get viewInFullSize => 'フルサイズで見る';
@@ -2645,16 +2656,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String get proposeATakeback => '待ったのお願い';
 
   @override
+  String get whiteProposesTakeback => '白が待ったを提案';
+
+  @override
+  String get blackProposesTakeback => '黒が待ったを提案';
+
+  @override
   String get takebackPropositionSent => '待ったのお願いを送りました';
 
   @override
-  String get takebackPropositionDeclined => '待ったを拒否';
+  String get whiteDeclinesTakeback => '白が待ったを拒否';
 
   @override
-  String get takebackPropositionAccepted => '待ったを認める';
+  String get blackDeclinesTakeback => '黒が待ったを拒否';
 
   @override
-  String get takebackPropositionCanceled => '待ったのお願いをキャンセル';
+  String get whiteAcceptsTakeback => '白が待ったを承認';
+
+  @override
+  String get blackAcceptsTakeback => '黒が待ったを承認';
+
+  @override
+  String get whiteCancelsTakeback => '白が待ったをキャンセル';
+
+  @override
+  String get blackCancelsTakeback => '黒が待ったをキャンセル';
 
   @override
   String get yourOpponentProposesATakeback => '対局相手が待ったをしていいか聞いています';
@@ -3494,6 +3520,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get termsOfService => '利用規約（英文）';
+
+  @override
+  String get titleVerification => '実戦タイトルの検証';
 
   @override
   String get sourceCode => 'ソースコード';
@@ -4490,6 +4519,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get stats => '統計';
 
   @override
+  String get accessibility => 'アクセシビリティ';
+
+  @override
+  String get enableBlindMode => '視覚障害モードをオンに';
+
+  @override
+  String get disableBlindMode => '視覚障害モードをオフに';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5432,112 +5470,114 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyGetTheTour => 'お困りですか？　ツアーへどうぞ！';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Lichess 「研究」機能にようこそ！';
 
   @override
   String get studyWelcomeToLichessStudyText =>
-      'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+      'これは共有される検討用のボードです。<br><br>棋譜の検討や注釈、<br>友達との相談、<br>レッスンなどに使えます。<br><br>とても便利なツールなので、ちょっと仕組みを見てみましょう。';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => '共有と保存';
 
   @override
-  String get studySharedAndSavedText =>
-      'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => '他のメンバーはあなたの手をリアルタイムで見ることができ、<br>変更はすべて永久に保存されます。';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => '研究のメンバー';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 観戦者は研究を見てチャットで会話できます。<br><br>$param2 参加者は駒を動かし、研究に変更を加えられます。';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return '$param のボタンをクリック。<br>そして誰が参加できるかを決めます。';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => '研究の章';
 
   @override
-  String get studyStudyChaptersText =>
-      'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => '研究には複数の「章」を作れます。<br>章ごとに違った開始局面と分岐手順が設定できます。';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => '局面へのコメント';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return '$param ボタンをクリックするか、右手の手順リスト内を右クリックします。<br>コメントが共有され、保存されます。';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => '局面への注釈';
 
   @override
   String get studyAnnotatePositionText =>
-      'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+      '!? ボタンをクリックするか、右手の手順リスト内を右クリックします。<br>注釈の記号が共有され、保存されます。';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => '読んでくれてありがとう';
 
   @override
   String get studyConclusionText =>
-      'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+      '自分で作った<a href=\'/study/mine/hot\'>研究</a>はプロフィールページに表示されます。<br>また<a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>研究についてのブログ記事<br>があります。<br>さらに「?」を押すとショートカットキーが確認できます。<br>お楽しみください！';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => '章の作り方';
 
   @override
-  String get studyCreateChapterText =>
-      'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => '研究には複数の「章」を作れます。<br>章ごとに違った分岐手順が設定できます。<br>賞の作り方は何通りもあります。';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => '開始局面から';
 
   @override
-  String get studyFromInitialPositionText =>
-      'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => '新しいゲーム開始局面です。<br>序盤の研究に最適です。';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => '自由配置局面';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => '駒を好きなように配置します。<br>終盤の研究に最適です。';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Lichess の対局の読み込み';
 
   @override
   String get studyLoadExistingLichessGameText =>
-      'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+      'Lichess の対局の URL<br>（例：lichess.org/7fHIU0XI）<br>をペーストすると章内にその手順が読み込めます。';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'FEN の局面から';
 
   @override
   String get studyFromFenStringText =>
-      'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+      'FEN 形式の局面<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>をペーストするとその局面から章が始まります。';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'PGN の棋譜から';
 
   @override
-  String get studyFromPgnGameText =>
-      'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'PGN形式の棋譜をペーストすれば<br>章内に手順、コメント、変化を入れられます。';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => '研究はバリアントにも対応';
 
   @override
-  String get studyVariantsAreSupportedText =>
-      'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'はい、クレージーハウスなど Lichess の<br>バリアントすべてを研究できます！';
 
   @override
-  String get studyChapterConclusionText =>
-      'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => '各章は永久に保存されます。<br>チェスコンテンツの整理は楽しい作業です！';
+
+  @override
+  String get studyDoubleDefeat => '両者負け';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => '黒負け白1/2ポイント';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => '白負け黒1/2ポイント';
 
   @override
   String studyNbChapters(int count) {

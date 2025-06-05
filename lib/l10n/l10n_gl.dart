@@ -103,7 +103,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Oculta a Interface de Usuario mentres xogas. Emprega esta opción se che molestan os xestos de navegación do sistema ós bordos da pantalla. Aplícase ás pantallas da partida e á de Puzzle Storm.';
+      'Oculta a Interface de Usuario durante o xogo. Emprégao se che amolan as iconas de navegación do sistema nos bordos da pantalla. Aplícase ás pantallas das partidas e dos crebacabezas.';
 
   @override
   String get mobileSettingsTab => 'Axustes';
@@ -112,7 +112,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileShareGamePGN => 'Compartir PGN';
 
   @override
-  String get mobileShareGameURL => 'Compartir a URL da partida';
+  String get mobileShareGameURL => 'Compartir o URL da partida';
 
   @override
   String get mobileSharePositionAsFEN => 'Compartir a posición coma FEN';
@@ -428,7 +428,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String arenaShareUrl(String param) {
-    return 'Comparte esta URL para que a xente se una: $param';
+    return 'Comparte este URL para que a xente se una: $param';
   }
 
   @override
@@ -1241,7 +1241,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get preferencesCorrespondenceEmailNotification =>
-      'Notificación diaria por email coas túas partidas por correspondencia';
+      'Email diario listando as túas partidas por correspondencia';
 
   @override
   String get preferencesNotifyStreamStart => 'Un presentador comeza unha transmisión en directo';
@@ -1485,21 +1485,11 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Buscar crebacabezas das partidas dun xogador';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Crebacabezas das partidas de $param';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Busca crebacabezas';
 
   @override
   String get puzzleFromMyGamesNone =>
       'Non tes crebacabezas na base de datos e aínda así Lichess quérete moito.\nXoga partidas rápidas e clásicas para ter máis opcións de que se engadan os teus crebacabezas!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 crebacabezas atopados nas partidas de $param2';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Adestra, analiza, mellora';
@@ -1548,6 +1538,17 @@ class AppLocalizationsGl extends AppLocalizations {
       locale: localeName,
       other: '$count puntos por riba da túa puntuación de crebacabezas',
       one: 'Un punto por riba da túa puntuación de exercicios',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count crebacabezas atopados nas partidas de $param2',
+      one: 'Un crebacabezas atopado nas partidas de $param2',
     );
     return '$_temp0';
   }
@@ -2099,6 +2100,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get createAGame => 'Crear unha partida';
 
   @override
+  String get createTheGame => 'Crear a partida';
+
+  @override
   String get whiteIsVictorious => 'As brancas gañan';
 
   @override
@@ -2246,6 +2250,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get copyVariationPgn => 'Copiar o PGN da variante';
+
+  @override
+  String get copyMainLinePgn => 'Copiar o PGN da liña principal';
 
   @override
   String get move => 'Movemento';
@@ -2437,6 +2444,11 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get currentGames => 'Partidas en curso';
+
+  @override
+  String joinedX(String param) {
+    return 'Uniuse $param';
+  }
 
   @override
   String get viewInFullSize => 'Ver a tamaño completo';
@@ -2838,16 +2850,31 @@ class AppLocalizationsGl extends AppLocalizations {
   String get proposeATakeback => 'Propoñer cambio de xogada';
 
   @override
+  String get whiteProposesTakeback => 'As brancas propoñen rectificar a xogada';
+
+  @override
+  String get blackProposesTakeback => 'As negras propoñen rectificar a xogada';
+
+  @override
   String get takebackPropositionSent => 'Proposta de cambio enviada';
 
   @override
-  String get takebackPropositionDeclined => 'Proposta de cambio rexeitada';
+  String get whiteDeclinesTakeback => 'As brancas rexeitan a proposta de cambio de xogada';
 
   @override
-  String get takebackPropositionAccepted => 'Proposta de cambio aceptada';
+  String get blackDeclinesTakeback => 'As negras rexeitan a proposta de cambio de xogada';
 
   @override
-  String get takebackPropositionCanceled => 'Proposta de cambio cancelada';
+  String get whiteAcceptsTakeback => 'As brancas aceptan a proposta de cambio de xogada';
+
+  @override
+  String get blackAcceptsTakeback => 'As negras aceptan a proposta de cambio de xogada';
+
+  @override
+  String get whiteCancelsTakeback => 'As brancas cancelan o cambio de xogada';
+
+  @override
+  String get blackCancelsTakeback => 'As negras cancelan o cambio de xogada';
 
   @override
   String get yourOpponentProposesATakeback => 'O teu rival propón rectificar a xogada';
@@ -3269,7 +3296,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get socialMediaLinks => 'Ligazóns ás redes sociais';
 
   @override
-  String get oneUrlPerLine => 'Unha URL por liña.';
+  String get oneUrlPerLine => 'Un URL por liña.';
 
   @override
   String get inlineNotation => 'Notación compacta';
@@ -3703,6 +3730,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get termsOfService => 'Termos do Servizo';
+
+  @override
+  String get titleVerification => 'Verificación de título';
 
   @override
   String get sourceCode => 'Código Fonte';
@@ -4618,7 +4648,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get embedsAvailable =>
-      'Pega unha ligazón dunha partida ou dun capítulo dun estudo para incrustala.';
+      'Pega a ligazón dunha partida ou dun capítulo dun estudo para incrustala.';
 
   @override
   String get inYourLocalTimezone => 'Na túa zona horaria';
@@ -4725,6 +4755,15 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get stats => 'Estatísticas';
+
+  @override
+  String get accessibility => 'Accesibilidade';
+
+  @override
+  String get enableBlindMode => 'Activar o modo de accesibilidade web';
+
+  @override
+  String get disableBlindMode => 'Desactivar o modo de accesibilidade web';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5573,7 +5612,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get studyYouCanPasteThisInTheForumToEmbed =>
-      'Podes pegar esta URL no foro ou no teu blog de Lichess para incrustala';
+      'Podes pegalo no foro ou no teu blog de Lichess para incrustalo';
 
   @override
   String get studyStartAtInitialPosition => 'Comezar desde a posición inicial';
@@ -5675,7 +5714,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get studyStartFromCustomPosition => 'Comezar dende unha posición personalizada';
 
   @override
-  String get studyLoadAGameByUrl => 'Cargar as partidas dende unha URL';
+  String get studyLoadAGameByUrl => 'Cargar as partidas dende un URL';
 
   @override
   String get studyLoadAPositionFromFen => 'Cargar unha posición dende o FEN';
@@ -5921,7 +5960,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Preme o botón $param, ou fai clic co botón dereito do rato na lista de xogadas.<br>Os comentarios compártense e sálvanse.';
+    return 'Preme o botón $param ou fai clic co botón dereito do rato na lista de xogadas.<br>Os comentarios compártense e sálvanse.';
   }
 
   @override
@@ -5964,7 +6003,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get studyLoadExistingLichessGameText =>
-      'Pega a URL dunha partida<br>(coma lichess.org/7fHIU0XI)<br>para cargar a lista de xogadas no capítulo.';
+      'Pega o URL dunha partida<br>(coma lichess.org/7fHIU0XI)<br>para cargar a lista de xogadas no capítulo.';
 
   @override
   String get studyFromFenStringTitle => 'A partires dunha cadea FEN';
@@ -5990,6 +6029,15 @@ class AppLocalizationsGl extends AppLocalizations {
   @override
   String get studyChapterConclusionText =>
       'Os capítulos grávanse para sempre.<br>Pásao ben organizando o teu contido de xadrez!';
+
+  @override
+  String get studyDoubleDefeat => 'Dobre derrota';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'As negras perden, mais as brancas non poden gañar';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'As brancas perden, mais as negras non poden gañar';
 
   @override
   String studyNbChapters(int count) {
