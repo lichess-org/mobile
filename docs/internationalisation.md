@@ -1,18 +1,18 @@
 # Internationalisation
 
-We're using the standard way of internationalising our app, as desbribed in the
-[official documentation](https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#setting-up).
+We're using the official Flutter way of internationalising our app, as desbribed in the
+[documentation](https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#setting-up).
 
-What is specific to this project is the way we produce the ARB files.
+What is specific to this project is the way the ARB files are generated.
 
-Lichess translations are managed in [crowdin lichess project](https://crowdin.com/project/lichess).
+Lichess translations are managed in [Crowdin lichess project](https://crowdin.com/project/lichess).
 
 Crowdin translations (and sources) are located in the `translation/` directory. New
-translations are regularly fetched from crowdin by a github action.
+translations (and lila sources) are regularly fetched from crowdin by a github action.
 
-We generate ARB files with a script that processes these translations: `scripts/gen-arb.mjs`.
+ARB files are generated with a script that processes these translations: `scripts/gen-arb.mjs`.
 
-Then a flutter command is used to generate the dart files from the ARB files:
+Then a flutter command is used to generate the dart files from the ARB files.
 
 So, in order to update the dart files we need to run:
 
