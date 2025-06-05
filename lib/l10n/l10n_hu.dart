@@ -102,6 +102,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileRecentSearches => 'Keresési előzmények';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Teljes képernyős mód';
 
   @override

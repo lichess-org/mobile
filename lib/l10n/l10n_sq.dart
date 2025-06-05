@@ -105,6 +105,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileRecentSearches => 'Kërkime së fundi';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Modaliteti zhytës';
 
   @override

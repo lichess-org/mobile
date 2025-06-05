@@ -103,6 +103,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileRecentSearches => 'Lastaj serĉoj';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Enakviĝa reĝimo';
 
   @override

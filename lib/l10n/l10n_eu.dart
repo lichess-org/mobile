@@ -102,6 +102,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileRecentSearches => 'Azken bilaketak';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Murgiltze modua';
 
   @override

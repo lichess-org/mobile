@@ -101,6 +101,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileRecentSearches => 'Nedávná vyhledávání';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Režim bez rušení';
 
   @override

@@ -99,6 +99,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileRecentSearches => '最近の検索';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => '没入モード';
 
   @override

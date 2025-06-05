@@ -101,6 +101,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileRecentSearches => 'Ostatnio wyszukiwane';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Tryb pełnoekranowy';
 
   @override

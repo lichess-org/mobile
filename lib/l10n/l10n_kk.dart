@@ -100,6 +100,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileRecentSearches => 'Кейінгі іздеулер';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Оқшау көрініс';
 
   @override

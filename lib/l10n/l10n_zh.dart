@@ -99,6 +99,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileRecentSearches => '最近搜索';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => '沉浸模式';
 
   @override

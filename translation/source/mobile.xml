@@ -28,6 +28,7 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Play puzzles from your favorite openings, or choose a theme.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Puzzles</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recent searches</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Remove bookmark</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersive mode</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and puzzle screens.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Settings</string>

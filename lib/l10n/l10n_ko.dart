@@ -99,6 +99,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileRecentSearches => '최근 검색어';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => '전체 화면 모드';
 
   @override

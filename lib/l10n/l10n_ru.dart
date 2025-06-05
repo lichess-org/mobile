@@ -102,6 +102,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileRecentSearches => 'Последние запросы';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Полноэкранный режим';
 
   @override

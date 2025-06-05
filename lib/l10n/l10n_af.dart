@@ -103,6 +103,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileRecentSearches => 'Onlangse soektogte';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Volskermmodus';
 
   @override

@@ -103,6 +103,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileRecentSearches => 'Letzte Suchen';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Immersiver Modus';
 
   @override

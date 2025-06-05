@@ -103,6 +103,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileRecentSearches => 'Nedavna pretraživanja';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Imerzivni način rada';
 
   @override

@@ -102,6 +102,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileRecentSearches => 'Cerques recents';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Mode immersiu';
 
   @override

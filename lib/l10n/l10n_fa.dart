@@ -102,6 +102,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileRecentSearches => 'واپسین جستجوها';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'حالت فراگیر';
 
   @override

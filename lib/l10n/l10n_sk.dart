@@ -102,6 +102,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileRecentSearches => 'Posledné vyhľadávania';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Režim celej obrazovky';
 
   @override

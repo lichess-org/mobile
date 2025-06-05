@@ -102,6 +102,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileRecentSearches => 'Recente zoekopdrachten';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Volledig scherm-modus';
 
   @override

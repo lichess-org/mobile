@@ -101,6 +101,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileRecentSearches => 'Скорашње претраге';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Режим целог екрана';
 
   @override

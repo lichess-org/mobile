@@ -103,6 +103,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileRecentSearches => 'Son axtarışlar';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'İmmersiv rejim';
 
   @override

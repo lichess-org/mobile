@@ -103,6 +103,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileRecentSearches => 'Búsquedas recientes';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Modo inmersivo';
 
   @override

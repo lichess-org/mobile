@@ -101,6 +101,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileRecentSearches => 'Нядаўнія пошукі';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Поўнаэкранны рэжым';
 
   @override

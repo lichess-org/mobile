@@ -102,6 +102,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileRecentSearches => 'Tìm kiếm gần đây';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Chế độ toàn màn hình';
 
   @override

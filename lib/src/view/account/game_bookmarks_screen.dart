@@ -160,7 +160,7 @@ class _BodyState extends ConsumerState<_Body> {
                           backgroundColor: context.lichessColors.error,
                           onPressed: onRemoveBookmark,
                           icon: Icons.bookmark_remove_outlined,
-                          label: 'Remove bookmark',
+                          label: context.l10n.mobileRemoveBookmark,
                         ),
                       ],
                     ),

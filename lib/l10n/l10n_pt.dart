@@ -102,6 +102,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileRecentSearches => 'Pesquisas recentes';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Modo imersivo';
 
   @override

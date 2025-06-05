@@ -100,6 +100,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileRecentSearches => 'عمليات البحث الأخيرة';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'وضع ملء الشاشة';
 
   @override

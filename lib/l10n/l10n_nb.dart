@@ -101,6 +101,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileRecentSearches => 'Nylige søk';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Fordypelsesmodus';
 
   @override

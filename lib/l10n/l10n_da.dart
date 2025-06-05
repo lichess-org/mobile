@@ -101,6 +101,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileRecentSearches => 'Seneste søgninger';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Fordybelsestilstand';
 
   @override

@@ -102,6 +102,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileRecentSearches => 'Senaste sökningar';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Expanderat läge';
 
   @override

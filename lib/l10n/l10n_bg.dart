@@ -101,6 +101,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileRecentSearches => 'Последни търсения';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Режим \"Цял екран\"';
 
   @override

@@ -103,6 +103,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileRecentSearches => 'Πρόσφατες αναζητήσεις';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Λειτουργία εστίασης';
 
   @override

@@ -102,6 +102,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileRecentSearches => 'Viimeisimmät haut';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Kokoruututila';
 
   @override

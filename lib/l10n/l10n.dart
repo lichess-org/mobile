@@ -363,6 +363,12 @@ abstract class AppLocalizations {
   /// **'Recent searches'**
   String get mobileRecentSearches;
 
+  /// No description provided for @mobileRemoveBookmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove bookmark'**
+  String get mobileRemoveBookmark;
+
   /// No description provided for @mobileSettingsImmersiveMode.
   ///
   /// In en, this message translates to:

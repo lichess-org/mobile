@@ -102,6 +102,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileRecentSearches => 'Недавні пошуки';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Повноекранний режим';
 
   @override

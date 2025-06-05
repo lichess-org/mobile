@@ -101,6 +101,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileRecentSearches => 'Recent searches';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Immersive mode';
 
   @override

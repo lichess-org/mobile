@@ -102,6 +102,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileRecentSearches => 'Kürzlich Gsuechts';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Ibettete Modus';
 
   @override

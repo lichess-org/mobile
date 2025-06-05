@@ -102,6 +102,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileRecentSearches => 'Nedavna iskanja';
 
   @override
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Interaktivni način';
 
   @override
