@@ -52,7 +52,7 @@ You should see the new strings in the `lib/l10n/lila_*.arb` and `lib/l10n/lila_*
 
 There are some strings that appear only in this app, but not on lichess.org.
 
-If you have a new string to be translated, add it to `translations/source.mobile.xml`. Make sure to include a `comment`
+If you have a new string to be translated, add it to `translations/source/mobile.xml`. Make sure to include a `comment`
 attribute, describing the usage of the string and its contents (e.g. placeholders). Some strings also must not exceed a
 certain width due to UI constraints, use the `maxLength` attribute for that.
 
