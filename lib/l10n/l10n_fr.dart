@@ -121,11 +121,43 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileSettingsClockPosition => 'Clock position';
 
   @override
+  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+
+  @override
+  String get mobileSettingsDraggedTargetCircle => 'Circle';
+
+  @override
+  String get mobileSettingsDraggedTargetSquare => 'Square';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Mode plein écran';
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
       'Masquer l\'interface utilisateur durant la partie. Utilisez cette option lorsque les gestes pour naviguer dans l\'interface utilisateur sur les bords de l\'écran vous gênent. S\'applique aux parties et aux problèmes.';
+
+  @override
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+
+  @override
+  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+
+  @override
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+
+  @override
+  String get mobileSettingsShapeDrawing => 'Shape drawing';
+
+  @override
+  String get mobileSettingsShapeDrawingSubtitle =>
+      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+
+  @override
+  String get mobileSettingsTouchFeedback => 'Touch feedback';
+
+  @override
+  String get mobileSettingsTouchFeedbackSubtitle =>
+      'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
   String get mobileSettingsTab => 'Paramètres';

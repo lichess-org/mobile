@@ -408,21 +408,16 @@ enum BoardTheme {
 }
 
 enum MaterialDifferenceFormat {
-  materialDifference(label: 'Material difference'),
-  capturedPieces(label: 'Captured pieces'),
-  hidden(label: 'Hidden');
-
-  const MaterialDifferenceFormat({required this.label});
-
-  final String label;
+  materialDifference,
+  capturedPieces,
+  hidden;
 
   bool get visible => this != MaterialDifferenceFormat.hidden;
 
   String l10n(AppLocalizations l10n) => switch (this) {
-    //TODO: Add l10n
-    MaterialDifferenceFormat.materialDifference => materialDifference.label,
-    MaterialDifferenceFormat.capturedPieces => capturedPieces.label,
-    MaterialDifferenceFormat.hidden => hidden.label,
+    MaterialDifferenceFormat.materialDifference => l10n.preferencesMaterialDifference,
+    MaterialDifferenceFormat.capturedPieces => l10n.mobileSettingsMaterialDifferenceCapturedPieces,
+    MaterialDifferenceFormat.hidden => l10n.puzzleHidden, // should be good to reuse this
   };
 }
 
@@ -449,8 +444,8 @@ enum CastlingMethod {
   };
 }
 
-String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
-  DragTargetKind.circle => 'Circle',
-  DragTargetKind.square => 'Square',
-  DragTargetKind.none => 'None',
+String dragTargetKindLabel(AppLocalizations l10n, DragTargetKind kind) => switch (kind) {
+  DragTargetKind.circle => l10n.mobileSettingsDraggedTargetCircle,
+  DragTargetKind.square => l10n.mobileSettingsDraggedTargetSquare,
+  DragTargetKind.none => l10n.none,
 };

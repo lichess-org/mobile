@@ -399,6 +399,24 @@ abstract class AppLocalizations {
   /// **'Clock position'**
   String get mobileSettingsClockPosition;
 
+  /// No description provided for @mobileSettingsDraggedPieceTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Dragged piece target'**
+  String get mobileSettingsDraggedPieceTarget;
+
+  /// No description provided for @mobileSettingsDraggedTargetCircle.
+  ///
+  /// In en, this message translates to:
+  /// **'Circle'**
+  String get mobileSettingsDraggedTargetCircle;
+
+  /// No description provided for @mobileSettingsDraggedTargetSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Square'**
+  String get mobileSettingsDraggedTargetSquare;
+
   /// No description provided for @mobileSettingsImmersiveMode.
   ///
   /// In en, this message translates to:
@@ -410,6 +428,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.'**
   String get mobileSettingsImmersiveModeSubtitle;
+
+  /// No description provided for @mobileSettingsMaterialDifferenceCapturedPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Captured pieces'**
+  String get mobileSettingsMaterialDifferenceCapturedPieces;
+
+  /// No description provided for @mobileSettingsPieceShiftMethodEither.
+  ///
+  /// In en, this message translates to:
+  /// **'Either tap or drag'**
+  String get mobileSettingsPieceShiftMethodEither;
+
+  /// No description provided for @mobileSettingsPieceShiftMethodTapTwoSquares.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap two squares'**
+  String get mobileSettingsPieceShiftMethodTapTwoSquares;
+
+  /// No description provided for @mobileSettingsShapeDrawing.
+  ///
+  /// In en, this message translates to:
+  /// **'Shape drawing'**
+  String get mobileSettingsShapeDrawing;
+
+  /// No description provided for @mobileSettingsShapeDrawingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.'**
+  String get mobileSettingsShapeDrawingSubtitle;
+
+  /// No description provided for @mobileSettingsTouchFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Touch feedback'**
+  String get mobileSettingsTouchFeedback;
+
+  /// No description provided for @mobileSettingsTouchFeedbackSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When enabled, the device will vibrate shortly when you move or capture a piece.'**
+  String get mobileSettingsTouchFeedbackSubtitle;
 
   /// No description provided for @mobileSettingsTab.
   ///
