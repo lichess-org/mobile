@@ -156,6 +156,11 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileToolsTab => 'Алати';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Чека се противник...';
 
   @override

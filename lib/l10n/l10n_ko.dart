@@ -154,6 +154,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileToolsTab => '도구';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => '상대 참가를 기다리는 중...';
 
   @override

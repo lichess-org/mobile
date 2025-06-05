@@ -157,6 +157,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileToolsTab => 'Công cụ';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Đang chờ đối thủ tham gia...';
 
   @override

@@ -154,6 +154,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileToolsTab => '工具';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => '正在等待对手加入...';
 
   @override

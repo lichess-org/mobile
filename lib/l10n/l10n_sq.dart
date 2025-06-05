@@ -160,6 +160,11 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileToolsTab => 'Mjete';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Po pritet që të vijë kundërshtari...';
 
   @override

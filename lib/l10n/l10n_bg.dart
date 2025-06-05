@@ -156,6 +156,11 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileToolsTab => 'Анализ';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
 
   @override

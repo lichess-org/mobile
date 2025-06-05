@@ -157,6 +157,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileToolsTab => 'Gereedschap';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Wachten op een tegenstander...';
 
   @override

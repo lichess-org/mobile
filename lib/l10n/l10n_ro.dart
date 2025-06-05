@@ -158,6 +158,11 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileToolsTab => 'Unelte';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'În așteptarea unui jucător...';
 
   @override

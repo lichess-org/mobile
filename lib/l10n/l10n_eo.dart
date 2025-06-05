@@ -158,6 +158,11 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileToolsTab => 'Iloj';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Atendante ke la kontraŭulo aliĝu...';
 
   @override

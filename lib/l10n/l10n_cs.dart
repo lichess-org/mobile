@@ -156,6 +156,11 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileToolsTab => 'Nástroje';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Čeká se na připojení protihráče...';
 
   @override

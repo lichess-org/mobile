@@ -157,6 +157,11 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileToolsTab => 'Orodja';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Čakanje, da se nasprotnik pridruži...';
 
   @override

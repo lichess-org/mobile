@@ -157,6 +157,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileToolsTab => 'Засоби';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Очікування на суперника...';
 
   @override

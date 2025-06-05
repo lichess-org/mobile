@@ -157,6 +157,11 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileToolsTab => 'Eines';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Esperant que s\'uneixi l\'adversari...';
 
   @override

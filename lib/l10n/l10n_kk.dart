@@ -155,6 +155,11 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileToolsTab => 'Құрал';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Қарсыластың қосылуын тосамыз...';
 
   @override

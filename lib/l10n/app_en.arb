@@ -66,6 +66,14 @@
   "mobileTapHereToStartPlayingChess": "Tap here to start playing chess.",
   "mobileTheme": "Theme",
   "mobileToolsTab": "Tools",
+  "mobileUnsupportedVariant": "Variant {param} is not supported in this version",
+  "@mobileUnsupportedVariant": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "mobileWaitingForOpponentToJoin": "Waiting for opponent to join...",
   "mobileWatchTab": "Watch",
   "mobileWelcomeToLichessApp": "Welcome to Lichess app!",

@@ -157,6 +157,11 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileToolsTab => 'Eszközök';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Várakozás az ellenfél csatlakozására...';
 
   @override

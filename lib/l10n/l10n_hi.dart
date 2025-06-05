@@ -158,6 +158,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileToolsTab => 'टूल्स';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'ऑप्पोनेंट का इंतजार कर रहे है...';
 
   @override

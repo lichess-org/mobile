@@ -157,6 +157,11 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileToolsTab => 'Werchzüg';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Warte bis en Gegner erschint...';
 
   @override

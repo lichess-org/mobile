@@ -157,6 +157,11 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileToolsTab => 'Nástroje';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Čaká sa na pripojenie súpera...';
 
   @override
