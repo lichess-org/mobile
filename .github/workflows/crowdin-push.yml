@@ -19,7 +19,9 @@ jobs:
           upload_sources: true
           upload_translations: false
           download_translations: false
-          crowdin_branch_name: '[lichess-org.mobile] main'
+          # only push mobile source
+          # we don't want to push lila sources!
+          upload_translations_args: "--preserve-hierarchy -b '[lichess-org.mobile] main' -s '/translation/source/mobile.xml' -t '/translation/dest/%file_name%/%locale%.%file_extension%"
         env:
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
