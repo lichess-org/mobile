@@ -447,6 +447,12 @@ abstract class AppLocalizations {
   /// **'System colors'**
   String get mobileSystemColors;
 
+  /// No description provided for @mobileTapHereToStartPlayingChess.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap here to start playing chess.'**
+  String get mobileTapHereToStartPlayingChess;
+
   /// No description provided for @mobileTheme.
   ///
   /// In en, this message translates to:
@@ -470,6 +476,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Watch'**
   String get mobileWatchTab;
+
+  /// No description provided for @mobileWelcomeToLichessApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Lichess app!'**
+  String get mobileWelcomeToLichessApp;
 
   /// No description provided for @activityActivity.
   ///

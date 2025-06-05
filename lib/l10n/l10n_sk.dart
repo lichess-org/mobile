@@ -145,6 +145,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSystemColors => 'Farby operačného systému';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'Vzhľad';
 
   @override
@@ -155,6 +158,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Sledovať';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => 'Aktivita';

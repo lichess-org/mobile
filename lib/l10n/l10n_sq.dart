@@ -148,6 +148,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSystemColors => 'Ngjyra sistemi';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'Temë';
 
   @override
@@ -158,6 +161,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Shiheni';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => 'Activity';

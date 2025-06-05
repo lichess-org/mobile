@@ -145,6 +145,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSystemColors => 'Цвет интерфейса';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'Оформление';
 
   @override
@@ -155,6 +158,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Просмотр';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => 'Активность';

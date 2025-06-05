@@ -145,6 +145,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSystemColors => 'Syschtem-Farbe';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'Farbschema';
 
   @override
@@ -155,6 +158,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Luege';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => 'Aktivitäte';

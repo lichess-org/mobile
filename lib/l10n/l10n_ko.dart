@@ -142,6 +142,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSystemColors => '시스템 색상';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => '테마';
 
   @override
@@ -152,6 +155,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileWatchTab => '관람';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => '활동';

@@ -145,6 +145,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSystemColors => 'Màu hệ thống';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'Giao diện';
 
   @override
@@ -155,6 +158,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Xem';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => 'Hoạt động';

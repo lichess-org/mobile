@@ -144,6 +144,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileSystemColors => 'System colors';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'Theme';
 
   @override
@@ -154,6 +157,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Tontonan';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => 'Activity';

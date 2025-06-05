@@ -146,6 +146,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileSystemColors => 'Sistemaj koloroj';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'Temo';
 
   @override
@@ -156,6 +159,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Spekti';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => 'Activity';

@@ -142,6 +142,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSystemColors => '系统颜色';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => '主题';
 
   @override
@@ -152,6 +155,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileWatchTab => '观看';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => '动态';
