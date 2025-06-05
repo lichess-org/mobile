@@ -962,6 +962,76 @@ class AppLocalizationsEu extends AppLocalizations {
   String get contactContactLichess => 'Jarri kontaktuan Lichessekin';
 
   @override
+  String get coordinatesCoordinates => 'Koordenatuak';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordenatuen entrenamendua';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Zuri gisa egindako puntuen batazbestekoa: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Beltz gisa egindako puntuen batazbestekoa: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Xake-taulako koordenatuak jakitea oso garrantzitsua da jokalarientzat:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'Ikastaro eta ariketa gehienek idazkera algebraikoa erabiltzen dute.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Horrela errazagoa da zure lagunekin hitz egitea, biok hitz egiten baituzue \"xakearen hizkuntza\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Partida errazago aztertu dezakezu ez badituzu laukien izenak aurkitu behar.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Koordenatua taulan agertzen dan eta dagokion laukian klik egin behar duzu.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Lauki bat markatuko da eta bere koordinatua idatzi beharko duzu (adb.: \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      '30 segundo dituzu ahal bezain beste lauki asmatzeko!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      'Nahi duzun arte aritu honetan, ez dago denbora mugarik!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Erakutsi koordenatuak';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koordenatuak lauki guztietan';
+
+  @override
+  String get coordinatesShowPieces => 'Erakutsi piezak';
+
+  @override
+  String get coordinatesStartTraining => 'Entrenatzen hasi';
+
+  @override
+  String get coordinatesFindSquare => 'Bilatu laukia';
+
+  @override
+  String get coordinatesNameSquare => 'Izendatu laukia';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks =>
+      'Zutabe eta errenkada batzuk bakarrik praktikatu';
+
+  @override
   String get patronDonate => 'Dirua eman';
 
   @override

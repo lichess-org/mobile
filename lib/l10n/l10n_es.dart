@@ -965,6 +965,75 @@ class AppLocalizationsEs extends AppLocalizations {
   String get contactContactLichess => 'Contactar con Lichess';
 
   @override
+  String get coordinatesCoordinates => 'Coordenadas';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Entrenar coordenadas';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Puntuación media con blancas: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Puntuación media con negras: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Conocer las coordenadas de los escaques es esencial en el ajedrez:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'La mayoría de los cursos y ejercicios de ajedrez usan la notación algebraica.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Facilita la comunicación con otros jugadores, que también hablan el \"lenguaje del ajedrez\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Puedes analizar partidas de forma más eficiente si no tienes que andar buscando los nombres de los escaques.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Una coordenada aparece en el tablero y debes hacer clic en la casilla correspondiente.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Una casilla se resalta en el tablero y debes introducir su coordenada (por ejemplo, \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      '¡Tienes 30 segundos para marcar correctamente tantas casillas como sea posible!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      '¡Tómate todo el tiempo que quieras, no hay límite de tiempo!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Mostrar coordenadas';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordenadas en cada casilla';
+
+  @override
+  String get coordinatesShowPieces => 'Mostrar piezas';
+
+  @override
+  String get coordinatesStartTraining => 'Comenzar entrenamiento';
+
+  @override
+  String get coordinatesFindSquare => 'Encontrar casilla';
+
+  @override
+  String get coordinatesNameSquare => 'Nombrar casilla';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practicar sólo algunas filas & columnas';
+
+  @override
   String get patronDonate => 'Donar';
 
   @override

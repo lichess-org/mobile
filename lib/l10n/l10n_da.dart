@@ -954,6 +954,75 @@ class AppLocalizationsDa extends AppLocalizations {
   String get contactContactLichess => 'Kontakt Lichess';
 
   @override
+  String get coordinatesCoordinates => 'Koordinater';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordinattræning';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Gennemsnitlig score som hvid: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Gennemsnitlig score som sort: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Det er vigtigt at kende koordinaterne på skakbrættet:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'De fleste skakkurser og øvelser bruger i vid udstrækning den algebraiske notation.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Det gør det lettere at snakke med dine skakvenner, når I begge forstår \"skakkens sprog\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Du kan analysere et parti mere effektivt, hvis du ikke skal lede efter feltnavne.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Et koordinat vises på brættet, og du skal klikke på det tilsvarende felt.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Et felt fremhæves på brættet, og du skal indtaste dets koordinat (f.eks. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Du har 30 sekunder til at kortlægge så mange felter som muligt!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      'Fortsæt så længe du ønsker, der er ingen tidsbegrænsning!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Vis koordinater';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koordinater på hvert felt';
+
+  @override
+  String get coordinatesShowPieces => 'Vis brikker';
+
+  @override
+  String get coordinatesStartTraining => 'Start træning';
+
+  @override
+  String get coordinatesFindSquare => 'Find felt';
+
+  @override
+  String get coordinatesNameSquare => 'Navngiv felt';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Øv kun nogle linjer og rækker';
+
+  @override
   String get patronDonate => 'Donér';
 
   @override

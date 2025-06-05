@@ -1039,6 +1039,73 @@ class AppLocalizationsAr extends AppLocalizations {
   String get contactContactLichess => 'تواصل مع Lichess';
 
   @override
+  String get coordinatesCoordinates => 'أسماء المربعات';
+
+  @override
+  String get coordinatesCoordinateTraining => 'التدريب على أسماء المربعات';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'متوسط الدرجات كأبيض: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'متوسط النتيجة كأسود: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'معرفة أسماء مربعات لوحة الشطرنج مهارة هامة جداً لعدة أسباب:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'معظم دورات الشطرنج والتمارين تستخدم التدوين الجبري على نطاق واسع.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'نسهل من التحدث إلى أصدقائك عن الشطرنج، كونكم تفهمان \"لغة الشطرنج\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'يمكنك تحليل المباراة بفعالية أكبر إذا كنت تتعرف بسرعة على أسماء المربعات.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'سيظهر أسم مربع على اللوحة وعليك الضغط علي المربع الصحيح.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'يتم إبراز مربع على اللوحة وعليك إدخال اسمه (مثلاً \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'لديك 30 ثانية لتسمية أكبر عدد ممكن من المربعات!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'استمر قدرَ ما تريد، لا يوجد حد زمني!';
+
+  @override
+  String get coordinatesShowCoordinates => 'إظهار الأسماء';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'أسم كل مربع';
+
+  @override
+  String get coordinatesShowPieces => 'إظهار القطع';
+
+  @override
+  String get coordinatesStartTraining => 'إبدأ التدريب';
+
+  @override
+  String get coordinatesFindSquare => 'ابحث عن المربع';
+
+  @override
+  String get coordinatesNameSquare => 'سمِّ المربع';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'تدرب فقط علي بعض الأعمدة & الصفوف';
+
+  @override
   String get patronDonate => 'تبرع';
 
   @override

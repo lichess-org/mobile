@@ -989,6 +989,73 @@ class AppLocalizationsHe extends AppLocalizations {
   String get contactContactLichess => 'צרו קשר עם ליצ\'ס';
 
   @override
+  String get coordinatesCoordinates => 'קואורדינטות (נקודות ציון)';
+
+  @override
+  String get coordinatesCoordinateTraining => 'אימון קואורדינטות (נקודות ציון)';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'הציון הממוצע כלבן: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'הציון הממוצע כשחור: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'ידיעת הקואורדינטות (נקודות הציון) של לוח השחמט היא מיומנות שחמטאית חשובה מאוד:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'בימינו, שיטת הרישום האלגברית היא הנפוצה ביותר בכל תוכנות האימון.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'היא מקלה על התקשורת עם חבריך לשחמט, כי היא משמשת כשפת תקשורת המובנת לכולכם.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'ניתן לנתח משחקים באופן יעיל יותר כאשר הזיהוי של המשבצות הוא מהיר וקל.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'נקודת ציון (קואורדינטה) מופיעה על הלוח ועליך ללחוץ על המשבצת המתאימה לה.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'אחת המשבצות מודגשת על הלוח ועליך להקליד את נקודת הציון (למשל: e4).';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => 'יש לך 30 שניות למקם נכונה כמה שיותר משבצות!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'פתרו כפי יכולתכם, אין מגבלת זמן!';
+
+  @override
+  String get coordinatesShowCoordinates => 'הצגת קואורדינטות (נקודות ציון)';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'קואורדינטות על כל משבצת';
+
+  @override
+  String get coordinatesShowPieces => 'הצגת הכלים';
+
+  @override
+  String get coordinatesStartTraining => 'התחילו להתאמן';
+
+  @override
+  String get coordinatesFindSquare => 'מצא/י את המשבצת';
+
+  @override
+  String get coordinatesNameSquare => 'תן/י שם למשבצת';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'תרגול של שורות וטורים מסוימים';
+
+  @override
   String get patronDonate => 'תרמו';
 
   @override

@@ -963,6 +963,75 @@ class AppLocalizationsFi extends AppLocalizations {
   String get contactContactLichess => 'Ota yhteyttä Lichessiin';
 
   @override
+  String get coordinatesCoordinates => 'Koordinaatit';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordinaattiharjoittelu';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Keskimääräinen tulos valkeana: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Keskimääräinen tulos mustana: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Shakkilaudan koordinaattien hallinta on erittäin tärkeä kyky shakinpelaajalle:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'Shakkikursseilla ja -harjoituksissa käytetään useimmiten algebrallista merkintätapaa.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'On helpompaa puhua shakkikavereidesi kanssa, kun ymmärrätte puolin ja toisin \"shakin kieltä\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Peliä voi analysoida tehokkaammin, kun ei tarvitse haeskella ruutujen nimiä.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Laudalle tulee näkyviin koordinaatit, ja sinun on klikattava niitä vastaavaa ruutua.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Laudalla valitaan vuorotellen eri ruutuja, ja tehtävänäsi on kirjoittaa kunkin koordinaatit (esim. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Sinulla on 30 sekuntia aikaa paikantaa niin monta ruutua kuin ehdit!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Tee sitä kaikessa rauhassa, aikarajaa ei ole!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Näytä koordinaatit';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koordinaatit jokaisessa ruudussa';
+
+  @override
+  String get coordinatesShowPieces => 'Näytä nappulat';
+
+  @override
+  String get coordinatesStartTraining => 'Aloita harjoitus';
+
+  @override
+  String get coordinatesFindSquare => 'Etsi ruutu';
+
+  @override
+  String get coordinatesNameSquare => 'Nimeä ruutu';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks =>
+      'Harjoittele vain tiettyjä linjoja ja rivejä';
+
+  @override
   String get patronDonate => 'Lahjoita';
 
   @override

@@ -852,6 +852,67 @@ class AppLocalizationsZh extends AppLocalizations {
   String get contactContactLichess => '联系 Lichess';
 
   @override
+  String get coordinatesCoordinates => '坐标';
+
+  @override
+  String get coordinatesCoordinateTraining => '坐标训练';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return '白方平均得分：$param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return '黑方平均得分：$param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => '了解棋盘坐标是一门很重要的象棋技能：';
+
+  @override
+  String get coordinatesMostChessCourses => '象棋课程及练习普遍使用代数记谱法。';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => '这能让您更便捷地与棋友交谈，因为你们都懂这门“象棋语言”。';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => '快速识别格子可以高效的分析对局。';
+
+  @override
+  String get coordinatesACoordinateAppears => '坐标将在棋盘上出现，您必须点击对应的棋格。';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => '棋格将在棋盘上高亮显示，您必须输入它的坐标(例如\"e4\")。';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => '您有30秒时间正确配对尽可能多的棋格。';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => '没有时间限制，尽情练习吧！';
+
+  @override
+  String get coordinatesShowCoordinates => '显示坐标';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => '在每个格子上显示坐标';
+
+  @override
+  String get coordinatesShowPieces => '显示棋子';
+
+  @override
+  String get coordinatesStartTraining => '开始训练';
+
+  @override
+  String get coordinatesFindSquare => '找格子';
+
+  @override
+  String get coordinatesNameSquare => '格子坐标';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => '练习指定行&列';
+
+  @override
   String get patronDonate => '捐赠';
 
   @override
@@ -6239,6 +6300,67 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get contactContactLichess => '聯繫 Lichess';
+
+  @override
+  String get coordinatesCoordinates => '座標';
+
+  @override
+  String get coordinatesCoordinateTraining => '座標訓練';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return '白棋方平均分數: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return '黑棋方平均分數: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => '能快速對照棋盤上的座標與其位置是一項很重要的技巧。';
+
+  @override
+  String get coordinatesMostChessCourses => '大多數的西洋棋課程都很頻繁的使用代數記譜法。';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => '這讓你跟和棋友更容易聊天，因為你們都知道「西洋棋的共同語言」。';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => '如果能夠快速地辨認座標，可以更有效率的分析一場棋局。';
+
+  @override
+  String get coordinatesACoordinateAppears => '座標將在棋盤上出現，您必須點擊對應的棋格。';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => '棋格將在棋盤上以紅色光提示，您必須輸入它的座標(例如「e4」)。';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => '您有30秒時間正確配對盡可能多的棋格。';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => '沒有時間限制，盡情練習吧！';
+
+  @override
+  String get coordinatesShowCoordinates => '顯示座標';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => '在每一格顯示座標';
+
+  @override
+  String get coordinatesShowPieces => '顯示棋子';
+
+  @override
+  String get coordinatesStartTraining => '開始訓練';
+
+  @override
+  String get coordinatesFindSquare => '尋找方格';
+
+  @override
+  String get coordinatesNameSquare => '說出方格的名字';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => '只練習部分列與行';
 
   @override
   String get patronDonate => '捐款';

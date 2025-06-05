@@ -1599,6 +1599,120 @@ abstract class AppLocalizations {
   /// **'Contact Lichess'**
   String get contactContactLichess;
 
+  /// No description provided for @coordinatesCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates'**
+  String get coordinatesCoordinates;
+
+  /// No description provided for @coordinatesCoordinateTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinate training'**
+  String get coordinatesCoordinateTraining;
+
+  /// No description provided for @coordinatesAverageScoreAsWhiteX.
+  ///
+  /// In en, this message translates to:
+  /// **'Average score as white: {param}'**
+  String coordinatesAverageScoreAsWhiteX(String param);
+
+  /// No description provided for @coordinatesAverageScoreAsBlackX.
+  ///
+  /// In en, this message translates to:
+  /// **'Average score as black: {param}'**
+  String coordinatesAverageScoreAsBlackX(String param);
+
+  /// No description provided for @coordinatesKnowingTheChessBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowing the chessboard coordinates is a very important skill for several reasons:'**
+  String get coordinatesKnowingTheChessBoard;
+
+  /// No description provided for @coordinatesMostChessCourses.
+  ///
+  /// In en, this message translates to:
+  /// **'Most chess courses and exercises use the algebraic notation extensively.'**
+  String get coordinatesMostChessCourses;
+
+  /// No description provided for @coordinatesTalkToYourChessFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'It makes it easier to talk to your chess friends, since you both understand the \'language of chess\'.'**
+  String get coordinatesTalkToYourChessFriends;
+
+  /// No description provided for @coordinatesYouCanAnalyseAGameMoreEffectively.
+  ///
+  /// In en, this message translates to:
+  /// **'You can analyse a game more effectively if you can quickly recognise coordinates.'**
+  String get coordinatesYouCanAnalyseAGameMoreEffectively;
+
+  /// No description provided for @coordinatesACoordinateAppears.
+  ///
+  /// In en, this message translates to:
+  /// **'A coordinate appears on the board and you must click on the corresponding square.'**
+  String get coordinatesACoordinateAppears;
+
+  /// No description provided for @coordinatesASquareIsHighlightedExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").'**
+  String get coordinatesASquareIsHighlightedExplanation;
+
+  /// No description provided for @coordinatesYouHaveThirtySeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'You have 30 seconds to correctly map as many squares as possible!'**
+  String get coordinatesYouHaveThirtySeconds;
+
+  /// No description provided for @coordinatesGoAsLongAsYouWant.
+  ///
+  /// In en, this message translates to:
+  /// **'Go as long as you want, there is no time limit!'**
+  String get coordinatesGoAsLongAsYouWant;
+
+  /// No description provided for @coordinatesShowCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Show coordinates'**
+  String get coordinatesShowCoordinates;
+
+  /// No description provided for @coordinatesShowCoordsOnAllSquares.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates on every square'**
+  String get coordinatesShowCoordsOnAllSquares;
+
+  /// No description provided for @coordinatesShowPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Show pieces'**
+  String get coordinatesShowPieces;
+
+  /// No description provided for @coordinatesStartTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Start training'**
+  String get coordinatesStartTraining;
+
+  /// No description provided for @coordinatesFindSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Find square'**
+  String get coordinatesFindSquare;
+
+  /// No description provided for @coordinatesNameSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Name square'**
+  String get coordinatesNameSquare;
+
+  /// No description provided for @coordinatesPracticeOnlySomeFilesAndRanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice only some files & ranks'**
+  String get coordinatesPracticeOnlySomeFilesAndRanks;
+
   /// No description provided for @patronDonate.
   ///
   /// In en, this message translates to:

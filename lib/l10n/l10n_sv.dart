@@ -955,6 +955,75 @@ class AppLocalizationsSv extends AppLocalizations {
   String get contactContactLichess => 'Kontakta Lichess';
 
   @override
+  String get coordinatesCoordinates => 'Koordinater';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Träna på koordinaterna';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Genomsnittlig poäng som vit: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Genomsnittlig poäng som svart: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Att veta schackbrädets koordinater är en mycket viktig schackfärdighet:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'De flesta schackkurserna och övningarna använder algebraisk notation.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Det gör det lättare att prata med dina schackvänner eftersom ni bägge förstår ”schackspråket”.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Ett parti analyseras ännu effektivare om du inte behöver söka efter rutornas koordinater.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'En koordinat visas på brädet och du ska klicka på motsvarande ruta.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'En ruta är markerad på tavlan och du ska ange dess koordinat (t.ex. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Du har 30 sekunder på dig att korrekt namnge så många rutor som möjligt!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      'Fortsätt så länge du vill, det finns ingen tidsbegränsning!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Visa koordinater';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koordinater på varje ruta';
+
+  @override
+  String get coordinatesShowPieces => 'Visa pjäser';
+
+  @override
+  String get coordinatesStartTraining => 'Starta träningen';
+
+  @override
+  String get coordinatesFindSquare => 'Hitta ruta';
+
+  @override
+  String get coordinatesNameSquare => 'Namnge ruta';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Öva bara på linjer & rader';
+
+  @override
   String get patronDonate => 'Donera';
 
   @override

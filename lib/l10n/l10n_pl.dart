@@ -997,6 +997,75 @@ class AppLocalizationsPl extends AppLocalizations {
   String get contactContactLichess => 'Skontaktuj się z Lichess';
 
   @override
+  String get coordinatesCoordinates => 'Współrzędne pól';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Trening współrzędnych pól';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Średni wynik białymi: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Średni wynik czarnymi: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Znajomość współrzędnych pól na szachownicy jest bardzo ważną umiejętnością:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'Większość kursów i ćwiczeń szachowych powszechnie wykorzystuje notację algebraiczną.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Rozmowa ze znajomymi szachistami będzie łatwiejsza, gdy będziecie się porozumiewać w „języku szachów”.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Analiza partii przebiega sprawniej, jeśli nie musisz szukać pól mając ich współrzędne.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Wyświetlą się współrzędne, a Ty musisz kliknąć odpowiednie pole.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Na szachownicy podświetli się jedno z pól i musisz wprowadzić jego współrzędne (np. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Masz 30 sekund, aby wskazać tak wiele pól, jak to możliwe!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      'Próbuj tak długo, jak chcesz, nie ma limitu czasowego!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Pokaż współrzędne';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Współrzędne na każdym polu';
+
+  @override
+  String get coordinatesShowPieces => 'Pokaż bierki';
+
+  @override
+  String get coordinatesStartTraining => 'Rozpocznij trening';
+
+  @override
+  String get coordinatesFindSquare => 'Znajdź pole';
+
+  @override
+  String get coordinatesNameSquare => 'Nazwij pole';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Poćwicz tylko niektóre kolumny & rzędy';
+
+  @override
   String get patronDonate => 'Przekaż datek';
 
   @override

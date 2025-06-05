@@ -927,6 +927,74 @@ class AppLocalizationsVi extends AppLocalizations {
   String get contactContactLichess => 'Liên hệ Lichess';
 
   @override
+  String get coordinatesCoordinates => 'Tầm nhìn';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Luyện tập tầm nhìn';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Điểm trung bình khi cầm quân trắng: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Điểm trung bình khi cầm quân đen: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Biết tọa độ bàn cờ là một kỹ năng rất quan trọng vì nhiều lý do:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'Hầu hết các khóa học và bài tập cờ vua dùng ký hiệu đại số rộng rãi.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Nó giúp bạn cờ dễ nói chuyện với nhau hơn, vì cả hai đều hiểu \"ngôn ngữ cờ vua\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Bạn sẽ phân tích ván cờ hiệu quả hơn nếu bạn có thể tìm ra ngay ô cờ từ tọa độ.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Một tọa độ sẽ xuất hiện trên bàn cờ và bạn phải nhấp chuột vào ô tương ứng.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Một ô trên bàn cờ sẽ được làm nổi bật và bạn phải nhập đúng tên ô đó (vd: \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Cố gắng tìm đúng nhiều ô nhất có thể trong vòng 30 giây!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Luyện tập vô tận, không có giới hạn thời gian!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Hiện tọa độ';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Tọa độ trên mỗi ô cờ';
+
+  @override
+  String get coordinatesShowPieces => 'Hiện quân cờ';
+
+  @override
+  String get coordinatesStartTraining => 'Bắt đầu tập luyện';
+
+  @override
+  String get coordinatesFindSquare => 'Tìm ô cờ';
+
+  @override
+  String get coordinatesNameSquare => 'Điền tên ô cờ';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Chỉ thực hành ở một số tệp & thứ hạng';
+
+  @override
   String get patronDonate => 'Ủng hộ';
 
   @override

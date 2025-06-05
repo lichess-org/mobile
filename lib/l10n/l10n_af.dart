@@ -955,6 +955,75 @@ class AppLocalizationsAf extends AppLocalizations {
   String get contactContactLichess => 'Contact Lichess';
 
   @override
+  String get coordinatesCoordinates => 'Koördinate';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koördinaat oefening';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Gemiddelde telling as wit: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Gemiddelde telling as swart: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Om die koördinate op die skaakbord te ken is \'n baie belangrike skaakvaardigheid:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'Meeste skaak kursusse en oefeninge gebruik algebraïese notasie.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Dit maak dit makliker om met jou skaak vriende te praat omdat julle albei die \'taal van skaak\' verstaan.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Jy kan \'n spel meer effektief analiseer as jy vinnig koördinate kan herken.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      '\'n Koördinaat verskyn op die bord en jy moet dan op die ooreenstemmende blokkie klik.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      '\'n Blokkie op die bord word gemerk en jy moet dan die ooreenstemmende koördinate verskaf (bv. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Jy het 30 sekondes om soveel blokkies moontlik te merk!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      'Neem so lank as wat jy wil, daar is geen tydsbeperking nie!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Vertoon koördinate';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koördinate op elke blokkie';
+
+  @override
+  String get coordinatesShowPieces => 'Vertoon stukke';
+
+  @override
+  String get coordinatesStartTraining => 'Begin die oefening';
+
+  @override
+  String get coordinatesFindSquare => 'Vind die blokkie';
+
+  @override
+  String get coordinatesNameSquare => 'Gee die koördinate van die blokkie';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Oefen slegs sommige rye & kolomme';
+
+  @override
   String get patronDonate => 'Donate';
 
   @override

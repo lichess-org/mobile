@@ -961,6 +961,75 @@ class AppLocalizationsPt extends AppLocalizations {
   String get contactContactLichess => 'Contactar o Lichess';
 
   @override
+  String get coordinatesCoordinates => 'Coordenadas';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Treino de coordenadas';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Pontuação média com as brancas: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Pontuação média com as pretas: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Saber as coordenadas do tabuleiro é uma habilidade muito importante no xadrez:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'A maioria dos cursos e exercícios usam extensamente a notação algébrica.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Torna-se mais fácil falar de xadrez com os teus amigos, já que ambos entendem o \"idioma do xadrez\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Podes analisar um jogo com maior eficiência se conseguires reconhecer as coordenadas rapidamente.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Aparece uma coordenada no tabuleiro e deve clicar no quadrado correspondente.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'É destacado um quadrado no tabuleiro e deve introduzir a sua coordenada (ex: \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Tem 30 segundos para mapear corretamente o máximo de quadrados possível!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      'Pode continuar enquanto quiser, não há limite de tempo!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Mostrar coordenadas';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordenadas em cada quadrado';
+
+  @override
+  String get coordinatesShowPieces => 'Mostrar as peças';
+
+  @override
+  String get coordinatesStartTraining => 'Começar o treino';
+
+  @override
+  String get coordinatesFindSquare => 'Encontrar quadrado';
+
+  @override
+  String get coordinatesNameSquare => 'Designar quadrado';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Pratica só algumas linhas & colunas';
+
+  @override
   String get patronDonate => 'Doar';
 
   @override
@@ -7210,6 +7279,74 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get contactContactLichess => 'Entrar em contato com Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Coordenadas';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Treinamento de coordenadas';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Pontuação média com as brancas: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Pontuação média com as pretas: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Saber as coordenadas do tabuleiro é habilidade enxadrística muito importante:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'A maioria dos cursos e exercícios de xadrez utilizam a notação algébrica extensivamente.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Isso torna mais fácil conversar com seus amigos de xadrez, desde que ambos entendam a \"linguagem do xadrez\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Você pode analisar um jogo mais eficientemente se não precisar ficar procurando os nomes das casas.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Uma coordenada aparece no tabuleiro e você deve clicar na casa correspondente.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Uma casa é destacada no tabuleiro e você deve inserir sua coordenada (ex: \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Você tem 30 segundos para localizar corretamente o máximo de casas possível!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Vá até quando quiser, não há limite de tempo!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Mostrar coordenadas';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coordenadas em cada casa';
+
+  @override
+  String get coordinatesShowPieces => 'Mostrar as peças';
+
+  @override
+  String get coordinatesStartTraining => 'Começar treino';
+
+  @override
+  String get coordinatesFindSquare => 'Ache a casa';
+
+  @override
+  String get coordinatesNameSquare => 'Nome da casa';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Praticar só algumas fileiras e colunas';
 
   @override
   String get patronDonate => 'Doação';

@@ -958,6 +958,75 @@ class AppLocalizationsNb extends AppLocalizations {
   String get contactContactLichess => 'Ta kontakt med Lichess';
 
   @override
+  String get coordinatesCoordinates => 'Koordinater';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Tren koordinater';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Gjennomsnittlig poengsum som hvit: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Gjennomsnittlig poengsum som sort: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Å kjenne sjakkbrettet er en meget viktig sjakkegenskap:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'De fleste sjakk-kurs og -øvelser bruker algebraisk notasjon mye.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Det gjør det lettere å snakke med sjakk-vennene dine, siden dere begge forstår \"sjakkens språk\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Det er lettere å analysere partier dersom du ikke må lete for å finne navn på feltene.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Et feltnavn dukker opp på brettet og du må klikke på det tilsvarende feltet.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Et felt blir markert på brettet og du må taste inn feltnavnet (f.eks. «e4»).';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Du har 30 sekunder på deg til å kartlegge så mange felt som mulig!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      'Du kan holde på så lenge du vil, det er ingen tidsfrist!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Vis koordinater';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koordinater på hvert felt';
+
+  @override
+  String get coordinatesShowPieces => 'Vis brikker';
+
+  @override
+  String get coordinatesStartTraining => 'Begynn trening';
+
+  @override
+  String get coordinatesFindSquare => 'Finn felt';
+
+  @override
+  String get coordinatesNameSquare => 'Angi feltnavn';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Øv på visse linjer og rader';
+
+  @override
   String get patronDonate => 'Bidra';
 
   @override

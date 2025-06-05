@@ -999,6 +999,74 @@ class AppLocalizationsSk extends AppLocalizations {
   String get contactContactLichess => 'Kontaktuj Lichess';
 
   @override
+  String get coordinatesCoordinates => 'Súradnice';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Tréning znalosti šachovnicových súradníc';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Priemerné skóre ako biely: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Priemerné skóre ako čierny: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Znalosť šachovnicových súradníc je pre šach veľmi dôležitá:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'Väčšina šachových kurzov a cvičení veľmi často používa algebraickú notáciu.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Ľahšie sa dorozumiete so svojimi šachovými priateľmi, pretože obaja budete hovoriť \"rečou šachu\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Môžete efektívnejšie analyzovať partie, ak nebudete neustále potrebovať hľadať názvy polí.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Na šachovnici sa zobrazia súradnice a Vašou úlohou je kliknúť na korešpondujúce políčko.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Na šachovnici sa zvýrazní políčko a Vašou úlohou je zadať jeho súradnice (napr. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Máte 30 sekúnd na to aby ste správne klikli na čo najviac políčok!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Trénujte do ľubovôle, nie ste limitovaní časom!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Ukázať súradnice';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Súradnice na všetkých políčkach';
+
+  @override
+  String get coordinatesShowPieces => 'Ukázať figúrky';
+
+  @override
+  String get coordinatesStartTraining => 'Začať tréning';
+
+  @override
+  String get coordinatesFindSquare => 'Nájsť pole';
+
+  @override
+  String get coordinatesNameSquare => 'Pomenovať pole';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Vybrať konkrétne stĺpce a rady';
+
+  @override
   String get patronDonate => 'Prispieť';
 
   @override

@@ -24,6 +24,7 @@ const modules = [
   'broadcast',
   'challenge',
   'contact',
+  'coordinates',
   'patron',
   'perfStat',
   'preferences',

@@ -998,6 +998,75 @@ class AppLocalizationsLt extends AppLocalizations {
   String get contactContactLichess => 'Susisiekite su „Lichess“';
 
   @override
+  String get coordinatesCoordinates => 'Koordinatės';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordinačių treniruotė';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Vidutinis rezultatas baltaisiais: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Vidutinis rezultatas juodaisiais: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Šachmatų lentos koordinačių žinojimas yra ypač svarbus įgūdis:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'Dauguma šachmatų kursų ir pratimų plačiai naudoja algebrinį žymėjimą.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Tai leidžia paprasčiau kalbėti su jūsų šachmatų draugais, kadangi abu suprantate „šachmatų kalbą“.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Galite efektyviau analizuoti partijas, kadangi nereikia ieškoti langelių pavadinimų.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Ant lentos pateikiama koordinatė ir jums reikia spustelti ant atitinkamo langelio.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Ant lentos paryškinamas langelis ir jums reikia spustelti ant atitinkamos koordinatės (pvz. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Turite 30 sekundžių pažymėti kiek galima daugiau langelių!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Žymėkite kiek tik norite, laiko limito nėra!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Rodyti koordinates';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Kiekvieno laukelio koordinatės';
+
+  @override
+  String get coordinatesShowPieces => 'Rodyti figūras';
+
+  @override
+  String get coordinatesStartTraining => 'Pradėti treniruotę';
+
+  @override
+  String get coordinatesFindSquare => 'Rasti langelį';
+
+  @override
+  String get coordinatesNameSquare => 'Pavadinti langelį';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks =>
+      'Treniruotis tik kai kurias statines ir gulstines';
+
+  @override
   String get patronDonate => 'Paremti';
 
   @override

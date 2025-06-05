@@ -997,6 +997,75 @@ class AppLocalizationsUk extends AppLocalizations {
   String get contactContactLichess => 'Зв\'язатися з Lichess';
 
   @override
+  String get coordinatesCoordinates => 'Координати';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Координатне тренування';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Середній результат за білих: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Середній результат за чорних: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Знання координат шахівниці - дуже важлива шахова навичка:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'У більшості шахових задач активно використовуються шахова нотація.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Це спрощує розмову з друзями-шахістами, бо Ви обидва розумієте «мову шахів».';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Ви можете більш ефективно аналізувати ігри, якщо вам не потрібно шукати координати.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Координата з\'являється на дошці, ви повинні натиснути на відповідний квадрат.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Квадрат виділяється на дошці, і ви повинні ввести його координати (наприклад, \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Ви маєте 30 секунд для того, щоб відмітити якнайбільше полів!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      'Витрачайте стільки часу, скільки забажаєте - жодних лімітів!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Відображати координати';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Координати на кожному полі';
+
+  @override
+  String get coordinatesShowPieces => 'Показувати фігури';
+
+  @override
+  String get coordinatesStartTraining => 'Розпочати тренування';
+
+  @override
+  String get coordinatesFindSquare => 'Знайти поле';
+
+  @override
+  String get coordinatesNameSquare => 'Назва поля';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Практикувати лише деякі ряди та стовпці';
+
+  @override
   String get patronDonate => 'Зробити внесок';
 
   @override

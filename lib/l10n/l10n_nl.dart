@@ -962,6 +962,74 @@ class AppLocalizationsNl extends AppLocalizations {
   String get contactContactLichess => 'Contact met Lichess';
 
   @override
+  String get coordinatesCoordinates => 'Coördinaten';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Coördinatentraining';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Gemiddelde score als wit: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Gemiddelde score als zwart: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'De schaakbordcoördinaten kennen is een zeer belangrijke schaakvaardigheid:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'De meeste schaakcursussen en -oefeningen maken gebruik van de algebraïsche notatie.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Het maakt het gemakkelijker om met je schaakvrienden te praten, aangezien jullie beide de \"taal van het schaken\" begrijpen.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Je kunt een spel effectiever analyseren als je niet hoeft te zoeken naar de namen van de velden.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Er verschijnt een coördinaat op het bord en je moet op het bijbehorende veld klikken.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Op het bord wordt een veld uitgelicht en je dient het coördinaat in te voeren (bijvoorbeeld \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Je hebt 30 seconden om zoveel mogelijk velden correct te benoemen!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Speel zolang als je wilt, er is geen tijdslimiet!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Coördinaten tonen';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Coördinaten op elk veld';
+
+  @override
+  String get coordinatesShowPieces => 'Stukken weergeven';
+
+  @override
+  String get coordinatesStartTraining => 'Start de training';
+
+  @override
+  String get coordinatesFindSquare => 'Velden zoeken';
+
+  @override
+  String get coordinatesNameSquare => 'Velden benoemen';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Alleen sommige kolommen & rijen oefenen';
+
+  @override
   String get patronDonate => 'Doneer';
 
   @override

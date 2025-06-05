@@ -967,6 +967,75 @@ class AppLocalizationsDe extends AppLocalizations {
   String get contactContactLichess => 'Lichess kontaktieren';
 
   @override
+  String get coordinatesCoordinates => 'Koordinaten';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Koordinatentraining';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Durchschnittliche Punktzahl als Weiß: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Durchschnittliche Punktzahl als Schwarz: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Die Koordinaten des Schachbretts zu kennen ist eine wichtige Fähigkeit:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'Die meisten Schach-Kurse und Übungen verwenden die algebraische Notation.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Es macht es einfacher dich mit deinen Schachfreunden zu unterhalten, da ihr beide die \"Schachsprache\" versteht.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Du kannst ein Spiel effektiver analysieren, wenn du nicht immer nach den Feldbezeichnungen suchen musst.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Es erscheint eine Koordinate auf dem Brett und du musst auf das entsprechende Feld klicken.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Ein Feld wird auf dem Brett hervorgehoben und du musst dessen Koordinate eingeben (z. B. „e4“).';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Du hast 30 Sekunden, um so viele Felder wie möglich korrekt zu benennen!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      'Spiele so lange du willst, es gibt keine Zeitbegrenzung!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Koordinaten anzeigen';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koordinaten auf jedem Feld';
+
+  @override
+  String get coordinatesShowPieces => 'Figuren anzeigen';
+
+  @override
+  String get coordinatesStartTraining => 'Training beginnen';
+
+  @override
+  String get coordinatesFindSquare => 'Feld finden';
+
+  @override
+  String get coordinatesNameSquare => 'Feld benennen';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Übe nur einige Linien & Reihen';
+
+  @override
   String get patronDonate => 'Spenden';
 
   @override
