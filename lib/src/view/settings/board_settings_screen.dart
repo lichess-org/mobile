@@ -49,6 +49,7 @@ class _Body extends ConsumerWidget {
     return ListView(
       children: [
         ListSection(
+          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
           hasLeading: false,
           children: [
             SwitchSettingTile(
@@ -73,14 +74,6 @@ class _Body extends ConsumerWidget {
                         .setDragTargetKind(value ?? DragTargetKind.circle);
                   },
                 );
-              },
-            ),
-            SwitchSettingTile(
-              title: Text(context.l10n.mobileSettingsTouchFeedback),
-              value: boardPrefs.hapticFeedback,
-              subtitle: Text(context.l10n.mobileSettingsTouchFeedbackSubtitle, maxLines: 5),
-              onChanged: (value) {
-                ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
               },
             ),
             SwitchSettingTile(
@@ -161,6 +154,20 @@ class _Body extends ConsumerWidget {
                       .read(boardPreferencesProvider.notifier)
                       .setClockPosition(value ?? ClockPosition.right),
                 );
+              },
+            ),
+          ],
+        ),
+        ListSection(
+          header: SettingsSectionTitle(context.l10n.preferencesGameBehavior),
+          hasLeading: false,
+          children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.mobileSettingsTouchFeedback),
+              value: boardPrefs.hapticFeedback,
+              subtitle: Text(context.l10n.mobileSettingsTouchFeedbackSubtitle, maxLines: 5),
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
               },
             ),
             SettingsListTile(
