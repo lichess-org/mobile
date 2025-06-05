@@ -30,12 +30,20 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileFeedbackButton => 'Rəy bildirin';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Salam, \"$param\"';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Varyasiyanı gizlət';
@@ -93,9 +101,6 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => 'Son axtarışlar';
-
-  @override
-  String get mobileSettingsHapticFeedback => 'Toxunuş əks-əlaqəsi';
 
   @override
   String get mobileSettingsImmersiveMode => 'İmmersiv rejim';

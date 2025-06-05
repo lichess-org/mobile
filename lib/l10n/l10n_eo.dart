@@ -30,12 +30,20 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileFeedbackButton => 'Prikomentado';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Saluton, $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Kaŝi varion';
@@ -93,9 +101,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => 'Lastaj serĉoj';
-
-  @override
-  String get mobileSettingsHapticFeedback => 'Tuŝ-retrokuplado';
 
   @override
   String get mobileSettingsImmersiveMode => 'Enakviĝa reĝimo';

@@ -6,15 +6,24 @@
   "mobileCorrespondenceClearSavedMove": "Clear saved move",
   "mobileCustomGameJoinAGame": "Join a game",
   "mobileFeedbackButton": "Feedback",
-  "mobileGreeting": "Hello, {param}",
-  "@mobileGreeting": {
+  "mobileGoodEvening": "Good evening, {param}",
+  "@mobileGoodEvening": {
     "placeholders": {
       "param": {
         "type": "String"
       }
     }
   },
-  "mobileGreetingWithoutName": "Hello",
+  "mobileGoodEveningWithoutName": "Good evening",
+  "mobileGoodDay": "Good day, {param}",
+  "@mobileGoodDay": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "mobileGoodDayWithoutName": "Good day",
   "mobileHideVariation": "Hide variation",
   "mobileHomeTab": "Home",
   "mobileLiveStreamers": "Live streamers",
@@ -39,7 +48,6 @@
   "mobilePuzzleThemesSubtitle": "Play puzzles from your favorite openings, or choose a theme.",
   "mobilePuzzlesTab": "Puzzles",
   "mobileRecentSearches": "Recent searches",
-  "mobileSettingsHapticFeedback": "Haptic feedback",
   "mobileSettingsImmersiveMode": "Immersive mode",
   "mobileSettingsImmersiveModeSubtitle": "Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and puzzle screens.",
   "mobileSettingsTab": "Settings",

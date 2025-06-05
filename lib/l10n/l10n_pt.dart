@@ -30,12 +30,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileFeedbackButton => 'Feedback';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Olá, $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Olá';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Ocultar variação';
@@ -92,9 +100,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => 'Pesquisas recentes';
-
-  @override
-  String get mobileSettingsHapticFeedback => 'Feedback tátil';
 
   @override
   String get mobileSettingsImmersiveMode => 'Modo imersivo';
@@ -6291,14 +6296,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileFeedbackButton => 'Comentários';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Olá, $param';
-  }
-
-  @override
-  String get mobileGreetingWithoutName => 'Olá';
-
-  @override
   String get mobileHideVariation => 'Ocultar variante forçada';
 
   @override
@@ -6355,9 +6352,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileRecentSearches => 'Pesquisas recentes';
-
-  @override
-  String get mobileSettingsHapticFeedback => 'Vibrar ao trocar';
 
   @override
   String get mobileSettingsImmersiveMode => 'Modo imersivo';

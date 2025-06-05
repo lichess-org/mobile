@@ -30,12 +30,20 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileFeedbackButton => 'بازخورد';
 
   @override
-  String mobileGreeting(String param) {
-    return 'درود، $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'پنهانیدن وَرتِش';
@@ -92,9 +100,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => 'واپسین جستجوها';
-
-  @override
-  String get mobileSettingsHapticFeedback => 'بازخورد لمسی';
 
   @override
   String get mobileSettingsImmersiveMode => 'حالت فراگیر';

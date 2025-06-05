@@ -30,12 +30,20 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileFeedbackButton => 'Visszajelzés';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Üdv $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Változatok elrejtése';
@@ -92,9 +100,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => 'Keresési előzmények';
-
-  @override
-  String get mobileSettingsHapticFeedback => 'Érintésalapú visszajelzés';
 
   @override
   String get mobileSettingsImmersiveMode => 'Teljes képernyős mód';

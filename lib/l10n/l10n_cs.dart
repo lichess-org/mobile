@@ -30,12 +30,20 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileFeedbackButton => 'Zpětná vazba';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Ahoj, $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Ahoj';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Schovej variace';
@@ -91,9 +99,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => 'Nedávná vyhledávání';
-
-  @override
-  String get mobileSettingsHapticFeedback => 'Haptická odezva';
 
   @override
   String get mobileSettingsImmersiveMode => 'Režim bez rušení';

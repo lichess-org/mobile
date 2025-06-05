@@ -30,12 +30,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileFeedbackButton => '问题反馈';
 
   @override
-  String mobileGreeting(String param) {
-    return '你好，$param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => '你好';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => '隐藏变着';
@@ -89,9 +97,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => '最近搜索';
-
-  @override
-  String get mobileSettingsHapticFeedback => '震动反馈';
 
   @override
   String get mobileSettingsImmersiveMode => '沉浸模式';
@@ -5692,14 +5697,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileFeedbackButton => '問題反饋';
 
   @override
-  String mobileGreeting(String param) {
-    return '您好， $param';
-  }
-
-  @override
-  String get mobileGreetingWithoutName => '您好';
-
-  @override
   String get mobileHideVariation => '隱藏變化';
 
   @override
@@ -5751,9 +5748,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileRecentSearches => '搜尋紀錄';
-
-  @override
-  String get mobileSettingsHapticFeedback => '震動回饋';
 
   @override
   String get mobileSettingsImmersiveMode => '沉浸模式';

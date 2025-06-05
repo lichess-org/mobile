@@ -30,12 +30,20 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileFeedbackButton => 'Përshtypje';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Tungjatjeta, $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Tungjatjeta';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Fshihe variantin';
@@ -95,9 +103,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => 'Kërkime së fundi';
-
-  @override
-  String get mobileSettingsHapticFeedback => 'Dridhje gjatë lëvizjesh';
 
   @override
   String get mobileSettingsImmersiveMode => 'Modaliteti zhytës';

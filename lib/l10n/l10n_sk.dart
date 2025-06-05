@@ -30,12 +30,20 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileFeedbackButton => 'Spätná väzba';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Ahoj, $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Ahoj';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Skryť varianty';
@@ -92,9 +100,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => 'Posledné vyhľadávania';
-
-  @override
-  String get mobileSettingsHapticFeedback => 'Vibrovanie zariadenia';
 
   @override
   String get mobileSettingsImmersiveMode => 'Režim celej obrazovky';

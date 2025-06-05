@@ -30,12 +30,20 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileFeedbackButton => 'Phản hồi';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Xin chào, $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Chào bạn';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Ẩn các biến';
@@ -92,9 +100,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => 'Tìm kiếm gần đây';
-
-  @override
-  String get mobileSettingsHapticFeedback => 'Rung phản hồi';
 
   @override
   String get mobileSettingsImmersiveMode => 'Chế độ toàn màn hình';

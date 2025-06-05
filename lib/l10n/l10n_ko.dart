@@ -30,12 +30,20 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileFeedbackButton => '피드백';
 
   @override
-  String mobileGreeting(String param) {
-    return '$param님, 안녕하세요';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => '안녕하세요';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => '바리에이션 숨기기';
@@ -89,9 +97,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => '최근 검색어';
-
-  @override
-  String get mobileSettingsHapticFeedback => '터치 시 진동';
 
   @override
   String get mobileSettingsImmersiveMode => '전체 화면 모드';

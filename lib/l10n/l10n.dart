@@ -237,17 +237,29 @@ abstract class AppLocalizations {
   /// **'Feedback'**
   String get mobileFeedbackButton;
 
-  /// No description provided for @mobileGreeting.
+  /// No description provided for @mobileGoodEvening.
   ///
   /// In en, this message translates to:
-  /// **'Hello, {param}'**
-  String mobileGreeting(String param);
+  /// **'Good evening, {param}'**
+  String mobileGoodEvening(String param);
 
-  /// No description provided for @mobileGreetingWithoutName.
+  /// No description provided for @mobileGoodEveningWithoutName.
   ///
   /// In en, this message translates to:
-  /// **'Hello'**
-  String get mobileGreetingWithoutName;
+  /// **'Good evening'**
+  String get mobileGoodEveningWithoutName;
+
+  /// No description provided for @mobileGoodDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Good day, {param}'**
+  String mobileGoodDay(String param);
+
+  /// No description provided for @mobileGoodDayWithoutName.
+  ///
+  /// In en, this message translates to:
+  /// **'Good day'**
+  String get mobileGoodDayWithoutName;
 
   /// No description provided for @mobileHideVariation.
   ///
@@ -350,12 +362,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recent searches'**
   String get mobileRecentSearches;
-
-  /// No description provided for @mobileSettingsHapticFeedback.
-  ///
-  /// In en, this message translates to:
-  /// **'Haptic feedback'**
-  String get mobileSettingsHapticFeedback;
 
   /// No description provided for @mobileSettingsImmersiveMode.
   ///

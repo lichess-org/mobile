@@ -30,12 +30,20 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileFeedbackButton => 'Отзиви';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Здравейте, $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Скрий вариацията';
@@ -91,9 +99,6 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get mobileRecentSearches => 'Последни търсения';
-
-  @override
-  String get mobileSettingsHapticFeedback => 'Вибрация при докосване';
 
   @override
   String get mobileSettingsImmersiveMode => 'Режим \"Цял екран\"';
