@@ -78,6 +78,12 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => '放大正在拖动的棋子';
 
   @override
@@ -106,6 +112,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
 
   @override
   String get mobileSettingsImmersiveMode => '沉浸模式';

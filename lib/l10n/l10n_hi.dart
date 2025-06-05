@@ -78,6 +78,12 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'घसीटते वक्त पीस बड़ा दिखाएं';
 
   @override
@@ -110,6 +116,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
 
   @override
   String get mobileSettingsImmersiveMode => 'इमर्सिव मोड';

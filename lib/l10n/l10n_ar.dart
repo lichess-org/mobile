@@ -78,6 +78,12 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'تكبير القطعة المسحوبة';
 
   @override
@@ -107,6 +113,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
 
   @override
   String get mobileSettingsImmersiveMode => 'وضع ملء الشاشة';

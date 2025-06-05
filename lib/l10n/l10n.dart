@@ -321,6 +321,18 @@ abstract class AppLocalizations {
   /// **'Players with \"{param}\"'**
   String mobilePlayersMatchingSearchTerm(String param);
 
+  /// No description provided for @mobilePositionLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Left'**
+  String get mobilePositionLeft;
+
+  /// No description provided for @mobilePositionRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Right'**
+  String get mobilePositionRight;
+
   /// No description provided for @mobilePrefMagnifyDraggedPiece.
   ///
   /// In en, this message translates to:
@@ -380,6 +392,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove bookmark'**
   String get mobileRemoveBookmark;
+
+  /// No description provided for @mobileSettingsClockPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Clock position'**
+  String get mobileSettingsClockPosition;
 
   /// No description provided for @mobileSettingsImmersiveMode.
   ///

@@ -41,6 +41,8 @@
       }
     }
   },
+  "mobilePositionLeft": "Left",
+  "mobilePositionRight": "Right",
   "mobilePrefMagnifyDraggedPiece": "Magnify dragged piece",
   "mobilePuzzleStormConfirmEndRun": "Do you want to end this run?",
   "mobilePuzzleStormFilterNothingToShow": "Nothing to show, please change the filters",
@@ -51,6 +53,7 @@
   "mobilePuzzlesTab": "Puzzles",
   "mobileRecentSearches": "Recent searches",
   "mobileRemoveBookmark": "Remove bookmark",
+  "mobileSettingsClockPosition": "Clock position",
   "mobileSettingsImmersiveMode": "Immersive mode",
   "mobileSettingsImmersiveModeSubtitle": "Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and puzzle screens.",
   "mobileSettingsTab": "Settings",

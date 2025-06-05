@@ -430,10 +430,9 @@ enum ClockPosition {
   left,
   right;
 
-  // TODO: l10n
-  String get label => switch (this) {
-    ClockPosition.left => 'Left',
-    ClockPosition.right => 'Right',
+  String label(AppLocalizations l10n) => switch (this) {
+    ClockPosition.left => l10n.mobilePositionLeft,
+    ClockPosition.right => l10n.mobilePositionRight,
   };
 }
 

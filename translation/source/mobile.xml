@@ -21,6 +21,8 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Over the board</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Players with "%s"</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Left</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Right</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Magnify dragged piece</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Do you want to end this run?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nothing to show, please change the filters</string>
@@ -31,6 +33,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Puzzles</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recent searches</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Remove bookmark</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Clock position</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersive mode</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and puzzle screens.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Settings</string>

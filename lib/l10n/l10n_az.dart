@@ -78,6 +78,12 @@ class AppLocalizationsAz extends AppLocalizations {
   }
 
   @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Tərpədilən fiquru böyütmə';
 
   @override
@@ -110,6 +116,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
 
   @override
   String get mobileSettingsImmersiveMode => 'İmmersiv rejim';

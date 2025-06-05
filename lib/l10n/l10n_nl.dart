@@ -78,6 +78,12 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Versleept stuk vergroot weergeven';
 
   @override
@@ -109,6 +115,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
 
   @override
   String get mobileSettingsImmersiveMode => 'Volledig scherm-modus';

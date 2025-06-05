@@ -78,6 +78,12 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Povećaj figuru koja se vuče';
 
   @override
@@ -110,6 +116,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
 
   @override
   String get mobileSettingsImmersiveMode => 'Imerzivni način rada';

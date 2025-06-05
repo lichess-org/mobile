@@ -78,6 +78,12 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Phóng to quân cờ được kéo';
 
   @override
@@ -109,6 +115,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
 
   @override
   String get mobileSettingsImmersiveMode => 'Chế độ toàn màn hình';

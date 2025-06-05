@@ -154,15 +154,14 @@ class _Body extends ConsumerWidget {
               },
             ),
             SettingsListTile(
-              //TODO Add l10n
-              settingsLabel: const Text('Clock position'),
-              settingsValue: boardPrefs.clockPosition.label,
+              settingsLabel: Text(context.l10n.mobileSettingsClockPosition),
+              settingsValue: boardPrefs.clockPosition.label(context.l10n),
               onTap: () {
                 showChoicePicker(
                   context,
                   choices: ClockPosition.values,
                   selectedItem: boardPrefs.clockPosition,
-                  labelBuilder: (t) => Text(t.label),
+                  labelBuilder: (t) => Text(t.label(context.l10n)),
                   onSelectedItemChanged: (ClockPosition? value) => ref
                       .read(boardPreferencesProvider.notifier)
                       .setClockPosition(value ?? ClockPosition.right),
