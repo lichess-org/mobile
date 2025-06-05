@@ -15,6 +15,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileAreYouSure => 'Är du säker?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Neka att ta tillbaka drag';
 
   @override

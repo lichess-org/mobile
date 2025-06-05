@@ -15,6 +15,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileAreYouSure => 'Is jy seker?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override

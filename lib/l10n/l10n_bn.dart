@@ -15,6 +15,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileAreYouSure => 'আপনি কি নিশ্চিত?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'চাল ফেরত নেওয়ার অফার বাতিল করুন';
 
   @override

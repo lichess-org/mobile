@@ -15,6 +15,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileAreYouSure => 'Вы ўпэўнены?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override

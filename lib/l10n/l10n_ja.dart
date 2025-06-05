@@ -15,6 +15,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileAreYouSure => '本当にいいですか？';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => '待ったをキャンセル';
 
   @override

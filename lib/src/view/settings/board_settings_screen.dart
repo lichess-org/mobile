@@ -31,7 +31,7 @@ class BoardSettingsScreen extends StatelessWidget {
       appBar: AppBar(
         leading: showCloseButton ? const CloseButton() : null,
         // TODO translate
-        title: const Text('Board settings'),
+        title: Text(context.l10n.mobileBoardSettings),
       ),
       body: const _Body(),
     );

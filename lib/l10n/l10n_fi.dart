@@ -15,6 +15,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileAreYouSure => 'Oletko varma?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Peruuta siirron peruutuspyyntö';
 
   @override

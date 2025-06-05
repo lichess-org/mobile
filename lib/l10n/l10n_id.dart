@@ -15,6 +15,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileAreYouSure => 'Apa kamu yakin?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override

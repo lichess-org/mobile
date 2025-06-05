@@ -15,6 +15,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileAreYouSure => 'Emin misiniz?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Geri alma teklifini iptal et';
 
   @override

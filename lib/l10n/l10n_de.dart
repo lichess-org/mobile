@@ -15,6 +15,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileAreYouSure => 'Bist du sicher?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Zugzurücknahme-Angebot abbrechen';
 
   @override

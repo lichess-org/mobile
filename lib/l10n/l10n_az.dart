@@ -15,6 +15,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileAreYouSure => 'Əminsinizmi?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Geri alma təklifini ləğv et';
 
   @override

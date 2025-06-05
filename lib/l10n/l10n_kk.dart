@@ -15,6 +15,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileAreYouSure => 'Растайсыз ба?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Жүріс қайтару сұрауын тоқтату';
 
   @override

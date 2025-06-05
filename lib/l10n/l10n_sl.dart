@@ -15,6 +15,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileAreYouSure => 'Ali ste prepričani?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Prekliči ponudbo za preklic poteze';
 
   @override

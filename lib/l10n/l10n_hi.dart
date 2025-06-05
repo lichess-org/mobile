@@ -15,6 +15,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileAreYouSure => 'पक्का?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'टेकबैक ऑफर कैंसल करें';
 
   @override

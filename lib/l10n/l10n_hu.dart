@@ -15,6 +15,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileAreYouSure => 'Biztos vagy benne?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Visszalépés kérésének visszavonása';
 
   @override

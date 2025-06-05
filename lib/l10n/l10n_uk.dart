@@ -15,6 +15,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileAreYouSure => 'Ви впевнені?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Скасувати пропозицію повернення ходу';
 
   @override

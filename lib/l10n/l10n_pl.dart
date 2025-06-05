@@ -15,6 +15,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileAreYouSure => 'Jesteś pewien?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Anuluj prośbę cofnięcia ruchu';
 
   @override

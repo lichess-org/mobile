@@ -15,6 +15,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileAreYouSure => 'Ĉu vi certas?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Nuligi proponon pri malmovo';
 
   @override

@@ -15,6 +15,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileAreYouSure => 'Weet je het zeker?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Terugnameaanbod annuleren';
 
   @override

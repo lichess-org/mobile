@@ -15,6 +15,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileAreYouSure => 'Estàs segur?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Anul·la la petició per desfer la jugada';
 
   @override

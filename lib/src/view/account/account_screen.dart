@@ -246,7 +246,7 @@ class AccountScreen extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Symbols.chess_pawn),
-                title: const Text('Board settings', overflow: TextOverflow.ellipsis),
+                title: Text(context.l10n.mobileBoardSettings, overflow: TextOverflow.ellipsis),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const Icon(Icons.chevron_right)
                     : null,

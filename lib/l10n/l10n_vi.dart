@@ -15,6 +15,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileAreYouSure => 'Bạn chắc chứ?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Hủy đề nghị đi lại';
 
   @override

@@ -15,6 +15,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileAreYouSure => '你确定吗？';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => '取消悔棋请求';
 
   @override

@@ -15,6 +15,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileAreYouSure => '확실하십니까?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => '무르기 요청 취소';
 
   @override

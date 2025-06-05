@@ -15,6 +15,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileAreYouSure => 'Er du sikker?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Avbryt tilbud om å angre';
 
   @override

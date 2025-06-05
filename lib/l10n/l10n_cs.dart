@@ -15,6 +15,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileAreYouSure => 'Jste si jistí?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Zrušit nabídku vrácení tahu';
 
   @override

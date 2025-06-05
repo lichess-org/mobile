@@ -15,6 +15,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileAreYouSure => 'مطمئنید؟';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'رد درخواست برگرداندن';
 
   @override

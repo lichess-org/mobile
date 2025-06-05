@@ -15,6 +15,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileAreYouSure => 'Jeste li sigurni?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Poništite ponudu za povrat poteza';
 
   @override

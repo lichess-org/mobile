@@ -15,6 +15,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileAreYouSure => 'Вы уверены?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Отменить предложение о возврате хода';
 
   @override

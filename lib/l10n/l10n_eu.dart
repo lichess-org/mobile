@@ -15,6 +15,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileAreYouSure => 'Ziur zaude?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Bertan behera utzi atzera-egite eskaera';
 
   @override

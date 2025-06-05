@@ -15,6 +15,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileAreYouSure => 'Jeni i sigurt?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Anulojeni ofertën për prapakthim';
 
   @override

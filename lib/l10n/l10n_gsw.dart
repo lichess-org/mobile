@@ -15,6 +15,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileAreYouSure => 'Bisch sicher?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Zugsrücknam-Offerte zruggzieh';
 
   @override

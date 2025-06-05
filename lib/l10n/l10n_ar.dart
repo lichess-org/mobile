@@ -15,6 +15,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileAreYouSure => 'هل أنت متأكد؟';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'إلغاء عرض الإسترجاع';
 
   @override

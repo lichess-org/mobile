@@ -15,6 +15,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileAreYouSure => 'Ste si istý?';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Zrušiť žiadosť o vrátenie ťahu';
 
   @override

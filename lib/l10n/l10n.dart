@@ -207,6 +207,12 @@ abstract class AppLocalizations {
   /// **'Are you sure?'**
   String get mobileAreYouSure;
 
+  /// No description provided for @mobileBoardSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Board settings'**
+  String get mobileBoardSettings;
+
   /// No description provided for @mobileCancelTakebackOffer.
   ///
   /// In en, this message translates to:

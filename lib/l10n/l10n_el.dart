@@ -15,6 +15,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileAreYouSure => 'Είστε σίγουροι;';
 
   @override
+  String get mobileBoardSettings => 'Board settings';
+
+  @override
   String get mobileCancelTakebackOffer => 'Ακυρώστε την προσφορά αναίρεσης της κίνησης';
 
   @override
