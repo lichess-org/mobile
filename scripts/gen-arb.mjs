@@ -108,14 +108,14 @@ const locales = [
 async function main() {
   await generateTemplateARB()
 
-  await generateLilaTranslationARBs()
+  await generateTranslationARB()
 }
 
 main()
 
 // --
 
-async function generateLilaTranslationARBs() {
+async function generateTranslationARB() {
   // load all translations into a single object
   const translations = {}
   for (const module of modules) {
