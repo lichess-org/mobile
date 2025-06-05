@@ -30,8 +30,7 @@ class BoardSettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: showCloseButton ? const CloseButton() : null,
-        // TODO translate
-        title: const Text('Board settings'),
+        title: Text(context.l10n.mobileBoardSettings),
       ),
       body: const _Body(),
     );
@@ -50,6 +49,7 @@ class _Body extends ConsumerWidget {
     return ListView(
       children: [
         ListSection(
+          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
           hasLeading: false,
           children: [
             SwitchSettingTile(
@@ -60,33 +60,20 @@ class _Body extends ConsumerWidget {
               },
             ),
             SettingsListTile(
-              settingsLabel: const Text('Dragged piece target'),
-              settingsValue: dragTargetKindLabel(boardPrefs.dragTargetKind),
+              settingsLabel: Text(context.l10n.mobileSettingsDraggedPieceTarget),
+              settingsValue: dragTargetKindLabel(context.l10n, boardPrefs.dragTargetKind),
               onTap: () {
                 showChoicePicker(
                   context,
                   choices: DragTargetKind.values,
                   selectedItem: boardPrefs.dragTargetKind,
-                  labelBuilder: (t) => Text(dragTargetKindLabel(t)),
+                  labelBuilder: (t) => Text(dragTargetKindLabel(context.l10n, t)),
                   onSelectedItemChanged: (DragTargetKind? value) {
                     ref
                         .read(boardPreferencesProvider.notifier)
                         .setDragTargetKind(value ?? DragTargetKind.circle);
                   },
                 );
-              },
-            ),
-            SwitchSettingTile(
-              // TODO translate
-              title: const Text('Touch feedback'),
-              value: boardPrefs.hapticFeedback,
-              subtitle: const Text(
-                // TODO translate
-                'When enabled, the device will vibrate shortly when you move or capture a piece.',
-                maxLines: 5,
-              ),
-              onChanged: (value) {
-                ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
               },
             ),
             SwitchSettingTile(
@@ -138,14 +125,14 @@ class _Body extends ConsumerWidget {
                 },
               ),
             SettingsListTile(
-              settingsLabel: const Text('Material'), //TODO: l10n
+              settingsLabel: Text(context.l10n.preferencesMaterialDifference),
               settingsValue: boardPrefs.materialDifferenceFormat.l10n(AppLocalizations.of(context)),
               onTap: () {
                 showChoicePicker(
                   context,
                   choices: MaterialDifferenceFormat.values,
                   selectedItem: boardPrefs.materialDifferenceFormat,
-                  labelBuilder: (t) => Text(t.label),
+                  labelBuilder: (t) => Text(t.l10n(context.l10n)),
                   onSelectedItemChanged: (MaterialDifferenceFormat? value) => ref
                       .read(boardPreferencesProvider.notifier)
                       .setMaterialDifferenceFormat(
@@ -155,19 +142,32 @@ class _Body extends ConsumerWidget {
               },
             ),
             SettingsListTile(
-              //TODO Add l10n
-              settingsLabel: const Text('Clock position'),
-              settingsValue: boardPrefs.clockPosition.label,
+              settingsLabel: Text(context.l10n.mobileSettingsClockPosition),
+              settingsValue: boardPrefs.clockPosition.label(context.l10n),
               onTap: () {
                 showChoicePicker(
                   context,
                   choices: ClockPosition.values,
                   selectedItem: boardPrefs.clockPosition,
-                  labelBuilder: (t) => Text(t.label),
+                  labelBuilder: (t) => Text(t.label(context.l10n)),
                   onSelectedItemChanged: (ClockPosition? value) => ref
                       .read(boardPreferencesProvider.notifier)
                       .setClockPosition(value ?? ClockPosition.right),
                 );
+              },
+            ),
+          ],
+        ),
+        ListSection(
+          header: SettingsSectionTitle(context.l10n.preferencesGameBehavior),
+          hasLeading: false,
+          children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.mobileSettingsTouchFeedback),
+              value: boardPrefs.hapticFeedback,
+              subtitle: Text(context.l10n.mobileSettingsTouchFeedbackSubtitle, maxLines: 5),
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
               },
             ),
             SettingsListTile(
@@ -207,13 +207,8 @@ class _Body extends ConsumerWidget {
               },
             ),
             SwitchSettingTile(
-              // TODO: Add l10n
-              title: const Text('Shape drawing'),
-              subtitle: const Text(
-                // TODO: translate
-                'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.',
-                maxLines: 5,
-              ),
+              title: Text(context.l10n.mobileSettingsShapeDrawing),
+              subtitle: Text(context.l10n.mobileSettingsShapeDrawingSubtitle, maxLines: 5),
               value: boardPrefs.enableShapeDrawings,
               onChanged: (value) {
                 ref.read(boardPreferencesProvider.notifier).toggleEnableShapeDrawings();
@@ -228,8 +223,7 @@ class _Body extends ConsumerWidget {
 
 String pieceShiftMethodl10n(BuildContext context, PieceShiftMethod pieceShiftMethod) =>
     switch (pieceShiftMethod) {
-      // TODO add this to mobile translations
-      PieceShiftMethod.either => 'Either tap or drag',
+      PieceShiftMethod.either => context.l10n.mobileSettingsPieceShiftMethodEither,
       PieceShiftMethod.drag => context.l10n.preferencesDragPiece,
-      PieceShiftMethod.tapTwoSquares => 'Tap two squares',
+      PieceShiftMethod.tapTwoSquares => context.l10n.mobileSettingsPieceShiftMethodTapTwoSquares,
     };

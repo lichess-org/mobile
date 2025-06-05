@@ -59,11 +59,11 @@ class _FloatingPlayButtonState extends ConsumerState<FloatingPlayButton> {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Welcome to Lichess app!\n\n',
+                      text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     TextSpan(
-                      text: 'Tap here to start playing chess.',
+                      text: context.l10n.mobileTapHereToStartPlayingChess,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],

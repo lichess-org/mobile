@@ -9,10 +9,20 @@ class AppLocalizationsSv extends AppLocalizations {
   AppLocalizationsSv([String locale = 'sv']) : super(locale);
 
   @override
+  String get mobileAccountPreferences => 'Account preferences';
+
+  @override
+  String get mobileAccountPreferencesHelp =>
+      'These preferences are applied to your Lichess account and will be used across all devices.';
+
+  @override
   String get mobileAllGames => 'Alla spel';
 
   @override
   String get mobileAreYouSure => 'Är du säker?';
+
+  @override
+  String get mobileBoardSettings => 'Board settings';
 
   @override
   String get mobileCancelTakebackOffer => 'Neka att ta tillbaka drag';
@@ -30,12 +40,20 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileFeedbackButton => 'Återkoppling';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Hej $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Dölj variationer';
@@ -59,9 +77,18 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Spelare med \"$param\"';
   }
+
+  @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Förstora flyttad pjäs';
@@ -94,7 +121,25 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileRecentSearches => 'Senaste sökningar';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Vibration';
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
+
+  @override
+  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+
+  @override
+  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+
+  @override
+  String get mobileSettingsDraggedTargetCircle => 'Circle';
+
+  @override
+  String get mobileSettingsDraggedTargetSquare => 'Square';
+
+  @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
 
   @override
   String get mobileSettingsImmersiveMode => 'Expanderat läge';
@@ -102,6 +147,51 @@ class AppLocalizationsSv extends AppLocalizations {
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
       'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+
+  @override
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+
+  @override
+  String get mobileSettingsPickAnImage => 'Pick an image';
+
+  @override
+  String get mobileSettingsPickAnImageHelp =>
+      'Custom background works only in dark mode. A dark image is recommended.';
+
+  @override
+  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+
+  @override
+  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+
+  @override
+  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+
+  @override
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+
+  @override
+  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+
+  @override
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+
+  @override
+  String get mobileSettingsShapeDrawing => 'Shape drawing';
+
+  @override
+  String get mobileSettingsShapeDrawingSubtitle =>
+      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+
+  @override
+  String get mobileSettingsShowBorder => 'Show border';
+
+  @override
+  String get mobileSettingsTouchFeedback => 'Touch feedback';
+
+  @override
+  String get mobileSettingsTouchFeedbackSubtitle =>
+      'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
   String get mobileSettingsTab => 'Inställn.';
@@ -134,16 +224,27 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileSystemColors => 'Systemets färger';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'Tema';
 
   @override
   String get mobileToolsTab => 'Verktyg';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version.';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Väntar på motståndare...';
 
   @override
   String get mobileWatchTab => 'Titta';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -948,6 +1049,75 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Kontakta Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Koordinater';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Träna på koordinaterna';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Genomsnittlig poäng som vit: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Genomsnittlig poäng som svart: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Att veta schackbrädets koordinater är en mycket viktig schackfärdighet:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'De flesta schackkurserna och övningarna använder algebraisk notation.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Det gör det lättare att prata med dina schackvänner eftersom ni bägge förstår ”schackspråket”.';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Ett parti analyseras ännu effektivare om du inte behöver söka efter rutornas koordinater.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'En koordinat visas på brädet och du ska klicka på motsvarande ruta.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'En ruta är markerad på tavlan och du ska ange dess koordinat (t.ex. \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Du har 30 sekunder på dig att korrekt namnge så många rutor som möjligt!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      'Fortsätt så länge du vill, det finns ingen tidsbegränsning!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Visa koordinater';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Koordinater på varje ruta';
+
+  @override
+  String get coordinatesShowPieces => 'Visa pjäser';
+
+  @override
+  String get coordinatesStartTraining => 'Starta träningen';
+
+  @override
+  String get coordinatesFindSquare => 'Hitta ruta';
+
+  @override
+  String get coordinatesNameSquare => 'Namnge ruta';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Öva bara på linjer & rader';
 
   @override
   String get patronDonate => 'Donera';

@@ -65,7 +65,7 @@ class PlayMenu extends ConsumerWidget {
                 ).push(OverTheBoardScreen.buildRoute(context));
               },
               icon: Icons.table_restaurant_outlined,
-              label: 'Over the board',
+              label: context.l10n.mobileOverTheBoard,
             ),
           ],
         ),

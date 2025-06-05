@@ -9,10 +9,20 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get mobileAccountPreferences => 'Account preferences';
+
+  @override
+  String get mobileAccountPreferencesHelp =>
+      'These preferences are applied to your Lichess account and will be used across all devices.';
+
+  @override
   String get mobileAllGames => '所有对局';
 
   @override
   String get mobileAreYouSure => '你确定吗？';
+
+  @override
+  String get mobileBoardSettings => 'Board settings';
 
   @override
   String get mobileCancelTakebackOffer => '取消悔棋请求';
@@ -30,12 +40,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileFeedbackButton => '问题反馈';
 
   @override
-  String mobileGreeting(String param) {
-    return '你好，$param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => '你好';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => '隐藏变着';
@@ -59,9 +77,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOkButton => '好';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return '包含\"$param\"名称的棋手';
   }
+
+  @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => '放大正在拖动的棋子';
@@ -91,7 +118,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileRecentSearches => '最近搜索';
 
   @override
-  String get mobileSettingsHapticFeedback => '震动反馈';
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
+
+  @override
+  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+
+  @override
+  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+
+  @override
+  String get mobileSettingsDraggedTargetCircle => 'Circle';
+
+  @override
+  String get mobileSettingsDraggedTargetSquare => 'Square';
+
+  @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
 
   @override
   String get mobileSettingsImmersiveMode => '沉浸模式';
@@ -99,6 +144,51 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
       '下棋时隐藏系统界面。 如果您的操作受到屏幕边缘的系统导航手势干扰，请使用此功能。 适用于棋局和谜题风暴界面。';
+
+  @override
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+
+  @override
+  String get mobileSettingsPickAnImage => 'Pick an image';
+
+  @override
+  String get mobileSettingsPickAnImageHelp =>
+      'Custom background works only in dark mode. A dark image is recommended.';
+
+  @override
+  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+
+  @override
+  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+
+  @override
+  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+
+  @override
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+
+  @override
+  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+
+  @override
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+
+  @override
+  String get mobileSettingsShapeDrawing => 'Shape drawing';
+
+  @override
+  String get mobileSettingsShapeDrawingSubtitle =>
+      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+
+  @override
+  String get mobileSettingsShowBorder => 'Show border';
+
+  @override
+  String get mobileSettingsTouchFeedback => 'Touch feedback';
+
+  @override
+  String get mobileSettingsTouchFeedbackSubtitle =>
+      'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
   String get mobileSettingsTab => '设置';
@@ -131,16 +221,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSystemColors => '系统颜色';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => '主题';
 
   @override
   String get mobileToolsTab => '工具';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version.';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => '正在等待对手加入...';
 
   @override
   String get mobileWatchTab => '观看';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => '动态';
@@ -845,6 +946,67 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get contactContactLichess => '联系 Lichess';
+
+  @override
+  String get coordinatesCoordinates => '坐标';
+
+  @override
+  String get coordinatesCoordinateTraining => '坐标训练';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return '白方平均得分：$param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return '黑方平均得分：$param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => '了解棋盘坐标是一门很重要的象棋技能：';
+
+  @override
+  String get coordinatesMostChessCourses => '象棋课程及练习普遍使用代数记谱法。';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => '这能让您更便捷地与棋友交谈，因为你们都懂这门“象棋语言”。';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => '快速识别格子可以高效的分析对局。';
+
+  @override
+  String get coordinatesACoordinateAppears => '坐标将在棋盘上出现，您必须点击对应的棋格。';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => '棋格将在棋盘上高亮显示，您必须输入它的坐标(例如\"e4\")。';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => '您有30秒时间正确配对尽可能多的棋格。';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => '没有时间限制，尽情练习吧！';
+
+  @override
+  String get coordinatesShowCoordinates => '显示坐标';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => '在每个格子上显示坐标';
+
+  @override
+  String get coordinatesShowPieces => '显示棋子';
+
+  @override
+  String get coordinatesStartTraining => '开始训练';
+
+  @override
+  String get coordinatesFindSquare => '找格子';
+
+  @override
+  String get coordinatesNameSquare => '格子坐标';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => '练习指定行&列';
 
   @override
   String get patronDonate => '捐赠';
@@ -5692,14 +5854,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileFeedbackButton => '問題反饋';
 
   @override
-  String mobileGreeting(String param) {
-    return '您好， $param';
-  }
-
-  @override
-  String get mobileGreetingWithoutName => '您好';
-
-  @override
   String get mobileHideVariation => '隱藏變化';
 
   @override
@@ -5751,9 +5905,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileRecentSearches => '搜尋紀錄';
-
-  @override
-  String get mobileSettingsHapticFeedback => '震動回饋';
 
   @override
   String get mobileSettingsImmersiveMode => '沉浸模式';
@@ -6245,6 +6396,67 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get contactContactLichess => '聯繫 Lichess';
+
+  @override
+  String get coordinatesCoordinates => '座標';
+
+  @override
+  String get coordinatesCoordinateTraining => '座標訓練';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return '白棋方平均分數: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return '黑棋方平均分數: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => '能快速對照棋盤上的座標與其位置是一項很重要的技巧。';
+
+  @override
+  String get coordinatesMostChessCourses => '大多數的西洋棋課程都很頻繁的使用代數記譜法。';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => '這讓你跟和棋友更容易聊天，因為你們都知道「西洋棋的共同語言」。';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => '如果能夠快速地辨認座標，可以更有效率的分析一場棋局。';
+
+  @override
+  String get coordinatesACoordinateAppears => '座標將在棋盤上出現，您必須點擊對應的棋格。';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation => '棋格將在棋盤上以紅色光提示，您必須輸入它的座標(例如「e4」)。';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => '您有30秒時間正確配對盡可能多的棋格。';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => '沒有時間限制，盡情練習吧！';
+
+  @override
+  String get coordinatesShowCoordinates => '顯示座標';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => '在每一格顯示座標';
+
+  @override
+  String get coordinatesShowPieces => '顯示棋子';
+
+  @override
+  String get coordinatesStartTraining => '開始訓練';
+
+  @override
+  String get coordinatesFindSquare => '尋找方格';
+
+  @override
+  String get coordinatesNameSquare => '說出方格的名字';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => '只練習部分列與行';
 
   @override
   String get patronDonate => '捐款';

@@ -9,10 +9,20 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
+  String get mobileAccountPreferences => 'Account preferences';
+
+  @override
+  String get mobileAccountPreferencesHelp =>
+      'These preferences are applied to your Lichess account and will be used across all devices.';
+
+  @override
   String get mobileAllGames => 'すべて';
 
   @override
   String get mobileAreYouSure => '本当にいいですか？';
+
+  @override
+  String get mobileBoardSettings => 'Board settings';
 
   @override
   String get mobileCancelTakebackOffer => '待ったをキャンセル';
@@ -30,12 +40,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileFeedbackButton => 'フィードバック';
 
   @override
-  String mobileGreeting(String param) {
-    return 'こんにちは $param さん';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'こんにちは';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => '変化手順を隠す';
@@ -59,9 +77,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return '「$param」を含むプレイヤー';
   }
+
+  @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'ドラッグ中の駒を拡大';
@@ -91,7 +118,25 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileRecentSearches => '最近の検索';
 
   @override
-  String get mobileSettingsHapticFeedback => '振動フィードバック';
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
+
+  @override
+  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+
+  @override
+  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+
+  @override
+  String get mobileSettingsDraggedTargetCircle => 'Circle';
+
+  @override
+  String get mobileSettingsDraggedTargetSquare => 'Square';
+
+  @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
 
   @override
   String get mobileSettingsImmersiveMode => '没入モード';
@@ -99,6 +144,51 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
       'プレイ中にシステムの UI を非表示にします。画面端のナビゲーションなどがじゃまだと思う場合に使ってください。対局とタクティクス問題に適用されます。';
+
+  @override
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+
+  @override
+  String get mobileSettingsPickAnImage => 'Pick an image';
+
+  @override
+  String get mobileSettingsPickAnImageHelp =>
+      'Custom background works only in dark mode. A dark image is recommended.';
+
+  @override
+  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+
+  @override
+  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+
+  @override
+  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+
+  @override
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+
+  @override
+  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+
+  @override
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+
+  @override
+  String get mobileSettingsShapeDrawing => 'Shape drawing';
+
+  @override
+  String get mobileSettingsShapeDrawingSubtitle =>
+      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+
+  @override
+  String get mobileSettingsShowBorder => 'Show border';
+
+  @override
+  String get mobileSettingsTouchFeedback => 'Touch feedback';
+
+  @override
+  String get mobileSettingsTouchFeedbackSubtitle =>
+      'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
   String get mobileSettingsTab => '設定';
@@ -131,16 +221,27 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSystemColors => 'OS と同じ色設定';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'テーマ';
 
   @override
   String get mobileToolsTab => 'ツール';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version.';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => '対戦相手の参加を待っています…';
 
   @override
   String get mobileWatchTab => '見る';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => '活動';
@@ -849,6 +950,69 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Lichess に連絡する';
+
+  @override
+  String get coordinatesCoordinates => 'マスの位置';
+
+  @override
+  String get coordinatesCoordinateTraining => '座標を読むトレーニング';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return '白番での平均スコア: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return '黒番での平均スコア: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard => 'チェス盤の座標がすぐわかるのは非常にだいじなスキルです。';
+
+  @override
+  String get coordinatesMostChessCourses => 'チェスの講座、問題はほとんど「代数式」という記譜法を使っています。';
+
+  @override
+  String get coordinatesTalkToYourChessFriends => 'またチェスの友人と話をするのも簡単になります。双方がいわば「チェス語」を理解しているからです。';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'このマスはどこか、いちいち探すことがなくなれば、ゲームの検討も効率よくできます。';
+
+  @override
+  String get coordinatesACoordinateAppears => 'ボード上にマスの名前が表示されるので、そのマスをクリックしてください。';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'ボード上にハイライト表示されるマスの座標（たとえば「e4」）を入力してください。';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds => '30 秒の間にできるだけ多くのマスを正しくクリック！';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'じっくりどうぞ、時間制限なしです！';
+
+  @override
+  String get coordinatesShowCoordinates => '座標を表示';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'すべてのマスに座標を表示';
+
+  @override
+  String get coordinatesShowPieces => '駒を表示';
+
+  @override
+  String get coordinatesStartTraining => 'トレーニングを開始';
+
+  @override
+  String get coordinatesFindSquare => 'マスを探す';
+
+  @override
+  String get coordinatesNameSquare => 'マスの名前を入力';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => '一部のファイルとランクだけ練習';
 
   @override
   String get patronDonate => '寄付';

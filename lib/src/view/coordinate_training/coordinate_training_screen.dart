@@ -34,7 +34,7 @@ class CoordinateTrainingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Coordinate Training'), // TODO l10n once script works
+        title: Text(context.l10n.coordinatesCoordinateTraining),
         actions: [
           Builder(
             builder: (context) {
@@ -163,7 +163,7 @@ class _BodyState extends ConsumerState<_Body> {
                               .read(coordinateTrainingControllerProvider.notifier)
                               .startTraining(trainingPrefs.timeChoice.duration);
                         },
-                        label: 'New Training',
+                        label: context.l10n.coordinatesStartTraining,
                       )
                     else
                       Expanded(
@@ -174,7 +174,7 @@ class _BodyState extends ConsumerState<_Body> {
                                   .read(coordinateTrainingControllerProvider.notifier)
                                   .startTraining(trainingPrefs.timeChoice.duration);
                             },
-                            label: 'Start Training',
+                            label: context.l10n.coordinatesStartTraining,
                           ),
                         ),
                       ),
@@ -253,7 +253,7 @@ class _CoordinateTrainingMenu extends ConsumerWidget {
           header: SettingsSectionTitle(context.l10n.preferencesDisplay),
           children: [
             SwitchSettingTile(
-              title: const Text('Show Coordinates'),
+              title: Text(context.l10n.coordinatesShowCoordinates),
               value: trainingPrefs.showCoordinates,
               onChanged: ref
                   .read(coordinateTrainingPreferencesProvider.notifier)
@@ -473,39 +473,24 @@ Future<void> _coordinateTrainingInfoDialogBuilder(BuildContext context) {
     context: context,
     builder: (context) {
       return AlertDialog.adaptive(
-        title: Text(context.l10n.aboutX('Coordinate Training')),
-        content: const SingleChildScrollView(
+        title: Text(context.l10n.aboutX(context.l10n.coordinatesCoordinateTraining)),
+        content: SingleChildScrollView(
           child: Text.rich(
             TextSpan(
               children: [
+                TextSpan(text: '${context.l10n.coordinatesKnowingTheChessBoard}\n'),
+                TextSpan(text: '  • ${context.l10n.coordinatesMostChessCourses}\n'),
+                TextSpan(text: '  • ${context.l10n.coordinatesTalkToYourChessFriends}\n'),
                 TextSpan(
-                  text:
-                      'Knowing the chessboard coordinates is a very important skill for several reasons:\n',
+                  text: '  • ${context.l10n.coordinatesYouCanAnalyseAGameMoreEffectively}\n',
                 ),
+                const TextSpan(text: '\n'),
                 TextSpan(
-                  text:
-                      '  • Most chess courses and exercises use the algebraic notation extensively.\n',
+                  text: '${context.l10n.coordinatesFindSquare}\n',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                TextSpan(
-                  text:
-                      "  • It makes it easier to talk to your chess friends, since you both understand the 'language of chess'.\n",
-                ),
-                TextSpan(
-                  text:
-                      '  • You can analyse a game more effectively if you can quickly recognise coordinates.\n',
-                ),
-                TextSpan(text: '\n'),
-                TextSpan(
-                  text: 'Find Square\n',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextSpan(
-                  text:
-                      'A coordinate appears on the board and you must click on the corresponding square.\n',
-                ),
-                TextSpan(
-                  text: 'You have 30 seconds to correctly map as many squares as possible!\n',
-                ),
+                TextSpan(text: '${context.l10n.coordinatesACoordinateAppears}\n'),
+                TextSpan(text: '${context.l10n.coordinatesYouHaveThirtySeconds}\n'),
               ],
             ),
           ),

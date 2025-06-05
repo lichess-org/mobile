@@ -9,10 +9,20 @@ class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
+  String get mobileAccountPreferences => 'Account preferences';
+
+  @override
+  String get mobileAccountPreferencesHelp =>
+      'These preferences are applied to your Lichess account and will be used across all devices.';
+
+  @override
   String get mobileAllGames => 'Усі ігри';
 
   @override
   String get mobileAreYouSure => 'Ви впевнені?';
+
+  @override
+  String get mobileBoardSettings => 'Board settings';
 
   @override
   String get mobileCancelTakebackOffer => 'Скасувати пропозицію повернення ходу';
@@ -30,12 +40,20 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileFeedbackButton => 'Відгук';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Привіт, $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Привіт';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Сховати варіанти';
@@ -59,9 +77,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileOkButton => 'Гаразд';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Гравці з «$param»';
   }
+
+  @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Збільшувати розмір фігури при перетягуванні';
@@ -94,7 +121,25 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileRecentSearches => 'Недавні пошуки';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Вібрація при ході';
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
+
+  @override
+  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+
+  @override
+  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+
+  @override
+  String get mobileSettingsDraggedTargetCircle => 'Circle';
+
+  @override
+  String get mobileSettingsDraggedTargetSquare => 'Square';
+
+  @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
 
   @override
   String get mobileSettingsImmersiveMode => 'Повноекранний режим';
@@ -102,6 +147,51 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
       'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+
+  @override
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+
+  @override
+  String get mobileSettingsPickAnImage => 'Pick an image';
+
+  @override
+  String get mobileSettingsPickAnImageHelp =>
+      'Custom background works only in dark mode. A dark image is recommended.';
+
+  @override
+  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+
+  @override
+  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+
+  @override
+  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+
+  @override
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+
+  @override
+  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+
+  @override
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+
+  @override
+  String get mobileSettingsShapeDrawing => 'Shape drawing';
+
+  @override
+  String get mobileSettingsShapeDrawingSubtitle =>
+      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+
+  @override
+  String get mobileSettingsShowBorder => 'Show border';
+
+  @override
+  String get mobileSettingsTouchFeedback => 'Touch feedback';
+
+  @override
+  String get mobileSettingsTouchFeedbackSubtitle =>
+      'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
   String get mobileSettingsTab => 'Налашт.';
@@ -134,16 +224,27 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSystemColors => 'Системні кольори';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'Тема';
 
   @override
   String get mobileToolsTab => 'Засоби';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version.';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Очікування на суперника...';
 
   @override
   String get mobileWatchTab => 'Дивитися';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => 'Активність';
@@ -990,6 +1091,75 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Зв\'язатися з Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Координати';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Координатне тренування';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Середній результат за білих: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Середній результат за чорних: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Знання координат шахівниці - дуже важлива шахова навичка:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'У більшості шахових задач активно використовуються шахова нотація.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Це спрощує розмову з друзями-шахістами, бо Ви обидва розумієте «мову шахів».';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Ви можете більш ефективно аналізувати ігри, якщо вам не потрібно шукати координати.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Координата з\'являється на дошці, ви повинні натиснути на відповідний квадрат.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Квадрат виділяється на дошці, і ви повинні ввести його координати (наприклад, \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Ви маєте 30 секунд для того, щоб відмітити якнайбільше полів!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant =>
+      'Витрачайте стільки часу, скільки забажаєте - жодних лімітів!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Відображати координати';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Координати на кожному полі';
+
+  @override
+  String get coordinatesShowPieces => 'Показувати фігури';
+
+  @override
+  String get coordinatesStartTraining => 'Розпочати тренування';
+
+  @override
+  String get coordinatesFindSquare => 'Знайти поле';
+
+  @override
+  String get coordinatesNameSquare => 'Назва поля';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Практикувати лише деякі ряди та стовпці';
 
   @override
   String get patronDonate => 'Зробити внесок';

@@ -9,10 +9,20 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
+  String get mobileAccountPreferences => 'Account preferences';
+
+  @override
+  String get mobileAccountPreferencesHelp =>
+      'These preferences are applied to your Lichess account and will be used across all devices.';
+
+  @override
   String get mobileAllGames => 'Tất cả ván đấu';
 
   @override
   String get mobileAreYouSure => 'Bạn chắc chứ?';
+
+  @override
+  String get mobileBoardSettings => 'Board settings';
 
   @override
   String get mobileCancelTakebackOffer => 'Hủy đề nghị đi lại';
@@ -30,12 +40,20 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileFeedbackButton => 'Phản hồi';
 
   @override
-  String mobileGreeting(String param) {
-    return 'Xin chào, $param';
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Chào bạn';
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Ẩn các biến';
@@ -59,9 +77,18 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'chơi với \"$param\"';
   }
+
+  @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Phóng to quân cờ được kéo';
@@ -94,7 +121,25 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileRecentSearches => 'Tìm kiếm gần đây';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Rung phản hồi';
+  String get mobileRemoveBookmark => 'Remove bookmark';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
+
+  @override
+  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+
+  @override
+  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+
+  @override
+  String get mobileSettingsDraggedTargetCircle => 'Circle';
+
+  @override
+  String get mobileSettingsDraggedTargetSquare => 'Square';
+
+  @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
 
   @override
   String get mobileSettingsImmersiveMode => 'Chế độ toàn màn hình';
@@ -102,6 +147,51 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
       'Ẩn giao diện hệ thống trong khi chơi. Dùng tuỳ chọn này nếu bạn bị các cử chỉ điều hướng của hệ thống ở các cạnh của màn hình làm phiền. Áp dụng cho màn hình ván đấu và câu đố.';
+
+  @override
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+
+  @override
+  String get mobileSettingsPickAnImage => 'Pick an image';
+
+  @override
+  String get mobileSettingsPickAnImageHelp =>
+      'Custom background works only in dark mode. A dark image is recommended.';
+
+  @override
+  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+
+  @override
+  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+
+  @override
+  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+
+  @override
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+
+  @override
+  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+
+  @override
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+
+  @override
+  String get mobileSettingsShapeDrawing => 'Shape drawing';
+
+  @override
+  String get mobileSettingsShapeDrawingSubtitle =>
+      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+
+  @override
+  String get mobileSettingsShowBorder => 'Show border';
+
+  @override
+  String get mobileSettingsTouchFeedback => 'Touch feedback';
+
+  @override
+  String get mobileSettingsTouchFeedbackSubtitle =>
+      'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
   String get mobileSettingsTab => 'Cài đặt';
@@ -134,16 +224,27 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSystemColors => 'Màu hệ thống';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'Giao diện';
 
   @override
   String get mobileToolsTab => 'Công cụ';
 
   @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version.';
+  }
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Đang chờ đối thủ tham gia...';
 
   @override
   String get mobileWatchTab => 'Xem';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
   String get activityActivity => 'Hoạt động';
@@ -920,6 +1021,74 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get contactContactLichess => 'Liên hệ Lichess';
+
+  @override
+  String get coordinatesCoordinates => 'Tầm nhìn';
+
+  @override
+  String get coordinatesCoordinateTraining => 'Luyện tập tầm nhìn';
+
+  @override
+  String coordinatesAverageScoreAsWhiteX(String param) {
+    return 'Điểm trung bình khi cầm quân trắng: $param';
+  }
+
+  @override
+  String coordinatesAverageScoreAsBlackX(String param) {
+    return 'Điểm trung bình khi cầm quân đen: $param';
+  }
+
+  @override
+  String get coordinatesKnowingTheChessBoard =>
+      'Biết tọa độ bàn cờ là một kỹ năng rất quan trọng vì nhiều lý do:';
+
+  @override
+  String get coordinatesMostChessCourses =>
+      'Hầu hết các khóa học và bài tập cờ vua dùng ký hiệu đại số rộng rãi.';
+
+  @override
+  String get coordinatesTalkToYourChessFriends =>
+      'Nó giúp bạn cờ dễ nói chuyện với nhau hơn, vì cả hai đều hiểu \"ngôn ngữ cờ vua\".';
+
+  @override
+  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
+      'Bạn sẽ phân tích ván cờ hiệu quả hơn nếu bạn có thể tìm ra ngay ô cờ từ tọa độ.';
+
+  @override
+  String get coordinatesACoordinateAppears =>
+      'Một tọa độ sẽ xuất hiện trên bàn cờ và bạn phải nhấp chuột vào ô tương ứng.';
+
+  @override
+  String get coordinatesASquareIsHighlightedExplanation =>
+      'Một ô trên bàn cờ sẽ được làm nổi bật và bạn phải nhập đúng tên ô đó (vd: \"e4\").';
+
+  @override
+  String get coordinatesYouHaveThirtySeconds =>
+      'Cố gắng tìm đúng nhiều ô nhất có thể trong vòng 30 giây!';
+
+  @override
+  String get coordinatesGoAsLongAsYouWant => 'Luyện tập vô tận, không có giới hạn thời gian!';
+
+  @override
+  String get coordinatesShowCoordinates => 'Hiện tọa độ';
+
+  @override
+  String get coordinatesShowCoordsOnAllSquares => 'Tọa độ trên mỗi ô cờ';
+
+  @override
+  String get coordinatesShowPieces => 'Hiện quân cờ';
+
+  @override
+  String get coordinatesStartTraining => 'Bắt đầu tập luyện';
+
+  @override
+  String get coordinatesFindSquare => 'Tìm ô cờ';
+
+  @override
+  String get coordinatesNameSquare => 'Điền tên ô cờ';
+
+  @override
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Chỉ thực hành ở một số tệp & thứ hạng';
 
   @override
   String get patronDonate => 'Ủng hộ';
