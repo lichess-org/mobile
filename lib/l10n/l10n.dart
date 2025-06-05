@@ -429,6 +429,12 @@ abstract class AppLocalizations {
   /// **'Square'**
   String get mobileSettingsDraggedTargetSquare;
 
+  /// No description provided for @mobileSettingsHomeWidgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Home widgets'**
+  String get mobileSettingsHomeWidgets;
+
   /// No description provided for @mobileSettingsImmersiveMode.
   ///
   /// In en, this message translates to:

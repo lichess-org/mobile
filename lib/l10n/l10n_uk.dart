@@ -136,6 +136,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Square';
 
   @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Повноекранний режим';
 
   @override

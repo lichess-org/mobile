@@ -137,6 +137,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Square';
 
   @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Modo inmersivo';
 
   @override

@@ -59,6 +59,7 @@
   "mobileSettingsDraggedPieceTarget": "Dragged piece target",
   "mobileSettingsDraggedTargetCircle": "Circle",
   "mobileSettingsDraggedTargetSquare": "Square",
+  "mobileSettingsHomeWidgets": "Home widgets",
   "mobileSettingsImmersiveMode": "Immersive mode",
   "mobileSettingsImmersiveModeSubtitle": "Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and puzzle screens.",
   "mobileSettingsMaterialDifferenceCapturedPieces": "Captured pieces",

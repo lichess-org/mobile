@@ -136,6 +136,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Square';
 
   @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Chế độ toàn màn hình';
 
   @override

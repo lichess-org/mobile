@@ -134,6 +134,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Square';
 
   @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Оқшау көрініс';
 
   @override

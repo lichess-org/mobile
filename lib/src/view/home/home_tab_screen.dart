@@ -170,7 +170,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             isEditingWidgets: widget.editModeEnabled,
             child: PlatformScaffold(
               appBar: widget.editModeEnabled
-                  ? PlatformAppBar(title: const Text('Home widgets'))
+                  ? PlatformAppBar(title: Text(context.l10n.mobileSettingsHomeWidgets))
                   : PlatformAppBar(
                       title: const Text('lichess.org'),
                       leading: const AccountIconButton(),

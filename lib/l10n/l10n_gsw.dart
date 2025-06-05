@@ -136,6 +136,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Square';
 
   @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Ibettete Modus';
 
   @override

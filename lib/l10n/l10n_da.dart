@@ -135,6 +135,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Square';
 
   @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Fordybelsestilstand';
 
   @override

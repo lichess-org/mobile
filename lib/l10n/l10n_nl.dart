@@ -136,6 +136,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Square';
 
   @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Volledig scherm-modus';
 
   @override

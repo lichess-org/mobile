@@ -133,6 +133,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Square';
 
   @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
+
+  @override
   String get mobileSettingsImmersiveMode => '전체 화면 모드';
 
   @override

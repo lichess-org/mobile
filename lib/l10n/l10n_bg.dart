@@ -135,6 +135,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Square';
 
   @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
+
+  @override
   String get mobileSettingsImmersiveMode => 'Режим \"Цял екран\"';
 
   @override
