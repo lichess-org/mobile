@@ -9,7 +9,7 @@
   "mobileCorrespondenceClearSavedMove": "Clear saved move",
   "mobileCustomGameJoinAGame": "Join a game",
   "mobileFeedbackButton": "Feedback",
-  "mobileGoodEvening": "Good evening, {param}.",
+  "mobileGoodEvening": "Good evening, {param}",
   "@mobileGoodEvening": {
     "placeholders": {
       "param": {
@@ -17,8 +17,8 @@
       }
     }
   },
-  "mobileGoodEveningWithoutName": "Good evening.",
-  "mobileGoodDay": "Good day, {param}.",
+  "mobileGoodEveningWithoutName": "Good evening",
+  "mobileGoodDay": "Good day, {param}",
   "@mobileGoodDay": {
     "placeholders": {
       "param": {
@@ -26,7 +26,7 @@
       }
     }
   },
-  "mobileGoodDayWithoutName": "Good day.",
+  "mobileGoodDayWithoutName": "Good day",
   "mobileHideVariation": "Hide variation",
   "mobileHomeTab": "Home",
   "mobileLiveStreamers": "Live streamers",
@@ -47,7 +47,7 @@
   "mobilePositionRight": "Right",
   "mobilePrefMagnifyDraggedPiece": "Magnify dragged piece",
   "mobilePuzzleStormConfirmEndRun": "Do you want to end this run?",
-  "mobilePuzzleStormFilterNothingToShow": "Nothing to show, please change the filters.",
+  "mobilePuzzleStormFilterNothingToShow": "Nothing to show, please change the filters",
   "mobilePuzzleStormNothingToShow": "Nothing to show. Play some runs of Puzzle Storm.",
   "mobilePuzzleStormSubtitle": "Solve as many puzzles as possible in 3 minutes.",
   "mobilePuzzleStreakAbortWarning": "You will lose your current streak and your score will be saved.",
