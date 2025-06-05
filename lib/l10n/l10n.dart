@@ -204,7 +204,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobileAccountPreferencesHelp.
   ///
   /// In en, this message translates to:
-  /// **'These preferences are applied to your account on the Lichess server and will be used across all devices.'**
+  /// **'These preferences are applied to your Lichess account and will be used across all devices.'**
   String get mobileAccountPreferencesHelp;
 
   /// No description provided for @mobileAllGames.

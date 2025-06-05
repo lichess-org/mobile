@@ -13,7 +13,7 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your account on the Lichess server and will be used across all devices.';
+      'These preferences are applied to your Lichess account and will be used across all devices.';
 
   @override
   String get mobileAllGames => 'All games';
