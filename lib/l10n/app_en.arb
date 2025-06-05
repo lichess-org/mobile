@@ -32,6 +32,7 @@
   "mobileNoSearchResults": "No results",
   "mobileNotFollowingAnyUser": "You are not following any user.",
   "mobileOkButton": "OK",
+  "mobileOverTheBoard": "Over the board",
   "mobilePlayersMatchingSearchTerm": "Players with \"{param}\"",
   "@mobilePlayersMatchingSearchTerm": {
     "placeholders": {

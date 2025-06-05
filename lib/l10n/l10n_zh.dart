@@ -70,6 +70,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOkButton => '好';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return '包含\"$param\"名称的棋手';
   }

@@ -70,6 +70,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileOkButton => 'Təsdiqlə';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return '\"$param\" ilə oyunçular';
   }

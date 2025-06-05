@@ -309,6 +309,12 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get mobileOkButton;
 
+  /// No description provided for @mobileOverTheBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Over the board'**
+  String get mobileOverTheBoard;
+
   /// No description provided for @mobilePlayersMatchingSearchTerm.
   ///
   /// In en, this message translates to:

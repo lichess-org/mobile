@@ -70,6 +70,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileOkButton => 'Иә';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Атауында \"$param\" бар ойыншылар';
   }

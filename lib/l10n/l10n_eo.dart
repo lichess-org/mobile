@@ -70,6 +70,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileOkButton => 'Bone';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Ludantanto kun \"$param\"';
   }

@@ -70,6 +70,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'O nome de usuario contén \"$param\"';
   }

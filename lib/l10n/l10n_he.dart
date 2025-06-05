@@ -70,6 +70,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileOkButton => 'בסדר';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'שחקנים עם ״$param״';
   }
