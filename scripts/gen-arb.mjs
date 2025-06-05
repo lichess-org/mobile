@@ -14,9 +14,11 @@ const destDir = `${__dirname}/../lib/l10n`
 const sourcePath = `${__dirname}/../translation/source`
 const translationPath = `${__dirname}/../translation/dest`
 
-// selection of lila translation modules to include
+// selection of translation modules to include
 const modules = [
-  'mobile', // mobile is not a module in crowdin, but another source of translations, we'll treat it as a module here for simplicity
+  // mobile is the only module managed by this project (of which we can edit the source)
+  'mobile',
+  // below are modules from lichess/lila
   'activity',
   'arena',
   'broadcast',
