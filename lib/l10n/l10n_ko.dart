@@ -231,7 +231,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version';
+    return 'Variant $param is not supported in this version.';
   }
 
   @override

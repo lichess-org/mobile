@@ -618,7 +618,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobileUnsupportedVariant.
   ///
   /// In en, this message translates to:
-  /// **'Variant {param} is not supported in this version'**
+  /// **'Variant {param} is not supported in this version.'**
   String mobileUnsupportedVariant(String param);
 
   /// No description provided for @mobileWaitingForOpponentToJoin.

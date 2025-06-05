@@ -90,7 +90,7 @@
   "mobileTapHereToStartPlayingChess": "Tap here to start playing chess.",
   "mobileTheme": "Theme",
   "mobileToolsTab": "Tools",
-  "mobileUnsupportedVariant": "Variant {param} is not supported in this version",
+  "mobileUnsupportedVariant": "Variant {param} is not supported in this version.",
   "@mobileUnsupportedVariant": {
     "placeholders": {
       "param": {
