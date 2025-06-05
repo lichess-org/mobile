@@ -36,6 +36,7 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recent searches</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Remove bookmark</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Clock position</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Presets</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Dragged piece target</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Circle</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Square</string>
@@ -43,10 +44,17 @@
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersive mode</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and puzzle screens.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Captured pieces</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Pick an image</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Custom background works only in dark mode. A dark image is recommended.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Blur the image</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Hide board</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Show board</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Swipe to display other backgrounds</string>
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Either tap or drag</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tap two squares</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Shape drawing</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Show border</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Touch feedback</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">When enabled, the device will vibrate shortly when you move or capture a piece.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Settings</string>

@@ -411,6 +411,12 @@ abstract class AppLocalizations {
   /// **'Clock position'**
   String get mobileSettingsClockPosition;
 
+  /// No description provided for @mobileSettingsCustomBackgroundPresets.
+  ///
+  /// In en, this message translates to:
+  /// **'Presets'**
+  String get mobileSettingsCustomBackgroundPresets;
+
   /// No description provided for @mobileSettingsDraggedPieceTarget.
   ///
   /// In en, this message translates to:
@@ -453,6 +459,42 @@ abstract class AppLocalizations {
   /// **'Captured pieces'**
   String get mobileSettingsMaterialDifferenceCapturedPieces;
 
+  /// No description provided for @mobileSettingsPickAnImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick an image'**
+  String get mobileSettingsPickAnImage;
+
+  /// No description provided for @mobileSettingsPickAnImageHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom background works only in dark mode. A dark image is recommended.'**
+  String get mobileSettingsPickAnImageHelp;
+
+  /// No description provided for @mobileSettingsPickAnImageBlur.
+  ///
+  /// In en, this message translates to:
+  /// **'Blur the image'**
+  String get mobileSettingsPickAnImageBlur;
+
+  /// No description provided for @mobileSettingsPickAnImageHideBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide board'**
+  String get mobileSettingsPickAnImageHideBoard;
+
+  /// No description provided for @mobileSettingsPickAnImageShowBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Show board'**
+  String get mobileSettingsPickAnImageShowBoard;
+
+  /// No description provided for @mobileSettingsPickAnImageSwipeToDisplay.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe to display other backgrounds'**
+  String get mobileSettingsPickAnImageSwipeToDisplay;
+
   /// No description provided for @mobileSettingsPieceShiftMethodEither.
   ///
   /// In en, this message translates to:
@@ -476,6 +518,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.'**
   String get mobileSettingsShapeDrawingSubtitle;
+
+  /// No description provided for @mobileSettingsShowBorder.
+  ///
+  /// In en, this message translates to:
+  /// **'Show border'**
+  String get mobileSettingsShowBorder;
 
   /// No description provided for @mobileSettingsTouchFeedback.
   ///

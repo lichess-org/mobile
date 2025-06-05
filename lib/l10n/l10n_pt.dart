@@ -127,6 +127,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileSettingsClockPosition => 'Clock position';
 
   @override
+  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+
+  @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
@@ -149,6 +152,25 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
 
   @override
+  String get mobileSettingsPickAnImage => 'Pick an image';
+
+  @override
+  String get mobileSettingsPickAnImageHelp =>
+      'Custom background works only in dark mode. A dark image is recommended.';
+
+  @override
+  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+
+  @override
+  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+
+  @override
+  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+
+  @override
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+
+  @override
   String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
 
   @override
@@ -160,6 +182,9 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get mobileSettingsShapeDrawingSubtitle =>
       'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+
+  @override
+  String get mobileSettingsShowBorder => 'Show border';
 
   @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
