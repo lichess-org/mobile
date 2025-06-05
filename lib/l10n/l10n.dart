@@ -258,25 +258,25 @@ abstract class AppLocalizations {
   /// No description provided for @mobileGoodEvening.
   ///
   /// In en, this message translates to:
-  /// **'Good evening, {param}'**
+  /// **'Good evening, {param}.'**
   String mobileGoodEvening(String param);
 
   /// No description provided for @mobileGoodEveningWithoutName.
   ///
   /// In en, this message translates to:
-  /// **'Good evening'**
+  /// **'Good evening.'**
   String get mobileGoodEveningWithoutName;
 
   /// No description provided for @mobileGoodDay.
   ///
   /// In en, this message translates to:
-  /// **'Good day, {param}'**
+  /// **'Good day, {param}.'**
   String mobileGoodDay(String param);
 
   /// No description provided for @mobileGoodDayWithoutName.
   ///
   /// In en, this message translates to:
-  /// **'Good day'**
+  /// **'Good day.'**
   String get mobileGoodDayWithoutName;
 
   /// No description provided for @mobileHideVariation.
@@ -360,7 +360,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobilePuzzleStormFilterNothingToShow.
   ///
   /// In en, this message translates to:
-  /// **'Nothing to show, please change the filters'**
+  /// **'Nothing to show, please change the filters.'**
   String get mobilePuzzleStormFilterNothingToShow;
 
   /// No description provided for @mobilePuzzleStormNothingToShow.

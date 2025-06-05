@@ -41,19 +41,19 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Good evening, $param.';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Good evening.';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Good day, $param.';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Good day.';
 
   @override
   String get mobileHideVariation => 'Ezkutatu aukera';
