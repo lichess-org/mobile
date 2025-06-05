@@ -1,26 +1,18 @@
 #!/usr/bin/env node
 
-import { readFileSync, createWriteStream, writeFileSync, mkdirSync, existsSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { readdir, unlink } from 'node:fs/promises';
-import { pipeline } from 'stream'
-import { promisify } from 'util'
 import colors from 'colors/safe.js'
 import { parseStringPromise } from 'xml2js'
-import fetch from 'node-fetch'
-import { request as octokitRequest } from '@octokit/request'
 import { dirname, basename, extname, join } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-const tmpDir = `${__dirname}/tmp/translations`
 const destDir = `${__dirname}/../lib/l10n`
 
-const lilaSourcePath = `${tmpDir}/source`
-const lilaTranslationsPath = `${tmpDir}/[lichess-org.lila] master/translation/dest`
-
-const mobileSourcePath = `${__dirname}/../translation/source`
-const mobileTranslationsPath = `${tmpDir}/[lichess-org.mobile] main/translation/dest`
+const sourcePath = `${__dirname}/../translation/source`
+const translationPath = `${__dirname}/../translation/dest`
 
 // selection of lila translation modules to include
 const modules = [
@@ -112,8 +104,6 @@ const locales = [
 ]
 
 async function main() {
-  mkdirSync(`${tmpDir}`, {recursive: true})
-
   await generateTemplateARB()
 
   await generateLilaTranslationARBs()
@@ -124,10 +114,6 @@ main()
 // --
 
 async function generateLilaTranslationARBs() {
-  // Download zip doesn't work anymore, we need another way to get the translations
-  // This is tracked here: https://github.com/lichess-org/mobile/issues/945
-  // for now we need to manually download the translations and put them in the tmp/translations folder
-
   // load all translations into a single object
   const translations = {}
   for (const module of modules) {
@@ -157,12 +143,12 @@ async function generateLilaTranslationARBs() {
     const parts = locale.split('-')
     const lang = parts[0]
     const country = parts[1]
-    const file = `${destDir}/lila_${lang}.arb`
+    const file = `${destDir}/app_${lang}.arb`
     try {
       // the lang already exists, it means the locale is a variant, we'll specify the country code
       // en-US is an exception because en-GB is the template file
       if (existsSync(file) || locale === 'en-US') {
-        writeTranslations(`${destDir}/lila_${lang}_${country}.arb`, translations[locale])
+        writeTranslations(`${destDir}/app_${lang}_${country}.arb`, translations[locale])
       } else {
         writeTranslations(file, translations[locale])
       }
@@ -174,9 +160,6 @@ async function generateLilaTranslationARBs() {
 }
 
 async function generateTemplateARB() {
-  // Download source translations (en-GB) from lila repo
-  await downloadLilaSourcesTo(tmpDir)
-
   // load en-GB and make ARB template file
   console.log(colors.blue('Writing template file...'))
   const template = {}
@@ -194,45 +177,16 @@ async function generateTemplateARB() {
   console.log(colors.green('   Template file successfully written.'))
 }
 
-async function downloadLilaSourcesTo(dir) {
-  console.log(colors.blue('Downloading lila source translations...'))
-  const response = await octokitRequest('GET /repos/{owner}/{repo}/contents/{path}', {
-    owner: 'lichess-org',
-    repo: 'lila',
-    path: 'translation/source'
-  })
-  if (!existsSync(`${dir}/source`)) mkdirSync(`${dir}/source`)
-  for (const entry of response.data) {
-    const streamPipeline = promisify(pipeline)
-    const response = await fetch(entry.download_url)
-    if (!response.ok) throw new Error(`unexpected response ${response.statusText}`)
-    await streamPipeline(response.body, createWriteStream(`${dir}/source/${entry.name}`))
-  }
-  console.log(colors.green('  Download complete.'))
-}
-
-function loadLilaTranslations(dir, locale) {
+function loadTranslations(module, locale) {
   if (locale === 'en-GB')
     return parseStringPromise(
-      readFileSync(`${lilaSourcePath}/${dir}.xml`)
+      readFileSync(`${sourcePath}/${module}.xml`)
     )
   else
     return parseStringPromise(
-      readFileSync(`${lilaTranslationsPath}/${dir}/${locale}.xml`)
+      readFileSync(`${translationPath}/${module}/${locale}.xml`)
     )
 }
-
-function loadMobileTranslation(locale) {
-  if (locale === 'en-GB')
-    return parseStringPromise(
-      readFileSync(`${mobileSourcePath}/mobile.xml`)
-    )
-  else
-    return parseStringPromise(
-      readFileSync(`${mobileTranslationsPath}/${locale}_mobile.xml`)
-    )
-}
-
 
 // in lila strings a percent sign is escaped with a double percent sign
 function unescape(str) {
@@ -360,11 +314,7 @@ async function loadXml(localesToLoad, module) {
   for (const locale of localesToLoad) {
     console.log(colors.blue(`Loading translations for ${colors.bold(locale)}...`))
     try {
-      if (module === 'mobile') {
-        sectionXml[locale] = await loadMobileTranslation(locale)
-      } else {
-        sectionXml[locale] = await loadLilaTranslations(module, locale)
-      }
+      sectionXml[locale] = await loadTranslations(module, locale)
     } catch (_) {
       console.warn(colors.yellow(`Could not load ${module} translations for locale: ${locale}`))
     }
