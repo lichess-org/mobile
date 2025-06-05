@@ -100,7 +100,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+      'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
 
   @override
   String get mobileSettingsTab => 'Settings';
@@ -1471,21 +1471,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Lookup puzzles from a player\'s games';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Puzzles from $param\' games';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Search puzzles';
 
   @override
   String get puzzleFromMyGamesNone =>
       'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 puzzles found in $param2 games';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Train, analyse, improve';
@@ -1533,6 +1523,17 @@ class AppLocalizationsEn extends AppLocalizations {
       locale: localeName,
       other: '$count points above your puzzle rating',
       one: 'One point above your puzzle rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count puzzles found in games by $param2',
+      one: 'One puzzle found in games by $param2',
     );
     return '$_temp0';
   }
@@ -2074,6 +2075,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createAGame => 'Create a game';
 
   @override
+  String get createTheGame => 'Create the game';
+
+  @override
   String get whiteIsVictorious => 'White is victorious';
 
   @override
@@ -2221,6 +2225,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get copyVariationPgn => 'Copy variation PGN';
+
+  @override
+  String get copyMainLinePgn => 'Copy mainline PGN';
 
   @override
   String get move => 'Move';
@@ -2412,6 +2419,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get currentGames => 'Current games';
 
   @override
+  String joinedX(String param) {
+    return 'Joined $param';
+  }
+
+  @override
   String get viewInFullSize => 'View in full size';
 
   @override
@@ -2517,7 +2529,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signupUsernameHint =>
-      'Make sure to choose a family-friendly username. You cannot change it later and any accounts with inappropriate usernames will get closed!';
+      'Make sure to choose a username that\'s appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!';
 
   @override
   String get signupEmailHint => 'We will only use it for password reset.';
@@ -2807,16 +2819,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proposeATakeback => 'Propose a takeback';
 
   @override
+  String get whiteProposesTakeback => 'White proposes takeback';
+
+  @override
+  String get blackProposesTakeback => 'Black proposes takeback';
+
+  @override
   String get takebackPropositionSent => 'Takeback sent';
 
   @override
-  String get takebackPropositionDeclined => 'Takeback declined';
+  String get whiteDeclinesTakeback => 'White declines takeback';
 
   @override
-  String get takebackPropositionAccepted => 'Takeback accepted';
+  String get blackDeclinesTakeback => 'Black declines takeback';
 
   @override
-  String get takebackPropositionCanceled => 'Takeback cancelled';
+  String get whiteAcceptsTakeback => 'White accepts takeback';
+
+  @override
+  String get blackAcceptsTakeback => 'Black accepts takeback';
+
+  @override
+  String get whiteCancelsTakeback => 'White cancels takeback';
+
+  @override
+  String get blackCancelsTakeback => 'Black cancels takeback';
 
   @override
   String get yourOpponentProposesATakeback => 'Your opponent proposes a takeback';
@@ -3670,6 +3697,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get termsOfService => 'Terms of Service';
+
+  @override
+  String get titleVerification => 'Title verification';
 
   @override
   String get sourceCode => 'Source Code';
@@ -4687,6 +4717,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stats => 'Stats';
+
+  @override
+  String get accessibility => 'Accessibility';
+
+  @override
+  String get enableBlindMode => 'Enable blind mode';
+
+  @override
+  String get disableBlindMode => 'Disable blind mode';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5951,6 +5990,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
+  String get studyDoubleDefeat => 'Double defeat';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6266,7 +6314,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+      'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
 
   @override
   String get mobileSettingsTab => 'Settings';
@@ -7637,21 +7685,11 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get puzzleLookupOfPlayer => 'Search puzzles from a player\'s games';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Puzzles from $param\'s games';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Search puzzles';
 
   @override
   String get puzzleFromMyGamesNone =>
       'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 puzzles found in $param2 games';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Train, analyse, improve';
@@ -7699,6 +7737,17 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
       locale: localeName,
       other: '$count points above your puzzle rating',
       one: 'One point above your puzzle rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count puzzles found in games by $param2',
+      one: 'One puzzle found in games by $param2',
     );
     return '$_temp0';
   }
@@ -8250,6 +8299,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get createAGame => 'Create a game';
 
   @override
+  String get createTheGame => 'Create the game';
+
+  @override
   String get whiteIsVictorious => 'White is victorious';
 
   @override
@@ -8397,6 +8449,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get copyVariationPgn => 'Copy variation PGN';
+
+  @override
+  String get copyMainLinePgn => 'Copy main line PGN';
 
   @override
   String get move => 'Move';
@@ -8586,6 +8641,11 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get currentGames => 'Current games';
+
+  @override
+  String joinedX(String param) {
+    return 'Joined $param';
+  }
 
   @override
   String get viewInFullSize => 'View in full size';
@@ -8983,16 +9043,31 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get proposeATakeback => 'Propose a takeback';
 
   @override
+  String get whiteProposesTakeback => 'White proposes takeback';
+
+  @override
+  String get blackProposesTakeback => 'Black proposes takeback';
+
+  @override
   String get takebackPropositionSent => 'Takeback sent';
 
   @override
-  String get takebackPropositionDeclined => 'Takeback declined';
+  String get whiteDeclinesTakeback => 'White declines takeback';
 
   @override
-  String get takebackPropositionAccepted => 'Takeback accepted';
+  String get blackDeclinesTakeback => 'Black declines takeback';
 
   @override
-  String get takebackPropositionCanceled => 'Takeback canceled';
+  String get whiteAcceptsTakeback => 'White accepts takeback';
+
+  @override
+  String get blackAcceptsTakeback => 'Black accepts takeback';
+
+  @override
+  String get whiteCancelsTakeback => 'White cancels takeback';
+
+  @override
+  String get blackCancelsTakeback => 'Black cancels takeback';
 
   @override
   String get yourOpponentProposesATakeback => 'Your opponent proposes a takeback';
@@ -9846,6 +9921,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get termsOfService => 'Terms of Service';
+
+  @override
+  String get titleVerification => 'Title verification';
 
   @override
   String get sourceCode => 'Source Code';
@@ -10863,6 +10941,15 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get stats => 'Stats';
+
+  @override
+  String get accessibility => 'Accessibility';
+
+  @override
+  String get enableBlindMode => 'Enable blind mode';
+
+  @override
+  String get disableBlindMode => 'Disable blind mode';
 
   @override
   String opponentLeftCounter(int count) {
@@ -12023,7 +12110,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get studyWelcomeToLichessStudyText =>
-      'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>to discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool. Let\'s take some time to see how it works.';
+      'This is a shared analysis board.<br><br>Use it to analyze and annotate games,<br>to discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool. Let\'s take some time to see how it works.';
 
   @override
   String get studySharedAndSaveTitle => 'Shared and saved';
@@ -12099,7 +12186,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get studyLoadExistingLichessGameText =>
-      'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+      'Paste a Lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -12125,6 +12212,15 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String get studyChapterConclusionText =>
       'Chapters are saved forever.<br>Have fun organizing your chess content!';
+
+  @override
+  String get studyDoubleDefeat => 'Double defeat';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
 
   @override
   String studyNbChapters(int count) {

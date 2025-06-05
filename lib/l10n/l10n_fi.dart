@@ -101,7 +101,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Piilota laitteen käyttöliittymä pelatessasi. Valitse tämä, jos laitteesi navigointieleet näytön laidoilla ovat sinulle häiriöksi. Asetus vaikuttaa peli- ja Puzzle Storm -näkymiin.';
+      'Piilota laitteen käyttöliittymä pelatessasi. Valitse tämä, jos laitteesi navigointieleet näytön laidoilla ovat sinulle häiriöksi. Asetus vaikuttaa peli- ja tehtävänäkymiin.';
 
   @override
   String get mobileSettingsTab => 'Asetukset';
@@ -843,7 +843,7 @@ class AppLocalizationsFi extends AppLocalizations {
       'Koska olet päättänyt piilottaa tulokset ja koska vältämme spoilereita, ovat kaikkien lautojen esikatselut tyhjiä.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Live-pelilauta';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -861,8 +861,8 @@ class AppLocalizationsFi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count katsojaa',
+      one: '$count katsoja',
     );
     return '$_temp0';
   }
@@ -1486,21 +1486,11 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Hae tehtäviä tietyn pelaajan peleistä';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Tehtäviä pelaajan $param peleistä';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Hae tehtäviä';
 
   @override
   String get puzzleFromMyGamesNone =>
       'Tietokannassa ei ole tehtäviä sinulta, mutta olet silti Lichessille erittäin tärkeä.\nKun pelaat lisää nopeita ja klassisia pelejä, on suurempi mahdollisuus, että sinunkin peleistäsi luodaan tehtävä!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return 'Löytyi $param1 tehtävää $param2 pelistä';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Harjoittele, analysoi, kehity';
@@ -1549,6 +1539,17 @@ class AppLocalizationsFi extends AppLocalizations {
       locale: localeName,
       other: '$count pistettä korkeampi tehtävävahvuusluku kuin sinulla',
       one: 'Yhden pisteen korkeampi tehtävävahvuusluku kuin sinulla',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Käyttäjän $param2 peleistä löytyi $count tehtävää',
+      one: 'Käyttäjän $param2 peleistä löytyi yksi tehtävä',
     );
     return '$_temp0';
   }
@@ -2104,6 +2105,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get createAGame => 'Luo uusi peli';
 
   @override
+  String get createTheGame => 'Luo peli';
+
+  @override
   String get whiteIsVictorious => 'Valkea voittaa';
 
   @override
@@ -2250,6 +2254,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get copyVariationPgn => 'Kopioi muunnelman PGN';
+
+  @override
+  String get copyMainLinePgn => 'Kopioi päämuunnelma PGN:nä';
 
   @override
   String get move => 'Siirto';
@@ -2440,6 +2447,11 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get currentGames => 'Meneillään olevat pelit';
+
+  @override
+  String joinedX(String param) {
+    return 'Liittyi $param';
+  }
 
   @override
   String get viewInFullSize => 'Näytä täysikokoisena';
@@ -2840,16 +2852,31 @@ class AppLocalizationsFi extends AppLocalizations {
   String get proposeATakeback => 'Pyydä siirron peruutusta';
 
   @override
+  String get whiteProposesTakeback => 'Valkea ehdottaa siirron perumista';
+
+  @override
+  String get blackProposesTakeback => 'Musta ehdottaa siirron perumista';
+
+  @override
   String get takebackPropositionSent => 'Siirron peruutusta pyydetty';
 
   @override
-  String get takebackPropositionDeclined => 'Siirron peruutuspyyntö torjuttu';
+  String get whiteDeclinesTakeback => 'Valkea ei hyväksy siirron perumista';
 
   @override
-  String get takebackPropositionAccepted => 'Siirron peruutuspyyntö hyväksytty';
+  String get blackDeclinesTakeback => 'Musta ei hyväksy siirron perumista';
 
   @override
-  String get takebackPropositionCanceled => 'Siirron peruutuspyyntö vedetty pois';
+  String get whiteAcceptsTakeback => 'Valkea hyväksyy siirron perumisen';
+
+  @override
+  String get blackAcceptsTakeback => 'Musta hyväksyy siirron perumisen';
+
+  @override
+  String get whiteCancelsTakeback => 'Valkea peruuttaa perumisehdotuksensa';
+
+  @override
+  String get blackCancelsTakeback => 'Musta peruuttaa perumisehdotuksensa';
 
   @override
   String get yourOpponentProposesATakeback => 'Vastustajasi ehdottaa siirron peruutusta';
@@ -3706,6 +3733,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get termsOfService => 'Käyttöehdot';
+
+  @override
+  String get titleVerification => 'Arvonimen vahvistaminen';
 
   @override
   String get sourceCode => 'Lähdekoodi';
@@ -4727,6 +4757,15 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get stats => 'Tilastot';
+
+  @override
+  String get accessibility => 'Saavutettavuus';
+
+  @override
+  String get enableBlindMode => 'Siirry sokean käyttäjän tilaan';
+
+  @override
+  String get disableBlindMode => 'Poistu sokean käyttäjän tilasta';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5991,6 +6030,15 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get studyChapterConclusionText =>
       'Luvut pysyvät aina tallennettuina.<br>Toivotamme mukavia hetkiä shakkisisältöjesi järjestelyyn!';
+
+  @override
+  String get studyDoubleDefeat => 'Molemminpuolinen tappio';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'Mustan tappio, mutta valkea ei voi voittaa';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'Valkean tappio, mutta musta ei voi voittaa';
 
   @override
   String studyNbChapters(int count) {

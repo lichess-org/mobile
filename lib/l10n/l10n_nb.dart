@@ -100,7 +100,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Skjul systemgrensesnittet mens du spiller. Bruk dette hvis du blir forstyrret av systemets navigasjonsgester på skjermkanten. Gjelder for partier og Puzzle Storm.';
+      'Skjul systemgrensesnittet mens du spiller. Bruk dette hvis du blir forstyrret av systemets navigasjonsgester på skjermkanten. Gjelder for partier og nøtter.';
 
   @override
   String get mobileSettingsTab => 'Valg';
@@ -854,8 +854,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count tilskuere',
+      one: '$count tilskuer',
     );
     return '$_temp0';
   }
@@ -1480,21 +1480,11 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Søk etter sjakknøtter fra en spillers partier';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Sjakknøtter fra partier med $param';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Søk etter sjakknøtter';
 
   @override
   String get puzzleFromMyGamesNone =>
       'Du har ingen sjakknøtter i databasen, men Lichess setter like fullt umåtelig stor pris på deg.\nSpill partier i hurtigsjakk og klassisk sjakk for å øke sjansen for å få med en sjakknøtt!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 sjakknøtter funnet i partier med $param2';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Øv, analyser, bli bedre';
@@ -1542,6 +1532,17 @@ class AppLocalizationsNb extends AppLocalizations {
       locale: localeName,
       other: '$count poeng over sjakknøttratingen din',
       one: 'Ett poeng over sjakknøttratingen din',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nøtter funnet i partier med $param2',
+      one: 'Én nøtt funnet i partier med $param2',
     );
     return '$_temp0';
   }
@@ -2095,6 +2096,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get createAGame => 'Start et parti';
 
   @override
+  String get createTheGame => 'Opprett partiet';
+
+  @override
   String get whiteIsVictorious => 'Hvit har vunnet';
 
   @override
@@ -2242,6 +2246,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get copyVariationPgn => 'Kopier variant-PGN';
+
+  @override
+  String get copyMainLinePgn => 'Kopier PGN for hovedvariant';
 
   @override
   String get move => 'Trekk';
@@ -2432,6 +2439,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get currentGames => 'Partier som spilles nå';
+
+  @override
+  String joinedX(String param) {
+    return 'Ble med $param';
+  }
 
   @override
   String get viewInFullSize => 'Se i full størrelse';
@@ -2829,16 +2841,31 @@ class AppLocalizationsNb extends AppLocalizations {
   String get proposeATakeback => 'Foreslå å angre';
 
   @override
+  String get whiteProposesTakeback => 'Hvit foreslår å ta tilbake trekket';
+
+  @override
+  String get blackProposesTakeback => 'Svart foreslår å ta tilbake trekket';
+
+  @override
   String get takebackPropositionSent => 'Angreforslag sendt';
 
   @override
-  String get takebackPropositionDeclined => 'Angreforslag avslått';
+  String get whiteDeclinesTakeback => 'Hvit avslår å ta tilbake trekket';
 
   @override
-  String get takebackPropositionAccepted => 'Angreforslag godtatt';
+  String get blackDeclinesTakeback => 'Svart avslår å ta tilbake trekket';
 
   @override
-  String get takebackPropositionCanceled => 'Angreforslag trukket tilbake';
+  String get whiteAcceptsTakeback => 'Hvit godtar å ta tilbake trekket';
+
+  @override
+  String get blackAcceptsTakeback => 'Svart godtar å ta tilbake trekket';
+
+  @override
+  String get whiteCancelsTakeback => 'Hvit avbryter forespørselen om å ta tilbake trekket';
+
+  @override
+  String get blackCancelsTakeback => 'Svart avbryter forespørselen om å ta tilbake trekket';
 
   @override
   String get yourOpponentProposesATakeback => 'Din motstander foreslår å angre';
@@ -3451,7 +3478,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get clockInitialTime => 'Starttid på klokken';
 
   @override
-  String get clockIncrement => 'Inkrement';
+  String get clockIncrement => 'Klokketillegg';
 
   @override
   String get privacy => 'Personvern';
@@ -3690,6 +3717,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get termsOfService => 'Tjenestevilkår';
+
+  @override
+  String get titleVerification => 'Tittelverifisering';
 
   @override
   String get sourceCode => 'Kildekode';
@@ -4711,6 +4741,15 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get stats => 'Statistikk';
+
+  @override
+  String get accessibility => 'Tilgjengelighet';
+
+  @override
+  String get enableBlindMode => 'Aktiver blindemodus';
+
+  @override
+  String get disableBlindMode => 'Deaktiver blindemodus';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5978,6 +6017,15 @@ class AppLocalizationsNb extends AppLocalizations {
       'Kapitler lagres for alltid.<br>Ha det gøy med å organisere sjakkinnholdet ditt!';
 
   @override
+  String get studyDoubleDefeat => 'Dobbelt tap';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'Svart tap, men hvit kan ikke vinne';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'Hvitt tap, men svart kan ikke vinne';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6022,10 +6070,10 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get timeagoJustNow => 'akkurat nå';
+  String get timeagoJustNow => 'om litt';
 
   @override
-  String get timeagoRightNow => 'akkurat nå';
+  String get timeagoRightNow => 'for litt siden';
 
   @override
   String get timeagoCompleted => 'fullført';
@@ -6046,8 +6094,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'i $count minutter',
-      one: 'i $count minutt',
+      other: 'om $count minutter',
+      one: 'om $count minutt',
     );
     return '$_temp0';
   }
@@ -6057,8 +6105,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'i $count timer',
-      one: 'i $count time',
+      other: 'om $count timer',
+      one: 'om $count time',
     );
     return '$_temp0';
   }
@@ -6068,8 +6116,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'i $count dager',
-      one: 'i $count dag',
+      other: 'om $count dager',
+      one: 'om $count dag',
     );
     return '$_temp0';
   }
@@ -6112,8 +6160,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count minutter siden',
-      one: '$count minutt siden',
+      other: 'for $count minutter siden',
+      one: 'for $count minutt siden',
     );
     return '$_temp0';
   }
@@ -6123,8 +6171,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count timer siden',
-      one: '$count time siden',
+      other: 'for $count timer siden',
+      one: 'for $count time siden',
     );
     return '$_temp0';
   }
@@ -6134,8 +6182,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count dager siden',
-      one: '$count dag siden',
+      other: 'for $count døgn siden',
+      one: 'for $count døgn siden',
     );
     return '$_temp0';
   }
@@ -6145,8 +6193,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count uker siden',
-      one: '$count uke siden',
+      other: 'for $count uker siden',
+      one: 'for $count uke siden',
     );
     return '$_temp0';
   }
@@ -6156,8 +6204,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count måneder siden',
-      one: '$count måned siden',
+      other: 'for $count måneder siden',
+      one: 'for $count måned siden',
     );
     return '$_temp0';
   }
@@ -6167,8 +6215,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count år siden',
-      one: '$count år siden',
+      other: 'for $count år siden',
+      one: 'for $count år siden',
     );
     return '$_temp0';
   }

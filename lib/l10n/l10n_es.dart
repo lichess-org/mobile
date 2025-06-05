@@ -102,7 +102,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Ocultar la interfaz del sistema durante la partida. Usa esto si te molestan los iconos de navegación del sistema en los bordes de la pantalla. Se aplica a las pantallas del juego y de Puzzle Storm.';
+      'Ocultar la interfaz del sistema durante la partida. Usa esto si te molestan los iconos de navegación del sistema en los bordes de la pantalla. Se aplica a las pantallas de la partida y de Puzzle Storm.';
 
   @override
   String get mobileSettingsTab => 'Ajustes';
@@ -1491,21 +1491,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Buscar ejercicios de las partidas de un jugador';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Ejercicios de las partidas de $param';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Buscar ejercicios';
 
   @override
   String get puzzleFromMyGamesNone =>
       'No tienes ejercicios en la base de datos, pero Lichess aún te quiere un montón.\n¡Juega partidas rápidas y clásicas para tener más posibilidades de que se añadan tus ejercicios!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 ejercicios encontrados en las partidas de $param2';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Entrena, analiza, mejora';
@@ -1554,6 +1544,17 @@ class AppLocalizationsEs extends AppLocalizations {
       locale: localeName,
       other: '$count puntos por encima de tu puntuación de ejercicios',
       one: 'Un punto por encima de tu puntuación de ejercicios',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ejercicios encontrados en las partidas de $param2',
+      one: 'Un ejercicio encontrado en las partidas de $param2',
     );
     return '$_temp0';
   }
@@ -2105,6 +2106,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get createAGame => 'Crear una partida';
 
   @override
+  String get createTheGame => 'Crea una partida';
+
+  @override
   String get whiteIsVictorious => 'Las blancas ganan';
 
   @override
@@ -2251,6 +2255,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get copyVariationPgn => 'Copiar PGN de la variante';
+
+  @override
+  String get copyMainLinePgn => 'Copiar PGN de la variante principal';
 
   @override
   String get move => 'Movimiento';
@@ -2444,6 +2451,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get currentGames => 'Partidas en juego';
 
   @override
+  String joinedX(String param) {
+    return 'Se unió hace $param';
+  }
+
+  @override
   String get viewInFullSize => 'Ver en tamaño completo';
 
   @override
@@ -2581,7 +2593,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get blankedPassword =>
-      'Has utilizado la misma contraseña en otro sitio y ese sitio se ha visto comprometido. Para garantizar la seguridad de tu cuenta en Lichess, necesitamos que establezcas una nueva contraseña. Gracias por tu comprensión.';
+      'Has utilizado la misma contraseña en otro sitio y ese sitio ha sido comprometido. Para garantizar la seguridad de tu cuenta en Lichess, necesitamos que establezcas una nueva contraseña. Gracias por su comprensión.';
 
   @override
   String get youAreLeavingLichess => 'Estás saliendo de Lichess';
@@ -2842,16 +2854,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get proposeATakeback => 'Proponer deshacer jugada';
 
   @override
+  String get whiteProposesTakeback => 'Las blancas proponen deshacer la jugada';
+
+  @override
+  String get blackProposesTakeback => 'Las negras proponen deshacer la jugada';
+
+  @override
   String get takebackPropositionSent => 'Propuesta de deshacer jugada enviada';
 
   @override
-  String get takebackPropositionDeclined => 'Propuesta de deshacer jugada rechazada';
+  String get whiteDeclinesTakeback => 'Las blancas rechazan deshacer la jugada';
 
   @override
-  String get takebackPropositionAccepted => 'Propuesta de deshacer jugada aceptada';
+  String get blackDeclinesTakeback => 'Las negras rechazan deshacer la jugada';
 
   @override
-  String get takebackPropositionCanceled => 'Propuesta de deshacer jugada cancelada';
+  String get whiteAcceptsTakeback => 'Las blancas aceptan deshacer la jugada';
+
+  @override
+  String get blackAcceptsTakeback => 'Las negras aceptan deshacer la jugada';
+
+  @override
+  String get whiteCancelsTakeback => 'Las blancas cancelan deshacer la jugada';
+
+  @override
+  String get blackCancelsTakeback => 'Las negras cancelan deshacer la jugada';
 
   @override
   String get yourOpponentProposesATakeback => 'Tu oponente propone deshacer la jugada';
@@ -3707,6 +3734,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get termsOfService => 'Condiciones del servicio';
+
+  @override
+  String get titleVerification => 'Verificación de título';
 
   @override
   String get sourceCode => 'Código fuente';
@@ -4737,6 +4767,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get stats => 'Estadísticas';
+
+  @override
+  String get accessibility => 'Accesibilidad';
+
+  @override
+  String get enableBlindMode => 'Activar modo para no videntes';
+
+  @override
+  String get disableBlindMode => 'Desactivar modo para no videntes';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6004,6 +6043,15 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get studyChapterConclusionText =>
       'Los capítulos se guardan para siempre.<br>¡Diviértete organizando tu contenido de ajedrez!';
+
+  @override
+  String get studyDoubleDefeat => 'Doble derrota';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'Derrota negra, aunque el blanco no puede ganar';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'Derrota Blanca, aunque el Negro no puede ganar';
 
   @override
   String studyNbChapters(int count) {

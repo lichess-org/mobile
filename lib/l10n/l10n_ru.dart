@@ -560,7 +560,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get arenaRankAvgHelp =>
-      'Среднее занятое место (вхождение в процент лучших игроков). Чем ниже значение, тем лучше.\n\nНапример, занятие 3 места в турнире из 100 игроков даёт 3 %. Занятие 10 места в турнире из 1000 игроков даёт 1 %.';
+      'Среднее занятое место (вхождение в процент лучших игроков). Чем ниже значение, тем лучше.\n\nНапример, занятие 3 места в турнире из 100 игроков даёт 3%. Занятие 10 места в турнире из 1000 игроков даёт 1%.';
 
   @override
   String get arenaMedians => 'медианы';
@@ -595,10 +595,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Требуется официальное звание для участия в турнире';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'Жеребьёвка турнира закончена';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Берсерк';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -877,7 +877,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Вы выбрали скрыть результаты, поэтому обзор досок пуст, чтобы сохранить интригу.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Доска в прямом эфире';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -897,8 +897,10 @@ class AppLocalizationsRu extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count зрителей',
+      many: '$count зрителей',
+      few: '$count зрителя',
+      one: '$count зритель',
     );
     return '$_temp0';
   }
@@ -990,10 +992,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get challengeInviteLichessUser => 'Или пригласите пользователя Lichess:';
 
   @override
-  String get contactContact => 'Контакты';
+  String get contactContact => 'Обратная связь';
 
   @override
-  String get contactContactLichess => 'Контакты Lichess';
+  String get contactContactLichess => 'Связаться с Lichess';
 
   @override
   String get patronDonate => 'Поддержать проект';
@@ -1496,7 +1498,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleSolved => 'решённые';
 
   @override
-  String get puzzleFailed => 'неудачные';
+  String get puzzleFailed => 'неправильно';
 
   @override
   String get puzzleStreakDescription =>
@@ -1524,21 +1526,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Искать задачи из партий игрока';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Задачи из партий $param';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Искать задачи';
 
   @override
   String get puzzleFromMyGamesNone =>
       'В базе данных нет задач из ваших партий, но Lichess надеется на вас.\nСыграйте больше партий в рапид или с классическим контролем времени, и ваши шансы попасть в список игроков с задачами увеличатся!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return 'Найдено $param1 задач в $param2 играх';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Тренируйтесь, анализируйте, улучшайте';
@@ -1593,6 +1585,19 @@ class AppLocalizationsRu extends AppLocalizations {
       many: '$count баллов выше вашего рейтинга в задачах',
       few: '$count баллов выше вашего рейтинга в задачах',
       one: 'Один балл выше вашего рейтинга в задачах',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count игр найдено в играх $param2',
+      many: '$count игр найдено в играх $param2',
+      few: '$count игры найдено в играх $param2',
+      one: 'Одна задача найдена в играх $param2',
     );
     return '$_temp0';
   }
@@ -2153,6 +2158,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get createAGame => 'Создать игру';
 
   @override
+  String get createTheGame => 'Создать игру';
+
+  @override
   String get whiteIsVictorious => 'Победа белых';
 
   @override
@@ -2299,6 +2307,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get copyVariationPgn => 'Скопировать вариант в формате PGN';
+
+  @override
+  String get copyMainLinePgn => 'Копировать PGN основной линии';
 
   @override
   String get move => 'Ход';
@@ -2489,6 +2500,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get currentGames => 'Текущие партии';
+
+  @override
+  String joinedX(String param) {
+    return 'Присоединились $param';
+  }
 
   @override
   String get viewInFullSize => 'Посмотреть в полном размере';
@@ -2888,16 +2904,31 @@ class AppLocalizationsRu extends AppLocalizations {
   String get proposeATakeback => 'Попросить соперника вернуть ход';
 
   @override
+  String get whiteProposesTakeback => 'Белые просят вернуть ход';
+
+  @override
+  String get blackProposesTakeback => 'Чёрные просят вернуть ход';
+
+  @override
   String get takebackPropositionSent => 'Предложение вернуть ход отправлено';
 
   @override
-  String get takebackPropositionDeclined => 'Предложение вернуть ход отклонено';
+  String get whiteDeclinesTakeback => 'Белые отказались вернуть ход';
 
   @override
-  String get takebackPropositionAccepted => 'Предложение вернуть ход принято';
+  String get blackDeclinesTakeback => 'Чёрные отказались вернуть ход';
 
   @override
-  String get takebackPropositionCanceled => 'Предложение вернуть ход отменено';
+  String get whiteAcceptsTakeback => 'Белые принимают возврат хода';
+
+  @override
+  String get blackAcceptsTakeback => 'Чёрные принимают возврат хода';
+
+  @override
+  String get whiteCancelsTakeback => 'Белые отменили просьбу вернуть ход';
+
+  @override
+  String get blackCancelsTakeback => 'Чёрные отменили просьбу вернуть ход';
 
   @override
   String get yourOpponentProposesATakeback => 'Ваш соперник просит вас вернуть ход';
@@ -3196,7 +3227,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get createdBy => 'Создан';
 
   @override
-  String get startingIn => 'Starting in';
+  String get startingIn => 'Начинается через';
 
   @override
   String standByX(String param) {
@@ -3753,6 +3784,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get termsOfService => 'Пользовательское соглашение';
 
   @override
+  String get titleVerification => 'Подтверждение звания';
+
+  @override
   String get sourceCode => 'Исходный код';
 
   @override
@@ -4028,7 +4062,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get downloadImported => 'Скачать в исходном виде';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Скачать все игры';
 
   @override
   String get crosstable => 'Счёт';
@@ -4778,6 +4812,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get stats => 'Статистика';
+
+  @override
+  String get accessibility => 'Специальные возможности';
+
+  @override
+  String get enableBlindMode => 'Включить слепой режим';
+
+  @override
+  String get disableBlindMode => 'Выключить слепой режим';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6026,115 +6069,125 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'Нужна помощь? Пройдите обучение!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Добро пожаловать в Студии Lichess!';
 
   @override
   String get studyWelcomeToLichessStudyText =>
-      'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+      'Это общая аналитическая доска.<br><br> Используйте её для анализа и аннотирования партий,<br>обсуждения позиций с друзьями,<br> и, конечно же, для уроков шахмат!<br><br> Это мощный инструмент, давайте уделим немного времени, чтобы посмотреть, как он работает.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Общие и сохранённые';
 
   @override
   String get studySharedAndSavedText =>
-      'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+      'Другие пользователи могут смотреть за вашими ходами в режиме реального времени!<br>Кроме того, всё сохраняется навсегда.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Участники студии';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 Участники могут видеть студию и общаться в чате.<br><br>$param2 Соавторы могут делать ходы и вносить изменения.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Нажмите на кнопку $param.<br>Затем решите, кто может редактировать студию, а кто нет.';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Главы студии';
 
   @override
   String get studyStudyChaptersText =>
-      'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+      'В студии может быть несколько глав.<br>В каждой главе есть своя начальная позиция и дерево ходов.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Комментарий к позиции';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Нажмите на кнопку $param, или нажмите правой кнопкой мыши на списке ходов справа.<br>Комментарии открыты для участников и сохранены.';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'Добавьте метки к позиции';
 
   @override
   String get studyAnnotatePositionText =>
-      'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+      'Нажмите на кнопку !?, или нажмите правой кнопкой мыши в списке ходов справа.<br>Значки аннотации открыты для участников и сохранены.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Благодарим за уделённое время';
 
   @override
   String get studyConclusionText =>
-      'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+      'Вы можете найти ваши<a href=\'/study/mine/hot\'> предыдущие студии</a> на странице вашего профиля.<br>Есть также<a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'> блог про студии</a><br>Опытные пользователи могут попробовать нажать «?» чтобы увидеть горячие клавиши.<br>Наслаждайтесь!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'Давайте создадим главу студии';
 
   @override
   String get studyCreateChapterText =>
-      'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+      'В студии может быть несколько глав.<br>В каждой главе есть своё дерево ходов,<br>и она может быть создана разными способами.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Из начальной позиции';
 
   @override
   String get studyFromInitialPositionText =>
-      'Just a board setup for a new game.<br>Suited to explore openings.';
+      'Расстановка для новой партии.<br>Подходит для исследования дебютов.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Пользовательская расстановка';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText =>
+      'Расставьте фигуры по своему усмотрению.<br>Подходит для исследования эндшпилей.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Загрузите существующую партию Lichess';
 
   @override
   String get studyLoadExistingLichessGameText =>
-      'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+      'Вставьте URL игры Lichess<br>(например, lichess.org/7fHIU0XI)<br>для загрузки ходов партии в главу.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'Из нотации FEN';
 
   @override
   String get studyFromFenStringText =>
-      'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+      'Вставьте позицию в формате FEN<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>для старта главы с этой позиции.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'Из нотации PGN';
 
   @override
   String get studyFromPgnGameText =>
-      'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+      'Вставьте партию в нотации PGN.<br>чтобы загрузить ходы, комментарии и варианты в главу.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'Студии поддерживают варианты шахмат';
 
   @override
   String get studyVariantsAreSupportedText =>
-      'Yes, you can study crazyhouse<br>and all lichess variants!';
+      'Да, вы можете исследовать Безумные шахматы<br>и другие варианты шахмат Lichess!';
 
   @override
   String get studyChapterConclusionText =>
-      'Chapters are saved forever.<br>Have fun organizing your chess content!';
+      'Главы сохраняются навсегда.<br>Получайте удовольствие от разбора вашей шахматной истории!';
+
+  @override
+  String get studyDoubleDefeat => 'Обоюдное поражение';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'Чёрные сдались, но белые не могут выиграть';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'Белые сдались, но чёрные не могут выиграть';
 
   @override
   String studyNbChapters(int count) {

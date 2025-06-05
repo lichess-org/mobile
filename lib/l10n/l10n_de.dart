@@ -102,7 +102,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'System-Benutzeroberfläche während des Spielens ausblenden. Nutze diese Option, wenn dich die Navigationsverhalten des Systems an den Bildschirmrändern stören. Gilt für Spiel- und Puzzle-Storm-Bildschirme.';
+      'System-Benutzeroberfläche während der Partie ausblenden. Nutze diese Option, wenn dich das Navigationsverhalten des Systems an den Bildschirmrändern stören. Gilt für Partie- und Aufgaben-Bildschirme.';
 
   @override
   String get mobileSettingsTab => 'Optionen';
@@ -1355,7 +1355,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzlePuzzleOfTheDay => 'Aufgabe des Tages';
 
   @override
-  String get puzzleDailyPuzzle => 'Aufgabe des Tages';
+  String get puzzleDailyPuzzle => 'Taktikaufgabe des Tages';
 
   @override
   String get puzzleClickToSolve => 'Zum Lösen klicken';
@@ -1488,21 +1488,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Suche Aufgaben aus den Partien eines Spielers';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Aufgaben aus Partien von $param';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Aufgaben suchen';
 
   @override
   String get puzzleFromMyGamesNone =>
       'Es befinden sich keine Aufgaben aus deinen Partien in der Datenbank, aber Lichess schätzt dich immer noch sehr.\n\nSpiele Schnellschach und klassische Partien, um deine Chancen zu erhöhen, dass eine Aufgabe aus deinen Partien hinzugefügt wird!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 Aufgaben in $param2 Partien gefunden';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trainiere, analysiere, verbessere';
@@ -1550,6 +1540,17 @@ class AppLocalizationsDe extends AppLocalizations {
       locale: localeName,
       other: '$count Punkte über deiner Aufgabenwertung',
       one: 'Ein Punkt über deiner Aufgabenwertung',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Aufgaben in den Partien von $param2 gefunden',
+      one: 'Eine Aufgabe in den Partien von $param2 gefunden',
     );
     return '$_temp0';
   }
@@ -2104,6 +2105,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get createAGame => 'Neue Partie';
 
   @override
+  String get createTheGame => 'Neue Partie erstellen';
+
+  @override
   String get whiteIsVictorious => 'Weiß gewinnt';
 
   @override
@@ -2251,6 +2255,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get copyVariationPgn => 'PGN-Variante kopieren';
+
+  @override
+  String get copyMainLinePgn => 'Kopiere PGN der Hauptvariante';
 
   @override
   String get move => 'Zug';
@@ -2441,6 +2448,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get currentGames => 'Laufende Partien';
+
+  @override
+  String joinedX(String param) {
+    return 'Ist vor $param beigetreten';
+  }
 
   @override
   String get viewInFullSize => 'In voller Größe anzeigen';
@@ -2845,16 +2857,31 @@ class AppLocalizationsDe extends AppLocalizations {
   String get proposeATakeback => 'Zugrücknahme vorschlagen';
 
   @override
+  String get whiteProposesTakeback => 'Weiß schlägt eine Zugrücknahme vor';
+
+  @override
+  String get blackProposesTakeback => 'Schwarz schlägt eine Zugrücknahme vor';
+
+  @override
   String get takebackPropositionSent => 'Zugrücknahme vorgeschlagen';
 
   @override
-  String get takebackPropositionDeclined => 'Zugrücknahme abgelehnt';
+  String get whiteDeclinesTakeback => 'Weiß lehnt eine Zugrücknahme ab';
 
   @override
-  String get takebackPropositionAccepted => 'Zugrücknahme angenommen';
+  String get blackDeclinesTakeback => 'Schwarz lehnt eine Zugrücknahme ab';
 
   @override
-  String get takebackPropositionCanceled => 'Zugrücknahme zurückgezogen';
+  String get whiteAcceptsTakeback => 'Weiß akzeptiert die Zugrücknahme';
+
+  @override
+  String get blackAcceptsTakeback => 'Schwarz akzeptiert die Zugrücknahme';
+
+  @override
+  String get whiteCancelsTakeback => 'Weiß nimmt die Zugrücknahme-Anfrage zurück';
+
+  @override
+  String get blackCancelsTakeback => 'Schwarz nimmt die Zugrücknahme-Anfrage zurück';
 
   @override
   String get yourOpponentProposesATakeback => 'Dein Gegner möchte den letzten Zug zurücknehmen';
@@ -3713,6 +3740,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get termsOfService => 'AGB';
+
+  @override
+  String get titleVerification => 'Titel-Verifizierung';
 
   @override
   String get sourceCode => 'Quellcode';
@@ -4748,6 +4778,15 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get stats => 'Statistiken';
+
+  @override
+  String get accessibility => 'Barrierefreiheit';
+
+  @override
+  String get enableBlindMode => 'Blindenmodus aktivieren';
+
+  @override
+  String get disableBlindMode => 'Blindenmodus deaktivieren';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6018,6 +6057,17 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get studyChapterConclusionText =>
       'Kapitel werden für immer gespeichert.<br>Viel Spaß beim Organisieren deines Schachinhalts!';
+
+  @override
+  String get studyDoubleDefeat => 'Doppelte Niederlage';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin =>
+      'Niederlage von Schwarz, aber Weiß kann nicht gewinnen';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin =>
+      'Niederlage von Weiß, aber Schwarz kann nicht gewinnen';
 
   @override
   String studyNbChapters(int count) {

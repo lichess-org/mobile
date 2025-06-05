@@ -100,7 +100,7 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Skjul systemets brugergrænseflade, mens du spiller. Brug denne funktion, hvis du er generet af systemets navigationsbevægelser i kanterne af skærmen. Gælder for parti- og Puzzle Storm-skærme.';
+      'Skjul systemets brugerflade, mens du spiller. Brug denne funktion, hvis du er generet af systemets navigationsbevægelser i kanterne af skærmen. Gælder for parti- og Puzzle Storm-skærme.';
 
   @override
   String get mobileSettingsTab => 'Indstillinger';
@@ -1476,21 +1476,11 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Søg taktikopgaver fra en spillers partier';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Taktikopgaver fra $param\' partier';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Søg taktikopgaver';
 
   @override
   String get puzzleFromMyGamesNone =>
       'Du har ingen taktikopgaver i databasen, men Lichess elsker dig alligevel.\nSpil hurtige (rapid) og klassiske (classical) partier for at forøge chancerne for at en af dine taktikopgave tilføjes!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 taktikopgaver fundet i $param2 partier';
-  }
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Træn, analysér, forbedr';
@@ -1538,6 +1528,17 @@ class AppLocalizationsDa extends AppLocalizations {
       locale: localeName,
       other: '$count points over din opgave-rating',
       one: 'Ét point over din opgave-rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count opgaver fundet i partier af $param2',
+      one: 'En opgave fundet i parti af $param2',
     );
     return '$_temp0';
   }
@@ -2091,6 +2092,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get createAGame => 'Opret et parti';
 
   @override
+  String get createTheGame => 'Opret partiet';
+
+  @override
   String get whiteIsVictorious => 'Hvid har vundet';
 
   @override
@@ -2238,6 +2242,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get copyVariationPgn => 'Kopiér variant-PGN';
+
+  @override
+  String get copyMainLinePgn => 'Kopiér hovedlinje-PGN';
 
   @override
   String get move => 'Træk';
@@ -2428,6 +2435,11 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get currentGames => 'Igangværende partier';
+
+  @override
+  String joinedX(String param) {
+    return 'Tilsluttede sig $param';
+  }
 
   @override
   String get viewInFullSize => 'Se i fuldskærm';
@@ -2827,16 +2839,31 @@ class AppLocalizationsDa extends AppLocalizations {
   String get proposeATakeback => 'Anmod om omtræk';
 
   @override
+  String get whiteProposesTakeback => 'Hvid foreslår at tage træk tilbage';
+
+  @override
+  String get blackProposesTakeback => 'Sort foreslår at tage træk tilbage';
+
+  @override
   String get takebackPropositionSent => 'Anmodning om omtræk sendt';
 
   @override
-  String get takebackPropositionDeclined => 'Anmodning om omtræk afslået';
+  String get whiteDeclinesTakeback => 'Hvid afviser at tage trækket tilbage';
 
   @override
-  String get takebackPropositionAccepted => 'Anmodning om omtræk accepteret';
+  String get blackDeclinesTakeback => 'Sort afviser at tage trækket tilbage';
 
   @override
-  String get takebackPropositionCanceled => 'Anmodning om omtræk annulleret';
+  String get whiteAcceptsTakeback => 'Hvid accepterer at tage trækket tilbage';
+
+  @override
+  String get blackAcceptsTakeback => 'Sort accepterer at tage trækket tilbage';
+
+  @override
+  String get whiteCancelsTakeback => 'Hvid annulerer tilbagetagelse af træk';
+
+  @override
+  String get blackCancelsTakeback => 'Sort annulerer tilbagetagelse af træk';
 
   @override
   String get yourOpponentProposesATakeback => 'Din modstander anmoder om omtræk';
@@ -3689,6 +3716,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get termsOfService => 'Servicevilkår';
+
+  @override
+  String get titleVerification => 'Bekræftelse af titel';
 
   @override
   String get sourceCode => 'Kildekode';
@@ -4709,6 +4739,15 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get stats => 'Statistik';
+
+  @override
+  String get accessibility => 'Tilgængelighed';
+
+  @override
+  String get enableBlindMode => 'Aktiver blindtilstand';
+
+  @override
+  String get disableBlindMode => 'Deaktiver blindtilstand';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5912,7 +5951,7 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get studyAnnotatePositionText =>
-      'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+      'Klik på !? knappen, eller lav et højreklik på træklisten i højre side.<br>Annoteringsglyffer deles og gemmes.';
 
   @override
   String get studyConclusionTitle => 'Tak for din tid';
@@ -5973,6 +6012,15 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String get studyChapterConclusionText =>
       'Kapitler gemmes for evigt.<br>God fornøjelse med at organisere dit skakindhold!';
+
+  @override
+  String get studyDoubleDefeat => 'Dobbelt nederlag';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'Sort nederlag, men hvid kan ikke vinde';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'Hvidt nederlag, men sort kan ikke vinde';
 
   @override
   String studyNbChapters(int count) {
