@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
-import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
@@ -50,9 +49,9 @@ class GameScreen extends ConsumerStatefulWidget {
     this.lastMoveAt,
     super.key,
   }) : assert(
-         initialGameId != null || seek != null || challenge != null,
-         'Either a seek, a challenge or an initial game id must be provided.',
-       );
+  initialGameId != null || seek != null || challenge != null,
+  'Either a seek, a challenge or an initial game id must be provided.',
+  );
 
   final GameSeek? seek;
   final GameFullId? initialGameId;
@@ -76,15 +75,15 @@ class GameScreen extends ConsumerStatefulWidget {
   }
 
   static Route<dynamic> buildRoute(
-    BuildContext context, {
-    GameSeek? seek,
-    GameFullId? initialGameId,
-    ChallengeRequest? challenge,
-    String? loadingFen,
-    Move? loadingLastMove,
-    Side? loadingOrientation,
-    DateTime? lastMoveAt,
-  }) {
+      BuildContext context, {
+        GameSeek? seek,
+        GameFullId? initialGameId,
+        ChallengeRequest? challenge,
+        String? loadingFen,
+        Move? loadingLastMove,
+        Side? loadingOrientation,
+        DateTime? lastMoveAt,
+      }) {
     return buildScreenRoute(
       context,
       screen: GameScreen(
@@ -127,11 +126,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       challenge: widget.challenge,
       game: widget.initialGameId != null
           ? (
-              gameId: widget.initialGameId!,
-              lastFen: widget.loadingFen,
-              lastMove: widget.loadingLastMove,
-              side: widget.loadingOrientation,
-            )
+      gameId: widget.initialGameId!,
+      lastFen: widget.loadingFen,
+      lastMove: widget.loadingLastMove,
+      side: widget.loadingOrientation,
+      )
           : null,
     );
     final boardPreferences = ref.watch(boardPreferencesProvider);
@@ -141,10 +140,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         final (game: loadedGame, challenge: challenge, declineReason: declineReason) = value;
         final isRealTimePlayingGame =
             (loadedGame != null
-                    ? ref.watch(isRealTimePlayableGameProvider(loadedGame.gameId))
-                    : const AsyncValue.data(true))
+                ? ref.watch(isRealTimePlayableGameProvider(loadedGame.gameId))
+                : const AsyncValue.data(true))
                 .valueOrNull ??
-            false;
+                false;
 
         final socketUri = loadedGame != null ? GameController.socketUri(loadedGame.gameId) : null;
 
@@ -156,67 +155,64 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             maintainBottomViewPadding: true,
             child: loadedGame != null
                 ? GameBody(
-                    loadedGame: loadedGame,
-                    whiteClockKey: _whiteClockKey,
-                    blackClockKey: _blackClockKey,
-                    boardKey: _boardKey,
-                    onLoadGameCallback: (id) {
-                      if (mounted) {
-                        ref.read(provider.notifier).loadGame(id);
-                      }
-                    },
-                    onNewOpponentCallback: (game) {
-                      if (!mounted) return;
+              loadedGame: loadedGame,
+              whiteClockKey: _whiteClockKey,
+              blackClockKey: _blackClockKey,
+              boardKey: _boardKey,
+              onLoadGameCallback: (id) {
+                if (mounted) {
+                  ref.read(provider.notifier).loadGame(id);
+                }
+              },
+              onNewOpponentCallback: (game) {
+                if (!mounted) return;
 
-                      if (widget.source == _GameSource.lobby) {
-                        ref.read(provider.notifier).newOpponent();
-                      } else {
-                        final savedSetup = ref.read(gameSetupPreferencesProvider);
-                        Navigator.of(context, rootNavigator: true).pushReplacement(
-                          GameScreen.buildRoute(
-                            context,
-                            seek: GameSeek.newOpponentFromGame(game, savedSetup),
-                          ),
-                        );
-                      }
-                    },
-                  )
+                if (widget.source == _GameSource.lobby) {
+                  ref.read(provider.notifier).newOpponent();
+                } else {
+                  final savedSetup = ref.read(gameSetupPreferencesProvider);
+                  Navigator.of(context, rootNavigator: true).pushReplacement(
+                    GameScreen.buildRoute(
+                      context,
+                      seek: GameSeek.newOpponentFromGame(game, savedSetup),
+                    ),
+                  );
+                }
+              },
+            )
                 : widget.challenge != null && challenge != null
                 ? ChallengeDeclinedBoard(
-                    challenge: challenge,
-                    declineReason: declineReason != null
-                        ? declineReason.label(context.l10n)
-                        : ChallengeDeclineReason.generic.label(context.l10n),
-                  )
+              challenge: challenge,
+              declineReason: declineReason != null
+                  ? declineReason.label(context.l10n)
+                  : ChallengeDeclineReason.generic.label(context.l10n),
+            )
                 : const LoadGameError('Could not create the game.'),
           ),
         );
 
-        return WakelockWidget(
-          shouldEnableOnFocusGained: () => loadedGame != null,
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              leading: isRealTimePlayingGame ? SocketPingRating(socketUri: socketUri) : null,
-              title: loadedGame != null
-                  ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
-                  : widget.seek != null
-                  ? _LobbyGameTitle(seek: widget.seek!)
-                  : widget.challenge != null
-                  ? _ChallengeGameTitle(challenge: widget.challenge!)
-                  : const SizedBox.shrink(),
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            leading: isRealTimePlayingGame ? SocketPingRating(socketUri: socketUri) : null,
+            title: loadedGame != null
+                ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
+                : widget.seek != null
+                ? _LobbyGameTitle(seek: widget.seek!)
+                : widget.challenge != null
+                ? _ChallengeGameTitle(challenge: widget.challenge!)
+                : const SizedBox.shrink(),
 
-              actions: [if (loadedGame != null) _GameMenu(gameId: loadedGame.gameId)],
-            ),
-            body: Theme.of(context).platform == TargetPlatform.android
-                ? AndroidGesturesExclusionWidget(
-                    boardKey: _boardKey,
-                    shouldExcludeGesturesOnFocusGained: () => isRealTimePlayingGame,
-                    shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
-                    child: body,
-                  )
-                : body,
+            actions: [if (loadedGame != null) _GameMenu(gameId: loadedGame.gameId)],
           ),
+          body: Theme.of(context).platform == TargetPlatform.android
+              ? AndroidGesturesExclusionWidget(
+            boardKey: _boardKey,
+            shouldExcludeGesturesOnFocusGained: () => isRealTimePlayingGame,
+            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+            child: body,
+          )
+              : body,
         );
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameScreen] could not create game; $e\n$s');
@@ -241,20 +237,20 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       case _:
         final loadingBoard = widget.seek != null
             ? LobbyScreenLoadingContent(
-                widget.seek!,
-                () => ref.read(createGameServiceProvider).cancelSeek(),
-              )
+          widget.seek!,
+              () => ref.read(createGameServiceProvider).cancelSeek(),
+        )
             : widget.challenge != null
             ? ChallengeLoadingContent(
-                widget.challenge!,
-                () => ref.read(createGameServiceProvider).cancelChallenge(),
-              )
+          widget.challenge!,
+              () => ref.read(createGameServiceProvider).cancelChallenge(),
+        )
             : const Column(
-                children: [
-                  Expanded(child: StandaloneGameLoadingBoard()),
-                  BottomBar.empty(),
-                ],
-              );
+          children: [
+            Expanded(child: StandaloneGameLoadingBoard()),
+            BottomBar.empty(),
+          ],
+        );
 
         return Scaffold(
           resizeToAvoidBottomInset: false,
@@ -307,14 +303,14 @@ class _GameMenu extends ConsumerWidget {
         ),
         ...(switch (ref.watch(gameShareDataProvider(gameId))) {
           AsyncData(:final value) =>
-            value.finished
-                ? makeFinishedGameShareContextMenuActions(
-                    context,
-                    ref,
-                    gameId: gameId.gameId,
-                    orientation: value.pov ?? Side.white,
-                  )
-                : [],
+          value.finished
+              ? makeFinishedGameShareContextMenuActions(
+            context,
+            ref,
+            gameId: gameId.gameId,
+            orientation: value.pov ?? Side.white,
+          )
+              : [],
           _ => [],
         }),
       ],

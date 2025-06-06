@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
@@ -211,65 +212,69 @@ class GameBody extends ConsumerWidget {
           onFocusRegained: () {
             ref.read(ctrlProvider.notifier).onFocusRegained();
           },
-          child: Column(
-            children: [
-              Expanded(
-                child: BoardTable(
-                  key: boardKey,
-                  boardSettingsOverrides: BoardSettingsOverrides(
-                    animationDuration: animationDuration,
-                    autoQueenPromotion: gameState.canAutoQueen,
-                    autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
-                    blindfoldMode: blindfoldMode,
-                  ),
-                  orientation: isBoardTurned ? youAre.opposite : youAre,
-                  lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
-                  interactiveBoardParams: (
-                    variant: gameState.game.meta.variant,
-                    position: gameState.currentPosition,
-                    playerSide: gameState.game.playable && !gameState.isReplaying
-                        ? youAre == Side.white
-                              ? PlayerSide.white
-                              : PlayerSide.black
-                        : PlayerSide.none,
-                    promotionMove: gameState.promotionMove,
-                    onMove: (move, {isDrop}) {
-                      ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
+          child: WakelockWidget(
+            shouldEnableOnFocusGained: () => gameState.game.playable,
+            child: Column(
+              children: [
+                Expanded(
+                  child: BoardTable(
+                    key: boardKey,
+                    boardSettingsOverrides: BoardSettingsOverrides(
+                      animationDuration: animationDuration,
+                      autoQueenPromotion: gameState.canAutoQueen,
+                      autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
+                      blindfoldMode: blindfoldMode,
+                    ),
+                    orientation: isBoardTurned ? youAre.opposite : youAre,
+                    lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
+                    interactiveBoardParams: (
+                      variant: gameState.game.meta.variant,
+                      position: gameState.currentPosition,
+                      playerSide: gameState.game.playable && !gameState.isReplaying
+                          ? youAre == Side.white
+                                ? PlayerSide.white
+                                : PlayerSide.black
+                          : PlayerSide.none,
+                      promotionMove: gameState.promotionMove,
+                      onMove: (move, {isDrop}) {
+                        ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
+                      },
+                      onPromotionSelection: (role) {
+                        ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+                      },
+                      premovable: gameState.canPremove
+                          ? (
+                              onSetPremove: (move) {
+                                ref.read(ctrlProvider.notifier).setPremove(move);
+                              },
+                              premove: gameState.premove,
+                            )
+                          : null,
+                    ),
+                    topTable: topPlayer,
+                    bottomTable:
+                        gameState.canShowClaimWinCountdown &&
+                            gameState.opponentLeftCountdown != null
+                        ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
+                        : bottomPlayer,
+                    moves: gameState.game.steps
+                        .skip(1)
+                        .map((e) => e.sanMove!.san)
+                        .toList(growable: false),
+                    currentMoveIndex: gameState.stepCursor,
+                    onSelectMove: (moveIndex) {
+                      ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
                     },
-                    onPromotionSelection: (role) {
-                      ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-                    },
-                    premovable: gameState.canPremove
-                        ? (
-                            onSetPremove: (move) {
-                              ref.read(ctrlProvider.notifier).setPremove(move);
-                            },
-                            premove: gameState.premove,
-                          )
-                        : null,
+                    zenMode: gameState.isZenModeActive,
                   ),
-                  topTable: topPlayer,
-                  bottomTable:
-                      gameState.canShowClaimWinCountdown && gameState.opponentLeftCountdown != null
-                      ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
-                      : bottomPlayer,
-                  moves: gameState.game.steps
-                      .skip(1)
-                      .map((e) => e.sanMove!.san)
-                      .toList(growable: false),
-                  currentMoveIndex: gameState.stepCursor,
-                  onSelectMove: (moveIndex) {
-                    ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
-                  },
-                  zenMode: gameState.isZenModeActive,
                 ),
-              ),
-              _GameBottomBar(
-                id: loadedGame.gameId,
-                onLoadGameCallback: onLoadGameCallback,
-                onNewOpponentCallback: onNewOpponentCallback,
-              ),
-            ],
+                _GameBottomBar(
+                  id: loadedGame.gameId,
+                  onLoadGameCallback: onLoadGameCallback,
+                  onNewOpponentCallback: onNewOpponentCallback,
+                ),
+              ],
+            ),
           ),
         );
 
