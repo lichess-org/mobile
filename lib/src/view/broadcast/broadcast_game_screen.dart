@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -29,12 +30,14 @@ import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:share_plus/share_plus.dart';
 
 class BroadcastGameScreen extends ConsumerStatefulWidget {
@@ -103,7 +106,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
   @override
   Widget build(BuildContext context) {
     final title = (widget.title != null)
-        ? Text(widget.title!, overflow: TextOverflow.ellipsis, maxLines: 1)
+        ? AppBarTitleText(widget.title!, maxLines: 2)
         : switch (ref.watch(broadcastGameScreenTitleProvider(widget.roundId))) {
             AsyncData(value: final title) => Text(
               title,
@@ -124,6 +127,12 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
           if (asyncIsEngineAvailable.valueOrNull == true)
             EngineDepth(savedEval: asyncEval.valueOrNull),
           AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
+          _BroadcastGameMenu(
+            roundId: widget.roundId,
+            gameId: widget.gameId,
+            tournamentSlug: widget.tournamentSlug,
+            roundSlug: widget.roundSlug,
+          ),
         ],
       ),
       body: _Body(
@@ -134,6 +143,96 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
         widget.roundSlug,
         tabController: _tabController,
       ),
+    );
+  }
+}
+
+class _BroadcastGameMenu extends ConsumerWidget {
+  const _BroadcastGameMenu({
+    required this.roundId,
+    required this.gameId,
+    this.tournamentSlug,
+    this.roundSlug,
+  });
+
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
+  final String? tournamentSlug;
+  final String? roundSlug;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ContextMenuIconButton(
+      icon: const Icon(Icons.more_horiz),
+      semanticsLabel: context.l10n.menu,
+      actions: [
+        ContextMenuAction(
+          icon: Icons.settings,
+          label: context.l10n.settingsSettings,
+          onPressed: () {
+            Navigator.of(context).push(
+              BroadcastGameSettingsScreen.buildRoute(context, roundId: roundId, gameId: gameId),
+            );
+          },
+        ),
+        ToggleSoundContextMenuAction(
+          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
+          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+        ),
+        if (tournamentSlug != null && roundSlug != null)
+          ContextMenuAction(
+            icon: Theme.of(context).platform == TargetPlatform.iOS
+                ? Icons.ios_share_outlined
+                : Icons.share_outlined,
+            label: context.l10n.mobileShareGameURL,
+            onPressed: () {
+              launchShareDialog(
+                context,
+                ShareParams(
+                  uri: lichessUri('/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId'),
+                ),
+              );
+            },
+          ),
+        ContextMenuAction(
+          icon: Icons.description_outlined,
+          label: context.l10n.mobileShareGamePGN,
+          onPressed: () async {
+            try {
+              final pgn = await ref.withClient(
+                (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
+              );
+              if (context.mounted) {
+                launchShareDialog(context, ShareParams(text: pgn));
+              }
+            } catch (e) {
+              if (context.mounted) {
+                showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+              }
+            }
+          },
+        ),
+        ContextMenuAction(
+          icon: Icons.gif_outlined,
+          label: context.l10n.gameAsGIF,
+          onPressed: () async {
+            try {
+              final gif = await ref.read(gameShareServiceProvider).chapterGif(roundId, gameId);
+              if (context.mounted) {
+                launchShareDialog(
+                  context,
+                  ShareParams(fileNameOverrides: ['$gameId.gif'], files: [gif]),
+                );
+              }
+            } catch (e) {
+              debugPrint(e.toString());
+              if (context.mounted) {
+                showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+              }
+            }
+          },
+        ),
+      ],
     );
   }
 }
@@ -539,77 +638,11 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
     return BottomBar(
       children: [
         BottomBarButton(
-          label: context.l10n.menu,
+          label: context.l10n.flipBoard,
           onTap: () {
-            showAdaptiveActionSheet<void>(
-              context: context,
-              actions: [
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.settingsSettings),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      BroadcastGameSettingsScreen.buildRoute(
-                        context,
-                        roundId: roundId,
-                        gameId: gameId,
-                      ),
-                    );
-                  },
-                ),
-                if (tournamentSlug != null && roundSlug != null)
-                  BottomSheetAction(
-                    makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
-                    onPressed: () {
-                      launchShareDialog(
-                        context,
-                        ShareParams(
-                          uri: lichessUri('/broadcast/$tournamentSlug/$roundSlug/$roundId/$gameId'),
-                        ),
-                      );
-                    },
-                  ),
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
-                  onPressed: () async {
-                    try {
-                      final pgn = await ref.withClient(
-                        (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
-                      );
-                      if (context.mounted) {
-                        launchShareDialog(context, ShareParams(text: pgn));
-                      }
-                    } catch (e) {
-                      if (context.mounted) {
-                        showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-                      }
-                    }
-                  },
-                ),
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.gameAsGIF),
-                  onPressed: () async {
-                    try {
-                      final gif = await ref
-                          .read(gameShareServiceProvider)
-                          .chapterGif(roundId, gameId);
-                      if (context.mounted) {
-                        launchShareDialog(
-                          context,
-                          ShareParams(fileNameOverrides: ['$gameId.gif'], files: [gif]),
-                        );
-                      }
-                    } catch (e) {
-                      debugPrint(e.toString());
-                      if (context.mounted) {
-                        showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-                      }
-                    }
-                  },
-                ),
-              ],
-            );
+            ref.read(ctrlProvider.notifier).toggleBoard();
           },
-          icon: Icons.menu,
+          icon: CupertinoIcons.arrow_2_squarepath,
         ),
         Builder(
           builder: (context) {
@@ -637,13 +670,6 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
               },
             );
           },
-        ),
-        BottomBarButton(
-          label: context.l10n.flipBoard,
-          onTap: () {
-            ref.read(ctrlProvider.notifier).toggleBoard();
-          },
-          icon: CupertinoIcons.arrow_2_squarepath,
         ),
         RepeatButton(
           onLongPress: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
