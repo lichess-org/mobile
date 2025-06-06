@@ -53,7 +53,6 @@ class _FloatingPlayButtonState extends ConsumerState<FloatingPlayButton> {
             constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.6),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              // TODO translate
               child: Text.rich(
                 textAlign: TextAlign.center,
                 TextSpan(
