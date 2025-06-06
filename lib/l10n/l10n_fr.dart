@@ -1464,13 +1464,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get preferencesBlindfold => 'Partie à l\'aveugle';
 
   @override
-  String get puzzlePuzzles => 'Puzzles';
+  String get puzzlePuzzles => 'Problèmes';
 
   @override
-  String get puzzlePuzzleThemes => 'Puzzle Themes';
+  String get puzzlePuzzleThemes => 'Thèmes des problèmes';
 
   @override
-  String get puzzleRecommended => 'Recommended';
+  String get puzzleRecommended => 'Recommandé';
 
   @override
   String get puzzlePhases => 'Phases';
@@ -1479,219 +1479,221 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleMotifs => 'Motifs';
 
   @override
-  String get puzzleAdvanced => 'Advanced';
+  String get puzzleAdvanced => 'Avancé';
 
   @override
-  String get puzzleLengths => 'Lengths';
+  String get puzzleLengths => 'Longueurs';
 
   @override
-  String get puzzleMates => 'Mates';
+  String get puzzleMates => 'Mats';
 
   @override
-  String get puzzleGoals => 'Goals';
+  String get puzzleGoals => 'Objectifs';
 
   @override
-  String get puzzleOrigin => 'Origin';
+  String get puzzleOrigin => 'Origine';
 
   @override
-  String get puzzleSpecialMoves => 'Special moves';
+  String get puzzleSpecialMoves => 'Coups spéciaux';
 
   @override
-  String get puzzleDidYouLikeThisPuzzle => 'Did you like this puzzle?';
+  String get puzzleDidYouLikeThisPuzzle => 'Avez-vous aimé ce problème ?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Vote to load the next one!';
+  String get puzzleVoteToLoadNextOne => 'Votez pour afficher le suivant !';
 
   @override
-  String get puzzleUpVote => 'Up vote puzzle';
+  String get puzzleUpVote => 'Voter pour ce problème';
 
   @override
-  String get puzzleDownVote => 'Down vote puzzle';
+  String get puzzleDownVote => 'Voter contre ce problème';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange =>
-      'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.';
+      'Votre classement ne changera pas. Notez que les problèmes ne sont pas une compétition. Le classement aide à sélectionner les meilleurs problèmes en fonction de votre niveau.';
 
   @override
-  String get puzzleFindTheBestMoveForWhite => 'Find the best move for white.';
+  String get puzzleFindTheBestMoveForWhite => 'Trouvez le meilleur coup pour les Blancs.';
 
   @override
-  String get puzzleFindTheBestMoveForBlack => 'Find the best move for black.';
+  String get puzzleFindTheBestMoveForBlack => 'Trouvez le meilleur coup pour les Noirs.';
 
   @override
-  String get puzzleToGetPersonalizedPuzzles => 'To get personalized puzzles:';
+  String get puzzleToGetPersonalizedPuzzles => 'Pour obtenir des problèmes personnalisés :';
 
   @override
   String puzzlePuzzleId(String param) {
-    return 'Puzzle $param';
+    return 'Problème $param';
   }
 
   @override
-  String get puzzlePuzzleOfTheDay => 'Puzzle of the day';
+  String get puzzlePuzzleOfTheDay => 'Problème du jour';
 
   @override
-  String get puzzleDailyPuzzle => 'Daily Puzzle';
+  String get puzzleDailyPuzzle => 'Problème du jour';
 
   @override
-  String get puzzleClickToSolve => 'Click to solve';
+  String get puzzleClickToSolve => 'Cliquez pour résoudre';
 
   @override
-  String get puzzleGoodMove => 'Good move';
+  String get puzzleGoodMove => 'Bon coup';
 
   @override
-  String get puzzleBestMove => 'Best move!';
+  String get puzzleBestMove => 'Meilleur coup  !';
 
   @override
-  String get puzzleKeepGoing => 'Keep going…';
+  String get puzzleKeepGoing => 'Continuez…';
 
   @override
-  String get puzzlePuzzleSuccess => 'Success!';
+  String get puzzlePuzzleSuccess => 'Succès !';
 
   @override
-  String get puzzlePuzzleComplete => 'Puzzle complete!';
+  String get puzzlePuzzleComplete => 'Problème terminé !';
 
   @override
-  String get puzzleByOpenings => 'By openings';
+  String get puzzleByOpenings => 'Par ouverture';
 
   @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+  String get puzzlePuzzlesByOpenings => 'Problèmes selon les ouvertures';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
+  String get puzzleOpeningsYouPlayedTheMost =>
+      'Ouvertures que vous avez le plus jouées dans des parties classées';
 
   @override
   String get puzzleUseFindInPage =>
-      'Use \"Find in page\" in the browser menu to find your favourite opening!';
+      'Utilisez la fonction « Rechercher dans la page » du navigateur pour trouver votre ouverture préférée !';
 
   @override
-  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
+  String get puzzleUseCtrlF =>
+      'Appuyez sur les touches Ctrl+f pour trouver votre ouverture préférée !';
 
   @override
-  String get puzzleNotTheMove => 'That\'s not the move!';
+  String get puzzleNotTheMove => 'Ce n\'est pas le coup !';
 
   @override
-  String get puzzleTrySomethingElse => 'Try something else.';
+  String get puzzleTrySomethingElse => 'Essayez autre chose.';
 
   @override
   String puzzleRatingX(String param) {
-    return 'Rating: $param';
+    return 'Classement : $param';
   }
 
   @override
-  String get puzzleHidden => 'hidden';
+  String get puzzleHidden => 'masqué';
 
   @override
   String puzzleFromGameLink(String param) {
-    return 'From game $param';
+    return 'Tiré de la partie $param';
   }
 
   @override
-  String get puzzleContinueTraining => 'Continue training';
+  String get puzzleContinueTraining => 'Continuer l\'entraînement';
 
   @override
-  String get puzzleDifficultyLevel => 'Difficulty level';
+  String get puzzleDifficultyLevel => 'Niveau de difficulté';
 
   @override
   String get puzzleNormal => 'Normal';
 
   @override
-  String get puzzleEasier => 'Easier';
+  String get puzzleEasier => 'Plus facile';
 
   @override
-  String get puzzleEasiest => 'Easiest';
+  String get puzzleEasiest => 'Le plus facile';
 
   @override
-  String get puzzleHarder => 'Harder';
+  String get puzzleHarder => 'Plus difficile';
 
   @override
-  String get puzzleHardest => 'Hardest';
+  String get puzzleHardest => 'Le plus difficile';
 
   @override
-  String get puzzleExample => 'Example';
+  String get puzzleExample => 'Exemple';
 
   @override
-  String get puzzleAddAnotherTheme => 'Add another theme';
+  String get puzzleAddAnotherTheme => 'Ajouter un autre thème';
 
   @override
-  String get puzzleNextPuzzle => 'Next puzzle';
+  String get puzzleNextPuzzle => 'Problème suivant';
 
   @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Jump to next puzzle immediately';
+  String get puzzleJumpToNextPuzzleImmediately => 'Passer immédiatement au problème suivant';
 
   @override
-  String get puzzlePuzzleDashboard => 'Puzzle Dashboard';
+  String get puzzlePuzzleDashboard => 'Tableau de bord des problèmes';
 
   @override
-  String get puzzleImprovementAreas => 'Improvement areas';
+  String get puzzleImprovementAreas => 'Aspects à améliorer';
 
   @override
-  String get puzzleStrengths => 'Strengths';
+  String get puzzleStrengths => 'Points forts';
 
   @override
-  String get puzzleHistory => 'Puzzle history';
+  String get puzzleHistory => 'Historique des problèmes';
 
   @override
-  String get puzzleSolved => 'solved';
+  String get puzzleSolved => 'résolu';
 
   @override
-  String get puzzleFailed => 'incorrect';
+  String get puzzleFailed => 'non résolu';
 
   @override
   String get puzzleStreakDescription =>
-      'Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it\'s game over! But you can skip one move per session.';
+      'Résolvez des problèmes de plus en plus difficiles et obtenez une série de victoires. Prenez votre temps, il n\'y a pas de pendule. Un mauvais coup et c\'est terminé ! Mais vous pouvez passer un coup par session.';
 
   @override
   String puzzleYourStreakX(String param) {
-    return 'Your streak: $param';
+    return 'Votre série gagnante : $param';
   }
 
   @override
   String get puzzleStreakSkipExplanation =>
-      'Skip this move to preserve your streak! Only works once per run.';
+      'Sautez ce coup pour préserver votre série gagnante! Possible une seule fois par session.';
 
   @override
-  String get puzzleContinueTheStreak => 'Continue the streak';
+  String get puzzleContinueTheStreak => 'Continuer la série';
 
   @override
-  String get puzzleNewStreak => 'New streak';
+  String get puzzleNewStreak => 'Nouvelle série';
 
   @override
-  String get puzzleFromMyGames => 'From my games';
+  String get puzzleFromMyGames => 'De mes parties';
 
   @override
-  String get puzzleLookupOfPlayer => 'Lookup puzzles from a player\'s games';
+  String get puzzleLookupOfPlayer => 'Rechercher des problèmes à partir des parties d\'un joueur';
 
   @override
-  String get puzzleSearchPuzzles => 'Search puzzles';
+  String get puzzleSearchPuzzles => 'Rechercher des problèmes';
 
   @override
   String get puzzleFromMyGamesNone =>
-      'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
+      'Vous n\'avez pas de problèmes dans la base de données, mais Lichess vous aime toujours.\nJouez des parties rapides et classiques pour augmenter vos chances qu\'une de vos parties soit utilisée comme problème !';
 
   @override
-  String get puzzlePuzzleDashboardDescription => 'Train, analyse, improve';
+  String get puzzlePuzzleDashboardDescription => 'S\'entraîner, analyser, s\'améliorer';
 
   @override
   String puzzlePercentSolved(String param) {
-    return '$param solved';
+    return '$param des problèmes résolus';
   }
 
   @override
-  String get puzzleNoPuzzlesToShow => 'Nothing to show, go play some puzzles first!';
+  String get puzzleNoPuzzlesToShow => 'Rien à afficher - faites d\'abord quelques problèmes !';
 
   @override
-  String get puzzleImprovementAreasDescription => 'Train these to optimize your progress!';
+  String get puzzleImprovementAreasDescription => 'Faites ces problèmes pour progresser !';
 
   @override
-  String get puzzleStrengthDescription => 'You perform the best in these themes';
+  String get puzzleStrengthDescription => 'Vous avez le plus de succès dans ces thèmes.';
 
   @override
   String puzzlePlayedXTimes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Played $count times',
-      one: 'Played $count time',
+      other: 'Joué $count fois',
+      one: 'Joué $count fois',
     );
     return '$_temp0';
   }
@@ -1701,8 +1703,8 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count points below your puzzle rating',
-      one: 'One point below your puzzle rating',
+      other: '$count points en dessous de votre classement de problème',
+      one: 'Un point en dessous de votre classement de problème',
     );
     return '$_temp0';
   }
@@ -1712,8 +1714,8 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count points above your puzzle rating',
-      one: 'One point above your puzzle rating',
+      other: '$count points au dessus de votre classement de problème',
+      one: 'Un point au dessus de votre classement de problème',
     );
     return '$_temp0';
   }
@@ -1731,13 +1733,23 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count played');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count problèmes faits',
+      one: '$count problème fait',
+    );
     return '$_temp0';
   }
 
   @override
   String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count to replay');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count problèmes à refaire',
+      one: '$count problème à refaire',
+    );
     return '$_temp0';
   }
 

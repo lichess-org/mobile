@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="broadcasts">Transmetime</string>
+  <string name="myBroadcasts">Transmetimet e mia</string>
+  <plurals name="nbBroadcasts">
+    <item quantity="one">%s transmetim</item>
+    <item quantity="other">%s transmetime</item>
+  </plurals>
+  <plurals name="nbViewers">
+    <item quantity="one">%s parës</item>
+    <item quantity="other">%s parës</item>
+  </plurals>
+  <string name="liveBroadcasts">Transmetime të drejtpërdrejta turnesh</string>
+  <string name="broadcastCalendar">Kalendar transmetimesh</string>
+  <string name="newBroadcast">Transmetim i ri i drejtpërdrejtë</string>
+  <string name="subscribedBroadcasts">Transmetime me pajtim</string>
+  <string name="aboutBroadcasts">Rreth transmetimeve</string>
+  <string name="howToUseLichessBroadcasts">Si të përdoren Transmetimet Lichess.</string>
+  <string name="theNewRoundHelp">Raundi i ri do të ketë të njëjtën anëtarë dhe kontribues si i mëparshmi.</string>
+  <string name="addRound">Shtoni një raund</string>
+  <string name="ongoing">Në zhvillim</string>
+  <string name="upcoming">I ardhshëm</string>
+  <string name="roundName">Emër raundi</string>
+  <string name="roundNumber">Numër raundi</string>
+  <string name="tournamentName">Emër turneu</string>
+  <string name="tournamentDescription">Përshkrim i shkurtër i turneut</string>
+  <string name="fullDescription">Përshkrim i plotë i turneut</string>
+  <string name="fullDescriptionHelp">Përshkrim i gjatë opsional i turneut. %1$s është e disponueshme. Gjatësia duhet të jetë më pak se %2$s shenja.</string>
+  <string name="sourceSingleUrl">URL Burimi PGN-je</string>
+  <string name="sourceUrlHelp">URL-ja që do të kontrollojë Lichess-i për të marrë përditësime PGN-sh. Duhet të jetë e përdorshme publikisht që nga Interneti.</string>
+  <string name="sourceGameIds">Deri në 64 ID lojërash Lichess, ndarë me hapësira.</string>
+  <string name="startDateTimeZone">Datë fillimi në zonën kohore vendore të turneut: %s</string>
+  <string name="startDateHelp">Opsionale, nëse e dini kur fillon veprimtaria</string>
+  <string name="currentGameUrl">URL e lojës së tanishme</string>
+  <string name="downloadAllRounds">Shkarko krejt raundet</string>
+  <string name="deleteRound">Fshije këtë raund</string>
+  <string name="definitivelyDeleteRound">Fshije përfundimisht raundin dhe lojërat e tij.</string>
+  <string name="deleteAllGamesOfThisRound">Fshi krejt lojërat e këtij raundi. Burimi do të duhet të jetë aktiv, që të mund të rikrijohen ato.</string>
+  <string name="editRoundStudy">Përpunoni analizë raundi</string>
+  <string name="deleteTournament">Fshije këtë turne</string>
+  <string name="definitivelyDeleteTournament">Fshihe përfundimisht krejt turneun, krejt raundet e tij dhe krejt lojërat në të.</string>
+  <string name="showScores">Shfaq pikë lojtatësh bazuar në përfundime lojërash</string>
+  <string name="replacePlayerTags">Opsionale: zëvendësoni emra lojëtarësh, vlerësime dhe tituj</string>
+  <string name="fideFederations">Federata FIDE</string>
+  <string name="top10Rating">10 vlerësimet kryesuese</string>
+  <string name="fidePlayers">Lojtarë FIDE</string>
+  <string name="fidePlayerNotFound">S’u gjet lojtar FIDE</string>
+  <string name="fideProfile">Profil FIDE</string>
+  <string name="federation">Federim</string>
+  <string name="ageThisYear">Moshë këtë vit</string>
+  <string name="unrated">Pa pikë</string>
+  <string name="recentTournaments">Turne së fundi</string>
+  <string name="openLichess">Hape në Lichess</string>
+  <string name="teams">Ekipe</string>
+  <string name="boards">Fusha</string>
+  <string name="overview">Përmbledhje</string>
+  <string name="subscribeTitle">Pajtohuni, që të noftoheni se kur fillon çdo raund. Mund të aktivizoni/çaktivizoni zilen, ose njoftimet “push” për transmetime, që nga parapëlqimet për llogarinë tuaj.</string>
+  <string name="uploadImage">Ngarkoni figurë turneu</string>
+  <string name="noBoardsYet">Ende pa fusha. Këto do të shfaqen sapo të ngrkohen lojërat.</string>
+  <string name="boardsCanBeLoaded" comment="%s is 'Broadcaster App', and links to https://lichess.org/broadcast/app&#10;&#10;This is advice that appears in the manager view for broadcasts. The 'source' in this context is where the games to be displayed in the tournament will come from. Games can be sourced in a number of ways (aside from the Broadcaster App, which is what Lichess recommends):&#10;* URL(s) pointing to PGN(s)&#10;* IDs of games played on Lichess&#10;* Lichess usernames">Fushat mund të ngarkohen me një burim, ose përmes %s</string>
+  <string name="startsAfter">Fillon pas %s</string>
+  <string name="startVerySoon">Transmetimi do të fillojë shumë shpejt.</string>
+  <string name="notYetStarted">Transmetimi s’ka filluar ende.</string>
+  <string name="officialWebsite">Sajti zyrtar</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page'">Më tepër mundësi te %s</string>
+  <string name="webmastersPage">faqe webmaster-ësh</string>
+  <string name="pgnSourceHelp" comment="%s is 'streaming API'">Një burim publik,, PGN, i atypëratyshëm për këtë raund. Ofrojmë gjithashtu edhe një %s, për njëkohësim më të shpejtë dhe më efikas.</string>
+  <string name="embedThisBroadcast">Trupëzojeni këtë transmetim në sajtin tuaj</string>
+  <string name="embedThisRound">Trupëzojeni %s në sajtin tuaj</string>
+  <string name="gamesThisTournament" comment="Appears as a heading for a list on an individual player's page within a broadcasted tournament. The list shows all the games that individual has played within that tournament.&#10;&#10;Example: https://lichess.org/broadcast/fide-womens-grand-prix-202425--pune/round-7/ZPXXCcDI#players/8608059">Lojëra në këtë turne</string>
+  <string name="score">Përfundim</string>
+  <string name="allTeams" comment="In this context, these are teams in a tournament that is being broadcast. The tournament format features teams.&#10;&#10;This is the default filter option, showing players from all teams in a given tournament.">Krejt ekipet</string>
+  <string name="tournamentFormat" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Format turneu</string>
+  <string name="tournamentLocation" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Vendndodhje Turney</string>
+  <string name="topPlayers" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.&#10;&#10;Broadcast creators can enter some top players' names here to attract attention. It is a free-entry field that accepts up to 4 names.">Lojtarët kryesues</string>
+  <string name="timezone" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Zonë kohore</string>
+  <string name="fideRatingCategory" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.&#10;&#10;The options for this field are Standard, Blitz, or Rapid.">Kategori vlerësimi FIDE</string>
+  <string name="optionalDetails" comment="Appears as a heading that groups fields in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Hollësi opsionale</string>
+  <string name="pastBroadcasts">Transmetime të kaluara</string>
+  <string name="allBroadcastsByMonth">Shihni krejt transmetimet sipas muajsh</string>
+  <string name="backToLiveMove">Mbrapsht te lëvizja “live”</string>
+  <string name="sinceHideResults">Meqë zgjodhët të fshihen përfundimet, krejt tabelat e paraparjeve janë të zbrazëta, për të shmangur tregime.</string>
+</resources>

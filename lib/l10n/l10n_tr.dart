@@ -463,213 +463,216 @@ class AppLocalizationsTr extends AppLocalizations {
   String get arenaArena => 'Arena';
 
   @override
-  String get arenaArenaTournaments => 'Arena tournaments';
+  String get arenaArenaTournaments => 'Arena turnuvaları';
 
   @override
-  String get arenaIsItRated => 'Is it rated?';
+  String get arenaIsItRated => 'Bu turnuva puanlı mı?';
 
   @override
   String get arenaWillBeNotified =>
-      'You will be notified when the tournament starts, so it is safe to play in another tab while waiting.';
+      'Turnuva başladığında sana haber vereceğiz, bu süre zarfında başka bir sekmede oynamanın bir sakıncası yok.';
 
   @override
-  String get arenaIsRated => 'This tournament is rated and will affect your rating.';
+  String get arenaIsRated => 'Evet, bu turnuva puanlıdır ve oyun puanınızı etkileyecektir.';
 
   @override
-  String get arenaIsNotRated => 'This tournament is *not* rated and will *not* affect your rating.';
+  String get arenaIsNotRated =>
+      'Hayır, bu turnuva puanlı *değildir* ve oyun puanınızı *etkilemeyecektir*.';
 
   @override
-  String get arenaSomeRated => 'Some tournaments are rated and will affect your rating.';
+  String get arenaSomeRated => 'Bazı turnuvalar puanlıdır ve oyun puanınızı etkiler.';
 
   @override
-  String get arenaHowAreScoresCalculated => 'How are scores calculated?';
+  String get arenaHowAreScoresCalculated => 'Maçlardan alınan puanlar nasıl hesaplanıyor?';
 
   @override
   String get arenaHowAreScoresCalculatedAnswer =>
-      'A win has a base score of 2 points, a draw 1 point, and a loss is worth no points.\nIf you win two games consecutively you will start a double-point streak, represented by a flame icon.\nThe following games will continue to be worth double points until you fail to win a game.\nThat is, a win will be worth 4 points, a draw 2 points and a loss will still not award any points.\n\nFor example, two wins followed by a draw will be worth 6 points: 2 + 2 + (2 x 1)';
+      'Kazanılan bir oyun temelde 2 puan, beraberlik 1 puan değerindedir. Kaybedilen bir oyun ise hiçbir puan getirmez. Üst üste iki oyun kazandığınız takdirde alev ikonu ile simgelenen çifte puan serisine girersiniz.\n\nMağlup olana veya berabere kalana kadar yapılan maçlardan iki katı puan kazanırsınız. Yani seride iken bir galibiyet 4 puan, beraberlik 2 puan getirirken kaybedilen oyundan hiçbir puan alınmaz.\n\nÖrneğin; üst üste kazanılan iki oyun ve ardından alınan bir beraberlik 6 puan değerindedir: 2 + 2 + (2 x 1)';
 
   @override
-  String get arenaBerserk => 'Arena Berserk';
+  String get arenaBerserk => 'Divane Modu';
 
   @override
   String get arenaBerserkAnswer =>
-      'When a player clicks the Berserk button at the beginning of the game, they lose half of their clock time, but the win is worth one extra tournament point.\n\nGoing Berserk in time controls with an increment also cancels the increment (1+2 is an exception, it gives 1+0).\n\nBerserk is not available for games with zero initial time (0+1, 0+2).\n\nBerserk only grants an extra point if you play at least 7 moves in the game.';
+      'Oyunun başında ekranın sağ altında bulunan \"Berserk\" tuşuna tıklayan oyuncu süresinin yarısından feragat eder ancak maçı kazandığı takdirde fazladan 1 turnuva puanı alır.\n\nSüre eklemeli oyunlarda Divane açan oyuncuya hamle sonrası süre ilave edilmez. (1+2 bir istisnadır, bu tempoda süre 1+0 olur)\n\nSıfır dakika ile başlayan oyunlarda Divane seçeneği mevcut değildir. (0+1, 0+2).\n\nDivane açılan bir oyun en az 7 hamle oynanmadan bitmiş ise ek puan geçerli değildir.';
 
   @override
-  String get arenaHowIsTheWinnerDecided => 'How is the winner decided?';
+  String get arenaHowIsTheWinnerDecided => 'Kazanan nasıl belirleniyor?';
 
   @override
   String get arenaHowIsTheWinnerDecidedAnswer =>
-      'The player(s) with the most points after the tournament\'s set time limit will be announced the winner(s).\n\nWhen two or more players have the same number of points, the tournament performance is the tie break.';
+      'Turnuva sona erdiğinde en fazla puana sahip oyuncu(lar) galip ilan edilir.';
 
   @override
-  String get arenaHowDoesPairingWork => 'How does the pairing work?';
+  String get arenaHowDoesPairingWork => 'Eşleştirme nasıl yapılıyor?';
 
   @override
   String get arenaHowDoesPairingWorkAnswer =>
-      'At the beginning of the tournament, players are paired based on their rating.\nAs soon as you finish a game, return to the tournament lobby: you will then be paired with a player close to your ranking. This ensures minimum wait time, however, you may not face all other players in the tournament.\nPlay fast and return to the lobby to play more games and win more points.';
+      'Turnuvanın başında eşleştirmeler oyuncuların puanlarına göre yapılır. Oyunu bitirip lobiye döndüğünüz anda ise kendi sıralamanıza yakın bir rakip ile eşleştirilirsiniz. Böylece bekleme süresi en aza indirgenmiş olur fakat turnuvadaki tüm oyuncularla karşılaşamayabilirsiniz.\n\nDaha fazla oyun oynayıp daha çok puan kazanmak için hızlıca oynayın ve lobiye dönün.';
 
   @override
-  String get arenaHowDoesItEnd => 'How does it end?';
+  String get arenaHowDoesItEnd => 'Turnuva nasıl sona erer?';
 
   @override
   String get arenaHowDoesItEndAnswer =>
-      'The tournament has a countdown clock. When it reaches zero, the tournament rankings are frozen, and the winner is announced. Games in progress must be finished, however, they don\'t count for the tournament.';
+      'Turnuvanın belirli bir süresi vardır. Bu süre bittiğinde sıralamalar kilitlenir ve kazanlar ilan edilir. Devam etmekte olan oyunların bitirilmesi gerekir ancak bu oyunlar turnuvaya dahil edilmez.';
 
   @override
-  String get arenaOtherRules => 'Other important rules';
+  String get arenaOtherRules => 'Diğer önemli kurallar';
 
   @override
   String get arenaThereIsACountdown =>
-      'There is a countdown for your first move. Failing to make a move within this time will forfeit the game to your opponent.';
+      'İlk hamlenizi yapmanız için bir geri sayım vardır. Verilen süre içinde bir hamle yapmadığınız takdirde rakibiniz galip sayılır.';
 
   @override
-  String get arenaThisIsPrivate => 'This is a private tournament';
+  String get arenaThisIsPrivate => 'Bu özel bir turnuvadır';
 
   @override
   String arenaShareUrl(String param) {
-    return 'Share this URL to let people join: $param';
+    return 'Arkadaşlarını davet etmek için bu URL\'yi kullanabilirsin: $param';
   }
 
   @override
   String arenaDrawStreakStandard(String param) {
-    return 'Draw streaks: When a player has consecutive draws in an arena, only the first draw will result in a point or draws lasting more than $param moves in standard games. The draw streak can only be broken by a win, not a loss or a draw.';
+    return 'Beraberlik serisi: Arena turnuvasında üst üste berabere kalan bir oyuncu sadece ilk maçtan puan alır. Beraberlik serisi yalnızca bir galibiyet ile bozulur, yenilgi veya başka bir beraberlikte devam eder. Ek olarak, klasik maçlarda $param hamleden uzun süren beraberliklerde oyuncular yine puan alır.';
   }
 
   @override
   String get arenaDrawStreakVariants =>
-      'The minimum game length for drawn games to award points differs by variant. The table below lists the threshold for each variant.';
+      'Berabere biten oyunların puan getirmesi için gereken minimum hamle sayısı varyanta göre değişir. Her varyant için gerekli olan asgari hamle sayısı tabloda verilmiştir.';
 
   @override
-  String get arenaVariant => 'Variant';
+  String get arenaVariant => 'Varyant';
 
   @override
-  String get arenaMinimumGameLength => 'Minimum game length';
+  String get arenaMinimumGameLength => 'Asgari hamle sayısı';
 
   @override
-  String get arenaHistory => 'Arena History';
+  String get arenaHistory => 'Arena Geçmişi';
 
   @override
-  String get arenaNewTeamBattle => 'New Team Battle';
+  String get arenaNewTeamBattle => 'Yeni Takım Çarpışması';
 
   @override
-  String get arenaCustomStartDate => 'Custom start date';
+  String get arenaCustomStartDate => 'Özel başlangıç tarihi';
 
   @override
   String get arenaCustomStartDateHelp =>
-      'In your own local timezone. This overrides the \"Time before tournament starts\" setting';
+      'Kendi saat diliminizi kullanın. \"Turnuvaya kalan süre\" ayarı geçersiz kalacaktır';
 
   @override
-  String get arenaAllowBerserk => 'Allow Berserk';
+  String get arenaAllowBerserk => 'Divane moduna izin ver';
 
   @override
-  String get arenaAllowBerserkHelp => 'Let players halve their clock time to gain an extra point';
+  String get arenaAllowBerserkHelp =>
+      'Ekstra puan kazanmak isteyen oyuncuların, sürelerinin yarısından feragat etmesine izin ver';
 
   @override
-  String get arenaAllowChatHelp => 'Let players discuss in a chat room';
+  String get arenaAllowChatHelp => 'Oyuncuların sohbet odasında konuşmasına izin ver';
 
   @override
-  String get arenaArenaStreaks => 'Arena streaks';
+  String get arenaArenaStreaks => 'Arena serisi';
 
   @override
-  String get arenaArenaStreaksHelp => 'After 2 wins, consecutive wins grant 4 points instead of 2.';
+  String get arenaArenaStreaksHelp =>
+      '2 kez üst üste kazandıktan sonra yapılan maçlar 2 yerine 4 puan verir.';
 
   @override
-  String get arenaNoBerserkAllowed => 'No Berserk allowed';
+  String get arenaNoBerserkAllowed => 'Divane modu devre dışı';
 
   @override
-  String get arenaNoArenaStreaks => 'No Arena streaks';
+  String get arenaNoArenaStreaks => 'Arena serisi devre dışı';
 
   @override
-  String get arenaAveragePerformance => 'Average performance';
+  String get arenaAveragePerformance => 'Ortalama performans';
 
   @override
-  String get arenaAverageScore => 'Average score';
+  String get arenaAverageScore => 'Ortalama skor';
 
   @override
-  String get arenaMyTournaments => 'My tournaments';
+  String get arenaMyTournaments => 'Turnuvalarım';
 
   @override
-  String get arenaEditTournament => 'Edit tournament';
+  String get arenaEditTournament => 'Turnuvayı düzenle';
 
   @override
-  String get arenaEditTeamBattle => 'Edit team battle';
+  String get arenaEditTeamBattle => 'Takım çarpışmasını düzenle';
 
   @override
-  String get arenaDefender => 'Defender';
+  String get arenaDefender => 'Savunucu';
 
   @override
-  String get arenaPickYourTeam => 'Pick your team';
+  String get arenaPickYourTeam => 'Takımınızı seçin';
 
   @override
   String get arenaWhichTeamWillYouRepresentInThisBattle =>
-      'Which team will you represent in this battle?';
+      'Bu mücadelede hangi takımı temsil edeceksiniz?';
 
   @override
   String get arenaYouMustJoinOneOfTheseTeamsToParticipate =>
-      'You must join one of these teams to participate!';
+      'Katılmak için bu takımlardan birine katılmanız gerekir!';
 
   @override
-  String get arenaCreated => 'Created';
+  String get arenaCreated => 'Oluşturuldu';
 
   @override
-  String get arenaRecentlyPlayed => 'Recently played';
+  String get arenaRecentlyPlayed => 'Son oynananlar';
 
   @override
-  String get arenaBestResults => 'Best results';
+  String get arenaBestResults => 'En iyi sonuçlar';
 
   @override
-  String get arenaTournamentStats => 'Tournament stats';
+  String get arenaTournamentStats => 'Turnuva istatistikleri';
 
   @override
   String get arenaRankAvgHelp =>
-      'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+      'Sıralama ortalaması, sıralamanızın yüzdesidir. Daha düşük olması daha iyidir.\n\nÖrneğin, 100 oyunculu bir turnuvada 3. sırada olmak = %3. 1000 oyunculu bir turnuvada 10. sırada olmak = %1.';
 
   @override
-  String get arenaMedians => 'medians';
+  String get arenaMedians => 'ortancadır';
 
   @override
   String arenaAllAveragesAreX(String param) {
-    return 'All averages on this page are $param.';
+    return 'Bu sayfadaki tüm değerler $param.';
   }
 
   @override
-  String get arenaTotal => 'Total';
+  String get arenaTotal => 'Toplam';
 
   @override
-  String get arenaPointsAvg => 'Points average';
+  String get arenaPointsAvg => 'Puan ortalaması';
 
   @override
-  String get arenaPointsSum => 'Points sum';
+  String get arenaPointsSum => 'Puan toplamı';
 
   @override
-  String get arenaRankAvg => 'Rank average';
+  String get arenaRankAvg => 'Sıralama ortalaması';
 
   @override
-  String get arenaTournamentWinners => 'Tournament winners';
+  String get arenaTournamentWinners => 'Turnuva şampiyonları';
 
   @override
-  String get arenaTournamentShields => 'Tournament shields';
+  String get arenaTournamentShields => 'Turnuva kalkanları';
 
   @override
-  String get arenaOnlyTitled => 'Only titled players';
+  String get arenaOnlyTitled => 'Sadece unvanlı oyuncular';
 
   @override
-  String get arenaOnlyTitledHelp => 'Require an official title to join the tournament';
+  String get arenaOnlyTitledHelp => 'Turnuvaya katılmak için resmî bir unvana sahip olmayı iste';
 
   @override
   String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Divane oranı';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Drawing the game within the first $count moves will earn neither player any points.',
-      one: 'Drawing the game within the first $count move will earn neither player any points.',
+      other: 'İlk $count hamle içinde oyun berabere biterse hiçbir oyuncu puan kazanamaz.',
+      one: 'İlk $count hamle içinde oyun berabere biterse hiçbir oyuncu puan kazanamaz.',
     );
     return '$_temp0';
   }
@@ -679,259 +682,262 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'View all $count teams',
-      one: 'View the team',
+      other: 'Tüm $count takımlarını görüntüleyin',
+      one: 'Takımı görüntüleyin',
     );
     return '$_temp0';
   }
 
   @override
-  String get broadcastBroadcasts => 'Broadcasts';
+  String get broadcastBroadcasts => 'Canlı Turnuvalar';
 
   @override
-  String get broadcastMyBroadcasts => 'My broadcasts';
+  String get broadcastMyBroadcasts => 'Canlı Turnuvalarım';
 
   @override
-  String get broadcastLiveBroadcasts => 'Live tournament broadcasts';
+  String get broadcastLiveBroadcasts => 'Canlı Turnuva Yayınları';
 
   @override
-  String get broadcastBroadcastCalendar => 'Broadcast calendar';
+  String get broadcastBroadcastCalendar => 'Turnuva takvimi';
 
   @override
-  String get broadcastNewBroadcast => 'New live broadcast';
+  String get broadcastNewBroadcast => 'Canlı Turnuva Ekle';
 
   @override
-  String get broadcastSubscribedBroadcasts => 'Subscribed broadcasts';
+  String get broadcastSubscribedBroadcasts => 'Abone olduğunuz canlı turnuvalar';
 
   @override
-  String get broadcastAboutBroadcasts => 'About broadcasts';
+  String get broadcastAboutBroadcasts => 'Canlı Turnuvalar hakkında';
 
   @override
-  String get broadcastHowToUseLichessBroadcasts => 'How to use Lichess Broadcasts.';
+  String get broadcastHowToUseLichessBroadcasts => 'Lichess Canlı Turnuvaları nasıl kullanılır.';
 
   @override
   String get broadcastTheNewRoundHelp =>
-      'The new round will have the same members and contributors as the previous one.';
+      'Yeni tur, önceki turdaki üyeler ve katkıda bulunanlarla aynı olacak.';
 
   @override
-  String get broadcastAddRound => 'Add a round';
+  String get broadcastAddRound => 'Bir tur ekle';
 
   @override
-  String get broadcastOngoing => 'Ongoing';
+  String get broadcastOngoing => 'Devam eden turnuvalar';
 
   @override
-  String get broadcastUpcoming => 'Upcoming';
+  String get broadcastUpcoming => 'Yaklaşan turnuvalar';
 
   @override
-  String get broadcastRoundName => 'Round name';
+  String get broadcastRoundName => 'Tur ismi';
 
   @override
-  String get broadcastRoundNumber => 'Round number';
+  String get broadcastRoundNumber => 'Tur sayısı';
 
   @override
-  String get broadcastTournamentName => 'Tournament name';
+  String get broadcastTournamentName => 'Turnuva ismi';
 
   @override
-  String get broadcastTournamentDescription => 'Short tournament description';
+  String get broadcastTournamentDescription => 'Turnuvanın kısa tanımı';
 
   @override
-  String get broadcastFullDescription => 'Full tournament description';
+  String get broadcastFullDescription => 'Etkinliğin detaylıca açıklaması';
 
   @override
   String broadcastFullDescriptionHelp(String param1, String param2) {
-    return 'Optional long description of the tournament. $param1 is available. Length must be less than $param2 characters.';
+    return 'Etkinliğin isteğe bağlı detaylı açıklaması. $param1 seçeneği mevcuttur. Metnin uzunluğu azami $param2 karakter olmalıdır.';
   }
 
   @override
-  String get broadcastSourceSingleUrl => 'PGN Source URL';
+  String get broadcastSourceSingleUrl => 'PGN Kaynak URL\'si';
 
   @override
   String get broadcastSourceUrlHelp =>
-      'URL that Lichess will check to get PGN updates. It must be publicly accessible from the Internet.';
+      'Lichess, sağladığınız URL yardımıyla PGN\'yi güncelleyecektir. İnternet üzerinden herkese açık bir URL yazmalısınız.';
 
   @override
-  String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
+  String get broadcastSourceGameIds => 'Boşluklarla ayrılmış 64 adede kadar Lichess oyun ID\'si.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Start date in the tournament local timezone: $param';
+    return 'Turnuva yerel saati ile başlama zamanı: $param';
   }
 
   @override
-  String get broadcastStartDateHelp => 'Optional, if you know when the event starts';
+  String get broadcastStartDateHelp =>
+      'İsteğe bağlı, etkinliğin ne zaman başladığını biliyorsanız ekleyebilirsiniz.';
 
   @override
-  String get broadcastCurrentGameUrl => 'Current game URL';
+  String get broadcastCurrentGameUrl => 'Şu anki oyunun linki';
 
   @override
-  String get broadcastDownloadAllRounds => 'Download all rounds';
+  String get broadcastDownloadAllRounds => 'Bütün maçları indir';
 
   @override
-  String get broadcastResetRound => 'Reset this round';
+  String get broadcastResetRound => 'Bu turu sıfırla';
 
   @override
-  String get broadcastDeleteRound => 'Delete this round';
+  String get broadcastDeleteRound => 'Bu turu sil';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
+  String get broadcastDefinitivelyDeleteRound => 'Turu ve oyunlarını tamamen sil.';
 
   @override
   String get broadcastDeleteAllGamesOfThisRound =>
-      'Delete all games of this round. The source will need to be active in order to re-create them.';
+      'Bu turdaki tüm oyunları sil. Tekrardan yapılabilmesi için kaynağın aktif olması gerekir.';
 
   @override
-  String get broadcastEditRoundStudy => 'Edit round study';
+  String get broadcastEditRoundStudy => 'Tur çalışmasını düzenle';
 
   @override
-  String get broadcastDeleteTournament => 'Delete this tournament';
+  String get broadcastDeleteTournament => 'Bu turnuvayı sil';
 
   @override
   String get broadcastDefinitivelyDeleteTournament =>
-      'Definitively delete the entire tournament, all its rounds and all its games.';
+      'Bütün turnuvayı, turlarını ve oyunlarını kalıcı olarak sil.';
 
   @override
-  String get broadcastShowScores => 'Show players scores based on game results';
+  String get broadcastShowScores => 'Oyuncuların puanlarını oyun sonuçlarına göre göster';
 
   @override
-  String get broadcastReplacePlayerTags => 'Optional: replace player names, ratings and titles';
+  String get broadcastReplacePlayerTags =>
+      'İsteğe bağlı: Oyuncu adlarını, derecelendirmelerini ve unvanlarını değiştirin';
 
   @override
-  String get broadcastFideFederations => 'FIDE federations';
+  String get broadcastFideFederations => 'FIDE federasyonları';
 
   @override
-  String get broadcastTop10Rating => 'Top 10 rating';
+  String get broadcastTop10Rating => 'İlk 10 rating';
 
   @override
-  String get broadcastFidePlayers => 'FIDE players';
+  String get broadcastFidePlayers => 'FIDE oyuncuları';
 
   @override
-  String get broadcastFidePlayerNotFound => 'FIDE player not found';
+  String get broadcastFidePlayerNotFound => 'FIDE oyuncusu bulunamadı';
 
   @override
-  String get broadcastFideProfile => 'FIDE profile';
+  String get broadcastFideProfile => 'FIDE profili';
 
   @override
-  String get broadcastFederation => 'Federation';
+  String get broadcastFederation => 'Federasyon';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAgeThisYear => 'Bu yılki yaşı';
 
   @override
-  String get broadcastUnrated => 'Unrated';
+  String get broadcastUnrated => 'Derecelendirilmemiş';
 
   @override
-  String get broadcastRecentTournaments => 'Recent tournaments';
+  String get broadcastRecentTournaments => 'Son Turnuvalar';
 
   @override
-  String get broadcastOpenLichess => 'Open in Lichess';
+  String get broadcastOpenLichess => 'Lichess\'te aç';
 
   @override
-  String get broadcastTeams => 'Teams';
+  String get broadcastTeams => 'Takımlar';
 
   @override
-  String get broadcastBoards => 'Boards';
+  String get broadcastBoards => 'Tahtalar';
 
   @override
-  String get broadcastOverview => 'Overview';
+  String get broadcastOverview => 'Genel Bakış';
 
   @override
   String get broadcastSubscribeTitle =>
-      'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+      'Tur başladığında bildirim almak için abone olun. Hesap tercihlerinizden anlık ya da çan bildirimi tercihinizi hesap tercihlerinizden belirleyebilirsiniz.';
 
   @override
-  String get broadcastUploadImage => 'Upload tournament image';
+  String get broadcastUploadImage => 'Turnuva görseli yükleyin';
 
   @override
-  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+  String get broadcastNoBoardsYet =>
+      'Henüz tahta bulunmamaktadır. Oyunlar yüklendikçe tahtalar ortaya çıkacaktır.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Boards can be loaded with a source or via the $param';
+    return 'Tahtalar bir kaynaktan ya da ${param}ndan yüklenebilir';
   }
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return '$param\'ten sonra başlar';
   }
 
   @override
-  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+  String get broadcastStartVerySoon => 'Yayın az sonra başlayacak.';
 
   @override
-  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+  String get broadcastNotYetStarted => 'Yayın henüz başlamadı.';
 
   @override
-  String get broadcastOfficialWebsite => 'Official website';
+  String get broadcastOfficialWebsite => 'Resmî site';
 
   @override
-  String get broadcastStandings => 'Standings';
+  String get broadcastStandings => 'Sıralamalar';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Resmi Sıralamalar';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return '${param}nda daha fazla seçenek';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'ağ yöneticileri sayfası';
 
   @override
   String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+    return 'Bu turun açık, gerçek zamanlı PGN kaynağı. Daha hızlı ve verimli senkronizasyon için $param\'ımız da bulunmaktadır.';
   }
 
   @override
-  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+  String get broadcastEmbedThisBroadcast => 'İnternet sitenizde bu yayını gömülü paylaşın';
 
   @override
   String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
+    return '${param}u İnternet sitenizde gömülü paylaşın';
   }
 
   @override
-  String get broadcastRatingDiff => 'Rating diff';
+  String get broadcastRatingDiff => 'Puan farkı';
 
   @override
-  String get broadcastGamesThisTournament => 'Games in this tournament';
+  String get broadcastGamesThisTournament => 'Bu turnuvadaki maçlar';
 
   @override
-  String get broadcastScore => 'Score';
+  String get broadcastScore => 'Skor';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Tüm takımlar';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Turnuva biçimi';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Turnuva Konumu';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'En iyi oyuncular';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Zaman dilimi';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'FIDE derecelendirme kategorisi';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'İsteğe bağlı ayrıntılar';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
+  String get broadcastPastBroadcasts => 'Geçmiş yayınlar';
 
   @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Tüm yayınları aylara göre görüntüleyin';
 
   @override
-  String get broadcastBackToLiveMove => 'Back to live move';
+  String get broadcastBackToLiveMove => 'Canlı hamleye dön';
 
   @override
   String get broadcastSinceHideResults =>
-      'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
+      'Sonuçları gizlemeyi seçtiğiniz için, spoiler vermemek adına tüm tahta görünümleri boş olacak.';
 
   @override
   String get broadcastLiveboard => 'Live board';
@@ -941,8 +947,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count broadcasts',
-      one: '$count broadcast',
+      other: '$count canlı turnuva',
+      one: '$count canlı turnuva',
     );
     return '$_temp0';
   }
@@ -1052,69 +1058,68 @@ class AppLocalizationsTr extends AppLocalizations {
   String get contactContactLichess => 'Lichess ile iletişime geçin';
 
   @override
-  String get coordinatesCoordinates => 'Coordinates';
+  String get coordinatesCoordinates => 'Koordinatlar';
 
   @override
-  String get coordinatesCoordinateTraining => 'Coordinate training';
+  String get coordinatesCoordinateTraining => 'Koordinat Antrenmanı';
 
   @override
   String coordinatesAverageScoreAsWhiteX(String param) {
-    return 'Average score as white: $param';
+    return 'Beyaz olarak ortalama skor: $param';
   }
 
   @override
   String coordinatesAverageScoreAsBlackX(String param) {
-    return 'Average score as black: $param';
+    return 'Siyah olarak ortalama skor: $param';
   }
 
   @override
   String get coordinatesKnowingTheChessBoard =>
-      'Knowing the chessboard coordinates is a very important skill for several reasons:';
+      'Satranç tahtasının koordinatlarını bilmek çok önemli bir satranç becerisidir:';
 
   @override
   String get coordinatesMostChessCourses =>
-      'Most chess courses and exercises use the algebraic notation extensively.';
+      'Satranç derslerinin ve alıştırmalarının çoğunda cebirsel gösterim kullanılır.';
 
   @override
   String get coordinatesTalkToYourChessFriends =>
-      'It makes it easier to talk to your chess friends, since you both understand the \'language of chess\'.';
+      '\"Satranç dilini\" anlayabildiğin için satranç oynayan arkadaşlarınla anlaşman daha kolay bir hâl alır.';
 
   @override
   String get coordinatesYouCanAnalyseAGameMoreEffectively =>
-      'You can analyse a game more effectively if you can quickly recognise coordinates.';
+      'Karelerin adlarını iyice bilirsen oyunları daha etkili bir şekilde analiz edebilirsin.';
 
   @override
   String get coordinatesACoordinateAppears =>
-      'A coordinate appears on the board and you must click on the corresponding square.';
+      'Tahta üzerinde sana verilecek koordinata karşılık gelen kareye tıklamalısın.';
 
   @override
   String get coordinatesASquareIsHighlightedExplanation =>
-      'A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").';
+      'Tahta üzerinde gösterilen karenin koordinatını yazmalısın (\"e4\" gibi).';
 
   @override
-  String get coordinatesYouHaveThirtySeconds =>
-      'You have 30 seconds to correctly map as many squares as possible!';
+  String get coordinatesYouHaveThirtySeconds => '30 saniye içinde kaç tane kare bulabilirsen!';
 
   @override
-  String get coordinatesGoAsLongAsYouWant => 'Go as long as you want, there is no time limit!';
+  String get coordinatesGoAsLongAsYouWant => 'İstediğin kadar oyna, süre sınırı yok!';
 
   @override
-  String get coordinatesShowCoordinates => 'Show coordinates';
+  String get coordinatesShowCoordinates => 'Koordinatları göster';
 
   @override
-  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+  String get coordinatesShowCoordsOnAllSquares => 'Her karede koordinatlar';
 
   @override
-  String get coordinatesShowPieces => 'Show pieces';
+  String get coordinatesShowPieces => 'Taşları göster';
 
   @override
-  String get coordinatesStartTraining => 'Start training';
+  String get coordinatesStartTraining => 'Antrenmana başla';
 
   @override
-  String get coordinatesFindSquare => 'Find square';
+  String get coordinatesFindSquare => 'Kareleri bul';
 
   @override
-  String get coordinatesNameSquare => 'Name square';
+  String get coordinatesNameSquare => 'Kareleri yaz';
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
@@ -1450,234 +1455,236 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferencesBlindfold => 'Körleme modu';
 
   @override
-  String get puzzlePuzzles => 'Puzzles';
+  String get puzzlePuzzles => 'Bulmacalar';
 
   @override
-  String get puzzlePuzzleThemes => 'Puzzle Themes';
+  String get puzzlePuzzleThemes => 'Bulmaca temaları';
 
   @override
-  String get puzzleRecommended => 'Recommended';
+  String get puzzleRecommended => 'Önerilen';
 
   @override
-  String get puzzlePhases => 'Phases';
+  String get puzzlePhases => 'Oyun aşamaları';
 
   @override
-  String get puzzleMotifs => 'Motifs';
+  String get puzzleMotifs => 'Motifler';
 
   @override
-  String get puzzleAdvanced => 'Advanced';
+  String get puzzleAdvanced => 'İleri düzey';
 
   @override
-  String get puzzleLengths => 'Lengths';
+  String get puzzleLengths => 'Uzunluğa göre';
 
   @override
-  String get puzzleMates => 'Mates';
+  String get puzzleMates => 'Matlar';
 
   @override
-  String get puzzleGoals => 'Goals';
+  String get puzzleGoals => 'Hedefler';
 
   @override
-  String get puzzleOrigin => 'Origin';
+  String get puzzleOrigin => 'Kaynak';
 
   @override
-  String get puzzleSpecialMoves => 'Special moves';
+  String get puzzleSpecialMoves => 'Özel hamleler';
 
   @override
-  String get puzzleDidYouLikeThisPuzzle => 'Did you like this puzzle?';
+  String get puzzleDidYouLikeThisPuzzle => 'Bulmacayı beğendiniz mi?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Vote to load the next one!';
+  String get puzzleVoteToLoadNextOne => 'Sıradakine geçmek için oy verin!';
 
   @override
-  String get puzzleUpVote => 'Up vote puzzle';
+  String get puzzleUpVote => 'Bulmacayı beğen';
 
   @override
-  String get puzzleDownVote => 'Down vote puzzle';
+  String get puzzleDownVote => 'Bulmacayı beğenme';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange =>
-      'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.';
+      'Bulmaca puanınız değişmeyecek. Bulmacaların bir yarış olmadığını unutmayın. Bu puan mevcut becerilerinize en uygun bulmacayı seçmeye yardımcı olur.';
 
   @override
-  String get puzzleFindTheBestMoveForWhite => 'Find the best move for white.';
+  String get puzzleFindTheBestMoveForWhite => 'Beyaz için en iyi hamleyi bulunuz.';
 
   @override
-  String get puzzleFindTheBestMoveForBlack => 'Find the best move for black.';
+  String get puzzleFindTheBestMoveForBlack => 'Siyah için en iyi hamleyi bulun.';
 
   @override
-  String get puzzleToGetPersonalizedPuzzles => 'To get personalized puzzles:';
+  String get puzzleToGetPersonalizedPuzzles => 'Kişiselleştirilmiş bulmacalar için:';
 
   @override
   String puzzlePuzzleId(String param) {
-    return 'Puzzle $param';
+    return 'Bulmaca $param';
   }
 
   @override
-  String get puzzlePuzzleOfTheDay => 'Puzzle of the day';
+  String get puzzlePuzzleOfTheDay => 'Günün bulmacası';
 
   @override
-  String get puzzleDailyPuzzle => 'Daily Puzzle';
+  String get puzzleDailyPuzzle => 'Günlük Bulmaca';
 
   @override
-  String get puzzleClickToSolve => 'Click to solve';
+  String get puzzleClickToSolve => 'Çözmek için tıklayın';
 
   @override
-  String get puzzleGoodMove => 'Good move';
+  String get puzzleGoodMove => 'İyi hamle';
 
   @override
-  String get puzzleBestMove => 'Best move!';
+  String get puzzleBestMove => 'En iyi hamle!';
 
   @override
-  String get puzzleKeepGoing => 'Keep going…';
+  String get puzzleKeepGoing => 'Devam et...';
 
   @override
-  String get puzzlePuzzleSuccess => 'Success!';
+  String get puzzlePuzzleSuccess => 'Başarılı!';
 
   @override
-  String get puzzlePuzzleComplete => 'Puzzle complete!';
+  String get puzzlePuzzleComplete => 'Bulmaca tamamlandı!';
 
   @override
-  String get puzzleByOpenings => 'By openings';
+  String get puzzleByOpenings => 'Açılışlardan';
 
   @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+  String get puzzlePuzzlesByOpenings => 'Açılışlardan bulmacalar';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
+  String get puzzleOpeningsYouPlayedTheMost => 'Dereceli oyunlarda en çok oynadığınız açılışlar';
 
   @override
   String get puzzleUseFindInPage =>
-      'Use \"Find in page\" in the browser menu to find your favourite opening!';
+      'Favori açılışlarınızı bulmak için tarayıcı menüsündeki \" Sayfa içinde bul\" seçeneğini kullanın!';
 
   @override
-  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
+  String get puzzleUseCtrlF => 'Favori açılışınızı bulmak bulmak için Ctrl+f kısayolunu kullanın!';
 
   @override
-  String get puzzleNotTheMove => 'That\'s not the move!';
+  String get puzzleNotTheMove => 'Olmadı!';
 
   @override
-  String get puzzleTrySomethingElse => 'Try something else.';
+  String get puzzleTrySomethingElse => 'Başka bir şey dene.';
 
   @override
   String puzzleRatingX(String param) {
-    return 'Rating: $param';
+    return 'Puan: $param';
   }
 
   @override
-  String get puzzleHidden => 'hidden';
+  String get puzzleHidden => 'gizli';
 
   @override
   String puzzleFromGameLink(String param) {
-    return 'From game $param';
+    return 'Maçın linki: $param';
   }
 
   @override
-  String get puzzleContinueTraining => 'Continue training';
+  String get puzzleContinueTraining => 'Pratik yapmaya devam et';
 
   @override
-  String get puzzleDifficultyLevel => 'Difficulty level';
+  String get puzzleDifficultyLevel => 'Zorluk seviyesi';
 
   @override
   String get puzzleNormal => 'Normal';
 
   @override
-  String get puzzleEasier => 'Easier';
+  String get puzzleEasier => 'Kolay';
 
   @override
-  String get puzzleEasiest => 'Easiest';
+  String get puzzleEasiest => 'Çok kolay';
 
   @override
-  String get puzzleHarder => 'Harder';
+  String get puzzleHarder => 'Zor';
 
   @override
-  String get puzzleHardest => 'Hardest';
+  String get puzzleHardest => 'Çok zor';
 
   @override
-  String get puzzleExample => 'Example';
+  String get puzzleExample => 'Örnek';
 
   @override
-  String get puzzleAddAnotherTheme => 'Add another theme';
+  String get puzzleAddAnotherTheme => 'Başka bir tema ekle';
 
   @override
-  String get puzzleNextPuzzle => 'Next puzzle';
+  String get puzzleNextPuzzle => 'Sıradaki bulmaca';
 
   @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Jump to next puzzle immediately';
+  String get puzzleJumpToNextPuzzleImmediately => 'Hemen sonraki bulmacaya atla';
 
   @override
-  String get puzzlePuzzleDashboard => 'Puzzle Dashboard';
+  String get puzzlePuzzleDashboard => 'Bulmaca kontrol paneli';
 
   @override
-  String get puzzleImprovementAreas => 'Improvement areas';
+  String get puzzleImprovementAreas => 'Gelişim alanları';
 
   @override
-  String get puzzleStrengths => 'Strengths';
+  String get puzzleStrengths => 'Güçlü yönler';
 
   @override
-  String get puzzleHistory => 'Puzzle history';
+  String get puzzleHistory => 'Bulmaca geçmişi';
 
   @override
-  String get puzzleSolved => 'solved';
+  String get puzzleSolved => 'çözüldü';
 
   @override
-  String get puzzleFailed => 'incorrect';
+  String get puzzleFailed => 'başarısız';
 
   @override
   String get puzzleStreakDescription =>
-      'Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it\'s game over! But you can skip one move per session.';
+      'Giderek zorlaşan bulmacaları çözün ve bir galibiyet serisi oluşturun. Zaman sınırı yok, bu yüzden acele etmeyin. Bir yanlış hamleye oyun biter! Fakat tur başına bir hamle atlayabilirsiniz.';
 
   @override
   String puzzleYourStreakX(String param) {
-    return 'Your streak: $param';
+    return 'Seriniz: $param';
   }
 
   @override
   String get puzzleStreakSkipExplanation =>
-      'Skip this move to preserve your streak! Only works once per run.';
+      'Serini korumak için bu hamleyi atla! Her turda sadece bir atlama hakkın var.';
 
   @override
-  String get puzzleContinueTheStreak => 'Continue the streak';
+  String get puzzleContinueTheStreak => 'Seriye devam et';
 
   @override
-  String get puzzleNewStreak => 'New streak';
+  String get puzzleNewStreak => 'Yeni seri';
 
   @override
-  String get puzzleFromMyGames => 'From my games';
+  String get puzzleFromMyGames => 'Benim oyunlarımdan';
 
   @override
-  String get puzzleLookupOfPlayer => 'Lookup puzzles from a player\'s games';
+  String get puzzleLookupOfPlayer => 'Bir oyuncunun oyunlarından bulmaca ara';
 
   @override
-  String get puzzleSearchPuzzles => 'Search puzzles';
+  String get puzzleSearchPuzzles => 'Bulmaca ara';
 
   @override
   String get puzzleFromMyGamesNone =>
-      'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
+      'Veri tabanında sizin maçlarınızdan bir bulmaca bulamadık ama dert etmeyin, Lichess pabucunuzu dama atmadı. Size ait bulmacaların eklenme şansını artırmak için rapid ve klasik maçlar oynayın!';
 
   @override
-  String get puzzlePuzzleDashboardDescription => 'Train, analyse, improve';
+  String get puzzlePuzzleDashboardDescription =>
+      'Egzersiz yapın, analiz edin, becerilerinizi geliştirin';
 
   @override
   String puzzlePercentSolved(String param) {
-    return '$param solved';
+    return '$param çözüldü';
   }
 
   @override
-  String get puzzleNoPuzzlesToShow => 'Nothing to show, go play some puzzles first!';
+  String get puzzleNoPuzzlesToShow => 'Gösterilecek bir şey yok. Önce biraz bulmaca çöz!';
 
   @override
-  String get puzzleImprovementAreasDescription => 'Train these to optimize your progress!';
+  String get puzzleImprovementAreasDescription =>
+      'Gelişiminizi optimize etmek için bunlar üzerine çalışın!';
 
   @override
-  String get puzzleStrengthDescription => 'You perform the best in these themes';
+  String get puzzleStrengthDescription => 'En iyi performansı bu temalarda gösteriyorsunuz';
 
   @override
   String puzzlePlayedXTimes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Played $count times',
-      one: 'Played $count time',
+      other: '$count kez çözüldü',
+      one: '$count kez çözüldü',
     );
     return '$_temp0';
   }
@@ -1687,8 +1694,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count points below your puzzle rating',
-      one: 'One point below your puzzle rating',
+      other: 'Bulmaca puanınızın $count puan altında',
+      one: 'Bulmaca puanınızın bir puan altında',
     );
     return '$_temp0';
   }
@@ -1698,8 +1705,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count points above your puzzle rating',
-      one: 'One point above your puzzle rating',
+      other: 'Bulmaca puanınızdan $count puan yüksek',
+      one: 'Bulmaca puanınızdan bir puan yüksek',
     );
     return '$_temp0';
   }
@@ -1717,13 +1724,23 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count played');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bulmaca',
+      one: '$count bulmaca',
+    );
     return '$_temp0';
   }
 
   @override
   String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count to replay');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gözden geçirilecek',
+      one: '$count gözden geçirilecek',
+    );
     return '$_temp0';
   }
 
@@ -2183,416 +2200,417 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Hesap kapatılmıştır.';
 
   @override
-  String get playWithAFriend => 'Play with a friend';
+  String get playWithAFriend => 'Bir arkadaşınla oyna';
 
   @override
-  String get playWithTheMachine => 'Play with the computer';
+  String get playWithTheMachine => 'Bilgisayara karşı oyna';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'To invite someone to play, give this URL';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'Oyuna davet etmek için, bu linki gönderin';
 
   @override
-  String get gameOver => 'Game Over';
+  String get gameOver => 'Oyun bitti';
 
   @override
-  String get waitingForOpponent => 'Waiting for opponent';
+  String get waitingForOpponent => 'Rakip bekleniyor';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
+  String get orLetYourOpponentScanQrCode => 'Veya rakibiniz bu QR kodunu tarasın';
 
   @override
-  String get waiting => 'Waiting';
+  String get waiting => 'Bekleniyor';
 
   @override
-  String get yourTurn => 'Your turn';
+  String get yourTurn => 'Sıra sizde';
 
   @override
   String aiNameLevelAiLevel(String param1, String param2) {
-    return '$param1 level $param2';
+    return '$param1 seviye $param2';
   }
 
   @override
-  String get level => 'Level';
+  String get level => 'Seviye';
 
   @override
-  String get strength => 'Strength';
+  String get strength => 'Kuvvet';
 
   @override
-  String get toggleTheChat => 'Toggle the chat';
+  String get toggleTheChat => 'Sohbeti aç/kapat';
 
   @override
-  String get chat => 'Chat';
+  String get chat => 'Sohbet';
 
   @override
-  String get resign => 'Resign';
+  String get resign => 'Oyundan Çekil';
 
   @override
-  String get checkmate => 'Checkmate';
+  String get checkmate => 'Şah Mat';
 
   @override
-  String get stalemate => 'Stalemate';
+  String get stalemate => 'Pat';
 
   @override
-  String get white => 'White';
+  String get white => 'Beyaz';
 
   @override
-  String get black => 'Black';
+  String get black => 'Siyah';
 
   @override
-  String get asWhite => 'as white';
+  String get asWhite => 'beyazda';
 
   @override
-  String get asBlack => 'as black';
+  String get asBlack => 'siyahlarda';
 
   @override
-  String get randomColor => 'Random side';
+  String get randomColor => 'Rastgele renk';
 
   @override
-  String get createAGame => 'Create a game';
+  String get createAGame => 'Yeni bir oyun kur';
 
   @override
   String get createTheGame => 'Create the game';
 
   @override
-  String get whiteIsVictorious => 'White is victorious';
+  String get whiteIsVictorious => 'Zafer Beyazın';
 
   @override
-  String get blackIsVictorious => 'Black is victorious';
+  String get blackIsVictorious => 'Zafer Siyahın';
 
   @override
-  String get youPlayTheWhitePieces => 'You play the white pieces';
+  String get youPlayTheWhitePieces => 'Beyaz taşlar sizin';
 
   @override
-  String get youPlayTheBlackPieces => 'You play the black pieces';
+  String get youPlayTheBlackPieces => 'Siyah taşlar sizin';
 
   @override
-  String get itsYourTurn => 'It\'s your turn!';
+  String get itsYourTurn => 'Sıra sizde!';
 
   @override
-  String get cheatDetected => 'Cheat Detected';
+  String get cheatDetected => 'Hile Tespit Edildi';
 
   @override
-  String get kingInTheCenter => 'King in the centre';
+  String get kingInTheCenter => 'Şah merkezde';
 
   @override
-  String get threeChecks => 'Three checks';
+  String get threeChecks => 'Üç şah';
 
   @override
-  String get raceFinished => 'Race finished';
+  String get raceFinished => 'Yarış bitti';
 
   @override
-  String get variantEnding => 'Variant ending';
+  String get variantEnding => 'Varyant bitti';
 
   @override
-  String get newOpponent => 'New opponent';
+  String get newOpponent => 'Yeni rakip';
 
   @override
   String get yourOpponentWantsToPlayANewGameWithYou =>
-      'Your opponent wants to play a new game with you';
+      'Rakibiniz sizinle yeni bir oyun oynamak istiyor';
 
   @override
-  String get joinTheGame => 'Join the game';
+  String get joinTheGame => 'Oyuna katıl';
 
   @override
-  String get whitePlays => 'White to play';
+  String get whitePlays => 'Hamle Beyazda';
 
   @override
-  String get blackPlays => 'Black to play';
+  String get blackPlays => 'Hamle Siyahta';
 
   @override
   String get opponentLeftChoices =>
-      'Your opponent left the game. You can claim victory, call the game a draw, or wait.';
+      'Rakibiniz oyundan düştü ya da masayı terk etti. İsterseniz dönmesini bekleyebilir, oyuna berabere diyebilir ya da galibiyetinizi talep edebilirsiniz.';
 
   @override
-  String get forceResignation => 'Claim victory';
+  String get forceResignation => 'Galibiyet talep et';
 
   @override
-  String get forceDraw => 'Call draw';
+  String get forceDraw => 'Beraberlik ilan et';
 
   @override
-  String get talkInChat => 'Please be nice in the chat!';
+  String get talkInChat => 'Lütfen sohbette nazik ol!';
 
   @override
   String get theFirstPersonToComeOnThisUrlWillPlayWithYou =>
-      'The first person to come to this URL will play with you.';
+      'Bağlantıya ilk ulaşan kişi rakibiniz olacak.';
 
   @override
-  String get whiteResigned => 'White resigned';
+  String get whiteResigned => 'Beyaz oyundan çekildi';
 
   @override
-  String get blackResigned => 'Black resigned';
+  String get blackResigned => 'Siyah oyundan çekildi';
 
   @override
-  String get whiteLeftTheGame => 'White left the game';
+  String get whiteLeftTheGame => 'Beyaz oyundan ayrıldı';
 
   @override
-  String get blackLeftTheGame => 'Black left the game';
+  String get blackLeftTheGame => 'Siyah oyundan ayrıldı';
 
   @override
-  String get whiteDidntMove => 'White didn\'t move';
+  String get whiteDidntMove => 'Beyaz hamle yapmadı';
 
   @override
-  String get blackDidntMove => 'Black didn\'t move';
+  String get blackDidntMove => 'Siyah hamle yapmadı';
 
   @override
-  String get requestAComputerAnalysis => 'Request a computer analysis';
+  String get requestAComputerAnalysis => 'Bilgisayar analizi talep et';
 
   @override
-  String get computerAnalysis => 'Computer analysis';
+  String get computerAnalysis => 'Bilgisayar analizi';
 
   @override
-  String get computerAnalysisAvailable => 'Computer analysis available';
+  String get computerAnalysisAvailable => 'Bilgisayar analizi mevcut';
 
   @override
-  String get computerAnalysisDisabled => 'Computer analysis disabled';
+  String get computerAnalysisDisabled => 'Bilgisayar analizi devre dışı bırakıldı';
 
   @override
-  String get analysis => 'Analysis board';
+  String get analysis => 'Analiz tahtası';
 
   @override
   String depthX(String param) {
-    return 'Depth $param';
+    return 'Derinlik $param';
   }
 
   @override
-  String get usingServerAnalysis => 'Using server analysis';
+  String get usingServerAnalysis => 'Sunucu analizi yapılıyor';
 
   @override
-  String get loadingEngine => 'Loading engine...';
+  String get loadingEngine => 'Satranç motoru yükleniyor...';
 
   @override
-  String get calculatingMoves => 'Calculating moves...';
+  String get calculatingMoves => 'Hamleler hesaplanıyor...';
 
   @override
-  String get engineFailed => 'Error loading engine';
+  String get engineFailed => 'Motor yüklenirken hata oluştu';
 
   @override
-  String get cloudAnalysis => 'Cloud analysis';
+  String get cloudAnalysis => 'Bulut analizi';
 
   @override
-  String get goDeeper => 'Go deeper';
+  String get goDeeper => 'Daha derine in';
 
   @override
-  String get showThreat => 'Show threat';
+  String get showThreat => 'Tehdidi göster';
 
   @override
-  String get inLocalBrowser => 'in local browser';
+  String get inLocalBrowser => 'yerel tarayıcı üzerinde';
 
   @override
-  String get toggleLocalEvaluation => 'Toggle local evaluation';
+  String get toggleLocalEvaluation => 'Yerel analizi aç/kapat';
 
   @override
-  String get promoteVariation => 'Promote variation';
+  String get promoteVariation => 'Bu varyanttan devam et';
 
   @override
-  String get makeMainLine => 'Make mainline';
+  String get makeMainLine => 'Ana devam yolu yap';
 
   @override
-  String get deleteFromHere => 'Delete from here';
+  String get deleteFromHere => 'Bu hamleden sonrasını sil';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'Varyasyonları daralt';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Varyasyonları genişlet';
 
   @override
-  String get forceVariation => 'Force variation';
+  String get forceVariation => 'Varyant olarak göster';
 
   @override
-  String get copyVariationPgn => 'Copy variation PGN';
+  String get copyVariationPgn => 'Varyasyon PGN\'sini kopyala';
 
   @override
   String get copyMainLinePgn => 'Copy mainline PGN';
 
   @override
-  String get move => 'Move';
+  String get move => 'Hamle';
 
   @override
-  String get variantLoss => 'Variant loss';
+  String get variantLoss => 'Varyant yenilgisi';
 
   @override
-  String get variantWin => 'Variant win';
+  String get variantWin => 'Varyant zaferi';
 
   @override
-  String get insufficientMaterial => 'Insufficient material';
+  String get insufficientMaterial => 'Yetersiz taş';
 
   @override
-  String get pawnMove => 'Pawn move';
+  String get pawnMove => 'Piyon hamlesi';
 
   @override
-  String get capture => 'Capture';
+  String get capture => 'Taş yeme';
 
   @override
-  String get close => 'Close';
+  String get close => 'Kapat';
 
   @override
-  String get winning => 'Winning';
+  String get winning => 'Kazandıran hamle(ler)';
 
   @override
-  String get losing => 'Losing';
+  String get losing => 'Kaybettiren hamle(ler)';
 
   @override
-  String get drawn => 'Drawn';
+  String get drawn => 'Berabere';
 
   @override
-  String get unknown => 'Unknown';
+  String get unknown => 'Belirsiz';
 
   @override
-  String get database => 'Database';
+  String get database => 'Veritabanı';
 
   @override
-  String get whiteDrawBlack => 'White / Draw / Black';
+  String get whiteDrawBlack => 'Beyaz / Berabere / Siyah';
 
   @override
   String averageRatingX(String param) {
-    return 'Average rating: $param';
+    return 'Ortalama puan: $param';
   }
 
   @override
-  String get recentGames => 'Recent games';
+  String get recentGames => 'Son oyunlar';
 
   @override
-  String get topGames => 'Top games';
+  String get topGames => 'En yüksek puanlı oyunlar';
 
   @override
   String masterDbExplanation(String param1, String param2, String param3) {
-    return 'OTB games of $param1+ FIDE-rated players from $param2 to $param3';
+    return '$param2 yılından $param3 yılına kadar $param1+ FIDE puanına sahip oyuncular tarafından tahta üzerinde oynanmış 2 milyon oyun';
   }
 
   @override
   String get dtzWithRounding =>
-      'DTZ50\'\' with rounding, based on number of half-moves until next capture or pawn move';
+      'DTZ50\'\', bir sonraki yakalama veya piyon hamlesine kadar olan yarım hamle sayısına dayalı yuvarlama ile';
 
   @override
-  String get noGameFound => 'No game found';
+  String get noGameFound => 'Oyun bulunamadı';
 
   @override
-  String get maxDepthReached => 'Max depth reached!';
+  String get maxDepthReached => 'Maksimum derinliğe ulaşıldı!';
 
   @override
   String get maybeIncludeMoreGamesFromThePreferencesMenu =>
-      'Maybe include more games from the preferences menu?';
+      'Seçenekler menüsünden daha fazla oyun eklemeyi deneyebilirsiniz.';
 
   @override
-  String get openings => 'Openings';
+  String get openings => 'Açılışlar';
 
   @override
-  String get openingExplorer => 'Opening explorer';
+  String get openingExplorer => 'Açılış kâşifi';
 
   @override
-  String get openingEndgameExplorer => 'Opening/endgame explorer';
+  String get openingEndgameExplorer => 'Açılış/oyunsonu kâşifi';
 
   @override
   String xOpeningExplorer(String param) {
-    return '$param opening explorer';
+    return '$param açılış kâşifi';
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => 'Play first opening/endgame-explorer move';
+  String get playFirstOpeningEndgameExplorerMove =>
+      'İlk sıradaki açılış kaşifi/oyun sonu analizi hamlesini oyna';
 
   @override
-  String get winPreventedBy50MoveRule => 'Win prevented by 50-move rule';
+  String get winPreventedBy50MoveRule => 'Galibiyet 50 hamle kuralı yüzünden engellendi';
 
   @override
-  String get lossSavedBy50MoveRule => 'Loss prevented by 50-move rule';
+  String get lossSavedBy50MoveRule => 'Mağlubiyet 50 hamle kuralı sayesinde önlendi';
 
   @override
-  String get winOr50MovesByPriorMistake => 'Win or 50 moves by prior mistake';
+  String get winOr50MovesByPriorMistake => 'Galibiyet veya geçmiş hata sebebiyle 50 hamle';
 
   @override
-  String get lossOr50MovesByPriorMistake => 'Loss or 50 moves by prior mistake';
+  String get lossOr50MovesByPriorMistake => 'Mağlubiyet veya geçmiş hata sebebiyle 50 hamle';
 
   @override
   String get unknownDueToRounding =>
-      'Win/loss only guaranteed if recommended tablebase line has been followed since the last capture or pawn move, due to possible rounding of DTZ values in Syzygy tablebases.';
+      'Kazanma/kaybetme, Syzygy tablo tabanlarında DTZ değerlerinin olası yuvarlanması nedeniyle, yalnızca son esir alma veya piyon hareketinden bu yana önerilen tablo tabanı çizgisi izlendiğinde garanti edilir.';
 
   @override
-  String get allSet => 'All set!';
+  String get allSet => 'Her şey tamam!';
 
   @override
-  String get importPgn => 'Import PGN';
+  String get importPgn => 'PGN\'yi içe aktar';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Sil';
 
   @override
-  String get deleteThisImportedGame => 'Delete this imported game?';
+  String get deleteThisImportedGame => 'İçe aktarılmış bu oyun silinsin mi?';
 
   @override
-  String get replayMode => 'Replay mode';
+  String get replayMode => 'Tekrar modu';
 
   @override
-  String get realtimeReplay => 'Realtime';
+  String get realtimeReplay => 'Gerçek Zamanlı';
 
   @override
-  String get byCPL => 'By CPL';
+  String get byCPL => 'CPL ile';
 
   @override
-  String get enable => 'Enable';
+  String get enable => 'Etkinleştir';
 
   @override
-  String get bestMoveArrow => 'Best move arrow';
+  String get bestMoveArrow => 'En iyi hamle imleci';
 
   @override
-  String get showVariationArrows => 'Show variation arrows';
+  String get showVariationArrows => 'Varyasyon oklarını göster';
 
   @override
-  String get evaluationGauge => 'Evaluation gauge';
+  String get evaluationGauge => 'Değerlendirme çubuğu';
 
   @override
-  String get multipleLines => 'Multiple lines';
+  String get multipleLines => 'Çoklu varyantlar';
 
   @override
-  String get cpus => 'CPUs';
+  String get cpus => 'İşlemci';
 
   @override
-  String get memory => 'Memory';
+  String get memory => 'Hafıza';
 
   @override
-  String get infiniteAnalysis => 'Infinite analysis';
+  String get infiniteAnalysis => 'Sonsuz analiz';
 
   @override
-  String get removesTheDepthLimit => 'Removes the depth limit, and keeps your computer warm';
+  String get removesTheDepthLimit => 'Derinlik sınırını kaldırır ve bilgisayarınızı sıcacık tutar';
 
   @override
-  String get blunder => 'Blunder';
+  String get blunder => 'Vahim hata';
 
   @override
-  String get mistake => 'Mistake';
+  String get mistake => 'Hata';
 
   @override
-  String get inaccuracy => 'Inaccuracy';
+  String get inaccuracy => 'Kusurlu hamle';
 
   @override
-  String get moveTimes => 'Move times';
+  String get moveTimes => 'Hamle zamanları';
 
   @override
-  String get flipBoard => 'Flip board';
+  String get flipBoard => 'Tahtayı döndür';
 
   @override
-  String get threefoldRepetition => 'Threefold repetition';
+  String get threefoldRepetition => 'Üç kez hamle tekrarı';
 
   @override
-  String get claimADraw => 'Claim a draw';
+  String get claimADraw => 'Beraberlik talep et';
 
   @override
   String get drawClaimed => 'Draw claimed';
 
   @override
-  String get offerDraw => 'Offer draw';
+  String get offerDraw => 'Beraberlik teklif et';
 
   @override
-  String get draw => 'Draw';
+  String get draw => 'Berabere';
 
   @override
-  String get drawByMutualAgreement => 'Draw by mutual agreement';
+  String get drawByMutualAgreement => 'Karşılıklı anlaşma ile berabere';
 
   @override
-  String get fiftyMovesWithoutProgress => 'Fifty moves without progress';
+  String get fiftyMovesWithoutProgress => 'Gelişme olmadan elli hamle';
 
   @override
-  String get currentGames => 'Current games';
+  String get currentGames => 'Şu anda oynanan oyunlar';
 
   @override
   String joinedX(String param) {
@@ -2600,399 +2618,400 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get viewInFullSize => 'View in full size';
+  String get viewInFullSize => 'Tam ekran göster';
 
   @override
-  String get logOut => 'Sign out';
+  String get logOut => 'Çıkış';
 
   @override
-  String get signIn => 'Sign in';
+  String get signIn => 'Giriş';
 
   @override
-  String get rememberMe => 'Keep me logged in';
+  String get rememberMe => 'Oturumu açık bırak';
 
   @override
-  String get youNeedAnAccountToDoThat => 'You need an account to do that';
+  String get youNeedAnAccountToDoThat => 'Bunu yapmanız için bir hesaba ihtiyacınız var';
 
   @override
-  String get signUp => 'Register';
+  String get signUp => 'Kayıt Ol';
 
   @override
   String get computersAreNotAllowedToPlay =>
-      'Computers and computer-assisted players are not allowed to play. Please do not get assistance from chess engines, databases, or from other players while playing. Also note that making multiple accounts is strongly discouraged and excessive multi-accounting will lead to being banned.';
+      'Bilgisayarlar ve bilgisayar destekli oyuncuların oynamasına izin yoktur. Lütfen maçlarda satranç motorlarından, veri tabanlarından ya da başka oyunculardan destek almayınız. Ayrıca, birden fazla hesap açmanız kesinlikle önerilmez. Çok fazla hesap açmak, hesapların kapatılmasına neden olacaktır.';
 
   @override
-  String get games => 'Games';
+  String get games => 'Oyunlar';
 
   @override
   String get forum => 'Forum';
 
   @override
   String xPostedInForumY(String param1, String param2) {
-    return '$param1 posted in topic $param2';
+    return '$param1, $param2 konusu altına bir mesaj yazdı';
   }
 
   @override
-  String get latestForumPosts => 'Latest forum posts';
+  String get latestForumPosts => 'En son forum gönderileri';
 
   @override
-  String get players => 'Players';
+  String get players => 'Oyuncular';
 
   @override
-  String get friends => 'Friends';
+  String get friends => 'Arkadaşlar';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'diğer oyuncular';
 
   @override
-  String get discussions => 'Conversations';
+  String get discussions => 'Sohbetler';
 
   @override
-  String get today => 'Today';
+  String get today => 'Bugün';
 
   @override
-  String get yesterday => 'Yesterday';
+  String get yesterday => 'Dün';
 
   @override
-  String get minutesPerSide => 'Minutes per side';
+  String get minutesPerSide => 'Taraf başına dakika';
 
   @override
-  String get variant => 'Variant';
+  String get variant => 'Varyant';
 
   @override
-  String get variants => 'Variants';
+  String get variants => 'Varyantlar';
 
   @override
-  String get timeControl => 'Time control';
+  String get timeControl => 'Süre ayarı';
 
   @override
-  String get realTime => 'Real time';
+  String get realTime => 'Gerçek zaman';
 
   @override
-  String get correspondence => 'Correspondence';
+  String get correspondence => 'Yazışma';
 
   @override
-  String get daysPerTurn => 'Days per turn';
+  String get daysPerTurn => 'Hamle başına gün';
 
   @override
-  String get oneDay => 'One day';
+  String get oneDay => 'Bir gün';
 
   @override
-  String get time => 'Time';
+  String get time => 'Zaman';
 
   @override
-  String get rating => 'Rating';
+  String get rating => 'Puan';
 
   @override
-  String get ratingStats => 'Rating stats';
+  String get ratingStats => 'Puan istatistikleri';
 
   @override
-  String get username => 'User name';
+  String get username => 'Kullanıcı adı';
 
   @override
-  String get usernameOrEmail => 'User name or email';
+  String get usernameOrEmail => 'Kullanıcı adı veya e-posta';
 
   @override
-  String get changeUsername => 'Change username';
+  String get changeUsername => 'Kullanıcı adını değiştir';
 
   @override
   String get changeUsernameNotSame =>
-      'Only the case of the letters can change. For example \"johndoe\" to \"JohnDoe\".';
+      'Sadece kullanıcı adınızdaki büyük/küçük harfleri değiştirebilirsiniz. Örneğin \"johndoe\" den \"JohnDoe\" gibi.';
 
   @override
   String get changeUsernameDescription =>
-      'Change your username. This can only be done once and you are only allowed to change the case of the letters in your username.';
+      'Kullanıcı adınızı değiştirin. Bu işlemi sadece 1 (bir) kez gerçekleştirebilirsiniz ve sadece mevcut kullanıcı adınızdaki harfleri (\"johndoe\", \"JohnDoe\") değiştirebilirsiniz.';
 
   @override
   String get signupUsernameHint =>
-      'Make sure to choose a username that\'s appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!';
+      'Aile dostu bir kullanıcı adı seçtiğinizden emin olun. Kullanıcı adı daha sonra değiştirilemez ve uygunsuz kullanıcı adına sahip hesaplar kapatılır!';
 
   @override
-  String get signupEmailHint => 'We will only use it for password reset.';
+  String get signupEmailHint => 'Bunu yalnızca şifre sıfırlaması için kullanacağız.';
 
   @override
-  String get password => 'Password';
+  String get password => 'Şifre';
 
   @override
-  String get changePassword => 'Change password';
+  String get changePassword => 'Şifre değiştir';
 
   @override
-  String get changeEmail => 'Change email';
+  String get changeEmail => 'E-posta adresini değiştir';
 
   @override
-  String get email => 'Email';
+  String get email => 'E-posta';
 
   @override
-  String get passwordReset => 'Password reset';
+  String get passwordReset => 'Şifreyi yenile';
 
   @override
-  String get forgotPassword => 'Forgot password?';
+  String get forgotPassword => 'Şifremi unuttum';
 
   @override
-  String get error_weakPassword => 'This password is extremely common, and too easy to guess.';
+  String get error_weakPassword => 'Bu parola çok yaygın, ve tahmin etmesi çok kolay.';
 
   @override
-  String get error_namePassword => 'Please don\'t use your username as your password.';
+  String get error_namePassword => 'Lütfen kullanıcı adınızı parolanız olarak kullanmayın.';
 
   @override
   String get blankedPassword =>
-      'You have used the same password on another site, and that site has been compromised. To ensure the safety of your Lichess account, we need you to set a new password. Thank you for your understanding.';
+      'Şifreniz güvenlik açığı yaşanan başka bir sitede kullanılmış. Lichess hesabınızı güvende tutmak için yeni bir şifre seçmeniz gerekiyor. Anlayışınız için teşekkürler.';
 
   @override
-  String get youAreLeavingLichess => 'You are leaving Lichess';
+  String get youAreLeavingLichess => 'Lichess\'ten ayrılıyorsunuz';
 
   @override
-  String get neverTypeYourPassword => 'Never type your Lichess password on another site!';
+  String get neverTypeYourPassword => 'Lichess parolanızı asla başka bir site içerisinde yazmayın!';
 
   @override
   String proceedToX(String param) {
-    return 'Proceed to $param';
+    return '$param adresine devam et';
   }
 
   @override
   String get passwordSuggestion =>
-      'Do not set a password suggested by someone else. They will use it to steal your account.';
+      'Başkaları tarafından önerilen bir parolayı kullanmayın. Bunu hesabınızı çalmak için kullanacaklardır.';
 
   @override
   String get emailSuggestion =>
-      'Do not set an email address suggested by someone else. They will use it to steal your account.';
+      'Başkaları tarafından önerilen bir e-posta adresi kullanmayın. Bunu hesabınızı çalmak için kullanacaklardır.';
 
   @override
-  String get emailConfirmHelp => 'Help with email confirmation';
+  String get emailConfirmHelp => 'E-posta onayı için yardım';
 
   @override
-  String get emailConfirmNotReceived => 'Didn\'t receive your confirmation email after signing up?';
+  String get emailConfirmNotReceived => 'Kayıt olduktan sonra doğrulama e-postası almadınız mı?';
 
   @override
-  String get whatSignupUsername => 'What username did you use to sign up?';
+  String get whatSignupUsername => 'Kayıt olmak için hangi kullanıcı adını kullandınız?';
 
   @override
   String usernameNotFound(String param) {
-    return 'We couldn\'t find any user by this name: $param.';
+    return '$param adında herhangi bir kullanıcı bulamadık.';
   }
 
   @override
-  String get usernameCanBeUsedForNewAccount => 'You can use this username to create a new account';
+  String get usernameCanBeUsedForNewAccount =>
+      'Bu kullanıcı adını yeni bir hesap oluşturmak için kullanabilirsiniz';
 
   @override
   String emailSent(String param) {
-    return 'We have sent an email to $param.';
+    return '$param adresine bir e-posta gönderdik.';
   }
 
   @override
-  String get emailCanTakeSomeTime => 'It can take some time to arrive.';
+  String get emailCanTakeSomeTime => 'E-postanın ulaşması biraz zaman alabilir.';
 
   @override
-  String get refreshInboxAfterFiveMinutes => 'Wait 5 minutes and refresh your email inbox.';
+  String get refreshInboxAfterFiveMinutes => '5 dakika bekleyip e-posta gelen kutunuzu yenileyin.';
 
   @override
   String get checkSpamFolder =>
-      'Also check your spam folder, it might end up there. If so, mark it as not spam.';
+      'Ayrıca spam klasörünü kontrol edin, orada olabilir. Eğer öyleyse spam değil olarak işaretleyin.';
 
   @override
-  String get emailForSignupHelp => 'If everything else fails, then send us this email:';
+  String get emailForSignupHelp => 'Hiçbiri işe yaramazsa, bize şu e-postayı gönderin:';
 
   @override
   String copyTextToEmail(String param) {
-    return 'Copy and paste the above text and send it to $param';
+    return 'Yukarıdaki metni kopyalayıp $param adresine gönderin';
   }
 
   @override
   String get waitForSignupHelp =>
-      'We will come back to you shortly to help you complete your signup.';
+      'Kaydınızı tamamlamanıza yardımcı olmak için kısa bir süre içinde size geri döneceğiz.';
 
   @override
   String accountConfirmed(String param) {
-    return 'The user $param is successfully confirmed.';
+    return '$param kullanıcısı başarıyla onaylandı.';
   }
 
   @override
   String accountCanLogin(String param) {
-    return 'You can login right now as $param.';
+    return 'Artık $param olarak giriş yapabilirsiniz.';
   }
 
   @override
-  String get accountConfirmationEmailNotNeeded => 'You do not need a confirmation email.';
+  String get accountConfirmationEmailNotNeeded => 'Onay e-postasına ihtiyacınız yok.';
 
   @override
   String accountClosed(String param) {
-    return 'The account $param is closed.';
+    return '$param hesabı kapatılmıştır.';
   }
 
   @override
   String accountRegisteredWithoutEmail(String param) {
-    return 'The account $param was registered without an email.';
+    return '$param hesabı e-posta olmadan kaydedildi.';
   }
 
   @override
-  String get rank => 'Rank';
+  String get rank => 'Sıralama';
 
   @override
   String rankX(String param) {
-    return 'Rank: $param';
+    return 'Sıralama: $param';
   }
 
   @override
-  String get gamesPlayed => 'Games played';
+  String get gamesPlayed => 'Oynanmış oyunlar';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'Tamam';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'İptal et';
 
   @override
-  String get whiteTimeOut => 'White time out';
+  String get whiteTimeOut => 'Beyazın zamanı tükendi';
 
   @override
-  String get blackTimeOut => 'Black time out';
+  String get blackTimeOut => 'Siyahın zamanı tükendi';
 
   @override
-  String get drawOfferSent => 'Draw offer sent';
+  String get drawOfferSent => 'Beraberlik teklifi gönderildi';
 
   @override
-  String get drawOfferAccepted => 'Draw offer accepted';
+  String get drawOfferAccepted => 'Beraberlik teklifi kabul edildi';
 
   @override
-  String get drawOfferCanceled => 'Draw offer cancelled';
+  String get drawOfferCanceled => 'Beraberlik teklifi iptal edildi';
 
   @override
-  String get whiteOffersDraw => 'White offers draw';
+  String get whiteOffersDraw => 'Beyaz beraberlik teklif ediyor';
 
   @override
-  String get blackOffersDraw => 'Black offers draw';
+  String get blackOffersDraw => 'Siyah beraberlik teklif ediyor';
 
   @override
-  String get whiteDeclinesDraw => 'White declines draw';
+  String get whiteDeclinesDraw => 'Beyaz beraberlik teklifini geri çevirdi';
 
   @override
-  String get blackDeclinesDraw => 'Black declines draw';
+  String get blackDeclinesDraw => 'Siyah beraberlik teklifini geri çevirdi';
 
   @override
-  String get yourOpponentOffersADraw => 'Your opponent offers a draw';
+  String get yourOpponentOffersADraw => 'Rakibiniz beraberlik teklif ediyor';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Kabul et';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Reddet';
 
   @override
-  String get playingRightNow => 'Playing right now';
+  String get playingRightNow => 'Şu an oynanıyor';
 
   @override
-  String get eventInProgress => 'Playing now';
+  String get eventInProgress => 'Şu anda oynanıyor';
 
   @override
-  String get finished => 'Finished';
+  String get finished => 'Bitti';
 
   @override
-  String get abortGame => 'Abort game';
+  String get abortGame => 'Oyunu iptal et';
 
   @override
-  String get gameAborted => 'Game aborted';
+  String get gameAborted => 'Oyun iptal edildi';
 
   @override
-  String get standard => 'Standard';
+  String get standard => 'Standart';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => 'Özel Konum';
 
   @override
-  String get unlimited => 'Unlimited';
+  String get unlimited => 'Sınırsız';
 
   @override
-  String get mode => 'Mode';
+  String get mode => 'Mod';
 
   @override
-  String get casual => 'Casual';
+  String get casual => 'Puansız';
 
   @override
-  String get rated => 'Rated';
+  String get rated => 'Puanlı';
 
   @override
-  String get casualTournament => 'Casual';
+  String get casualTournament => 'Puansız';
 
   @override
-  String get ratedTournament => 'Rated';
+  String get ratedTournament => 'Puanlı';
 
   @override
-  String get thisGameIsRated => 'This game is rated';
+  String get thisGameIsRated => 'Bu oyun derecelidir';
 
   @override
-  String get rematch => 'Rematch';
+  String get rematch => 'Yeniden oyna';
 
   @override
-  String get rematchOfferSent => 'Rematch offer sent';
+  String get rematchOfferSent => 'Yeniden oynama teklifi yollandı';
 
   @override
-  String get rematchOfferAccepted => 'Rematch offer accepted';
+  String get rematchOfferAccepted => 'Yeniden oynama teklifi kabul edildi';
 
   @override
-  String get rematchOfferCanceled => 'Rematch offer cancelled';
+  String get rematchOfferCanceled => 'Yeniden oynama teklifi geri çekildi';
 
   @override
-  String get rematchOfferDeclined => 'Rematch offer declined';
+  String get rematchOfferDeclined => 'Yeniden oynama teklifi reddedildi';
 
   @override
-  String get cancelRematchOffer => 'Cancel rematch offer';
+  String get cancelRematchOffer => 'Yeniden oynama teklifini geri çek';
 
   @override
-  String get viewRematch => 'View rematch';
+  String get viewRematch => 'Rövanş oyununu göster';
 
   @override
-  String get confirmMove => 'Confirm move';
+  String get confirmMove => 'Hamleyi onayla';
 
   @override
-  String get play => 'Play';
+  String get play => 'Oyna';
 
   @override
-  String get inbox => 'Inbox';
+  String get inbox => 'Gelen kutusu';
 
   @override
-  String get chatRoom => 'Chat room';
+  String get chatRoom => 'Sohbet odası';
 
   @override
-  String get loginToChat => 'Sign in to chat';
+  String get loginToChat => 'Sohbete katılmak için oturum aç';
 
   @override
-  String get youHaveBeenTimedOut => 'You have been timed out.';
+  String get youHaveBeenTimedOut => 'Sohbetten men edildiniz.';
 
   @override
-  String get spectatorRoom => 'Spectator room';
+  String get spectatorRoom => 'Seyirci odası';
 
   @override
-  String get composeMessage => 'Compose message';
+  String get composeMessage => 'Bir mesaj yaz';
 
   @override
-  String get subject => 'Subject';
+  String get subject => 'Konu';
 
   @override
-  String get send => 'Send';
+  String get send => 'Gönder';
 
   @override
-  String get incrementInSeconds => 'Increment in seconds';
+  String get incrementInSeconds => 'Hamle başına eklenen saniye';
 
   @override
-  String get freeOnlineChess => 'Free Online Chess';
+  String get freeOnlineChess => 'Ücretsiz Çevrimiçi Satranç';
 
   @override
-  String get exportGames => 'Export games';
+  String get exportGames => 'Oyunları indir';
 
   @override
-  String get ratingRange => 'Rating range';
+  String get ratingRange => 'Puan aralığı';
 
   @override
-  String get thisAccountViolatedTos => 'This account violated the Lichess Terms of Service';
+  String get thisAccountViolatedTos => 'Bu hesap Lichess Hizmet Şartları\'nı ihlal etti';
 
   @override
-  String get openingExplorerAndTablebase => 'Opening explorer & tablebase';
+  String get openingExplorerAndTablebase => 'Açılış kâşifi & oyunsonu analizi';
 
   @override
-  String get takeback => 'Takeback';
+  String get takeback => 'Hamleyi geri al';
 
   @override
-  String get proposeATakeback => 'Propose a takeback';
+  String get proposeATakeback => 'Hamleyi geri almayı teklif et';
 
   @override
   String get whiteProposesTakeback => 'White proposes takeback';
@@ -3001,7 +3020,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get blackProposesTakeback => 'Black proposes takeback';
 
   @override
-  String get takebackPropositionSent => 'Takeback sent';
+  String get takebackPropositionSent => 'Hamleyi geri alma teklif edildi';
 
   @override
   String get whiteDeclinesTakeback => 'White declines takeback';
@@ -3022,1094 +3041,1097 @@ class AppLocalizationsTr extends AppLocalizations {
   String get blackCancelsTakeback => 'Black cancels takeback';
 
   @override
-  String get yourOpponentProposesATakeback => 'Your opponent proposes a takeback';
+  String get yourOpponentProposesATakeback => 'Rakibiniz hamleyi geri almayı teklif etti';
 
   @override
-  String get bookmarkThisGame => 'Bookmark this game';
+  String get bookmarkThisGame => 'Bu oyunu işaretle';
 
   @override
-  String get tournament => 'Tournament';
+  String get tournament => 'Turnuva';
 
   @override
-  String get tournaments => 'Tournaments';
+  String get tournaments => 'Turnuvalar';
 
   @override
-  String get tournamentPoints => 'Tournament points';
+  String get tournamentPoints => 'Turnuvalardan alınan puanlar';
 
   @override
-  String get viewTournament => 'View tournament';
+  String get viewTournament => 'Turnuvaya göz at';
 
   @override
-  String get backToTournament => 'Back to tournament';
+  String get backToTournament => 'Turnuvaya geri dön';
 
   @override
   String get noDrawBeforeSwissLimit =>
-      'You cannot draw before 30 moves are played in a Swiss tournament.';
+      'Bir İsviçre sistemi turnuvasında 30 hamle oynanmadan beraberlik teklif edemezsiniz.';
 
   @override
-  String get thematic => 'Thematic';
+  String get thematic => 'Tematik';
 
   @override
   String yourPerfRatingIsProvisional(String param) {
-    return 'Your $param rating is provisional';
+    return '$param puanınız geçicidir';
   }
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
-    return 'Your $param1 rating ($param2) is too high';
+    return '$param1 puanınız ($param2) gerekenden fazla';
   }
 
   @override
   String yourTopWeeklyPerfRatingIsTooHigh(String param1, String param2) {
-    return 'Your top weekly $param1 rating ($param2) is too high';
+    return 'Haftalık $param1 puanınız ($param2) gerekenden fazla';
   }
 
   @override
   String yourPerfRatingIsTooLow(String param1, String param2) {
-    return 'Your $param1 rating ($param2) is too low';
+    return '$param1 puanınız ($param2) gerekenden az';
   }
 
   @override
   String ratedMoreThanInPerf(String param1, String param2) {
-    return 'Rated ≥ $param1 in $param2';
+    return '$param2 puanı ≥ $param1 olmalı';
   }
 
   @override
   String ratedLessThanInPerf(String param1, String param2) {
-    return 'Rated ≤ $param1 in $param2 for the last week';
+    return '$param2 puanı ≤ $param1 olmalı';
   }
 
   @override
   String mustBeInTeam(String param) {
-    return 'Must be in team $param';
+    return '$param adlı takımda olmalısınız';
   }
 
   @override
   String youAreNotInTeam(String param) {
-    return 'You are not in the team $param';
+    return '$param takımının üyesi değilsiniz';
   }
 
   @override
-  String get backToGame => 'Back to game';
+  String get backToGame => 'Oyuna dön';
 
   @override
   String get siteDescription =>
-      'Free online chess server. Play chess in a clean interface. No registration, no ads, no plugin required. Play chess with the computer, friends or random opponents.';
+      'Bedava çevrimiçi satranç sunucusu. Sade bir arayüzde satranç oynayın. Kayda gerek yok, reklam yok, eklenti yok. Bilgisayara karşı, arkadaşlarınızla veya rastgele bir rakiple satranç oynayın.';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
-    return '$param1 joined team $param2';
+    return '$param1, $param2 takımına katıldı';
   }
 
   @override
   String xCreatedTeamY(String param1, String param2) {
-    return '$param1 created team $param2';
+    return '$param1, $param2 takımını kurdu';
   }
 
   @override
-  String get startedStreaming => 'started streaming';
+  String get startedStreaming => 'bir yayın başlattı';
 
   @override
   String xStartedStreaming(String param) {
-    return '$param started streaming';
+    return '$param canlı yayında';
   }
 
   @override
-  String get averageElo => 'Average rating';
+  String get averageElo => 'Ortalama derece';
 
   @override
-  String get location => 'Location';
+  String get location => 'Yer';
 
   @override
-  String get filterGames => 'Filter games';
+  String get filterGames => 'Oyunları kategorilendir';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Sıfırla';
 
   @override
-  String get apply => 'Submit';
+  String get apply => 'Uygula';
 
   @override
-  String get save => 'Save';
+  String get save => 'Kaydet';
 
   @override
-  String get leaderboard => 'Leaderboard';
+  String get leaderboard => 'Lider Tablosu';
 
   @override
-  String get screenshotCurrentPosition => 'Screenshot current position';
+  String get screenshotCurrentPosition => 'Geçerli pozisyonun ekran görüntüsünü al';
 
   @override
-  String get gameAsGIF => 'Game as GIF';
+  String get gameAsGIF => 'Oyunun GIF hali';
 
   @override
-  String get pasteTheFenStringHere => 'Paste the FEN text here';
+  String get pasteTheFenStringHere => 'FEN kodunu buraya yapıştırın';
 
   @override
-  String get pasteThePgnStringHere => 'Paste the PGN text here';
+  String get pasteThePgnStringHere => 'PGN kodunu buraya yapıştırın';
 
   @override
-  String get orUploadPgnFile => 'Or upload a PGN file';
+  String get orUploadPgnFile => 'Veya bir PGN dosyası yükle';
 
   @override
-  String get fromPosition => 'From position';
+  String get fromPosition => 'Özel pozisyondan';
 
   @override
-  String get continueFromHere => 'Continue from here';
+  String get continueFromHere => 'Bu pozisyondan devam et';
 
   @override
-  String get toStudy => 'Study';
+  String get toStudy => 'Çalışma oluştur';
 
   @override
-  String get importGame => 'Import game';
+  String get importGame => 'Oyun yükle';
 
   @override
   String get importGameExplanation =>
-      'Paste a game PGN to get a browsable replay, computer analysis, game chat and public shareable URL.';
+      'Göz atılabilir bir oyun tekrarı, bilgisayar analizi, oyun sohbeti ve paylaşılabilir bir URL edinmek için bir oyun PGN\'si yapıştırın.';
 
   @override
   String get importGameCaveat =>
-      'Variations will be erased. To keep them, import the PGN via a study.';
+      'Varyasyonlar silinecek. Varyasyonları saklamak için bir çalışma aracılığıyla PGN\'yi içe aktarın.';
 
   @override
   String get importGameDataPrivacyWarning =>
-      'This PGN can be accessed by the public. To import a game privately, use a study.';
+      'Bu PGN herkes tarafından erişilebilir. Bir oyunu özel olarak yüklemek istiyorsanız bir çalışma kullanın.';
 
   @override
-  String get thisIsAChessCaptcha => 'This is a chess CAPTCHA.';
+  String get thisIsAChessCaptcha => 'Bu bir satranç CAPTCHA\'sıdır.';
 
   @override
   String get clickOnTheBoardToMakeYourMove =>
-      'Click on the board to make your move, and prove you are human.';
+      'İnsan olduğunuzu kanıtlamak için tahtaya tıklayın ve hamlenizi yapın.';
 
   @override
-  String get captcha_fail => 'Please solve the chess captcha.';
+  String get captcha_fail => 'Lütfen satranç CAPTCHA\'sını çözün.';
 
   @override
-  String get notACheckmate => 'Not a checkmate';
+  String get notACheckmate => 'Mat değil';
 
   @override
-  String get whiteCheckmatesInOneMove => 'White to checkmate in one move';
+  String get whiteCheckmatesInOneMove => 'Beyaz bir hamlede mat eder';
 
   @override
-  String get blackCheckmatesInOneMove => 'Black to checkmate in one move';
+  String get blackCheckmatesInOneMove => 'Siyah bir hamlede mat eder';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Tekrar dene';
 
   @override
-  String get reconnecting => 'Reconnecting';
+  String get reconnecting => 'Yeniden bağlanılıyor';
 
   @override
-  String get noNetwork => 'Offline';
+  String get noNetwork => 'Çevrimdışı';
 
   @override
-  String get favoriteOpponents => 'Favourite opponents';
+  String get favoriteOpponents => 'Favori rakipler';
 
   @override
-  String get follow => 'Follow';
+  String get follow => 'Takip et';
 
   @override
-  String get following => 'Following';
+  String get following => 'Takip ediyorsun';
 
   @override
-  String get unfollow => 'Unfollow';
+  String get unfollow => 'Takibi bırak';
 
   @override
   String followX(String param) {
-    return 'Follow $param';
+    return '$param Takip Et';
   }
 
   @override
   String unfollowX(String param) {
-    return 'Unfollow $param';
+    return '$param Takibi Bırak';
   }
 
   @override
-  String get block => 'Block';
+  String get block => 'Engelle';
 
   @override
-  String get blocked => 'Blocked';
+  String get blocked => 'Engellendi';
 
   @override
-  String get unblock => 'Unblock';
+  String get unblock => 'Engeli kaldır';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
-    return '$param1 started following $param2';
+    return '$param1, $param2 isimli oyuncuyu takip etmeye başladı';
   }
 
   @override
-  String get more => 'More';
+  String get more => 'Daha fazla';
 
   @override
-  String get memberSince => 'Member since';
+  String get memberSince => 'Üyelik tarihi';
 
   @override
   String lastSeenActive(String param) {
-    return 'Active $param';
+    return 'Aktif $param';
   }
 
   @override
-  String get player => 'Player';
+  String get player => 'Oyuncu';
 
   @override
-  String get list => 'List';
+  String get list => 'Liste';
 
   @override
-  String get graph => 'Graph';
+  String get graph => 'Grafik';
 
   @override
-  String get required => 'Required.';
+  String get required => 'Gerekli.';
 
   @override
-  String get openTournaments => 'Open tournaments';
+  String get openTournaments => 'Açık turnuvalar';
 
   @override
-  String get duration => 'Duration';
+  String get duration => 'Süre';
 
   @override
-  String get winner => 'Winner';
+  String get winner => 'Kazanan';
 
   @override
-  String get standing => 'Standing';
+  String get standing => 'Sıralama';
 
   @override
-  String get createANewTournament => 'Create a new tournament';
+  String get createANewTournament => 'Yeni bir turnuva oluştur';
 
   @override
-  String get tournamentCalendar => 'Tournament calendar';
+  String get tournamentCalendar => 'Turnuva takvimi';
 
   @override
-  String get conditionOfEntry => 'Entry requirements:';
+  String get conditionOfEntry => 'Katılma şartı:';
 
   @override
-  String get advancedSettings => 'Advanced settings';
+  String get advancedSettings => 'Gelişmiş ayarlar';
 
   @override
-  String get safeTournamentName => 'Pick a very safe name for the tournament.';
+  String get safeTournamentName => 'Turnuva için oldukça güvenli bir isim seçin.';
 
   @override
   String get inappropriateNameWarning =>
-      'Anything even slightly inappropriate could get your account closed.';
+      'Herhangi bir uygunsuz isim, hesabınızın yasaklanmasına yol açabilir.';
 
   @override
   String get emptyTournamentName =>
-      'Leave empty to name the tournament after a notable chess player.';
+      'Kutuyu boş bırakarak turnuvaya rastgele bir Büyükusta\'nın ismini verebilirsiniz.';
 
   @override
   String get makePrivateTournament =>
-      'Make the tournament private, and restrict access with a password';
+      'Turnuvayı özel olarak ayarlayın ve şifre koyarak erişimi kısıtlayın';
 
   @override
-  String get join => 'Join';
+  String get join => 'Katıl';
 
   @override
-  String get withdraw => 'Withdraw';
+  String get withdraw => 'Çekil';
 
   @override
-  String get points => 'Points';
+  String get points => 'Puanlar';
 
   @override
-  String get wins => 'Wins';
+  String get wins => 'Galibiyetler';
 
   @override
-  String get losses => 'Losses';
+  String get losses => 'Mağlubiyetler';
 
   @override
-  String get createdBy => 'Created by';
+  String get createdBy => 'Oluşturan kişi';
 
   @override
   String get startingIn => 'Starting in';
 
   @override
   String standByX(String param) {
-    return 'Stand by $param, pairing players, get ready!';
+    return 'Hazır ol $param, oyuncular eşleştiriliyor!';
   }
 
   @override
-  String get pause => 'Pause';
+  String get pause => 'Duraklat';
 
   @override
-  String get resume => 'Resume';
+  String get resume => 'Devam et';
 
   @override
-  String get youArePlaying => 'You are playing!';
+  String get youArePlaying => 'Şu an oyundasınız!';
 
   @override
-  String get winRate => 'Win rate';
+  String get winRate => 'Kazanma oranı';
 
   @override
-  String get performance => 'Performance';
+  String get performance => 'Performans';
 
   @override
-  String get tournamentComplete => 'Tournament complete';
+  String get tournamentComplete => 'Turnuva sona erdi';
 
   @override
-  String get movesPlayed => 'Moves played';
+  String get movesPlayed => 'Toplam hamle sayısı';
 
   @override
-  String get whiteWins => 'White wins';
+  String get whiteWins => 'Beyaz zaferleri';
 
   @override
-  String get blackWins => 'Black wins';
+  String get blackWins => 'Siyah zaferleri';
 
   @override
-  String get drawRate => 'Draw rate';
+  String get drawRate => 'Berabere oranı';
 
   @override
-  String get draws => 'Draws';
+  String get draws => 'Beraberlikler';
 
   @override
-  String get averageOpponent => 'Average opponent';
+  String get averageOpponent => 'Ortalama rakip';
 
   @override
-  String get boardEditor => 'Board editor';
+  String get boardEditor => 'Tahta yapıcı';
 
   @override
-  String get setTheBoard => 'Set the board';
+  String get setTheBoard => 'Tahtayı ayarla';
 
   @override
-  String get popularOpenings => 'Popular openings';
+  String get popularOpenings => 'Popüler açılışlar';
 
   @override
-  String get endgamePositions => 'Endgame positions';
+  String get endgamePositions => 'Oyunsonu pozisyonları';
 
   @override
   String chess960StartPosition(String param) {
-    return 'Chess960 start position: $param';
+    return 'Chess960 başlangıç pozisyonu: $param';
   }
 
   @override
-  String get startPosition => 'Starting position';
+  String get startPosition => 'Başlangıç konumu';
 
   @override
-  String get clearBoard => 'Clear board';
+  String get clearBoard => 'Tahtayı temizle';
 
   @override
-  String get loadPosition => 'Load position';
+  String get loadPosition => 'Pozisyon yükle';
 
   @override
-  String get isPrivate => 'Private';
+  String get isPrivate => 'Özel';
 
   @override
   String reportXToModerators(String param) {
-    return 'Report $param to moderators';
+    return '$param \'i Moderatörlere bildir';
   }
 
   @override
   String profileCompletion(String param) {
-    return 'Profile completion: $param';
+    return 'Profil tamamlanma oranı: $param';
   }
 
   @override
   String xRating(String param) {
-    return '$param rating';
+    return 'Derecelendirme: $param';
   }
 
   @override
-  String get ifNoneLeaveEmpty => 'If none, leave empty';
+  String get ifNoneLeaveEmpty => 'Eğer yoksa, boş bırakın';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Profil';
 
   @override
-  String get editProfile => 'Edit profile';
+  String get editProfile => 'Profili düzenle';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Gerçek isim';
 
   @override
-  String get setFlair => 'Set your flair';
+  String get setFlair => 'Rozetinizi seçin';
 
   @override
-  String get flair => 'Flair';
+  String get flair => 'Rozet';
 
   @override
-  String get youCanHideFlair =>
-      'There is a setting to hide all user flairs across the entire site.';
+  String get youCanHideFlair => 'Ayarlardan oyuncu rozetlerini gizleyebilirsiniz.';
 
   @override
-  String get biography => 'Biography';
+  String get biography => 'Biyografi';
 
   @override
-  String get countryRegion => 'Country or region';
+  String get countryRegion => 'Ülke veya bölge';
 
   @override
-  String get thankYou => 'Thank you!';
+  String get thankYou => 'Teşekkürler!';
 
   @override
-  String get socialMediaLinks => 'Social media links';
+  String get socialMediaLinks => 'Sosyal medya bağlantıları';
 
   @override
-  String get oneUrlPerLine => 'One URL per line.';
+  String get oneUrlPerLine => 'Her satıra bir bağlantı yazın.';
 
   @override
-  String get inlineNotation => 'Inline notation';
+  String get inlineNotation => 'Notasyonu aynı satırda göster';
 
   @override
-  String get makeAStudy => 'For safekeeping and sharing, consider making a study.';
+  String get makeAStudy => 'Bunları kaydetmek ve paylaşmak için çalışma oluşturabilirsiniz.';
 
   @override
-  String get clearSavedMoves => 'Clear moves';
+  String get clearSavedMoves => 'Hamleleri sil';
 
   @override
-  String get previouslyOnLichessTV => 'Previously on Lichess TV';
+  String get previouslyOnLichessTV => 'Lichess TV\'de bunlar da vardı;';
 
   @override
-  String get onlinePlayers => 'Online players';
+  String get onlinePlayers => 'Çevrimiçi oyuncular';
 
   @override
-  String get activePlayers => 'Active players';
+  String get activePlayers => 'Aktif oyuncular';
 
   @override
-  String get bewareTheGameIsRatedButHasNoClock => 'Beware, the game is rated but has no clock!';
+  String get bewareTheGameIsRatedButHasNoClock => 'Dikkat, oyun puanlı ama suresizdir.';
 
   @override
-  String get success => 'Success';
+  String get success => 'Başarılı';
 
   @override
   String get automaticallyProceedToNextGameAfterMoving =>
-      'Automatically proceed to next game after moving';
+      'Hamle yaptıktan sonra otomatik olarak diğer oyuna geç';
 
   @override
-  String get autoSwitch => 'Auto switch';
+  String get autoSwitch => 'Otomatik Seç';
 
   @override
-  String get puzzles => 'Puzzles';
+  String get puzzles => 'Bulmacalar';
 
   @override
-  String get onlineBots => 'Online bots';
+  String get onlineBots => 'Çevrimiçi botlar';
 
   @override
-  String get name => 'Name';
+  String get name => 'İsim';
 
   @override
-  String get description => 'Description';
+  String get description => 'Açıklama';
 
   @override
-  String get descPrivate => 'Private description';
+  String get descPrivate => 'Üyelere özel açıklama';
 
   @override
   String get descPrivateHelp =>
-      'Text that only the team members will see. If set, replaces the public description for team members.';
+      'Sadece takım üyelerinin görebileceği metindir. Kullanılması halinde, takım üyeleri genel açıklama yerine bunu görür.';
 
   @override
-  String get no => 'No';
+  String get no => 'Hayır';
 
   @override
-  String get yes => 'Yes';
+  String get yes => 'Evet';
 
   @override
-  String get website => 'Website';
+  String get website => 'Web sitesi';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Mobil';
 
   @override
-  String get help => 'Help:';
+  String get help => 'Yardım:';
 
   @override
-  String get createANewTopic => 'Create a new topic';
+  String get createANewTopic => 'Yeni bir bildiri oluştur.';
 
   @override
-  String get topics => 'Topics';
+  String get topics => 'Konular';
 
   @override
-  String get posts => 'Posts';
+  String get posts => 'Gönderiler';
 
   @override
-  String get lastPost => 'Last post';
+  String get lastPost => 'Son gönderi';
 
   @override
-  String get views => 'Views';
+  String get views => 'Görüntülenme sayısı';
 
   @override
-  String get replies => 'Replies';
+  String get replies => 'Cevaplar';
 
   @override
-  String get replyToThisTopic => 'Reply to this topic';
+  String get replyToThisTopic => 'Bu konu hakkında cevap yaz';
 
   @override
-  String get reply => 'Reply';
+  String get reply => 'Cevap yaz';
 
   @override
-  String get message => 'Message';
+  String get message => 'Mesaj';
 
   @override
-  String get createTheTopic => 'Create the topic';
+  String get createTheTopic => 'Bildiri oluştur';
 
   @override
-  String get reportAUser => 'Report a user';
+  String get reportAUser => 'Kullanıcı ihbar et';
 
   @override
-  String get user => 'User';
+  String get user => 'Kullanıcı';
 
   @override
-  String get reason => 'Reason';
+  String get reason => 'Sebep';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
+  String get whatIsIheMatter => 'Problem nedir?';
 
   @override
-  String get cheat => 'Cheat';
+  String get cheat => 'Hile';
 
   @override
-  String get troll => 'Troll';
+  String get troll => 'Trol';
 
   @override
-  String get other => 'Other';
+  String get other => 'Diğer';
 
   @override
   String get reportCheatBoostHelp =>
-      'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+      'Oyunun (oyunların) bağlantısını yapıştırın ve kullanıcının hangi davranışı yanlış açıklayın. Sadece \"bu hile\" demeyin, bize bu sonuca nasıl vardığınızı söyleyin.';
 
   @override
   String get reportUsernameHelp =>
-      'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
+      'Bu kullanıcı adı hakkında neyin saldırganca olduğunu açıklayın. Sadece \"bu saldırganca/uygunsuz\" demeyin, bu sonuca nasıl vardığınızı söyleyin bize, özellikle de hakaret gizlenmiş, ingilizce olmayan, argo, veya tarihsel/kültürel referansalar varsa.';
 
   @override
   String get reportProcessedFasterInEnglish =>
-      'Your report will be processed faster if written in English.';
+      'Eğer İngilizce yazarsanız raporunuz daha hızlı işleme alınır.';
 
   @override
   String get error_provideOneCheatedGameLink =>
-      'Please provide at least one link to a cheated game.';
+      'Lütfen hileli gördüğünüz en az 1 adet oyun linki verin.';
 
   @override
   String by(String param) {
-    return 'by $param';
+    return '$param oluşturdu';
   }
 
   @override
   String importedByX(String param) {
-    return 'Imported by $param';
+    return '$param tarafından yüklendi';
   }
 
   @override
-  String get thisTopicIsNowClosed => 'This topic is now closed.';
+  String get thisTopicIsNowClosed => 'Bu konu kapanmıştır.';
 
   @override
   String get blog => 'Blog';
 
   @override
-  String get notes => 'Notes';
+  String get notes => 'Notlar';
 
   @override
-  String get typePrivateNotesHere => 'Type private notes here';
+  String get typePrivateNotesHere => 'Özel notlarınızı buraya yazın';
 
   @override
-  String get writeAPrivateNoteAboutThisUser => 'Write a private note about this user';
+  String get writeAPrivateNoteAboutThisUser => 'Bu kullanıcı hakkında özel bir not oluştur';
 
   @override
-  String get noNoteYet => 'No note yet';
+  String get noNoteYet => 'Henüz bir not yok';
 
   @override
-  String get invalidUsernameOrPassword => 'Invalid username or password';
+  String get invalidUsernameOrPassword => 'Hatalı kullanıcı adı ya da şifre';
 
   @override
-  String get incorrectPassword => 'Incorrect password';
+  String get incorrectPassword => 'Şifre yanlış';
 
   @override
-  String get invalidAuthenticationCode => 'Invalid authentication code';
+  String get invalidAuthenticationCode => 'Geçersiz kimlik doğrulama kodu';
 
   @override
-  String get emailMeALink => 'Email me a link';
+  String get emailMeALink => 'E-Posta ile giriş linki yolla';
 
   @override
-  String get currentPassword => 'Current password';
+  String get currentPassword => 'Mevcut şifre';
 
   @override
-  String get newPassword => 'New password';
+  String get newPassword => 'Yeni şifre';
 
   @override
-  String get newPasswordAgain => 'New password (again)';
+  String get newPasswordAgain => 'Yeni şifre (tekrar)';
 
   @override
-  String get newPasswordsDontMatch => 'The new passwords don\'t match';
+  String get newPasswordsDontMatch => 'Yeni şifreler eşleşmiyor';
 
   @override
-  String get newPasswordStrength => 'Password strength';
+  String get newPasswordStrength => 'Şifre gücü';
 
   @override
-  String get clockInitialTime => 'Clock initial time';
+  String get clockInitialTime => 'Maç başlangıç süresi';
 
   @override
-  String get clockIncrement => 'Clock increment';
+  String get clockIncrement => 'Hamle başına süre artışı';
 
   @override
-  String get privacy => 'Privacy';
+  String get privacy => 'Gizlilik';
 
   @override
-  String get privacyPolicy => 'Privacy policy';
+  String get privacyPolicy => 'Gizlilik politikası';
 
   @override
-  String get letOtherPlayersFollowYou => 'Let other players follow you';
+  String get letOtherPlayersFollowYou => 'Diğer oyuncular seni takip etsin mi?';
 
   @override
-  String get letOtherPlayersChallengeYou => 'Let other players challenge you';
+  String get letOtherPlayersChallengeYou => 'Diğer oyuncular oyun teklif edebilsin';
 
   @override
-  String get letOtherPlayersInviteYouToStudy => 'Let other players invite you to study';
+  String get letOtherPlayersInviteYouToStudy =>
+      'Diğer oyuncular sizi bir çalışmaya davet edebilsin';
 
   @override
-  String get sound => 'Sound';
+  String get sound => 'Ses';
 
   @override
-  String get none => 'None';
+  String get none => 'Hiçbiri';
 
   @override
-  String get fast => 'Fast';
+  String get fast => 'Hızlı';
 
   @override
   String get normal => 'Normal';
 
   @override
-  String get slow => 'Slow';
+  String get slow => 'Yavaş';
 
   @override
-  String get insideTheBoard => 'Inside the board';
+  String get insideTheBoard => 'Karelerin üzerinde';
 
   @override
-  String get outsideTheBoard => 'Outside the board';
+  String get outsideTheBoard => 'Karelerin dışında';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'Tahtadaki tüm karelerde';
 
   @override
-  String get onSlowGames => 'On slow games';
+  String get onSlowGames => 'Yavaş oyunlarda';
 
   @override
-  String get always => 'Always';
+  String get always => 'Her zaman';
 
   @override
-  String get never => 'Never';
+  String get never => 'Asla';
 
   @override
   String xCompetesInY(String param1, String param2) {
-    return '$param1 competes in $param2';
+    return '$param1, $param2\'ya katıldı';
   }
 
   @override
-  String get victory => 'Victory';
+  String get victory => 'Zafer';
 
   @override
-  String get defeat => 'Defeat';
+  String get defeat => 'Yenilgi';
 
   @override
   String victoryVsYInZ(String param1, String param2, String param3) {
-    return '$param1 vs $param2 in $param3';
+    return '$param2 adlı oyuncuya karşı $param3 maçında $param1';
   }
 
   @override
   String defeatVsYInZ(String param1, String param2, String param3) {
-    return '$param1 vs $param2 in $param3';
+    return '$param2 adlı oyuncuya karşı $param3 maçında $param1';
   }
 
   @override
   String drawVsYInZ(String param1, String param2, String param3) {
-    return '$param1 vs $param2 in $param3';
+    return '$param2 adlı oyuncuya karşı $param3 maçında $param1';
   }
 
   @override
-  String get timeline => 'Timeline';
+  String get timeline => 'Zaman tüneli';
 
   @override
-  String get starting => 'Starting:';
+  String get starting => 'Başlangıç:';
 
   @override
-  String get allInformationIsPublicAndOptional => 'All information is public and optional.';
+  String get allInformationIsPublicAndOptional => 'Tüm bilgiler herkese açık ve seçime bağlıdır.';
 
   @override
   String get biographyDescription =>
-      'Talk about yourself, your interests, what you like in chess, your favourite openings, players, ...';
+      'Kendinizden bahsedin, satrançta ne buluyorsunuz, favori açılışlarınız, oyunlarınız, hayranı olduğunuz satranç ustaları…';
 
   @override
-  String get listBlockedPlayers => 'List players you have blocked';
+  String get listBlockedPlayers => 'Engellenen oyuncular';
 
   @override
-  String get human => 'Human';
+  String get human => 'İnsan';
 
   @override
-  String get computer => 'Computer';
+  String get computer => 'Bilgisayar';
 
   @override
-  String get side => 'Side';
+  String get side => 'Taraf';
 
   @override
-  String get clock => 'Clock';
+  String get clock => 'Saat';
 
   @override
-  String get opponent => 'Opponent';
+  String get opponent => 'Rakip';
 
   @override
-  String get learnMenu => 'Learn';
+  String get learnMenu => 'Öğren';
 
   @override
-  String get studyMenu => 'Study';
+  String get studyMenu => 'Çalışmalar';
 
   @override
-  String get practice => 'Practice';
+  String get practice => 'Egzersizler';
 
   @override
-  String get community => 'Community';
+  String get community => 'Topluluk';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Araçlar';
 
   @override
-  String get increment => 'Increment';
+  String get increment => 'Artış';
 
   @override
-  String get error_unknown => 'Invalid value';
+  String get error_unknown => 'Geçersiz değer';
 
   @override
-  String get error_required => 'This field is required';
+  String get error_required => 'Bu alan gerekli';
 
   @override
-  String get error_email => 'This email address is invalid';
+  String get error_email => 'Bu e-posta adresi geçersiz';
 
   @override
   String get error_email_acceptable =>
-      'This email address is not acceptable. Please double-check it, and try again.';
+      'Bu e-posta adresi kabul edilemez. Lütfen tekrar kontrol edin ve tekrar deneyin.';
 
   @override
-  String get error_email_unique => 'Email address invalid or already taken';
+  String get error_email_unique => 'E-posta adresi geçersiz veya önceden alınmış';
 
   @override
-  String get error_email_different => 'This is already your email address';
+  String get error_email_different => 'Zaten bu e-postayı kullanıyorsun';
 
   @override
   String error_minLength(String param) {
-    return 'Must be at least $param characters long';
+    return 'Asgari uzunluk: $param';
   }
 
   @override
   String error_maxLength(String param) {
-    return 'Must be at most $param characters long';
+    return 'Azami uzunluk: $param';
   }
 
   @override
   String error_min(String param) {
-    return 'Must be at least $param';
+    return '$param değerinden büyük veya eşit olmalıdır';
   }
 
   @override
   String error_max(String param) {
-    return 'Must be at most $param';
+    return '$param değerinden küçük veya eşit olmalıdır';
   }
 
   @override
   String ifRatingIsPlusMinusX(String param) {
-    return 'If rating is ± $param';
+    return 'Eğer puanları ± $param ise';
   }
 
   @override
-  String get ifRegistered => 'If registered';
+  String get ifRegistered => 'Hesabı olanlar';
 
   @override
-  String get onlyExistingConversations => 'Only existing conversations';
+  String get onlyExistingConversations => 'Sadece mevcut yazışmalar';
 
   @override
-  String get onlyFriends => 'Only friends';
+  String get onlyFriends => 'Sadece arkadaşlar';
 
   @override
-  String get menu => 'Menu';
+  String get menu => 'Menü';
 
   @override
-  String get castling => 'Castling';
+  String get castling => 'Rok Atma';
 
   @override
-  String get whiteCastlingKingside => 'White O-O';
+  String get whiteCastlingKingside => 'Beyaz O-O';
 
   @override
-  String get blackCastlingKingside => 'Black O-O';
+  String get blackCastlingKingside => 'Siyah O-O';
 
   @override
   String tpTimeSpentPlaying(String param) {
-    return 'Time spent playing: $param';
+    return 'Toplam oynama süresi: $param';
   }
 
   @override
-  String get watchGames => 'Watch games';
+  String get watchGames => 'Oyunları izle';
 
   @override
   String tpTimeSpentOnTV(String param) {
-    return 'Time featured on TV: $param';
+    return 'TV\'de izlenme süresi: $param';
   }
 
   @override
-  String get watch => 'Watch';
+  String get watch => 'İzle';
 
   @override
-  String get videoLibrary => 'Video library';
+  String get videoLibrary => 'Video kütüphanesi';
 
   @override
-  String get streamersMenu => 'Streamers';
+  String get streamersMenu => 'Canlı Yayınlar';
 
   @override
-  String get mobileApp => 'Mobile App';
+  String get mobileApp => 'Mobil Uygulama';
 
   @override
-  String get webmasters => 'Webmasters';
+  String get webmasters => 'Site Yöneticileri';
 
   @override
-  String get about => 'About';
+  String get about => 'Hakkında';
 
   @override
   String aboutX(String param) {
-    return 'About $param';
+    return '$param hakkında';
   }
 
   @override
   String xIsAFreeYLibreOpenSourceChessServer(String param1, String param2) {
-    return '$param1 is a free ($param2), libre, no-ads, open source chess server.';
+    return '$param1; tamamen ücretsiz ($param2), özgür, reklamsız, açık kaynak kodlu bir satranç sitesidir.';
   }
 
   @override
-  String get really => 'really';
+  String get really => 'ciddiyiz';
 
   @override
-  String get contribute => 'Contribute';
+  String get contribute => 'Katkıda bulun';
 
   @override
-  String get termsOfService => 'Terms of Service';
+  String get termsOfService => 'Hizmet koşulları';
 
   @override
   String get titleVerification => 'Title verification';
 
   @override
-  String get sourceCode => 'Source Code';
+  String get sourceCode => 'Kaynak Kodu';
 
   @override
-  String get simultaneousExhibitions => 'Simultaneous exhibitions';
+  String get simultaneousExhibitions => 'Eş zamanlı gösteriler';
 
   @override
-  String get host => 'Host';
+  String get host => 'Ev Sahibi';
 
   @override
   String hostColorX(String param) {
-    return 'Host colour: $param';
+    return 'Ev sahibi rengi: $param';
   }
 
   @override
-  String get yourPendingSimuls => 'Your pending simuls';
+  String get yourPendingSimuls => 'Bekleyen simultane oyunlarınız';
 
   @override
-  String get createdSimuls => 'Newly created simuls';
+  String get createdSimuls => 'Yeni oluşturulan eş zamanlı gösteriler';
 
   @override
-  String get hostANewSimul => 'Host a new simul';
+  String get hostANewSimul => 'Eş zamanlı gösteri düzenle';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Sign up to host or join a simul';
+  String get signUpToHostOrJoinASimul =>
+      'Bir simultane oyuna katılmak veya ev sahipliği yapmak için kayıt olun';
 
   @override
-  String get noSimulFound => 'Simul not found';
+  String get noSimulFound => 'Eş zamanlı gösteri bulunamadı';
 
   @override
-  String get noSimulExplanation => 'This simultaneous exhibition does not exist.';
+  String get noSimulExplanation => 'Eş zamanlı gösteri yok.';
 
   @override
-  String get returnToSimulHomepage => 'Return to simul homepage';
+  String get returnToSimulHomepage => 'Eş zamanlı gösteri sayfasına geri dön';
 
   @override
-  String get aboutSimul => 'Simuls involve a single player facing several players at once.';
+  String get aboutSimul =>
+      'Eş zamanlı gösterilerde, bir oyuncu aynı anda birçok oyuncuya karşı mücadele verir.';
 
   @override
-  String get aboutSimulImage => 'Out of 50 opponents, Fischer won 47 games, drew 2 and lost 1.';
+  String get aboutSimulImage =>
+      'Fischer 50 rakibe karşı, 47 oyun kazandı, 2 beraberlik ve 1 yenilgi aldı.';
 
   @override
   String get aboutSimulRealLife =>
-      'The concept is taken from real world events. In real life, this involves the simul host moving from table to table to play a single move.';
+      'Bu kavram gerçek etkinliklerden alınmıştır. Gerçek hayatta, eş zamanlı gösterinin ev sahibi masadan masaya dolaşarak birer hamle yapar.';
 
   @override
   String get aboutSimulRules =>
-      'When the simul starts, every player starts a game with the host. The simul ends when all games are complete.';
+      'Eş zamanlı gösteriye katılan her oyuncu, beyaz taşlarla oynayan ev sahibi ilk hamleyi yaptıktan sonra maça başlar. Bütün oyunlar bittiğinde eş zamanlı gösteri sona erer.';
 
   @override
   String get aboutSimulSettings =>
-      'Simuls are always casual. Rematches, takebacks and adding time are disabled.';
+      'Eş zamanlı gösteriler daima puansızdır. Yeniden maç teklifi göndermek, hamleyi geri almak ve ek süre talep etmek devre dışıdır.';
 
   @override
-  String get create => 'Create';
+  String get create => 'Oluştur';
 
   @override
-  String get whenCreateSimul => 'When you create a Simul, you get to play several players at once.';
+  String get whenCreateSimul => 'Eş zamanlı gösterilerde, birkaç oyuncuyla aynı anda oynarsınız.';
 
   @override
   String get simulVariantsHint =>
-      'If you select several variants, each player gets to choose which one to play.';
+      'Eğer birkaç varyant seçerseniz, her oyuncu istediği varyantı seçip oynar.';
 
   @override
   String get simulClockHint =>
-      'Fischer Clock setup. The more players you take on, the more time you may need.';
+      'Fischer Saati formatı. Ne kadar fazla oyuncu ile yüzleşirseniz, o kadar fazla zamana ihtiyaç duyabilirsiniz.';
 
   @override
   String get simulAddExtraTime =>
-      'You may add extra initial time to your clock to help you cope with the simul.';
+      'Eş zamanlı gösteride süreyi idare edebilmek için kendi saatinize fazladan zaman ekleyebilirsiniz.';
 
   @override
-  String get simulHostExtraTime => 'Host extra initial clock time';
+  String get simulHostExtraTime => 'Ev sahibinin fazladan süresi';
 
   @override
   String get simulAddExtraTimePerPlayer =>
-      'Add initial time to your clock for each player joining the simul.';
+      'Eş zamanlı gösteriye katılan her oyuncu için saatinize başlangıç süresi ekleyin.';
 
   @override
-  String get simulHostExtraTimePerPlayer => 'Host extra clock time per player';
+  String get simulHostExtraTimePerPlayer => 'Ev sahibi, katılan her oyuncu için ekstra süre alır';
 
   @override
-  String get lichessTournaments => 'Lichess tournaments';
+  String get lichessTournaments => 'Lichess turnuvaları';
 
   @override
-  String get tournamentFAQ => 'Arena tournament FAQ';
+  String get tournamentFAQ => 'Arena turnuvaları SSS';
 
   @override
-  String get timeBeforeTournamentStarts => 'Time before tournament starts';
+  String get timeBeforeTournamentStarts => 'Turnuvaya kalan süre';
 
   @override
-  String get averageCentipawnLoss => 'Average centipawn loss';
+  String get averageCentipawnLoss => 'Ortalama santipiyon kaybı';
 
   @override
-  String get accuracy => 'Accuracy';
+  String get accuracy => 'Doğruluk';
 
   @override
-  String get keyboardShortcuts => 'Keyboard shortcuts';
+  String get keyboardShortcuts => 'Klavye kısayolları';
 
   @override
-  String get keyMoveBackwardOrForward => 'move backward/forward';
+  String get keyMoveBackwardOrForward => 'önceki/sonraki hamle';
 
   @override
-  String get keyGoToStartOrEnd => 'go to start/end';
+  String get keyGoToStartOrEnd => 'başa/sona git';
 
   @override
-  String get keyCycleSelectedVariation => 'Cycle selected variation';
+  String get keyCycleSelectedVariation => 'Seçilen varyasyonu değiştir';
 
   @override
-  String get keyShowOrHideComments => 'show/hide comments';
+  String get keyShowOrHideComments => 'yorumları gizle/göster';
 
   @override
-  String get keyEnterOrExitVariation => 'enter/exit variation';
+  String get keyEnterOrExitVariation => 'varyasyona gir/çık';
 
   @override
-  String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
+  String get keyRequestComputerAnalysis => 'Bilgisayar analizi talep et, Hatalarından ders al';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Next (Learn from your mistakes)';
+  String get keyNextLearnFromYourMistakes => 'Sonraki (Hatalarından ders al)';
 
   @override
-  String get keyNextBlunder => 'Next blunder';
+  String get keyNextBlunder => 'Sonraki vahim hata';
 
   @override
-  String get keyNextMistake => 'Next mistake';
+  String get keyNextMistake => 'Sonraki hata';
 
   @override
-  String get keyNextInaccuracy => 'Next inaccuracy';
+  String get keyNextInaccuracy => 'Sonraki kusurlu hamle';
 
   @override
-  String get keyPreviousBranch => 'Previous branch';
+  String get keyPreviousBranch => 'Önceki dal';
 
   @override
-  String get keyNextBranch => 'Next branch';
+  String get keyNextBranch => 'Sıradaki dal';
 
   @override
-  String get toggleVariationArrows => 'Toggle variation arrows';
+  String get toggleVariationArrows => 'Varyasyon oklarını aç/kapat';
 
   @override
-  String get cyclePreviousOrNextVariation => 'Cycle previous/next variation';
+  String get cyclePreviousOrNextVariation => 'Önceki/sonraki varyasyona geç';
 
   @override
-  String get toggleGlyphAnnotations => 'Toggle move annotations';
+  String get toggleGlyphAnnotations => 'Glif dipnotlarını aç/kapat';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'Konum açıklamalarını değiştir';
 
   @override
   String get variationArrowsInfo =>
-      'Variation arrows let you navigate without using the move list.';
+      'Varyasyon okları, hamle listesini kullanmadan gezinmenizi sağlar.';
 
   @override
-  String get playSelectedMove => 'play selected move';
+  String get playSelectedMove => 'seçili hamleyi oyna';
 
   @override
-  String get newTournament => 'New tournament';
+  String get newTournament => 'Yeni turnuva';
 
   @override
   String get tournamentHomeTitle =>
-      'Chess tournaments featuring various time controls and variants';
+      'Çeşitli zaman kontrolleri ve varyantları içeren satranç turnuvası';
 
   @override
   String get tournamentHomeDescription =>
-      'Play fast-paced chess tournaments! Join an official scheduled tournament, or create your own. Bullet, Blitz, Classical, Chess960, King of the Hill, Threecheck, and more options available for endless chess fun.';
+      'Hızlı tempolu satranç turnuvalarında oynayın! Önceden planlanmış turnuvalara katılın, ya da kendi turnuvanızı oluşturun. Sınırsız satranç eğlenceniz için Kurşun, Yıldırım, Klasik, Satranç960, Tepenin Şahı, Üçşah ve daha fazla seçenek mevcuttur.';
 
   @override
-  String get tournamentNotFound => 'Tournament not found';
+  String get tournamentNotFound => 'Turnuva bulunamadı.';
 
   @override
-  String get tournamentDoesNotExist => 'This tournament does not exist.';
+  String get tournamentDoesNotExist => 'Böyle bir turnuva yok.';
 
   @override
   String get tournamentMayHaveBeenCanceled =>
-      'The tournament may have been cancelled if all players left before it started.';
+      'Eğer bütün oyuncular turnuva başlamadan ayrıldıysa, iptal edilmiş olabilir.';
 
   @override
-  String get returnToTournamentsHomepage => 'Return to tournaments homepage';
+  String get returnToTournamentsHomepage => 'Turnuva sayfasına geri dön.';
 
   @override
   String weeklyPerfTypeRatingDistribution(String param) {
-    return 'Weekly $param rating distribution';
+    return 'Haftalık $param puan dağılımı';
   }
 
   @override
   String yourPerfTypeRatingIsRating(String param1, String param2) {
-    return 'Your $param1 rating is $param2.';
+    return '$param1 puanınız $param2.';
   }
 
   @override
   String youAreBetterThanPercentOfPerfTypePlayers(String param1, String param2) {
-    return 'You are better than $param1 of $param2 players.';
+    return '$param2 kategorisindeki oyuncuların $param1 kadarından daha iyisiniz.';
   }
 
   @override
   String userIsBetterThanPercentOfPerfTypePlayers(String param1, String param2, String param3) {
-    return '$param1 is better than $param2 of $param3 players.';
+    return '$param1 $param3 oyuncularının $param2 kadarından daha iyi.';
   }
 
   @override
   String betterThanPercentPlayers(String param1, String param2) {
-    return 'Better than $param1 of $param2 players';
+    return '$param2 oyuncularının $param1 kadarından daha iyi';
   }
 
   @override
   String youDoNotHaveAnEstablishedPerfTypeRating(String param) {
-    return 'You do not have an established $param rating.';
+    return 'Sabit bir $param puanınız yok.';
   }
 
   @override
-  String get yourRating => 'Your rating';
+  String get yourRating => 'Sizin puanınız';
 
   @override
-  String get cumulative => 'Cumulative';
+  String get cumulative => 'Kümülatif';
 
   @override
-  String get glicko2Rating => 'Glicko-2 rating';
+  String get glicko2Rating => 'Glicko-2 puanı';
 
   @override
-  String get checkYourEmail => 'Check your Email';
+  String get checkYourEmail => 'E-postanızı kontrol edin';
 
   @override
   String get weHaveSentYouAnEmailClickTheLink =>
-      'We\'ve sent you an email. Click the link in the email to activate your account.';
+      'Size e-posta yolladık. Hesabınızı aktifleştirmek için e-postanızdaki linke tıklayın.';
 
   @override
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces =>
-      'If you don\'t see the email, check other places it might be, like your junk, spam, social, or other folders.';
+      'Eğer e-postayı görmüyorsanız, spam, sosyal veya diğer klasörlere göz atmayı deneyin.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Eğer 5 dakika içerisinde mail size ulaşmazsa:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Tüm çöp, spam ve diğer klasörleri kontrol edin';
 
   @override
   String verifyYourAddress(String param) {
@@ -4118,781 +4140,786 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String weHaveSentYouAnEmailTo(String param) {
-    return 'We\'ve sent an email to $param. Click the link in the email to reset your password.';
+    return '$param adresine e-posta yolladık. Şifrenizi tekrar ayarlamak için e-postadaki linke tıklayın.';
   }
 
   @override
   String byRegisteringYouAgreeToBeBoundByOur(String param) {
-    return 'By registering, you agree to the $param.';
+    return 'Kaydolarak, $param \'ı kabul etmiş sayılırsınız.';
   }
 
   @override
   String readAboutOur(String param) {
-    return 'Read about our $param.';
+    return '$param hakkında bilgi edinin.';
   }
 
   @override
-  String get networkLagBetweenYouAndLichess => 'Network lag between you and Lichess';
+  String get networkLagBetweenYouAndLichess => 'Siz ve lichess.org arasındaki gecikme (ping)';
 
   @override
-  String get timeToProcessAMoveOnLichessServer => 'Time to process a move on Lichess\'s server';
+  String get timeToProcessAMoveOnLichessServer => 'lichess.org üzerindeki hamle süreniz (ms)';
 
   @override
-  String get downloadAnnotated => 'Download annotated';
+  String get downloadAnnotated => 'Açıklamalarıyla beraber indirin';
 
   @override
-  String get downloadRaw => 'Download raw';
+  String get downloadRaw => 'Açıklamasız indirin.';
 
   @override
-  String get downloadImported => 'Download imported';
+  String get downloadImported => 'İçeri aktarılmış oyunu indir';
 
   @override
   String get downloadAllGames => 'Download all games';
 
   @override
-  String get crosstable => 'Crosstable';
+  String get crosstable => 'Çapraz Tablo';
 
   @override
   String get youCanAlsoScrollOverTheBoardToMoveInTheGame =>
-      'Scroll over the board to move in the game.';
+      'Ayrıca fare tekerini kullanarak da hamle yapabilirsiniz.';
 
   @override
   String get scrollOverComputerVariationsToPreviewThem =>
-      'Scroll over computer variations to preview them.';
+      'Fareyi bilgisayar varyantlarının üzerine getirerek pozisyonu görüntüleyin.';
 
   @override
   String get analysisShapesHowTo =>
-      'Press shift+click or right-click to draw circles and arrows on the board.';
+      'Tahta üzerinde çember ya da ok çizmek için lütfen shift+click ya da right+click kullanın.';
 
   @override
-  String get letOtherPlayersMessageYou => 'Let other players message you';
+  String get letOtherPlayersMessageYou => 'Diğer oyuncular size mesaj yollayabilsinler mi?';
 
   @override
-  String get receiveForumNotifications => 'Receive notifications when mentioned in the forum';
+  String get receiveForumNotifications => 'Forumda sizden bahsedildiğinde bildirim alın';
 
   @override
-  String get shareYourInsightsData => 'Share your chess insights data';
+  String get shareYourInsightsData => 'Satranç oyun verilerinizi diğerleriyle paylaşın';
 
   @override
-  String get withNobody => 'With nobody';
+  String get withNobody => 'Hiçkimse ile';
 
   @override
-  String get withFriends => 'With friends';
+  String get withFriends => 'Yalnızca arkadaşlarımla';
 
   @override
-  String get withEverybody => 'With everybody';
+  String get withEverybody => 'Herkes ile';
 
   @override
-  String get kidMode => 'Kid mode';
+  String get kidMode => 'Çocuk modu';
 
   @override
-  String get kidModeIsEnabled => 'Kid mode is enabled.';
+  String get kidModeIsEnabled => 'Çocuk modu etkin.';
 
   @override
   String get kidModeExplanation =>
-      'This is about safety. In kid mode, all site communications are disabled. Enable this for your children and school students, to protect them from other internet users.';
+      'Bu mod çocuğunuzun güvenliği ile ilgilidir. Tüm site bağlantıları devre dışı bırakılır. Eğer çocuklarınızı veya okul öğrencilerinizi diğer internet kullanıcılarına karşı korumak istiyorsanız, bu modu etkinleştirin.';
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
-    return 'In kid mode, the Lichess logo gets a $param icon, so you know your kids are safe.';
+    return 'Çocuk modunda, lichess.org logosu yerine $param belirir, bilin ki çocuğunuz güvendedir :)';
   }
 
   @override
   String get askYourChessTeacherAboutLiftingKidMode =>
-      'Your account is managed. Ask your chess teacher about lifting kid mode.';
+      'Hesabınız kısıtlandı. Çocuk modunu kaldırmak için satranç öğretmeninize danışın.';
 
   @override
-  String get enableKidMode => 'Enable Kid mode';
+  String get enableKidMode => 'Çocuk modunu aktifleştir';
 
   @override
-  String get disableKidMode => 'Disable Kid mode';
+  String get disableKidMode => 'Çocuk modunu devre dışı bırak';
 
   @override
-  String get security => 'Security';
+  String get security => 'Güvenlik';
 
   @override
-  String get sessions => 'Sessions';
+  String get sessions => 'Oturumlar';
 
   @override
-  String get revokeAllSessions => 'revoke all sessions';
+  String get revokeAllSessions => 'tüm oturumları kaldır';
 
   @override
-  String get playChessEverywhere => 'Play chess everywhere';
+  String get playChessEverywhere => 'Her yerde satranç oyna';
 
   @override
-  String get everybodyGetsAllFeaturesForFree => 'Everybody gets all features for free';
+  String get everybodyGetsAllFeaturesForFree => 'Bütün özellikler ücretsizdir';
 
   @override
-  String get viewTheSolution => 'View the solution';
+  String get viewTheSolution => 'Çözümü göster';
 
   @override
-  String get noChallenges => 'No challenges.';
+  String get noChallenges => 'Meydan okuma yok.';
 
   @override
   String xHostsY(String param1, String param2) {
-    return '$param1 hosts $param2';
+    return '$param1 ev sahipliği yaptı: $param2';
   }
 
   @override
   String xJoinsY(String param1, String param2) {
-    return '$param1 joins $param2';
+    return '$param1 katıldı: $param2';
   }
 
   @override
   String xLikesY(String param1, String param2) {
-    return '$param1 likes $param2';
+    return '$param1 beğendi: $param2';
   }
 
   @override
-  String get quickPairing => 'Quick pairing';
+  String get quickPairing => 'Hızlı eşleşme';
 
   @override
-  String get lobby => 'Lobby';
+  String get lobby => 'Lobi';
 
   @override
-  String get anonymous => 'Anonymous';
+  String get anonymous => 'Anonim';
 
   @override
   String yourScore(String param) {
-    return 'Your score: $param';
+    return 'Puan durumu: $param';
   }
 
   @override
-  String get language => 'Language';
+  String get language => 'Dil';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Tüm diller';
 
   @override
-  String get background => 'Background';
+  String get background => 'Arkaplan';
 
   @override
-  String get light => 'Light';
+  String get light => 'Açık';
 
   @override
-  String get dark => 'Dark';
+  String get dark => 'Koyu';
 
   @override
-  String get transparent => 'Transparent';
+  String get transparent => 'Şeffaf';
 
   @override
-  String get deviceTheme => 'Device theme';
+  String get deviceTheme => 'Cihaz teması';
 
   @override
-  String get backgroundImageUrl => 'Background image URL:';
+  String get backgroundImageUrl => 'Arka plan resim linki:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Tahta';
 
   @override
-  String get size => 'Size';
+  String get size => 'Boyut';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'Opaklık';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Parlaklık';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'Ton';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'Renkleri varsayılana döndür';
 
   @override
-  String get pieceSet => 'Piece set';
+  String get pieceSet => 'Taş seti';
 
   @override
-  String get embedInYourWebsite => 'Embed in your website';
+  String get embedInYourWebsite => 'İnternet sitenizde gömülü olarak paylaşın';
 
   @override
-  String get usernameAlreadyUsed => 'This username is already in use, please try another one.';
+  String get usernameAlreadyUsed =>
+      'Bu kullanıcı adı zaten kullanılıyor, lütfen başka bir kullanıcı adı deneyin.';
 
   @override
-  String get usernamePrefixInvalid => 'The username must start with a letter.';
+  String get usernamePrefixInvalid => 'Kullanıcı adınız bir harfle başlamak zorundadır.';
 
   @override
-  String get usernameSuffixInvalid => 'The username must end with a letter or a number.';
+  String get usernameSuffixInvalid => 'Kullanıcı adınız bir harf veya sayı ile bitmelidir.';
 
   @override
   String get usernameCharsInvalid =>
-      'The username must only contain letters, numbers, underscores, and hyphens. Consecutive underscores and hyphens are not allowed.';
+      'Kullanıcı adı yalnızca harf, sayı, alt çizgi ve çizgi içerebilir.';
 
   @override
-  String get usernameUnacceptable => 'This username is not acceptable.';
+  String get usernameUnacceptable => 'Bu kullanıcı adı uygun değil.';
 
   @override
-  String get playChessInStyle => 'Play chess in style';
+  String get playChessInStyle => 'Satrancı tarz ile oynayın';
 
   @override
-  String get chessBasics => 'Chess basics';
+  String get chessBasics => 'Satrancın temel prensipleri';
 
   @override
-  String get coaches => 'Coaches';
+  String get coaches => 'Eğitmenler';
 
   @override
-  String get invalidPgn => 'Invalid PGN';
+  String get invalidPgn => 'Geçersiz PGN';
 
   @override
-  String get invalidFen => 'Invalid FEN';
+  String get invalidFen => 'Geçersiz FEN';
 
   @override
-  String get custom => 'Custom';
+  String get custom => 'Özel';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Bildirimler';
 
   @override
   String notificationsX(String param1) {
-    return 'Notifications: $param1';
+    return 'Bildirimler: $param1';
   }
 
   @override
   String perfRatingX(String param) {
-    return 'Rating: $param';
+    return 'Puan: $param';
   }
 
   @override
-  String get practiceWithComputer => 'Practice with computer';
+  String get practiceWithComputer => 'Bilgisayar ile pratik yapın';
 
   @override
   String anotherWasX(String param) {
-    return 'Another was $param';
+    return '$param ise bir diğer seçenek';
   }
 
   @override
   String bestWasX(String param) {
-    return 'Best was $param';
+    return 'En iyisi $param idi';
   }
 
   @override
-  String get youBrowsedAway => 'You browsed away';
+  String get youBrowsedAway => 'Çok uzaklara gittiniz';
 
   @override
-  String get resumePractice => 'Resume practice';
+  String get resumePractice => 'Pratik yapmaya devam edin.';
 
   @override
-  String get drawByFiftyMoves => 'The game has been drawn by the fifty move rule.';
+  String get drawByFiftyMoves => 'Oyun, elli hamle kuralı gereğince beraberlikle sonuçlandı.';
 
   @override
-  String get theGameIsADraw => 'The game is a draw.';
+  String get theGameIsADraw => 'Bu maç berabere.';
 
   @override
-  String get computerThinking => 'Computer thinking ...';
+  String get computerThinking => 'Bilgisayar düşünüyor...';
 
   @override
-  String get seeBestMove => 'See best move';
+  String get seeBestMove => 'En iyi hamleyi gör';
 
   @override
-  String get hideBestMove => 'Hide best move';
+  String get hideBestMove => 'En iyi hamleyi gizle';
 
   @override
-  String get getAHint => 'Get a hint';
+  String get getAHint => 'İpucu';
 
   @override
-  String get evaluatingYourMove => 'Evaluating your move ...';
+  String get evaluatingYourMove => 'Hamleniz değerlendiriliyor...';
 
   @override
-  String get whiteWinsGame => 'White wins';
+  String get whiteWinsGame => 'Beyaz kazandı';
 
   @override
-  String get blackWinsGame => 'Black wins';
+  String get blackWinsGame => 'Siyah kazandı';
 
   @override
-  String get learnFromYourMistakes => 'Learn from your mistakes';
+  String get learnFromYourMistakes => 'Hatalarından ders al';
 
   @override
-  String get learnFromThisMistake => 'Learn from this mistake';
+  String get learnFromThisMistake => 'Bu hatadan ders çıkart';
 
   @override
-  String get skipThisMove => 'Skip this move';
+  String get skipThisMove => 'Bu hamleyi geç';
 
   @override
-  String get next => 'Next';
+  String get next => 'Sonraki';
 
   @override
   String xWasPlayed(String param) {
-    return '$param was played';
+    return '$param oynandı';
   }
 
   @override
-  String get findBetterMoveForWhite => 'Find a better move for white';
+  String get findBetterMoveForWhite => 'Beyaz için en iyi hamleyi bulun';
 
   @override
-  String get findBetterMoveForBlack => 'Find a better move for black';
+  String get findBetterMoveForBlack => 'Siyah için en iyi hamleyi bulun';
 
   @override
-  String get resumeLearning => 'Resume learning';
+  String get resumeLearning => 'Kaldığınız yerden devam edin';
 
   @override
-  String get youCanDoBetter => 'You can do better';
+  String get youCanDoBetter => 'Daha iyisini yapabilirsin';
 
   @override
-  String get tryAnotherMoveForWhite => 'Try another move for white';
+  String get tryAnotherMoveForWhite => 'Beyaz için başka bir hamle dene';
 
   @override
-  String get tryAnotherMoveForBlack => 'Try another move for black';
+  String get tryAnotherMoveForBlack => 'Siyah için başka bir hamle dene';
 
   @override
-  String get solution => 'Solution';
+  String get solution => 'Çözüm';
 
   @override
-  String get waitingForAnalysis => 'Waiting for analysis';
+  String get waitingForAnalysis => 'Analiz bekleniyor';
 
   @override
-  String get noMistakesFoundForWhite => 'No mistakes found for white';
+  String get noMistakesFoundForWhite => 'Beyazın bir hatası bulunamadı';
 
   @override
-  String get noMistakesFoundForBlack => 'No mistakes found for black';
+  String get noMistakesFoundForBlack => 'Siyahın bir hatası bulunamadı';
 
   @override
-  String get doneReviewingWhiteMistakes => 'Done reviewing white mistakes';
+  String get doneReviewingWhiteMistakes => 'Beyazın hataları analiz edildi';
 
   @override
-  String get doneReviewingBlackMistakes => 'Done reviewing black mistakes';
+  String get doneReviewingBlackMistakes => 'Siyahın hataları analiz edildi';
 
   @override
-  String get doItAgain => 'Do it again';
+  String get doItAgain => 'Tekrarlayın';
 
   @override
-  String get reviewWhiteMistakes => 'Review white mistakes';
+  String get reviewWhiteMistakes => 'Beyazın hatalarını gözden geçirin';
 
   @override
-  String get reviewBlackMistakes => 'Review black mistakes';
+  String get reviewBlackMistakes => 'Siyahın hatalarını gözden geçirin';
 
   @override
-  String get advantage => 'Advantage';
+  String get advantage => 'Avantaj';
 
   @override
-  String get opening => 'Opening';
+  String get opening => 'Açılış';
 
   @override
-  String get middlegame => 'Middlegame';
+  String get middlegame => 'Oyunortası';
 
   @override
-  String get endgame => 'Endgame';
+  String get endgame => 'Oyunsonu';
 
   @override
-  String get conditionalPremoves => 'Conditional premoves';
+  String get conditionalPremoves => 'Şartlı ön hamle';
 
   @override
-  String get addCurrentVariation => 'Add current variation';
+  String get addCurrentVariation => 'Mevcut varyantı ekle';
 
   @override
   String get playVariationToCreateConditionalPremoves =>
-      'Play a variation to create conditional premoves';
+      'Koşullu ön hamleler yapmak için bir varyasyon oynayın';
 
   @override
-  String get noConditionalPremoves => 'No conditional premoves';
+  String get noConditionalPremoves => 'Koşullu ön hamle yok';
 
   @override
   String playX(String param) {
-    return 'Play $param';
+    return '$param oyna';
   }
 
   @override
-  String get showUnreadLichessMessage => 'You have received a private message from Lichess.';
+  String get showUnreadLichessMessage => 'Lichess size bir özel mesaj gönderdi.';
 
   @override
-  String get clickHereToReadIt => 'Click here to read it';
+  String get clickHereToReadIt => 'Okumak için buraya tıklayın';
 
   @override
-  String get sorry => 'Sorry :(';
+  String get sorry => 'Üzgünüz :(';
 
   @override
-  String get weHadToTimeYouOutForAWhile => 'We had to time you out for a while.';
+  String get weHadToTimeYouOutForAWhile =>
+      'Sizi bir süreliğine oyunlardan men etmek zorunda kaldık.';
 
   @override
-  String get why => 'Why?';
+  String get why => 'Neden?';
 
   @override
-  String get pleasantChessExperience =>
-      'We aim to provide a pleasant chess experience for everyone.';
+  String get pleasantChessExperience => 'Herkese keyifli bir satranç deneyimi sunmayı amaçlıyoruz.';
 
   @override
   String get goodPractice =>
-      'To that effect, we must ensure that all players follow good practice.';
+      'Bu nedenle, bütün oyuncuların doğru davranışlar sergilemesine özen gösteriyoruz.';
 
   @override
-  String get potentialProblem => 'When a potential problem is detected, we display this message.';
+  String get potentialProblem =>
+      'Potansiyel bir sorun tespit edildiğinde bu mesajı görüntülüyoruz.';
 
   @override
-  String get howToAvoidThis => 'How to avoid this?';
+  String get howToAvoidThis => 'Tekrar olmaması için ne yapmalıyım?';
 
   @override
-  String get playEveryGame => 'Play every game you start.';
+  String get playEveryGame => 'Başladığınız her oyunu sonuna kadar oynayın.';
 
   @override
-  String get tryToWin => 'Try to win (or at least draw) every game you play.';
+  String get tryToWin =>
+      'Oynadığınız her oyunu kazanmaya çalışın (ya da en azından berabere kalmayı deneyin).';
 
   @override
-  String get resignLostGames => 'Resign lost games (don\'t let the clock run down).';
+  String get resignLostGames => 'Kaybettiğiniz oyunlardan çekilin (sürenin dolmasını beklemeyin).';
 
   @override
-  String get temporaryInconvenience => 'We apologise for the temporary inconvenience,';
+  String get temporaryInconvenience => 'Verdiğimiz geçici rahatsızlıktan dolayı özür dileriz,';
 
   @override
-  String get wishYouGreatGames => 'and wish you great games on lichess.org.';
+  String get wishYouGreatGames => 've lichess.org\'da harika oyunlar dileriz.';
 
   @override
-  String get thankYouForReading => 'Thank you for reading!';
+  String get thankYouForReading => 'Okuduğunuz için teşekkür ederiz!';
 
   @override
-  String get lifetimeScore => 'Lifetime score';
+  String get lifetimeScore => 'Toplam skor';
 
   @override
-  String get currentMatchScore => 'Current match score';
+  String get currentMatchScore => 'Mevcut maç skoru';
 
   @override
   String get agreementAssistance =>
-      'I agree that I will at no time receive assistance during my games (from a chess computer, book, database or another person).';
+      'Maçlar esnasında hiçbir zaman dışarıdan yardım almayacağım (bilgisayardan, kitaptan, veri tabanından veya başka bir insandan).';
 
   @override
-  String get agreementNice => 'I agree that I will always be respectful to other players.';
+  String get agreementNice => 'Diğer oyunculara karşı her zaman iyi bir tutum içinde olacağım.';
 
   @override
   String agreementMultipleAccounts(String param) {
-    return 'I agree that I will not create multiple accounts (except for the reasons stated in the $param).';
+    return 'Birden fazla hesap oluşturmayacağımı onaylıyorum ($param\'da sıralanmış durumlar hariç).';
   }
 
   @override
-  String get agreementPolicy => 'I agree that I will follow all Lichess policies.';
+  String get agreementPolicy => 'Lichess kurallarını takip edeceğim.';
 
   @override
-  String get searchOrStartNewDiscussion => 'Search or start new conversation';
+  String get searchOrStartNewDiscussion => 'Tartışma ara veya yenisini başlat';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Düzenle';
 
   @override
   String get bullet => 'Bullet';
 
   @override
-  String get blitz => 'Blitz';
+  String get blitz => 'Yıldırım';
 
   @override
-  String get rapid => 'Rapid';
+  String get rapid => 'Hızlı';
 
   @override
-  String get classical => 'Classical';
+  String get classical => 'Klasik';
 
   @override
-  String get ultraBulletDesc => 'Insanely fast games: less than 30 seconds';
+  String get ultraBulletDesc => 'Aşırı hızlı oyunlar: 30 saniyeden daha az';
 
   @override
-  String get bulletDesc => 'Very fast games: less than 3 minutes';
+  String get bulletDesc => 'Çok yüksek tempolu oyunlar: 3 dakikadan daha az';
 
   @override
-  String get blitzDesc => 'Fast games: 3 to 8 minutes';
+  String get blitzDesc => 'Yüksek tempolu oyunlar: 3 ile 8 dakika arası';
 
   @override
-  String get rapidDesc => 'Rapid games: 8 to 25 minutes';
+  String get rapidDesc => 'Hızlı oyunlar: 8 ile 25 dakika arası';
 
   @override
-  String get classicalDesc => 'Classical games: 25 minutes and more';
+  String get classicalDesc => 'Klasik oyunlar: 25 dakika ve daha fazlası';
 
   @override
-  String get correspondenceDesc => 'Correspondence games: one or several days per move';
+  String get correspondenceDesc => 'Yazışmalı oyunlar: Hamle başına bir veya birkaç gün';
 
   @override
-  String get puzzleDesc => 'Chess tactics trainer';
+  String get puzzleDesc => 'Satranç taktik egzersizi';
 
   @override
-  String get important => 'Important';
+  String get important => 'Önemli';
 
   @override
   String yourQuestionMayHaveBeenAnswered(String param1) {
-    return 'Your question may already have an answer $param1';
+    return 'Sorunuzun yanıtı $param1 cevaplanmış olabilir.';
   }
 
   @override
-  String get inTheFAQ => 'in the FAQ';
+  String get inTheFAQ => 'Sıkça Sorulan Sorularda';
 
   @override
   String toReportSomeoneForCheatingOrBadBehavior(String param1) {
-    return 'To report a user for cheating or bad behaviour, $param1';
+    return 'Bir kullanıcıyı hileden ya da kötü davranışından dolayı raporlamak istiyorsanız $param1';
   }
 
   @override
-  String get useTheReportForm => 'use the report form';
+  String get useTheReportForm => 'rapor formunu kullanın';
 
   @override
   String toRequestSupport(String param1) {
-    return 'To request support, $param1';
+    return 'Destek almak istiyorsanız, $param1';
   }
 
   @override
-  String get tryTheContactPage => 'try the contact page';
+  String get tryTheContactPage => 'iletişim sayfasını kullanmayı deneyebilirsiniz';
 
   @override
   String makeSureToRead(String param1) {
-    return 'Make sure to read $param1';
+    return 'Okuduğunuzdan emin olun: $param1';
   }
 
   @override
-  String get theForumEtiquette => 'the forum etiquette';
+  String get theForumEtiquette => 'forum görgü kuralları';
 
   @override
-  String get thisTopicIsArchived => 'This topic has been archived and can no longer be replied to.';
+  String get thisTopicIsArchived => 'Bu konu arşivlenmiş ve yeni yanıtlara kapatılmıştır.';
 
   @override
   String joinTheTeamXToPost(String param1) {
-    return 'Join the $param1, to post in this forum';
+    return 'Bu forumda paylaşım yapmak için $param1 adlı takıma katılın';
   }
 
   @override
   String teamNamedX(String param1) {
-    return '$param1 team';
+    return '$param1';
   }
 
   @override
-  String get youCannotPostYetPlaySomeGames => 'You can\'t post in the forums yet. Play some games!';
+  String get youCannotPostYetPlaySomeGames =>
+      'Henüz forumda konu açamazsınız. Biraz daha maç yaptıktan sonra tekrar deneyin.';
 
   @override
-  String get subscribe => 'Subscribe';
+  String get subscribe => 'Abone ol';
 
   @override
-  String get unsubscribe => 'Unsubscribe';
+  String get unsubscribe => 'Abonelikten çık';
 
   @override
   String mentionedYouInX(String param1) {
-    return 'mentioned you in \"$param1\".';
+    return '\"$param1\" adlı gönderide sizden bahsetti.';
   }
 
   @override
   String xMentionedYouInY(String param1, String param2) {
-    return '$param1 mentioned you in \"$param2\".';
+    return '$param1 sizden bahsetti: \"$param2\".';
   }
 
   @override
   String invitedYouToX(String param1) {
-    return 'invited you to \"$param1\".';
+    return 'sizi \"$param1\" adlı çalışmaya davet etti.';
   }
 
   @override
   String xInvitedYouToY(String param1, String param2) {
-    return '$param1 invited you to \"$param2\".';
+    return '$param1 sizi \"$param2\" adlı çalışmaya davet ediyor.';
   }
 
   @override
-  String get youAreNowPartOfTeam => 'You are now part of the team.';
+  String get youAreNowPartOfTeam => 'Artık ekibin bir üyesisiniz.';
 
   @override
   String youHaveJoinedTeamX(String param1) {
-    return 'You have joined \"$param1\".';
+    return '\"$param1\" adlı takıma katıldın.';
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Someone you reported was banned';
+  String get someoneYouReportedWasBanned => 'İhbar ettiğiniz biri engellendi';
 
   @override
-  String get congratsYouWon => 'Congratulations, you won!';
+  String get congratsYouWon => 'Tebrikler, kazandınız!';
 
   @override
   String gameVsX(String param1) {
-    return 'Game vs $param1';
+    return '$param1 ile oyun';
   }
 
   @override
   String resVsX(String param1, String param2) {
-    return '$param1 vs $param2';
+    return '$param1 ile $param2 karşı karşıya';
   }
 
   @override
-  String get lostAgainstTOSViolator =>
-      'You lost rating points to someone who violated the Lichess TOS';
+  String get lostAgainstTOSViolator => 'Lichess Kulanım Şartları\'nı ihlal eden birine kaybettiniz';
 
   @override
   String refundXpointsTimeControlY(String param1, String param2) {
-    return 'Refund: $param1 $param2 rating points.';
+    return '$param1 $param2 puanı iade edildi.';
   }
 
   @override
-  String get timeAlmostUp => 'Time is almost up!';
+  String get timeAlmostUp => 'Zaman dolmak üzere!';
 
   @override
-  String get clickToRevealEmailAddress => '[Click to reveal email address]';
+  String get clickToRevealEmailAddress => '[E-posta adresini göstermek için tıklayın]';
 
   @override
-  String get download => 'Download';
+  String get download => 'İndir';
 
   @override
-  String get coachManager => 'Coach manager';
+  String get coachManager => 'Eğitmen ayarları';
 
   @override
-  String get streamerManager => 'Streamer manager';
+  String get streamerManager => 'Yayıncı ayarları';
 
   @override
-  String get cancelTournament => 'Cancel the tournament';
+  String get cancelTournament => 'Turnuvayı iptal et';
 
   @override
-  String get tournDescription => 'Tournament description';
+  String get tournDescription => 'Turnuva açıklaması';
 
   @override
   String get tournDescriptionHelp =>
-      'Anything special you want to tell the participants? Try to keep it short. Markdown links are available: [name](https://url)';
+      'Katılımcılara söylemek istediğiniz özel bir şey var mı? Kısa tutmaya çalışın. İşaretleme bağlantılarını kullanabilirsiniz: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Games are rated and impact players ratings';
+  String get ratedFormHelp => 'Oyunlar derecelidir ve oyuncu puanlarını etkilemektedir';
 
   @override
-  String get onlyMembersOfTeam => 'Only members of team';
+  String get onlyMembersOfTeam => 'Sadece takım üyeleri';
 
   @override
-  String get noRestriction => 'No restriction';
+  String get noRestriction => 'Kısıtlama yok';
 
   @override
-  String get minimumRatedGames => 'Minimum rated games';
+  String get minimumRatedGames => 'En düşük puanlı oyunlar';
 
   @override
-  String get minimumRating => 'Minimum rating';
+  String get minimumRating => 'En düşük puan';
 
   @override
-  String get maximumWeeklyRating => 'Maximum weekly rating';
+  String get maximumWeeklyRating => 'Haftalık en yüksek puan';
 
   @override
   String positionInputHelp(String param) {
-    return 'Paste a valid FEN to start every game from a given position.\nIt only works for standard games, not with variants.\nYou can use the $param to generate a FEN position, then paste it here.\nLeave empty to start games from the normal initial position.';
+    return 'Her oyunda belirli bir pozisyondan başlamak için geçerli FEN yazınız.\nSadece standart oyunlarda çalışır, varyantlarda çalışmaz.\nFEN pozisyonu oluşturmak için $param kullanıp buraya yazabilirsiniz.\nBaşlangıç pozisyonundan oynamak için boş bırakınız.';
   }
 
   @override
-  String get cancelSimul => 'Cancel the simul';
+  String get cancelSimul => 'Eş zamanlı gösteriyi iptal et';
 
   @override
-  String get simulHostcolor => 'Host colour for each game';
+  String get simulHostcolor => 'Ev sahibinin rengi';
 
   @override
-  String get estimatedStart => 'Estimated start time';
+  String get estimatedStart => 'Tahminî başlangıç süresi';
 
   @override
   String simulFeatured(String param) {
-    return 'Feature on $param';
+    return '$param adresinden yayımla';
   }
 
   @override
   String simulFeaturedHelp(String param) {
-    return 'Show your simul to everyone on $param. Disable for private simuls.';
+    return 'Eş zamanlı gösteriyi $param adresinden herkese görünür kılar. Özel gösteriler için devre dışı bırakın.';
   }
 
   @override
-  String get simulDescription => 'Simul description';
+  String get simulDescription => 'Eş zamanlı gösterinin açıklaması';
 
   @override
-  String get simulDescriptionHelp => 'Anything you want to tell the participants?';
+  String get simulDescriptionHelp => 'Katılımcılara söylemek istediğiniz bir şey var mı?';
 
   @override
   String markdownAvailable(String param) {
-    return '$param is available for more advanced syntax.';
+    return '$param kullanarak metni daha ayrıntılı bir şekilde biçimlendirebilirsiniz.';
   }
 
   @override
-  String get embedsAvailable => 'Paste a game URL or a study chapter URL to embed it.';
+  String get embedsAvailable =>
+      'Bir maç veya çalışma bölümü eklemek için bağlantıyı buraya yapıştırın.';
 
   @override
-  String get inYourLocalTimezone => 'In your own local timezone';
+  String get inYourLocalTimezone => 'Yerel zaman diliminizde';
 
   @override
-  String get tournChat => 'Tournament chat';
+  String get tournChat => 'Turnuva sohbeti';
 
   @override
-  String get noChat => 'No chat';
+  String get noChat => 'Sohbet yasak';
 
   @override
-  String get onlyTeamLeaders => 'Only team leaders';
+  String get onlyTeamLeaders => 'Yalnızca takım liderleri';
 
   @override
-  String get onlyTeamMembers => 'Only team members';
+  String get onlyTeamMembers => 'Yalnızca takım üyeleri';
 
   @override
-  String get navigateMoveTree => 'Navigate the move tree';
+  String get navigateMoveTree => 'Hamleler arasında gezin';
 
   @override
-  String get mouseTricks => 'Mouse tricks';
+  String get mouseTricks => 'Fare ile yapılan numaralar';
 
   @override
-  String get toggleLocalAnalysis => 'Toggle local computer analysis';
+  String get toggleLocalAnalysis => 'Yerel bilgisayar analizini aç/kapat';
 
   @override
-  String get toggleAllAnalysis => 'Toggle all computer analysis';
+  String get toggleAllAnalysis => 'Genel bilgisayar analizini aç/kapat';
 
   @override
-  String get playComputerMove => 'Play best computer move';
+  String get playComputerMove => 'En iyi bilgisayar hamlesini oyna';
 
   @override
-  String get analysisOptions => 'Analysis options';
+  String get analysisOptions => 'Analiz seçenekleri';
 
   @override
-  String get focusChat => 'Focus chat';
+  String get focusChat => 'Sohbete odaklan';
 
   @override
-  String get showHelpDialog => 'Show this help dialog';
+  String get showHelpDialog => 'Bu yardım iletisini göster';
 
   @override
-  String get reopenYourAccount => 'Reopen your account';
+  String get reopenYourAccount => 'Hesabı aktifleştir';
 
   @override
   String get reopenYourAccountDescription =>
-      'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
+      'Hesabınızı kapattıktan sonra fikrinizi değiştirdiyseniz hesabınızı tekrar açmak için bir şansınız var.';
 
   @override
-  String get emailAssociatedToaccount => 'Email address associated to the account';
+  String get emailAssociatedToaccount => 'Hesabın bağlı olduğu e-posta adresi';
 
   @override
-  String get sentEmailWithLink => 'We\'ve sent you an email with a link.';
+  String get sentEmailWithLink => 'Size içinde ilgili bağlantı bulunan bir e-posta gönderdik.';
 
   @override
-  String get tournamentEntryCode => 'Tournament entry code';
+  String get tournamentEntryCode => 'Turnuva giriş kodu';
 
   @override
-  String get hangOn => 'Hang on!';
+  String get hangOn => 'Dur bir dakika!';
 
   @override
   String gameInProgress(String param) {
-    return 'You have a game in progress with $param.';
+    return 'Şu anda $param ile olan maçınız devam ediyor.';
   }
 
   @override
-  String get abortTheGame => 'Abort the game';
+  String get abortTheGame => 'Maçı iptal et';
 
   @override
-  String get resignTheGame => 'Resign the game';
+  String get resignTheGame => 'Maçı terk et';
 
   @override
-  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
+  String get youCantStartNewGame => 'Mevcut oyun bitene kadar yeni bir oyuna başlayamazsın.';
 
   @override
-  String get since => 'Since';
+  String get since => 'Seçili tarihten beri';
 
   @override
-  String get until => 'Until';
+  String get until => 'Seçili tarihe kadar';
 
   @override
-  String get lichessDbExplanation => 'Rated games played on Lichess';
+  String get lichessDbExplanation =>
+      'Tüm Lichess oyuncularının puanlı oyunlarından alınan örnekler';
 
   @override
-  String get switchSides => 'Switch sides';
+  String get switchSides => 'Renk değiştir';
 
   @override
-  String get closingAccountWithdrawAppeal => 'Closing your account will withdraw your appeal';
+  String get closingAccountWithdrawAppeal => 'Hesabınızı kapatırsanız başvurunuz geri çekilecektir';
 
   @override
-  String get ourEventTips => 'Our tips for organising events';
+  String get ourEventTips => 'Etkinlik düzenlemek için ipuçlarımız';
 
   @override
-  String get instructions => 'Instructions';
+  String get instructions => 'Talimatlar';
 
   @override
-  String get showMeEverything => 'Show me everything';
+  String get showMeEverything => 'Bana her şeyi göster';
 
   @override
   String get lichessPatronInfo =>
-      'Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.';
+      'Lichess bir yardım kuruluşudur ve tamamen özgür/açık kaynak kodlu bir yazılımdır. Tüm işletme maliyetleri, geliştirmeler ve içerikler yalnızca kullanıcı bağışları ile finanse edilmektedir.';
 
   @override
-  String get nothingToSeeHere => 'Nothing to see here at the moment.';
+  String get nothingToSeeHere => 'Şu anda görülebilecek bir şey yok.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'İstatistikler';
 
   @override
   String get accessibility => 'Accessibility';
@@ -4908,8 +4935,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Your opponent left the game. You can claim victory in $count seconds.',
-      one: 'Your opponent left the game. You can claim victory in $count second.',
+      other: 'Rakibiniz oyundan ayrıldı. $count saniye sonra galibiyet talep edebilirsiniz.',
+      one: 'Rakibiniz oyundan ayrıldı. $count saniye sonra galibiyet talep edebilirsiniz.',
     );
     return '$_temp0';
   }
@@ -4919,8 +4946,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Mate in $count half-moves',
-      one: 'Mate in $count half-move',
+      other: '$count yarım hamlede mat',
+      one: '$count yarım hamle sonra mat',
     );
     return '$_temp0';
   }
@@ -4930,8 +4957,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count blunders',
-      one: '$count blunder',
+      other: '$count vahim hata',
+      one: '$count vahim hata',
     );
     return '$_temp0';
   }
@@ -4941,8 +4968,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Blunders',
-      one: '$count Blunder',
+      other: '$count Vahim hata',
+      one: '$count Vahim hata',
     );
     return '$_temp0';
   }
@@ -4952,8 +4979,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count mistakes',
-      one: '$count mistake',
+      other: '$count hata',
+      one: '$count hata',
     );
     return '$_temp0';
   }
@@ -4963,8 +4990,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Mistakes',
-      one: '$count Mistake',
+      other: '$count Hata',
+      one: '$count Hata',
     );
     return '$_temp0';
   }
@@ -4974,8 +5001,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count inaccuracies',
-      one: '$count inaccuracy',
+      other: '$count kusurlu hamle',
+      one: '$count kusurlu hamle',
     );
     return '$_temp0';
   }
@@ -4985,8 +5012,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Inaccuracies',
-      one: '$count Inaccuracy',
+      other: '$count Kusurlu hamle',
+      one: '$count Kusurlu hamle',
     );
     return '$_temp0';
   }
@@ -4996,8 +5023,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count players',
-      one: '$count player',
+      other: '$count çevrimiçi oyuncu',
+      one: '$count çevrimiçi oyuncu',
     );
     return '$_temp0';
   }
@@ -5007,8 +5034,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count games',
-      one: '$count game',
+      other: '$count oynanan oyun',
+      one: '$count oynanan oyun',
     );
     return '$_temp0';
   }
@@ -5018,8 +5045,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count rating over $param2 games',
-      one: '$count rating over $param2 game',
+      other: '$param2 oyun üzerinden $count puanı',
+      one: '$param2 oyun üzerinden $count puanı',
     );
     return '$_temp0';
   }
@@ -5029,8 +5056,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count bookmarks',
-      one: '$count bookmark',
+      other: '$count işaretlenmiş oyun',
+      one: '$count işaretlenmiş oyun',
     );
     return '$_temp0';
   }
@@ -5040,8 +5067,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count days',
-      one: '$count day',
+      other: '$count gün',
+      one: '$count gün',
     );
     return '$_temp0';
   }
@@ -5051,8 +5078,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count hours',
-      one: '$count hour',
+      other: '$count saat',
+      one: '$count saat',
     );
     return '$_temp0';
   }
@@ -5062,8 +5089,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count minutes',
-      one: '$count minute',
+      other: '$count dakika',
+      one: '$count dakika',
     );
     return '$_temp0';
   }
@@ -5073,8 +5100,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Rank is updated every $count minutes',
-      one: 'Rank is updated every minute',
+      other: 'Sıralama her $count dakikada bir güncellenir',
+      one: 'Sıralama her $count dakikada bir güncellenir',
     );
     return '$_temp0';
   }
@@ -5084,8 +5111,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles',
-      one: '$count puzzle',
+      other: '$count bulmaca',
+      one: '$count bulmaca',
     );
     return '$_temp0';
   }
@@ -5095,8 +5122,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count games with you',
-      one: '$count game with you',
+      other: 'Sizinle oynadığı oyun sayısı: $count',
+      one: 'Sizinle oynadığı oyun sayısı: $count',
     );
     return '$_temp0';
   }
@@ -5106,8 +5133,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count rated',
-      one: '$count rated',
+      other: '$count dereceli',
+      one: '$count puanlı',
     );
     return '$_temp0';
   }
@@ -5117,8 +5144,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count wins',
-      one: '$count win',
+      other: '$count galibiyet',
+      one: '$count galibiyet',
     );
     return '$_temp0';
   }
@@ -5128,8 +5155,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count losses',
-      one: '$count loss',
+      other: '$count mağlubiyet',
+      one: '$count mağlubiyet',
     );
     return '$_temp0';
   }
@@ -5139,8 +5166,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count draws',
-      one: '$count draw',
+      other: '$count beraberlik',
+      one: '$count beraberlik',
     );
     return '$_temp0';
   }
@@ -5150,8 +5177,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count playing',
-      one: '$count playing',
+      other: '$count oynuyor',
+      one: '$count oynanıyor',
     );
     return '$_temp0';
   }
@@ -5161,8 +5188,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Give $count seconds',
-      one: 'Give $count second',
+      other: '$count saniye ver',
+      one: '$count saniye ver',
     );
     return '$_temp0';
   }
@@ -5172,8 +5199,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count tournament points',
-      one: '$count tournament point',
+      other: '$count Turnuva Puanı',
+      one: '$count Turnuva Puanı',
     );
     return '$_temp0';
   }
@@ -5183,8 +5210,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count studies',
-      one: '$count study',
+      other: '$count çalışma',
+      one: '$count çalışma',
     );
     return '$_temp0';
   }
@@ -5194,8 +5221,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count simuls',
-      one: '$count simul',
+      other: '$count eş zamanlı oyun',
+      one: '$count eş zamanlı oyun',
     );
     return '$_temp0';
   }
@@ -5205,8 +5232,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '≥ $count rated games',
-      one: '≥ $count rated game',
+      other: '≥ $count dereceli maç',
+      one: '≥ $count dereceli maç',
     );
     return '$_temp0';
   }
@@ -5216,8 +5243,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '≥ $count $param2 rated games',
-      one: '≥ $count $param2 rated game',
+      other: '≥ $count puanlı $param2 maçı',
+      one: '≥ $count puanlı $param2 maçı',
     );
     return '$_temp0';
   }
@@ -5227,8 +5254,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'You need to play $count more $param2 rated games',
-      one: 'You need to play $count more $param2 rated game',
+      other: '$count tane daha dereceli $param2 oynamanız gerekiyor',
+      one: '$count tane daha dereceli $param2 oynamanız gerekiyor',
     );
     return '$_temp0';
   }
@@ -5238,8 +5265,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'You need to play $count more rated games',
-      one: 'You need to play $count more rated game',
+      other: '$count tane daha dereceli oyun oynamanız gerekiyor',
+      one: '$count tane daha dereceli oyun oynamanız gerekiyor',
     );
     return '$_temp0';
   }
@@ -5249,8 +5276,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count imported games',
-      one: '$count imported game',
+      other: '$count yüklenen oyun',
+      one: '$count yüklenen oyun',
     );
     return '$_temp0';
   }
@@ -5260,8 +5287,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count friends online',
-      one: '$count friend online',
+      other: '$count arkadaş çevrim içi',
+      one: '$count arkadaş çevrim içi',
     );
     return '$_temp0';
   }
@@ -5271,8 +5298,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count followers',
-      one: '$count follower',
+      other: '$count takipçi',
+      one: '$count takipçi',
     );
     return '$_temp0';
   }
@@ -5282,8 +5309,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count following',
-      one: '$count following',
+      other: '$count takip ettiklerim',
+      one: '$count takip ettiklerim',
     );
     return '$_temp0';
   }
@@ -5293,8 +5320,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Less than $count minutes',
-      one: 'Less than $count minute',
+      other: '$count dakikadan daha az',
+      one: '$count dakikadan daha az',
     );
     return '$_temp0';
   }
@@ -5304,8 +5331,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count games in play',
-      one: '$count game in play',
+      other: 'Şu anda $count oyun oynanıyor',
+      one: 'Şu anda $count oyun oynanıyor',
     );
     return '$_temp0';
   }
@@ -5315,8 +5342,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Maximum: $count characters.',
-      one: 'Maximum: $count character.',
+      other: 'En fazla: $count karakter.',
+      one: 'En fazla: $count karakter.',
     );
     return '$_temp0';
   }
@@ -5326,8 +5353,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count blocks',
-      one: '$count block',
+      other: '$count kişiyi engelledi',
+      one: '$count kişiyi engelledi',
     );
     return '$_temp0';
   }
@@ -5337,8 +5364,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count forum posts',
-      one: '$count forum post',
+      other: '$count Forum Mesajı',
+      one: '$count Forum Mesajı',
     );
     return '$_temp0';
   }
@@ -5348,8 +5375,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count $param2 players this week.',
-      one: '$count $param2 player this week.',
+      other: 'Bu hafta $count $param2 oyuncusu.',
+      one: 'Bu hafta bir $param2 oyuncusu.',
     );
     return '$_temp0';
   }
@@ -5359,8 +5386,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Available in $count languages!',
-      one: 'Available in $count language!',
+      other: '$count farklı dili destekler!',
+      one: '$count farklı dili destekler!',
     );
     return '$_temp0';
   }
@@ -5370,8 +5397,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count seconds to play the first move',
-      one: '$count second to play the first move',
+      other: 'İlk hamle için son $count saniye',
+      one: 'İlk hamle için son $count saniye',
     );
     return '$_temp0';
   }
@@ -5381,8 +5408,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count seconds',
-      one: '$count second',
+      other: '$count saniye',
+      one: '$count saniye',
     );
     return '$_temp0';
   }
@@ -5392,8 +5419,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'and save $count premove lines',
-      one: 'and save $count premove line',
+      other: 've $count önceki varyantları kaydedin',
+      one: 've $count önceki varyantları kaydedin',
     );
     return '$_temp0';
   }
@@ -5584,481 +5611,482 @@ class AppLocalizationsTr extends AppLocalizations {
   String get streamerLichessStreamers => 'Lichess yayıncıları';
 
   @override
-  String get studyPrivate => 'Private';
+  String get studyPrivate => 'Gizli';
 
   @override
-  String get studyMyStudies => 'My studies';
+  String get studyMyStudies => 'Çalışmalarım';
 
   @override
-  String get studyStudiesIContributeTo => 'Studies I contribute to';
+  String get studyStudiesIContributeTo => 'Katkıda bulunduğum çalışmalar';
 
   @override
-  String get studyMyPublicStudies => 'My public studies';
+  String get studyMyPublicStudies => 'Herkese açık çalışmalarım';
 
   @override
-  String get studyMyPrivateStudies => 'My private studies';
+  String get studyMyPrivateStudies => 'Gizli çalışmalarım';
 
   @override
-  String get studyMyFavoriteStudies => 'My favourite studies';
+  String get studyMyFavoriteStudies => 'En sevdiğim çalışmalar';
 
   @override
-  String get studyWhatAreStudies => 'What are studies?';
+  String get studyWhatAreStudies => 'Çalışmalar nedir?';
 
   @override
-  String get studyAllStudies => 'All studies';
+  String get studyAllStudies => 'Bütün çalışmalar';
 
   @override
   String studyStudiesCreatedByX(String param) {
-    return 'Studies created by $param';
+    return 'Çalışmalar $param tarafından oluşturulmuştur';
   }
 
   @override
-  String get studyNoneYet => 'None yet.';
+  String get studyNoneYet => 'Henüz yok.';
 
   @override
-  String get studyHot => 'Hot';
+  String get studyHot => 'Popüler';
 
   @override
-  String get studyDateAddedNewest => 'Date added (newest)';
+  String get studyDateAddedNewest => 'Eklenme tarihi (en yeni)';
 
   @override
-  String get studyDateAddedOldest => 'Date added (oldest)';
+  String get studyDateAddedOldest => 'Eklenme tarihi (en eski)';
 
   @override
-  String get studyRecentlyUpdated => 'Recently updated';
+  String get studyRecentlyUpdated => 'Yeni güncellenmiş';
 
   @override
-  String get studyMostPopular => 'Most popular';
+  String get studyMostPopular => 'En popüler';
 
   @override
-  String get studyAlphabetical => 'Alphabetical';
+  String get studyAlphabetical => 'Alfabetik';
 
   @override
-  String get studyAddNewChapter => 'Add a new chapter';
+  String get studyAddNewChapter => 'Yeni bir bölüm ekle';
 
   @override
-  String get studyAddMembers => 'Add members';
+  String get studyAddMembers => 'Üye ekle';
 
   @override
-  String get studyInviteToTheStudy => 'Invite to the study';
+  String get studyInviteToTheStudy => 'Bu çalışmaya davet edin';
 
   @override
   String get studyPleaseOnlyInvitePeopleYouKnow =>
-      'Please only invite people who know you, and who actively want to join this study.';
+      'Lütfen sadece tanıdığınız ve katkı sağlayacağını düşündüğünüz kişileri davet ediniz.';
 
   @override
-  String get studySearchByUsername => 'Search by username';
+  String get studySearchByUsername => 'Kullanıcı adına göre ara';
 
   @override
-  String get studySpectator => 'Spectator';
+  String get studySpectator => 'İzleyici';
 
   @override
-  String get studyContributor => 'Contributor';
+  String get studyContributor => 'Katılımcı';
 
   @override
-  String get studyKick => 'Kick';
+  String get studyKick => 'Çıkar';
 
   @override
-  String get studyLeaveTheStudy => 'Leave the study';
+  String get studyLeaveTheStudy => 'Çalışmadan ayrıl';
 
   @override
-  String get studyYouAreNowAContributor => 'You are now a contributor';
+  String get studyYouAreNowAContributor => 'Artık bir katılımcısınız';
 
   @override
-  String get studyYouAreNowASpectator => 'You are now a spectator';
+  String get studyYouAreNowASpectator => 'Artık bir izleyicisiniz';
 
   @override
-  String get studyPgnTags => 'PGN tags';
+  String get studyPgnTags => 'PGN etiketleri';
 
   @override
-  String get studyLike => 'Like';
+  String get studyLike => 'Beğen';
 
   @override
-  String get studyUnlike => 'Unlike';
+  String get studyUnlike => 'Beğenmekten Vazgeç';
 
   @override
-  String get studyNewTag => 'New tag';
+  String get studyNewTag => 'Yeni etiket';
 
   @override
-  String get studyCommentThisPosition => 'Comment on this position';
+  String get studyCommentThisPosition => 'Bu pozisyon için yorum yap';
 
   @override
-  String get studyCommentThisMove => 'Comment on this move';
+  String get studyCommentThisMove => 'Bu hamle için yorum yap';
 
   @override
-  String get studyAnnotateWithGlyphs => 'Annotate with glyphs';
+  String get studyAnnotateWithGlyphs => 'Glifler ile açıkla';
 
   @override
-  String get studyTheChapterIsTooShortToBeAnalysed => 'The chapter is too short to be analysed.';
+  String get studyTheChapterIsTooShortToBeAnalysed => 'Bu bölüm analiz için çok kısa.';
 
   @override
   String get studyOnlyContributorsCanRequestAnalysis =>
-      'Only the study contributors can request a computer analysis.';
+      'Sadece katılımcılar bilgisayar analizi isteyebilir.';
 
   @override
-  String get studyGetAFullComputerAnalysis =>
-      'Get a full server-side computer analysis of the mainline.';
+  String get studyGetAFullComputerAnalysis => 'Bu varyant için ayrıntılı bir sunucu analizi yapın.';
 
   @override
   String get studyMakeSureTheChapterIsComplete =>
-      'Make sure the chapter is complete. You can only request analysis once.';
+      'Bu bölümü tamamladığınızdan emin olun. Sadece bir kez bilgisayar analizi talep edebilirsiniz.';
 
   @override
   String get studyAllSyncMembersRemainOnTheSamePosition =>
-      'All SYNC members remain on the same position';
+      'Senkronize edilen bütün üyeler aynı pozisyonda kalır';
 
   @override
-  String get studyShareChanges => 'Share changes with spectators and save them on the server';
+  String get studyShareChanges => 'Değişiklikleri izleyiciler ile paylaşın ve sunucuya kaydedin';
 
   @override
-  String get studyPlaying => 'Playing';
+  String get studyPlaying => 'Oynanıyor';
 
   @override
-  String get studyShowResults => 'Results';
+  String get studyShowResults => 'Sonuçlar';
 
   @override
-  String get studyShowEvalBar => 'Evaluation bars';
+  String get studyShowEvalBar => 'Değerlendirme çubuğu';
 
   @override
-  String get studyNext => 'Next';
+  String get studyNext => 'Sonraki';
 
   @override
-  String get studyShareAndExport => 'Share & export';
+  String get studyShareAndExport => 'Paylaş ve dışa aktar';
 
   @override
-  String get studyCloneStudy => 'Clone';
+  String get studyCloneStudy => 'Klon';
 
   @override
-  String get studyStudyPgn => 'Study PGN';
+  String get studyStudyPgn => 'Çalışma PGN\'si';
 
   @override
-  String get studyChapterPgn => 'Chapter PGN';
+  String get studyChapterPgn => 'Bölüm PGN\'si';
 
   @override
-  String get studyCopyChapterPgn => 'Copy PGN';
+  String get studyCopyChapterPgn => 'PGN \'yi kopyala';
 
   @override
-  String get studyDownloadGame => 'Download game';
+  String get studyDownloadGame => 'Oyunu indir';
 
   @override
-  String get studyStudyUrl => 'Study URL';
+  String get studyStudyUrl => 'Çalışma Adresi';
 
   @override
-  String get studyCurrentChapterUrl => 'Current chapter URL';
+  String get studyCurrentChapterUrl => 'Mevcut Bölümün Adresi';
 
   @override
   String get studyYouCanPasteThisInTheForumToEmbed =>
-      'You can paste this in the forum or your Lichess blog to embed';
+      'Forumda gömülü olarak paylaşmak için yukarıdaki bağlantıyı kullanabilirsiniz';
 
   @override
-  String get studyStartAtInitialPosition => 'Start at initial position';
+  String get studyStartAtInitialPosition => 'İlk pozisyondan başlasın';
 
   @override
   String studyStartAtX(String param) {
-    return 'Start at $param';
+    return '$param pozisyonundan başlasın';
   }
 
   @override
-  String get studyEmbedInYourWebsite => 'Embed in your website';
+  String get studyEmbedInYourWebsite =>
+      'İnternet sitenizde ya da blogunuzda gömülü olarak paylaşın';
 
   @override
-  String get studyReadMoreAboutEmbedding => 'Read more about embedding';
+  String get studyReadMoreAboutEmbedding => 'Gömülü paylaşma hakkında';
 
   @override
-  String get studyOnlyPublicStudiesCanBeEmbedded => 'Only public studies can be embedded!';
+  String get studyOnlyPublicStudiesCanBeEmbedded =>
+      'Yalnızca herkese açık çalışmalar gömülü paylaşılabilir!';
 
   @override
-  String get studyOpen => 'Open';
+  String get studyOpen => 'Aç';
 
   @override
   String studyXBroughtToYouByY(String param1, String param2) {
-    return '$param1, brought to you by $param2';
+    return '$param2 sana $param1 getirdi';
   }
 
   @override
-  String get studyStudyNotFound => 'Study not found';
+  String get studyStudyNotFound => 'Böyle bir çalışma bulunamadı';
 
   @override
-  String get studyEditChapter => 'Edit chapter';
+  String get studyEditChapter => 'Bölümü düzenle';
 
   @override
-  String get studyNewChapter => 'New chapter';
+  String get studyNewChapter => 'Yeni bölüm';
 
   @override
   String studyImportFromChapterX(String param) {
-    return 'Import from $param';
+    return '$param çalışmasından içe aktar';
   }
 
   @override
-  String get studyOrientation => 'Orientation';
+  String get studyOrientation => 'Tahta yönü';
 
   @override
-  String get studyAnalysisMode => 'Analysis mode';
+  String get studyAnalysisMode => 'Analiz modu';
 
   @override
-  String get studyPinnedChapterComment => 'Pinned chapter comment';
+  String get studyPinnedChapterComment => 'Bölüm üzerine yorumlar';
 
   @override
-  String get studySaveChapter => 'Save chapter';
+  String get studySaveChapter => 'Bölümü kaydet';
 
   @override
-  String get studyClearAnnotations => 'Clear annotations';
+  String get studyClearAnnotations => 'Açıklamaları sil';
 
   @override
-  String get studyClearVariations => 'Clear variations';
+  String get studyClearVariations => 'Varyasyonları sil';
 
   @override
-  String get studyDeleteChapter => 'Delete chapter';
+  String get studyDeleteChapter => 'Bölümü sil';
 
   @override
-  String get studyDeleteThisChapter => 'Delete this chapter. There is no going back!';
+  String get studyDeleteThisChapter => 'Bu bölüm silinsin mi? Bunun geri dönüşü yok!';
 
   @override
   String get studyClearAllCommentsInThisChapter =>
-      'Clear all comments, glyphs and drawn shapes in this chapter';
+      'Bu bölümdeki bütün yorumlar ve işaretler temizlensin mi?';
 
   @override
-  String get studyRightUnderTheBoard => 'Right under the board';
+  String get studyRightUnderTheBoard => 'Tahtanın hemen altında görünsün';
 
   @override
-  String get studyNoPinnedComment => 'None';
+  String get studyNoPinnedComment => 'Yok';
 
   @override
-  String get studyNormalAnalysis => 'Normal analysis';
+  String get studyNormalAnalysis => 'Normal analiz';
 
   @override
-  String get studyHideNextMoves => 'Hide next moves';
+  String get studyHideNextMoves => 'Sonraki hamleleri gizle';
 
   @override
-  String get studyInteractiveLesson => 'Interactive lesson';
+  String get studyInteractiveLesson => 'Etkileşimli ders';
 
   @override
   String studyChapterX(String param) {
-    return 'Chapter $param';
+    return 'Bölüm $param';
   }
 
   @override
-  String get studyEmpty => 'Empty';
+  String get studyEmpty => 'Boş';
 
   @override
-  String get studyStartFromInitialPosition => 'Start from initial position';
+  String get studyStartFromInitialPosition => 'İlk pozisyondan başlasın';
 
   @override
-  String get studyEditor => 'Editor';
+  String get studyEditor => 'Editör';
 
   @override
-  String get studyStartFromCustomPosition => 'Start from custom position';
+  String get studyStartFromCustomPosition => 'Özel bir pozisyondan başlasın';
 
   @override
-  String get studyLoadAGameByUrl => 'Load games by URLs';
+  String get studyLoadAGameByUrl => 'URL ile oyun yükle';
 
   @override
-  String get studyLoadAPositionFromFen => 'Load a position from FEN';
+  String get studyLoadAPositionFromFen => 'FEN kullanarak pozisyon yükle';
 
   @override
-  String get studyLoadAGameFromPgn => 'Load games from PGN';
+  String get studyLoadAGameFromPgn => 'PGN ile oyun yükle';
 
   @override
-  String get studyAutomatic => 'Automatic';
+  String get studyAutomatic => 'Otomatik';
 
   @override
-  String get studyUrlOfTheGame => 'URL of the games, one per line';
+  String get studyUrlOfTheGame => 'Oyunun bağlantısı';
 
   @override
   String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Load games from $param1 or $param2';
+    return '$param1 veya $param2 kullanarak oyun yükle';
   }
 
   @override
-  String get studyCreateChapter => 'Create chapter';
+  String get studyCreateChapter => 'Bölüm oluştur';
 
   @override
-  String get studyCreateStudy => 'Create study';
+  String get studyCreateStudy => 'Çalışma oluştur';
 
   @override
-  String get studyEditStudy => 'Edit study';
+  String get studyEditStudy => 'Çalışmayı düzenle';
 
   @override
-  String get studyVisibility => 'Visibility';
+  String get studyVisibility => 'Görünürlük';
 
   @override
-  String get studyPublic => 'Public';
+  String get studyPublic => 'Herkese açık';
 
   @override
-  String get studyUnlisted => 'Unlisted';
+  String get studyUnlisted => 'Liste dışı';
 
   @override
-  String get studyInviteOnly => 'Invite only';
+  String get studyInviteOnly => 'Sadece davet edilenler';
 
   @override
-  String get studyAllowCloning => 'Allow cloning';
+  String get studyAllowCloning => 'Klonlamaya izni olanlar';
 
   @override
-  String get studyNobody => 'Nobody';
+  String get studyNobody => 'Hiç kimse';
 
   @override
-  String get studyOnlyMe => 'Only me';
+  String get studyOnlyMe => 'Sadece ben';
 
   @override
-  String get studyContributors => 'Contributors';
+  String get studyContributors => 'Katkıda Bulunanlar';
 
   @override
-  String get studyMembers => 'Members';
+  String get studyMembers => 'Üyeler';
 
   @override
-  String get studyEveryone => 'Everyone';
+  String get studyEveryone => 'Herkes';
 
   @override
-  String get studyEnableSync => 'Enable sync';
+  String get studyEnableSync => 'Senkronizasyonu etkinleştir';
 
   @override
-  String get studyYesKeepEveryoneOnTheSamePosition => 'Yes: keep everyone on the same position';
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Evet: herkes aynı pozisyonda kalsın';
 
   @override
-  String get studyNoLetPeopleBrowseFreely => 'No: let people browse freely';
+  String get studyNoLetPeopleBrowseFreely => 'Hayır: herkes dilediğince gezinebilsin';
 
   @override
-  String get studyPinnedStudyComment => 'Pinned study comment';
+  String get studyPinnedStudyComment => 'Çalışma üzerine yorumlar';
 
   @override
-  String get studyStart => 'Start';
+  String get studyStart => 'Başlat';
 
   @override
-  String get studySave => 'Save';
+  String get studySave => 'Kaydet';
 
   @override
-  String get studyClearChat => 'Clear chat';
+  String get studyClearChat => 'Sohbeti temizle';
 
   @override
   String get studyDeleteTheStudyChatHistory =>
-      'Delete the study chat history? There is no going back!';
+      'Çalışmanın sohbet geçmişi silinsin mi? Bunun geri dönüşü yok!';
 
   @override
-  String get studyDeleteStudy => 'Delete study';
+  String get studyDeleteStudy => 'Çalışmayı sil';
 
   @override
   String studyConfirmDeleteStudy(String param) {
-    return 'Delete the entire study? There is no going back! Type the name of the study to confirm: $param';
+    return 'Tüm çalışma silinsin mi? Bunun geri dönüşü yok! İşlemi onaylamak için çalışmanın adını yazın: $param';
   }
 
   @override
-  String get studyWhereDoYouWantToStudyThat => 'Where do you want to study that?';
+  String get studyWhereDoYouWantToStudyThat => 'Bu çalışmayı nerede sürdürmek istersiniz?';
 
   @override
-  String get studyGoodMove => 'Good move';
+  String get studyGoodMove => 'İyi hamle';
 
   @override
-  String get studyMistake => 'Mistake';
+  String get studyMistake => 'Hata';
 
   @override
-  String get studyBrilliantMove => 'Brilliant move';
+  String get studyBrilliantMove => 'Muhteşem hamle';
 
   @override
-  String get studyBlunder => 'Blunder';
+  String get studyBlunder => 'Vahim hata';
 
   @override
-  String get studyInterestingMove => 'Interesting move';
+  String get studyInterestingMove => 'İlginç hamle';
 
   @override
-  String get studyDubiousMove => 'Dubious move';
+  String get studyDubiousMove => 'Şüpheli hamle';
 
   @override
-  String get studyOnlyMove => 'Only move';
+  String get studyOnlyMove => 'Tek hamle';
 
   @override
   String get studyZugzwang => 'Zugzwang';
 
   @override
-  String get studyEqualPosition => 'Equal position';
+  String get studyEqualPosition => 'Eşit pozisyon';
 
   @override
-  String get studyUnclearPosition => 'Unclear position';
+  String get studyUnclearPosition => 'Belirsiz pozisyon';
 
   @override
-  String get studyWhiteIsSlightlyBetter => 'White is slightly better';
+  String get studyWhiteIsSlightlyBetter => 'Beyaz biraz önde';
 
   @override
-  String get studyBlackIsSlightlyBetter => 'Black is slightly better';
+  String get studyBlackIsSlightlyBetter => 'Siyah biraz önde';
 
   @override
-  String get studyWhiteIsBetter => 'White is better';
+  String get studyWhiteIsBetter => 'Beyaz daha üstün';
 
   @override
-  String get studyBlackIsBetter => 'Black is better';
+  String get studyBlackIsBetter => 'Siyah daha üstün';
 
   @override
-  String get studyWhiteIsWinning => 'White is winning';
+  String get studyWhiteIsWinning => 'Beyaz kazanıyor';
 
   @override
-  String get studyBlackIsWinning => 'Black is winning';
+  String get studyBlackIsWinning => 'Siyah kazanıyor';
 
   @override
-  String get studyNovelty => 'Novelty';
+  String get studyNovelty => 'Farklı bir açılış';
 
   @override
-  String get studyDevelopment => 'Development';
+  String get studyDevelopment => 'Gelişim hamlesi';
 
   @override
-  String get studyInitiative => 'Initiative';
+  String get studyInitiative => 'Girişim';
 
   @override
-  String get studyAttack => 'Attack';
+  String get studyAttack => 'Saldırı';
 
   @override
-  String get studyCounterplay => 'Counterplay';
+  String get studyCounterplay => 'Karşı saldırı';
 
   @override
-  String get studyTimeTrouble => 'Time trouble';
+  String get studyTimeTrouble => 'Vakit sıkıntısı';
 
   @override
-  String get studyWithCompensation => 'With compensation';
+  String get studyWithCompensation => 'Pozisyon avantajı ile';
 
   @override
-  String get studyWithTheIdea => 'With the idea';
+  String get studyWithTheIdea => 'Plan doğrultusunda';
 
   @override
-  String get studyNextChapter => 'Next chapter';
+  String get studyNextChapter => 'Sonraki bölüm';
 
   @override
-  String get studyPrevChapter => 'Previous chapter';
+  String get studyPrevChapter => 'Önceki bölüm';
 
   @override
-  String get studyStudyActions => 'Study actions';
+  String get studyStudyActions => 'Çalışma seçenekleri';
 
   @override
-  String get studyTopics => 'Topics';
+  String get studyTopics => 'Konular';
 
   @override
-  String get studyMyTopics => 'My topics';
+  String get studyMyTopics => 'Konularım';
 
   @override
-  String get studyPopularTopics => 'Popular topics';
+  String get studyPopularTopics => 'Popüler konular';
 
   @override
-  String get studyManageTopics => 'Manage topics';
+  String get studyManageTopics => 'Konuları yönet';
 
   @override
-  String get studyBack => 'Back';
+  String get studyBack => 'Baştan başlat';
 
   @override
-  String get studyPlayAgain => 'Play again';
+  String get studyPlayAgain => 'Tekrar oyna';
 
   @override
-  String get studyWhatWouldYouPlay => 'What would you play in this position?';
+  String get studyWhatWouldYouPlay => 'Burada hangi hamleyi yapardınız?';
 
   @override
-  String get studyYouCompletedThisLesson => 'Congratulations! You completed this lesson.';
+  String get studyYouCompletedThisLesson => 'Tebrikler! Bu dersi tamamlandınız.';
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return 'Sayfa başına $param';
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'Yardıma mı ihtiyacın var? Tura başla!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Lichess Dersine Hoşgeldin! ';
 
   @override
   String get studyWelcomeToLichessStudyText =>
@@ -6107,7 +6135,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Vakit ayırdığınız için teşekkürler';
 
   @override
   String get studyConclusionText =>
@@ -6179,8 +6207,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Chapters',
-      one: '$count Chapter',
+      other: '$count Bölüm',
+      one: '$count Bölüm',
     );
     return '$_temp0';
   }
@@ -6190,8 +6218,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Games',
-      one: '$count Game',
+      other: '$count Oyun',
+      one: '$count oyun',
     );
     return '$_temp0';
   }
@@ -6201,8 +6229,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Members',
-      one: '$count Member',
+      other: '$count Üye',
+      one: '$count Üye',
     );
     return '$_temp0';
   }
@@ -6212,9 +6240,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
-      one: 'Paste your PGN text here, up to $count game',
+      other: 'PGN metninizi buraya yapıştırın, en fazla $count oyuna kadar',
+      one: 'PGN metninizi buraya yapıştırın, en fazla $count oyuna kadar',
     );
     return '$_temp0';
   }

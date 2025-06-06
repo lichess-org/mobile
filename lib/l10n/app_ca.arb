@@ -251,6 +251,8 @@
   "coordinatesFindSquare": "Cerca caselles",
   "coordinatesNameSquare": "Anomena caselles",
   "coordinatesPracticeOnlySomeFilesAndRanks": "Practicar només algunes files i columnes",
+  "patronDonate": "Donar",
+  "patronLichessPatron": "Patró de Lichess",
   "perfStatPerfStats": "Estadístiques de {param}",
   "perfStatViewTheGames": "Veure les partides",
   "perfStatProvisional": "provisional",

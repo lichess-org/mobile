@@ -5622,515 +5622,518 @@ class AppLocalizationsNl extends AppLocalizations {
   String get streamerLichessStreamers => 'Lichess streamers';
 
   @override
-  String get studyPrivate => 'Private';
+  String get studyPrivate => 'Privé';
 
   @override
-  String get studyMyStudies => 'My studies';
+  String get studyMyStudies => 'Mijn Studies';
 
   @override
-  String get studyStudiesIContributeTo => 'Studies I contribute to';
+  String get studyStudiesIContributeTo => 'Studies waaraan ik bijdraag';
 
   @override
-  String get studyMyPublicStudies => 'My public studies';
+  String get studyMyPublicStudies => 'Mijn openbare studies';
 
   @override
-  String get studyMyPrivateStudies => 'My private studies';
+  String get studyMyPrivateStudies => 'Mijn privé studies';
 
   @override
-  String get studyMyFavoriteStudies => 'My favourite studies';
+  String get studyMyFavoriteStudies => 'Mijn favoriete studies';
 
   @override
-  String get studyWhatAreStudies => 'What are studies?';
+  String get studyWhatAreStudies => 'Wat zijn studies?';
 
   @override
-  String get studyAllStudies => 'All studies';
+  String get studyAllStudies => 'Alle studies';
 
   @override
   String studyStudiesCreatedByX(String param) {
-    return 'Studies created by $param';
+    return 'Studies gemaakt door $param';
   }
 
   @override
-  String get studyNoneYet => 'None yet.';
+  String get studyNoneYet => 'Nog geen...';
 
   @override
-  String get studyHot => 'Hot';
+  String get studyHot => 'Populair';
 
   @override
-  String get studyDateAddedNewest => 'Date added (newest)';
+  String get studyDateAddedNewest => 'Datum toegevoegd (nieuwste)';
 
   @override
-  String get studyDateAddedOldest => 'Date added (oldest)';
+  String get studyDateAddedOldest => 'Datum toegevoegd (oudste)';
 
   @override
-  String get studyRecentlyUpdated => 'Recently updated';
+  String get studyRecentlyUpdated => 'Recent bijgewerkt';
 
   @override
-  String get studyMostPopular => 'Most popular';
+  String get studyMostPopular => 'Meest populair';
 
   @override
-  String get studyAlphabetical => 'Alphabetical';
+  String get studyAlphabetical => 'Alfabetisch';
 
   @override
-  String get studyAddNewChapter => 'Add a new chapter';
+  String get studyAddNewChapter => 'Nieuw hoofdstuk toevoegen';
 
   @override
-  String get studyAddMembers => 'Add members';
+  String get studyAddMembers => 'Deelnemers toevoegen';
 
   @override
-  String get studyInviteToTheStudy => 'Invite to the study';
+  String get studyInviteToTheStudy => 'Uitnodigen voor de studie';
 
   @override
   String get studyPleaseOnlyInvitePeopleYouKnow =>
-      'Please only invite people who know you, and who actively want to join this study.';
+      'Nodig alleen deelnemers uit die jou kennen en actief mee willen doen aan deze studie.';
 
   @override
-  String get studySearchByUsername => 'Search by username';
+  String get studySearchByUsername => 'Zoeken op gebruikersnaam';
 
   @override
-  String get studySpectator => 'Spectator';
+  String get studySpectator => 'Kijker';
 
   @override
-  String get studyContributor => 'Contributor';
+  String get studyContributor => 'Bijdrager';
 
   @override
-  String get studyKick => 'Kick';
+  String get studyKick => 'Verwijder';
 
   @override
-  String get studyLeaveTheStudy => 'Leave the study';
+  String get studyLeaveTheStudy => 'Verlaat de studie';
 
   @override
-  String get studyYouAreNowAContributor => 'You are now a contributor';
+  String get studyYouAreNowAContributor => 'Je bent nu een bijdrager';
 
   @override
-  String get studyYouAreNowASpectator => 'You are now a spectator';
+  String get studyYouAreNowASpectator => 'Je bent nu een toeschouwer';
 
   @override
-  String get studyPgnTags => 'PGN tags';
+  String get studyPgnTags => 'PGN labels';
 
   @override
-  String get studyLike => 'Like';
+  String get studyLike => 'Vind ik leuk';
 
   @override
-  String get studyUnlike => 'Unlike';
+  String get studyUnlike => 'Vind ik niet meer leuk';
 
   @override
-  String get studyNewTag => 'New tag';
+  String get studyNewTag => 'Nieuw label';
 
   @override
-  String get studyCommentThisPosition => 'Comment on this position';
+  String get studyCommentThisPosition => 'Reageer op deze positie';
 
   @override
-  String get studyCommentThisMove => 'Comment on this move';
+  String get studyCommentThisMove => 'Reageer op deze zet';
 
   @override
-  String get studyAnnotateWithGlyphs => 'Annotate with glyphs';
+  String get studyAnnotateWithGlyphs => 'Maak aantekeningen met symbolen';
 
   @override
-  String get studyTheChapterIsTooShortToBeAnalysed => 'The chapter is too short to be analysed.';
+  String get studyTheChapterIsTooShortToBeAnalysed =>
+      'Dit hoofdstuk is te kort om geanalyseerd te worden.';
 
   @override
   String get studyOnlyContributorsCanRequestAnalysis =>
-      'Only the study contributors can request a computer analysis.';
+      'Alleen de bijdragers kunnen een computer analyse aanvragen.';
 
   @override
   String get studyGetAFullComputerAnalysis =>
-      'Get a full server-side computer analysis of the mainline.';
+      'Krijg een volledige computer analyse van de hoofdlijn.';
 
   @override
   String get studyMakeSureTheChapterIsComplete =>
-      'Make sure the chapter is complete. You can only request analysis once.';
+      'Zorg ervoor dat het hoofdstuk voltooid is. Je kunt slechts één keer een analyse aanvragen.';
 
   @override
   String get studyAllSyncMembersRemainOnTheSamePosition =>
-      'All SYNC members remain on the same position';
+      'Alle SYNC leden blijven op dezelfde positie';
 
   @override
-  String get studyShareChanges => 'Share changes with spectators and save them on the server';
+  String get studyShareChanges => 'Deel veranderingen met toeschouwers en sla deze op op de server';
 
   @override
-  String get studyPlaying => 'Playing';
+  String get studyPlaying => 'Spelend';
 
   @override
-  String get studyShowResults => 'Results';
+  String get studyShowResults => 'Resultaten';
 
   @override
-  String get studyShowEvalBar => 'Evaluation bars';
+  String get studyShowEvalBar => 'Evaluatiebalk';
 
   @override
-  String get studyNext => 'Next';
+  String get studyNext => 'Volgende';
 
   @override
-  String get studyShareAndExport => 'Share & export';
+  String get studyShareAndExport => 'Deel & exporteer';
 
   @override
-  String get studyCloneStudy => 'Clone';
+  String get studyCloneStudy => 'Kopiëren';
 
   @override
-  String get studyStudyPgn => 'Study PGN';
+  String get studyStudyPgn => 'PGN bestuderen';
 
   @override
-  String get studyChapterPgn => 'Chapter PGN';
+  String get studyChapterPgn => 'Hoofdstuk PGN';
 
   @override
-  String get studyCopyChapterPgn => 'Copy PGN';
+  String get studyCopyChapterPgn => 'PGN kopiëren';
 
   @override
-  String get studyDownloadGame => 'Download game';
+  String get studyDownloadGame => 'Partij downloaden';
 
   @override
-  String get studyStudyUrl => 'Study URL';
+  String get studyStudyUrl => 'Studie URL';
 
   @override
-  String get studyCurrentChapterUrl => 'Current chapter URL';
+  String get studyCurrentChapterUrl => 'Huidige hoofdstuk URL';
 
   @override
   String get studyYouCanPasteThisInTheForumToEmbed =>
-      'You can paste this in the forum or your Lichess blog to embed';
+      'Je kunt deze link plakken wanneer je een bericht schrijft op het forum om de partij interactief weer te geven';
 
   @override
-  String get studyStartAtInitialPosition => 'Start at initial position';
+  String get studyStartAtInitialPosition => 'Begin bij de startpositie';
 
   @override
   String studyStartAtX(String param) {
-    return 'Start at $param';
+    return 'Beginnen bij $param';
   }
 
   @override
-  String get studyEmbedInYourWebsite => 'Embed in your website';
+  String get studyEmbedInYourWebsite => 'Insluiten in blog of website';
 
   @override
-  String get studyReadMoreAboutEmbedding => 'Read more about embedding';
+  String get studyReadMoreAboutEmbedding => 'Lees meer over insluiten';
 
   @override
-  String get studyOnlyPublicStudiesCanBeEmbedded => 'Only public studies can be embedded!';
+  String get studyOnlyPublicStudiesCanBeEmbedded =>
+      'Alleen openbare studies kunnen worden ingevoegd!';
 
   @override
   String get studyOpen => 'Open';
 
   @override
   String studyXBroughtToYouByY(String param1, String param2) {
-    return '$param1, brought to you by $param2';
+    return '$param1 aangeboden door $param2';
   }
 
   @override
-  String get studyStudyNotFound => 'Study not found';
+  String get studyStudyNotFound => 'Studie niet gevonden';
 
   @override
-  String get studyEditChapter => 'Edit chapter';
+  String get studyEditChapter => 'Hoofdstuk bewerken';
 
   @override
-  String get studyNewChapter => 'New chapter';
+  String get studyNewChapter => 'Nieuw hoofdstuk';
 
   @override
   String studyImportFromChapterX(String param) {
-    return 'Import from $param';
+    return 'Importeren van $param';
   }
 
   @override
-  String get studyOrientation => 'Orientation';
+  String get studyOrientation => 'Oriëntatie';
 
   @override
-  String get studyAnalysisMode => 'Analysis mode';
+  String get studyAnalysisMode => 'Analysemodus';
 
   @override
-  String get studyPinnedChapterComment => 'Pinned chapter comment';
+  String get studyPinnedChapterComment => 'Vastgezet commentaar van het hoofdstuk';
 
   @override
-  String get studySaveChapter => 'Save chapter';
+  String get studySaveChapter => 'Hoofdstuk opslaan';
 
   @override
-  String get studyClearAnnotations => 'Clear annotations';
+  String get studyClearAnnotations => 'Wis aantekeningen';
 
   @override
-  String get studyClearVariations => 'Clear variations';
+  String get studyClearVariations => 'Verwijder variaties';
 
   @override
-  String get studyDeleteChapter => 'Delete chapter';
+  String get studyDeleteChapter => 'Verwijder hoofdstuk';
 
   @override
-  String get studyDeleteThisChapter => 'Delete this chapter. There is no going back!';
+  String get studyDeleteThisChapter =>
+      'Wil je dit hoofdstuk verwijderen? Je kan dit niet ongedaan maken!';
 
   @override
   String get studyClearAllCommentsInThisChapter =>
-      'Clear all comments, glyphs and drawn shapes in this chapter';
+      'Verwijder alle aantekeningen, tekens en getekende figuren in dit hoofdstuk?';
 
   @override
-  String get studyRightUnderTheBoard => 'Right under the board';
+  String get studyRightUnderTheBoard => 'Recht onder het bord';
 
   @override
-  String get studyNoPinnedComment => 'None';
+  String get studyNoPinnedComment => 'Geen';
 
   @override
-  String get studyNormalAnalysis => 'Normal analysis';
+  String get studyNormalAnalysis => 'Normale analyse';
 
   @override
-  String get studyHideNextMoves => 'Hide next moves';
+  String get studyHideNextMoves => 'Verberg volgende zetten';
 
   @override
-  String get studyInteractiveLesson => 'Interactive lesson';
+  String get studyInteractiveLesson => 'Interactieve les';
 
   @override
   String studyChapterX(String param) {
-    return 'Chapter $param';
+    return 'Hoofdstuk $param';
   }
 
   @override
-  String get studyEmpty => 'Empty';
+  String get studyEmpty => 'Leeg';
 
   @override
-  String get studyStartFromInitialPosition => 'Start from initial position';
+  String get studyStartFromInitialPosition => 'Start bij de initiële positie';
 
   @override
   String get studyEditor => 'Editor';
 
   @override
-  String get studyStartFromCustomPosition => 'Start from custom position';
+  String get studyStartFromCustomPosition => 'Start bij een aangepaste positie';
 
   @override
-  String get studyLoadAGameByUrl => 'Load games by URLs';
+  String get studyLoadAGameByUrl => 'Laad partijen via een URL';
 
   @override
-  String get studyLoadAPositionFromFen => 'Load a position from FEN';
+  String get studyLoadAPositionFromFen => 'Laad een spel via een FEN';
 
   @override
-  String get studyLoadAGameFromPgn => 'Load games from PGN';
+  String get studyLoadAGameFromPgn => 'Laad partijen via een PGN';
 
   @override
-  String get studyAutomatic => 'Automatic';
+  String get studyAutomatic => 'Automatisch';
 
   @override
-  String get studyUrlOfTheGame => 'URL of the games, one per line';
+  String get studyUrlOfTheGame => 'URL van de partijen, één per regel';
 
   @override
   String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Load games from $param1 or $param2';
+    return 'Laad partijen van $param1 of $param2';
   }
 
   @override
-  String get studyCreateChapter => 'Create chapter';
+  String get studyCreateChapter => 'Creëer hoofdstuk';
 
   @override
-  String get studyCreateStudy => 'Create study';
+  String get studyCreateStudy => 'Maak studie';
 
   @override
-  String get studyEditStudy => 'Edit study';
+  String get studyEditStudy => 'Bewerk studie';
 
   @override
-  String get studyVisibility => 'Visibility';
+  String get studyVisibility => 'Zichtbaarheid';
 
   @override
-  String get studyPublic => 'Public';
+  String get studyPublic => 'Openbaar';
 
   @override
-  String get studyUnlisted => 'Unlisted';
+  String get studyUnlisted => 'Niet openbaar';
 
   @override
-  String get studyInviteOnly => 'Invite only';
+  String get studyInviteOnly => 'Alleen op uitnodiging';
 
   @override
-  String get studyAllowCloning => 'Allow cloning';
+  String get studyAllowCloning => 'Klonen toestaan';
 
   @override
-  String get studyNobody => 'Nobody';
+  String get studyNobody => 'Niemand';
 
   @override
-  String get studyOnlyMe => 'Only me';
+  String get studyOnlyMe => 'Alleen ik';
 
   @override
-  String get studyContributors => 'Contributors';
+  String get studyContributors => 'Bijdragers';
 
   @override
-  String get studyMembers => 'Members';
+  String get studyMembers => 'Deelnemers';
 
   @override
-  String get studyEveryone => 'Everyone';
+  String get studyEveryone => 'Iedereen';
 
   @override
-  String get studyEnableSync => 'Enable sync';
+  String get studyEnableSync => 'Synchronisatie inschakelen';
 
   @override
-  String get studyYesKeepEveryoneOnTheSamePosition => 'Yes: keep everyone on the same position';
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Ja: houd iedereen op dezelfde stelling';
 
   @override
-  String get studyNoLetPeopleBrowseFreely => 'No: let people browse freely';
+  String get studyNoLetPeopleBrowseFreely => 'Nee: laat mensen vrij bladeren';
 
   @override
-  String get studyPinnedStudyComment => 'Pinned study comment';
+  String get studyPinnedStudyComment => 'Vastgezette studie reactie';
 
   @override
   String get studyStart => 'Start';
 
   @override
-  String get studySave => 'Save';
+  String get studySave => 'Opslaan';
 
   @override
-  String get studyClearChat => 'Clear chat';
+  String get studyClearChat => 'Maak de chat leeg';
 
   @override
   String get studyDeleteTheStudyChatHistory =>
-      'Delete the study chat history? There is no going back!';
+      'Verwijder de studiechat geschiedenis? Er is geen weg terug!';
 
   @override
-  String get studyDeleteStudy => 'Delete study';
+  String get studyDeleteStudy => 'Studie verwijderen';
 
   @override
   String studyConfirmDeleteStudy(String param) {
-    return 'Delete the entire study? There is no going back! Type the name of the study to confirm: $param';
+    return 'De hele studie verwijderen? Er is geen weg terug! Type de naam van de studie om te bevestigen dat je de studie wilt verwijderen: $param';
   }
 
   @override
-  String get studyWhereDoYouWantToStudyThat => 'Where do you want to study that?';
+  String get studyWhereDoYouWantToStudyThat => 'Waar wil je dat bestuderen?';
 
   @override
-  String get studyGoodMove => 'Good move';
+  String get studyGoodMove => 'Goede zet';
 
   @override
-  String get studyMistake => 'Mistake';
+  String get studyMistake => 'Fout';
 
   @override
-  String get studyBrilliantMove => 'Brilliant move';
+  String get studyBrilliantMove => 'Briljante zet';
 
   @override
   String get studyBlunder => 'Blunder';
 
   @override
-  String get studyInterestingMove => 'Interesting move';
+  String get studyInterestingMove => 'Interessante zet';
 
   @override
-  String get studyDubiousMove => 'Dubious move';
+  String get studyDubiousMove => 'Dubieuze zet';
 
   @override
-  String get studyOnlyMove => 'Only move';
+  String get studyOnlyMove => 'Enig mogelijke zet';
 
   @override
-  String get studyZugzwang => 'Zugzwang';
+  String get studyZugzwang => 'Zetdwang';
 
   @override
-  String get studyEqualPosition => 'Equal position';
+  String get studyEqualPosition => 'Stelling in evenwicht';
 
   @override
-  String get studyUnclearPosition => 'Unclear position';
+  String get studyUnclearPosition => 'Onduidelijke stelling';
 
   @override
-  String get studyWhiteIsSlightlyBetter => 'White is slightly better';
+  String get studyWhiteIsSlightlyBetter => 'Wit staat iets beter';
 
   @override
-  String get studyBlackIsSlightlyBetter => 'Black is slightly better';
+  String get studyBlackIsSlightlyBetter => 'Zwart staat iets beter';
 
   @override
-  String get studyWhiteIsBetter => 'White is better';
+  String get studyWhiteIsBetter => 'Wit staat beter';
 
   @override
-  String get studyBlackIsBetter => 'Black is better';
+  String get studyBlackIsBetter => 'Zwart staat beter';
 
   @override
-  String get studyWhiteIsWinning => 'White is winning';
+  String get studyWhiteIsWinning => 'Wit staat gewonnen';
 
   @override
-  String get studyBlackIsWinning => 'Black is winning';
+  String get studyBlackIsWinning => 'Zwart staat gewonnen';
 
   @override
-  String get studyNovelty => 'Novelty';
+  String get studyNovelty => 'Noviteit';
 
   @override
-  String get studyDevelopment => 'Development';
+  String get studyDevelopment => 'Ontwikkeling';
 
   @override
-  String get studyInitiative => 'Initiative';
+  String get studyInitiative => 'Initiatief';
 
   @override
-  String get studyAttack => 'Attack';
+  String get studyAttack => 'Aanval';
 
   @override
-  String get studyCounterplay => 'Counterplay';
+  String get studyCounterplay => 'Tegenspel';
 
   @override
-  String get studyTimeTrouble => 'Time trouble';
+  String get studyTimeTrouble => 'Tijdnood';
 
   @override
-  String get studyWithCompensation => 'With compensation';
+  String get studyWithCompensation => 'Met compensatie';
 
   @override
-  String get studyWithTheIdea => 'With the idea';
+  String get studyWithTheIdea => 'Met het idee';
 
   @override
-  String get studyNextChapter => 'Next chapter';
+  String get studyNextChapter => 'Volgende hoofdstuk';
 
   @override
-  String get studyPrevChapter => 'Previous chapter';
+  String get studyPrevChapter => 'Vorige hoofdstuk';
 
   @override
-  String get studyStudyActions => 'Study actions';
+  String get studyStudyActions => 'Studie sneltoetsen';
 
   @override
-  String get studyTopics => 'Topics';
+  String get studyTopics => 'Onderwerpen';
 
   @override
-  String get studyMyTopics => 'My topics';
+  String get studyMyTopics => 'Mijn onderwerpen';
 
   @override
-  String get studyPopularTopics => 'Popular topics';
+  String get studyPopularTopics => 'Populaire onderwerpen';
 
   @override
-  String get studyManageTopics => 'Manage topics';
+  String get studyManageTopics => 'Onderwerpen beheren';
 
   @override
-  String get studyBack => 'Back';
+  String get studyBack => 'Terug';
 
   @override
-  String get studyPlayAgain => 'Play again';
+  String get studyPlayAgain => 'Opnieuw spelen';
 
   @override
-  String get studyWhatWouldYouPlay => 'What would you play in this position?';
+  String get studyWhatWouldYouPlay => 'Wat zou je in deze stelling spelen?';
 
   @override
-  String get studyYouCompletedThisLesson => 'Congratulations! You completed this lesson.';
+  String get studyYouCompletedThisLesson => 'Gefeliciteerd! Je hebt deze les voltooid.';
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param per pagina';
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => 'Hulp nodig? Volg de rondleiding!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Welkom bij Lichess Study!';
 
   @override
   String get studyWelcomeToLichessStudyText =>
-      'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+      'Dit is een gedeeld analyselbord.<br><br>Gebruik het om partijen te analyseren en aantekeningen te maken,<br>stellingen met vrienden te bespreken,<br>en natuurlijk voor schaaklessen!<br><br>Het is een krachtig gereedschap, laten we even de tijd nemen om te zien hoe het werkt.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Gedeeld en opgeslagen';
 
   @override
   String get studySharedAndSavedText =>
-      'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+      'Andere leden kunnen in real time je zetten zien!<br>Plus, alles wordt voor altijd bewaard.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Studieleden';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 Toeschouwers kunnen de studie bekijken en praten in de chat.<br><br>$param2 Bijdragers kunnen zetten doen en de studie bijwerken.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Klik op de $param knop.<br>Bepaal vervolgens wie kan bijdragen of niet.';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Studiehoofdstukken';
 
   @override
   String get studyStudyChaptersText =>
-      'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+      'Een studie kan meerdere hoofdstukken bevatten.<br>Elk hoofdstuk heeft een specifieke beginpositie en zettenboom.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Reageer op een stelling';
 
   @override
   String studyCommentPositionText(String param) {
@@ -6138,62 +6141,62 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'Een stelling van commentaar voorzien';
 
   @override
   String get studyAnnotatePositionText =>
-      'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+      'Klik op de !? knop, of klik met de rechtermuisknop op de zerrenlijst aan de rechterkant.<br>Aantekeningen worden gedeeld en opgeslagen.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => 'Bedankt voor je tijd';
 
   @override
   String get studyConclusionText =>
       'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'Laten we een studiehoofdstuk maken';
 
   @override
   String get studyCreateChapterText =>
-      'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+      'Een studie kan verschillende hoofdstukken bevatten.<br>Elk hoofdstuk heeft een aparte zettenboom,<br>en kan op verschillende manieren worden gemaakt.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Vanaf beginstelling';
 
   @override
   String get studyFromInitialPositionText =>
       'Just a board setup for a new game.<br>Suited to explore openings.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Aangepaste stelling';
 
   @override
   String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Laad een bestaande lichess-partij';
 
   @override
   String get studyLoadExistingLichessGameText =>
-      'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+      'Plak een lichess partij link<br>(zoals lichess.org/7fHIU0XI)<br>om de partijzetten in het hoofdstuk te laden.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'Van een FEN-tekenreeks';
 
   @override
   String get studyFromFenStringText =>
-      'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+      'Plak een stelling in FEN-formaat<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>om het hoofdstuk te beginnen vanaf een bepaalde stelling.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'Van een PGN-bestand';
 
   @override
   String get studyFromPgnGameText =>
-      'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+      'Plak een partij in PGN-formaat.<br>om zetten, reacties en variaties in het hoofdstuk te laden.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'Studies ondersteunen varianten';
 
   @override
   String get studyVariantsAreSupportedText =>
@@ -6201,24 +6204,24 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get studyChapterConclusionText =>
-      'Chapters are saved forever.<br>Have fun organizing your chess content!';
+      'Hoofdstukken worden voor altijd bewaard.<br>Veel plezier met het ordenen van uw schaakinhoud!';
 
   @override
-  String get studyDoubleDefeat => 'Double defeat';
+  String get studyDoubleDefeat => 'Dubbele nederlaag';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+  String get studyBlackDefeatWhiteCanNotWin => 'Zwarte nederlaag, maar Wit kan niet winnen';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+  String get studyWhiteDefeatBlackCanNotWin => 'Witte nederlaag, maar Zwart kan niet winnen';
 
   @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Chapters',
-      one: '$count Chapter',
+      other: '$count hoofdstukken',
+      one: '$count hoofdstuk',
     );
     return '$_temp0';
   }
@@ -6228,8 +6231,8 @@ class AppLocalizationsNl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Games',
-      one: '$count Game',
+      other: '$count Partijen',
+      one: '$count Partij',
     );
     return '$_temp0';
   }
@@ -6239,8 +6242,8 @@ class AppLocalizationsNl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Members',
-      one: '$count Member',
+      other: '$count Deelnemers',
+      one: '$count Deelnemer',
     );
     return '$_temp0';
   }
@@ -6250,9 +6253,8 @@ class AppLocalizationsNl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
-      one: 'Paste your PGN text here, up to $count game',
+      other: 'Plak je PGN tekst hier, tot $count spellen mogelijk',
+      one: 'Plak je PGN tekst hier, tot $count spel mogelijk',
     );
     return '$_temp0';
   }

@@ -1130,10 +1130,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practicar només algunes files i columnes';
 
   @override
-  String get patronDonate => 'Donate';
+  String get patronDonate => 'Donar';
 
   @override
-  String get patronLichessPatron => 'Lichess Patron';
+  String get patronLichessPatron => 'Patró de Lichess';
 
   @override
   String perfStatPerfStats(String param) {

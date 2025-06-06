@@ -460,205 +460,210 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get arenaArena => 'Arena';
+  String get arenaArena => 'Αρένα';
 
   @override
-  String get arenaArenaTournaments => 'Arena tournaments';
+  String get arenaArenaTournaments => 'Τουρνουά αρένας';
 
   @override
-  String get arenaIsItRated => 'Is it rated?';
+  String get arenaIsItRated => 'Είναι βαθμολογημένο;';
 
   @override
   String get arenaWillBeNotified =>
-      'You will be notified when the tournament starts, so it is safe to play in another tab while waiting.';
+      'Θα ειδοποιηθείτε όταν ξεκινήσει το τουρνουά, έτσι είναι ασφαλές να παίξετε σε άλλη καρτέλα όσο περιμένετε.';
 
   @override
-  String get arenaIsRated => 'This tournament is rated and will affect your rating.';
+  String get arenaIsRated =>
+      'Αυτό το τουρνουά είναι με αξιολόγηση και θα επηρεάσει την βαθμολογία σας.';
 
   @override
-  String get arenaIsNotRated => 'This tournament is *not* rated and will *not* affect your rating.';
+  String get arenaIsNotRated =>
+      'Αυτό το τουρνουά δεν είναι βαθμολογημένο και δεν θα επηρεάσει την βαθμολογία σας.';
 
   @override
-  String get arenaSomeRated => 'Some tournaments are rated and will affect your rating.';
+  String get arenaSomeRated =>
+      'Ορισμένα πρωταθλήματα είναι βαθμολογημένα και θα επηρεάσουν την βαθμολογία σας.';
 
   @override
-  String get arenaHowAreScoresCalculated => 'How are scores calculated?';
+  String get arenaHowAreScoresCalculated => 'Πως υπολογίζονται οι βαθμολογίες;';
 
   @override
   String get arenaHowAreScoresCalculatedAnswer =>
-      'A win has a base score of 2 points, a draw 1 point, and a loss is worth no points.\nIf you win two games consecutively you will start a double-point streak, represented by a flame icon.\nThe following games will continue to be worth double points until you fail to win a game.\nThat is, a win will be worth 4 points, a draw 2 points and a loss will still not award any points.\n\nFor example, two wins followed by a draw will be worth 6 points: 2 + 2 + (2 x 1)';
+      'Η νίκη αξίζει 2 πόντους, η ισοπαλία 1 πόντο, και η ήττα κανένα.\nΑν νικήσετε δύο παρτίδες συνεχόμενα αποδίδονται διπλάσιοι πόντοι,\nπου αντιπροσωπεύονται από ένα εικονίδιο φλόγας.\nΟι επόμενες παρτίδες θα αξίζουν διπλάσιους πόντους μέχρι να χάσετε μία. Επομένως, η νίκη θα βαθμολογείται με 4 πόντους, η ισοπαλία 2 πόντους, και η ήττα 0.\nΓια παράδειγμα, δύο νίκες και μία ισοπαλία αξίζουν 6 πόντους: 2 + 2 + (2 x 1)';
 
   @override
-  String get arenaBerserk => 'Arena Berserk';
+  String get arenaBerserk => 'Αρένα Berserk';
 
   @override
   String get arenaBerserkAnswer =>
-      'When a player clicks the Berserk button at the beginning of the game, they lose half of their clock time, but the win is worth one extra tournament point.\n\nGoing Berserk in time controls with an increment also cancels the increment (1+2 is an exception, it gives 1+0).\n\nBerserk is not available for games with zero initial time (0+1, 0+2).\n\nBerserk only grants an extra point if you play at least 7 moves in the game.';
+      'Όταν ο παίκτης πατήσει το πλήκτρο Berserk στην έναρξη της παρτίδας, χάνει τον μισό χρόνο στο ρολόι, αλλά η νίκη αξίζει ένα έξτρα πόντο στο τουρνουά.\n\nΠατώντας Berserk σε χρόνους με προσαύξηση, ακυρώνεται η προσαύξηση (εξαιρείται το 1+2, που γίνεται 1+0). \n\nTo Berserk δεν ισχύει για παρτίδες με μηδενικό αρχικό χρόνο (0+1, 0+2).\n\nΤο Berserk προσθέτει ένα έξτρα πόντο μόνο αν παιχθούν τουλάχιστον 7 κινήσεις στην παρτίδα.';
 
   @override
-  String get arenaHowIsTheWinnerDecided => 'How is the winner decided?';
+  String get arenaHowIsTheWinnerDecided => 'Πως αναδεικνύεται ο νικητής;';
 
   @override
   String get arenaHowIsTheWinnerDecidedAnswer =>
-      'The player(s) with the most points after the tournament\'s set time limit will be announced the winner(s).\n\nWhen two or more players have the same number of points, the tournament performance is the tie break.';
+      'Ο παίκτης/παίκτες με τους περισσότερους πόντους μετά τη λήξη του προκαθορισμένου χρόνου του τουρνουά αναδεικνύεται/αναδεικνύονται νικητής/νικητής.\n\nΌταν δύο ή περισσότεροι παίκτες έχουν τους ίδιους πόντους, η επίδοση στον διαγωνισμό καθορίζει τον νικητή.';
 
   @override
-  String get arenaHowDoesPairingWork => 'How does the pairing work?';
+  String get arenaHowDoesPairingWork => 'Πως λειτουργεί η αντιστοίχιση;';
 
   @override
   String get arenaHowDoesPairingWorkAnswer =>
-      'At the beginning of the tournament, players are paired based on their rating.\nAs soon as you finish a game, return to the tournament lobby: you will then be paired with a player close to your ranking. This ensures minimum wait time, however, you may not face all other players in the tournament.\nPlay fast and return to the lobby to play more games and win more points.';
+      'Στην αρχή του διαγωνισμού, οι παίκτες αντιστοιχίζονται βάσει της βαθμολογίας τους.\nΜόλις τελειώσει η παρτίδα σας, επιστρέφετε στο δωμάτιο αναμονής του τουρνουά όπου θα κληρωθείτε με παίκτη κοντά στην κατάταξή σας. Αυτό εξασφαλίζει μικρό χρόνο αναμονής, ωστόσο μπορεί να μην αντιμετωπίσετε όλους τους άλλους παίκτες στο πρωτάθλημα.\nΠαίξτε γρήγορα και επιστρέψτε στο δωμάτιο αναμονής για να παίξετε περισσότερες παρτίδες και να κερδίσετε περισσότερους πόντους.';
 
   @override
-  String get arenaHowDoesItEnd => 'How does it end?';
+  String get arenaHowDoesItEnd => 'Πως τελειώνει;';
 
   @override
   String get arenaHowDoesItEndAnswer =>
-      'The tournament has a countdown clock. When it reaches zero, the tournament rankings are frozen, and the winner is announced. Games in progress must be finished, however, they don\'t count for the tournament.';
+      'Το τουρνουά έχει ρολόι αντίστροφης μέτρησης. Όταν αυτό φτάσει στο μηδέν, η βαθμολογίες των παικτών κλειδώνουν, και αναδεικνύεται ο νικητής. Οι παρτίδες σε εξέλιξη πρέπει να ολοκληρωθούν, ωστόσο το αποτέλεσμα τους δεν μετράει για το πρωτάθλημα.';
 
   @override
-  String get arenaOtherRules => 'Other important rules';
+  String get arenaOtherRules => 'Άλλοι σημαντικοί κανόνες';
 
   @override
   String get arenaThereIsACountdown =>
-      'There is a countdown for your first move. Failing to make a move within this time will forfeit the game to your opponent.';
+      'Υπάρχει αντίστροφη μέτρηση για την πρώτη κίνηση. Εάν δεν κάνετε την πρώτη σας κίνηση μέσα σε αυτό το χρονικό διάστημα θα χάσετε την παρτίδα.';
 
   @override
-  String get arenaThisIsPrivate => 'This is a private tournament';
+  String get arenaThisIsPrivate => 'Αυτός ο διαγωνισμός είναι ιδιωτικός';
 
   @override
   String arenaShareUrl(String param) {
-    return 'Share this URL to let people join: $param';
+    return 'Μοιραστείτε αυτήν την διεύθυνση URL για να συμμετάσχουν άλλα άτομα: $param';
   }
 
   @override
   String arenaDrawStreakStandard(String param) {
-    return 'Draw streaks: When a player has consecutive draws in an arena, only the first draw will result in a point or draws lasting more than $param moves in standard games. The draw streak can only be broken by a win, not a loss or a draw.';
+    return 'Συνεχόμενες ισοπαλίες: Όταν ένας παίκτης έχει συνεχόμενες ισοπαλίες στην αρένα, είτε μόνο η πρώτη θα δώσει ένα πόντο, είτε ισοπαλίες που διήρκησαν πάνω από $param κινήσεις. Οι συνεχόμενες ισοπαλίες σταματούν να θεωρούνται συνεχόμενες μόνο εφόσον τις ακολουθήσει μία νίκη και όχι μία ήττα ή ισοπαλία.';
   }
 
   @override
   String get arenaDrawStreakVariants =>
-      'The minimum game length for drawn games to award points differs by variant. The table below lists the threshold for each variant.';
+      'Ο ελάχιστος αριθμός των κινήσεων που απαιτούνται στα ισόπαλα παιχνίδια για να δώσουν πόντους εξαρτάται από την κάθε παραλλαγή, όπως φαίνεται και στον παρακάτω πίνακα.';
 
   @override
-  String get arenaVariant => 'Variant';
+  String get arenaVariant => 'Εκδοχή';
 
   @override
-  String get arenaMinimumGameLength => 'Minimum game length';
+  String get arenaMinimumGameLength => 'Ελάχιστος αριθμός κινήσεων';
 
   @override
-  String get arenaHistory => 'Arena History';
+  String get arenaHistory => 'Ιστορικό αρένας';
 
   @override
-  String get arenaNewTeamBattle => 'New Team Battle';
+  String get arenaNewTeamBattle => 'Νέα ομαδική μάχη';
 
   @override
-  String get arenaCustomStartDate => 'Custom start date';
+  String get arenaCustomStartDate => 'Προσαρμοσμένη ημερομηνία έναρξης';
 
   @override
   String get arenaCustomStartDateHelp =>
-      'In your own local timezone. This overrides the \"Time before tournament starts\" setting';
+      'Στην τοπική ζώνη ώρας σας. Αυτό υπερισχύει της ρύθμισης \"Χρόνος προτού ξεκινήσει το πρωτάθλημα\"';
 
   @override
-  String get arenaAllowBerserk => 'Allow Berserk';
+  String get arenaAllowBerserk => 'Να επιτρέπεται το Berserk';
 
   @override
-  String get arenaAllowBerserkHelp => 'Let players halve their clock time to gain an extra point';
+  String get arenaAllowBerserkHelp =>
+      'Να επιτρέπεται στους παίκτες να μειώσουν τον χρόνο στο ρολόι τους κατά το ήμισυ για να κερδίσουν έναν επιπλέον πόντο';
 
   @override
-  String get arenaAllowChatHelp => 'Let players discuss in a chat room';
+  String get arenaAllowChatHelp => 'Να επιτρέπεται στους παίκτες να συζητούν σε δωμάτιο συνομιλίας';
 
   @override
   String get arenaArenaStreaks => 'Arena streaks';
 
   @override
-  String get arenaArenaStreaksHelp => 'After 2 wins, consecutive wins grant 4 points instead of 2.';
+  String get arenaArenaStreaksHelp =>
+      'Μετά από 2 νίκες, επιπλέον διαδοχικές νίκες σας 4 πόντους αντί για 2.';
 
   @override
-  String get arenaNoBerserkAllowed => 'No Berserk allowed';
+  String get arenaNoBerserkAllowed => 'Δεν επιτρέπεται το berserk';
 
   @override
-  String get arenaNoArenaStreaks => 'No Arena streaks';
+  String get arenaNoArenaStreaks => 'Χωρίς σερί νικών Αρένας';
 
   @override
-  String get arenaAveragePerformance => 'Average performance';
+  String get arenaAveragePerformance => 'Μέση επίδοση';
 
   @override
-  String get arenaAverageScore => 'Average score';
+  String get arenaAverageScore => 'Μέση βαθμολογία';
 
   @override
-  String get arenaMyTournaments => 'My tournaments';
+  String get arenaMyTournaments => 'Τα τουρνουά μου';
 
   @override
-  String get arenaEditTournament => 'Edit tournament';
+  String get arenaEditTournament => 'Επεξεργασία τουρνουά';
 
   @override
-  String get arenaEditTeamBattle => 'Edit team battle';
+  String get arenaEditTeamBattle => 'Επεξεργασία ομαδικής μάχης';
 
   @override
-  String get arenaDefender => 'Defender';
+  String get arenaDefender => 'Υπερασπιστής';
 
   @override
-  String get arenaPickYourTeam => 'Pick your team';
+  String get arenaPickYourTeam => 'Διαλέξτε την ομάδα σας';
 
   @override
   String get arenaWhichTeamWillYouRepresentInThisBattle =>
-      'Which team will you represent in this battle?';
+      'Ποια ομάδα θα αντιπροσωπεύσετε σε αυτή τη μάχη;';
 
   @override
   String get arenaYouMustJoinOneOfTheseTeamsToParticipate =>
-      'You must join one of these teams to participate!';
+      'Πρέπει να μπείτε σε μία από αυτές τις ομάδες για να συμμετάσχετε!';
 
   @override
-  String get arenaCreated => 'Created';
+  String get arenaCreated => 'Δημιουργήθηκε';
 
   @override
-  String get arenaRecentlyPlayed => 'Recently played';
+  String get arenaRecentlyPlayed => 'Παίχτηκαν πρόσφατα';
 
   @override
-  String get arenaBestResults => 'Best results';
+  String get arenaBestResults => 'Καλύτερα αποτελέσματα';
 
   @override
-  String get arenaTournamentStats => 'Tournament stats';
+  String get arenaTournamentStats => 'Στατιστικά τουρνουά';
 
   @override
   String get arenaRankAvgHelp =>
-      'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+      'Ο μέσος όρος κατάταξης είναι ένα ποσοστό της κατάταξης σας. Χαμηλότερο είναι καλύτερο.\n\nΓια παράδειγμα, είστε τρίτος σε ένα τουρνουά 100 παικτών = 3%. Όντας δέκατος σε ένα τουρνουά 1000 παικτών = 1%.';
 
   @override
-  String get arenaMedians => 'medians';
+  String get arenaMedians => 'διάμεσες τιμές';
 
   @override
   String arenaAllAveragesAreX(String param) {
-    return 'All averages on this page are $param.';
+    return 'Όλοι οι μέσοι όροι σε αυτήν τη σελίδα είναι $param.';
   }
 
   @override
-  String get arenaTotal => 'Total';
+  String get arenaTotal => 'Σύνολο';
 
   @override
-  String get arenaPointsAvg => 'Points average';
+  String get arenaPointsAvg => 'Μέσος όρος πόντων';
 
   @override
-  String get arenaPointsSum => 'Points sum';
+  String get arenaPointsSum => 'Σύνολο πόντων';
 
   @override
-  String get arenaRankAvg => 'Rank average';
+  String get arenaRankAvg => 'Μέσος όρος κατάταξης';
 
   @override
-  String get arenaTournamentWinners => 'Tournament winners';
+  String get arenaTournamentWinners => 'Νικητές πρωταθλήματος';
 
   @override
-  String get arenaTournamentShields => 'Tournament shields';
+  String get arenaTournamentShields => 'Πρωταθλήματα Ασπίδας';
 
   @override
-  String get arenaOnlyTitled => 'Only titled players';
+  String get arenaOnlyTitled => 'Μόνο τιτλούχοι παίκτες';
 
   @override
-  String get arenaOnlyTitledHelp => 'Require an official title to join the tournament';
+  String get arenaOnlyTitledHelp => 'Χρειάζεται ένας επίσημος τίτλος για συμμετοχή στο πρωτάθλημα';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'Οι αντιστοιχίσεις του τουρνουά έχουν κλείσει.';
 
   @override
   String get arenaBerserkRate => 'Berserk rate';
@@ -668,8 +673,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Drawing the game within the first $count moves will earn neither player any points.',
-      one: 'Drawing the game within the first $count move will earn neither player any points.',
+      other: 'Η συμφωνία ισοπαλίας στις πρώτες $count κινήσεις δε δίνει πόντους σε κανέναν παίκτη.',
+      one: 'Η συμφωνία ισοπαλίας στην πρώτη $count κίνηση δε δίνει πόντους σε κανέναν παίκτη.',
     );
     return '$_temp0';
   }
@@ -679,259 +684,265 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'View all $count teams',
-      one: 'View the team',
+      other: 'Δείτε όλες τις $count ομάδες',
+      one: 'Δείτε την ομάδα',
     );
     return '$_temp0';
   }
 
   @override
-  String get broadcastBroadcasts => 'Broadcasts';
+  String get broadcastBroadcasts => 'Αναμεταδόσεις';
 
   @override
-  String get broadcastMyBroadcasts => 'My broadcasts';
+  String get broadcastMyBroadcasts => 'Οι αναμεταδόσεις μου';
 
   @override
-  String get broadcastLiveBroadcasts => 'Live tournament broadcasts';
+  String get broadcastLiveBroadcasts => 'Αναμεταδόσεις ζωντανών τουρνουά';
 
   @override
-  String get broadcastBroadcastCalendar => 'Broadcast calendar';
+  String get broadcastBroadcastCalendar => 'Ημερολόγιο αναμεταδόσεων';
 
   @override
-  String get broadcastNewBroadcast => 'New live broadcast';
+  String get broadcastNewBroadcast => 'Νέα ζωντανή αναμετάδοση';
 
   @override
-  String get broadcastSubscribedBroadcasts => 'Subscribed broadcasts';
+  String get broadcastSubscribedBroadcasts => 'Εγγεγραμμένες αναμεταδόσεις';
 
   @override
-  String get broadcastAboutBroadcasts => 'About broadcasts';
+  String get broadcastAboutBroadcasts => 'Σχετικά με τις αναμεταδόσεις';
 
   @override
-  String get broadcastHowToUseLichessBroadcasts => 'How to use Lichess Broadcasts.';
+  String get broadcastHowToUseLichessBroadcasts =>
+      'Πώς να χρησιμοποιήσετε τις αναμεταδόσεις Lichess.';
 
   @override
   String get broadcastTheNewRoundHelp =>
-      'The new round will have the same members and contributors as the previous one.';
+      'Ο νέος γύρος θα έχει τα ίδια μέλη και τους ίδιους συνεισφέροντες όπως ο προηγούμενος.';
 
   @override
-  String get broadcastAddRound => 'Add a round';
+  String get broadcastAddRound => 'Προσθήκη γύρου';
 
   @override
-  String get broadcastOngoing => 'Ongoing';
+  String get broadcastOngoing => 'Σε εξέλιξη';
 
   @override
-  String get broadcastUpcoming => 'Upcoming';
+  String get broadcastUpcoming => 'Προσεχή';
 
   @override
-  String get broadcastRoundName => 'Round name';
+  String get broadcastRoundName => 'Όνομα γύρου';
 
   @override
-  String get broadcastRoundNumber => 'Round number';
+  String get broadcastRoundNumber => 'Αριθμός γύρου';
 
   @override
-  String get broadcastTournamentName => 'Tournament name';
+  String get broadcastTournamentName => 'Όνομα τουρνουά';
 
   @override
-  String get broadcastTournamentDescription => 'Short tournament description';
+  String get broadcastTournamentDescription => 'Σύντομη περιγραφή τουρνουά';
 
   @override
-  String get broadcastFullDescription => 'Full tournament description';
+  String get broadcastFullDescription => 'Πλήρης περιγραφή γεγονότος';
 
   @override
   String broadcastFullDescriptionHelp(String param1, String param2) {
-    return 'Optional long description of the tournament. $param1 is available. Length must be less than $param2 characters.';
+    return 'Προαιρετική αναλυτική περιγραφή της αναμετάδοσης. Η μορφή $param1 είναι διαθέσιμη. Το μήκος πρέπει να είναι μικρότερο από $param2 χαρακτήρες.';
   }
 
   @override
-  String get broadcastSourceSingleUrl => 'PGN Source URL';
+  String get broadcastSourceSingleUrl => 'Πηγαίο URL για PGN';
 
   @override
   String get broadcastSourceUrlHelp =>
-      'URL that Lichess will check to get PGN updates. It must be publicly accessible from the Internet.';
+      'URL για λήψη PGN ενημερώσεων. Πρέπει να είναι δημόσια προσβάσιμο μέσω διαδικτύου.';
 
   @override
-  String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
+  String get broadcastSourceGameIds =>
+      'Έως και 64 ταυτότητες παιχνιδιών Lichess, διαχωριζόμενες από κενά.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Start date in the tournament local timezone: $param';
+    return 'Ημερομηνία έναρξης του τουρνουά στην τοπική ζώνη ώρας: $param';
   }
 
   @override
-  String get broadcastStartDateHelp => 'Optional, if you know when the event starts';
+  String get broadcastStartDateHelp => 'Προαιρετικό, εάν γνωρίζετε πότε αρχίζει η εκδήλωση';
 
   @override
-  String get broadcastCurrentGameUrl => 'Current game URL';
+  String get broadcastCurrentGameUrl => 'Διεύθυνση URL αυτής της παρτίδας';
 
   @override
-  String get broadcastDownloadAllRounds => 'Download all rounds';
+  String get broadcastDownloadAllRounds => 'Λήψη όλων των γύρων';
 
   @override
-  String get broadcastResetRound => 'Reset this round';
+  String get broadcastResetRound => 'Επαναφορά αυτού του γύρου';
 
   @override
-  String get broadcastDeleteRound => 'Delete this round';
+  String get broadcastDeleteRound => 'Διαγραφή αυτού του γύρου';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
+  String get broadcastDefinitivelyDeleteRound =>
+      'Διαγράψτε οριστικά τον γύρο και όλες τις παρτίδες του.';
 
   @override
   String get broadcastDeleteAllGamesOfThisRound =>
-      'Delete all games of this round. The source will need to be active in order to re-create them.';
+      'Διαγράψτε όλες τις παρτίδες αυτού του γύρου. Η πηγή μετάδοσης θα πρέπει να είναι ενεργή για να τα ξαναδημιουργήσετε.';
 
   @override
-  String get broadcastEditRoundStudy => 'Edit round study';
+  String get broadcastEditRoundStudy => 'Επεξεργασία μελέτης γύρου';
 
   @override
-  String get broadcastDeleteTournament => 'Delete this tournament';
+  String get broadcastDeleteTournament => 'Διαγραφή αυτού του τουρνουά';
 
   @override
   String get broadcastDefinitivelyDeleteTournament =>
-      'Definitively delete the entire tournament, all its rounds and all its games.';
+      'Σίγουρα διαγράψτε ολόκληρο τον διαγωνισμό, όλους τους γύρους του και όλες τις παρτίδες του.';
 
   @override
-  String get broadcastShowScores => 'Show players scores based on game results';
+  String get broadcastShowScores =>
+      'Εμφάνιση βαθμολογιών παικτών βάσει των αποτελεσμάτων των παρτίδων.';
 
   @override
-  String get broadcastReplacePlayerTags => 'Optional: replace player names, ratings and titles';
+  String get broadcastReplacePlayerTags =>
+      'Προαιρετικό: αντικατάσταση ονομάτων, βαθμολογιών και τίτλων παικτών';
 
   @override
-  String get broadcastFideFederations => 'FIDE federations';
+  String get broadcastFideFederations => 'Ομοσπονδίες FIDE';
 
   @override
-  String get broadcastTop10Rating => 'Top 10 rating';
+  String get broadcastTop10Rating => 'Κορυφαίες 10 βαθμολογίες';
 
   @override
-  String get broadcastFidePlayers => 'FIDE players';
+  String get broadcastFidePlayers => 'Παίκτες FIDE';
 
   @override
-  String get broadcastFidePlayerNotFound => 'FIDE player not found';
+  String get broadcastFidePlayerNotFound => 'Δε βρέθηκε παίκτης FIDE';
 
   @override
-  String get broadcastFideProfile => 'FIDE profile';
+  String get broadcastFideProfile => 'Προφίλ FIDE';
 
   @override
-  String get broadcastFederation => 'Federation';
+  String get broadcastFederation => 'Ομοσπονδία';
 
   @override
-  String get broadcastAgeThisYear => 'Age this year';
+  String get broadcastAgeThisYear => 'Φετινή ηλικία';
 
   @override
-  String get broadcastUnrated => 'Unrated';
+  String get broadcastUnrated => 'Μη βαθμολογημένο';
 
   @override
-  String get broadcastRecentTournaments => 'Recent tournaments';
+  String get broadcastRecentTournaments => 'Πρόσφατα τουρνουά';
 
   @override
-  String get broadcastOpenLichess => 'Open in Lichess';
+  String get broadcastOpenLichess => 'Άνοιγμα στο Lichess';
 
   @override
-  String get broadcastTeams => 'Teams';
+  String get broadcastTeams => 'Ομάδες';
 
   @override
-  String get broadcastBoards => 'Boards';
+  String get broadcastBoards => 'Σκακιέρες';
 
   @override
-  String get broadcastOverview => 'Overview';
+  String get broadcastOverview => 'Επισκόπηση';
 
   @override
   String get broadcastSubscribeTitle =>
-      'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
+      'Εγγραφείτε για να ειδοποιείστε όταν ξεκινάει ο κάθε γύρος. Μπορείτε να εναλλάξετε μεταξύ του κουδουνιού ή των push ειδοποιήσεων για αναμεταδόσεις, στις προτιμήσεις του λογαριασμού σας.';
 
   @override
-  String get broadcastUploadImage => 'Upload tournament image';
+  String get broadcastUploadImage => 'Ανεβάστε εικόνα τουρνουά';
 
   @override
-  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+  String get broadcastNoBoardsYet =>
+      'Δεν υπάρχουν διαθέσιμες σκακιέρες ακόμα. Θα εμφανιστούν μόλις φορτωθούν οι παρτίδες.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Boards can be loaded with a source or via the $param';
+    return 'Οι σκακιέρες μπορούν να φορτωθούν από μια πηγή ή μέσω του $param';
   }
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Starts after $param';
+    return 'Ξεκινάει μετά από $param';
   }
 
   @override
-  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
+  String get broadcastStartVerySoon => 'Η αναμετάδοση θα ξεκινήσει πολύ σύντομα.';
 
   @override
-  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
+  String get broadcastNotYetStarted => 'Η αναμετάδοση δεν έχει ξεκινήσει ακόμα.';
 
   @override
-  String get broadcastOfficialWebsite => 'Official website';
+  String get broadcastOfficialWebsite => 'Επίσημη ιστοσελίδα';
 
   @override
-  String get broadcastStandings => 'Standings';
+  String get broadcastStandings => 'Κατάταξη';
 
   @override
-  String get broadcastOfficialStandings => 'Official Standings';
+  String get broadcastOfficialStandings => 'Επίσημη Κατάταξη';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'More options on the $param';
+    return 'Περισσότερες επιλογές στη $param';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'σελίδα για webmasters';
 
   @override
   String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
+    return 'Μια δημόσια πηγή PGN πολύ λειτουργεί σε πραγματικό χρόνο για αυτόν τον γύρο. Προσφέρουμε επίσης το $param για γρηγορότερο και αποτελεσματικότερο συγχρονισμό.';
   }
 
   @override
-  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
+  String get broadcastEmbedThisBroadcast => 'Ενσωμάτωση αυτήν την αναμετάδοση στην ιστοσελίδα σας';
 
   @override
   String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
+    return 'Ενσωματώστε τον $param στην ιστοσελίδα σας';
   }
 
   @override
-  String get broadcastRatingDiff => 'Rating diff';
+  String get broadcastRatingDiff => 'Διαφορά βαθμολογίας';
 
   @override
-  String get broadcastGamesThisTournament => 'Games in this tournament';
+  String get broadcastGamesThisTournament => 'Παρτίδες σε αυτό το τουρνουά';
 
   @override
-  String get broadcastScore => 'Score';
+  String get broadcastScore => 'Βαθμολογία';
 
   @override
-  String get broadcastAllTeams => 'All teams';
+  String get broadcastAllTeams => 'Όλες οι ομάδες';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Μορφή τουρνουά';
 
   @override
-  String get broadcastTournamentLocation => 'Tournament Location';
+  String get broadcastTournamentLocation => 'Τοποθεσία Τουρνουά';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Κορυφαίοι παίκτες';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Ζώνη ώρας';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Κατηγορία αξιολόγησης FIDE';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Προαιρετικές λεπτομέρειες';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
+  String get broadcastPastBroadcasts => 'Προηγούμενες αναμεταδόσεις';
 
   @override
-  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
+  String get broadcastAllBroadcastsByMonth => 'Προβολή όλων των αναμεταδόσεων ανά μήνα';
 
   @override
-  String get broadcastBackToLiveMove => 'Back to live move';
+  String get broadcastBackToLiveMove => 'Επιστροφή στην τρέχουσα κίνηση';
 
   @override
   String get broadcastSinceHideResults =>
-      'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
+      'Εφόσον επιλέξατε να κρύψετε τα αποτελέσματα, όλες οι σκακιέρες προεπισκόπησης είναι κενές ώστε να αποφευχθούν σπόιλερς.';
 
   @override
   String get broadcastLiveboard => 'Live board';
@@ -941,8 +952,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count broadcasts',
-      one: '$count broadcast',
+      other: '$count αναμεταδόσεις',
+      one: '$count αναμετάδοση',
     );
     return '$_temp0';
   }
@@ -1231,219 +1242,225 @@ class AppLocalizationsEl extends AppLocalizations {
   String get perfStatNow => 'τώρα';
 
   @override
-  String get preferencesPreferences => 'Preferences';
+  String get preferencesPreferences => 'Προτιμήσεις';
 
   @override
-  String get preferencesDisplay => 'Display';
+  String get preferencesDisplay => 'Εμφάνιση';
 
   @override
-  String get preferencesPrivacy => 'Privacy';
+  String get preferencesPrivacy => 'Ιδιωτικότητα';
 
   @override
-  String get preferencesNotifications => 'Notifications';
+  String get preferencesNotifications => 'Ειδοποιήσεις';
 
   @override
-  String get preferencesPieceAnimation => 'Piece animation';
+  String get preferencesPieceAnimation => 'Κίνηση πιονιών';
 
   @override
-  String get preferencesMaterialDifference => 'Material difference';
+  String get preferencesMaterialDifference => 'Διαφορά υλικού';
 
   @override
-  String get preferencesBoardHighlights => 'Board highlights (last move and check)';
+  String get preferencesBoardHighlights => 'Φωτισμός σκακιέρας (τελευταία κίνηση και σαχ)';
 
   @override
-  String get preferencesPieceDestinations => 'Piece destinations (valid moves and premoves)';
+  String get preferencesPieceDestinations =>
+      'Προορισμοί κομματιών (έγκυρες κινήσεις και προκινήσεις)';
 
   @override
-  String get preferencesBoardCoordinates => 'Board coordinates (A-H, 1-8)';
+  String get preferencesBoardCoordinates => 'Συντεταγμένες σκακιέρας (A-H, 1-8)';
 
   @override
-  String get preferencesMoveListWhilePlaying => 'Move list while playing';
+  String get preferencesMoveListWhilePlaying => 'Λίστα κινήσεων κατά τη διάρκεια της παρτίδας';
 
   @override
-  String get preferencesPgnPieceNotation => 'Move notation';
+  String get preferencesPgnPieceNotation => 'Εμφάνιση κινήσεων';
 
   @override
-  String get preferencesChessPieceSymbol => 'Chess piece symbol';
+  String get preferencesChessPieceSymbol => 'Σύμβολο πιονιού στο σκάκι';
 
   @override
-  String get preferencesPgnLetter => 'Letter (K, Q, R, B, N)';
+  String get preferencesPgnLetter => 'Γράμμα (K, Q, R, B, N)';
 
   @override
-  String get preferencesZenMode => 'Zen mode';
+  String get preferencesZenMode => 'Λειτουργία Zεν';
 
   @override
-  String get preferencesShowPlayerRatings => 'Show player ratings';
+  String get preferencesShowPlayerRatings => 'Εμφάνιση αξιολογήσεων παικτών';
 
   @override
   String get preferencesShowFlairs => 'Show player flairs';
 
   @override
   String get preferencesExplainShowPlayerRatings =>
-      'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.';
+      'Αυτό επιτρέπει την απόκρυψη όλων τις βαθμολογίες από την ιστοσελίδα, έτσι ώστε να μπορείτε να επικεντρωθείτε στο σκάκι. Τα παιχνίδια θα αξιολογούνται, η ρύθμιση αυτή επηρεάζει την εμφάνιση μόνο.';
 
   @override
-  String get preferencesDisplayBoardResizeHandle => 'Show board resize handle';
+  String get preferencesDisplayBoardResizeHandle =>
+      'Εμφάνιση χειριστηρίου αλλαγής μεγέθους σκακιέρας';
 
   @override
-  String get preferencesOnlyOnInitialPosition => 'Only on initial position';
+  String get preferencesOnlyOnInitialPosition => 'Μόνο στην αρχική διάταξη';
 
   @override
-  String get preferencesInGameOnly => 'In-game only';
+  String get preferencesInGameOnly => 'Μόνο κατά τη διάρκεια του παιχνιδιού';
 
   @override
   String get preferencesExceptInGame => 'Except in-game';
 
   @override
-  String get preferencesChessClock => 'Chess clock';
+  String get preferencesChessClock => 'Σκακιστικό χρονόμετρο';
 
   @override
-  String get preferencesTenthsOfSeconds => 'Tenths of seconds';
+  String get preferencesTenthsOfSeconds => 'Δέκατα του δευτερολέπτου';
 
   @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'When time remaining < 10 seconds';
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Όταν απομένουν < 10 δευτερόλεπτα';
 
   @override
-  String get preferencesHorizontalGreenProgressBars => 'Horizontal green progress bars';
+  String get preferencesHorizontalGreenProgressBars => 'Οριζόντιες πράσινες γραμμές προόδου';
 
   @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Sound when time gets critical';
+  String get preferencesSoundWhenTimeGetsCritical =>
+      'Ηχητική ειδοποίηση όταν ο χρόνος γίνεται κρίσιμος';
 
   @override
-  String get preferencesGiveMoreTime => 'Give more time';
+  String get preferencesGiveMoreTime => 'Προσθέστε περισσότερο χρόνο';
 
   @override
-  String get preferencesGameBehavior => 'Game behaviour';
+  String get preferencesGameBehavior => 'Συμπεριφορά παιχνιδιού';
 
   @override
-  String get preferencesHowDoYouMovePieces => 'How do you move pieces?';
+  String get preferencesHowDoYouMovePieces => 'Πώς θέλετε να μετακινείτε τα κομμάτια;';
 
   @override
-  String get preferencesClickTwoSquares => 'Click two squares';
+  String get preferencesClickTwoSquares => 'Κάνοντας κλικ στα δύο τετράγωνα';
 
   @override
-  String get preferencesDragPiece => 'Drag a piece';
+  String get preferencesDragPiece => 'Σέρνοντας ένα πιόνι';
 
   @override
-  String get preferencesBothClicksAndDrag => 'Either';
+  String get preferencesBothClicksAndDrag => 'Και τα δύο';
 
   @override
   String get preferencesPremovesPlayingDuringOpponentTurn =>
-      'Premoves (playing during opponent turn)';
+      'Προκινήσεις (παιγμένες κατά τον χρόνο σκέψης του αντιπάλου)';
 
   @override
-  String get preferencesTakebacksWithOpponentApproval => 'Takebacks (with opponent approval)';
+  String get preferencesTakebacksWithOpponentApproval => 'Ανακλήσεις (με έγκριση του αντιπάλου)';
 
   @override
-  String get preferencesInCasualGamesOnly => 'In casual games only';
+  String get preferencesInCasualGamesOnly => 'Μόνο σε φιλικά παιχνίδια';
 
   @override
-  String get preferencesPromoteToQueenAutomatically => 'Promote to Queen automatically';
+  String get preferencesPromoteToQueenAutomatically => 'Αυτόματη προαγωγή σε βασίλισσα';
 
   @override
   String get preferencesExplainPromoteToQueenAutomatically =>
-      'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
+      'Κρατήστε πατημένο το πλήκτρο <ctrl> ενώ κάνετε την προαγωγή για να απενεργοποιήσετε προσωρινά την αυτόματη προαγωγή';
 
   @override
-  String get preferencesWhenPremoving => 'When premoving';
+  String get preferencesWhenPremoving => 'Κατά προεπιλογή κίνησης';
 
   @override
   String get preferencesClaimDrawOnThreefoldRepetitionAutomatically =>
-      'Claim draw on threefold repetition automatically';
+      'Διεκδικήστε ισοπαλία αυτόματα σε τριπλή επανάληψη';
 
   @override
   String get preferencesWhenTimeRemainingLessThanThirtySeconds =>
-      'When time remaining < 30 seconds';
+      'Όταν απομένουν < 30 δευτερόλεπτα';
 
   @override
-  String get preferencesMoveConfirmation => 'Move confirmation';
+  String get preferencesMoveConfirmation => 'Επιβεβαίωση κίνησης';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled =>
-      'Can be disabled during a game with the board menu';
+      'Μπορεί να απενεργοποιηθεί κατά τη διάρκεια ενός παιχνιδιού με το μενού της σκακιέρας';
 
   @override
-  String get preferencesInCorrespondenceGames => 'Correspondence games';
+  String get preferencesInCorrespondenceGames => 'Στις παρτίδες δι\' αλληλογραφίας';
 
   @override
-  String get preferencesCorrespondenceAndUnlimited => 'Correspondence and unlimited';
+  String get preferencesCorrespondenceAndUnlimited => 'Δι\' αλληλογραφίας και απεριορίστου χρόνου';
 
   @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Confirm resignation and draw offers';
+  String get preferencesConfirmResignationAndDrawOffers =>
+      'Επιβεβαίωση παραίτησης και προσφοράς ισοπαλίας';
 
   @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Castling method';
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Μέθοδος ροκέ';
 
   @override
-  String get preferencesCastleByMovingTwoSquares => 'Move king two squares';
+  String get preferencesCastleByMovingTwoSquares => 'Ροκέ μετακινώντας τον βασιλιά δύο τετράγωνα';
 
   @override
-  String get preferencesCastleByMovingOntoTheRook => 'Move king onto rook';
+  String get preferencesCastleByMovingOntoTheRook =>
+      'Ροκέ μετακινώντας τον βασιλιά πάνω στον πύργο';
 
   @override
-  String get preferencesInputMovesWithTheKeyboard => 'Input moves with the keyboard';
+  String get preferencesInputMovesWithTheKeyboard => 'Κάντε κινήσεις με το πληκτρολόγιο';
 
   @override
-  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
+  String get preferencesInputMovesWithVoice => 'Εισαγωγή κινήσεων με τη φωνή σας';
 
   @override
-  String get preferencesSnapArrowsToValidMoves => 'Snap arrows to valid moves';
+  String get preferencesSnapArrowsToValidMoves => 'Αγκύρωση βελών σε έγκυρες κινήσεις';
 
   @override
   String get preferencesSayGgWpAfterLosingOrDrawing =>
-      'Say \"Good game, well played\" upon defeat or draw';
+      'Αποστολή «Good game, well played» (Ωραίο παιχνίδι, καλά παιγμένο) μετά από ήττα ή ισοπαλία';
 
   @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Your preferences have been saved.';
+  String get preferencesYourPreferencesHaveBeenSaved => 'Οι προτιμήσεις σας αποθηκεύτηκαν.';
 
   @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll on the board to replay moves';
+  String get preferencesScrollOnTheBoardToReplayMoves =>
+      'Κυλίστε τον δρομέα πάνω στη σκακιέρα για να ξαναδείτε κινήσεις';
 
   @override
   String get preferencesCorrespondenceEmailNotification =>
-      'Daily email listing your correspondence games';
+      'Να δέχομαι ημερήσια ειδοποίηση ηλεκτρονικού ταχυδρομείου για τα παιχνίδια διά αλληλογραφίας μου';
 
   @override
-  String get preferencesNotifyStreamStart => 'Streamer goes live';
+  String get preferencesNotifyStreamStart => 'Streamer εκπέμπει ζωντανά';
 
   @override
-  String get preferencesNotifyInboxMsg => 'New inbox message';
+  String get preferencesNotifyInboxMsg => 'Νέο εισερχόμενο μήνυμα';
 
   @override
-  String get preferencesNotifyForumMention => 'Forum comment mentions you';
+  String get preferencesNotifyForumMention => 'Το σχόλιο του φόρουμ σας αναφέρει';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Study invite';
+  String get preferencesNotifyInvitedStudy => 'Πρόσκληση μελέτης';
 
   @override
-  String get preferencesNotifyGameEvent => 'Correspondence game updates';
+  String get preferencesNotifyGameEvent => 'Ενημερώσεις σε παιχνίδια αλληλογραφίας';
 
   @override
-  String get preferencesNotifyChallenge => 'Challenges';
+  String get preferencesNotifyChallenge => 'Προκλήσεις';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
+  String get preferencesNotifyTournamentSoon => 'Το τουρνουά ξεκινά σύντομα';
 
   @override
-  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
+  String get preferencesNotifyTimeAlarm => 'Το ρολόι εξαντλείται στο παιχνίδι αλληλογραφίας';
 
   @override
-  String get preferencesNotifyBell => 'Bell notification within Lichess';
+  String get preferencesNotifyBell => 'Ειδοποίηση με καμπανάκι εντός του Lichess';
 
   @override
-  String get preferencesNotifyPush => 'Device notification when you\'re not on Lichess';
+  String get preferencesNotifyPush => 'Ειδοποίηση συσκευής όταν δεν είστε στο Lichess';
 
   @override
   String get preferencesNotifyWeb => 'Browser';
 
   @override
-  String get preferencesNotifyDevice => 'Device';
+  String get preferencesNotifyDevice => 'Συσκευή';
 
   @override
-  String get preferencesBellNotificationSound => 'Bell notification sound';
+  String get preferencesBellNotificationSound => 'Ειδοποίηση με ήχο από καμπανάκι';
 
   @override
-  String get preferencesBlindfold => 'Blindfold';
+  String get preferencesBlindfold => 'Τυφλό';
 
   @override
   String get puzzlePuzzles => 'Γρίφοι';
@@ -2197,2386 +2214,2411 @@ class AppLocalizationsEl extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Αυτός ο λογαριασμός έχει κλείσει.';
 
   @override
-  String get playWithAFriend => 'Play with a friend';
+  String get playWithAFriend => 'Παίξτε με έναν φίλο';
 
   @override
-  String get playWithTheMachine => 'Play with the computer';
+  String get playWithTheMachine => 'Παίξτε με τον υπολογιστή';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'To invite someone to play, give this URL';
+  String get toInviteSomeoneToPlayGiveThisUrl =>
+      'Για να προσκαλέσετε κάποιον σε ένα παιχνίδι, στείλτε του αυτήν τη διεύθυνση';
 
   @override
-  String get gameOver => 'Game Over';
+  String get gameOver => 'Τέλος παιχνιδιού';
 
   @override
-  String get waitingForOpponent => 'Waiting for opponent';
+  String get waitingForOpponent => 'Αναμονή για αντίπαλο';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
+  String get orLetYourOpponentScanQrCode =>
+      'Ή ζητήστε από τον αντίπαλό σας να σαρώσει αυτόν τον κωδικό QR';
 
   @override
-  String get waiting => 'Waiting';
+  String get waiting => 'Αναμονή';
 
   @override
-  String get yourTurn => 'Your turn';
+  String get yourTurn => 'Η σειρά σας';
 
   @override
   String aiNameLevelAiLevel(String param1, String param2) {
-    return '$param1 level $param2';
+    return '$param1 επιπέδου $param2';
   }
 
   @override
-  String get level => 'Level';
+  String get level => 'Επίπεδο';
 
   @override
-  String get strength => 'Strength';
+  String get strength => 'Ισχύς';
 
   @override
-  String get toggleTheChat => 'Toggle the chat';
+  String get toggleTheChat => 'Εναλλαγή προβολής της συνομιλίας';
 
   @override
-  String get chat => 'Chat';
+  String get chat => 'Συνομιλία';
 
   @override
-  String get resign => 'Resign';
+  String get resign => 'Παραίτηση';
 
   @override
-  String get checkmate => 'Checkmate';
+  String get checkmate => 'Ματ';
 
   @override
-  String get stalemate => 'Stalemate';
+  String get stalemate => 'Πατ';
 
   @override
-  String get white => 'White';
+  String get white => 'Λευκά';
 
   @override
-  String get black => 'Black';
+  String get black => 'Μαύρα';
 
   @override
-  String get asWhite => 'as white';
+  String get asWhite => 'ως λευκός';
 
   @override
-  String get asBlack => 'as black';
+  String get asBlack => 'ως μαύρος';
 
   @override
-  String get randomColor => 'Random side';
+  String get randomColor => 'Τυχαίο χρώμα';
 
   @override
-  String get createAGame => 'Create a game';
+  String get createAGame => 'Δημιουργήστε παιχνίδι';
 
   @override
   String get createTheGame => 'Create the game';
 
   @override
-  String get whiteIsVictorious => 'White is victorious';
+  String get whiteIsVictorious => 'Τα λευκά νίκησαν';
 
   @override
-  String get blackIsVictorious => 'Black is victorious';
+  String get blackIsVictorious => 'Τα μαύρα νίκησαν';
 
   @override
-  String get youPlayTheWhitePieces => 'You play the white pieces';
+  String get youPlayTheWhitePieces => 'Παίζετε τα λευκά';
 
   @override
-  String get youPlayTheBlackPieces => 'You play the black pieces';
+  String get youPlayTheBlackPieces => 'Παίζετε τα μαύρα';
 
   @override
-  String get itsYourTurn => 'It\'s your turn!';
+  String get itsYourTurn => 'Είναι η σειρά σας!';
 
   @override
-  String get cheatDetected => 'Cheat Detected';
+  String get cheatDetected => 'Βρέθηκε απάτη';
 
   @override
-  String get kingInTheCenter => 'King in the centre';
+  String get kingInTheCenter => 'Βασιλιάς στο κέντρο';
 
   @override
-  String get threeChecks => 'Three checks';
+  String get threeChecks => 'Τρία σαχ';
 
   @override
-  String get raceFinished => 'Race finished';
+  String get raceFinished => 'Τέλος αγώνα';
 
   @override
-  String get variantEnding => 'Variant ending';
+  String get variantEnding => 'Εκδοχή ολοκληρώθηκε';
 
   @override
-  String get newOpponent => 'New opponent';
+  String get newOpponent => 'Νέος αντίπαλος';
 
   @override
   String get yourOpponentWantsToPlayANewGameWithYou =>
-      'Your opponent wants to play a new game with you';
+      'Ο αντίπαλος θέλει να παίξει νέο παιχνίδι μαζί σας';
 
   @override
-  String get joinTheGame => 'Join the game';
+  String get joinTheGame => 'Λάβετε μέρος στο παιχνίδι';
 
   @override
-  String get whitePlays => 'White to play';
+  String get whitePlays => 'Παίζουν τα λευκά';
 
   @override
-  String get blackPlays => 'Black to play';
+  String get blackPlays => 'Παίζουν τα μαύρα';
 
   @override
   String get opponentLeftChoices =>
-      'Your opponent left the game. You can claim victory, call the game a draw, or wait.';
+      'Ο αντίπαλός σας έφυγε από το παιχνίδι. Μπορείτε να ισχυρισθείτε νίκη, ισοπαλία, ή να περιμένετε.';
 
   @override
-  String get forceResignation => 'Claim victory';
+  String get forceResignation => 'Ισχυριστείτε νίκη';
 
   @override
-  String get forceDraw => 'Call draw';
+  String get forceDraw => 'Δηλώστε ισοπαλία';
 
   @override
-  String get talkInChat => 'Please be nice in the chat!';
+  String get talkInChat => 'Παρακαλούμε να είστε ευγενικοί στη συνομιλία!';
 
   @override
   String get theFirstPersonToComeOnThisUrlWillPlayWithYou =>
-      'The first person to come to this URL will play with you.';
+      'Ο πρώτος που θα επισκεφθεί αυτήν τη διεύθυνση θα παίξει μαζί σας.';
 
   @override
-  String get whiteResigned => 'White resigned';
+  String get whiteResigned => 'Τα λευκά παραιτήθηκαν';
 
   @override
-  String get blackResigned => 'Black resigned';
+  String get blackResigned => 'Τα μαύρα παραιτήθηκαν';
 
   @override
-  String get whiteLeftTheGame => 'White left the game';
+  String get whiteLeftTheGame => 'Τα λευκά έφυγαν από το παιχνίδι';
 
   @override
-  String get blackLeftTheGame => 'Black left the game';
+  String get blackLeftTheGame => 'Τα μαύρα έφυγαν από το παιχνίδι';
 
   @override
-  String get whiteDidntMove => 'White didn\'t move';
+  String get whiteDidntMove => 'Τα λευκά δεν έπαιξαν';
 
   @override
-  String get blackDidntMove => 'Black didn\'t move';
+  String get blackDidntMove => 'Τα μαύρα δεν έπαιξαν';
 
   @override
-  String get requestAComputerAnalysis => 'Request a computer analysis';
+  String get requestAComputerAnalysis => 'Ζητήστε ανάλυση υπολογιστή';
 
   @override
-  String get computerAnalysis => 'Computer analysis';
+  String get computerAnalysis => 'Ανάλυση υπολογιστή';
 
   @override
-  String get computerAnalysisAvailable => 'Computer analysis available';
+  String get computerAnalysisAvailable => 'Ανάλυση υπολογιστή διαθέσιμη';
 
   @override
-  String get computerAnalysisDisabled => 'Computer analysis disabled';
+  String get computerAnalysisDisabled => 'Η ανάλυση υπολογιστή απενεργοποιήθηκε';
 
   @override
-  String get analysis => 'Analysis board';
+  String get analysis => 'Σκακιέρα ανάλυσης';
 
   @override
   String depthX(String param) {
-    return 'Depth $param';
+    return '$param βάθος';
   }
 
   @override
-  String get usingServerAnalysis => 'Using server analysis';
+  String get usingServerAnalysis => 'Ανάλυση διακομιστή';
 
   @override
-  String get loadingEngine => 'Loading engine...';
+  String get loadingEngine => 'Εκκίνηση μηχανής ...';
 
   @override
-  String get calculatingMoves => 'Calculating moves...';
+  String get calculatingMoves => 'Υπολογισμός κινήσεων...';
 
   @override
-  String get engineFailed => 'Error loading engine';
+  String get engineFailed => 'Σφάλμα κατά τη φόρτωση της μηχανής';
 
   @override
-  String get cloudAnalysis => 'Cloud analysis';
+  String get cloudAnalysis => 'Ανάλυση σε νέφος';
 
   @override
-  String get goDeeper => 'Go deeper';
+  String get goDeeper => 'Βαθύτερα';
 
   @override
-  String get showThreat => 'Show threat';
+  String get showThreat => 'Εμφάνιση απειλής';
 
   @override
-  String get inLocalBrowser => 'in local browser';
+  String get inLocalBrowser => 'σε τοπικό περιηγητή';
 
   @override
-  String get toggleLocalEvaluation => 'Toggle local evaluation';
+  String get toggleLocalEvaluation => 'Εναλλαγή τοπικής αξιολόγησης';
 
   @override
-  String get promoteVariation => 'Promote variation';
+  String get promoteVariation => 'Προώθηση βαριάντας';
 
   @override
-  String get makeMainLine => 'Make mainline';
+  String get makeMainLine => 'Δημιουργία κύριας γραμμής';
 
   @override
-  String get deleteFromHere => 'Delete from here';
+  String get deleteFromHere => 'Διαγραφή από εδώ';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'Σύμπτυξη παραλλαγών';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Εμφάνιση βαριάντων';
 
   @override
-  String get forceVariation => 'Force variation';
+  String get forceVariation => 'Θέσε σε βαριάντα';
 
   @override
-  String get copyVariationPgn => 'Copy variation PGN';
+  String get copyVariationPgn => 'Αντιγραφή PGN αρχείου κινήσεων';
 
   @override
   String get copyMainLinePgn => 'Copy mainline PGN';
 
   @override
-  String get move => 'Move';
+  String get move => 'Κίνηση';
 
   @override
-  String get variantLoss => 'Variant loss';
+  String get variantLoss => 'Ήττα εκδοχής';
 
   @override
-  String get variantWin => 'Variant win';
+  String get variantWin => 'Νίκη εκδοχής';
 
   @override
-  String get insufficientMaterial => 'Insufficient material';
+  String get insufficientMaterial => 'Ανεπαρκές υλικό';
 
   @override
-  String get pawnMove => 'Pawn move';
+  String get pawnMove => 'Κίνηση πιονιού';
 
   @override
-  String get capture => 'Capture';
+  String get capture => 'Αιχμαλώτιση';
 
   @override
-  String get close => 'Close';
+  String get close => 'Κλείσιμο';
 
   @override
-  String get winning => 'Winning';
+  String get winning => 'Κερδίζει';
 
   @override
-  String get losing => 'Losing';
+  String get losing => 'Χάνει';
 
   @override
-  String get drawn => 'Drawn';
+  String get drawn => 'Ισοπαλία';
 
   @override
-  String get unknown => 'Unknown';
+  String get unknown => 'Άγνωστο';
 
   @override
-  String get database => 'Database';
+  String get database => 'Βάση δεδομένων';
 
   @override
-  String get whiteDrawBlack => 'White / Draw / Black';
+  String get whiteDrawBlack => 'Λευκά / Ισοπαλία / Μαύρα';
 
   @override
   String averageRatingX(String param) {
-    return 'Average rating: $param';
+    return 'Μέση βαθμολογία: $param';
   }
 
   @override
-  String get recentGames => 'Recent games';
+  String get recentGames => 'Πρόσφατα παιχνίδια';
 
   @override
-  String get topGames => 'Top games';
+  String get topGames => 'Κορυφαίες παρτίδες';
 
   @override
   String masterDbExplanation(String param1, String param2, String param3) {
-    return 'OTB games of $param1+ FIDE-rated players from $param2 to $param3';
+    return 'Παρτίδες OTB $param1 + παικτών με αξιολόγηση FIDE, από $param2 έως $param3';
   }
 
   @override
   String get dtzWithRounding =>
-      'DTZ50\'\' with rounding, based on number of half-moves until next capture or pawn move';
+      'DTZ50\'\' με στρογγυλοποίηση, βάσει του αριθμού των κινήσεων μέχρι την επόμενη κίνηση πιονιού ή την επόμενη αλλαγή';
 
   @override
-  String get noGameFound => 'No game found';
+  String get noGameFound => 'Δεν βρέθηκε παρτίδα';
 
   @override
-  String get maxDepthReached => 'Max depth reached!';
+  String get maxDepthReached => 'Έχετε φτάσει το μέγιστο βάθος!';
 
   @override
   String get maybeIncludeMoreGamesFromThePreferencesMenu =>
-      'Maybe include more games from the preferences menu?';
+      'Δοκιμάστε να συμπεριλάβετε περισσότερα παιχνίδια από το μενού προτιμήσεων.';
 
   @override
-  String get openings => 'Openings';
+  String get openings => 'Ανοίγματα';
 
   @override
-  String get openingExplorer => 'Opening explorer';
+  String get openingExplorer => 'Εξερευνητής ανοιγμάτων';
 
   @override
-  String get openingEndgameExplorer => 'Opening/endgame explorer';
+  String get openingEndgameExplorer => 'Εξερευνητής ανοιγμάτων/φινάλε';
 
   @override
   String xOpeningExplorer(String param) {
-    return '$param opening explorer';
+    return '$param εξερευνητής ανοιγμάτων';
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => 'Play first opening/endgame-explorer move';
+  String get playFirstOpeningEndgameExplorerMove =>
+      'Κλειδί: παίξτε ΠρώταΆνοιγμαΦινάλεΕξερευνητήςΚίνηση';
 
   @override
-  String get winPreventedBy50MoveRule => 'Win prevented by 50-move rule';
+  String get winPreventedBy50MoveRule => 'H νίκη εμποδίζεται από τον κανόνα των 50 κινήσεων';
 
   @override
-  String get lossSavedBy50MoveRule => 'Loss prevented by 50-move rule';
+  String get lossSavedBy50MoveRule => 'Η ήττα αποτρέπεται από τον κανόνα των 50 κινήσεων';
 
   @override
-  String get winOr50MovesByPriorMistake => 'Win or 50 moves by prior mistake';
+  String get winOr50MovesByPriorMistake => 'Νίκη ή ισοπαλία από 50 κινήσεις λόγω λάθους';
 
   @override
-  String get lossOr50MovesByPriorMistake => 'Loss or 50 moves by prior mistake';
+  String get lossOr50MovesByPriorMistake => 'Ήττα ή ισοπαλία από 50 κινήσεις λόγω λάθους';
 
   @override
   String get unknownDueToRounding =>
-      'Win/loss only guaranteed if recommended tablebase line has been followed since the last capture or pawn move, due to possible rounding of DTZ values in Syzygy tablebases.';
+      'Η νίκη/ήττα είναι εγγυημένη μόνο εάν έχει ακολουθηθεί η συνιστώμενη γραμμή βάσης από την τελευταία κίνηση πιονιού ή την τελευταία αλλαγή, λόγω πιθανής στρογγυλοποίησης.';
 
   @override
-  String get allSet => 'All set!';
+  String get allSet => 'Εφαρμογή!';
 
   @override
-  String get importPgn => 'Import PGN';
+  String get importPgn => 'Εισαγωγή PGN';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Διαγραφή';
 
   @override
-  String get deleteThisImportedGame => 'Delete this imported game?';
+  String get deleteThisImportedGame => 'Διαγραφή εισηγμένης παρτίδας;';
 
   @override
-  String get replayMode => 'Replay mode';
+  String get replayMode => 'Επανάληψη';
 
   @override
-  String get realtimeReplay => 'Realtime';
+  String get realtimeReplay => 'Σε πραγματικό χρόνο';
 
   @override
-  String get byCPL => 'By CPL';
+  String get byCPL => 'Με CPL';
 
   @override
-  String get enable => 'Enable';
+  String get enable => 'Ενεργοποίηση';
 
   @override
-  String get bestMoveArrow => 'Best move arrow';
+  String get bestMoveArrow => 'Βέλτιστη κίνηση βέλους';
 
   @override
-  String get showVariationArrows => 'Show variation arrows';
+  String get showVariationArrows => 'Εμφάνισε βελάκια παραλλαγών';
 
   @override
-  String get evaluationGauge => 'Evaluation gauge';
+  String get evaluationGauge => 'Δείκτης αξιολόγησης';
 
   @override
-  String get multipleLines => 'Multiple lines';
+  String get multipleLines => 'Πολλαπλές γραμμές';
 
   @override
   String get cpus => 'CPUs';
 
   @override
-  String get memory => 'Memory';
+  String get memory => 'Μνήμη';
 
   @override
-  String get infiniteAnalysis => 'Infinite analysis';
+  String get infiniteAnalysis => 'Άπειρη ανάλυση';
 
   @override
-  String get removesTheDepthLimit => 'Removes the depth limit, and keeps your computer warm';
+  String get removesTheDepthLimit => 'Καταργεί το όριο βάθους και κρατά τον υπολογιστή σας ζεστό';
 
   @override
-  String get blunder => 'Blunder';
+  String get blunder => 'Σοβαρό σφάλμα';
 
   @override
-  String get mistake => 'Mistake';
+  String get mistake => 'Λάθος';
 
   @override
-  String get inaccuracy => 'Inaccuracy';
+  String get inaccuracy => 'Ανακρίβεια';
 
   @override
-  String get moveTimes => 'Move times';
+  String get moveTimes => 'Χρόνοι κινήσεων';
 
   @override
-  String get flipBoard => 'Flip board';
+  String get flipBoard => 'Περιστροφή σκακιέρας';
 
   @override
-  String get threefoldRepetition => 'Threefold repetition';
+  String get threefoldRepetition => 'Τριπλή επανάληψη';
 
   @override
-  String get claimADraw => 'Claim a draw';
+  String get claimADraw => 'Απαίτηση ισοπαλίας';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Απαιτήθηκε ισοπαλία';
 
   @override
-  String get offerDraw => 'Offer draw';
+  String get offerDraw => 'Προσφορά ισοπαλίας';
 
   @override
-  String get draw => 'Draw';
+  String get draw => 'Ισοπαλία';
 
   @override
-  String get drawByMutualAgreement => 'Draw by mutual agreement';
+  String get drawByMutualAgreement => 'Ισοπαλία κατόπιν συμφωνίας';
 
   @override
-  String get fiftyMovesWithoutProgress => 'Fifty moves without progress';
+  String get fiftyMovesWithoutProgress => 'Πενήντα κινήσεις χωρίς πρόοδο';
 
   @override
-  String get currentGames => 'Current games';
+  String get currentGames => 'Παιχνίδια σε εξέλιξη';
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return 'Έγινε μέλος $param';
   }
 
   @override
-  String get viewInFullSize => 'View in full size';
+  String get viewInFullSize => 'Προβολή σε πλήρες μέγεθος';
 
   @override
-  String get logOut => 'Sign out';
+  String get logOut => 'Έξοδος';
 
   @override
-  String get signIn => 'Sign in';
+  String get signIn => 'Είσοδος';
 
   @override
-  String get rememberMe => 'Keep me logged in';
+  String get rememberMe => 'Απομνημόνευση των στοιχείων σύνδεσης';
 
   @override
-  String get youNeedAnAccountToDoThat => 'You need an account to do that';
+  String get youNeedAnAccountToDoThat => 'Χρειάζεστε λογαριασμό για να το κάνετε αυτό';
 
   @override
-  String get signUp => 'Register';
+  String get signUp => 'Εγγραφή';
 
   @override
   String get computersAreNotAllowedToPlay =>
-      'Computers and computer-assisted players are not allowed to play. Please do not get assistance from chess engines, databases, or from other players while playing. Also note that making multiple accounts is strongly discouraged and excessive multi-accounting will lead to being banned.';
+      'Δεν επιτρέπουμε στους υπολογιστές και παίκτες με υποβοήθηση υπολογιστή να παίζουν στο Lichess. Παρακαλούμε μη δεχτείτε βοήθεια από σκακιστικούς υπολογιστές, βάσεις δεδομένων ή άλλους παίκτες όσο παίζετε εδώ. Επίσης σημειώστε πως αποθαρρύνουμε την δημιουργία πολλών λογαριασμών και υπερβολή σε αυτό θα καταλήξει σε αποκλεισμό.';
 
   @override
-  String get games => 'Games';
+  String get games => 'Παιχνίδια';
 
   @override
-  String get forum => 'Forum';
+  String get forum => 'Φόρουμ';
 
   @override
   String xPostedInForumY(String param1, String param2) {
-    return '$param1 posted in topic $param2';
+    return 'Ο χρήστης $param1 έγραψε στη συζήτηση $param2';
   }
 
   @override
-  String get latestForumPosts => 'Latest forum posts';
+  String get latestForumPosts => 'Τελευταίες δημοσιεύσεις στο φόρουμ';
 
   @override
-  String get players => 'Players';
+  String get players => 'Παίκτες';
 
   @override
-  String get friends => 'Friends';
+  String get friends => 'Φίλοι';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'άλλους παίκτες';
 
   @override
-  String get discussions => 'Conversations';
+  String get discussions => 'Συζητήσεις';
 
   @override
-  String get today => 'Today';
+  String get today => 'Σήμερα';
 
   @override
-  String get yesterday => 'Yesterday';
+  String get yesterday => 'Χθες';
 
   @override
-  String get minutesPerSide => 'Minutes per side';
+  String get minutesPerSide => 'Λεπτά ανά πλευρά';
 
   @override
-  String get variant => 'Variant';
+  String get variant => 'Εκδοχή';
 
   @override
-  String get variants => 'Variants';
+  String get variants => 'Εκδοχές';
 
   @override
-  String get timeControl => 'Time control';
+  String get timeControl => 'Χρονόμετρο';
 
   @override
-  String get realTime => 'Real time';
+  String get realTime => 'Πραγματικού χρόνου';
 
   @override
-  String get correspondence => 'Correspondence';
+  String get correspondence => 'Αλληλογραφία';
 
   @override
-  String get daysPerTurn => 'Days per turn';
+  String get daysPerTurn => 'Ημέρες ανά κίνηση';
 
   @override
-  String get oneDay => 'One day';
+  String get oneDay => 'Μία ημέρα';
 
   @override
-  String get time => 'Time';
+  String get time => 'Χρόνος';
 
   @override
-  String get rating => 'Rating';
+  String get rating => 'Βαθμολογία';
 
   @override
-  String get ratingStats => 'Rating stats';
+  String get ratingStats => 'Στατιστικές βαθμολογίας';
 
   @override
-  String get username => 'User name';
+  String get username => 'Όνομα χρήστη';
 
   @override
-  String get usernameOrEmail => 'User name or email';
+  String get usernameOrEmail => 'Όνομα χρήστη ή ηλ. ταχυδρομείο';
 
   @override
-  String get changeUsername => 'Change username';
+  String get changeUsername => 'Αλλαγή ονόματος χρήστη';
 
   @override
   String get changeUsernameNotSame =>
-      'Only the case of the letters can change. For example \"johndoe\" to \"JohnDoe\".';
+      'Μόνο η αλλαγή χαρακτήρων από μικρά σε κεφαλαία επιτρέπεται. Για παράδειγμα \"johndoe\" σε \"JohnDoe\".';
 
   @override
   String get changeUsernameDescription =>
-      'Change your username. This can only be done once and you are only allowed to change the case of the letters in your username.';
+      'Αλλαγή ονόματος χρήστη. Μπορεί να γίνει μόνο μία φορά και μόνο η αλλαγή χαρακτήρων σε μικρά-κεφαλαία στο όνομα χρήστη επιτρέπεται.';
 
   @override
   String get signupUsernameHint =>
-      'Make sure to choose a username that\'s appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!';
+      'Eπιλέξτε ένα φιλικό προς την οικογένεια όνομα χρήστη, καθώς δε θα μπορέσετε να το αλλάξετε αργότερα. Λογαριασμοί με ακατάλληλα ψευδώνυμα θα απενεργοποιούνται!';
 
   @override
-  String get signupEmailHint => 'We will only use it for password reset.';
+  String get signupEmailHint =>
+      'Θα τη χρησιμοποιήσουμε μόνο για την επαναφορά του κωδικού πρόσβασης.';
 
   @override
-  String get password => 'Password';
+  String get password => 'Κωδικός';
 
   @override
-  String get changePassword => 'Change password';
+  String get changePassword => 'Αλλαγή κωδικού';
 
   @override
-  String get changeEmail => 'Change email';
+  String get changeEmail => 'Αλλαγή διεύθυνσης email';
 
   @override
-  String get email => 'Email';
+  String get email => 'Ηλ. ταχυδρομείο';
 
   @override
-  String get passwordReset => 'Password reset';
+  String get passwordReset => 'Επαναφορά κωδικού';
 
   @override
-  String get forgotPassword => 'Forgot password?';
+  String get forgotPassword => 'Ξεχάσατε τον κωδικό;';
 
   @override
-  String get error_weakPassword => 'This password is extremely common, and too easy to guess.';
+  String get error_weakPassword =>
+      'Αυτός ο κωδικός πρόσβασης είναι εξαιρετικά συνηθισμένος και πολύ εύκολος να μαντέψει.';
 
   @override
-  String get error_namePassword => 'Please don\'t use your username as your password.';
+  String get error_namePassword =>
+      'Παρακαλώ μην χρησιμοποιείτε το όνομα χρήστη σας ως κωδικό πρόσβασής σας.';
 
   @override
   String get blankedPassword =>
-      'You have used the same password on another site, and that site has been compromised. To ensure the safety of your Lichess account, we need you to set a new password. Thank you for your understanding.';
+      'Έχετε χρησιμοποιήσει τον ίδιο κωδικό πρόσβασης σε άλλη ιστοσελίδα και εκείνη η ιστοσελίδα έχει παραβιαστεί. Για να διασφαλίσετε την ασφάλεια του λογαριασμού σας στο Lichess θα πρέπει να ορίσετε ένα νέο κωδικό πρόσβασης. Σας ευχαριστούμε για την κατανόησή.';
 
   @override
-  String get youAreLeavingLichess => 'You are leaving Lichess';
+  String get youAreLeavingLichess => 'Φεύγετε από το Lichess';
 
   @override
-  String get neverTypeYourPassword => 'Never type your Lichess password on another site!';
+  String get neverTypeYourPassword =>
+      'Ποτέ μην πληκτρολογήσετε τον κωδικό σας από το Lichess σε άλλον ιστότοπο!';
 
   @override
   String proceedToX(String param) {
-    return 'Proceed to $param';
+    return 'Μεταβείτε στο $param';
   }
 
   @override
   String get passwordSuggestion =>
-      'Do not set a password suggested by someone else. They will use it to steal your account.';
+      'Μην ορίσετε τον κωδικό πρόσβασης που σας πρότεινε κάποιος άλλος. Θα χρησιμοποιηθεί για να κλαπεί ο λογαριασμός σας.';
 
   @override
   String get emailSuggestion =>
-      'Do not set an email address suggested by someone else. They will use it to steal your account.';
+      'Μη χρησιμοποιήσετε email που στάλθηκε από κάποιον άλλο. Θα το χρησιμοποιήσουν για να κλέψουν τον λογαριασμό σας.';
 
   @override
-  String get emailConfirmHelp => 'Help with email confirmation';
+  String get emailConfirmHelp => 'Βοήθεια για την επιβεβαίωση email';
 
   @override
-  String get emailConfirmNotReceived => 'Didn\'t receive your confirmation email after signing up?';
+  String get emailConfirmNotReceived => 'Δε λάβατε το email επιβεβαίωσης μετά την εγγραφή;';
 
   @override
-  String get whatSignupUsername => 'What username did you use to sign up?';
+  String get whatSignupUsername => 'Τι όνομα χρήστη χρησιμοποιήσατε για να εγγραφείτε;';
 
   @override
   String usernameNotFound(String param) {
-    return 'We couldn\'t find any user by this name: $param.';
+    return 'Δεν μπορέσαμε να βρούμε κάποιον χρήστη με το όνομα: $param.';
   }
 
   @override
-  String get usernameCanBeUsedForNewAccount => 'You can use this username to create a new account';
+  String get usernameCanBeUsedForNewAccount =>
+      'Μπορείτε να χρησιμοποιήσετε αυτό το όνομα χρήστη για να δημιουργήσετε ένα νέο λογαριασμό';
 
   @override
   String emailSent(String param) {
-    return 'We have sent an email to $param.';
+    return 'Στείλαμε ένα email στη διεύθυνση $param.';
   }
 
   @override
-  String get emailCanTakeSomeTime => 'It can take some time to arrive.';
+  String get emailCanTakeSomeTime => 'Μπορεί να πάρει κάποια λεπτά μέχρι να φτάσει.';
 
   @override
-  String get refreshInboxAfterFiveMinutes => 'Wait 5 minutes and refresh your email inbox.';
+  String get refreshInboxAfterFiveMinutes =>
+      'Περιμένετε 5 λεπτά και ανανεώστε τα εισερχόμενα email σας.';
 
   @override
   String get checkSpamFolder =>
-      'Also check your spam folder, it might end up there. If so, mark it as not spam.';
+      'Επίσης, ελέγξτε τον φάκελο ανεπιθύμητης αλληλογραφίας, μπορεί να έχει καταλήξει εκεί. Αν ναι, σημειώστε το ως μη ανεπιθύμητο.';
 
   @override
-  String get emailForSignupHelp => 'If everything else fails, then send us this email:';
+  String get emailForSignupHelp => 'Αν όλα τα άλλα αποτύχουν, τότε στείλτε μας αυτό το email:';
 
   @override
   String copyTextToEmail(String param) {
-    return 'Copy and paste the above text and send it to $param';
+    return 'Αντιγράψτε και επικολλήστε το παραπάνω κείμενο και στείλτε το στο $param';
   }
 
   @override
   String get waitForSignupHelp =>
-      'We will come back to you shortly to help you complete your signup.';
+      'Θα επανέλθουμε σύντομα σε σας για να σας βοηθήσουμε να ολοκληρώσετε την εγγραφή σας.';
 
   @override
   String accountConfirmed(String param) {
-    return 'The user $param is successfully confirmed.';
+    return 'Ο χρήστης $param έχει επαληθευτεί με επιτυχία.';
   }
 
   @override
   String accountCanLogin(String param) {
-    return 'You can login right now as $param.';
+    return 'Μπορείτε να συνδεθείτε τώρα ως $param.';
   }
 
   @override
-  String get accountConfirmationEmailNotNeeded => 'You do not need a confirmation email.';
+  String get accountConfirmationEmailNotNeeded => 'Δεν χρειάζεστε ένα email επιβεβαίωσης.';
 
   @override
   String accountClosed(String param) {
-    return 'The account $param is closed.';
+    return 'Ο λογαριασμός $param έχει κλείσει.';
   }
 
   @override
   String accountRegisteredWithoutEmail(String param) {
-    return 'The account $param was registered without an email.';
+    return 'Ο λογαριασμός $param καταχωρήθηκε χωρίς email.';
   }
 
   @override
-  String get rank => 'Rank';
+  String get rank => 'Κατάταξη';
 
   @override
   String rankX(String param) {
-    return 'Rank: $param';
+    return 'Κατάταξη: $param';
   }
 
   @override
-  String get gamesPlayed => 'Games played';
+  String get gamesPlayed => 'Παιγμένα παιχνίδια';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'ΟΚ';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Ακύρωση';
 
   @override
-  String get whiteTimeOut => 'White time out';
+  String get whiteTimeOut => 'Τέλος χρόνου για τα λευκά';
 
   @override
-  String get blackTimeOut => 'Black time out';
+  String get blackTimeOut => 'Τέλος χρόνου για τα μαύρα';
 
   @override
-  String get drawOfferSent => 'Draw offer sent';
+  String get drawOfferSent => 'Πρόταση ισοπαλίας εστάλη';
 
   @override
-  String get drawOfferAccepted => 'Draw offer accepted';
+  String get drawOfferAccepted => 'Πρόταση ισοπαλίας αποδεκτή';
 
   @override
-  String get drawOfferCanceled => 'Draw offer cancelled';
+  String get drawOfferCanceled => 'Πρόταση ισοπαλίας ακυρώθηκε';
 
   @override
-  String get whiteOffersDraw => 'White offers draw';
+  String get whiteOffersDraw => 'Τα λευκά προσφέρουν ισοπαλία';
 
   @override
-  String get blackOffersDraw => 'Black offers draw';
+  String get blackOffersDraw => 'Τα μαύρα προσφέρουν ισοπαλία';
 
   @override
-  String get whiteDeclinesDraw => 'White declines draw';
+  String get whiteDeclinesDraw => 'Τα λευκά απορρίπτουν την ισοπαλία';
 
   @override
-  String get blackDeclinesDraw => 'Black declines draw';
+  String get blackDeclinesDraw => 'Τα μαύρα απορρίπτουν την ισοπαλία';
 
   @override
-  String get yourOpponentOffersADraw => 'Your opponent offers a draw';
+  String get yourOpponentOffersADraw => 'Ο αντίπαλος σας προτείνει ισοπαλία';
 
   @override
-  String get accept => 'Accept';
+  String get accept => 'Αποδοχή';
 
   @override
-  String get decline => 'Decline';
+  String get decline => 'Άρνηση';
 
   @override
-  String get playingRightNow => 'Playing right now';
+  String get playingRightNow => 'Παιχνίδι σε εξέλιξη τώρα';
 
   @override
-  String get eventInProgress => 'Playing now';
+  String get eventInProgress => 'Σε εξέλιξη τώρα';
 
   @override
-  String get finished => 'Finished';
+  String get finished => 'Ολοκληρωμένα';
 
   @override
-  String get abortGame => 'Abort game';
+  String get abortGame => 'Εγκαταλείψτε το παιχνίδι';
 
   @override
-  String get gameAborted => 'Game aborted';
+  String get gameAborted => 'Παιχνίδι εγκατελήφθη';
 
   @override
-  String get standard => 'Standard';
+  String get standard => 'Κανονικό';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => 'Προσαρμοσμένη θέση';
 
   @override
-  String get unlimited => 'Unlimited';
+  String get unlimited => 'Απεριόριστου χρόνου';
 
   @override
-  String get mode => 'Mode';
+  String get mode => 'Τύπος παιχνιδιού';
 
   @override
-  String get casual => 'Casual';
+  String get casual => 'Φιλικό';
 
   @override
-  String get rated => 'Rated';
+  String get rated => 'Βαθμολογημένο';
 
   @override
-  String get casualTournament => 'Casual';
+  String get casualTournament => 'Φιλικό';
 
   @override
-  String get ratedTournament => 'Rated';
+  String get ratedTournament => 'Βαθμολογημένo';
 
   @override
-  String get thisGameIsRated => 'This game is rated';
+  String get thisGameIsRated => 'Το παιχνίδι βαθμολογείται';
 
   @override
-  String get rematch => 'Rematch';
+  String get rematch => 'Ξαναπαίξτε';
 
   @override
-  String get rematchOfferSent => 'Rematch offer sent';
+  String get rematchOfferSent => 'Πρόταση ρεβάνς εστάλη';
 
   @override
-  String get rematchOfferAccepted => 'Rematch offer accepted';
+  String get rematchOfferAccepted => 'Η πρόταση ρεβάνς έγινε αποδεκτή';
 
   @override
-  String get rematchOfferCanceled => 'Rematch offer cancelled';
+  String get rematchOfferCanceled => 'Η πρόταση ρεβάνς ακυρώθηκε';
 
   @override
-  String get rematchOfferDeclined => 'Rematch offer declined';
+  String get rematchOfferDeclined => 'Η πρόταση ρεβάνς απορρίφθηκε';
 
   @override
-  String get cancelRematchOffer => 'Cancel rematch offer';
+  String get cancelRematchOffer => 'Ακύρωση πρότασης ρεβάνς';
 
   @override
-  String get viewRematch => 'View rematch';
+  String get viewRematch => 'Δείτε την παρτίδα ρεβάνς';
 
   @override
-  String get confirmMove => 'Confirm move';
+  String get confirmMove => 'Επιβεβαίωση κίνησης';
 
   @override
-  String get play => 'Play';
+  String get play => 'Παίξτε';
 
   @override
-  String get inbox => 'Inbox';
+  String get inbox => 'Εισερχόμενα';
 
   @override
-  String get chatRoom => 'Chat room';
+  String get chatRoom => 'Ζωντανή συζήτηση';
 
   @override
-  String get loginToChat => 'Sign in to chat';
+  String get loginToChat => 'Συνδεθείτε για να μιλήσετε';
 
   @override
-  String get youHaveBeenTimedOut => 'You have been timed out.';
+  String get youHaveBeenTimedOut => 'Έχετε αποσυνδεθεί.';
 
   @override
-  String get spectatorRoom => 'Spectator room';
+  String get spectatorRoom => 'Συζήτηση θεατών';
 
   @override
-  String get composeMessage => 'Compose message';
+  String get composeMessage => 'Σύνθεση μηνύματος';
 
   @override
-  String get subject => 'Subject';
+  String get subject => 'Θέμα';
 
   @override
-  String get send => 'Send';
+  String get send => 'Αποστολή';
 
   @override
-  String get incrementInSeconds => 'Increment in seconds';
+  String get incrementInSeconds => 'Προσαύξηση σε δευτερόλεπτα';
 
   @override
-  String get freeOnlineChess => 'Free Online Chess';
+  String get freeOnlineChess => 'Δωρεάν Διαδικτυακό Σκάκι';
 
   @override
-  String get exportGames => 'Export games';
+  String get exportGames => 'Εξαγωγή παιχνιδιών';
 
   @override
-  String get ratingRange => 'Rating range';
+  String get ratingRange => 'Εμβέλεια βαθμολογίας';
 
   @override
-  String get thisAccountViolatedTos => 'This account violated the Lichess Terms of Service';
+  String get thisAccountViolatedTos =>
+      'Αυτός ο λογαριασμός παραβαίνει τους όρους χρήσης του Lichess';
 
   @override
-  String get openingExplorerAndTablebase => 'Opening explorer & tablebase';
+  String get openingExplorerAndTablebase => 'Εξερευνητής ανοιγμάτων & φινάλε';
 
   @override
-  String get takeback => 'Takeback';
+  String get takeback => 'Ανάκληση κίνησης';
 
   @override
-  String get proposeATakeback => 'Propose a takeback';
+  String get proposeATakeback => 'Προσφέρετε ανάκληση της προηγούμενης κίνησης';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'Τα λευκά προτείνουν αναίρεση της κίνησης';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'Τα μαύρα προτείνουν αναίρεση της κίνησης';
 
   @override
-  String get takebackPropositionSent => 'Takeback sent';
+  String get takebackPropositionSent => 'Προσφορά ανάκλησης κίνησης εστάλη';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'Τα λευκά απορρίπτουν την αναίρεση της κίνησης';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'Τα μαύρα απορρίπτουν την αναίρεση της κίνησης';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'Τα λευκά αποδέχονται την αναίρεση της κίνησης';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'Τα μαύρα αποδέχονται την αναίρεση της κίνησης';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'Τα λευκά ακύρωσαν την πρόταση αναίρεσης της κίνησης';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'Τα μαύρα ακύρωσαν την πρόταση αναίρεσης της κίνησης';
 
   @override
-  String get yourOpponentProposesATakeback => 'Your opponent proposes a takeback';
+  String get yourOpponentProposesATakeback =>
+      'Ο αντίπαλός σας πρότεινε ακύρωση της τελευταίας κίνησης';
 
   @override
-  String get bookmarkThisGame => 'Bookmark this game';
+  String get bookmarkThisGame => 'Προσθέστε σελιδοδείκτη για αυτό το παιχνίδι';
 
   @override
-  String get tournament => 'Tournament';
+  String get tournament => 'Τουρνουά';
 
   @override
-  String get tournaments => 'Tournaments';
+  String get tournaments => 'Πρωταθλήματα';
 
   @override
-  String get tournamentPoints => 'Tournament points';
+  String get tournamentPoints => 'Πόντοι από τουρνουά';
 
   @override
-  String get viewTournament => 'View tournament';
+  String get viewTournament => 'Παρακολούθηση τουρνουά';
 
   @override
-  String get backToTournament => 'Back to tournament';
+  String get backToTournament => 'Επιστροφή στο τουρνουά';
 
   @override
   String get noDrawBeforeSwissLimit =>
-      'You cannot draw before 30 moves are played in a Swiss tournament.';
+      'Στα τουρνουά ελβετικού τύπου, απαγορεύονται οι προτάσεις ισοπαλίας σε λιγότερες από 30 κινήσεις.';
 
   @override
-  String get thematic => 'Thematic';
+  String get thematic => 'Θεματικό';
 
   @override
   String yourPerfRatingIsProvisional(String param) {
-    return 'Your $param rating is provisional';
+    return 'Η $param βαθμολογία σας είναι προσωρινή';
   }
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
-    return 'Your $param1 rating ($param2) is too high';
+    return 'Η $param1 βαθμολογία σας ($param2) είναι πολύ υψηλή';
   }
 
   @override
   String yourTopWeeklyPerfRatingIsTooHigh(String param1, String param2) {
-    return 'Your top weekly $param1 rating ($param2) is too high';
+    return 'Η κορυφαία εβδομαδιαία $param1 βαθμολογία σας ($param2) είναι πολύ υψηλή';
   }
 
   @override
   String yourPerfRatingIsTooLow(String param1, String param2) {
-    return 'Your $param1 rating ($param2) is too low';
+    return 'Η $param1 βαθμολογία σας ($param2) είναι πολύ χαμηλή';
   }
 
   @override
   String ratedMoreThanInPerf(String param1, String param2) {
-    return 'Rated ≥ $param1 in $param2';
+    return 'Βαθμολογημένο ≥ $param1 στο $param2';
   }
 
   @override
   String ratedLessThanInPerf(String param1, String param2) {
-    return 'Rated ≤ $param1 in $param2 for the last week';
+    return 'Βαθμολογημένο ≤ $param1 στο $param2';
   }
 
   @override
   String mustBeInTeam(String param) {
-    return 'Must be in team $param';
+    return 'Πρέπει να είστε στην ομάδα $param';
   }
 
   @override
   String youAreNotInTeam(String param) {
-    return 'You are not in the team $param';
+    return 'Δεν είστε στην ομάδα $param';
   }
 
   @override
-  String get backToGame => 'Back to game';
+  String get backToGame => 'Επιστρέψτε στο παιχνίδι';
 
   @override
   String get siteDescription =>
-      'Free online chess server. Play chess in a clean interface. No registration, no ads, no plugin required. Play chess with the computer, friends or random opponents.';
+      'Δωρεάν διαδικτυακό παιχνίδι Σκακιού. Παίξτε Σκάκι τώρα σε καθαρό γραφικό περιβάλλον. Χωρίς εγγραφές, χωρίς διαφημίσεις, χωρίς πρόσθετα. Παίξτε Σκάκι με τον υπολογιστή, με φίλους ή με τυχαίους αντιπάλους.';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
-    return '$param1 joined team $param2';
+    return 'Ο χρήστης $param1 έγινε μέλος της ομάδα $param2';
   }
 
   @override
   String xCreatedTeamY(String param1, String param2) {
-    return '$param1 created team $param2';
+    return 'Ο $param1 δημιούργησε την ομάδα $param2';
   }
 
   @override
-  String get startedStreaming => 'started streaming';
+  String get startedStreaming => 'ξεκίνησε να μεταδίδει';
 
   @override
   String xStartedStreaming(String param) {
-    return '$param started streaming';
+    return '$param ξεκίνησε να μεταδίδει';
   }
 
   @override
-  String get averageElo => 'Average rating';
+  String get averageElo => 'Μέσος όρος βαθμολογίας';
 
   @override
-  String get location => 'Location';
+  String get location => 'Τοποθεσία';
 
   @override
-  String get filterGames => 'Filter games';
+  String get filterGames => 'Φίλτρο παιχνιδιών';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Επαναφορά';
 
   @override
-  String get apply => 'Submit';
+  String get apply => 'Εφαρμογή';
 
   @override
-  String get save => 'Save';
+  String get save => 'Αποθήκευση';
 
   @override
-  String get leaderboard => 'Leaderboard';
+  String get leaderboard => 'Πίνακας βαθμολογίας';
 
   @override
-  String get screenshotCurrentPosition => 'Screenshot current position';
+  String get screenshotCurrentPosition => 'Τραβήξτε στιγμιότυπο της τρέχουσας θέσης';
 
   @override
-  String get gameAsGIF => 'Game as GIF';
+  String get gameAsGIF => 'Αποθήκευση ως GIF';
 
   @override
-  String get pasteTheFenStringHere => 'Paste the FEN text here';
+  String get pasteTheFenStringHere => 'Επικολλήστε τον κώδικα FEN εδώ';
 
   @override
-  String get pasteThePgnStringHere => 'Paste the PGN text here';
+  String get pasteThePgnStringHere => 'Επικολλήστε το κείμενο του PGN εδώ';
 
   @override
-  String get orUploadPgnFile => 'Or upload a PGN file';
+  String get orUploadPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
 
   @override
-  String get fromPosition => 'From position';
+  String get fromPosition => 'Από συγκεκριμένη θέση';
 
   @override
-  String get continueFromHere => 'Continue from here';
+  String get continueFromHere => 'Συνέχεια από εδώ';
 
   @override
-  String get toStudy => 'Study';
+  String get toStudy => 'Μελέτη';
 
   @override
-  String get importGame => 'Import game';
+  String get importGame => 'Εισαγωγή παιχνιδιού';
 
   @override
   String get importGameExplanation =>
-      'Paste a game PGN to get a browsable replay, computer analysis, game chat and public shareable URL.';
+      'Επικολλήστε PGN παιχνιδιού για να δημιουργήσετε περιηγήσιμη αναπαραγωγή, \nανάλυση από υπολογιστή, συνομιλία παιχνιδιού και κοινόχρηστο URL.';
 
   @override
   String get importGameCaveat =>
-      'Variations will be erased. To keep them, import the PGN via a study.';
+      'Οι παραλλαγές θα διαγραφούν. Για να τις κρατήσετε εισάγεται το PGN μέσω μιας μελέτης.';
 
   @override
   String get importGameDataPrivacyWarning =>
-      'This PGN can be accessed by the public. To import a game privately, use a study.';
+      'Αυτό το PGN είναι προσβάσιμο από το κοινό. Για να εισαγάγετε ένα παιχνίδι ιδιωτικά, χρησιμοποιήστε μια μελέτη.';
 
   @override
-  String get thisIsAChessCaptcha => 'This is a chess CAPTCHA.';
+  String get thisIsAChessCaptcha => 'Αυτό είναι CAPTCHA σκακιού.';
 
   @override
   String get clickOnTheBoardToMakeYourMove =>
-      'Click on the board to make your move, and prove you are human.';
+      'Κάνετε κλικ στη σκακιέρα για να κινήσετε τα πιόνια και να αποδείξετε πως είστε άνθρωπος.';
 
   @override
-  String get captcha_fail => 'Please solve the chess captcha.';
+  String get captcha_fail => 'Παρακαλούμε λύστε το σκακιστικό captcha.';
 
   @override
-  String get notACheckmate => 'Not a checkmate';
+  String get notACheckmate => 'Δεν είναι ματ';
 
   @override
-  String get whiteCheckmatesInOneMove => 'White to checkmate in one move';
+  String get whiteCheckmatesInOneMove => 'Παίζουν τα λευκά, κάντε ματ με μια κίνηση';
 
   @override
-  String get blackCheckmatesInOneMove => 'Black to checkmate in one move';
+  String get blackCheckmatesInOneMove => 'Παίζουν τα μαύρα, κάντε ματ με μια κίνηση';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Επανάληψη';
 
   @override
-  String get reconnecting => 'Reconnecting';
+  String get reconnecting => 'Επανασύνδεση';
 
   @override
-  String get noNetwork => 'Offline';
+  String get noNetwork => 'Εκτός σύνδεσης';
 
   @override
-  String get favoriteOpponents => 'Favourite opponents';
+  String get favoriteOpponents => 'Αγαπημένοι αντίπαλοι';
 
   @override
-  String get follow => 'Follow';
+  String get follow => 'Ακολουθήστε';
 
   @override
-  String get following => 'Following';
+  String get following => 'Ακολουθείτε';
 
   @override
-  String get unfollow => 'Unfollow';
+  String get unfollow => 'Κατάργηση παρακολούθησης';
 
   @override
   String followX(String param) {
-    return 'Follow $param';
+    return 'Ακολουθήστε τον $param';
   }
 
   @override
   String unfollowX(String param) {
-    return 'Unfollow $param';
+    return 'Κατάργηση ακολούθησης του $param';
   }
 
   @override
-  String get block => 'Block';
+  String get block => 'Αποκλείστε';
 
   @override
-  String get blocked => 'Blocked';
+  String get blocked => 'Αποκλεισμένος';
 
   @override
-  String get unblock => 'Unblock';
+  String get unblock => 'Κατάργηση απόκλεισης';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
-    return '$param1 started following $param2';
+    return 'Ο χρήστης $param1 άρχισε να ακολουθεί τον $param2';
   }
 
   @override
-  String get more => 'More';
+  String get more => 'Περισσότερα';
 
   @override
-  String get memberSince => 'Member since';
+  String get memberSince => 'Μέλος από τις';
 
   @override
   String lastSeenActive(String param) {
-    return 'Active $param';
+    return 'Τελευταία είσοδος $param';
   }
 
   @override
-  String get player => 'Player';
+  String get player => 'Παίκτης';
 
   @override
-  String get list => 'List';
+  String get list => 'Κατάλογος';
 
   @override
-  String get graph => 'Graph';
+  String get graph => 'Διάγραμμα';
 
   @override
-  String get required => 'Required.';
+  String get required => 'Απαιτείται.';
 
   @override
-  String get openTournaments => 'Open tournaments';
+  String get openTournaments => 'Ανοικτά τουρνουά';
 
   @override
-  String get duration => 'Duration';
+  String get duration => 'Διάρκεια';
 
   @override
-  String get winner => 'Winner';
+  String get winner => 'Νικητής';
 
   @override
-  String get standing => 'Standing';
+  String get standing => 'Κατάταξη';
 
   @override
-  String get createANewTournament => 'Create a new tournament';
+  String get createANewTournament => 'Δημιουργήστε νέο τουρνουά';
 
   @override
-  String get tournamentCalendar => 'Tournament calendar';
+  String get tournamentCalendar => 'Ημερολόγιο τουρνουά';
 
   @override
-  String get conditionOfEntry => 'Entry requirements:';
+  String get conditionOfEntry => 'Προϋπόθεση εισόδου:';
 
   @override
-  String get advancedSettings => 'Advanced settings';
+  String get advancedSettings => 'Ρυθμίσεις για προχωρημένους';
 
   @override
-  String get safeTournamentName => 'Pick a very safe name for the tournament.';
+  String get safeTournamentName => 'Διαλέξτε ένα πολύ ασφαλές όνομα για το τουρνουά.';
 
   @override
   String get inappropriateNameWarning =>
-      'Anything even slightly inappropriate could get your account closed.';
+      'Οτιδήποτε ακόμα και ελάχιστα ακατάλληλο μπορεί να κλείσει τον λογαριασμό σας.';
 
   @override
   String get emptyTournamentName =>
-      'Leave empty to name the tournament after a notable chess player.';
+      'Αφήστε το κενό για να πάρει το όνομά του τυχαία από κάποιον γνωστό σκακιστή.';
 
   @override
   String get makePrivateTournament =>
-      'Make the tournament private, and restrict access with a password';
+      'Κάντε το τουρνουά ιδιωτικό, και περιορίστε την πρόσβαση με κωδικό';
 
   @override
-  String get join => 'Join';
+  String get join => 'Συμμετοχή';
 
   @override
-  String get withdraw => 'Withdraw';
+  String get withdraw => 'Απόσυρση';
 
   @override
-  String get points => 'Points';
+  String get points => 'Πόντοι';
 
   @override
-  String get wins => 'Wins';
+  String get wins => 'Νίκες';
 
   @override
-  String get losses => 'Losses';
+  String get losses => 'Ήττες';
 
   @override
-  String get createdBy => 'Created by';
+  String get createdBy => 'Δημιουργήθηκε από';
 
   @override
-  String get startingIn => 'Starting in';
+  String get startingIn => 'Εκκίνηση σε';
 
   @override
   String standByX(String param) {
-    return 'Stand by $param, pairing players, get ready!';
+    return 'Αναμένετε $param, αντιστοίχιση παικτών, ετοιμαστείτε!';
   }
 
   @override
-  String get pause => 'Pause';
+  String get pause => 'Παύση';
 
   @override
-  String get resume => 'Resume';
+  String get resume => 'Συνέχεια';
 
   @override
-  String get youArePlaying => 'You are playing!';
+  String get youArePlaying => 'Παίζετε τώρα!';
 
   @override
-  String get winRate => 'Win rate';
+  String get winRate => 'Ποσοστό νικών';
 
   @override
-  String get performance => 'Performance';
+  String get performance => 'Επίδοση';
 
   @override
-  String get tournamentComplete => 'Tournament complete';
+  String get tournamentComplete => 'Το τουρνουά ολοκληρώθηκε';
 
   @override
-  String get movesPlayed => 'Moves played';
+  String get movesPlayed => 'Παιγμένες κινήσεις';
 
   @override
-  String get whiteWins => 'White wins';
+  String get whiteWins => 'Τα άσπρα νικούν';
 
   @override
-  String get blackWins => 'Black wins';
+  String get blackWins => 'Τα μαύρα νικούν';
 
   @override
-  String get drawRate => 'Draw rate';
+  String get drawRate => 'Ποσοστά ισοπαλίας';
 
   @override
-  String get draws => 'Draws';
+  String get draws => 'Ισοπαλίες';
 
   @override
-  String get averageOpponent => 'Average opponent';
+  String get averageOpponent => 'Μέση βαθμολογία αντιπάλων';
 
   @override
-  String get boardEditor => 'Board editor';
+  String get boardEditor => 'Προετοιμαστής σκακιέρας';
 
   @override
-  String get setTheBoard => 'Set the board';
+  String get setTheBoard => 'Στήστε την σκακιέρα';
 
   @override
-  String get popularOpenings => 'Popular openings';
+  String get popularOpenings => 'Δημοφιλή ανοίγματα';
 
   @override
-  String get endgamePositions => 'Endgame positions';
+  String get endgamePositions => 'Θέσεις φινάλε';
 
   @override
   String chess960StartPosition(String param) {
-    return 'Chess960 start position: $param';
+    return 'Αρχική θέση Chess960: $param';
   }
 
   @override
-  String get startPosition => 'Starting position';
+  String get startPosition => 'Αρχική διάταξη';
 
   @override
-  String get clearBoard => 'Clear board';
+  String get clearBoard => 'Εκκαθάριση σκακιέρας';
 
   @override
-  String get loadPosition => 'Load position';
+  String get loadPosition => 'Φορτώστε θέση';
 
   @override
-  String get isPrivate => 'Private';
+  String get isPrivate => 'Ιδιωτικό';
 
   @override
   String reportXToModerators(String param) {
-    return 'Report $param to moderators';
+    return 'Αναφέρετε τον $param στο προσωπικό';
   }
 
   @override
   String profileCompletion(String param) {
-    return 'Profile completion: $param';
+    return 'Ολοκλήρωση προφίλ: $param';
   }
 
   @override
   String xRating(String param) {
-    return '$param rating';
+    return 'Βαθμολογία $param';
   }
 
   @override
-  String get ifNoneLeaveEmpty => 'If none, leave empty';
+  String get ifNoneLeaveEmpty => 'Αν δεν υπάρχει, αφήστε κενό';
 
   @override
-  String get profile => 'Profile';
+  String get profile => 'Προφίλ';
 
   @override
-  String get editProfile => 'Edit profile';
+  String get editProfile => 'Επεξεργασία προφίλ';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Πραγματικό όνομα';
 
   @override
-  String get setFlair => 'Set your flair';
+  String get setFlair => 'Ορίστε τη νιφάδα σας';
 
   @override
-  String get flair => 'Flair';
+  String get flair => 'Νιφάδα';
 
   @override
   String get youCanHideFlair =>
-      'There is a setting to hide all user flairs across the entire site.';
+      'Υπάρχει μια ρύθμιση για να κρύψει όλες τις νιφάδες χρήστη σε ολόκληρη την ιστοσελίδα.';
 
   @override
-  String get biography => 'Biography';
+  String get biography => 'Βιογραφικό';
 
   @override
-  String get countryRegion => 'Country or region';
+  String get countryRegion => 'Χώρα ή περιοχή';
 
   @override
-  String get thankYou => 'Thank you!';
+  String get thankYou => 'Ευχαριστούμε!';
 
   @override
-  String get socialMediaLinks => 'Social media links';
+  String get socialMediaLinks => 'Σύνδεσμοι κοινωνικών μέσων';
 
   @override
-  String get oneUrlPerLine => 'One URL per line.';
+  String get oneUrlPerLine => 'Μία διεύθυνση URL ανά γραμμή.';
 
   @override
-  String get inlineNotation => 'Inline notation';
+  String get inlineNotation => 'Ενσωματωμένη σημειογραφία';
 
   @override
-  String get makeAStudy => 'For safekeeping and sharing, consider making a study.';
+  String get makeAStudy => 'Για αποθήκευση και διαμοιρασμό, μπορείτε να δημιουργήσετε μία μελέτη.';
 
   @override
-  String get clearSavedMoves => 'Clear moves';
+  String get clearSavedMoves => 'Εκκαθάριση κινήσεων';
 
   @override
-  String get previouslyOnLichessTV => 'Previously on Lichess TV';
+  String get previouslyOnLichessTV => 'Νωρίτερα στη Tηλεόραση Lichess';
 
   @override
-  String get onlinePlayers => 'Online players';
+  String get onlinePlayers => 'Συνδεδεμένοι παίκτες';
 
   @override
-  String get activePlayers => 'Active players';
+  String get activePlayers => 'Ενεργοί παίκτες';
 
   @override
-  String get bewareTheGameIsRatedButHasNoClock => 'Beware, the game is rated but has no clock!';
+  String get bewareTheGameIsRatedButHasNoClock =>
+      'Προσοχή, το παιχνίδι βαθμολογείται αλλά του λείπει ρολόι!';
 
   @override
-  String get success => 'Success';
+  String get success => 'Επιτυχία';
 
   @override
   String get automaticallyProceedToNextGameAfterMoving =>
-      'Automatically proceed to next game after moving';
+      'Προχωρήστε αυτόματα στο επόμενο παιχνίδι μετά την κίνηση';
 
   @override
-  String get autoSwitch => 'Auto switch';
+  String get autoSwitch => 'Αυτόματη εναλλαγή';
 
   @override
-  String get puzzles => 'Puzzles';
+  String get puzzles => 'Γρίφοι';
 
   @override
-  String get onlineBots => 'Online bots';
+  String get onlineBots => 'Συνδεδεμένα bot';
 
   @override
-  String get name => 'Name';
+  String get name => 'Ονομασία';
 
   @override
-  String get description => 'Description';
+  String get description => 'Περιγραφή';
 
   @override
-  String get descPrivate => 'Private description';
+  String get descPrivate => 'Ιδιωτική περιγραφή';
 
   @override
   String get descPrivateHelp =>
-      'Text that only the team members will see. If set, replaces the public description for team members.';
+      'Κείμενο που θα δουν μόνο τα μέλη της ομάδας. Εάν οριστεί, αντικαθιστά τη δημόσια περιγραφή για τα μέλη της ομάδας.';
 
   @override
-  String get no => 'No';
+  String get no => 'Όχι';
 
   @override
-  String get yes => 'Yes';
+  String get yes => 'Ναι';
 
   @override
-  String get website => 'Website';
+  String get website => 'Ιστοσελίδα';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Εφαρμογή Κινητού';
 
   @override
-  String get help => 'Help:';
+  String get help => 'Βοήθεια:';
 
   @override
-  String get createANewTopic => 'Create a new topic';
+  String get createANewTopic => 'Δημιουργήστε καινούριο θέμα';
 
   @override
-  String get topics => 'Topics';
+  String get topics => 'Θέματα';
 
   @override
-  String get posts => 'Posts';
+  String get posts => 'Δημοσιεύσεις';
 
   @override
-  String get lastPost => 'Last post';
+  String get lastPost => 'Τελευταία δημοσίευση';
 
   @override
-  String get views => 'Views';
+  String get views => 'Εμφανίσεις';
 
   @override
-  String get replies => 'Replies';
+  String get replies => 'Απαντήσεις';
 
   @override
-  String get replyToThisTopic => 'Reply to this topic';
+  String get replyToThisTopic => 'Απαντήστε σε αυτό το θέμα';
 
   @override
-  String get reply => 'Reply';
+  String get reply => 'Απάντηση';
 
   @override
-  String get message => 'Message';
+  String get message => 'Μήνυμα';
 
   @override
-  String get createTheTopic => 'Create the topic';
+  String get createTheTopic => 'Δημιουργήστε θέμα';
 
   @override
-  String get reportAUser => 'Report a user';
+  String get reportAUser => 'Αναφορά χρήστη';
 
   @override
-  String get user => 'User';
+  String get user => 'Χρήστης';
 
   @override
-  String get reason => 'Reason';
+  String get reason => 'Αιτία';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
+  String get whatIsIheMatter => 'Τι τρέχει;';
 
   @override
-  String get cheat => 'Cheat';
+  String get cheat => 'Απάτη';
 
   @override
-  String get troll => 'Troll';
+  String get troll => 'Εμπαιγμός';
 
   @override
-  String get other => 'Other';
+  String get other => 'Άλλο';
 
   @override
   String get reportCheatBoostHelp =>
-      'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+      'Επικολλήστε τους συνδέσμους με τα παιχνίδια και εξηγήστε μας γιατί θεωρείτε ότι η συμπεριφορά του χρήστη είναι παράξενη σε αυτά. Μη λέτε απλώς ότι «κλέβει» (\"they cheat\"), αλλά πείτε μας πως καταλήξατε σε αυτό το συμπέρασμα.';
 
   @override
   String get reportUsernameHelp =>
-      'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
+      'Εξηγήστε μας γιατί είναι προσβλητικό το όνομα αυτού του χρήστη. Μη λέτε απλώς ότι \"είναι προσβλητικό/ακατάλληλο\" (\"it\'s offensive/inappropriate\"), αλλά πείτε μας πώς καταλήξατε σε αυτό το συμπέρασμα, ειδικά αν πρόκειται για προσβολή η οποία δεν είναι ιδιαίτερα εμφανής: για παράδειγμα αν δεν είναι στα αγγλικά, είναι σε κάποια αργκό ή κάνει κάποια προσβλητική ιστορική/πολιτιστική αναφορά.';
 
   @override
   String get reportProcessedFasterInEnglish =>
-      'Your report will be processed faster if written in English.';
+      'Η αναφορά σας θα επεξεργαστεί γρηγορότερα αν είναι γραμμένη στα αγγλικά.';
 
   @override
   String get error_provideOneCheatedGameLink =>
-      'Please provide at least one link to a cheated game.';
+      'Καταχωρίστε τουλάχιστον έναν σύνδεσμο σε ένα παιχνίδι εξαπάτησης.';
 
   @override
   String by(String param) {
-    return 'by $param';
+    return 'από τον $param';
   }
 
   @override
   String importedByX(String param) {
-    return 'Imported by $param';
+    return 'Εισήχθη από τον χρήστη $param';
   }
 
   @override
-  String get thisTopicIsNowClosed => 'This topic is now closed.';
+  String get thisTopicIsNowClosed => 'Το θέμα έχει κλείσει.';
 
   @override
-  String get blog => 'Blog';
+  String get blog => 'Ιστολόγιο';
 
   @override
-  String get notes => 'Notes';
+  String get notes => 'Σημειώσεις';
 
   @override
-  String get typePrivateNotesHere => 'Type private notes here';
+  String get typePrivateNotesHere => 'Γράψτε εδώ τις προσωπικές σας σημειώσεις';
 
   @override
-  String get writeAPrivateNoteAboutThisUser => 'Write a private note about this user';
+  String get writeAPrivateNoteAboutThisUser => 'Γράψτε μια ιδιωτική σημείωση για αυτόν το χρήστη';
 
   @override
-  String get noNoteYet => 'No note yet';
+  String get noNoteYet => 'Καμία σημείωση ακόμη';
 
   @override
-  String get invalidUsernameOrPassword => 'Invalid username or password';
+  String get invalidUsernameOrPassword => 'Άκυρο όνομα χρήστη ή κωδικός';
 
   @override
-  String get incorrectPassword => 'Incorrect password';
+  String get incorrectPassword => 'Εσφαλμένος κωδικός';
 
   @override
-  String get invalidAuthenticationCode => 'Invalid authentication code';
+  String get invalidAuthenticationCode => 'Μη έγκυρος κωδικός επαλήθευσης';
 
   @override
-  String get emailMeALink => 'Email me a link';
+  String get emailMeALink => 'Στείλτε μου σύνδεσμο μέσω ηλ. ταχυδρομείου';
 
   @override
-  String get currentPassword => 'Current password';
+  String get currentPassword => 'Κωδικός σε ισχύ';
 
   @override
-  String get newPassword => 'New password';
+  String get newPassword => 'Νέος κωδικός';
 
   @override
-  String get newPasswordAgain => 'New password (again)';
+  String get newPasswordAgain => 'Νέος κωδικός (επαλήθευση)';
 
   @override
-  String get newPasswordsDontMatch => 'The new passwords don\'t match';
+  String get newPasswordsDontMatch => 'Οι νέοι κωδικοί πρόσβασης δεν ταιριάζουν';
 
   @override
-  String get newPasswordStrength => 'Password strength';
+  String get newPasswordStrength => 'Ισχύς Κωδικού Πρόσβασης';
 
   @override
-  String get clockInitialTime => 'Clock initial time';
+  String get clockInitialTime => 'Ρολόι αρχικός χρόνος';
 
   @override
-  String get clockIncrement => 'Clock increment';
+  String get clockIncrement => 'Ρολόι προσαύξηση';
 
   @override
-  String get privacy => 'Privacy';
+  String get privacy => 'Απόρρητο';
 
   @override
-  String get privacyPolicy => 'Privacy policy';
+  String get privacyPolicy => 'Πολιτική απορρήτου';
 
   @override
-  String get letOtherPlayersFollowYou => 'Let other players follow you';
+  String get letOtherPlayersFollowYou => 'Επιτρέψτε σε άλλους παίκτες να σας ακολουθούν';
 
   @override
-  String get letOtherPlayersChallengeYou => 'Let other players challenge you';
+  String get letOtherPlayersChallengeYou =>
+      'Επιτρέψτε σε άλλους παίκτες να σας προκαλούν σε παιχνίδι';
 
   @override
-  String get letOtherPlayersInviteYouToStudy => 'Let other players invite you to study';
+  String get letOtherPlayersInviteYouToStudy =>
+      'Επιτρέψτε σε άλλους παίκτες να σας προσκαλούν σε μελέτη';
 
   @override
-  String get sound => 'Sound';
+  String get sound => 'Ήχος';
 
   @override
-  String get none => 'None';
+  String get none => 'Καθόλου';
 
   @override
-  String get fast => 'Fast';
+  String get fast => 'Γρήγορη';
 
   @override
-  String get normal => 'Normal';
+  String get normal => 'Κανονική';
 
   @override
-  String get slow => 'Slow';
+  String get slow => 'Αργή';
 
   @override
-  String get insideTheBoard => 'Inside the board';
+  String get insideTheBoard => 'Μέσα στη σκακιέρα';
 
   @override
-  String get outsideTheBoard => 'Outside the board';
+  String get outsideTheBoard => 'Εκτός της σκακιέρας';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'Σε όλα τα τετράγωνα της σκακιέρας';
 
   @override
-  String get onSlowGames => 'On slow games';
+  String get onSlowGames => 'Σε αργά παιχνίδια';
 
   @override
-  String get always => 'Always';
+  String get always => 'Πάντα';
 
   @override
-  String get never => 'Never';
+  String get never => 'Ποτέ';
 
   @override
   String xCompetesInY(String param1, String param2) {
-    return '$param1 competes in $param2';
+    return 'Ο χρήστης $param1 ανταγωνίζεται στο $param2';
   }
 
   @override
-  String get victory => 'Victory';
+  String get victory => 'Επιτυχία';
 
   @override
-  String get defeat => 'Defeat';
+  String get defeat => 'Ήττα';
 
   @override
   String victoryVsYInZ(String param1, String param2, String param3) {
-    return '$param1 vs $param2 in $param3';
+    return '$param1 εναντίον $param2 σε $param3';
   }
 
   @override
   String defeatVsYInZ(String param1, String param2, String param3) {
-    return '$param1 vs $param2 in $param3';
+    return '$param1 εναντίον $param2 σε $param3';
   }
 
   @override
   String drawVsYInZ(String param1, String param2, String param3) {
-    return '$param1 vs $param2 in $param3';
+    return '$param1 εναντίον $param2 σε $param3';
   }
 
   @override
-  String get timeline => 'Timeline';
+  String get timeline => 'Χρονολόγιο';
 
   @override
-  String get starting => 'Starting:';
+  String get starting => 'Αρχίζει:';
 
   @override
-  String get allInformationIsPublicAndOptional => 'All information is public and optional.';
+  String get allInformationIsPublicAndOptional =>
+      'Όλες οι πληροφορίες είναι δημόσιες και προαιρετικές.';
 
   @override
   String get biographyDescription =>
-      'Talk about yourself, your interests, what you like in chess, your favourite openings, players, ...';
+      'Γράψτε για τον εαυτό σας, τι σας αρέσει στο σκάκι, τα αγαπημένα σας ανοίγματα, παιχνίδια, παίκτες…';
 
   @override
-  String get listBlockedPlayers => 'List players you have blocked';
+  String get listBlockedPlayers => 'Κατάλογος παικτών που έχετε αποκλείσει';
 
   @override
-  String get human => 'Human';
+  String get human => 'Άνθρωπος';
 
   @override
-  String get computer => 'Computer';
+  String get computer => 'Υπολογιστής';
 
   @override
-  String get side => 'Side';
+  String get side => 'Πλευρά';
 
   @override
-  String get clock => 'Clock';
+  String get clock => 'Χρόνος';
 
   @override
-  String get opponent => 'Opponent';
+  String get opponent => 'Αντίπαλος';
 
   @override
-  String get learnMenu => 'Learn';
+  String get learnMenu => 'Εκμάθηση';
 
   @override
-  String get studyMenu => 'Study';
+  String get studyMenu => 'Μελέτη';
 
   @override
-  String get practice => 'Practice';
+  String get practice => 'Εξάσκηση';
 
   @override
-  String get community => 'Community';
+  String get community => 'Κοινότητα';
 
   @override
-  String get tools => 'Tools';
+  String get tools => 'Εργαλεία';
 
   @override
-  String get increment => 'Increment';
+  String get increment => 'Προσαύξηση';
 
   @override
-  String get error_unknown => 'Invalid value';
+  String get error_unknown => 'Άκυρη τιμή';
 
   @override
-  String get error_required => 'This field is required';
+  String get error_required => 'Αυτό το πεδίο είναι υποχρεωτικό';
 
   @override
-  String get error_email => 'This email address is invalid';
+  String get error_email => 'Αυτή η διεύθυνση ηλεκτρονικού ταχυδρομείου δεν είναι έγκυρη';
 
   @override
   String get error_email_acceptable =>
-      'This email address is not acceptable. Please double-check it, and try again.';
+      'Αυτή η διεύθυνση ηλ. ταχυδρομείου δεν είναι αποδεκτή. Ελέγξτε την και προσπαθήστε ξανά.';
 
   @override
-  String get error_email_unique => 'Email address invalid or already taken';
+  String get error_email_unique =>
+      'Η διεύθυνση ηλεκτρονικού ταχυδρομείου είναι άκυρη ή υπάρχει ήδη';
 
   @override
-  String get error_email_different => 'This is already your email address';
+  String get error_email_different => 'Έχετε ήδη αυτήν την διεύθυνση ηλ. ταχυδρομείου';
 
   @override
   String error_minLength(String param) {
-    return 'Must be at least $param characters long';
+    return 'Πρέπει να περιέχει τουλάχιστον $param χαρακτήρες';
   }
 
   @override
   String error_maxLength(String param) {
-    return 'Must be at most $param characters long';
+    return 'Πρέπει να περιέχει το πολύ $param χαρακτήρες';
   }
 
   @override
   String error_min(String param) {
-    return 'Must be at least $param';
+    return 'Πρέπει να είναι τουλάχιστον $param';
   }
 
   @override
   String error_max(String param) {
-    return 'Must be at most $param';
+    return 'Πρέπει να είναι το πολύ $param';
   }
 
   @override
   String ifRatingIsPlusMinusX(String param) {
-    return 'If rating is ± $param';
+    return 'Εάν η βαθμολογία είναι ± $param';
   }
 
   @override
-  String get ifRegistered => 'If registered';
+  String get ifRegistered => 'Εάν είναι εγγεγραμμένοι';
 
   @override
-  String get onlyExistingConversations => 'Only existing conversations';
+  String get onlyExistingConversations => 'Μόνο υπάρχουσες συνομιλίες';
 
   @override
-  String get onlyFriends => 'Only friends';
+  String get onlyFriends => 'Μόνο φίλοι';
 
   @override
-  String get menu => 'Menu';
+  String get menu => 'Κατάλογος';
 
   @override
-  String get castling => 'Castling';
+  String get castling => 'Pοκέ';
 
   @override
-  String get whiteCastlingKingside => 'White O-O';
+  String get whiteCastlingKingside => 'Λευκά O-O';
 
   @override
-  String get blackCastlingKingside => 'Black O-O';
+  String get blackCastlingKingside => 'Μαύρα O-O';
 
   @override
   String tpTimeSpentPlaying(String param) {
-    return 'Time spent playing: $param';
+    return 'Χρόνος που διατέθηκε παίζοντας: $param';
   }
 
   @override
-  String get watchGames => 'Watch games';
+  String get watchGames => 'Παρακολουθήστε παιχνίδια';
 
   @override
   String tpTimeSpentOnTV(String param) {
-    return 'Time featured on TV: $param';
+    return 'Χρόνος στην Τηλεόραση: $param';
   }
 
   @override
-  String get watch => 'Watch';
+  String get watch => 'Παρακολουθήστε';
 
   @override
-  String get videoLibrary => 'Video library';
+  String get videoLibrary => 'Βιβλιοθήκη τηλεοπτικού υλικού';
 
   @override
   String get streamersMenu => 'Streamers';
 
   @override
-  String get mobileApp => 'Mobile App';
+  String get mobileApp => 'Εφαρμογή για Κινητά';
 
   @override
-  String get webmasters => 'Webmasters';
+  String get webmasters => 'Διαχειριστές';
 
   @override
-  String get about => 'About';
+  String get about => 'Σχετικά με';
 
   @override
   String aboutX(String param) {
-    return 'About $param';
+    return 'Σχετικά με $param';
   }
 
   @override
   String xIsAFreeYLibreOpenSourceChessServer(String param1, String param2) {
-    return '$param1 is a free ($param2), libre, no-ads, open source chess server.';
+    return 'Το $param1 είναι ($param2) δωρεάν, ελεύθερη, χωρίς διαφημίσεις, ανοικτού κώδικα υπηρεσία για διαδικτυακό σκάκι.';
   }
 
   @override
-  String get really => 'really';
+  String get really => 'πραγματικά';
 
   @override
-  String get contribute => 'Contribute';
+  String get contribute => 'Συνεισφέρετε';
 
   @override
-  String get termsOfService => 'Terms of Service';
+  String get termsOfService => 'Όροι χρήσης';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'Επιβεβαίωση τίτλου';
 
   @override
-  String get sourceCode => 'Source Code';
+  String get sourceCode => 'Πηγαίος κώδικας';
 
   @override
-  String get simultaneousExhibitions => 'Simultaneous exhibitions';
+  String get simultaneousExhibitions => 'Σιμουλτανέ';
 
   @override
-  String get host => 'Host';
+  String get host => 'Διοργανωτής';
 
   @override
   String hostColorX(String param) {
-    return 'Host colour: $param';
+    return 'Χρώμα διοργανωτή: $param';
   }
 
   @override
-  String get yourPendingSimuls => 'Your pending simuls';
+  String get yourPendingSimuls => 'Τα εκκρεμείς σας σιμουλτανέ';
 
   @override
-  String get createdSimuls => 'Newly created simuls';
+  String get createdSimuls => 'Πρόσφατα σιμουλτανέ';
 
   @override
-  String get hostANewSimul => 'Host a new simul';
+  String get hostANewSimul => 'Διοργάνωση νέου σιμουλτανέ';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Sign up to host or join a simul';
+  String get signUpToHostOrJoinASimul =>
+      'Εγγραφείτε για να φιλοξενήσετε ή να συμμετάσχετε σε ένα σιμουλτανέ';
 
   @override
-  String get noSimulFound => 'Simul not found';
+  String get noSimulFound => 'Το σιμουλτανέ δε βρέθηκε';
 
   @override
-  String get noSimulExplanation => 'This simultaneous exhibition does not exist.';
+  String get noSimulExplanation => 'Αυτό το σιμουλτανέ δεν υπάρχει.';
 
   @override
-  String get returnToSimulHomepage => 'Return to simul homepage';
+  String get returnToSimulHomepage => 'Επιστροφή στην αρχική σελίδα σιμουλτανέ';
 
   @override
-  String get aboutSimul => 'Simuls involve a single player facing several players at once.';
+  String get aboutSimul =>
+      'Τα σιμουλτανέ είναι διοργανώσεις στις οποίες ένας μεμονωμένος παίκτης αντιμετωπίζει πολλούς ταυτόχρονα.';
 
   @override
-  String get aboutSimulImage => 'Out of 50 opponents, Fischer won 47 games, drew 2 and lost 1.';
+  String get aboutSimulImage =>
+      'Από τους 50 αντιπάλους, ο Φίσερ κέρδισε 47 παιχνίδια, κατάφερε 2 ισοπαλίες και έχασε 1.';
 
   @override
   String get aboutSimulRealLife =>
-      'The concept is taken from real world events. In real life, this involves the simul host moving from table to table to play a single move.';
+      'Η έννοια προέρχεται από πραγματικά γεγονότα. Σε πραγματικούς χώρους, ο διοργανωτής του σιμουλτανέ μετακινείται από τραπέζι σε τραπέζι για να παίξει μία και μόνο κίνηση.';
 
   @override
   String get aboutSimulRules =>
-      'When the simul starts, every player starts a game with the host. The simul ends when all games are complete.';
+      'Όταν ξεκινήσει το σιμουλτανέ, κάθε παίκτης ξεκινά το παιχνίδι με τον διοργανωτή, ο οποίος έχει τα λευκά κομμάτια. Η διοργάνωση τελειώνει όταν όλα τα παιχνίδια ολοκληρωθούν.';
 
   @override
   String get aboutSimulSettings =>
-      'Simuls are always casual. Rematches, takebacks and adding time are disabled.';
+      'Τα σιμουλτανέ είναι πάντα φιλικά. Οι επαναλήψεις, ανακλήσεις κινήσεων και προσθήκες επιπλέον χρόνου έχουν απενεργοποιηθεί.';
 
   @override
-  String get create => 'Create';
+  String get create => 'Δημιουργήστε';
 
   @override
-  String get whenCreateSimul => 'When you create a Simul, you get to play several players at once.';
+  String get whenCreateSimul =>
+      'Όταν δημιουργείτε ένα σιμουλτανέ, πρέπει να παίξετε με αρκετούς παίκτες ταυτόχρονα.';
 
   @override
   String get simulVariantsHint =>
-      'If you select several variants, each player gets to choose which one to play.';
+      'Εάν επιλέξετε διάφορες εκδοχές, κάθε παίκτης μπορεί να επιλέξει ποια θα παίξει.';
 
   @override
   String get simulClockHint =>
-      'Fischer Clock setup. The more players you take on, the more time you may need.';
+      'Ρολόι Φίσερ. Όσους περισσότερους παίκτες παίξετε, τόσο περισσότερο χρόνο ίσως χρειαστείτε.';
 
   @override
   String get simulAddExtraTime =>
-      'You may add extra initial time to your clock to help you cope with the simul.';
+      'Μπορείτε να προσθέσετε επιπλέον χρόνο στο ρολόι σας για να βοηθηθείτε.';
 
   @override
-  String get simulHostExtraTime => 'Host extra initial clock time';
+  String get simulHostExtraTime => 'Παροχή επιπλέον χρόνου στο ρολόι';
 
   @override
   String get simulAddExtraTimePerPlayer =>
-      'Add initial time to your clock for each player joining the simul.';
+      'Προσθήκη χρόνου στο ρολόι κάθε παίκτη που συνδέεται στο σιμουλτανέ.';
 
   @override
-  String get simulHostExtraTimePerPlayer => 'Host extra clock time per player';
+  String get simulHostExtraTimePerPlayer => 'Προσθήκη επιπλέον χρόνου ανά παίκτη';
 
   @override
-  String get lichessTournaments => 'Lichess tournaments';
+  String get lichessTournaments => 'Τουρνουά στο Lichess';
 
   @override
-  String get tournamentFAQ => 'Arena tournament FAQ';
+  String get tournamentFAQ => 'Τεκμηρίωση για τουρνουά τύπου αρένας';
 
   @override
-  String get timeBeforeTournamentStarts => 'Time before tournament starts';
+  String get timeBeforeTournamentStarts => 'Χρόνος προτού ξεκινήσει το τουρνουά';
 
   @override
-  String get averageCentipawnLoss => 'Average centipawn loss';
+  String get averageCentipawnLoss => 'Μέση απώλεια εκατοστοπιονιού';
 
   @override
-  String get accuracy => 'Accuracy';
+  String get accuracy => 'Ακρίβεια';
 
   @override
-  String get keyboardShortcuts => 'Keyboard shortcuts';
+  String get keyboardShortcuts => 'Συντομεύσεις πληκτρολογίου';
 
   @override
-  String get keyMoveBackwardOrForward => 'move backward/forward';
+  String get keyMoveBackwardOrForward => 'μετακίνηση προς τα πίσω / προς τα εμπρός';
 
   @override
-  String get keyGoToStartOrEnd => 'go to start/end';
+  String get keyGoToStartOrEnd => 'πηγαίνετε στην έναρξη / λήξη';
 
   @override
-  String get keyCycleSelectedVariation => 'Cycle selected variation';
+  String get keyCycleSelectedVariation => 'Επανάληψη επιλεγμένης βαριάντας';
 
   @override
-  String get keyShowOrHideComments => 'show/hide comments';
+  String get keyShowOrHideComments => 'εμφάνιση / απόκρυψη σχολίων';
 
   @override
-  String get keyEnterOrExitVariation => 'enter/exit variation';
+  String get keyEnterOrExitVariation => 'είσοδος / έξοδος εκδοχής';
 
   @override
-  String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
+  String get keyRequestComputerAnalysis =>
+      'Ζητήστε ανάλυση της θέσης από υπολογιστή, Μάθετε από τα λάθη σας';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Next (Learn from your mistakes)';
+  String get keyNextLearnFromYourMistakes => 'Συνέχεια (Μάθετε από τα λάθη σας)';
 
   @override
-  String get keyNextBlunder => 'Next blunder';
+  String get keyNextBlunder => 'Επόμενο σοβαρό σφάλμα';
 
   @override
-  String get keyNextMistake => 'Next mistake';
+  String get keyNextMistake => 'Επόμενο λάθος';
 
   @override
-  String get keyNextInaccuracy => 'Next inaccuracy';
+  String get keyNextInaccuracy => 'Επόμενη ανακρίβεια';
 
   @override
-  String get keyPreviousBranch => 'Previous branch';
+  String get keyPreviousBranch => 'Προηγούμενος κλάδος';
 
   @override
-  String get keyNextBranch => 'Next branch';
+  String get keyNextBranch => 'Επόμενος κλάδως';
 
   @override
-  String get toggleVariationArrows => 'Toggle variation arrows';
+  String get toggleVariationArrows => 'Εμφάνισε βελάκια παραλλαγών';
 
   @override
-  String get cyclePreviousOrNextVariation => 'Cycle previous/next variation';
+  String get cyclePreviousOrNextVariation => 'Κλειδί: κύκλος ΠροηγούμενηΉΕπόμενηΒαριάντα';
 
   @override
-  String get toggleGlyphAnnotations => 'Toggle move annotations';
+  String get toggleGlyphAnnotations => 'Μεταβολή ΓρίφοςΣχόλιο';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'Μεταβολή ΘέσηΣχόλιο';
 
   @override
-  String get variationArrowsInfo =>
-      'Variation arrows let you navigate without using the move list.';
+  String get variationArrowsInfo => 'Εκδοχή ΒέληΠληροφορίες.';
 
   @override
-  String get playSelectedMove => 'play selected move';
+  String get playSelectedMove => 'παίξε την επιλεγμένη κίνηση';
 
   @override
-  String get newTournament => 'New tournament';
+  String get newTournament => 'Νέο τουρνουά';
 
   @override
-  String get tournamentHomeTitle =>
-      'Chess tournaments featuring various time controls and variants';
+  String get tournamentHomeTitle => 'Σκακιστικά τουρνουά διαφόρων χρόνων και εκδοχών';
 
   @override
   String get tournamentHomeDescription =>
-      'Play fast-paced chess tournaments! Join an official scheduled tournament, or create your own. Bullet, Blitz, Classical, Chess960, King of the Hill, Threecheck, and more options available for endless chess fun.';
+      'Παίξτε στιγμιαία τορνουά. Συμμετάσχετε σε επίσημο διαγωνισμό ή δημιουργήστε δικό σας. Υπερταχέα, Ταχέα, Κλασσικά, 960, Βασιλιάς στο κέντρο, Τρία σαχ και πολλές άλλες επιλογές για ατελείωτη διασκέδαση.';
 
   @override
-  String get tournamentNotFound => 'Tournament not found';
+  String get tournamentNotFound => 'Τουρνουά δεν βρέθηκε';
 
   @override
-  String get tournamentDoesNotExist => 'This tournament does not exist.';
+  String get tournamentDoesNotExist => 'Αυτό το τουρνουά δεν υπάρχει.';
 
   @override
   String get tournamentMayHaveBeenCanceled =>
-      'The tournament may have been cancelled if all players left before it started.';
+      'Ίσως έχει ακυρωθεί, εάν όλοι οι παίκτες αποχώρησαν πριν ξεκινήσει το τουρνουά.';
 
   @override
-  String get returnToTournamentsHomepage => 'Return to tournaments homepage';
+  String get returnToTournamentsHomepage => 'Επιστροφή στην αρχική σελίδα τουρνουά';
 
   @override
   String weeklyPerfTypeRatingDistribution(String param) {
-    return 'Weekly $param rating distribution';
+    return 'Μηνιαία κατανομή βαθμολογίας $param';
   }
 
   @override
   String yourPerfTypeRatingIsRating(String param1, String param2) {
-    return 'Your $param1 rating is $param2.';
+    return 'Η βαθμολογία σας στο $param1 είναι $param2.';
   }
 
   @override
   String youAreBetterThanPercentOfPerfTypePlayers(String param1, String param2) {
-    return 'You are better than $param1 of $param2 players.';
+    return 'Είστε καλύτεροι από $param1 των παικτών $param2.';
   }
 
   @override
   String userIsBetterThanPercentOfPerfTypePlayers(String param1, String param2, String param3) {
-    return '$param1 is better than $param2 of $param3 players.';
+    return 'Ο/Η $param1 είναι καλύτερος/η από το $param2 των $param3 παικτών.';
   }
 
   @override
   String betterThanPercentPlayers(String param1, String param2) {
-    return 'Better than $param1 of $param2 players';
+    return 'Είστε καλύτεροι από $param1 των παικτών $param2';
   }
 
   @override
   String youDoNotHaveAnEstablishedPerfTypeRating(String param) {
-    return 'You do not have an established $param rating.';
+    return 'Δεν έχετε μια καθιερωμένη βαθμολογία $param.';
   }
 
   @override
-  String get yourRating => 'Your rating';
+  String get yourRating => 'Η βαθμολογία σας';
 
   @override
-  String get cumulative => 'Cumulative';
+  String get cumulative => 'Αθροιστικά';
 
   @override
-  String get glicko2Rating => 'Glicko-2 rating';
+  String get glicko2Rating => 'Βαθμολογία Glicko-2';
 
   @override
-  String get checkYourEmail => 'Check your Email';
+  String get checkYourEmail => 'Ελέγξτε το ηλ. ταχυδρομείο σας';
 
   @override
   String get weHaveSentYouAnEmailClickTheLink =>
-      'We\'ve sent you an email. Click the link in the email to activate your account.';
+      'Σας έχουμε στείλει ένα μήνυμα ηλ. ταχυδρομείου. Κάντε κλικ τον σύνδεσμο στο ηλ.ταχυδρομείο για να ενεργοποιήσετε τον λογαριασμό σας.';
 
   @override
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces =>
-      'If you don\'t see the email, check other places it might be, like your junk, spam, social, or other folders.';
+      'Εάν δεν μπορείτε να δείτε το μήνυμα ηλ. ταχυδρομείου, ελέγξτε άλλες θέσεις που θα μπορούσε να είναι, όπως στα διαγραμμένα, ανεπιθύμητη αλληλογραφία, κοινωνικά, ή σε άλλους φακέλους.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Εάν δε λάβετε το email σε 5 λεπτά:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Ελέγξτε τα ανεπιθύμητα μηνύματα σας και άλλους φακέλους';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Επιβεβαιώστε ότι το $param είναι η διεύθυνση email σας';
   }
 
   @override
   String weHaveSentYouAnEmailTo(String param) {
-    return 'We\'ve sent an email to $param. Click the link in the email to reset your password.';
+    return 'Έχουμε στείλει ένα μήνυμα ηλ. ταχυδρομείου στο $param. Κάντε κλικ τον σύνδεσμο στο ηλ. ταχυδρομείο για να επαναφέρετε τον κωδικό πρόσβασής σας.';
   }
 
   @override
   String byRegisteringYouAgreeToBeBoundByOur(String param) {
-    return 'By registering, you agree to the $param.';
+    return 'Με την εγγραφή σας συμφωνείτε ότι δεσμεύεστε από τους $param.';
   }
 
   @override
   String readAboutOur(String param) {
-    return 'Read about our $param.';
+    return 'Διαβάστε για την $param μας.';
   }
 
   @override
-  String get networkLagBetweenYouAndLichess => 'Network lag between you and Lichess';
+  String get networkLagBetweenYouAndLichess => 'Υστέρηση δικτύου ανάμεσα σε εσάς και το lichess';
 
   @override
-  String get timeToProcessAMoveOnLichessServer => 'Time to process a move on Lichess\'s server';
+  String get timeToProcessAMoveOnLichessServer =>
+      'Χρόνος επεξεργασίας μίας κίνησης στον διακομιστή lichess';
 
   @override
-  String get downloadAnnotated => 'Download annotated';
+  String get downloadAnnotated => 'Λήψη με υποσημειώσεις';
 
   @override
-  String get downloadRaw => 'Download raw';
+  String get downloadRaw => 'Λήψη ακατέργαστο';
 
   @override
-  String get downloadImported => 'Download imported';
+  String get downloadImported => 'Λήψη εισαγόμενου';
 
   @override
   String get downloadAllGames => 'Download all games';
 
   @override
-  String get crosstable => 'Crosstable';
+  String get crosstable => 'Αποτελέσματα';
 
   @override
   String get youCanAlsoScrollOverTheBoardToMoveInTheGame =>
-      'Scroll over the board to move in the game.';
+      'Μπορείτε επίσης να κινήσετε πάνω στην σκακιέρα για να μετακινηθείτε στο παιχνίδι.';
 
   @override
   String get scrollOverComputerVariationsToPreviewThem =>
-      'Scroll over computer variations to preview them.';
+      'Μετακινήστε το ποντίκι σας πάνω στις βαριάντες του υπολογιστή για την προεπισκόπησή τους.';
 
   @override
   String get analysisShapesHowTo =>
-      'Press shift+click or right-click to draw circles and arrows on the board.';
+      'Πατήστε Shift + κλικ ή δεξί κλικ για να σχεδιάσετε κύκλους και βέλη στην σκακιέρα.';
 
   @override
-  String get letOtherPlayersMessageYou => 'Let other players message you';
+  String get letOtherPlayersMessageYou => 'Επιτρέψτε άλλους παίκτες να σας στέλνουν μηνύματα';
 
   @override
-  String get receiveForumNotifications => 'Receive notifications when mentioned in the forum';
+  String get receiveForumNotifications =>
+      'Να λαμβάνετε ειδοποιήσεις όταν γίνεται αναφορά σας στο φόρουμ';
 
   @override
-  String get shareYourInsightsData => 'Share your chess insights data';
+  String get shareYourInsightsData => 'Κοινή χρήση των δεδομένων σας';
 
   @override
-  String get withNobody => 'With nobody';
+  String get withNobody => 'Με κανέναν';
 
   @override
-  String get withFriends => 'With friends';
+  String get withFriends => 'Με φίλους';
 
   @override
-  String get withEverybody => 'With everybody';
+  String get withEverybody => 'Με όλους';
 
   @override
-  String get kidMode => 'Kid mode';
+  String get kidMode => 'Λειτουργία παιδιού';
 
   @override
-  String get kidModeIsEnabled => 'Kid mode is enabled.';
+  String get kidModeIsEnabled => 'Η λειτουργία για παιδιά είναι ενεργοποιημένη.';
 
   @override
   String get kidModeExplanation =>
-      'This is about safety. In kid mode, all site communications are disabled. Enable this for your children and school students, to protect them from other internet users.';
+      'Αυτό έχει σχέση με την ασφάλεια. Στην λειτουργία για παιδιά, απενεργοποιούνται όλες οι επικοινωνίες της ιστοσελίδας. Ενεργοποιήστε το για τα παιδιά σας και τους μαθητές, για την προστασία τους από άλλους διαδικτυακούς χρήστες.';
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
-    return 'In kid mode, the Lichess logo gets a $param icon, so you know your kids are safe.';
+    return 'Στην λειτουργία για παιδιά, το λογότυπο του lichess παίρνει ένα εικονίδιο $param, έτσι ώστε να γνωρίζετε ότι τα παιδιά σας είναι ασφαλή.';
   }
 
   @override
   String get askYourChessTeacherAboutLiftingKidMode =>
-      'Your account is managed. Ask your chess teacher about lifting kid mode.';
+      'Ο λογαριασμός σας διαχειρίζεται. Ρωτήστε τον δασκαλό σας στο σκάκι για να αφαιρέσει τη λειτουργία παιδιού.';
 
   @override
-  String get enableKidMode => 'Enable Kid mode';
+  String get enableKidMode => 'Ενεργοποίηση λειτουργίας παιδιού';
 
   @override
-  String get disableKidMode => 'Disable Kid mode';
+  String get disableKidMode => 'Απενεργοποίηση λειτουργίας παιδιού';
 
   @override
-  String get security => 'Security';
+  String get security => 'Ασφάλεια';
 
   @override
-  String get sessions => 'Sessions';
+  String get sessions => 'Συνεδρίες';
 
   @override
-  String get revokeAllSessions => 'revoke all sessions';
+  String get revokeAllSessions => 'ανακαλέστε όλες τις συνεδρίες';
 
   @override
-  String get playChessEverywhere => 'Play chess everywhere';
+  String get playChessEverywhere => 'Παίξτε σκάκι παντού';
 
   @override
-  String get everybodyGetsAllFeaturesForFree => 'Everybody gets all features for free';
+  String get everybodyGetsAllFeaturesForFree => 'Όλα τα στοιχεία είναι δωρεάν για όλους';
 
   @override
-  String get viewTheSolution => 'View the solution';
+  String get viewTheSolution => 'Δείτε τη λύση';
 
   @override
-  String get noChallenges => 'No challenges.';
+  String get noChallenges => 'Δεν έχετε προκλήσεις.';
 
   @override
   String xHostsY(String param1, String param2) {
-    return '$param1 hosts $param2';
+    return '$param1 φιλοξενεί τη $param2';
   }
 
   @override
   String xJoinsY(String param1, String param2) {
-    return '$param1 joins $param2';
+    return '$param1 συμμετέχει στη $param2';
   }
 
   @override
   String xLikesY(String param1, String param2) {
-    return '$param1 likes $param2';
+    return '$param2 αρέσει στην/ον $param1';
   }
 
   @override
-  String get quickPairing => 'Quick pairing';
+  String get quickPairing => 'Γρήγορη αντιστοίχιση';
 
   @override
-  String get lobby => 'Lobby';
+  String get lobby => 'Χώρος αναμονής';
 
   @override
-  String get anonymous => 'Anonymous';
+  String get anonymous => 'Ανώνυμος';
 
   @override
   String yourScore(String param) {
-    return 'Your score: $param';
+    return 'Η βαθμολογία σας: $param';
   }
 
   @override
-  String get language => 'Language';
+  String get language => 'Γλώσσα';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Οποιαδήποτε γλώσσα';
 
   @override
-  String get background => 'Background';
+  String get background => 'Φόντο';
 
   @override
-  String get light => 'Light';
+  String get light => 'Φωτεινό';
 
   @override
-  String get dark => 'Dark';
+  String get dark => 'Σκοτεινό';
 
   @override
-  String get transparent => 'Transparent';
+  String get transparent => 'Διάφανο';
 
   @override
-  String get deviceTheme => 'Device theme';
+  String get deviceTheme => 'Θέμα συσκευής';
 
   @override
-  String get backgroundImageUrl => 'Background image URL:';
+  String get backgroundImageUrl => 'Διεύθυνση εικόνας φόντου:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Σκακιέρα';
 
   @override
-  String get size => 'Size';
+  String get size => 'Μέγεθος';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'Αδιαφάνεια';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Φωτεινότητα';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'Χροιά';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'Επαναφορά χρωμάτων στα προκαθορισμένα';
 
   @override
-  String get pieceSet => 'Piece set';
+  String get pieceSet => 'Επιλογή κομματιών';
 
   @override
-  String get embedInYourWebsite => 'Embed in your website';
+  String get embedInYourWebsite => 'Ενσωματώστε στην ιστοσελίδα σας';
 
   @override
-  String get usernameAlreadyUsed => 'This username is already in use, please try another one.';
+  String get usernameAlreadyUsed =>
+      'Αυτό το όνομα χρήστη ήδη χρησιμοποιείται, παρακαλώ δοκιμάστε ένα άλλο.';
 
   @override
-  String get usernamePrefixInvalid => 'The username must start with a letter.';
+  String get usernamePrefixInvalid => 'Το όνομα χρήστη πρέπει να αρχίζει με ένα γράμμα.';
 
   @override
-  String get usernameSuffixInvalid => 'The username must end with a letter or a number.';
+  String get usernameSuffixInvalid =>
+      'Το όνομα χρήστη πρέπει να τελειώνει με ένα γράμμα ή έναν αριθμό.';
 
   @override
   String get usernameCharsInvalid =>
-      'The username must only contain letters, numbers, underscores, and hyphens. Consecutive underscores and hyphens are not allowed.';
+      'Το όνομα χρήστη πρέπει να περιέχει μόνο γράμματα, αριθμούς, κάτω παύλες και ενωτικά.';
 
   @override
-  String get usernameUnacceptable => 'This username is not acceptable.';
+  String get usernameUnacceptable => 'Αυτό το όνομα χρήστη δεν είναι αποδεκτό.';
 
   @override
-  String get playChessInStyle => 'Play chess in style';
+  String get playChessInStyle => 'Παίξτε σκάκι με στυλ';
 
   @override
-  String get chessBasics => 'Chess basics';
+  String get chessBasics => 'Τα βασικά';
 
   @override
-  String get coaches => 'Coaches';
+  String get coaches => 'Προπονητές';
 
   @override
-  String get invalidPgn => 'Invalid PGN';
+  String get invalidPgn => 'Μη έγκυρο PGN';
 
   @override
-  String get invalidFen => 'Invalid FEN';
+  String get invalidFen => 'Μη έγκυρο FEN';
 
   @override
-  String get custom => 'Custom';
+  String get custom => 'Προσαρμογή';
 
   @override
-  String get notifications => 'Notifications';
+  String get notifications => 'Ειδοποιήσεις';
 
   @override
   String notificationsX(String param1) {
-    return 'Notifications: $param1';
+    return 'Ειδοποιήσεις: $param1';
   }
 
   @override
   String perfRatingX(String param) {
-    return 'Rating: $param';
+    return 'Βαθμολογία: $param';
   }
 
   @override
-  String get practiceWithComputer => 'Practice with computer';
+  String get practiceWithComputer => 'Εξάσκηση με τον υπολογιστή';
 
   @override
   String anotherWasX(String param) {
-    return 'Another was $param';
+    return 'Εναλλακτική ήταν $param';
   }
 
   @override
   String bestWasX(String param) {
-    return 'Best was $param';
+    return 'Το καλύτερο ήταν $param';
   }
 
   @override
-  String get youBrowsedAway => 'You browsed away';
+  String get youBrowsedAway => 'Απομακρυνθήκατε';
 
   @override
-  String get resumePractice => 'Resume practice';
+  String get resumePractice => 'Συνεχίσετε την πρακτική';
 
   @override
-  String get drawByFiftyMoves => 'The game has been drawn by the fifty move rule.';
+  String get drawByFiftyMoves => 'Ισοπαλία λόγω του κανόνα των 50 κινήσεων.';
 
   @override
-  String get theGameIsADraw => 'The game is a draw.';
+  String get theGameIsADraw => 'Η παρτίδα είναι ισόπαλη.';
 
   @override
-  String get computerThinking => 'Computer thinking ...';
+  String get computerThinking => 'Ο υπολογιστής σκέφτεται ...';
 
   @override
-  String get seeBestMove => 'See best move';
+  String get seeBestMove => 'Δείτε την καλύτερη κίνηση';
 
   @override
-  String get hideBestMove => 'Hide best move';
+  String get hideBestMove => 'Απόκρυψη καλύτερης κίνησης';
 
   @override
-  String get getAHint => 'Get a hint';
+  String get getAHint => 'Λάβετε μια υπόδειξη';
 
   @override
-  String get evaluatingYourMove => 'Evaluating your move ...';
+  String get evaluatingYourMove => 'Αξιολογώντας την κίνηση σας...';
 
   @override
-  String get whiteWinsGame => 'White wins';
+  String get whiteWinsGame => 'Κερδίζουν τα λευκά';
 
   @override
-  String get blackWinsGame => 'Black wins';
+  String get blackWinsGame => 'Κερδίζουν τα μαύρα';
 
   @override
-  String get learnFromYourMistakes => 'Learn from your mistakes';
+  String get learnFromYourMistakes => 'Μάθετε από τα λάθη σας';
 
   @override
-  String get learnFromThisMistake => 'Learn from this mistake';
+  String get learnFromThisMistake => 'Μάθετε από αυτό το λάθος';
 
   @override
-  String get skipThisMove => 'Skip this move';
+  String get skipThisMove => 'Παραλείψτε αυτό το βήμα';
 
   @override
-  String get next => 'Next';
+  String get next => 'Επόμενο';
 
   @override
   String xWasPlayed(String param) {
-    return '$param was played';
+    return '$param παίχτηκε';
   }
 
   @override
-  String get findBetterMoveForWhite => 'Find a better move for white';
+  String get findBetterMoveForWhite => 'Βρείτε μια καλύτερη κίνηση για τα λευκά';
 
   @override
-  String get findBetterMoveForBlack => 'Find a better move for black';
+  String get findBetterMoveForBlack => 'Βρείτε μια καλύτερη κίνηση για τα μαύρα';
 
   @override
-  String get resumeLearning => 'Resume learning';
+  String get resumeLearning => 'Συνεχίστε την μάθηση';
 
   @override
-  String get youCanDoBetter => 'You can do better';
+  String get youCanDoBetter => 'Μπορείτε και καλύτερα';
 
   @override
-  String get tryAnotherMoveForWhite => 'Try another move for white';
+  String get tryAnotherMoveForWhite => 'Δοκιμάστε μια άλλη κίνηση για τα λευκά';
 
   @override
-  String get tryAnotherMoveForBlack => 'Try another move for black';
+  String get tryAnotherMoveForBlack => 'Δοκιμάστε μια άλλη κίνηση για τα μαύρα';
 
   @override
-  String get solution => 'Solution';
+  String get solution => 'Λύση';
 
   @override
-  String get waitingForAnalysis => 'Waiting for analysis';
+  String get waitingForAnalysis => 'Αναμονή για την ανάλυση';
 
   @override
-  String get noMistakesFoundForWhite => 'No mistakes found for white';
+  String get noMistakesFoundForWhite => 'Δεν βρέθηκαν λάθη για τα λευκά';
 
   @override
-  String get noMistakesFoundForBlack => 'No mistakes found for black';
+  String get noMistakesFoundForBlack => 'Δεν βρέθηκαν λάθη για τα μαύρα';
 
   @override
-  String get doneReviewingWhiteMistakes => 'Done reviewing white mistakes';
+  String get doneReviewingWhiteMistakes => 'Έγινε έλεγχος λαθών για τα λευκά';
 
   @override
-  String get doneReviewingBlackMistakes => 'Done reviewing black mistakes';
+  String get doneReviewingBlackMistakes => 'Έγινε έλεγχος λαθών για τα μαύρα';
 
   @override
-  String get doItAgain => 'Do it again';
+  String get doItAgain => 'Κάντε το ξανά';
 
   @override
-  String get reviewWhiteMistakes => 'Review white mistakes';
+  String get reviewWhiteMistakes => 'Ανασκόπηση λαθών λευκών';
 
   @override
-  String get reviewBlackMistakes => 'Review black mistakes';
+  String get reviewBlackMistakes => 'Ανασκόπηση λαθών μαύρων';
 
   @override
-  String get advantage => 'Advantage';
+  String get advantage => 'Πλεονέκτημα';
 
   @override
-  String get opening => 'Opening';
+  String get opening => 'Άνοιγμα';
 
   @override
-  String get middlegame => 'Middlegame';
+  String get middlegame => 'Μέση φάση παιχνιδιού';
 
   @override
-  String get endgame => 'Endgame';
+  String get endgame => 'Φινάλε';
 
   @override
-  String get conditionalPremoves => 'Conditional premoves';
+  String get conditionalPremoves => 'Υποθετικές προκινήσεις';
 
   @override
-  String get addCurrentVariation => 'Add current variation';
+  String get addCurrentVariation => 'Προσθέστε τρέχουσα παραλλαγή';
 
   @override
   String get playVariationToCreateConditionalPremoves =>
-      'Play a variation to create conditional premoves';
+      'Παίξτε μια παραλλαγή για να δημιουργήσετε υποθετικές προκινήσεις';
 
   @override
-  String get noConditionalPremoves => 'No conditional premoves';
+  String get noConditionalPremoves => 'Καμία υποθετική προκίνηση';
 
   @override
   String playX(String param) {
-    return 'Play $param';
+    return 'Παίξτε $param';
   }
 
   @override
-  String get showUnreadLichessMessage => 'You have received a private message from Lichess.';
+  String get showUnreadLichessMessage => 'Έχετε λάβει ένα προσωπικό μήνυμα από το Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Click here to read it';
+  String get clickHereToReadIt => 'Κάντε κλικ εδώ για να το δείτε';
 
   @override
-  String get sorry => 'Sorry :(';
+  String get sorry => 'Λυπούμαστε :(';
 
   @override
-  String get weHadToTimeYouOutForAWhile => 'We had to time you out for a while.';
+  String get weHadToTimeYouOutForAWhile => 'Πρέπει να σας αποκλείσουμε για λίγο.';
 
   @override
-  String get why => 'Why?';
+  String get why => 'Γιατί;';
 
   @override
   String get pleasantChessExperience =>
-      'We aim to provide a pleasant chess experience for everyone.';
+      'Ο σκοπός μας είναι να προσφέρουμε μια ευχάριστη σκακιστική ατμόσφαιρα για όλους.';
 
   @override
   String get goodPractice =>
-      'To that effect, we must ensure that all players follow good practice.';
+      'Για να πραγματοποιηθεί αυτό, πρέπει να βεβαιωθούμε ότι όλοι οι παίκτες ακολουθούν τους κανόνες.';
 
   @override
-  String get potentialProblem => 'When a potential problem is detected, we display this message.';
+  String get potentialProblem => 'Όταν ανιχνευτεί ένα πιθανό πρόβλημα, εμφανίζεται αυτό το μήνυμα.';
 
   @override
-  String get howToAvoidThis => 'How to avoid this?';
+  String get howToAvoidThis => 'Πώς να το αποφύγετε αυτό;';
 
   @override
-  String get playEveryGame => 'Play every game you start.';
+  String get playEveryGame => 'Τελειώστε κάθε παρτίδα που ξεκινάτε.';
 
   @override
-  String get tryToWin => 'Try to win (or at least draw) every game you play.';
+  String get tryToWin =>
+      'Προσπαθήστε να νικήσετε (ή να φέρετε ισοπαλία) σε κάθε παιχνίδι που παίζετε.';
 
   @override
-  String get resignLostGames => 'Resign lost games (don\'t let the clock run down).';
+  String get resignLostGames =>
+      'Παραιτηθείτε σε παιχνίδια που χάνετε (μην αφήνετε τον χρόνο σας να τελειώσει).';
 
   @override
-  String get temporaryInconvenience => 'We apologise for the temporary inconvenience,';
+  String get temporaryInconvenience => 'Συγχωρέστε μας για την προσωρινή δυσφορία,';
 
   @override
-  String get wishYouGreatGames => 'and wish you great games on lichess.org.';
+  String get wishYouGreatGames => 'και σας ευχόμαστε καλές παρτίδες στο lichess.org.';
 
   @override
-  String get thankYouForReading => 'Thank you for reading!';
+  String get thankYouForReading => 'Ευχαριστούμε που αφιερώσατε χρόνο για να διαβάσετε το μήνυμα!';
 
   @override
-  String get lifetimeScore => 'Lifetime score';
+  String get lifetimeScore => 'Συνολικό σκορ';
 
   @override
-  String get currentMatchScore => 'Current match score';
+  String get currentMatchScore => 'Τρέχον σκορ';
 
   @override
   String get agreementAssistance =>
-      'I agree that I will at no time receive assistance during my games (from a chess computer, book, database or another person).';
+      'Αποδέχομαι ότι ουδέποτε θα λάβω βοήθεια κατά τις παρτίδες μου (από υπολογιστή, βιβλίο, βάση δεδομένων ή άλλο πρόσωπο).';
 
   @override
-  String get agreementNice => 'I agree that I will always be respectful to other players.';
+  String get agreementNice => 'Αποδέχομαι ότι πάντα θα επιδεικνύω σεβασμό προς όλους του παίκτες.';
 
   @override
   String agreementMultipleAccounts(String param) {
-    return 'I agree that I will not create multiple accounts (except for the reasons stated in the $param).';
+    return 'Συμφωνώ ότι δε θα δημιουργήσω πολλούς λογαριασμούς (εκτός από τους λόγους προβλέπονται από τους $param).';
   }
 
   @override
-  String get agreementPolicy => 'I agree that I will follow all Lichess policies.';
+  String get agreementPolicy => 'Αποδέχομαι ότι θα συμμορφωθώ με όλες τις πολιτικές του Lichess.';
 
   @override
-  String get searchOrStartNewDiscussion => 'Search or start new conversation';
+  String get searchOrStartNewDiscussion => 'Αναζήτηση ή έναρξη νέας συνομιλίας';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Επεξεργασία';
 
   @override
   String get bullet => 'Bullet';
@@ -4588,325 +4630,334 @@ class AppLocalizationsEl extends AppLocalizations {
   String get rapid => 'Rapid';
 
   @override
-  String get classical => 'Classical';
+  String get classical => 'Κλασικό';
 
   @override
-  String get ultraBulletDesc => 'Insanely fast games: less than 30 seconds';
+  String get ultraBulletDesc => 'Εξαιρετικά γρήγορες παρτίδες: λιγότερο από 30 δεύτερα';
 
   @override
-  String get bulletDesc => 'Very fast games: less than 3 minutes';
+  String get bulletDesc => 'Πολύ γρήγορες παρτίδες: λιγότερο από 3 λεπτά';
 
   @override
-  String get blitzDesc => 'Fast games: 3 to 8 minutes';
+  String get blitzDesc => 'Γρήγορες παρτίδες: 3 έως 8 λεπτά';
 
   @override
-  String get rapidDesc => 'Rapid games: 8 to 25 minutes';
+  String get rapidDesc => 'Παρτίδες rapid: 8 έως 25 λεπτά';
 
   @override
-  String get classicalDesc => 'Classical games: 25 minutes and more';
+  String get classicalDesc => 'Κλασικές παρτίδες: 25 λεπτά και άνω';
 
   @override
-  String get correspondenceDesc => 'Correspondence games: one or several days per move';
+  String get correspondenceDesc =>
+      'Παρτίδες αλληλογραφίας: μία ή περισσότερες μέρες για την κίνηση';
 
   @override
-  String get puzzleDesc => 'Chess tactics trainer';
+  String get puzzleDesc => 'Εξάσκηση τακτικών';
 
   @override
-  String get important => 'Important';
+  String get important => 'Σημαντικό';
 
   @override
   String yourQuestionMayHaveBeenAnswered(String param1) {
-    return 'Your question may already have an answer $param1';
+    return 'Η ερώτησή σας μπορεί να έχει απαντηθεί ήδη $param1';
   }
 
   @override
-  String get inTheFAQ => 'in the FAQ';
+  String get inTheFAQ => 'στις συχνές ερωτήσεις.';
 
   @override
   String toReportSomeoneForCheatingOrBadBehavior(String param1) {
-    return 'To report a user for cheating or bad behaviour, $param1';
+    return 'Για να αναφέρετε έναν χρήστη για κλέψιμο ή για κακή συμπεριφορά, $param1';
   }
 
   @override
-  String get useTheReportForm => 'use the report form';
+  String get useTheReportForm => 'χρησιμοποιείστε τη φόρμα αναφορών';
 
   @override
   String toRequestSupport(String param1) {
-    return 'To request support, $param1';
+    return 'Για να ζητήσετε βοήθεια, $param1';
   }
 
   @override
-  String get tryTheContactPage => 'try the contact page';
+  String get tryTheContactPage => 'χρησιμοποιείστε την σελίδα επικοινωνίας';
 
   @override
   String makeSureToRead(String param1) {
-    return 'Make sure to read $param1';
+    return 'Φροντίστε να διαβάσετε $param1';
   }
 
   @override
-  String get theForumEtiquette => 'the forum etiquette';
+  String get theForumEtiquette => 'τους κανόνες καλής συμπεριφοράς του φόρουμ';
 
   @override
-  String get thisTopicIsArchived => 'This topic has been archived and can no longer be replied to.';
+  String get thisTopicIsArchived => 'Αυτό το θέμα έχει αρχειοθετηθεί και δεν δέχεται απαντήσεις.';
 
   @override
   String joinTheTeamXToPost(String param1) {
-    return 'Join the $param1, to post in this forum';
+    return 'Δηλώστε συμμετοχή στο $param1, για να κάνετε δημοσιεύσεις σε αυτό το φόρουμ';
   }
 
   @override
   String teamNamedX(String param1) {
-    return '$param1 team';
+    return '$param1 ομάδες';
   }
 
   @override
-  String get youCannotPostYetPlaySomeGames => 'You can\'t post in the forums yet. Play some games!';
+  String get youCannotPostYetPlaySomeGames =>
+      'Δεν μπορείτε να δημοσιεύσετε σε αυτό το φόρουμ ακόμα. Παίξτε μερικά παιχνίδια!';
 
   @override
-  String get subscribe => 'Subscribe';
+  String get subscribe => 'Εγγραφείτε';
 
   @override
-  String get unsubscribe => 'Unsubscribe';
+  String get unsubscribe => 'Απεγγραφείτε';
 
   @override
   String mentionedYouInX(String param1) {
-    return 'mentioned you in \"$param1\".';
+    return 'σας ανέφερε στο \"$param1\".';
   }
 
   @override
   String xMentionedYouInY(String param1, String param2) {
-    return '$param1 mentioned you in \"$param2\".';
+    return 'Ο χρήστης $param1 σας ανέφερε στο «$param2».';
   }
 
   @override
   String invitedYouToX(String param1) {
-    return 'invited you to \"$param1\".';
+    return 'σας προσκάλεσε στο «$param1».';
   }
 
   @override
   String xInvitedYouToY(String param1, String param2) {
-    return '$param1 invited you to \"$param2\".';
+    return 'Ο χρήστης $param1 σας προσκάλεσε στο «$param2».';
   }
 
   @override
-  String get youAreNowPartOfTeam => 'You are now part of the team.';
+  String get youAreNowPartOfTeam => 'Είστε πλέον μέλος της ομάδας.';
 
   @override
   String youHaveJoinedTeamX(String param1) {
-    return 'You have joined \"$param1\".';
+    return 'Είστε πλέον μέλος της ομάδας «$param1».';
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Someone you reported was banned';
+  String get someoneYouReportedWasBanned => 'Κάποιος που αναφέρατε έχει αποκλειστεί';
 
   @override
-  String get congratsYouWon => 'Congratulations, you won!';
+  String get congratsYouWon => 'Συγχαρητήρια, κερδίσατε!';
 
   @override
   String gameVsX(String param1) {
-    return 'Game vs $param1';
+    return 'Παιχνίδι εναντίον $param1';
   }
 
   @override
   String resVsX(String param1, String param2) {
-    return '$param1 vs $param2';
+    return '$param1 εναντίον $param2';
   }
 
   @override
   String get lostAgainstTOSViolator =>
-      'You lost rating points to someone who violated the Lichess TOS';
+      'Χάσατε από κάποιον που παραβίασε τους όρους χρήσης του Lichess';
 
   @override
   String refundXpointsTimeControlY(String param1, String param2) {
-    return 'Refund: $param1 $param2 rating points.';
+    return 'Επιστροφή πόντων: $param1 $param2 πόντοι βαθμολογίας.';
   }
 
   @override
-  String get timeAlmostUp => 'Time is almost up!';
+  String get timeAlmostUp => 'Ο χρόνος σας έχει σχεδόν τελειώσει!';
 
   @override
-  String get clickToRevealEmailAddress => '[Click to reveal email address]';
+  String get clickToRevealEmailAddress =>
+      '[Κάντε κλικ για να δείτε τη διεύθυνση ηλεκτρονικού ταχυδρομείου]';
 
   @override
-  String get download => 'Download';
+  String get download => 'Λήψη';
 
   @override
-  String get coachManager => 'Coach manager';
+  String get coachManager => 'Διαχειριστής προπονητή';
 
   @override
-  String get streamerManager => 'Streamer manager';
+  String get streamerManager => 'Διαχειριστής streamer';
 
   @override
-  String get cancelTournament => 'Cancel the tournament';
+  String get cancelTournament => 'Ακύρωση τουρνουά';
 
   @override
-  String get tournDescription => 'Tournament description';
+  String get tournDescription => 'Περιγραφή του τουρνουά';
 
   @override
   String get tournDescriptionHelp =>
-      'Anything special you want to tell the participants? Try to keep it short. Markdown links are available: [name](https://url)';
+      'Θέλετε να πείτε κάτι ιδιαίτερο στους παίκτες; Προσπαθήστε να κρατήσετε το μήνυμά σας σύντομο. Μπορείτε να χρησιμοποιείτε συνδέσμους σε Markdown: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Games are rated and impact players ratings';
+  String get ratedFormHelp =>
+      'Τα παιχνίδια αξιολογούνται\nκαι επηρεάζουν τη βαθμολογία των παιχτών';
 
   @override
-  String get onlyMembersOfTeam => 'Only members of team';
+  String get onlyMembersOfTeam => 'Μόνο μέλη της ομάδας';
 
   @override
-  String get noRestriction => 'No restriction';
+  String get noRestriction => 'Χωρίς περιορισμούς';
 
   @override
-  String get minimumRatedGames => 'Minimum rated games';
+  String get minimumRatedGames => 'Ελάχιστος αριθμός βαθμολογημένων παιχνιδιών';
 
   @override
-  String get minimumRating => 'Minimum rating';
+  String get minimumRating => 'Ελάχιστη βαθμολογία';
 
   @override
-  String get maximumWeeklyRating => 'Maximum weekly rating';
+  String get maximumWeeklyRating => 'Μέγιστη εβδομαδιαία βαθμολογία';
 
   @override
   String positionInputHelp(String param) {
-    return 'Paste a valid FEN to start every game from a given position.\nIt only works for standard games, not with variants.\nYou can use the $param to generate a FEN position, then paste it here.\nLeave empty to start games from the normal initial position.';
+    return 'Επικολλήστε ένα έγκυρο FEN για να ξεκινήσει κάθε παιχνίδι από μια συγκεκριμένη θέση.\nΛειτουργεί μόνο για κανονικά παιχνίδια, όχι για παραλλαγές.\nΜπορείτε να χρησιμοποιήσετε τον $param για να πάρετε το FEN μιας θέσης, και στη συνέχεια να την επικολλήστε το εδώ.\nΜπορείτε να αφήσετε το πλαίσιο κενό για να ξεκινούν οι παρτίδες από την κανονική αρχική θέση.';
   }
 
   @override
-  String get cancelSimul => 'Cancel the simul';
+  String get cancelSimul => 'Ακύρωση σιμουλτανέ';
 
   @override
-  String get simulHostcolor => 'Host colour for each game';
+  String get simulHostcolor => 'Χρώμα διοργανωτή σε κάθε παιχνίδι';
 
   @override
-  String get estimatedStart => 'Estimated start time';
+  String get estimatedStart => 'Εκτιμώμενη ώρα έναρξης';
 
   @override
   String simulFeatured(String param) {
-    return 'Feature on $param';
+    return 'Προβεβλημένο στο $param';
   }
 
   @override
   String simulFeaturedHelp(String param) {
-    return 'Show your simul to everyone on $param. Disable for private simuls.';
+    return 'Να εμφανίζεται το σιμουλτανέ σε όλους στο $param. Απενεργοποιήστε αυτήν την επιλογή για ιδιωτικά σιμουλτανέ.';
   }
 
   @override
-  String get simulDescription => 'Simul description';
+  String get simulDescription => 'Περιγραφή σιμουλτανέ';
 
   @override
-  String get simulDescriptionHelp => 'Anything you want to tell the participants?';
+  String get simulDescriptionHelp => 'Θέλετε να πείτε κάτι στους συμμετέχοντες;';
 
   @override
   String markdownAvailable(String param) {
-    return '$param is available for more advanced syntax.';
+    return 'Η μορφή $param είναι διαθέσιμη για μια πιο προχωρημένη σύνταξη.';
   }
 
   @override
-  String get embedsAvailable => 'Paste a game URL or a study chapter URL to embed it.';
+  String get embedsAvailable =>
+      'Επικολλήστε μια διεύθυνση URL παιχνιδιού ή ένα κεφάλαιο μελέτης για να το ενσωματώσετε.';
 
   @override
-  String get inYourLocalTimezone => 'In your own local timezone';
+  String get inYourLocalTimezone => 'Στη δική σας ζώνη ώρας';
 
   @override
-  String get tournChat => 'Tournament chat';
+  String get tournChat => 'Δωμάτιο συνομιλίας τουρνουά';
 
   @override
-  String get noChat => 'No chat';
+  String get noChat => 'Να μην επιτρέπεται η συνομιλία';
 
   @override
-  String get onlyTeamLeaders => 'Only team leaders';
+  String get onlyTeamLeaders => 'Μόνο οι αρχηγοί ομάδων';
 
   @override
-  String get onlyTeamMembers => 'Only team members';
+  String get onlyTeamMembers => 'Μόνο τα μέλη της ομάδας';
 
   @override
-  String get navigateMoveTree => 'Navigate the move tree';
+  String get navigateMoveTree => 'Πλοηγηθείτε στο δέντρο κινήσεων';
 
   @override
-  String get mouseTricks => 'Mouse tricks';
+  String get mouseTricks => '«Κόλπα» με το ποντίκι';
 
   @override
-  String get toggleLocalAnalysis => 'Toggle local computer analysis';
+  String get toggleLocalAnalysis => 'Εναλλαγή ανάλυσης τοπικού υπολογιστή';
 
   @override
-  String get toggleAllAnalysis => 'Toggle all computer analysis';
+  String get toggleAllAnalysis => 'Εναλλαγή όλων των αναλύσεων υπολογιστή';
 
   @override
-  String get playComputerMove => 'Play best computer move';
+  String get playComputerMove => 'Παίξτε την καλύτερη κίνηση που προτείνει ο υπολογιστής';
 
   @override
-  String get analysisOptions => 'Analysis options';
+  String get analysisOptions => 'Ρυθμίσεις ανάλυσης';
 
   @override
-  String get focusChat => 'Focus chat';
+  String get focusChat => 'Εστίαση στο chat';
 
   @override
-  String get showHelpDialog => 'Show this help dialog';
+  String get showHelpDialog => 'Εμφάνιση αυτού του παραθύρου διαλόγου βοήθειας';
 
   @override
-  String get reopenYourAccount => 'Reopen your account';
+  String get reopenYourAccount => 'Ξανανοίξτε τον λογαριασμό σας';
 
   @override
   String get reopenYourAccountDescription =>
-      'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
+      'Αν κλείσατε τον λογαριασμό σας, αλλά έκτοτε έχετε αλλάξει γνώμη, έχετε την δυνατότητα να ανακτήσετε τον λογαριασμό σας.';
 
   @override
-  String get emailAssociatedToaccount => 'Email address associated to the account';
+  String get emailAssociatedToaccount =>
+      'Διεύθυνση ηλεκτρονικού ταχυδρομείου αυτού του λογαριασμού';
 
   @override
-  String get sentEmailWithLink => 'We\'ve sent you an email with a link.';
+  String get sentEmailWithLink => 'Σας στείλαμε ένα email με τον σύνδεσμο.';
 
   @override
-  String get tournamentEntryCode => 'Tournament entry code';
+  String get tournamentEntryCode => 'Κωδικός εισόδου τουρνουά';
 
   @override
-  String get hangOn => 'Hang on!';
+  String get hangOn => 'Περιμένετε!';
 
   @override
   String gameInProgress(String param) {
-    return 'You have a game in progress with $param.';
+    return 'Έχετε μία παρτίδα σε εξέλιξη με τον/την $param.';
   }
 
   @override
-  String get abortTheGame => 'Abort the game';
+  String get abortTheGame => 'Διακόψτε το παιχνίδι';
 
   @override
-  String get resignTheGame => 'Resign the game';
+  String get resignTheGame => 'Εγκαταλείψτε το παιχνίδι';
 
   @override
-  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
+  String get youCantStartNewGame =>
+      'Δεν μπορείτε να ξεκινήσετε μια καινούργια παρτίδα εάν δεν ολοκληρωθεί αυτή.';
 
   @override
-  String get since => 'Since';
+  String get since => 'Από';
 
   @override
-  String get until => 'Until';
+  String get until => 'Έως';
 
   @override
-  String get lichessDbExplanation => 'Rated games played on Lichess';
+  String get lichessDbExplanation =>
+      'Δείγμα βαθμολογημένων παιχνιδιών από όλους του παίκτες στο Lichess';
 
   @override
-  String get switchSides => 'Switch sides';
+  String get switchSides => 'Εναλλαγή πλευρών';
 
   @override
-  String get closingAccountWithdrawAppeal => 'Closing your account will withdraw your appeal';
+  String get closingAccountWithdrawAppeal =>
+      'Αν απενεργοποιήσετε τον λογαριασμό σας θα χάσετε το δικαίωμα έφεσης';
 
   @override
-  String get ourEventTips => 'Our tips for organising events';
+  String get ourEventTips => 'Οι συμβουλές μας για τη διοργάνωση εκδηλώσεων';
 
   @override
-  String get instructions => 'Instructions';
+  String get instructions => 'Οδηγίες';
 
   @override
-  String get showMeEverything => 'Show me everything';
+  String get showMeEverything => 'Εμφάνιση όλων';
 
   @override
   String get lichessPatronInfo =>
-      'Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.';
+      'Το Lichess είναι ένα φιλανθρωπικό και εντελώς ελεύθερο λογισμικό ανοιχτού κώδικα.\nΌλα τα εξοδα λειτουργίας, ανάπτυξης και περιεχομένου καλύπτοναι αποκλειστικά από δωρεές χρηστών.';
 
   @override
-  String get nothingToSeeHere => 'Nothing to see here at the moment.';
+  String get nothingToSeeHere => 'Τίποτα για να δείτε εδώ αυτή τη στιγμή.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Στατιστικά';
 
   @override
   String get accessibility => 'Accessibility';
@@ -4922,8 +4973,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Your opponent left the game. You can claim victory in $count seconds.',
-      one: 'Your opponent left the game. You can claim victory in $count second.',
+      other: 'Ο αντίπαλος έφυγε από το παιχνίδι. Διεκδίκηση νίκης σε $count δευτερόλεπτα.',
+      one: 'Ο αντίπαλός σας έφυγε από το παιχνίδι. Διεκδίκηση νίκης σε $count δευτερόλεπτο.',
     );
     return '$_temp0';
   }
@@ -4933,8 +4984,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Mate in $count half-moves',
-      one: 'Mate in $count half-move',
+      other: 'Ματ σε $count μισές κινήσεις',
+      one: 'Ματ σε $count μισή κίνηση',
     );
     return '$_temp0';
   }
@@ -4944,8 +4995,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count blunders',
-      one: '$count blunder',
+      other: '$count σοβαρά σφάλματα',
+      one: '$count σοβαρό σφάλμα',
     );
     return '$_temp0';
   }
@@ -4955,8 +5006,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Blunders',
-      one: '$count Blunder',
+      other: '$count Σοβαρά σφάλματα',
+      one: '$count Σοβαρό σφάλμα',
     );
     return '$_temp0';
   }
@@ -4966,8 +5017,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count mistakes',
-      one: '$count mistake',
+      other: '$count λάθη',
+      one: '$count λάθος',
     );
     return '$_temp0';
   }
@@ -4977,8 +5028,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Mistakes',
-      one: '$count Mistake',
+      other: '$count Λάθη',
+      one: '$count Λάθος',
     );
     return '$_temp0';
   }
@@ -4988,8 +5039,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count inaccuracies',
-      one: '$count inaccuracy',
+      other: '$count ανακρίβειες',
+      one: '$count ανακρίβεια',
     );
     return '$_temp0';
   }
@@ -4999,8 +5050,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Inaccuracies',
-      one: '$count Inaccuracy',
+      other: '$count Ανακρίβειες',
+      one: '$count Ανακρίβεια',
     );
     return '$_temp0';
   }
@@ -5010,8 +5061,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count players',
-      one: '$count player',
+      other: '$count παίκτες',
+      one: '$count παίκτης',
     );
     return '$_temp0';
   }
@@ -5021,8 +5072,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count games',
-      one: '$count game',
+      other: '$count παιχνίδια',
+      one: '$count παιχνίδι',
     );
     return '$_temp0';
   }
@@ -5032,8 +5083,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count rating over $param2 games',
-      one: '$count rating over $param2 game',
+      other: 'Βαθμολογία $count για $param2 παιχνίδια',
+      one: 'Βαθμολογία $count για $param2 παιχνίδι',
     );
     return '$_temp0';
   }
@@ -5043,8 +5094,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count bookmarks',
-      one: '$count bookmark',
+      other: '$count σελιδοδείκτες',
+      one: '$count σελιδοδείκτης',
     );
     return '$_temp0';
   }
@@ -5054,8 +5105,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count days',
-      one: '$count day',
+      other: '$count ημέρες',
+      one: '$count ημέρα',
     );
     return '$_temp0';
   }
@@ -5065,8 +5116,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count hours',
-      one: '$count hour',
+      other: '$count ώρες',
+      one: '$count ώρα',
     );
     return '$_temp0';
   }
@@ -5076,8 +5127,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count minutes',
-      one: '$count minute',
+      other: '$count λεπτά',
+      one: '$count λεπτό',
     );
     return '$_temp0';
   }
@@ -5087,8 +5138,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Rank is updated every $count minutes',
-      one: 'Rank is updated every minute',
+      other: 'Η κατάταξη ενημερώνεται κάθε $count λεπτά',
+      one: 'Η κατάταξη ενημερώνεται κάθε λεπτό',
     );
     return '$_temp0';
   }
@@ -5098,8 +5149,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles',
-      one: '$count puzzle',
+      other: '$count γρίφοι',
+      one: '$count γρίφος',
     );
     return '$_temp0';
   }
@@ -5109,8 +5160,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count games with you',
-      one: '$count game with you',
+      other: '$count παιχνίδια με εσάς',
+      one: '$count παιχνίδι με εσάς',
     );
     return '$_temp0';
   }
@@ -5120,8 +5171,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count rated',
-      one: '$count rated',
+      other: '$count βαθμολογημένα',
+      one: '$count βαθμολογημένο',
     );
     return '$_temp0';
   }
@@ -5131,8 +5182,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count wins',
-      one: '$count win',
+      other: '$count νίκες',
+      one: '$count νίκη',
     );
     return '$_temp0';
   }
@@ -5142,8 +5193,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count losses',
-      one: '$count loss',
+      other: '$count ήττες',
+      one: '$count ήττα',
     );
     return '$_temp0';
   }
@@ -5153,8 +5204,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count draws',
-      one: '$count draw',
+      other: '$count ισοπαλίες',
+      one: '$count ισοπαλία',
     );
     return '$_temp0';
   }
@@ -5164,8 +5215,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count playing',
-      one: '$count playing',
+      other: '$count παίζονται',
+      one: '$count παίζεται',
     );
     return '$_temp0';
   }
@@ -5175,8 +5226,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Give $count seconds',
-      one: 'Give $count second',
+      other: 'Προσθέστε $count δευτερόλεπτα',
+      one: 'Προσθέστε $count δευτερόλεπτα',
     );
     return '$_temp0';
   }
@@ -5186,8 +5237,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count tournament points',
-      one: '$count tournament point',
+      other: '$count πόντοι τουρνουά',
+      one: '$count πόντος τουρνουά',
     );
     return '$_temp0';
   }
@@ -5197,8 +5248,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count studies',
-      one: '$count study',
+      other: '$count μελέτες',
+      one: '$count μελέτη',
     );
     return '$_temp0';
   }
@@ -5208,8 +5259,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count simuls',
-      one: '$count simul',
+      other: '$count σιμουλτανέ',
+      one: '$count σιμουλτανέ',
     );
     return '$_temp0';
   }
@@ -5219,8 +5270,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '≥ $count rated games',
-      one: '≥ $count rated game',
+      other: '≥ $count βαθμολογημένα παιχνίδια',
+      one: '≥ $count βαθμολογημένο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -5230,8 +5281,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '≥ $count $param2 rated games',
-      one: '≥ $count $param2 rated game',
+      other: '≥ $count βαθμολογημένα παιχνίδια $param2',
+      one: '≥ $count βαθμολογημένο παιχνίδι $param2',
     );
     return '$_temp0';
   }
@@ -5241,8 +5292,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'You need to play $count more $param2 rated games',
-      one: 'You need to play $count more $param2 rated game',
+      other: 'Πρέπει να παίξετε $count επιπλέον $param2 βαθμολογημένα παιχνίδια',
+      one: 'Πρέπει να παίξετε $count επιπλέον $param2 βαθμολογημένο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -5252,8 +5303,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'You need to play $count more rated games',
-      one: 'You need to play $count more rated game',
+      other: 'Πρέπει να παίξετε $count βαθμολογημένα παιχνίδια',
+      one: 'Πρέπει να παίξετε $count βαθμολογημένο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -5263,8 +5314,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count imported games',
-      one: '$count imported game',
+      other: '$count Εισαγόμενα παιχνίδια',
+      one: '$count Εισαγόμενο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -5274,8 +5325,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count friends online',
-      one: '$count friend online',
+      other: '$count φίλοι συνδεδεμένοι',
+      one: '$count φίλος/η συνδεδεμένος/η',
     );
     return '$_temp0';
   }
@@ -5285,8 +5336,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count followers',
-      one: '$count follower',
+      other: '$count ακόλουθοι',
+      one: '$count ακόλουθος',
     );
     return '$_temp0';
   }
@@ -5296,8 +5347,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count following',
-      one: '$count following',
+      other: '$count ακολουθούνται',
+      one: '$count ακολουθείται',
     );
     return '$_temp0';
   }
@@ -5307,8 +5358,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Less than $count minutes',
-      one: 'Less than $count minute',
+      other: 'Λιγότερο από $count λεπτά',
+      one: 'Λιγότερο από $count λεπτό',
     );
     return '$_temp0';
   }
@@ -5318,8 +5369,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count games in play',
-      one: '$count game in play',
+      other: '$count παιχνίδια παίζονται τώρα',
+      one: '$count παιχνίδι παίζεται τώρα',
     );
     return '$_temp0';
   }
@@ -5329,8 +5380,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Maximum: $count characters.',
-      one: 'Maximum: $count character.',
+      other: 'Όριο: $count χαρακτήρες.',
+      one: 'Όριο: $count χαρακτήρες.',
     );
     return '$_temp0';
   }
@@ -5340,8 +5391,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count blocks',
-      one: '$count block',
+      other: '$count αποκλεισμοί',
+      one: '$count αποκλεισμός',
     );
     return '$_temp0';
   }
@@ -5351,8 +5402,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count forum posts',
-      one: '$count forum post',
+      other: '$count δημοσιεύσεις φόρουμ',
+      one: '$count δημοσίευση φόρουμ',
     );
     return '$_temp0';
   }
@@ -5362,8 +5413,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count $param2 players this week.',
-      one: '$count $param2 player this week.',
+      other: '$count παίκτες $param2 αυτήν την εβδομάδα.',
+      one: '$count παίκτης $param2 αυτήν την εβδομάδα.',
     );
     return '$_temp0';
   }
@@ -5373,8 +5424,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Available in $count languages!',
-      one: 'Available in $count language!',
+      other: 'Διαθέσιμο σε $count γλώσσες!',
+      one: 'Διαθέσιμο σε $count γλώσσες!',
     );
     return '$_temp0';
   }
@@ -5384,8 +5435,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count seconds to play the first move',
-      one: '$count second to play the first move',
+      other: '$count δευτερόλεπτα για την πρώτη κίνηση',
+      one: '$count δευτερόλεπτο για την πρώτη κίνηση',
     );
     return '$_temp0';
   }
@@ -5395,8 +5446,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count seconds',
-      one: '$count second',
+      other: '$count δευτερόλεπτα',
+      one: '$count δευτερόλεπτο',
     );
     return '$_temp0';
   }
@@ -5406,8 +5457,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'and save $count premove lines',
-      one: 'and save $count premove line',
+      other: 'και αποθηκεύστε $count γραμμές προκίνησης',
+      one: 'και αποθηκεύστε $count γραμμή προκίνησης',
     );
     return '$_temp0';
   }
@@ -5598,474 +5649,477 @@ class AppLocalizationsEl extends AppLocalizations {
   String get streamerLichessStreamers => 'Lichess streamers';
 
   @override
-  String get studyPrivate => 'Private';
+  String get studyPrivate => 'Ιδιωτικό';
 
   @override
-  String get studyMyStudies => 'My studies';
+  String get studyMyStudies => 'Οι μελέτες μου';
 
   @override
-  String get studyStudiesIContributeTo => 'Studies I contribute to';
+  String get studyStudiesIContributeTo => 'Μελέτες που συνεισφέρω';
 
   @override
-  String get studyMyPublicStudies => 'My public studies';
+  String get studyMyPublicStudies => 'Οι δημόσιες μελέτες μου';
 
   @override
-  String get studyMyPrivateStudies => 'My private studies';
+  String get studyMyPrivateStudies => 'Οι ιδιωτικές μελέτες μου';
 
   @override
-  String get studyMyFavoriteStudies => 'My favourite studies';
+  String get studyMyFavoriteStudies => 'Οι αγαπημένες μελέτες μου';
 
   @override
-  String get studyWhatAreStudies => 'What are studies?';
+  String get studyWhatAreStudies => 'Τι είναι οι μελέτες;';
 
   @override
-  String get studyAllStudies => 'All studies';
+  String get studyAllStudies => 'Όλες οι μελέτες';
 
   @override
   String studyStudiesCreatedByX(String param) {
-    return 'Studies created by $param';
+    return 'Μελέτες που δημιουργήθηκαν από τον/την $param';
   }
 
   @override
-  String get studyNoneYet => 'None yet.';
+  String get studyNoneYet => 'Τίποτα ακόμη εδώ.';
 
   @override
-  String get studyHot => 'Hot';
+  String get studyHot => 'Δημοφιλείς (hot)';
 
   @override
-  String get studyDateAddedNewest => 'Date added (newest)';
+  String get studyDateAddedNewest => 'Ημερομηνία προσθήκης (νεότερες)';
 
   @override
-  String get studyDateAddedOldest => 'Date added (oldest)';
+  String get studyDateAddedOldest => 'Ημερομηνία προσθήκης (παλαιότερες)';
 
   @override
-  String get studyRecentlyUpdated => 'Recently updated';
+  String get studyRecentlyUpdated => 'Πρόσφατα ενημερωμένες';
 
   @override
-  String get studyMostPopular => 'Most popular';
+  String get studyMostPopular => 'Οι πιο δημοφιλείς';
 
   @override
-  String get studyAlphabetical => 'Alphabetical';
+  String get studyAlphabetical => 'Αλφαβητικά';
 
   @override
-  String get studyAddNewChapter => 'Add a new chapter';
+  String get studyAddNewChapter => 'Προσθήκη νέου κεφαλαίου';
 
   @override
-  String get studyAddMembers => 'Add members';
+  String get studyAddMembers => 'Προσθήκη μελών';
 
   @override
-  String get studyInviteToTheStudy => 'Invite to the study';
+  String get studyInviteToTheStudy => 'Προσκάλεσε στην μελέτη';
 
   @override
   String get studyPleaseOnlyInvitePeopleYouKnow =>
-      'Please only invite people who know you, and who actively want to join this study.';
+      'Παρακαλώ, προσκαλέστε μόνο άτομα που γνωρίζετε και που θέλουν να συμμετέχουν ενεργά σε αυτήν την μελέτη.';
 
   @override
-  String get studySearchByUsername => 'Search by username';
+  String get studySearchByUsername => 'Αναζήτηση με όνομα χρήστη';
 
   @override
-  String get studySpectator => 'Spectator';
+  String get studySpectator => 'Θεατής';
 
   @override
-  String get studyContributor => 'Contributor';
+  String get studyContributor => 'Συνεισφέρων';
 
   @override
-  String get studyKick => 'Kick';
+  String get studyKick => 'Αποβολή';
 
   @override
-  String get studyLeaveTheStudy => 'Leave the study';
+  String get studyLeaveTheStudy => 'Αποχώρησε από αυτήν την μελέτη';
 
   @override
-  String get studyYouAreNowAContributor => 'You are now a contributor';
+  String get studyYouAreNowAContributor => 'Μπορείτε τώρα να συνεισφέρετε στην μελέτη';
 
   @override
-  String get studyYouAreNowASpectator => 'You are now a spectator';
+  String get studyYouAreNowASpectator => 'Είστε πλέον θεατής';
 
   @override
-  String get studyPgnTags => 'PGN tags';
+  String get studyPgnTags => 'PGN ετικέτες';
 
   @override
-  String get studyLike => 'Like';
+  String get studyLike => 'Μου αρέσει';
 
   @override
-  String get studyUnlike => 'Unlike';
+  String get studyUnlike => 'Δε μου αρέσει';
 
   @override
-  String get studyNewTag => 'New tag';
+  String get studyNewTag => 'Νέα ετικέτα';
 
   @override
-  String get studyCommentThisPosition => 'Comment on this position';
+  String get studyCommentThisPosition => 'Σχολίασε την υπάρχουσα θέση';
 
   @override
-  String get studyCommentThisMove => 'Comment on this move';
+  String get studyCommentThisMove => 'Σχολίασε αυτήν την κίνηση';
 
   @override
-  String get studyAnnotateWithGlyphs => 'Annotate with glyphs';
+  String get studyAnnotateWithGlyphs => 'Σχολιασμός με σύμβολα';
 
   @override
-  String get studyTheChapterIsTooShortToBeAnalysed => 'The chapter is too short to be analysed.';
+  String get studyTheChapterIsTooShortToBeAnalysed =>
+      'Το κεφάλαιο είναι πολύ μικρό για να αναλυθεί.';
 
   @override
   String get studyOnlyContributorsCanRequestAnalysis =>
-      'Only the study contributors can request a computer analysis.';
+      'Μόνο αυτοί που συνεισφέρουν στην σπουδή μπορούν να ζητήσουν ανάλυση από υπολογιστή.';
 
   @override
   String get studyGetAFullComputerAnalysis =>
-      'Get a full server-side computer analysis of the mainline.';
+      'Αίτηση πλήρης ανάλυσης της κύριας γραμμής παρτίδας από μηχανή του σέρβερ.';
 
   @override
   String get studyMakeSureTheChapterIsComplete =>
-      'Make sure the chapter is complete. You can only request analysis once.';
+      'Σιγουρευτείτε ότι το κεφάλαιο είναι ολοκληρωμένο. Μπορείτε να ζητήσετε ανάλυση μόνο μια φορά.';
 
   @override
   String get studyAllSyncMembersRemainOnTheSamePosition =>
-      'All SYNC members remain on the same position';
+      'Όλα τα συγχρονισμένα μέλη παραμένουν στην ίδια θέση';
 
   @override
-  String get studyShareChanges => 'Share changes with spectators and save them on the server';
+  String get studyShareChanges =>
+      'Διαμοιρασμός στους θεατές των αλλαγών και αποθήκευση τους στο σέρβερ';
 
   @override
-  String get studyPlaying => 'Playing';
+  String get studyPlaying => 'Παίζονται';
 
   @override
-  String get studyShowResults => 'Results';
+  String get studyShowResults => 'Αποτελέσματα';
 
   @override
-  String get studyShowEvalBar => 'Evaluation bars';
+  String get studyShowEvalBar => 'Μπάρες αξιολόγησης';
 
   @override
-  String get studyNext => 'Next';
+  String get studyNext => 'Επόμενη';
 
   @override
-  String get studyShareAndExport => 'Share & export';
+  String get studyShareAndExport => 'Διαμοιρασμός & εξαγωγή';
 
   @override
-  String get studyCloneStudy => 'Clone';
+  String get studyCloneStudy => 'Κλωνοποίησε';
 
   @override
-  String get studyStudyPgn => 'Study PGN';
+  String get studyStudyPgn => 'PGN της μελέτης';
 
   @override
-  String get studyChapterPgn => 'Chapter PGN';
+  String get studyChapterPgn => 'PGN του κεφαλαίου';
 
   @override
-  String get studyCopyChapterPgn => 'Copy PGN';
+  String get studyCopyChapterPgn => 'Αντιγραφή PGN';
 
   @override
-  String get studyDownloadGame => 'Download game';
+  String get studyDownloadGame => 'Λήψη παιχνιδιού';
 
   @override
-  String get studyStudyUrl => 'Study URL';
+  String get studyStudyUrl => 'URL μελέτης';
 
   @override
-  String get studyCurrentChapterUrl => 'Current chapter URL';
+  String get studyCurrentChapterUrl => 'Τρέχον κεφάλαιο URL';
 
   @override
   String get studyYouCanPasteThisInTheForumToEmbed =>
-      'You can paste this in the forum or your Lichess blog to embed';
+      'Επικολλήστε το παρόν για ενσωμάτωση στο φόρουμ';
 
   @override
-  String get studyStartAtInitialPosition => 'Start at initial position';
+  String get studyStartAtInitialPosition => 'Ξεκινάει από αρχική θέση';
 
   @override
   String studyStartAtX(String param) {
-    return 'Start at $param';
+    return 'Ξεκινάει με $param';
   }
 
   @override
-  String get studyEmbedInYourWebsite => 'Embed in your website';
+  String get studyEmbedInYourWebsite => 'Ενσωματώστε στην ιστοσελίδα σας ή το μπλογκ σας';
 
   @override
-  String get studyReadMoreAboutEmbedding => 'Read more about embedding';
+  String get studyReadMoreAboutEmbedding => 'Διαβάστε περισσότερα για την ενσωμάτωση';
 
   @override
-  String get studyOnlyPublicStudiesCanBeEmbedded => 'Only public studies can be embedded!';
+  String get studyOnlyPublicStudiesCanBeEmbedded =>
+      'Μόνο δημόσιες μελέτες μπορούν να ενσωματωθούν!';
 
   @override
-  String get studyOpen => 'Open';
+  String get studyOpen => 'Άνοιξε';
 
   @override
   String studyXBroughtToYouByY(String param1, String param2) {
-    return '$param1, brought to you by $param2';
+    return '$param1, δημιουργήθηκε από $param2';
   }
 
   @override
-  String get studyStudyNotFound => 'Study not found';
+  String get studyStudyNotFound => 'Η μελέτη δεν βρέθηκε';
 
   @override
-  String get studyEditChapter => 'Edit chapter';
+  String get studyEditChapter => 'Επεξεργάσου το κεφάλαιο';
 
   @override
-  String get studyNewChapter => 'New chapter';
+  String get studyNewChapter => 'Νέο κεφάλαιο';
 
   @override
   String studyImportFromChapterX(String param) {
-    return 'Import from $param';
+    return 'Εισαγωγή από $param';
   }
 
   @override
-  String get studyOrientation => 'Orientation';
+  String get studyOrientation => 'Προσανατολισμός';
 
   @override
-  String get studyAnalysisMode => 'Analysis mode';
+  String get studyAnalysisMode => 'Τύπος ανάλυσης';
 
   @override
-  String get studyPinnedChapterComment => 'Pinned chapter comment';
+  String get studyPinnedChapterComment => 'Καρφιτσωμένο σχόλιο κεφαλαίου';
 
   @override
-  String get studySaveChapter => 'Save chapter';
+  String get studySaveChapter => 'Αποθήκευση κεφαλαίου';
 
   @override
-  String get studyClearAnnotations => 'Clear annotations';
+  String get studyClearAnnotations => 'Διαγραφή σχολιασμών';
 
   @override
-  String get studyClearVariations => 'Clear variations';
+  String get studyClearVariations => 'Εκκαθάριση βαριάντων';
 
   @override
-  String get studyDeleteChapter => 'Delete chapter';
+  String get studyDeleteChapter => 'Διαγραφή κεφαλαίου';
 
   @override
-  String get studyDeleteThisChapter => 'Delete this chapter. There is no going back!';
+  String get studyDeleteThisChapter => 'Διαγραφή κεφαλαίου; Μη αναιρέσιμη ενέργεια!';
 
   @override
   String get studyClearAllCommentsInThisChapter =>
-      'Clear all comments, glyphs and drawn shapes in this chapter';
+      'Καθαρισμός όλων των σχολίων, συμβόλων και σχεδίων στο τρέχον κεφάλαιο;';
 
   @override
-  String get studyRightUnderTheBoard => 'Right under the board';
+  String get studyRightUnderTheBoard => 'Κάτω από την σκακιέρα';
 
   @override
-  String get studyNoPinnedComment => 'None';
+  String get studyNoPinnedComment => 'Καμία';
 
   @override
-  String get studyNormalAnalysis => 'Normal analysis';
+  String get studyNormalAnalysis => 'Απλή ανάλυση';
 
   @override
-  String get studyHideNextMoves => 'Hide next moves';
+  String get studyHideNextMoves => 'Απόκρυψη επόμενων κινήσεων';
 
   @override
-  String get studyInteractiveLesson => 'Interactive lesson';
+  String get studyInteractiveLesson => 'Διαδραστικό μάθημα';
 
   @override
   String studyChapterX(String param) {
-    return 'Chapter $param';
+    return 'Κεφάλαιο $param';
   }
 
   @override
-  String get studyEmpty => 'Empty';
+  String get studyEmpty => 'Κενή';
 
   @override
-  String get studyStartFromInitialPosition => 'Start from initial position';
+  String get studyStartFromInitialPosition => 'Έναρξη από τρέχουσα θέση';
 
   @override
-  String get studyEditor => 'Editor';
+  String get studyEditor => 'Επεξεργαστής';
 
   @override
-  String get studyStartFromCustomPosition => 'Start from custom position';
+  String get studyStartFromCustomPosition => 'Έναρξη από τρέχουσα θέση';
 
   @override
-  String get studyLoadAGameByUrl => 'Load games by URLs';
+  String get studyLoadAGameByUrl => 'Φόρτωση παρτίδας με URL';
 
   @override
-  String get studyLoadAPositionFromFen => 'Load a position from FEN';
+  String get studyLoadAPositionFromFen => 'Φόρτωση θέσης από FEN';
 
   @override
-  String get studyLoadAGameFromPgn => 'Load games from PGN';
+  String get studyLoadAGameFromPgn => 'Φόρτωσε μια παρτίδα από PGN';
 
   @override
-  String get studyAutomatic => 'Automatic';
+  String get studyAutomatic => 'Αυτόματο';
 
   @override
-  String get studyUrlOfTheGame => 'URL of the games, one per line';
+  String get studyUrlOfTheGame => 'URL παρτίδων, ένα ανά γραμμή';
 
   @override
   String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Load games from $param1 or $param2';
+    return 'Φόρτωση παρτίδων από $param1 ή $param2';
   }
 
   @override
-  String get studyCreateChapter => 'Create chapter';
+  String get studyCreateChapter => 'Δημιουργία κεφαλαίου';
 
   @override
-  String get studyCreateStudy => 'Create study';
+  String get studyCreateStudy => 'Δημιουργία μελέτης';
 
   @override
-  String get studyEditStudy => 'Edit study';
+  String get studyEditStudy => 'Επεξεργασία μελέτης';
 
   @override
-  String get studyVisibility => 'Visibility';
+  String get studyVisibility => 'Ορατότητα';
 
   @override
-  String get studyPublic => 'Public';
+  String get studyPublic => 'Δημόσια';
 
   @override
-  String get studyUnlisted => 'Unlisted';
+  String get studyUnlisted => 'Ακαταχώρητη';
 
   @override
-  String get studyInviteOnly => 'Invite only';
+  String get studyInviteOnly => 'Με πρόσκληση';
 
   @override
-  String get studyAllowCloning => 'Allow cloning';
+  String get studyAllowCloning => 'Επέτρεψε αντιγραφή';
 
   @override
-  String get studyNobody => 'Nobody';
+  String get studyNobody => 'Κανένας';
 
   @override
-  String get studyOnlyMe => 'Only me';
+  String get studyOnlyMe => 'Μόνο εγώ';
 
   @override
-  String get studyContributors => 'Contributors';
+  String get studyContributors => 'Συνεισφέροντες';
 
   @override
-  String get studyMembers => 'Members';
+  String get studyMembers => 'Μέλη';
 
   @override
-  String get studyEveryone => 'Everyone';
+  String get studyEveryone => 'Οποιοσδήποτε';
 
   @override
-  String get studyEnableSync => 'Enable sync';
+  String get studyEnableSync => 'Ενεργοποίηση συγχρονισμού';
 
   @override
-  String get studyYesKeepEveryoneOnTheSamePosition => 'Yes: keep everyone on the same position';
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Ναι: όλοι βλέπουν την ίδια θέση';
 
   @override
-  String get studyNoLetPeopleBrowseFreely => 'No: let people browse freely';
+  String get studyNoLetPeopleBrowseFreely => 'Όχι: ελεύθερη επιλογή θέσης';
 
   @override
-  String get studyPinnedStudyComment => 'Pinned study comment';
+  String get studyPinnedStudyComment => 'Καρφιτσωμένο σχόλιο μελέτης';
 
   @override
-  String get studyStart => 'Start';
+  String get studyStart => 'Δημιουργία';
 
   @override
-  String get studySave => 'Save';
+  String get studySave => 'Αποθήκευση';
 
   @override
-  String get studyClearChat => 'Clear chat';
+  String get studyClearChat => 'Εκκαθάριση συνομιλίας';
 
   @override
   String get studyDeleteTheStudyChatHistory =>
-      'Delete the study chat history? There is no going back!';
+      'Διαγραφή συνομιλίας μελέτης; Μη αναιρέσιμη ενέργεια!';
 
   @override
-  String get studyDeleteStudy => 'Delete study';
+  String get studyDeleteStudy => 'Διαγραφή μελέτης';
 
   @override
   String studyConfirmDeleteStudy(String param) {
-    return 'Delete the entire study? There is no going back! Type the name of the study to confirm: $param';
+    return 'Να διαγραφεί όλη η μελέτη; Η ενέργεια αυτή δεν μπορεί να αναιρεθεί! Πληκτρολογήστε το όνομα της μελέτης για επιβεβαίωση: $param';
   }
 
   @override
-  String get studyWhereDoYouWantToStudyThat => 'Where do you want to study that?';
+  String get studyWhereDoYouWantToStudyThat => 'Που θέλετε να δημιουργήσετε την μελέτη;';
 
   @override
-  String get studyGoodMove => 'Good move';
+  String get studyGoodMove => 'Καλή κίνηση';
 
   @override
-  String get studyMistake => 'Mistake';
+  String get studyMistake => 'Λάθος';
 
   @override
-  String get studyBrilliantMove => 'Brilliant move';
+  String get studyBrilliantMove => 'Εξαιρετική κίνηση';
 
   @override
-  String get studyBlunder => 'Blunder';
+  String get studyBlunder => 'Σοβαρό λάθος';
 
   @override
-  String get studyInterestingMove => 'Interesting move';
+  String get studyInterestingMove => 'Ενδιαφέρουσα κίνηση';
 
   @override
-  String get studyDubiousMove => 'Dubious move';
+  String get studyDubiousMove => 'Κίνηση αμφίβολης αξίας';
 
   @override
-  String get studyOnlyMove => 'Only move';
+  String get studyOnlyMove => 'Μοναδική κίνηση';
 
   @override
-  String get studyZugzwang => 'Zugzwang';
+  String get studyZugzwang => 'Τσούγκσβανγκ';
 
   @override
-  String get studyEqualPosition => 'Equal position';
+  String get studyEqualPosition => 'Ισόπαλη θέση';
 
   @override
-  String get studyUnclearPosition => 'Unclear position';
+  String get studyUnclearPosition => 'Ασαφής θέση';
 
   @override
-  String get studyWhiteIsSlightlyBetter => 'White is slightly better';
+  String get studyWhiteIsSlightlyBetter => 'Το λευκά είναι ελαφρώς καλύτερα';
 
   @override
-  String get studyBlackIsSlightlyBetter => 'Black is slightly better';
+  String get studyBlackIsSlightlyBetter => 'Το μαύρα είναι ελαφρώς καλύτερα';
 
   @override
-  String get studyWhiteIsBetter => 'White is better';
+  String get studyWhiteIsBetter => 'Τα λευκά είναι καλύτερα';
 
   @override
-  String get studyBlackIsBetter => 'Black is better';
+  String get studyBlackIsBetter => 'Τα μαύρα είναι καλύτερα';
 
   @override
-  String get studyWhiteIsWinning => 'White is winning';
+  String get studyWhiteIsWinning => 'Τα λευκά κερδίζουν';
 
   @override
-  String get studyBlackIsWinning => 'Black is winning';
+  String get studyBlackIsWinning => 'Τα μαύρα κερδίζουν';
 
   @override
   String get studyNovelty => 'Novelty';
 
   @override
-  String get studyDevelopment => 'Development';
+  String get studyDevelopment => 'Ανάπτυξη';
 
   @override
-  String get studyInitiative => 'Initiative';
+  String get studyInitiative => 'Πρωτοβουλία';
 
   @override
-  String get studyAttack => 'Attack';
+  String get studyAttack => 'Επίθεση';
 
   @override
-  String get studyCounterplay => 'Counterplay';
+  String get studyCounterplay => 'Αντεπίθεση';
 
   @override
-  String get studyTimeTrouble => 'Time trouble';
+  String get studyTimeTrouble => 'Πίεση χρόνου';
 
   @override
-  String get studyWithCompensation => 'With compensation';
+  String get studyWithCompensation => 'Με αντάλλαγμα';
 
   @override
-  String get studyWithTheIdea => 'With the idea';
+  String get studyWithTheIdea => 'Με ιδέα';
 
   @override
-  String get studyNextChapter => 'Next chapter';
+  String get studyNextChapter => 'Επόμενο κεφάλαιο';
 
   @override
-  String get studyPrevChapter => 'Previous chapter';
+  String get studyPrevChapter => 'Προηγούμενο κεφάλαιο';
 
   @override
-  String get studyStudyActions => 'Study actions';
+  String get studyStudyActions => 'Ρυθμίσεις μελέτης';
 
   @override
-  String get studyTopics => 'Topics';
+  String get studyTopics => 'Θέματα';
 
   @override
-  String get studyMyTopics => 'My topics';
+  String get studyMyTopics => 'Τα θέματά μου';
 
   @override
-  String get studyPopularTopics => 'Popular topics';
+  String get studyPopularTopics => 'Δημοφιλή θέματα';
 
   @override
-  String get studyManageTopics => 'Manage topics';
+  String get studyManageTopics => 'Διαχείριση θεμάτων';
 
   @override
-  String get studyBack => 'Back';
+  String get studyBack => 'Πίσω';
 
   @override
-  String get studyPlayAgain => 'Play again';
+  String get studyPlayAgain => 'Παίξτε ξανά';
 
   @override
-  String get studyWhatWouldYouPlay => 'What would you play in this position?';
+  String get studyWhatWouldYouPlay => 'Τι θα παίζατε σε αυτή τη θέση;';
 
   @override
-  String get studyYouCompletedThisLesson => 'Congratulations! You completed this lesson.';
+  String get studyYouCompletedThisLesson => 'Συγχαρητήρια! Ολοκληρώσατε αυτό το μάθημα.';
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '$param ανά σελίδα';
   }
 
   @override
@@ -6180,21 +6234,23 @@ class AppLocalizationsEl extends AppLocalizations {
       'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
-  String get studyDoubleDefeat => 'Double defeat';
+  String get studyDoubleDefeat => 'Διπλή ήττα';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+  String get studyBlackDefeatWhiteCanNotWin =>
+      'Τα Μαύρα έχασαν, ενώ τα Λευκά δεν μπορούν να κερδίσουν';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+  String get studyWhiteDefeatBlackCanNotWin =>
+      'Τα Λευκά έχασαν, ενώ τα Μαύρα δεν μπορούν να κερδίσουν';
 
   @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Chapters',
-      one: '$count Chapter',
+      other: '$count Κεφάλαια',
+      one: '$count Κεφάλαιο',
     );
     return '$_temp0';
   }
@@ -6204,8 +6260,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Games',
-      one: '$count Game',
+      other: '$count Παρτίδες',
+      one: '$count Παρτίδα',
     );
     return '$_temp0';
   }
@@ -6215,8 +6271,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Members',
-      one: '$count Member',
+      other: '$count Μέλη',
+      one: '$count Μέλος',
     );
     return '$_temp0';
   }
@@ -6227,8 +6283,8 @@ class AppLocalizationsEl extends AppLocalizations {
       count,
       locale: localeName,
       other:
-          'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
-      one: 'Paste your PGN text here, up to $count game',
+          'Επικολλήστε παιχνίδια ως PGN εδώ. Θα δημιουργηθεί κεφάλαιο για κάθε παιχνίδι. Η μελέτη μπορεί να έχει μέχρι $count κεφάλαια.',
+      one: 'Επικολλήστε το PGN εδώ, μέχρι $count παρτίδα',
     );
     return '$_temp0';
   }

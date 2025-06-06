@@ -952,69 +952,64 @@ class AppLocalizationsKo extends AppLocalizations {
   String get contactContactLichess => 'Lichess에 문의하기';
 
   @override
-  String get coordinatesCoordinates => 'Coordinates';
+  String get coordinatesCoordinates => '좌표';
 
   @override
-  String get coordinatesCoordinateTraining => 'Coordinate training';
+  String get coordinatesCoordinateTraining => '좌표 훈련';
 
   @override
   String coordinatesAverageScoreAsWhiteX(String param) {
-    return 'Average score as white: $param';
+    return '백색으로 평균 점수: $param';
   }
 
   @override
   String coordinatesAverageScoreAsBlackX(String param) {
-    return 'Average score as black: $param';
+    return '흑색으로 평균 점수: $param';
   }
 
   @override
-  String get coordinatesKnowingTheChessBoard =>
-      'Knowing the chessboard coordinates is a very important skill for several reasons:';
+  String get coordinatesKnowingTheChessBoard => '체스판 좌표를 아는 것은 아주 중요한 체스 기술입니다:';
 
   @override
-  String get coordinatesMostChessCourses =>
-      'Most chess courses and exercises use the algebraic notation extensively.';
+  String get coordinatesMostChessCourses => '대부분의 체스 강좌와 훈련은 `대수적 표기법`을 광범위하게 사용합니다.';
 
   @override
   String get coordinatesTalkToYourChessFriends =>
-      'It makes it easier to talk to your chess friends, since you both understand the \'language of chess\'.';
+      '기보법을 안다면, 친구와 당신 모두 \'체스의 언어\'를 이해하기 때문에 체스 경기를 이야기하기 쉬워집니다.';
 
   @override
   String get coordinatesYouCanAnalyseAGameMoreEffectively =>
-      'You can analyse a game more effectively if you can quickly recognise coordinates.';
+      '당신이 좌표를 빠르게 인식할 수 있다면 더 효과적으로 게임을 분석할 수 있습니다.';
 
   @override
-  String get coordinatesACoordinateAppears =>
-      'A coordinate appears on the board and you must click on the corresponding square.';
+  String get coordinatesACoordinateAppears => '보드 위에 좌표가 나타나며 알맞은 칸을 클릭해야 합니다.';
 
   @override
-  String get coordinatesASquareIsHighlightedExplanation =>
-      'A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").';
+  String get coordinatesASquareIsHighlightedExplanation => '보드의 칸이 강조되며 좌표를 입력해야 합니다. (예: \"e4\")';
 
   @override
-  String get coordinatesYouHaveThirtySeconds =>
-      'You have 30 seconds to correctly map as many squares as possible!';
+  String get coordinatesYouHaveThirtySeconds => '30초 동안 가능한 많은 칸을 매칭하세요!';
 
   @override
-  String get coordinatesGoAsLongAsYouWant => 'Go as long as you want, there is no time limit!';
+  String get coordinatesGoAsLongAsYouWant => '원하는 만큼 오래 하세요, 시간 제한은 없습니다!';
 
   @override
-  String get coordinatesShowCoordinates => 'Show coordinates';
+  String get coordinatesShowCoordinates => '좌표 표시';
 
   @override
-  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+  String get coordinatesShowCoordsOnAllSquares => '모든 칸에 좌표';
 
   @override
-  String get coordinatesShowPieces => 'Show pieces';
+  String get coordinatesShowPieces => '기물 표시';
 
   @override
-  String get coordinatesStartTraining => 'Start training';
+  String get coordinatesStartTraining => '훈련 시작';
 
   @override
-  String get coordinatesFindSquare => 'Find square';
+  String get coordinatesFindSquare => '칸 찾기';
 
   @override
-  String get coordinatesNameSquare => 'Name square';
+  String get coordinatesNameSquare => '칸 이름 맞추기';
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
@@ -1341,235 +1336,228 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesBlindfold => '기물 가리기';
 
   @override
-  String get puzzlePuzzles => 'Puzzles';
+  String get puzzlePuzzles => '퍼즐';
 
   @override
-  String get puzzlePuzzleThemes => 'Puzzle Themes';
+  String get puzzlePuzzleThemes => '퍼즐 테마';
 
   @override
-  String get puzzleRecommended => 'Recommended';
+  String get puzzleRecommended => '추천';
 
   @override
-  String get puzzlePhases => 'Phases';
+  String get puzzlePhases => '단계';
 
   @override
-  String get puzzleMotifs => 'Motifs';
+  String get puzzleMotifs => '모티브';
 
   @override
-  String get puzzleAdvanced => 'Advanced';
+  String get puzzleAdvanced => '고급';
 
   @override
-  String get puzzleLengths => 'Lengths';
+  String get puzzleLengths => '길이';
 
   @override
-  String get puzzleMates => 'Mates';
+  String get puzzleMates => '체크메이트';
 
   @override
-  String get puzzleGoals => 'Goals';
+  String get puzzleGoals => '목표';
 
   @override
-  String get puzzleOrigin => 'Origin';
+  String get puzzleOrigin => '출처';
 
   @override
-  String get puzzleSpecialMoves => 'Special moves';
+  String get puzzleSpecialMoves => '특수 행마';
 
   @override
-  String get puzzleDidYouLikeThisPuzzle => 'Did you like this puzzle?';
+  String get puzzleDidYouLikeThisPuzzle => '이 퍼즐이 괜찮았나요?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Vote to load the next one!';
+  String get puzzleVoteToLoadNextOne => '다음 퍼즐을 위해 투표해주세요!';
 
   @override
-  String get puzzleUpVote => 'Up vote puzzle';
+  String get puzzleUpVote => '퍼즐 추천';
 
   @override
-  String get puzzleDownVote => 'Down vote puzzle';
+  String get puzzleDownVote => '퍼즐 비추천';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange =>
-      'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.';
+      '당신의 퍼즐 레이팅은 바뀌지 않을 것입니다. 퍼즐은 경쟁이 아니라는 걸 기억하세요. 레이팅은 당신의 현재 수준에 맞는 퍼즐을 선택하도록 돕습니다.';
 
   @override
-  String get puzzleFindTheBestMoveForWhite => 'Find the best move for white.';
+  String get puzzleFindTheBestMoveForWhite => '백의 최선 수를 찾아보세요.';
 
   @override
-  String get puzzleFindTheBestMoveForBlack => 'Find the best move for black.';
+  String get puzzleFindTheBestMoveForBlack => '흑의 최선 수를 찾아보세요.';
 
   @override
-  String get puzzleToGetPersonalizedPuzzles => 'To get personalized puzzles:';
+  String get puzzleToGetPersonalizedPuzzles => '개인화된 퍼즐을 위해선:';
 
   @override
   String puzzlePuzzleId(String param) {
-    return 'Puzzle $param';
+    return '퍼즐 $param';
   }
 
   @override
-  String get puzzlePuzzleOfTheDay => 'Puzzle of the day';
+  String get puzzlePuzzleOfTheDay => '오늘의 퍼즐';
 
   @override
-  String get puzzleDailyPuzzle => 'Daily Puzzle';
+  String get puzzleDailyPuzzle => '일일 퍼즐';
 
   @override
-  String get puzzleClickToSolve => 'Click to solve';
+  String get puzzleClickToSolve => '퍼즐 풀기';
 
   @override
-  String get puzzleGoodMove => 'Good move';
+  String get puzzleGoodMove => '좋은 수 입니다.';
 
   @override
-  String get puzzleBestMove => 'Best move!';
+  String get puzzleBestMove => '가장 좋은 수입니다!';
 
   @override
-  String get puzzleKeepGoing => 'Keep going…';
+  String get puzzleKeepGoing => '계속하세요...';
 
   @override
-  String get puzzlePuzzleSuccess => 'Success!';
+  String get puzzlePuzzleSuccess => '성공!';
 
   @override
-  String get puzzlePuzzleComplete => 'Puzzle complete!';
+  String get puzzlePuzzleComplete => '퍼즐 완료!';
 
   @override
-  String get puzzleByOpenings => 'By openings';
+  String get puzzleByOpenings => '오프닝별';
 
   @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+  String get puzzlePuzzlesByOpenings => '오프닝별 퍼즐';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
+  String get puzzleOpeningsYouPlayedTheMost => '레이팅 게임에서 가장 많이 플레이한 오프닝';
 
   @override
-  String get puzzleUseFindInPage =>
-      'Use \"Find in page\" in the browser menu to find your favourite opening!';
+  String get puzzleUseFindInPage => '브라우저의 \"페이지에서 찾기\" 메뉴를 이용해 가장 좋아하는 오프닝을 찾으세요!';
 
   @override
-  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
+  String get puzzleUseCtrlF => 'Ctrl+f를 사용해서 가장 좋아하는 오프닝을 찾으세요!';
 
   @override
-  String get puzzleNotTheMove => 'That\'s not the move!';
+  String get puzzleNotTheMove => '그 수가 아닙니다!';
 
   @override
-  String get puzzleTrySomethingElse => 'Try something else.';
+  String get puzzleTrySomethingElse => '다른 것 시도하기';
 
   @override
   String puzzleRatingX(String param) {
-    return 'Rating: $param';
+    return '레이팅: $param';
   }
 
   @override
-  String get puzzleHidden => 'hidden';
+  String get puzzleHidden => '숨겨짐';
 
   @override
   String puzzleFromGameLink(String param) {
-    return 'From game $param';
+    return '게임 $param에서';
   }
 
   @override
-  String get puzzleContinueTraining => 'Continue training';
+  String get puzzleContinueTraining => '연습 계속하기';
 
   @override
-  String get puzzleDifficultyLevel => 'Difficulty level';
+  String get puzzleDifficultyLevel => '난이도';
 
   @override
-  String get puzzleNormal => 'Normal';
+  String get puzzleNormal => '보통';
 
   @override
-  String get puzzleEasier => 'Easier';
+  String get puzzleEasier => '쉬움';
 
   @override
-  String get puzzleEasiest => 'Easiest';
+  String get puzzleEasiest => '매우 쉬움';
 
   @override
-  String get puzzleHarder => 'Harder';
+  String get puzzleHarder => '어려움';
 
   @override
-  String get puzzleHardest => 'Hardest';
+  String get puzzleHardest => '매우 어려움';
 
   @override
-  String get puzzleExample => 'Example';
+  String get puzzleExample => '예시';
 
   @override
-  String get puzzleAddAnotherTheme => 'Add another theme';
+  String get puzzleAddAnotherTheme => '새 테마 추가';
 
   @override
-  String get puzzleNextPuzzle => 'Next puzzle';
+  String get puzzleNextPuzzle => '다음 퍼즐';
 
   @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Jump to next puzzle immediately';
+  String get puzzleJumpToNextPuzzleImmediately => '다음 퍼즐로 즉시 이동';
 
   @override
-  String get puzzlePuzzleDashboard => 'Puzzle Dashboard';
+  String get puzzlePuzzleDashboard => '퍼즐 대시보드';
 
   @override
-  String get puzzleImprovementAreas => 'Improvement areas';
+  String get puzzleImprovementAreas => '개선이 필요한 부분';
 
   @override
-  String get puzzleStrengths => 'Strengths';
+  String get puzzleStrengths => '강점';
 
   @override
-  String get puzzleHistory => 'Puzzle history';
+  String get puzzleHistory => '퍼즐 히스토리';
 
   @override
-  String get puzzleSolved => 'solved';
+  String get puzzleSolved => '해결함';
 
   @override
-  String get puzzleFailed => 'incorrect';
+  String get puzzleFailed => '실패함';
 
   @override
   String get puzzleStreakDescription =>
-      'Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it\'s game over! But you can skip one move per session.';
+      '점점 더 어려워지는 퍼즐을 풀고 연승을 쌓으세요. 시간 제한은 없습니다. 한번의 잘못된 수 만으로 게임이 끝납니다! 그러나 세션당 한 수를 건너 뛸 수 있습니다.';
 
   @override
   String puzzleYourStreakX(String param) {
-    return 'Your streak: $param';
+    return '연승 기록: $param';
   }
 
   @override
-  String get puzzleStreakSkipExplanation =>
-      'Skip this move to preserve your streak! Only works once per run.';
+  String get puzzleStreakSkipExplanation => '이 수를 건너뛰고 연승 기록을 보존하세요! 한 도전에 한 번만 가능합니다.';
 
   @override
-  String get puzzleContinueTheStreak => 'Continue the streak';
+  String get puzzleContinueTheStreak => '계속하기';
 
   @override
-  String get puzzleNewStreak => 'New streak';
+  String get puzzleNewStreak => '새 연승 도전';
 
   @override
-  String get puzzleFromMyGames => 'From my games';
+  String get puzzleFromMyGames => '내 게임에서';
 
   @override
-  String get puzzleLookupOfPlayer => 'Lookup puzzles from a player\'s games';
+  String get puzzleLookupOfPlayer => '플레이어의 게임들에서 퍼즐을 찾습니다';
 
   @override
-  String get puzzleSearchPuzzles => 'Search puzzles';
+  String get puzzleSearchPuzzles => '퍼즐 찾기';
 
   @override
   String get puzzleFromMyGamesNone =>
-      'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
+      '데이터베이스에 퍼즐이 없습니다만, Lichess는 여전히 당신을 사랑합니다.\n래피드나 클래시컬 게임을 플레이해서 당신의 퍼즐이 추가될 확률을 높이세요!';
 
   @override
-  String get puzzlePuzzleDashboardDescription => 'Train, analyse, improve';
+  String get puzzlePuzzleDashboardDescription => '훈련, 분석, 개선';
 
   @override
   String puzzlePercentSolved(String param) {
-    return '$param solved';
+    return '$param 해결함';
   }
 
   @override
-  String get puzzleNoPuzzlesToShow => 'Nothing to show, go play some puzzles first!';
+  String get puzzleNoPuzzlesToShow => '표시할 것이 없습니다. 먼저 퍼즐을 플레이하세요!';
 
   @override
-  String get puzzleImprovementAreasDescription => 'Train these to optimize your progress!';
+  String get puzzleImprovementAreasDescription => '실력을 높이기 위해 훈련하세요!';
 
   @override
-  String get puzzleStrengthDescription => 'You perform the best in these themes';
+  String get puzzleStrengthDescription => '이 테마에서 최고의 성적을 냈습니다';
 
   @override
   String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Played $count times',
-      one: 'Played $count time',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count회 플레이');
     return '$_temp0';
   }
 
@@ -1578,8 +1566,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count points below your puzzle rating',
-      one: 'One point below your puzzle rating',
+      other: '당신의 퍼즐 레이팅보다 $count 포인트 낮음',
     );
     return '$_temp0';
   }
@@ -1589,8 +1576,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count points above your puzzle rating',
-      one: 'One point above your puzzle rating',
+      other: '당신의 퍼즐 레이팅보다 $count 포인트 높음',
     );
     return '$_temp0';
   }
@@ -1600,452 +1586,421 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles found in games by $param2',
-      one: 'One puzzle found in games by $param2',
+      other: '$param2의 대국들에서 $count개의 퍼즐 발견됨',
     );
     return '$_temp0';
   }
 
   @override
   String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count played');
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 플레이함');
     return '$_temp0';
   }
 
   @override
   String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count to replay');
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 다시 풀기');
     return '$_temp0';
   }
 
   @override
-  String get puzzleThemeAdvancedPawn => 'Advanced pawn';
+  String get puzzleThemeAdvancedPawn => '전진한 폰';
 
   @override
-  String get puzzleThemeAdvancedPawnDescription =>
-      'One of your pawns is deep into the opponent position, maybe threatening to promote.';
+  String get puzzleThemeAdvancedPawnDescription => '상대방 진영에 깊숙히 전진한 폰이 승급을 노립니다.';
 
   @override
-  String get puzzleThemeAdvantage => 'Advantage';
+  String get puzzleThemeAdvantage => '이점';
 
   @override
-  String get puzzleThemeAdvantageDescription =>
-      'Seize your chance to get a decisive advantage. (200cp ≤ eval ≤ 600cp)';
+  String get puzzleThemeAdvantageDescription => '결정적인 이점을 쟁취하세요. (200cp ≤ eval ≤ 600cp)';
 
   @override
-  String get puzzleThemeAnastasiaMate => 'Anastasia\'s mate';
+  String get puzzleThemeAnastasiaMate => '아나스타시아 메이트';
 
   @override
   String get puzzleThemeAnastasiaMateDescription =>
-      'A knight and rook or queen team up to trap the opposing king between the side of the board and a friendly piece.';
+      '나이트와 룩 또는 퀸이 힘을 합쳐 상대 킹을 보드 가장자리와 자신의 기물 사이의 함정에 빠트립니다.';
 
   @override
-  String get puzzleThemeArabianMate => 'Arabian mate';
+  String get puzzleThemeArabianMate => '아라비안 메이트';
 
   @override
-  String get puzzleThemeArabianMateDescription =>
-      'A knight and a rook team up to trap the opposing king on a corner of the board.';
+  String get puzzleThemeArabianMateDescription => '나이트와 룩이 힘을 합쳐 상대 킹을 보드 구석에서 함정에 빠트립니다.';
 
   @override
-  String get puzzleThemeAttackingF2F7 => 'Attacking f2 or f7';
+  String get puzzleThemeAttackingF2F7 => 'f2나 f7 공격하기';
 
   @override
-  String get puzzleThemeAttackingF2F7Description =>
-      'An attack focusing on the f2 or f7 pawn, such as in the fried liver opening.';
+  String get puzzleThemeAttackingF2F7Description => 'f2나 f7 칸의 폰을 노리고 공격합니다. 예시: 프라이드 리버 오프닝.';
 
   @override
-  String get puzzleThemeAttraction => 'Attraction';
+  String get puzzleThemeAttraction => '유인';
 
   @override
-  String get puzzleThemeAttractionDescription =>
-      'An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.';
+  String get puzzleThemeAttractionDescription => '희생이나 교환을 통해 상대 기물을 후속 전술이 있는 칸으로 끌어냅니다.';
 
   @override
-  String get puzzleThemeBackRankMate => 'Back rank mate';
+  String get puzzleThemeBackRankMate => '백 랭크 메이트';
 
   @override
-  String get puzzleThemeBackRankMateDescription =>
-      'Checkmate the king on the home rank, when it is trapped there by its own pieces.';
+  String get puzzleThemeBackRankMateDescription => '킹이 자신의 기물들에게 막혀 마지막 랭크에서 체크메이트 당합니다.';
 
   @override
-  String get puzzleThemeBishopEndgame => 'Bishop endgame';
+  String get puzzleThemeBishopEndgame => '비숍 엔드게임';
 
   @override
-  String get puzzleThemeBishopEndgameDescription => 'An endgame with only bishops and pawns.';
+  String get puzzleThemeBishopEndgameDescription => '비숍과 폰만 있는 엔드게임';
 
   @override
-  String get puzzleThemeBodenMate => 'Boden\'s mate';
+  String get puzzleThemeBodenMate => '보든 메이트';
 
   @override
-  String get puzzleThemeBodenMateDescription =>
-      'Two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces.';
+  String get puzzleThemeBodenMateDescription => '자신의 기물에 막힌 킹에게 두 비숍이 X자로 대각선을 막아 메이트를 합니다.';
 
   @override
-  String get puzzleThemeCastling => 'Castling';
+  String get puzzleThemeCastling => '캐슬링';
 
   @override
-  String get puzzleThemeCastlingDescription =>
-      'Bring the king to safety, and deploy the rook for attack.';
+  String get puzzleThemeCastlingDescription => '왕을 안전하게 피신시키고, 룩을 이용해 공격 태세를 갖춥니다.';
 
   @override
-  String get puzzleThemeCapturingDefender => 'Capture the defender';
+  String get puzzleThemeCapturingDefender => '보호하는 기물을 제거하세요.';
 
   @override
   String get puzzleThemeCapturingDefenderDescription =>
-      'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.';
+      '다른 기물을 방어중인 기물을 잡아서 다음 수에 더 이상 방어되지 않는 기물을 잡을 수 있게 됩니다.';
 
   @override
-  String get puzzleThemeCrushing => 'Crushing';
+  String get puzzleThemeCrushing => '박살내기';
 
   @override
-  String get puzzleThemeCrushingDescription =>
-      'Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)';
+  String get puzzleThemeCrushingDescription => '상대의 블런더를 포착하고 박살내어 이득을 얻으세요. (eval ≥ 600cp)';
 
   @override
-  String get puzzleThemeDoubleBishopMate => 'Double bishop mate';
+  String get puzzleThemeDoubleBishopMate => '2비숍 메이트';
 
   @override
-  String get puzzleThemeDoubleBishopMateDescription =>
-      'Two attacking bishops on adjacent diagonals deliver mate to a king obstructed by friendly pieces.';
+  String get puzzleThemeDoubleBishopMateDescription => '자신의 기물에 막힌 킹에게 두 비숍이 인접한 대각선을 막아 메이트를 합니다.';
 
   @override
-  String get puzzleThemeDovetailMate => 'Dovetail mate';
+  String get puzzleThemeDovetailMate => '도브테일 메이트';
 
   @override
   String get puzzleThemeDovetailMateDescription =>
-      'A queen delivers mate to an adjacent king, whose only two escape squares are obstructed by friendly pieces.';
+      '퀸이 킹 바로 옆에서 메이트를 합니다. 유일하게 빠져나갈 수 있는 두 칸은 자신의 기물에게 막혀 있습니다.';
 
   @override
-  String get puzzleThemeEquality => 'Equality';
+  String get puzzleThemeEquality => '동등함';
 
   @override
   String get puzzleThemeEqualityDescription =>
-      'Come back from a losing position, and secure a draw or a balanced position. (eval ≤ 200cp)';
+      '불리한 상황에서 벗어나 무승부 또는 균형잡힌 포지션으로 만드세요. (eval ≤ 200cp)';
 
   @override
-  String get puzzleThemeKingsideAttack => 'Kingside attack';
+  String get puzzleThemeKingsideAttack => '킹사이드 공격';
 
   @override
-  String get puzzleThemeKingsideAttackDescription =>
-      'An attack of the opponent\'s king, after they castled on the king side.';
+  String get puzzleThemeKingsideAttackDescription => '상대 킹이 킹사이드 캐슬링을 한 뒤의 공격.';
 
   @override
-  String get puzzleThemeClearance => 'Clearance';
+  String get puzzleThemeClearance => '정리';
 
   @override
-  String get puzzleThemeClearanceDescription =>
-      'A move, often with tempo, that clears a square, file or diagonal for a follow-up tactical idea.';
+  String get puzzleThemeClearanceDescription => '이어지는 전술적 아이디어를 위해 칸, 파일 또는 대각선을 비우는 수입니다.';
 
   @override
-  String get puzzleThemeDefensiveMove => 'Defensive move';
+  String get puzzleThemeDefensiveMove => '방어적인 수';
 
   @override
-  String get puzzleThemeDefensiveMoveDescription =>
-      'A precise move or sequence of moves that is needed to avoid losing material or another advantage.';
+  String get puzzleThemeDefensiveMoveDescription => '기물을 잃거나 다른 손실을 피하기 위해 필요한 정확한 수입니다.';
 
   @override
-  String get puzzleThemeDeflection => 'Deflection';
+  String get puzzleThemeDeflection => '굴절';
 
   @override
   String get puzzleThemeDeflectionDescription =>
-      'A move that distracts an opponent piece from another duty that it performs, such as guarding a key square. Sometimes also called \"overloading\".';
+      '중요한 칸을 수비하는 등 다른 역할을 수행하는 상대 기물의 주의를 분산시키는 수입니다. \"과부하\"라고도 불립니다.';
 
   @override
-  String get puzzleThemeDiscoveredAttack => 'Discovered attack';
+  String get puzzleThemeDiscoveredAttack => '디스커버드 어택';
 
   @override
   String get puzzleThemeDiscoveredAttackDescription =>
-      'Moving a piece (such as a knight), that previously blocked an attack by a long range piece (such as a rook), out of the way of that piece.';
+      '장거리 기물(예: 룩)의 길을 막고 있는 기물(예: 나이트)을 이동시켜 공격합니다.';
 
   @override
-  String get puzzleThemeDoubleCheck => 'Double check';
+  String get puzzleThemeDoubleCheck => '더블 체크';
 
   @override
   String get puzzleThemeDoubleCheckDescription =>
-      'Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent\'s king.';
+      '움직인 기물과 그 뒤에 있던 기물이 모두 상대 킹을 공격한 디스커버 어택의 결과로, 두 기물이 동시에 체크를 합니다.';
 
   @override
-  String get puzzleThemeEndgame => 'Endgame';
+  String get puzzleThemeEndgame => '엔드게임';
 
   @override
-  String get puzzleThemeEndgameDescription => 'A tactic during the last phase of the game.';
+  String get puzzleThemeEndgameDescription => '게임 종반부에서의 전략';
 
   @override
   String get puzzleThemeEnPassantDescription =>
-      'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
+      '앙파상 규칙을 포함한 전술입니다. 상대 폰이 처음에 두 칸 이동해서 내 폰을 지나쳤을 경우, 그 폰을 잡을 수 있습니다.';
 
   @override
-  String get puzzleThemeExposedKing => 'Exposed king';
+  String get puzzleThemeExposedKing => '노출된 킹';
 
   @override
-  String get puzzleThemeExposedKingDescription =>
-      'A tactic involving a king with few defenders around it, often leading to checkmate.';
+  String get puzzleThemeExposedKingDescription => '주변에 방어자가 얼마 없는 킹에 대한 전술입니다. 종종 체크메이트가 되기도 합니다.';
 
   @override
-  String get puzzleThemeFork => 'Fork';
+  String get puzzleThemeFork => '포크';
 
   @override
-  String get puzzleThemeForkDescription =>
-      'A move where the moved piece attacks two opponent pieces at once.';
+  String get puzzleThemeForkDescription => '이동한 기물이 두 개의 상대 기물을 동시에 공격하는 수입니다.';
 
   @override
-  String get puzzleThemeHangingPiece => 'Hanging piece';
+  String get puzzleThemeHangingPiece => '보호받지 않는 기물';
 
   @override
-  String get puzzleThemeHangingPieceDescription =>
-      'A tactic involving an opponent piece being undefended or insufficiently defended and free to capture.';
+  String get puzzleThemeHangingPieceDescription => '상대 기물이 지켜지지 않거나 불충분하게 지켜져 공짜로 잡을 수 있는 전술입니다.';
 
   @override
-  String get puzzleThemeHookMate => 'Hook mate';
+  String get puzzleThemeHookMate => '훅 메이트';
 
   @override
-  String get puzzleThemeHookMateDescription =>
-      'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
+  String get puzzleThemeHookMateDescription => '상대의 폰에 의해 탈출로가 막힌 킹을 룩, 나이트, 폰으로 체크메이트 합니다.';
 
   @override
-  String get puzzleThemeInterference => 'Interference';
+  String get puzzleThemeInterference => '간섭';
 
   @override
   String get puzzleThemeInterferenceDescription =>
-      'Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.';
+      '상대의 두 기물 사이에 기물을 집어넣어 그 기물들을 지켜지지 않게 만듭니다. 두 룩 사이의 나이트처럼요.';
 
   @override
-  String get puzzleThemeIntermezzo => 'Intermezzo';
+  String get puzzleThemeIntermezzo => '사잇수';
 
   @override
   String get puzzleThemeIntermezzoDescription =>
-      'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".';
+      '예상되는 플레이를 하는 대신, 먼저 상대가 즉시 해결해야 하는 또 다른 위협을 끼워 넣습니다. \"Zwischenzug\"나 \"In between\"이라고도 합니다.';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Kill box mate';
+  String get puzzleThemeKillBoxMate => '킬 박스 체크메이트';
 
   @override
   String get puzzleThemeKillBoxMateDescription =>
-      'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+      '킹 옆에서는 룩이 체크를 넣고, 퀸이 그 룩을 지켜주면서 킹의 도주로를 차단하는 체크메이트 패턴입니다. 룩과 퀸이 3 x 3 \"킬 박스\" 안에서 킹을 공격합니다.';
 
   @override
-  String get puzzleThemeVukovicMate => 'Vukovic mate';
+  String get puzzleThemeVukovicMate => '부코비치 메이트';
 
   @override
   String get puzzleThemeVukovicMateDescription =>
-      'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+      '룩과 나이트가 협력하여 왕에게 체크메이트를 겁니다. 룩은 세 번째 기물의 지원을 받아 메이트를 완성하고, 나이트는 왕의 도주로를 차단하는 역할을 합니다.';
 
   @override
-  String get puzzleThemeKnightEndgame => 'Knight endgame';
+  String get puzzleThemeKnightEndgame => '나이트 엔딩';
 
   @override
-  String get puzzleThemeKnightEndgameDescription => 'An endgame with only knights and pawns.';
+  String get puzzleThemeKnightEndgameDescription => '나이트와 폰만 있는 엔드게임';
 
   @override
-  String get puzzleThemeLong => 'Long puzzle';
+  String get puzzleThemeLong => '긴 퍼즐';
 
   @override
-  String get puzzleThemeLongDescription => 'Three moves to win.';
+  String get puzzleThemeLongDescription => '승리까지 세 수 걸립니다.';
 
   @override
-  String get puzzleThemeMaster => 'Master games';
+  String get puzzleThemeMaster => '마스터 게임';
 
   @override
-  String get puzzleThemeMasterDescription => 'Puzzles from games played by titled players.';
+  String get puzzleThemeMasterDescription => '타이틀 보유 플레이어의 게임에서 나온 퍼즐입니다.';
 
   @override
-  String get puzzleThemeMasterVsMaster => 'Master vs Master games';
+  String get puzzleThemeMasterVsMaster => '마스터 vs 마스터 게임';
 
   @override
-  String get puzzleThemeMasterVsMasterDescription =>
-      'Puzzles from games between two titled players.';
+  String get puzzleThemeMasterVsMasterDescription => '타이틀 보유 플레이어 간의 게임에서 나온 퍼즐입니다.';
 
   @override
-  String get puzzleThemeMate => 'Checkmate';
+  String get puzzleThemeMate => '체크메이트';
 
   @override
-  String get puzzleThemeMateDescription => 'Win the game with style.';
+  String get puzzleThemeMateDescription => '게임을 승리하세요.';
 
   @override
-  String get puzzleThemeMateIn1 => 'Mate in 1';
+  String get puzzleThemeMateIn1 => '1수 메이트';
 
   @override
-  String get puzzleThemeMateIn1Description => 'Deliver checkmate in one move.';
+  String get puzzleThemeMateIn1Description => '한 수만에 체크메이트하세요.';
 
   @override
-  String get puzzleThemeMateIn2 => 'Mate in 2';
+  String get puzzleThemeMateIn2 => '2수 메이트';
 
   @override
-  String get puzzleThemeMateIn2Description => 'Deliver checkmate in two moves.';
+  String get puzzleThemeMateIn2Description => '두 수만에 체크메이트하세요.';
 
   @override
-  String get puzzleThemeMateIn3 => 'Mate in 3';
+  String get puzzleThemeMateIn3 => '3수 메이트';
 
   @override
-  String get puzzleThemeMateIn3Description => 'Deliver checkmate in three moves.';
+  String get puzzleThemeMateIn3Description => '세 수만에 체크메이트하세요.';
 
   @override
-  String get puzzleThemeMateIn4 => 'Mate in 4';
+  String get puzzleThemeMateIn4 => '4수 메이트';
 
   @override
-  String get puzzleThemeMateIn4Description => 'Deliver checkmate in four moves.';
+  String get puzzleThemeMateIn4Description => '네 수만에 체크메이트하세요.';
 
   @override
-  String get puzzleThemeMateIn5 => 'Mate in 5 or more';
+  String get puzzleThemeMateIn5 => '5수+ 메이트';
 
   @override
-  String get puzzleThemeMateIn5Description => 'Figure out a long mating sequence.';
+  String get puzzleThemeMateIn5Description => '긴 체크메이트를 찾아내세요.';
 
   @override
-  String get puzzleThemeMiddlegame => 'Middlegame';
+  String get puzzleThemeMiddlegame => '미들게임';
 
   @override
-  String get puzzleThemeMiddlegameDescription => 'A tactic during the second phase of the game.';
+  String get puzzleThemeMiddlegameDescription => '게임 중반부에서의 전략';
 
   @override
-  String get puzzleThemeOneMove => 'One-move puzzle';
+  String get puzzleThemeOneMove => '1수 퍼즐';
 
   @override
-  String get puzzleThemeOneMoveDescription => 'A puzzle that is only one move long.';
+  String get puzzleThemeOneMoveDescription => '한 수짜리 퍼즐입니다.';
 
   @override
-  String get puzzleThemeOpening => 'Opening';
+  String get puzzleThemeOpening => '오프닝';
 
   @override
-  String get puzzleThemeOpeningDescription => 'A tactic during the first phase of the game.';
+  String get puzzleThemeOpeningDescription => '게임 초반부에서의 전략';
 
   @override
-  String get puzzleThemePawnEndgame => 'Pawn endgame';
+  String get puzzleThemePawnEndgame => '폰 엔드게임';
 
   @override
-  String get puzzleThemePawnEndgameDescription => 'An endgame with only pawns.';
+  String get puzzleThemePawnEndgameDescription => '폰만 있는 엔드게임.';
 
   @override
-  String get puzzleThemePin => 'Pin';
+  String get puzzleThemePin => '핀';
 
   @override
-  String get puzzleThemePinDescription =>
-      'A tactic involving pins, where a piece is unable to move without revealing an attack on a higher value piece.';
+  String get puzzleThemePinDescription => '더 높은 가치의 기물이 공격받게 되기 때문에 기물을 움직이지 못하게 하는 전술입니다.';
 
   @override
-  String get puzzleThemePromotion => 'Promotion';
+  String get puzzleThemePromotion => '프로모션';
 
   @override
-  String get puzzleThemePromotionDescription =>
-      'Promote one of your pawn to a queen or minor piece.';
+  String get puzzleThemePromotionDescription => '폰을 퀸이나 다른 기물로 승진';
 
   @override
-  String get puzzleThemeQueenEndgame => 'Queen endgame';
+  String get puzzleThemeQueenEndgame => '퀸 엔딩';
 
   @override
-  String get puzzleThemeQueenEndgameDescription => 'An endgame with only queens and pawns.';
+  String get puzzleThemeQueenEndgameDescription => '퀸과 폰만 있는 엔드게임';
 
   @override
-  String get puzzleThemeQueenRookEndgame => 'Queen and Rook';
+  String get puzzleThemeQueenRookEndgame => '퀸과 룩';
 
   @override
-  String get puzzleThemeQueenRookEndgameDescription =>
-      'An endgame with only queens, rooks and pawns.';
+  String get puzzleThemeQueenRookEndgameDescription => '퀸과 룩, 폰만 있는 엔드게임';
 
   @override
-  String get puzzleThemeQueensideAttack => 'Queenside attack';
+  String get puzzleThemeQueensideAttack => '퀸사이드 공격';
 
   @override
-  String get puzzleThemeQueensideAttackDescription =>
-      'An attack of the opponent\'s king, after they castled on the queen side.';
+  String get puzzleThemeQueensideAttackDescription => '상대 킹이 퀸사이드 캐슬링을 한 뒤의 공격.';
 
   @override
-  String get puzzleThemeQuietMove => 'Quiet move';
+  String get puzzleThemeQuietMove => '조용한 수';
 
   @override
-  String get puzzleThemeQuietMoveDescription =>
-      'A move that does neither make a check or capture, nor an immediate threat to capture, but does prepare a more hidden unavoidable threat for a later move.';
+  String get puzzleThemeQuietMoveDescription => '체크 또는 기물을 잡는 수가 아니지만 나중에 피할 수 없는 위협을 준비하는 수입니다.';
 
   @override
-  String get puzzleThemeRookEndgame => 'Rook endgame';
+  String get puzzleThemeRookEndgame => '룩 엔딩';
 
   @override
-  String get puzzleThemeRookEndgameDescription => 'An endgame with only rooks and pawns.';
+  String get puzzleThemeRookEndgameDescription => '룩과 폰만 있는 엔드게임';
 
   @override
-  String get puzzleThemeSacrifice => 'Sacrifice';
+  String get puzzleThemeSacrifice => '희생';
 
   @override
-  String get puzzleThemeSacrificeDescription =>
-      'A tactic involving giving up material in the short-term, to gain an advantage again after a forced sequence of moves.';
+  String get puzzleThemeSacrificeDescription => '일련의 강제수로 이득을 얻기 위해 단기적으로 기물을 포기하는 전술입니다.';
 
   @override
-  String get puzzleThemeShort => 'Short puzzle';
+  String get puzzleThemeShort => '짧은 퍼즐';
 
   @override
-  String get puzzleThemeShortDescription => 'Two moves to win.';
+  String get puzzleThemeShortDescription => '승리까지 두 수 걸립니다.';
 
   @override
-  String get puzzleThemeSkewer => 'Skewer';
+  String get puzzleThemeSkewer => '스큐어';
 
   @override
   String get puzzleThemeSkewerDescription =>
-      'A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.';
+      '높은 가치의 기물을 공격해 길을 비키게 만들고, 그 뒤에 있는 낮은 가치의 기물을 잡는 전술입니다. 핀의 반대죠.';
 
   @override
-  String get puzzleThemeSmotheredMate => 'Smothered mate';
+  String get puzzleThemeSmotheredMate => '질식 체크메이트';
 
   @override
   String get puzzleThemeSmotheredMateDescription =>
-      'A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.';
+      '자신의 기물에 둘러쌓여(또는 \"질식되어\") 움직일 수 없는 킹을 나이트로 체크메이트 시키는 것 입니다.';
 
   @override
-  String get puzzleThemeSuperGM => 'Super GM games';
+  String get puzzleThemeSuperGM => '슈퍼GM 게임';
 
   @override
-  String get puzzleThemeSuperGMDescription =>
-      'Puzzles from games played by the best players in the world.';
+  String get puzzleThemeSuperGMDescription => '세계 최고 플레이어들의 게임에서 나온 퍼즐입니다.';
 
   @override
-  String get puzzleThemeTrappedPiece => 'Trapped piece';
+  String get puzzleThemeTrappedPiece => '갇힌 기물';
 
   @override
-  String get puzzleThemeTrappedPieceDescription =>
-      'A piece is unable to escape capture as it has limited moves.';
+  String get puzzleThemeTrappedPieceDescription => '기물의 움직임이 제한되어 있어 잡히는걸 막을 수 없습니다.';
 
   @override
-  String get puzzleThemeUnderPromotion => 'Underpromotion';
+  String get puzzleThemeUnderPromotion => '하향 승진';
 
   @override
-  String get puzzleThemeUnderPromotionDescription => 'Promotion to a knight, bishop, or rook.';
+  String get puzzleThemeUnderPromotionDescription => '나이트, 비숍, 룩으로 승진';
 
   @override
-  String get puzzleThemeVeryLong => 'Very long puzzle';
+  String get puzzleThemeVeryLong => '아주 긴 퍼즐';
 
   @override
-  String get puzzleThemeVeryLongDescription => 'Four moves or more to win.';
+  String get puzzleThemeVeryLongDescription => '승리까지 네 수 이상이 걸립니다.';
 
   @override
-  String get puzzleThemeXRayAttack => 'X-Ray attack';
+  String get puzzleThemeXRayAttack => 'X-Ray 공격';
 
   @override
-  String get puzzleThemeXRayAttackDescription =>
-      'A piece attacks or defends a square, through an enemy piece.';
+  String get puzzleThemeXRayAttackDescription => '기물이 상대 기물 너머의 칸을 공격 또는 방어합니다.';
 
   @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
+  String get puzzleThemeZugzwang => '추크추방';
 
   @override
-  String get puzzleThemeZugzwangDescription =>
-      'The opponent is limited in the moves they can make, and all moves worsen their position.';
+  String get puzzleThemeZugzwangDescription => '상대가 둘 수 있는 수는 제한되어 있으며, 모든 수가 포지션을 악화시킵니다.';
 
   @override
-  String get puzzleThemeMix => 'Healthy mix';
+  String get puzzleThemeMix => '골고루 섞기';
 
   @override
-  String get puzzleThemeMixDescription =>
-      'A bit of everything. You don\'t know what to expect, so you remain ready for anything! Just like in real games.';
+  String get puzzleThemeMixDescription => '전부 다. 무엇이 나올지 모르기 때문에 모든 것에 준비되어 있어야 합니다. 마치 진짜 게임처럼요.';
 
   @override
-  String get puzzleThemePlayerGames => 'Player games';
+  String get puzzleThemePlayerGames => '플레이어 게임';
 
   @override
-  String get puzzleThemePlayerGamesDescription =>
-      'Lookup puzzles generated from your games, or from another player\'s games.';
+  String get puzzleThemePlayerGamesDescription => '당신의 게임이나 다른 플레이어의 게임에서 나온 퍼즐을 찾아보세요.';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'These puzzles are in the public domain, and can be downloaded from $param.';
+    return '이 퍼즐들은 퍼블릭 도메인이며, $param에서 다운로드할 수 있습니다.';
   }
 
   @override
@@ -5227,495 +5182,486 @@ class AppLocalizationsKo extends AppLocalizations {
   String get streamerLichessStreamers => 'Lichess 스트리머';
 
   @override
-  String get studyPrivate => 'Private';
+  String get studyPrivate => '비공개';
 
   @override
-  String get studyMyStudies => 'My studies';
+  String get studyMyStudies => '내 연구';
 
   @override
-  String get studyStudiesIContributeTo => 'Studies I contribute to';
+  String get studyStudiesIContributeTo => '내가 기여한 연구';
 
   @override
-  String get studyMyPublicStudies => 'My public studies';
+  String get studyMyPublicStudies => '내 공개 연구';
 
   @override
-  String get studyMyPrivateStudies => 'My private studies';
+  String get studyMyPrivateStudies => '내 비공개 연구';
 
   @override
-  String get studyMyFavoriteStudies => 'My favourite studies';
+  String get studyMyFavoriteStudies => '내가 즐겨찾는 연구';
 
   @override
-  String get studyWhatAreStudies => 'What are studies?';
+  String get studyWhatAreStudies => '연구란 무엇인가요?';
 
   @override
-  String get studyAllStudies => 'All studies';
+  String get studyAllStudies => '모든 연구';
 
   @override
   String studyStudiesCreatedByX(String param) {
-    return 'Studies created by $param';
+    return '$param이(가) 만든 연구';
   }
 
   @override
-  String get studyNoneYet => 'None yet.';
+  String get studyNoneYet => '아직 없음';
 
   @override
-  String get studyHot => 'Hot';
+  String get studyHot => '인기있는';
 
   @override
-  String get studyDateAddedNewest => 'Date added (newest)';
+  String get studyDateAddedNewest => '추가된 날짜(새로운 순)';
 
   @override
-  String get studyDateAddedOldest => 'Date added (oldest)';
+  String get studyDateAddedOldest => '추가된 날짜(오래된 순)';
 
   @override
-  String get studyRecentlyUpdated => 'Recently updated';
+  String get studyRecentlyUpdated => '최근에 업데이트된 순';
 
   @override
-  String get studyMostPopular => 'Most popular';
+  String get studyMostPopular => '인기 많은 순';
 
   @override
-  String get studyAlphabetical => 'Alphabetical';
+  String get studyAlphabetical => '알파벳 순';
 
   @override
-  String get studyAddNewChapter => 'Add a new chapter';
+  String get studyAddNewChapter => '새 챕터 추가하기';
 
   @override
-  String get studyAddMembers => 'Add members';
+  String get studyAddMembers => '멤버 추가';
 
   @override
-  String get studyInviteToTheStudy => 'Invite to the study';
+  String get studyInviteToTheStudy => '연구에 초대';
 
   @override
-  String get studyPleaseOnlyInvitePeopleYouKnow =>
-      'Please only invite people who know you, and who actively want to join this study.';
+  String get studyPleaseOnlyInvitePeopleYouKnow => '당신이 아는 사람들이나 연구에 적극적으로 참여하고 싶은 사람들만 초대하세요.';
 
   @override
-  String get studySearchByUsername => 'Search by username';
+  String get studySearchByUsername => '사용자 이름으로 검색';
 
   @override
-  String get studySpectator => 'Spectator';
+  String get studySpectator => '관전자';
 
   @override
-  String get studyContributor => 'Contributor';
+  String get studyContributor => '기여자';
 
   @override
-  String get studyKick => 'Kick';
+  String get studyKick => '강제 퇴장';
 
   @override
-  String get studyLeaveTheStudy => 'Leave the study';
+  String get studyLeaveTheStudy => '연구 나가기';
 
   @override
-  String get studyYouAreNowAContributor => 'You are now a contributor';
+  String get studyYouAreNowAContributor => '당신은 이제 기여자입니다';
 
   @override
-  String get studyYouAreNowASpectator => 'You are now a spectator';
+  String get studyYouAreNowASpectator => '당신은 이제 관전자입니다';
 
   @override
-  String get studyPgnTags => 'PGN tags';
+  String get studyPgnTags => 'PGN 태그';
 
   @override
-  String get studyLike => 'Like';
+  String get studyLike => '좋아요';
 
   @override
-  String get studyUnlike => 'Unlike';
+  String get studyUnlike => '좋아요 취소';
 
   @override
-  String get studyNewTag => 'New tag';
+  String get studyNewTag => '새 태그';
 
   @override
-  String get studyCommentThisPosition => 'Comment on this position';
+  String get studyCommentThisPosition => '이 포지션에 댓글 달기';
 
   @override
-  String get studyCommentThisMove => 'Comment on this move';
+  String get studyCommentThisMove => '이 수에 댓글 달기';
 
   @override
-  String get studyAnnotateWithGlyphs => 'Annotate with glyphs';
+  String get studyAnnotateWithGlyphs => '기호로 주석 달기';
 
   @override
-  String get studyTheChapterIsTooShortToBeAnalysed => 'The chapter is too short to be analysed.';
+  String get studyTheChapterIsTooShortToBeAnalysed => '분석되기 너무 짧은 챕터입니다.';
 
   @override
-  String get studyOnlyContributorsCanRequestAnalysis =>
-      'Only the study contributors can request a computer analysis.';
+  String get studyOnlyContributorsCanRequestAnalysis => '연구 기여자만이 컴퓨터 분석을 요청할 수 있습니다.';
 
   @override
-  String get studyGetAFullComputerAnalysis =>
-      'Get a full server-side computer analysis of the mainline.';
+  String get studyGetAFullComputerAnalysis => '메인라인에 대한 전체 서버 컴퓨터 분석을 가져옵니다.';
 
   @override
-  String get studyMakeSureTheChapterIsComplete =>
-      'Make sure the chapter is complete. You can only request analysis once.';
+  String get studyMakeSureTheChapterIsComplete => '챕터가 완료되었는지 확인하세요. 분석은 한번만 요청할 수 있습니다.';
 
   @override
-  String get studyAllSyncMembersRemainOnTheSamePosition =>
-      'All SYNC members remain on the same position';
+  String get studyAllSyncMembersRemainOnTheSamePosition => '동기화된 모든 멤버들은 같은 포지션을 공유합니다';
 
   @override
-  String get studyShareChanges => 'Share changes with spectators and save them on the server';
+  String get studyShareChanges => '관전자와 변경 사항을 공유하고 서버에 저장';
 
   @override
-  String get studyPlaying => 'Playing';
+  String get studyPlaying => '대국 중';
 
   @override
-  String get studyShowResults => 'Results';
+  String get studyShowResults => '결과';
 
   @override
-  String get studyShowEvalBar => 'Evaluation bars';
+  String get studyShowEvalBar => '엔진 평가치';
 
   @override
-  String get studyNext => 'Next';
+  String get studyNext => '다음';
 
   @override
-  String get studyShareAndExport => 'Share & export';
+  String get studyShareAndExport => '공유 및 내보내기';
 
   @override
-  String get studyCloneStudy => 'Clone';
+  String get studyCloneStudy => '복제';
 
   @override
-  String get studyStudyPgn => 'Study PGN';
+  String get studyStudyPgn => '연구 PGN';
 
   @override
-  String get studyChapterPgn => 'Chapter PGN';
+  String get studyChapterPgn => '챕터 PGN';
 
   @override
-  String get studyCopyChapterPgn => 'Copy PGN';
+  String get studyCopyChapterPgn => 'PGN 복사';
 
   @override
-  String get studyDownloadGame => 'Download game';
+  String get studyDownloadGame => '게임 다운로드';
 
   @override
-  String get studyStudyUrl => 'Study URL';
+  String get studyStudyUrl => '연구 URL';
 
   @override
-  String get studyCurrentChapterUrl => 'Current chapter URL';
+  String get studyCurrentChapterUrl => '현재 챕터 URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed =>
-      'You can paste this in the forum or your Lichess blog to embed';
+  String get studyYouCanPasteThisInTheForumToEmbed => '포럼에 공유하려면 이 주소를 붙여넣으세요';
 
   @override
-  String get studyStartAtInitialPosition => 'Start at initial position';
+  String get studyStartAtInitialPosition => '처음 포지션에서 시작';
 
   @override
   String studyStartAtX(String param) {
-    return 'Start at $param';
+    return '$param에서 시작';
   }
 
   @override
-  String get studyEmbedInYourWebsite => 'Embed in your website';
+  String get studyEmbedInYourWebsite => '웹사이트 또는 블로그에 공유하기';
 
   @override
-  String get studyReadMoreAboutEmbedding => 'Read more about embedding';
+  String get studyReadMoreAboutEmbedding => '공유에 대한 상세 정보';
 
   @override
-  String get studyOnlyPublicStudiesCanBeEmbedded => 'Only public studies can be embedded!';
+  String get studyOnlyPublicStudiesCanBeEmbedded => '공개 연구만 공유할 수 있습니다!';
 
   @override
-  String get studyOpen => 'Open';
+  String get studyOpen => '열기';
 
   @override
   String studyXBroughtToYouByY(String param1, String param2) {
-    return '$param1, brought to you by $param2';
+    return '$param1. $param2에서 가져옴';
   }
 
   @override
-  String get studyStudyNotFound => 'Study not found';
+  String get studyStudyNotFound => '연구를 찾을 수 없음';
 
   @override
-  String get studyEditChapter => 'Edit chapter';
+  String get studyEditChapter => '챕터 편집하기';
 
   @override
-  String get studyNewChapter => 'New chapter';
+  String get studyNewChapter => '새 챕터';
 
   @override
   String studyImportFromChapterX(String param) {
-    return 'Import from $param';
+    return '$param에서 가져오기';
   }
 
   @override
-  String get studyOrientation => 'Orientation';
+  String get studyOrientation => '방향';
 
   @override
-  String get studyAnalysisMode => 'Analysis mode';
+  String get studyAnalysisMode => '분석 모드';
 
   @override
-  String get studyPinnedChapterComment => 'Pinned chapter comment';
+  String get studyPinnedChapterComment => '챕터 댓글 고정하기';
 
   @override
-  String get studySaveChapter => 'Save chapter';
+  String get studySaveChapter => '챕터 저장';
 
   @override
-  String get studyClearAnnotations => 'Clear annotations';
+  String get studyClearAnnotations => '주석 지우기';
 
   @override
-  String get studyClearVariations => 'Clear variations';
+  String get studyClearVariations => '바리에이션 초기화';
 
   @override
-  String get studyDeleteChapter => 'Delete chapter';
+  String get studyDeleteChapter => '챕터 지우기';
 
   @override
-  String get studyDeleteThisChapter => 'Delete this chapter. There is no going back!';
+  String get studyDeleteThisChapter => '이 챕터를 지울까요? 되돌릴 수 없습니다!';
 
   @override
-  String get studyClearAllCommentsInThisChapter =>
-      'Clear all comments, glyphs and drawn shapes in this chapter';
+  String get studyClearAllCommentsInThisChapter => '이 챕터의 모든 코멘트와 기호를 지울까요?';
 
   @override
-  String get studyRightUnderTheBoard => 'Right under the board';
+  String get studyRightUnderTheBoard => '보드 우하단에';
 
   @override
-  String get studyNoPinnedComment => 'None';
+  String get studyNoPinnedComment => '없음';
 
   @override
-  String get studyNormalAnalysis => 'Normal analysis';
+  String get studyNormalAnalysis => '일반 분석';
 
   @override
-  String get studyHideNextMoves => 'Hide next moves';
+  String get studyHideNextMoves => '다음 수 숨기기';
 
   @override
-  String get studyInteractiveLesson => 'Interactive lesson';
+  String get studyInteractiveLesson => '상호 대화형 레슨';
 
   @override
   String studyChapterX(String param) {
-    return 'Chapter $param';
+    return '챕터 $param';
   }
 
   @override
-  String get studyEmpty => 'Empty';
+  String get studyEmpty => '비어있음';
 
   @override
-  String get studyStartFromInitialPosition => 'Start from initial position';
+  String get studyStartFromInitialPosition => '초기 포지션에서 시작';
 
   @override
-  String get studyEditor => 'Editor';
+  String get studyEditor => '편집기';
 
   @override
-  String get studyStartFromCustomPosition => 'Start from custom position';
+  String get studyStartFromCustomPosition => '커스텀 포지션에서 시작';
 
   @override
-  String get studyLoadAGameByUrl => 'Load games by URLs';
+  String get studyLoadAGameByUrl => 'URL로 게임 가져오기';
 
   @override
-  String get studyLoadAPositionFromFen => 'Load a position from FEN';
+  String get studyLoadAPositionFromFen => 'FEN으로 포지션 가져오기';
 
   @override
-  String get studyLoadAGameFromPgn => 'Load games from PGN';
+  String get studyLoadAGameFromPgn => 'PGN으로 게임 가져오기';
 
   @override
-  String get studyAutomatic => 'Automatic';
+  String get studyAutomatic => '자동';
 
   @override
-  String get studyUrlOfTheGame => 'URL of the games, one per line';
+  String get studyUrlOfTheGame => '한 줄에 하나씩, 게임의 URL';
 
   @override
   String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Load games from $param1 or $param2';
+    return '$param1 또는 $param2에서 게임 로드';
   }
 
   @override
-  String get studyCreateChapter => 'Create chapter';
+  String get studyCreateChapter => '챕터 만들기';
 
   @override
-  String get studyCreateStudy => 'Create study';
+  String get studyCreateStudy => '연구 만들기';
 
   @override
-  String get studyEditStudy => 'Edit study';
+  String get studyEditStudy => '연구 편집하기';
 
   @override
-  String get studyVisibility => 'Visibility';
+  String get studyVisibility => '공개 설정';
 
   @override
-  String get studyPublic => 'Public';
+  String get studyPublic => '공개';
 
   @override
-  String get studyUnlisted => 'Unlisted';
+  String get studyUnlisted => '비공개';
 
   @override
-  String get studyInviteOnly => 'Invite only';
+  String get studyInviteOnly => '초대만';
 
   @override
-  String get studyAllowCloning => 'Allow cloning';
+  String get studyAllowCloning => '복제 허용';
 
   @override
-  String get studyNobody => 'Nobody';
+  String get studyNobody => '아무도';
 
   @override
-  String get studyOnlyMe => 'Only me';
+  String get studyOnlyMe => '나만';
 
   @override
-  String get studyContributors => 'Contributors';
+  String get studyContributors => '기여자만';
 
   @override
-  String get studyMembers => 'Members';
+  String get studyMembers => '멤버만';
 
   @override
-  String get studyEveryone => 'Everyone';
+  String get studyEveryone => '모두';
 
   @override
-  String get studyEnableSync => 'Enable sync';
+  String get studyEnableSync => '동기화 사용';
 
   @override
-  String get studyYesKeepEveryoneOnTheSamePosition => 'Yes: keep everyone on the same position';
+  String get studyYesKeepEveryoneOnTheSamePosition => '예: 모두가 같은 위치를 봅니다';
 
   @override
-  String get studyNoLetPeopleBrowseFreely => 'No: let people browse freely';
+  String get studyNoLetPeopleBrowseFreely => '아니요: 사람들이 자유롭게 이동할 수 있습니다';
 
   @override
-  String get studyPinnedStudyComment => 'Pinned study comment';
+  String get studyPinnedStudyComment => '고정된 댓글';
 
   @override
-  String get studyStart => 'Start';
+  String get studyStart => '시작';
 
   @override
-  String get studySave => 'Save';
+  String get studySave => '저장';
 
   @override
-  String get studyClearChat => 'Clear chat';
+  String get studyClearChat => '채팅 기록 지우기';
 
   @override
-  String get studyDeleteTheStudyChatHistory =>
-      'Delete the study chat history? There is no going back!';
+  String get studyDeleteTheStudyChatHistory => '연구 채팅 기록을 삭제할까요? 되돌릴 수 없습니다!';
 
   @override
-  String get studyDeleteStudy => 'Delete study';
+  String get studyDeleteStudy => '연구 삭제';
 
   @override
   String studyConfirmDeleteStudy(String param) {
-    return 'Delete the entire study? There is no going back! Type the name of the study to confirm: $param';
+    return '모든 연구를 삭제할까요? 복구할 수 없습니다! 확인을 위해서 연구의 이름을 입력하세요: $param';
   }
 
   @override
-  String get studyWhereDoYouWantToStudyThat => 'Where do you want to study that?';
+  String get studyWhereDoYouWantToStudyThat => '어디에서 연구를 시작하시겠습니까?';
 
   @override
-  String get studyGoodMove => 'Good move';
+  String get studyGoodMove => '좋은 수';
 
   @override
-  String get studyMistake => 'Mistake';
+  String get studyMistake => '실수';
 
   @override
-  String get studyBrilliantMove => 'Brilliant move';
+  String get studyBrilliantMove => '매우 좋은 수';
 
   @override
-  String get studyBlunder => 'Blunder';
+  String get studyBlunder => '블런더';
 
   @override
-  String get studyInterestingMove => 'Interesting move';
+  String get studyInterestingMove => '흥미로운 수';
 
   @override
-  String get studyDubiousMove => 'Dubious move';
+  String get studyDubiousMove => '애매한 수';
 
   @override
-  String get studyOnlyMove => 'Only move';
+  String get studyOnlyMove => '유일한 수';
 
   @override
-  String get studyZugzwang => 'Zugzwang';
+  String get studyZugzwang => '추크추방';
 
   @override
-  String get studyEqualPosition => 'Equal position';
+  String get studyEqualPosition => '동등한 포지션';
 
   @override
-  String get studyUnclearPosition => 'Unclear position';
+  String get studyUnclearPosition => '불확실한 포지션';
 
   @override
-  String get studyWhiteIsSlightlyBetter => 'White is slightly better';
+  String get studyWhiteIsSlightlyBetter => '백이 미세하게 좋음';
 
   @override
-  String get studyBlackIsSlightlyBetter => 'Black is slightly better';
+  String get studyBlackIsSlightlyBetter => '흑이 미세하게 좋음';
 
   @override
-  String get studyWhiteIsBetter => 'White is better';
+  String get studyWhiteIsBetter => '백이 유리함';
 
   @override
-  String get studyBlackIsBetter => 'Black is better';
+  String get studyBlackIsBetter => '흑이 유리함';
 
   @override
-  String get studyWhiteIsWinning => 'White is winning';
+  String get studyWhiteIsWinning => '백이 이기고 있음';
 
   @override
-  String get studyBlackIsWinning => 'Black is winning';
+  String get studyBlackIsWinning => '흑이 이기고 있음';
 
   @override
-  String get studyNovelty => 'Novelty';
+  String get studyNovelty => '새로운 수';
 
   @override
-  String get studyDevelopment => 'Development';
+  String get studyDevelopment => '발전';
 
   @override
-  String get studyInitiative => 'Initiative';
+  String get studyInitiative => '주도권';
 
   @override
-  String get studyAttack => 'Attack';
+  String get studyAttack => '공격';
 
   @override
-  String get studyCounterplay => 'Counterplay';
+  String get studyCounterplay => '반격';
 
   @override
-  String get studyTimeTrouble => 'Time trouble';
+  String get studyTimeTrouble => '시간이 부족함';
 
   @override
-  String get studyWithCompensation => 'With compensation';
+  String get studyWithCompensation => '보상이 있음';
 
   @override
-  String get studyWithTheIdea => 'With the idea';
+  String get studyWithTheIdea => '아이디어';
 
   @override
-  String get studyNextChapter => 'Next chapter';
+  String get studyNextChapter => '다음 챕터';
 
   @override
-  String get studyPrevChapter => 'Previous chapter';
+  String get studyPrevChapter => '이전 챕터';
 
   @override
-  String get studyStudyActions => 'Study actions';
+  String get studyStudyActions => '연구 작업';
 
   @override
-  String get studyTopics => 'Topics';
+  String get studyTopics => '주제';
 
   @override
-  String get studyMyTopics => 'My topics';
+  String get studyMyTopics => '내 주제';
 
   @override
-  String get studyPopularTopics => 'Popular topics';
+  String get studyPopularTopics => '인기 주제';
 
   @override
-  String get studyManageTopics => 'Manage topics';
+  String get studyManageTopics => '주제 관리';
 
   @override
-  String get studyBack => 'Back';
+  String get studyBack => '뒤로';
 
   @override
-  String get studyPlayAgain => 'Play again';
+  String get studyPlayAgain => '다시 플레이';
 
   @override
-  String get studyWhatWouldYouPlay => 'What would you play in this position?';
+  String get studyWhatWouldYouPlay => '이 포지션에서 무엇을 하시겠습니까?';
 
   @override
-  String get studyYouCompletedThisLesson => 'Congratulations! You completed this lesson.';
+  String get studyYouCompletedThisLesson => '축하합니다! 이 레슨을 완료했습니다.';
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return '페이지 당 $param개';
   }
 
   @override
-  String get studyGetTheTour => 'Need help? Get the tour!';
+  String get studyGetTheTour => '도움이 필요하세요? 투어를 해보세요!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Lichess 연구에 오신 것을 환영합니다!';
 
   @override
   String get studyWelcomeToLichessStudyText =>
       'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => '공유되고 저장됨';
 
   @override
-  String get studySharedAndSavedText =>
-      'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => '다른 회원들이 내 수를 실시간으로 볼 수 있습니다!<br>그리고 모든 것은 영원히 저장됩니다.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => '연구 회원들';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
@@ -5728,60 +5674,59 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => '연구 챕터';
 
   @override
   String get studyStudyChaptersText =>
-      'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+      '하나의 연구는 여러 개의 챕터를 포함할 수 있습니다.<br>각 챕터는 고유한 시작 포지션과 수순 트리를 가지고 있습니다.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => '포지션에 댓글 남기기';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return '$param 버튼을 클릭하거나, 우측의 수 목록을 우클릭하세요.<br>댓글들은 공유되며 저장됩니다.';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => '포지션에 주석달기';
 
   @override
-  String get studyAnnotatePositionText =>
-      'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => '!? 버튼을 클릭하거나, 우측의 수 목록을 우클릭하세요.<br>주석들은 공유되며 저장됩니다.';
 
   @override
-  String get studyConclusionTitle => 'Thanks for your time';
+  String get studyConclusionTitle => '시간을 내주셔셔 감사합니다';
 
   @override
   String get studyConclusionText =>
       'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => '연구 챕터를 만듭시다';
 
   @override
   String get studyCreateChapterText =>
-      'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+      '하나의 연구는 여러 개의 챕터를 포함할 수 있습니다.<br>각 챕터는 고유한 수순 트리를 가지고 있고,<br>다양한 방법으로 만들 수 있습니다.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => '초기 포지션에서';
 
   @override
   String get studyFromInitialPositionText =>
       'Just a board setup for a new game.<br>Suited to explore openings.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => '사용자 지정 포지션';
 
   @override
   String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => '벌써 있는 lichess 게임 불러오기';
 
   @override
   String get studyLoadExistingLichessGameText =>
-      'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+      '챕터에 게임 수를 불러오려면<br>lichess 게임 URL을 붙여넣으세요<br>(예시: lichess.org/7fHIU0XI).';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -5791,62 +5736,46 @@ class AppLocalizationsKo extends AppLocalizations {
       'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'PGN 게임에서';
 
   @override
   String get studyFromPgnGameText =>
       'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => '연구들은 변형 체스를 지원합니다';
 
   @override
-  String get studyVariantsAreSupportedText =>
-      'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => '네, 크레이지하우스나 모든 lichess 변형 체스를<br>연구할 수 있어요!';
 
   @override
   String get studyChapterConclusionText =>
       'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
-  String get studyDoubleDefeat => 'Double defeat';
+  String get studyDoubleDefeat => '양측 패배';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+  String get studyBlackDefeatWhiteCanNotWin => '흑 패배, 그러나 백 승리 불가';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+  String get studyWhiteDefeatBlackCanNotWin => '백 패배, 그러나 흑 승리 불가';
 
   @override
   String studyNbChapters(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Chapters',
-      one: '$count Chapter',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 챕터');
     return '$_temp0';
   }
 
   @override
   String studyNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Games',
-      one: '$count Game',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count 게임');
     return '$_temp0';
   }
 
   @override
   String studyNbMembers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Members',
-      one: '$count Member',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '멤버 $count명');
     return '$_temp0';
   }
 
@@ -5855,9 +5784,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
-      one: 'Paste your PGN text here, up to $count game',
+      other: 'PGN을 여기에 붙여넣으세요. 최대 $count 게임까지 가능합니다.',
     );
     return '$_temp0';
   }
