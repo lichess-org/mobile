@@ -102,6 +102,7 @@ class SwitchSettingTile extends StatelessWidget {
 class SliderSettingsTile extends StatefulWidget {
   const SliderSettingsTile({
     this.icon,
+    this.title,
     required this.value,
     required this.values,
     required this.onChangeEnd,
@@ -109,6 +110,7 @@ class SliderSettingsTile extends StatefulWidget {
   });
 
   final Widget? icon;
+  final Widget? title;
   final double value;
   final List<double> values;
   final void Function(double value) onChangeEnd;
@@ -142,7 +144,8 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
 
     return ListTile(
       leading: widget.icon,
-      title: slider,
+      title: widget.title ?? slider,
+      subtitle: widget.title != null ? slider : null,
       trailing: widget.labelBuilder != null
           ? Text(widget.labelBuilder!.call(widget.values[_index]))
           : null,
