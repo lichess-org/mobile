@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -268,66 +269,73 @@ class _Body extends ConsumerWidget {
         final currentNode = state.currentNode;
         final pov = state.pov;
 
-        return AnalysisLayout(
-          smallBoard: broadcastPrefs.smallBoard,
-          pov: pov,
-          tabController: tabController,
-          boardBuilder: (context, boardSize, borderRadius) =>
-              _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
-          boardHeader: _PlayerWidget(
-            tournamentId: tournamentId,
-            roundId: roundId,
-            gameId: gameId,
-            widgetPosition: _PlayerWidgetPosition.top,
-          ),
-          boardFooter: _PlayerWidget(
-            tournamentId: tournamentId,
-            roundId: roundId,
-            gameId: gameId,
-            widgetPosition: _PlayerWidgetPosition.bottom,
-          ),
-          engineGaugeBuilder: state.hasAvailableEval(enginePrefs) && showEvaluationGauge
-              ? (context, orientation) {
-                  return orientation == Orientation.portrait
-                      ? EngineGauge(
-                          displayMode: EngineGaugeDisplayMode.horizontal,
-                          params: engineGaugeParams,
-                          engineLinesState: state.isEngineAvailable(enginePrefs)
-                              ? broadcastPrefs.showEngineLines
-                                    ? EngineLinesShowState.expanded
-                                    : EngineLinesShowState.collapsed
-                              : null,
-                          onTap: () {
-                            ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines();
-                          },
-                        )
-                      : Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                          child: EngineGauge(
-                            displayMode: EngineGaugeDisplayMode.vertical,
+        return WakelockWidget(
+          child: AnalysisLayout(
+            smallBoard: broadcastPrefs.smallBoard,
+            pov: pov,
+            tabController: tabController,
+            boardBuilder: (context, boardSize, borderRadius) =>
+                _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
+            boardHeader: _PlayerWidget(
+              tournamentId: tournamentId,
+              roundId: roundId,
+              gameId: gameId,
+              widgetPosition: _PlayerWidgetPosition.top,
+            ),
+            boardFooter: _PlayerWidget(
+              tournamentId: tournamentId,
+              roundId: roundId,
+              gameId: gameId,
+              widgetPosition: _PlayerWidgetPosition.bottom,
+            ),
+            engineGaugeBuilder: state.hasAvailableEval(enginePrefs) && showEvaluationGauge
+                ? (context, orientation) {
+                    return orientation == Orientation.portrait
+                        ? EngineGauge(
+                            displayMode: EngineGaugeDisplayMode.horizontal,
                             params: engineGaugeParams,
-                          ),
-                        );
-                }
-              : null,
-          engineLines:
-              isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
-              ? EngineLines(
-                  savedEval: currentNode.eval,
-                  isGameOver: currentNode.position.isGameOver,
-                  onTapMove: ref
-                      .read(broadcastAnalysisControllerProvider(roundId, gameId).notifier)
-                      .onUserMove,
-                )
-              : null,
-          bottomBar: _BroadcastGameBottomBar(
-            roundId: roundId,
-            gameId: gameId,
-            tournamentSlug: tournamentSlug,
-            roundSlug: roundSlug,
+                            engineLinesState: state.isEngineAvailable(enginePrefs)
+                                ? broadcastPrefs.showEngineLines
+                                      ? EngineLinesShowState.expanded
+                                      : EngineLinesShowState.collapsed
+                                : null,
+                            onTap: () {
+                              ref
+                                  .read(broadcastPreferencesProvider.notifier)
+                                  .toggleShowEngineLines();
+                            },
+                          )
+                        : Container(
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
+                            child: EngineGauge(
+                              displayMode: EngineGaugeDisplayMode.vertical,
+                              params: engineGaugeParams,
+                            ),
+                          );
+                  }
+                : null,
+            engineLines:
+                isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
+                ? EngineLines(
+                    savedEval: currentNode.eval,
+                    isGameOver: currentNode.position.isGameOver,
+                    onTapMove: ref
+                        .read(broadcastAnalysisControllerProvider(roundId, gameId).notifier)
+                        .onUserMove,
+                  )
+                : null,
+            bottomBar: _BroadcastGameBottomBar(
+              roundId: roundId,
+              gameId: gameId,
+              tournamentSlug: tournamentSlug,
+              roundSlug: roundSlug,
+            ),
+            children: [
+              _OpeningExplorerTab(roundId, gameId),
+              _BroadcastGameTreeView(roundId, gameId),
+            ],
           ),
-          children: [_OpeningExplorerTab(roundId, gameId), _BroadcastGameTreeView(roundId, gameId)],
         );
       case AsyncValue(:final error?):
         return Center(child: Text('Cannot load broadcast game: $error'));
