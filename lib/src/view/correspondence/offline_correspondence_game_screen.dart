@@ -248,8 +248,8 @@ class _BodyState extends ConsumerState<_Body> {
                             .firstWhereOrNull((g) => g.$2.isMyTurn);
                         return nextTurn != null
                             ? () {
-                              widget.onGameChanged(nextTurn);
-                            }
+                                widget.onGameChanged(nextTurn);
+                              }
                             : null;
                       },
                       orElse: () => null,
@@ -257,17 +257,16 @@ class _BodyState extends ConsumerState<_Body> {
                   ),
                   BottomBarButton(
                     label: context.l10n.mobileCorrespondenceClearSavedMove,
-                    onTap:
-                        game.registeredMoveAtPgn != null
-                            ? () {
-                              showConfirmDialog<void>(
-                                context,
-                                title: Text(context.l10n.mobileCorrespondenceClearSavedMove),
-                                isDestructiveAction: true,
-                                onConfirm: () => deleteRegisteredMove(),
-                              );
-                            }
-                            : null,
+                    onTap: game.registeredMoveAtPgn != null
+                        ? () {
+                            showConfirmDialog<void>(
+                              context,
+                              title: Text(context.l10n.mobileCorrespondenceClearSavedMove),
+                              isDestructiveAction: true,
+                              onConfirm: () => deleteRegisteredMove(),
+                            );
+                          }
+                        : null,
                     icon: Icons.save,
                   ),
                   RepeatButton(

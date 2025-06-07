@@ -386,28 +386,26 @@ class _Body extends ConsumerWidget {
             },
             premovable: null,
           ),
-          shapes:
-              puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
-                  ? ISet([
-                    Arrow(
-                      color: const Color(0x66003088),
-                      orig: evalBestMove.from,
-                      dest: evalBestMove.to,
-                    ),
-                  ])
-                  : puzzleState.hintSquare != null
-                  ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
-                  : null,
-          engineGauge:
-              puzzleState.isEngineAvailable(enginePrefs)
-                  ? (
-                    isLocalEngineAvailable: true,
-                    orientation: puzzleState.pov,
-                    position: puzzleState.currentPosition,
-                    savedEval: puzzleState.node.eval,
-                    serverEval: puzzleState.node.serverEval,
-                  )
-                  : null,
+          shapes: puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
+              ? ISet([
+                  Arrow(
+                    color: const Color(0x66003088),
+                    orig: evalBestMove.from,
+                    dest: evalBestMove.to,
+                  ),
+                ])
+              : puzzleState.hintSquare != null
+              ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
+              : null,
+          engineGauge: puzzleState.isEngineAvailable(enginePrefs)
+              ? (
+                  isLocalEngineAvailable: true,
+                  orientation: puzzleState.pov,
+                  position: puzzleState.currentPosition,
+                  savedEval: puzzleState.node.eval,
+                  serverEval: puzzleState.node.serverEval,
+                )
+              : null,
           showEngineGaugePlaceholder: true,
           topTable: Center(
             child: PuzzleFeedbackWidget(

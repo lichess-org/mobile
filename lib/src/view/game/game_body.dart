@@ -230,12 +230,11 @@ class GameBody extends ConsumerWidget {
                   interactiveBoardParams: (
                     variant: gameState.game.meta.variant,
                     position: gameState.currentPosition,
-                    playerSide:
-                        gameState.game.playable && !gameState.isReplaying
-                            ? youAre == Side.white
-                                ? PlayerSide.white
-                                : PlayerSide.black
-                            : PlayerSide.none,
+                    playerSide: gameState.game.playable && !gameState.isReplaying
+                        ? youAre == Side.white
+                              ? PlayerSide.white
+                              : PlayerSide.black
+                        : PlayerSide.none,
                     promotionMove: gameState.promotionMove,
                     onMove: (move, {isDrop}) {
                       ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
@@ -243,21 +242,20 @@ class GameBody extends ConsumerWidget {
                     onPromotionSelection: (role) {
                       ref.read(ctrlProvider.notifier).onPromotionSelection(role);
                     },
-                    premovable:
-                        gameState.canPremove
-                            ? (
-                              onSetPremove: (move) {
-                                ref.read(ctrlProvider.notifier).setPremove(move);
-                              },
-                              premove: gameState.premove,
-                            )
-                            : null,
+                    premovable: gameState.canPremove
+                        ? (
+                            onSetPremove: (move) {
+                              ref.read(ctrlProvider.notifier).setPremove(move);
+                            },
+                            premove: gameState.premove,
+                          )
+                        : null,
                   ),
                   topTable: topPlayer,
                   bottomTable:
                       gameState.canShowClaimWinCountdown && gameState.opponentLeftCountdown != null
-                          ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
-                          : bottomPlayer,
+                      ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
+                      : bottomPlayer,
                   moves: gameState.game.steps
                       .skip(1)
                       .map((e) => e.sanMove!.san)

@@ -285,9 +285,9 @@ typedef _PgnTreeViewParams = ({
   /// Can be used e.g. to ensure that the current move is visible on the screen.
   GlobalKey currentMoveKey,
 
-      /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move.
-      PgnTreeNotifier? notifier,
-    });
+  /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move.
+  PgnTreeNotifier? notifier,
+});
 
 /// Filter node children when computer analysis is disabled
 IList<ViewBranch> _filteredChildren(ViewNode node, bool shouldShowComputerAnalysis) {
@@ -1128,12 +1128,11 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
             ...sideLineWidgets,
             if (_hasCollapsedLines)
               GestureDetector(
-                onTap:
-                    widget.params.notifier != null
-                        ? () {
-                          widget.params.notifier?.expandVariations(widget.initialPath);
-                        }
-                        : null,
+                onTap: widget.params.notifier != null
+                    ? () {
+                        widget.params.notifier?.expandVariations(widget.initialPath);
+                      }
+                    : null,
                 child: Icon(
                   Icons.add_box,
                   color: _textColor(context, 0.6),
@@ -1245,28 +1244,25 @@ class InlineMove extends ConsumerWidget {
       key: isCurrentMove ? params.currentMoveKey : null,
       borderRadius: borderRadius,
       onTap: params.notifier != null ? () => params.notifier?.userJump(path) : null,
-      onLongPress:
-          params.notifier != null
-              ? () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  isDismissible: true,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  builder:
-                      (context) => _MoveContextMenu(
-                        notifier: params.notifier,
-                        title:
-                            ply.isOdd
-                                ? '${(ply / 2).ceil()}. $moveWithNag'
-                                : '${(ply / 2).ceil()}... $moveWithNag',
-                        path: path,
-                        branch: branch,
-                        lineInfo: lineInfo,
-                      ),
-                );
-              }
-              : null,
+      onLongPress: params.notifier != null
+          ? () {
+              showModalBottomSheet<void>(
+                context: context,
+                isDismissible: true,
+                isScrollControlled: true,
+                showDragHandle: true,
+                builder: (context) => _MoveContextMenu(
+                  notifier: params.notifier,
+                  title: ply.isOdd
+                      ? '${(ply / 2).ceil()}. $moveWithNag'
+                      : '${(ply / 2).ceil()}... $moveWithNag',
+                  path: path,
+                  branch: branch,
+                  lineInfo: lineInfo,
+                ),
+              );
+            }
+          : null,
       child: Container(
         padding: kInlineMovePadding,
         decoration: _boxDecoration(context, isCurrentMove, isLiveMove),

@@ -159,34 +159,30 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                             icon: CupertinoIcons.arrow_2_squarepath,
                           ),
                           RepeatButton(
-                            onLongPress:
-                                ref.read(_tvGameCtrl.notifier).canGoBack()
-                                    ? () => _moveBackward(ref)
-                                    : null,
+                            onLongPress: ref.read(_tvGameCtrl.notifier).canGoBack()
+                                ? () => _moveBackward(ref)
+                                : null,
                             child: BottomBarButton(
                               key: const ValueKey('goto-previous'),
-                              onTap:
-                                  ref.read(_tvGameCtrl.notifier).canGoBack()
-                                      ? () => _moveBackward(ref)
-                                      : null,
+                              onTap: ref.read(_tvGameCtrl.notifier).canGoBack()
+                                  ? () => _moveBackward(ref)
+                                  : null,
                               label: 'Previous',
                               icon: CupertinoIcons.chevron_back,
                               showTooltip: false,
                             ),
                           ),
                           RepeatButton(
-                            onLongPress:
-                                ref.read(_tvGameCtrl.notifier).canGoForward()
-                                    ? () => _moveForward(ref)
-                                    : null,
+                            onLongPress: ref.read(_tvGameCtrl.notifier).canGoForward()
+                                ? () => _moveForward(ref)
+                                : null,
                             child: BottomBarButton(
                               key: const ValueKey('goto-next'),
                               icon: CupertinoIcons.chevron_forward,
                               label: context.l10n.next,
-                              onTap:
-                                  ref.read(_tvGameCtrl.notifier).canGoForward()
-                                      ? () => _moveForward(ref)
-                                      : null,
+                              onTap: ref.read(_tvGameCtrl.notifier).canGoForward()
+                                  ? () => _moveForward(ref)
+                                  : null,
                               showTooltip: false,
                             ),
                           ),
@@ -194,16 +190,15 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       ),
                     );
                   },
-                  loading:
-                      () => const Shimmer(
-                        child: GameLayout(
-                          topTable: LoadingPlayerWidget(),
-                          bottomTable: LoadingPlayerWidget(),
-                          orientation: Side.white,
-                          fen: kEmptyFEN,
-                          moves: [],
-                        ),
-                      ),
+                  loading: () => const Shimmer(
+                    child: GameLayout(
+                      topTable: LoadingPlayerWidget(),
+                      bottomTable: LoadingPlayerWidget(),
+                      orientation: Side.white,
+                      fen: kEmptyFEN,
+                      moves: [],
+                    ),
+                  ),
                   error: (err, stackTrace) {
                     debugPrint('SEVERE: [TvScreen] could not load stream; $err\n$stackTrace');
                     return const GameLayout(
@@ -217,8 +212,8 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   },
                 ),
               ),
-          ],
-            ),
+            ],
+          ),
         ),
       ),
     );

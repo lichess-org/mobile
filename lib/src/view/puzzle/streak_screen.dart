@@ -93,10 +93,9 @@ class _ErrorBody extends ConsumerWidget {
             child: SafeArea(
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final orientation =
-                      constraints.maxWidth > constraints.maxHeight
-                          ? Orientation.landscape
-                          : Orientation.portrait;
+                  final orientation = constraints.maxWidth > constraints.maxHeight
+                      ? Orientation.landscape
+                      : Orientation.portrait;
                   final isTablet = isTabletOrLarger(context);
 
                   final defaultSettings = boardPreferences.toBoardSettings().copyWith(
@@ -108,11 +107,10 @@ class _ErrorBody extends ConsumerWidget {
                     final defaultBoardSize =
                         constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
                     final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
-                    final boardSize =
-                        sideWidth >= 250
-                            ? defaultBoardSize
-                            : constraints.biggest.longestSide / kGoldenRatio -
-                                (kTabletBoardTableSidePadding * 2);
+                    final boardSize = sideWidth >= 250
+                        ? defaultBoardSize
+                        : constraints.biggest.longestSide / kGoldenRatio -
+                              (kTabletBoardTableSidePadding * 2);
                     return Padding(
                       padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
                       child: Row(
@@ -131,22 +129,18 @@ class _ErrorBody extends ConsumerWidget {
                     );
                   } else {
                     final defaultBoardSize = constraints.biggest.shortestSide;
-                    final double boardSize =
-                        isTablet
-                            ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                            : defaultBoardSize;
+                    final double boardSize = isTablet
+                        ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                        : defaultBoardSize;
 
                     return Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding:
-                              isTablet
-                                  ? const EdgeInsets.symmetric(
-                                    horizontal: kTabletBoardTableSidePadding,
-                                  )
-                                  : EdgeInsets.zero,
+                          padding: isTablet
+                              ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                              : EdgeInsets.zero,
                           child: _BoardWidget(
                             size: boardSize,
                             fen: kEmptyBoardFEN,
@@ -169,23 +163,21 @@ class _ErrorBody extends ConsumerWidget {
   }
 }
 
-typedef InteractiveBoardParams =
-    ({
-      Variant variant,
-      Position position,
-      PlayerSide playerSide,
-      NormalMove? promotionMove,
-      void Function(NormalMove, {bool? isDrop}) onMove,
-      void Function(Role? role) onPromotionSelection,
-      Premovable? premovable,
-    });
+typedef InteractiveBoardParams = ({
+  Variant variant,
+  Position position,
+  PlayerSide playerSide,
+  NormalMove? promotionMove,
+  void Function(NormalMove, {bool? isDrop}) onMove,
+  void Function(Role? role) onPromotionSelection,
+  Premovable? premovable,
+});
 
 class _Body extends ConsumerStatefulWidget {
   const _Body({required this.initialPuzzleContext, required this.streak});
 
   final PuzzleContext initialPuzzleContext;
   final PuzzleStreak streak;
-
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -198,7 +190,10 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final boardPreferences = ref.watch(boardPreferencesProvider);
-    final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext, isPuzzleStreak: true);
+    final ctrlProvider = puzzleControllerProvider(
+      widget.initialPuzzleContext,
+      isPuzzleStreak: true,
+    );
     final puzzleState = ref.watch(ctrlProvider);
 
     ref.listen(ctrlProvider, (previous, next) {
@@ -212,14 +207,13 @@ class _BodyState extends ConsumerState<_Body> {
     final InteractiveBoardParams interactiveBoardParams = (
       variant: Variant.standard,
       position: puzzleState.currentPosition,
-      playerSide:
-          puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
-              ? PlayerSide.none
-              : puzzleState.mode == PuzzleMode.view
-              ? PlayerSide.both
-              : puzzleState.pov == Side.white
-              ? PlayerSide.white
-              : PlayerSide.black,
+      playerSide: puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
+          ? PlayerSide.none
+          : puzzleState.mode == PuzzleMode.view
+          ? PlayerSide.both
+          : puzzleState.pov == Side.white
+          ? PlayerSide.white
+          : PlayerSide.black,
       promotionMove: puzzleState.promotionMove,
       onMove: (move, {isDrop, captured}) {
         ref.read(ctrlProvider.notifier).onUserMove(move);
@@ -507,7 +501,7 @@ class _BodyState extends ConsumerState<_Body> {
           )
         : content;
   }
-  
+
   void _onCompleteShape(Shape shape) {
     if (!mounted) return;
 
@@ -568,7 +562,12 @@ class _BoardWidget extends StatelessWidget {
     if (error != null) {
       return SizedBox.square(
         dimension: size,
-        child: Stack(children: [board, _ErrorWidget(errorMessage: error!, boardSize: size)]),
+        child: Stack(
+          children: [
+            board,
+            _ErrorWidget(errorMessage: error!, boardSize: size),
+          ],
+        ),
       );
     }
 
