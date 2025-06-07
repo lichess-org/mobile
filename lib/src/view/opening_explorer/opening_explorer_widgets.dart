@@ -3,11 +3,12 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kTableRowVerticalPadding = 10.0;
@@ -18,15 +19,13 @@ const _kTableRowPadding = EdgeInsets.symmetric(
 );
 const _kHeaderTextStyle = TextStyle(fontSize: 12);
 
-Color _whiteBoxColor(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.dark
-        ? Colors.white.withValues(alpha: 0.8)
-        : Colors.white;
+Color _whiteBoxColor(BuildContext context) => Theme.of(context).brightness == Brightness.dark
+    ? Colors.white.withValues(alpha: 0.8)
+    : Colors.white;
 
-Color _blackBoxColor(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.light
-        ? Colors.black.withValues(alpha: 0.7)
-        : Colors.black;
+Color _blackBoxColor(BuildContext context) => Theme.of(context).brightness == Brightness.light
+    ? Colors.black.withValues(alpha: 0.7)
+    : Colors.black;
 
 class OpeningNameHeader extends StatelessWidget {
   const OpeningNameHeader({required this.opening, super.key});
@@ -39,10 +38,9 @@ class OpeningNameHeader extends StatelessWidget {
       padding: _kTableRowPadding,
       decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
       child: GestureDetector(
-        onTap:
-            opening.name == context.l10n.startPosition
-                ? null
-                : () => launchUrl(Uri.parse('https://lichess.org/opening/${opening.name}')),
+        onTap: opening.name == context.l10n.startPosition
+            ? null
+            : () => launchUrl(Uri.parse('https://lichess.org/opening/${opening.name}')),
         child: Row(
           children: [
             if (opening.name != context.l10n.startPosition) ...[
@@ -180,8 +178,9 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
         if (moves.isNotEmpty)
           TableRow(
             decoration: BoxDecoration(
-              color:
-                  moves.length.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
+              color: moves.length.isEven
+                  ? context.lichessTheme.rowEven
+                  : context.lichessTheme.rowOdd,
             ),
             children: [
               Container(
@@ -350,11 +349,13 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(
-            ArchivedGameScreen.buildRoute(
+            AnalysisScreen.buildRoute(
               context,
-              gameId: widget.game.id,
-              orientation: Side.white,
-              initialCursor: widget.ply,
+              AnalysisOptions(
+                orientation: Side.white,
+                gameId: widget.game.id,
+                initialMoveCursor: widget.ply,
+              ),
             ),
           );
         },

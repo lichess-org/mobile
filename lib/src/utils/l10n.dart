@@ -53,8 +53,8 @@ String relativeDate(AppLocalizations l10n, DateTime date, {bool shortDate = true
   if (diff.isNegative) {
     return diff.inDays == 0
         ? diff.inHours == 0
-            ? l10n.timeagoNbMinutesAgo(diff.inMinutes.abs())
-            : l10n.timeagoNbHoursAgo(diff.inHours.abs())
+              ? l10n.timeagoNbMinutesAgo(diff.inMinutes.abs())
+              : l10n.timeagoNbHoursAgo(diff.inHours.abs())
         : diff.inDays == 1
         ? l10n.yesterday
         : diff.inDays.abs() <= 7
@@ -67,8 +67,10 @@ String relativeDate(AppLocalizations l10n, DateTime date, {bool shortDate = true
   }
   return diff.inDays == 0
       ? diff.inHours == 0
-          ? l10n.timeagoInNbMinutes(diff.inMinutes)
-          : l10n.timeagoInNbHours(diff.inHours)
+            ? diff.inMinutes == 0
+                  ? l10n.timeagoInNbSeconds(diff.inSeconds)
+                  : l10n.timeagoInNbMinutes(diff.inMinutes)
+            : l10n.timeagoInNbHours(diff.inHours)
       : diff.inDays.abs() <= 7
       ? l10n.timeagoInNbDays(diff.inDays)
       : diff.inDays.abs() <= 30

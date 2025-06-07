@@ -30,13 +30,12 @@ class PlatformDialogAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformWidget(
       androidBuilder: (context) => TextButton(onPressed: onPressed, child: child),
-      iosBuilder:
-          (context) => CupertinoDialogAction(
-            onPressed: onPressed,
-            isDefaultAction: cupertinoIsDefaultAction,
-            isDestructiveAction: cupertinoIsDestructiveAction,
-            child: child,
-          ),
+      iosBuilder: (context) => CupertinoDialogAction(
+        onPressed: onPressed,
+        isDefaultAction: cupertinoIsDefaultAction,
+        isDestructiveAction: cupertinoIsDestructiveAction,
+        child: child,
+      ),
     );
   }
 }

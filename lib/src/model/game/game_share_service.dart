@@ -71,10 +71,9 @@ class GameShareService {
   /// Fetches the GIF animation of a game.
   Future<(XFile, ExportedGame)> gameGif(GameId id, Side orientation) async {
     final boardPreferences = _ref.read(boardPreferencesProvider);
-    final boardTheme =
-        boardPreferences.boardTheme == BoardTheme.system
-            ? BoardTheme.brown
-            : boardPreferences.boardTheme;
+    final boardTheme = boardPreferences.boardTheme == BoardTheme.system
+        ? BoardTheme.brown
+        : boardPreferences.boardTheme;
     final pieceTheme = boardPreferences.pieceSet;
     final resp = await Future.wait([
       _ref
@@ -99,10 +98,9 @@ class GameShareService {
   /// Fetches the GIF animation of a study chapter.
   Future<XFile> chapterGif(StringId id, StringId chapterId) async {
     final boardPreferences = _ref.read(boardPreferencesProvider);
-    final boardTheme =
-        boardPreferences.boardTheme == BoardTheme.system
-            ? BoardTheme.brown
-            : boardPreferences.boardTheme;
+    final boardTheme = boardPreferences.boardTheme == BoardTheme.system
+        ? BoardTheme.brown
+        : boardPreferences.boardTheme;
     final pieceTheme = boardPreferences.pieceSet;
 
     final resp = await _ref

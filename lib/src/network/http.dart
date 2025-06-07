@@ -40,10 +40,10 @@ const _maxCacheSize = 2 * 1024 * 1024;
 /// Creates a Uri pointing to lichess server with the given unencoded path and query parameters.
 Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
     kLichessHost.startsWith('localhost') ||
-            kLichessHost.startsWith('10.') ||
-            kLichessHost.startsWith('192.168.')
-        ? Uri.http(kLichessHost, unencodedPath, queryParameters)
-        : Uri.https(kLichessHost, unencodedPath, queryParameters);
+        kLichessHost.startsWith('10.') ||
+        kLichessHost.startsWith('192.168.')
+    ? Uri.http(kLichessHost, unencodedPath, queryParameters)
+    : Uri.https(kLichessHost, unencodedPath, queryParameters);
 
 /// Creates the appropriate http client for the platform.
 ///
@@ -63,10 +63,9 @@ class HttpClientFactory {
       );
       return CronetClient.fromCronetEngine(engine);
     } else if (Platform.isIOS || Platform.isMacOS) {
-      final config =
-          URLSessionConfiguration.ephemeralSessionConfiguration()
-            ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
-            ..httpAdditionalHeaders = {'User-Agent': userAgent};
+      final config = URLSessionConfiguration.ephemeralSessionConfiguration()
+        ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
+        ..httpAdditionalHeaders = {'User-Agent': userAgent};
       return CupertinoClient.fromSessionConfiguration(config);
     } else {
       return IOClient(HttpClient()..userAgent = userAgent);
@@ -85,47 +84,43 @@ class HttpClientFactory {
 @Riverpod(keepAlive: true)
 HttpClientFactory httpClientFactory(Ref ref) {
   return HttpClientFactory(
-    wrapper:
-        (client) => _RegisterCallbackClient(
-          client,
-          onRequest: (request) async {
-            if (request.method == 'HEAD') return;
-            final httpLogStorage = await ref.read(httpLogStorageProvider.future);
-            httpLogStorage.save(
-              HttpLogEntry(
-                httpLogId: request.hashCode.toString(),
-                requestDateTime: DateTime.now(),
-                requestMethod: request.method,
-                requestUrl: request.url,
-              ),
-            );
-          },
-          onResponse: (response) async {
-            if (response.request != null) {
-              final httpLogStorage = await ref.read(httpLogStorageProvider.future);
-              httpLogStorage.updateWithResponse(
-                response.request!.hashCode.toString(),
-                responseCode: response.statusCode,
-                responseDateTime: DateTime.now(),
-              );
-            }
-          },
-          onError: (request, error, [st]) async {
-            if (request.method == 'HEAD') return;
-            final httpLogStorage = await ref.read(httpLogStorageProvider.future);
-            if (error is ClientException) {
-              httpLogStorage.updateWithError(
-                request.hashCode.toString(),
-                errorMessage: error.message,
-              );
-            } else {
-              httpLogStorage.updateWithError(
-                request.hashCode.toString(),
-                errorMessage: error.toString(),
-              );
-            }
-          },
-        ),
+    wrapper: (client) => _RegisterCallbackClient(
+      client,
+      onRequest: (request) async {
+        if (request.method == 'HEAD') return;
+        final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+        httpLogStorage.save(
+          HttpLogEntry(
+            httpLogId: request.hashCode.toString(),
+            requestDateTime: DateTime.now(),
+            requestMethod: request.method,
+            requestUrl: request.url,
+          ),
+        );
+      },
+      onResponse: (response) async {
+        if (response.request != null) {
+          final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+          httpLogStorage.updateWithResponse(
+            response.request!.hashCode.toString(),
+            responseCode: response.statusCode,
+            responseDateTime: DateTime.now(),
+          );
+        }
+      },
+      onError: (request, error, [st]) async {
+        if (request.method == 'HEAD') return;
+        final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+        if (error is ClientException) {
+          httpLogStorage.updateWithError(request.hashCode.toString(), errorMessage: error.message);
+        } else {
+          httpLogStorage.updateWithError(
+            request.hashCode.toString(),
+            errorMessage: error.toString(),
+          );
+        }
+      },
+    ),
   );
 }
 

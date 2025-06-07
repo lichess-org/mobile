@@ -51,10 +51,9 @@ sealed class FcmMessage {
           final round = message.data['lichess.round'] as String?;
           if (gameFullId != null) {
             final fullId = GameFullId(gameFullId);
-            final game =
-                round != null
-                    ? PlayableGame.fromServerJson(jsonDecode(round) as Map<String, dynamic>)
-                    : null;
+            final game = round != null
+                ? PlayableGame.fromServerJson(jsonDecode(round) as Map<String, dynamic>)
+                : null;
             return CorresGameUpdateFcmMessage(
               fullId,
               game: game,
@@ -201,6 +200,7 @@ class PlaybanNotification extends LocalNotification {
       'playban',
       importance: Importance.max,
       priority: Priority.max,
+      autoCancel: false,
     ),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
@@ -325,10 +325,9 @@ class ChallengeNotification extends LocalNotification {
     ),
     iOS: DarwinNotificationDetails(
       threadIdentifier: channelId,
-      categoryIdentifier:
-          challenge.variant.isPlaySupported
-              ? darwinPlayableVariantCategoryId
-              : darwinUnplayableVariantCategoryId,
+      categoryIdentifier: challenge.variant.isPlaySupported
+          ? darwinPlayableVariantCategoryId
+          : darwinUnplayableVariantCategoryId,
     ),
   );
 

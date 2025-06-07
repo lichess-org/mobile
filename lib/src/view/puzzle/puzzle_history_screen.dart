@@ -22,10 +22,16 @@ final _dateFormatter = DateFormat.yMMMd();
 
 /// Shows a short preview of the puzzle history.
 class PuzzleHistoryPreview extends ConsumerWidget {
-  const PuzzleHistoryPreview(this.history, {this.maxRows, super.key});
+  const PuzzleHistoryPreview(
+    this.history, {
+    this.maxRows,
+    this.shouldOpenCasualPuzzleRun,
+    super.key,
+  });
 
   final IList<PuzzleHistoryEntry> history;
   final int? maxRows;
+  final bool? shouldOpenCasualPuzzleRun;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,6 +50,7 @@ class PuzzleHistoryPreview extends ConsumerWidget {
                   context,
                   angle: const PuzzleTheme(PuzzleThemeKey.mix),
                   puzzleId: e.id,
+                  openCasualRun: shouldOpenCasualPuzzleRun ?? false,
                 ),
               );
             },
@@ -149,17 +156,15 @@ class _BodyState extends ConsumerState<_Body> {
               return Padding(
                 padding: const EdgeInsets.only(right: _kPuzzlePadding),
                 child: Row(
-                  children:
-                      element
-                          .map((e) => PuzzleHistoryBoard(e as PuzzleHistoryEntry, boardWidth))
-                          .toList(),
+                  children: element
+                      .map((e) => PuzzleHistoryBoard(e as PuzzleHistoryEntry, boardWidth))
+                      .toList(),
                 ),
               );
             } else if (element is DateTime) {
-              final title =
-                  DateTime.now().difference(element).inDays >= 15
-                      ? _dateFormatter.format(element)
-                      : relativeDate(context.l10n, element);
+              final title = DateTime.now().difference(element).inDays >= 15
+                  ? _dateFormatter.format(element)
+                  : relativeDate(context.l10n, element);
               return Padding(
                 padding: const EdgeInsets.only(left: _kPuzzlePadding).add(Styles.sectionTopPadding),
                 child: Text(
@@ -225,10 +230,9 @@ class _PuzzleResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color:
-          entry.win
-              ? context.lichessColors.good.withValues(alpha: 0.7)
-              : context.lichessColors.error.withValues(alpha: 0.7),
+      color: entry.win
+          ? context.lichessColors.good.withValues(alpha: 0.7)
+          : context.lichessColors.error.withValues(alpha: 0.7),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 3),
         child: Row(
@@ -275,12 +279,11 @@ class _PreviewBoardsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final crossAxisCount =
-            constraints.maxWidth > 600
-                ? 4
-                : constraints.maxWidth > 450
-                ? 3
-                : 2;
+        final crossAxisCount = constraints.maxWidth > 600
+            ? 4
+            : constraints.maxWidth > 450
+            ? 3
+            : 2;
         const columnGap = 12.0;
         final boardWidth =
             (constraints.maxWidth - (columnGap * crossAxisCount - columnGap)) / crossAxisCount;

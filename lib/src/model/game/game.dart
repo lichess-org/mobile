@@ -23,7 +23,7 @@ part 'game.g.dart';
 
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
-/// Common interface for playable and archived games.
+/// Common interface for playable and exported games.
 abstract mixin class BaseGame {
   GameId get id;
 
@@ -58,20 +58,18 @@ abstract mixin class BaseGame {
   Player get black;
 
   /// Player of the playing point of view. Null if spectating.
-  Player? get me =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? white
-          : black;
+  Player? get me => youAre == null
+      ? null
+      : youAre == Side.white
+      ? white
+      : black;
 
   /// Opponent from the playing point of view. Null if spectating.
-  Player? get opponent =>
-      youAre == null
-          ? null
-          : youAre == Side.white
-          ? black
-          : white;
+  Player? get opponent => youAre == null
+      ? null
+      : youAre == Side.white
+      ? black
+      : white;
 
   Position get lastPosition;
 
@@ -94,8 +92,8 @@ abstract mixin class BaseGame {
 
   ({PlayerAnalysis white, PlayerAnalysis black})? get serverAnalysis =>
       white.analysis != null && black.analysis != null
-          ? (white: white.analysis!, black: black.analysis!)
-          : null;
+      ? (white: white.analysis!, black: black.analysis!)
+      : null;
 
   /// Converts the game to a tree representation
   Root makeTree() {
@@ -108,12 +106,11 @@ abstract mixin class BaseGame {
     for (var i = 1; i < steps.length; i++) {
       final step = steps[i];
       final eval = evals?.elementAtOrNull(i - 1);
-      final pgnEval =
-          eval?.cp != null
-              ? PgnEvaluation.pawns(pawns: cpToPawns(eval!.cp!), depth: eval.depth)
-              : eval?.mate != null
-              ? PgnEvaluation.mate(mate: eval!.mate, depth: eval.depth)
-              : null;
+      final pgnEval = eval?.cp != null
+          ? PgnEvaluation.pawns(pawns: cpToPawns(eval!.cp!), depth: eval.depth)
+          : eval?.mate != null
+          ? PgnEvaluation.mate(mate: eval!.mate, depth: eval.depth)
+          : null;
       final clock = clocks?.elementAtOrNull(i - 1);
       Duration? emt;
       if (clock != null) {
@@ -131,10 +128,9 @@ abstract mixin class BaseGame {
         }
       }
 
-      final comment =
-          eval != null || clock != null
-              ? PgnComment(text: eval?.judgment?.comment, clock: clock, emt: emt, eval: pgnEval)
-              : null;
+      final comment = eval != null || clock != null
+          ? PgnComment(text: eval?.judgment?.comment, clock: clock, emt: emt, eval: pgnEval)
+          : null;
       final nag = eval?.judgment != null ? _judgmentNameToNag(eval!.judgment!.name) : null;
       final nextNode = Branch(
         sanMove: step.sanMove!,
@@ -186,14 +182,13 @@ abstract mixin class BaseGame {
             black.user?.name ??
             black.name ??
             (black.aiLevel != null ? 'Stockfish level ${black.aiLevel}' : 'Anonymous'),
-        'Result':
-            status.value >= GameStatus.mate.value
-                ? winner == null
-                    ? '½-½'
-                    : winner == Side.white
-                    ? '1-0'
-                    : '0-1'
-                : '*',
+        'Result': status.value >= GameStatus.mate.value
+            ? winner == null
+                  ? '½-½'
+                  : winner == Side.white
+                  ? '1-0'
+                  : '0-1'
+            : '*',
         if (white.rating != null) 'WhiteElo': white.rating!.toString(),
         if (black.rating != null) 'BlackElo': black.rating!.toString(),
         if (white.ratingDiff != null)
@@ -231,6 +226,10 @@ mixin IndexableSteps on BaseGame {
   Duration? archivedWhiteClockAt(int cursor) => steps[cursor].archivedWhiteClock;
 
   Duration? archivedBlackClockAt(int cursor) => steps[cursor].archivedBlackClock;
+
+  Duration? archivedClockOf(Side side, int cursor) {
+    return side == Side.white ? steps[cursor].archivedWhiteClock : steps[cursor].archivedBlackClock;
+  }
 
   Move? get lastMove {
     return steps.last.sanMove?.move;
@@ -275,7 +274,7 @@ enum GameRule {
 }
 
 @freezed
-class ServerGamePrefs with _$ServerGamePrefs {
+sealed class ServerGamePrefs with _$ServerGamePrefs {
   const ServerGamePrefs._();
 
   const factory ServerGamePrefs({
@@ -289,7 +288,7 @@ class ServerGamePrefs with _$ServerGamePrefs {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class TournamentMeta with _$TournamentMeta {
+sealed class TournamentMeta with _$TournamentMeta {
   const TournamentMeta._();
 
   const factory TournamentMeta({
@@ -307,7 +306,7 @@ class TournamentMeta with _$TournamentMeta {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class GameMeta with _$GameMeta {
+sealed class GameMeta with _$GameMeta {
   const GameMeta._();
 
   @Assert('!(clock != null && daysPerTurn != null)')
@@ -346,16 +345,19 @@ class GameMeta with _$GameMeta {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class CorrespondenceClockData with _$CorrespondenceClockData {
+sealed class CorrespondenceClockData with _$CorrespondenceClockData {
+  const CorrespondenceClockData._();
   const factory CorrespondenceClockData({required Duration white, required Duration black}) =
       _CorrespondenceClockData;
 
   factory CorrespondenceClockData.fromJson(Map<String, dynamic> json) =>
       _$CorrespondenceClockDataFromJson(json);
+
+  Duration forSide(Side side) => side == Side.white ? white : black;
 }
 
 @freezed
-class GameStep with _$GameStep {
+sealed class GameStep with _$GameStep {
   const factory GameStep({
     required Position position,
     SanMove? sanMove,

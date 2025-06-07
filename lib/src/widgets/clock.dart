@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 const _kClockFontSize = 26.0;
@@ -51,14 +52,14 @@ class Clock extends StatelessWidget {
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final showTenths = timeLeft < _showTenthsThreshold;
     final isEmergency = emergencyThreshold != null && timeLeft <= emergencyThreshold!;
-    final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     final hoursDisplay = padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
     final minsDisplay = padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
 
     final brightness = Theme.of(context).brightness;
     final colorScheme = ColorScheme.of(context);
-    final effectiveClockStyle = clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme);
+    final effectiveClockStyle =
+        clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme, context.lichessColors);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -68,14 +69,13 @@ class Clock extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            color:
-                timeLeft > Duration.zero
-                    ? active
-                        ? isEmergency
+            color: timeLeft > Duration.zero
+                ? active
+                      ? isEmergency
                             ? effectiveClockStyle.emergencyBackgroundColor
                             : effectiveClockStyle.activeBackgroundColor
-                        : effectiveClockStyle.backgroundColor
-                    : effectiveClockStyle.emergencyBackgroundColor,
+                      : effectiveClockStyle.backgroundColor
+                : effectiveClockStyle.emergencyBackgroundColor,
           ),
           child: Padding(
             padding: padding,
@@ -83,19 +83,19 @@ class Clock extends StatelessWidget {
               maxScaleFactor: kMaxClockTextScaleFactor,
               child: RichText(
                 text: TextSpan(
-                  text:
-                      hours > 0
-                          ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
-                          : '$minsDisplay:$secs',
+                  text: hours > 0
+                      ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
+                      : '$minsDisplay:$secs',
                   style: TextStyle(
-                    color:
-                        active
-                            ? isEmergency
-                                ? effectiveClockStyle.emergencyTextColor
-                                : effectiveClockStyle.activeTextColor
-                            : effectiveClockStyle.textColor,
+                    color: timeLeft > Duration.zero
+                        ? active
+                              ? isEmergency
+                                    ? effectiveClockStyle.emergencyTextColor
+                                    : effectiveClockStyle.activeTextColor
+                              : effectiveClockStyle.textColor
+                        : effectiveClockStyle.emergencyTextColor,
                     fontSize: _kClockFontSize * fontScaleFactor,
-                    height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 1.0 : null,
+                    height: isShortVerticalScreen(context) ? 1.0 : null,
                     fontFeatures: const [FontFeature.tabularFigures()],
                   ),
                   children: [
@@ -138,17 +138,23 @@ class ClockStyle {
   final Color activeBackgroundColor;
   final Color emergencyBackgroundColor;
 
-  factory ClockStyle.defaultStyle(Brightness brightness, ColorScheme colorScheme) => ClockStyle(
+  factory ClockStyle.defaultStyle(
+    Brightness brightness,
+    ColorScheme colorScheme,
+    LichessCustomColors lichessColors,
+  ) => ClockStyle(
     backgroundColor: colorScheme.surface,
     textColor: colorScheme.outline,
-    activeBackgroundColor:
-        brightness == Brightness.dark ? colorScheme.inverseSurface : colorScheme.tertiaryContainer,
-    activeTextColor:
-        brightness == Brightness.dark
-            ? colorScheme.onInverseSurface
-            : colorScheme.onTertiaryContainer,
-    emergencyBackgroundColor: colorScheme.errorContainer,
-    emergencyTextColor: colorScheme.onErrorContainer,
+    activeBackgroundColor: brightness == Brightness.dark
+        ? colorScheme.inverseSurface
+        : colorScheme.tertiaryContainer,
+    activeTextColor: brightness == Brightness.dark
+        ? colorScheme.onInverseSurface
+        : colorScheme.onTertiaryContainer,
+    emergencyBackgroundColor: lichessColors.error.withValues(
+      alpha: brightness == Brightness.dark ? 0.6 : 0.4,
+    ),
+    emergencyTextColor: brightness == Brightness.dark ? Colors.white60 : Colors.black87,
   );
 }
 

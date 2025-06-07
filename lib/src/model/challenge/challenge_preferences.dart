@@ -55,7 +55,7 @@ class ChallengePreferences extends _$ChallengePreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class ChallengePrefs with _$ChallengePrefs implements Serializable {
+sealed class ChallengePrefs with _$ChallengePrefs implements Serializable {
   const ChallengePrefs._();
 
   const factory ChallengePrefs({
@@ -76,10 +76,9 @@ class ChallengePrefs with _$ChallengePrefs implements Serializable {
     sideChoice: SideChoice.random,
   );
 
-  Speed get speed =>
-      timeControl == ChallengeTimeControlType.clock
-          ? Speed.fromTimeIncrement(TimeIncrement(clock.time.inSeconds, clock.increment.inSeconds))
-          : Speed.correspondence;
+  Speed get speed => timeControl == ChallengeTimeControlType.clock
+      ? Speed.fromTimeIncrement(TimeIncrement(clock.time.inSeconds, clock.increment.inSeconds))
+      : Speed.correspondence;
 
   ChallengeRequest makeRequest(LightUser destUser, [String? initialFen]) {
     return ChallengeRequest(

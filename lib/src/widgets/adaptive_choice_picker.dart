@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 /// Otherwise, it shows a [CupertinoPicker].
 Future<void> showChoicePicker<T>(
   BuildContext context, {
+  Widget? title,
   required List<T> choices,
   required T selectedItem,
   required Widget Function(T choice) labelBuilder,
@@ -21,6 +22,7 @@ Future<void> showChoicePicker<T>(
         context: context,
         builder: (context) {
           return AlertDialog(
+            title: title,
             clipBehavior: Clip.hardEdge,
             contentPadding: const EdgeInsets.only(top: 16.0, bottom: 24.0, left: 0, right: 0),
             scrollable: true,
@@ -43,10 +45,10 @@ Future<void> showChoicePicker<T>(
                     .toList(growable: false);
                 return choiceWidgets.length >= 10
                     ? SizedBox(
-                      width: double.maxFinite,
-                      height: deviceHeight * 0.6,
-                      child: ListView(shrinkWrap: true, children: choiceWidgets),
-                    )
+                        width: double.maxFinite,
+                        height: deviceHeight * 0.6,
+                        child: ListView(shrinkWrap: true, children: choiceWidgets),
+                      )
                     : ListBody(children: choiceWidgets);
               },
             ),
@@ -65,18 +67,18 @@ Future<void> showChoicePicker<T>(
           context: context,
           builder: (context) {
             return CupertinoActionSheet(
-              actions:
-                  choices.map((value) {
-                    return CupertinoActionSheetAction(
-                      onPressed: () {
-                        if (onSelectedItemChanged != null) {
-                          onSelectedItemChanged(value);
-                        }
-                        Navigator.of(context).pop();
-                      },
-                      child: labelBuilder(value),
-                    );
-                  }).toList(),
+              title: title,
+              actions: choices.map((value) {
+                return CupertinoActionSheetAction(
+                  onPressed: () {
+                    if (onSelectedItemChanged != null) {
+                      onSelectedItemChanged(value);
+                    }
+                    Navigator.of(context).pop();
+                  },
+                  child: labelBuilder(value),
+                );
+              }).toList(),
               cancelButton: CupertinoActionSheetAction(
                 isDefaultAction: true,
                 onPressed: () => Navigator.of(context).pop(),
@@ -107,10 +109,9 @@ Future<void> showChoicePicker<T>(
                   scrollController: FixedExtentScrollController(
                     initialItem: choices.indexWhere((t) => t == selectedItem),
                   ),
-                  children:
-                      choices.map((value) {
-                        return Center(child: labelBuilder(value));
-                      }).toList(),
+                  children: choices.map((value) {
+                    return Center(child: labelBuilder(value));
+                  }).toList(),
                   onSelectedItemChanged: (_) {},
                 ),
               ),
@@ -138,49 +139,52 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
         scrollable: true,
         content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: choices
-                  .map((choice) {
-                    return CheckboxListTile.adaptive(
-                      title: labelBuilder(choice),
-                      value: items.contains(choice),
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            items = value ? items.union({choice}) : items.difference({choice});
-                          });
-                        }
-                      },
-                    );
-                  })
-                  .toList(growable: false),
+            // Material ancestor is needed for CheckboxListTile.adaptive to work on iOS
+            return Material(
+              type: MaterialType.transparency,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: choices
+                    .map((choice) {
+                      return CheckboxListTile.adaptive(
+                        title: labelBuilder(choice),
+                        value: items.contains(choice),
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              items = value ? items.union({choice}) : items.difference({choice});
+                            });
+                          }
+                        },
+                      );
+                    })
+                    .toList(growable: false),
+              ),
             );
           },
         ),
-        actions:
-            Theme.of(context).platform == TargetPlatform.iOS
-                ? [
-                  CupertinoDialogAction(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(context.l10n.cancel),
-                  ),
-                  CupertinoDialogAction(
-                    isDefaultAction: true,
-                    child: Text(context.l10n.mobileOkButton),
-                    onPressed: () => Navigator.of(context).pop(items),
-                  ),
-                ]
-                : [
-                  TextButton(
-                    child: Text(context.l10n.cancel),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                  TextButton(
-                    child: Text(context.l10n.mobileOkButton),
-                    onPressed: () => Navigator.of(context).pop(items),
-                  ),
-                ],
+        actions: Theme.of(context).platform == TargetPlatform.iOS
+            ? [
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(context.l10n.cancel),
+                ),
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: Text(context.l10n.mobileOkButton),
+                  onPressed: () => Navigator.of(context).pop(items),
+                ),
+              ]
+            : [
+                TextButton(
+                  child: Text(context.l10n.cancel),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                TextButton(
+                  child: Text(context.l10n.mobileOkButton),
+                  onPressed: () => Navigator.of(context).pop(items),
+                ),
+              ],
       );
     },
   );

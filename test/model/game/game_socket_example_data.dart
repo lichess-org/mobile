@@ -3,15 +3,14 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 
-typedef FullEventTestClock =
-    ({
-      bool running,
-      Duration initial,
-      Duration increment,
-      Duration? emerg,
-      Duration white,
-      Duration black,
-    });
+typedef FullEventTestClock = ({
+  bool running,
+  Duration initial,
+  Duration increment,
+  Duration? emerg,
+  Duration white,
+  Duration black,
+});
 
 typedef FullEventTestCorrespondenceClock = ({Duration white, Duration black, int daysPerTurn});
 
@@ -36,9 +35,8 @@ String makeFullEvent(
   TournamentMeta? tournament,
 }) {
   final youAreStr = youAre != null ? '"youAre": "${youAre.name}",' : '';
-  final clockStr =
-      clock != null
-          ? '''
+  final clockStr = clock != null
+      ? '''
     "clock": {
       "running": ${clock.running},
       "initial": ${clock.initial.inSeconds},
@@ -49,22 +47,20 @@ String makeFullEvent(
       "moretime": 15
     },
 '''
-          : '';
+      : '';
 
-  final correspondenceClockStr =
-      correspondenceClock != null
-          ? '''
+  final correspondenceClockStr = correspondenceClock != null
+      ? '''
     "correspondence": {
       "daysPerTurn": ${correspondenceClock.daysPerTurn},
       "white": ${(correspondenceClock.white.inMilliseconds / 1000).toStringAsFixed(2)},
       "black": ${(correspondenceClock.black.inMilliseconds / 1000).toStringAsFixed(2)}
     },
 '''
-          : '';
+      : '';
 
-  final tournamentStr =
-      tournament != null
-          ? '''
+  final tournamentStr = tournament != null
+      ? '''
     "tournament": {
       "id": "${tournament.id}",
       "name": "${tournament.name}",
@@ -73,7 +69,7 @@ String makeFullEvent(
       ${tournament.ranks != null ? '"ranks": { "white": ${tournament.ranks!.white}, "black": ${tournament.ranks!.black}}' : ''}
     },
   '''
-          : '';
+      : '';
 
   return '''
 {

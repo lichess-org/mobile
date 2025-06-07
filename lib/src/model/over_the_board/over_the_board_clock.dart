@@ -96,7 +96,7 @@ class OverTheBoardClock extends _$OverTheBoardClock {
 }
 
 @freezed
-class OverTheBoardClockState with _$OverTheBoardClockState {
+sealed class OverTheBoardClockState with _$OverTheBoardClockState {
   const OverTheBoardClockState._();
 
   const factory OverTheBoardClockState({
@@ -108,10 +108,9 @@ class OverTheBoardClockState with _$OverTheBoardClockState {
   }) = _OverTheBoardClockState;
 
   factory OverTheBoardClockState.fromTimeIncrement(TimeIncrement timeIncrement) {
-    final initialTime =
-        timeIncrement.isInfinite
-            ? null
-            : Duration(seconds: max(timeIncrement.time, timeIncrement.increment));
+    final initialTime = timeIncrement.isInfinite
+        ? null
+        : Duration(seconds: max(timeIncrement.time, timeIncrement.increment));
 
     return OverTheBoardClockState(
       timeIncrement: timeIncrement,

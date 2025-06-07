@@ -16,7 +16,7 @@ ChatData chatDataFromPick(RequiredPick pick) {
 }
 
 @freezed
-class ChatMessage with _$ChatMessage {
+sealed class ChatMessage with _$ChatMessage {
   const ChatMessage._();
 
   const factory ChatMessage({
@@ -29,16 +29,15 @@ class ChatMessage with _$ChatMessage {
     String? title,
   }) = _ChatMessage;
 
-  LightUser? get user =>
-      username != null
-          ? LightUser(
-            id: UserId.fromUserName(username!),
-            name: username!,
-            title: title,
-            flair: flair,
-            isPatron: patron,
-          )
-          : null;
+  LightUser? get user => username != null
+      ? LightUser(
+          id: UserId.fromUserName(username!),
+          name: username!,
+          title: title,
+          flair: flair,
+          isPatron: patron,
+        )
+      : null;
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) =>
       ChatMessage.fromPick(pick(json).required());

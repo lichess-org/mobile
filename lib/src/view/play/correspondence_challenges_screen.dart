@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
-import 'package:lichess_mobile/src/view/play/custom_game_bottom_sheet.dart';
+import 'package:lichess_mobile/src/view/play/create_correspondence_game_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -79,8 +79,9 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
           body: Center(child: Text('Could not load correspondence challenges')),
         );
       case AsyncData(value: final challenges):
-        final supportedChallenges =
-            challenges.where((challenge) => challenge.variant.isPlaySupported).toList();
+        final supportedChallenges = challenges
+            .where((challenge) => challenge.variant.isPlaySupported)
+            .toList();
         return Scaffold(
           appBar: AppBar(
             title: Text(context.l10n.correspondence),
@@ -93,7 +94,7 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return const CustomGameBottomSheet(timeControl: TimeControl.correspondence);
+                        return const CreateCorrespondenceGameBottomSheet();
                       },
                     );
                   },
@@ -105,11 +106,9 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
             onRefresh: () => ref.refresh(correspondenceChallengesProvider.future),
             child: ListView.separated(
               itemCount: supportedChallenges.length,
-              separatorBuilder:
-                  (context, index) =>
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-                          : const SizedBox.shrink(),
+              separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+                  ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                  : const SizedBox.shrink(),
               itemBuilder: (context, index) {
                 final challenge = supportedChallenges[index];
                 final isMySeek = UserId.fromUserName(challenge.username) == session?.user.id;
@@ -121,29 +120,27 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
                     name: challenge.username,
                     title: challenge.title,
                   ),
-                  onPressed:
-                      isMySeek
-                          ? null
-                          : session == null
-                          ? () {
-                            showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
-                          }
-                          : () {
-                            showConfirmDialog<void>(
-                              context,
-                              title: Text(context.l10n.accept),
-                              isDestructiveAction: true,
-                              onConfirm: () {
-                                socketClient.send('joinSeek', challenge.id.toString());
-                              },
-                            );
-                          },
-                  onCancel:
-                      isMySeek
-                          ? () {
-                            socketClient.send('cancelSeek', challenge.id.toString());
-                          }
-                          : null,
+                  onPressed: isMySeek
+                      ? null
+                      : session == null
+                      ? () {
+                          showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                        }
+                      : () {
+                          showConfirmDialog<void>(
+                            context,
+                            title: Text(context.l10n.accept),
+                            isDestructiveAction: true,
+                            onConfirm: () {
+                              socketClient.send('joinSeek', challenge.id.toString());
+                            },
+                          );
+                        },
+                  onCancel: isMySeek
+                      ? () {
+                          socketClient.send('cancelSeek', challenge.id.toString());
+                        }
+                      : null,
                 );
               },
             ),

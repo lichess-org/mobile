@@ -18,7 +18,10 @@ class LoadPositionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text(context.l10n.loadPosition)), body: const _Body());
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.loadPosition)),
+      body: const _Body(),
+    );
   }
 }
 
@@ -77,23 +80,22 @@ class _BodyState extends State<_Body> {
             child: Column(
               children: [
                 FilledButton(
-                  onPressed:
-                      parsedInput != null
-                          ? () => Navigator.of(
-                            context,
-                            rootNavigator: true,
-                          ).push(AnalysisScreen.buildRoute(context, parsedInput!.options))
-                          : null,
+                  onPressed: parsedInput != null
+                      ? () => Navigator.of(
+                          context,
+                          rootNavigator: true,
+                        ).push(AnalysisScreen.buildRoute(context, parsedInput!.options))
+                      : null,
                   child: Text(context.l10n.analysis),
                 ),
                 const SizedBox(height: 16.0),
                 FilledButton(
-                  onPressed:
-                      parsedInput != null
-                          ? () => Navigator.of(context, rootNavigator: true).push(
-                            BoardEditorScreen.buildRoute(context, initialFen: parsedInput!.fen),
-                          )
-                          : null,
+                  onPressed: parsedInput != null
+                      ? () => Navigator.of(
+                          context,
+                          rootNavigator: true,
+                        ).push(BoardEditorScreen.buildRoute(context, initialFen: parsedInput!.fen))
+                      : null,
                   child: Text(context.l10n.boardEditor),
                 ),
               ],

@@ -85,14 +85,26 @@ final game = ExportedGame(
     speed: Speed.blitz,
     rated: true,
     status: GameStatus.started,
-    white: const Player(user: LightUser(id: UserId('whiteId'), name: 'White'), rating: 1500),
-    black: const Player(user: LightUser(id: UserId('blackId'), name: 'Black'), rating: 1500),
+    white: const Player(
+      user: LightUser(id: UserId('whiteId'), name: 'White'),
+      rating: 1500,
+    ),
+    black: const Player(
+      user: LightUser(id: UserId('blackId'), name: 'Black'),
+      rating: 1500,
+    ),
     clock: (initial: const Duration(minutes: 2), increment: const Duration(seconds: 3)),
   ),
   steps: _makeSteps('e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
   status: GameStatus.started,
-  white: const Player(user: LightUser(id: UserId('whiteId'), name: 'White'), rating: 1500),
-  black: const Player(user: LightUser(id: UserId('blackId'), name: 'Black'), rating: 1500),
+  white: const Player(
+    user: LightUser(id: UserId('whiteId'), name: 'White'),
+    rating: 1500,
+  ),
+  black: const Player(
+    user: LightUser(id: UserId('blackId'), name: 'Black'),
+    rating: 1500,
+  ),
   youAre: Side.white,
 );
 
@@ -117,14 +129,26 @@ final games = List.generate(100, (index) {
       speed: Speed.blitz,
       rated: true,
       status: GameStatus.started,
-      white: const Player(user: LightUser(id: UserId('whiteId'), name: 'White'), rating: 1500),
-      black: const Player(user: LightUser(id: UserId('blackId'), name: 'Black'), rating: 1500),
+      white: const Player(
+        user: LightUser(id: UserId('whiteId'), name: 'White'),
+        rating: 1500,
+      ),
+      black: const Player(
+        user: LightUser(id: UserId('blackId'), name: 'Black'),
+        rating: 1500,
+      ),
       clock: (initial: const Duration(minutes: 2), increment: const Duration(seconds: 3)),
     ),
     steps: _makeSteps('e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
     status: GameStatus.started,
-    white: const Player(user: LightUser(id: UserId('whiteId'), name: 'White'), rating: 1500),
-    black: const Player(user: LightUser(id: UserId('blackId'), name: 'Black'), rating: 1500),
+    white: const Player(
+      user: LightUser(id: UserId('whiteId'), name: 'White'),
+      rating: 1500,
+    ),
+    black: const Player(
+      user: LightUser(id: UserId('blackId'), name: 'Black'),
+      rating: 1500,
+    ),
     youAre: Side.white,
   );
 });

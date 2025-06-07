@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
@@ -36,7 +37,7 @@ final _dateFormat = DateFormat('yyyy.MM.dd');
 typedef StandaloneAnalysis = ({String pgn, Variant variant, bool isComputerAnalysisAllowed});
 
 @freezed
-class AnalysisOptions with _$AnalysisOptions {
+sealed class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
 
   @Assert('standalone != null || gameId != null')
@@ -128,30 +129,29 @@ class AnalysisController extends _$AnalysisController
 
     final game = PgnGame.parsePgn(
       pgn,
-      initHeaders:
-          () =>
-              options.isLichessGameAnalysis
-                  ? {}
-                  : {
-                    'Event': '?',
-                    'Site': '?',
-                    'Date': _dateFormat.format(DateTime.now()),
-                    'Round': '?',
-                    'White': '?',
-                    'Black': '?',
-                    'Result': '*',
-                    'WhiteElo': '?',
-                    'BlackElo': '?',
-                  },
+      initHeaders: () => options.isLichessGameAnalysis
+          ? {}
+          : {
+              'Event': '?',
+              'Site': '?',
+              'Date': _dateFormat.format(DateTime.now()),
+              'Round': '?',
+              'White': '?',
+              'Black': '?',
+              'Result': '*',
+              'WhiteElo': '?',
+              'BlackElo': '?',
+            },
     );
 
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
-    final isComputerAnalysisAllowed =
-        options.isLichessGameAnalysis
-            ? pgnHeaders['Result'] != '*'
-            : options.standalone!.isComputerAnalysisAllowed;
+    final isGameFinished = pgnHeaders['Result'] != '*';
+
+    final isComputerAnalysisAllowed = options.isLichessGameAnalysis
+        ? isGameFinished
+        : options.standalone!.isComputerAnalysisAllowed;
 
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
 
@@ -211,6 +211,7 @@ class AnalysisController extends _$AnalysisController
       gameId: options.gameId,
       archivedGame: archivedGame,
       currentPath: currentPath,
+      pathToLiveMove: isGameFinished ? null : _root.mainlinePath,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
@@ -429,6 +430,22 @@ class AnalysisController extends _$AnalysisController
     return nodes.map((node) => node.sanMove.san).join(' ');
   }
 
+  Future<void> toggleBookmark() async {
+    if (state.hasValue) {
+      final game = state.requireValue.archivedGame;
+      if (game == null) return;
+      final toggledBookmark = !(game.data.bookmarked ?? false);
+      await ref.read(accountServiceProvider).setGameBookmark(game.id, bookmark: toggledBookmark);
+      state = AsyncValue.data(
+        state.requireValue.copyWith(
+          archivedGame: state.requireValue.archivedGame?.copyWith(
+            data: game.data.copyWith(bookmarked: toggledBookmark),
+          ),
+        ),
+      );
+    }
+  }
+
   void _setPath(
     UciPath path, {
     bool shouldForceShowVariation = false,
@@ -451,8 +468,9 @@ class AnalysisController extends _$AnalysisController
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView =
-        shouldForceShowVariation || shouldRecomputeRootView ? _root.view : curState.root;
+    final rootView = shouldForceShowVariation || shouldRecomputeRootView
+        ? _root.view
+        : curState.root;
 
     final isForward = path.size > curState.currentPath.size;
     if (currentNode is Branch) {
@@ -538,10 +556,9 @@ class AnalysisController extends _$AnalysisController
       state = AsyncData(
         state.requireValue.copyWith(
           acplChartData: _makeAcplChartData(),
-          playersAnalysis:
-              event.$2.analysis != null
-                  ? (white: event.$2.analysis!.white, black: event.$2.analysis!.black)
-                  : null,
+          playersAnalysis: event.$2.analysis != null
+              ? (white: event.$2.analysis!.white, black: event.$2.analysis!.black)
+              : null,
           root: _root.view,
         ),
       );
@@ -552,12 +569,11 @@ class AnalysisController extends _$AnalysisController
     final eval = n2['eval'] as Map<String, dynamic>?;
     final cp = eval?['cp'] as int?;
     final mate = eval?['mate'] as int?;
-    final pgnEval =
-        cp != null
-            ? PgnEvaluation.pawns(pawns: cpToPawns(cp))
-            : mate != null
-            ? PgnEvaluation.mate(mate: mate)
-            : null;
+    final pgnEval = cp != null
+        ? PgnEvaluation.pawns(pawns: cpToPawns(cp))
+        : mate != null
+        ? PgnEvaluation.mate(mate: mate)
+        : null;
     final glyphs = n2['glyphs'] as List<dynamic>?;
     final glyph = glyphs?.first as Map<String, dynamic>?;
     final comments = n2['comments'] as List<dynamic>?;
@@ -614,20 +630,19 @@ class AnalysisController extends _$AnalysisController
           final (isCheckmate, side, eval) = el;
           return eval != null
               ? ExternalEval(
-                cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
-                mate: eval.mate,
-                depth: eval.depth,
-              )
+                  cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
+                  mate: eval.mate,
+                  depth: eval.depth,
+                )
               : ExternalEval(
-                cp: null,
-                // hack to display checkmate as the max eval
-                mate:
-                    isCheckmate
-                        ? side == Side.white
+                  cp: null,
+                  // hack to display checkmate as the max eval
+                  mate: isCheckmate
+                      ? side == Side.white
                             ? -1
                             : 1
-                        : null,
-              );
+                      : null,
+                );
         })
         .toList(growable: false);
     return list.isEmpty ? null : IList(list);
@@ -635,7 +650,7 @@ class AnalysisController extends _$AnalysisController
 }
 
 @freezed
-class AnalysisState with _$AnalysisState implements EvaluationMixinState {
+sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState {
   const AnalysisState._();
 
   const factory AnalysisState({
@@ -660,6 +675,9 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
 
     /// The path to the current node in the analysis view.
     required UciPath currentPath,
+
+    /// If this is a correspondence game, the path to the last move that has been played.
+    required UciPath? pathToLiveMove,
 
     /// Whether the current path is on the mainline.
     required bool isOnMainline,
@@ -711,7 +729,7 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
   }) = _AnalysisState;
 
   @override
-  bool get alwaysRequestCloudEval => currentPosition.ply < 15;
+  bool get alwaysRequestCloudEval => false;
 
   /// Whether the analysis is for a lichess game.
   bool get isLichessGameAnalysis => gameId != null;
@@ -758,7 +776,7 @@ class AnalysisState with _$AnalysisState implements EvaluationMixinState {
 }
 
 @freezed
-class AnalysisCurrentNode with _$AnalysisCurrentNode {
+sealed class AnalysisCurrentNode with _$AnalysisCurrentNode {
   const AnalysisCurrentNode._();
 
   const factory AnalysisCurrentNode({
@@ -806,10 +824,10 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
     final pgnEval = lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
     return pgnEval != null
         ? ExternalEval(
-          cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
-          mate: pgnEval.mate,
-          depth: pgnEval.depth,
-        )
+            cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
+            mate: pgnEval.mate,
+            depth: pgnEval.depth,
+          )
         : null;
   }
 }

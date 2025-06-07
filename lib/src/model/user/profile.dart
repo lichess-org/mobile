@@ -8,7 +8,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'profile.freezed.dart';
 
 @freezed
-class Profile with _$Profile {
+sealed class Profile with _$Profile {
   const factory Profile({
     String? country,
     String? location,
@@ -38,35 +38,35 @@ class Profile with _$Profile {
       fideRating: pick('fideRating').asIntOrNull(),
       uscfRating: pick('uscfRating').asIntOrNull(),
       ecfRating: pick('ecfRating').asIntOrNull(),
-      links:
-          rawLinks
-              ?.where((e) => e.trim().isNotEmpty)
-              .map((e) {
-                final link = SocialLink.fromUrl(e);
-                if (link == null) {
-                  final uri = Uri.tryParse(e);
-                  if (uri != null) {
-                    return SocialLink(site: null, url: uri);
-                  }
-                  return null;
-                }
-                return link;
-              })
-              .nonNulls
-              .toIList(),
+      links: rawLinks
+          ?.where((e) => e.trim().isNotEmpty)
+          .map((e) {
+            final link = SocialLink.fromUrl(e);
+            if (link == null) {
+              final uri = Uri.tryParse(e);
+              if (uri != null) {
+                return SocialLink(site: null, url: uri);
+              }
+              return null;
+            }
+            return link;
+          })
+          .nonNulls
+          .toIList(),
     );
   }
 }
 
 @freezed
-class SocialLink with _$SocialLink {
+sealed class SocialLink with _$SocialLink {
   const factory SocialLink({required LinkSite? site, required Uri url}) = _SocialLink;
 
   const SocialLink._();
 
   static SocialLink? fromUrl(String url) {
-    final updatedUrl =
-        url.startsWith('http://') || url.startsWith('https://') ? url : 'https://$url';
+    final updatedUrl = url.startsWith('http://') || url.startsWith('https://')
+        ? url
+        : 'https://$url';
     final uri = Uri.tryParse(updatedUrl);
     if (uri == null) return null;
     final host = uri.host.replaceAll(RegExp(r'www\.'), '');

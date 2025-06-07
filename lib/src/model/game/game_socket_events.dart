@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/utils/json.dart';
 part 'game_socket_events.freezed.dart';
 
 @freezed
-class GameFullEvent with _$GameFullEvent {
+sealed class GameFullEvent with _$GameFullEvent {
   const factory GameFullEvent({required PlayableGame game, required int socketEventVersion}) =
       _GameFullEvent;
 
@@ -27,7 +27,7 @@ class GameFullEvent with _$GameFullEvent {
 }
 
 @freezed
-class MoveEvent with _$MoveEvent {
+sealed class MoveEvent with _$MoveEvent {
   const MoveEvent._();
 
   const factory MoveEvent({
@@ -87,7 +87,7 @@ MoveEvent _socketMoveEventFromPick(RequiredPick pick) {
 }
 
 @freezed
-class GameEndEvent with _$GameEndEvent {
+sealed class GameEndEvent with _$GameEndEvent {
   const GameEndEvent._();
 
   const factory GameEndEvent({
@@ -120,7 +120,7 @@ GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
 }
 
 @freezed
-class ServerEvalEvent with _$ServerEvalEvent {
+sealed class ServerEvalEvent with _$ServerEvalEvent {
   const ServerEvalEvent._();
 
   const factory ServerEvalEvent({
@@ -159,10 +159,9 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
     final glyph = glyphs?.first as Map<String, dynamic>?;
     final comments = node['comments'] as List<dynamic>?;
     final comment = comments?.first as Map<String, dynamic>?;
-    final judgment =
-        glyph != null && comment != null
-            ? (name: _nagToJugdmentName(glyph['id'] as int), comment: comment['text'] as String)
-            : null;
+    final judgment = glyph != null && comment != null
+        ? (name: _nagToJugdmentName(glyph['id'] as int), comment: comment['text'] as String)
+        : null;
 
     final variation = nextVariation;
 

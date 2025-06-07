@@ -1,11 +1,14 @@
 import 'package:chessground/chessground.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
+import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 
@@ -214,5 +217,106 @@ void main() {
         expect(find.byType(BoardShapeWidget), findsOne);
       });
     });
+
+    group('Local engine is delayed:', () {
+      // testWidgets('displays a CLOUD label if cloud eval is available', (tester) async {
+      //   await makeEngineTestApp(tester, broadcastGame: (_tournamentId, _roundId, _gameId));
+
+      //   // displays loading indicator
+      //   expect(
+      //     find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitFadingFour)),
+      //     findsOne,
+      //   );
+      //   await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
+      //   expect(isCloudEvalDisplayed(), isTrue);
+      //   expect(find.widgetWithText(EngineDepth, '36'), findsOne);
+
+      //   // Wait for local engine delay
+      //   await tester.pump(kLocalEngineAfterCloudEvalDelay + kEngineEvalEmissionThrottleDelay);
+      //   // Local engine has not even started
+      //   expect(find.widgetWithText(EngineDepth, '36'), findsOne);
+      // });
+
+      testWidgets('starts local engine if cloud eval is not available', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameId),
+          isCloudEvalEnabled: false,
+        );
+        expect(find.byType(EngineDepth), findsOne);
+        // displays loading indicator
+        expect(
+          find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitFadingFour)),
+          findsOne,
+        );
+
+        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
+        // cloud eval is not available, so it still displays loading indicator
+        expect(
+          find.descendant(of: find.byType(EngineDepth), matching: find.byType(SpinKitFadingFour)),
+          findsOne,
+        );
+        expect(isCloudEvalDisplayed(), isFalse);
+
+        // Now wait for local engine
+        await tester.pump(kLocalEngineAfterCloudEvalDelay + kEngineEvalEmissionThrottleDelay);
+        expect(find.widgetWithText(EngineDepth, '16'), findsOne);
+      });
+
+      // testWidgets('Cloud eval will override local engine eval', (tester) async {
+      //   // Simulates a connection lag that will make the cloud eval come 300ms after the local engine
+      //   final connectionLag =
+      //       kLocalEngineAfterCloudEvalDelay -
+      //       kRequestEvalDebounceDelay +
+      //       const Duration(milliseconds: 300);
+      //   await makeEngineTestApp(
+      //     tester,
+      //     broadcastGame: (_tournamentId, _roundId, _gameId),
+      //     connectionLag: connectionLag,
+      //   );
+
+      //   // Wait for local engine eval
+      //   await tester.pump(kLocalEngineAfterCloudEvalDelay);
+      //   expect(find.widgetWithText(EngineDepth, '15'), findsOne);
+
+      //   // cloud eval will be available 300ms after the local engine eval
+      //   await tester.pump(const Duration(milliseconds: 300));
+      //   expect(isCloudEvalDisplayed(), isTrue);
+      //   expect(find.widgetWithText(EngineDepth, '36'), findsOne);
+      // });
+
+      // testWidgets('Local engine will not override cloud eval with greater depth', (tester) async {
+      //   // Simulates a connection lag that will make the local engine come 100ms after the cloud eval
+      //   final connectionLag =
+      //       kLocalEngineAfterCloudEvalDelay -
+      //       kRequestEvalDebounceDelay +
+      //       const Duration(milliseconds: 100);
+      //   await makeEngineTestApp(
+      //     tester,
+      //     broadcastGame: (_tournamentId, _roundId, _gameId),
+      //     connectionLag: connectionLag,
+      //   );
+
+      //   // Wait for local engine eval
+      //   await tester.pump(kLocalEngineAfterCloudEvalDelay);
+      //   expect(find.widgetWithText(EngineDepth, '15'), findsOne);
+
+      //   // Cloud eval will be available 100ms after the first local engine eval emission
+      //   await tester.pump(const Duration(milliseconds: 100));
+      //   expect(isCloudEvalDisplayed(), isTrue);
+      //   expect(find.widgetWithText(EngineDepth, '36'), findsOne);
+
+      //   // local engine is still running, but it will not override the cloud eval
+      //   // wait for the next local engine eval emission (after throttle delay minus the 100ms already waited)
+      //   await tester.pump(kEngineEvalEmissionThrottleDelay - const Duration(milliseconds: 100));
+      //   expect(isCloudEvalDisplayed(), isTrue);
+      //   expect(find.widgetWithText(EngineDepth, '36'), findsOne);
+      // });
+    });
   });
+}
+
+/// Checks if the cloud eval label is displayed in the EngineDepth widget
+bool isCloudEvalDisplayed() {
+  return find.widgetWithText(EngineDepth, 'CLOUD').evaluate().isNotEmpty;
 }

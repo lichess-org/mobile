@@ -4,9 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
-import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -14,19 +12,15 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 /// A list tile that shows more detailed game info than [GameListTile].
 class GameListDetailTile extends StatelessWidget {
-  const GameListDetailTile({required this.item, this.onPressedBookmark, this.gameListContext});
+  const GameListDetailTile({required this.item, this.onPressedBookmark});
 
   final LightExportedGameWithPov item;
   final Future<void> Function(BuildContext context)? onPressedBookmark;
-
-  /// The context of the game list that opened this screen, if available.
-  final (UserId?, GameFilterState)? gameListContext;
 
   Side get mySide => item.pov;
 
@@ -39,8 +33,6 @@ class GameListDetailTile extends StatelessWidget {
 
     final titleFontSize = isTablet ? 24.0 : 16.0;
     final subtitleFontSize = isTablet ? 18.0 : 12.0;
-
-    final customColors = Theme.of(context).extension<CustomColors>();
 
     final moveList = game.moves?.split(' ');
 
@@ -56,35 +48,32 @@ class GameListDetailTile extends StatelessWidget {
 
     return InkWell(
       onLongPress: () {
-        showAdaptiveBottomSheet<void>(
+        showModalBottomSheet<void>(
           context: context,
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder:
-              (context) => GameContextMenu(
-                opponentTitle: UserFullNameWidget.player(
-                  user: opponent.user,
-                  aiLevel: opponent.aiLevel,
-                  rating: opponent.rating,
-                ),
-                game: game,
-                mySide: mySide,
-                showGameSummary: false,
-                onPressedBookmark: onPressedBookmark,
-              ),
+          builder: (context) => GameContextMenu(
+            opponentTitle: UserFullNameWidget.player(
+              user: opponent.user,
+              aiLevel: opponent.aiLevel,
+              rating: opponent.rating,
+            ),
+            game: game,
+            mySide: mySide,
+            showGameSummary: false,
+            onPressedBookmark: onPressedBookmark,
+          ),
         );
       },
-      onTap:
-          () => openGameScreen(
-            context,
-            game: item.game,
-            orientation: item.pov,
-            loadingLastMove: game.lastMove,
-            lastMoveAt: game.lastMoveAt,
-            gameListContext: gameListContext,
-          ),
+      onTap: () => openGameScreen(
+        context,
+        game: item.game,
+        orientation: item.pov,
+        loadingLastMove: game.lastMove,
+        lastMoveAt: game.lastMoveAt,
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         child: LayoutBuilder(
@@ -170,12 +159,11 @@ class GameListDetailTile extends StatelessWidget {
                                     ),
                                     style: TextStyle(
                                       fontSize: subtitleFontSize,
-                                      color:
-                                          game.winner == null
-                                              ? customColors?.brag
-                                              : game.winner == mySide
-                                              ? customColors?.good
-                                              : customColors?.error,
+                                      color: game.winner == null
+                                          ? context.lichessColors.brag
+                                          : game.winner == mySide
+                                          ? context.lichessColors.good
+                                          : context.lichessColors.error,
                                     ),
                                     children: [
                                       if (me.ratingDiff != null)

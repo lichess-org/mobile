@@ -1,46 +1,15 @@
 import 'package:flutter/material.dart';
 
-/// A modal bottom sheet that adapts to the platform (Android/iOS).
-Future<T?> showAdaptiveBottomSheet<T>({
-  required BuildContext context,
-  required WidgetBuilder builder,
-  bool isDismissible = true,
-  bool useRootNavigator = true,
-  bool useSafeArea = true,
-  bool isScrollControlled = false,
-  bool? showDragHandle,
-  BoxConstraints? constraints,
-}) {
-  return showModalBottomSheet<T>(
-    context: context,
-    isDismissible: isDismissible,
-    enableDrag: isDismissible,
-    showDragHandle: showDragHandle,
-    isScrollControlled: isScrollControlled,
-    useRootNavigator: useRootNavigator,
-    useSafeArea: useSafeArea,
-    shape:
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
-            )
-            : null,
-    constraints: constraints,
-    elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : null,
-    builder: builder,
-  );
-}
-
 /// A modal bottom sheet container that adapts to the content size.
 ///
-/// This is typically used with [showAdaptiveBottomSheet] to display a
+/// This is typically used with [showModalBottomSheet] to display a
 /// context menu.
 ///
 /// This is meant for content that mostly fits on the screen, not for long lists.
 class BottomSheetScrollableContainer extends StatelessWidget {
   const BottomSheetScrollableContainer({
     required this.children,
-    this.padding = const EdgeInsets.only(bottom: 16.0),
+    this.padding = const EdgeInsets.symmetric(vertical: 16.0),
     this.scrollController,
   });
 

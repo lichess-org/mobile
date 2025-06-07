@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -24,10 +23,7 @@ Future<User?> account(Ref ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return null;
 
-  return ref.withClientCacheFor(
-    (client) => AccountRepository(client).getProfile(),
-    const Duration(hours: 1),
-  );
+  return ref.withClient((client) => AccountRepository(client).getProfile());
 }
 
 @riverpod
@@ -38,16 +34,6 @@ Future<LightUser?> accountUser(Ref ref) async {
 @riverpod
 Future<bool> kidMode(Ref ref) async {
   return ref.watch(accountProvider.selectAsync((user) => user?.kid ?? false));
-}
-
-@riverpod
-Future<IList<UserActivity>> accountActivity(Ref ref) async {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return IList();
-  return ref.withClientCacheFor(
-    (client) => UserRepository(client).getActivity(session.user.id),
-    const Duration(hours: 1),
-  );
 }
 
 /// A provider that fetches the ongoing games for the current user.
@@ -62,15 +48,22 @@ class OngoingGames extends _$OngoingGames {
       (client) => AccountRepository(client).getOngoingGames(nb: 50),
       // cache is useful to reduce the number of requests to the server because this is used by
       // both the correspondence service to sync games and the home screen to display ongoing games
-      const Duration(hours: 1),
+      const Duration(minutes: 10),
     );
   }
 
   /// Update the game with the given `id` with the new `game` data.
+  ///
+  /// If the game is not playable anymore, it will be removed from the list.
   void updateGame(GameFullId id, PlayableGame game) {
     if (!state.hasValue) return;
     final index = state.requireValue.indexWhere((e) => e.fullId == id);
     if (index == -1) return;
+    if (!game.playable) {
+      state = AsyncData(state.requireValue.removeAt(index));
+      return;
+    }
+
     final me = game.youAre ?? Side.white;
     final newGame = OngoingGame(
       id: game.id,
@@ -85,7 +78,8 @@ class OngoingGames extends _$OngoingGames {
       opponentRating: game.opponent?.rating,
       opponentAiLevel: game.opponent?.aiLevel,
       lastMove: game.lastMove,
-      secondsLeft: game.clock?.forSide(me).inSeconds,
+      secondsLeft:
+          game.clock?.forSide(me).inSeconds ?? game.correspondenceClock?.forSide(me).inSeconds,
     );
     state = AsyncData(
       state.requireValue.replace(index, newGame).sort((a, b) {
@@ -130,7 +124,7 @@ class AccountRepository {
         }
         return list
             .map((e) => _ongoingGameFromJson(e as Map<String, dynamic>))
-            .where((e) => e.variant.isReadSupported)
+            .where((e) => e.variant.isPlaySupported)
             .toIList();
       },
     );

@@ -32,6 +32,9 @@ sealed class ClientEval extends Eval {
   /// The depth of the search.
   int get depth;
 
+  /// The number of nodes searched.
+  int get nodes;
+
   /// The principal variations.
   IList<PvData> get pvs;
 
@@ -50,11 +53,15 @@ sealed class ClientEval extends Eval {
 
 /// The eval coming from other Lichess clients, served from the network.
 @freezed
-class CloudEval with _$CloudEval implements ClientEval {
+sealed class CloudEval with _$CloudEval implements ClientEval {
   CloudEval._();
 
-  factory CloudEval({required int depth, required Position position, required IList<PvData> pvs}) =
-      _CloudEval;
+  factory CloudEval({
+    required int depth,
+    required int nodes,
+    required Position position,
+    required IList<PvData> pvs,
+  }) = _CloudEval;
 
   @override
   String get evalString => _evalString(cp, mate);
@@ -77,7 +84,7 @@ class CloudEval with _$CloudEval implements ClientEval {
 
 /// The eval from the local engine.
 @freezed
-class LocalEval with _$LocalEval implements ClientEval {
+sealed class LocalEval with _$LocalEval implements ClientEval {
   const LocalEval._();
 
   const factory LocalEval({
@@ -115,7 +122,7 @@ class LocalEval with _$LocalEval implements ClientEval {
 
 /// The eval from an external engine, typically Lichess server side Stockfish.
 @Freezed(fromJson: true, toJson: true)
-class ExternalEval with _$ExternalEval implements Eval {
+sealed class ExternalEval with _$ExternalEval implements Eval {
   const ExternalEval._();
 
   const factory ExternalEval({
@@ -180,7 +187,7 @@ IList<MoveWithWinningChances> _bestMoves(IList<PvData> pvs, Position position) {
 }
 
 @freezed
-class PvData with _$PvData {
+sealed class PvData with _$PvData {
   const PvData._();
   const factory PvData({required IList<UCIMove> moves, int? mate, int? cp}) = _PvData;
 

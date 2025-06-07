@@ -1,7 +1,12 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -29,18 +34,24 @@ class ProfileScreen extends ConsumerStatefulWidget {
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
+final _accountActivityProvider = FutureProvider.autoDispose<IList<UserActivity>>((ref) {
+  final session = ref.watch(authSessionProvider);
+  if (session == null) return IList();
+  return ref.withClient((client) => UserRepository(client).getActivity(session.user.id));
+}, name: 'userActivityProvider');
+
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
+    final activity = ref.watch(_accountActivityProvider);
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: account.when(
-          data:
-              (user) =>
-                  user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user.lightUser),
+          data: (user) =>
+              user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user.lightUser),
           loading: () => const SizedBox.shrink(),
           error: (error, _) => const SizedBox.shrink(),
         ),
@@ -60,12 +71,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
           return RefreshIndicator.adaptive(
-            edgeOffset:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                    : 0.0,
+            edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                : 0.0,
             key: _refreshIndicatorKey,
-            onRefresh: () async => ref.refresh(accountProvider),
+            onRefresh: () => Future.wait([
+              ref.refresh(accountProvider.future),
+              ref.refresh(_accountActivityProvider.future),
+              ref.refresh(myRecentGamesProvider.future),
+            ]),
             child: ListView(
               children: [
                 UserProfileWidget(user: user),
@@ -88,7 +102,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ],
                   ),
-                const UserActivityWidget(),
+                UserActivityWidget(activity: activity),
                 RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
               ],
             ),
@@ -119,33 +133,31 @@ class AccountPerfCards extends ConsumerWidget {
           return const SizedBox.shrink();
         }
       },
-      loading:
-          () => Shimmer(
-            child: Padding(
-              padding: padding ?? Styles.bodySectionPadding,
-              child: SizedBox(
-                height: 106,
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 3.0),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  separatorBuilder: (context, index) => const SizedBox(width: 10),
-                  itemBuilder:
-                      (context, index) => ShimmerLoading(
-                        isLoading: true,
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
+      loading: () => Shimmer(
+        child: Padding(
+          padding: padding ?? Styles.bodySectionPadding,
+          child: SizedBox(
+            height: 106,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(vertical: 3.0),
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              separatorBuilder: (context, index) => const SizedBox(width: 10),
+              itemBuilder: (context, index) => ShimmerLoading(
+                isLoading: true,
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                 ),
               ),
             ),
           ),
+        ),
+      ),
       error: (error, stack) => const SizedBox.shrink(),
     );
   }

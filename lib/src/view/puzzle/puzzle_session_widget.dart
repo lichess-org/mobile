@@ -64,16 +64,15 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: OrientationBuilder(
         builder: (context, orientation) {
-          final remainingSpace = estimateRemainingHeightLeftBoard(context);
+          final remainingSpace = estimateHeightMinusBoardFromContext(context);
           final estimatedTableHeight = remainingSpace / 2;
           const estimatedRatingWidgetHeight = 33.0;
           final estimatedWidgetHeight = estimatedTableHeight - estimatedRatingWidgetHeight;
-          final maxHeight =
-              orientation == Orientation.portrait
-                  ? estimatedWidgetHeight >= 60
-                      ? 60.0
-                      : 26.0
-                  : 60.0;
+          final maxHeight = orientation == Orientation.portrait
+              ? estimatedWidgetHeight >= 60
+                    ? 60.0
+                    : 26.0
+              : 60.0;
 
           return ConstrainedBox(
             constraints: BoxConstraints(minHeight: 26.0, maxHeight: maxHeight),
@@ -90,31 +89,30 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                       isLoading: loadingPuzzleId == attempt.id,
                       brightness: brightness,
                       attempt: attempt,
-                      onTap:
-                          puzzleState.puzzle.puzzle.id != attempt.id && loadingPuzzleId == null
-                              ? (id) async {
-                                final provider = puzzleProvider(id);
-                                setState(() {
-                                  loadingPuzzleId = id;
-                                });
-                                try {
-                                  final puzzle = await ref.read(provider.future);
-                                  final nextContext = PuzzleContext(
-                                    userId: widget.initialPuzzleContext.userId,
-                                    angle: widget.initialPuzzleContext.angle,
-                                    puzzle: puzzle,
-                                  );
+                      onTap: puzzleState.puzzle.puzzle.id != attempt.id && loadingPuzzleId == null
+                          ? (id) async {
+                              final provider = puzzleProvider(id);
+                              setState(() {
+                                loadingPuzzleId = id;
+                              });
+                              try {
+                                final puzzle = await ref.read(provider.future);
+                                final nextContext = PuzzleContext(
+                                  userId: widget.initialPuzzleContext.userId,
+                                  angle: widget.initialPuzzleContext.angle,
+                                  puzzle: puzzle,
+                                );
 
-                                  ref.read(widget.ctrlProvider.notifier).onLoadPuzzle(nextContext);
-                                } finally {
-                                  if (mounted) {
-                                    setState(() {
-                                      loadingPuzzleId = null;
-                                    });
-                                  }
+                                ref.read(widget.ctrlProvider.notifier).onLoadPuzzle(nextContext);
+                              } finally {
+                                if (mounted) {
+                                  setState(() {
+                                    loadingPuzzleId = null;
+                                  });
                                 }
                               }
-                              : null,
+                            }
+                          : null,
                     ),
                   if (puzzleState.mode == PuzzleMode.view || currentAttempt == null)
                     _SessionItem(
@@ -168,61 +166,59 @@ class _SessionItem extends StatelessWidget {
         height: 26,
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         decoration: BoxDecoration(
-          color:
-              isCurrent
-                  ? Colors.grey.harmonizeWith(colorScheme.primary)
-                  : attempt != null
-                  ? attempt!.win
-                      ? good.harmonizeWith(colorScheme.primary)
-                      : error.harmonizeWith(colorScheme.primary)
-                  : next.harmonizeWith(colorScheme.primary),
+          color: isCurrent
+              ? Colors.grey.harmonizeWith(colorScheme.primary)
+              : attempt != null
+              ? attempt!.win
+                    ? good.harmonizeWith(colorScheme.primary)
+                    : error.harmonizeWith(colorScheme.primary)
+              : next.harmonizeWith(colorScheme.primary),
           borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
-        child:
-            isLoading
-                ? const Padding(
-                  padding: EdgeInsets.all(2.0),
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: CircularProgressIndicator.adaptive(backgroundColor: Colors.white),
-                  ),
-                )
-                : attempt?.ratingDiff != null && attempt!.ratingDiff != 0
-                ? RatingPrefAware(
-                  orElse: Icon(
-                    attempt != null
-                        ? attempt!.win
-                            ? Icons.check
-                            : Icons.close
-                        : null,
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: FittedBox(
-                      fit: BoxFit.fitHeight,
-                      child: Text(
-                        attempt!.ratingDiffString!,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          height: 1,
-                          fontFeatures: [FontFeature.tabularFigures()],
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-                : Icon(
+        child: isLoading
+            ? const Padding(
+                padding: EdgeInsets.all(2.0),
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: CircularProgressIndicator.adaptive(backgroundColor: Colors.white),
+                ),
+              )
+            : attempt?.ratingDiff != null && attempt!.ratingDiff != 0
+            ? RatingPrefAware(
+                orElse: Icon(
                   attempt != null
                       ? attempt!.win
-                          ? Icons.check
-                          : Icons.close
+                            ? Icons.check
+                            : Icons.close
                       : null,
                   color: Colors.white,
                   size: 18,
                 ),
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: FittedBox(
+                    fit: BoxFit.fitHeight,
+                    child: Text(
+                      attempt!.ratingDiffString!,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        height: 1,
+                        fontFeatures: [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : Icon(
+                attempt != null
+                    ? attempt!.win
+                          ? Icons.check
+                          : Icons.close
+                    : null,
+                color: Colors.white,
+                size: 18,
+              ),
       ),
     );
   }

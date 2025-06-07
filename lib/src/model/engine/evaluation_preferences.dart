@@ -66,7 +66,7 @@ enum ChessEnginePref {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Serializable {
+sealed class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Serializable {
   const EngineEvaluationPrefState._();
 
   const factory EngineEvaluationPrefState({

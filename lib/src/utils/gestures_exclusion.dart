@@ -15,7 +15,11 @@ final _deviceInfoPlugin = DeviceInfoPlugin();
 /// Navigation gestures start with Android 10 (API 29).
 /// They conflict with board game gestures, and we must set immersive mode
 /// to disable them.
-class AndroidGesturesExclusionWidget extends StatelessWidget {
+///
+/// This widget will keep the initial [MediaQueryData.viewPadding] whether immersive mode is set or
+/// not. This works in conjunction with the [SafeArea.maintainBottomViewPadding] property. This is
+/// the responsibility of the parent widget to set the [SafeArea] with the correct value.
+class AndroidGesturesExclusionWidget extends StatefulWidget {
   const AndroidGesturesExclusionWidget({
     required this.child,
     required this.boardKey,
@@ -43,17 +47,34 @@ class AndroidGesturesExclusionWidget extends StatelessWidget {
   final bool shouldSetImmersiveMode;
 
   @override
+  State<AndroidGesturesExclusionWidget> createState() => _AndroidGesturesExclusionWidgetState();
+}
+
+class _AndroidGesturesExclusionWidgetState extends State<AndroidGesturesExclusionWidget> {
+  EdgeInsets? initialViewPadding;
+
+  @override
   Widget build(BuildContext context) {
-    return FocusDetector(
-      onFocusGained: () {
-        if (shouldExcludeGesturesOnFocusGained?.call() ?? true) {
-          setAndroidBoardGesturesExclusion(boardKey, withImmersiveMode: shouldSetImmersiveMode);
-        }
-      },
-      onFocusLost: () {
-        clearAndroidBoardGesturesExclusion();
-      },
-      child: child,
+    initialViewPadding ??= MediaQuery.of(context).viewPadding;
+
+    return MediaQuery(
+      // Always set the view padding to the initial value to avoid an UI shift when immersive mode
+      // is enabled.
+      data: MediaQuery.of(context).copyWith(viewPadding: initialViewPadding),
+      child: FocusDetector(
+        onFocusGained: () {
+          if (widget.shouldExcludeGesturesOnFocusGained?.call() ?? true) {
+            setAndroidBoardGesturesExclusion(
+              widget.boardKey,
+              withImmersiveMode: widget.shouldSetImmersiveMode,
+            );
+          }
+        },
+        onFocusLost: () {
+          clearAndroidBoardGesturesExclusion();
+        },
+        child: widget.child,
+      ),
     );
   }
 }
@@ -134,20 +155,18 @@ class GesturesExclusion {
       return;
     }
 
-    final rectsAsMaps =
-        rects
-            .map(
-              (r) =>
-                  r.hasNaN || r.isInfinite
-                      ? null
-                      : {
-                        'left': r.left.floor(),
-                        'top': r.top.floor(),
-                        'right': r.right.floor(),
-                        'bottom': r.bottom.floor(),
-                      },
-            )
-            .toList();
+    final rectsAsMaps = rects
+        .map(
+          (r) => r.hasNaN || r.isInfinite
+              ? null
+              : {
+                  'left': r.left.floor(),
+                  'top': r.top.floor(),
+                  'right': r.right.floor(),
+                  'bottom': r.bottom.floor(),
+                },
+        )
+        .toList();
 
     try {
       await _channel.invokeMethod<void>('setSystemGestureExclusionRects', rectsAsMaps);

@@ -9,7 +9,9 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 part 'ongoing_game.freezed.dart';
 
 @freezed
-class OngoingGame with _$OngoingGame {
+sealed class OngoingGame with _$OngoingGame {
+  const OngoingGame._();
+
   factory OngoingGame({
     required GameId id,
     required GameFullId fullId,
@@ -25,4 +27,6 @@ class OngoingGame with _$OngoingGame {
     Move? lastMove,
     int? secondsLeft,
   }) = _OngoingGame;
+
+  bool get isRealTime => speed != Speed.correspondence;
 }

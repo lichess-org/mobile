@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="broadcasts">Vysílání</string>
+  <string name="myBroadcasts">Moje vysílání</string>
+  <plurals name="nbBroadcasts">
+    <item quantity="one">%s vysílání</item>
+    <item quantity="few">%s vysílání</item>
+    <item quantity="many">%s vysílání</item>
+    <item quantity="other">%s vysílání</item>
+  </plurals>
+  <plurals name="nbViewers">
+    <item quantity="one">%s divák</item>
+    <item quantity="few">%s diváků</item>
+    <item quantity="many">%s diváků</item>
+    <item quantity="other">%s diváků</item>
+  </plurals>
+  <string name="liveBroadcasts">Živé přenosy turnajů</string>
+  <string name="broadcastCalendar">Kalendář přenosů</string>
+  <string name="newBroadcast">Nový živý přenos</string>
+  <string name="subscribedBroadcasts">Odebírané přenosy</string>
+  <string name="aboutBroadcasts">O vysílání</string>
+  <string name="howToUseLichessBroadcasts">Jak používat Lichess vysílání.</string>
+  <string name="theNewRoundHelp">Nové kolo bude mít stejné členy a přispěvatele jako to předchozí.</string>
+  <string name="addRound">Přidat kolo</string>
+  <string name="ongoing">Probíhající</string>
+  <string name="upcoming">Chystané</string>
+  <string name="roundName">Číslo kola</string>
+  <string name="roundNumber">Číslo kola</string>
+  <string name="tournamentName">Název turnaje</string>
+  <string name="tournamentDescription">Stručný popis turnaje</string>
+  <string name="fullDescription">Úplný popis události</string>
+  <string name="fullDescriptionHelp">Volitelný dlouhý popis přenosu. %1$s je k dispozici. Délka musí být menší než %2$s znaků.</string>
+  <string name="sourceSingleUrl">PGN Zdrojová URL adresa</string>
+  <string name="sourceUrlHelp">URL adresa, kterou bude Lichess kontrolovat pro získání PGN aktualizací. Musí být veřejně přístupná z internetu.</string>
+  <string name="sourceGameIds">Až 64 ID Lichess her, oddělených mezerama.</string>
+  <string name="startDateTimeZone">Datum zahájení v lokálním čase turnaje: %s</string>
+  <string name="startDateHelp">Nepovinné, pokud víte, kdy událost začíná</string>
+  <string name="currentGameUrl">URL adresa právě probíhající partie</string>
+  <string name="downloadAllRounds">Stáhnout hry ze všech kol</string>
+  <string name="resetRound">Resetovat toto kolo</string>
+  <string name="deleteRound">Smazat toto kolo</string>
+  <string name="definitivelyDeleteRound">Definitivně smazat kolo a jeho hry.</string>
+  <string name="deleteAllGamesOfThisRound">Smazat všechny hry v tomto kole. Zdroj musí být aktivní aby bylo možno je znovu vytvořit.</string>
+  <string name="editRoundStudy">Upravit studie kola</string>
+  <string name="deleteTournament">Smazat tento turnaj</string>
+  <string name="definitivelyDeleteTournament">Opravdu smazat celý turnaj, všechna kola a hry.</string>
+  <string name="showScores">Zobraz skóre hráču dle herních výsledků</string>
+  <string name="replacePlayerTags">Volitelné: nahraď jména hráčů, rating a tituly</string>
+  <string name="fideFederations">FIDE federace</string>
+  <string name="top10Rating">Rating top 10</string>
+  <string name="fidePlayers">FIDE hráči</string>
+  <string name="fidePlayerNotFound">FIDE hráč nenalezen</string>
+  <string name="fideProfile">FIDE profil</string>
+  <string name="federation">Federace</string>
+  <string name="ageThisYear">Věk tento rok</string>
+  <string name="unrated">Nehodnocen</string>
+  <string name="recentTournaments">Nedávné tournamenty</string>
+  <string name="openLichess">Otevřít v Lichess</string>
+  <string name="teams">Týmy</string>
+  <string name="boards">Šachovnice</string>
+  <string name="overview">Přehled</string>
+  <string name="subscribeTitle">Přihlaste se k odběru, abyste byli informováni o začátku každého kola. V předvolbách účtu můžete přepnout mezi zvukovými nebo push oznámeními pro vysílání.</string>
+  <string name="uploadImage">Nahrát obrázek turnaje</string>
+  <string name="noBoardsYet">Zatím žádné šachovnice. Ty se zobrazí se po nahrání partií.</string>
+  <string name="boardsCanBeLoaded" comment="%s is 'Broadcaster App', and links to https://lichess.org/broadcast/app&#10;&#10;This is advice that appears in the manager view for broadcasts. The 'source' in this context is where the games to be displayed in the tournament will come from. Games can be sourced in a number of ways (aside from the Broadcaster App, which is what Lichess recommends):&#10;* URL(s) pointing to PGN(s)&#10;* IDs of games played on Lichess&#10;* Lichess usernames">Hry můžou být načteny pomocí zdroje či %s</string>
+  <string name="startsAfter">Začíná po %s</string>
+  <string name="startVerySoon">Vysílání začne velmi brzy.</string>
+  <string name="notYetStarted">Vysílání ještě nezačalo.</string>
+  <string name="officialWebsite">Oficiální stránka</string>
+  <string name="standings">Pořadí</string>
+  <string name="officialStandings" comment="Appears in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.&#10;&#10;This is a field where a tournament organiser can add a URL pointing to the official standings for their tournament.">Oficiální pořadí</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page'">Více možností na %s</string>
+  <string name="webmastersPage">Stránka webmasterů</string>
+  <string name="pgnSourceHelp" comment="%s is 'streaming API'">Veřejný zdroj PGN v reálném čase pro toto kolo. Nabízíme také %s pro rychlejší a efektivnější synchronizaci.</string>
+  <string name="embedThisBroadcast">Vložte toto vysílání na váš web</string>
+  <string name="embedThisRound">Vložte %s na váš web</string>
+  <string name="ratingDiff">Ratingový rozdíl</string>
+  <string name="gamesThisTournament" comment="Appears as a heading for a list on an individual player's page within a broadcasted tournament. The list shows all the games that individual has played within that tournament.&#10;&#10;Example: https://lichess.org/broadcast/fide-womens-grand-prix-202425--pune/round-7/ZPXXCcDI#players/8608059">Hry v tomto turnaji</string>
+  <string name="score">Skóre</string>
+  <string name="allTeams" comment="In this context, these are teams in a tournament that is being broadcast. The tournament format features teams.&#10;&#10;This is the default filter option, showing players from all teams in a given tournament.">Všechny týmy</string>
+  <string name="tournamentFormat" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Formát turnaje</string>
+  <string name="tournamentLocation" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Místo konání turnaje</string>
+  <string name="topPlayers" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.&#10;&#10;Broadcast creators can enter some top players' names here to attract attention. It is a free-entry field that accepts up to 4 names.">Nejlepší hráči</string>
+  <string name="timezone" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Časové pásmo</string>
+  <string name="fideRatingCategory" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.&#10;&#10;The options for this field are Standard, Blitz, or Rapid.">Kategorie ratingu FIDE</string>
+  <string name="optionalDetails" comment="Appears as a heading that groups fields in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Volitelné detaily</string>
+  <string name="pastBroadcasts">Dřívější vysílání</string>
+  <string name="allBroadcastsByMonth">Zobrazit všechny vysílání podle měsíce</string>
+  <string name="backToLiveMove">Zpět k přímému tahu</string>
+  <string name="sinceHideResults">Vzhledem k tomu, že jste se rozhodli skrýt výsledky, všechny náhledy jsou prázdné, abyste se vyhnuli spoilerům.</string>
+  <string name="liveboard" comment="Describes a pane in live broadcasts which lets you see what the current move is.&#10;&#10;This is useful when you are seeing previous moves in a live game, but still want to see the live/current position.">Živá deska</string>
+</resources>

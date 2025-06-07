@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -113,11 +112,10 @@ class OnlineFriendsWidget extends ConsumerWidget {
           );
           return const Center(child: Text('Could not load online friends'));
         },
-        loading:
-            () => ShimmerLoading(
-              isLoading: true,
-              child: ListSection.loading(itemsNumber: 5, header: true),
-            ),
+        loading: () => ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(itemsNumber: 5, header: true),
+        ),
       ),
     );
   }
@@ -138,29 +136,27 @@ class _OnlineFriendListTile extends ConsumerWidget {
 
     return ListTile(
       title: UserFullNameWidget(user: user),
-      trailing:
-          playing
-              ? IconButton(
-                tooltip: context.l10n.watchGames,
-                onPressed: () {
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(TvScreen.buildRoute(context, user: user));
-                },
-                icon: const Icon(Icons.live_tv),
-              )
-              : null,
+      trailing: playing
+          ? IconButton(
+              tooltip: context.l10n.watchGames,
+              onPressed: () {
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(TvScreen.buildRoute(context, user: user));
+              },
+              icon: const Icon(Icons.live_tv),
+            )
+          : null,
       onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, user)),
-      onLongPress:
-          () => showAdaptiveBottomSheet<void>(
-            context: context,
-            useRootNavigator: true,
-            isDismissible: true,
-            isScrollControlled: true,
-            showDragHandle: true,
-            builder: (context) => UserContextMenu(userId: user.id),
-          ),
+      onLongPress: () => showModalBottomSheet<void>(
+        context: context,
+        useRootNavigator: true,
+        isDismissible: true,
+        isScrollControlled: true,
+        showDragHandle: true,
+        builder: (context) => UserContextMenu(userId: user.id),
+      ),
     );
   }
 }
@@ -176,11 +172,9 @@ class _Online extends ConsumerWidget {
       case AsyncData(:final value):
         return ListView.separated(
           itemCount: value.length,
-          separatorBuilder:
-              (context, index) =>
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? const PlatformDivider(height: 1)
-                      : const SizedBox.shrink(),
+          separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+              ? const PlatformDivider(height: 1)
+              : const SizedBox.shrink(),
           itemBuilder: (context, index) {
             return _OnlineFriendListTile(onlineFriend: value[index]);
           },
@@ -208,11 +202,9 @@ class _Following extends ConsumerWidget {
             }
             return ListView.separated(
               itemCount: following.length,
-              separatorBuilder:
-                  (context, index) =>
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? const PlatformDivider(height: 1)
-                          : const SizedBox.shrink(),
+              separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+                  ? const PlatformDivider(height: 1)
+                  : const SizedBox.shrink(),
               itemBuilder: (context, index) {
                 final user = following[index];
                 return Slidable(
@@ -248,12 +240,9 @@ class _Following extends ConsumerWidget {
                   child: UserListTile.fromUser(
                     user,
                     _isOnline(user, value.$2),
-                    onTap:
-                        () => {
-                          Navigator.of(
-                            context,
-                          ).push(UserScreen.buildRoute(context, user.lightUser)),
-                        },
+                    onTap: () => {
+                      Navigator.of(context).push(UserScreen.buildRoute(context, user.lightUser)),
+                    },
                   ),
                 );
               },

@@ -19,7 +19,7 @@ part 'game_seek.freezed.dart';
 /// See corresponding API docs:
 /// https://lichess.org/api#tag/Board/operation/apiBoardSeek
 @freezed
-class GameSeek with _$GameSeek {
+sealed class GameSeek with _$GameSeek {
   const GameSeek._();
 
   @Assert(
@@ -40,7 +40,7 @@ class GameSeek with _$GameSeek {
     (int, int)? ratingDelta,
   }) = _GameSeek;
 
-  /// Construct a game seek from a predefined time control.
+  /// Construct a fast pairing game seek from a predefined time control.
   factory GameSeek.fastPairing(TimeIncrement setup, AuthSessionState? session) {
     return GameSeek(
       clock: (Duration(seconds: setup.time), Duration(seconds: setup.increment)),
@@ -52,12 +52,12 @@ class GameSeek with _$GameSeek {
   factory GameSeek.custom(GameSetupPrefs setup, User? account) {
     return GameSeek(
       clock: (
-        Duration(seconds: setup.customTimeSeconds),
-        Duration(seconds: setup.customIncrementSeconds),
+        Duration(seconds: setup.timeIncrement.time),
+        Duration(seconds: setup.timeIncrement.increment),
       ),
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      ratingRange: account != null ? setup.ratingRangeFromCustom(account) : null,
+      ratingRange: account != null ? setup.realTimeRatingRange(account) : null,
     );
   }
 
@@ -67,7 +67,7 @@ class GameSeek with _$GameSeek {
       days: setup.customDaysPerTurn,
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      ratingRange: account != null ? setup.ratingRangeFromCustom(account) : null,
+      ratingRange: account != null ? setup.correspondenceRatingRange(account) : null,
     );
   }
 
@@ -75,8 +75,9 @@ class GameSeek with _$GameSeek {
   /// the same time control, variant and rated status.
   factory GameSeek.newOpponentFromGame(PlayableGame game, GameSetupPrefs setup) {
     return GameSeek(
-      clock:
-          game.meta.clock != null ? (game.meta.clock!.initial, game.meta.clock!.increment) : null,
+      clock: game.meta.clock != null
+          ? (game.meta.clock!.initial, game.meta.clock!.increment)
+          : null,
       rated: game.meta.rated,
       variant: game.meta.variant,
       ratingDelta: game.source == GameSource.lobby ? setup.customRatingDelta : null,

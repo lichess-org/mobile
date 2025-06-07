@@ -33,109 +33,19 @@ enum TournamentFreq implements Comparable<TournamentFreq> {
   }
 }
 
-typedef TournamentLists =
-    ({
-      IList<LightTournament> started,
-      IList<LightTournament> created,
-      IList<LightTournament> finished,
-    });
+typedef TournamentLists = ({
+  IList<LightTournament> started,
+  IList<LightTournament> created,
+  IList<LightTournament> finished,
+});
 
 typedef TournamentMe = ({int rank, GameFullId? gameId, bool? withdraw, Duration? pauseDelay});
 
 const int kStandingsPageSize = 10;
 typedef StandingPage = ({int page, IList<StandingPlayer> players});
 
-extension TournamentExtension on Pick {
-  TimeIncrement asTimeIncrementOrThrow() {
-    final requiredPick = this.required();
-    return TimeIncrement(
-      requiredPick('limit').asIntOrThrow(),
-      requiredPick('increment').asIntOrThrow(),
-    );
-  }
-
-  TournamentFreq asTournamentFreqOrThrow() {
-    final value = this.required().value;
-    if (value is TournamentFreq) {
-      return value;
-    }
-    if (value is String) {
-      final freq = TournamentFreq.nameMap[value];
-      if (freq != null) return freq;
-    }
-    throw PickException("value $value at $debugParsingExit can't be casted to TournamentFreq");
-  }
-
-  IList<LightTournament> asTournamentListOrThrow() =>
-      asListOrThrow((pick) => LightTournament.fromServerJson(pick.asMapOrThrow())).toIList();
-
-  Verdict asVerdictOrThrow() {
-    final requiredPick = this.required();
-    return (
-      condition: requiredPick('condition').asStringOrThrow(),
-      ok: requiredPick('verdict').asStringOrThrow() == 'ok',
-    );
-  }
-
-  Verdicts asVerdictsOrThrow() {
-    final requiredPick = this.required();
-    return (
-      list:
-          requiredPick('list')
-              .asListOrThrow((pick) => pick.asVerdictOrThrow())
-              .where(
-                // we don't want to show the condition specific to the bot players
-                // since it makes no sense a a bot player use the app
-                (v) => v.condition != 'Bot players are not allowed',
-              )
-              .toIList(),
-      accepted: requiredPick('accepted').asBoolOrThrow(),
-    );
-  }
-
-  TournamentMe? asTournamentMeOrNull() {
-    if (value == null) return null;
-    try {
-      final requiredPick = this.required();
-      return (
-        rank: requiredPick('rank').asIntOrThrow(),
-        gameId: requiredPick('fullId').asGameFullIdOrNull(),
-        withdraw: requiredPick('withdraw').asBoolOrNull(),
-        pauseDelay: requiredPick('pauseDelay').asDurationFromSecondsOrNull(),
-      );
-    } catch (e) {
-      return null;
-    }
-  }
-
-  StandingPage? asStandingPageOrNull() {
-    if (value == null) return null;
-    try {
-      final requiredPick = this.required();
-      return (
-        page: requiredPick('page').asIntOrThrow(),
-        players:
-            requiredPick(
-              'players',
-            ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
-      );
-    } catch (_) {
-      return null;
-    }
-  }
-
-  FeaturedGame? asFeaturedGameOrNull() {
-    if (value == null) return null;
-    try {
-      return _featuredGameFromPick(this.required());
-    } catch (_) {
-      return null;
-    }
-  }
-}
-
 @freezed
-class TournamentMeta with _$TournamentMeta {
+sealed class TournamentMeta with _$TournamentMeta {
   const TournamentMeta._();
 
   const factory TournamentMeta({
@@ -169,7 +79,7 @@ TournamentMeta _tournamentMetaFromPick(RequiredPick pick) {
 }
 
 @freezed
-class LightTournament with _$LightTournament {
+sealed class LightTournament with _$LightTournament {
   const LightTournament._();
 
   const factory LightTournament({
@@ -180,12 +90,18 @@ class LightTournament with _$LightTournament {
     required DateTime startsAt,
     required DateTime finishesAt,
     required LightUser? winner,
+    bool? isTeamBattle,
   }) = _LightTournament;
 
   factory LightTournament.fromServerJson(Map<String, Object?> json) =>
       _lightTournamentFromPick(pick(json).required());
 
+  factory LightTournament.fromPick(RequiredPick pick) => _lightTournamentFromPick(pick);
+
   bool get isSystemTournament => meta.freq != null;
+
+  // TODO: add support for team battle
+  bool get isSupportedInApp => playSupportedVariants.contains(meta.variant) && isTeamBattle != true;
 }
 
 LightTournament _lightTournamentFromPick(RequiredPick pick) {
@@ -197,6 +113,8 @@ LightTournament _lightTournamentFromPick(RequiredPick pick) {
     position: pick('perf', 'position').asIntOrThrow(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     winner: pick('winner').asLightUserOrNull(),
+    // TODO add support for team battle; for now we just test if the field is not empty
+    isTeamBattle: pick('teamBattle').asMapOrNull<String, dynamic>()?.isNotEmpty,
   );
 }
 
@@ -205,7 +123,7 @@ typedef Verdicts = ({IList<Verdict> list, bool accepted});
 typedef Verdict = ({String condition, bool ok});
 
 @freezed
-class Tournament with _$Tournament {
+sealed class Tournament with _$Tournament {
   const Tournament._();
 
   const factory Tournament({
@@ -218,6 +136,7 @@ class Tournament with _$Tournament {
     required bool? isStarted,
     required (Duration, DateTime)? timeToStart,
     required (Duration, DateTime)? timeToFinish,
+    required bool pairingsClosed,
     required TournamentMe? me,
     required int nbPlayers,
     required StandingPage? standing,
@@ -254,6 +173,7 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     timeToFinish: pick(
       'secondsToFinish',
     ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
+    pairingsClosed: pick('pairingsClosed').asBoolOrFalse(),
     me: pick('me').asTournamentMeOrNull(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     standing: pick('standing').asStandingPageOrNull(),
@@ -274,12 +194,12 @@ Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick 
     // Sometimes a new FEN comes in via the websocket, but the API reload response
     // still has the FEN of the previous move, leading to sync issues.
     // So only copy the whole game here if it's a new ID.
-    featuredGame:
-        tournament.featuredGame?.id != newFeaturedGameId
-            ? pick('featured').asFeaturedGameOrNull()
-            : tournament.featuredGame,
+    featuredGame: tournament.featuredGame?.id != newFeaturedGameId
+        ? pick('featured').asFeaturedGameOrNull()
+        : tournament.featuredGame,
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
+    pairingsClosed: pick('pairingsClosed').asBoolOrFalse(),
     timeToStart: pick(
       'secondsToStart',
     ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
@@ -295,7 +215,7 @@ Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick 
 typedef StandingSheet = ({bool fire, IList<int> scores});
 
 @freezed
-class StandingPlayer with _$StandingPlayer {
+sealed class StandingPlayer with _$StandingPlayer {
   const StandingPlayer._();
 
   const factory StandingPlayer({
@@ -324,15 +244,17 @@ StandingPlayer _standingPlayerFromPick(RequiredPick pick) {
     rank: pick('rank').asIntOrThrow(),
     sheet: (
       fire: pick('sheet', 'fire').asBoolOrFalse(),
-      scores:
-          pick('sheet', 'scores').asStringOrThrow().characters.map((e) => int.parse(e)).toIList(),
+      scores: pick(
+        'sheet',
+        'scores',
+      ).asStringOrThrow().characters.map((e) => int.parse(e)).toIList(),
     ),
     withdraw: pick('withdraw').asBoolOrFalse(),
   );
 }
 
 @freezed
-class FeaturedPlayer with _$FeaturedPlayer {
+sealed class FeaturedPlayer with _$FeaturedPlayer {
   const FeaturedPlayer._();
 
   const factory FeaturedPlayer({
@@ -360,7 +282,7 @@ FeaturedPlayer _featuredPlayerFromPick(RequiredPick pick) {
 typedef FeaturedGameClocks = ({Duration white, Duration black});
 
 @freezed
-class FeaturedGame with _$FeaturedGame {
+sealed class FeaturedGame with _$FeaturedGame {
   const FeaturedGame._();
 
   const factory FeaturedGame({
@@ -400,7 +322,7 @@ FeaturedGame _featuredGameFromPick(RequiredPick pick) {
 }
 
 @freezed
-class TournamentStats with _$TournamentStats {
+sealed class TournamentStats with _$TournamentStats {
   const TournamentStats._();
 
   const factory TournamentStats({
@@ -432,4 +354,91 @@ class TournamentStats with _$TournamentStats {
   int get berserkRate => ((nbBerserks / nbGames) * 100).round();
   int get blackWinRate => ((nbBlackWins / nbGames) * 100).round();
   int get whiteWinRate => ((nbWhiteWins / nbGames) * 100).round();
+}
+
+extension TournamentExtension on Pick {
+  TimeIncrement asTimeIncrementOrThrow() {
+    final requiredPick = this.required();
+    return TimeIncrement(
+      requiredPick('limit').asIntOrThrow(),
+      requiredPick('increment').asIntOrThrow(),
+    );
+  }
+
+  TournamentFreq asTournamentFreqOrThrow() {
+    final value = this.required().value;
+    if (value is TournamentFreq) {
+      return value;
+    }
+    if (value is String) {
+      final freq = TournamentFreq.nameMap[value];
+      if (freq != null) return freq;
+    }
+    throw PickException("value $value at $debugParsingExit can't be casted to TournamentFreq");
+  }
+
+  IList<LightTournament> asTournamentListOrThrow() =>
+      asListOrThrow(LightTournament.fromPick).toIList();
+
+  Verdict asVerdictOrThrow() {
+    final requiredPick = this.required();
+    return (
+      condition: requiredPick('condition').asStringOrThrow(),
+      ok: requiredPick('verdict').asStringOrThrow() == 'ok',
+    );
+  }
+
+  Verdicts asVerdictsOrThrow() {
+    final requiredPick = this.required();
+    return (
+      list: requiredPick('list')
+          .asListOrThrow((pick) => pick.asVerdictOrThrow())
+          .where(
+            // we don't want to show the condition specific to the bot players
+            // since it makes no sense a a bot player use the app
+            (v) => v.condition != 'Bot players are not allowed',
+          )
+          .toIList(),
+      accepted: requiredPick('accepted').asBoolOrThrow(),
+    );
+  }
+
+  TournamentMe? asTournamentMeOrNull() {
+    if (value == null) return null;
+    try {
+      final requiredPick = this.required();
+      return (
+        rank: requiredPick('rank').asIntOrThrow(),
+        gameId: requiredPick('fullId').asGameFullIdOrNull(),
+        withdraw: requiredPick('withdraw').asBoolOrNull(),
+        pauseDelay: requiredPick('pauseDelay').asDurationFromSecondsOrNull(),
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  StandingPage? asStandingPageOrNull() {
+    if (value == null) return null;
+    try {
+      final requiredPick = this.required();
+      return (
+        page: requiredPick('page').asIntOrThrow(),
+        players: requiredPick(
+          'players',
+        ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  FeaturedGame? asFeaturedGameOrNull() {
+    if (value == null) return null;
+    try {
+      return _featuredGameFromPick(this.required());
+    } catch (_) {
+      return null;
+    }
+  }
 }

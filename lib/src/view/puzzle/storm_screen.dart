@@ -19,13 +19,13 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_layout.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -52,79 +52,51 @@ class _StormScreenState extends ConsumerState<StormScreen> {
           actions: [_StormDashboardButton(), const ToggleSoundButton()],
           title: const Text('Puzzle Storm'),
         ),
-        body: _Load(_boardKey),
+        body: _Body(_boardKey),
       ),
     );
   }
 }
 
-class _Load extends ConsumerWidget {
-  const _Load(this.boardKey);
+class _Body extends ConsumerWidget {
+  const _Body(this.boardKey);
 
   final GlobalKey boardKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final storm = ref.watch(stormProvider);
-    return storm.when(
-      data: (data) {
-        return _Body(data: data, boardKey: boardKey);
-      },
-      loading: () => const CenterLoadingIndicator(),
-      error: (e, s) {
-        debugPrint('SEVERE: [PuzzleStormScreen] could not load streak; $e\n$s');
-        return Center(
-          child: GameLayout(
-            topTable: kEmptyWidget,
-            bottomTable: kEmptyWidget,
-            fen: kEmptyFen,
-            orientation: Side.white,
-            errorMessage: e.toString(),
-          ),
-        );
-      },
-    );
-  }
-}
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.data, required this.boardKey});
+    switch (storm) {
+      case AsyncData(value: final PuzzleStormResponse data):
+        final ctrlProvider = stormControllerProvider(data.puzzles, data.timestamp);
+        final boardPreferences = ref.watch(boardPreferencesProvider);
+        final stormState = ref.watch(ctrlProvider);
 
-  final PuzzleStormResponse data;
+        ref.listen(ctrlProvider, (prev, state) {
+          if (prev?.mode != StormMode.ended && state.mode == StormMode.ended) {
+            Future.delayed(const Duration(milliseconds: 200), () {
+              if (context.mounted) {
+                _showStats(context, ref.read(ctrlProvider).stats!);
+              }
+            });
+          }
 
-  final GlobalKey boardKey;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = stormControllerProvider(data.puzzles, data.timestamp);
-    final boardPreferences = ref.watch(boardPreferencesProvider);
-    final stormState = ref.watch(ctrlProvider);
-
-    ref.listen(ctrlProvider, (prev, state) {
-      if (prev?.mode != StormMode.ended && state.mode == StormMode.ended) {
-        Future.delayed(const Duration(milliseconds: 200), () {
-          if (context.mounted) {
-            _showStats(context, ref.read(ctrlProvider).stats!);
+          if (state.mode == StormMode.ended) {
+            clearAndroidBoardGesturesExclusion();
           }
         });
-      }
 
-      if (state.mode == StormMode.ended) {
-        clearAndroidBoardGesturesExclusion();
-      }
-    });
-
-    final content = PopScope(
-      canPop: stormState.mode != StormMode.running,
-      onPopInvokedWithResult: (bool didPop, _) async {
-        if (didPop) {
-          return;
-        }
-        final NavigatorState navigator = Navigator.of(context);
-        final shouldPop = await showAdaptiveDialog<bool>(
-          context: context,
-          builder:
-              (context) => YesNoDialog(
+        final content = PopScope(
+          canPop: stormState.mode != StormMode.running,
+          onPopInvokedWithResult: (bool didPop, _) async {
+            if (didPop) {
+              return;
+            }
+            final NavigatorState navigator = Navigator.of(context);
+            final shouldPop = await showAdaptiveDialog<bool>(
+              context: context,
+              builder: (context) => YesNoDialog(
                 title: Text(context.l10n.mobileAreYouSure),
                 content: Text(context.l10n.mobilePuzzleStormConfirmEndRun),
                 onYes: () {
@@ -132,60 +104,74 @@ class _Body extends ConsumerWidget {
                 },
                 onNo: () => Navigator.of(context).pop(false),
               ),
-        );
-        if (shouldPop ?? false) {
-          navigator.pop();
-        }
-      },
-      child: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: SafeArea(
-                child: GameLayout(
-                  boardKey: boardKey,
-                  orientation: stormState.pov,
-                  lastMove: stormState.lastMove as NormalMove?,
-                  fen: stormState.position.fen,
-                  interactiveBoardParams: (
-                    position: stormState.position,
-                    variant: Variant.standard,
-                    playerSide:
-                        !stormState.firstMovePlayed ||
-                                stormState.mode == StormMode.ended ||
-                                stormState.position.isGameOver
-                            ? PlayerSide.none
-                            : stormState.pov == Side.white
-                            ? PlayerSide.white
-                            : PlayerSide.black,
-                    promotionMove: stormState.promotionMove,
-                    onMove:
-                        (move, {isDrop, captured}) =>
-                            ref.read(ctrlProvider.notifier).onUserMove(move),
-                    onPromotionSelection:
-                        (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
-                    premovable: null,
+            );
+            if (shouldPop ?? false) {
+              navigator.pop();
+            }
+          },
+          child: SafeArea(
+            // view padding can change on Android when immersive mode is enabled, so to prevent any
+            // board vertical shift, we set `maintainBottomViewPadding` to true.
+            maintainBottomViewPadding: true,
+            child: Column(
+              children: [
+                Expanded(
+                  child: PuzzleLayout(
+                    boardKey: boardKey,
+                    orientation: stormState.pov,
+                    lastMove: stormState.lastMove as NormalMove?,
+                    fen: stormState.position.fen,
+                    interactiveBoardParams: (
+                      position: stormState.position,
+                      variant: Variant.standard,
+                      playerSide:
+                          !stormState.firstMovePlayed ||
+                              stormState.mode == StormMode.ended ||
+                              stormState.position.isGameOver
+                          ? PlayerSide.none
+                          : stormState.pov == Side.white
+                          ? PlayerSide.white
+                          : PlayerSide.black,
+                      promotionMove: stormState.promotionMove,
+                      onMove: (move, {isDrop, captured}) =>
+                          ref.read(ctrlProvider.notifier).onUserMove(move),
+                      onPromotionSelection: (role) =>
+                          ref.read(ctrlProvider.notifier).onPromotionSelection(role),
+                      premovable: null,
+                    ),
+                    topTable: _TopTable(data),
+                    bottomTable: _Combo(stormState.combo),
                   ),
-                  topTable: _TopTable(data),
-                  bottomTable: _Combo(stormState.combo),
-                  userActionsBar: _BottomBar(ctrlProvider),
                 ),
-              ),
+                _BottomBar(ctrlProvider),
+              ],
             ),
           ),
-        ],
-      ),
-    );
+        );
 
-    return Theme.of(context).platform == TargetPlatform.android
-        ? AndroidGesturesExclusionWidget(
-          boardKey: boardKey,
-          shouldExcludeGesturesOnFocusGained:
-              () => stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
-          shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
-          child: content,
-        )
-        : content;
+        return Theme.of(context).platform == TargetPlatform.android
+            ? AndroidGesturesExclusionWidget(
+                boardKey: boardKey,
+                shouldExcludeGesturesOnFocusGained: () =>
+                    stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
+                shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+                child: content,
+              )
+            : content;
+      case AsyncError(:final error, :final stackTrace):
+        debugPrint('SEVERE: [PuzzleStormScreen] could not load storm; $error\n$stackTrace');
+        return Center(
+          child: PuzzleLayout(
+            topTable: kEmptyWidget,
+            bottomTable: kEmptyWidget,
+            fen: kEmptyFen,
+            orientation: Side.white,
+            errorMessage: 'An error occurred while loading the storm: $error',
+          ),
+        );
+      case _:
+        return const CenterLoadingIndicator();
+    }
   }
 }
 
@@ -209,7 +195,10 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
                 TextSpan(
                   text: 'Each correct ',
                   children: [
-                    TextSpan(text: 'move', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(
+                      text: 'move',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     TextSpan(
                       text:
                           ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
@@ -379,101 +368,92 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
     );
     return AnimatedBuilder(
       animation: _controller,
-      builder:
-          (context, child) => LayoutBuilder(
-            builder: (context, constraints) {
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          widget.combo.current.toString(),
-                          style: const TextStyle(
-                            fontSize: 26,
-                            height: 1.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(context.l10n.stormCombo),
-                      ],
+      builder: (context, child) => LayoutBuilder(
+        builder: (context, constraints) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.combo.current.toString(),
+                      style: const TextStyle(
+                        fontSize: 26,
+                        height: 1.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: constraints.maxWidth * 0.65,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 25,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              boxShadow:
-                                  _controller.value == 1.0
-                                      ? [
-                                        BoxShadow(
-                                          color: indicatorColor.withValues(alpha: 0.3),
-                                          blurRadius: 10.0,
-                                          spreadRadius: 2.0,
-                                        ),
-                                      ]
-                                      : [],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-                              child: LinearProgressIndicator(
-                                value: _controller.value,
-                                valueColor: AlwaysStoppedAnimation<Color>(indicatorColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children:
-                              StormCombo.levelBonus.mapIndexed((index, level) {
-                                final isCurrentLevel = index < lvl;
-                                return AnimatedContainer(
-                                  alignment: Alignment.center,
-                                  curve: Curves.easeIn,
-                                  duration: const Duration(milliseconds: 1000),
-                                  width: 28 * MediaQuery.textScalerOf(context).scale(14) / 14,
-                                  height: 24 * MediaQuery.textScalerOf(context).scale(14) / 14,
-                                  decoration:
-                                      isCurrentLevel
-                                          ? BoxDecoration(
-                                            color: comboShades[index],
-                                            borderRadius: const BorderRadius.all(
-                                              Radius.circular(3.0),
-                                            ),
-                                          )
-                                          : null,
-                                  child: Text(
-                                    '${level}s',
-                                    style: TextStyle(
-                                      color:
-                                          isCurrentLevel
-                                              ? ColorScheme.of(context).onSecondary
-                                              : null,
-                                    ),
+                    Text(context.l10n.stormCombo),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: constraints.maxWidth * 0.65,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 25,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: _controller.value == 1.0
+                              ? [
+                                  BoxShadow(
+                                    color: indicatorColor.withValues(alpha: 0.3),
+                                    blurRadius: 10.0,
+                                    spreadRadius: 2.0,
                                   ),
-                                );
-                              }).toList(),
+                                ]
+                              : [],
                         ),
-                      ],
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                          child: LinearProgressIndicator(
+                            value: _controller.value,
+                            valueColor: AlwaysStoppedAnimation<Color>(indicatorColor),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 10.0),
-                ],
-              );
-            },
-          ),
+                    const SizedBox(height: 4),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: StormCombo.levelBonus.mapIndexed((index, level) {
+                        final isCurrentLevel = index < lvl;
+                        return AnimatedContainer(
+                          alignment: Alignment.center,
+                          curve: Curves.easeIn,
+                          duration: const Duration(milliseconds: 1000),
+                          width: 28 * MediaQuery.textScalerOf(context).scale(14) / 14,
+                          height: 24 * MediaQuery.textScalerOf(context).scale(14) / 14,
+                          decoration: isCurrentLevel
+                              ? BoxDecoration(
+                                  color: comboShades[index],
+                                  borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                                )
+                              : null,
+                          child: Text(
+                            '${level}s',
+                            style: TextStyle(
+                              color: isCurrentLevel ? ColorScheme.of(context).onSecondary : null,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10.0),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -522,14 +502,13 @@ class _BottomBar extends ConsumerWidget {
             icon: LichessIcons.flag,
             label: context.l10n.stormEndRun.split('(').first.trimRight(),
             showLabel: true,
-            onTap:
-                stormState.puzzleIndex >= 1
-                    ? () {
-                      if (stormState.clock.startAt != null) {
-                        stormState.clock.sendEnd();
-                      }
+            onTap: stormState.puzzleIndex >= 1
+                ? () {
+                    if (stormState.clock.startAt != null) {
+                      stormState.clock.sendEnd();
                     }
-                    : null,
+                  }
+                : null,
           ),
         if (stormState.mode == StormMode.ended && stormState.stats != null)
           BottomBarButton(
@@ -580,12 +559,13 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
   @override
   Widget build(BuildContext context) {
     final puzzleList = widget.stats.historyFilter(filter);
-    final highScoreWidgets =
-        widget.stats.newHigh != null
-            ? [
-              const SizedBox(height: 16),
-              Card(
-                margin: Styles.bodySectionPadding,
+    final highScoreWidgets = widget.stats.newHigh != null
+        ? [
+            const SizedBox(height: 16),
+            Card(
+              margin: Styles.bodySectionPadding,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
                   leading: Icon(
                     LichessIcons.storm,
@@ -601,8 +581,9 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                   ),
                 ),
               ),
-            ]
-            : null;
+            ),
+          ]
+        : null;
 
     return SafeArea(
       child: ListView(
@@ -652,8 +633,8 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                       child: SemanticIconButton(
                         semanticsLabel: context.l10n.stormFailedPuzzles,
                         icon: const Icon(Icons.close),
-                        onPressed:
-                            () => setState(() => filter = filter.copyWith(failed: !filter.failed)),
+                        onPressed: () =>
+                            setState(() => filter = filter.copyWith(failed: !filter.failed)),
                         color: filter.failed ? ColorScheme.of(context).primary : null,
                       ),
                     ),
@@ -663,8 +644,8 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                       child: SemanticIconButton(
                         semanticsLabel: context.l10n.stormSlowPuzzles,
                         icon: const Icon(Icons.hourglass_bottom),
-                        onPressed:
-                            () => setState(() => filter = filter.copyWith(slow: !filter.slow)),
+                        onPressed: () =>
+                            setState(() => filter = filter.copyWith(slow: !filter.slow)),
                         color: filter.slow ? ColorScheme.of(context).primary : null,
                       ),
                     ),
@@ -672,7 +653,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                 ),
                 const SizedBox(height: 3.0),
                 if (puzzleList.isNotEmpty)
-                  PuzzleHistoryPreview(puzzleList)
+                  PuzzleHistoryPreview(puzzleList, shouldOpenCasualPuzzleRun: true)
                 else
                   Center(child: Text(context.l10n.mobilePuzzleStormFilterNothingToShow)),
               ],

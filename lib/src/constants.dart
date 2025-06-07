@@ -36,6 +36,8 @@ const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
 
 // UI
+const double kCupertinoBarBlurSigma = 30.0;
+const double kCupertinoBarOpacity = 0.8;
 
 const kDefaultSeedColor = Color.fromARGB(255, 191, 128, 29);
 
@@ -48,8 +50,9 @@ const kFlexGoldenRatioBase = 100000000000;
 const kFlexGoldenRatio = 161803398875;
 
 /// Use same box shadows as material widgets with elevation 1.
-final List<BoxShadow> boardShadows =
-    defaultTargetPlatform == TargetPlatform.iOS ? <BoxShadow>[] : kElevationToShadow[1]!;
+final List<BoxShadow> boardShadows = defaultTargetPlatform == TargetPlatform.iOS
+    ? <BoxShadow>[]
+    : kElevationToShadow[1]!;
 
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
@@ -58,8 +61,8 @@ const kTabletBoardTableSidePadding = 16.0;
 const kBottomBarHeight = 56.0;
 const kMaterialPopupMenuMaxWidth = 500.0;
 
-/// The threshold to detect screens with a small remaining height left board.
-const kSmallRemainingHeightLeftBoardThreshold = 160;
+/// The threshold to detect screens with a small remaining height minus board.
+const kSmallHeightMinusBoard = 170;
 
 // annotations
 class _AllowedWidgetReturn {

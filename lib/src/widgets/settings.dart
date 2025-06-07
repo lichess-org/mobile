@@ -36,16 +36,15 @@ class SettingsListTile extends StatelessWidget {
       child: ListTile(
         leading: icon,
         title: _SettingsTitle(title: settingsLabel),
-        subtitle:
-            explanation != null
-                ? Text(
-                  explanation!,
-                  maxLines: 5,
-                  style: ListTileTheme.of(context).subtitleTextStyle?.copyWith(
-                    fontSize: TextTheme.of(context).bodySmall?.fontSize,
-                  ),
-                )
-                : null,
+        subtitle: explanation != null
+            ? Text(
+                explanation!,
+                maxLines: 5,
+                style: ListTileTheme.of(
+                  context,
+                ).subtitleTextStyle?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
+              )
+            : null,
         onTap: onTap,
         trailing: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.25),
@@ -83,15 +82,14 @@ class SwitchSettingTile extends StatelessWidget {
     return ListTile(
       leading: leading,
       title: _SettingsTitle(title: title),
-      subtitle:
-          subtitle != null
-              ? DefaultTextStyle.merge(
-                style: ListTileTheme.of(
-                  context,
-                ).subtitleTextStyle?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
-                child: subtitle!,
-              )
-              : null,
+      subtitle: subtitle != null
+          ? DefaultTextStyle.merge(
+              style: ListTileTheme.of(
+                context,
+              ).subtitleTextStyle?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
+              child: subtitle!,
+            )
+          : null,
       trailing: Switch.adaptive(
         value: value,
         onChanged: onChanged,
@@ -145,10 +143,9 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
     return ListTile(
       leading: widget.icon,
       title: slider,
-      trailing:
-          widget.labelBuilder != null
-              ? Text(widget.labelBuilder!.call(widget.values[_index]))
-              : null,
+      trailing: widget.labelBuilder != null
+          ? Text(widget.labelBuilder!.call(widget.values[_index]))
+          : null,
     );
   }
 }

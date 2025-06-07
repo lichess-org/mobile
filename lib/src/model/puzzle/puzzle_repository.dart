@@ -198,7 +198,7 @@ class PuzzleRepository {
 }
 
 @freezed
-class PuzzleBatchResponse with _$PuzzleBatchResponse {
+sealed class PuzzleBatchResponse with _$PuzzleBatchResponse {
   const factory PuzzleBatchResponse({
     required IList<Puzzle> puzzles,
     PuzzleGlicko? glicko,
@@ -207,7 +207,7 @@ class PuzzleBatchResponse with _$PuzzleBatchResponse {
 }
 
 @freezed
-class PuzzleStreakResponse with _$PuzzleStreakResponse {
+sealed class PuzzleStreakResponse with _$PuzzleStreakResponse {
   const factory PuzzleStreakResponse({
     required Puzzle puzzle,
     required Streak streak,
@@ -222,7 +222,7 @@ class PuzzleStreakResponse with _$PuzzleStreakResponse {
 }
 
 @freezed
-class PuzzleStormResponse with _$PuzzleStormResponse {
+sealed class PuzzleStormResponse with _$PuzzleStormResponse {
   const factory PuzzleStormResponse({
     required IList<LitePuzzle> puzzles,
     required String? key,
@@ -371,14 +371,11 @@ PuzzleDashboard _puzzleDashboardFromPick(RequiredPick pick) => PuzzleDashboard(
     performance: pick('global')('performance').asIntOrThrow(),
     theme: PuzzleThemeKey.mix,
   ),
-  themes:
-      pick('themes')
-          .asMapOrThrow<String, Map<String, dynamic>>()
-          .keys
-          .map(
-            (key) => _puzzleDashboardDataFromPick(pick('themes')(key)('results').required(), key),
-          )
-          .toIList(),
+  themes: pick('themes')
+      .asMapOrThrow<String, Map<String, dynamic>>()
+      .keys
+      .map((key) => _puzzleDashboardDataFromPick(pick('themes')(key)('results').required(), key))
+      .toIList(),
 );
 
 PuzzleDashboardData _puzzleDashboardDataFromPick(RequiredPick results, String themeKey) =>

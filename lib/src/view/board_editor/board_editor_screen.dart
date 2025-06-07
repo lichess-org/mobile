@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_filters.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -53,11 +52,10 @@ class BoardEditorScreen extends ConsumerWidget {
           final defaultBoardSize = constraints.biggest.shortestSide;
           final isTablet = isTabletOrLarger(context);
           final remainingHeight = constraints.maxHeight - defaultBoardSize;
-          final isSmallScreen = remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-          final boardSize =
-              isTablet || isSmallScreen
-                  ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                  : defaultBoardSize;
+          final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
+          final boardSize = isTablet || isSmallScreen
+              ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+              : defaultBoardSize;
 
           final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
 
@@ -127,16 +125,13 @@ class _BoardEditor extends ConsumerWidget {
         boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
       ),
       pointerMode: editorState.editorPointerMode,
-      onDiscardedPiece:
-          (Square square) =>
-              ref.read(boardEditorControllerProvider(initialFen).notifier).discardPiece(square),
-      onDroppedPiece:
-          (Square? origin, Square dest, Piece piece) => ref
-              .read(boardEditorControllerProvider(initialFen).notifier)
-              .movePiece(origin, dest, piece),
-      onEditedSquare:
-          (Square square) =>
-              ref.read(boardEditorControllerProvider(initialFen).notifier).editSquare(square),
+      onDiscardedPiece: (Square square) =>
+          ref.read(boardEditorControllerProvider(initialFen).notifier).discardPiece(square),
+      onDroppedPiece: (Square? origin, Square dest, Piece piece) => ref
+          .read(boardEditorControllerProvider(initialFen).notifier)
+          .movePiece(origin, dest, piece),
+      onEditedSquare: (Square square) =>
+          ref.read(boardEditorControllerProvider(initialFen).notifier).editSquare(square),
     );
   }
 }
@@ -191,13 +186,12 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
               height: squareSize,
               child: ColoredBox(
                 key: Key('drag-button-${widget.side.name}'),
-                color:
-                    editorState.editorPointerMode == EditorPointerMode.drag
-                        ? context.lichessColors.good
-                        : Colors.transparent,
+                color: editorState.editorPointerMode == EditorPointerMode.drag
+                    ? context.lichessColors.good
+                    : Colors.transparent,
                 child: GestureDetector(
-                  onTap:
-                      () => ref.read(editorController.notifier).updateMode(EditorPointerMode.drag),
+                  onTap: () =>
+                      ref.read(editorController.notifier).updateMode(EditorPointerMode.drag),
                   child: Icon(CupertinoIcons.hand_draw, size: 0.9 * squareSize),
                 ),
               ),
@@ -214,9 +208,9 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                 key: Key('piece-button-${piece.color.name}-${piece.role.name}'),
                 color:
                     ref.read(boardEditorControllerProvider(widget.initialFen)).activePieceOnEdit ==
-                            piece
-                        ? ColorScheme.of(context).primary
-                        : Colors.transparent,
+                        piece
+                    ? ColorScheme.of(context).primary
+                    : Colors.transparent,
                 child: GestureDetector(
                   child: Draggable(
                     data: Piece(role: role, color: widget.side),
@@ -226,14 +220,11 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                       pieceAssets: boardPrefs.pieceSet.assets,
                     ),
                     child: pieceWidget,
-                    onDragEnd:
-                        (_) =>
-                            ref.read(editorController.notifier).updateMode(EditorPointerMode.drag),
+                    onDragEnd: (_) =>
+                        ref.read(editorController.notifier).updateMode(EditorPointerMode.drag),
                   ),
-                  onTap:
-                      () => ref
-                          .read(editorController.notifier)
-                          .updateMode(EditorPointerMode.edit, piece),
+                  onTap: () =>
+                      ref.read(editorController.notifier).updateMode(EditorPointerMode.edit, piece),
                 ),
               );
             }),
@@ -242,17 +233,13 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
               width: squareSize,
               height: squareSize,
               child: ColoredBox(
-                color:
-                    editorState.deletePiecesActive
-                        ? context.lichessColors.error
-                        : Colors.transparent,
+                color: editorState.deletePiecesActive
+                    ? context.lichessColors.error
+                    : Colors.transparent,
                 child: GestureDetector(
-                  onTap:
-                      () => {
-                        ref
-                            .read(editorController.notifier)
-                            .updateMode(EditorPointerMode.edit, null),
-                      },
+                  onTap: () => {
+                    ref.read(editorController.notifier).updateMode(EditorPointerMode.edit, null),
+                  },
                   child: Icon(CupertinoIcons.delete, size: 0.8 * squareSize),
                 ),
               ),
@@ -280,34 +267,38 @@ class _BottomBar extends ConsumerWidget {
         BottomBarButton(
           icon: Icons.menu,
           label: context.l10n.menu,
-          onTap:
-              () => showAdaptiveActionSheet<void>(
-                context: context,
-                actions: [
-                  BottomSheetAction(
-                    makeLabel: (context) => Text(context.l10n.loadPosition),
-                    onPressed: () {
-                      final notifier = ref.read(editorController.notifier);
-                      Navigator.of(context).push(
-                        SearchPositionScreen.buildRoute(
-                          context,
-                          onPositionSelected:
-                              (position) => {
-                                notifier.loadFen(position.fen),
-                                Navigator.of(context).pop(),
-                              },
-                        ),
-                      );
-                    },
-                  ),
-                  BottomSheetAction(
-                    makeLabel: (context) => Text(context.l10n.clearBoard),
-                    onPressed: () {
-                      ref.read(editorController.notifier).loadFen(kEmptyFen);
-                    },
-                  ),
-                ],
+          onTap: () => showAdaptiveActionSheet<void>(
+            context: context,
+            actions: [
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.startPosition),
+                onPressed: () {
+                  ref.read(editorController.notifier).loadFen(kInitialEPD);
+                },
               ),
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.loadPosition),
+                onPressed: () {
+                  final notifier = ref.read(editorController.notifier);
+                  Navigator.of(context).push(
+                    SearchPositionScreen.buildRoute(
+                      context,
+                      onPositionSelected: (position) => {
+                        notifier.loadFen(position.fen),
+                        Navigator.of(context).pop(),
+                      },
+                    ),
+                  );
+                },
+              ),
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.clearBoard),
+                onPressed: () {
+                  ref.read(editorController.notifier).loadFen(kEmptyFen);
+                },
+              ),
+            ],
+          ),
         ),
         BottomBarButton(
           key: const Key('flip-button'),
@@ -320,36 +311,35 @@ class _BottomBar extends ConsumerWidget {
           label: context.l10n.analysis,
           onTap:
               editorState.pgn != null &&
-                      // 1 condition (of many) where stockfish segfaults
-                      pieceCount > 0 &&
-                      pieceCount <= 32
-                  ? () {
-                    Navigator.of(context).push(
-                      AnalysisScreen.buildRoute(
-                        context,
-                        AnalysisOptions(
-                          orientation: editorState.orientation,
-                          standalone: (
-                            pgn: editorState.pgn!,
-                            isComputerAnalysisAllowed: true,
-                            variant: Variant.fromPosition,
-                          ),
+                  // 1 condition (of many) where stockfish segfaults
+                  pieceCount > 0 &&
+                  pieceCount <= 32
+              ? () {
+                  Navigator.of(context).push(
+                    AnalysisScreen.buildRoute(
+                      context,
+                      AnalysisOptions(
+                        orientation: editorState.orientation,
+                        standalone: (
+                          pgn: editorState.pgn!,
+                          isComputerAnalysisAllowed: true,
+                          variant: Variant.fromPosition,
                         ),
                       ),
-                    );
-                  }
-                  : null,
+                    ),
+                  );
+                }
+              : null,
           icon: Icons.biotech,
         ),
         BottomBarButton(
           label: 'Filters',
-          onTap:
-              () => showAdaptiveBottomSheet<void>(
-                context: context,
-                builder: (BuildContext context) => BoardEditorFilters(initialFen: initialFen),
-                showDragHandle: true,
-                constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
-              ),
+          onTap: () => showModalBottomSheet<void>(
+            context: context,
+            builder: (BuildContext context) => BoardEditorFilters(initialFen: initialFen),
+            showDragHandle: true,
+            constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+          ),
           icon: Icons.tune,
         ),
       ],

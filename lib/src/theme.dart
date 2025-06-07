@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -12,14 +13,13 @@ const kSliderTheme = SliderThemeData(
 
 ThemeData makeAppTheme(BuildContext context, GeneralPrefs generalPrefs, BoardPrefs boardPrefs) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-  final brightness =
-      generalPrefs.isForcedDarkMode
-          ? Brightness.dark
-          : switch (generalPrefs.themeMode) {
-            BackgroundThemeMode.light => Brightness.light,
-            BackgroundThemeMode.dark => Brightness.dark,
-            BackgroundThemeMode.system => MediaQuery.platformBrightnessOf(context),
-          };
+  final brightness = generalPrefs.isForcedDarkMode
+      ? Brightness.dark
+      : switch (generalPrefs.themeMode) {
+          BackgroundThemeMode.light => Brightness.light,
+          BackgroundThemeMode.dark => Brightness.dark,
+          BackgroundThemeMode.system => MediaQuery.platformBrightnessOf(context),
+        };
 
   if (generalPrefs.backgroundColor == null && generalPrefs.backgroundImage == null) {
     return _makeDefaultTheme(brightness, generalPrefs, boardPrefs, isIOS);
@@ -89,60 +89,87 @@ ThemeData _makeDefaultTheme(
   };
   final hasSystemColors = systemScheme != null && generalPrefs.systemColors == true;
 
-  final defaultScheme = ColorScheme.fromSeed(
+  final neutralScheme = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
     brightness: brightness,
     dynamicSchemeVariant: DynamicSchemeVariant.neutral,
   );
+  final defaultScheme = ColorScheme.fromSeed(
+    seedColor: boardTheme.colors.darkSquare,
+    brightness: brightness,
+  );
+  // makes a theme with neutral surfaces and default colors
+  final boardScheme = defaultScheme.copyWith(
+    surface: neutralScheme.surface,
+    onSurface: neutralScheme.onSurface,
+    surfaceDim: neutralScheme.surfaceDim,
+    surfaceBright: neutralScheme.surfaceBright,
+    surfaceContainer: neutralScheme.surfaceContainer,
+    surfaceContainerLowest: neutralScheme.surfaceContainerLowest,
+    surfaceContainerLow: neutralScheme.surfaceContainerLow,
+    surfaceContainerHigh: neutralScheme.surfaceContainerHigh,
+    surfaceContainerHighest: neutralScheme.surfaceContainerHighest,
+    onSurfaceVariant: neutralScheme.onSurfaceVariant,
+    inverseSurface: neutralScheme.inverseSurface,
+    onInverseSurface: neutralScheme.onInverseSurface,
+    shadow: neutralScheme.shadow,
+    scrim: neutralScheme.scrim,
+    surfaceTint: neutralScheme.surfaceTint,
+  );
 
   final textTheme = isIOS ? kCupertinoDefaultTextTheme : null;
 
-  final theme =
-      hasSystemColors
-          ? ThemeData.from(colorScheme: systemScheme, textTheme: textTheme)
-          : ThemeData.from(colorScheme: defaultScheme, textTheme: textTheme);
+  final theme = hasSystemColors
+      ? ThemeData.from(colorScheme: systemScheme, textTheme: textTheme)
+      : ThemeData.from(colorScheme: boardScheme, textTheme: textTheme);
 
   return theme.copyWith(
     cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     appBarTheme: _appBarTheme.copyWith(
-      backgroundColor: isIOS ? theme.colorScheme.surface.withValues(alpha: 0.9) : null,
+      backgroundColor: isIOS
+          ? theme.colorScheme.surface.withValues(alpha: kCupertinoBarOpacity)
+          : null,
       scrolledUnderElevation: isIOS ? 0 : null,
-      titleTextStyle:
-          isIOS
-              ? const CupertinoTextThemeData().navTitleTextStyle.copyWith(
-                color: theme.colorScheme.onSurface,
-              )
-              : null,
-    ),
-    navigationBarTheme:
-        isIOS
-            ? NavigationBarThemeData(
-              backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.9),
+      titleTextStyle: isIOS
+          ? const CupertinoTextThemeData().navTitleTextStyle.copyWith(
+              color: theme.colorScheme.onSurface,
             )
-            : null,
+          : null,
+    ),
+    navigationBarTheme: isIOS
+        ? NavigationBarThemeData(
+            backgroundColor: theme.colorScheme.surface.withValues(alpha: kCupertinoBarOpacity),
+          )
+        : null,
     bottomAppBarTheme: BottomAppBarTheme(
       color: theme.colorScheme.surface,
       elevation: isIOS ? 0 : null,
     ),
     iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
     listTileTheme: _makeListTileTheme(theme.colorScheme, isIOS),
-    cardTheme:
-        isIOS ? _kCupertinoCardTheme.copyWith(color: theme.colorScheme.surfaceContainerHigh) : null,
+    cardTheme: isIOS
+        ? _kCupertinoCardTheme.copyWith(color: theme.colorScheme.surfaceContainerHigh)
+        : null,
     inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(theme.colorScheme) : null,
-    floatingActionButtonTheme:
-        isIOS
-            ? FloatingActionButtonThemeData(
-              backgroundColor: theme.colorScheme.secondaryFixedDim,
-              foregroundColor: theme.colorScheme.onSecondaryFixedVariant,
-            )
-            : null,
+    floatingActionButtonTheme: isIOS
+        ? FloatingActionButtonThemeData(
+            backgroundColor: theme.colorScheme.secondaryFixedDim,
+            foregroundColor: theme.colorScheme.onSecondaryFixedVariant,
+          )
+        : null,
     dialogTheme: isIOS ? _kCupertinoDialogTheme : null,
     filledButtonTheme: isIOS ? _kCupertinoFilledButtonTheme : null,
     outlinedButtonTheme: isIOS ? _kCupertinoOutlinedButtonTheme : null,
     menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
     bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
     sliderTheme: kSliderTheme,
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
     extensions: [lichessCustomColors.harmonized(theme.colorScheme)],
   );
 }
@@ -179,10 +206,9 @@ ThemeData _makeBackgroundImageTheme({
     cardTheme: isIOS ? _kCupertinoCardTheme : null,
     inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(baseTheme.colorScheme) : null,
     bottomSheetTheme: (isIOS ? _kCupertinoBottomSheetTheme : const BottomSheetThemeData()).copyWith(
-      backgroundColor:
-          isIOS
-              ? lighten(baseTheme.colorScheme.surface, 0.1).withValues(alpha: 0.9)
-              : baseTheme.colorScheme.surface.withValues(alpha: 0.9),
+      backgroundColor: isIOS
+          ? lighten(baseTheme.colorScheme.surface, 0.1).withValues(alpha: 0.9)
+          : baseTheme.colorScheme.surface.withValues(alpha: 0.9),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: baseTheme.colorScheme.secondaryFixedDim,
@@ -193,57 +219,52 @@ ThemeData _makeBackgroundImageTheme({
     ),
     filledButtonTheme: isIOS ? _kCupertinoFilledButtonTheme : null,
     outlinedButtonTheme: isIOS ? _kCupertinoOutlinedButtonTheme : null,
-    menuTheme:
-        isIOS
-            ? MenuThemeData(
-              style: MenuStyle(
-                elevation: const WidgetStatePropertyAll(0),
-                backgroundColor: WidgetStatePropertyAll(
-                  baseTheme.colorScheme.surfaceContainer.withValues(alpha: 0.8),
-                ),
-              ),
-            )
-            : MenuThemeData(
-              style: MenuStyle(
-                backgroundColor: WidgetStatePropertyAll(
-                  baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
-                ),
+    menuTheme: isIOS
+        ? MenuThemeData(
+            style: MenuStyle(
+              elevation: const WidgetStatePropertyAll(0),
+              backgroundColor: WidgetStatePropertyAll(
+                baseTheme.colorScheme.surfaceContainer.withValues(alpha: 0.8),
               ),
             ),
+          )
+        : MenuThemeData(
+            style: MenuStyle(
+              backgroundColor: WidgetStatePropertyAll(
+                baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
+              ),
+            ),
+          ),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: _appBarTheme.copyWith(
-      backgroundColor: isBackgroundImage ? null : seedColor.withValues(alpha: 0.9),
+      backgroundColor: isBackgroundImage ? null : seedColor.withValues(alpha: kCupertinoBarOpacity),
       scrolledUnderElevation: isIOS ? 0 : null,
-      titleTextStyle:
-          isIOS
-              ? const CupertinoTextThemeData().navTitleTextStyle.copyWith(
-                color: baseTheme.colorScheme.onSurface,
-              )
-              : null,
-    ),
-    navigationBarTheme:
-        isIOS
-            ? NavigationBarThemeData(
-              backgroundColor:
-                  isBackgroundImage
-                      ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
-                      : seedColor.withValues(alpha: 0.9),
+      titleTextStyle: isIOS
+          ? const CupertinoTextThemeData().navTitleTextStyle.copyWith(
+              color: baseTheme.colorScheme.onSurface,
             )
-            : null,
+          : null,
+    ),
+    navigationBarTheme: isIOS
+        ? NavigationBarThemeData(
+            backgroundColor: isBackgroundImage
+                ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
+                : seedColor.withValues(alpha: kCupertinoBarOpacity),
+          )
+        : null,
     bottomAppBarTheme: BottomAppBarTheme(
-      color:
-          isBackgroundImage
-              ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
-              : seedColor,
+      color: isBackgroundImage
+          ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
+          : seedColor,
       elevation: isIOS ? 0 : null,
     ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
-    pageTransitionsTheme: PageTransitionsTheme(
+    pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
-        TargetPlatform.android: ZoomPageTransitionsBuilder(
-          backgroundColor: seedColor.withValues(alpha: 0),
+        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(
+          backgroundColor: Colors.transparent,
         ),
-        TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       },
     ),
 
@@ -275,10 +296,9 @@ const MenuThemeData _kCupertinoMenuThemeData = MenuThemeData(
 ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
   return ListTileThemeData(
     iconColor: colorScheme.onSurface.withValues(alpha: 0.7),
-    titleTextStyle:
-        isIOS
-            ? TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: 16)
-            : null,
+    titleTextStyle: isIOS
+        ? TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: 16)
+        : null,
     subtitleTextStyle: TextStyle(
       color: colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
     ),

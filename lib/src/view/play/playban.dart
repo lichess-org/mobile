@@ -33,14 +33,13 @@ class PlaybanMessage extends StatelessWidget {
           clockUpdatedAt: playban.date,
           active: true,
           tickInterval: const Duration(seconds: 1),
-          builder:
-              (BuildContext context, Duration timeleft) => Center(
-                child: Text(
-                  context.l10n.timeagoNbMinutesRemaining(timeleft.inMinutes),
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+          builder: (BuildContext context, Duration timeleft) => Center(
+            child: Text(
+              context.l10n.timeagoNbMinutesRemaining(timeleft.inMinutes),
+              style: const TextStyle(fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
         const SizedBox(height: 16.0),
         Align(

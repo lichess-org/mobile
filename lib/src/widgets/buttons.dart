@@ -67,12 +67,11 @@ class _OpacityButtonState extends State<OpacityButton> {
       label: widget.semanticsLabel,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTapDown:
-            widget.onPressed != null
-                ? (_) {
-                  setState(() => _isPressed = true);
-                }
-                : null,
+        onTapDown: widget.onPressed != null
+            ? (_) {
+                setState(() => _isPressed = true);
+              }
+            : null,
         onTapUp: (_) {
           setState(() => _isPressed = false);
           widget.onPressed?.call();

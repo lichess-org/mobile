@@ -96,6 +96,10 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
     return save(state.copyWith(clockPosition: clockPosition));
   }
 
+  Future<void> toggleMoveListDisplay() {
+    return save(state.copyWith(moveListDisplay: !state.moveListDisplay));
+  }
+
   Future<void> toggleEnableShapeDrawings() {
     return save(state.copyWith(enableShapeDrawings: !state.enableShapeDrawings));
   }
@@ -110,7 +114,7 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
 }
 
 @Freezed(fromJson: true, toJson: true)
-class BoardPrefs with _$BoardPrefs implements Serializable {
+sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   const BoardPrefs._();
 
   @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')
@@ -139,6 +143,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
       unknownEnumValue: CastlingMethod.kingOverRook,
     )
     required CastlingMethod castlingMethod,
+    @JsonKey(defaultValue: true) required bool moveListDisplay,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
@@ -163,6 +168,7 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
     pieceAnimation: true,
     materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     clockPosition: ClockPosition.right,
+    moveListDisplay: true,
     pieceShiftMethod: PieceShiftMethod.either,
     castlingMethod: CastlingMethod.kingOverRook,
     enableShapeDrawings: true,
@@ -183,10 +189,9 @@ class BoardPrefs with _$BoardPrefs implements Serializable {
       colorScheme: boardTheme.colors,
       brightness: brightness,
       hue: hue,
-      border:
-          showBorder
-              ? BoardBorder(color: darken(boardTheme.colors.darkSquare, 0.2), width: 16.0)
-              : null,
+      border: showBorder
+          ? BoardBorder(color: darken(boardTheme.colors.darkSquare, 0.2), width: 16.0)
+          : null,
       showValidMoves: showLegalMoves,
       showLastMove: boardHighlights,
       enableCoordinates: coordinates,
@@ -374,10 +379,9 @@ enum BoardTheme {
           for (final c in const [1, 2, 3, 4, 5, 6])
             Container(
               width: 44,
-              color:
-                  c.isEven
-                      ? BoardTheme.system.colors.darkSquare
-                      : BoardTheme.system.colors.lightSquare,
+              color: c.isEven
+                  ? BoardTheme.system.colors.darkSquare
+                  : BoardTheme.system.colors.lightSquare,
             ),
         ],
       ),

@@ -20,6 +20,16 @@ class BroadcastRepository {
     );
   }
 
+  Future<BroadcastSearchList> searchBroadcasts({required String searchTerm, int page = 1}) {
+    return client.readJson(
+      Uri(
+        path: '/api/broadcast/search',
+        queryParameters: {'q': searchTerm, 'page': page.toString()},
+      ),
+      mapper: _makeBroadcastSearchResponseFromJson,
+    );
+  }
+
   Future<BroadcastTournament> getTournament(BroadcastTournamentId broadcastTournamentId) {
     return client.readJson(
       Uri(path: 'api/broadcast/$broadcastTournamentId'),
@@ -63,6 +73,13 @@ BroadcastList _makeBroadcastResponseFromJson(Map<String, dynamic> json) {
     active: pick(json, 'active').asListOrThrow(_broadcastFromPick).toIList(),
     past: pick(json, 'past', 'currentPageResults').asListOrThrow(_broadcastFromPick).toIList(),
     nextPage: pick(json, 'past', 'nextPage').asIntOrNull(),
+  );
+}
+
+BroadcastSearchList _makeBroadcastSearchResponseFromJson(Map<String, dynamic> json) {
+  return (
+    broadcasts: pick(json, 'currentPageResults').asListOrThrow(_broadcastFromPick).toIList(),
+    nextPage: pick(json, 'nextPage').asIntOrNull(),
   );
 }
 
@@ -119,12 +136,11 @@ BroadcastTournamentGroup _tournamentGroupFromPick(RequiredPick pick) {
 BroadcastRound _roundFromPick(RequiredPick pick) {
   final live = pick('ongoing').asBoolOrFalse();
   final finished = pick('finished').asBoolOrFalse();
-  final status =
-      live
-          ? RoundStatus.live
-          : finished
-          ? RoundStatus.finished
-          : RoundStatus.upcoming;
+  final status = live
+      ? RoundStatus.live
+      : finished
+      ? RoundStatus.finished
+      : RoundStatus.upcoming;
 
   return BroadcastRound(
     id: pick('id').asBroadcastRoundIdOrThrow(),

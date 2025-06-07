@@ -95,21 +95,18 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
               if (prefs.enginePref == ChessEnginePref.sfLatest && !_hasNNUEFiles)
                 LoadingButtonBuilder(
                   initialFuture: _downloadNNUEFilesFuture,
-                  fetchData:
-                      () => ref
-                          .read(evaluationServiceProvider)
-                          .downloadNNUEFiles(inBackground: false),
+                  fetchData: () =>
+                      ref.read(evaluationServiceProvider).downloadNNUEFiles(inBackground: false),
                   builder: (context, isLoading, fetchData) {
                     return ListTile(
-                      trailing:
-                          isLoading
-                              ? AnimatedBuilder(
-                                animation: _downloadProgress,
-                                builder: (_, _) {
-                                  return CircularProgressIndicator(value: _downloadProgress.value);
-                                },
-                              )
-                              : const Icon(Icons.download),
+                      trailing: isLoading
+                          ? AnimatedBuilder(
+                              animation: _downloadProgress,
+                              builder: (_, _) {
+                                return CircularProgressIndicator(value: _downloadProgress.value);
+                              },
+                            )
+                          : const Icon(Icons.download),
                       title: Text(isLoading ? 'Downloading NNUE files' : 'Download NNUE files'),
                       subtitle: const Text('79MB'),
                       enabled: !isLoading,

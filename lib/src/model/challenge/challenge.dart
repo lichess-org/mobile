@@ -34,7 +34,7 @@ abstract mixin class BaseChallenge {
 
 /// A challenge already created server-side.
 @Freezed(fromJson: true, toJson: true)
-class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
+sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
   const Challenge._();
 
   const factory Challenge({
@@ -88,19 +88,17 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
 
     final variantStr = variant == Variant.standard ? '' : ' • ${variant.label}';
 
-    final sidePiece =
-        sideChoice == SideChoice.black
-            ? '♔ '
-            : sideChoice == SideChoice.white
-            ? '♚ '
-            : '';
+    final sidePiece = sideChoice == SideChoice.black
+        ? '♔ '
+        : sideChoice == SideChoice.white
+        ? '♚ '
+        : '';
 
-    final side =
-        sideChoice == SideChoice.black
-            ? l10n.white
-            : sideChoice == SideChoice.white
-            ? l10n.black
-            : l10n.randomColor;
+    final side = sideChoice == SideChoice.black
+        ? l10n.white
+        : sideChoice == SideChoice.white
+        ? l10n.black
+        : l10n.randomColor;
 
     final mode = rated ? l10n.rated : l10n.casual;
 
@@ -110,7 +108,7 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
 
 /// A challenge request to play a game with another user.
 @freezed
-class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements BaseChallenge {
+sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements BaseChallenge {
   const ChallengeRequest._();
 
   @Assert('clock != null || days != null', 'Either clock or days must be set but not both.')
@@ -319,11 +317,9 @@ extension ChallengeExtension on Pick {
     if (value is String) {
       return ChallengeDeclineReason.values.firstWhere(
         (element) => element.name.toLowerCase() == value,
-        orElse:
-            () =>
-                throw PickException(
-                  "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
-                ),
+        orElse: () => throw PickException(
+          "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
+        ),
       );
     }
     throw PickException(

@@ -8,7 +8,7 @@ part 'uci.g.dart';
 
 /// UciCharPair from scalachess
 @Freezed(fromJson: true, toJson: true, toStringOverride: false)
-class UciCharPair with _$UciCharPair {
+sealed class UciCharPair with _$UciCharPair {
   const UciCharPair._();
 
   const factory UciCharPair(String a, String b) = _UciCharPair;
@@ -55,7 +55,7 @@ const _dropRoles = [Role.queen, Role.rook, Role.bishop, Role.knight, Role.pawn];
 /// Compact representation of a path to a game node made from concatenated
 /// UciCharPair strings.
 @Freezed(fromJson: true, toJson: true)
-class UciPath with _$UciPath {
+sealed class UciPath with _$UciPath {
   const UciPath._();
 
   const factory UciPath(String value) = _UciPath;

@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/user/search_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -106,27 +107,25 @@ class _Body extends ConsumerWidget {
       final searchHistory = ref.watch(searchHistoryProvider).history;
       return SafeArea(
         child: SingleChildScrollView(
-          child:
-              searchHistory.isEmpty
-                  ? kEmptyWidget
-                  : ListSection(
-                    header: Text(context.l10n.mobileRecentSearches),
-                    headerTrailing: TextButton(
-                      child: Text(context.l10n.mobileClearButton),
-                      onPressed: () => ref.read(searchHistoryProvider.notifier).clear(),
-                    ),
-                    hasLeading: true,
-                    children:
-                        searchHistory
-                            .map(
-                              (term) => ListTile(
-                                leading: const Icon(Icons.history),
-                                title: Text(term),
-                                onTap: () => onRecentSearchTap(term),
-                              ),
-                            )
-                            .toList(),
+          child: searchHistory.isEmpty
+              ? kEmptyWidget
+              : ListSection(
+                  header: Text(context.l10n.mobileRecentSearches),
+                  headerTrailing: TextButton(
+                    child: Text(context.l10n.mobileClearButton),
+                    onPressed: () => ref.read(searchHistoryProvider.notifier).clear(),
                   ),
+                  hasLeading: true,
+                  children: searchHistory
+                      .map(
+                        (term) => ListTile(
+                          leading: const Icon(Icons.history),
+                          title: Text(term),
+                          onTap: () => onRecentSearchTap(term),
+                        ),
+                      )
+                      .toList(),
+                ),
         ),
       );
     }
@@ -142,51 +141,41 @@ class _UserList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final autoComplete = ref.watch(autoCompleteUserProvider(term));
-    return SingleChildScrollView(
-      child: autoComplete.when(
-        data:
-            (userList) =>
-                userList.isNotEmpty
-                    ? ListSection(
-                      header: Row(
-                        children: [
-                          const Icon(Icons.person),
-                          const SizedBox(width: 8),
-                          Text(context.l10n.mobilePlayersMatchingSearchTerm(term)),
-                        ],
+
+    return autoComplete.when(
+      data: (userList) => userList.isNotEmpty
+          ? SingleChildScrollView(
+              child: ListSection(
+                header: Row(
+                  children: [
+                    const Icon(Icons.person),
+                    const SizedBox(width: 8),
+                    Text(context.l10n.mobilePlayersMatchingSearchTerm(term)),
+                  ],
+                ),
+                hasLeading: true,
+                children: userList
+                    .map(
+                      (user) => UserListTile.fromLightUser(
+                        user,
+                        onTap: () {
+                          if (onUserTap != null) {
+                            onUserTap!.call(user);
+                          }
+                        },
                       ),
-                      hasLeading: true,
-                      children:
-                          userList
-                              .map(
-                                (user) => UserListTile.fromLightUser(
-                                  user,
-                                  onTap: () {
-                                    if (onUserTap != null) {
-                                      onUserTap!.call(user);
-                                    }
-                                  },
-                                ),
-                              )
-                              .toList(),
                     )
-                    : Column(
-                      children: [
-                        const SizedBox(height: 16.0),
-                        Center(child: Text(context.l10n.mobileNoSearchResults)),
-                      ],
-                    ),
-        error: (e, _) {
-          debugPrint('Error loading search results: $e');
-          return const Column(
-            children: [
-              SizedBox(height: 16.0),
-              Center(child: Text('Could not load search results.')),
-            ],
-          );
-        },
-        loading: () => const Column(children: [SizedBox(height: 16.0), CenterLoadingIndicator()]),
-      ),
+                    .toList(),
+              ),
+            )
+          : Center(
+              child: Text(context.l10n.mobileNoSearchResults, style: Styles.noResultTextStyle),
+            ),
+      error: (e, _) {
+        debugPrint('Error loading search results: $e');
+        return const Center(child: Text('Could not load search results.'));
+      },
+      loading: () => const Center(child: CenterLoadingIndicator()),
     );
   }
 }

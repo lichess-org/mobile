@@ -36,10 +36,9 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
   Future<void> toggleLichessDbSpeed(Speed speed) => save(
     state.copyWith(
       lichessDb: state.lichessDb.copyWith(
-        speeds:
-            state.lichessDb.speeds.contains(speed)
-                ? state.lichessDb.speeds.remove(speed)
-                : state.lichessDb.speeds.add(speed),
+        speeds: state.lichessDb.speeds.contains(speed)
+            ? state.lichessDb.speeds.remove(speed)
+            : state.lichessDb.speeds.add(speed),
       ),
     ),
   );
@@ -47,10 +46,9 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
   Future<void> toggleLichessDbRating(int rating) => save(
     state.copyWith(
       lichessDb: state.lichessDb.copyWith(
-        ratings:
-            state.lichessDb.ratings.contains(rating)
-                ? state.lichessDb.ratings.remove(rating)
-                : state.lichessDb.ratings.add(rating),
+        ratings: state.lichessDb.ratings.contains(rating)
+            ? state.lichessDb.ratings.remove(rating)
+            : state.lichessDb.ratings.add(rating),
       ),
     ),
   );
@@ -67,10 +65,9 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
   Future<void> togglePlayerDbSpeed(Speed speed) => save(
     state.copyWith(
       playerDb: state.playerDb.copyWith(
-        speeds:
-            state.playerDb.speeds.contains(speed)
-                ? state.playerDb.speeds.remove(speed)
-                : state.playerDb.speeds.add(speed),
+        speeds: state.playerDb.speeds.contains(speed)
+            ? state.playerDb.speeds.remove(speed)
+            : state.playerDb.speeds.add(speed),
       ),
     ),
   );
@@ -78,10 +75,9 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
   Future<void> togglePlayerDbGameMode(GameMode gameMode) => save(
     state.copyWith(
       playerDb: state.playerDb.copyWith(
-        gameModes:
-            state.playerDb.gameModes.contains(gameMode)
-                ? state.playerDb.gameModes.remove(gameMode)
-                : state.playerDb.gameModes.add(gameMode),
+        gameModes: state.playerDb.gameModes.contains(gameMode)
+            ? state.playerDb.gameModes.remove(gameMode)
+            : state.playerDb.gameModes.add(gameMode),
       ),
     ),
   );
@@ -91,7 +87,7 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Serializable {
+sealed class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Serializable {
   const OpeningExplorerPrefs._();
 
   const factory OpeningExplorerPrefs({
@@ -114,7 +110,7 @@ class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Serializable {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class MasterDb with _$MasterDb {
+sealed class MasterDb with _$MasterDb {
   const MasterDb._();
 
   const factory MasterDb({required int sinceYear}) = _MasterDb;
@@ -135,7 +131,7 @@ class MasterDb with _$MasterDb {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class LichessDb with _$LichessDb {
+sealed class LichessDb with _$LichessDb {
   const LichessDb._();
 
   const factory LichessDb({
@@ -173,7 +169,7 @@ class LichessDb with _$LichessDb {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PlayerDb with _$PlayerDb {
+sealed class PlayerDb with _$PlayerDb {
   const PlayerDb._();
 
   const factory PlayerDb({

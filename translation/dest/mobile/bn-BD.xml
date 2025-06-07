@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">সব গেম</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">আপনি কি নিশ্চিত?</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">চাল ফেরত নেওয়ার অফার বাতিল করুন</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">মুছে ফেলুন</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">হোম</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">সেটিংস</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN শেয়ার করুন</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">খেলার লিংক শেয়ার করুন</string>
+  <string name="showComments" comment="Shown in the analysis screen.">কমেন্টগুলো দেখুন</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">প্রতিপক্ষের জন্য অপেক্ষারত...</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">দেখুন</string>
+</resources>

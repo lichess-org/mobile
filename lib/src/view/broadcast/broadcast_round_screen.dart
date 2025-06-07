@@ -171,42 +171,39 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     AsyncValue<BroadcastTournament> asyncTournament,
     AsyncValue<BroadcastRoundState> asyncRound,
   ) {
-    return PlatformScaffold(
-      extendBody: Theme.of(context).platform == TargetPlatform.iOS,
-      appBar: PlatformAppBar(
-        title: AppBarTitleText(widget.broadcast.title, maxLines: 2),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: <Widget>[
-            Tab(text: context.l10n.broadcastOverview),
-            Tab(text: context.l10n.broadcastBoards),
-            Tab(text: context.l10n.players),
+    return switch (asyncRound) {
+      AsyncData(value: final _) => PlatformScaffold(
+        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        appBar: PlatformAppBar(
+          title: AppBarTitleText(widget.broadcast.title, maxLines: 2),
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: <Widget>[
+              Tab(text: context.l10n.broadcastOverview),
+              Tab(text: context.l10n.broadcastBoards),
+              Tab(text: context.l10n.players),
+            ],
+          ),
+          actions: [
+            SemanticIconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () => showModalBottomSheet<void>(
+                context: context,
+                isDismissible: true,
+                isScrollControlled: true,
+                builder: (_) =>
+                    _BroadcastSettingsBottomSheet(filter, onGameFilterChange: setGameFilter),
+              ),
+              semanticsLabel: context.l10n.settingsSettings,
+            ),
+            SemanticIconButton(
+              icon: const PlatformShareIcon(),
+              semanticsLabel: context.l10n.studyShareAndExport,
+              onPressed: () => showBroadcastShareMenu(context, widget.broadcast),
+            ),
           ],
         ),
-        actions: [
-          SemanticIconButton(
-            icon: const Icon(Icons.settings),
-            onPressed:
-                () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  isDismissible: true,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  builder:
-                      (_) =>
-                          _BroadcastSettingsBottomSheet(filter, onGameFilterChange: setGameFilter),
-                ),
-            semanticsLabel: context.l10n.settingsSettings,
-          ),
-          SemanticIconButton(
-            icon: const PlatformShareIcon(),
-            semanticsLabel: context.l10n.studyShareAndExport,
-            onPressed: () => showBroadcastShareMenu(context, widget.broadcast),
-          ),
-        ],
-      ),
-      body: switch (asyncRound) {
-        AsyncData(value: final _) => TabBarView(
+        body: TabBarView(
           controller: _tabController,
           children: <Widget>[
             BroadcastOverviewTab(broadcast: widget.broadcast, tournamentId: _selectedTournamentId),
@@ -222,18 +219,22 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             BroadcastPlayersTab(tournamentId: _selectedTournamentId),
           ],
         ),
-        _ => const Center(child: CircularProgressIndicator.adaptive()),
-      },
-      bottomNavigationBar: switch (asyncTournament) {
-        AsyncData(:final value) => _BottomBar(
-          tournament: value,
-          roundId: _selectedRoundId ?? value.defaultRoundId,
-          setTournamentId: setTournamentId,
-          setRoundId: setRoundId,
-        ),
-        _ => const BottomBar.empty(),
-      },
-    );
+        bottomNavigationBar: switch (asyncTournament) {
+          AsyncData(:final value) => _BottomBar(
+            tournament: value,
+            roundId: _selectedRoundId ?? value.defaultRoundId,
+            setTournamentId: setTournamentId,
+            setRoundId: setRoundId,
+          ),
+          _ => const BottomBar.empty(),
+        },
+      ),
+      _ => PlatformScaffold(
+        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        appBar: PlatformAppBar(title: AppBarTitleText(widget.broadcast.title, maxLines: 2)),
+        body: const Center(child: CircularProgressIndicator.adaptive()),
+      ),
+    };
   }
 
   @override
@@ -289,29 +290,26 @@ class _BottomBar extends ConsumerWidget {
       children: [
         if (tournament.group != null)
           TextButton(
-            onPressed:
-                () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  showDragHandle: true,
-                  isScrollControlled: true,
-                  isDismissible: true,
-                  builder:
-                      (_) => DraggableScrollableSheet(
-                        initialChildSize: 0.4,
-                        maxChildSize: 0.4,
-                        minChildSize: 0.1,
-                        snap: true,
-                        expand: false,
-                        builder: (context, scrollController) {
-                          return _TournamentSelectorMenu(
-                            tournament: tournament,
-                            group: tournament.group!,
-                            scrollController: scrollController,
-                            setTournamentId: setTournamentId,
-                          );
-                        },
-                      ),
-                ),
+            onPressed: () => showModalBottomSheet<void>(
+              context: context,
+              showDragHandle: true,
+              isScrollControlled: true,
+              isDismissible: true,
+              constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+              builder: (_) => DraggableScrollableSheet(
+                initialChildSize: 0.4,
+                snap: true,
+                expand: false,
+                builder: (context, scrollController) {
+                  return _TournamentSelectorMenu(
+                    tournament: tournament,
+                    group: tournament.group!,
+                    scrollController: scrollController,
+                    setTournamentId: setTournamentId,
+                  );
+                },
+              ),
+            ),
             child: Text(
               tournament.group!.firstWhere((g) => g.id == tournament.data.id).name,
               maxLines: 1,
@@ -319,28 +317,26 @@ class _BottomBar extends ConsumerWidget {
             ),
           ),
         TextButton(
-          onPressed:
-              () => showAdaptiveBottomSheet<void>(
-                context: context,
-                showDragHandle: true,
-                isScrollControlled: true,
-                isDismissible: true,
-                builder:
-                    (_) => DraggableScrollableSheet(
-                      initialChildSize: 0.6,
-                      maxChildSize: 0.6,
-                      snap: true,
-                      expand: false,
-                      builder: (context, scrollController) {
-                        return _RoundSelectorMenu(
-                          selectedRoundId: roundId,
-                          rounds: tournament.rounds,
-                          scrollController: scrollController,
-                          setRoundId: setRoundId,
-                        );
-                      },
-                    ),
-              ),
+          onPressed: () => showModalBottomSheet<void>(
+            context: context,
+            showDragHandle: true,
+            isScrollControlled: true,
+            isDismissible: true,
+            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+            builder: (_) => DraggableScrollableSheet(
+              initialChildSize: 0.6,
+              snap: true,
+              expand: false,
+              builder: (context, scrollController) {
+                return _RoundSelectorMenu(
+                  selectedRoundId: roundId,
+                  rounds: tournament.rounds,
+                  scrollController: scrollController,
+                  setRoundId: setRoundId,
+                );
+              },
+            ),
+          ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -405,17 +401,16 @@ class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
             key: round.id == widget.selectedRoundId ? currentRoundKey : null,
             selected: round.id == widget.selectedRoundId,
             title: Text(round.name, overflow: TextOverflow.ellipsis, maxLines: 2),
-            subtitle:
-                (round.startsAt != null || round.startsAfterPrevious)
-                    ? Text(
-                      round.startsAt != null
-                          ? round.startsAt!.difference(DateTime.now()).inDays.abs() < 30
+            subtitle: (round.startsAt != null || round.startsAfterPrevious)
+                ? Text(
+                    round.startsAt != null
+                        ? round.startsAt!.difference(DateTime.now()).inDays.abs() < 30
                               ? _dateFormatMonth.format(round.startsAt!)
                               : _dateFormatYearMonth.format(round.startsAt!)
-                          : context.l10n.broadcastStartsAfter(widget.rounds[index - 1].name),
-                      overflow: TextOverflow.ellipsis,
-                    )
-                    : null,
+                        : context.l10n.broadcastStartsAfter(widget.rounds[index - 1].name),
+                    overflow: TextOverflow.ellipsis,
+                  )
+                : null,
             trailing: switch (round.status) {
               RoundStatus.finished => Icon(Icons.check, color: context.lichessColors.good),
               RoundStatus.live => Icon(Icons.circle, color: context.lichessColors.error),
@@ -508,49 +503,43 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
   Widget build(BuildContext context) {
     final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
 
-    return DraggableScrollableSheet(
-      initialChildSize: .6,
-      expand: false,
-      builder:
-          (context, scrollController) => ListView(
-            controller: scrollController,
+    return BottomSheetScrollableContainer(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SettingsSectionTitle(context.l10n.filterGames),
-                    const SizedBox(height: 6),
-                    Filter<_BroadcastGameFilter>(
-                      filterType: FilterType.singleChoice,
-                      choices: _BroadcastGameFilter.values,
-                      choiceSelected: (choice) => filter == choice,
-                      choiceLabel: (category) => Text(category.l10n(context.l10n)),
-                      onSelected: (value, selected) {
-                        setState(() => filter = value);
-                        widget.onGameFilterChange.call(value);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              ListSection(
-                header: SettingsSectionTitle(context.l10n.preferencesDisplay),
-                materialFilledCard: true,
-                children: [
-                  SwitchSettingTile(
-                    title: Text(context.l10n.evaluationGauge),
-                    value: broadcastPreferences.showEvaluationBar,
-                    onChanged: (value) {
-                      ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
-                    },
-                  ),
-                ],
+              SettingsSectionTitle(context.l10n.filterGames),
+              const SizedBox(height: 6),
+              Filter<_BroadcastGameFilter>(
+                filterType: FilterType.singleChoice,
+                choices: _BroadcastGameFilter.values,
+                choiceSelected: (choice) => filter == choice,
+                choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                onSelected: (value, selected) {
+                  setState(() => filter = value);
+                  widget.onGameFilterChange.call(value);
+                },
               ),
             ],
           ),
+        ),
+        ListSection(
+          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
+          materialFilledCard: true,
+          children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.evaluationGauge),
+              value: broadcastPreferences.showEvaluationBar,
+              onChanged: (value) {
+                ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

@@ -41,8 +41,9 @@ class SocketPingRating extends ConsumerWidget {
                       text: 'PING: ',
                       children: [
                         TextSpan(
-                          text:
-                              p.averageLag > Duration.zero ? '${p.averageLag.inMilliseconds}' : '?',
+                          text: p.averageLag > Duration.zero
+                              ? '${p.averageLag.inMilliseconds}'
+                              : '?',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(

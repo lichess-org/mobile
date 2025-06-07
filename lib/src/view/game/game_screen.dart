@@ -7,12 +7,14 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
@@ -21,7 +23,7 @@ import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -45,7 +47,6 @@ class GameScreen extends ConsumerStatefulWidget {
     this.loadingLastMove,
     this.loadingOrientation,
     this.lastMoveAt,
-    this.gameListContext,
     super.key,
   }) : assert(
          initialGameId != null || seek != null || challenge != null,
@@ -62,9 +63,6 @@ class GameScreen extends ConsumerStatefulWidget {
 
   /// The date of the last move played in the game. If null, the game is in progress.
   final DateTime? lastMoveAt;
-
-  /// The context of the game list that opened this screen, if available.
-  final (UserId?, GameFilterState)? gameListContext;
 
   _GameSource get source {
     if (initialGameId != null) {
@@ -85,7 +83,6 @@ class GameScreen extends ConsumerStatefulWidget {
     Move? loadingLastMove,
     Side? loadingOrientation,
     DateTime? lastMoveAt,
-    (UserId?, GameFilterState)? gameListContext,
   }) {
     return buildScreenRoute(
       context,
@@ -97,7 +94,6 @@ class GameScreen extends ConsumerStatefulWidget {
         loadingLastMove: loadingLastMove,
         loadingOrientation: loadingOrientation,
         lastMoveAt: lastMoveAt,
-        gameListContext: gameListContext,
       ),
     );
   }
@@ -118,51 +114,37 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     final provider = currentGameProvider(
       seek: widget.seek,
       challenge: widget.challenge,
-      game:
-          widget.initialGameId != null
-              ? (
-                gameId: widget.initialGameId!,
-                lastFen: widget.loadingFen,
-                lastMove: widget.loadingLastMove,
-                side: widget.loadingOrientation,
-              )
-              : null,
+      game: widget.initialGameId != null
+          ? (
+              gameId: widget.initialGameId!,
+              lastFen: widget.loadingFen,
+              lastMove: widget.loadingLastMove,
+              side: widget.loadingOrientation,
+            )
+          : null,
     );
+    final boardPreferences = ref.watch(boardPreferencesProvider);
 
     switch (ref.watch(provider)) {
       case AsyncData(:final value):
         final (game: loadedGame, challenge: challenge, declineReason: declineReason) = value;
-        final shouldPreventGoingBackAsync =
-            loadedGame != null
-                ? ref.watch(shouldPreventGoingBackProvider(loadedGame.gameId))
-                : const AsyncValue.data(true);
+        final isRealTimePlayingGame =
+            (loadedGame != null
+                    ? ref.watch(isRealTimePlayableGameProvider(loadedGame.gameId))
+                    : const AsyncValue.data(true))
+                .valueOrNull ??
+            false;
 
         final socketUri = loadedGame != null ? GameController.socketUri(loadedGame.gameId) : null;
 
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
-              data: (prevent) => prevent ? SocketPingRating(socketUri: socketUri) : null,
-              orElse: () => null,
-            ),
-            title:
-                loadedGame != null
-                    ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
-                    : widget.seek != null
-                    ? _LobbyGameTitle(seek: widget.seek!)
-                    : widget.challenge != null
-                    ? _ChallengeGameTitle(challenge: widget.challenge!)
-                    : const SizedBox.shrink(),
-
-            actions: [
-              if (loadedGame != null)
-                _GameMenu(gameId: loadedGame.gameId, gameListContext: widget.gameListContext),
-            ],
-          ),
-          body:
-              loadedGame != null
-                  ? GameBody(
+        final body = PopScope(
+          canPop: isRealTimePlayingGame != true,
+          child: SafeArea(
+            // view padding can change on Android when immersive mode is enabled, so to prevent any
+            // board vertical shift, we set `maintainBottomViewPadding` to true.
+            maintainBottomViewPadding: true,
+            child: loadedGame != null
+                ? GameBody(
                     loadedGame: loadedGame,
                     whiteClockKey: _whiteClockKey,
                     blackClockKey: _blackClockKey,
@@ -188,62 +170,87 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                       }
                     },
                   )
-                  : widget.challenge != null && challenge != null
-                  ? ChallengeDeclinedBoard(
+                : widget.challenge != null && challenge != null
+                ? ChallengeDeclinedBoard(
                     challenge: challenge,
-                    declineReason:
-                        declineReason != null
-                            ? declineReason.label(context.l10n)
-                            : ChallengeDeclineReason.generic.label(context.l10n),
+                    declineReason: declineReason != null
+                        ? declineReason.label(context.l10n)
+                        : ChallengeDeclineReason.generic.label(context.l10n),
                   )
-                  : const LoadGameError('Could not create the game.'),
+                : const LoadGameError('Could not create the game.'),
+          ),
+        );
+
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            leading: isRealTimePlayingGame ? SocketPingRating(socketUri: socketUri) : null,
+            title: loadedGame != null
+                ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
+                : widget.seek != null
+                ? _LobbyGameTitle(seek: widget.seek!)
+                : widget.challenge != null
+                ? _ChallengeGameTitle(challenge: widget.challenge!)
+                : const SizedBox.shrink(),
+
+            actions: [if (loadedGame != null) _GameMenu(gameId: loadedGame.gameId)],
+          ),
+          body: Theme.of(context).platform == TargetPlatform.android
+              ? AndroidGesturesExclusionWidget(
+                  boardKey: _boardKey,
+                  shouldExcludeGesturesOnFocusGained: () => isRealTimePlayingGame,
+                  shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+                  child: body,
+                )
+              : body,
         );
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameScreen] could not create game; $e\n$s');
 
-        // lichess sends a 400 response if user has disallowed challenges
-        final message =
-            e is ServerException && e.statusCode == 400
-                ? LoadGameError('Could not create the game: ${e.jsonError?['error'] as String?}')
-                : const LoadGameError(
-                  'Sorry, we could not create the game. Please try again later.',
-                );
+        // lichess sends a 400 response if user has not allowed challenges
+        final message = e is ServerException && e.statusCode == 400
+            ? LoadGameError('Could not create the game: ${e.jsonError?['error'] as String?}')
+            : const LoadGameError('Sorry, we could not create the game. Please try again later.');
 
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: const SocketPingRating(),
-            title:
-                widget.seek != null
-                    ? _LobbyGameTitle(seek: widget.seek!)
-                    : widget.challenge != null
-                    ? _ChallengeGameTitle(challenge: widget.challenge!)
-                    : const SizedBox.shrink(),
+            title: widget.seek != null
+                ? _LobbyGameTitle(seek: widget.seek!)
+                : widget.challenge != null
+                ? _ChallengeGameTitle(challenge: widget.challenge!)
+                : const SizedBox.shrink(),
           ),
           body: PopScope(child: message),
         );
       case _:
-        final loadingBoard =
-            widget.seek != null
-                ? LobbyScreenLoadingContent(
-                  widget.seek!,
-                  () => ref.read(createGameServiceProvider).cancelSeek(),
-                )
-                : widget.challenge != null
-                ? ChallengeLoadingContent(
-                  widget.challenge!,
-                  () => ref.read(createGameServiceProvider).cancelChallenge(),
-                )
-                : const StandaloneGameLoadingBoard();
+        final loadingBoard = widget.seek != null
+            ? LobbyScreenLoadingContent(
+                widget.seek!,
+                () => ref.read(createGameServiceProvider).cancelSeek(),
+              )
+            : widget.challenge != null
+            ? ChallengeLoadingContent(
+                widget.challenge!,
+                () => ref.read(createGameServiceProvider).cancelChallenge(),
+              )
+            : const Column(
+                children: [
+                  Expanded(child: StandaloneGameLoadingBoard()),
+                  BottomBar.empty(),
+                ],
+              );
 
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: const SocketPingRating(),
-            title:
-                widget.seek != null
-                    ? _LobbyGameTitle(seek: widget.seek!)
-                    : widget.challenge != null
-                    ? _ChallengeGameTitle(challenge: widget.challenge!)
-                    : const SizedBox.shrink(),
+            title: widget.seek != null
+                ? _LobbyGameTitle(seek: widget.seek!)
+                : widget.challenge != null
+                ? _ChallengeGameTitle(challenge: widget.challenge!)
+                : const SizedBox.shrink(),
           ),
           body: PopScope(canPop: false, child: loadingBoard),
         );
@@ -252,49 +259,47 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 }
 
 class _GameMenu extends ConsumerWidget {
-  const _GameMenu({required this.gameId, this.gameListContext});
+  const _GameMenu({required this.gameId});
 
   final GameFullId gameId;
-  final (UserId?, GameFilterState)? gameListContext;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isBookmarkedAsync = ref.watch(isGameBookmarkedProvider(gameId));
 
-    return ContextMenuButton(
-      consumeOutsideTap: false,
+    return ContextMenuIconButton(
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
       actions: [
         ContextMenuAction(
-          icon: const Icon(Icons.settings),
+          icon: Icons.settings,
           label: context.l10n.settingsSettings,
-          onPressed:
-              () => showAdaptiveBottomSheet<void>(
-                context: context,
-                isDismissible: true,
-                isScrollControlled: true,
-                showDragHandle: true,
-                builder: (_) => GameSettings(id: gameId),
-              ),
+          onPressed: () => showModalBottomSheet<void>(
+            context: context,
+            isDismissible: true,
+            isScrollControlled: true,
+            builder: (_) => GameSettings(id: gameId),
+          ),
         ),
-        const ToggleSoundContextMenuAction(),
+        ToggleSoundContextMenuAction(
+          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
+          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+        ),
         GameBookmarkContextMenuAction(
           id: gameId.gameId,
           bookmarked: isBookmarkedAsync.valueOrNull ?? false,
-          onToggleBookmark:
-              () => ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
-          gameListContext: gameListContext,
+          onToggleBookmark: () =>
+              ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
         ),
         ...(switch (ref.watch(gameShareDataProvider(gameId))) {
           AsyncData(:final value) =>
             value.finished
                 ? makeFinishedGameShareContextMenuActions(
-                  context,
-                  ref,
-                  gameId: gameId.gameId,
-                  orientation: value.pov ?? Side.white,
-                )
+                    context,
+                    ref,
+                    gameId: gameId.gameId,
+                    orientation: value.pov ?? Side.white,
+                  )
                 : [],
           _ => [],
         }),
@@ -360,13 +365,12 @@ class _TournamentGameTitle extends ConsumerWidget {
           clockUpdatedAt: tournament.clock.at,
           active: true,
           tickInterval: const Duration(seconds: 1),
-          builder:
-              (BuildContext context, Duration timeLeft) => Center(
-                child: Text(
-                  '${timeLeft.toHoursMinutesSeconds()} ',
-                  style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
-                ),
-              ),
+          builder: (BuildContext context, Duration timeLeft) => Center(
+            child: Text(
+              '${timeLeft.toHoursMinutesSeconds()} ',
+              style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
+            ),
+          ),
         ),
       ],
     );
@@ -413,22 +417,21 @@ class _StandaloneGameTitle extends ConsumerWidget {
           ],
         );
       },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: SizedBox(
-                height: 24.0,
-                width: 200.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: SizedBox(
+            height: 24.0,
+            width: 200.0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(10.0),
               ),
             ),
           ),
+        ),
+      ),
       error: (error, _) => const SizedBox.shrink(),
     );
   }

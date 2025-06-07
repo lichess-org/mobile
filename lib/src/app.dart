@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
@@ -108,7 +107,6 @@ class _AppState extends ConsumerState<Application> {
     final theme = makeAppTheme(context, generalPrefs, boardPrefs);
 
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     return MaterialApp(
       localizationsDelegates: const [
@@ -120,16 +118,14 @@ class _AppState extends ConsumerState<Application> {
       title: 'lichess.org',
       locale: generalPrefs.locale,
       theme: theme.copyWith(
-        navigationBarTheme:
-            isIOS
-                ? null
-                : NavigationBarTheme.of(context).copyWith(
-                  height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 60 : null,
-                ),
+        navigationBarTheme: isIOS
+            ? null
+            : NavigationBarTheme.of(
+                context,
+              ).copyWith(height: isShortVerticalScreen(context) ? 60 : null),
       ),
-      onGenerateRoute:
-          (settings) =>
-              settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,
+      onGenerateRoute: (settings) =>
+          settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,
       onGenerateInitialRoutes: (initialRoute) {
         final homeRoute = buildScreenRoute<void>(context, screen: const MainTabScaffold());
         return <Route<dynamic>?>[

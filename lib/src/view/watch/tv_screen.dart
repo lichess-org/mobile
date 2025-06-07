@@ -74,23 +74,22 @@ class _TvScreenState extends ConsumerState<TvScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title:
-              widget.channel?.label != null
-                  ? Text('${widget.channel!.label} TV')
-                  : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      UserFullNameWidget(user: widget.user),
-                      const SizedBox(width: 4.0),
-                      const Icon(Icons.live_tv),
-                    ],
-                  ),
+          title: widget.channel?.label != null
+              ? Text('${widget.channel!.label} TV')
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    UserFullNameWidget(user: widget.user),
+                    const SizedBox(width: 4.0),
+                    const Icon(Icons.live_tv),
+                  ],
+                ),
           actions: const [ToggleSoundButton()],
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: SafeArea(
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
                 child: asyncGame.when(
                   data: (gameState) {
                     final game = gameState.game;
@@ -99,45 +98,41 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     final blackPlayerWidget = GamePlayer(
                       game: game.copyWith(black: game.black.setOnGame(true)),
                       side: Side.black,
-                      clock:
-                          gameState.game.clock != null
-                              ? CountdownClockBuilder(
-                                key: _blackClockKey,
-                                timeLeft: gameState.game.clock!.black,
-                                delay:
-                                    gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
-                                clockUpdatedAt: gameState.game.clock!.at,
-                                active: gameState.activeClockSide == Side.black,
-                                builder: (context, timeLeft) {
-                                  return Clock(
-                                    timeLeft: timeLeft,
-                                    active: gameState.activeClockSide == Side.black,
-                                  );
-                                },
-                              )
-                              : null,
+                      clock: gameState.game.clock != null
+                          ? CountdownClockBuilder(
+                              key: _blackClockKey,
+                              timeLeft: gameState.game.clock!.black,
+                              delay: gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
+                              clockUpdatedAt: gameState.game.clock!.at,
+                              active: gameState.activeClockSide == Side.black,
+                              builder: (context, timeLeft) {
+                                return Clock(
+                                  timeLeft: timeLeft,
+                                  active: gameState.activeClockSide == Side.black,
+                                );
+                              },
+                            )
+                          : null,
                       materialDiff: game.lastMaterialDiffAt(Side.black),
                     );
                     final whitePlayerWidget = GamePlayer(
                       game: game.copyWith(white: game.white.setOnGame(true)),
                       side: Side.white,
-                      clock:
-                          gameState.game.clock != null
-                              ? CountdownClockBuilder(
-                                key: _whiteClockKey,
-                                timeLeft: gameState.game.clock!.white,
-                                clockUpdatedAt: gameState.game.clock!.at,
-                                delay:
-                                    gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
-                                active: gameState.activeClockSide == Side.white,
-                                builder: (context, timeLeft) {
-                                  return Clock(
-                                    timeLeft: timeLeft,
-                                    active: gameState.activeClockSide == Side.white,
-                                  );
-                                },
-                              )
-                              : null,
+                      clock: gameState.game.clock != null
+                          ? CountdownClockBuilder(
+                              key: _whiteClockKey,
+                              timeLeft: gameState.game.clock!.white,
+                              clockUpdatedAt: gameState.game.clock!.at,
+                              delay: gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
+                              active: gameState.activeClockSide == Side.white,
+                              builder: (context, timeLeft) {
+                                return Clock(
+                                  timeLeft: timeLeft,
+                                  active: gameState.activeClockSide == Side.white,
+                                );
+                              },
+                            )
+                          : null,
                       materialDiff: game.lastMaterialDiffAt(Side.white),
                     );
 
@@ -147,14 +142,12 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       boardSettingsOverrides: const BoardSettingsOverrides(
                         animationDuration: Duration.zero,
                       ),
-                      topTable:
-                          gameState.orientation == Side.white
-                              ? blackPlayerWidget
-                              : whitePlayerWidget,
-                      bottomTable:
-                          gameState.orientation == Side.white
-                              ? whitePlayerWidget
-                              : blackPlayerWidget,
+                      topTable: gameState.orientation == Side.white
+                          ? blackPlayerWidget
+                          : whitePlayerWidget,
+                      bottomTable: gameState.orientation == Side.white
+                          ? whitePlayerWidget
+                          : blackPlayerWidget,
                       moves: game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false),
                       currentMoveIndex: gameState.stepCursor,
                       lastMove: game.moveAt(gameState.stepCursor),
@@ -224,8 +217,8 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   },
                 ),
               ),
-            ),
           ],
+            ),
         ),
       ),
     );

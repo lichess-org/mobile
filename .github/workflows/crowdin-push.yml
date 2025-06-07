@@ -1,0 +1,25 @@
+name: Crowdin source push
+
+on:
+  push:
+    paths:
+        - 'translation/source/mobile.xml'
+    branches: [ main ]
+
+jobs:
+  crowdin-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Crowdin push
+        uses: crowdin/github-action@v2
+        with:
+          upload_sources: true
+          upload_translations: false
+          download_translations: false
+          crowdin_branch_name: '[lichess-org.mobile] main'
+        env:
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}

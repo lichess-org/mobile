@@ -80,82 +80,82 @@ class _MoveListState extends ConsumerState<MoveList> {
 
     return widget.type == MoveListType.inline
         ? Container(
-          decoration: widget.inlineDecoration,
-          padding: const EdgeInsets.only(left: 5),
-          height: _kMoveListHeight,
-          width: double.infinity,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: widget.slicedMoves
-                  .mapIndexed(
-                    (index, moves) => Container(
-                      margin: const EdgeInsets.only(right: 10),
-                      child: Row(
-                        children: [
-                          InlineMoveCount(
-                            pieceNotation: pieceNotation,
-                            count: index + 1,
-                            color: widget.inlineColor,
-                          ),
-                          ...moves.map((move) {
-                            // cursor index starts at 0, move index starts at 1
-                            final isCurrentMove = widget.currentMoveIndex == move.key + 1;
-                            return InlineMoveItem(
-                              key: isCurrentMove ? currentMoveKey : null,
-                              move: move,
-                              color: widget.inlineColor,
-                              pieceNotation: pieceNotation,
-                              current: isCurrentMove,
-                              onSelectMove: widget.onSelectMove,
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(growable: false),
-            ),
-          ),
-        )
-        : Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            decoration: widget.inlineDecoration,
+            padding: const EdgeInsets.only(left: 5),
+            height: _kMoveListHeight,
+            width: double.infinity,
             child: SingleChildScrollView(
-              child: Column(
+              scrollDirection: Axis.horizontal,
+              child: Row(
                 children: widget.slicedMoves
                     .mapIndexed(
-                      (index, moves) => Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          StackedMoveCount(count: index + 1),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                ...moves.map((move) {
-                                  // cursor index starts at 0, move index starts at 1
-                                  final isCurrentMove = widget.currentMoveIndex == move.key + 1;
-                                  return Expanded(
-                                    child: StackedMoveItem(
-                                      key: isCurrentMove ? currentMoveKey : null,
-                                      move: move,
-                                      current: isCurrentMove,
-                                      onSelectMove: widget.onSelectMove,
-                                    ),
-                                  );
-                                }),
-                              ],
+                      (index, moves) => Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: Row(
+                          children: [
+                            InlineMoveCount(
+                              pieceNotation: pieceNotation,
+                              count: index + 1,
+                              color: widget.inlineColor,
                             ),
-                          ),
-                        ],
+                            ...moves.map((move) {
+                              // cursor index starts at 0, move index starts at 1
+                              final isCurrentMove = widget.currentMoveIndex == move.key + 1;
+                              return InlineMoveItem(
+                                key: isCurrentMove ? currentMoveKey : null,
+                                move: move,
+                                color: widget.inlineColor,
+                                pieceNotation: pieceNotation,
+                                current: isCurrentMove,
+                                onSelectMove: widget.onSelectMove,
+                              );
+                            }),
+                          ],
+                        ),
                       ),
                     )
                     .toList(growable: false),
               ),
             ),
-          ),
-        );
+          )
+        : Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: widget.slicedMoves
+                      .mapIndexed(
+                        (index, moves) => Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            StackedMoveCount(count: index + 1),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  ...moves.map((move) {
+                                    // cursor index starts at 0, move index starts at 1
+                                    final isCurrentMove = widget.currentMoveIndex == move.key + 1;
+                                    return Expanded(
+                                      child: StackedMoveItem(
+                                        key: isCurrentMove ? currentMoveKey : null,
+                                        move: move,
+                                        current: isCurrentMove,
+                                        onSelectMove: widget.onSelectMove,
+                                      ),
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList(growable: false),
+                ),
+              ),
+            ),
+          );
   }
 }
 
@@ -211,12 +211,11 @@ class InlineMoveItem extends StatelessWidget {
           style: TextStyle(
             fontFamily: pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
             fontWeight: current == true ? FontWeight.bold : FontWeight.w500,
-            color:
-                current != true
-                    ? color != null
-                        ? color!.withValues(alpha: _moveListOpacity)
-                        : textShade(context, _moveListOpacity)
-                    : ColorScheme.of(context).primary,
+            color: current != true
+                ? color != null
+                      ? color!.withValues(alpha: _moveListOpacity)
+                      : textShade(context, _moveListOpacity)
+                : ColorScheme.of(context).primary,
           ),
         ),
       ),

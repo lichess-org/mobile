@@ -64,10 +64,9 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
 
     final cacheKey = OpeningExplorerCacheKey(fen: widget.position.fen, prefs: prefs);
     final cacheOpeningExplorer = cache[cacheKey];
-    final openingExplorerAsync =
-        cacheOpeningExplorer != null
-            ? AsyncValue.data((entry: cacheOpeningExplorer, isIndexing: false))
-            : ref.watch(openingExplorerProvider(fen: widget.position.fen));
+    final openingExplorerAsync = cacheOpeningExplorer != null
+        ? AsyncValue.data((entry: cacheOpeningExplorer, isIndexing: false))
+        : ref.watch(openingExplorerProvider(fen: widget.position.fen));
 
     if (cacheOpeningExplorer == null) {
       ref.listen(openingExplorerProvider(fen: widget.position.fen), (_, curAsync) {
@@ -158,7 +157,9 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
           online: () => 'Could not load opening explorer data.',
           offline: () => 'Opening Explorer is not available offline.',
         );
-        return Center(child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)));
+        return Center(
+          child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
+        );
       case _:
         return _ExplorerListView(
           scrollable: widget.scrollable,

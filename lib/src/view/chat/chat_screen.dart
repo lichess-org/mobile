@@ -11,9 +11,10 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
-  final ChatOptions options;
+  const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
 
-  const ChatBottomBarButton({required this.options, super.key});
+  final ChatOptions options;
+  final bool showLabel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,6 +22,7 @@ class ChatBottomBarButton extends ConsumerWidget {
 
     return BottomBarButton(
       label: context.l10n.chatRoom,
+      showLabel: showLabel,
       onTap: () {
         Navigator.of(context).push(ChatScreen.buildRoute(context, options: options));
       },
@@ -29,8 +31,8 @@ class ChatBottomBarButton extends ConsumerWidget {
         AsyncData(:final value) =>
           value > 0
               ? value < 10
-                  ? value.toString()
-                  : '9+'
+                    ? value.toString()
+                    : '9+'
               : null,
         _ => null,
       },
@@ -80,12 +82,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
       case AsyncData(:final value):
         return Scaffold(
           appBar: AppBar(
-            title:
-                widget.options.isPublic
-                    ? Text(context.l10n.chatRoom)
-                    : widget.options.opponent == null
-                    ? Text(context.l10n.chatRoom)
-                    : UserFullNameWidget(user: widget.options.opponent),
+            title: widget.options.isPublic
+                ? Text(context.l10n.chatRoom)
+                : widget.options.opponent == null
+                ? Text(context.l10n.chatRoom)
+                : UserFullNameWidget(user: widget.options.opponent),
             centerTitle: true,
           ),
           body: Column(
@@ -96,7 +97,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
                   child: ListView.builder(
                     // remove the automatic bottom padding of the ListView which is here taken care
                     // of by the _ChatBottomBar
-                    padding: MediaQuery.of(context).padding.copyWith(bottom: 0),
+                    padding: MediaQuery.paddingOf(context).copyWith(bottom: 0),
                     reverse: true,
                     itemCount: value.messages.length,
                     itemBuilder: (context, index) {
@@ -106,10 +107,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
                           : (message.username == session?.user.name)
                           ? _MessageBubble(you: true, message: message)
                           : _MessageBubble(
-                            you: false,
-                            message: message,
-                            showUsername: widget.options.isPublic,
-                          );
+                              you: false,
+                              message: message,
+                              showUsername: widget.options.isPublic,
+                            );
                     },
                   ),
                 ),
@@ -134,7 +135,7 @@ class _MessageBubble extends ConsumerWidget {
   final bool showUsername;
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
-      you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainerLow;
+      you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainerHigh;
 
   Color _textColor(BuildContext context, Brightness brightness) =>
       you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;
@@ -221,21 +222,19 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
     final session = ref.watch(authSessionProvider);
     final sendButton = ValueListenableBuilder<TextEditingValue>(
       valueListenable: _textController,
-      builder:
-          (context, value, child) => SemanticIconButton(
-            onPressed:
-                session != null && value.text.isNotEmpty
-                    ? () {
-                      ref
-                          .read(chatControllerProvider(widget.options).notifier)
-                          .postMessage(_textController.text);
-                      _textController.clear();
-                    }
-                    : null,
-            icon: const Icon(Icons.send),
-            padding: EdgeInsets.zero,
-            semanticsLabel: context.l10n.send,
-          ),
+      builder: (context, value, child) => SemanticIconButton(
+        onPressed: session != null && value.text.isNotEmpty
+            ? () {
+                ref
+                    .read(chatControllerProvider(widget.options).notifier)
+                    .postMessage(_textController.text);
+                _textController.clear();
+              }
+            : null,
+        icon: const Icon(Icons.send),
+        padding: EdgeInsets.zero,
+        semanticsLabel: context.l10n.send,
+      ),
     );
     final placeholder = session != null ? context.l10n.talkInChat : context.l10n.loginToChat;
     return SafeArea(

@@ -26,8 +26,8 @@ String gameStatusL10n(
     case GameStatus.timeout:
       return winner == null
           ? lastPosition.turn == Side.white
-              ? '${context.l10n.whiteLeftTheGame} • ${context.l10n.draw}'
-              : '${context.l10n.blackLeftTheGame} • ${context.l10n.draw}'
+                ? '${context.l10n.whiteLeftTheGame} • ${context.l10n.draw}'
+                : '${context.l10n.blackLeftTheGame} • ${context.l10n.draw}'
           : winner == Side.black
           ? context.l10n.whiteLeftTheGame
           : context.l10n.blackLeftTheGame;
@@ -42,8 +42,8 @@ String gameStatusL10n(
     case GameStatus.outoftime:
       return winner == null
           ? lastPosition.turn == Side.white
-              ? '${context.l10n.whiteTimeOut} • ${context.l10n.draw}'
-              : '${context.l10n.blackTimeOut} • ${context.l10n.draw}'
+                ? '${context.l10n.whiteTimeOut} • ${context.l10n.draw}'
+                : '${context.l10n.blackTimeOut} • ${context.l10n.draw}'
           : winner == Side.black
           ? context.l10n.whiteTimeOut
           : context.l10n.blackTimeOut;

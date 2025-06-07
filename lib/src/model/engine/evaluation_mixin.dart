@@ -205,22 +205,22 @@ mixin EngineEvaluationMixin {
 
   void _handleEvalHitEvent(SocketEvent event) {
     final path = pick(event.data, 'path').asUciPathOrThrow();
+    final nodes = pick(event.data, 'knodes').asIntOrThrow() * 1000;
     final depth = pick(event.data, 'depth').asIntOrThrow();
 
-    final pvs =
-        pick(event.data, 'pvs')
-            .asListOrThrow(
-              (pv) => PvData(
-                moves: pv('moves').asStringOrThrow().split(' ').toIList(),
-                cp: pv('cp').asIntOrNull(),
-                mate: pv('mate').asIntOrNull(),
-              ),
-            )
-            .toIList();
+    final pvs = pick(event.data, 'pvs')
+        .asListOrThrow(
+          (pv) => PvData(
+            moves: pv('moves').asStringOrThrow().split(' ').toIList(),
+            cp: pv('cp').asIntOrNull(),
+            mate: pv('mate').asIntOrNull(),
+          ),
+        )
+        .toIList();
 
     bool isSameEvalString = true;
     positionTree.updateAt(path, (node) {
-      final eval = CloudEval(depth: depth, pvs: pvs, position: node.position);
+      final eval = CloudEval(depth: depth, nodes: nodes, pvs: pvs, position: node.position);
       final nodeDepth = node.eval?.depth;
       if (nodeDepth != null && nodeDepth >= depth) {
         // don't override the local eval if it's deeper than the cloud eval
@@ -294,17 +294,22 @@ mixin EngineEvaluationMixin {
           positionTree.updateAt(work.path, (node) {
             final nodeEval = node.eval;
             if (nodeEval is CloudEval) {
-              if (nodeEval.depth >= eval.depth) {
-                if (work.isDeeper != true && work.searchTime != kMaxEngineSearchTime) {
+              if (nodeEval.depth >= eval.depth &&
+                  work.isDeeper != true &&
+                  work.searchTime != kMaxEngineSearchTime) {
+                final targetTime = work.searchTime;
+                final searchTime = eval.searchTime;
+                final likelyNodes =
+                    ((targetTime.inMilliseconds * eval.nodes) / searchTime.inMilliseconds).round();
+                // if the cloud eval is likely better, stop the local engine
+                // nps varies with positional complexity so this is rough, but save planet earth
+                if (likelyNodes < nodeEval.nodes) {
                   _evaluationService?.stop();
                 }
                 return;
               }
             } else if (nodeEval is LocalEval) {
               if (nodeEval.isBetter(eval)) {
-                if (work.isDeeper != true && work.searchTime != kMaxEngineSearchTime) {
-                  _evaluationService?.stop();
-                }
                 return;
               }
             }

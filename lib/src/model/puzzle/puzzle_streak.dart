@@ -18,7 +18,7 @@ part 'puzzle_streak.g.dart';
 typedef Streak = IList<PuzzleId>;
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzleStreak with _$PuzzleStreak {
+sealed class PuzzleStreak with _$PuzzleStreak {
   const PuzzleStreak._();
 
   const factory PuzzleStreak({
@@ -46,10 +46,9 @@ class PuzzleStreakController extends _$PuzzleStreakController {
     final activeStreak = await streakStorage.loadActiveStreak();
     if (activeStreak != null) {
       final puzzle = await ref.read(puzzleProvider(activeStreak.streak[activeStreak.index]).future);
-      final nextPuzzle =
-          activeStreak.nextId != null
-              ? await ref.read(puzzleProvider(activeStreak.nextId!).future)
-              : null;
+      final nextPuzzle = activeStreak.nextId != null
+          ? await ref.read(puzzleProvider(activeStreak.nextId!).future)
+          : null;
 
       return (streak: activeStreak, puzzle: puzzle, nextPuzzle: nextPuzzle);
     }

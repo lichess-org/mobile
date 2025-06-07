@@ -30,35 +30,32 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
         final puzzleRating = context.l10n.puzzleRatingX(puzzle.puzzle.rating.toString());
         final playedXTimes = context.l10n.puzzlePlayedXTimes(puzzle.puzzle.plays).localizeNumbers();
         return _FeedbackTile(
-          leading:
-              state.result == PuzzleResult.win
-                  ? Icon(Icons.check, size: 36, color: context.lichessColors.good)
-                  : null,
-          title:
-              onStreak && state.result == PuzzleResult.lose
-                  ? const Text(
-                    'GAME OVER',
-                    style: TextStyle(fontSize: 24, letterSpacing: 2.0),
-                    textAlign: TextAlign.center,
+          leading: state.result == PuzzleResult.win
+              ? Icon(Icons.check, size: 36, color: context.lichessColors.good)
+              : null,
+          title: onStreak && state.result == PuzzleResult.lose
+              ? const Text(
+                  'GAME OVER',
+                  style: TextStyle(fontSize: 24, letterSpacing: 2.0),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                )
+              : Text(
+                  state.result == PuzzleResult.win
+                      ? context.l10n.puzzlePuzzleSuccess
+                      : context.l10n.puzzlePuzzleComplete,
+                  overflow: TextOverflow.ellipsis,
+                ),
+          subtitle: onStreak && state.result == PuzzleResult.lose
+              ? null
+              : RatingPrefAware(
+                  orElse: Text('$playedXTimes.', overflow: TextOverflow.ellipsis, maxLines: 2),
+                  child: Text(
+                    '$puzzleRating. $playedXTimes.',
                     overflow: TextOverflow.ellipsis,
-                  )
-                  : Text(
-                    state.result == PuzzleResult.win
-                        ? context.l10n.puzzlePuzzleSuccess
-                        : context.l10n.puzzlePuzzleComplete,
-                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                   ),
-          subtitle:
-              onStreak && state.result == PuzzleResult.lose
-                  ? null
-                  : RatingPrefAware(
-                    orElse: Text('$playedXTimes.', overflow: TextOverflow.ellipsis, maxLines: 2),
-                    child: Text(
-                      '$puzzleRating. $playedXTimes.',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
-                  ),
+                ),
         );
       case PuzzleMode.load:
       case PuzzleMode.play:
@@ -83,10 +80,9 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
             leading: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4.0),
-                color:
-                    brightness == Brightness.light
-                        ? boardTheme.colors.lightSquare
-                        : boardTheme.colors.darkSquare,
+                color: brightness == Brightness.light
+                    ? boardTheme.colors.lightSquare
+                    : boardTheme.colors.darkSquare,
               ),
               child: Padding(
                 padding: const EdgeInsets.all(2.0),

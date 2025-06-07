@@ -128,7 +128,7 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
 }
 
 @freezed
-class OverTheBoardGameState with _$OverTheBoardGameState {
+sealed class OverTheBoardGameState with _$OverTheBoardGameState {
   const OverTheBoardGameState._();
 
   const factory OverTheBoardGameState({
@@ -138,8 +138,9 @@ class OverTheBoardGameState with _$OverTheBoardGameState {
   }) = _OverTheBoardGameState;
 
   factory OverTheBoardGameState.fromVariant(Variant variant, Speed speed) {
-    final position =
-        variant == Variant.chess960 ? randomChess960Position() : variant.initialPosition;
+    final position = variant == Variant.chess960
+        ? randomChess960Position()
+        : variant.initialPosition;
     return OverTheBoardGameState(
       game: OverTheBoardGame(
         steps: [GameStep(position: position)].lock,

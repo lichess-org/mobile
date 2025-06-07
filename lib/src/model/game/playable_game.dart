@@ -30,7 +30,7 @@ part 'playable_game.freezed.dart';
 /// See also:
 /// - [ExportedGame] for a game that is finished and not owned by the current user.
 @freezed
-class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements BaseGame {
+sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements BaseGame {
   const PlayableGame._();
 
   @Assert('steps.isNotEmpty')
@@ -80,8 +80,8 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
   Duration? clockOf(Side side) {
     return clock != null
         ? side == Side.white
-            ? clock!.white
-            : clock!.black
+              ? clock!.white
+              : clock!.black
         : null;
   }
 
@@ -137,10 +137,9 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
         status: status,
         white: white,
         black: black,
-        clock:
-            meta.clock != null
-                ? (initial: meta.clock!.initial, increment: meta.clock!.increment)
-                : null,
+        clock: meta.clock != null
+            ? (initial: meta.clock!.initial, increment: meta.clock!.increment)
+            : null,
         opening: meta.opening,
       ),
       initialFen: initialFen,
@@ -158,7 +157,7 @@ class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements Base
 }
 
 @freezed
-class PlayableClockData with _$PlayableClockData {
+sealed class PlayableClockData with _$PlayableClockData {
   const PlayableClockData._();
 
   const factory PlayableClockData({
@@ -184,10 +183,9 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   final initialFen = requiredGamePick('initialFen').asStringOrNull();
 
   // assume lichess always send initialFen with fromPosition and chess960
-  Position position =
-      (meta.variant == Variant.fromPosition || meta.variant == Variant.chess960)
-          ? Chess.fromSetup(Setup.parseFen(initialFen!))
-          : meta.variant.initialPosition;
+  Position position = (meta.variant == Variant.fromPosition || meta.variant == Variant.chess960)
+      ? Chess.fromSetup(Setup.parseFen(initialFen!))
+      : meta.variant.initialPosition;
 
   final steps = [GameStep(position: position)];
   final pgn = pick('game', 'pgn').asStringOrNull();

@@ -8,9 +8,8 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
-import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -29,8 +28,9 @@ class UserContextMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
 
-    final AsyncValue<User> userAsync =
-        user != null ? AsyncData(user!) : ref.watch(userProvider(id: userId!));
+    final AsyncValue<User> userAsync = user != null
+        ? AsyncData(user!)
+        : ref.watch(userProvider(id: userId!));
 
     switch (userAsync) {
       case AsyncData(:final value):
@@ -78,16 +78,19 @@ class UserContextMenu extends ConsumerWidget {
               icon: Icons.person,
               child: Text(context.l10n.profile),
             ),
+            ListTile(
+              title: Text(context.l10n.watchGames),
+              leading: const Icon(Icons.live_tv_outlined),
+              onTap: () {
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(TvScreen.buildRoute(context, user: value.lightUser));
+              },
+            ),
             if (session != null && value.canChallenge == true)
               BottomSheetContextMenuAction(
-                onPressed: () {
-                  final isOddBot = oddBots.contains(value.lightUser.name.toLowerCase());
-                  Navigator.of(context).push(
-                    isOddBot
-                        ? ChallengeOddBotsScreen.buildRoute(context, value.lightUser)
-                        : CreateChallengeScreen.buildRoute(context, value.lightUser),
-                  );
-                },
+                onPressed: () => UserScreen.challengeUser(value, context: context, ref: ref),
                 icon: LichessIcons.crossed_swords,
                 child: Text(context.l10n.challengeChallengeToPlay),
               ),

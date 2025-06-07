@@ -295,6 +295,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
           win: state.result == PuzzleResult.win,
           rated:
               initialContext.userId != null &&
+              initialContext.casualRun != true &&
               !state.hintShown &&
               ref.read(puzzlePreferencesProvider).rated,
         ),
@@ -407,7 +408,7 @@ enum PuzzleResult { win, lose }
 enum PuzzleFeedback { good, bad }
 
 @freezed
-class PuzzleState with _$PuzzleState implements EvaluationMixinState {
+sealed class PuzzleState with _$PuzzleState implements EvaluationMixinState {
   const PuzzleState._();
 
   const factory PuzzleState({

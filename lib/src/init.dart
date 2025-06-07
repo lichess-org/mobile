@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -9,11 +10,17 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
+import 'package:lichess_mobile/src/model/account/home_preferences.dart';
+import 'package:lichess_mobile/src/model/account/home_widgets.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -29,18 +36,8 @@ final _logger = Logger('Init');
 Future<void> setupFirstLaunch() async {
   final prefs = LichessBinding.instance.sharedPreferences;
   final pInfo = await PackageInfo.fromPlatform();
-
   final appVersion = Version.parse(pInfo.version);
   final installedVersion = prefs.getString('installed_version');
-
-  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 14, 0)) {
-    // TODO remove this migration code after a few releases
-    _migrateThemeSettings();
-  }
-
-  if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
-    prefs.setString('installed_version', appVersion.canonicalizedVersion);
-  }
 
   if (prefs.getBool('first_run') ?? true) {
     // Clear secure storage on first run because it is not deleted on app uninstall
@@ -57,31 +54,32 @@ Future<void> setupFirstLaunch() async {
       await prefs.setString(PrefCategory.board.storageKey, jsonEncode(boardPrefs.toJson()));
     }
 
+    _screenSizeBasedInitialization();
+
     await prefs.setBool('first_run', false);
   }
-}
 
-Future<void> _migrateThemeSettings() async {
-  if (getCorePalette() == null) {
-    return;
-  }
-  final prefs = LichessBinding.instance.sharedPreferences;
-  try {
-    final stored = LichessBinding.instance.sharedPreferences.getString(
-      PrefCategory.general.storageKey,
-    );
-    if (stored == null) {
-      return;
+  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 15, 12)) {
+    // migrate home preferences to session preferences
+    final homePrefs = prefs.getString(PrefCategory.home.storageKey);
+    if (homePrefs == null) {
+      final storedSession = await SecureStorage.instance.read(key: kSessionStorageKey);
+      final session = storedSession != null
+          ? AuthSessionState.fromJson(jsonDecode(storedSession) as Map<String, dynamic>)
+          : null;
+      const empty = HomePrefs(disabledWidgets: IListConst<HomeEditableWidget>([]));
+      // keep quick game matrix for already installed apps, since it was removed by default in 0.15.12
+      prefs.setString(
+        SessionPreferencesStorage.key(PrefCategory.home.storageKey, session),
+        jsonEncode(empty.toJson()),
+      );
+    } else {
+      prefs.setString(SessionPreferencesStorage.key(PrefCategory.home.storageKey, null), homePrefs);
     }
-    final generalPrefs = GeneralPrefs.fromJson(jsonDecode(stored) as Map<String, dynamic>);
-    final migrated = generalPrefs.copyWith(
-      systemColors:
-          // ignore: deprecated_member_use_from_same_package
-          generalPrefs.appThemeSeed == AppThemeSeed.system,
-    );
-    await prefs.setString(PrefCategory.general.storageKey, jsonEncode(migrated.toJson()));
-  } catch (e) {
-    _logger.warning('Failed to migrate theme settings: $e');
+  }
+
+  if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
+    prefs.setString('installed_version', appVersion.canonicalizedVersion);
   }
 }
 
@@ -129,11 +127,10 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
     ) {
       final CorePalette? palette = value[0] as CorePalette?;
       final schemes = value[1] as dynamic;
-      final ColorSchemes? colorSchemes =
-          schemes != null
-              // ignore: avoid_dynamic_calls
-              ? (light: schemes.light as ColorScheme, dark: schemes.dark as ColorScheme)
-              : null;
+      final ColorSchemes? colorSchemes = schemes != null
+          // ignore: avoid_dynamic_calls
+          ? (light: schemes.light as ColorScheme, dark: schemes.dark as ColorScheme)
+          : null;
 
       setSystemColors(palette, colorSchemes);
     });
@@ -172,4 +169,20 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
 
   // This setting is per session.
   await FlutterDisplayMode.setPreferredMode(mostOptimalMode);
+}
+
+// Adjusts some settings for small screens based on the MediaQuery data.
+Future<void> _screenSizeBasedInitialization() async {
+  final prefs = LichessBinding.instance.sharedPreferences;
+  final mediaQueryData = MediaQueryData.fromView(
+    WidgetsBinding.instance.platformDispatcher.views.first,
+  );
+  final isSmallScreen = estimateHeightMinusBoard(mediaQueryData) < kSmallHeightMinusBoard;
+
+  final analysisPrefs = AnalysisPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
+  await prefs.setString(PrefCategory.analysis.storageKey, jsonEncode(analysisPrefs.toJson()));
+  final studyPrefs = StudyPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
+  await prefs.setString(PrefCategory.study.storageKey, jsonEncode(studyPrefs.toJson()));
+  final broadcastPrefs = BroadcastPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
+  await prefs.setString(PrefCategory.broadcast.storageKey, jsonEncode(broadcastPrefs.toJson()));
 }

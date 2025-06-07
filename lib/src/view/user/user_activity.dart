@@ -1,10 +1,9 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -16,17 +15,12 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 final _dateFormatter = DateFormat.yMMMd();
 
 class UserActivityWidget extends ConsumerWidget {
-  const UserActivityWidget({this.user, super.key});
+  const UserActivityWidget({required this.activity, super.key});
 
-  final User? user;
+  final AsyncValue<IList<UserActivity>> activity;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activity =
-        user != null
-            ? ref.watch(userActivityProvider(id: user!.id))
-            : ref.watch(accountActivityProvider);
-
     return activity.when(
       data: (data) {
         final nonEmptyActivities = data.where((entry) => entry.isNotEmpty);
@@ -36,21 +30,22 @@ class UserActivityWidget extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.activityActivity, style: Styles.sectionTitle),
           hasLeading: true,
-          children:
-              nonEmptyActivities.take(10).map((entry) => UserActivityEntry(entry: entry)).toList(),
+          children: nonEmptyActivities
+              .take(10)
+              .map((entry) => UserActivityEntry(entry: entry))
+              .toList(),
         );
       },
       error: (error, stackTrace) {
         debugPrint('SEVERE: [UserScreen] could not load user activity; $error\n$stackTrace');
         return const Text('Could not load user activity');
       },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: ListSection.loading(itemsNumber: 10, header: true, hasLeading: true),
-            ),
-          ),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(itemsNumber: 10, header: true, hasLeading: true),
+        ),
+      ),
     );
   }
 }
@@ -66,8 +61,8 @@ class UserActivityEntry extends ConsumerWidget {
     const leadingIconSize = 26.0;
     final emptySubtitle = theme.platform == TargetPlatform.iOS ? const SizedBox.shrink() : null;
 
-    final redColor = theme.extension<CustomColors>()?.error;
-    final greenColor = theme.extension<CustomColors>()?.good;
+    final redColor = context.lichessColors.error;
+    final greenColor = context.lichessColors.good;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -97,10 +92,9 @@ class UserActivityEntry extends ConsumerWidget {
                         gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
                             ? LichessIcons.arrow_full_upperright
                             : LichessIcons.arrow_full_lowerright,
-                        color:
-                            gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
-                                ? greenColor
-                                : redColor,
+                        color: gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
+                            ? greenColor
+                            : redColor,
                         size: 12,
                       ),
                       Text(
@@ -108,10 +102,9 @@ class UserActivityEntry extends ConsumerWidget {
                             .abs()
                             .toString(),
                         style: TextStyle(
-                          color:
-                              gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
-                                  ? greenColor
-                                  : redColor,
+                          color: gameEntry.value.ratingAfter - gameEntry.value.ratingBefore > 0
+                              ? greenColor
+                              : redColor,
                           fontSize: 11,
                         ),
                       ),
@@ -139,19 +132,17 @@ class UserActivityEntry extends ConsumerWidget {
                       entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
                           ? LichessIcons.arrow_full_upperright
                           : LichessIcons.arrow_full_lowerright,
-                      color:
-                          entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
-                              ? greenColor
-                              : redColor,
+                      color: entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
+                          ? greenColor
+                          : redColor,
                       size: 12,
                     ),
                     Text(
                       (entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore).abs().toString(),
                       style: TextStyle(
-                        color:
-                            entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
-                                ? greenColor
-                                : redColor,
+                        color: entry.puzzles!.ratingAfter - entry.puzzles!.ratingBefore > 0
+                            ? greenColor
+                            : redColor,
                         fontSize: 11,
                       ),
                     ),
@@ -180,20 +171,28 @@ class UserActivityEntry extends ConsumerWidget {
             trailing: BriefGameResultBox(win: entry.storm!.score, draw: 0, loss: 0),
           ),
         if (entry.correspondenceEnds != null)
-          _UserActivityListTile(
-            leading: const Icon(LichessIcons.correspondence, size: leadingIconSize),
-            title: context.l10n.activityCompletedNbGames(
-              entry.correspondenceEnds!.win +
-                  entry.correspondenceEnds!.draw +
-                  entry.correspondenceEnds!.loss,
+          for (final corresEndEntry in entry.correspondenceEnds!.entries)
+            _UserActivityListTile(
+              leading: Icon(corresEndEntry.key.icon, size: leadingIconSize),
+              title: corresEndEntry.key == Perf.correspondence
+                  ? context.l10n.activityCompletedNbGames(
+                      corresEndEntry.value.win +
+                          corresEndEntry.value.draw +
+                          corresEndEntry.value.loss,
+                    )
+                  : context.l10n.activityCompletedNbVariantGames(
+                      corresEndEntry.value.win +
+                          corresEndEntry.value.draw +
+                          corresEndEntry.value.loss,
+                      corresEndEntry.key.title,
+                    ),
+              subtitle: emptySubtitle,
+              trailing: BriefGameResultBox(
+                win: corresEndEntry.value.win,
+                draw: corresEndEntry.value.draw,
+                loss: corresEndEntry.value.loss,
+              ),
             ),
-            subtitle: emptySubtitle,
-            trailing: BriefGameResultBox(
-              win: entry.correspondenceEnds!.win,
-              draw: entry.correspondenceEnds!.draw,
-              loss: entry.correspondenceEnds!.loss,
-            ),
-          ),
         if (entry.correspondenceMovesNb != null && entry.correspondenceGamesNb != null)
           _UserActivityListTile(
             leading: const Icon(LichessIcons.correspondence, size: leadingIconSize),
@@ -206,18 +205,17 @@ class UserActivityEntry extends ConsumerWidget {
           _UserActivityListTile(
             leading: const Icon(Icons.emoji_events, size: leadingIconSize),
             title: context.l10n.activityCompetedInNbTournaments(entry.tournamentNb!),
-            subtitle:
-                entry.bestTournament != null
-                    ? Text(
-                      context.l10n.activityRankedInTournament(
-                        entry.bestTournament!.rank,
-                        entry.bestTournament!.rankPercent.toString(),
-                        entry.bestTournament!.nbGames.toString(),
-                        entry.bestTournament!.name,
-                      ),
-                      maxLines: 2,
-                    )
-                    : emptySubtitle,
+            subtitle: entry.bestTournament != null
+                ? Text(
+                    context.l10n.activityRankedInTournament(
+                      entry.bestTournament!.rank,
+                      entry.bestTournament!.rankPercent.toString(),
+                      entry.bestTournament!.nbGames.toString(),
+                      entry.bestTournament!.name,
+                    ),
+                    maxLines: 2,
+                  )
+                : emptySubtitle,
           ),
         if (entry.followInNb != null)
           _UserActivityListTile(
@@ -304,22 +302,12 @@ class BriefGameResultBox extends StatelessWidget {
             ((win != 0 ? 1 : 0) + (draw != 0 ? 1 : 0) + (loss != 0 ? 1 : 0) - 1) * _spaceWidth,
         child: Row(
           children: [
-            if (win != 0)
-              _ResultBox(
-                number: win,
-                color: Theme.of(context).extension<CustomColors>()?.good ?? LichessColors.green,
-              ),
+            if (win != 0) _ResultBox(number: win, color: context.lichessColors.good),
             if (win != 0 && draw != 0) const SizedBox(width: _spaceWidth),
             if (draw != 0) _ResultBox(number: draw, color: context.lichessColors.brag),
             if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
               const SizedBox(width: _spaceWidth),
-            if (loss != 0)
-              _ResultBox(
-                number: loss,
-                color:
-                    Theme.of(context).extension<CustomColors>()?.error ??
-                    context.lichessColors.error,
-              ),
+            if (loss != 0) _ResultBox(number: loss, color: context.lichessColors.error),
           ],
         ),
       ),

@@ -98,8 +98,9 @@ class UserFullNameWidget extends ConsumerWidget {
           Text(
             user!.title!,
             style: (style ?? const TextStyle()).copyWith(
-              color:
-                  user?.title == 'BOT' ? context.lichessColors.fancy : context.lichessColors.brag,
+              color: user?.title == 'BOT'
+                  ? context.lichessColors.fancy
+                  : context.lichessColors.brag,
               fontWeight: user?.title == 'BOT' ? null : FontWeight.bold,
             ),
           ),

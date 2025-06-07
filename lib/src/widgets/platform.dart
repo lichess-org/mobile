@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 
 /// A simple widget that builds different things on different platforms.
@@ -64,6 +65,7 @@ class PlatformScaffold extends StatelessWidget {
     this.body,
     this.appBar,
     this.floatingActionButton,
+    this.persistentFooterButtons,
     this.bottomSheet,
     this.bottomNavigationBar,
     this.extendBody,
@@ -72,6 +74,7 @@ class PlatformScaffold extends StatelessWidget {
   final PlatformAppBar? appBar;
   final Widget? body;
   final Widget? floatingActionButton;
+  final List<Widget>? persistentFooterButtons;
   final Widget? bottomSheet;
   final Widget? bottomNavigationBar;
   final bool? extendBody;
@@ -88,29 +91,31 @@ class PlatformScaffold extends StatelessWidget {
       extendBody: extendBody ?? hasExtendedBodyParentScaffold,
       appBar: appBar,
       body: body,
+      persistentFooterButtons: persistentFooterButtons,
       floatingActionButton: floatingActionButton,
       bottomSheet: bottomSheet,
       bottomNavigationBar:
           bottomNavigationBar ??
           (hasExtendedBodyParentScaffold
               ? Container(
-                color: Colors.transparent,
-                height: MediaQuery.paddingOf(context).bottom,
-                width: double.infinity,
-              )
+                  color: Colors.transparent,
+                  height: MediaQuery.paddingOf(context).bottom,
+                  width: double.infinity,
+                )
               : null),
     );
   }
 }
 
 class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
-  PlatformAppBar({super.key, this.leading, this.title, this.actions, this.bottom})
+  PlatformAppBar({super.key, this.leading, this.title, this.actions, this.bottom, this.centerTitle})
     : preferredSize = _PreferredAppBarSize(kToolbarHeight, bottom?.preferredSize.height);
 
   final Widget? leading;
   final Widget? title;
   final List<Widget>? actions;
   final PreferredSizeWidget? bottom;
+  final bool? centerTitle;
 
   @override
   final Size preferredSize;
@@ -123,13 +128,19 @@ class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: leading,
       actions: actions,
       bottom: bottom,
-      centerTitle: isIOS,
+      centerTitle: centerTitle,
     );
 
     return isIOS
         ? ClipRect(
-          child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), child: appBar),
-        )
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: kCupertinoBarBlurSigma,
+                sigmaY: kCupertinoBarBlurSigma,
+              ),
+              child: appBar,
+            ),
+          )
         : appBar;
   }
 }

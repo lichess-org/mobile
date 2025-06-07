@@ -97,29 +97,28 @@ Future<T?> showCupertinoActionSheet<T>({
     builder: (BuildContext context) {
       return CupertinoActionSheet(
         title: title,
-        actions:
-            actions
-                .map(
-                  // Builder is used to retrieve the context immediately surrounding the button
-                  // This is necessary to get the correct context for the iPad share dialog
-                  // which needs the position of the action to display the share dialog
-                  (action) => Builder(
-                    builder: (context) {
-                      return CupertinoActionSheetAction(
-                        onPressed: () {
-                          if (action.dismissOnPress) {
-                            Navigator.of(context).pop();
-                          }
-                          action.onPressed();
-                        },
-                        isDestructiveAction: action.isDestructiveAction,
-                        isDefaultAction: action.isDefaultAction,
-                        child: action.makeLabel(context),
-                      );
+        actions: actions
+            .map(
+              // Builder is used to retrieve the context immediately surrounding the button
+              // This is necessary to get the correct context for the iPad share dialog
+              // which needs the position of the action to display the share dialog
+              (action) => Builder(
+                builder: (context) {
+                  return CupertinoActionSheetAction(
+                    onPressed: () {
+                      if (action.dismissOnPress) {
+                        Navigator.of(context).pop();
+                      }
+                      action.onPressed();
                     },
-                  ),
-                )
-                .toList(),
+                    isDestructiveAction: action.isDestructiveAction,
+                    isDefaultAction: action.isDefaultAction,
+                    child: action.makeLabel(context),
+                  );
+                },
+              ),
+            )
+            .toList(),
         cancelButton: CupertinoActionSheetAction(
           isDefaultAction: true,
           onPressed: () {
@@ -154,7 +153,10 @@ Future<T?> showMaterialActionSheet<T>({
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 if (title != null) ...[
-                  Padding(padding: const EdgeInsets.all(16.0), child: Center(child: title)),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Center(child: title),
+                  ),
                 ],
                 ...actions.mapIndexed<Widget>((index, action) {
                   return InkWell(
@@ -179,8 +181,9 @@ Future<T?> showMaterialActionSheet<T>({
                           Expanded(
                             child: DefaultTextStyle(
                               style: actionTextStyle,
-                              textAlign:
-                                  action.leading != null ? TextAlign.start : TextAlign.center,
+                              textAlign: action.leading != null
+                                  ? TextAlign.start
+                                  : TextAlign.center,
                               child: action.makeLabel(context),
                             ),
                           ),

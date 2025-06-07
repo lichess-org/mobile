@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -10,23 +9,24 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class TimeControlModal extends ConsumerWidget {
+class TimeControlModal extends StatelessWidget {
   const TimeControlModal({
-    required this.value,
+    required this.timeIncrement,
     required this.onSelected,
     this.excludeUltraBullet = false,
     super.key,
   });
 
-  final TimeIncrement value;
+  final TimeIncrement timeIncrement;
   final ValueSetter<TimeIncrement> onSelected;
 
   final bool excludeUltraBullet;
 
   static const _horizontalPadding = EdgeInsets.symmetric(horizontal: 16.0);
+  static const _sectionSpacing = SizedBox(height: 16.0);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     void onSelected(TimeIncrement choice) {
       Navigator.pop(context);
       this.onSelected(choice);
@@ -45,7 +45,7 @@ class TimeControlModal extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _SectionChoices(
-                  value,
+                  timeIncrement,
                   choices: [
                     if (!excludeUltraBullet) const TimeIncrement(0, 1),
                     const TimeIncrement(60, 0),
@@ -55,9 +55,9 @@ class TimeControlModal extends ConsumerWidget {
                   title: const _SectionTitle(title: 'Bullet', icon: LichessIcons.bullet),
                   onSelected: onSelected,
                 ),
-                const SizedBox(height: 20.0),
+                _sectionSpacing,
                 _SectionChoices(
-                  value,
+                  timeIncrement,
                   choices: const [
                     TimeIncrement(180, 0),
                     TimeIncrement(180, 2),
@@ -67,9 +67,9 @@ class TimeControlModal extends ConsumerWidget {
                   title: const _SectionTitle(title: 'Blitz', icon: LichessIcons.blitz),
                   onSelected: onSelected,
                 ),
-                const SizedBox(height: 20.0),
+                _sectionSpacing,
                 _SectionChoices(
-                  value,
+                  timeIncrement,
                   choices: const [
                     TimeIncrement(600, 0),
                     TimeIncrement(600, 5),
@@ -79,9 +79,9 @@ class TimeControlModal extends ConsumerWidget {
                   title: const _SectionTitle(title: 'Rapid', icon: LichessIcons.rapid),
                   onSelected: onSelected,
                 ),
-                const SizedBox(height: 20.0),
+                _sectionSpacing,
                 _SectionChoices(
-                  value,
+                  timeIncrement,
                   choices: const [
                     TimeIncrement(1500, 0),
                     TimeIncrement(1800, 0),
@@ -96,89 +96,86 @@ class TimeControlModal extends ConsumerWidget {
           ),
         ),
         Card.filled(
-          margin: _horizontalPadding.add(Styles.sectionBottomPadding),
+          margin: _horizontalPadding,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
             child: Theme(
               data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
+                initiallyExpanded: timeIncrement.isCustom,
                 title: _SectionTitle(title: context.l10n.custom, icon: Icons.tune),
                 tilePadding: EdgeInsets.zero,
                 minTileHeight: 0,
                 children: [
                   Builder(
                     builder: (context) {
-                      TimeIncrement custom = value;
+                      TimeIncrement custom = timeIncrement;
                       return StatefulBuilder(
                         builder: (context, setState) {
                           return Column(
                             children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: NonLinearSlider(
-                                      value: custom.time,
-                                      values: kAvailableTimesInSeconds,
-                                      labelBuilder: clockLabelInMinutes,
-                                      onChange: (num value) {
-                                        setState(() {
-                                          custom = TimeIncrement(value.toInt(), custom.increment);
-                                        });
-                                      },
-                                      onChangeEnd: (num value) {
-                                        setState(() {
-                                          custom = TimeIncrement(value.toInt(), custom.increment);
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 60,
-                                    child: Center(
-                                      child: Text(
-                                        clockLabelInMinutes(custom.time),
-                                        style: Styles.timeControl.merge(Styles.bold),
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title: Text.rich(
+                                  TextSpan(
+                                    text: '${context.l10n.minutesPerSide}: ',
+                                    children: [
+                                      TextSpan(
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                        text: clockLabelInMinutes(custom.time),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
+                                ),
+                                subtitle: NonLinearSlider(
+                                  value: custom.time,
+                                  values: kAvailableTimesInSeconds,
+                                  labelBuilder: clockLabelInMinutes,
+                                  onChange: (num value) {
+                                    setState(() {
+                                      custom = TimeIncrement(value.toInt(), custom.increment);
+                                    });
+                                  },
+                                  onChangeEnd: (num value) {
+                                    setState(() {
+                                      custom = TimeIncrement(value.toInt(), custom.increment);
+                                    });
+                                  },
+                                ),
                               ),
-                              const Row(
-                                children: [
-                                  Spacer(),
-                                  SizedBox(width: 60, child: Center(child: Text('+'))),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: NonLinearSlider(
-                                      value: custom.increment,
-                                      values: kAvailableIncrementsInSeconds,
-                                      onChange: (num value) {
-                                        setState(() {
-                                          custom = TimeIncrement(custom.time, value.toInt());
-                                        });
-                                      },
-                                      onChangeEnd: (num value) {
-                                        setState(() {
-                                          custom = TimeIncrement(custom.time, value.toInt());
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 60,
-                                    child: Center(
-                                      child: Text(
-                                        custom.increment.toString(),
-                                        style: Styles.timeControl.merge(Styles.bold),
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title: Text.rich(
+                                  TextSpan(
+                                    text: '${context.l10n.incrementInSeconds}: ',
+                                    children: [
+                                      TextSpan(
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        ),
+                                        text: custom.increment.toString(),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
+                                ),
+                                subtitle: NonLinearSlider(
+                                  value: custom.increment,
+                                  values: kAvailableIncrementsInSeconds,
+                                  onChange: (num value) {
+                                    setState(() {
+                                      custom = TimeIncrement(custom.time, value.toInt());
+                                    });
+                                  },
+                                  onChangeEnd: (num value) {
+                                    setState(() {
+                                      custom = TimeIncrement(custom.time, value.toInt());
+                                    });
+                                  },
+                                ),
                               ),
                               FilledButton(
                                 onPressed: custom.isInfinite ? null : () => onSelected(custom),
@@ -217,25 +214,24 @@ class _SectionChoices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final choiceWidgets =
-        choices
-            .mapIndexed((index, choice) {
-              return [
-                Expanded(
-                  child: _ChoiceChip(
-                    key: ValueKey(choice),
-                    label: Text(choice.display, style: Styles.bold),
-                    selected: selected == choice,
-                    onSelected: (bool selected) {
-                      if (selected) onSelected(choice);
-                    },
-                  ),
-                ),
-                if (index < choices.length - 1) spacing,
-              ];
-            })
-            .flattened
-            .toList();
+    final choiceWidgets = choices
+        .mapIndexed((index, choice) {
+          return [
+            Expanded(
+              child: _ChoiceChip(
+                key: ValueKey(choice),
+                label: Text(choice.display, style: Styles.bold),
+                selected: selected == choice,
+                onSelected: (bool selected) {
+                  if (selected) onSelected(choice);
+                },
+              ),
+            ),
+            if (index < choices.length - 1) spacing,
+          ];
+        })
+        .flattened
+        .toList();
 
     if (choices.length < 4) {
       final placeHolders = [
@@ -248,7 +244,11 @@ class _SectionChoices extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [title, const SizedBox(height: 10), Row(children: choiceWidgets)],
+      children: [
+        title,
+        const SizedBox(height: 4),
+        Row(children: choiceWidgets),
+      ],
     );
   }
 }
@@ -269,14 +269,15 @@ class _ChoiceChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color:
-            selected
-                ? ColorScheme.of(context).primaryContainer
-                : ColorScheme.of(context).surfaceContainerLow,
+        color: selected
+            ? ColorScheme.of(context).secondaryContainer
+            : ColorScheme.of(context).surfaceContainerLow,
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         border: Border.fromBorderSide(
           BorderSide(
-            color: selected ? ColorScheme.of(context).primary : Theme.of(context).dividerColor,
+            color: selected
+                ? ColorScheme.of(context).secondaryContainer
+                : Theme.of(context).dividerColor,
             width: 1.0,
           ),
         ),
@@ -289,10 +290,9 @@ class _ChoiceChip extends StatelessWidget {
           child: Center(
             child: DefaultTextStyle.merge(
               style: Styles.timeControl.copyWith(
-                color:
-                    selected
-                        ? ColorScheme.of(context).onPrimaryContainer
-                        : ColorScheme.of(context).onSurfaceVariant,
+                color: selected
+                    ? ColorScheme.of(context).onPrimaryContainer
+                    : ColorScheme.of(context).onSurfaceVariant,
               ),
               child: label,
             ),

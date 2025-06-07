@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
@@ -88,16 +89,13 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final brightness = Theme.of(context).brightness;
     final colorScheme = ColorScheme.of(context);
-    final clockStyle = ClockStyle.defaultStyle(brightness, colorScheme);
+    final clockStyle = ClockStyle.defaultStyle(brightness, colorScheme, context.lichessColors);
 
-    final remainingHeight = estimateRemainingHeightLeftBoard(context);
-
-    final daysStr =
-        days > 1
-            ? context.l10n.nbDays(days)
-            : days == 1
-            ? context.l10n.oneDay
-            : '';
+    final daysStr = days > 1
+        ? context.l10n.nbDays(days)
+        : days == 1
+        ? context.l10n.oneDay
+        : '';
 
     final hoursStr = days > 0 && hours > 0 ? ' ${context.l10n.nbHours(hours)}' : '';
 
@@ -119,7 +117,7 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
                 style: TextStyle(
                   color: widget.active ? clockStyle.activeTextColor : clockStyle.textColor,
                   fontSize: 18,
-                  height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold ? 1.0 : null,
+                  height: isShortVerticalScreen(context) ? 1.0 : null,
                   fontFeatures: days == 0 ? const [FontFeature.tabularFigures()] : null,
                 ),
                 children: [
@@ -128,10 +126,9 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
                     TextSpan(
                       text: ':',
                       style: TextStyle(
-                        color:
-                            widget.active && timeLeft.inSeconds.remainder(2) == 0
-                                ? clockStyle.activeTextColor.withValues(alpha: 0.5)
-                                : null,
+                        color: widget.active && timeLeft.inSeconds.remainder(2) == 0
+                            ? clockStyle.activeTextColor.withValues(alpha: 0.5)
+                            : null,
                       ),
                     ),
                     TextSpan(text: mins.toString().padLeft(2, '0')),

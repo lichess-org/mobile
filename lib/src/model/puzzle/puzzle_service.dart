@@ -49,7 +49,7 @@ class PuzzleServiceFactory {
 }
 
 @freezed
-class PuzzleContext with _$PuzzleContext {
+sealed class PuzzleContext with _$PuzzleContext {
   const factory PuzzleContext({
     required Puzzle puzzle,
     required PuzzleAngle angle,
@@ -60,6 +60,9 @@ class PuzzleContext with _$PuzzleContext {
 
     /// List of solved puzzle results if available.
     IList<PuzzleRound>? rounds,
+
+    /// If true, will force all puzzles of the run to be solved in casual mode.
+    bool? casualRun,
   }) = _PuzzleContext;
 }
 
@@ -87,16 +90,15 @@ class PuzzleService {
   }) {
     return Result.release(
       _syncAndLoadData(userId, angle).map(
-        (data) =>
-            data.$1 != null && data.$1!.unsolved.isNotEmpty
-                ? PuzzleContext(
-                  puzzle: data.$1!.unsolved[0],
-                  angle: angle,
-                  userId: userId,
-                  glicko: data.$2,
-                  rounds: data.$3,
-                )
-                : null,
+        (data) => data.$1 != null && data.$1!.unsolved.isNotEmpty
+            ? PuzzleContext(
+                puzzle: data.$1!.unsolved[0],
+                angle: angle,
+                userId: userId,
+                glicko: data.$2,
+                rounds: data.$3,
+              )
+            : null,
       ),
     );
   }
@@ -112,17 +114,16 @@ class PuzzleService {
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     puzzleStorage.save(puzzle: puzzle);
-    final data = await batchStorage.fetch(userId: userId, angle: angle);
-    if (data != null) {
-      await batchStorage.save(
-        userId: userId,
-        angle: angle,
-        data: PuzzleBatch(
-          solved: IList([...data.solved, solution]),
-          unsolved: data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
-        ),
-      );
-    }
+    const emptyBatch = PuzzleBatch(solved: IListConst([]), unsolved: IListConst([]));
+    final data = await batchStorage.fetch(userId: userId, angle: angle) ?? emptyBatch;
+    await batchStorage.save(
+      userId: userId,
+      angle: angle,
+      data: PuzzleBatch(
+        solved: IList([...data.solved, solution]),
+        unsolved: data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
+      ),
+    );
     return nextPuzzle(userId: userId, angle: angle);
   }
 
@@ -159,22 +160,21 @@ class PuzzleService {
 
     final deficit = max(0, queueLength - unsolved.length);
 
-    if (deficit > 0) {
-      _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
+    if (deficit > 0 || solved.isNotEmpty) {
+      _log.fine('Will sync puzzles with lichess (deficit: $deficit, solved: ${solved.length})');
 
       final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
 
       // anonymous users can't solve puzzles so we just download the deficit
-      // we send the request even if the deficit is 0 to get the glicko rating
       final batchResponse = _ref.withClient(
         (client) => Result.capture(
           solved.isNotEmpty && userId != null
               ? PuzzleRepository(
-                client,
-              ).solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
+                  client,
+                ).solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
               : PuzzleRepository(
-                client,
-              ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
+                  client,
+                ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
         ),
       );
 

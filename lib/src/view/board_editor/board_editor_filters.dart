@@ -27,20 +27,17 @@ class BoardEditorFilters extends ConsumerWidget {
           padding: Styles.horizontalBodyPadding,
           child: Wrap(
             spacing: 8.0,
-            children:
-                Side.values.map((side) {
-                  return ChoiceChip(
-                    label: Text(
-                      side == Side.white ? context.l10n.whitePlays : context.l10n.blackPlays,
-                    ),
-                    selected: editorState.sideToPlay == side,
-                    onSelected: (selected) {
-                      if (selected) {
-                        ref.read(editorController.notifier).setSideToPlay(side);
-                      }
-                    },
-                  );
-                }).toList(),
+            children: Side.values.map((side) {
+              return ChoiceChip(
+                label: Text(side == Side.white ? context.l10n.whitePlays : context.l10n.blackPlays),
+                selected: editorState.sideToPlay == side,
+                onSelected: (selected) {
+                  if (selected) {
+                    ref.read(editorController.notifier).setSideToPlay(side);
+                  }
+                },
+              );
+            }).toList(),
           ),
         ),
         Padding(
@@ -81,16 +78,15 @@ class BoardEditorFilters extends ConsumerWidget {
           ),
           Wrap(
             spacing: 8.0,
-            children:
-                editorState.enPassantOptions.squares.map((square) {
-                  return ChoiceChip(
-                    label: Text(square.name),
-                    selected: editorState.enPassantSquare == square,
-                    onSelected: (selected) {
-                      ref.read(editorController.notifier).toggleEnPassantSquare(square);
-                    },
-                  );
-                }).toList(),
+            children: editorState.enPassantOptions.squares.map((square) {
+              return ChoiceChip(
+                label: Text(square.name),
+                selected: editorState.enPassantSquare == square,
+                onSelected: (selected) {
+                  ref.read(editorController.notifier).toggleEnPassantSquare(square);
+                },
+              );
+            }).toList(),
           ),
         ],
       ],
@@ -116,7 +112,10 @@ class SearchPositionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tabBar = TabBar(
-      tabs: [Tab(text: context.l10n.openings), Tab(text: context.l10n.endgamePositions)],
+      tabs: [
+        Tab(text: context.l10n.openings),
+        Tab(text: context.l10n.endgamePositions),
+      ],
     );
     final tabBarView = TabBarView(
       children: [

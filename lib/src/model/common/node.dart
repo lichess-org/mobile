@@ -310,23 +310,21 @@ abstract class Node {
           PgnNodeData(
             san: childFrom.sanMove.san,
             startingComments: childFrom.startingComments?.map((c) => c.makeComment()).toList(),
-            comments:
-                (childFrom.lichessAnalysisComments ?? childFrom.comments)?.map((c) {
-                  final eval = childFrom.eval;
-                  final pgnEval =
-                      eval?.cp != null
-                          ? PgnEvaluation.pawns(pawns: cpToPawns(eval!.cp!), depth: eval.depth)
-                          : eval?.mate != null
-                          ? PgnEvaluation.mate(mate: eval!.mate, depth: eval.depth)
-                          : c.eval;
-                  return PgnComment(
-                    text: c.text,
-                    shapes: c.shapes,
-                    clock: c.clock,
-                    emt: c.emt,
-                    eval: pgnEval,
-                  ).makeComment();
-                }).toList(),
+            comments: (childFrom.lichessAnalysisComments ?? childFrom.comments)?.map((c) {
+              final eval = childFrom.eval;
+              final pgnEval = eval?.cp != null
+                  ? PgnEvaluation.pawns(pawns: cpToPawns(eval!.cp!), depth: eval.depth)
+                  : eval?.mate != null
+                  ? PgnEvaluation.mate(mate: eval!.mate, depth: eval.depth)
+                  : c.eval;
+              return PgnComment(
+                text: c.text,
+                shapes: c.shapes,
+                clock: c.clock,
+                emt: c.emt,
+                eval: pgnEval,
+              ).makeComment();
+            }).toList(),
             nags: childFrom.nags,
           ),
         );
@@ -531,10 +529,9 @@ class Root extends Node {
             isCollapsed: frame.nesting > 2 || hideVariations && childIdx > 0,
             isComputerVariation: isLichessAnalysis && childIdx > 0,
             lichessAnalysisComments: isLichessAnalysis ? comments?.toList() : null,
-            startingComments:
-                isLichessAnalysis
-                    ? null
-                    : childFrom.data.startingComments?.map(PgnComment.fromPgn).toList(),
+            startingComments: isLichessAnalysis
+                ? null
+                : childFrom.data.startingComments?.map(PgnComment.fromPgn).toList(),
             comments: isLichessAnalysis ? null : comments?.toList(),
             nags: childFrom.data.nags,
           );
@@ -545,10 +542,10 @@ class Root extends Node {
             to: branch,
             nesting:
                 frame.from.children.length == 1 ||
-                        // mainline continuation
-                        (childIdx == 0 && frame.nesting == 1)
-                    ? frame.nesting
-                    : frame.nesting + 1,
+                    // mainline continuation
+                    (childIdx == 0 && frame.nesting == 1)
+                ? frame.nesting
+                : frame.nesting + 1,
           ));
 
           onVisitNode?.call(root, branch, isMainline);
@@ -588,7 +585,7 @@ abstract class ViewNode {
 
 /// An immutable view of a [Root] node.
 @freezed
-class ViewRoot extends ViewNode with _$ViewRoot {
+sealed class ViewRoot extends ViewNode with _$ViewRoot {
   const ViewRoot._();
   const factory ViewRoot({
     required Position position,
@@ -620,7 +617,7 @@ class ViewRoot extends ViewNode with _$ViewRoot {
 
 /// An immutable view of a [Branch] node.
 @freezed
-class ViewBranch extends ViewNode with _$ViewBranch {
+sealed class ViewBranch extends ViewNode with _$ViewBranch {
   const ViewBranch._();
 
   const factory ViewBranch({
@@ -673,10 +670,10 @@ class ViewBranch extends ViewNode with _$ViewBranch {
     final pgnEval = lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
     return pgnEval != null
         ? ExternalEval(
-          cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
-          mate: pgnEval.mate,
-          depth: pgnEval.depth,
-        )
+            cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
+            mate: pgnEval.mate,
+            depth: pgnEval.depth,
+          )
         : null;
   }
 

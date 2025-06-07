@@ -12,7 +12,11 @@ typedef StudyList = ({IList<StudyPageData> studies, int? nextPage});
 @riverpod
 class StudyListPaginator extends _$StudyListPaginator {
   @override
-  Future<StudyList> build({required StudyFilterState filter, String? search}) {
+  Future<StudyList> build({
+    required StudyCategory category,
+    required StudyListOrder order,
+    String? search,
+  }) {
     return _nextPage();
   }
 
@@ -33,7 +37,7 @@ class StudyListPaginator extends _$StudyListPaginator {
 
     final repo = ref.read(studyRepositoryProvider);
     return search == null
-        ? repo.getStudies(category: filter.category, order: filter.order, page: nextPage)
+        ? repo.getStudies(category: category, order: order, page: nextPage)
         : repo.searchStudies(query: search!, page: nextPage);
   }
 }

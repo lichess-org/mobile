@@ -9,10 +9,22 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'clock_tool_controller.freezed.dart';
 part 'clock_tool_controller.g.dart';
 
+enum ClockSide {
+  top,
+  bottom;
+
+  ClockSide get opposite => this == ClockSide.top ? ClockSide.bottom : ClockSide.top;
+
+  Side get chessClockSide => this == ClockSide.top ? Side.black : Side.white;
+}
+
 @riverpod
 class ClockToolController extends _$ClockToolController {
-  late final ChessClock _clock;
-  final Map<Side, bool> _hasPlayedLowTimeSound = {Side.white: false, Side.black: false};
+  late ChessClock _clock;
+  final Map<ClockSide, bool> _hasPlayedLowTimeSound = {
+    ClockSide.top: false,
+    ClockSide.bottom: false,
+  };
   late Duration _emergencyThreshold;
 
   @override
@@ -21,13 +33,13 @@ class ClockToolController extends _$ClockToolController {
     const increment = Duration.zero;
     _emergencyThreshold = _calculateEmergencyThreshold(time);
     const options = ClockOptions(
-      whiteTime: time,
-      blackTime: time,
-      whiteIncrement: increment,
-      blackIncrement: increment,
+      topTime: time,
+      bottomTime: time,
+      topIncrement: increment,
+      bottomIncrement: increment,
     );
 
-    _clock = ChessClock(whiteTime: time, blackTime: time, onFlag: _onFlagged);
+    _clock = ChessClock(blackTime: time, whiteTime: time, onFlag: _onFlagged);
 
     // Add listeners for both clocks
     _clock.whiteTime.addListener(onClockEmergency);
@@ -41,9 +53,9 @@ class ClockToolController extends _$ClockToolController {
 
     return ClockState(
       options: options,
-      whiteTime: _clock.whiteTime,
-      blackTime: _clock.blackTime,
-      activeSide: Side.white,
+      // we'll alway use blackTime for top and whiteTime for bottom
+      topTime: _clock.blackTime,
+      bottomTime: _clock.whiteTime,
       clockOrientation: ClockOrientation.portraitUp,
     );
   }
@@ -55,9 +67,11 @@ class ClockToolController extends _$ClockToolController {
 
   void onClockEmergency() {
     final activeSide = state.activeSide;
+    if (activeSide == null) return;
     if (_hasPlayedLowTimeSound[activeSide]!) return;
-    final activeSideTime =
-        activeSide == Side.white ? _clock.whiteTime.value : _clock.blackTime.value;
+    final activeSideTime = activeSide == ClockSide.top
+        ? _clock.blackTime.value
+        : _clock.whiteTime.value;
     if (activeSideTime <= _emergencyThreshold) {
       ref.read(soundServiceProvider).play(Sound.lowTime);
       _hasPlayedLowTimeSound[activeSide] = true;
@@ -66,97 +80,95 @@ class ClockToolController extends _$ClockToolController {
 
   void _onFlagged() {
     _clock.stop();
-    state = state.copyWith(flagged: _clock.activeSide);
-  }
-
-  void onTap(Side playerType) {
-    final started = state.started;
-    if (playerType == Side.white) {
-      state = state.copyWith(
-        started: true,
-        activeSide: Side.black,
-        whiteMoves: started ? state.whiteMoves + 1 : 0,
-      );
-    } else {
-      state = state.copyWith(
-        started: true,
-        activeSide: Side.white,
-        blackMoves: started ? state.blackMoves + 1 : 0,
-      );
-    }
-    ref.read(soundServiceProvider).play(Sound.clock);
-    _clock.startSide(playerType.opposite);
-    _clock.incTime(
-      playerType,
-      playerType == Side.white ? state.options.whiteIncrement : state.options.blackIncrement,
+    state = state.copyWith(
+      flagged: _clock.activeSide == Side.white ? ClockSide.bottom : ClockSide.top,
     );
   }
 
-  void updateDuration(Side playerType, Duration duration) {
+  void onTap(ClockSide playerType) {
+    final started = state.activeSide != null;
+    state = state.copyWith(
+      activeSide: playerType.opposite,
+      topMoves: playerType == ClockSide.top && started ? state.topMoves + 1 : state.topMoves,
+      bottomMoves: playerType == ClockSide.bottom && started
+          ? state.bottomMoves + 1
+          : state.bottomMoves,
+    );
+    ref.read(soundServiceProvider).play(Sound.clock);
+    _clock.startSide(playerType.opposite.chessClockSide);
+    _clock.incTime(
+      playerType.chessClockSide,
+      playerType == ClockSide.top ? state.options.topIncrement : state.options.bottomIncrement,
+    );
+  }
+
+  void updateDuration(ClockSide playerType, Duration duration) {
     if (state.flagged != null || state.paused) {
       return;
     }
 
     _clock.setTimes(
-      whiteTime: playerType == Side.white ? duration + state.options.whiteIncrement : null,
-      blackTime: playerType == Side.black ? duration + state.options.blackIncrement : null,
+      whiteTime: playerType == ClockSide.bottom ? duration + state.options.topIncrement : null,
+      blackTime: playerType == ClockSide.top ? duration + state.options.bottomIncrement : null,
     );
   }
 
   void updateOptions(TimeIncrement timeIncrement) {
     final options = ClockOptions.fromTimeIncrement(timeIncrement);
     _emergencyThreshold = _calculateEmergencyThreshold(Duration(seconds: timeIncrement.time));
-    _hasPlayedLowTimeSound[Side.white] = false;
-    _hasPlayedLowTimeSound[Side.black] = false;
-    _clock.setTimes(whiteTime: options.whiteTime, blackTime: options.blackTime);
+    _hasPlayedLowTimeSound[ClockSide.top] = false;
+    _hasPlayedLowTimeSound[ClockSide.bottom] = false;
+    _clock.setTimes(blackTime: options.topTime, whiteTime: options.bottomTime);
     state = state.copyWith(
       options: options,
-      whiteTime: _clock.whiteTime,
-      blackTime: _clock.blackTime,
+      topTime: _clock.blackTime,
+      bottomTime: _clock.whiteTime,
     );
   }
 
-  void updateOptionsCustom(TimeIncrement clock, Side player) {
+  void updateOptionsCustom(TimeIncrement clock, ClockSide player) {
     final options = ClockOptions(
-      whiteTime: player == Side.white ? Duration(seconds: clock.time) : state.options.whiteTime,
-      blackTime: player == Side.black ? Duration(seconds: clock.time) : state.options.blackTime,
-      whiteIncrement:
-          player == Side.white ? Duration(seconds: clock.increment) : state.options.whiteIncrement,
-      blackIncrement:
-          player == Side.black ? Duration(seconds: clock.increment) : state.options.blackIncrement,
+      topTime: player == ClockSide.top ? Duration(seconds: clock.time) : state.options.topTime,
+      bottomTime: player == ClockSide.bottom
+          ? Duration(seconds: clock.time)
+          : state.options.bottomTime,
+      topIncrement: player == ClockSide.top
+          ? Duration(seconds: clock.increment)
+          : state.options.topIncrement,
+      bottomIncrement: player == ClockSide.bottom
+          ? Duration(seconds: clock.increment)
+          : state.options.bottomIncrement,
     );
-    _clock.setTimes(whiteTime: options.whiteTime, blackTime: options.blackTime);
+    _clock.setTimes(blackTime: options.topTime, whiteTime: options.bottomTime);
     state = ClockState(
       options: options,
-      whiteTime: _clock.whiteTime,
-      blackTime: _clock.blackTime,
+      topTime: _clock.blackTime,
+      bottomTime: _clock.whiteTime,
       activeSide: state.activeSide,
       clockOrientation: state.clockOrientation,
     );
   }
 
-  void setBottomPlayer(Side playerType) => state = state.copyWith(bottomPlayer: playerType);
-
   void reset() {
-    _clock.setTimes(whiteTime: state.options.whiteTime, blackTime: state.options.whiteTime);
-    // Reset low time sound flags for both players
-    _hasPlayedLowTimeSound[Side.white] = false;
-    _hasPlayedLowTimeSound[Side.black] = false;
     state = state.copyWith(
-      whiteTime: _clock.whiteTime,
-      blackTime: _clock.blackTime,
-      activeSide: Side.white,
+      activeSide: null,
+      topTime: _clock.blackTime,
+      bottomTime: _clock.whiteTime,
       flagged: null,
-      started: false,
       paused: false,
-      whiteMoves: 0,
-      blackMoves: 0,
+      topMoves: 0,
+      bottomMoves: 0,
     );
+    _clock.stop();
+    _clock.setTimes(blackTime: state.options.topTime, whiteTime: state.options.bottomTime);
+    // Reset low time sound flags for both players
+    _hasPlayedLowTimeSound[ClockSide.top] = false;
+    _hasPlayedLowTimeSound[ClockSide.bottom] = false;
   }
 
-  void start() {
-    _clock.startSide(Side.white);
-    state = state.copyWith(started: true);
+  void start(ClockSide playerType) {
+    _clock.startSide(playerType.opposite.chessClockSide);
+    state = state.copyWith(activeSide: playerType.opposite);
   }
 
   void pause() {
@@ -175,64 +187,72 @@ class ClockToolController extends _$ClockToolController {
 }
 
 @freezed
-class ClockOptions with _$ClockOptions {
+sealed class ClockOptions with _$ClockOptions {
   const ClockOptions._();
 
   const factory ClockOptions({
-    required Duration whiteTime,
-    required Duration blackTime,
-    required Duration whiteIncrement,
-    required Duration blackIncrement,
+    required Duration topTime,
+    required Duration bottomTime,
+    required Duration topIncrement,
+    required Duration bottomIncrement,
   }) = _ClockOptions;
 
   factory ClockOptions.fromTimeIncrement(TimeIncrement timeIncrement) => ClockOptions(
-    whiteTime: Duration(seconds: timeIncrement.time),
-    blackTime: Duration(seconds: timeIncrement.time),
-    whiteIncrement: Duration(seconds: timeIncrement.increment),
-    blackIncrement: Duration(seconds: timeIncrement.increment),
+    topTime: Duration(seconds: timeIncrement.time),
+    bottomTime: Duration(seconds: timeIncrement.time),
+    topIncrement: Duration(seconds: timeIncrement.increment),
+    bottomIncrement: Duration(seconds: timeIncrement.increment),
   );
 
   factory ClockOptions.fromSeparateTimeIncrements(
     TimeIncrement playerTop,
     TimeIncrement playerBottom,
   ) => ClockOptions(
-    whiteTime: Duration(seconds: playerTop.time),
-    blackTime: Duration(seconds: playerBottom.time),
-    whiteIncrement: Duration(seconds: playerTop.increment),
-    blackIncrement: Duration(seconds: playerBottom.increment),
+    topTime: Duration(seconds: playerTop.time),
+    bottomTime: Duration(seconds: playerBottom.time),
+    topIncrement: Duration(seconds: playerTop.increment),
+    bottomIncrement: Duration(seconds: playerBottom.increment),
   );
+
+  int getIncrement(ClockSide playerType) {
+    return playerType == ClockSide.top ? topIncrement.inSeconds : bottomIncrement.inSeconds;
+  }
+
+  bool hasIncrement(ClockSide playerType) {
+    return getIncrement(playerType) > 0;
+  }
 }
 
 @freezed
-class ClockState with _$ClockState {
+sealed class ClockState with _$ClockState {
   const ClockState._();
 
   const factory ClockState({
     required ClockOptions options,
-    required ValueListenable<Duration> whiteTime,
-    required ValueListenable<Duration> blackTime,
-    required Side activeSide,
-    @Default(Side.white) Side bottomPlayer,
-    Side? flagged,
-    @Default(false) bool started,
+    required ValueListenable<Duration> topTime,
+    required ValueListenable<Duration> bottomTime,
+    ClockSide? activeSide,
+    ClockSide? flagged,
     @Default(false) bool paused,
-    @Default(0) int whiteMoves,
-    @Default(0) int blackMoves,
+    @Default(0) int topMoves,
+    @Default(0) int bottomMoves,
     required ClockOrientation clockOrientation,
   }) = _ClockState;
 
-  ValueListenable<Duration> getDuration(Side playerType) =>
-      playerType == Side.white ? whiteTime : blackTime;
+  bool get started => activeSide != null;
 
-  int getMovesCount(Side playerType) => playerType == Side.white ? whiteMoves : blackMoves;
+  ValueListenable<Duration> getDuration(ClockSide playerType) =>
+      playerType == ClockSide.top ? topTime : bottomTime;
 
-  bool isPlayersTurn(Side playerType) => started && activeSide == playerType && flagged == null;
+  int getMovesCount(ClockSide playerType) => playerType == ClockSide.top ? topMoves : bottomMoves;
 
-  bool isPlayersMoveAllowed(Side playerType) => isPlayersTurn(playerType) && !paused;
+  bool isPlayersTurn(ClockSide playerType) => activeSide == playerType && flagged == null;
 
-  bool isActivePlayer(Side playerType) => isPlayersTurn(playerType) && !paused;
+  bool isPlayersMoveAllowed(ClockSide playerType) => isPlayersTurn(playerType) && !paused;
 
-  bool isFlagged(Side playerType) => flagged == playerType;
+  bool isActivePlayer(ClockSide playerType) => isPlayersTurn(playerType) && !paused;
+
+  bool isFlagged(ClockSide playerType) => flagged == playerType;
 }
 
 enum ClockOrientation {

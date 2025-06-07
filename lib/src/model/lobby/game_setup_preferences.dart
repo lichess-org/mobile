@@ -29,16 +29,8 @@ class GameSetupPreferences extends _$GameSetupPreferences
     return fetch();
   }
 
-  Future<void> setQuickPairingTimeIncrement(TimeIncrement timeInc) {
-    return save(state.copyWith(quickPairingTimeIncrement: timeInc));
-  }
-
-  Future<void> setCustomTimeSeconds(int seconds) {
-    return save(state.copyWith(customTimeSeconds: seconds));
-  }
-
-  Future<void> setCustomIncrementSeconds(int seconds) {
-    return save(state.copyWith(customIncrementSeconds: seconds));
+  Future<void> setTimeIncrement(TimeIncrement timeInc) {
+    return save(state.copyWith(timeIncrement: timeInc));
   }
 
   Future<void> setCustomVariant(Variant variant) {
@@ -59,13 +51,11 @@ class GameSetupPreferences extends _$GameSetupPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
+sealed class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
   const GameSetupPrefs._();
 
   const factory GameSetupPrefs({
-    required TimeIncrement quickPairingTimeIncrement,
-    required int customTimeSeconds,
-    required int customIncrementSeconds,
+    required TimeIncrement timeIncrement,
     required int customDaysPerTurn,
     required Variant customVariant,
     required bool customRated,
@@ -73,24 +63,29 @@ class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
   }) = _GameSetupPrefs;
 
   static const defaults = GameSetupPrefs(
-    quickPairingTimeIncrement: TimeIncrement(600, 0),
-    customTimeSeconds: 180,
-    customIncrementSeconds: 0,
+    timeIncrement: TimeIncrement(600, 0),
     customVariant: Variant.standard,
     customRated: false,
     customRatingDelta: (-500, 500),
     customDaysPerTurn: 3,
   );
 
-  Speed get speedFromCustom =>
-      Speed.fromTimeIncrement(TimeIncrement(customTimeSeconds, customIncrementSeconds));
-
-  Perf get perfFromCustom => Perf.fromVariantAndSpeed(customVariant, speedFromCustom);
+  Perf get realTimePerf =>
+      Perf.fromVariantAndSpeed(customVariant, Speed.fromTimeIncrement(timeIncrement));
 
   /// Returns the rating range for the custom setup, or null if the user
   /// doesn't have a rating for the custom setup perf.
-  (int, int)? ratingRangeFromCustom(User user) {
-    final perf = user.perfs[perfFromCustom];
+  (int, int)? realTimeRatingRange(User user) {
+    final perf = user.perfs[realTimePerf];
+    if (perf == null) return null;
+    if (perf.provisional == true) return null;
+    final min = math.max(0, perf.rating + customRatingDelta.$1);
+    final max = perf.rating + customRatingDelta.$2;
+    return (min, max);
+  }
+
+  (int, int)? correspondenceRatingRange(User user) {
+    final perf = user.perfs[Perf.correspondence];
     if (perf == null) return null;
     if (perf.provisional == true) return null;
     final min = math.max(0, perf.rating + customRatingDelta.$1);

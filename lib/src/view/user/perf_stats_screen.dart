@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
@@ -21,7 +22,7 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -45,13 +46,18 @@ class PerfStatsScreen extends StatelessWidget {
   final Perf perf;
 
   static Route<dynamic> buildRoute(BuildContext context, {required User user, required Perf perf}) {
-    return buildScreenRoute(context, screen: PerfStatsScreen(user: user, perf: perf));
+    return buildScreenRoute(
+      context,
+      screen: PerfStatsScreen(user: user, perf: perf),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: _Title(user: user, perf: perf)),
+      appBar: AppBar(
+        title: _Title(user: user, perf: perf),
+      ),
       body: _Body(user: user, perf: perf),
     );
   }
@@ -95,18 +101,17 @@ class _Title extends StatelessWidget {
           actions: allPerfs
               .map((p) {
                 return BottomSheetAction(
-                  makeLabel:
-                      (context) => Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(p.icon),
-                          const SizedBox(width: 6),
-                          Text(
-                            context.l10n.perfStatPerfStats(p.title),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                  makeLabel: (context) => Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(p.icon),
+                      const SizedBox(width: 6),
+                      Text(
+                        context.l10n.perfStatPerfStats(p.title),
+                        overflow: TextOverflow.ellipsis,
                       ),
+                    ],
+                  ),
                   onPressed: () {
                     Navigator.of(
                       context,
@@ -190,14 +195,14 @@ class _Body extends ConsumerWidget {
                       Text(
                         (loggedInUser != null && loggedInUser.user.id == user.id)
                             ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
-                              '${data.percentile!.toStringAsFixed(2)}%',
-                              perf.title,
-                            )
+                                '${data.percentile!.toStringAsFixed(2)}%',
+                                perf.title,
+                              )
                             : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
-                              user.username,
-                              '${data.percentile!.toStringAsFixed(2)}%',
-                              perf.title,
-                            ),
+                                user.username,
+                                '${data.percentile!.toStringAsFixed(2)}%',
+                                perf.title,
+                              ),
                         style: TextStyle(color: textShade(context, 0.7)),
                       ),
                     subStatSpace,
@@ -210,12 +215,11 @@ class _Body extends ConsumerWidget {
                       if (data.rank != null)
                         StatCard(
                           context.l10n.rank,
-                          value:
-                              data.rank == null
-                                  ? '?'
-                                  : NumberFormat.decimalPattern(
-                                    Intl.getCurrentLocale(),
-                                  ).format(data.rank),
+                          value: data.rank == null
+                              ? '?'
+                              : NumberFormat.decimalPattern(
+                                  Intl.getCurrentLocale(),
+                                ).format(data.rank),
                         ),
                       StatCard(
                         context.l10n.perfStatRatingDeviation('').replaceAll(': .', ''),
@@ -453,15 +457,15 @@ class _RatingWidget extends StatelessWidget {
     return (rating == null)
         ? const Text('?', style: TextStyle(fontSize: _defaultValueFontSize))
         : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              rating.toString(),
-              style: TextStyle(fontSize: _defaultValueFontSize, color: color),
-            ),
-            _UserGameWidget(game),
-          ],
-        );
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                rating.toString(),
+                style: TextStyle(fontSize: _defaultValueFontSize, color: color),
+              ),
+              _UserGameWidget(game),
+            ],
+          );
   }
 }
 
@@ -490,14 +494,13 @@ class _PercentageValueWidget extends StatelessWidget {
           _getPercentageString(value, denominator),
           style: TextStyle(
             fontSize: _defaultValueFontSize,
-            color:
-                color == null
-                    ? isShaded
-                        ? textShade(context, _customOpacity / 2)
-                        : textShade(context, _customOpacity)
-                    : isShaded
-                    ? color!.withValues(alpha: _customOpacity / 2)
-                    : color!.withValues(alpha: _customOpacity),
+            color: color == null
+                ? isShaded
+                      ? textShade(context, _customOpacity / 2)
+                      : textShade(context, _customOpacity)
+                : isShaded
+                ? color!.withValues(alpha: _customOpacity / 2)
+                : color!.withValues(alpha: _customOpacity),
           ),
         ),
       ],
@@ -547,22 +550,18 @@ class _StreakWidget extends StatelessWidget {
             );
           }
 
-          final Text valueText = streak.map(
-            timeStreak: (UserTimeStreak streak) {
-              return Text(
-                streak.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
-                style: valueStyle,
-                textAlign: TextAlign.center,
-              );
-            },
-            gameStreak: (UserGameStreak streak) {
-              return Text(
-                context.l10n.nbGames(streak.gamesPlayed),
-                style: valueStyle,
-                textAlign: TextAlign.center,
-              );
-            },
-          );
+          final valueText = switch (streak) {
+            UserTimeStreak(:final timePlayed) => Text(
+              timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
+              style: valueStyle,
+              textAlign: TextAlign.center,
+            ),
+            UserGameStreak(:final gamesPlayed) => Text(
+              context.l10n.nbGames(gamesPlayed),
+              style: valueStyle,
+              textAlign: TextAlign.center,
+            ),
+          };
 
           return Expanded(
             child: Column(
@@ -626,10 +625,13 @@ class _GameListWidget extends ConsumerWidget {
               final gameData = list.firstWhereOrNull((g) => g.id == game.gameId);
               if (context.mounted && gameData != null && gameData.variant.isReadSupported) {
                 Navigator.of(context, rootNavigator: true).push(
-                  ArchivedGameScreen.buildRoute(
+                  AnalysisScreen.buildRoute(
                     context,
-                    gameData: gameData,
-                    orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,
+                    AnalysisOptions(
+                      orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,
+                      gameId: gameData.id,
+                      initialMoveCursor: 0,
+                    ),
                   ),
                 );
               } else if (context.mounted && gameData != null) {
@@ -656,13 +658,12 @@ class _GameListTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       title: playerTitle,
-      subtitle:
-          subtitle != null
-              ? DefaultTextStyle.merge(
-                child: subtitle!,
-                style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-              )
-              : null,
+      subtitle: subtitle != null
+          ? DefaultTextStyle.merge(
+              child: subtitle!,
+              style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+            )
+          : null,
     );
   }
 }
@@ -732,15 +733,12 @@ class _EloChartState extends State<_EloChart> {
       }
     }
 
-    _allFlSpot =
-        pointsHistoryRatingCompleted
-            .map(
-              (element) => FlSpot(
-                element.date.difference(_firstDate).inDays.toDouble(),
-                element.elo.toDouble(),
-              ),
-            )
-            .toList();
+    _allFlSpot = pointsHistoryRatingCompleted
+        .map(
+          (element) =>
+              FlSpot(element.date.difference(_firstDate).inDays.toDouble(), element.elo.toDouble()),
+        )
+        .toList();
 
     if (_dateIsInRange(DateRange.threeMonths)) {
       _selectedRange = DateRange.threeMonths;

@@ -52,21 +52,21 @@ final socketGlobalStream = _globalStreamController.stream;
 /// Creates a WebSocket URI for the lichess server.
 Uri lichessWSUri(String unencodedPath, [Map<String, String>? queryParameters]) =>
     kLichessWSHost.startsWith('localhost') ||
-            kLichessWSHost.startsWith('10.') ||
-            kLichessWSHost.startsWith('192.168.')
-        ? Uri(
-          scheme: 'ws',
-          host: kLichessWSHost.split(':')[0],
-          port: int.parse(kLichessWSHost.split(':')[1]),
-          path: unencodedPath,
-          queryParameters: queryParameters,
-        )
-        : Uri(
-          scheme: 'wss',
-          host: kLichessWSHost,
-          path: unencodedPath,
-          queryParameters: queryParameters,
-        );
+        kLichessWSHost.startsWith('10.') ||
+        kLichessWSHost.startsWith('192.168.')
+    ? Uri(
+        scheme: 'ws',
+        host: kLichessWSHost.split(':')[0],
+        port: int.parse(kLichessWSHost.split(':')[1]),
+        path: unencodedPath,
+        queryParameters: queryParameters,
+      )
+    : Uri(
+        scheme: 'wss',
+        host: kLichessWSHost,
+        path: unencodedPath,
+        queryParameters: queryParameters,
+      );
 
 /// A lichess WebSocket client.
 ///
@@ -210,8 +210,9 @@ class SocketClient {
 
     final session = getSession();
     final uri = lichessWSUri(route.path, version != null ? {'v': version.toString()} : null);
-    final Map<String, String> headers =
-        session != null ? {'Authorization': 'Bearer ${signBearerToken(session.token)}'} : {};
+    final Map<String, String> headers = session != null
+        ? {'Authorization': 'Bearer ${signBearerToken(session.token)}'}
+        : {};
     WebSocket.userAgent = makeUserAgent(packageInfo, deviceInfo, sri, session?.user);
 
     _logger.info('Creating WebSocket connection to $route');
@@ -672,23 +673,22 @@ class SocketPing extends _$SocketPing {
     final pool = ref.read(socketPoolProvider);
     return route != null
         ? route == pool.currentClient.route
-            ? pool.averageLag.value
-            : Duration.zero
+              ? pool.averageLag.value
+              : Duration.zero
         : pool.averageLag.value;
   }
 
   SocketPingState _getPing(Duration lag) => (
     averageLag: lag,
-    rating:
-        lag.inMicroseconds == 0
-            ? 0
-            : lag.inMicroseconds < 150000
-            ? 4
-            : lag.inMicroseconds < 300000
-            ? 3
-            : lag.inMicroseconds < 500000
-            ? 2
-            : 1,
+    rating: lag.inMicroseconds == 0
+        ? 0
+        : lag.inMicroseconds < 150000
+        ? 4
+        : lag.inMicroseconds < 300000
+        ? 3
+        : lag.inMicroseconds < 500000
+        ? 2
+        : 1,
   );
 
   void _listener() {

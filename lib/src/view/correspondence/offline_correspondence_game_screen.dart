@@ -147,17 +147,15 @@ class _BodyState extends ConsumerState<_Body> {
       materialDifferenceFormat: materialDifference,
       shouldLinkToUserProfile: false,
       mePlaying: youAre == Side.black,
-      confirmMoveCallbacks:
-          youAre == Side.black && moveToConfirm != null
-              ? (confirm: confirmMove, cancel: cancelMove)
-              : null,
-      clock:
-          youAre == Side.black && game.estimatedTimeLeft(Side.black, widget.lastModified) != null
-              ? CorrespondenceClock(
-                duration: game.estimatedTimeLeft(Side.black, widget.lastModified)!,
-                active: activeClockSide == Side.black,
-              )
-              : null,
+      confirmMoveCallbacks: youAre == Side.black && moveToConfirm != null
+          ? (confirm: confirmMove, cancel: cancelMove)
+          : null,
+      clock: youAre == Side.black && game.estimatedTimeLeft(Side.black, widget.lastModified) != null
+          ? CorrespondenceClock(
+              duration: game.estimatedTimeLeft(Side.black, widget.lastModified)!,
+              active: activeClockSide == Side.black,
+            )
+          : null,
     );
     final white = GamePlayer(
       game: game,
@@ -166,17 +164,15 @@ class _BodyState extends ConsumerState<_Body> {
       materialDifferenceFormat: materialDifference,
       shouldLinkToUserProfile: false,
       mePlaying: youAre == Side.white,
-      confirmMoveCallbacks:
-          youAre == Side.white && moveToConfirm != null
-              ? (confirm: confirmMove, cancel: cancelMove)
-              : null,
-      clock:
-          game.estimatedTimeLeft(Side.white, widget.lastModified) != null
-              ? CorrespondenceClock(
-                duration: game.estimatedTimeLeft(Side.white, widget.lastModified)!,
-                active: activeClockSide == Side.white,
-              )
-              : null,
+      confirmMoveCallbacks: youAre == Side.white && moveToConfirm != null
+          ? (confirm: confirmMove, cancel: cancelMove)
+          : null,
+      clock: game.estimatedTimeLeft(Side.white, widget.lastModified) != null
+          ? CorrespondenceClock(
+              duration: game.estimatedTimeLeft(Side.white, widget.lastModified)!,
+              active: activeClockSide == Side.white,
+            )
+          : null,
     );
 
     final topPlayer = youAre == Side.white ? black : white;
@@ -192,12 +188,11 @@ class _BodyState extends ConsumerState<_Body> {
               interactiveBoardParams: (
                 variant: game.meta.variant,
                 position: position,
-                playerSide:
-                    game.playable && !isReplaying
-                        ? youAre == Side.white
-                            ? PlayerSide.white
-                            : PlayerSide.black
-                        : PlayerSide.none,
+                playerSide: game.playable && !isReplaying
+                    ? youAre == Side.white
+                          ? PlayerSide.white
+                          : PlayerSide.black
+                    : PlayerSide.none,
                 promotionMove: promotionMove,
                 onMove: (move, {isDrop}) {
                   onUserMove(move);

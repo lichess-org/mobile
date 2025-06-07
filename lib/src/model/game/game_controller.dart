@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
@@ -34,7 +34,6 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_controller.freezed.dart';
@@ -100,23 +99,23 @@ class GameController extends _$GameController {
         ref.read(soundServiceProvider).play(Sound.dong);
       }
 
-      if (game.playable) {
-        if (game.clock != null) {
-          _clock = ChessClock(
-            whiteTime: game.clock!.white,
-            blackTime: game.clock!.black,
-            emergencyThreshold: game.meta.clock?.emergency,
-            onEmergency: onClockEmergency,
-            onFlag: onFlag,
-          );
-          if (game.clock!.running) {
-            final pos = game.lastPosition;
-            if (pos.fullmoves > 1) {
-              _clock!.startSide(pos.turn);
-            }
+      if (game.clock != null) {
+        _clock = ChessClock(
+          whiteTime: game.clock!.white,
+          blackTime: game.clock!.black,
+          emergencyThreshold: game.meta.clock?.emergency,
+          onEmergency: onClockEmergency,
+          onFlag: onFlag,
+        );
+        if (game.clock!.running) {
+          final pos = game.lastPosition;
+          if (pos.fullmoves > 1) {
+            _clock!.startSide(pos.turn);
           }
         }
-      } else if (game.finished) {
+      }
+
+      if (game.finished) {
         _onFinishedGameLoad(fullEvent.game);
       }
 
@@ -429,12 +428,11 @@ class GameController extends _$GameController {
 
   void _sendMoveToSocket(Move move, {required bool isPremove, required bool withLag}) {
     final thinkTime = _clock?.stop();
-    final moveTime =
-        _clock != null
-            ? isPremove == true
-                ? Duration.zero
-                : thinkTime
-            : null;
+    final moveTime = _clock != null
+        ? isPremove == true
+              ? Duration.zero
+              : thinkTime
+        : null;
     _socketClient.send(
       'move',
       {
@@ -523,8 +521,9 @@ class GameController extends _$GameController {
             premove: hasSameNumberOfSteps ? curState.premove : null,
             promotionMove: hasSameNumberOfSteps ? curState.promotionMove : null,
             moveToConfirm: hasSameNumberOfSteps ? curState.moveToConfirm : null,
-            opponentLeftCountdown:
-                isOpponentOnGame ? null : state.requireValue.opponentLeftCountdown,
+            opponentLeftCountdown: isOpponentOnGame
+                ? null
+                : state.requireValue.opponentLeftCountdown,
           ),
         );
 
@@ -598,13 +597,12 @@ class GameController extends _$GameController {
         }
 
         if (data.clock != null) {
-          final lag =
-              newState.game.playable && newState.game.isMyTurn
-                  // my own clock doesn't need to be compensated for
-                  ? Duration.zero
-                  // server will send the lag only if it's more than 10ms
-                  // default lag of 10ms is also used by web client
-                  : data.clock?.lag ?? const Duration(milliseconds: 10);
+          final lag = newState.game.playable && newState.game.isMyTurn
+              // my own clock doesn't need to be compensated for
+              ? Duration.zero
+              // server will send the lag only if it's more than 10ms
+              // default lag of 10ms is also used by web client
+              : data.clock?.lag ?? const Duration(milliseconds: 10);
 
           _updateClock(
             white: data.clock!.white,
@@ -643,7 +641,8 @@ class GameController extends _$GameController {
         }
 
         if (curState.game.meta.speed == Speed.correspondence) {
-          ref.read(correspondenceServiceProvider).updateGame(gameFullId, newState.game);
+          ref.read(correspondenceServiceProvider).updateStoredGame(gameFullId, newState.game);
+          ref.read(ongoingGamesProvider.notifier).updateGame(gameFullId, newState.game);
         }
 
         if (!curState.isReplaying &&
@@ -694,24 +693,22 @@ class GameController extends _$GameController {
         }
 
         if (curState.game.meta.speed == Speed.correspondence) {
-          ref.read(correspondenceServiceProvider).updateGame(gameFullId, newState.game);
+          ref.read(correspondenceServiceProvider).updateStoredGame(gameFullId, newState.game);
+          ref.read(ongoingGamesProvider.notifier).updateGame(gameFullId, newState.game);
         }
 
         state = AsyncValue.data(newState);
 
         if (!newState.game.aborted) {
-          _getPostGameData().then((result) {
-            result.fold(
-              (data) {
+          _getPostGameData()
+              .then((data) {
                 final game = _mergePostGameData(state.requireValue.game, data);
                 state = AsyncValue.data(state.requireValue.copyWith(game: game));
                 _storeGame(game);
-              },
-              (e, s) {
+              })
+              .catchError((Object e, StackTrace s) {
                 _logger.warning('Could not get post game data', e, s);
-              },
-            );
-          });
+              });
         }
 
       case 'clockInc':
@@ -726,10 +723,9 @@ class GameController extends _$GameController {
           _clock?.setTime(side, newClock);
 
           // sync game clock object even if it's not used to display the clock
-          final newState =
-              side == Side.white
-                  ? curState.copyWith.game.clock!(white: newClock)
-                  : curState.copyWith.game.clock!(black: newClock);
+          final newState = side == Side.white
+              ? curState.copyWith.game.clock!(white: newClock)
+              : curState.copyWith.game.clock!(black: newClock);
           state = AsyncValue.data(newState);
         }
 
@@ -781,8 +777,9 @@ class GameController extends _$GameController {
         final curState = state.requireValue;
         state = AsyncValue.data(
           curState.copyWith(
-            lastDrawOfferAtPly:
-                side != null && side == curState.game.youAre ? curState.game.lastPly : null,
+            lastDrawOfferAtPly: side != null && side == curState.game.youAre
+                ? curState.game.lastPly
+                : null,
             game: curState.game.copyWith(
               white: curState.game.white.copyWith(
                 offeringDraw: side == null ? null : side == Side.white,
@@ -877,25 +874,23 @@ class GameController extends _$GameController {
     }
   }
 
-  FutureResult<ExportedGame> _getPostGameData() {
-    return Result.capture(
-      ref.withClient((client) => GameRepository(client).getGame(gameFullId.gameId)),
-    );
+  Future<ExportedGame> _getPostGameData() {
+    return ref.withClient((client) => GameRepository(client).getGame(gameFullId.gameId));
   }
 
   Future<void> _onFinishedGameLoad(PlayableGame game) async {
     if (game.meta.speed == Speed.correspondence) {
-      ref.read(correspondenceServiceProvider).updateGame(gameFullId, game);
+      ref.read(correspondenceServiceProvider).updateStoredGame(gameFullId, game);
     }
 
-    final result = await _getPostGameData();
-    final gameWithPostData = result.fold(
-      (data) => _mergePostGameData(game, data, rewriteSteps: true),
-      (e, s) {
-        _logger.warning('Could not get post game data: $e', e, s);
-        return game;
-      },
-    );
+    PlayableGame gameWithPostData = game;
+    try {
+      final result = await _getPostGameData();
+      gameWithPostData = _mergePostGameData(game, result, rewriteSteps: true);
+    } catch (e, s) {
+      _logger.warning('Could not get post game data', e, s);
+    }
+
     await _storeGame(gameWithPostData);
 
     state = AsyncValue.data(state.requireValue.copyWith(game: gameWithPostData));
@@ -914,21 +909,17 @@ class GameController extends _$GameController {
     IList<GameStep> newSteps = game.steps;
     if (rewriteSteps && game.meta.clock != null && data.clocks != null) {
       final initialTime = game.meta.clock!.initial;
-      newSteps =
-          game.steps.mapIndexed((index, element) {
-            if (index == 0) {
-              return element.copyWith(
-                archivedWhiteClock: initialTime,
-                archivedBlackClock: initialTime,
-              );
-            }
-            final prevClock = index > 1 ? data.clocks![index - 2] : initialTime;
-            final stepClock = data.clocks![index - 1];
-            return element.copyWith(
-              archivedWhiteClock: index.isOdd ? stepClock : prevClock,
-              archivedBlackClock: index.isEven ? stepClock : prevClock,
-            );
-          }).toIList();
+      newSteps = game.steps.mapIndexed((index, element) {
+        if (index == 0) {
+          return element.copyWith(archivedWhiteClock: initialTime, archivedBlackClock: initialTime);
+        }
+        final prevClock = index > 1 ? data.clocks![index - 2] : initialTime;
+        final stepClock = data.clocks![index - 1];
+        return element.copyWith(
+          archivedWhiteClock: index.isOdd ? stepClock : prevClock,
+          archivedBlackClock: index.isEven ? stepClock : prevClock,
+        );
+      }).toIList();
     }
 
     return game.copyWith(
@@ -945,7 +936,7 @@ class GameController extends _$GameController {
 typedef LiveGameClock = ({ValueListenable<Duration> white, ValueListenable<Duration> black});
 
 @freezed
-class GameState with _$GameState {
+sealed class GameState with _$GameState {
   const GameState._();
 
   const factory GameState({
@@ -1061,28 +1052,26 @@ class GameState with _$GameState {
 
   String get analysisPgn => game.makePgn();
 
-  AnalysisOptions get analysisOptions =>
-      game.finished
-          ? AnalysisOptions(
-            orientation: game.youAre ?? Side.white,
-            initialMoveCursor: stepCursor,
-            gameId: gameFullId.gameId,
-          )
-          : AnalysisOptions(
-            orientation: game.youAre ?? Side.white,
-            initialMoveCursor: stepCursor,
-            standalone: (
-              pgn: game.makePgn(),
-              variant: game.meta.variant,
-              isComputerAnalysisAllowed: false,
-            ),
-          );
+  AnalysisOptions get analysisOptions => game.finished
+      ? AnalysisOptions(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          gameId: gameFullId.gameId,
+        )
+      : AnalysisOptions(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          standalone: (
+            pgn: game.makePgn(),
+            variant: game.meta.variant,
+            isComputerAnalysisAllowed: false,
+          ),
+        );
 
-  GameChatOptions? get chatOptions =>
-      isZenModeActive || game.meta.tournament != null
-          ? null
-          : GameChatOptions(
-            id: gameFullId,
-            opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
-          );
+  GameChatOptions? get chatOptions => isZenModeActive || game.meta.tournament != null
+      ? null
+      : GameChatOptions(
+          id: gameFullId,
+          opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
+        );
 }

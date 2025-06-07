@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -29,7 +28,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = broadcastAnalysisControllerProvider(roundId, gameId);
 
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.settingsSettings)),
@@ -39,17 +38,26 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
             children: [
               SwitchSettingTile(
                 title: Text(context.l10n.inlineNotation),
-                value: analysisPrefs.inlineNotation,
-                onChanged:
-                    (value) =>
-                        ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                value: broadcastPrefs.inlineNotation,
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
                 // TODO: translate
-                title: const Text('Small board'),
-                value: analysisPrefs.smallBoard,
-                onChanged:
-                    (value) => ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+                title: const Text('Smaller board'),
+                value: broadcastPrefs.smallBoard,
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleSmallBoard(),
+              ),
+              ListTile(
+                title: Text(context.l10n.openingExplorer),
+                onTap: () => showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  isDismissible: true,
+                  builder: (_) => const OpeningExplorerSettings(),
+                ),
               ),
             ],
           ),
@@ -58,49 +66,43 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
             children: [
               SwitchSettingTile(
                 title: Text(context.l10n.enable),
-                value: analysisPrefs.enableComputerAnalysis,
+                value: broadcastPrefs.enableComputerAnalysis,
                 onChanged: (_) {
                   ref.read(controller.notifier).toggleComputerAnalysis();
                 },
               ),
               AnimatedCrossFade(
                 duration: const Duration(milliseconds: 300),
-                crossFadeState:
-                    analysisPrefs.enableComputerAnalysis
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
+                crossFadeState: broadcastPrefs.enableComputerAnalysis
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
                 firstChild: const SizedBox.shrink(),
                 secondChild: Column(
                   children: [
                     SwitchSettingTile(
                       title: Text(context.l10n.evaluationGauge),
-                      value: analysisPrefs.showEvaluationGauge,
-                      onChanged:
-                          (value) =>
-                              ref
-                                  .read(analysisPreferencesProvider.notifier)
-                                  .toggleShowEvaluationGauge(),
+                      value: broadcastPrefs.showEvaluationGauge,
+                      onChanged: (value) => ref
+                          .read(broadcastPreferencesProvider.notifier)
+                          .toggleShowEvaluationGauge(),
                     ),
                     SwitchSettingTile(
                       title: Text(context.l10n.toggleGlyphAnnotations),
-                      value: analysisPrefs.showAnnotations,
-                      onChanged:
-                          (_) => ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
+                      value: broadcastPrefs.showAnnotations,
+                      onChanged: (_) =>
+                          ref.read(broadcastPreferencesProvider.notifier).toggleAnnotations(),
                     ),
                     SwitchSettingTile(
                       title: Text(context.l10n.mobileShowComments),
-                      value: analysisPrefs.showPgnComments,
-                      onChanged:
-                          (_) => ref.read(analysisPreferencesProvider.notifier).togglePgnComments(),
+                      value: broadcastPrefs.showPgnComments,
+                      onChanged: (_) =>
+                          ref.read(broadcastPreferencesProvider.notifier).togglePgnComments(),
                     ),
                     SwitchSettingTile(
                       title: Text(context.l10n.bestMoveArrow),
-                      value: analysisPrefs.showBestMoveArrow,
-                      onChanged:
-                          (value) =>
-                              ref
-                                  .read(analysisPreferencesProvider.notifier)
-                                  .toggleShowBestMoveArrow(),
+                      value: broadcastPrefs.showBestMoveArrow,
+                      onChanged: (value) =>
+                          ref.read(broadcastPreferencesProvider.notifier).toggleShowBestMoveArrow(),
                     ),
                   ],
                 ),
@@ -109,32 +111,16 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
           ),
           AnimatedCrossFade(
             duration: const Duration(milliseconds: 300),
-            crossFadeState:
-                analysisPrefs.enableComputerAnalysis
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
+            crossFadeState: broadcastPrefs.enableComputerAnalysis
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
             firstChild: const SizedBox.shrink(),
             secondChild: EngineSettingsWidget(
-              onSetEngineSearchTime:
-                  (value) => ref.read(controller.notifier).setEngineSearchTime(value),
+              onSetEngineSearchTime: (value) =>
+                  ref.read(controller.notifier).setEngineSearchTime(value),
               onSetNumEvalLines: (value) => ref.read(controller.notifier).setNumEvalLines(value),
               onSetEngineCores: (value) => ref.read(controller.notifier).setEngineCores(value),
             ),
-          ),
-          ListSection(
-            children: [
-              ListTile(
-                title: Text(context.l10n.openingExplorer),
-                onTap:
-                    () => showAdaptiveBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      showDragHandle: true,
-                      isDismissible: true,
-                      builder: (_) => const OpeningExplorerSettings(),
-                    ),
-              ),
-            ],
           ),
         ],
       ),

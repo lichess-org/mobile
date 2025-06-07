@@ -151,7 +151,7 @@ class BoardEditorController extends _$BoardEditorController {
 enum CastlingRight { whiteKing, whiteQueen, blackKing, blackQueen }
 
 @freezed
-class BoardEditorState with _$BoardEditorState {
+sealed class BoardEditorState with _$BoardEditorState {
   const BoardEditorState._();
 
   const factory BoardEditorState({
@@ -193,10 +193,9 @@ class BoardEditorState with _$BoardEditorState {
       final rooksAndKings =
           (board.bySide(side) & SquareSet.backrankOf(side)) & (board.rooks | board.kings);
       for (final castlingSide in CastlingSide.values) {
-        final candidate =
-            castlingSide == CastlingSide.king
-                ? rooksAndKings.squares.lastOrNull
-                : rooksAndKings.squares.firstOrNull;
+        final candidate = castlingSide == CastlingSide.king
+            ? rooksAndKings.squares.lastOrNull
+            : rooksAndKings.squares.firstOrNull;
         final isCastlingPossible =
             candidate != null && board.rooks.has(candidate) && backrankKing.singleSquare != null;
         switch ((side, castlingSide)) {

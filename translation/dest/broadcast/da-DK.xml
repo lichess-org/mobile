@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="broadcasts">Udsendelser</string>
+  <string name="myBroadcasts">Mine udsendelser</string>
+  <plurals name="nbBroadcasts">
+    <item quantity="one">%s udsendelse</item>
+    <item quantity="other">%s udsendelser</item>
+  </plurals>
+  <plurals name="nbViewers">
+    <item quantity="one">%s seer</item>
+    <item quantity="other">%s seere</item>
+  </plurals>
+  <string name="liveBroadcasts">Live turnerings-udsendelser</string>
+  <string name="broadcastCalendar">Kaldender for udsendelser</string>
+  <string name="newBroadcast">Ny live-udsendelse</string>
+  <string name="subscribedBroadcasts">Udsendelser, du abonnerer på</string>
+  <string name="aboutBroadcasts">Om udsendelse</string>
+  <string name="howToUseLichessBroadcasts">Sådan bruges Lichess-udsendelser.</string>
+  <string name="theNewRoundHelp">Den nye runde vil have de samme medlemmer og bidragydere som den foregående.</string>
+  <string name="addRound">Tilføj en runde</string>
+  <string name="ongoing">I gang</string>
+  <string name="upcoming">Kommende</string>
+  <string name="roundName">Rundenavn</string>
+  <string name="roundNumber">Rundenummer</string>
+  <string name="tournamentName">Turneringsnavn</string>
+  <string name="tournamentDescription">Kort beskrivelse af turnering</string>
+  <string name="fullDescription">Fuld beskrivelse af begivenheden</string>
+  <string name="fullDescriptionHelp">Valgfri lang beskrivelse af transmissionen. %1$s er tilgængelig. Længde skal være mindre end %2$s tegn.</string>
+  <string name="sourceSingleUrl">URL for PGN-kilde</string>
+  <string name="sourceUrlHelp">URL som Lichess vil trække på for at få PGN updates. Den skal være offentlig tilgængelig fra internettet.</string>
+  <string name="sourceGameIds">Op til 64 Lichess parti-ID\'er, adskilt af mellemrum.</string>
+  <string name="startDateTimeZone">Startdato i turneringens lokale tidszone: %s</string>
+  <string name="startDateHelp">Valgfri, hvis du ved, hvornår begivenheden starter</string>
+  <string name="currentGameUrl">Nuværende parti URL</string>
+  <string name="downloadAllRounds">Download alle runder</string>
+  <string name="resetRound">Nulstil denne runde</string>
+  <string name="deleteRound">Slet denne runde</string>
+  <string name="definitivelyDeleteRound">Slet runden og dens partier endegyldigt.</string>
+  <string name="deleteAllGamesOfThisRound">Slet alle partier i denne runde. Kilden skal være aktiv for at genskabe dem.</string>
+  <string name="editRoundStudy">Rediger rundestudie</string>
+  <string name="deleteTournament">Slet denne turnering</string>
+  <string name="definitivelyDeleteTournament">Slet hele turneringen, alle dens runder og alle dens partier.</string>
+  <string name="showScores">Vis spilleres point baseret på resultater fra partier</string>
+  <string name="replacePlayerTags">Valgfrit: udskift spillernavne, ratings og titler</string>
+  <string name="fideFederations">FIDE-føderationer</string>
+  <string name="top10Rating">Top 10 rating</string>
+  <string name="fidePlayers">FIDE-spillere</string>
+  <string name="fidePlayerNotFound">FIDE-spiller ikke fundet</string>
+  <string name="fideProfile">FIDE-profil</string>
+  <string name="federation">Føderation</string>
+  <string name="ageThisYear">Alder i år</string>
+  <string name="unrated">Uden rating</string>
+  <string name="recentTournaments">Seneste turneringer</string>
+  <string name="openLichess">Åbn i Lichess</string>
+  <string name="teams">Hold</string>
+  <string name="boards">Brætter</string>
+  <string name="overview">Oversigt</string>
+  <string name="subscribeTitle">Abonner på at blive underrettet, når hver runde starter. Du kan skifte mellem klokke- eller push-meddelelser for udsendelser i dine kontoindstillinger.</string>
+  <string name="uploadImage">Upload turneringsbillede</string>
+  <string name="noBoardsYet">Ingen brætter endnu. Disse vises når partier er uploadet.</string>
+  <string name="boardsCanBeLoaded" comment="%s is 'Broadcaster App', and links to https://lichess.org/broadcast/app&#10;&#10;This is advice that appears in the manager view for broadcasts. The 'source' in this context is where the games to be displayed in the tournament will come from. Games can be sourced in a number of ways (aside from the Broadcaster App, which is what Lichess recommends):&#10;* URL(s) pointing to PGN(s)&#10;* IDs of games played on Lichess&#10;* Lichess usernames">Brætter kan indlæses med en kilde eller via %s</string>
+  <string name="startsAfter">Starter efter %s</string>
+  <string name="startVerySoon">Udsendelsen starter meget snart.</string>
+  <string name="notYetStarted">Udsendelsen er endnu ikke startet.</string>
+  <string name="officialWebsite">Officielt websted</string>
+  <string name="standings">Stillinger</string>
+  <string name="officialStandings" comment="Appears in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.&#10;&#10;This is a field where a tournament organiser can add a URL pointing to the official standings for their tournament.">Officiel stilling</string>
+  <string name="iframeHelp" comment="%s is 'webmasters page'">Flere muligheder på %s</string>
+  <string name="webmastersPage">webmasters side</string>
+  <string name="pgnSourceHelp" comment="%s is 'streaming API'">En offentlig, realtids PGN-kilde til denne runde. Vi tilbyder også en %s for hurtigere og mere effektiv synkronisering.</string>
+  <string name="embedThisBroadcast">Indlejr denne udsendelse på dit website</string>
+  <string name="embedThisRound">Indlejr %s på dit website</string>
+  <string name="ratingDiff">Rating-forskel</string>
+  <string name="gamesThisTournament" comment="Appears as a heading for a list on an individual player's page within a broadcasted tournament. The list shows all the games that individual has played within that tournament.&#10;&#10;Example: https://lichess.org/broadcast/fide-womens-grand-prix-202425--pune/round-7/ZPXXCcDI#players/8608059">Partier i denne turnering</string>
+  <string name="score">Score</string>
+  <string name="allTeams" comment="In this context, these are teams in a tournament that is being broadcast. The tournament format features teams.&#10;&#10;This is the default filter option, showing players from all teams in a given tournament.">Alle hold</string>
+  <string name="tournamentFormat" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Turneringsformat</string>
+  <string name="tournamentLocation" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Turneringssted</string>
+  <string name="topPlayers" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.&#10;&#10;Broadcast creators can enter some top players' names here to attract attention. It is a free-entry field that accepts up to 4 names.">Topspillere</string>
+  <string name="timezone" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Tidszone</string>
+  <string name="fideRatingCategory" comment="Appears as an optional field in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.&#10;&#10;The options for this field are Standard, Blitz, or Rapid.">FIDE-ratingkategori</string>
+  <string name="optionalDetails" comment="Appears as a heading that groups fields in the broadcast creation form (https://lichess.org/broadcast/new), for a tournament that someone wishes to broadcast on Lichess.">Valgfri detaljer</string>
+  <string name="pastBroadcasts">Tidligere udsendelser</string>
+  <string name="allBroadcastsByMonth">Vis alle udsendelser efter måned</string>
+  <string name="backToLiveMove">Tilbage til live træk</string>
+  <string name="sinceHideResults">Da du har valgt at skjule resultaterne, er alle forhåndsvisningerne af brætter tomme for at undgå afsløringer.</string>
+  <string name="liveboard" comment="Describes a pane in live broadcasts which lets you see what the current move is.&#10;&#10;This is useful when you are seeing previous moves in a live game, but still want to see the live/current position.">Live bræt</string>
+</resources>

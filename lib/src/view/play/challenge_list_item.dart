@@ -47,19 +47,17 @@ class ChallengeListItem extends ConsumerWidget {
     final isFromPosition = challenge.variant == Variant.fromPosition;
 
     final leading = Icon(challenge.perf.icon);
-    final trailing =
-        challenge.challenger?.lagRating != null
-            ? LagIndicator(lagRating: challenge.challenger!.lagRating!)
-            : null;
-    final title =
-        isMyChallenge
-            // shows destUser if it exists, otherwise shows the challenger (me)
-            // if no destUser, it's an open challenge I sent
-            ? UserFullNameWidget(
-              user: challenge.destUser != null ? challenge.destUser!.user : challengerUser,
-              rating: challenge.destUser?.rating ?? challenge.challenger?.rating,
-            )
-            : UserFullNameWidget(user: challengerUser, rating: challenge.challenger?.rating);
+    final trailing = challenge.challenger?.lagRating != null
+        ? LagIndicator(lagRating: challenge.challenger!.lagRating!)
+        : null;
+    final title = isMyChallenge
+        // shows destUser if it exists, otherwise shows the challenger (me)
+        // if no destUser, it's an open challenge I sent
+        ? UserFullNameWidget(
+            user: challenge.destUser != null ? challenge.destUser!.user : challengerUser,
+            rating: challenge.destUser?.rating ?? challenge.challenger?.rating,
+          )
+        : UserFullNameWidget(user: challengerUser, rating: challenge.challenger?.rating);
     final subtitle = Text(challenge.description(context.l10n));
 
     final screenWidth = MediaQuery.sizeOf(context).width;
@@ -83,12 +81,11 @@ class ChallengeListItem extends ConsumerWidget {
           if (onDecline != null || (isMyChallenge && onCancel != null))
             SlidableAction(
               icon: Icons.close,
-              onPressed:
-                  isMyChallenge
-                      ? (_) => onCancel!()
-                      : onDecline != null
-                      ? (_) => onDecline!(null)
-                      : null,
+              onPressed: isMyChallenge
+                  ? (_) => onCancel!()
+                  : onDecline != null
+                  ? (_) => onDecline!(null)
+                  : null,
               spacing: 8.0,
               backgroundColor: context.lichessColors.error,
               foregroundColor: Colors.white,
@@ -96,34 +93,32 @@ class ChallengeListItem extends ConsumerWidget {
             ),
         ],
       ),
-      child:
-          isFromPosition
-              ? ExpansionTile(
-                backgroundColor: color,
-                childrenPadding: Styles.bodyPadding.subtract(const EdgeInsets.only(top: 8.0)),
-                leading: leading,
-                title: title,
-                subtitle: subtitle,
-                children: [
-                  if (challenge.variant == Variant.fromPosition && challenge.initialFen != null)
-                    BoardThumbnail(
-                      size: min(400, screenWidth - 2 * Styles.bodyPadding.horizontal),
-                      orientation:
-                          challenge.sideChoice == SideChoice.white ? Side.white : Side.black,
-                      fen: challenge.initialFen!,
-                      onTap: onPressed,
-                    ),
-                ],
-                // onTap: onPressed,
-              )
-              : ListTile(
-                tileColor: color,
-                leading: leading,
-                title: title,
-                subtitle: subtitle,
-                trailing: trailing,
-                onTap: onPressed,
-              ),
+      child: isFromPosition
+          ? ExpansionTile(
+              backgroundColor: color,
+              childrenPadding: Styles.bodyPadding.subtract(const EdgeInsets.only(top: 8.0)),
+              leading: leading,
+              title: title,
+              subtitle: subtitle,
+              children: [
+                if (challenge.variant == Variant.fromPosition && challenge.initialFen != null)
+                  BoardThumbnail(
+                    size: min(400, screenWidth - 2 * Styles.bodyPadding.horizontal),
+                    orientation: challenge.sideChoice == SideChoice.white ? Side.white : Side.black,
+                    fen: challenge.initialFen!,
+                    onTap: onPressed,
+                  ),
+              ],
+              // onTap: onPressed,
+            )
+          : ListTile(
+              tileColor: color,
+              leading: leading,
+              title: title,
+              subtitle: subtitle,
+              trailing: trailing,
+              onTap: onPressed,
+            ),
     );
   }
 }
@@ -150,17 +145,15 @@ class CorrespondenceChallengeListItem extends StatelessWidget {
         status: ChallengeStatus.created,
         variant: challenge.variant,
         speed: Speed.correspondence,
-        timeControl:
-            challenge.days != null
-                ? ChallengeTimeControlType.correspondence
-                : ChallengeTimeControlType.unlimited,
+        timeControl: challenge.days != null
+            ? ChallengeTimeControlType.correspondence
+            : ChallengeTimeControlType.unlimited,
         rated: challenge.rated,
-        sideChoice:
-            challenge.side == null
-                ? SideChoice.random
-                : challenge.side == Side.white
-                ? SideChoice.white
-                : SideChoice.black,
+        sideChoice: challenge.side == null
+            ? SideChoice.random
+            : challenge.side == Side.white
+            ? SideChoice.white
+            : SideChoice.black,
         days: challenge.days,
         challenger: (
           user: challengerUser,

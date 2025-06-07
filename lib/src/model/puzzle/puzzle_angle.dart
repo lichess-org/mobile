@@ -23,7 +23,7 @@ sealed class PuzzleAngle {
 }
 
 @freezed
-class PuzzleTheme with _$PuzzleTheme implements PuzzleAngle {
+sealed class PuzzleTheme with _$PuzzleTheme implements PuzzleAngle {
   const PuzzleTheme._();
   const factory PuzzleTheme(PuzzleThemeKey themeKey) = _PuzzleTheme;
 
@@ -35,7 +35,7 @@ class PuzzleTheme with _$PuzzleTheme implements PuzzleAngle {
 }
 
 @freezed
-class PuzzleOpening with _$PuzzleOpening implements PuzzleAngle {
+sealed class PuzzleOpening with _$PuzzleOpening implements PuzzleAngle {
   const PuzzleOpening._();
   const factory PuzzleOpening(String key) = _PuzzleOpening;
 

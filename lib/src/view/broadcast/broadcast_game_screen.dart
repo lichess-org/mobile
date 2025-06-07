@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -102,17 +102,16 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final title =
-        (widget.title != null)
-            ? Text(widget.title!, overflow: TextOverflow.ellipsis, maxLines: 1)
-            : switch (ref.watch(broadcastGameScreenTitleProvider(widget.roundId))) {
-              AsyncData(value: final title) => Text(
-                title,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-              _ => const SizedBox.shrink(),
-            };
+    final title = (widget.title != null)
+        ? Text(widget.title!, overflow: TextOverflow.ellipsis, maxLines: 1)
+        : switch (ref.watch(broadcastGameScreenTitleProvider(widget.roundId))) {
+            AsyncData(value: final title) => Text(
+              title,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+            _ => const SizedBox.shrink(),
+          };
     final asyncEval = ref.watch(broadcastGameEvalProvider(widget.roundId, widget.gameId));
     final asyncIsEngineAvailable = ref.watch(
       isBroadcastEngineAvailableProvider(widget.roundId, widget.gameId),
@@ -160,9 +159,9 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(broadcastAnalysisControllerProvider(roundId, gameId))) {
       case AsyncValue(value: final state?, hasValue: true):
-        final analysisPrefs = ref.watch(analysisPreferencesProvider);
+        final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
         final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-        final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
+        final showEvaluationGauge = broadcastPrefs.showEvaluationGauge;
         final numEvalLines = enginePrefs.numEvalLines;
 
         final engineGaugeParams = state.engineGaugeParams(enginePrefs);
@@ -171,12 +170,11 @@ class _Body extends ConsumerWidget {
         final pov = state.pov;
 
         return AnalysisLayout(
-          smallBoard: analysisPrefs.smallBoard,
+          smallBoard: broadcastPrefs.smallBoard,
           pov: pov,
           tabController: tabController,
-          boardBuilder:
-              (context, boardSize, borderRadius) =>
-                  _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
+          boardBuilder: (context, boardSize, borderRadius) =>
+              _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
           boardHeader: _PlayerWidget(
             tournamentId: tournamentId,
             roundId: roundId,
@@ -189,15 +187,22 @@ class _Body extends ConsumerWidget {
             gameId: gameId,
             widgetPosition: _PlayerWidgetPosition.bottom,
           ),
-          engineGaugeBuilder:
-              state.hasAvailableEval(enginePrefs) && showEvaluationGauge
-                  ? (context, orientation) {
-                    return orientation == Orientation.portrait
-                        ? EngineGauge(
+          engineGaugeBuilder: state.hasAvailableEval(enginePrefs) && showEvaluationGauge
+              ? (context, orientation) {
+                  return orientation == Orientation.portrait
+                      ? EngineGauge(
                           displayMode: EngineGaugeDisplayMode.horizontal,
                           params: engineGaugeParams,
+                          engineLinesState: state.isEngineAvailable(enginePrefs)
+                              ? broadcastPrefs.showEngineLines
+                                    ? EngineLinesShowState.expanded
+                                    : EngineLinesShowState.collapsed
+                              : null,
+                          onTap: () {
+                            ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines();
+                          },
                         )
-                        : Container(
+                      : Container(
                           clipBehavior: Clip.hardEdge,
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
                           child: EngineGauge(
@@ -205,19 +210,18 @@ class _Body extends ConsumerWidget {
                             params: engineGaugeParams,
                           ),
                         );
-                  }
-                  : null,
+                }
+              : null,
           engineLines:
-              isLocalEvaluationEnabled && numEvalLines > 0
-                  ? EngineLines(
-                    savedEval: currentNode.eval,
-                    isGameOver: currentNode.position.isGameOver,
-                    onTapMove:
-                        ref
-                            .read(broadcastAnalysisControllerProvider(roundId, gameId).notifier)
-                            .onUserMove,
-                  )
-                  : null,
+              isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
+              ? EngineLines(
+                  savedEval: currentNode.eval,
+                  isGameOver: currentNode.position.isGameOver,
+                  onTapMove: ref
+                      .read(broadcastAnalysisControllerProvider(roundId, gameId).notifier)
+                      .onUserMove,
+                )
+              : null,
           bottomBar: _BroadcastGameBottomBar(
             roundId: roundId,
             gameId: gameId,
@@ -245,23 +249,22 @@ class _BroadcastGameTreeView extends ConsumerWidget {
     final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
     final state = ref.watch(ctrlProvider).requireValue;
 
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
 
     return SingleChildScrollView(
       child: DebouncedPgnTreeView(
         root: state.root,
         currentPath: state.currentPath,
-        broadcastLivePath: state.broadcastLivePath,
+        livePath: state.broadcastLivePath,
         pgnRootComments: state.pgnRootComments,
-        shouldShowComputerAnalysis: analysisPrefs.enableComputerAnalysis,
-        shouldShowComments: analysisPrefs.enableComputerAnalysis && analysisPrefs.showPgnComments,
+        shouldShowComputerAnalysis: broadcastPrefs.enableComputerAnalysis,
+        shouldShowComments: broadcastPrefs.enableComputerAnalysis && broadcastPrefs.showPgnComments,
         shouldShowAnnotations:
-            analysisPrefs.enableComputerAnalysis && analysisPrefs.showAnnotations,
+            broadcastPrefs.enableComputerAnalysis && broadcastPrefs.showAnnotations,
         notifier: ref.read(ctrlProvider.notifier),
-        displayMode:
-            analysisPrefs.inlineNotation
-                ? PgnTreeDisplayMode.inlineNotation
-                : PgnTreeDisplayMode.twoColumn,
+        displayMode: broadcastPrefs.inlineNotation
+            ? PgnTreeDisplayMode.inlineNotation
+            : PgnTreeDisplayMode.twoColumn,
       ),
     );
   }
@@ -305,30 +308,24 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
     final ctrlProvider = broadcastAnalysisControllerProvider(widget.roundId, widget.gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
     final showBestMoveArrow =
-        broadcastAnalysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
+        broadcastAnalysisState.isEngineAvailable(enginePrefs) && broadcastPrefs.showBestMoveArrow;
     final showAnnotations =
-        broadcastAnalysisState.isComputerAnalysisEnabled && analysisPrefs.showAnnotations;
+        broadcastAnalysisState.isComputerAnalysisEnabled && broadcastPrefs.showAnnotations;
     final currentNode = broadcastAnalysisState.currentNode;
 
-    final bestMoves =
-        showBestMoveArrow
-            ? pickBestClientEval(
-              localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
-              savedEval: currentNode.eval,
-            )?.bestMoves
-            : null;
-    final ISet<Shape> bestMoveShapes =
-        bestMoves != null
-            ? computeBestMoveShapes(
-              bestMoves,
-              currentNode.position.turn,
-              boardPrefs.pieceSet.assets,
-            )
-            : ISet();
+    final bestMoves = showBestMoveArrow
+        ? pickBestClientEval(
+            localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
+            savedEval: currentNode.eval,
+          )?.bestMoves
+        : null;
+    final ISet<Shape> bestMoveShapes = bestMoves != null
+        ? computeBestMoveShapes(bestMoves, currentNode.position.turn, boardPrefs.pieceSet.assets)
+        : ISet();
 
     final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
@@ -341,23 +338,21 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
       game: boardPrefs.toGameData(
         variant: Variant.standard,
         position: broadcastAnalysisState.position,
-        playerSide:
-            broadcastAnalysisState.position.isGameOver
-                ? PlayerSide.none
-                : broadcastAnalysisState.position.turn == Side.white
-                ? PlayerSide.white
-                : PlayerSide.black,
+        playerSide: broadcastAnalysisState.position.isGameOver
+            ? PlayerSide.none
+            : broadcastAnalysisState.position.turn == Side.white
+            ? PlayerSide.white
+            : PlayerSide.black,
         promotionMove: broadcastAnalysisState.promotionMove,
         onMove: (move, {isDrop, captured}) => ref.read(ctrlProvider.notifier).onUserMove(move),
         onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       ),
       shapes: userShapes.union(bestMoveShapes),
-      annotations:
-          sanMove != null && annotation != null
-              ? altCastles.containsKey(sanMove.move.uci)
-                  ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
-                  : IMap({sanMove.move.to: annotation})
-              : null,
+      annotations: sanMove != null && annotation != null
+          ? altCastles.containsKey(sanMove.move.uci)
+                ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
+                : IMap({sanMove.move.to: annotation})
+          : null,
       settings: boardPrefs.toBoardSettings().copyWith(
         borderRadius: widget.borderRadius,
         boxShadow: widget.borderRadius != null ? boardShadows : const <BoxShadow>[],
@@ -409,8 +404,9 @@ class _PlayerWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(broadcastRoundGameProvider(roundId, gameId))) {
       case AsyncValue(value: final game?, hasValue: true):
-        final broadcastAnalysisState =
-            ref.watch(broadcastAnalysisControllerProvider(roundId, gameId)).requireValue;
+        final broadcastAnalysisState = ref
+            .watch(broadcastAnalysisControllerProvider(roundId, gameId))
+            .requireValue;
 
         final isCursorOnLiveMove =
             broadcastAnalysisState.currentPath == broadcastAnalysisState.broadcastLivePath;
@@ -457,34 +453,31 @@ class _PlayerWidget extends ConsumerWidget {
                 if (liveClock != null || pastClock != null)
                   Container(
                     height: kAnalysisBoardHeaderOrFooterHeight,
-                    color:
-                        isClockActive
-                            ? ColorScheme.of(context).tertiaryContainer
-                            : (side == sideToMove)
-                            ? ColorScheme.of(context).secondaryContainer
-                            : Colors.transparent,
+                    color: isClockActive
+                        ? ColorScheme.of(context).tertiaryContainer
+                        : (side == sideToMove)
+                        ? ColorScheme.of(context).secondaryContainer
+                        : Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
                       child: Center(
-                        child:
-                            liveClock != null
-                                ? CountdownClockBuilder(
-                                  timeLeft: liveClock,
-                                  active: isClockActive,
-                                  builder:
-                                      (context, timeLeft) => _Clock(
-                                        timeLeft: timeLeft,
-                                        isSideToMove: side == sideToMove,
-                                        isClockActive: isClockActive,
-                                      ),
-                                  tickInterval: const Duration(seconds: 1),
-                                  clockUpdatedAt: game.updatedClockAt,
-                                )
-                                : _Clock(
-                                  timeLeft: pastClock!,
+                        child: liveClock != null
+                            ? CountdownClockBuilder(
+                                timeLeft: liveClock,
+                                active: isClockActive,
+                                builder: (context, timeLeft) => _Clock(
+                                  timeLeft: timeLeft,
                                   isSideToMove: side == sideToMove,
-                                  isClockActive: false,
+                                  isClockActive: isClockActive,
                                 ),
+                                tickInterval: const Duration(seconds: 1),
+                                clockUpdatedAt: game.updatedClockAt,
+                              )
+                            : _Clock(
+                                timeLeft: pastClock!,
+                                isSideToMove: side == sideToMove,
+                                isClockActive: false,
+                              ),
                       ),
                     ),
                   ),
@@ -512,12 +505,11 @@ class _Clock extends StatelessWidget {
     return Text(
       timeLeft.toHoursMinutesSeconds(),
       style: TextStyle(
-        color:
-            isClockActive
-                ? ColorScheme.of(context).onTertiaryContainer
-                : isSideToMove
-                ? ColorScheme.of(context).onSecondaryContainer
-                : null,
+        color: isClockActive
+            ? ColorScheme.of(context).onTertiaryContainer
+            : isSideToMove
+            ? ColorScheme.of(context).onSecondaryContainer
+            : null,
         fontFeatures: const [FontFeature.tabularFigures()],
       ),
     );
@@ -539,7 +531,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
+    final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
@@ -628,17 +620,17 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
                 return BottomBarButton(
                   label: context.l10n.toggleLocalEvaluation,
                   onTap:
-                      analysisPrefs.enableComputerAnalysis &&
-                              snapshot.connectionState != ConnectionState.waiting
-                          ? () async {
-                            toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
-                            try {
-                              await toggleFuture;
-                            } finally {
-                              toggleFuture = null;
-                            }
+                      broadcastPrefs.enableComputerAnalysis &&
+                          snapshot.connectionState != ConnectionState.waiting
+                      ? () async {
+                          toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
+                          try {
+                            await toggleFuture;
+                          } finally {
+                            toggleFuture = null;
                           }
-                          : null,
+                        }
+                      : null,
                   icon: CupertinoIcons.gauge,
                   highlighted: broadcastAnalysisState.isEngineAvailable(enginePrefs),
                 );

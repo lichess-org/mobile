@@ -58,132 +58,135 @@ class ServerAnalysisSummary extends ConsumerWidget {
 
     return playersAnalysis != null
         ? ListView(
-          children: [
-            if (currentGameAnalysis == options.gameId)
-              const Padding(padding: EdgeInsets.only(top: 16.0), child: WaitingForServerAnalysis()),
-            AcplChart(options),
-            Center(
-              child: SizedBox(
-                width: math.min(MediaQuery.sizeOf(context).width, 500),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Table(
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    columnWidths: const {
-                      0: FlexColumnWidth(1),
-                      1: FlexColumnWidth(1),
-                      2: FlexColumnWidth(1),
-                    },
-                    children: [
-                      TableRow(
-                        decoration: const BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Colors.grey)),
-                        ),
-                        children: [
-                          _SummaryPlayerName(Side.white, pgnHeaders),
-                          Center(
-                            child: Text(
-                              pgnHeaders.get('Result') ?? '',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
+            children: [
+              if (currentGameAnalysis == options.gameId)
+                const Padding(
+                  padding: EdgeInsets.only(top: 16.0),
+                  child: WaitingForServerAnalysis(),
+                ),
+              AcplChart(options),
+              Center(
+                child: SizedBox(
+                  width: math.min(MediaQuery.sizeOf(context).width, 500),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Table(
+                      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                      columnWidths: const {
+                        0: FlexColumnWidth(1),
+                        1: FlexColumnWidth(1),
+                        2: FlexColumnWidth(1),
+                      },
+                      children: [
+                        TableRow(
+                          decoration: const BoxDecoration(
+                            border: Border(bottom: BorderSide(color: Colors.grey)),
                           ),
-                          _SummaryPlayerName(Side.black, pgnHeaders),
-                        ],
-                      ),
-                      if (playersAnalysis.white.accuracy != null &&
-                          playersAnalysis.black.accuracy != null)
-                        TableRow(
                           children: [
-                            _SummaryNumber('${playersAnalysis.white.accuracy}%'),
+                            _SummaryPlayerName(Side.white, pgnHeaders),
                             Center(
-                              heightFactor: 1.8,
-                              child: Text(context.l10n.accuracy, softWrap: true),
-                            ),
-                            _SummaryNumber('${playersAnalysis.black.accuracy}%'),
-                          ],
-                        ),
-                      for (final item in [
-                        (
-                          playersAnalysis.white.inaccuracies.toString(),
-                          context.l10n.nbInaccuracies(2).replaceAll('2', '').trim().capitalize(),
-                          playersAnalysis.black.inaccuracies.toString(),
-                        ),
-                        (
-                          playersAnalysis.white.mistakes.toString(),
-                          context.l10n.nbMistakes(2).replaceAll('2', '').trim().capitalize(),
-                          playersAnalysis.black.mistakes.toString(),
-                        ),
-                        (
-                          playersAnalysis.white.blunders.toString(),
-                          context.l10n.nbBlunders(2).replaceAll('2', '').trim().capitalize(),
-                          playersAnalysis.black.blunders.toString(),
-                        ),
-                      ])
-                        TableRow(
-                          children: [
-                            _SummaryNumber(item.$1),
-                            Center(heightFactor: 1.2, child: Text(item.$2, softWrap: true)),
-                            _SummaryNumber(item.$3),
-                          ],
-                        ),
-                      if (playersAnalysis.white.acpl != null && playersAnalysis.black.acpl != null)
-                        TableRow(
-                          children: [
-                            _SummaryNumber(playersAnalysis.white.acpl.toString()),
-                            Center(
-                              heightFactor: 1.5,
                               child: Text(
-                                context.l10n.averageCentipawnLoss,
-                                softWrap: true,
-                                textAlign: TextAlign.center,
+                                pgnHeaders.get('Result') ?? '',
+                                style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
-                            _SummaryNumber(playersAnalysis.black.acpl.toString()),
+                            _SummaryPlayerName(Side.black, pgnHeaders),
                           ],
                         ),
-                    ],
+                        if (playersAnalysis.white.accuracy != null &&
+                            playersAnalysis.black.accuracy != null)
+                          TableRow(
+                            children: [
+                              _SummaryNumber('${playersAnalysis.white.accuracy}%'),
+                              Center(
+                                heightFactor: 1.8,
+                                child: Text(context.l10n.accuracy, softWrap: true),
+                              ),
+                              _SummaryNumber('${playersAnalysis.black.accuracy}%'),
+                            ],
+                          ),
+                        for (final item in [
+                          (
+                            playersAnalysis.white.inaccuracies.toString(),
+                            context.l10n.nbInaccuracies(2).replaceAll('2', '').trim().capitalize(),
+                            playersAnalysis.black.inaccuracies.toString(),
+                          ),
+                          (
+                            playersAnalysis.white.mistakes.toString(),
+                            context.l10n.nbMistakes(2).replaceAll('2', '').trim().capitalize(),
+                            playersAnalysis.black.mistakes.toString(),
+                          ),
+                          (
+                            playersAnalysis.white.blunders.toString(),
+                            context.l10n.nbBlunders(2).replaceAll('2', '').trim().capitalize(),
+                            playersAnalysis.black.blunders.toString(),
+                          ),
+                        ])
+                          TableRow(
+                            children: [
+                              _SummaryNumber(item.$1),
+                              Center(heightFactor: 1.2, child: Text(item.$2, softWrap: true)),
+                              _SummaryNumber(item.$3),
+                            ],
+                          ),
+                        if (playersAnalysis.white.acpl != null &&
+                            playersAnalysis.black.acpl != null)
+                          TableRow(
+                            children: [
+                              _SummaryNumber(playersAnalysis.white.acpl.toString()),
+                              Center(
+                                heightFactor: 1.5,
+                                child: Text(
+                                  context.l10n.averageCentipawnLoss,
+                                  softWrap: true,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              _SummaryNumber(playersAnalysis.black.acpl.toString()),
+                            ],
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        )
+            ],
+          )
         : Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Spacer(),
-            if (currentGameAnalysis == options.gameId)
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: WaitingForServerAnalysis(),
-                ),
-              )
-            else
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Builder(
-                    builder: (context) {
-                      Future<void>? pendingRequest;
-                      return StatefulBuilder(
-                        builder: (context, setState) {
-                          return FutureBuilder<void>(
-                            future: pendingRequest,
-                            builder: (context, snapshot) {
-                              return FilledButton.tonal(
-                                onPressed:
-                                    ref.watch(authSessionProvider) == null
-                                        ? () {
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Spacer(),
+              if (currentGameAnalysis == options.gameId)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: WaitingForServerAnalysis(),
+                  ),
+                )
+              else
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Builder(
+                      builder: (context) {
+                        Future<void>? pendingRequest;
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return FutureBuilder<void>(
+                              future: pendingRequest,
+                              builder: (context, snapshot) {
+                                return FilledButton.tonal(
+                                  onPressed: ref.watch(authSessionProvider) == null
+                                      ? () {
                                           showSnackBar(
                                             context,
                                             context.l10n.youNeedAnAccountToDoThat,
                                           );
                                         }
-                                        : snapshot.connectionState == ConnectionState.waiting
-                                        ? null
-                                        : () {
+                                      : snapshot.connectionState == ConnectionState.waiting
+                                      ? null
+                                      : () {
                                           setState(() {
                                             pendingRequest = ref
                                                 .read(ctrlProvider.notifier)
@@ -199,19 +202,19 @@ class ServerAnalysisSummary extends ConsumerWidget {
                                                 });
                                           });
                                         },
-                                child: Text(context.l10n.requestAComputerAnalysis),
-                              );
-                            },
-                          );
-                        },
-                      );
-                    },
+                                  child: Text(context.l10n.requestAComputerAnalysis),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-            const Spacer(),
-          ],
-        );
+              const Spacer(),
+            ],
+          );
   }
 }
 
@@ -251,12 +254,12 @@ class _SummaryPlayerName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playerTitle =
-        side == Side.white ? pgnHeaders.get('WhiteTitle') : pgnHeaders.get('BlackTitle');
-    final playerName =
-        side == Side.white
-            ? pgnHeaders.get('White') ?? context.l10n.white
-            : pgnHeaders.get('Black') ?? context.l10n.black;
+    final playerTitle = side == Side.white
+        ? pgnHeaders.get('WhiteTitle')
+        : pgnHeaders.get('BlackTitle');
+    final playerName = side == Side.white
+        ? pgnHeaders.get('White') ?? context.l10n.white
+        : pgnHeaders.get('Black') ?? context.l10n.black;
 
     final brightness = Theme.of(context).brightness;
 
@@ -270,8 +273,8 @@ class _SummaryPlayerName extends StatelessWidget {
               Icon(
                 side == Side.white
                     ? brightness == Brightness.light
-                        ? CupertinoIcons.circle
-                        : CupertinoIcons.circle_filled
+                          ? CupertinoIcons.circle
+                          : CupertinoIcons.circle_filled
                     : brightness == Brightness.light
                     ? CupertinoIcons.circle_filled
                     : CupertinoIcons.circle,

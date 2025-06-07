@@ -130,16 +130,16 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
     Locale('af'),
     Locale('ar'),
     Locale('az'),
@@ -152,6 +152,7 @@ abstract class AppLocalizations {
     Locale('da'),
     Locale('de'),
     Locale('el'),
+    Locale('en'),
     Locale('en', 'US'),
     Locale('eo'),
     Locale('es'),
@@ -191,7 +192,7 @@ abstract class AppLocalizations {
     Locale('uk'),
     Locale('vi'),
     Locale('zh'),
-    Locale('zh', 'TW')
+    Locale('zh', 'TW'),
   ];
 
   /// No description provided for @mobileAllGames.
@@ -365,7 +366,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobileSettingsImmersiveModeSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.'**
+  /// **'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.'**
   String get mobileSettingsImmersiveModeSubtitle;
 
   /// No description provided for @mobileSettingsTab.
@@ -2564,12 +2565,6 @@ abstract class AppLocalizations {
   /// **'Lookup puzzles from a player\'s games'**
   String get puzzleLookupOfPlayer;
 
-  /// No description provided for @puzzleFromXGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzles from {param}\' games'**
-  String puzzleFromXGames(String param);
-
   /// No description provided for @puzzleSearchPuzzles.
   ///
   /// In en, this message translates to:
@@ -2581,12 +2576,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!'**
   String get puzzleFromMyGamesNone;
-
-  /// No description provided for @puzzleFromXGamesFound.
-  ///
-  /// In en, this message translates to:
-  /// **'{param1} puzzles found in {param2} games'**
-  String puzzleFromXGamesFound(String param1, String param2);
 
   /// No description provided for @puzzlePuzzleDashboardDescription.
   ///
@@ -2635,6 +2624,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}'**
   String puzzleNbPointsAboveYourPuzzleRating(int count);
+
+  /// No description provided for @puzzlePuzzlesFoundInUserGames.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One puzzle found in games by {param2}} other{{count} puzzles found in games by {param2}}}'**
+  String puzzlePuzzlesFoundInUserGames(int count, String param2);
 
   /// No description provided for @puzzleNbPlayed.
   ///
@@ -3596,6 +3591,12 @@ abstract class AppLocalizations {
   /// **'Create a game'**
   String get createAGame;
 
+  /// No description provided for @createTheGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Create the game'**
+  String get createTheGame;
+
   /// No description provided for @whiteIsVictorious.
   ///
   /// In en, this message translates to:
@@ -3883,6 +3884,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy variation PGN'**
   String get copyVariationPgn;
+
+  /// No description provided for @copyMainLinePgn.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy mainline PGN'**
+  String get copyMainLinePgn;
 
   /// No description provided for @move.
   ///
@@ -4244,6 +4251,12 @@ abstract class AppLocalizations {
   /// **'Current games'**
   String get currentGames;
 
+  /// No description provided for @joinedX.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined {param}'**
+  String joinedX(String param);
+
   /// No description provided for @viewInFullSize.
   ///
   /// In en, this message translates to:
@@ -4445,7 +4458,7 @@ abstract class AppLocalizations {
   /// No description provided for @signupUsernameHint.
   ///
   /// In en, this message translates to:
-  /// **'Make sure to choose a family-friendly username. You cannot change it later and any accounts with inappropriate usernames will get closed!'**
+  /// **'Make sure to choose a username that\'s appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!'**
   String get signupUsernameHint;
 
   /// No description provided for @signupEmailHint.
@@ -4976,29 +4989,59 @@ abstract class AppLocalizations {
   /// **'Propose a takeback'**
   String get proposeATakeback;
 
+  /// No description provided for @whiteProposesTakeback.
+  ///
+  /// In en, this message translates to:
+  /// **'White proposes takeback'**
+  String get whiteProposesTakeback;
+
+  /// No description provided for @blackProposesTakeback.
+  ///
+  /// In en, this message translates to:
+  /// **'Black proposes takeback'**
+  String get blackProposesTakeback;
+
   /// No description provided for @takebackPropositionSent.
   ///
   /// In en, this message translates to:
   /// **'Takeback sent'**
   String get takebackPropositionSent;
 
-  /// No description provided for @takebackPropositionDeclined.
+  /// No description provided for @whiteDeclinesTakeback.
   ///
   /// In en, this message translates to:
-  /// **'Takeback declined'**
-  String get takebackPropositionDeclined;
+  /// **'White declines takeback'**
+  String get whiteDeclinesTakeback;
 
-  /// No description provided for @takebackPropositionAccepted.
+  /// No description provided for @blackDeclinesTakeback.
   ///
   /// In en, this message translates to:
-  /// **'Takeback accepted'**
-  String get takebackPropositionAccepted;
+  /// **'Black declines takeback'**
+  String get blackDeclinesTakeback;
 
-  /// No description provided for @takebackPropositionCanceled.
+  /// No description provided for @whiteAcceptsTakeback.
   ///
   /// In en, this message translates to:
-  /// **'Takeback cancelled'**
-  String get takebackPropositionCanceled;
+  /// **'White accepts takeback'**
+  String get whiteAcceptsTakeback;
+
+  /// No description provided for @blackAcceptsTakeback.
+  ///
+  /// In en, this message translates to:
+  /// **'Black accepts takeback'**
+  String get blackAcceptsTakeback;
+
+  /// No description provided for @whiteCancelsTakeback.
+  ///
+  /// In en, this message translates to:
+  /// **'White cancels takeback'**
+  String get whiteCancelsTakeback;
+
+  /// No description provided for @blackCancelsTakeback.
+  ///
+  /// In en, this message translates to:
+  /// **'Black cancels takeback'**
+  String get blackCancelsTakeback;
 
   /// No description provided for @yourOpponentProposesATakeback.
   ///
@@ -6529,6 +6572,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Terms of Service'**
   String get termsOfService;
+
+  /// No description provided for @titleVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Title verification'**
+  String get titleVerification;
 
   /// No description provided for @sourceCode.
   ///
@@ -8342,6 +8391,24 @@ abstract class AppLocalizations {
   /// **'Stats'**
   String get stats;
 
+  /// No description provided for @accessibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility'**
+  String get accessibility;
+
+  /// No description provided for @enableBlindMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable blind mode'**
+  String get enableBlindMode;
+
+  /// No description provided for @disableBlindMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable blind mode'**
+  String get disableBlindMode;
+
   /// No description provided for @opponentLeftCounter.
   ///
   /// In en, this message translates to:
@@ -10016,6 +10083,24 @@ abstract class AppLocalizations {
   /// **'Chapters are saved forever.<br>Have fun organizing your chess content!'**
   String get studyChapterConclusionText;
 
+  /// No description provided for @studyDoubleDefeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Double defeat'**
+  String get studyDoubleDefeat;
+
+  /// No description provided for @studyBlackDefeatWhiteCanNotWin.
+  ///
+  /// In en, this message translates to:
+  /// **'Black defeat, but White can\'t win'**
+  String get studyBlackDefeatWhiteCanNotWin;
+
+  /// No description provided for @studyWhiteDefeatBlackCanNotWin.
+  ///
+  /// In en, this message translates to:
+  /// **'White defeat, but Black can\'t win'**
+  String get studyWhiteDefeatBlackCanNotWin;
+
   /// No description provided for @studyNbChapters.
   ///
   /// In en, this message translates to:
@@ -10158,94 +10243,200 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'af', 'ar', 'az', 'be', 'bg', 'bn', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'gl', 'gsw', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lt', 'lv', 'mk', 'nb', 'nl', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'af',
+    'ar',
+    'az',
+    'be',
+    'bg',
+    'bn',
+    'bs',
+    'ca',
+    'cs',
+    'da',
+    'de',
+    'el',
+    'en',
+    'eo',
+    'es',
+    'et',
+    'eu',
+    'fa',
+    'fi',
+    'fr',
+    'gl',
+    'gsw',
+    'he',
+    'hi',
+    'hr',
+    'hu',
+    'hy',
+    'id',
+    'it',
+    'ja',
+    'kk',
+    'ko',
+    'lt',
+    'lv',
+    'mk',
+    'nb',
+    'nl',
+    'pl',
+    'pt',
+    'ro',
+    'ru',
+    'sk',
+    'sl',
+    'sq',
+    'sr',
+    'sv',
+    'tr',
+    'uk',
+    'vi',
+    'zh',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
   // Lookup logic when language+country codes are specified.
   switch (locale.languageCode) {
-    case 'en': {
-  switch (locale.countryCode) {
-    case 'US': return AppLocalizationsEnUs();
-   }
-  break;
-   }
-    case 'pt': {
-  switch (locale.countryCode) {
-    case 'BR': return AppLocalizationsPtBr();
-   }
-  break;
-   }
-    case 'zh': {
-  switch (locale.countryCode) {
-    case 'TW': return AppLocalizationsZhTw();
-   }
-  break;
-   }
+    case 'en':
+      {
+        switch (locale.countryCode) {
+          case 'US':
+            return AppLocalizationsEnUs();
+        }
+        break;
+      }
+    case 'pt':
+      {
+        switch (locale.countryCode) {
+          case 'BR':
+            return AppLocalizationsPtBr();
+        }
+        break;
+      }
+    case 'zh':
+      {
+        switch (locale.countryCode) {
+          case 'TW':
+            return AppLocalizationsZhTw();
+        }
+        break;
+      }
   }
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return AppLocalizationsEn();
-    case 'af': return AppLocalizationsAf();
-    case 'ar': return AppLocalizationsAr();
-    case 'az': return AppLocalizationsAz();
-    case 'be': return AppLocalizationsBe();
-    case 'bg': return AppLocalizationsBg();
-    case 'bn': return AppLocalizationsBn();
-    case 'bs': return AppLocalizationsBs();
-    case 'ca': return AppLocalizationsCa();
-    case 'cs': return AppLocalizationsCs();
-    case 'da': return AppLocalizationsDa();
-    case 'de': return AppLocalizationsDe();
-    case 'el': return AppLocalizationsEl();
-    case 'eo': return AppLocalizationsEo();
-    case 'es': return AppLocalizationsEs();
-    case 'et': return AppLocalizationsEt();
-    case 'eu': return AppLocalizationsEu();
-    case 'fa': return AppLocalizationsFa();
-    case 'fi': return AppLocalizationsFi();
-    case 'fr': return AppLocalizationsFr();
-    case 'gl': return AppLocalizationsGl();
-    case 'gsw': return AppLocalizationsGsw();
-    case 'he': return AppLocalizationsHe();
-    case 'hi': return AppLocalizationsHi();
-    case 'hr': return AppLocalizationsHr();
-    case 'hu': return AppLocalizationsHu();
-    case 'hy': return AppLocalizationsHy();
-    case 'id': return AppLocalizationsId();
-    case 'it': return AppLocalizationsIt();
-    case 'ja': return AppLocalizationsJa();
-    case 'kk': return AppLocalizationsKk();
-    case 'ko': return AppLocalizationsKo();
-    case 'lt': return AppLocalizationsLt();
-    case 'lv': return AppLocalizationsLv();
-    case 'mk': return AppLocalizationsMk();
-    case 'nb': return AppLocalizationsNb();
-    case 'nl': return AppLocalizationsNl();
-    case 'pl': return AppLocalizationsPl();
-    case 'pt': return AppLocalizationsPt();
-    case 'ro': return AppLocalizationsRo();
-    case 'ru': return AppLocalizationsRu();
-    case 'sk': return AppLocalizationsSk();
-    case 'sl': return AppLocalizationsSl();
-    case 'sq': return AppLocalizationsSq();
-    case 'sr': return AppLocalizationsSr();
-    case 'sv': return AppLocalizationsSv();
-    case 'tr': return AppLocalizationsTr();
-    case 'uk': return AppLocalizationsUk();
-    case 'vi': return AppLocalizationsVi();
-    case 'zh': return AppLocalizationsZh();
+    case 'af':
+      return AppLocalizationsAf();
+    case 'ar':
+      return AppLocalizationsAr();
+    case 'az':
+      return AppLocalizationsAz();
+    case 'be':
+      return AppLocalizationsBe();
+    case 'bg':
+      return AppLocalizationsBg();
+    case 'bn':
+      return AppLocalizationsBn();
+    case 'bs':
+      return AppLocalizationsBs();
+    case 'ca':
+      return AppLocalizationsCa();
+    case 'cs':
+      return AppLocalizationsCs();
+    case 'da':
+      return AppLocalizationsDa();
+    case 'de':
+      return AppLocalizationsDe();
+    case 'el':
+      return AppLocalizationsEl();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'eo':
+      return AppLocalizationsEo();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'et':
+      return AppLocalizationsEt();
+    case 'eu':
+      return AppLocalizationsEu();
+    case 'fa':
+      return AppLocalizationsFa();
+    case 'fi':
+      return AppLocalizationsFi();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'gl':
+      return AppLocalizationsGl();
+    case 'gsw':
+      return AppLocalizationsGsw();
+    case 'he':
+      return AppLocalizationsHe();
+    case 'hi':
+      return AppLocalizationsHi();
+    case 'hr':
+      return AppLocalizationsHr();
+    case 'hu':
+      return AppLocalizationsHu();
+    case 'hy':
+      return AppLocalizationsHy();
+    case 'id':
+      return AppLocalizationsId();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'ja':
+      return AppLocalizationsJa();
+    case 'kk':
+      return AppLocalizationsKk();
+    case 'ko':
+      return AppLocalizationsKo();
+    case 'lt':
+      return AppLocalizationsLt();
+    case 'lv':
+      return AppLocalizationsLv();
+    case 'mk':
+      return AppLocalizationsMk();
+    case 'nb':
+      return AppLocalizationsNb();
+    case 'nl':
+      return AppLocalizationsNl();
+    case 'pl':
+      return AppLocalizationsPl();
+    case 'pt':
+      return AppLocalizationsPt();
+    case 'ro':
+      return AppLocalizationsRo();
+    case 'ru':
+      return AppLocalizationsRu();
+    case 'sk':
+      return AppLocalizationsSk();
+    case 'sl':
+      return AppLocalizationsSl();
+    case 'sq':
+      return AppLocalizationsSq();
+    case 'sr':
+      return AppLocalizationsSr();
+    case 'sv':
+      return AppLocalizationsSv();
+    case 'tr':
+      return AppLocalizationsTr();
+    case 'uk':
+      return AppLocalizationsUk();
+    case 'vi':
+      return AppLocalizationsVi();
+    case 'zh':
+      return AppLocalizationsZh();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
+    'that was used.',
   );
 }

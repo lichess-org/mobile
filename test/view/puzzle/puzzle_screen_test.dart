@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../model/auth/fake_session_storage.dart';
@@ -617,6 +618,89 @@ void main() {
       expect(captured[2].solved, [PuzzleSolution(id: puzzle.puzzle.id, win: false, rated: true)]);
       expect(captured[3].solved.length, 0);
     });
+  });
+
+  testWidgets('can disable puzzle rating for a run', variant: kPlatformVariant, (
+    WidgetTester tester,
+  ) async {
+    final mockClient = MockClient((request) {
+      if (request.url.path == '/api/puzzle/batch/mix') {
+        return mockResponse(batchOf1, 200);
+      }
+      return mockResponse('', 404);
+    });
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: PuzzleScreen(
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        puzzleId: puzzle2.puzzle.id,
+        openCasualRun: true,
+      ),
+      overrides: [
+        lichessClientProvider.overrideWith((ref) {
+          return LichessClient(mockClient, ref);
+        }),
+        puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
+        puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+      ],
+      userSession: fakeSession,
+    );
+
+    Future<void> saveDBReq() => mockBatchStorage.save(
+      userId: fakeSession.user.id,
+      angle: const PuzzleTheme(PuzzleThemeKey.mix),
+      data: captureAny(named: 'data'),
+    );
+    when(saveDBReq).thenAnswer((_) async {});
+    when(
+      () => mockBatchStorage.fetch(
+        userId: fakeSession.user.id,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+      ),
+    ).thenAnswer((_) async => batch);
+
+    when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
+
+    await tester.pumpWidget(app);
+
+    // wait for the puzzle to load
+    await tester.pump(const Duration(milliseconds: 200));
+
+    // open settings
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+
+    // see the disabled rating switch
+    expect(find.widgetWithText(SwitchSettingTile, 'Rated'), findsOneWidget);
+    expect(
+      tester.widget<SwitchSettingTile>(find.widgetWithText(SwitchSettingTile, 'Rated')).value,
+      isFalse,
+    );
+    // the switch is disabled
+    expect(
+      tester.widget<SwitchSettingTile>(find.widgetWithText(SwitchSettingTile, 'Rated')).onChanged,
+      null,
+    );
+
+    // dismiss settings by tapping outside of the bottom sheet
+    await tester.tapAt(const Offset(100, 100));
+
+    // wait for first move to be played and view solution button to appear
+    await tester.pump(const Duration(seconds: 5));
+
+    // view solution
+    expect(find.byIcon(Icons.help), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.help));
+
+    // wait for solution replay animation to finish
+    await tester.pump(const Duration(seconds: 1));
+
+    // check puzzle was saved as non rated
+    final captured = verify(saveDBReq).captured.map((e) => e as PuzzleBatch).toList();
+    expect(captured.length, 2);
+    expect(captured[0].solved, [PuzzleSolution(id: puzzle2.puzzle.id, win: false, rated: false)]);
+    expect(captured[1].solved.length, 0);
   });
 }
 

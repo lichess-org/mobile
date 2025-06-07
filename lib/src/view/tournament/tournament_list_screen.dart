@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_faq.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -80,6 +81,13 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
       child: PlatformScaffold(
         appBar: PlatformAppBar(
           title: Text(context.l10n.arenaArenaTournaments),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.help_outline),
+              tooltip: context.l10n.tournamentFAQ,
+              onPressed: () => Navigator.of(context).push(TournamentFAQScreen.buildRoute(context)),
+            ),
+          ],
           bottom: TabBar(
             controller: _tabController,
             tabs: <Widget>[
@@ -115,7 +123,7 @@ class FeaturedTournamentsWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     switch (featured) {
       case AsyncData(:final value):
-        if (value.where((t) => playSupportedVariants.contains(t.meta.variant)).isEmpty) {
+        if (value.where((t) => t.isSupportedInApp).isEmpty) {
           return const SizedBox.shrink();
         }
         return ListSection(
@@ -165,15 +173,13 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
     final List<LightTournament> systemTours = [];
     final List<LightTournament> userTours = [];
 
-    widget.tournaments
-        .where((tournament) => playSupportedVariants.contains(tournament.meta.variant))
-        .forEach((tournament) {
-          if (tournament.isSystemTournament) {
-            systemTours.add(tournament);
-          } else {
-            userTours.add(tournament);
-          }
-        });
+    widget.tournaments.where((tournament) => tournament.isSupportedInApp).forEach((tournament) {
+      if (tournament.isSystemTournament) {
+        systemTours.add(tournament);
+      } else {
+        userTours.add(tournament);
+      }
+    });
 
     final sortedSystemTours = systemTours
         .sorted((a, b) {
@@ -210,20 +216,17 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
     ];
 
     return RefreshIndicator.adaptive(
-      edgeOffset:
-          Theme.of(context).platform == TargetPlatform.iOS
-              ? MediaQuery.paddingOf(context).top + kToolbarHeight
-              : 0.0,
+      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+          ? MediaQuery.paddingOf(context).top + kToolbarHeight
+          : 0.0,
       key: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(tournamentsProvider),
       child: ListView.separated(
         shrinkWrap: true,
         itemCount: tournamentListItems.length,
-        separatorBuilder:
-            (context, index) =>
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-                    : const SizedBox.shrink(),
+        separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+            ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+            : const SizedBox.shrink(),
         itemBuilder: (context, index) => tournamentListItems[index],
       ),
     );
@@ -234,11 +237,11 @@ Color? _iconColor(LightTournament tournament) {
   return tournament.meta.maxRating != null
       ? LichessColors.purple
       : switch (tournament.meta.freq) {
-        TournamentFreq.hourly => LichessColors.green,
-        TournamentFreq.daily => LichessColors.blue,
-        TournamentFreq.monthly => LichessColors.red,
-        _ => null,
-      };
+          TournamentFreq.hourly => LichessColors.green,
+          TournamentFreq.daily => LichessColors.blue,
+          TournamentFreq.monthly => LichessColors.red,
+          _ => null,
+        };
 }
 
 class _TournamentListItem extends StatelessWidget {
@@ -278,11 +281,10 @@ class _TournamentListItem extends StatelessWidget {
           ),
         ],
       ),
-      onTap:
-          () => Navigator.of(
-            context,
-            rootNavigator: true,
-          ).push(TournamentScreen.buildRoute(context, tournament.id)),
+      onTap: () => Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(TournamentScreen.buildRoute(context, tournament.id)),
     );
   }
 }

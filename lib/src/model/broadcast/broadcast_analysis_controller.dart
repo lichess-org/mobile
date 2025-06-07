@@ -6,7 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -127,7 +127,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
-    final prefs = ref.read(analysisPreferencesProvider);
+    final prefs = ref.read(broadcastPreferencesProvider);
 
     final broadcastState = BroadcastAnalysisState(
       id: gameId,
@@ -180,18 +180,18 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       final newRoot = Root.fromPgnGame(game, isLichessAnalysis: true);
 
       final broadcastPath = newRoot.mainlinePath;
-      final lastMove =
-          wasOnLivePath ? newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move : curState.lastMove;
+      final lastMove = wasOnLivePath
+          ? newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move
+          : curState.lastMove;
 
       newRoot.merge(_root);
 
       _root = newRoot;
 
       final newCurrentPath = wasOnLivePath ? broadcastPath : curState.currentPath;
-      final newCurrentNode =
-          wasOnLivePath
-              ? AnalysisCurrentNode.fromNode(_root.nodeAt(newCurrentPath))
-              : curState.currentNode;
+      final newCurrentNode = wasOnLivePath
+          ? AnalysisCurrentNode.fromNode(_root.nodeAt(newCurrentPath))
+          : curState.currentNode;
 
       state = AsyncData(
         state.requireValue.copyWith(
@@ -420,7 +420,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   ///
   /// Acts both on engine evaluation and server analysis.
   Future<void> toggleComputerAnalysis() async {
-    await ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
+    await ref.read(broadcastPreferencesProvider.notifier).toggleEnableComputerAnalysis();
 
     final curState = state.requireValue;
     final engineWasAvailable = curState.isEngineAvailable(evaluationPrefs);
@@ -459,8 +459,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView =
-        shouldForceShowVariation || shouldRecomputeRootView ? _root.view : state.requireValue.root;
+    final rootView = shouldForceShowVariation || shouldRecomputeRootView
+        ? _root.view
+        : state.requireValue.root;
 
     final isForward = path.size > state.requireValue.currentPath.size;
     if (currentNode is Branch) {
@@ -524,7 +525,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 }
 
 @freezed
-class BroadcastAnalysisState with _$BroadcastAnalysisState implements EvaluationMixinState {
+sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements EvaluationMixinState {
   const BroadcastAnalysisState._();
 
   const factory BroadcastAnalysisState({

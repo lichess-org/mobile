@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
-import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -72,7 +71,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   static const offlineWidget = Center(
-    child: Text('No internet connection.', style: TextStyle(color: Colors.grey, fontSize: 20.0)),
+    child: Text('No internet connection.', style: Styles.noResultTextStyle),
   );
 
   @override
@@ -94,23 +93,20 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(leading: const AccountIconButton(), title: Text(context.l10n.watch)),
-        floatingActionButton: const FloatingPlayButton(),
-        body:
-            isOnline
-                ? OrientationBuilder(
-                  builder: (context, orientation) {
-                    return RefreshIndicator.adaptive(
-                      edgeOffset:
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                              : 0.0,
-                      key: _androidRefreshKey,
-                      onRefresh: _refreshData,
-                      child: _Body(orientation),
-                    );
-                  },
-                )
-                : offlineWidget,
+        body: isOnline
+            ? OrientationBuilder(
+                builder: (context, orientation) {
+                  return RefreshIndicator.adaptive(
+                    edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                        ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                        : 0.0,
+                    key: _androidRefreshKey,
+                    onRefresh: _refreshData,
+                    child: _Body(orientation),
+                  );
+                },
+              )
+            : offlineWidget,
       ),
     );
   }
@@ -241,8 +237,8 @@ class _WatchTvWidget extends ConsumerWidget {
         return ListSection(
           header: const Text('Lichess TV'),
           hasLeading: true,
-          onHeaderTap:
-              () => Navigator.of(context).push(LiveTvChannelsScreen.buildRoute(context)).then((_) {
+          onHeaderTap: () =>
+              Navigator.of(context).push(LiveTvChannelsScreen.buildRoute(context)).then((_) {
                 if (context.mounted) {
                   _doRefreshDataForRef(ref);
                 }
@@ -257,21 +253,20 @@ class _WatchTvWidget extends ConsumerWidget {
                     aiLevel: snapshot.player.asPlayer.aiLevel,
                     rating: snapshot.player.rating,
                   ),
-                  onTap:
-                      () => Navigator.of(context, rootNavigator: true)
-                          .push(
-                            TvScreen.buildRoute(
-                              context,
-                              channel: snapshot.channel,
-                              gameId: snapshot.id,
-                              orientation: snapshot.player.side,
-                            ),
-                          )
-                          .then((_) {
-                            if (context.mounted) {
-                              _doRefreshDataForRef(ref);
-                            }
-                          }),
+                  onTap: () => Navigator.of(context, rootNavigator: true)
+                      .push(
+                        TvScreen.buildRoute(
+                          context,
+                          channel: snapshot.channel,
+                          gameId: snapshot.id,
+                          orientation: snapshot.player.side,
+                        ),
+                      )
+                      .then((_) {
+                        if (context.mounted) {
+                          _doRefreshDataForRef(ref);
+                        }
+                      }),
                 );
               })
               .toList(growable: false),
@@ -284,13 +279,12 @@ class _WatchTvWidget extends ConsumerWidget {
           child: Text('Could not load TV channels'),
         );
       },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: ListSection.loading(itemsNumber: 4, header: true, hasLeading: true),
-            ),
-          ),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(itemsNumber: 4, header: true, hasLeading: true),
+        ),
+      ),
     );
   }
 }
@@ -328,17 +322,12 @@ class _StreamerWidget extends ConsumerWidget {
           child: Text('Could not load live streamers'),
         );
       },
-      loading:
-          () => Shimmer(
-            child: ShimmerLoading(
-              isLoading: true,
-              child: ListSection.loading(
-                itemsNumber: numberOfItems,
-                header: true,
-                hasLeading: true,
-              ),
-            ),
-          ),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(itemsNumber: numberOfItems, header: true, hasLeading: true),
+        ),
+      ),
     );
   }
 }

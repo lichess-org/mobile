@@ -93,48 +93,47 @@ class _OpeningFamily extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child:
-          openingFamily.openings.isNotEmpty
-              ? ExpansionTile(
-                title: Text(openingFamily.name, overflow: TextOverflow.ellipsis, style: titleStyle),
-                subtitle: Text(
-                  '${openingFamily.count}',
-                  style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-                ),
-                children: [
-                  ListSection(
-                    children: [
-                      _OpeningTile(
-                        name: openingFamily.name,
-                        openingKey: openingFamily.key,
-                        count: openingFamily.count,
+      child: openingFamily.openings.isNotEmpty
+          ? ExpansionTile(
+              title: Text(openingFamily.name, overflow: TextOverflow.ellipsis, style: titleStyle),
+              subtitle: Text(
+                '${openingFamily.count}',
+                style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+              ),
+              children: [
+                ListSection(
+                  children: [
+                    _OpeningTile(
+                      name: openingFamily.name,
+                      openingKey: openingFamily.key,
+                      count: openingFamily.count,
+                      titleStyle: titleStyle,
+                    ),
+                    ...openingFamily.openings.map(
+                      (opening) => _OpeningTile(
+                        name: opening.name,
+                        openingKey: opening.key,
+                        count: opening.count,
                         titleStyle: titleStyle,
                       ),
-                      ...openingFamily.openings.map(
-                        (opening) => _OpeningTile(
-                          name: opening.name,
-                          openingKey: opening.key,
-                          count: opening.count,
-                          titleStyle: titleStyle,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              )
-              : ListTile(
-                title: Text(openingFamily.name, overflow: TextOverflow.ellipsis, style: titleStyle),
-                subtitle: Text(
-                  '${openingFamily.count}',
-                  style: TextStyle(color: textShade(context, 0.5)),
+                    ),
+                  ],
                 ),
-                onTap: () {
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(PuzzleScreen.buildRoute(context, angle: PuzzleOpening(openingFamily.key)));
-                },
+              ],
+            )
+          : ListTile(
+              title: Text(openingFamily.name, overflow: TextOverflow.ellipsis, style: titleStyle),
+              subtitle: Text(
+                '${openingFamily.count}',
+                style: TextStyle(color: textShade(context, 0.5)),
               ),
+              onTap: () {
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(PuzzleScreen.buildRoute(context, angle: PuzzleOpening(openingFamily.key)));
+              },
+            ),
     );
   }
 }

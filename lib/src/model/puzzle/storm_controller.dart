@@ -243,26 +243,23 @@ class StormController extends _$StormController {
       comboBest: state.combo.best,
       time: state.clock.endAt!,
       timePerMove: mean,
-      highest:
-          wins.isNotEmpty
-              ? wins
-                  .map((e) => e.rating)
-                  .reduce((maxRating, rating) => rating > maxRating ? rating : maxRating)
-              : 0,
+      highest: wins.isNotEmpty
+          ? wins
+                .map((e) => e.rating)
+                .reduce((maxRating, rating) => rating > maxRating ? rating : maxRating)
+          : 0,
       history: state.history,
-      slowPuzzleIds:
-          state.history
-              .where((e) => e.solvingTime!.inSeconds > threshold)
-              .map((e) => e.id)
-              .toIList(),
+      slowPuzzleIds: state.history
+          .where((e) => e.solvingTime!.inSeconds > threshold)
+          .map((e) => e.id)
+          .toIList(),
     );
   }
 
   void _pushToHistory({required bool success}) {
-    final timeTaken =
-        state.lastSolvedTime != null
-            ? DateTime.now().difference(state.lastSolvedTime!)
-            : DateTime.now().difference(state.clock.startAt!);
+    final timeTaken = state.lastSolvedTime != null
+        ? DateTime.now().difference(state.lastSolvedTime!)
+        : DateTime.now().difference(state.clock.startAt!);
     state = state.copyWith(
       history: state.history.add(
         PuzzleHistoryEntry.fromLitePuzzle(state.puzzle, success, timeTaken),
@@ -276,7 +273,7 @@ class StormController extends _$StormController {
 }
 
 @freezed
-class StormState with _$StormState {
+sealed class StormState with _$StormState {
   const StormState._();
 
   const factory StormState({
@@ -342,7 +339,7 @@ enum ComboState { increase, reset, noChange }
 
 /// A `StormCombo` object represents the current and best combo of a storm run
 @freezed
-class StormCombo with _$StormCombo {
+sealed class StormCombo with _$StormCombo {
   const StormCombo._();
 
   const factory StormCombo({required int current, required int best}) = _StormCombo;

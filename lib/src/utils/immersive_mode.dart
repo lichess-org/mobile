@@ -83,18 +83,16 @@ class ImmersiveMode {
   Future<void> disable() async {
     final wakeFuture = WakelockPlus.disable();
 
-    final androidInfo =
-        defaultTargetPlatform == TargetPlatform.android
-            ? await DeviceInfoPlugin().androidInfo
-            : null;
+    final androidInfo = defaultTargetPlatform == TargetPlatform.android
+        ? await DeviceInfoPlugin().androidInfo
+        : null;
 
-    final setUiModeFuture =
-        androidInfo == null || androidInfo.version.sdkInt >= 29
-            ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge)
-            : SystemChrome.setEnabledSystemUIMode(
-              SystemUiMode.manual,
-              overlays: SystemUiOverlay.values,
-            );
+    final setUiModeFuture = androidInfo == null || androidInfo.version.sdkInt >= 29
+        ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge)
+        : SystemChrome.setEnabledSystemUIMode(
+            SystemUiMode.manual,
+            overlays: SystemUiOverlay.values,
+          );
 
     return Future.wait([wakeFuture, setUiModeFuture]).then((_) {});
   }

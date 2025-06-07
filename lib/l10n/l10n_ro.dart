@@ -70,19 +70,23 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobilePuzzleStormConfirmEndRun => 'Vrei să termini acest run?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nimic de afișat, vă rugăm să schimbați filtrele';
+  String get mobilePuzzleStormFilterNothingToShow =>
+      'Nimic de afișat, vă rugăm să schimbați filtrele';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nimic de arătat. Jucați câteva partide de Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow =>
+      'Nimic de arătat. Jucați câteva partide de Puzzle Storm.';
 
   @override
   String get mobilePuzzleStormSubtitle => 'Rezolvă cât mai multe puzzle-uri în 3 minute.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'Îți vei pierde streak-ul actual iar scorul va fi salvat.';
+  String get mobilePuzzleStreakAbortWarning =>
+      'Îți vei pierde streak-ul actual iar scorul va fi salvat.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Joacă puzzle-uri din deschiderile tale preferate sau alege o temă.';
+  String get mobilePuzzleThemesSubtitle =>
+      'Joacă puzzle-uri din deschiderile tale preferate sau alege o temă.';
 
   @override
   String get mobilePuzzlesTab => 'Puzzle-uri';
@@ -97,7 +101,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Mod imersiv';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Ascunde interfața de utilizator a sistemului în timpul jocului. Folosește această opțiune dacă ești deranjat de gesturile de navigare ale sistemului la marginile ecranului. Se aplică pentru ecranele de joc și Puzzle Storm.';
+  String get mobileSettingsImmersiveModeSubtitle =>
+      'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
 
   @override
   String get mobileSettingsTab => 'Setări';
@@ -375,187 +380,199 @@ class AppLocalizationsRo extends AppLocalizations {
   String get arenaArena => 'Arena';
 
   @override
-  String get arenaArenaTournaments => 'Turnee de tip arenă';
+  String get arenaArenaTournaments => 'Arena tournaments';
 
   @override
-  String get arenaIsItRated => 'Este evaluat?';
+  String get arenaIsItRated => 'Is it rated?';
 
   @override
-  String get arenaWillBeNotified => 'Vei fi notificat când competiția începe, deci este în regulă să joci în altă filă în timp ce aștepți.';
+  String get arenaWillBeNotified =>
+      'You will be notified when the tournament starts, so it is safe to play in another tab while waiting.';
 
   @override
-  String get arenaIsRated => 'Această competiție este evaluată și-ți va afecta scorul.';
+  String get arenaIsRated => 'This tournament is rated and will affect your rating.';
 
   @override
-  String get arenaIsNotRated => 'Această competiție *nu* este evaluată și *nu* îți va afecta scorul.';
+  String get arenaIsNotRated => 'This tournament is *not* rated and will *not* affect your rating.';
 
   @override
-  String get arenaSomeRated => 'Unele competiții sunt evaluate și-ți vor afecta scorul.';
+  String get arenaSomeRated => 'Some tournaments are rated and will affect your rating.';
 
   @override
-  String get arenaHowAreScoresCalculated => 'Cum e calculat scorul?';
+  String get arenaHowAreScoresCalculated => 'How are scores calculated?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Un câștig valorează 2 puncte, o remiză: 1 punct, iar o înfrângere nu valorează nimic.\nDacă câștigi două partide consecutiv, punctele vor fi dublate pentru următoarele partide și sunt reprezentate de o pictogramă în flăcări.\nUrmătoarele partide vor valora punctaj dublu până se va întrerupe șirul de câștiguri consecutive.\nAsta înseamnă că: un câștig va valora 4 puncte, o remiză: 2 puncte, iar o înfrângere niciun punct.\n\nDe exemplu, două câștiguri urmate de o remiză vor valora 6 puncte: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer =>
+      'A win has a base score of 2 points, a draw 1 point, and a loss is worth no points.\nIf you win two games consecutively you will start a double-point streak, represented by a flame icon.\nThe following games will continue to be worth double points until you fail to win a game.\nThat is, a win will be worth 4 points, a draw 2 points and a loss will still not award any points.\n\nFor example, two wins followed by a draw will be worth 6 points: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Când un jucător apasă pe butonul Berserk la începutul meciului, i se va înjumătăți timpul, dar câștigul va valora un punct în plus.\n\nApăsând pe butonul Berserk, nu vei beneficia de incrementarea timpului. (1+2 este o excepție, va fi 1+0)\n\nModul Berserk nu este valabil pentru partidele cu timp inițial zero (0+1, 0+2).\n\nModul Berserk îți va oferi un punct în plus doar dacă vei juca cel puțin 7 mutări în joc.';
+  String get arenaBerserkAnswer =>
+      'When a player clicks the Berserk button at the beginning of the game, they lose half of their clock time, but the win is worth one extra tournament point.\n\nGoing Berserk in time controls with an increment also cancels the increment (1+2 is an exception, it gives 1+0).\n\nBerserk is not available for games with zero initial time (0+1, 0+2).\n\nBerserk only grants an extra point if you play at least 7 moves in the game.';
 
   @override
-  String get arenaHowIsTheWinnerDecided => 'Cum este decis câștigătorul?';
+  String get arenaHowIsTheWinnerDecided => 'How is the winner decided?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Jucătorul(-ii) care a(u) obținut cele mai multe puncte la încheierea timpului stabilit pentru turneu va fi declarat câștigător.\n\nCând doi sau mai mulți jucători au același număr de puncte, departajarea se va face pe baza perfomanței.';
+  String get arenaHowIsTheWinnerDecidedAnswer =>
+      'The player(s) with the most points after the tournament\'s set time limit will be announced the winner(s).\n\nWhen two or more players have the same number of points, the tournament performance is the tie break.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Cum funcționează potrivirea jucătorilor?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'La începutul competiției, jucătorii sunt asociați în funcție de scorul lor.\nDe îndată ce termini un meci și te întorci la lobby-ul competiției, vei fi asociat cu un jucător al cărui scor este apropiat de scorul tău. Aceasta asigură un timp de așteptare minim, totuși este posibil să nu joci cu toți jucătorii din competiție.\nJoacă rapid și întoarce-te la lobby pentru a juca mai multe partide și pentru a câștiga mai multe puncte.';
+  String get arenaHowDoesPairingWorkAnswer =>
+      'At the beginning of the tournament, players are paired based on their rating.\nAs soon as you finish a game, return to the tournament lobby: you will then be paired with a player close to your ranking. This ensures minimum wait time, however, you may not face all other players in the tournament.\nPlay fast and return to the lobby to play more games and win more points.';
 
   @override
-  String get arenaHowDoesItEnd => 'Cum se termină?';
+  String get arenaHowDoesItEnd => 'How does it end?';
 
   @override
-  String get arenaHowDoesItEndAnswer => 'Competiția are un o limită de timp. Când ajunge la zero, scorurile din competiție sunt înghețate și câștigătorul este anunțat. Meciurile în desfășurare trebuie terminate, deși nu sunt luate în considerare pentru competiție.';
+  String get arenaHowDoesItEndAnswer =>
+      'The tournament has a countdown clock. When it reaches zero, the tournament rankings are frozen, and the winner is announced. Games in progress must be finished, however, they don\'t count for the tournament.';
 
   @override
-  String get arenaOtherRules => 'Alte reguli importante';
+  String get arenaOtherRules => 'Other important rules';
 
   @override
-  String get arenaThereIsACountdown => 'Există o numărătoare inversă pentru prima dvs. mutare. Eșuarea efectuării unei mutări în această limită de timp va duce la abandonarea meciului.';
+  String get arenaThereIsACountdown =>
+      'There is a countdown for your first move. Failing to make a move within this time will forfeit the game to your opponent.';
 
   @override
-  String get arenaThisIsPrivate => 'Aceasta este o competiție privată';
+  String get arenaThisIsPrivate => 'This is a private tournament';
 
   @override
   String arenaShareUrl(String param) {
-    return 'Pentru a distribui, folosiți acest URL: $param';
+    return 'Share this URL to let people join: $param';
   }
 
   @override
   String arenaDrawStreakStandard(String param) {
-    return 'Serie de remize consecutive: Când un jucător are remize consecutive într-un turneu de tip arenă, va primi un punct doar pentru prima remiză este punctată, precum și pentru remizele în partide standard care au mai mult de $param mutări. Seria de remize poate fi întreruptă doar de o victorie, nu de o înfrângere sau remiză.';
+    return 'Draw streaks: When a player has consecutive draws in an arena, only the first draw will result in a point or draws lasting more than $param moves in standard games. The draw streak can only be broken by a win, not a loss or a draw.';
   }
 
   @override
-  String get arenaDrawStreakVariants => 'Lungimea minimă a jocului pentru a obține puncte în cazul remizelor diferă în funcție de variantă. Tabelul de mai jos enumeră pragul pentru fiecare variantă.';
+  String get arenaDrawStreakVariants =>
+      'The minimum game length for drawn games to award points differs by variant. The table below lists the threshold for each variant.';
 
   @override
-  String get arenaVariant => 'Variantă';
+  String get arenaVariant => 'Variant';
 
   @override
-  String get arenaMinimumGameLength => 'Lungimea minimă a jocului';
+  String get arenaMinimumGameLength => 'Minimum game length';
 
   @override
-  String get arenaHistory => 'Istoricul turneelor de tip arenă';
+  String get arenaHistory => 'Arena History';
 
   @override
-  String get arenaNewTeamBattle => 'Luptă în echipă';
+  String get arenaNewTeamBattle => 'New Team Battle';
 
   @override
-  String get arenaCustomStartDate => 'Data de început personalizată';
+  String get arenaCustomStartDate => 'Custom start date';
 
   @override
-  String get arenaCustomStartDateHelp => 'În fusul orar local. Acest lucru înlocuiește setarea \"Timp înainte de începerea turneului\"';
+  String get arenaCustomStartDateHelp =>
+      'In your own local timezone. This overrides the \"Time before tournament starts\" setting';
 
   @override
-  String get arenaAllowBerserk => 'Permite Berserk';
+  String get arenaAllowBerserk => 'Allow Berserk';
 
   @override
-  String get arenaAllowBerserkHelp => 'Lăsați jucătorii să își înjumătățească timpul pentru a obține un punct în plus';
+  String get arenaAllowBerserkHelp => 'Let players halve their clock time to gain an extra point';
 
   @override
-  String get arenaAllowChatHelp => 'Permiteți jucătorilor să discute într-o cameră de chat';
+  String get arenaAllowChatHelp => 'Let players discuss in a chat room';
 
   @override
-  String get arenaArenaStreaks => 'Serie de victorii in arenă';
+  String get arenaArenaStreaks => 'Arena streaks';
 
   @override
-  String get arenaArenaStreaksHelp => 'După 2 partide câştigate, câştigurile consecutive aduc 4 puncte în loc de 2.';
+  String get arenaArenaStreaksHelp => 'After 2 wins, consecutive wins grant 4 points instead of 2.';
 
   @override
-  String get arenaNoBerserkAllowed => 'Niciun Berserk permis';
+  String get arenaNoBerserkAllowed => 'No Berserk allowed';
 
   @override
-  String get arenaNoArenaStreaks => 'Nicio serie de victorii în arenă';
+  String get arenaNoArenaStreaks => 'No Arena streaks';
 
   @override
-  String get arenaAveragePerformance => 'Performanță medie';
+  String get arenaAveragePerformance => 'Average performance';
 
   @override
-  String get arenaAverageScore => 'Scor mediu';
+  String get arenaAverageScore => 'Average score';
 
   @override
-  String get arenaMyTournaments => 'Turneele mele';
+  String get arenaMyTournaments => 'My tournaments';
 
   @override
-  String get arenaEditTournament => 'Editare turneu';
+  String get arenaEditTournament => 'Edit tournament';
 
   @override
-  String get arenaEditTeamBattle => 'Editare bătălie echipă';
+  String get arenaEditTeamBattle => 'Edit team battle';
 
   @override
-  String get arenaDefender => 'Apărător';
+  String get arenaDefender => 'Defender';
 
   @override
-  String get arenaPickYourTeam => 'Alege-ți echipa';
+  String get arenaPickYourTeam => 'Pick your team';
 
   @override
-  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Ce echipă vei reprezenta în această bătălie?';
+  String get arenaWhichTeamWillYouRepresentInThisBattle =>
+      'Which team will you represent in this battle?';
 
   @override
-  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Trebuie să te alături uneia dintre aceste echipe pentru a participa!';
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate =>
+      'You must join one of these teams to participate!';
 
   @override
-  String get arenaCreated => 'Creat';
+  String get arenaCreated => 'Created';
 
   @override
-  String get arenaRecentlyPlayed => 'Jucate recent';
+  String get arenaRecentlyPlayed => 'Recently played';
 
   @override
-  String get arenaBestResults => 'Cele mai bune rezultate';
+  String get arenaBestResults => 'Best results';
 
   @override
-  String get arenaTournamentStats => 'Statistici turneu';
+  String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'Media rangului este un procent din clasamentul tău. Mai mic e mai bine.\n\nDe exemplu, fiind clasat locul 3 într-un turneu de 100 de jucători = 3%. Find clasat locul 10 într-un turneu de 1000 de jucători = 1%.';
+  String get arenaRankAvgHelp =>
+      'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
-  String get arenaMedians => 'mediane';
+  String get arenaMedians => 'medians';
 
   @override
   String arenaAllAveragesAreX(String param) {
-    return 'Toate mediile de pe această pagină sunt $param.';
+    return 'All averages on this page are $param.';
   }
 
   @override
   String get arenaTotal => 'Total';
 
   @override
-  String get arenaPointsAvg => 'Medie puncte';
+  String get arenaPointsAvg => 'Points average';
 
   @override
-  String get arenaPointsSum => 'Sumă puncte';
+  String get arenaPointsSum => 'Points sum';
 
   @override
-  String get arenaRankAvg => 'Media rangului';
+  String get arenaRankAvg => 'Rank average';
 
   @override
-  String get arenaTournamentWinners => 'Câștigători de turnee';
+  String get arenaTournamentWinners => 'Tournament winners';
 
   @override
-  String get arenaTournamentShields => 'Scut turneu';
+  String get arenaTournamentShields => 'Tournament shields';
 
   @override
-  String get arenaOnlyTitled => 'Doar jucători titrați';
+  String get arenaOnlyTitled => 'Only titled players';
 
   @override
-  String get arenaOnlyTitledHelp => 'Solicitați un titlu oficial pentru a se alătura turneului';
+  String get arenaOnlyTitledHelp => 'Require an official title to join the tournament';
 
   @override
   String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
@@ -568,9 +585,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Efectuarea unei remize în primele $count mutări nu va aduce niciun punct niciunui jucător.',
-      few: 'Efectuarea unei remize în primele $count mutări nu va aduce niciun punct niciunui jucător.',
-      one: 'Efectuarea unei remize în prima $count mutare nu va aduce niciun punct niciunui jucător.',
+      other: 'Drawing the game within the first $count moves will earn neither player any points.',
+      one: 'Drawing the game within the first $count move will earn neither player any points.',
     );
     return '$_temp0';
   }
@@ -580,254 +596,259 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Vezi toate cele $count de echipe',
-      few: 'Vezi toate cele $count echipe',
-      one: 'Vezi echipa',
+      other: 'View all $count teams',
+      one: 'View the team',
     );
     return '$_temp0';
   }
 
   @override
-  String get broadcastBroadcasts => 'Transmisiuni';
+  String get broadcastBroadcasts => 'Broadcasts';
 
   @override
-  String get broadcastMyBroadcasts => 'Transmisiile mele';
+  String get broadcastMyBroadcasts => 'My broadcasts';
 
   @override
-  String get broadcastLiveBroadcasts => 'Difuzări de turnee în direct';
+  String get broadcastLiveBroadcasts => 'Live tournament broadcasts';
 
   @override
-  String get broadcastBroadcastCalendar => 'Calendar de transmisiuni';
+  String get broadcastBroadcastCalendar => 'Broadcast calendar';
 
   @override
-  String get broadcastNewBroadcast => 'O nouă difuzare în direct';
+  String get broadcastNewBroadcast => 'New live broadcast';
 
   @override
-  String get broadcastSubscribedBroadcasts => 'Transmisii abonate';
+  String get broadcastSubscribedBroadcasts => 'Subscribed broadcasts';
 
   @override
-  String get broadcastAboutBroadcasts => 'Despre emisiuni';
+  String get broadcastAboutBroadcasts => 'About broadcasts';
 
   @override
-  String get broadcastHowToUseLichessBroadcasts => 'Cum să utilizați emisiunile Lichess.';
+  String get broadcastHowToUseLichessBroadcasts => 'How to use Lichess Broadcasts.';
 
   @override
-  String get broadcastTheNewRoundHelp => 'Runda noua va avea aceiași membri și contribuitori ca cea anterioară.';
+  String get broadcastTheNewRoundHelp =>
+      'The new round will have the same members and contributors as the previous one.';
 
   @override
-  String get broadcastAddRound => 'Adaugă o rundă';
+  String get broadcastAddRound => 'Add a round';
 
   @override
-  String get broadcastOngoing => 'În desfășurare';
+  String get broadcastOngoing => 'Ongoing';
 
   @override
-  String get broadcastUpcoming => 'Următoare';
+  String get broadcastUpcoming => 'Upcoming';
 
   @override
-  String get broadcastRoundName => 'Numele rundei';
+  String get broadcastRoundName => 'Round name';
 
   @override
-  String get broadcastRoundNumber => 'Număr rotund';
+  String get broadcastRoundNumber => 'Round number';
 
   @override
-  String get broadcastTournamentName => 'Numele turneului';
+  String get broadcastTournamentName => 'Tournament name';
 
   @override
-  String get broadcastTournamentDescription => 'O descriere scurtă a turneului';
+  String get broadcastTournamentDescription => 'Short tournament description';
 
   @override
-  String get broadcastFullDescription => 'Întreaga descriere a evenimentului';
+  String get broadcastFullDescription => 'Full tournament description';
 
   @override
   String broadcastFullDescriptionHelp(String param1, String param2) {
-    return 'Descriere lungă, opțională, a difuzării. $param1 este disponibil. Lungimea trebuie să fie mai mică decât $param2 caractere.';
+    return 'Optional long description of the tournament. $param1 is available. Length must be less than $param2 characters.';
   }
 
   @override
-  String get broadcastSourceSingleUrl => 'URL sursă PGN';
+  String get broadcastSourceSingleUrl => 'PGN Source URL';
 
   @override
-  String get broadcastSourceUrlHelp => 'URL-ul pe care Lichess îl va verifica pentru a obține actualizări al PGN-ului. Trebuie să fie public accesibil pe Internet.';
+  String get broadcastSourceUrlHelp =>
+      'URL that Lichess will check to get PGN updates. It must be publicly accessible from the Internet.';
 
   @override
-  String get broadcastSourceGameIds => 'Până la 64 de ID-uri de joc Lichess, separate prin spații.';
+  String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
-    return 'Data de start în fusul orar local al turneului: $param';
+    return 'Start date in the tournament local timezone: $param';
   }
 
   @override
-  String get broadcastStartDateHelp => 'Opțional, dacă știi când va începe evenimentul';
+  String get broadcastStartDateHelp => 'Optional, if you know when the event starts';
 
   @override
-  String get broadcastCurrentGameUrl => 'URL-ul partidei curente';
+  String get broadcastCurrentGameUrl => 'Current game URL';
 
   @override
-  String get broadcastDownloadAllRounds => 'Descarcă toate rundele';
+  String get broadcastDownloadAllRounds => 'Download all rounds';
 
   @override
-  String get broadcastResetRound => 'Resetează această rundă';
+  String get broadcastResetRound => 'Reset this round';
 
   @override
-  String get broadcastDeleteRound => 'Șterge această rundă';
+  String get broadcastDeleteRound => 'Delete this round';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Șterge definitiv runda și jocurile sale.';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
-  String get broadcastDeleteAllGamesOfThisRound => 'Șterge toate jocurile din această rundă. Sursa va trebui să fie activă pentru a le recrea.';
+  String get broadcastDeleteAllGamesOfThisRound =>
+      'Delete all games of this round. The source will need to be active in order to re-create them.';
 
   @override
-  String get broadcastEditRoundStudy => 'Editare rundă de studiu';
+  String get broadcastEditRoundStudy => 'Edit round study';
 
   @override
-  String get broadcastDeleteTournament => 'Șterge acest turneu';
+  String get broadcastDeleteTournament => 'Delete this tournament';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Sigur doresc să ștergeți întregul turneu, toate rundele și toate jocurile sale.';
+  String get broadcastDefinitivelyDeleteTournament =>
+      'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
-  String get broadcastShowScores => 'Arată scorurile jucătorilor pe baza rezultatelor jocului';
+  String get broadcastShowScores => 'Show players scores based on game results';
 
   @override
-  String get broadcastReplacePlayerTags => 'Opțional: înlocuiește numele jucătorilor, ratingurile și titlurile';
+  String get broadcastReplacePlayerTags => 'Optional: replace player names, ratings and titles';
 
   @override
-  String get broadcastFideFederations => 'Federații FIDE';
+  String get broadcastFideFederations => 'FIDE federations';
 
   @override
-  String get broadcastTop10Rating => 'Top 10 evaluări';
+  String get broadcastTop10Rating => 'Top 10 rating';
 
   @override
-  String get broadcastFidePlayers => 'Jucători FIDE';
+  String get broadcastFidePlayers => 'FIDE players';
 
   @override
-  String get broadcastFidePlayerNotFound => 'Jucătorul FIDE nu a fost găsit';
+  String get broadcastFidePlayerNotFound => 'FIDE player not found';
 
   @override
-  String get broadcastFideProfile => 'Profil FIDE';
+  String get broadcastFideProfile => 'FIDE profile';
 
   @override
-  String get broadcastFederation => 'Federație';
+  String get broadcastFederation => 'Federation';
 
   @override
-  String get broadcastAgeThisYear => 'Vârsta în acest an';
+  String get broadcastAgeThisYear => 'Age this year';
 
   @override
-  String get broadcastUnrated => 'Fără rating';
+  String get broadcastUnrated => 'Unrated';
 
   @override
-  String get broadcastRecentTournaments => 'Turnee recente';
+  String get broadcastRecentTournaments => 'Recent tournaments';
 
   @override
-  String get broadcastOpenLichess => 'Deschide în Lichess';
+  String get broadcastOpenLichess => 'Open in Lichess';
 
   @override
-  String get broadcastTeams => 'Echipe';
+  String get broadcastTeams => 'Teams';
 
   @override
-  String get broadcastBoards => 'Table';
+  String get broadcastBoards => 'Boards';
 
   @override
-  String get broadcastOverview => 'Prezentare generală';
+  String get broadcastOverview => 'Overview';
 
   @override
-  String get broadcastSubscribeTitle => 'Abonează-te pentru a fi notificat când începe fiecare rundă. Poți gestiona notificările sonore sau push pentru transmisiuni din setările contului tău.';
+  String get broadcastSubscribeTitle =>
+      'Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.';
 
   @override
-  String get broadcastUploadImage => 'Încărcați imaginea turneului';
+  String get broadcastUploadImage => 'Upload tournament image';
 
   @override
-  String get broadcastNoBoardsYet => 'Încă nu sunt table. Acestea vor apărea după ce partidele vor fi încărcate.';
+  String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
-    return 'Tablele pot fi încărcate dintr-o sursă sau prin intermediul $param';
+    return 'Boards can be loaded with a source or via the $param';
   }
 
   @override
   String broadcastStartsAfter(String param) {
-    return 'Începe după $param';
+    return 'Starts after $param';
   }
 
   @override
-  String get broadcastStartVerySoon => 'Transmisiunea va începe foarte curând.';
+  String get broadcastStartVerySoon => 'The broadcast will start very soon.';
 
   @override
-  String get broadcastNotYetStarted => 'Transmisiunea nu a început încă.';
+  String get broadcastNotYetStarted => 'The broadcast has not yet started.';
 
   @override
-  String get broadcastOfficialWebsite => 'Website-ul oficial';
+  String get broadcastOfficialWebsite => 'Official website';
 
   @override
-  String get broadcastStandings => 'Clasament';
+  String get broadcastStandings => 'Standings';
 
   @override
-  String get broadcastOfficialStandings => 'Clasament oficial';
+  String get broadcastOfficialStandings => 'Official Standings';
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'Mai multe opțiuni pe $param';
+    return 'More options on the $param';
   }
 
   @override
-  String get broadcastWebmastersPage => 'pagina administratorilor de site';
+  String get broadcastWebmastersPage => 'webmasters page';
 
   @override
   String broadcastPgnSourceHelp(String param) {
-    return 'O sursă publică de PGN în timp real pentru această rundă. De asemenea, oferim un $param pentru o sincronizare mai rapidă și mai eficientă.';
+    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
   }
 
   @override
-  String get broadcastEmbedThisBroadcast => 'Încorporează această transmisiune în site-ul tău';
+  String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
 
   @override
   String broadcastEmbedThisRound(String param) {
-    return 'Încorporează $param în site-ul tău';
+    return 'Embed $param in your website';
   }
 
   @override
-  String get broadcastRatingDiff => 'Diferență rating';
+  String get broadcastRatingDiff => 'Rating diff';
 
   @override
-  String get broadcastGamesThisTournament => 'Jocuri în acest turneu';
+  String get broadcastGamesThisTournament => 'Games in this tournament';
 
   @override
-  String get broadcastScore => 'Scor';
+  String get broadcastScore => 'Score';
 
   @override
-  String get broadcastAllTeams => 'Toate echipele';
+  String get broadcastAllTeams => 'All teams';
 
   @override
-  String get broadcastTournamentFormat => 'Format turneu';
+  String get broadcastTournamentFormat => 'Tournament format';
 
   @override
-  String get broadcastTournamentLocation => 'Locație turneu';
+  String get broadcastTournamentLocation => 'Tournament Location';
 
   @override
-  String get broadcastTopPlayers => 'Jucători de top';
+  String get broadcastTopPlayers => 'Top players';
 
   @override
-  String get broadcastTimezone => 'Fus orar';
+  String get broadcastTimezone => 'Time zone';
 
   @override
-  String get broadcastFideRatingCategory => 'Categoria de rating FIDE';
+  String get broadcastFideRatingCategory => 'FIDE rating category';
 
   @override
-  String get broadcastOptionalDetails => 'Detalii opționale';
+  String get broadcastOptionalDetails => 'Optional details';
 
   @override
-  String get broadcastPastBroadcasts => 'Transmisii anterioare';
+  String get broadcastPastBroadcasts => 'Past broadcasts';
 
   @override
-  String get broadcastAllBroadcastsByMonth => 'Vezi toate transmisiunile pe fiecare lună';
+  String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
 
   @override
-  String get broadcastBackToLiveMove => 'Înapoi la mutarea live';
+  String get broadcastBackToLiveMove => 'Back to live move';
 
   @override
-  String get broadcastSinceHideResults => 'Din moment ce ai ales să ascunzi rezultatele, toate tablele de previzualizare sunt goale pentru a evita spoilerele.';
+  String get broadcastSinceHideResults =>
+      'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
   String get broadcastLiveboard => 'Live board';
@@ -837,9 +858,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de transmisiuni',
-      few: '$count transmisiuni',
-      one: '$count transmisiune',
+      other: '$count broadcasts',
+      one: '$count broadcast',
     );
     return '$_temp0';
   }
@@ -849,9 +869,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count spectatori',
-      few: '$count spectatori',
-      one: '$count spectator',
+      other: '$count viewers',
+      one: '$count viewer',
     );
     return '$_temp0';
   }
@@ -874,7 +893,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get challengeChallengeCanceled => 'Provocare anulată.';
 
   @override
-  String get challengeRegisterToSendChallenges => 'Te rugăm să te înregistrezi pentru a putea trimite provocări.';
+  String get challengeRegisterToSendChallenges =>
+      'Te rugăm să te înregistrezi pentru a putea trimite provocări.';
 
   @override
   String challengeYouCannotChallengeX(String param) {
@@ -908,10 +928,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get challengeDeclineLater => 'Nu este timpul potrivit, te rog întreabă mai târziu.';
 
   @override
-  String get challengeDeclineTooFast => 'Acest timp este prea rapid pentru mine, te rog să mă provoci cu un timp mai lent.';
+  String get challengeDeclineTooFast =>
+      'Acest timp este prea rapid pentru mine, te rog să mă provoci cu un timp mai lent.';
 
   @override
-  String get challengeDeclineTooSlow => 'Acest timp este prea lent pentru mine, te rog să mă provoci cu un timp mai rapid.';
+  String get challengeDeclineTooSlow =>
+      'Acest timp este prea lent pentru mine, te rog să mă provoci cu un timp mai rapid.';
 
   @override
   String get challengeDeclineTimeControl => 'Nu accept provocări cu acest timp.';
@@ -961,7 +983,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get perfStatProvisional => 'provizoriu';
 
   @override
-  String get perfStatNotEnoughRatedGames => 'Nu au fost jucate destule meciuri oficiale pentru a stabili un rating solid.';
+  String get perfStatNotEnoughRatedGames =>
+      'Nu au fost jucate destule meciuri oficiale pentru a stabili un rating solid.';
 
   @override
   String perfStatProgressOverLastXGames(String param) {
@@ -1103,7 +1126,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preferencesShowFlairs => 'Arată pictograma personalizată a jucătorului';
 
   @override
-  String get preferencesExplainShowPlayerRatings => 'Acest lucru permite ascunderea tuturor ratingurilor de pe site, pentru a ajuta la concentrarea pe jocul de șah. Jocurile pot fi evaluate, această setare este doar despre ce se poate vedea.';
+  String get preferencesExplainShowPlayerRatings =>
+      'Acest lucru permite ascunderea tuturor ratingurilor de pe site, pentru a ajuta la concentrarea pe jocul de șah. Jocurile pot fi evaluate, această setare este doar despre ce se poate vedea.';
 
   @override
   String get preferencesDisplayBoardResizeHandle => 'Arată indicatorul de redimensionare a tablei';
@@ -1151,7 +1175,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preferencesBothClicksAndDrag => 'Ambele';
 
   @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Mutare anticipată (mută pe timpul adversarului)';
+  String get preferencesPremovesPlayingDuringOpponentTurn =>
+      'Mutare anticipată (mută pe timpul adversarului)';
 
   @override
   String get preferencesTakebacksWithOpponentApproval => 'Dă înapoi (cu aprobarea adversarului)';
@@ -1163,22 +1188,26 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Promovează automat în damă';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Țineți apăsată tasta <ctrl> în timp ce promovați un pion pentru a dezactiva temporar promovarea automată';
+  String get preferencesExplainPromoteToQueenAutomatically =>
+      'Țineți apăsată tasta <ctrl> în timp ce promovați un pion pentru a dezactiva temporar promovarea automată';
 
   @override
   String get preferencesWhenPremoving => 'În cazul mutărilor anticipate';
 
   @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Declară automat o remiză în cazul a trei repetări';
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically =>
+      'Declară automat o remiză în cazul a trei repetări';
 
   @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Când timpul rămas e mai scurt de 30 de secunde';
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds =>
+      'Când timpul rămas e mai scurt de 30 de secunde';
 
   @override
   String get preferencesMoveConfirmation => 'Confirmare mutare';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Poate fi dezactivat în timpul unui joc cu meniul de tablă';
+  String get preferencesExplainCanThenBeTemporarilyDisabled =>
+      'Poate fi dezactivat în timpul unui joc cu meniul de tablă';
 
   @override
   String get preferencesInCorrespondenceGames => 'În jocuri prin corespondență';
@@ -1187,10 +1216,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preferencesCorrespondenceAndUnlimited => 'Corespondență sau timp nelimitat';
 
   @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Confirmă abandonarea și oferirea remizei';
+  String get preferencesConfirmResignationAndDrawOffers =>
+      'Confirmă abandonarea și oferirea remizei';
 
   @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metoda prin care faci rocada';
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook =>
+      'Metoda prin care faci rocada';
 
   @override
   String get preferencesCastleByMovingTwoSquares => 'Mută regele două pătrățele';
@@ -1208,16 +1239,19 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preferencesSnapArrowsToValidMoves => 'Trage săgețile la mutările valide';
 
   @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Spune \"Joc bun, bine jucat\" la înfrângere sau la remiză';
+  String get preferencesSayGgWpAfterLosingOrDrawing =>
+      'Spune \"Joc bun, bine jucat\" la înfrângere sau la remiză';
 
   @override
   String get preferencesYourPreferencesHaveBeenSaved => 'Preferințele tale au fost salvate';
 
   @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Derulează pe tablă pentru a rejuca mutările';
+  String get preferencesScrollOnTheBoardToReplayMoves =>
+      'Derulează pe tablă pentru a rejuca mutările';
 
   @override
-  String get preferencesCorrespondenceEmailNotification => 'Notificare zilnică prin email cu lista jocurilor prin corespondență';
+  String get preferencesCorrespondenceEmailNotification =>
+      'Notificare zilnică prin email cu lista jocurilor prin corespondență';
 
   @override
   String get preferencesNotifyStreamStart => 'Un streamer e live';
@@ -1307,7 +1341,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleDownVote => 'Vot negativ';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Evaluarea ta la puzzle-uri nu se va schimba. Iți amintim că puzzle-urile nu sunt o competiție. Evaluarea ajută la selectarea celor mai bune puzzle-uri care corespund nivelului tău.';
+  String get puzzleYourPuzzleRatingWillNotChange =>
+      'Evaluarea ta la puzzle-uri nu se va schimba. Iți amintim că puzzle-urile nu sunt o competiție. Evaluarea ajută la selectarea celor mai bune puzzle-uri care corespund nivelului tău.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'Găsiți cea mai bună mutare pentru alb.';
@@ -1354,10 +1389,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzlePuzzlesByOpenings => 'Puzzle-uri după deschidere';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Deschideri pe care le-ai jucat cel mai mult în meciurile evaluate';
+  String get puzzleOpeningsYouPlayedTheMost =>
+      'Deschideri pe care le-ai jucat cel mai mult în meciurile evaluate';
 
   @override
-  String get puzzleUseFindInPage => 'Folosește \"Găsește în pagină\" în meniul browser-ului pentru a găsi deschiderea ta preferată!';
+  String get puzzleUseFindInPage =>
+      'Folosește \"Găsește în pagină\" în meniul browser-ului pentru a găsi deschiderea ta preferată!';
 
   @override
   String get puzzleUseCtrlF => 'Folosește Ctrl+f pentru a găsi deschiderea favorită!';
@@ -1433,7 +1470,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleFailed => 'eșuat';
 
   @override
-  String get puzzleStreakDescription => 'Rezolvă probleme din ce în ce mai grele și construiește un șir de victorii consecutive. Nu există limită de timp, deci nu te grăbi. O mișcare greșită și jocul s-a terminat! Dar poți sări peste o mutare în fiecare sesiune.';
+  String get puzzleStreakDescription =>
+      'Rezolvă probleme din ce în ce mai grele și construiește un șir de victorii consecutive. Nu există limită de timp, deci nu te grăbi. O mișcare greșită și jocul s-a terminat! Dar poți sări peste o mutare în fiecare sesiune.';
 
   @override
   String puzzleYourStreakX(String param) {
@@ -1441,7 +1479,8 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
-  String get puzzleStreakSkipExplanation => 'Sări peste această mutare pentru a-ți păstra șirul de probleme consecutive reușite! Funcționează o singură dată pe sesiune.';
+  String get puzzleStreakSkipExplanation =>
+      'Sări peste această mutare pentru a-ți păstra șirul de probleme consecutive reușite! Funcționează o singură dată pe sesiune.';
 
   @override
   String get puzzleContinueTheStreak => 'Continuă secvența';
@@ -1456,20 +1495,11 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleLookupOfPlayer => 'Caută puzzle-uri din jocurile unui jucător';
 
   @override
-  String puzzleFromXGames(String param) {
-    return 'Puzzle-uri din jocurile $param';
-  }
-
-  @override
   String get puzzleSearchPuzzles => 'Caută puzzle-uri';
 
   @override
-  String get puzzleFromMyGamesNone => 'Nu ai nici o problemă în baza de date, dar Lichess tot te apreciază foarte mult.\nJoacă jocuri rapide și clasice pentru a crește șansele de a vedea adăugată o problemă extrasă din partidele tale!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 probleme găsite în $param2 jocuri';
-  }
+  String get puzzleFromMyGamesNone =>
+      'Nu ai nici o problemă în baza de date, dar Lichess tot te apreciază foarte mult.\nJoacă jocuri rapide și clasice pentru a crește șansele de a vedea adăugată o problemă extrasă din partidele tale!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Antreneaza-te, analizează, fii mai bun';
@@ -1525,6 +1555,18 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String puzzlePuzzlesFoundInUserGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count puzzle-uri găsite în jocurile utilizatorului $param2',
+      few: '$count puzzle-uri găsite în jocurile utilizatorului $param2',
+      one: 'Un puzzle găsit în jocurile utilizatorului $param2',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String puzzleNbPlayed(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1552,43 +1594,50 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeAdvancedPawn => 'Pion avansat';
 
   @override
-  String get puzzleThemeAdvancedPawnDescription => 'Unul dintre pionii care este avansat in teritoriul inamic, poate amenință să promoveze.';
+  String get puzzleThemeAdvancedPawnDescription =>
+      'Unul dintre pionii care este avansat in teritoriul inamic, poate amenință să promoveze.';
 
   @override
   String get puzzleThemeAdvantage => 'Avantaj';
 
   @override
-  String get puzzleThemeAdvantageDescription => 'Profită de șansa ta pentru a obține un avantaj decisiv. (200cp ≤ eval ≤ 600cp)';
+  String get puzzleThemeAdvantageDescription =>
+      'Profită de șansa ta pentru a obține un avantaj decisiv. (200cp ≤ eval ≤ 600cp)';
 
   @override
   String get puzzleThemeAnastasiaMate => 'Mat-ul Anastasiei';
 
   @override
-  String get puzzleThemeAnastasiaMateDescription => 'Un cal şi o tură sau o regină fac echipă pentru a prinde regele opus între marginea tablei şi o piesă aliată.';
+  String get puzzleThemeAnastasiaMateDescription =>
+      'Un cal şi o tură sau o regină fac echipă pentru a prinde regele opus între marginea tablei şi o piesă aliată.';
 
   @override
   String get puzzleThemeArabianMate => 'Mat-ul arab';
 
   @override
-  String get puzzleThemeArabianMateDescription => 'Un cal și o tură au făcut echipă să prinda regele într-un colț de tablă.';
+  String get puzzleThemeArabianMateDescription =>
+      'Un cal și o tură au făcut echipă să prinda regele într-un colț de tablă.';
 
   @override
   String get puzzleThemeAttackingF2F7 => 'Atac pe f2 sau f7';
 
   @override
-  String get puzzleThemeAttackingF2F7Description => 'Un atac concentrat pe pionul f2 sau f7, cum ar fi în deschiderea ficat prăjit (atacul Fegatello).';
+  String get puzzleThemeAttackingF2F7Description =>
+      'Un atac concentrat pe pionul f2 sau f7, cum ar fi în deschiderea ficat prăjit (atacul Fegatello).';
 
   @override
   String get puzzleThemeAttraction => 'Atragere';
 
   @override
-  String get puzzleThemeAttractionDescription => 'Un schimb sau sacrificiu care încurajează sau forțează o piesă adversară pe un pătrat care permite o tactică ulterioară.';
+  String get puzzleThemeAttractionDescription =>
+      'Un schimb sau sacrificiu care încurajează sau forțează o piesă adversară pe un pătrat care permite o tactică ulterioară.';
 
   @override
   String get puzzleThemeBackRankMate => 'Mat pe rândul din spate';
 
   @override
-  String get puzzleThemeBackRankMateDescription => 'Dă șah mat regelui pe rândul inițial, când e blocat acolo de propriele lui piese.';
+  String get puzzleThemeBackRankMateDescription =>
+      'Dă șah mat regelui pe rândul inițial, când e blocat acolo de propriele lui piese.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Final cu nebuni';
@@ -1600,7 +1649,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeBodenMate => 'Mat-ul lui Boden';
 
   @override
-  String get puzzleThemeBodenMateDescription => 'Doi nebuni care atacă pe diagonale încrucișate livrează mat-ul unui rege blocat de piese aliate.';
+  String get puzzleThemeBodenMateDescription =>
+      'Doi nebuni care atacă pe diagonale încrucișate livrează mat-ul unui rege blocat de piese aliate.';
 
   @override
   String get puzzleThemeCastling => 'Rocada';
@@ -1612,67 +1662,78 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeCapturingDefender => 'Capturează apărătorul';
 
   @override
-  String get puzzleThemeCapturingDefenderDescription => 'Capturarea unei piese esențiale apărării alteia, permițând captura piesei acum neapărată la o mutare ulterioară.';
+  String get puzzleThemeCapturingDefenderDescription =>
+      'Capturarea unei piese esențiale apărării alteia, permițând captura piesei acum neapărată la o mutare ulterioară.';
 
   @override
   String get puzzleThemeCrushing => 'Zdrobitor';
 
   @override
-  String get puzzleThemeCrushingDescription => 'Observă gafa adversarului pentru a obține un avantaj zdrobitor. (eval ≥ 600cp)';
+  String get puzzleThemeCrushingDescription =>
+      'Observă gafa adversarului pentru a obține un avantaj zdrobitor. (eval ≥ 600cp)';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat-ul cu doi nebuni';
 
   @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Doi nebuni care atacă pe diagonale adiacente livrează mat-ul unui rege blocat de piese aliate.';
+  String get puzzleThemeDoubleBishopMateDescription =>
+      'Doi nebuni care atacă pe diagonale adiacente livrează mat-ul unui rege blocat de piese aliate.';
 
   @override
   String get puzzleThemeDovetailMate => 'Mat-ul dovertail';
 
   @override
-  String get puzzleThemeDovetailMateDescription => 'O regină livrează mat-ul unui rege adiacent, care are doar două patrate de scapare dar sunt blocate de piese aliate.';
+  String get puzzleThemeDovetailMateDescription =>
+      'O regină livrează mat-ul unui rege adiacent, care are doar două patrate de scapare dar sunt blocate de piese aliate.';
 
   @override
   String get puzzleThemeEquality => 'Egalitate';
 
   @override
-  String get puzzleThemeEqualityDescription => 'Întoarce-te dintr-o poziție de pierdere și asigură o remiză sau o poziție echilibrată. (eval ≤ 200cp)';
+  String get puzzleThemeEqualityDescription =>
+      'Întoarce-te dintr-o poziție de pierdere și asigură o remiză sau o poziție echilibrată. (eval ≤ 200cp)';
 
   @override
   String get puzzleThemeKingsideAttack => 'Atac pe partea regelui';
 
   @override
-  String get puzzleThemeKingsideAttackDescription => 'Un atac al regelui adversarului, după ce a făcut rocada pe partea regelui.';
+  String get puzzleThemeKingsideAttackDescription =>
+      'Un atac al regelui adversarului, după ce a făcut rocada pe partea regelui.';
 
   @override
   String get puzzleThemeClearance => 'Îndepărtare';
 
   @override
-  String get puzzleThemeClearanceDescription => 'O mutare, adeseori cu tempo, care eliberează un pătrat, o coloană sau o diagonală pentru o idee tactică ulterioară.';
+  String get puzzleThemeClearanceDescription =>
+      'O mutare, adeseori cu tempo, care eliberează un pătrat, o coloană sau o diagonală pentru o idee tactică ulterioară.';
 
   @override
   String get puzzleThemeDefensiveMove => 'Mutare defensivă';
 
   @override
-  String get puzzleThemeDefensiveMoveDescription => 'O mutare precisă sau o secvență de mutări care e necesară pentru a evita pierderea pieselor sau a unui alt avantaj.';
+  String get puzzleThemeDefensiveMoveDescription =>
+      'O mutare precisă sau o secvență de mutări care e necesară pentru a evita pierderea pieselor sau a unui alt avantaj.';
 
   @override
   String get puzzleThemeDeflection => 'Deviere';
 
   @override
-  String get puzzleThemeDeflectionDescription => 'O mutare care distrage o piesă adversară de la o altă funcție pe care o îndeplinește, cum ar fi apărarea unui pătrat esențial.';
+  String get puzzleThemeDeflectionDescription =>
+      'O mutare care distrage o piesă adversară de la o altă funcție pe care o îndeplinește, cum ar fi apărarea unui pătrat esențial.';
 
   @override
   String get puzzleThemeDiscoveredAttack => 'Atac prin descoperire';
 
   @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Mutarea unei piese care bloca anterior un atac de la o altă piesă cu rază lungă de acțiune, cum ar fi un cal din calea unui turn.';
+  String get puzzleThemeDiscoveredAttackDescription =>
+      'Mutarea unei piese care bloca anterior un atac de la o altă piesă cu rază lungă de acțiune, cum ar fi un cal din calea unui turn.';
 
   @override
   String get puzzleThemeDoubleCheck => 'Șah dublu';
 
   @override
-  String get puzzleThemeDoubleCheckDescription => 'Șahul cu două piese deodată, ca rezultat al unui atac descoperit unde și piesa mutată, și cea descoperită atacă regele adversarului.';
+  String get puzzleThemeDoubleCheckDescription =>
+      'Șahul cu două piese deodată, ca rezultat al unui atac descoperit unde și piesa mutată, și cea descoperită atacă regele adversarului.';
 
   @override
   String get puzzleThemeEndgame => 'Final de partidă';
@@ -1681,55 +1742,64 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'O tactică în ultima etapă a jocului.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'O tactică cu regula en passant, unde un pion poate captura un pion adversar care l-a întrecut folosind mutarea sa inițială de două pătrate.';
+  String get puzzleThemeEnPassantDescription =>
+      'O tactică cu regula en passant, unde un pion poate captura un pion adversar care l-a întrecut folosind mutarea sa inițială de două pătrate.';
 
   @override
   String get puzzleThemeExposedKing => 'Rege expus';
 
   @override
-  String get puzzleThemeExposedKingDescription => 'O tactică ce implică un rege cu puțini apărători în jurul său, adeseori rezultând în șah mat.';
+  String get puzzleThemeExposedKingDescription =>
+      'O tactică ce implică un rege cu puțini apărători în jurul său, adeseori rezultând în șah mat.';
 
   @override
   String get puzzleThemeFork => 'Bifurcare';
 
   @override
-  String get puzzleThemeForkDescription => 'O mutare unde piesa mutată atacă două piese adversare deodată.';
+  String get puzzleThemeForkDescription =>
+      'O mutare unde piesa mutată atacă două piese adversare deodată.';
 
   @override
   String get puzzleThemeHangingPiece => 'Piesă neprotejată';
 
   @override
-  String get puzzleThemeHangingPieceDescription => 'O tactică ce implică o piesă adversară care e neprotejată sau apărată insuficient și e liberă pentru capturare.';
+  String get puzzleThemeHangingPieceDescription =>
+      'O tactică ce implică o piesă adversară care e neprotejată sau apărată insuficient și e liberă pentru capturare.';
 
   @override
   String get puzzleThemeHookMate => 'Mat-ul hook';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Șah mat cu o tură, un cal și un pion alături de un pion inamic pentru a limita metodele de scăpare ale regelui.';
+  String get puzzleThemeHookMateDescription =>
+      'Șah mat cu o tură, un cal și un pion alături de un pion inamic pentru a limita metodele de scăpare ale regelui.';
 
   @override
   String get puzzleThemeInterference => 'Obstacol';
 
   @override
-  String get puzzleThemeInterferenceDescription => 'Mutarea unei piese între două piese adversare pentru a lăsa una sau ambele piese adversare neprotejate, cum ar fi un cal pe un pătrat protejat dintre două ture.';
+  String get puzzleThemeInterferenceDescription =>
+      'Mutarea unei piese între două piese adversare pentru a lăsa una sau ambele piese adversare neprotejate, cum ar fi un cal pe un pătrat protejat dintre două ture.';
 
   @override
   String get puzzleThemeIntermezzo => 'Intermezzo';
 
   @override
-  String get puzzleThemeIntermezzoDescription => 'În loc să faci mutarea așteptată, mai întâi intervii cu o altă mutare care e o amenințare imediată, căreia adversarul trebuie să-i răspundă. Cunoscut și ca \"Zwischenzug\" sau \"In between\".';
+  String get puzzleThemeIntermezzoDescription =>
+      'În loc să faci mutarea așteptată, mai întâi intervii cu o altă mutare care e o amenințare imediată, căreia adversarul trebuie să-i răspundă. Cunoscut și ca \"Zwischenzug\" sau \"In between\".';
 
   @override
   String get puzzleThemeKillBoxMate => 'Mat în casetă mortală';
 
   @override
-  String get puzzleThemeKillBoxMateDescription => 'O tură este lingă regele inamic și susținută de o regină care de asemenea blochează pătratele pe unde ar putea evada regele. Tura și regina îl prind pe rege într-o \"casetă mortală\" de 3x3.';
+  String get puzzleThemeKillBoxMateDescription =>
+      'O tură este lingă regele inamic și susținută de o regină care de asemenea blochează pătratele pe unde ar putea evada regele. Tura și regina îl prind pe rege într-o \"casetă mortală\" de 3x3.';
 
   @override
   String get puzzleThemeVukovicMate => 'Mat Vukovic';
 
   @override
-  String get puzzleThemeVukovicMateDescription => 'O tură și un cal fac echipă pentru a da șah mat regelui. Tura dă mat fiind apărată de o a treia piesă iar calul blochează toate căile de scăpare ale regelui.';
+  String get puzzleThemeVukovicMateDescription =>
+      'O tură și un cal fac echipă pentru a da șah mat regelui. Tura dă mat fiind apărată de o a treia piesă iar calul blochează toate căile de scăpare ale regelui.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Final cu cai';
@@ -1747,13 +1817,15 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeMaster => 'Partidele maeștrilor';
 
   @override
-  String get puzzleThemeMasterDescription => 'Puzzle-uri din partidele jucate de jucători care au primit titluri FIDE.';
+  String get puzzleThemeMasterDescription =>
+      'Puzzle-uri din partidele jucate de jucători care au primit titluri FIDE.';
 
   @override
   String get puzzleThemeMasterVsMaster => 'Partide maestru vs maestru';
 
   @override
-  String get puzzleThemeMasterVsMasterDescription => 'Puzzle-uri din partidele jucate între doi jucători care au primit titluri FIDE.';
+  String get puzzleThemeMasterVsMasterDescription =>
+      'Puzzle-uri din partidele jucate între doi jucători care au primit titluri FIDE.';
 
   @override
   String get puzzleThemeMate => 'Mat';
@@ -1819,13 +1891,15 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemePin => 'Blocare';
 
   @override
-  String get puzzleThemePinDescription => 'O tactică cu blocări, unde o piesă nu se poate mișca fără a descoperi un atac asupra unei piese mai valoroase.';
+  String get puzzleThemePinDescription =>
+      'O tactică cu blocări, unde o piesă nu se poate mișca fără a descoperi un atac asupra unei piese mai valoroase.';
 
   @override
   String get puzzleThemePromotion => 'Promovare';
 
   @override
-  String get puzzleThemePromotionDescription => 'Un pion care promovează sau amenință să promoveze e cheia acestei tactici.';
+  String get puzzleThemePromotionDescription =>
+      'Un pion care promovează sau amenință să promoveze e cheia acestei tactici.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Final cu regine';
@@ -1837,19 +1911,22 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeQueenRookEndgame => 'Final cu regine și turnuri';
 
   @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Un final de partidă doar cu regine, turnuri și pioni.';
+  String get puzzleThemeQueenRookEndgameDescription =>
+      'Un final de partidă doar cu regine, turnuri și pioni.';
 
   @override
   String get puzzleThemeQueensideAttack => 'Atac pe partea reginei';
 
   @override
-  String get puzzleThemeQueensideAttackDescription => 'Un atac asupra regelui adversarului, după ce a făcut rocada pe partea reginei.';
+  String get puzzleThemeQueensideAttackDescription =>
+      'Un atac asupra regelui adversarului, după ce a făcut rocada pe partea reginei.';
 
   @override
   String get puzzleThemeQuietMove => 'Mutare silențioasă';
 
   @override
-  String get puzzleThemeQuietMoveDescription => 'O mutare care nu capturează sau dă șah, dar care pregătește o amenințare inevitabilă pentru o mutare ulterioară.';
+  String get puzzleThemeQuietMoveDescription =>
+      'O mutare care nu capturează sau dă șah, dar care pregătește o amenințare inevitabilă pentru o mutare ulterioară.';
 
   @override
   String get puzzleThemeRookEndgame => 'Final cu turnuri';
@@ -1861,7 +1938,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeSacrifice => 'Sacrificiu';
 
   @override
-  String get puzzleThemeSacrificeDescription => 'O tactică care implică renunțarea la material pe termen scurt pentru a câștiga un avantaj din nou după o secvență forțată de mutări.';
+  String get puzzleThemeSacrificeDescription =>
+      'O tactică care implică renunțarea la material pe termen scurt pentru a câștiga un avantaj din nou după o secvență forțată de mutări.';
 
   @override
   String get puzzleThemeShort => 'Puzzle scurt';
@@ -1873,25 +1951,29 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeSkewer => 'Skewer';
 
   @override
-  String get puzzleThemeSkewerDescription => 'Un motiv care implică atacarea unei piese de mare valoare, mutarea înafara traseului, și permițând capturarea sau atacarea unei piese cu valoare inferioară în spatele ei, inversul unui pin.';
+  String get puzzleThemeSkewerDescription =>
+      'Un motiv care implică atacarea unei piese de mare valoare, mutarea înafara traseului, și permițând capturarea sau atacarea unei piese cu valoare inferioară în spatele ei, inversul unui pin.';
 
   @override
   String get puzzleThemeSmotheredMate => 'Mat sufocat';
 
   @override
-  String get puzzleThemeSmotheredMateDescription => 'Un șah mat livrat de un cal în care regele împerechiat este incapabil să se miște deoarece este înconjurat (sau sufocat) de piesele lui aliate.';
+  String get puzzleThemeSmotheredMateDescription =>
+      'Un șah mat livrat de un cal în care regele împerechiat este incapabil să se miște deoarece este înconjurat (sau sufocat) de piesele lui aliate.';
 
   @override
   String get puzzleThemeSuperGM => 'Partidele Super GM';
 
   @override
-  String get puzzleThemeSuperGMDescription => 'Puzzle-uri din partidele jucate de cei mai buni jucători din lume.';
+  String get puzzleThemeSuperGMDescription =>
+      'Puzzle-uri din partidele jucate de cei mai buni jucători din lume.';
 
   @override
   String get puzzleThemeTrappedPiece => 'Piesa blocată';
 
   @override
-  String get puzzleThemeTrappedPieceDescription => 'O piesa este incapabilă de a scăpa din capturarea deoarece are mutări limitate.';
+  String get puzzleThemeTrappedPieceDescription =>
+      'O piesa este incapabilă de a scăpa din capturarea deoarece are mutări limitate.';
 
   @override
   String get puzzleThemeUnderPromotion => 'Subpromovare';
@@ -1909,25 +1991,29 @@ class AppLocalizationsRo extends AppLocalizations {
   String get puzzleThemeXRayAttack => 'Atac raze x';
 
   @override
-  String get puzzleThemeXRayAttackDescription => 'O piesă atacă sau apară un patrat, printr-o piesă inamică.';
+  String get puzzleThemeXRayAttackDescription =>
+      'O piesă atacă sau apară un patrat, printr-o piesă inamică.';
 
   @override
   String get puzzleThemeZugzwang => 'Zugzwang';
 
   @override
-  String get puzzleThemeZugzwangDescription => 'Adversarul este limitat în mișcările pe care le poate face, iar toate mișcările îi înrăutățesc poziția.';
+  String get puzzleThemeZugzwangDescription =>
+      'Adversarul este limitat în mișcările pe care le poate face, iar toate mișcările îi înrăutățesc poziția.';
 
   @override
   String get puzzleThemeMix => 'Mixt';
 
   @override
-  String get puzzleThemeMixDescription => 'Un pic din toate. Nu știi la ce să te aștepți, așa că rămâi gata pentru orice! La fel ca în jocurile reale.';
+  String get puzzleThemeMixDescription =>
+      'Un pic din toate. Nu știi la ce să te aștepți, așa că rămâi gata pentru orice! La fel ca în jocurile reale.';
 
   @override
   String get puzzleThemePlayerGames => 'Partide jucători';
 
   @override
-  String get puzzleThemePlayerGamesDescription => 'Caută puzzle-uri generate din partidele tale sau din partidele unui alt jucător.';
+  String get puzzleThemePlayerGamesDescription =>
+      'Caută puzzle-uri generate din partidele tale sau din partidele unui alt jucător.';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
@@ -1944,10 +2030,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get settingsCloseAccount => 'Închide contul';
 
   @override
-  String get settingsManagedAccountCannotBeClosed => 'Contul tău este gestionat și nu poate fi închis.';
+  String get settingsManagedAccountCannotBeClosed =>
+      'Contul tău este gestionat și nu poate fi închis.';
 
   @override
-  String get settingsCantOpenSimilarAccount => 'Nu îți va fi permis să creezi un cont nou cu același nume, indiferent dacă literele sunt minuscule sau majuscule.';
+  String get settingsCantOpenSimilarAccount =>
+      'Nu îți va fi permis să creezi un cont nou cu același nume, indiferent dacă literele sunt minuscule sau majuscule.';
 
   @override
   String get settingsCancelKeepAccount => 'Anulează și păstrează contul';
@@ -1959,1172 +2047,1222 @@ class AppLocalizationsRo extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Contul este închis.';
 
   @override
-  String get playWithAFriend => 'Jucați cu un prieten';
+  String get playWithAFriend => 'Play with a friend';
 
   @override
-  String get playWithTheMachine => 'Jucați cu calculatorul';
+  String get playWithTheMachine => 'Play with the computer';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'Pentru a invita pe cineva să joace, folosiți acest URL';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'To invite someone to play, give this URL';
 
   @override
-  String get gameOver => 'Partidă încheiată';
+  String get gameOver => 'Game Over';
 
   @override
-  String get waitingForOpponent => 'Se așteaptă adversarul';
+  String get waitingForOpponent => 'Waiting for opponent';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Sau lăsați adversarul să scaneze acest cod QR';
+  String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
 
   @override
-  String get waiting => 'Se așteaptă';
+  String get waiting => 'Waiting';
 
   @override
-  String get yourTurn => 'Rândul tău';
+  String get yourTurn => 'Your turn';
 
   @override
   String aiNameLevelAiLevel(String param1, String param2) {
-    return '$param1 nivel $param2';
+    return '$param1 level $param2';
   }
 
   @override
-  String get level => 'Nivel';
+  String get level => 'Level';
 
   @override
-  String get strength => 'Putere';
+  String get strength => 'Strength';
 
   @override
-  String get toggleTheChat => 'Arată/Ascunde discuţia';
+  String get toggleTheChat => 'Toggle the chat';
 
   @override
-  String get chat => 'Discuţie';
+  String get chat => 'Chat';
 
   @override
-  String get resign => 'Renunță';
+  String get resign => 'Resign';
 
   @override
-  String get checkmate => 'Şah mat';
+  String get checkmate => 'Checkmate';
 
   @override
-  String get stalemate => 'Pat';
+  String get stalemate => 'Stalemate';
 
   @override
-  String get white => 'Alb';
+  String get white => 'White';
 
   @override
-  String get black => 'Negru';
+  String get black => 'Black';
 
   @override
-  String get asWhite => 'cu albele';
+  String get asWhite => 'as white';
 
   @override
-  String get asBlack => 'cu negrele';
+  String get asBlack => 'as black';
 
   @override
-  String get randomColor => 'Culoare aleatorie';
+  String get randomColor => 'Random side';
 
   @override
-  String get createAGame => 'Creează un joc';
+  String get createAGame => 'Create a game';
 
   @override
-  String get whiteIsVictorious => 'Albul a câștigat';
+  String get createTheGame => 'Create the game';
 
   @override
-  String get blackIsVictorious => 'Negrul a câștigat';
+  String get whiteIsVictorious => 'White is victorious';
 
   @override
-  String get youPlayTheWhitePieces => 'Joci cu albele';
+  String get blackIsVictorious => 'Black is victorious';
 
   @override
-  String get youPlayTheBlackPieces => 'Joci cu negrele';
+  String get youPlayTheWhitePieces => 'You play the white pieces';
 
   @override
-  String get itsYourTurn => 'E rândul tău!';
+  String get youPlayTheBlackPieces => 'You play the black pieces';
 
   @override
-  String get cheatDetected => 'S-a trişat';
+  String get itsYourTurn => 'It\'s your turn!';
 
   @override
-  String get kingInTheCenter => 'Regele în centru';
+  String get cheatDetected => 'Cheat Detected';
 
   @override
-  String get threeChecks => 'Trei șahuri';
+  String get kingInTheCenter => 'King in the centre';
 
   @override
-  String get raceFinished => 'Competiție terminată';
+  String get threeChecks => 'Three checks';
 
   @override
-  String get variantEnding => 'Sfârșit prin variantă';
+  String get raceFinished => 'Race finished';
 
   @override
-  String get newOpponent => 'Adversar nou';
+  String get variantEnding => 'Variant ending';
 
   @override
-  String get yourOpponentWantsToPlayANewGameWithYou => 'Adversarul dvs. vă propune o nouă partidă';
+  String get newOpponent => 'New opponent';
 
   @override
-  String get joinTheGame => 'Intră în partidă';
+  String get yourOpponentWantsToPlayANewGameWithYou =>
+      'Your opponent wants to play a new game with you';
 
   @override
-  String get whitePlays => 'Albul joacă';
+  String get joinTheGame => 'Join the game';
 
   @override
-  String get blackPlays => 'Negrul joacă';
+  String get whitePlays => 'White to play';
 
   @override
-  String get opponentLeftChoices => 'Adversarul tău a părăsit jocul. Poți cere victoria, decide remiza sau îl poți aștepta.';
+  String get blackPlays => 'Black to play';
 
   @override
-  String get forceResignation => 'Revendică victoria';
+  String get opponentLeftChoices =>
+      'Your opponent left the game. You can claim victory, call the game a draw, or wait.';
 
   @override
-  String get forceDraw => 'Anunță remiză';
+  String get forceResignation => 'Claim victory';
 
   @override
-  String get talkInChat => 'Te rog să fii cu bun simț pe chat!';
+  String get forceDraw => 'Call draw';
 
   @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Prima persoană care accesează acest link va juca cu tine.';
+  String get talkInChat => 'Please be nice in the chat!';
 
   @override
-  String get whiteResigned => 'Albul a cedat';
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou =>
+      'The first person to come to this URL will play with you.';
 
   @override
-  String get blackResigned => 'Negrul a cedat';
+  String get whiteResigned => 'White resigned';
 
   @override
-  String get whiteLeftTheGame => 'Albul a părăsit partida';
+  String get blackResigned => 'Black resigned';
 
   @override
-  String get blackLeftTheGame => 'Negrul a părăsit partida';
+  String get whiteLeftTheGame => 'White left the game';
 
   @override
-  String get whiteDidntMove => 'Albul nu s-a mișcat';
+  String get blackLeftTheGame => 'Black left the game';
 
   @override
-  String get blackDidntMove => 'Negrul nu s-a mișcat';
+  String get whiteDidntMove => 'White didn\'t move';
 
   @override
-  String get requestAComputerAnalysis => 'Cereți o analiză făcută de calculator';
+  String get blackDidntMove => 'Black didn\'t move';
 
   @override
-  String get computerAnalysis => 'Analiza computer-ului';
+  String get requestAComputerAnalysis => 'Request a computer analysis';
 
   @override
-  String get computerAnalysisAvailable => 'Analiză computerizată disponibilă';
+  String get computerAnalysis => 'Computer analysis';
 
   @override
-  String get computerAnalysisDisabled => 'Analiză computerizată dezactivată';
+  String get computerAnalysisAvailable => 'Computer analysis available';
 
   @override
-  String get analysis => 'Tablă de analiză';
+  String get computerAnalysisDisabled => 'Computer analysis disabled';
+
+  @override
+  String get analysis => 'Analysis board';
 
   @override
   String depthX(String param) {
-    return 'Profunzime $param';
+    return 'Depth $param';
   }
 
   @override
-  String get usingServerAnalysis => 'Utilizează analiză de server';
+  String get usingServerAnalysis => 'Using server analysis';
 
   @override
-  String get loadingEngine => 'Se încarcă motorul de analiză...';
+  String get loadingEngine => 'Loading engine...';
 
   @override
-  String get calculatingMoves => 'Se calculează mutările...';
+  String get calculatingMoves => 'Calculating moves...';
 
   @override
-  String get engineFailed => 'Eroare încărcare motor';
+  String get engineFailed => 'Error loading engine';
 
   @override
-  String get cloudAnalysis => 'Analiză online';
+  String get cloudAnalysis => 'Cloud analysis';
 
   @override
-  String get goDeeper => 'Mergi mai în profunzime';
+  String get goDeeper => 'Go deeper';
 
   @override
-  String get showThreat => 'Afișează amenințarea';
+  String get showThreat => 'Show threat';
 
   @override
-  String get inLocalBrowser => 'în browserul local';
+  String get inLocalBrowser => 'in local browser';
 
   @override
-  String get toggleLocalEvaluation => 'Pornește/oprește evaluarea locală';
+  String get toggleLocalEvaluation => 'Toggle local evaluation';
 
   @override
-  String get promoteVariation => 'Promovează variația';
+  String get promoteVariation => 'Promote variation';
 
   @override
-  String get makeMainLine => 'Fă-o variația principală';
+  String get makeMainLine => 'Make mainline';
 
   @override
-  String get deleteFromHere => 'Șterge de aici';
+  String get deleteFromHere => 'Delete from here';
 
   @override
-  String get collapseVariations => 'Restrânge variațiile';
+  String get collapseVariations => 'Collapse variations';
 
   @override
-  String get expandVariations => 'Extinde variațiile';
+  String get expandVariations => 'Expand variations';
 
   @override
-  String get forceVariation => 'Forțează variația';
+  String get forceVariation => 'Force variation';
 
   @override
-  String get copyVariationPgn => 'Copiază varianta PGN';
+  String get copyVariationPgn => 'Copy variation PGN';
 
   @override
-  String get move => 'Mutare';
+  String get copyMainLinePgn => 'Copy mainline PGN';
 
   @override
-  String get variantLoss => 'Variantă pierdere';
+  String get move => 'Move';
 
   @override
-  String get variantWin => 'Variantă câștig';
+  String get variantLoss => 'Variant loss';
 
   @override
-  String get insufficientMaterial => 'Material insuficient';
+  String get variantWin => 'Variant win';
 
   @override
-  String get pawnMove => 'Mutare de pion';
+  String get insufficientMaterial => 'Insufficient material';
 
   @override
-  String get capture => 'Captură';
+  String get pawnMove => 'Pawn move';
 
   @override
-  String get close => 'Închide';
+  String get capture => 'Capture';
 
   @override
-  String get winning => 'Câştigă';
+  String get close => 'Close';
 
   @override
-  String get losing => 'Pierde';
+  String get winning => 'Winning';
 
   @override
-  String get drawn => 'Remiză';
+  String get losing => 'Losing';
 
   @override
-  String get unknown => 'Necunoscut';
+  String get drawn => 'Drawn';
 
   @override
-  String get database => 'Bază de date';
+  String get unknown => 'Unknown';
 
   @override
-  String get whiteDrawBlack => 'Alb / Remiză / Negru';
+  String get database => 'Database';
+
+  @override
+  String get whiteDrawBlack => 'White / Draw / Black';
 
   @override
   String averageRatingX(String param) {
-    return 'Medie evaluare: $param';
+    return 'Average rating: $param';
   }
 
   @override
-  String get recentGames => 'Jocuri recente';
+  String get recentGames => 'Recent games';
 
   @override
-  String get topGames => 'Cele mai bune jocuri';
+  String get topGames => 'Top games';
 
   @override
   String masterDbExplanation(String param1, String param2, String param3) {
-    return 'Două milioane de jocuri reale OTB ale jucătorilor cu evaluare FIDE $param1+ între $param2 și $param3';
+    return 'OTB games of $param1+ FIDE-rated players from $param2 to $param3';
   }
 
   @override
-  String get dtzWithRounding => 'DTZ50\'\' cu rotunjire, bazat pe numărul de jumătăți de mutări până la următoarea captură sau mutare de pion';
+  String get dtzWithRounding =>
+      'DTZ50\'\' with rounding, based on number of half-moves until next capture or pawn move';
 
   @override
-  String get noGameFound => 'Nu a fost găsit nici un joc';
+  String get noGameFound => 'No game found';
 
   @override
-  String get maxDepthReached => 'Adâncime maximă atinsă!';
+  String get maxDepthReached => 'Max depth reached!';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Poate doriți să includeți mai multe jocuri din meniul de preferințe?';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu =>
+      'Maybe include more games from the preferences menu?';
 
   @override
-  String get openings => 'Deschideri';
+  String get openings => 'Openings';
 
   @override
-  String get openingExplorer => 'Exploratorul de deschideri';
+  String get openingExplorer => 'Opening explorer';
 
   @override
-  String get openingEndgameExplorer => 'Explorator de deschideri/finaluri de joc';
+  String get openingEndgameExplorer => 'Opening/endgame explorer';
 
   @override
   String xOpeningExplorer(String param) {
-    return 'Exploratorul de deschideri $param';
+    return '$param opening explorer';
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => 'Joacă prima mutare de deschidere/final de joc-explorator';
+  String get playFirstOpeningEndgameExplorerMove => 'Play first opening/endgame-explorer move';
 
   @override
-  String get winPreventedBy50MoveRule => 'Victoria partidei a fost împiedicată de regula celor 50 de mutări';
+  String get winPreventedBy50MoveRule => 'Win prevented by 50-move rule';
 
   @override
-  String get lossSavedBy50MoveRule => 'Pierderea partidei a fost împiedicată de regula celor 50 de mutări';
+  String get lossSavedBy50MoveRule => 'Loss prevented by 50-move rule';
 
   @override
-  String get winOr50MovesByPriorMistake => 'Câștig sau remiză la 50 de mutări din cauza unei greșeli anterioare';
+  String get winOr50MovesByPriorMistake => 'Win or 50 moves by prior mistake';
 
   @override
-  String get lossOr50MovesByPriorMistake => 'Pierdere sau remiză la 50 de mutări din cauza unei greșeli anterioare';
+  String get lossOr50MovesByPriorMistake => 'Loss or 50 moves by prior mistake';
 
   @override
-  String get unknownDueToRounding => 'Câștigul sau pierderea este garantată numai dacă a fost urmată linia de bază recomandată de la ultima capturare sau mișcare de pion, din cauza eventualelor rotunjiri.';
+  String get unknownDueToRounding =>
+      'Win/loss only guaranteed if recommended tablebase line has been followed since the last capture or pawn move, due to possible rounding of DTZ values in Syzygy tablebases.';
 
   @override
-  String get allSet => 'Gata!';
+  String get allSet => 'All set!';
 
   @override
-  String get importPgn => 'Importare PGN';
+  String get importPgn => 'Import PGN';
 
   @override
-  String get delete => 'Șterge';
+  String get delete => 'Delete';
 
   @override
-  String get deleteThisImportedGame => 'Ștergi acest joc importat?';
+  String get deleteThisImportedGame => 'Delete this imported game?';
 
   @override
-  String get replayMode => 'Modul de reluare';
+  String get replayMode => 'Replay mode';
 
   @override
-  String get realtimeReplay => 'În timp real';
+  String get realtimeReplay => 'Realtime';
 
   @override
-  String get byCPL => 'După CPL';
+  String get byCPL => 'By CPL';
 
   @override
-  String get enable => 'Activează';
+  String get enable => 'Enable';
 
   @override
-  String get bestMoveArrow => 'Săgeată pentru cea mai bună mutare';
+  String get bestMoveArrow => 'Best move arrow';
 
   @override
-  String get showVariationArrows => 'Afișează săgețile variației';
+  String get showVariationArrows => 'Show variation arrows';
 
   @override
-  String get evaluationGauge => 'Indicator de evaluare';
+  String get evaluationGauge => 'Evaluation gauge';
 
   @override
-  String get multipleLines => 'Mutări multiple';
+  String get multipleLines => 'Multiple lines';
 
   @override
-  String get cpus => 'Procesoare';
+  String get cpus => 'CPUs';
 
   @override
-  String get memory => 'Memorie';
+  String get memory => 'Memory';
 
   @override
-  String get infiniteAnalysis => 'Analiză infinită';
+  String get infiniteAnalysis => 'Infinite analysis';
 
   @override
-  String get removesTheDepthLimit => 'Elimină limita de adâncime (și încălzește computerul)';
+  String get removesTheDepthLimit => 'Removes the depth limit, and keeps your computer warm';
 
   @override
-  String get blunder => 'Gafă';
+  String get blunder => 'Blunder';
 
   @override
-  String get mistake => 'Greșeală';
+  String get mistake => 'Mistake';
 
   @override
-  String get inaccuracy => 'Inexactitate';
+  String get inaccuracy => 'Inaccuracy';
 
   @override
-  String get moveTimes => 'Timpii de mutare';
+  String get moveTimes => 'Move times';
 
   @override
-  String get flipBoard => 'Rotiţi tabla';
+  String get flipBoard => 'Flip board';
 
   @override
-  String get threefoldRepetition => 'Repetare de trei ori';
+  String get threefoldRepetition => 'Threefold repetition';
 
   @override
-  String get claimADraw => 'Cere remiză';
+  String get claimADraw => 'Claim a draw';
 
   @override
-  String get drawClaimed => 'Remiză revendicată';
+  String get drawClaimed => 'Draw claimed';
 
   @override
-  String get offerDraw => 'Propune remiză';
+  String get offerDraw => 'Offer draw';
 
   @override
-  String get draw => 'Remiză';
+  String get draw => 'Draw';
 
   @override
-  String get drawByMutualAgreement => 'Remiză prin acord reciproc';
+  String get drawByMutualAgreement => 'Draw by mutual agreement';
 
   @override
-  String get fiftyMovesWithoutProgress => 'Cincizeci de mișcări fără progres';
+  String get fiftyMovesWithoutProgress => 'Fifty moves without progress';
 
   @override
-  String get currentGames => 'Partide active';
+  String get currentGames => 'Current games';
 
   @override
-  String get viewInFullSize => 'Vezi la dimensiune maximă';
+  String joinedX(String param) {
+    return 'Joined $param';
+  }
 
   @override
-  String get logOut => 'Deconectare';
+  String get viewInFullSize => 'View in full size';
 
   @override
-  String get signIn => 'Autentificare';
+  String get logOut => 'Sign out';
 
   @override
-  String get rememberMe => 'Ține-mă minte';
+  String get signIn => 'Sign in';
 
   @override
-  String get youNeedAnAccountToDoThat => 'Aveți nevoie de cont pentru această acțiune';
+  String get rememberMe => 'Keep me logged in';
 
   @override
-  String get signUp => 'Înregistrare';
+  String get youNeedAnAccountToDoThat => 'You need an account to do that';
 
   @override
-  String get computersAreNotAllowedToPlay => 'Computerele și jucătorii asistați de computer nu au voie să joace. Vă rugăm ca în timpul partidei să nu primiți asistență de la motoare de șah, baze de date, sau de la alți jucători. Rețineți totodată că acțiunea de creare a mai multor conturi este descurajată și că un număr mare de conturi vor conduce la blocarea accesului pe site (ban).';
+  String get signUp => 'Register';
 
   @override
-  String get games => 'Partide';
+  String get computersAreNotAllowedToPlay =>
+      'Computers and computer-assisted players are not allowed to play. Please do not get assistance from chess engines, databases, or from other players while playing. Also note that making multiple accounts is strongly discouraged and excessive multi-accounting will lead to being banned.';
+
+  @override
+  String get games => 'Games';
 
   @override
   String get forum => 'Forum';
 
   @override
   String xPostedInForumY(String param1, String param2) {
-    return '$param1 a comentat la subiectul $param2';
+    return '$param1 posted in topic $param2';
   }
 
   @override
-  String get latestForumPosts => 'Ultimele postări pe forum';
+  String get latestForumPosts => 'Latest forum posts';
 
   @override
-  String get players => 'Jucători';
+  String get players => 'Players';
 
   @override
-  String get friends => 'Prieteni';
+  String get friends => 'Friends';
 
   @override
-  String get otherPlayers => 'alți jucători';
+  String get otherPlayers => 'other players';
 
   @override
-  String get discussions => 'Discuții';
+  String get discussions => 'Conversations';
 
   @override
-  String get today => 'Astăzi';
+  String get today => 'Today';
 
   @override
-  String get yesterday => 'Ieri';
+  String get yesterday => 'Yesterday';
 
   @override
-  String get minutesPerSide => 'Minute pe fiecare parte';
+  String get minutesPerSide => 'Minutes per side';
 
   @override
-  String get variant => 'Variantă';
+  String get variant => 'Variant';
 
   @override
-  String get variants => 'Variante';
+  String get variants => 'Variants';
 
   @override
-  String get timeControl => 'Controlul de timp';
+  String get timeControl => 'Time control';
 
   @override
-  String get realTime => 'În timp real';
+  String get realTime => 'Real time';
 
   @override
-  String get correspondence => 'Corespondență';
+  String get correspondence => 'Correspondence';
 
   @override
-  String get daysPerTurn => 'Zile pentru o mutare';
+  String get daysPerTurn => 'Days per turn';
 
   @override
-  String get oneDay => 'O zi';
+  String get oneDay => 'One day';
 
   @override
-  String get time => 'Timp';
+  String get time => 'Time';
 
   @override
-  String get rating => 'Clasament';
+  String get rating => 'Rating';
 
   @override
-  String get ratingStats => 'Statistică pentru clasament';
+  String get ratingStats => 'Rating stats';
 
   @override
-  String get username => 'Nume de utilizator';
+  String get username => 'User name';
 
   @override
-  String get usernameOrEmail => 'Nume de utilizator sau email';
+  String get usernameOrEmail => 'User name or email';
 
   @override
-  String get changeUsername => 'Schimbă numele de utilizator';
+  String get changeUsername => 'Change username';
 
   @override
-  String get changeUsernameNotSame => 'Se poate interschimba doar din minuscule în majuscule. De exemplu: „johndoe” în „JohnDoe”.';
+  String get changeUsernameNotSame =>
+      'Only the case of the letters can change. For example \"johndoe\" to \"JohnDoe\".';
 
   @override
-  String get changeUsernameDescription => 'Schimbă-ți numele de utilizator. Această operație poate fi efectuată o singură dată și presupune doar schimbarea literelor din minuscule în majuscule și invers.';
+  String get changeUsernameDescription =>
+      'Change your username. This can only be done once and you are only allowed to change the case of the letters in your username.';
 
   @override
-  String get signupUsernameHint => 'Asigurați-vă că alegeți un nume de utilizator decent. Nu îl puteți schimba mai târziu și orice cont cu nume de utilizator indecent va fi închis!';
+  String get signupUsernameHint =>
+      'Make sure to choose a username that\'s appropriate for all ages. You cannot change it later and any accounts with inappropriate usernames will get closed!';
 
   @override
-  String get signupEmailHint => 'Îl vom folosi doar pentru resetarea parolei.';
+  String get signupEmailHint => 'We will only use it for password reset.';
 
   @override
-  String get password => 'Parolă';
+  String get password => 'Password';
 
   @override
-  String get changePassword => 'Schimbă parola';
+  String get changePassword => 'Change password';
 
   @override
-  String get changeEmail => 'Schimbă emailul';
+  String get changeEmail => 'Change email';
 
   @override
   String get email => 'Email';
 
   @override
-  String get passwordReset => 'Resetează parola';
+  String get passwordReset => 'Password reset';
 
   @override
-  String get forgotPassword => 'Ți-ai uitat parola?';
+  String get forgotPassword => 'Forgot password?';
 
   @override
-  String get error_weakPassword => 'Această parolă este extrem de comună şi prea uşor de ghicit.';
+  String get error_weakPassword => 'This password is extremely common, and too easy to guess.';
 
   @override
-  String get error_namePassword => 'Te rugăm să nu folosești numele tău de utilizator ca parolă.';
+  String get error_namePassword => 'Please don\'t use your username as your password.';
 
   @override
-  String get blankedPassword => 'Ați folosit aceeași parolă pe un alt site, iar acel site a fost compromis. Pentru a asigura siguranța contului dvs. Lichess, trebuie să setați o parolă nouă. Vă mulțumim pentru înțelegere.';
+  String get blankedPassword =>
+      'You have used the same password on another site, and that site has been compromised. To ensure the safety of your Lichess account, we need you to set a new password. Thank you for your understanding.';
 
   @override
-  String get youAreLeavingLichess => 'Părăsești Lichess';
+  String get youAreLeavingLichess => 'You are leaving Lichess';
 
   @override
-  String get neverTypeYourPassword => 'Nu introduceți niciodată parola Lichess pe un alt site!';
+  String get neverTypeYourPassword => 'Never type your Lichess password on another site!';
 
   @override
   String proceedToX(String param) {
-    return 'Continuă către $param';
+    return 'Proceed to $param';
   }
 
   @override
-  String get passwordSuggestion => 'Nu seta o parolă sugerată de altcineva. O vor folosi pentru a vă fura contul.';
+  String get passwordSuggestion =>
+      'Do not set a password suggested by someone else. They will use it to steal your account.';
 
   @override
-  String get emailSuggestion => 'Nu setați o adresă de e-mail sugerată de altcineva. O vor folosi pentru a vă fura contul.';
+  String get emailSuggestion =>
+      'Do not set an email address suggested by someone else. They will use it to steal your account.';
 
   @override
-  String get emailConfirmHelp => 'Ajutor cu confirmarea adresei de email';
+  String get emailConfirmHelp => 'Help with email confirmation';
 
   @override
-  String get emailConfirmNotReceived => 'Nu ai primit emailul de confirmare după înregistrare?';
+  String get emailConfirmNotReceived => 'Didn\'t receive your confirmation email after signing up?';
 
   @override
-  String get whatSignupUsername => 'Ce nume de utilizator ai folosit pentru a te înregistra?';
+  String get whatSignupUsername => 'What username did you use to sign up?';
 
   @override
   String usernameNotFound(String param) {
-    return 'Nu am putut găsi niciun utilizator cu acest nume: $param.';
+    return 'We couldn\'t find any user by this name: $param.';
   }
 
   @override
-  String get usernameCanBeUsedForNewAccount => 'Poți folosi acest nume de utilizator pentru a crea un cont nou';
+  String get usernameCanBeUsedForNewAccount => 'You can use this username to create a new account';
 
   @override
   String emailSent(String param) {
-    return 'Am trimis un email la $param.';
+    return 'We have sent an email to $param.';
   }
 
   @override
-  String get emailCanTakeSomeTime => 'Poate dura ceva timp să ajungă.';
+  String get emailCanTakeSomeTime => 'It can take some time to arrive.';
 
   @override
-  String get refreshInboxAfterFiveMinutes => 'Așteptați 5 minute și reîncărcați emailurile primite.';
+  String get refreshInboxAfterFiveMinutes => 'Wait 5 minutes and refresh your email inbox.';
 
   @override
-  String get checkSpamFolder => 'De asemenea, verificați folderul de spam, ar putea ajunge acolo. În acel caz, marcați-l ca nefiind spam.';
+  String get checkSpamFolder =>
+      'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
-  String get emailForSignupHelp => 'Dacă niciuna dintre variantele anterioare nu funcționează, trimiteți-ne acest email:';
+  String get emailForSignupHelp => 'If everything else fails, then send us this email:';
 
   @override
   String copyTextToEmail(String param) {
-    return 'Dați copy-paste la textul de mai sus și trimiteți-l la $param';
+    return 'Copy and paste the above text and send it to $param';
   }
 
   @override
-  String get waitForSignupHelp => 'Vom reveni în curând cu un răspuns pentru a vă ajuta să finalizați înregistrarea.';
+  String get waitForSignupHelp =>
+      'We will come back to you shortly to help you complete your signup.';
 
   @override
   String accountConfirmed(String param) {
-    return 'Utilizatorul $param a fost confirmat cu succes.';
+    return 'The user $param is successfully confirmed.';
   }
 
   @override
   String accountCanLogin(String param) {
-    return 'Vă puteți autentifica chiar acum ca $param.';
+    return 'You can login right now as $param.';
   }
 
   @override
-  String get accountConfirmationEmailNotNeeded => 'Nu aveți nevoie de un email de confirmare.';
+  String get accountConfirmationEmailNotNeeded => 'You do not need a confirmation email.';
 
   @override
   String accountClosed(String param) {
-    return 'Contul $param este închis.';
+    return 'The account $param is closed.';
   }
 
   @override
   String accountRegisteredWithoutEmail(String param) {
-    return 'Contul $param a fost înregistrat fără o adresă de email.';
+    return 'The account $param was registered without an email.';
   }
 
   @override
-  String get rank => 'Clasificare';
+  String get rank => 'Rank';
 
   @override
   String rankX(String param) {
-    return 'Loc în clasament: $param';
+    return 'Rank: $param';
   }
 
   @override
-  String get gamesPlayed => 'Partide jucate';
+  String get gamesPlayed => 'Games played';
 
   @override
   String get ok => 'OK';
 
   @override
-  String get cancel => 'Anulare';
+  String get cancel => 'Cancel';
 
   @override
-  String get whiteTimeOut => 'Timpul pentru alb a expirat';
+  String get whiteTimeOut => 'White time out';
 
   @override
-  String get blackTimeOut => 'Timpul pentru negru a expirat';
+  String get blackTimeOut => 'Black time out';
 
   @override
-  String get drawOfferSent => 'Propunere de remiză trimisă';
+  String get drawOfferSent => 'Draw offer sent';
 
   @override
-  String get drawOfferAccepted => 'Propunere de remiză acceptată';
+  String get drawOfferAccepted => 'Draw offer accepted';
 
   @override
-  String get drawOfferCanceled => 'Propunere remiză anulată';
+  String get drawOfferCanceled => 'Draw offer cancelled';
 
   @override
-  String get whiteOffersDraw => 'Albul a oferit remiza';
+  String get whiteOffersDraw => 'White offers draw';
 
   @override
-  String get blackOffersDraw => 'Negrul a oferit remiza';
+  String get blackOffersDraw => 'Black offers draw';
 
   @override
-  String get whiteDeclinesDraw => 'Albul refuză propunerea de remiză';
+  String get whiteDeclinesDraw => 'White declines draw';
 
   @override
-  String get blackDeclinesDraw => 'Negrul refuză propunerea de remiză';
+  String get blackDeclinesDraw => 'Black declines draw';
 
   @override
-  String get yourOpponentOffersADraw => 'Adversarul dvs. vă propune remiza';
+  String get yourOpponentOffersADraw => 'Your opponent offers a draw';
 
   @override
-  String get accept => 'Acceptați';
+  String get accept => 'Accept';
 
   @override
-  String get decline => 'Refuzați';
+  String get decline => 'Decline';
 
   @override
-  String get playingRightNow => 'În desfășurare...';
+  String get playingRightNow => 'Playing right now';
 
   @override
-  String get eventInProgress => 'În desfășurare';
+  String get eventInProgress => 'Playing now';
 
   @override
-  String get finished => 'Terminat';
+  String get finished => 'Finished';
 
   @override
-  String get abortGame => 'Abandonați partida';
+  String get abortGame => 'Abort game';
 
   @override
-  String get gameAborted => 'Partidă abandonată';
+  String get gameAborted => 'Game aborted';
 
   @override
   String get standard => 'Standard';
 
   @override
-  String get customPosition => 'Poziție personalizată';
+  String get customPosition => 'Custom position';
 
   @override
-  String get unlimited => 'Nelimitat';
+  String get unlimited => 'Unlimited';
 
   @override
-  String get mode => 'Mod';
+  String get mode => 'Mode';
 
   @override
-  String get casual => 'Amical';
+  String get casual => 'Casual';
 
   @override
-  String get rated => 'Oficial';
+  String get rated => 'Rated';
 
   @override
-  String get casualTournament => 'Amical';
+  String get casualTournament => 'Casual';
 
   @override
-  String get ratedTournament => 'Oficial';
+  String get ratedTournament => 'Rated';
 
   @override
-  String get thisGameIsRated => 'Această partidă este oficială';
+  String get thisGameIsRated => 'This game is rated';
 
   @override
-  String get rematch => 'Revanșă';
+  String get rematch => 'Rematch';
 
   @override
-  String get rematchOfferSent => 'Propunerea de revanșă a fost trimisă';
+  String get rematchOfferSent => 'Rematch offer sent';
 
   @override
-  String get rematchOfferAccepted => 'Propunerea de revanșă a fost acceptată';
+  String get rematchOfferAccepted => 'Rematch offer accepted';
 
   @override
-  String get rematchOfferCanceled => 'Propunerea de revanșă a fost anulată';
+  String get rematchOfferCanceled => 'Rematch offer cancelled';
 
   @override
-  String get rematchOfferDeclined => 'Propunerea de revanșă a fost respinsă';
+  String get rematchOfferDeclined => 'Rematch offer declined';
 
   @override
-  String get cancelRematchOffer => 'Anulați propunerea de revanșă';
+  String get cancelRematchOffer => 'Cancel rematch offer';
 
   @override
-  String get viewRematch => 'Urmărește revanșa';
+  String get viewRematch => 'View rematch';
 
   @override
-  String get confirmMove => 'Confirmă mutarea';
+  String get confirmMove => 'Confirm move';
 
   @override
-  String get play => 'Joacă';
+  String get play => 'Play';
 
   @override
-  String get inbox => 'Căsuță poștală';
+  String get inbox => 'Inbox';
 
   @override
-  String get chatRoom => 'Zona de chat';
+  String get chatRoom => 'Chat room';
 
   @override
-  String get loginToChat => 'Conectare la chat';
+  String get loginToChat => 'Sign in to chat';
 
   @override
-  String get youHaveBeenTimedOut => 'Pentru o perioadă, nu mai aveți acces la chat.';
+  String get youHaveBeenTimedOut => 'You have been timed out.';
 
   @override
-  String get spectatorRoom => 'Zona spectatorilor';
+  String get spectatorRoom => 'Spectator room';
 
   @override
-  String get composeMessage => 'Compune un mesaj';
+  String get composeMessage => 'Compose message';
 
   @override
-  String get subject => 'Subiect';
+  String get subject => 'Subject';
 
   @override
-  String get send => 'Trimite';
+  String get send => 'Send';
 
   @override
-  String get incrementInSeconds => 'Adaos de timp în secunde';
+  String get incrementInSeconds => 'Increment in seconds';
 
   @override
-  String get freeOnlineChess => 'Șah Online Gratuit';
+  String get freeOnlineChess => 'Free Online Chess';
 
   @override
-  String get exportGames => 'Exportă partidele';
+  String get exportGames => 'Export games';
 
   @override
-  String get ratingRange => 'Nivel valoric';
+  String get ratingRange => 'Rating range';
 
   @override
-  String get thisAccountViolatedTos => 'Acest cont a încălcat condițiile de utilizare ale site-ului Lichess';
+  String get thisAccountViolatedTos => 'This account violated the Lichess Terms of Service';
 
   @override
-  String get openingExplorerAndTablebase => 'Deschide exploratorul & baza de date';
+  String get openingExplorerAndTablebase => 'Opening explorer & tablebase';
 
   @override
-  String get takeback => 'Revocare';
+  String get takeback => 'Takeback';
 
   @override
-  String get proposeATakeback => 'Propune revocarea mutării';
+  String get proposeATakeback => 'Propose a takeback';
 
   @override
-  String get takebackPropositionSent => 'Propunere de revocare trimisă';
+  String get whiteProposesTakeback => 'White proposes takeback';
 
   @override
-  String get takebackPropositionDeclined => 'Propunerea de revocare respinsă';
+  String get blackProposesTakeback => 'Black proposes takeback';
 
   @override
-  String get takebackPropositionAccepted => 'Propunerea de revocare acceptată';
+  String get takebackPropositionSent => 'Takeback sent';
 
   @override
-  String get takebackPropositionCanceled => 'Propunerea de revocare anulată';
+  String get whiteDeclinesTakeback => 'White declines takeback';
 
   @override
-  String get yourOpponentProposesATakeback => 'Adversarul tău propune revocarea unei mutări';
+  String get blackDeclinesTakeback => 'Black declines takeback';
 
   @override
-  String get bookmarkThisGame => 'Marcați această partidă';
+  String get whiteAcceptsTakeback => 'White accepts takeback';
 
   @override
-  String get tournament => 'Turneu';
+  String get blackAcceptsTakeback => 'Black accepts takeback';
 
   @override
-  String get tournaments => 'Turnee';
+  String get whiteCancelsTakeback => 'White cancels takeback';
 
   @override
-  String get tournamentPoints => 'Puncte de turneu';
+  String get blackCancelsTakeback => 'Black cancels takeback';
 
   @override
-  String get viewTournament => 'Vizualizați turneul';
+  String get yourOpponentProposesATakeback => 'Your opponent proposes a takeback';
 
   @override
-  String get backToTournament => 'Înapoi la turneu';
+  String get bookmarkThisGame => 'Bookmark this game';
 
   @override
-  String get noDrawBeforeSwissLimit => 'Nu poți declara remiză înainte ca 30 de mutări să fie jucate într-un turneu elvețian.';
+  String get tournament => 'Tournament';
 
   @override
-  String get thematic => 'Tematică';
+  String get tournaments => 'Tournaments';
+
+  @override
+  String get tournamentPoints => 'Tournament points';
+
+  @override
+  String get viewTournament => 'View tournament';
+
+  @override
+  String get backToTournament => 'Back to tournament';
+
+  @override
+  String get noDrawBeforeSwissLimit =>
+      'You cannot draw before 30 moves are played in a Swiss tournament.';
+
+  @override
+  String get thematic => 'Thematic';
 
   @override
   String yourPerfRatingIsProvisional(String param) {
-    return 'Scorul tău la $param este provizoriu';
+    return 'Your $param rating is provisional';
   }
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
-    return 'Scorul tău la $param1 ($param2) este prea mare';
+    return 'Your $param1 rating ($param2) is too high';
   }
 
   @override
   String yourTopWeeklyPerfRatingIsTooHigh(String param1, String param2) {
-    return 'Scorul tău săptămânal la $param1 ($param2) este prea mare';
+    return 'Your top weekly $param1 rating ($param2) is too high';
   }
 
   @override
   String yourPerfRatingIsTooLow(String param1, String param2) {
-    return 'Scorul tău la $param1 ($param2) este prea mic';
+    return 'Your $param1 rating ($param2) is too low';
   }
 
   @override
   String ratedMoreThanInPerf(String param1, String param2) {
-    return 'Evaluat ≥ $param1 în $param2';
+    return 'Rated ≥ $param1 in $param2';
   }
 
   @override
   String ratedLessThanInPerf(String param1, String param2) {
-    return 'Evaluat ≤ $param1 în $param2';
+    return 'Rated ≤ $param1 in $param2 for the last week';
   }
 
   @override
   String mustBeInTeam(String param) {
-    return 'Trebuie să fii in echipa $param';
+    return 'Must be in team $param';
   }
 
   @override
   String youAreNotInTeam(String param) {
-    return 'Nu sunteți în echipa $param';
+    return 'You are not in the team $param';
   }
 
   @override
-  String get backToGame => 'Înapoi la joc';
+  String get backToGame => 'Back to game';
 
   @override
-  String get siteDescription => 'Șah online gratuit. Joacă șah acum într-o interfață simplă. Fără înregistrare, fără reclame, fără plugin-uri. Joacă șah cu calculatorul, cu prietenii sau cu alți jucători aleși la întâmplare.';
+  String get siteDescription =>
+      'Free online chess server. Play chess in a clean interface. No registration, no ads, no plugin required. Play chess with the computer, friends or random opponents.';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
-    return '$param1 a intrat în echipa $param2';
+    return '$param1 joined team $param2';
   }
 
   @override
   String xCreatedTeamY(String param1, String param2) {
-    return '$param1 a creat echipa $param2';
+    return '$param1 created team $param2';
   }
 
   @override
-  String get startedStreaming => 'e live';
+  String get startedStreaming => 'started streaming';
 
   @override
   String xStartedStreaming(String param) {
-    return '$param a pornit stream-ul';
+    return '$param started streaming';
   }
 
   @override
-  String get averageElo => 'Medie rating';
+  String get averageElo => 'Average rating';
 
   @override
-  String get location => 'Locaţie';
+  String get location => 'Location';
 
   @override
-  String get filterGames => 'Filtrați partidele';
+  String get filterGames => 'Filter games';
 
   @override
-  String get reset => 'Resetare';
+  String get reset => 'Reset';
 
   @override
-  String get apply => 'Aplicați';
+  String get apply => 'Submit';
 
   @override
-  String get save => 'Salvează';
+  String get save => 'Save';
 
   @override
-  String get leaderboard => 'Clasament';
+  String get leaderboard => 'Leaderboard';
 
   @override
-  String get screenshotCurrentPosition => 'Captură de ecran cu poziția curentă';
+  String get screenshotCurrentPosition => 'Screenshot current position';
 
   @override
-  String get gameAsGIF => 'Salvați jocul ca fișier GIF';
+  String get gameAsGIF => 'Game as GIF';
 
   @override
-  String get pasteTheFenStringHere => 'Lipește textul FEN aici';
+  String get pasteTheFenStringHere => 'Paste the FEN text here';
 
   @override
-  String get pasteThePgnStringHere => 'Lipește textul PGN aici';
+  String get pasteThePgnStringHere => 'Paste the PGN text here';
 
   @override
-  String get orUploadPgnFile => 'Sau încarcă un fișier PGN';
+  String get orUploadPgnFile => 'Or upload a PGN file';
 
   @override
-  String get fromPosition => 'De la poziția';
+  String get fromPosition => 'From position';
 
   @override
-  String get continueFromHere => 'Continuați de aici';
+  String get continueFromHere => 'Continue from here';
 
   @override
-  String get toStudy => 'Studiază';
+  String get toStudy => 'Study';
 
   @override
-  String get importGame => 'Importați partida';
+  String get importGame => 'Import game';
 
   @override
-  String get importGameExplanation => 'Lipiți o partidă în format PGN pentru a putea apoi să o rejucați, să cereți o analiză a computerului, să folosiți funcția de chat și să obțineți un URL pentru distribuire.';
+  String get importGameExplanation =>
+      'Paste a game PGN to get a browsable replay, computer analysis, game chat and public shareable URL.';
 
   @override
-  String get importGameCaveat => 'Variațiile vor fi șterse. Pentru a le păstra, importați PGN-ul printr-un studiu.';
+  String get importGameCaveat =>
+      'Variations will be erased. To keep them, import the PGN via a study.';
 
   @override
-  String get importGameDataPrivacyWarning => 'Acest PGN poate fi accesat public. Pentru a importa un joc în mod privat, folosește un studiu.';
+  String get importGameDataPrivacyWarning =>
+      'This PGN can be accessed by the public. To import a game privately, use a study.';
 
   @override
-  String get thisIsAChessCaptcha => 'Aceasta este o verificare anti-spam pe baza unei poziții de șah.';
+  String get thisIsAChessCaptcha => 'This is a chess CAPTCHA.';
 
   @override
-  String get clickOnTheBoardToMakeYourMove => 'Apăsați pe tablă pentru a muta, dovedind că sunteți om.';
+  String get clickOnTheBoardToMakeYourMove =>
+      'Click on the board to make your move, and prove you are human.';
 
   @override
-  String get captcha_fail => 'Vă rugăm să completați acest puzzle.';
+  String get captcha_fail => 'Please solve the chess captcha.';
 
   @override
-  String get notACheckmate => 'Nu este șah mat';
+  String get notACheckmate => 'Not a checkmate';
 
   @override
-  String get whiteCheckmatesInOneMove => 'Albele să dea șah mat într-o mutare';
+  String get whiteCheckmatesInOneMove => 'White to checkmate in one move';
 
   @override
-  String get blackCheckmatesInOneMove => 'Negrele să dea șah mat într-o mutare';
+  String get blackCheckmatesInOneMove => 'Black to checkmate in one move';
 
   @override
-  String get retry => 'Mai încercați';
+  String get retry => 'Retry';
 
   @override
-  String get reconnecting => 'Se reconectează';
+  String get reconnecting => 'Reconnecting';
 
   @override
-  String get noNetwork => 'Deconectat';
+  String get noNetwork => 'Offline';
 
   @override
-  String get favoriteOpponents => 'Adversari preferați';
+  String get favoriteOpponents => 'Favourite opponents';
 
   @override
-  String get follow => 'Urmăriți';
+  String get follow => 'Follow';
 
   @override
-  String get following => 'Se urmărește';
+  String get following => 'Following';
 
   @override
-  String get unfollow => 'Opriți urmărirea';
+  String get unfollow => 'Unfollow';
 
   @override
   String followX(String param) {
-    return 'Urmărește utilizatorul $param';
+    return 'Follow $param';
   }
 
   @override
   String unfollowX(String param) {
-    return 'Nu mai urmări utilizatorul $param';
+    return 'Unfollow $param';
   }
 
   @override
-  String get block => 'Blocare';
+  String get block => 'Block';
 
   @override
-  String get blocked => 'Blocat';
+  String get blocked => 'Blocked';
 
   @override
-  String get unblock => 'Deblocare';
+  String get unblock => 'Unblock';
 
   @override
   String xStartedFollowingY(String param1, String param2) {
-    return '$param1 a început să vă urmărească $param2';
+    return '$param1 started following $param2';
   }
 
   @override
-  String get more => 'Mai mult';
+  String get more => 'More';
 
   @override
-  String get memberSince => 'Membru din';
+  String get memberSince => 'Member since';
 
   @override
   String lastSeenActive(String param) {
-    return 'Ultima autentificare $param';
+    return 'Active $param';
   }
 
   @override
-  String get player => 'Jucător';
+  String get player => 'Player';
 
   @override
-  String get list => 'Listă';
+  String get list => 'List';
 
   @override
-  String get graph => 'Grafic';
+  String get graph => 'Graph';
 
   @override
-  String get required => 'Obligatoriu.';
+  String get required => 'Required.';
 
   @override
-  String get openTournaments => 'Turnee deschise';
+  String get openTournaments => 'Open tournaments';
 
   @override
-  String get duration => 'Durată';
+  String get duration => 'Duration';
 
   @override
-  String get winner => 'Câștigător';
+  String get winner => 'Winner';
 
   @override
-  String get standing => 'Clasament';
+  String get standing => 'Standing';
 
   @override
-  String get createANewTournament => 'Creați un turneu nou';
+  String get createANewTournament => 'Create a new tournament';
 
   @override
-  String get tournamentCalendar => 'Calendarul competiției';
+  String get tournamentCalendar => 'Tournament calendar';
 
   @override
-  String get conditionOfEntry => 'Condiții de intrare:';
+  String get conditionOfEntry => 'Entry requirements:';
 
   @override
-  String get advancedSettings => 'Setări avansate';
+  String get advancedSettings => 'Advanced settings';
 
   @override
-  String get safeTournamentName => 'Alege un nume foarte sigur pentru turneu.';
+  String get safeTournamentName => 'Pick a very safe name for the tournament.';
 
   @override
-  String get inappropriateNameWarning => 'Orice nume care este chiar și ușor nepotrivit poate cauza închiderea contului tău.';
+  String get inappropriateNameWarning =>
+      'Anything even slightly inappropriate could get your account closed.';
 
   @override
-  String get emptyTournamentName => 'Lăsați necompletat pentru a numi turneul după un jucător bun de șah.';
+  String get emptyTournamentName =>
+      'Leave empty to name the tournament after a notable chess player.';
 
   @override
-  String get makePrivateTournament => 'Faceți competiția privată și restricționați accesul cu o parolă';
+  String get makePrivateTournament =>
+      'Make the tournament private, and restrict access with a password';
 
   @override
-  String get join => 'Intră';
+  String get join => 'Join';
 
   @override
-  String get withdraw => 'Retrage-te';
+  String get withdraw => 'Withdraw';
 
   @override
-  String get points => 'Puncte';
+  String get points => 'Points';
 
   @override
-  String get wins => 'Victorii';
+  String get wins => 'Wins';
 
   @override
-  String get losses => 'Înfrângeri';
+  String get losses => 'Losses';
 
   @override
-  String get createdBy => 'Creat de';
+  String get createdBy => 'Created by';
 
   @override
   String get startingIn => 'Starting in';
 
   @override
   String standByX(String param) {
-    return 'Fii pe fază, $param, jucătorii sunt cuplați, pregătește-te!';
+    return 'Stand by $param, pairing players, get ready!';
   }
 
   @override
-  String get pause => 'Pauză';
+  String get pause => 'Pause';
 
   @override
-  String get resume => 'Continuare';
+  String get resume => 'Resume';
 
   @override
-  String get youArePlaying => 'Te joci!';
+  String get youArePlaying => 'You are playing!';
 
   @override
-  String get winRate => 'Procent de câștig';
+  String get winRate => 'Win rate';
 
   @override
-  String get performance => 'Performanță';
+  String get performance => 'Performance';
 
   @override
-  String get tournamentComplete => 'Turneu încheiat';
+  String get tournamentComplete => 'Tournament complete';
 
   @override
-  String get movesPlayed => 'Mutări jucate';
+  String get movesPlayed => 'Moves played';
 
   @override
-  String get whiteWins => 'Albul câștigă';
+  String get whiteWins => 'White wins';
 
   @override
-  String get blackWins => 'Negrul câștigă';
+  String get blackWins => 'Black wins';
 
   @override
-  String get drawRate => 'Rata de remiză';
+  String get drawRate => 'Draw rate';
 
   @override
-  String get draws => 'Remize';
+  String get draws => 'Draws';
 
   @override
-  String get averageOpponent => 'Cota medie a adversarilor';
+  String get averageOpponent => 'Average opponent';
 
   @override
-  String get boardEditor => 'Editorul de tablă';
+  String get boardEditor => 'Board editor';
 
   @override
-  String get setTheBoard => 'Așează tabla';
+  String get setTheBoard => 'Set the board';
 
   @override
-  String get popularOpenings => 'Deschideri populare';
+  String get popularOpenings => 'Popular openings';
 
   @override
-  String get endgamePositions => 'Poziții de sfârșit';
+  String get endgamePositions => 'Endgame positions';
 
   @override
   String chess960StartPosition(String param) {
-    return 'Poziție de start Chess960: $param';
+    return 'Chess960 start position: $param';
   }
 
   @override
-  String get startPosition => 'Poziția de start';
+  String get startPosition => 'Starting position';
 
   @override
-  String get clearBoard => 'Curăță tabla';
+  String get clearBoard => 'Clear board';
 
   @override
-  String get loadPosition => 'Încarcă poziția';
+  String get loadPosition => 'Load position';
 
   @override
-  String get isPrivate => 'Privat';
+  String get isPrivate => 'Private';
 
   @override
   String reportXToModerators(String param) {
-    return 'Raportează-l pe $param moderatorilor';
+    return 'Report $param to moderators';
   }
 
   @override
   String profileCompletion(String param) {
-    return 'Completarea profilului: $param';
+    return 'Profile completion: $param';
   }
 
   @override
@@ -3133,913 +3271,944 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
-  String get ifNoneLeaveEmpty => 'Dacă nu există, nu completați';
+  String get ifNoneLeaveEmpty => 'If none, leave empty';
 
   @override
-  String get profile => 'Profil';
+  String get profile => 'Profile';
 
   @override
-  String get editProfile => 'Editează profilul';
+  String get editProfile => 'Edit profile';
 
   @override
-  String get realName => 'Nume real';
+  String get realName => 'Real name';
 
   @override
-  String get setFlair => 'Arată-ți stilul';
+  String get setFlair => 'Set your flair';
 
   @override
-  String get flair => 'Pictograma personalizată';
+  String get flair => 'Flair';
 
   @override
-  String get youCanHideFlair => 'Există o setare pentru a ascunde flair-ul utilizatorilor pe întregului site.';
+  String get youCanHideFlair =>
+      'There is a setting to hide all user flairs across the entire site.';
 
   @override
-  String get biography => 'Biografie';
+  String get biography => 'Biography';
 
   @override
-  String get countryRegion => 'Țara sau regiunea';
+  String get countryRegion => 'Country or region';
 
   @override
-  String get thankYou => 'Mulţumesc!';
+  String get thankYou => 'Thank you!';
 
   @override
-  String get socialMediaLinks => 'Link-urile rețelelor de socializare';
+  String get socialMediaLinks => 'Social media links';
 
   @override
-  String get oneUrlPerLine => 'Un URL pe linie.';
+  String get oneUrlPerLine => 'One URL per line.';
 
   @override
-  String get inlineNotation => 'Notație integrată';
+  String get inlineNotation => 'Inline notation';
 
   @override
-  String get makeAStudy => 'Pentru păstrare în siguranță și partajare, aveți în vedere crearea unui studiu.';
+  String get makeAStudy => 'For safekeeping and sharing, consider making a study.';
 
   @override
-  String get clearSavedMoves => 'Șterge mutările';
+  String get clearSavedMoves => 'Clear moves';
 
   @override
-  String get previouslyOnLichessTV => 'Anterior pe Lichess TV';
+  String get previouslyOnLichessTV => 'Previously on Lichess TV';
 
   @override
-  String get onlinePlayers => 'Jucători conectați';
+  String get onlinePlayers => 'Online players';
 
   @override
-  String get activePlayers => 'Jucători activi';
+  String get activePlayers => 'Active players';
 
   @override
-  String get bewareTheGameIsRatedButHasNoClock => 'Atenție, partida este oficială, dar se joacă fără ceas!';
+  String get bewareTheGameIsRatedButHasNoClock => 'Beware, the game is rated but has no clock!';
 
   @override
-  String get success => 'Succes';
+  String get success => 'Success';
 
   @override
-  String get automaticallyProceedToNextGameAfterMoving => 'Du-te automat la partida următoare după mutare';
+  String get automaticallyProceedToNextGameAfterMoving =>
+      'Automatically proceed to next game after moving';
 
   @override
-  String get autoSwitch => 'Schimbă automat';
+  String get autoSwitch => 'Auto switch';
 
   @override
-  String get puzzles => 'Probleme de șah';
+  String get puzzles => 'Puzzles';
 
   @override
-  String get onlineBots => 'Boți online';
+  String get onlineBots => 'Online bots';
 
   @override
-  String get name => 'Nume';
+  String get name => 'Name';
 
   @override
-  String get description => 'Descriere';
+  String get description => 'Description';
 
   @override
-  String get descPrivate => 'Descriere privată';
+  String get descPrivate => 'Private description';
 
   @override
-  String get descPrivateHelp => 'Text pe care îl vor vedea doar membrii echipei. Dacă este setat, înlocuiește descrierea publică pentru membrii echipei.';
+  String get descPrivateHelp =>
+      'Text that only the team members will see. If set, replaces the public description for team members.';
 
   @override
-  String get no => 'Nu';
+  String get no => 'No';
 
   @override
-  String get yes => 'Da';
+  String get yes => 'Yes';
 
   @override
-  String get website => 'Pagină web';
+  String get website => 'Website';
 
   @override
-  String get mobile => 'Mobil';
+  String get mobile => 'Mobile';
 
   @override
-  String get help => 'Ajutor:';
+  String get help => 'Help:';
 
   @override
-  String get createANewTopic => 'Creează un nou topic';
+  String get createANewTopic => 'Create a new topic';
 
   @override
-  String get topics => 'Subiecte';
+  String get topics => 'Topics';
 
   @override
-  String get posts => 'Postări';
+  String get posts => 'Posts';
 
   @override
-  String get lastPost => 'Ultima postare';
+  String get lastPost => 'Last post';
 
   @override
-  String get views => 'Vizualizări';
+  String get views => 'Views';
 
   @override
-  String get replies => 'Răspunsuri';
+  String get replies => 'Replies';
 
   @override
-  String get replyToThisTopic => 'Răspunde la acest topic';
+  String get replyToThisTopic => 'Reply to this topic';
 
   @override
-  String get reply => 'Răspunde';
+  String get reply => 'Reply';
 
   @override
-  String get message => 'Mesaj';
+  String get message => 'Message';
 
   @override
-  String get createTheTopic => 'Creează un topic';
+  String get createTheTopic => 'Create the topic';
 
   @override
-  String get reportAUser => 'Raportează un utilizator';
+  String get reportAUser => 'Report a user';
 
   @override
-  String get user => 'Utilizator';
+  String get user => 'User';
 
   @override
-  String get reason => 'Motiv';
+  String get reason => 'Reason';
 
   @override
-  String get whatIsIheMatter => 'Care este problema?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
-  String get cheat => 'Trișează';
+  String get cheat => 'Cheat';
 
   @override
   String get troll => 'Troll';
 
   @override
-  String get other => 'Altceva';
+  String get other => 'Other';
 
   @override
-  String get reportCheatBoostHelp => 'Adaugă link-ul de la joc(uri) și arată ce este greșit cu privire la acest comportament al utilizatorului. Nu preciza doar \"trișează\", ci spune-ne cum ai ajuns la această concluzie.';
+  String get reportCheatBoostHelp =>
+      'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
 
   @override
-  String get reportUsernameHelp => 'Explică de ce acest nume de utilizator este jignitor. Nu spune doar \"e ofensiv/inadecvat\", ci spune-ne cum ai ajuns la această concluzie, mai ales în cazul în care insulta este obscură, nu este în engleză, este jargon sau este o referință istorică/culturală.';
+  String get reportUsernameHelp =>
+      'Explain what about this username is offensive. Don\'t just say \"it\'s offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Raportul tău va fi procesat mai rapid dacă este scris în engleză.';
+  String get reportProcessedFasterInEnglish =>
+      'Your report will be processed faster if written in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Te rugăm să furnizezi cel puțin un link către un joc în care s-a trișat.';
+  String get error_provideOneCheatedGameLink =>
+      'Please provide at least one link to a cheated game.';
 
   @override
   String by(String param) {
-    return 'de $param';
+    return 'by $param';
   }
 
   @override
   String importedByX(String param) {
-    return 'Importat de $param';
+    return 'Imported by $param';
   }
 
   @override
-  String get thisTopicIsNowClosed => 'Acest topic este acum închis.';
+  String get thisTopicIsNowClosed => 'This topic is now closed.';
 
   @override
   String get blog => 'Blog';
 
   @override
-  String get notes => 'Note';
+  String get notes => 'Notes';
 
   @override
-  String get typePrivateNotesHere => 'Scrie în privat aici';
+  String get typePrivateNotesHere => 'Type private notes here';
 
   @override
-  String get writeAPrivateNoteAboutThisUser => 'Scrie o notiță privată despre acest utilizator';
+  String get writeAPrivateNoteAboutThisUser => 'Write a private note about this user';
 
   @override
-  String get noNoteYet => 'Încă nu există notițe';
+  String get noNoteYet => 'No note yet';
 
   @override
-  String get invalidUsernameOrPassword => 'Nume sau parolă invalidă';
+  String get invalidUsernameOrPassword => 'Invalid username or password';
 
   @override
-  String get incorrectPassword => 'Parolă greșită';
+  String get incorrectPassword => 'Incorrect password';
 
   @override
-  String get invalidAuthenticationCode => 'Cod de autentificare incorect';
+  String get invalidAuthenticationCode => 'Invalid authentication code';
 
   @override
-  String get emailMeALink => 'Trimite-mi un email cu link-ul';
+  String get emailMeALink => 'Email me a link';
 
   @override
-  String get currentPassword => 'Parola curentă';
+  String get currentPassword => 'Current password';
 
   @override
-  String get newPassword => 'Noua parolă';
+  String get newPassword => 'New password';
 
   @override
-  String get newPasswordAgain => 'Noua parolă (repetă)';
+  String get newPasswordAgain => 'New password (again)';
 
   @override
-  String get newPasswordsDontMatch => 'Parolele introduse nu se potrivesc';
+  String get newPasswordsDontMatch => 'The new passwords don\'t match';
 
   @override
-  String get newPasswordStrength => 'Dificultatea parolei';
+  String get newPasswordStrength => 'Password strength';
 
   @override
-  String get clockInitialTime => 'Timpul inițial al ceasului';
+  String get clockInitialTime => 'Clock initial time';
 
   @override
-  String get clockIncrement => 'Incrementarea ceasului';
+  String get clockIncrement => 'Clock increment';
 
   @override
-  String get privacy => 'Confidențialitate';
+  String get privacy => 'Privacy';
 
   @override
-  String get privacyPolicy => 'Politica de confidențialitate';
+  String get privacyPolicy => 'Privacy policy';
 
   @override
-  String get letOtherPlayersFollowYou => 'Permite altor jucători să te urmărească';
+  String get letOtherPlayersFollowYou => 'Let other players follow you';
 
   @override
-  String get letOtherPlayersChallengeYou => 'Permite altor jucători să te provoace la joc';
+  String get letOtherPlayersChallengeYou => 'Let other players challenge you';
 
   @override
-  String get letOtherPlayersInviteYouToStudy => 'Lasă alți jucători să te invite într-un studiu';
+  String get letOtherPlayersInviteYouToStudy => 'Let other players invite you to study';
 
   @override
-  String get sound => 'Sunet';
+  String get sound => 'Sound';
 
   @override
-  String get none => 'Nici una';
+  String get none => 'None';
 
   @override
-  String get fast => 'Rapidă';
+  String get fast => 'Fast';
 
   @override
-  String get normal => 'Normală';
+  String get normal => 'Normal';
 
   @override
-  String get slow => 'Lentă';
+  String get slow => 'Slow';
 
   @override
-  String get insideTheBoard => 'Pe interiorul tablei';
+  String get insideTheBoard => 'Inside the board';
 
   @override
-  String get outsideTheBoard => 'În afara tablei';
+  String get outsideTheBoard => 'Outside the board';
 
   @override
-  String get allSquaresOfTheBoard => 'Toate pătratele de pe tablă';
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
-  String get onSlowGames => 'În jocurile lente';
+  String get onSlowGames => 'On slow games';
 
   @override
-  String get always => 'Întotdeauna';
+  String get always => 'Always';
 
   @override
-  String get never => 'Niciodată';
+  String get never => 'Never';
 
   @override
   String xCompetesInY(String param1, String param2) {
-    return '$param1 concurează în $param2';
+    return '$param1 competes in $param2';
   }
 
   @override
-  String get victory => 'Victorie';
+  String get victory => 'Victory';
 
   @override
-  String get defeat => 'Înfrângere';
+  String get defeat => 'Defeat';
 
   @override
   String victoryVsYInZ(String param1, String param2, String param3) {
-    return '$param1 vs $param2 în $param3';
+    return '$param1 vs $param2 in $param3';
   }
 
   @override
   String defeatVsYInZ(String param1, String param2, String param3) {
-    return '$param1 vs $param2 în $param3';
+    return '$param1 vs $param2 in $param3';
   }
 
   @override
   String drawVsYInZ(String param1, String param2, String param3) {
-    return '$param1 vs $param2 în $param3';
+    return '$param1 vs $param2 in $param3';
   }
 
   @override
-  String get timeline => 'Activitate recentă';
+  String get timeline => 'Timeline';
 
   @override
-  String get starting => 'Începe în:';
+  String get starting => 'Starting:';
 
   @override
-  String get allInformationIsPublicAndOptional => 'Aceste date sunt publice și opționale.';
+  String get allInformationIsPublicAndOptional => 'All information is public and optional.';
 
   @override
-  String get biographyDescription => 'Descrie-te, ce-ți place în șah, deschiderea favorită, jocurile, jucătorii tăi favoriți…';
+  String get biographyDescription =>
+      'Talk about yourself, your interests, what you like in chess, your favourite openings, players, ...';
 
   @override
-  String get listBlockedPlayers => 'Afișează jucătorii pe care i-ai blocat';
+  String get listBlockedPlayers => 'List players you have blocked';
 
   @override
-  String get human => 'Om';
+  String get human => 'Human';
 
   @override
-  String get computer => 'Calculator';
+  String get computer => 'Computer';
 
   @override
-  String get side => 'Parte';
+  String get side => 'Side';
 
   @override
-  String get clock => 'Ceas';
+  String get clock => 'Clock';
 
   @override
-  String get opponent => 'Adversar';
+  String get opponent => 'Opponent';
 
   @override
-  String get learnMenu => 'Învață';
+  String get learnMenu => 'Learn';
 
   @override
-  String get studyMenu => 'Studiază';
+  String get studyMenu => 'Study';
 
   @override
-  String get practice => 'Antrenează-te';
+  String get practice => 'Practice';
 
   @override
-  String get community => 'Comunitate';
+  String get community => 'Community';
 
   @override
-  String get tools => 'Unelte';
+  String get tools => 'Tools';
 
   @override
-  String get increment => 'Suplimentar';
+  String get increment => 'Increment';
 
   @override
-  String get error_unknown => 'Valoarea nu este validă';
+  String get error_unknown => 'Invalid value';
 
   @override
-  String get error_required => 'Acest camp este necesar';
+  String get error_required => 'This field is required';
 
   @override
-  String get error_email => 'Această adresă de e-mail nu este validă';
+  String get error_email => 'This email address is invalid';
 
   @override
-  String get error_email_acceptable => 'Această adresă de e-mail nu este acceptată. Te rugăm să o verifici și să încerci din nou.';
+  String get error_email_acceptable =>
+      'This email address is not acceptable. Please double-check it, and try again.';
 
   @override
-  String get error_email_unique => 'Adresa de e-mail nu este validă sau este deja folosită';
+  String get error_email_unique => 'Email address invalid or already taken';
 
   @override
-  String get error_email_different => 'Aceasta este deja adresa dvs. de e-mail';
+  String get error_email_different => 'This is already your email address';
 
   @override
   String error_minLength(String param) {
-    return 'Lungimea minimă este $param';
+    return 'Must be at least $param characters long';
   }
 
   @override
   String error_maxLength(String param) {
-    return 'Lungimea maximă este $param';
+    return 'Must be at most $param characters long';
   }
 
   @override
   String error_min(String param) {
-    return 'Trebuie să fie mai mare sau egal cu $param';
+    return 'Must be at least $param';
   }
 
   @override
   String error_max(String param) {
-    return 'Trebuie să fie mai mic sau egal cu $param';
+    return 'Must be at most $param';
   }
 
   @override
   String ifRatingIsPlusMinusX(String param) {
-    return 'Dacă rating-ul este ± $param';
+    return 'If rating is ± $param';
   }
 
   @override
-  String get ifRegistered => 'Dacă este înregistrat';
+  String get ifRegistered => 'If registered';
 
   @override
-  String get onlyExistingConversations => 'Doar conversații existente';
+  String get onlyExistingConversations => 'Only existing conversations';
 
   @override
-  String get onlyFriends => 'Doar prieteni';
+  String get onlyFriends => 'Only friends';
 
   @override
-  String get menu => 'Meniu';
+  String get menu => 'Menu';
 
   @override
-  String get castling => 'Rocada';
+  String get castling => 'Castling';
 
   @override
-  String get whiteCastlingKingside => 'Alb O-O';
+  String get whiteCastlingKingside => 'White O-O';
 
   @override
-  String get blackCastlingKingside => 'Negru O-O';
+  String get blackCastlingKingside => 'Black O-O';
 
   @override
   String tpTimeSpentPlaying(String param) {
-    return 'Timp petrecut jucând: $param';
+    return 'Time spent playing: $param';
   }
 
   @override
-  String get watchGames => 'Vezi partide';
+  String get watchGames => 'Watch games';
 
   @override
   String tpTimeSpentOnTV(String param) {
-    return 'Timp la TV: $param';
+    return 'Time featured on TV: $param';
   }
 
   @override
-  String get watch => 'Privește';
+  String get watch => 'Watch';
 
   @override
-  String get videoLibrary => 'Librărie video';
+  String get videoLibrary => 'Video library';
 
   @override
-  String get streamersMenu => 'Streameri';
+  String get streamersMenu => 'Streamers';
 
   @override
-  String get mobileApp => 'Aplicația mobilă';
+  String get mobileApp => 'Mobile App';
 
   @override
-  String get webmasters => 'Webmasteri';
+  String get webmasters => 'Webmasters';
 
   @override
-  String get about => 'Despre';
+  String get about => 'About';
 
   @override
   String aboutX(String param) {
-    return 'Despre $param';
+    return 'About $param';
   }
 
   @override
   String xIsAFreeYLibreOpenSourceChessServer(String param1, String param2) {
-    return '$param1 este un server de șah gratuit ($param2), fără reclame și open-source.';
+    return '$param1 is a free ($param2), libre, no-ads, open source chess server.';
   }
 
   @override
-  String get really => 'pe bune';
+  String get really => 'really';
 
   @override
-  String get contribute => 'Contribuie';
+  String get contribute => 'Contribute';
 
   @override
-  String get termsOfService => 'Termeni și condiții';
+  String get termsOfService => 'Terms of Service';
 
   @override
-  String get sourceCode => 'Cod sursă';
+  String get titleVerification => 'Title verification';
 
   @override
-  String get simultaneousExhibitions => 'Simultane de șah';
+  String get sourceCode => 'Source Code';
 
   @override
-  String get host => 'Gazdă';
+  String get simultaneousExhibitions => 'Simultaneous exhibitions';
+
+  @override
+  String get host => 'Host';
 
   @override
   String hostColorX(String param) {
-    return 'Culoarea gazdei: $param';
+    return 'Host colour: $param';
   }
 
   @override
-  String get yourPendingSimuls => 'Simultanele tale în așteptare';
+  String get yourPendingSimuls => 'Your pending simuls';
 
   @override
-  String get createdSimuls => 'Simultan nou creat';
+  String get createdSimuls => 'Newly created simuls';
 
   @override
-  String get hostANewSimul => 'Găzduiește un nou simultan';
+  String get hostANewSimul => 'Host a new simul';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Înregistrează-te pentru a găzdui sau pentru participarea la un simultan';
+  String get signUpToHostOrJoinASimul => 'Sign up to host or join a simul';
 
   @override
-  String get noSimulFound => 'Simultanul nu a fost găsit';
+  String get noSimulFound => 'Simul not found';
 
   @override
-  String get noSimulExplanation => 'Acest simultan nu există.';
+  String get noSimulExplanation => 'This simultaneous exhibition does not exist.';
 
   @override
-  String get returnToSimulHomepage => 'Înapoi la pagina simultanului';
+  String get returnToSimulHomepage => 'Return to simul homepage';
 
   @override
-  String get aboutSimul => 'Simultanele înseamnă un singur jucător în fața mai multor jucători în același timp.';
+  String get aboutSimul => 'Simuls involve a single player facing several players at once.';
 
   @override
-  String get aboutSimulImage => 'Din 50 de oponenți, Fischer a câștigat 47 de partide, a făcut remiză în 2 partide și a pierdut 1 partida.';
+  String get aboutSimulImage => 'Out of 50 opponents, Fischer won 47 games, drew 2 and lost 1.';
 
   @override
-  String get aboutSimulRealLife => 'Conceptul provine din evenimentele din lumea reală. În viața reală, jucătorul care acordă un simultan se deplasează de la o tablă la alta pentru a juca la fiecare câte o singură mutare.';
+  String get aboutSimulRealLife =>
+      'The concept is taken from real world events. In real life, this involves the simul host moving from table to table to play a single move.';
 
   @override
-  String get aboutSimulRules => 'Când simultanul începe, fiecare jucător începe jocul cu gazda și va juca cu piesele albe. Simultanul se termină când toate jocurile sunt complete.';
+  String get aboutSimulRules =>
+      'When the simul starts, every player starts a game with the host. The simul ends when all games are complete.';
 
   @override
-  String get aboutSimulSettings => 'Simultanele sunt tot timpul amicale. Revanșele, mutările înapoi și opțiunea \"mai mult timp\" sunt dezactivate.';
+  String get aboutSimulSettings =>
+      'Simuls are always casual. Rematches, takebacks and adding time are disabled.';
 
   @override
-  String get create => 'Creează';
+  String get create => 'Create';
 
   @override
-  String get whenCreateSimul => 'Când creezi un simultan, vei juca cu mai mulți jucători în același timp.';
+  String get whenCreateSimul => 'When you create a Simul, you get to play several players at once.';
 
   @override
-  String get simulVariantsHint => 'Dacă alegi mai multe variante, fiecare jucător va avea de ales ce variantă va juca.';
+  String get simulVariantsHint =>
+      'If you select several variants, each player gets to choose which one to play.';
 
   @override
-  String get simulClockHint => 'Configurare de ceas Fischer. Cu cât joci împotriva mai multor jucători, cu atât vei avea nevoie de mai mult timp.';
+  String get simulClockHint =>
+      'Fischer Clock setup. The more players you take on, the more time you may need.';
 
   @override
-  String get simulAddExtraTime => 'Poți adăuga timp în plus pe ceasul tău pentru a te ajuta să faci față simultanului.';
+  String get simulAddExtraTime =>
+      'You may add extra initial time to your clock to help you cope with the simul.';
 
   @override
-  String get simulHostExtraTime => 'Timp suplimentar pe ceasul gazdei';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
-  String get simulAddExtraTimePerPlayer => 'Adaugă timp inițial la ceasul tău pentru fiecare jucător care se alătură jocului simultan.';
+  String get simulAddExtraTimePerPlayer =>
+      'Add initial time to your clock for each player joining the simul.';
 
   @override
-  String get simulHostExtraTimePerPlayer => 'Timp suplimentar pentru ceasul gazdei, pentru fiecare jucător';
+  String get simulHostExtraTimePerPlayer => 'Host extra clock time per player';
 
   @override
-  String get lichessTournaments => 'Turnee Lichess';
+  String get lichessTournaments => 'Lichess tournaments';
 
   @override
-  String get tournamentFAQ => 'Întrebări și răspunsuri pentru turneu';
+  String get tournamentFAQ => 'Arena tournament FAQ';
 
   @override
-  String get timeBeforeTournamentStarts => 'Timp până la începerea turneului';
+  String get timeBeforeTournamentStarts => 'Time before tournament starts';
 
   @override
-  String get averageCentipawnLoss => 'Medie pion-cenți pierduți';
+  String get averageCentipawnLoss => 'Average centipawn loss';
 
   @override
-  String get accuracy => 'Acuratețe';
+  String get accuracy => 'Accuracy';
 
   @override
-  String get keyboardShortcuts => 'Scurtături taste';
+  String get keyboardShortcuts => 'Keyboard shortcuts';
 
   @override
-  String get keyMoveBackwardOrForward => 'mută înapoi/înainte';
+  String get keyMoveBackwardOrForward => 'move backward/forward';
 
   @override
-  String get keyGoToStartOrEnd => 'început/sfârșit';
+  String get keyGoToStartOrEnd => 'go to start/end';
 
   @override
-  String get keyCycleSelectedVariation => 'Următoarea variație';
+  String get keyCycleSelectedVariation => 'Cycle selected variation';
 
   @override
-  String get keyShowOrHideComments => 'arată/ascunde comentarii';
+  String get keyShowOrHideComments => 'show/hide comments';
 
   @override
-  String get keyEnterOrExitVariation => 'acceptă/respinge variație';
+  String get keyEnterOrExitVariation => 'enter/exit variation';
 
   @override
-  String get keyRequestComputerAnalysis => 'Solicită analiza calculatorului, Învață din greșelile tale';
+  String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
 
   @override
-  String get keyNextLearnFromYourMistakes => 'Următorul (Învață din greșelile tale)';
+  String get keyNextLearnFromYourMistakes => 'Next (Learn from your mistakes)';
 
   @override
-  String get keyNextBlunder => 'Următoarea greșeală gravă';
+  String get keyNextBlunder => 'Next blunder';
 
   @override
-  String get keyNextMistake => 'Următoarea greșeală';
+  String get keyNextMistake => 'Next mistake';
 
   @override
-  String get keyNextInaccuracy => 'Următoarea neacuratețe';
+  String get keyNextInaccuracy => 'Next inaccuracy';
 
   @override
-  String get keyPreviousBranch => 'Ramura precedentă';
+  String get keyPreviousBranch => 'Previous branch';
 
   @override
-  String get keyNextBranch => 'Ramura următoare';
+  String get keyNextBranch => 'Next branch';
 
   @override
-  String get toggleVariationArrows => 'Comută săgețile de variație';
+  String get toggleVariationArrows => 'Toggle variation arrows';
 
   @override
-  String get cyclePreviousOrNextVariation => 'Ciclu de variație precedentă/următoare';
+  String get cyclePreviousOrNextVariation => 'Cycle previous/next variation';
 
   @override
-  String get toggleGlyphAnnotations => 'Comută adnotările gilfelor';
+  String get toggleGlyphAnnotations => 'Toggle move annotations';
 
   @override
-  String get togglePositionAnnotations => 'Activează/Dezactivează adnotările pozițiilor';
+  String get togglePositionAnnotations => 'Toggle position annotations';
 
   @override
-  String get variationArrowsInfo => 'Săgețile de variație vă permit să navigați fără a utiliza lista de mutare.';
+  String get variationArrowsInfo =>
+      'Variation arrows let you navigate without using the move list.';
 
   @override
-  String get playSelectedMove => 'joacă mutarea selectată';
+  String get playSelectedMove => 'play selected move';
 
   @override
-  String get newTournament => 'Turneu nou';
+  String get newTournament => 'New tournament';
 
   @override
-  String get tournamentHomeTitle => 'Turneu de șah cu control de timp și variante';
+  String get tournamentHomeTitle =>
+      'Chess tournaments featuring various time controls and variants';
 
   @override
-  String get tournamentHomeDescription => 'Joacă turnee rapide de șah! Intră într-un turneu oficial planificat sau crează-ți-l tu. Bullet (Glonț),  Blitz (Fulger), Classical (Clasic), Chess960, Regele în centru, Trei șahuri și alte opțiuni sunt disponibile pentru o distracție continuă.';
+  String get tournamentHomeDescription =>
+      'Play fast-paced chess tournaments! Join an official scheduled tournament, or create your own. Bullet, Blitz, Classical, Chess960, King of the Hill, Threecheck, and more options available for endless chess fun.';
 
   @override
-  String get tournamentNotFound => 'Turneul nu a fost găsit';
+  String get tournamentNotFound => 'Tournament not found';
 
   @override
-  String get tournamentDoesNotExist => 'Acest turneu nu există.';
+  String get tournamentDoesNotExist => 'This tournament does not exist.';
 
   @override
-  String get tournamentMayHaveBeenCanceled => 'Posibil să fi fost anulat, dacă toți jucătorii au plecat înainte de începerea turneului.';
+  String get tournamentMayHaveBeenCanceled =>
+      'The tournament may have been cancelled if all players left before it started.';
 
   @override
-  String get returnToTournamentsHomepage => 'Înapoi la pagina turneului';
+  String get returnToTournamentsHomepage => 'Return to tournaments homepage';
 
   @override
   String weeklyPerfTypeRatingDistribution(String param) {
-    return 'Distribuția săptămânală a palmaresului $param';
+    return 'Weekly $param rating distribution';
   }
 
   @override
   String yourPerfTypeRatingIsRating(String param1, String param2) {
-    return 'Scorul $param1 este $param2.';
+    return 'Your $param1 rating is $param2.';
   }
 
   @override
   String youAreBetterThanPercentOfPerfTypePlayers(String param1, String param2) {
-    return 'Ești mai bun ca $param1 dintre jucătorii de $param2.';
+    return 'You are better than $param1 of $param2 players.';
   }
 
   @override
   String userIsBetterThanPercentOfPerfTypePlayers(String param1, String param2, String param3) {
-    return 'Jucătorul $param1 este mai bun decât $param2 dintre jucătorii de $param3.';
+    return '$param1 is better than $param2 of $param3 players.';
   }
 
   @override
   String betterThanPercentPlayers(String param1, String param2) {
-    return 'Mai bun decât $param1 dintre jucătorii de $param2';
+    return 'Better than $param1 of $param2 players';
   }
 
   @override
   String youDoNotHaveAnEstablishedPerfTypeRating(String param) {
-    return 'Nu aveți un scor $param definit.';
+    return 'You do not have an established $param rating.';
   }
 
   @override
-  String get yourRating => 'Scorul tău';
+  String get yourRating => 'Your rating';
 
   @override
-  String get cumulative => 'Cumulativ';
+  String get cumulative => 'Cumulative';
 
   @override
-  String get glicko2Rating => 'Evaluare Glicko-2';
+  String get glicko2Rating => 'Glicko-2 rating';
 
   @override
-  String get checkYourEmail => 'Verifică-ți adresa de email';
+  String get checkYourEmail => 'Check your Email';
 
   @override
-  String get weHaveSentYouAnEmailClickTheLink => 'V-am trimis un email. Dă click pe link-ul din email pentru a-ți activa contul.';
+  String get weHaveSentYouAnEmailClickTheLink =>
+      'We\'ve sent you an email. Click the link in the email to activate your account.';
 
   @override
-  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Dacă nu vezi email-ul trimis, verifică și în alte locuri, cum ar fi folderul de spam, gunoi, mesaje sociale sau alte foldere.';
+  String get ifYouDoNotSeeTheEmailCheckOtherPlaces =>
+      'If you don\'t see the email, check other places it might be, like your junk, spam, social, or other folders.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'Dacă nu primești emailul în decurs de 5 minute:';
+  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
 
   @override
-  String get checkAllEmailFolders => 'Verifică secțiunile de spam, junk și altele';
+  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Asigură-te că $param este adresa ta de email';
+    return 'Verify that $param is your email address';
   }
 
   @override
   String weHaveSentYouAnEmailTo(String param) {
-    return 'Am trimis un email la $param. Dă click pe link-ul trimis în acel email pentru a-ți reseta parola.';
+    return 'We\'ve sent an email to $param. Click the link in the email to reset your password.';
   }
 
   @override
   String byRegisteringYouAgreeToBeBoundByOur(String param) {
-    return 'Înregistrându-te, ești de acord cu $param.';
+    return 'By registering, you agree to the $param.';
   }
 
   @override
   String readAboutOur(String param) {
-    return 'Citește despre $param.';
+    return 'Read about our $param.';
   }
 
   @override
-  String get networkLagBetweenYouAndLichess => 'Întârziere de rețea între tine și Lichess';
+  String get networkLagBetweenYouAndLichess => 'Network lag between you and Lichess';
 
   @override
-  String get timeToProcessAMoveOnLichessServer => 'Timpul necesar procesării unei mutări pe serverul Lichess';
+  String get timeToProcessAMoveOnLichessServer => 'Time to process a move on Lichess\'s server';
 
   @override
-  String get downloadAnnotated => 'Descarcă cu note';
+  String get downloadAnnotated => 'Download annotated';
 
   @override
-  String get downloadRaw => 'Descarcă brut';
+  String get downloadRaw => 'Download raw';
 
   @override
-  String get downloadImported => 'Descarcă importat';
+  String get downloadImported => 'Download imported';
 
   @override
-  String get downloadAllGames => 'Descarcă toate partidele';
+  String get downloadAllGames => 'Download all games';
 
   @override
-  String get crosstable => 'Tabel de scoruri';
+  String get crosstable => 'Crosstable';
 
   @override
-  String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'De asemenea, poți acționa rotița mouse-ului pentru a face mutări pe tablă.';
+  String get youCanAlsoScrollOverTheBoardToMoveInTheGame =>
+      'Scroll over the board to move in the game.';
 
   @override
-  String get scrollOverComputerVariationsToPreviewThem => 'Derulați variantele calculatorului pentru a le previzualiza.';
+  String get scrollOverComputerVariationsToPreviewThem =>
+      'Scroll over computer variations to preview them.';
 
   @override
-  String get analysisShapesHowTo => 'Apasă shift+click sau click-dreapta pentru a desena cercuri și săgeți pe tablă.';
+  String get analysisShapesHowTo =>
+      'Press shift+click or right-click to draw circles and arrows on the board.';
 
   @override
-  String get letOtherPlayersMessageYou => 'Permite altor jucători să îți trimită mesaje';
+  String get letOtherPlayersMessageYou => 'Let other players message you';
 
   @override
-  String get receiveForumNotifications => 'Primește notificări atunci când ești menționat în forum';
+  String get receiveForumNotifications => 'Receive notifications when mentioned in the forum';
 
   @override
-  String get shareYourInsightsData => 'Partajează-ți statisticile legate de jocuri';
+  String get shareYourInsightsData => 'Share your chess insights data';
 
   @override
-  String get withNobody => 'Cu nimeni';
+  String get withNobody => 'With nobody';
 
   @override
-  String get withFriends => 'Cu prietenii';
+  String get withFriends => 'With friends';
 
   @override
-  String get withEverybody => 'Cu toată lumea';
+  String get withEverybody => 'With everybody';
 
   @override
-  String get kidMode => 'Mod pentru copii';
+  String get kidMode => 'Kid mode';
 
   @override
-  String get kidModeIsEnabled => 'Modul copil este activat.';
+  String get kidModeIsEnabled => 'Kid mode is enabled.';
 
   @override
-  String get kidModeExplanation => 'În modul „copil”, toate modalitățile de comunicare sunt dezactivate. Activează asta pentru copilul tău sau pentru școlari, pentru a-i proteja de alți utilizatori ai internetului.';
+  String get kidModeExplanation =>
+      'This is about safety. In kid mode, all site communications are disabled. Enable this for your children and school students, to protect them from other internet users.';
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
-    return 'În modul „copil”, sigla paginii va avea iconița $param, în felul acesta vei ști când copiii tăi sunt în siguranță.';
+    return 'In kid mode, the Lichess logo gets a $param icon, so you know your kids are safe.';
   }
 
   @override
-  String get askYourChessTeacherAboutLiftingKidMode => 'Contul tău este gestionat. Întreabă-ți profesorul de șah despre scoaterea modului copil.';
+  String get askYourChessTeacherAboutLiftingKidMode =>
+      'Your account is managed. Ask your chess teacher about lifting kid mode.';
 
   @override
-  String get enableKidMode => 'Activează modul „copil”';
+  String get enableKidMode => 'Enable Kid mode';
 
   @override
-  String get disableKidMode => 'Dezactivează modul „copil”';
+  String get disableKidMode => 'Disable Kid mode';
 
   @override
-  String get security => 'Securitate';
+  String get security => 'Security';
 
   @override
-  String get sessions => 'Sesiuni';
+  String get sessions => 'Sessions';
 
   @override
-  String get revokeAllSessions => 'revocați toate sesiunile';
+  String get revokeAllSessions => 'revoke all sessions';
 
   @override
-  String get playChessEverywhere => 'Joacă șah oriunde';
+  String get playChessEverywhere => 'Play chess everywhere';
 
   @override
-  String get everybodyGetsAllFeaturesForFree => 'Toată lumea are access la toate opțiunile, gratuit';
+  String get everybodyGetsAllFeaturesForFree => 'Everybody gets all features for free';
 
   @override
-  String get viewTheSolution => 'Vezi soluția';
+  String get viewTheSolution => 'View the solution';
 
   @override
-  String get noChallenges => 'Nicio provocare.';
+  String get noChallenges => 'No challenges.';
 
   @override
   String xHostsY(String param1, String param2) {
-    return '$param1 găzduiește $param2';
+    return '$param1 hosts $param2';
   }
 
   @override
   String xJoinsY(String param1, String param2) {
-    return '$param1 se alătură $param2';
+    return '$param1 joins $param2';
   }
 
   @override
   String xLikesY(String param1, String param2) {
-    return '$param1 îi place $param2';
+    return '$param1 likes $param2';
   }
 
   @override
-  String get quickPairing => 'Potrivire rapidă';
+  String get quickPairing => 'Quick pairing';
 
   @override
   String get lobby => 'Lobby';
 
   @override
-  String get anonymous => 'Anonim';
+  String get anonymous => 'Anonymous';
 
   @override
   String yourScore(String param) {
-    return 'Scorul tău: $param';
+    return 'Your score: $param';
   }
 
   @override
-  String get language => 'Limbă';
+  String get language => 'Language';
 
   @override
-  String get allLanguages => 'Orice limbă';
+  String get allLanguages => 'All languages';
 
   @override
-  String get background => 'Fundal';
+  String get background => 'Background';
 
   @override
-  String get light => 'Luminos';
+  String get light => 'Light';
 
   @override
-  String get dark => 'Culoare închisă';
+  String get dark => 'Dark';
 
   @override
   String get transparent => 'Transparent';
 
   @override
-  String get deviceTheme => 'Tema dispozitivului';
+  String get deviceTheme => 'Device theme';
 
   @override
-  String get backgroundImageUrl => 'URL-ul imaginii de fundal:';
+  String get backgroundImageUrl => 'Background image URL:';
 
   @override
-  String get board => 'Tablă';
+  String get board => 'Board';
 
   @override
-  String get size => 'Dimensiune';
+  String get size => 'Size';
 
   @override
-  String get opacity => 'Opacitate';
+  String get opacity => 'Opacity';
 
   @override
-  String get brightness => 'Luminozitate';
+  String get brightness => 'Brightness';
 
   @override
-  String get hue => 'Nuanță';
+  String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Resetează culorile la valorile implicite';
+  String get boardReset => 'Reset colours to default';
 
   @override
-  String get pieceSet => 'Set de piese';
+  String get pieceSet => 'Piece set';
 
   @override
-  String get embedInYourWebsite => 'Incorporează în site-ul tău';
+  String get embedInYourWebsite => 'Embed in your website';
 
   @override
-  String get usernameAlreadyUsed => 'Nume de utilzator este deja folosit, te rugam să încerci altul.';
+  String get usernameAlreadyUsed => 'This username is already in use, please try another one.';
 
   @override
-  String get usernamePrefixInvalid => 'Numele de utilizator trebuie să înceapă cu o literă.';
+  String get usernamePrefixInvalid => 'The username must start with a letter.';
 
   @override
-  String get usernameSuffixInvalid => 'Numele de utilizator trebuie să se termine cu o literă sau o cifră.';
+  String get usernameSuffixInvalid => 'The username must end with a letter or a number.';
 
   @override
-  String get usernameCharsInvalid => 'Numele de utilizator poate conține doar litere, cifre, linii de subliniere și cratime.';
+  String get usernameCharsInvalid =>
+      'The username must only contain letters, numbers, underscores, and hyphens. Consecutive underscores and hyphens are not allowed.';
 
   @override
-  String get usernameUnacceptable => 'Numele de utilizator nu e acceptabil.';
+  String get usernameUnacceptable => 'This username is not acceptable.';
 
   @override
-  String get playChessInStyle => 'Joacă șah cu stil';
+  String get playChessInStyle => 'Play chess in style';
 
   @override
-  String get chessBasics => 'Bazele șahului';
+  String get chessBasics => 'Chess basics';
 
   @override
-  String get coaches => 'Antrenori';
+  String get coaches => 'Coaches';
 
   @override
-  String get invalidPgn => 'PGN invalid';
+  String get invalidPgn => 'Invalid PGN';
 
   @override
-  String get invalidFen => 'FEN invalid';
+  String get invalidFen => 'Invalid FEN';
 
   @override
-  String get custom => 'Personalizat';
+  String get custom => 'Custom';
 
   @override
-  String get notifications => 'Notificări';
+  String get notifications => 'Notifications';
 
   @override
   String notificationsX(String param1) {
-    return 'Notificări: $param1';
+    return 'Notifications: $param1';
   }
 
   @override
@@ -4048,212 +4217,216 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
-  String get practiceWithComputer => 'Joacă cu computer-ul';
+  String get practiceWithComputer => 'Practice with computer';
 
   @override
   String anotherWasX(String param) {
-    return 'Altă mutare bună este: $param';
+    return 'Another was $param';
   }
 
   @override
   String bestWasX(String param) {
-    return 'Cea mai bună mutare este: $param';
+    return 'Best was $param';
   }
 
   @override
-  String get youBrowsedAway => 'Ați părăsit jocul cu computer-ul';
+  String get youBrowsedAway => 'You browsed away';
 
   @override
-  String get resumePractice => 'Reia antrenamentul';
+  String get resumePractice => 'Resume practice';
 
   @override
-  String get drawByFiftyMoves => 'Partida s-a terminat remiză din cauza regulii de 50 de mutări.';
+  String get drawByFiftyMoves => 'The game has been drawn by the fifty move rule.';
 
   @override
-  String get theGameIsADraw => 'Remiză.';
+  String get theGameIsADraw => 'The game is a draw.';
 
   @override
-  String get computerThinking => 'Calculatorul se gândește ...';
+  String get computerThinking => 'Computer thinking ...';
 
   @override
-  String get seeBestMove => 'Vezi cea mai bună mutare';
+  String get seeBestMove => 'See best move';
 
   @override
-  String get hideBestMove => 'Ascunde cea mai bună mutare';
+  String get hideBestMove => 'Hide best move';
 
   @override
-  String get getAHint => 'Obține un indiciu';
+  String get getAHint => 'Get a hint';
 
   @override
-  String get evaluatingYourMove => 'Evaluându-ți mutarea ...';
+  String get evaluatingYourMove => 'Evaluating your move ...';
 
   @override
-  String get whiteWinsGame => 'Albele câștigă';
+  String get whiteWinsGame => 'White wins';
 
   @override
-  String get blackWinsGame => 'Negrele câștigă';
+  String get blackWinsGame => 'Black wins';
 
   @override
-  String get learnFromYourMistakes => 'Învață din greșelile tale';
+  String get learnFromYourMistakes => 'Learn from your mistakes';
 
   @override
-  String get learnFromThisMistake => 'Învață din greșeli';
+  String get learnFromThisMistake => 'Learn from this mistake';
 
   @override
-  String get skipThisMove => 'Sari peste această mutare';
+  String get skipThisMove => 'Skip this move';
 
   @override
-  String get next => 'Următorea';
+  String get next => 'Next';
 
   @override
   String xWasPlayed(String param) {
-    return '$param a fost mutat';
+    return '$param was played';
   }
 
   @override
-  String get findBetterMoveForWhite => 'Găsește o mutare mai bună pentru albe';
+  String get findBetterMoveForWhite => 'Find a better move for white';
 
   @override
-  String get findBetterMoveForBlack => 'Găsește o mutare mai bună pentru negre';
+  String get findBetterMoveForBlack => 'Find a better move for black';
 
   @override
-  String get resumeLearning => 'Reia învățatul';
+  String get resumeLearning => 'Resume learning';
 
   @override
-  String get youCanDoBetter => 'Poți mai bine';
+  String get youCanDoBetter => 'You can do better';
 
   @override
-  String get tryAnotherMoveForWhite => 'Încearcă altă mutare pentru albe';
+  String get tryAnotherMoveForWhite => 'Try another move for white';
 
   @override
-  String get tryAnotherMoveForBlack => 'Încearcă altă mutare pentru negre';
+  String get tryAnotherMoveForBlack => 'Try another move for black';
 
   @override
-  String get solution => 'Soluție';
+  String get solution => 'Solution';
 
   @override
-  String get waitingForAnalysis => 'Așteptând pentru analize';
+  String get waitingForAnalysis => 'Waiting for analysis';
 
   @override
-  String get noMistakesFoundForWhite => 'Nici o greșeală găsită din partea albelor';
+  String get noMistakesFoundForWhite => 'No mistakes found for white';
 
   @override
-  String get noMistakesFoundForBlack => 'Nici o greșeală găsită din partea negrelor';
+  String get noMistakesFoundForBlack => 'No mistakes found for black';
 
   @override
-  String get doneReviewingWhiteMistakes => 'Gata cu analiza greșelilor din partea albelor';
+  String get doneReviewingWhiteMistakes => 'Done reviewing white mistakes';
 
   @override
-  String get doneReviewingBlackMistakes => 'Gata cu analiza greșelilor din partea negrelor';
+  String get doneReviewingBlackMistakes => 'Done reviewing black mistakes';
 
   @override
-  String get doItAgain => 'Fă-o din nou';
+  String get doItAgain => 'Do it again';
 
   @override
-  String get reviewWhiteMistakes => 'Analizează greșelile albelor';
+  String get reviewWhiteMistakes => 'Review white mistakes';
 
   @override
-  String get reviewBlackMistakes => 'Analizează greșelile negrelor';
+  String get reviewBlackMistakes => 'Review black mistakes';
 
   @override
-  String get advantage => 'Avantaj';
+  String get advantage => 'Advantage';
 
   @override
-  String get opening => 'Deschidere';
+  String get opening => 'Opening';
 
   @override
-  String get middlegame => 'Mijlocul jocului';
+  String get middlegame => 'Middlegame';
 
   @override
-  String get endgame => 'Sfârșitul jocului';
+  String get endgame => 'Endgame';
 
   @override
-  String get conditionalPremoves => 'Mutări anticipate condiționale';
+  String get conditionalPremoves => 'Conditional premoves';
 
   @override
-  String get addCurrentVariation => 'Adaugă variația curentă';
+  String get addCurrentVariation => 'Add current variation';
 
   @override
-  String get playVariationToCreateConditionalPremoves => 'Joacă o variație pentru a crea mutări anticipate condiționale';
+  String get playVariationToCreateConditionalPremoves =>
+      'Play a variation to create conditional premoves';
 
   @override
-  String get noConditionalPremoves => 'Fără mutări anticipate condiționale';
+  String get noConditionalPremoves => 'No conditional premoves';
 
   @override
   String playX(String param) {
-    return 'Mută $param';
+    return 'Play $param';
   }
 
   @override
-  String get showUnreadLichessMessage => 'Ați primit un mesaj privat de la Lichess.';
+  String get showUnreadLichessMessage => 'You have received a private message from Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Click aici pentru a-l citi';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
-  String get sorry => 'Scuze :(';
+  String get sorry => 'Sorry :(';
 
   @override
-  String get weHadToTimeYouOutForAWhile => 'Am fost nevoiți să suspendăm activitatea pentru puțin timp.';
+  String get weHadToTimeYouOutForAWhile => 'We had to time you out for a while.';
 
   @override
-  String get why => 'De ce?';
+  String get why => 'Why?';
 
   @override
-  String get pleasantChessExperience => 'Dorim să oferim o experiență plăcută tuturor jucătorilor de șah.';
+  String get pleasantChessExperience =>
+      'We aim to provide a pleasant chess experience for everyone.';
 
   @override
-  String get goodPractice => 'Ca acest lucru să se întâmple, trebuie să ne asigurăm că toți jucătorii respectă bunele practici.';
+  String get goodPractice =>
+      'To that effect, we must ensure that all players follow good practice.';
 
   @override
-  String get potentialProblem => 'Când o potențială problemă este detectată, afișăm acest mesaj.';
+  String get potentialProblem => 'When a potential problem is detected, we display this message.';
 
   @override
-  String get howToAvoidThis => 'Cum puteți preveni suspendarea?';
+  String get howToAvoidThis => 'How to avoid this?';
 
   @override
-  String get playEveryGame => 'Jucați fiecare meci pe care-l începeți.';
+  String get playEveryGame => 'Play every game you start.';
 
   @override
-  String get tryToWin => 'Încercați să câștigați (sau măcar să faceți remiză) fiecare meci pe care-l jucați.';
+  String get tryToWin => 'Try to win (or at least draw) every game you play.';
 
   @override
-  String get resignLostGames => 'Abandonați partidele pierdute (nu lăsați timpul să expire).';
+  String get resignLostGames => 'Resign lost games (don\'t let the clock run down).';
 
   @override
-  String get temporaryInconvenience => 'Ne pare rău pentru neplăcerile temporare';
+  String get temporaryInconvenience => 'We apologise for the temporary inconvenience,';
 
   @override
-  String get wishYouGreatGames => 'și vă dorim partide deosebite pe Lichess.org.';
+  String get wishYouGreatGames => 'and wish you great games on lichess.org.';
 
   @override
-  String get thankYouForReading => 'Îți mulțumim pentru atenție!';
+  String get thankYouForReading => 'Thank you for reading!';
 
   @override
-  String get lifetimeScore => 'Scorul total';
+  String get lifetimeScore => 'Lifetime score';
 
   @override
-  String get currentMatchScore => 'Scorul curent';
+  String get currentMatchScore => 'Current match score';
 
   @override
-  String get agreementAssistance => 'Sunt de acord să nu primesc niciodată asistență în timpul partidelor mele (de la un calculator, o carte, o bază de date sau de la o altă persoană).';
+  String get agreementAssistance =>
+      'I agree that I will at no time receive assistance during my games (from a chess computer, book, database or another person).';
 
   @override
-  String get agreementNice => 'Sunt de acord să fiu mereu respectuos cu alți jucători.';
+  String get agreementNice => 'I agree that I will always be respectful to other players.';
 
   @override
   String agreementMultipleAccounts(String param) {
-    return 'Sunt de acord să nu creez conturi multiple (cu excepția motivelor declarate în $param).';
+    return 'I agree that I will not create multiple accounts (except for the reasons stated in the $param).';
   }
 
   @override
-  String get agreementPolicy => 'Sunt de acord cu respectarea tuturor politicilor Lichess.';
+  String get agreementPolicy => 'I agree that I will follow all Lichess policies.';
 
   @override
-  String get searchOrStartNewDiscussion => 'Caută sau începe o nouă conversație';
+  String get searchOrStartNewDiscussion => 'Search or start new conversation';
 
   @override
-  String get edit => 'Modifică';
+  String get edit => 'Edit';
 
   @override
   String get bullet => 'Bullet';
@@ -4265,123 +4438,123 @@ class AppLocalizationsRo extends AppLocalizations {
   String get rapid => 'Rapid';
 
   @override
-  String get classical => 'Clasic';
+  String get classical => 'Classical';
 
   @override
-  String get ultraBulletDesc => 'Partide incredibil de rapide: mai puțin de 30 de secunde';
+  String get ultraBulletDesc => 'Insanely fast games: less than 30 seconds';
 
   @override
-  String get bulletDesc => 'Partide foarte rapide: mai puțin de 3 minute';
+  String get bulletDesc => 'Very fast games: less than 3 minutes';
 
   @override
-  String get blitzDesc => 'Partide rapide: între 3 și 8 minute';
+  String get blitzDesc => 'Fast games: 3 to 8 minutes';
 
   @override
-  String get rapidDesc => 'Partide destul de rapide: între 8 și 25 de minute';
+  String get rapidDesc => 'Rapid games: 8 to 25 minutes';
 
   @override
-  String get classicalDesc => 'Partide clasice: 25 de minute sau mai mult';
+  String get classicalDesc => 'Classical games: 25 minutes and more';
 
   @override
-  String get correspondenceDesc => 'Partide prin corespondență: o mutare la una sau mai multe zile';
+  String get correspondenceDesc => 'Correspondence games: one or several days per move';
 
   @override
-  String get puzzleDesc => 'Antrenor de tactici de șah';
+  String get puzzleDesc => 'Chess tactics trainer';
 
   @override
   String get important => 'Important';
 
   @override
   String yourQuestionMayHaveBeenAnswered(String param1) {
-    return 'Este posibil ca întrebarea ta să aibă deja un răspuns $param1';
+    return 'Your question may already have an answer $param1';
   }
 
   @override
-  String get inTheFAQ => 'la întrebări și răspunsuri.';
+  String get inTheFAQ => 'in the FAQ';
 
   @override
   String toReportSomeoneForCheatingOrBadBehavior(String param1) {
-    return 'Pentru a raporta un utilizator pentru trișare sau comportament inadecvat, $param1';
+    return 'To report a user for cheating or bad behaviour, $param1';
   }
 
   @override
-  String get useTheReportForm => 'folosiți formularul de raportare';
+  String get useTheReportForm => 'use the report form';
 
   @override
   String toRequestSupport(String param1) {
-    return 'Pentru a solicita asistență, $param1';
+    return 'To request support, $param1';
   }
 
   @override
-  String get tryTheContactPage => 'încercați pagina de contact';
+  String get tryTheContactPage => 'try the contact page';
 
   @override
   String makeSureToRead(String param1) {
-    return 'Asigură-te că citești $param1';
+    return 'Make sure to read $param1';
   }
 
   @override
-  String get theForumEtiquette => 'normele de comportare în forum';
+  String get theForumEtiquette => 'the forum etiquette';
 
   @override
-  String get thisTopicIsArchived => 'Acest subiect a fost arhivat și nu mai acceptă răspunsuri.';
+  String get thisTopicIsArchived => 'This topic has been archived and can no longer be replied to.';
 
   @override
   String joinTheTeamXToPost(String param1) {
-    return 'Alăturați-vă echipei $param1, pentru a posta pe acest forum';
+    return 'Join the $param1, to post in this forum';
   }
 
   @override
   String teamNamedX(String param1) {
-    return 'echipa $param1';
+    return '$param1 team';
   }
 
   @override
-  String get youCannotPostYetPlaySomeGames => 'Încă nu puteți posta în forumuri. Jucați câteva partide!';
+  String get youCannotPostYetPlaySomeGames => 'You can\'t post in the forums yet. Play some games!';
 
   @override
-  String get subscribe => 'Abonați-vă';
+  String get subscribe => 'Subscribe';
 
   @override
-  String get unsubscribe => 'Dezabonați-vă';
+  String get unsubscribe => 'Unsubscribe';
 
   @override
   String mentionedYouInX(String param1) {
-    return 'te-a menționat în \"$param1\".';
+    return 'mentioned you in \"$param1\".';
   }
 
   @override
   String xMentionedYouInY(String param1, String param2) {
-    return '$param1 te-a menționat în \"$param2\".';
+    return '$param1 mentioned you in \"$param2\".';
   }
 
   @override
   String invitedYouToX(String param1) {
-    return 'te-a invitat la \"$param1\".';
+    return 'invited you to \"$param1\".';
   }
 
   @override
   String xInvitedYouToY(String param1, String param2) {
-    return '$param1 te-a invitat la \"$param2\".';
+    return '$param1 invited you to \"$param2\".';
   }
 
   @override
-  String get youAreNowPartOfTeam => 'Acum faci parte din echipă.';
+  String get youAreNowPartOfTeam => 'You are now part of the team.';
 
   @override
   String youHaveJoinedTeamX(String param1) {
-    return 'V-ați alăturat la \"$param1\".';
+    return 'You have joined \"$param1\".';
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Cineva pe care l-ai raportat a fost banat';
+  String get someoneYouReportedWasBanned => 'Someone you reported was banned';
 
   @override
-  String get congratsYouWon => 'Felicitări, ați câștigat!';
+  String get congratsYouWon => 'Congratulations, you won!';
 
   @override
   String gameVsX(String param1) {
-    return 'Joc vs $param1';
+    return 'Game vs $param1';
   }
 
   @override
@@ -4390,205 +4563,217 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
-  String get lostAgainstTOSViolator => 'Ai pierdut în fața cuiva care a încălcat Termenii și Condițiile Lichess';
+  String get lostAgainstTOSViolator =>
+      'You lost rating points to someone who violated the Lichess TOS';
 
   @override
   String refundXpointsTimeControlY(String param1, String param2) {
-    return 'Rambursare: $param1 puncte de evaluare $param2.';
+    return 'Refund: $param1 $param2 rating points.';
   }
 
   @override
-  String get timeAlmostUp => 'Timpul se apropie de sfârșit!';
+  String get timeAlmostUp => 'Time is almost up!';
 
   @override
-  String get clickToRevealEmailAddress => '[Click pentru a dezvălui adresa de e-mail]';
+  String get clickToRevealEmailAddress => '[Click to reveal email address]';
 
   @override
-  String get download => 'Descărcare';
+  String get download => 'Download';
 
   @override
-  String get coachManager => 'Setări pentru antrenor';
+  String get coachManager => 'Coach manager';
 
   @override
-  String get streamerManager => 'Setări pentru streamer';
+  String get streamerManager => 'Streamer manager';
 
   @override
-  String get cancelTournament => 'Anulează turneul';
+  String get cancelTournament => 'Cancel the tournament';
 
   @override
-  String get tournDescription => 'Descrierea turneului';
+  String get tournDescription => 'Tournament description';
 
   @override
-  String get tournDescriptionHelp => 'Vrei să spui participanților ceva special? Încearcă să fii succint. Poți folosi legături Markdown: [name](https://url)';
+  String get tournDescriptionHelp =>
+      'Anything special you want to tell the participants? Try to keep it short. Markdown links are available: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Partidele sunt evaluate\nși vor avea ca rezultat modificarea ratingului';
+  String get ratedFormHelp => 'Games are rated and impact players ratings';
 
   @override
-  String get onlyMembersOfTeam => 'Numai membrii echipei';
+  String get onlyMembersOfTeam => 'Only members of team';
 
   @override
-  String get noRestriction => 'Fără restricții';
+  String get noRestriction => 'No restriction';
 
   @override
-  String get minimumRatedGames => 'Numar minim de partide evaluate jucate';
+  String get minimumRatedGames => 'Minimum rated games';
 
   @override
-  String get minimumRating => 'Rating minim';
+  String get minimumRating => 'Minimum rating';
 
   @override
-  String get maximumWeeklyRating => 'Rating săptămânal maxim';
+  String get maximumWeeklyRating => 'Maximum weekly rating';
 
   @override
   String positionInputHelp(String param) {
-    return 'Lipiți un FEN valid pentru a începe fiecare joc dintr-o poziție dată.\nFuncționează doar pentru jocuri standard, nu si pentru variante.\nPuteți utiliza $param pentru a genera o poziție FEN, apoi lipiți-o aici.\nLăsați gol pentru a începe jocurile din poziția inițială normală.';
+    return 'Paste a valid FEN to start every game from a given position.\nIt only works for standard games, not with variants.\nYou can use the $param to generate a FEN position, then paste it here.\nLeave empty to start games from the normal initial position.';
   }
 
   @override
-  String get cancelSimul => 'Anulează simul';
+  String get cancelSimul => 'Cancel the simul';
 
   @override
-  String get simulHostcolor => 'Culoare gazdă pentru fiecare joc';
+  String get simulHostcolor => 'Host colour for each game';
 
   @override
-  String get estimatedStart => 'Timp de începere estimat';
+  String get estimatedStart => 'Estimated start time';
 
   @override
   String simulFeatured(String param) {
-    return 'Recomandat de $param';
+    return 'Feature on $param';
   }
 
   @override
   String simulFeaturedHelp(String param) {
-    return 'Arătați-vă simul tuturor de pe $param. Dezactivați pentru simul private.';
+    return 'Show your simul to everyone on $param. Disable for private simuls.';
   }
 
   @override
-  String get simulDescription => 'Descriere Simul';
+  String get simulDescription => 'Simul description';
 
   @override
-  String get simulDescriptionHelp => 'Ce vrei să spui participanţilor?';
+  String get simulDescriptionHelp => 'Anything you want to tell the participants?';
 
   @override
   String markdownAvailable(String param) {
-    return '$param este disponibil pentru sintaxă mai avansată.';
+    return '$param is available for more advanced syntax.';
   }
 
   @override
-  String get embedsAvailable => 'Lipește un URL al jocului sau un URL de capitol de studiu pentru a-l încorpora.';
+  String get embedsAvailable => 'Paste a game URL or a study chapter URL to embed it.';
 
   @override
-  String get inYourLocalTimezone => 'În fusul orar local';
+  String get inYourLocalTimezone => 'In your own local timezone';
 
   @override
-  String get tournChat => 'Conversatie';
+  String get tournChat => 'Tournament chat';
 
   @override
-  String get noChat => 'Fără conversație';
+  String get noChat => 'No chat';
 
   @override
-  String get onlyTeamLeaders => 'Doar lideri de echipă';
+  String get onlyTeamLeaders => 'Only team leaders';
 
   @override
-  String get onlyTeamMembers => 'Doar membrii echipei';
+  String get onlyTeamMembers => 'Only team members';
 
   @override
-  String get navigateMoveTree => 'Navigați pe arborele de mutări';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
-  String get mouseTricks => 'Trucuri cu mouse-ul';
+  String get mouseTricks => 'Mouse tricks';
 
   @override
-  String get toggleLocalAnalysis => 'Activează/dezactivează analiza computerizată locală';
+  String get toggleLocalAnalysis => 'Toggle local computer analysis';
 
   @override
-  String get toggleAllAnalysis => 'Activează/dezactivează analiza computerizată';
+  String get toggleAllAnalysis => 'Toggle all computer analysis';
 
   @override
-  String get playComputerMove => 'Joacă cea mai bună mutare a calculatorului';
+  String get playComputerMove => 'Play best computer move';
 
   @override
-  String get analysisOptions => 'Opțiuni de analiză';
+  String get analysisOptions => 'Analysis options';
 
   @override
-  String get focusChat => 'Focalizează conversația';
+  String get focusChat => 'Focus chat';
 
   @override
-  String get showHelpDialog => 'Arată acest dialog de ajutor';
+  String get showHelpDialog => 'Show this help dialog';
 
   @override
-  String get reopenYourAccount => 'Redeschide contul tău';
+  String get reopenYourAccount => 'Reopen your account';
 
   @override
-  String get reopenYourAccountDescription => 'Dacă ți-ai închis contul, dar de atunci te-ai răzgândit, primești o șansă să-ți recuperezi contul.';
+  String get reopenYourAccountDescription =>
+      'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
 
   @override
-  String get emailAssociatedToaccount => 'Adresa de e-mail asociată contului';
+  String get emailAssociatedToaccount => 'Email address associated to the account';
 
   @override
-  String get sentEmailWithLink => 'Ți-am trimis un e-mail cu un link.';
+  String get sentEmailWithLink => 'We\'ve sent you an email with a link.';
 
   @override
-  String get tournamentEntryCode => 'Cod de intrare în turneu';
+  String get tournamentEntryCode => 'Tournament entry code';
 
   @override
-  String get hangOn => 'Așteaptă!';
+  String get hangOn => 'Hang on!';
 
   @override
   String gameInProgress(String param) {
-    return 'Ai un joc în desfășurare cu $param.';
+    return 'You have a game in progress with $param.';
   }
 
   @override
-  String get abortTheGame => 'Abandonează jocul';
+  String get abortTheGame => 'Abort the game';
 
   @override
-  String get resignTheGame => 'Cedează jocul';
+  String get resignTheGame => 'Resign the game';
 
   @override
-  String get youCantStartNewGame => 'Nu poți începe un joc nou până când acesta nu se termină.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
-  String get since => 'De la';
+  String get since => 'Since';
 
   @override
-  String get until => 'Până la';
+  String get until => 'Until';
 
   @override
-  String get lichessDbExplanation => 'Partide evaluate obținute de la toți jucătorii Lichess';
+  String get lichessDbExplanation => 'Rated games played on Lichess';
 
   @override
-  String get switchSides => 'Întoarce tabla';
+  String get switchSides => 'Switch sides';
 
   @override
-  String get closingAccountWithdrawAppeal => 'Închiderea contului dvs. vă va retrage apelul';
+  String get closingAccountWithdrawAppeal => 'Closing your account will withdraw your appeal';
 
   @override
-  String get ourEventTips => 'Sfaturile noastre pentru organizarea evenimentelor';
+  String get ourEventTips => 'Our tips for organising events';
 
   @override
-  String get instructions => 'Instrucțiuni';
+  String get instructions => 'Instructions';
 
   @override
-  String get showMeEverything => 'Afișează-mi tot';
+  String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess este o asociație non-profit și un software gratuit și open-source.\nToate costurile de operare și de dezvoltare sunt finanțate doar din donațiile utilizatorilor.';
+  String get lichessPatronInfo =>
+      'Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.';
 
   @override
-  String get nothingToSeeHere => 'Nimic de văzut aici momentan.';
+  String get nothingToSeeHere => 'Nothing to see here at the moment.';
 
   @override
-  String get stats => 'Statistici';
+  String get stats => 'Stats';
+
+  @override
+  String get accessibility => 'Accessibility';
+
+  @override
+  String get enableBlindMode => 'Enable blind mode';
+
+  @override
+  String get disableBlindMode => 'Disable blind mode';
 
   @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Adversarul tău a părăsit jocul. Poți revendica victoria peste $count secunde.',
-      few: 'Adversarul tău a părăsit jocul. Poți revendica victoria peste $count secunde.',
-      one: 'Adversarul tău a părăsit jocul. Poți revendica victoria peste o secundă.',
+      other: 'Your opponent left the game. You can claim victory in $count seconds.',
+      one: 'Your opponent left the game. You can claim victory in $count second.',
     );
     return '$_temp0';
   }
@@ -4598,9 +4783,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Mat în $count mutări',
-      few: 'Mat în $count mutări',
-      one: 'Mat la prima mutare',
+      other: 'Mate in $count half-moves',
+      one: 'Mate in $count half-move',
     );
     return '$_temp0';
   }
@@ -4610,9 +4794,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de gafe',
-      few: '$count gafe',
-      one: 'o gafă',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -4622,9 +4805,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count De gafe',
-      few: '$count Gafe',
-      one: 'O Gafă',
+      other: '$count Blunders',
+      one: '$count Blunder',
     );
     return '$_temp0';
   }
@@ -4634,9 +4816,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de greșeli',
-      few: '$count greșeli',
-      one: 'o greșeală',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -4646,9 +4827,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count De greșeli',
-      few: '$count Greșeli',
-      one: 'O Greșeală',
+      other: '$count Mistakes',
+      one: '$count Mistake',
     );
     return '$_temp0';
   }
@@ -4658,9 +4838,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de inexactități',
-      few: '$count inexactități',
-      one: 'o inexactitate',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -4670,9 +4849,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count De inexactități',
-      few: '$count Inexactități',
-      one: 'O Inexactitate',
+      other: '$count Inaccuracies',
+      one: '$count Inaccuracy',
     );
     return '$_temp0';
   }
@@ -4682,9 +4860,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de jucători',
-      few: '$count jucători',
-      one: 'un jucător',
+      other: '$count players',
+      one: '$count player',
     );
     return '$_temp0';
   }
@@ -4694,9 +4871,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de partide',
-      few: '$count partide',
-      one: 'o partidă',
+      other: '$count games',
+      one: '$count game',
     );
     return '$_temp0';
   }
@@ -4706,9 +4882,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Rating $count din $param2 de meciuri',
-      few: 'Rating $count din $param2 meciuri',
-      one: 'Rating $count din $param2 meci',
+      other: '$count rating over $param2 games',
+      one: '$count rating over $param2 game',
     );
     return '$_temp0';
   }
@@ -4718,9 +4893,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count marcate',
-      few: '$count marcate',
-      one: 'unul marcat',
+      other: '$count bookmarks',
+      one: '$count bookmark',
     );
     return '$_temp0';
   }
@@ -4730,9 +4904,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de zile',
-      few: '$count zile',
-      one: 'o zi',
+      other: '$count days',
+      one: '$count day',
     );
     return '$_temp0';
   }
@@ -4742,9 +4915,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de ore',
-      few: '$count ore',
-      one: 'o oră',
+      other: '$count hours',
+      one: '$count hour',
     );
     return '$_temp0';
   }
@@ -4754,9 +4926,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de minute',
-      few: '$count minute',
-      one: '$count minut',
+      other: '$count minutes',
+      one: '$count minute',
     );
     return '$_temp0';
   }
@@ -4766,9 +4937,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Locul în clasament este actualizat la fiecare $count minute',
-      few: 'Locul în clasament este actualizat la fiecare $count minute',
-      one: 'Locul în clasament este actualizat în fiecare minut',
+      other: 'Rank is updated every $count minutes',
+      one: 'Rank is updated every minute',
     );
     return '$_temp0';
   }
@@ -4778,9 +4948,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de probleme șah',
-      few: '$count probleme șah',
-      one: 'O problemă șah',
+      other: '$count puzzles',
+      one: '$count puzzle',
     );
     return '$_temp0';
   }
@@ -4790,9 +4959,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de partide cu tine',
-      few: '$count partide cu tine',
-      one: 'o partidă cu tine',
+      other: '$count games with you',
+      one: '$count game with you',
     );
     return '$_temp0';
   }
@@ -4802,9 +4970,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count oficiale',
-      few: '$count oficiale',
-      one: 'Unul oficial',
+      other: '$count rated',
+      one: '$count rated',
     );
     return '$_temp0';
   }
@@ -4814,9 +4981,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de victorii',
-      few: '$count victorii',
-      one: 'o victorie',
+      other: '$count wins',
+      one: '$count win',
     );
     return '$_temp0';
   }
@@ -4826,9 +4992,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de înfrângeri',
-      few: '$count înfrângeri',
-      one: 'o înfrângere',
+      other: '$count losses',
+      one: '$count loss',
     );
     return '$_temp0';
   }
@@ -4838,9 +5003,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de remize',
-      few: '$count remize',
-      one: 'o remiză',
+      other: '$count draws',
+      one: '$count draw',
     );
     return '$_temp0';
   }
@@ -4850,9 +5014,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de jocuri',
-      few: '$count jocuri',
-      one: 'Un joc',
+      other: '$count playing',
+      one: '$count playing',
     );
     return '$_temp0';
   }
@@ -4862,9 +5025,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Acordă $count de secunde',
-      few: 'Acordă $count secunde',
-      one: 'Acordă o secundă',
+      other: 'Give $count seconds',
+      one: 'Give $count second',
     );
     return '$_temp0';
   }
@@ -4874,9 +5036,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de puncte de turneu',
-      few: '$count puncte de turneu',
-      one: 'Un punct de turneu',
+      other: '$count tournament points',
+      one: '$count tournament point',
     );
     return '$_temp0';
   }
@@ -4886,9 +5047,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de studii',
-      few: '$count studii',
-      one: '$count studiu',
+      other: '$count studies',
+      one: '$count study',
     );
     return '$_temp0';
   }
@@ -4898,9 +5058,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de simul-uri',
-      few: '$count simul-uri',
-      one: 'Un simul',
+      other: '$count simuls',
+      one: '$count simul',
     );
     return '$_temp0';
   }
@@ -4910,9 +5069,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de partide oficiale jucate',
-      few: '≥ $count partide oficiale',
-      one: '≥ o partidă oficială jucată',
+      other: '≥ $count rated games',
+      one: '≥ $count rated game',
     );
     return '$_temp0';
   }
@@ -4922,9 +5080,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '≥ $count de partide oficiale $param2 jucate',
-      few: '≥ $count partide oficiale $param2 jucate',
-      one: '≥ o partidă $param2 jucată',
+      other: '≥ $count $param2 rated games',
+      one: '≥ $count $param2 rated game',
     );
     return '$_temp0';
   }
@@ -4934,9 +5091,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Trebuie să joci încă $count partide $param2 evaluate',
-      few: 'Trebuie să joci încă $count meciuri in variantă $param2',
-      one: 'Trebuie să joci încă $count meci in variantă $param2',
+      other: 'You need to play $count more $param2 rated games',
+      one: 'You need to play $count more $param2 rated game',
     );
     return '$_temp0';
   }
@@ -4946,9 +5102,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Trebuie să joci încă $count de partide oficiale',
-      few: 'Trebuie să joci încă $count partide oficiale',
-      one: 'Trebuie să joci încă o partidă oficială',
+      other: 'You need to play $count more rated games',
+      one: 'You need to play $count more rated game',
     );
     return '$_temp0';
   }
@@ -4958,9 +5113,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de partide importate',
-      few: '$count partide importate',
-      one: 'O partidă importată',
+      other: '$count imported games',
+      one: '$count imported game',
     );
     return '$_temp0';
   }
@@ -4970,9 +5124,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de prieteni online',
-      few: '$count prieteni online',
-      one: 'Un prieten online',
+      other: '$count friends online',
+      one: '$count friend online',
     );
     return '$_temp0';
   }
@@ -4982,9 +5135,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de urmăritori',
-      few: '$count urmăritori',
-      one: 'Un urmăritor',
+      other: '$count followers',
+      one: '$count follower',
     );
     return '$_temp0';
   }
@@ -4994,9 +5146,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count urmăriți',
-      few: '$count urmăriți',
-      one: 'Unul urmărit',
+      other: '$count following',
+      one: '$count following',
     );
     return '$_temp0';
   }
@@ -5006,9 +5157,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Mai puțin de $count de minute',
-      few: 'Mai puțin de $count minute',
-      one: 'Mai puțin de un minut',
+      other: 'Less than $count minutes',
+      one: 'Less than $count minute',
     );
     return '$_temp0';
   }
@@ -5018,9 +5168,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de partide în desfășurare',
-      few: '$count partide în desfășurare',
-      one: '$count partidă în desfășurare',
+      other: '$count games in play',
+      one: '$count game in play',
     );
     return '$_temp0';
   }
@@ -5030,9 +5179,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Maxim: $count caractere.',
-      few: 'Maxim: $count caractere.',
-      one: 'Maxim: $count caracter.',
+      other: 'Maximum: $count characters.',
+      one: 'Maximum: $count character.',
     );
     return '$_temp0';
   }
@@ -5042,9 +5190,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count jucători blocați',
-      few: '$count jucători blocați',
-      one: '$count jucător blocat',
+      other: '$count blocks',
+      one: '$count block',
     );
     return '$_temp0';
   }
@@ -5054,9 +5201,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de postări pe forum',
-      few: '$count postări pe forum',
-      one: '$count postare pe forum',
+      other: '$count forum posts',
+      one: '$count forum post',
     );
     return '$_temp0';
   }
@@ -5066,9 +5212,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count jucători $param2 în această săptămână.',
-      few: '$count jucători $param2 în această săptămână.',
-      one: '$count jucător $param2 în această săptămână.',
+      other: '$count $param2 players this week.',
+      one: '$count $param2 player this week.',
     );
     return '$_temp0';
   }
@@ -5078,9 +5223,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Disponibil în $count limbi!',
-      few: 'Disponibil în $count limbi!',
-      one: 'Disponibil într-o limbă!',
+      other: 'Available in $count languages!',
+      one: 'Available in $count language!',
     );
     return '$_temp0';
   }
@@ -5090,9 +5234,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count secunde rămase pentru a începe jocul',
-      few: '$count secunde rămase pentru a începe jocul',
-      one: '$count secundă rămasă pentru a începe jocul',
+      other: '$count seconds to play the first move',
+      one: '$count second to play the first move',
     );
     return '$_temp0';
   }
@@ -5102,9 +5245,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count secunde',
-      few: '$count secunde',
-      one: '$count secundă',
+      other: '$count seconds',
+      one: '$count second',
     );
     return '$_temp0';
   }
@@ -5114,9 +5256,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'și salvează $count variațiile cu mutare anticipată',
-      few: 'și salvează $count variațiile cu mutare anticipată',
-      one: 'și salvează $count variație cu mutare anticipată',
+      other: 'and save $count premove lines',
+      one: 'and save $count premove line',
     );
     return '$_temp0';
   }
@@ -5128,7 +5269,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get stormYouPlayTheWhitePiecesInAllPuzzles => 'Joci cu piesele albe în toate puzzle-urile';
 
   @override
-  String get stormYouPlayTheBlackPiecesInAllPuzzles => 'Joci cu piesele negre în toate puzzle-urile';
+  String get stormYouPlayTheBlackPiecesInAllPuzzles =>
+      'Joci cu piesele negre în toate puzzle-urile';
 
   @override
   String get stormPuzzlesSolved => 'probleme rezolvate';
@@ -5251,7 +5393,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get stormSkipHelp => 'Poți sări peste o mutare pe cursă:';
 
   @override
-  String get stormSkipExplanation => 'Sări peste această mutare pentru a păstra combo-ul! Funcționează o singură dată pe cursă.';
+  String get stormSkipExplanation =>
+      'Sări peste această mutare pentru a păstra combo-ul! Funcționează o singură dată pe cursă.';
 
   @override
   String get stormFailedPuzzles => 'Probleme eșuate';
@@ -5308,466 +5451,474 @@ class AppLocalizationsRo extends AppLocalizations {
   String get streamerLichessStreamers => 'Lichess streameri';
 
   @override
-  String get studyPrivate => 'Privat';
+  String get studyPrivate => 'Private';
 
   @override
-  String get studyMyStudies => 'Studiile mele';
+  String get studyMyStudies => 'My studies';
 
   @override
-  String get studyStudiesIContributeTo => 'Studiile la care contribui';
+  String get studyStudiesIContributeTo => 'Studies I contribute to';
 
   @override
-  String get studyMyPublicStudies => 'Studiile mele publice';
+  String get studyMyPublicStudies => 'My public studies';
 
   @override
-  String get studyMyPrivateStudies => 'Studiile mele private';
+  String get studyMyPrivateStudies => 'My private studies';
 
   @override
-  String get studyMyFavoriteStudies => 'Studiile mele preferate';
+  String get studyMyFavoriteStudies => 'My favourite studies';
 
   @override
-  String get studyWhatAreStudies => 'Ce sunt studiile?';
+  String get studyWhatAreStudies => 'What are studies?';
 
   @override
-  String get studyAllStudies => 'Toate studiile';
+  String get studyAllStudies => 'All studies';
 
   @override
   String studyStudiesCreatedByX(String param) {
-    return 'Studii create de $param';
+    return 'Studies created by $param';
   }
 
   @override
-  String get studyNoneYet => 'Niciunul încă.';
+  String get studyNoneYet => 'None yet.';
 
   @override
-  String get studyHot => 'Populare';
+  String get studyHot => 'Hot';
 
   @override
-  String get studyDateAddedNewest => 'Data adăugată (cele mai noi)';
+  String get studyDateAddedNewest => 'Date added (newest)';
 
   @override
-  String get studyDateAddedOldest => 'Data adăugată (cele mai vechi)';
+  String get studyDateAddedOldest => 'Date added (oldest)';
 
   @override
-  String get studyRecentlyUpdated => 'Încărcate recent';
+  String get studyRecentlyUpdated => 'Recently updated';
 
   @override
-  String get studyMostPopular => 'Cele mai populare';
+  String get studyMostPopular => 'Most popular';
 
   @override
-  String get studyAlphabetical => 'Alfabetic';
+  String get studyAlphabetical => 'Alphabetical';
 
   @override
-  String get studyAddNewChapter => 'Adaugă un nou capitol';
+  String get studyAddNewChapter => 'Add a new chapter';
 
   @override
-  String get studyAddMembers => 'Adaugă membri';
+  String get studyAddMembers => 'Add members';
 
   @override
-  String get studyInviteToTheStudy => 'Invită la studiu';
+  String get studyInviteToTheStudy => 'Invite to the study';
 
   @override
-  String get studyPleaseOnlyInvitePeopleYouKnow => 'Vă rugăm să invitați doar persoanele pe care le cunoașteți și care vor în mod activ să se alăture studiului.';
+  String get studyPleaseOnlyInvitePeopleYouKnow =>
+      'Please only invite people who know you, and who actively want to join this study.';
 
   @override
-  String get studySearchByUsername => 'Caută după numele de utilizator';
+  String get studySearchByUsername => 'Search by username';
 
   @override
   String get studySpectator => 'Spectator';
 
   @override
-  String get studyContributor => 'Contribuitor';
+  String get studyContributor => 'Contributor';
 
   @override
-  String get studyKick => 'Înlătură';
+  String get studyKick => 'Kick';
 
   @override
-  String get studyLeaveTheStudy => 'Părăsește studiul';
+  String get studyLeaveTheStudy => 'Leave the study';
 
   @override
-  String get studyYouAreNowAContributor => 'Acum ești un contribuitor';
+  String get studyYouAreNowAContributor => 'You are now a contributor';
 
   @override
-  String get studyYouAreNowASpectator => 'Acum ești un spectator';
+  String get studyYouAreNowASpectator => 'You are now a spectator';
 
   @override
-  String get studyPgnTags => 'Etichete PGN';
+  String get studyPgnTags => 'PGN tags';
 
   @override
-  String get studyLike => 'Apreciază';
+  String get studyLike => 'Like';
 
   @override
-  String get studyUnlike => 'Nu îmi mai place';
+  String get studyUnlike => 'Unlike';
 
   @override
-  String get studyNewTag => 'Etichetă nouă';
+  String get studyNewTag => 'New tag';
 
   @override
-  String get studyCommentThisPosition => 'Comentează această poziție';
+  String get studyCommentThisPosition => 'Comment on this position';
 
   @override
-  String get studyCommentThisMove => 'Comentează această mutare';
+  String get studyCommentThisMove => 'Comment on this move';
 
   @override
-  String get studyAnnotateWithGlyphs => 'Adnotează cu simboluri';
+  String get studyAnnotateWithGlyphs => 'Annotate with glyphs';
 
   @override
-  String get studyTheChapterIsTooShortToBeAnalysed => 'Capitolul este prea mic pentru a fi analizat.';
+  String get studyTheChapterIsTooShortToBeAnalysed => 'The chapter is too short to be analysed.';
 
   @override
-  String get studyOnlyContributorsCanRequestAnalysis => 'Numai contribuitorii studiului pot solicita o analiză a computerului.';
+  String get studyOnlyContributorsCanRequestAnalysis =>
+      'Only the study contributors can request a computer analysis.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Obțineți o întreagă analiză server-side a computerului a variației principale.';
+  String get studyGetAFullComputerAnalysis =>
+      'Get a full server-side computer analysis of the mainline.';
 
   @override
-  String get studyMakeSureTheChapterIsComplete => 'Asigurați-vă că acest capitol este complet. Puteți solicita o analiză doar o singură dată.';
+  String get studyMakeSureTheChapterIsComplete =>
+      'Make sure the chapter is complete. You can only request analysis once.';
 
   @override
-  String get studyAllSyncMembersRemainOnTheSamePosition => 'Toți membri sincronizați rămân la aceeași poziție';
+  String get studyAllSyncMembersRemainOnTheSamePosition =>
+      'All SYNC members remain on the same position';
 
   @override
-  String get studyShareChanges => 'Împărtășește modificările cu spectatorii și salvează-le pe server';
+  String get studyShareChanges => 'Share changes with spectators and save them on the server';
 
   @override
-  String get studyPlaying => 'În desfășurare';
+  String get studyPlaying => 'Playing';
 
   @override
-  String get studyShowResults => 'Rezultate';
+  String get studyShowResults => 'Results';
 
   @override
-  String get studyShowEvalBar => 'Bară de evaluare';
+  String get studyShowEvalBar => 'Evaluation bars';
 
   @override
-  String get studyNext => 'Următoarea';
+  String get studyNext => 'Next';
 
   @override
-  String get studyShareAndExport => 'Împărtășește & exportă';
+  String get studyShareAndExport => 'Share & export';
 
   @override
-  String get studyCloneStudy => 'Clonează';
+  String get studyCloneStudy => 'Clone';
 
   @override
-  String get studyStudyPgn => 'PGN-ul studiului';
+  String get studyStudyPgn => 'Study PGN';
 
   @override
-  String get studyChapterPgn => 'PGN-ul capitolului';
+  String get studyChapterPgn => 'Chapter PGN';
 
   @override
-  String get studyCopyChapterPgn => 'Copiază PGN';
+  String get studyCopyChapterPgn => 'Copy PGN';
 
   @override
-  String get studyDownloadGame => 'Descarcă partida';
+  String get studyDownloadGame => 'Download game';
 
   @override
-  String get studyStudyUrl => 'URL-ul studiului';
+  String get studyStudyUrl => 'Study URL';
 
   @override
-  String get studyCurrentChapterUrl => 'URL-ul capitolului curent';
+  String get studyCurrentChapterUrl => 'Current chapter URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Poți lipi acest cod în forum pentru a îngloba';
+  String get studyYouCanPasteThisInTheForumToEmbed =>
+      'You can paste this in the forum or your Lichess blog to embed';
 
   @override
-  String get studyStartAtInitialPosition => 'Începeți de la poziția inițială';
+  String get studyStartAtInitialPosition => 'Start at initial position';
 
   @override
   String studyStartAtX(String param) {
-    return 'Începeți la $param';
+    return 'Start at $param';
   }
 
   @override
-  String get studyEmbedInYourWebsite => 'Înglobează pe site-ul sau blog-ul tău';
+  String get studyEmbedInYourWebsite => 'Embed in your website';
 
   @override
-  String get studyReadMoreAboutEmbedding => 'Citește mai multe despre înglobare';
+  String get studyReadMoreAboutEmbedding => 'Read more about embedding';
 
   @override
-  String get studyOnlyPublicStudiesCanBeEmbedded => 'Numai studii publice pot fi înglobate!';
+  String get studyOnlyPublicStudiesCanBeEmbedded => 'Only public studies can be embedded!';
 
   @override
-  String get studyOpen => 'Deschideți';
+  String get studyOpen => 'Open';
 
   @override
   String studyXBroughtToYouByY(String param1, String param2) {
-    return '$param1, oferit pentru dvs. de $param2';
+    return '$param1, brought to you by $param2';
   }
 
   @override
-  String get studyStudyNotFound => 'Studiul nu a fost găsit';
+  String get studyStudyNotFound => 'Study not found';
 
   @override
-  String get studyEditChapter => 'Editează capitolul';
+  String get studyEditChapter => 'Edit chapter';
 
   @override
-  String get studyNewChapter => 'Capitol nou';
+  String get studyNewChapter => 'New chapter';
 
   @override
   String studyImportFromChapterX(String param) {
-    return 'Importă din $param';
+    return 'Import from $param';
   }
 
   @override
-  String get studyOrientation => 'Orientare';
+  String get studyOrientation => 'Orientation';
 
   @override
-  String get studyAnalysisMode => 'Tip de analiză';
+  String get studyAnalysisMode => 'Analysis mode';
 
   @override
-  String get studyPinnedChapterComment => 'Comentariu fixat';
+  String get studyPinnedChapterComment => 'Pinned chapter comment';
 
   @override
-  String get studySaveChapter => 'Salvează capitolul';
+  String get studySaveChapter => 'Save chapter';
 
   @override
-  String get studyClearAnnotations => 'Curățați adnotările';
+  String get studyClearAnnotations => 'Clear annotations';
 
   @override
-  String get studyClearVariations => 'Curățați variațiile';
+  String get studyClearVariations => 'Clear variations';
 
   @override
-  String get studyDeleteChapter => 'Ștergeți capitolul';
+  String get studyDeleteChapter => 'Delete chapter';
 
   @override
-  String get studyDeleteThisChapter => 'Ștergeți acest capitol? Nu există cale de întoarcere!';
+  String get studyDeleteThisChapter => 'Delete this chapter. There is no going back!';
 
   @override
-  String get studyClearAllCommentsInThisChapter => 'Ștergeți toate comentariile, simbolurile și figurile desenate din acest capitol?';
+  String get studyClearAllCommentsInThisChapter =>
+      'Clear all comments, glyphs and drawn shapes in this chapter';
 
   @override
-  String get studyRightUnderTheBoard => 'Fix sub tablă';
+  String get studyRightUnderTheBoard => 'Right under the board';
 
   @override
-  String get studyNoPinnedComment => 'Niciunul';
+  String get studyNoPinnedComment => 'None';
 
   @override
-  String get studyNormalAnalysis => 'Analiză normală';
+  String get studyNormalAnalysis => 'Normal analysis';
 
   @override
-  String get studyHideNextMoves => 'Ascunde următoarele mutări';
+  String get studyHideNextMoves => 'Hide next moves';
 
   @override
-  String get studyInteractiveLesson => 'Lecție interactivă';
+  String get studyInteractiveLesson => 'Interactive lesson';
 
   @override
   String studyChapterX(String param) {
-    return 'Capitolul $param';
+    return 'Chapter $param';
   }
 
   @override
-  String get studyEmpty => 'Gol';
+  String get studyEmpty => 'Empty';
 
   @override
-  String get studyStartFromInitialPosition => 'Începeți de la poziția inițială';
+  String get studyStartFromInitialPosition => 'Start from initial position';
 
   @override
   String get studyEditor => 'Editor';
 
   @override
-  String get studyStartFromCustomPosition => 'Începeți de la o poziție personalizată';
+  String get studyStartFromCustomPosition => 'Start from custom position';
 
   @override
-  String get studyLoadAGameByUrl => 'Încărcați meciul din URL';
+  String get studyLoadAGameByUrl => 'Load games by URLs';
 
   @override
-  String get studyLoadAPositionFromFen => 'Încărcați o poziție din FEN';
+  String get studyLoadAPositionFromFen => 'Load a position from FEN';
 
   @override
-  String get studyLoadAGameFromPgn => 'Încărcați un joc din PGN';
+  String get studyLoadAGameFromPgn => 'Load games from PGN';
 
   @override
-  String get studyAutomatic => 'Automată';
+  String get studyAutomatic => 'Automatic';
 
   @override
-  String get studyUrlOfTheGame => 'URL-ul jocului';
+  String get studyUrlOfTheGame => 'URL of the games, one per line';
 
   @override
   String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Încărcați un joc de pe $param1 sau $param2';
+    return 'Load games from $param1 or $param2';
   }
 
   @override
-  String get studyCreateChapter => 'Creați capitolul';
+  String get studyCreateChapter => 'Create chapter';
 
   @override
-  String get studyCreateStudy => 'Creați studiul';
+  String get studyCreateStudy => 'Create study';
 
   @override
-  String get studyEditStudy => 'Editați studiul';
+  String get studyEditStudy => 'Edit study';
 
   @override
-  String get studyVisibility => 'Vizibilitate';
+  String get studyVisibility => 'Visibility';
 
   @override
   String get studyPublic => 'Public';
 
   @override
-  String get studyUnlisted => 'Nelistat';
+  String get studyUnlisted => 'Unlisted';
 
   @override
-  String get studyInviteOnly => 'Doar invitați';
+  String get studyInviteOnly => 'Invite only';
 
   @override
-  String get studyAllowCloning => 'Permiteți clonarea';
+  String get studyAllowCloning => 'Allow cloning';
 
   @override
-  String get studyNobody => 'Nimeni';
+  String get studyNobody => 'Nobody';
 
   @override
-  String get studyOnlyMe => 'Doar eu';
+  String get studyOnlyMe => 'Only me';
 
   @override
-  String get studyContributors => 'Contribuitori';
+  String get studyContributors => 'Contributors';
 
   @override
-  String get studyMembers => 'Membri';
+  String get studyMembers => 'Members';
 
   @override
-  String get studyEveryone => 'Toată lumea';
+  String get studyEveryone => 'Everyone';
 
   @override
-  String get studyEnableSync => 'Activați sincronizarea';
+  String get studyEnableSync => 'Enable sync';
 
   @override
-  String get studyYesKeepEveryoneOnTheSamePosition => 'Da: menține-i pe toți la aceeași poziție';
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Yes: keep everyone on the same position';
 
   @override
-  String get studyNoLetPeopleBrowseFreely => 'Nu: permite navigarea liberă';
+  String get studyNoLetPeopleBrowseFreely => 'No: let people browse freely';
 
   @override
-  String get studyPinnedStudyComment => 'Comentariu fixat';
+  String get studyPinnedStudyComment => 'Pinned study comment';
 
   @override
-  String get studyStart => 'Începe';
+  String get studyStart => 'Start';
 
   @override
-  String get studySave => 'Salvează';
+  String get studySave => 'Save';
 
   @override
-  String get studyClearChat => 'Șterge conversația';
+  String get studyClearChat => 'Clear chat';
 
   @override
-  String get studyDeleteTheStudyChatHistory => 'Ștergeți istoricul chatului? Nu există cale de întoarcere!';
+  String get studyDeleteTheStudyChatHistory =>
+      'Delete the study chat history? There is no going back!';
 
   @override
-  String get studyDeleteStudy => 'Ștergeți studiul';
+  String get studyDeleteStudy => 'Delete study';
 
   @override
   String studyConfirmDeleteStudy(String param) {
-    return 'Ștergeți întregul studiu? Nu există cale de întoarcere! Introduceți numele studiului pentru a confirma: $param';
+    return 'Delete the entire study? There is no going back! Type the name of the study to confirm: $param';
   }
 
   @override
-  String get studyWhereDoYouWantToStudyThat => 'Unde vreți s-o studiați?';
+  String get studyWhereDoYouWantToStudyThat => 'Where do you want to study that?';
 
   @override
-  String get studyGoodMove => 'Mutare bună';
+  String get studyGoodMove => 'Good move';
 
   @override
-  String get studyMistake => 'Greșeală';
+  String get studyMistake => 'Mistake';
 
   @override
-  String get studyBrilliantMove => 'Mișcare genială';
+  String get studyBrilliantMove => 'Brilliant move';
 
   @override
-  String get studyBlunder => 'Gafă';
+  String get studyBlunder => 'Blunder';
 
   @override
-  String get studyInterestingMove => 'Mișcare interesantă';
+  String get studyInterestingMove => 'Interesting move';
 
   @override
-  String get studyDubiousMove => 'Mutare dubioasă';
+  String get studyDubiousMove => 'Dubious move';
 
   @override
-  String get studyOnlyMove => 'Singura mișcare posibilă';
+  String get studyOnlyMove => 'Only move';
 
   @override
   String get studyZugzwang => 'Zugzwang';
 
   @override
-  String get studyEqualPosition => 'Poziție egală';
+  String get studyEqualPosition => 'Equal position';
 
   @override
-  String get studyUnclearPosition => 'Poziție neclară';
+  String get studyUnclearPosition => 'Unclear position';
 
   @override
-  String get studyWhiteIsSlightlyBetter => 'Albul este puțin mai bun';
+  String get studyWhiteIsSlightlyBetter => 'White is slightly better';
 
   @override
-  String get studyBlackIsSlightlyBetter => 'Negrul este puțin mai bun';
+  String get studyBlackIsSlightlyBetter => 'Black is slightly better';
 
   @override
-  String get studyWhiteIsBetter => 'Albul este mai bun';
+  String get studyWhiteIsBetter => 'White is better';
 
   @override
-  String get studyBlackIsBetter => 'Negrul este mai bun';
+  String get studyBlackIsBetter => 'Black is better';
 
   @override
-  String get studyWhiteIsWinning => 'Albul câștigă';
+  String get studyWhiteIsWinning => 'White is winning';
 
   @override
-  String get studyBlackIsWinning => 'Negrul câștigă';
+  String get studyBlackIsWinning => 'Black is winning';
 
   @override
-  String get studyNovelty => 'Noutate';
+  String get studyNovelty => 'Novelty';
 
   @override
-  String get studyDevelopment => 'Dezvoltare';
+  String get studyDevelopment => 'Development';
 
   @override
-  String get studyInitiative => 'Inițiativă';
+  String get studyInitiative => 'Initiative';
 
   @override
-  String get studyAttack => 'Atac';
+  String get studyAttack => 'Attack';
 
   @override
-  String get studyCounterplay => 'Contraatac';
+  String get studyCounterplay => 'Counterplay';
 
   @override
-  String get studyTimeTrouble => 'Probleme de timp';
+  String get studyTimeTrouble => 'Time trouble';
 
   @override
-  String get studyWithCompensation => 'Cu compensații';
+  String get studyWithCompensation => 'With compensation';
 
   @override
-  String get studyWithTheIdea => 'Cu ideea';
+  String get studyWithTheIdea => 'With the idea';
 
   @override
-  String get studyNextChapter => 'Capitolul următor';
+  String get studyNextChapter => 'Next chapter';
 
   @override
-  String get studyPrevChapter => 'Capitolul precedent';
+  String get studyPrevChapter => 'Previous chapter';
 
   @override
-  String get studyStudyActions => 'Acţiuni de studiu';
+  String get studyStudyActions => 'Study actions';
 
   @override
-  String get studyTopics => 'Subiecte';
+  String get studyTopics => 'Topics';
 
   @override
-  String get studyMyTopics => 'Subiectele mele';
+  String get studyMyTopics => 'My topics';
 
   @override
-  String get studyPopularTopics => 'Subiecte populare';
+  String get studyPopularTopics => 'Popular topics';
 
   @override
-  String get studyManageTopics => 'Gestionează subiecte';
+  String get studyManageTopics => 'Manage topics';
 
   @override
-  String get studyBack => 'Înapoi';
+  String get studyBack => 'Back';
 
   @override
-  String get studyPlayAgain => 'Joacă din nou';
+  String get studyPlayAgain => 'Play again';
 
   @override
-  String get studyWhatWouldYouPlay => 'Ce ai juca în această poziție?';
+  String get studyWhatWouldYouPlay => 'What would you play in this position?';
 
   @override
-  String get studyYouCompletedThisLesson => 'Felicitări! Ai terminat această lecție.';
+  String get studyYouCompletedThisLesson => 'Congratulations! You completed this lesson.';
 
   @override
   String studyPerPage(String param) {
-    return '$param pe pagină';
+    return '$param per page';
   }
 
   @override
@@ -5777,13 +5928,15 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText =>
+      'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
 
   @override
   String get studySharedAndSaveTitle => 'Shared and saved';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText =>
+      'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
 
   @override
   String get studyStudyMembersTitle => 'Study members';
@@ -5802,7 +5955,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyStudyChaptersTitle => 'Study chapters';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText =>
+      'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
 
   @override
   String get studyCommentPositionTitle => 'Comment on a position';
@@ -5816,25 +5970,29 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyAnnotatePositionTitle => 'Annotate a position';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText =>
+      'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
 
   @override
   String get studyConclusionTitle => 'Thanks for your time';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText =>
+      'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
   String get studyCreateChapterTitle => 'Let\'s create a study chapter';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText =>
+      'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
 
   @override
   String get studyFromInitialPositionTitle => 'From initial position';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText =>
+      'Just a board setup for a new game.<br>Suited to explore openings.';
 
   @override
   String get studyCustomPositionTitle => 'Custom position';
@@ -5846,37 +6004,50 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText =>
+      'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText =>
+      'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
 
   @override
   String get studyFromPgnGameTitle => 'From a PGN game';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText =>
+      'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Studies support variants';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText =>
+      'Yes, you can study crazyhouse<br>and all lichess variants!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText =>
+      'Chapters are saved forever.<br>Have fun organizing your chess content!';
+
+  @override
+  String get studyDoubleDefeat => 'Double defeat';
+
+  @override
+  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+
+  @override
+  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
 
   @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count capitole',
-      few: '$count capitole',
-      one: '$count capitol',
+      other: '$count Chapters',
+      one: '$count Chapter',
     );
     return '$_temp0';
   }
@@ -5886,9 +6057,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count partide',
-      few: '$count partide',
-      one: '$count partidă',
+      other: '$count Games',
+      one: '$count Game',
     );
     return '$_temp0';
   }
@@ -5898,9 +6068,8 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count membri',
-      few: '$count membri',
-      one: '$count membru',
+      other: '$count Members',
+      one: '$count Member',
     );
     return '$_temp0';
   }
@@ -5910,9 +6079,9 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Lipiți textul PGN aici, până la $count meciuri',
-      few: 'Lipiți textul PGN aici, până la $count meciuri',
-      one: 'Lipiți textul PGN aici, până la $count meci',
+      other:
+          'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game',
     );
     return '$_temp0';
   }

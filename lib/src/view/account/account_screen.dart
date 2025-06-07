@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
@@ -51,29 +52,25 @@ class _AccountIconButtonState extends ConsumerState<AccountIconButton> {
     return switch (account) {
       AsyncData(:final value) => IconButton(
         tooltip: value == null ? context.l10n.signIn : value.username,
-        icon:
-            value == null
-                ? const Icon(Icons.account_circle_outlined, size: 30)
-                : CircleAvatar(
-                  radius: 16,
-                  foregroundImage:
-                      value.flair != null
-                          ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
-                          : null,
-                  onForegroundImageError:
-                      value.flair != null
-                          ? (error, _) {
-                            setState(() {
-                              errorLoadingFlair = true;
-                            });
-                          }
-                          : null,
-                  backgroundColor:
-                      value.flair == null || errorLoadingFlair
-                          ? null
-                          : ColorScheme.of(context).surfaceContainer,
-                  child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
-                ),
+        icon: value == null
+            ? const Icon(Icons.account_circle_outlined, size: 30)
+            : CircleAvatar(
+                radius: 16,
+                foregroundImage: value.flair != null
+                    ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
+                    : null,
+                onForegroundImageError: value.flair != null
+                    ? (error, _) {
+                        setState(() {
+                          errorLoadingFlair = true;
+                        });
+                      }
+                    : null,
+                backgroundColor: value.flair == null || errorLoadingFlair
+                    ? null
+                    : ColorScheme.of(context).surfaceContainer,
+                child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
+              ),
         onPressed: () {
           Navigator.of(context, rootNavigator: true).push(AccountScreen.buildRoute(context));
         },
@@ -106,27 +103,25 @@ class AccountScreen extends ConsumerWidget {
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
-    final Widget? donateButton =
-        userSession == null || userSession.user.isPatron != true
-            ? ListTile(
-              leading: Icon(
-                LichessIcons.patron,
-                semanticLabel: context.l10n.patronLichessPatron,
-                color: context.lichessColors.brag,
-              ),
-              title: Text(
-                context.l10n.patronDonate,
-                style: TextStyle(color: context.lichessColors.brag),
-              ),
-              trailing:
-                  Theme.of(context).platform == TargetPlatform.iOS
-                      ? const Icon(Icons.chevron_right)
-                      : null,
-              onTap: () {
-                launchUrl(Uri.parse('https://lichess.org/patron'));
-              },
-            )
-            : null;
+    final Widget? donateButton = userSession == null || userSession.user.isPatron != true
+        ? ListTile(
+            leading: Icon(
+              LichessIcons.patron,
+              semanticLabel: context.l10n.patronLichessPatron,
+              color: context.lichessColors.brag,
+            ),
+            title: Text(
+              context.l10n.patronDonate,
+              style: TextStyle(color: context.lichessColors.brag),
+            ),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const Icon(Icons.chevron_right)
+                : null,
+            onTap: () {
+              launchUrl(Uri.parse('https://lichess.org/patron'));
+            },
+          )
+        : null;
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
@@ -142,22 +137,20 @@ class AccountScreen extends ConsumerWidget {
                 ListTile(
                   leading: const Icon(Icons.person_outline),
                   title: Text(context.l10n.profile),
-                  trailing:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? const Icon(Icons.chevron_right)
-                          : null,
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const Icon(Icons.chevron_right)
+                      : null,
                   onTap: () {
-                    ref.invalidate(accountActivityProvider);
+                    ref.invalidate(accountProvider);
                     Navigator.of(context).push(ProfileScreen.buildRoute(context));
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.manage_accounts_outlined),
                   title: Text(context.l10n.preferencesPreferences),
-                  trailing:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? const Icon(Icons.chevron_right)
-                          : null,
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const Icon(Icons.chevron_right)
+                      : null,
                   onTap: () {
                     Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
                   },
@@ -211,45 +204,52 @@ class AccountScreen extends ConsumerWidget {
                 child: SettingsListTile(
                   icon: const Icon(Icons.brightness_medium_outlined),
                   settingsLabel: Text(context.l10n.background),
-                  settingsValue:
-                      generalPrefs.isForcedDarkMode
-                          ? BackgroundThemeMode.dark.title(context.l10n)
-                          : generalPrefs.themeMode.title(context.l10n),
-                  onTap:
-                      generalPrefs.isForcedDarkMode
-                          ? null
-                          : () {
-                            showChoicePicker(
-                              context,
-                              choices: BackgroundThemeMode.values,
-                              selectedItem: generalPrefs.themeMode,
-                              labelBuilder: (t) => Text(t.title(context.l10n)),
-                              onSelectedItemChanged:
-                                  (BackgroundThemeMode? value) => ref
-                                      .read(generalPreferencesProvider.notifier)
-                                      .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
-                            );
-                          },
+                  settingsValue: generalPrefs.isForcedDarkMode
+                      ? BackgroundThemeMode.dark.title(context.l10n)
+                      : generalPrefs.themeMode.title(context.l10n),
+                  onTap: generalPrefs.isForcedDarkMode
+                      ? null
+                      : () {
+                          showChoicePicker(
+                            context,
+                            choices: BackgroundThemeMode.values,
+                            selectedItem: generalPrefs.themeMode,
+                            labelBuilder: (t) => Text(t.title(context.l10n)),
+                            onSelectedItemChanged: (BackgroundThemeMode? value) => ref
+                                .read(generalPreferencesProvider.notifier)
+                                .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
+                          );
+                        },
                 ),
               ),
               ListTile(
                 leading: const Icon(Icons.palette_outlined),
                 title: Text(context.l10n.mobileTheme),
-                trailing:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? const Icon(Icons.chevron_right)
-                        : null,
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const Icon(Icons.chevron_right)
+                    : null,
                 onTap: () {
                   Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.app_registration),
+                title: const Text('Home widgets'),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const Icon(Icons.chevron_right)
+                    : null,
+                onTap: () {
+                  Navigator.of(
+                    context,
+                  ).push(HomeTabScreen.buildRoute(context, editModeEnabled: true));
+                },
+              ),
+              ListTile(
                 leading: const Icon(Symbols.chess_pawn),
-                title: Text(context.l10n.preferencesGameBehavior, overflow: TextOverflow.ellipsis),
-                trailing:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? const Icon(Icons.chevron_right)
-                        : null,
+                title: const Text('Board settings', overflow: TextOverflow.ellipsis),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const Icon(Icons.chevron_right)
+                    : null,
                 onTap: () {
                   Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
                 },
@@ -257,10 +257,9 @@ class AccountScreen extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.memory_outlined),
                 title: const Text('Chess engine'),
-                trailing:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? const Icon(Icons.chevron_right)
-                        : null,
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const Icon(Icons.chevron_right)
+                    : null,
                 onTap: () {
                   Navigator.of(context).push(EngineSettingsScreen.buildRoute(context));
                 },
@@ -278,9 +277,8 @@ class AccountScreen extends ConsumerWidget {
                       choices: AppLocalizations.supportedLocales,
                       selectedItem: generalPrefs.locale ?? Localizations.localeOf(context),
                       labelBuilder: (t) => Text(localeToLocalizedName(t)),
-                      onSelectedItemChanged:
-                          (Locale? locale) =>
-                              ref.read(generalPreferencesProvider.notifier).setLocale(locale),
+                      onSelectedItemChanged: (Locale? locale) =>
+                          ref.read(generalPreferencesProvider.notifier).setLocale(locale),
                     );
                   } else {
                     AppSettings.openAppSettings();

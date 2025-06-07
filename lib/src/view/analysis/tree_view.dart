@@ -28,15 +28,15 @@ class AnalysisTreeView extends ConsumerWidget {
           DebouncedPgnTreeView(
             root: analysisState.root,
             currentPath: analysisState.currentPath,
+            livePath: analysisState.pathToLiveMove,
             pgnRootComments: analysisState.pgnRootComments,
             notifier: ref.read(ctrlProvider.notifier),
             shouldShowComputerAnalysis: enableComputerAnalysis,
             shouldShowComments: enableComputerAnalysis && prefs.showPgnComments,
             shouldShowAnnotations: enableComputerAnalysis && prefs.showAnnotations,
-            displayMode:
-                prefs.inlineNotation
-                    ? PgnTreeDisplayMode.inlineNotation
-                    : PgnTreeDisplayMode.twoColumn,
+            displayMode: prefs.inlineNotation
+                ? PgnTreeDisplayMode.inlineNotation
+                : PgnTreeDisplayMode.twoColumn,
           ),
           if (analysisState.archivedGame != null)
             Padding(

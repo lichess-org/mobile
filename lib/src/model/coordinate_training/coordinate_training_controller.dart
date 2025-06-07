@@ -106,7 +106,7 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
 }
 
 @freezed
-class CoordinateTrainingState with _$CoordinateTrainingState {
+sealed class CoordinateTrainingState with _$CoordinateTrainingState {
   const CoordinateTrainingState._();
 
   const factory CoordinateTrainingState({
@@ -122,8 +122,7 @@ class CoordinateTrainingState with _$CoordinateTrainingState {
 
   bool get trainingActive => elapsed != null;
 
-  double? get timeFractionElapsed =>
-      (elapsed != null && timeLimit != null)
-          ? elapsed!.inMilliseconds / timeLimit!.inMilliseconds
-          : null;
+  double? get timeFractionElapsed => (elapsed != null && timeLimit != null)
+      ? elapsed!.inMilliseconds / timeLimit!.inMilliseconds
+      : null;
 }

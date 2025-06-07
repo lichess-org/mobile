@@ -460,7 +460,7 @@ class StudyController extends _$StudyController
 enum GamebookState { startLesson, findTheMove, correctMove, incorrectMove, lessonComplete }
 
 @freezed
-class StudyState with _$StudyState implements EvaluationMixinState {
+sealed class StudyState with _$StudyState implements EvaluationMixinState {
   const StudyState._();
 
   const factory StudyState({
@@ -518,16 +518,15 @@ class StudyState with _$StudyState implements EvaluationMixinState {
 
   bool get isOpeningExplorerAvailable => !gamebookActive && study.chapter.features.explorer;
 
-  EngineGaugeParams? engineGaugeParams(EngineEvaluationPrefState prefs) =>
-      isEngineAvailable(prefs)
-          ? (
-            isLocalEngineAvailable: isEngineAvailable(prefs),
-            orientation: pov,
-            position: currentPosition!,
-            savedEval: currentNode.eval,
-            serverEval: null,
-          )
-          : null;
+  EngineGaugeParams? engineGaugeParams(EngineEvaluationPrefState prefs) => isEngineAvailable(prefs)
+      ? (
+          isLocalEngineAvailable: isEngineAvailable(prefs),
+          orientation: pov,
+          position: currentPosition!,
+          savedEval: currentNode.eval,
+          serverEval: null,
+        )
+      : null;
 
   @override
   Position? get currentPosition => currentNode.position;
@@ -589,7 +588,7 @@ class StudyState with _$StudyState implements EvaluationMixinState {
 }
 
 @freezed
-class StudyCurrentNode with _$StudyCurrentNode {
+sealed class StudyCurrentNode with _$StudyCurrentNode {
   const StudyCurrentNode._();
 
   const factory StudyCurrentNode({

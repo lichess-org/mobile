@@ -96,115 +96,103 @@ class GameBody extends ConsumerWidget {
     switch (ref.watch(ctrlProvider)) {
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameBody] could not load game data; $e\n$s');
-        return const PopScope(
-          child: LoadGameError('Sorry, we could not load the game. Please try again later.'),
-        );
+        return const LoadGameError('Sorry, we could not load the game. Please try again later.');
       case AsyncData(value: final gameState, isRefreshing: false):
         final youAre = gameState.game.youAre ?? Side.white;
-        final archivedBlackClock = gameState.game.archivedBlackClockAt(gameState.stepCursor);
-        final archivedWhiteClock = gameState.game.archivedWhiteClockAt(gameState.stepCursor);
 
         final black = GamePlayer(
           game: gameState.game,
           side: Side.black,
-          materialDiff:
-              boardPreferences.materialDifferenceFormat.visible
-                  ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
-                  : null,
+          materialDiff: boardPreferences.materialDifferenceFormat.visible
+              ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
+              : null,
           materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
           timeToMove: gameState.game.sideToMove == Side.black ? gameState.timeToMove : null,
           mePlaying: youAre == Side.black,
           canGoForward: gameState.canGoForward,
           zenMode: gameState.isZenModeActive,
           clockPosition: boardPreferences.clockPosition,
-          confirmMoveCallbacks:
-              youAre == Side.black && gameState.moveToConfirm != null
-                  ? (
-                    confirm: () {
-                      ref.read(ctrlProvider.notifier).confirmMove();
+          confirmMoveCallbacks: youAre == Side.black && gameState.moveToConfirm != null
+              ? (
+                  confirm: () {
+                    ref.read(ctrlProvider.notifier).confirmMove();
+                  },
+                  cancel: () {
+                    ref.read(ctrlProvider.notifier).cancelMove();
+                  },
+                )
+              : null,
+          clock: gameState.liveClock != null
+              ? RepaintBoundary(
+                  child: ValueListenableBuilder(
+                    key: blackClockKey,
+                    valueListenable: gameState.liveClock!.black,
+                    builder: (context, value, _) {
+                      return Clock(
+                        key: const ValueKey('black-clock'),
+                        timeLeft: value,
+                        active: gameState.activeClockSide == Side.black,
+                        emergencyThreshold: youAre == Side.black
+                            ? gameState.game.meta.clock?.emergency
+                            : null,
+                      );
                     },
-                    cancel: () {
-                      ref.read(ctrlProvider.notifier).cancelMove();
-                    },
-                  )
-                  : null,
-          clock:
-              archivedBlackClock != null
-                  ? Clock(timeLeft: archivedBlackClock, active: false)
-                  : gameState.liveClock != null
-                  ? RepaintBoundary(
-                    child: ValueListenableBuilder(
-                      key: blackClockKey,
-                      valueListenable: gameState.liveClock!.black,
-                      builder: (context, value, _) {
-                        return Clock(
-                          key: const ValueKey('black-clock'),
-                          timeLeft: value,
-                          active: gameState.activeClockSide == Side.black,
-                          emergencyThreshold:
-                              youAre == Side.black ? gameState.game.meta.clock?.emergency : null,
-                        );
-                      },
-                    ),
-                  )
-                  : gameState.game.correspondenceClock != null
-                  ? CorrespondenceClock(
-                    duration: gameState.game.correspondenceClock!.black,
-                    active: gameState.activeClockSide == Side.black,
-                    onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
-                  )
-                  : null,
+                  ),
+                )
+              : gameState.game.correspondenceClock != null
+              ? CorrespondenceClock(
+                  duration: gameState.game.correspondenceClock!.black,
+                  active: gameState.activeClockSide == Side.black,
+                  onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
+                )
+              : null,
         );
         final white = GamePlayer(
           game: gameState.game,
           side: Side.white,
-          materialDiff:
-              boardPreferences.materialDifferenceFormat.visible
-                  ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
-                  : null,
+          materialDiff: boardPreferences.materialDifferenceFormat.visible
+              ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
+              : null,
           materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
           timeToMove: gameState.game.sideToMove == Side.white ? gameState.timeToMove : null,
           mePlaying: youAre == Side.white,
           canGoForward: gameState.canGoForward,
           zenMode: gameState.isZenModeActive,
           clockPosition: boardPreferences.clockPosition,
-          confirmMoveCallbacks:
-              youAre == Side.white && gameState.moveToConfirm != null
-                  ? (
-                    confirm: () {
-                      ref.read(ctrlProvider.notifier).confirmMove();
+          confirmMoveCallbacks: youAre == Side.white && gameState.moveToConfirm != null
+              ? (
+                  confirm: () {
+                    ref.read(ctrlProvider.notifier).confirmMove();
+                  },
+                  cancel: () {
+                    ref.read(ctrlProvider.notifier).cancelMove();
+                  },
+                )
+              : null,
+          clock: gameState.liveClock != null
+              ? RepaintBoundary(
+                  child: ValueListenableBuilder(
+                    key: whiteClockKey,
+                    valueListenable: gameState.liveClock!.white,
+                    builder: (context, value, _) {
+                      return Clock(
+                        key: const ValueKey('white-clock'),
+                        timeLeft: value,
+                        active: gameState.activeClockSide == Side.white,
+                        emergencyThreshold: youAre == Side.white
+                            ? gameState.game.meta.clock?.emergency
+                            : null,
+                      );
                     },
-                    cancel: () {
-                      ref.read(ctrlProvider.notifier).cancelMove();
-                    },
-                  )
-                  : null,
-          clock:
-              archivedWhiteClock != null
-                  ? Clock(timeLeft: archivedWhiteClock, active: false)
-                  : gameState.liveClock != null
-                  ? RepaintBoundary(
-                    child: ValueListenableBuilder(
-                      key: whiteClockKey,
-                      valueListenable: gameState.liveClock!.white,
-                      builder: (context, value, _) {
-                        return Clock(
-                          key: const ValueKey('white-clock'),
-                          timeLeft: value,
-                          active: gameState.activeClockSide == Side.white,
-                          emergencyThreshold:
-                              youAre == Side.white ? gameState.game.meta.clock?.emergency : null,
-                        );
-                      },
-                    ),
-                  )
-                  : gameState.game.correspondenceClock != null
-                  ? CorrespondenceClock(
-                    duration: gameState.game.correspondenceClock!.white,
-                    active: gameState.activeClockSide == Side.white,
-                    onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
-                  )
-                  : null,
+                  ),
+                )
+              : gameState.game.correspondenceClock != null
+              ? CorrespondenceClock(
+                  duration: gameState.game.correspondenceClock!.white,
+                  active: gameState.activeClockSide == Side.white,
+                  onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
+                )
+              : null,
         );
 
         final isBoardTurned = ref.watch(isBoardTurnedProvider);
@@ -216,11 +204,11 @@ class GameBody extends ConsumerWidget {
 
         final animationDuration =
             gameState.game.meta.speed == Speed.ultraBullet ||
-                    gameState.game.meta.speed == Speed.bullet
-                ? Duration.zero
-                : boardPreferences.pieceAnimationDuration;
+                gameState.game.meta.speed == Speed.bullet
+            ? Duration.zero
+            : boardPreferences.pieceAnimationDuration;
 
-        final content = FocusDetector(
+        return FocusDetector(
           onFocusRegained: () {
             ref.read(ctrlProvider.notifier).onFocusRegained();
           },
@@ -290,59 +278,39 @@ class GameBody extends ConsumerWidget {
           ),
         );
 
-        return Theme.of(context).platform == TargetPlatform.android
-            ? AndroidGesturesExclusionWidget(
-              boardKey: boardKey,
-              shouldExcludeGesturesOnFocusGained:
-                  () =>
-                      gameState.game.meta.speed != Speed.correspondence && gameState.game.playable,
-              shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
-              child: content,
-            )
-            : content;
       case AsyncData(:final value, isRefreshing: true):
-        return PopScope(
-          canPop: false,
-          child: Column(
-            children: [
-              Expanded(
-                child: SafeArea(
-                  child: StandaloneGameLoadingBoard(
-                    fen: value.game.lastPosition.fen,
-                    lastMove: value.game.moveAt(value.stepCursor) as NormalMove?,
-                    orientation: value.game.youAre,
-                  ),
-                ),
+        return Column(
+          children: [
+            Expanded(
+              child: StandaloneGameLoadingBoard(
+                fen: value.game.lastPosition.fen,
+                lastMove: value.game.moveAt(value.stepCursor) as NormalMove?,
+                orientation: value.game.youAre,
               ),
-              _GameBottomBar(
-                id: loadedGame.gameId,
-                onLoadGameCallback: onLoadGameCallback,
-                onNewOpponentCallback: onNewOpponentCallback,
-              ),
-            ],
-          ),
+            ),
+            _GameBottomBar(
+              id: loadedGame.gameId,
+              onLoadGameCallback: onLoadGameCallback,
+              onNewOpponentCallback: onNewOpponentCallback,
+            ),
+          ],
         );
       case final _:
-        return PopScope(
-          canPop: true,
-          child: Column(
-            children: [
-              Expanded(
-                child: SafeArea(
-                  child: StandaloneGameLoadingBoard(
-                    fen: loadedGame.lastFen,
-                    lastMove: loadedGame.lastMove,
-                    orientation: loadedGame.side,
-                  ),
-                ),
+        return Column(
+          children: [
+            Expanded(
+              child: StandaloneGameLoadingBoard(
+                fen: loadedGame.lastFen,
+                lastMove: loadedGame.lastMove,
+                orientation: loadedGame.side,
               ),
-              _GameBottomBar(
-                id: loadedGame.gameId,
-                onLoadGameCallback: onLoadGameCallback,
-                onNewOpponentCallback: onNewOpponentCallback,
-              ),
-            ],
-          ),
+            ),
+            _GameBottomBar(
+              id: loadedGame.gameId,
+              onLoadGameCallback: onLoadGameCallback,
+              onNewOpponentCallback: onNewOpponentCallback,
+            ),
+          ],
         );
     }
   }
@@ -373,11 +341,10 @@ class GameBody extends ConsumerWidget {
           if (context.mounted) {
             showAdaptiveDialog<void>(
               context: context,
-              builder:
-                  (context) => GameResultDialog(
-                    id: loadedGame.gameId,
-                    onNewOpponentCallback: onNewOpponentCallback,
-                  ),
+              builder: (context) => GameResultDialog(
+                id: loadedGame.gameId,
+                onNewOpponentCallback: onNewOpponentCallback,
+              ),
               barrierDismissible: true,
             );
           }
@@ -457,10 +424,9 @@ class _GameBottomBar extends ConsumerWidget {
             if (gameState.canBerserk)
               BottomBarButton(
                 label: context.l10n.arenaBerserk,
-                onTap:
-                    gameState.canBerserk && !gameState.hasBerserked
-                        ? ref.read(gameControllerProvider(id).notifier).berserk
-                        : null,
+                onTap: gameState.canBerserk && !gameState.hasBerserked
+                    ? ref.read(gameControllerProvider(id).notifier).berserk
+                    : null,
                 icon: LichessIcons.body_cut,
               ),
             if (gameState.game.playable && gameState.game.opponent?.offeringDraw == true)
@@ -470,16 +436,15 @@ class _GameBottomBar extends ConsumerWidget {
                 onTap: () {
                   showAdaptiveDialog<void>(
                     context: context,
-                    builder:
-                        (context) => _GameNegotiationDialog(
-                          title: Text(context.l10n.yourOpponentOffersADraw),
-                          onAccept: () {
-                            ref.read(gameControllerProvider(id).notifier).offerOrAcceptDraw();
-                          },
-                          onDecline: () {
-                            ref.read(gameControllerProvider(id).notifier).cancelOrDeclineDraw();
-                          },
-                        ),
+                    builder: (context) => _GameNegotiationDialog(
+                      title: Text(context.l10n.yourOpponentOffersADraw),
+                      onAccept: () {
+                        ref.read(gameControllerProvider(id).notifier).offerOrAcceptDraw();
+                      },
+                      onDecline: () {
+                        ref.read(gameControllerProvider(id).notifier).cancelOrDeclineDraw();
+                      },
+                    ),
                     barrierDismissible: true,
                   );
                 },
@@ -505,16 +470,15 @@ class _GameBottomBar extends ConsumerWidget {
                 onTap: () {
                   showAdaptiveDialog<void>(
                     context: context,
-                    builder:
-                        (context) => _GameNegotiationDialog(
-                          title: Text(context.l10n.yourOpponentProposesATakeback),
-                          onAccept: () {
-                            ref.read(gameControllerProvider(id).notifier).acceptTakeback();
-                          },
-                          onDecline: () {
-                            ref.read(gameControllerProvider(id).notifier).cancelOrDeclineTakeback();
-                          },
-                        ),
+                    builder: (context) => _GameNegotiationDialog(
+                      title: Text(context.l10n.yourOpponentProposesATakeback),
+                      onAccept: () {
+                        ref.read(gameControllerProvider(id).notifier).acceptTakeback();
+                      },
+                      onDecline: () {
+                        ref.read(gameControllerProvider(id).notifier).cancelOrDeclineTakeback();
+                      },
+                    ),
                     barrierDismissible: true,
                   );
                 },
@@ -540,9 +504,8 @@ class _GameBottomBar extends ConsumerWidget {
                 onTap: () {
                   showAdaptiveDialog<void>(
                     context: context,
-                    builder:
-                        (context) =>
-                            GameResultDialog(id: id, onNewOpponentCallback: onNewOpponentCallback),
+                    builder: (context) =>
+                        GameResultDialog(id: id, onNewOpponentCallback: onNewOpponentCallback),
                     barrierDismissible: true,
                   );
                 },
@@ -551,20 +514,19 @@ class _GameBottomBar extends ConsumerWidget {
             else
               BottomBarButton(
                 label: context.l10n.resign,
-                onTap:
-                    gameState.game.resignable
-                        ? gameState.shouldConfirmResignAndDrawOffer
-                            ? () => _showConfirmDialog(
+                onTap: gameState.game.resignable
+                    ? gameState.shouldConfirmResignAndDrawOffer
+                          ? () => _showConfirmDialog(
                               context,
                               description: Text(context.l10n.resignTheGame),
                               onConfirm: () {
                                 ref.read(gameControllerProvider(id).notifier).resignGame();
                               },
                             )
-                            : () {
+                          : () {
                               ref.read(gameControllerProvider(id).notifier).resignGame();
                             }
-                        : null,
+                    : null,
                 icon: Icons.flag_outlined,
               ),
             if (canShowChat) ChatBottomBarButton(options: gameState.chatOptions!),
@@ -593,7 +555,7 @@ class _GameBottomBar extends ConsumerWidget {
           ],
         );
       case _:
-        return const BottomBar(children: []);
+        return const BottomBar.empty();
     }
   }
 
@@ -635,10 +597,9 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.meta.clock != null && gameState.game.canGiveTime)
           BottomSheetAction(
-            makeLabel:
-                (context) => Text(
-                  context.l10n.giveNbSeconds(gameState.game.meta.clock!.moreTime?.inSeconds ?? 15),
-                ),
+            makeLabel: (context) => Text(
+              context.l10n.giveNbSeconds(gameState.game.meta.clock!.moreTime?.inSeconds ?? 15),
+            ),
             onPressed: () {
               ref.read(gameControllerProvider(id).notifier).moreTime();
             },
@@ -661,34 +622,32 @@ class _GameBottomBar extends ConsumerWidget {
         if (gameState.canOfferDraw)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.offerDraw),
-            onPressed:
-                gameState.shouldConfirmResignAndDrawOffer
-                    ? () => _showConfirmDialog(
-                      context,
-                      description: Text(context.l10n.offerDraw),
-                      onConfirm: () {
-                        ref.read(gameControllerProvider(id).notifier).offerOrAcceptDraw();
-                      },
-                    )
-                    : () {
+            onPressed: gameState.shouldConfirmResignAndDrawOffer
+                ? () => _showConfirmDialog(
+                    context,
+                    description: Text(context.l10n.offerDraw),
+                    onConfirm: () {
                       ref.read(gameControllerProvider(id).notifier).offerOrAcceptDraw();
                     },
+                  )
+                : () {
+                    ref.read(gameControllerProvider(id).notifier).offerOrAcceptDraw();
+                  },
           ),
         if (gameState.game.resignable)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.resign),
-            onPressed:
-                gameState.shouldConfirmResignAndDrawOffer
-                    ? () => _showConfirmDialog(
-                      context,
-                      description: Text(context.l10n.resignTheGame),
-                      onConfirm: () {
-                        ref.read(gameControllerProvider(id).notifier).resignGame();
-                      },
-                    )
-                    : () {
+            onPressed: gameState.shouldConfirmResignAndDrawOffer
+                ? () => _showConfirmDialog(
+                    context,
+                    description: Text(context.l10n.resignTheGame),
+                    onConfirm: () {
                       ref.read(gameControllerProvider(id).notifier).resignGame();
                     },
+                  )
+                : () {
+                    ref.read(gameControllerProvider(id).notifier).resignGame();
+                  },
           ),
         if (gameState.game.canClaimWin) ...[
           BottomSheetAction(
@@ -748,15 +707,14 @@ class _GameBottomBar extends ConsumerWidget {
   }) async {
     final result = await showAdaptiveDialog<bool>(
       context: context,
-      builder:
-          (context) => YesNoDialog(
-            title: Text(context.l10n.mobileAreYouSure),
-            content: description,
-            onYes: () {
-              return Navigator.of(context).pop(true);
-            },
-            onNo: () => Navigator.of(context).pop(false),
-          ),
+      builder: (context) => YesNoDialog(
+        title: Text(context.l10n.mobileAreYouSure),
+        content: description,
+        onYes: () {
+          return Navigator.of(context).pop(true);
+        },
+        onNo: () => Navigator.of(context).pop(false),
+      ),
     );
     if (result == true) {
       onConfirm();

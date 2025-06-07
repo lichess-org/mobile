@@ -209,7 +209,10 @@ class _OverallStatPlayer extends StatelessWidget {
                     ),
                   ),
                 if (fideId != null)
-                  SizedBox(width: statWidth, child: _StatCard('FIDE ID', value: fideId.toString())),
+                  SizedBox(
+                    width: statWidth,
+                    child: _StatCard('FIDE ID', value: fideId.toString()),
+                  ),
               ],
             ),
           if (score != null || performance != null || ratingDiff != null)
@@ -297,10 +300,9 @@ class _GameResultRow extends StatelessWidget {
               Expanded(flex: 5, child: BroadcastPlayerWidget(player: opponent, showRating: false)),
               Expanded(
                 flex: 3,
-                child:
-                    (opponentRating != null)
-                        ? Center(child: Text(opponentRating.toString()))
-                        : const SizedBox.shrink(),
+                child: (opponentRating != null)
+                    ? Center(child: Text(opponentRating.toString()))
+                    : const SizedBox.shrink(),
               ),
               SizedBox(
                 width: 30,
@@ -311,11 +313,11 @@ class _GameResultRow extends StatelessWidget {
                     decoration: BoxDecoration(
                       border:
                           (Theme.of(context).brightness == Brightness.light &&
-                                      color == Side.white ||
-                                  Theme.of(context).brightness == Brightness.dark &&
-                                      color == Side.black)
-                              ? Border.all(width: 2.0, color: ColorScheme.of(context).outline)
-                              : null,
+                                  color == Side.white ||
+                              Theme.of(context).brightness == Brightness.dark &&
+                                  color == Side.black)
+                          ? Border.all(width: 2.0, color: ColorScheme.of(context).outline)
+                          : null,
                       shape: BoxShape.circle,
                       color: switch (color) {
                         Side.white => Colors.white.withValues(alpha: 0.9),
@@ -350,10 +352,9 @@ class _GameResultRow extends StatelessWidget {
               if (showRatingDiff)
                 SizedBox(
                   width: 38,
-                  child:
-                      (playerGameResult.ratingDiff != null)
-                          ? ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 14)
-                          : null,
+                  child: (playerGameResult.ratingDiff != null)
+                      ? ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 14)
+                      : null,
                 ),
             ],
           ),

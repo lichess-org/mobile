@@ -35,6 +35,7 @@ class PuzzleLayout extends ConsumerStatefulWidget {
     this.shapes,
     this.engineGauge,
     this.errorMessage,
+    this.boardKey,
     this.showEngineGaugePlaceholder = false,
     this.userActionsBar,
     super.key,
@@ -53,6 +54,7 @@ class PuzzleLayout extends ConsumerStatefulWidget {
       topTable = const SizedBox.shrink(),
       bottomTable = const SizedBox.shrink(),
       shapes = null,
+      boardKey = null,
       engineGauge = null,
       userActionsBar = null;
 
@@ -80,6 +82,11 @@ class PuzzleLayout extends ConsumerStatefulWidget {
 
   /// Optional error message that will be displayed on top of the board.
   final String? errorMessage;
+
+  /// [GlobalKey] for the board.
+  ///
+  /// Used to set gestures exclusion on android.
+  final GlobalKey? boardKey;
 
   /// Whether to show the engine gauge placeholder.
   final bool showEngineGaugePlaceholder;

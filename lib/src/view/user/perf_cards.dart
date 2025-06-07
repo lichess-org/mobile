@@ -108,10 +108,9 @@ class PerfCards extends StatelessWidget {
                                     userPerf.progression > 0
                                         ? LichessIcons.arrow_full_upperright
                                         : LichessIcons.arrow_full_lowerright,
-                                    color:
-                                        userPerf.progression > 0
-                                            ? context.lichessColors.good
-                                            : context.lichessColors.error,
+                                    color: userPerf.progression > 0
+                                        ? context.lichessColors.good
+                                        : context.lichessColors.error,
                                     size: 12,
                                   ),
                                   Flexible(
@@ -120,10 +119,9 @@ class PerfCards extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
-                                        color:
-                                            userPerf.progression > 0
-                                                ? context.lichessColors.good
-                                                : context.lichessColors.error,
+                                        color: userPerf.progression > 0
+                                            ? context.lichessColors.good
+                                            : context.lichessColors.error,
                                         fontSize: 11,
                                       ),
                                     ),

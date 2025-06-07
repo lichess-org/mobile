@@ -35,24 +35,27 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget bar = BottomAppBar(
-      color:
-          Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent
-              ? (BottomAppBarTheme.of(context).color ?? ColorScheme.of(context).surface).withValues(
-                alpha: 0.9,
-              )
-              : null,
+      color: Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent
+          ? (BottomAppBarTheme.of(context).color ?? ColorScheme.of(context).surface).withValues(
+              alpha: kCupertinoBarOpacity,
+            )
+          : null,
       height: kBottomBarHeight,
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
       child: Row(
         mainAxisAlignment: mainAxisAlignment,
-        children:
-            expandChildren ? children.map((child) => Expanded(child: child)).toList() : children,
+        children: expandChildren
+            ? children.map((child) => Expanded(child: child)).toList()
+            : children,
       ),
     );
 
     if (Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent) {
       bar = ClipRect(
-        child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), child: bar),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: kCupertinoBarBlurSigma, sigmaY: kCupertinoBarBlurSigma),
+          child: bar,
+        ),
       );
     }
 
@@ -142,10 +145,9 @@ class BottomBarButton extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.zero,
           onTap: onTap,
-          child:
-              blink
-                  ? _AnimatedInvertBackground(color: primary.withValues(alpha: 0.2), child: child)
-                  : child,
+          child: blink
+              ? _AnimatedInvertBackground(color: primary.withValues(alpha: 0.2), child: child)
+              : child,
         ),
       ),
     );

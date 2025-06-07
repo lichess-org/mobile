@@ -29,7 +29,7 @@ typedef ClockData = ({Duration initial, Duration increment});
 ///
 /// See [PlayableGame] for a game owned by the current user and that can be played unless finished.
 @Freezed(fromJson: true, toJson: true)
-class ExportedGame with _$ExportedGame, BaseGame, IndexableSteps implements BaseGame {
+sealed class ExportedGame with _$ExportedGame, BaseGame, IndexableSteps implements BaseGame {
   const ExportedGame._();
 
   @Assert('steps.isNotEmpty')
@@ -54,7 +54,7 @@ class ExportedGame with _$ExportedGame, BaseGame, IndexableSteps implements Base
     IList<Duration>? clocks,
   }) = _ExportedGame;
 
-  /// Create an archived game from the lichess api.
+  /// Create an exported game from the lichess api.
   ///
   /// Currently, those endpoints are supported:
   /// - GET /game/export/:id
@@ -62,7 +62,7 @@ class ExportedGame with _$ExportedGame, BaseGame, IndexableSteps implements Base
     return _archivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
   }
 
-  /// Create an archived game from a local storage JSON.
+  /// Create an exported game from a local storage JSON.
   factory ExportedGame.fromJson(Map<String, dynamic> json) => _$ExportedGameFromJson(json);
 }
 
@@ -76,7 +76,7 @@ typedef LightExportedGameWithPov = ({LightExportedGame game, Side pov});
 /// - GET /api/games/user/:userId
 /// - GET /api/games/export/_ids
 @Freezed(fromJson: true, toJson: true)
-class LightExportedGame with _$LightExportedGame {
+sealed class LightExportedGame with _$LightExportedGame {
   const LightExportedGame._();
 
   const factory LightExportedGame({
@@ -163,15 +163,14 @@ ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
       speed: data.speed,
       perf: data.perf,
       rated: data.rated,
-      clock:
-          data.clock != null
-              ? (
-                initial: data.clock!.initial,
-                increment: data.clock!.increment,
-                emergency: null,
-                moreTime: null,
-              )
-              : null,
+      clock: data.clock != null
+          ? (
+              initial: data.clock!.initial,
+              increment: data.clock!.increment,
+              emergency: null,
+              moreTime: null,
+            )
+          : null,
       opening: data.opening,
       division: division,
     ),
@@ -190,10 +189,9 @@ ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
       final movesList = moves.isEmpty ? <String>[] : moves.split(' ');
 
       // assume lichess always send initialFen with fromPosition and chess960
-      Position position =
-          (data.variant == Variant.fromPosition || data.variant == Variant.chess960)
-              ? Chess.fromSetup(Setup.parseFen(initialFen!))
-              : data.variant.initialPosition;
+      Position position = (data.variant == Variant.fromPosition || data.variant == Variant.chess960)
+          ? Chess.fromSetup(Setup.parseFen(initialFen!))
+          : data.variant.initialPosition;
       int index = 0;
       final List<GameStep> steps = [GameStep(position: position)];
       Duration? clock = data.clock?.initial;
@@ -247,12 +245,11 @@ LightExportedGame _lightExportedGameFromPick(
     lastMove: pick('lastMove').asUciMoveOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
     opening: pick('opening').letOrNull(_openingFromPick),
-    bookmarked:
-        isBookmarked
-            ? true
-            : withBookmarked
-            ? pick('bookmarked').asBoolOrFalse()
-            : null,
+    bookmarked: isBookmarked
+        ? true
+        : withBookmarked
+        ? pick('bookmarked').asBoolOrFalse()
+        : null,
   );
 }
 

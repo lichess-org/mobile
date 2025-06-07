@@ -61,16 +61,15 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                       choices: Zen.values,
                       selectedItem: data.zenMode,
                       labelBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          isLoading
-                              ? null
-                              : (Zen? value) {
-                                _setPref(
-                                  () => ref
-                                      .read(accountPreferencesProvider.notifier)
-                                      .setZen(value ?? data.zenMode),
-                                );
-                              },
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (Zen? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setZen(value ?? data.zenMode),
+                              );
+                            },
                     );
                   },
                 ),
@@ -83,16 +82,15 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                       choices: PieceNotation.values,
                       selectedItem: data.pieceNotation,
                       labelBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          isLoading
-                              ? null
-                              : (PieceNotation? value) {
-                                _setPref(
-                                  () => ref
-                                      .read(accountPreferencesProvider.notifier)
-                                      .setPieceNotation(value ?? data.pieceNotation),
-                                );
-                              },
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (PieceNotation? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setPieceNotation(value ?? data.pieceNotation),
+                              );
+                            },
                     );
                   },
                 ),
@@ -105,16 +103,15 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                       choices: ShowRatings.values,
                       selectedItem: data.showRatings,
                       labelBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          isLoading
-                              ? null
-                              : (ShowRatings? value) {
-                                _setPref(
-                                  () => ref
-                                      .read(accountPreferencesProvider.notifier)
-                                      .setShowRatings(value ?? data.showRatings),
-                                );
-                              },
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (ShowRatings? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setShowRatings(value ?? data.showRatings),
+                              );
+                            },
                     );
                   },
                   explanation: context.l10n.preferencesExplainShowPlayerRatings,
@@ -128,30 +125,28 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 SwitchSettingTile(
                   title: Text(context.l10n.preferencesPremovesPlayingDuringOpponentTurn),
                   value: data.premove.value,
-                  onChanged:
-                      isLoading
-                          ? null
-                          : (value) {
-                            _setPref(
-                              () => ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setPremove(BooleanPref(value)),
-                            );
-                          },
+                  onChanged: isLoading
+                      ? null
+                      : (value) {
+                          _setPref(
+                            () => ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setPremove(BooleanPref(value)),
+                          );
+                        },
                 ),
                 SwitchSettingTile(
                   title: Text(context.l10n.preferencesConfirmResignationAndDrawOffers),
                   value: data.confirmResign.value,
-                  onChanged:
-                      isLoading
-                          ? null
-                          : (value) {
-                            _setPref(
-                              () => ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setConfirmResign(BooleanPref(value)),
-                            );
-                          },
+                  onChanged: isLoading
+                      ? null
+                      : (value) {
+                          _setPref(
+                            () => ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setConfirmResign(BooleanPref(value)),
+                          );
+                        },
                 ),
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesTakebacksWithOpponentApproval),
@@ -162,16 +157,15 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                       choices: Takeback.values,
                       selectedItem: data.takeback,
                       labelBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          isLoading
-                              ? null
-                              : (Takeback? value) {
-                                _setPref(
-                                  () => ref
-                                      .read(accountPreferencesProvider.notifier)
-                                      .setTakeback(value ?? data.takeback),
-                                );
-                              },
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (Takeback? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setTakeback(value ?? data.takeback),
+                              );
+                            },
                     );
                   },
                 ),
@@ -184,16 +178,15 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                       choices: AutoQueen.values,
                       selectedItem: data.autoQueen,
                       labelBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          isLoading
-                              ? null
-                              : (AutoQueen? value) {
-                                _setPref(
-                                  () => ref
-                                      .read(accountPreferencesProvider.notifier)
-                                      .setAutoQueen(value ?? data.autoQueen),
-                                );
-                              },
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (AutoQueen? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setAutoQueen(value ?? data.autoQueen),
+                              );
+                            },
                     );
                   },
                 ),
@@ -208,16 +201,15 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                       choices: AutoThreefold.values,
                       selectedItem: data.autoThreefold,
                       labelBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          isLoading
-                              ? null
-                              : (AutoThreefold? value) {
-                                _setPref(
-                                  () => ref
-                                      .read(accountPreferencesProvider.notifier)
-                                      .setAutoThreefold(value ?? data.autoThreefold),
-                                );
-                              },
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (AutoThreefold? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setAutoThreefold(value ?? data.autoThreefold),
+                              );
+                            },
                     );
                   },
                 ),
@@ -257,32 +249,30 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                       choices: Moretime.values,
                       selectedItem: data.moretime,
                       labelBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          isLoading
-                              ? null
-                              : (Moretime? value) {
-                                _setPref(
-                                  () => ref
-                                      .read(accountPreferencesProvider.notifier)
-                                      .setMoretime(value ?? data.moretime),
-                                );
-                              },
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (Moretime? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setMoretime(value ?? data.moretime),
+                              );
+                            },
                     );
                   },
                 ),
                 SwitchSettingTile(
                   title: Text(context.l10n.preferencesSoundWhenTimeGetsCritical),
                   value: data.clockSound.value,
-                  onChanged:
-                      isLoading
-                          ? null
-                          : (value) {
-                            _setPref(
-                              () => ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setClockSound(BooleanPref(value)),
-                            );
-                          },
+                  onChanged: isLoading
+                      ? null
+                      : (value) {
+                          _setPref(
+                            () => ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setClockSound(BooleanPref(value)),
+                          );
+                        },
                 ),
               ],
             ),
@@ -293,16 +283,15 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 SwitchSettingTile(
                   title: Text(context.l10n.letOtherPlayersFollowYou),
                   value: data.follow.value,
-                  onChanged:
-                      isLoading
-                          ? null
-                          : (value) {
-                            _setPref(
-                              () => ref
-                                  .read(accountPreferencesProvider.notifier)
-                                  .setFollow(BooleanPref(value)),
-                            );
-                          },
+                  onChanged: isLoading
+                      ? null
+                      : (value) {
+                          _setPref(
+                            () => ref
+                                .read(accountPreferencesProvider.notifier)
+                                .setFollow(BooleanPref(value)),
+                          );
+                        },
                 ),
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.letOtherPlayersChallengeYou),
@@ -313,16 +302,15 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                       choices: Challenge.values,
                       selectedItem: data.challenge,
                       labelBuilder: (t) => Text(t.label(context)),
-                      onSelectedItemChanged:
-                          isLoading
-                              ? null
-                              : (Challenge? value) {
-                                _setPref(
-                                  () => ref
-                                      .read(accountPreferencesProvider.notifier)
-                                      .setChallenge(value ?? data.challenge),
-                                );
-                              },
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (Challenge? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setChallenge(value ?? data.challenge),
+                              );
+                            },
                     );
                   },
                 ),

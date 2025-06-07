@@ -5,9 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
-import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -30,19 +28,11 @@ final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
 /// A list tile for a game in a game list.
 class GameListTile extends StatelessWidget {
-  const GameListTile({
-    required this.item,
-    this.padding,
-    this.onPressedBookmark,
-    this.gameListContext,
-  });
+  const GameListTile({required this.item, this.padding, this.onPressedBookmark});
 
   final LightExportedGameWithPov item;
   final EdgeInsetsGeometry? padding;
   final Future<void> Function(BuildContext context)? onPressedBookmark;
-
-  /// The context of the game list that opened this screen, if available.
-  final (UserId?, GameFilterState)? gameListContext;
 
   @override
   Widget build(BuildContext context) {
@@ -65,16 +55,14 @@ class GameListTile extends StatelessWidget {
     return _GameListTile(
       game: game,
       mySide: youAre,
-      onTap:
-          () => openGameScreen(
-            context,
-            game: item.game,
-            orientation: item.pov,
-            loadingFen: game.lastFen,
-            loadingLastMove: game.lastMove,
-            lastMoveAt: game.lastMoveAt,
-            gameListContext: gameListContext,
-          ),
+      onTap: () => openGameScreen(
+        context,
+        game: item.game,
+        orientation: item.pov,
+        loadingFen: game.lastFen,
+        loadingLastMove: game.lastMove,
+        lastMoveAt: game.lastMoveAt,
+      ),
       icon: game.perf.icon,
       opponentTitle: UserFullNameWidget.player(
         user: opponent.user,
@@ -124,20 +112,19 @@ class _GameListTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       onLongPress: () {
-        showAdaptiveBottomSheet<void>(
+        showModalBottomSheet<void>(
           context: context,
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
           showDragHandle: true,
-          builder:
-              (context) => GameContextMenu(
-                game: game,
-                mySide: mySide,
-                showGameSummary: true,
-                opponentTitle: opponentTitle,
-                onPressedBookmark: onPressedBookmark,
-              ),
+          builder: (context) => GameContextMenu(
+            game: game,
+            mySide: mySide,
+            showGameSummary: true,
+            opponentTitle: opponentTitle,
+            onPressedBookmark: onPressedBookmark,
+          ),
         );
       },
       leading: icon != null ? Icon(icon) : null,
@@ -167,8 +154,6 @@ class GameContextMenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = mySide;
-
-    final customColors = Theme.of(context).extension<CustomColors>();
 
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
@@ -241,12 +226,11 @@ class GameContextMenu extends ConsumerWidget {
                                     winner: game.winner,
                                   ),
                                   style: TextStyle(
-                                    color:
-                                        game.winner == null
-                                            ? customColors?.brag
-                                            : game.winner == mySide
-                                            ? customColors?.good
-                                            : customColors?.error,
+                                    color: game.winner == null
+                                        ? context.lichessColors.brag
+                                        : game.winner == mySide
+                                        ? context.lichessColors.good
+                                        : context.lichessColors.error,
                                   ),
                                 ),
                               if (game.opening != null)
@@ -271,23 +255,22 @@ class GameContextMenu extends ConsumerWidget {
           ),
         BottomSheetContextMenuAction(
           icon: Icons.biotech,
-          onPressed:
-              game.variant.isReadSupported
-                  ? () {
-                    Navigator.of(context).push(
-                      AnalysisScreen.buildRoute(
-                        context,
-                        AnalysisOptions(orientation: orientation, gameId: game.id),
-                      ),
-                    );
-                  }
-                  : () {
-                    showSnackBar(
+          onPressed: game.variant.isReadSupported
+              ? () {
+                  Navigator.of(context).push(
+                    AnalysisScreen.buildRoute(
                       context,
-                      'This variant is not supported yet.',
-                      type: SnackBarType.info,
-                    );
-                  },
+                      AnalysisOptions(orientation: orientation, gameId: game.id),
+                    ),
+                  );
+                }
+              : () {
+                  showSnackBar(
+                    context,
+                    'This variant is not supported yet.',
+                    type: SnackBarType.info,
+                  );
+                },
           child: Text(context.l10n.analysis),
         ),
         if (isLoggedIn && onPressedBookmark != null)
@@ -295,7 +278,7 @@ class GameContextMenu extends ConsumerWidget {
             onPressed: () => onPressedBookmark?.call(context),
             icon: game.isBookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
             closeOnPressed: true,
-            child: Text(game.isBookmarked ? 'Unbookmark this game' : context.l10n.bookmarkThisGame),
+            child: Text(game.isBookmarked ? 'Remove bookmark' : context.l10n.bookmarkThisGame),
           ),
         if (!isTabletOrLarger(context)) ...[
           BottomSheetContextMenuAction(

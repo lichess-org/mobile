@@ -24,10 +24,9 @@ void main() {
       final query = request.url.queryParameters;
       final max = int.parse(query['max']!);
       final beforeDateParam = query['before'];
-      final beforeDate =
-          beforeDateParam != null
-              ? DateTime.fromMillisecondsSinceEpoch(int.parse(beforeDateParam))
-              : null;
+      final beforeDate = beforeDateParam != null
+          ? DateTime.fromMillisecondsSinceEpoch(int.parse(beforeDateParam))
+          : null;
       final totalAlreadyRequested = mockActivityRequestsCount.values.fold(0, (p, e) => p + e);
 
       if (totalAlreadyRequested >= totalNumberOfPuzzles) {

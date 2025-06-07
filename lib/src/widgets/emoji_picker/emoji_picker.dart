@@ -147,15 +147,14 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
   }
 
   Widget _buildTabBar(BuildContext context) {
-    final tabs =
-        widget.emojiData.categories
-            .map(
-              (category) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Icon(categoryIcon(category.id), size: 20),
-              ),
-            )
-            .toList();
+    final tabs = widget.emojiData.categories
+        .map(
+          (category) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Icon(categoryIcon(category.id), size: 20),
+          ),
+        )
+        .toList();
     return TabBar(
       isScrollable: true,
       tabAlignment: TabAlignment.start,
@@ -170,28 +169,27 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
   Widget _buildSections(BuildContext context) {
     CustomScrollView builder(EmojiData emojiData, EmojiSkinTone skinTone) => CustomScrollView(
       controller: scrollController,
-      slivers:
-          emojiData.categories
-              .map(
-                (category) => SliverPadding(
-                  padding: widget.padding,
-                  sliver: SliverVisibilityDetector(
-                    key: ValueKey(category.id),
-                    onVisibilityChanged: (info) => updateMostVisibleSection(category.id, info),
-                    sliver: EmojiSection(
-                      sectionKey: sectionKeys[category.id]!,
-                      skinTone: skinTone,
-                      configuration: widget.configuration,
-                      emojiData: emojiData,
-                      category: category,
-                      headerBuilder: widget.headerBuilder,
-                      itemBuilder: widget.itemBuilder,
-                      onEmojiSelected: widget.onEmojiSelected,
-                    ),
-                  ),
+      slivers: emojiData.categories
+          .map(
+            (category) => SliverPadding(
+              padding: widget.padding,
+              sliver: SliverVisibilityDetector(
+                key: ValueKey(category.id),
+                onVisibilityChanged: (info) => updateMostVisibleSection(category.id, info),
+                sliver: EmojiSection(
+                  sectionKey: sectionKeys[category.id]!,
+                  skinTone: skinTone,
+                  configuration: widget.configuration,
+                  emojiData: emojiData,
+                  category: category,
+                  headerBuilder: widget.headerBuilder,
+                  itemBuilder: widget.itemBuilder,
+                  onEmojiSelected: widget.onEmojiSelected,
                 ),
-              )
-              .toList(),
+              ),
+            ),
+          )
+          .toList(),
     );
 
     if (widget.configuration.showSearchBar) {
@@ -245,8 +243,9 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
         return;
       }
       // Find the category with the highest visibility fraction
-      final mostVisibleCategoryId =
-          visibleSections.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+      final mostVisibleCategoryId = visibleSections.entries
+          .reduce((a, b) => a.value > b.value ? a : b)
+          .key;
       mostVisibleIndex.value = widget.emojiData.categories.indexWhere(
         (category) => category.id == mostVisibleCategoryId,
       );

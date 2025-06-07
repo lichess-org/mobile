@@ -31,6 +31,10 @@ class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<
     return save(state.copyWith(showEvaluationGauge: !state.showEvaluationGauge));
   }
 
+  Future<void> toggleShowEngineLines() {
+    return save(state.copyWith(showEngineLines: !state.showEngineLines));
+  }
+
   Future<void> toggleAnnotations() {
     return save(state.copyWith(showAnnotations: !state.showAnnotations));
   }
@@ -53,12 +57,13 @@ class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<
 }
 
 @Freezed(fromJson: true, toJson: true)
-class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
+sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   const AnalysisPrefs._();
 
   const factory AnalysisPrefs({
     @JsonKey(defaultValue: true) required bool enableComputerAnalysis,
     required bool showEvaluationGauge,
+    @JsonKey(defaultValue: true) required bool showEngineLines,
     required bool showBestMoveArrow,
     required bool showAnnotations,
     required bool showPgnComments,
@@ -69,6 +74,7 @@ class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   static const defaults = AnalysisPrefs(
     enableComputerAnalysis: true,
     showEvaluationGauge: true,
+    showEngineLines: true,
     showBestMoveArrow: true,
     showAnnotations: true,
     showPgnComments: true,

@@ -98,13 +98,12 @@ class ImageColorWorker {
               (int previousValue, int element) => previousValue + element,
             );
 
-        final int scoredResult =
-            Score.score(
-              colorToCount,
-              desired: 1,
-              fallbackColorARGB: 0xFFFFFFFF,
-              filter: false,
-            ).first;
+        final int scoredResult = Score.score(
+          colorToCount,
+          desired: 1,
+          fallbackColorARGB: 0xFFFFFFFF,
+          filter: false,
+        ).first;
         final Hct sourceColor = Hct.fromInt(scoredResult);
         if ((meanTone - sourceColor.tone).abs() > 20) {
           sourceColor.tone = meanTone;
