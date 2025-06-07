@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="menu">Umuɣ</string>
+  <string name="progressX">Asfari: %s</string>
+  <string name="play" comment="play&#10;&#10;A small ribbon that appears on your current chapter in the Chess Basics course. Please keep this string short.">urar!</string>
+</resources>

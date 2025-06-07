@@ -81,7 +81,7 @@ class _GameBookmarkContextMenuActionState extends State<GameBookmarkContextMenuA
       builder: (context, snapshot) {
         return ContextMenuAction(
           icon: _bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
-          label: _bookmarked ? 'Remove bookmark' : context.l10n.bookmarkThisGame,
+          label: _bookmarked ? context.l10n.mobileRemoveBookmark : context.l10n.bookmarkThisGame,
           onPressed: snapshot.connectionState == ConnectionState.waiting
               ? null
               : () async {

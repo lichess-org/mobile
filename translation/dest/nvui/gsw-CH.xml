@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="featuredEvents">Usgwählti Ereignis</string>
+  <string name="moveList">Zugs-Lischte</string>
+  <string name="gameInfo">Schpiel-Info</string>
+  <string name="pieces">Figure</string>
+  <string name="gameStatus">Schpiel-Status</string>
+  <string name="lastMove">Letschte Zug</string>
+  <string name="inputForm">Igabe-Art</string>
+  <string name="actions">Aktione</string>
+  <string name="yourClock">Dini Zit</string>
+  <string name="opponentClock">Zit vum Gägner</string>
+</resources>

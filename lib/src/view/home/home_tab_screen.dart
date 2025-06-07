@@ -170,7 +170,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             isEditingWidgets: widget.editModeEnabled,
             child: PlatformScaffold(
               appBar: widget.editModeEnabled
-                  ? PlatformAppBar(title: const Text('Home widgets'))
+                  ? PlatformAppBar(title: Text(context.l10n.mobileSettingsHomeWidgets))
                   : PlatformAppBar(
                       title: const Text('lichess.org'),
                       leading: const AccountIconButton(),
@@ -232,7 +232,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       const _EditableWidget(
         widget: HomeEditableWidget.hello,
         shouldShow: true,
-        child: _HelloWidget(),
+        child: _GreetingWidget(),
       ),
       _EditableWidget(
         widget: HomeEditableWidget.perfCards,
@@ -274,7 +274,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     required bool isTablet,
   }) {
     final welcomeWidgets = [
-      const _HelloWidget(),
+      const _GreetingWidget(),
       Padding(
         padding: Styles.bodySectionPadding,
         child: LichessMessage(style: TextTheme.of(context).bodyLarge),
@@ -349,7 +349,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       const _EditableWidget(
         widget: HomeEditableWidget.hello,
         shouldShow: true,
-        child: _HelloWidget(),
+        child: _GreetingWidget(),
       ),
       if (status.isOnline)
         _EditableWidget(
@@ -475,14 +475,12 @@ class _EditableWidget extends ConsumerWidget {
   }
 }
 
-class _HelloWidget extends ConsumerWidget {
-  const _HelloWidget();
+class _GreetingWidget extends ConsumerWidget {
+  const _GreetingWidget();
 
-  /// Returns the string representing the current time of day
-  /// Used in the greeting widget to provide visual time indicator
-  String getTimeOfDayIcon() {
+  bool get isDayTime {
     final hour = DateTime.now().hour;
-    return hour >= 6 && hour < 18 ? '☀️' : '🌙';
+    return hour >= 6 && hour < 18;
   }
 
   @override
@@ -506,18 +504,28 @@ class _HelloWidget extends ConsumerWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(getTimeOfDayIcon(), style: const TextStyle(fontSize: iconSize, height: 1.0)),
+              Text(
+                isDayTime ? '☀️' : '🌙',
+                style: const TextStyle(fontSize: iconSize, height: 1.0),
+              ),
               const SizedBox(width: 5.0),
               if (user != null)
                 Flexible(
                   child: l10nWithWidget(
-                    context.l10n.mobileGreeting,
+                    isDayTime ? context.l10n.mobileGoodDay : context.l10n.mobileGoodEvening,
                     Text(user.name, style: style),
                     textStyle: style,
                   ),
                 )
               else
-                Flexible(child: Text(context.l10n.mobileGreetingWithoutName, style: style)),
+                Flexible(
+                  child: Text(
+                    isDayTime
+                        ? context.l10n.mobileGoodDayWithoutName
+                        : context.l10n.mobileGoodEveningWithoutName,
+                    style: style,
+                  ),
+                ),
             ],
           ),
         ),

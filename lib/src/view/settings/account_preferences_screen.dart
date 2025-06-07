@@ -48,6 +48,13 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
 
         return ListView(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                context.l10n.mobileAccountPreferencesHelp,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
             ListSection(
               header: SettingsSectionTitle(context.l10n.preferencesDisplay),
               hasLeading: false,
@@ -327,7 +334,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(context.l10n.preferencesPreferences),
+        title: Text(context.l10n.mobileAccountPreferences),
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
       body: content,

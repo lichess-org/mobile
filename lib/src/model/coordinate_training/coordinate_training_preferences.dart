@@ -73,13 +73,12 @@ enum TrainingMode {
   findSquare,
   nameSquare;
 
-  // TODO l10n
   String label(AppLocalizations l10n) {
     switch (this) {
       case TrainingMode.findSquare:
-        return 'Find Square';
+        return l10n.coordinatesFindSquare;
       case TrainingMode.nameSquare:
-        return 'Name Square';
+        return l10n.coordinatesNameSquare;
     }
   }
 }

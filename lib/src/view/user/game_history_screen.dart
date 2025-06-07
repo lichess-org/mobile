@@ -303,7 +303,7 @@ class _BodyState extends ConsumerState<_Body> {
                                     : Icons.bookmark_add_outlined,
                                 // TODO l10n
                                 label: game.isBookmarked
-                                    ? 'Remove bookmark'
+                                    ? context.l10n.mobileRemoveBookmark
                                     : context.l10n.bookmarkThisGame,
                               ),
                             ],

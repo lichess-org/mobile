@@ -49,7 +49,7 @@ jobs:
           upload_translations: false
           download_sources: true
           download_translations: true
-          download_translations_args: '--all --skip-untranslated-files'
+          download_translations_args: '--all'
           crowdin_branch_name: '[lichess-org.lila] master'
           localization_branch_name: l10n_crowdin_lila
 

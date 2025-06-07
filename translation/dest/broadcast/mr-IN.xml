@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="broadcasts">प्रसारणे</string>
+  <string name="myBroadcasts">माझे आवडते प्रसारण</string>
+  <plurals name="nbBroadcasts">
+    <item quantity="one">%s प्रसारणे</item>
+    <item quantity="other">%s प्रसारणे</item>
+  </plurals>
+  <string name="liveBroadcasts">थेट स्पर्धा प्रसारणे</string>
+  <string name="newBroadcast">नवीन थेट प्रसारण</string>
+  <string name="aboutBroadcasts">प्रसारणां बद्दल</string>
+  <string name="howToUseLichessBroadcasts">Lichess ब्रॉडकास्ट कसे वापरावे.</string>
+  <string name="theNewRoundHelp">नवीन फेरीत मागील प्रमाणेच सदस्य आणि योगदानकर्ते असतील.</string>
+  <string name="addRound">फेरी जोडा</string>
+  <string name="ongoing">चालू आहे</string>
+  <string name="upcoming">आगामी</string>
+  <string name="roundName">फेरीचे नाव</string>
+  <string name="roundNumber">फेरीचा क्रमांक</string>
+  <string name="tournamentName">स्पर्धेचे नाव</string>
+  <string name="tournamentDescription">लघु स्पर्धेचे वर्णन</string>
+  <string name="fullDescription">संपूर्ण स्पर्धेचे वर्णन</string>
+  <string name="fullDescriptionHelp">स्पर्धेचे पर्यायी संपूर्ण वर्णन. %1$s उपलब्ध आहे. %2$s अक्षरांपेक्षा कमी.</string>
+  <string name="sourceUrlHelp">URL जी लाइसेस PGN अद्यतने मिळविण्यासाठी तपासणी करेल. ते इंटरनेट वरून सार्वजनिकरित्या प्रवेश करण्यायोग्य असणे आवश्यक आहे.</string>
+  <string name="startDateHelp">पर्यायी, इव्हेंट कधी सुरू होतो हे आपल्याला माहिती असल्यास</string>
+  <string name="currentGameUrl">चालू खेळाचा URL</string>
+  <string name="downloadAllRounds">सर्व फेऱ्या डाउनलोड करा</string>
+  <string name="resetRound">ही फेरी रेसेट करा</string>
+  <string name="deleteRound">फेरी रद्द करा</string>
+  <string name="definitivelyDeleteRound">फेरी आणि त्याचे सर्व गेम निश्चितपणे हटवा.</string>
+  <string name="deleteAllGamesOfThisRound">या फेरीतील सर्व खेळ हटवा. ते पुन्हा तयार करण्यासाठी स्त्रोत सक्रिय असणे आवश्यक आहे.</string>
+  <string name="editRoundStudy">फेरीचा अभ्यास संपादित करा</string>
+  <string name="deleteTournament">ही स्पर्धा हटवा</string>
+  <string name="definitivelyDeleteTournament">संपूर्ण टूर्नामेंट, त्याच्या सर्व फेऱ्या आणि त्याचे सर्व गेम निश्चितपणे हटवा.</string>
+</resources>

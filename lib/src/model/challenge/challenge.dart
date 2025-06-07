@@ -67,8 +67,7 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
   /// The description of the challenge.
   String description(AppLocalizations l10n) {
     if (!variant.isPlaySupported) {
-      // TODO: l10n
-      return 'This variant is not yet supported on the app.';
+      return l10n.mobileUnsupportedVariant(variant.label);
     }
 
     final time = switch (timeControl) {
