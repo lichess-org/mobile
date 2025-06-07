@@ -53,17 +53,16 @@ class _FloatingPlayButtonState extends ConsumerState<FloatingPlayButton> {
             constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.6),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              // TODO translate
               child: Text.rich(
                 textAlign: TextAlign.center,
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Welcome to Lichess app!\n\n',
+                      text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     TextSpan(
-                      text: 'Tap here to start playing chess.',
+                      text: context.l10n.mobileTapHereToStartPlayingChess,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],

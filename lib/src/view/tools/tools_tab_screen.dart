@@ -129,7 +129,7 @@ class _Body extends ConsumerWidget {
           ),
           _ToolsButton(
             icon: Icons.where_to_vote_outlined,
-            title: 'Coordinate Training', // TODO l10n
+            title: context.l10n.coordinatesCoordinateTraining,
             onTap: () => Navigator.of(
               context,
               rootNavigator: true,

@@ -4,7 +4,6 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class EngineSettingsWidget extends ConsumerWidget {
@@ -43,66 +42,33 @@ class EngineSettingsWidget extends ConsumerWidget {
         ListSection(
           header: const SettingsSectionTitle('Stockfish'),
           children: [
-            ListTile(
-              title: Text.rich(
-                TextSpan(
-                  text: 'Search time: ',
-                  style: const TextStyle(fontWeight: FontWeight.normal),
-                  children: [
-                    TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: prefs.engineSearchTime.inSeconds == 3600
-                          ? '∞'
-                          : '${prefs.engineSearchTime.inSeconds}s',
-                    ),
-                  ],
-                ),
-              ),
-              subtitle: NonLinearSlider(
-                labelBuilder: (value) => value == 3600 ? '∞' : '${value}s',
-                value: prefs.engineSearchTime.inSeconds,
-                values: kAvailableEngineSearchTimes.map((e) => e.inSeconds).toList(),
-                onChangeEnd: (value) => onSetEngineSearchTime(Duration(seconds: value.toInt())),
-              ),
+            SliderSettingsTile(
+              title: const Text('Search time'),
+              value: prefs.engineSearchTime.inSeconds.toDouble(),
+              values: kAvailableEngineSearchTimes.map((e) => e.inSeconds.toDouble()).toList(),
+              labelBuilder: (value) =>
+                  value == kMaxEngineSearchTime.inSeconds.toDouble() ? '∞' : '${value.toInt()}s',
+              onChangeEnd: (value) {
+                onSetEngineSearchTime(Duration(seconds: value.toInt()));
+              },
             ),
-            ListTile(
-              title: Text.rich(
-                TextSpan(
-                  text: '${context.l10n.multipleLines}: ',
-                  style: const TextStyle(fontWeight: FontWeight.normal),
-                  children: [
-                    TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: prefs.numEvalLines.toString(),
-                    ),
-                  ],
-                ),
-              ),
-              subtitle: NonLinearSlider(
-                value: prefs.numEvalLines,
-                values: const [0, 1, 2, 3],
-                onChangeEnd: (value) => onSetNumEvalLines(value.toInt()),
-              ),
+            SliderSettingsTile(
+              title: Text(context.l10n.multipleLines),
+              value: prefs.numEvalLines.toDouble(),
+              values: const [0, 1, 2, 3],
+              labelBuilder: (value) => value.toInt().toString(),
+              onChangeEnd: (value) => onSetNumEvalLines(value.toInt()),
             ),
             if (maxEngineCores > 1)
-              ListTile(
-                title: Text.rich(
-                  TextSpan(
-                    text: '${context.l10n.cpus}: ',
-                    style: const TextStyle(fontWeight: FontWeight.normal),
-                    children: [
-                      TextSpan(
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                        text: prefs.numEngineCores.toString(),
-                      ),
-                    ],
-                  ),
-                ),
-                subtitle: NonLinearSlider(
-                  value: prefs.numEngineCores,
-                  values: List.generate(maxEngineCores, (index) => index + 1),
-                  onChangeEnd: (value) => onSetEngineCores(value.toInt()),
-                ),
+              SliderSettingsTile(
+                title: Text(context.l10n.cpus),
+                value: prefs.numEngineCores.toDouble(),
+                values: List.generate(
+                  maxEngineCores,
+                  (index) => index + 1,
+                ).map((e) => e.toDouble()).toList(),
+                labelBuilder: (value) => value.toInt().toString(),
+                onChangeEnd: (value) => onSetEngineCores(value.toInt()),
               ),
           ],
         ),

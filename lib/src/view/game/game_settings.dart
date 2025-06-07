@@ -74,8 +74,7 @@ class GameSettings extends ConsumerWidget {
               },
             ),
             ListTile(
-              // TODO translate
-              title: const Text('Board settings'),
+              title: Text(context.l10n.mobileBoardSettings),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.of(

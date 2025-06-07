@@ -272,7 +272,7 @@ class _Body extends ConsumerWidget {
                   ? EngineGauge(
                       displayMode: EngineGaugeDisplayMode.horizontal,
                       params: analysisState.engineGaugeParams(enginePrefs),
-                      engineLinesState: analysisState.isEngineAvailable(enginePrefs)
+                      engineLinesState: isEngineAvailable && numEvalLines > 0
                           ? analysisPrefs.showEngineLines
                                 ? EngineLinesShowState.expanded
                                 : EngineLinesShowState.collapsed
@@ -291,7 +291,7 @@ class _Body extends ConsumerWidget {
                     );
             }
           : null,
-      engineLines: isEngineAvailable && analysisPrefs.showEngineLines && numEvalLines > 0
+      engineLines: isEngineAvailable && numEvalLines > 0 && analysisPrefs.showEngineLines
           ? EngineLines(
               onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
               savedEval: currentNode.eval,

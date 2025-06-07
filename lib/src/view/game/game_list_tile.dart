@@ -278,7 +278,9 @@ class GameContextMenu extends ConsumerWidget {
             onPressed: () => onPressedBookmark?.call(context),
             icon: game.isBookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
             closeOnPressed: true,
-            child: Text(game.isBookmarked ? 'Remove bookmark' : context.l10n.bookmarkThisGame),
+            child: Text(
+              game.isBookmarked ? context.l10n.mobileRemoveBookmark : context.l10n.bookmarkThisGame,
+            ),
           ),
         if (!isTabletOrLarger(context)) ...[
           BottomSheetContextMenuAction(

@@ -4,11 +4,13 @@ on:
   push:
     paths:
       - 'lib/**'
+      - '!lib/l10n/**'
       - 'test/**'
     branches: [ "main" ]
   pull_request:
     paths:
       - 'lib/**'
+      - '!lib/l10n/**'
       - 'test/**'
     branches: [ "main" ]
 

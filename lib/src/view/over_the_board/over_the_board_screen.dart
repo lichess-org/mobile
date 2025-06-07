@@ -37,7 +37,7 @@ class OverTheBoardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Over the board'), // TODO: l10n
+        title: Text(context.l10n.mobileOverTheBoard),
         actions: [
           SemanticIconButton(
             onPressed: () => showConfigureDisplaySettings(context),

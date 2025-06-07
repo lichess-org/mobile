@@ -147,7 +147,7 @@ class AccountScreen extends ConsumerWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.manage_accounts_outlined),
-                  title: Text(context.l10n.preferencesPreferences),
+                  title: Text(context.l10n.mobileAccountPreferences),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const Icon(Icons.chevron_right)
                       : null,
@@ -234,7 +234,7 @@ class AccountScreen extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.app_registration),
-                title: const Text('Home widgets'),
+                title: Text(context.l10n.mobileSettingsHomeWidgets),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const Icon(Icons.chevron_right)
                     : null,
@@ -246,7 +246,7 @@ class AccountScreen extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Symbols.chess_pawn),
-                title: const Text('Board settings', overflow: TextOverflow.ellipsis),
+                title: Text(context.l10n.mobileBoardSettings, overflow: TextOverflow.ellipsis),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const Icon(Icons.chevron_right)
                     : null,

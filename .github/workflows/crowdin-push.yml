@@ -1,10 +1,11 @@
-name: Crowdin source push
+name: Crowdin mobile source push
 
 on:
   push:
     paths:
         - 'translation/source/mobile.xml'
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   crowdin-push:
@@ -19,7 +20,10 @@ jobs:
           upload_sources: true
           upload_translations: false
           download_translations: false
+          source: translation/source/mobile.xml
+          translation: /translation/dest/%file_name%/%locale%.%file_extension%
           crowdin_branch_name: '[lichess-org.mobile] main'
+          upload_sources_args: '--preserve-hierarchy'
         env:
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}

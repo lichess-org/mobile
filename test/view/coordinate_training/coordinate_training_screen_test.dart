@@ -17,7 +17,7 @@ void main() {
       final app = await makeTestProviderScopeApp(tester, home: const CoordinateTrainingScreen());
       await tester.pumpWidget(app);
 
-      await tester.tap(find.text('Start Training'));
+      await tester.tap(find.text('Start training'));
       await tester.pumpAndSettle();
 
       final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
@@ -46,7 +46,7 @@ void main() {
       trainingPrefsNotifier.setMode(TrainingMode.findSquare);
       trainingPrefsNotifier.setSideChoice(SideChoice.white);
 
-      await tester.tap(find.text('Start Training'));
+      await tester.tap(find.text('Start training'));
       await tester.pumpAndSettle();
 
       final controllerProvider = coordinateTrainingControllerProvider;
@@ -81,7 +81,7 @@ void main() {
 
       final controllerProvider = coordinateTrainingControllerProvider;
 
-      await tester.tap(find.text('Start Training'));
+      await tester.tap(find.text('Start training'));
       await tester.pumpAndSettle();
 
       final currentCoord = container.read(controllerProvider).currentCoord;
