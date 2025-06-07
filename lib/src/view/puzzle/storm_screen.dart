@@ -19,10 +19,10 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_layout.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -116,7 +116,7 @@ class _Body extends ConsumerWidget {
             child: Column(
               children: [
                 Expanded(
-                  child: BoardTable(
+                  child: PuzzleLayout(
                     boardKey: boardKey,
                     orientation: stormState.pov,
                     lastMove: stormState.lastMove as NormalMove?,
@@ -161,7 +161,7 @@ class _Body extends ConsumerWidget {
       case AsyncError(:final error, :final stackTrace):
         debugPrint('SEVERE: [PuzzleStormScreen] could not load storm; $error\n$stackTrace');
         return Center(
-          child: BoardTable(
+          child: PuzzleLayout(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
             fen: kEmptyFen,
