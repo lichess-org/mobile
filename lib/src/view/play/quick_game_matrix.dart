@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -82,13 +81,8 @@ class _SectionChoices extends ConsumerWidget {
         .mapIndexed((index, choice) {
           return [
             Expanded(
-              child: _ChoiceChip(
-                key: ValueKey(choice),
-                title: Text(
-                  choice.display,
-                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
-                ),
-                subtitle: Text(choice.speed.label, style: const TextStyle(fontSize: 14.0)),
+              child: _ExistingChoiceChip(
+                choice: choice,
                 onTap: isOnline
                     ? () {
                         Navigator.of(context, rootNavigator: true).push(
@@ -115,8 +109,8 @@ class _SectionChoices extends ConsumerWidget {
           if (choices.length < 3) ...[
             const SizedBox(width: _kMatrixSpacing),
             Expanded(
-              child: _ChoiceChip(
-                title: Text(context.l10n.custom, textAlign: TextAlign.center),
+              child: _CustomChoiceChip(
+                title: context.l10n.custom,
                 onTap: isOnline
                     ? () {
                         showModalBottomSheet<void>(
@@ -138,11 +132,13 @@ class _SectionChoices extends ConsumerWidget {
   }
 }
 
-class _ChoiceChip extends StatelessWidget {
-  const _ChoiceChip({required this.title, this.subtitle, required this.onTap, super.key});
+// Base class for choice chips.
+abstract class _ChoiceChip extends StatelessWidget {
+  const _ChoiceChip({required this.onTap, super.key});
 
-  final Widget title;
-  final Widget? subtitle;
+  // The children of the chip, displayed in a column.
+  abstract final List<Widget> children;
+
   final void Function()? onTap;
 
   static const BorderRadius _kBorderRadius = BorderRadius.all(Radius.circular(6.0));
@@ -173,7 +169,7 @@ class _ChoiceChip extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [title, if (subtitle != null) subtitle!],
+                children: children,
               ),
             ),
           ),
@@ -181,4 +177,27 @@ class _ChoiceChip extends StatelessWidget {
       ),
     );
   }
+}
+
+// Choice chips for existing choices.
+class _ExistingChoiceChip extends _ChoiceChip {
+  _ExistingChoiceChip({required this.choice, super.onTap}) : super(key: ValueKey(choice));
+
+  final TimeIncrement choice;
+
+  @override
+  List<Widget> get children => [
+    Text(choice.display, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0)),
+    Text(choice.speed.label, style: const TextStyle(fontSize: 14.0)),
+  ];
+}
+
+class _CustomChoiceChip extends _ChoiceChip {
+  const _CustomChoiceChip({required this.title, super.onTap})
+    : super(key: const ValueKey('choice-custom'));
+
+  final String title;
+
+  @override
+  List<Widget> get children => [Text(title, textAlign: TextAlign.center)];
 }
