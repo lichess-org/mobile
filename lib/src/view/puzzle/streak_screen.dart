@@ -163,16 +163,6 @@ class _ErrorBody extends ConsumerWidget {
   }
 }
 
-typedef InteractiveBoardParams = ({
-  Variant variant,
-  Position position,
-  PlayerSide playerSide,
-  NormalMove? promotionMove,
-  void Function(NormalMove, {bool? isDrop}) onMove,
-  void Function(Role? role) onPromotionSelection,
-  Premovable? premovable,
-});
-
 class _Body extends ConsumerStatefulWidget {
   const _Body({required this.initialPuzzleContext, required this.streak});
 
@@ -203,28 +193,6 @@ class _BodyState extends ConsumerState<_Body> {
         ref.read(puzzleStreakControllerProvider.notifier).next();
       }
     });
-
-    final InteractiveBoardParams interactiveBoardParams = (
-      variant: Variant.standard,
-      position: puzzleState.currentPosition,
-      playerSide: puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
-          ? PlayerSide.none
-          : puzzleState.mode == PuzzleMode.view
-          ? PlayerSide.both
-          : puzzleState.pov == Side.white
-          ? PlayerSide.white
-          : PlayerSide.black,
-      promotionMove: puzzleState.promotionMove,
-      onMove: (move, {isDrop, captured}) {
-        ref.read(ctrlProvider.notifier).onUserMove(move);
-      },
-      onPromotionSelection: (role) {
-        ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-      },
-      premovable: null,
-    );
-
-    final lastMove = puzzleState.lastMove as NormalMove?;
 
     final content = PopScope(
       canPop: widget.streak.index == 0 || widget.streak.finished,
@@ -273,15 +241,24 @@ class _BodyState extends ConsumerState<_Body> {
                         ),
                       );
 
-                      final fen = interactiveBoardParams.position.fen;
                       final gameData = boardPreferences.toGameData(
-                        variant: interactiveBoardParams.variant,
-                        position: interactiveBoardParams.position,
-                        playerSide: interactiveBoardParams.playerSide,
-                        promotionMove: interactiveBoardParams.promotionMove,
-                        onMove: interactiveBoardParams.onMove,
-                        onPromotionSelection: interactiveBoardParams.onPromotionSelection,
-                        premovable: interactiveBoardParams.premovable,
+                        variant: Variant.standard,
+                        position: puzzleState.currentPosition,
+                        playerSide: puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
+                            ? PlayerSide.none
+                            : puzzleState.mode == PuzzleMode.view
+                            ? PlayerSide.both
+                            : puzzleState.pov == Side.white
+                            ? PlayerSide.white
+                            : PlayerSide.black,
+                        promotionMove: puzzleState.promotionMove,
+                        onMove: (move, {isDrop, captured}) {
+                          ref.read(ctrlProvider.notifier).onUserMove(move);
+                        },
+                        onPromotionSelection: (role) {
+                          ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+                        },
+                        premovable: null,
                       );
 
                       if (orientation == Orientation.landscape) {
@@ -300,17 +277,17 @@ class _BodyState extends ConsumerState<_Body> {
                               _BoardWidget(
                                 boardKey: _boardKey,
                                 size: boardSize,
-                                fen: fen,
+                                fen: puzzleState.currentPosition.fen,
                                 orientation: puzzleState.pov,
                                 gameData: gameData,
-                                lastMove: lastMove,
+                                lastMove: puzzleState.lastMove as NormalMove?,
                                 settings: defaultSettings,
                               ),
                               const SizedBox(width: 16.0),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     Center(
                                       child: PuzzleFeedbackWidget(
@@ -421,10 +398,10 @@ class _BodyState extends ConsumerState<_Body> {
                               child: _BoardWidget(
                                 boardKey: _boardKey,
                                 size: boardSize,
-                                fen: fen,
+                                fen: puzzleState.currentPosition.fen,
                                 orientation: puzzleState.pov,
                                 gameData: gameData,
-                                lastMove: lastMove,
+                                lastMove: puzzleState.lastMove as NormalMove?,
                                 settings: defaultSettings,
                               ),
                             ),

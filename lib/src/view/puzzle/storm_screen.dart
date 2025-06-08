@@ -1,6 +1,7 @@
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +19,7 @@ import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_layout.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
@@ -58,13 +60,20 @@ class _StormScreenState extends ConsumerState<StormScreen> {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body(this.boardKey);
 
   final GlobalKey boardKey;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  ISet<Shape> userShapes = ISet();
+
+  @override
+  Widget build(BuildContext context) {
     final storm = ref.watch(stormProvider);
 
     switch (storm) {
@@ -116,34 +125,134 @@ class _Body extends ConsumerWidget {
             child: Column(
               children: [
                 Expanded(
-                  child: PuzzleLayout(
-                    boardKey: boardKey,
-                    orientation: stormState.pov,
-                    lastMove: stormState.lastMove as NormalMove?,
-                    fen: stormState.position.fen,
-                    interactiveBoardParams: (
-                      position: stormState.position,
-                      variant: Variant.standard,
-                      playerSide:
-                          !stormState.firstMovePlayed ||
-                              stormState.mode == StormMode.ended ||
-                              stormState.position.isGameOver
-                          ? PlayerSide.none
-                          : stormState.pov == Side.white
-                          ? PlayerSide.white
-                          : PlayerSide.black,
-                      promotionMove: stormState.promotionMove,
-                      onMove: (move, {isDrop, captured}) =>
-                          ref.read(ctrlProvider.notifier).onUserMove(move),
-                      onPromotionSelection: (role) =>
-                          ref.read(ctrlProvider.notifier).onPromotionSelection(role),
-                      premovable: null,
+                  child: Center(
+                    child: SafeArea(
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          final orientation = constraints.maxWidth > constraints.maxHeight
+                              ? Orientation.landscape
+                              : Orientation.portrait;
+                          final isTablet = isTabletOrLarger(context);
+
+                          final defaultSettings = boardPreferences.toBoardSettings().copyWith(
+                            borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+                            boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                            drawShape: DrawShapeOptions(
+                              enable: boardPreferences.enableShapeDrawings,
+                              onCompleteShape: _onCompleteShape,
+                              onClearShapes: _onClearShapes,
+                              newShapeColor: boardPreferences.shapeColor.color,
+                            ),
+                          );
+
+                          final gameData = boardPreferences.toGameData(
+                            variant: Variant.standard,
+                            position: stormState.position,
+                            playerSide:
+                                !stormState.firstMovePlayed ||
+                                    stormState.mode == StormMode.ended ||
+                                    stormState.position.isGameOver
+                                ? PlayerSide.none
+                                : stormState.pov == Side.white
+                                ? PlayerSide.white
+                                : PlayerSide.black,
+                            promotionMove: stormState.promotionMove,
+                            onMove: (move, {isDrop, captured}) =>
+                                ref.read(ctrlProvider.notifier).onUserMove(move),
+                            onPromotionSelection: (role) =>
+                                ref.read(ctrlProvider.notifier).onPromotionSelection(role),
+                            premovable: null,
+                          );
+
+                          if (orientation == Orientation.landscape) {
+                            final defaultBoardSize =
+                                constraints.biggest.shortestSide -
+                                (kTabletBoardTableSidePadding * 2);
+                            final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
+                            final boardSize = sideWidth >= 250
+                                ? defaultBoardSize
+                                : constraints.biggest.longestSide / kGoldenRatio -
+                                      (kTabletBoardTableSidePadding * 2);
+                            return Padding(
+                              padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  _BoardWidget(
+                                    boardKey: widget.boardKey,
+                                    size: boardSize,
+                                    fen: stormState.position.fen,
+                                    orientation: stormState.pov,
+                                    gameData: gameData,
+                                    lastMove: stormState.lastMove as NormalMove?,
+                                    settings: defaultSettings,
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        _TopTable(data),
+                                        _Combo(stormState.combo),
+                                        _BottomBar(ctrlProvider),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            final defaultBoardSize = constraints.biggest.shortestSide;
+                            final double boardSize = isTablet
+                                ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                                : defaultBoardSize;
+
+                            return Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                                    ),
+                                    child: _TopTable(data),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: isTablet
+                                      ? const EdgeInsets.symmetric(
+                                          horizontal: kTabletBoardTableSidePadding,
+                                        )
+                                      : EdgeInsets.zero,
+                                  child: _BoardWidget(
+                                    boardKey: widget.boardKey,
+                                    size: boardSize,
+                                    fen: stormState.position.fen,
+                                    orientation: stormState.pov,
+                                    gameData: gameData,
+                                    lastMove: stormState.lastMove as NormalMove?,
+                                    settings: defaultSettings,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                                    ),
+                                    child: _Combo(stormState.combo),
+                                  ),
+                                ),
+                                _BottomBar(ctrlProvider),
+                              ],
+                            );
+                          }
+                        },
+                      ),
                     ),
-                    topTable: _TopTable(data),
-                    bottomTable: _Combo(stormState.combo),
                   ),
                 ),
-                _BottomBar(ctrlProvider),
               ],
             ),
           ),
@@ -151,7 +260,7 @@ class _Body extends ConsumerWidget {
 
         return Theme.of(context).platform == TargetPlatform.android
             ? AndroidGesturesExclusionWidget(
-                boardKey: boardKey,
+                boardKey: widget.boardKey,
                 shouldExcludeGesturesOnFocusGained: () =>
                     stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
                 shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
@@ -172,6 +281,103 @@ class _Body extends ConsumerWidget {
       case _:
         return const CenterLoadingIndicator();
     }
+  }
+
+  void _onCompleteShape(Shape shape) {
+    if (!mounted) return;
+
+    if (userShapes.any((element) => element == shape)) {
+      setState(() {
+        userShapes = userShapes.remove(shape);
+      });
+      return;
+    } else {
+      setState(() {
+        userShapes = userShapes.add(shape);
+      });
+    }
+  }
+
+  void _onClearShapes() {
+    if (!mounted) return;
+
+    setState(() {
+      userShapes = ISet();
+    });
+  }
+}
+
+class _BoardWidget extends StatelessWidget {
+  const _BoardWidget({
+    this.boardKey,
+    required this.size,
+    required this.fen,
+    required this.orientation,
+    required this.gameData,
+    this.lastMove,
+    required this.settings,
+    this.error,
+  });
+
+  final double size;
+  final String fen;
+  final Side orientation;
+  final GameData? gameData;
+  final Move? lastMove;
+  final ChessboardSettings settings;
+  final String? error;
+  final GlobalKey? boardKey;
+
+  @override
+  Widget build(BuildContext context) {
+    final board = Chessboard(
+      key: boardKey,
+      size: size,
+      fen: fen,
+      orientation: orientation,
+      game: gameData,
+      lastMove: lastMove,
+      settings: settings,
+    );
+
+    if (error != null) {
+      return SizedBox.square(
+        dimension: size,
+        child: Stack(
+          children: [
+            board,
+            _ErrorWidget(errorMessage: error!, boardSize: size),
+          ],
+        ),
+      );
+    }
+
+    return board;
+  }
+}
+
+class _ErrorWidget extends StatelessWidget {
+  const _ErrorWidget({required this.errorMessage, required this.boardSize});
+  final double boardSize;
+  final String errorMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.square(
+      dimension: boardSize,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            ),
+            child: Padding(padding: const EdgeInsets.all(10.0), child: Text(errorMessage)),
+          ),
+        ),
+      ),
+    );
   }
 }
 
