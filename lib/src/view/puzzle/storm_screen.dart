@@ -44,8 +44,6 @@ class StormScreen extends ConsumerStatefulWidget {
 }
 
 class _StormScreenState extends ConsumerState<StormScreen> {
-  final _boardKey = GlobalKey(debugLabel: 'boardOnStormScreen');
-
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
@@ -54,16 +52,120 @@ class _StormScreenState extends ConsumerState<StormScreen> {
           actions: [_StormDashboardButton(), const ToggleSoundButton()],
           title: const Text('Puzzle Storm'),
         ),
-        body: _Body(_boardKey),
+        body: const _Load(),
       ),
+    );
+  }
+}
+class _Load extends ConsumerWidget {
+  const _Load();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final storm = ref.watch(stormProvider);
+
+    switch (storm) {
+      case AsyncData(value: final PuzzleStormResponse data):
+        return _Body(data: data);
+      case AsyncError(:final error, :final stackTrace):
+        debugPrint('SEVERE: [PuzzleStormScreen] could not load storm; $error\n$stackTrace');
+        return Center(child: _ErrorBody(errorMessage: error.toString()));
+      case _:
+        return const CenterLoadingIndicator();
+    }
+  }
+}
+
+class _ErrorBody extends ConsumerWidget {
+  const _ErrorBody({required this.errorMessage});
+
+  final String errorMessage;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final boardPreferences = ref.watch(boardPreferencesProvider);
+
+    return Column(
+      children: [
+        Expanded(
+          child: Center(
+            child: SafeArea(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final orientation = constraints.maxWidth > constraints.maxHeight
+                      ? Orientation.landscape
+                      : Orientation.portrait;
+                  final isTablet = isTabletOrLarger(context);
+
+                  final defaultSettings = boardPreferences.toBoardSettings().copyWith(
+                    borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+                    boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                  );
+
+                  if (orientation == Orientation.landscape) {
+                    final defaultBoardSize =
+                        constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
+                    final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
+                    final boardSize = sideWidth >= 250
+                        ? defaultBoardSize
+                        : constraints.biggest.longestSide / kGoldenRatio -
+                              (kTabletBoardTableSidePadding * 2);
+                    return Padding(
+                      padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          _BoardWidget(
+                            size: boardSize,
+                            fen: kEmptyBoardFEN,
+                            orientation: Side.white,
+                            gameData: null,
+                            settings: defaultSettings,
+                            error: errorMessage,
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    final defaultBoardSize = constraints.biggest.shortestSide;
+                    final double boardSize = isTablet
+                        ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                        : defaultBoardSize;
+
+                    return Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: isTablet
+                              ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                              : EdgeInsets.zero,
+                          child: _BoardWidget(
+                            size: boardSize,
+                            fen: kEmptyBoardFEN,
+                            orientation: Side.white,
+                            gameData: null,
+                            settings: defaultSettings,
+                            error: errorMessage,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body(this.boardKey);
+  const _Body({required this.data});
 
-  final GlobalKey boardKey;
+  final PuzzleStormResponse data;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -71,6 +173,7 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   ISet<Shape> userShapes = ISet();
+  final _boardKey = GlobalKey(debugLabel: 'boardOnStormScreen');
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +282,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   _BoardWidget(
-                                    boardKey: widget.boardKey,
+                                    boardKey: _boardKey,
                                     size: boardSize,
                                     fen: stormState.position.fen,
                                     orientation: stormState.pov,
@@ -193,7 +296,79 @@ class _BodyState extends ConsumerState<_Body> {
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        _TopTable(data),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            StormClockWidget(clock: stormState.clock),
+                                            if (stormState.mode == StormMode.initial)
+                                              Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    context.l10n.stormMoveToStart,
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    stormState.pov == Side.white
+                                                        ? context
+                                                              .l10n
+                                                              .stormYouPlayTheWhitePiecesInAllPuzzles
+                                                        : context
+                                                              .l10n
+                                                              .stormYouPlayTheBlackPiecesInAllPuzzles,
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: const TextStyle(fontSize: 12),
+                                                  ),
+                                                ],
+                                              ),
+                                          ],
+                                        ),
+
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: isTablet
+                                                ? kTabletBoardTableSidePadding
+                                                : 12.0,
+                                            vertical: 32.0,
+                                          ),
+                                          child: Center(
+                                            child: Card(
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(24.0),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Icon(
+                                                      LichessIcons.storm,
+                                                      size: 150.0,
+                                                      color: ColorScheme.of(context).primary,
+                                                    ),
+                                                    const SizedBox(width: 8),
+                                                    Text(
+                                                      stormState.numSolved.toString().padRight(2),
+                                                      style: TextStyle(
+                                                        fontSize: 90.0,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: ColorScheme.of(context).primary,
+                                                        fontFeatures: const [
+                                                          FontFeature.tabularFigures(),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
                                         _Combo(stormState.combo),
                                         _BottomBar(ctrlProvider),
                                       ],
@@ -227,7 +402,7 @@ class _BodyState extends ConsumerState<_Body> {
                                         )
                                       : EdgeInsets.zero,
                                   child: _BoardWidget(
-                                    boardKey: widget.boardKey,
+                                    boardKey: _boardKey,
                                     size: boardSize,
                                     fen: stormState.position.fen,
                                     orientation: stormState.pov,
@@ -260,7 +435,7 @@ class _BodyState extends ConsumerState<_Body> {
 
         return Theme.of(context).platform == TargetPlatform.android
             ? AndroidGesturesExclusionWidget(
-                boardKey: widget.boardKey,
+                boardKey: _boardKey,
                 shouldExcludeGesturesOnFocusGained: () =>
                     stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
                 shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,

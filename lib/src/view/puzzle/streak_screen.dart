@@ -299,32 +299,30 @@ class _BodyState extends ConsumerState<_Body> {
                                     Padding(
                                       padding: EdgeInsets.symmetric(
                                         horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                                        vertical: 32.0,
                                       ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 32.0),
-                                        child: Center(
-                                          child: Card(
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(24.0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Icon(
-                                                    LichessIcons.streak,
-                                                    size: 150.0,
+                                      child: Center(
+                                        child: Card(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(24.0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                  LichessIcons.streak,
+                                                  size: 150.0,
+                                                  color: ColorScheme.of(context).primary,
+                                                ),
+                                                const SizedBox(width: 8.0),
+                                                Text(
+                                                  widget.streak.index.toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 90.0,
+                                                    fontWeight: FontWeight.bold,
                                                     color: ColorScheme.of(context).primary,
                                                   ),
-                                                  const SizedBox(width: 8.0),
-                                                  Text(
-                                                    widget.streak.index.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 90.0,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ColorScheme.of(context).primary,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
