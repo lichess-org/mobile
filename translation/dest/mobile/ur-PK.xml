@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ہوم</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">حقیقی بساط پر</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">بائیں</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">دائیں</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">تربیت</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">اختیارات</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">پی جی این شئیر کریں</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">مقابلے کا لنک شیئر کریں</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">اوزار</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ملاحظہ</string>
+</resources>

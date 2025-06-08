@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kodu</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Üle laua</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Vasakul</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Paremal</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Pusle</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Kella asukoht</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Seaded</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Jaga PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Jaga mängu URL</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Tööriistad</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s ei ole toetatud sellel versioonil.</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Vaata</string>
+</resources>

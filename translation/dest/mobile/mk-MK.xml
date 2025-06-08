@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Повратна информација</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Тактилен фидбек</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Почетна</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Игра за двајца</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Лево</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Десно</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Проблеми</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Позиција на часовникот</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Поставки</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Сподели PGN запис</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Сподели URL од партијата</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Системски бои</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Алатки</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Варијацијата %s не е поддржана во оваа верзија.</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Гледај</string>
 </resources>

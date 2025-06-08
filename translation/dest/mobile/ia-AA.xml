@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Partita local</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Enigmas</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Publicar PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Publicar URL del joco</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variante %s non es supportate in iste version.</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Spectar</string>
+</resources>

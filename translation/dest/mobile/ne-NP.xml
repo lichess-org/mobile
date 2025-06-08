@@ -5,18 +5,22 @@
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">सफा</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">खेललाई जानुहोस्</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">आलोचना</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">नमस्ते, %s</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">घर</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">तपाईलाई यो पना हेर्नेको लागि लग इन गर्न पर्छ।</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">कुनै परिणाम छैन</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">तपाई कुनै पानि युजेर फोलो गर्दै छैन।</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ठीक छ</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">बोर्डमा खेलेको अनुभव</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">खेलहारु \"%s\" संग</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">बायाँ</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">दायाँ</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">प्रशिक्षण</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">हालका खोजहरू</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">कम्पन प्रतिक्रिया</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">ध्यान मोड</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">घडीको स्थान</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">ध्यान मोड</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">विकल्पहरु</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN शेयर गर्नुहोस्</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">खेलको URL शेयर गर्नुहोस्</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">प्रणाली रङहारु</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">उपकरणहरू</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">हेर्नुहोस्</string>

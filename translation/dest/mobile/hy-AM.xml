@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Գլխավոր էջ</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Լավ</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Երկուսով խաղատախտակի առջև</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Ձախից</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Աջից</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">խնդիրներ</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Ժամացույցի դիրքը</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Տարածել PGN -ն</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Տարածել խաղի հղումը</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Գործիքներ</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">%s տարբերակն այս թարմացումը չի ապահովում.</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Դիտել</string>
+</resources>

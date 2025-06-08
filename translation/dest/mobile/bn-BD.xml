@@ -5,6 +5,12 @@
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">চাল ফেরত নেওয়ার অফার বাতিল করুন</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">মুছে ফেলুন</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">হোম</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">কোনো সমস্যা নেই</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">একই বোর্ড/ডিভাইসে</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">বামদিকে</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ডানদিকে</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ধাঁধা</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ঘড়ির পজিশন</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">সেটিংস</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN শেয়ার করুন</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">খেলার লিংক শেয়ার করুন</string>

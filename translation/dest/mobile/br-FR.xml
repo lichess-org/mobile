@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Degemer</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Ezlinenn</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">A-gleiz</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">A-zehoù</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Lec\'hiadur an horolaj</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Skignañ ur PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Skignañ URL ar c\'hrogad</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Ostilhoù</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Ne vez ket degemeret an adstumm %s c\'hoazh.</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sellet</string>
+</resources>

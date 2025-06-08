@@ -8,6 +8,8 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Heim</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Þú þarft að vera innskráð(ur) til að skoða þessa síðu.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Engar niðurstöður</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Í LAGI</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Yfir borðið</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Þú munt missa núverandi döngun þína og stigin þín munu vistast.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Þrautir</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Nýlegar leitir</string>

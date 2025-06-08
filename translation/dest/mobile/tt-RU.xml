@@ -4,8 +4,15 @@
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Фикер һәм тәкъдимнәр җибәрү</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Өйгә</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Ярар</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Тактада</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Сул</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Уң</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Башваткыч</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Сәгать позициясе</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Көйләүләр</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PNG бүлешү</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Уен URL бүлешү</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Кораллар</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Вариант %s бу версиядә булышынмый.</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Карау</string>
 </resources>
