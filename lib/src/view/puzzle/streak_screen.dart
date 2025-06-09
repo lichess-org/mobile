@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
@@ -62,7 +63,7 @@ class _Load extends ConsumerWidget {
     switch (streak) {
       case AsyncValue(:final error?, :final stackTrace):
         debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
-        return Center(child: _ErrorBody(errorMessage: error.toString()));
+        return Center(child: PuzzleErrorBoardWidget(errorMessage: error.toString()));
       case AsyncValue(:final value?):
         return _Body(
           initialPuzzleContext: PuzzleContext(
@@ -75,92 +76,6 @@ class _Load extends ConsumerWidget {
       case _:
         return const Center(child: CircularProgressIndicator.adaptive());
     }
-  }
-}
-
-class _ErrorBody extends ConsumerWidget {
-  const _ErrorBody({required this.errorMessage});
-
-  final String errorMessage;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final boardPreferences = ref.watch(boardPreferencesProvider);
-
-    return Column(
-      children: [
-        Expanded(
-          child: Center(
-            child: SafeArea(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final orientation = constraints.maxWidth > constraints.maxHeight
-                      ? Orientation.landscape
-                      : Orientation.portrait;
-                  final isTablet = isTabletOrLarger(context);
-
-                  final defaultSettings = boardPreferences.toBoardSettings().copyWith(
-                    borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-                    boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-                  );
-
-                  if (orientation == Orientation.landscape) {
-                    final defaultBoardSize =
-                        constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-                    final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
-                    final boardSize = sideWidth >= 250
-                        ? defaultBoardSize
-                        : constraints.biggest.longestSide / kGoldenRatio -
-                              (kTabletBoardTableSidePadding * 2);
-                    return Padding(
-                      padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          BoardWidget(
-                            size: boardSize,
-                            fen: kEmptyBoardFEN,
-                            orientation: Side.white,
-                            gameData: null,
-                            settings: defaultSettings,
-                            error: errorMessage,
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    final defaultBoardSize = constraints.biggest.shortestSide;
-                    final double boardSize = isTablet
-                        ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                        : defaultBoardSize;
-
-                    return Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: isTablet
-                              ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                              : EdgeInsets.zero,
-                          child: BoardWidget(
-                            size: boardSize,
-                            fen: kEmptyBoardFEN,
-                            orientation: Side.white,
-                            gameData: null,
-                            settings: defaultSettings,
-                            error: errorMessage,
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                },
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }
 
@@ -245,7 +160,9 @@ class _BodyState extends ConsumerState<_Body> {
                       final gameData = boardPreferences.toGameData(
                         variant: Variant.standard,
                         position: puzzleState.currentPosition,
-                        playerSide: puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
+                        playerSide:
+                            puzzleState.mode == PuzzleMode.load ||
+                                puzzleState.currentPosition.isGameOver
                             ? PlayerSide.none
                             : puzzleState.mode == PuzzleMode.view
                             ? PlayerSide.both
