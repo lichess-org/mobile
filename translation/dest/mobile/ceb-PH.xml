@@ -9,13 +9,16 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Walay resulta</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Wala ka nag-follow sa bisan kinsa nga user.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Modawat</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Ibabaw sa pisara</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Mga magdudula nga adunay \"%s\"</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Wala</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Tuo</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Walay ipakita. Pagdula og pipila ka run sa Puzzle Storm.</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Mawad-an ka sa imong streak karon ug ang imong puntos ma-reserba.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Puzzles</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Bag-o nga mga pagpangita</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Haptic feedback</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersive mode</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Posisyon sa orasan</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersive mode</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Settings</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Ipakigbahin ang PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Ipakigbahin ang game URL</string>
@@ -23,5 +26,6 @@
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ipakigbahin kini nga puzzle</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Mga kolor sa sistema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Kagamitan</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Ang variant %s wala gisuportahan niini nga bersyon.</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Talan-awon</string>
 </resources>

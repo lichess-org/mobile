@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Tagta başy</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Tapmaçalar</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sazlamalar</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN-ny paýlaş</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Oýun URL-sini paýlaş</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Gurallar</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Tomaşa et</string>
+</resources>

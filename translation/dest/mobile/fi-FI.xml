@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Käyttäjätunnuksen asetukset</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Nämä asetukset tallentuvat Lichess-tunnukseesi ja tulevat käyttöön kaikilla laitteilla.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Kaikki pelit</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Oletko varma?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Laudan asetukset</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Peruuta siirron peruutuspyyntö</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Tyhjennä</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Poista tallennettu siirto</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Liity peliin</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Palaute</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Hei %s</string>
-  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">Hei</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Piilota muunnelma</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Etusivu</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live-striimaajat</string>
@@ -16,7 +17,10 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Ei hakutuloksia</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Et seuraa yhtäkään käyttäjää.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Kaveria vastaan offline-tilassa</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Pelaajat, joiden tunnuksesta löytyy \"%s\"</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Vasemmalla</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Oikealla</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Suurenna vedettävä nappula</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Haluatko lopettaa tämän sarjan?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Ei näytettävää, muuta suodatusehtoja</string>
@@ -26,9 +30,15 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Tee tehtäviä suosikkiavauksistasi tai valitse tehtäväteema.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Tehtävät</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Viimeisimmät haut</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Kosketuspalaute</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Kokoruututila</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Poista kirjanmerkki</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Kellon sijainti</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Vedetyn nappulan kohde</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Ympyrä</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Neliö</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Etusivun pienohjelmat</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Kokoruututila</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Piilota laitteen käyttöliittymä pelatessasi. Valitse tämä, jos laitteesi navigointieleet näytön laidoilla ovat sinulle häiriöksi. Asetus vaikuttaa peli- ja tehtävänäkymiin.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Lyödyt nappulat</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Asetukset</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Jaa PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Jaa pelin URL</string>
@@ -41,6 +51,7 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Järjestelmän värit</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Teema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Työkalut</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variantti %s ei ole tuettu tässä versiossa.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Odotetaan vastustajan löytymistä...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Seuraa</string>
 </resources>

@@ -7,8 +7,6 @@
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">جووڵەی پاشەکەوتکراو بسڕەوە</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">بەشداریی یارییەک بکە</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">بۆچوونەکانت</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">سڵاو، %s</string>
-  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">سڵاو</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">زنجیرە جووڵە پێشنیارکراوەکان بشارەوە</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">سەرەتا</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">پەخشکەرە ڕاستەوخۆکان</string>
@@ -16,7 +14,10 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ھیچ ئەنجامێک نەدۆزرایەوە</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">تۆ شوێنی ھیچ بەکارھێنەرێک نەکەوتوویت.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">باشە</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">لەسەر تەختە</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">یاریزانان بە «%s»</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">چەپ</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ڕاست</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">داشی ڕاکێشراو گەورە بکە</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">دەتەوێت کۆتایی بەم درێژەدانە بھێنیت؟</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">ھیچ ئەنجامێک نەدۆزرایەوە، تکایە پاڵێوەرەکانت بگۆڕە</string>
@@ -26,8 +27,8 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">مەتەڵەکان شیکار بکە کە پەیوەندییان بە دەستپێکە دڵخوازەکانتەوە ھەیە، یان شێوازێک ھەڵبژێرە.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">مەتەڵەکان</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">دوایین گەڕانەکان</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">کاردانەوەی بەرکەوتن</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">دۆخی پڕاوپڕی شاشە</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">شوێنی کاتژمێر</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">دۆخی پڕاوپڕی شاشە</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">شاردنەوەی ڕووکاری سیستەم لەکاتی یاریکردندا. ئەمە بەکاربھێنە ئەگەر ئاماژەکانی ڕێدۆزیی سیستەمەکە لە لێواری شاشەکە بێزارت دەکەن. ئەمە شاشەکانی یاری و مەتەڵ دەگرێتەوە.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ڕێکخسنەکان</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">ھاوبەشکردنی PGN</string>
@@ -41,6 +42,7 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">ڕەنگەکانی سیستەم</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">ڕووکار</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">ئامرازەکان</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">شێوەی %s لەم وەشانەدا پشتگیریی ناکرێت.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">چاوەڕێی بەشداریکردنی ڕکابەر...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">سەیرکردن</string>
 </resources>

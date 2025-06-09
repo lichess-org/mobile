@@ -7,7 +7,6 @@
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">കരുതിവച്ച നീക്കം മായ്ക്കുക</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">കളിയിൽ പങ്കെടുക്കുക</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">പ്രതികരണം</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">നമസ്കാരം, %s</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">വൃതിയാനം മറച്ച വയ്ക്കുക</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ആമുഖം</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">തൽസമയ പ്രവാഹക്കാർ</string>
@@ -15,7 +14,10 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ഫലങ്ങളൊന്നുമില്ല</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">താങ്ങൾ ഒരു ഉപയോക്താവിനും പിന്തുടരുന്നില്ല.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ശരി</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">ബോർഡിൽ കളിക്കുക</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">%s ഒപ്പമുള്ള കളിക്കാർ</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">ഇടത്</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">വലത്</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">വലിച്ചതു് കരു വലുതാക്കുക</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">താങ്ങൾക്കു് ഈ ഓട്ടം നിരുത്തണോ?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">ഒന്നും കാണിക്കുകാനില്ല, ദയവായി അരിപ്പുകൾ മാറ്റുക</string>
@@ -25,8 +27,8 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">താങ്ങളുടെ പ്രയപെട്ട തുടക്കങ്ങൾ നിന്നു് ചെസ്സു് സമസ്യകൾ കളിക്കുക, അല്ലെങ്കിൽ ഒരു അലങ്കാരം തിരഞ്ഞെടുക്കുക.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">സമസ്യകൾ</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">സമീപകാല തിരയലുകൾ</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">സ്പർശന പ്രതികരണം</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">ആഴത്തിലുള്ള അനുഭവരീതി</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ക്ലോക്ക് സ്ഥാനം</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">ആഴത്തിലുള്ള അനുഭവരീതി</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ക്രമീകരണം</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN പങ്കിടുക</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">കളി വിലാസം (URL) പങ്കിടുക</string>
@@ -39,6 +41,7 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">വ്യവസ്ഥാനിറങ്ങൾ</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">ചമയം</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">ഉപകരണങ്ങൾ</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">%s എന്ന വരിയന്റ് ഇത് സപ്പോർട് ചെയ്യുന്നില്ല.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">മറ്റെ കളിക്കാര്‍ക്കായി കാത്തുനിൽക്കുന്നു...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">കാണുക</string>
 </resources>

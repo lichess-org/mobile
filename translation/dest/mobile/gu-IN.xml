@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">ડાબી તરફ</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">જમણી તરફ</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">કોયડા</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ઘડિયાળનું સ્થળ</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">વોચ</string>
+</resources>
