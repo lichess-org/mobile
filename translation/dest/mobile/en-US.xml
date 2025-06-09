@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Account settings</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">These settings are applied to your Lichess account and will be used across all devices.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">All games</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Are you sure?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Board settings</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancel takeback offer</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Clear</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Clear saved move</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Join a game</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Good evening, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Good evening</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Good day, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Good day</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Hide variation</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Home</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live streamers</string>
@@ -27,9 +34,29 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Play puzzles from your favorite openings, or choose a theme.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Puzzles</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recent searches</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Remove the bookmark</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Clock position</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Presets</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Target of dragged piece</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Circle</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Square</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Home widgets</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersive mode</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Pieces captured</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Choose an image</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Custom background works only in dark mode. A dark image is recommended.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Blur the image</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Hide board</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Show board</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Swipe to display other backgrounds</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Either tap or drag</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tap two squares</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Shape drawing</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Show border</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Touch feedback</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">When enabled, the device will vibrate shortly when you move or capture a piece.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Settings</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Share PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Share game URL</string>
@@ -40,9 +67,11 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Show variations</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Something went wrong.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">System colors</string>
+  <string name="tapHereToStartPlayingChess" comment="A message shown only once the first time the app is installed. Appear in a popup over the main floating action button on the home screen.">Tap here to start playing chess.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Theme</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Tools</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s is not supported in this version.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Waiting for opponent to join...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Watch</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Welcome to the Lichess app!</string>
 </resources>
