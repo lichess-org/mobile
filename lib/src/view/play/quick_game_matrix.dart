@@ -89,6 +89,7 @@ class _SectionChoices extends ConsumerWidget {
                   style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
                 ),
                 subtitle: Text(choice.speed.label, style: const TextStyle(fontSize: 14.0)),
+                speed: choice.speed,
                 onTap: isOnline
                     ? () {
                         Navigator.of(context, rootNavigator: true).push(
@@ -139,10 +140,17 @@ class _SectionChoices extends ConsumerWidget {
 }
 
 class _ChoiceChip extends StatelessWidget {
-  const _ChoiceChip({required this.title, this.subtitle, required this.onTap, super.key});
+  const _ChoiceChip({
+    required this.title,
+    this.subtitle,
+    this.speed,
+    required this.onTap,
+    super.key,
+  });
 
   final Widget title;
   final Widget? subtitle;
+  final Speed? speed;
   final void Function()? onTap;
 
   static const BorderRadius _kBorderRadius = BorderRadius.all(Radius.circular(6.0));
