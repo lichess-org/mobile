@@ -9,7 +9,7 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => '계정 환경설정';
 
   @override
   String get mobileAccountPreferencesHelp =>
@@ -22,7 +22,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileAreYouSure => '확실하십니까?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => '체스판 설정';
 
   @override
   String get mobileCancelTakebackOffer => '무르기 요청 취소';
@@ -41,19 +41,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return '좋은 밤이에요, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => '좋은 밤이에요';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return '좋은 날이에요, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => '좋은 날이에요';
 
   @override
   String get mobileHideVariation => '바리에이션 숨기기';
@@ -77,7 +77,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOkButton => '확인';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => '로컬 게임';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => '왼쪽';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => '오른쪽';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => '드래그한 기물 확대하기';
@@ -118,25 +118,25 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileRecentSearches => '최근 검색어';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => '북마크 제거';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => '시계 위치';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => '프리셋';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => '드래그된 기물 타겟';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => '원';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => '칸';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => '홈 위젯';
 
   @override
   String get mobileSettingsImmersiveMode => '전체 화면 모드';
@@ -146,20 +146,20 @@ class AppLocalizationsKo extends AppLocalizations {
       'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => '잡힌 기물';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => '이미지 선택';
 
   @override
   String get mobileSettingsPickAnImageHelp =>
       'Custom background works only in dark mode. A dark image is recommended.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => '이미지 블러처리 하기';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => '체스판 숨기기';
 
   @override
   String get mobileSettingsPickAnImageShowBoard => 'Show board';
@@ -241,7 +241,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileWatchTab => '관람';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Lichess 앱에 오신 것을 환영합니다!';
 
   @override
   String get activityActivity => '활동';

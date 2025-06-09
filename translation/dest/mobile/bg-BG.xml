@@ -4,18 +4,20 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Сигурни ли сте?</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Изчисти</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Отзиви</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Здравейте, %s</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Скрий вариацията</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Начало</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">За да видите тази страница, трябва да влезете в профила си.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Няма резултати</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ОК</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Двама над дъската</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Ляво</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Дясно</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Решете колкото можете повече задачи за 3 минути.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Решавайте задачи от любимите Ви дебюти или изберете друга тема.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Задачи</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Последни търсения</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Вибрация при докосване</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Режим \"Цял екран\"</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Позиция на часовника</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Режим \"Цял екран\"</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Настройки</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Сподели PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Сподели URL на играта</string>
@@ -28,5 +30,6 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Системни цветове</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Тема</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Анализ</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Вариант %s не се поддържа в тази версия.</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Гледай</string>
 </resources>

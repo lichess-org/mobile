@@ -9,11 +9,11 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Fiókbeállítások';
 
   @override
   String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your Lichess account and will be used across all devices.';
+      'Ezek a beállítások a Lichess profilodhoz tartoznak és minden eszközön érvényesek.';
 
   @override
   String get mobileAllGames => 'Összes játszma';
@@ -22,7 +22,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileAreYouSure => 'Biztos vagy benne?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Sakktábla beállítások';
 
   @override
   String get mobileCancelTakebackOffer => 'Visszalépés kérésének visszavonása';
@@ -41,19 +41,19 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Szép estét, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Szép estét';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Szép napot, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Szép napot';
 
   @override
   String get mobileHideVariation => 'Változatok elrejtése';
@@ -77,7 +77,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Asztali játék';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Bal';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Jobb';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Mozdított bábu nagyítása';
@@ -101,7 +101,8 @@ class AppLocalizationsHu extends AppLocalizations {
       'Nincs megjeleníthető elem, változtasd meg a szűrőket';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow =>
+      'Jelenleg nincs semmi látnivaló. Játssz Puzzle Storm-ot.';
 
   @override
   String get mobilePuzzleStormSubtitle => 'Oldd meg a lehető legtöbb feladványt 3 perc alatt.';
@@ -121,77 +122,77 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileRecentSearches => 'Keresési előzmények';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Könyvjelző eltávolítása';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Óra helye';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Téma előbeállítások';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Mozdított figura célmezőjének kijelölése';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Kör';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Négyzet';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Kezdőlap widget-ek';
 
   @override
   String get mobileSettingsImmersiveMode => 'Teljes képernyős mód';
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+      'A rendszer gombjainak elrejtése játék közben. Kapcsold be, ha zavarnak a rendszer navigációs mozdulatai a képernyő sarkainál. A játszmaképernyőn és a feladvány módok képernyőin működik.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Leütött figurák';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Válassz egy képet';
 
   @override
   String get mobileSettingsPickAnImageHelp =>
-      'Custom background works only in dark mode. A dark image is recommended.';
+      'Saját háttérkép csak sötét módban használható. Sötétebb árnyalatú kép használata ajánlott.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Kép homályosítása';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Sakktábla elrejtése';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Sakktábla megjelenítése';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Húzd oldalra több háttér megjelenítéséhez';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Érintés és húzás is';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Érintés a két mezőre';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Alakzatok rajzolása';
 
   @override
   String get mobileSettingsShapeDrawingSubtitle =>
-      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+      'Alakzatok rajzolása két ujjal: egyik ujjadat tartsd egy üres mezőn, a másikkal érintéssel kört, húzással nyilat rajzolhatsz a sakktáblára.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Sakktábla keret megjelenítése';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Rezgés érintésre';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle =>
-      'When enabled, the device will vibrate shortly when you move or capture a piece.';
+      'Az eszköz rezgést ad figurák mozgatásakor és ütésekor.';
 
   @override
   String get mobileSettingsTab => 'Beállítás';
@@ -224,17 +225,17 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSystemColors => 'Rendszerszínek';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Érints ide a játékhoz.';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileTheme => 'Megjelenés';
 
   @override
   String get mobileToolsTab => 'Eszközök';
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'A $param variáns nem támogatott ebben a verzióban.';
   }
 
   @override
@@ -244,7 +245,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileWatchTab => 'Néznivaló';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Üdvözlünk a Lichess alkalmazásban!';
 
   @override
   String get activityActivity => 'Aktivitás';

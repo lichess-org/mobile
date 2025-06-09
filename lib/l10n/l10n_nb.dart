@@ -22,7 +22,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileAreYouSure => 'Er du sikker?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Brettinnstillinger';
 
   @override
   String get mobileCancelTakebackOffer => 'Avbryt tilbud om å angre';
@@ -41,19 +41,19 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'God kveld, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'God kveld';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'God dag, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'God dag';
 
   @override
   String get mobileHideVariation => 'Skjul variant';
@@ -77,7 +77,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileOkButton => 'Ok';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Over brettet';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Venstre';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Høyre';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Forstørr brikker når de dras';
@@ -123,7 +123,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Klokkeposisjon';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -233,7 +233,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Varianten $param støttes ikke i denne versjonen.';
   }
 
   @override

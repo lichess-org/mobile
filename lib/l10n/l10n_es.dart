@@ -9,11 +9,11 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Preferencias de la cuenta';
 
   @override
   String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your Lichess account and will be used across all devices.';
+      'Estas preferencias se aplican a tu cuenta de Lichess y se usarán en todos los dispositivos.';
 
   @override
   String get mobileAllGames => 'Todas las partidas';
@@ -22,7 +22,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileAreYouSure => '¿Estás seguro?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Configuración del tablero';
 
   @override
   String get mobileCancelTakebackOffer => 'Cancelar oferta de deshacer movimiento';
@@ -41,19 +41,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Buenas tardes, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Buenas tardes';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Buen día, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Buen día';
 
   @override
   String get mobileHideVariation => 'Ocultar variación';
@@ -77,7 +77,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileOkButton => 'Aceptar';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Sobre el tablero';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'A la izquierda';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'A la derecha';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Aumentar la pieza arrastrada';
@@ -125,7 +125,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Posición del reloj';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -235,7 +235,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'La variante $param no es compatible con esta versión.';
   }
 
   @override

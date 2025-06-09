@@ -7,7 +7,6 @@
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Padam langkah disimpan</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Sertai permainan</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Maklum balas</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Hai, %s</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Sembunyikan variasi</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Tab Utama</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Penstrim langsung</string>
@@ -15,7 +14,10 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Tiada hasil</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Anda tidak ikut mana-mana pengguna.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Atas papan</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Pemain dengan \"%s\"</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Kiri</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Kanan</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">membesarkan sekeping diseret</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Adakah anda ingin mengakhiri larian ini?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Tiada apa-apa untuk ditunjukkan, sila ubah penapis</string>
@@ -25,6 +27,12 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Mainkan teka-teki dari bukaan kegemaran anda, atau pilih tema.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Teka-terki</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Carian terkini</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Maklum balas haptik</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Mod Imersif</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Kedudukan jam</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Mod Imersif</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Tetapan</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Kongsi PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Kongsi URL permainan</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Peralatan</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variasi %s tidak disokong dalam versi ini.</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Tonton</string>
 </resources>

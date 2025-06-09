@@ -77,7 +77,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileOkButton => 'U redu';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Igraj bez mreže, preko uređaja';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Lijevo';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Desno';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Povećaj figuru koja se vuče';
@@ -125,7 +125,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Pozicija sata';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -235,7 +235,7 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Varijanta $param nije podržana u ovoj verziji.';
   }
 
   @override

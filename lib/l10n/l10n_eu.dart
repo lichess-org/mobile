@@ -77,7 +77,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileOkButton => 'Ados';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Taula gainean';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Ezkerra';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Eskuma';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Handitu arrastatutako pieza';
@@ -124,7 +124,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Erlojuaren posizioa';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -234,7 +234,7 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return '$param aldaera ezin da erabili bertsio honetan.';
   }
 
   @override

@@ -77,7 +77,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileOkButton => 'У реду';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Преко табле';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -2436,22 +2436,22 @@ class AppLocalizationsSr extends AppLocalizations {
   String get pawnMove => 'Потез пешаком';
 
   @override
-  String get capture => 'Једење';
+  String get capture => 'Узимање';
 
   @override
-  String get close => 'Затворите';
+  String get close => 'Затвори';
 
   @override
-  String get winning => 'Добија';
+  String get winning => 'Побеђује';
 
   @override
   String get losing => 'Губи';
 
   @override
-  String get drawn => 'Реми';
+  String get drawn => 'Ремизован';
 
   @override
-  String get unknown => 'Не зна се';
+  String get unknown => 'Непознато';
 
   @override
   String get database => 'База података';
@@ -2468,11 +2468,11 @@ class AppLocalizationsSr extends AppLocalizations {
   String get recentGames => 'Недавне партије';
 
   @override
-  String get topGames => 'Најбоље партије';
+  String get topGames => 'Партије највишег рејтинга';
 
   @override
   String masterDbExplanation(String param1, String param2, String param3) {
-    return 'Два милиона партија на табли $param1+ ФИДЕ рангираних играча од $param2. до $param3.';
+    return 'Партије преко табле од $param1+ ФИДЕ рејтованих играча из $param2. до $param3.';
   }
 
   @override
@@ -2480,14 +2480,14 @@ class AppLocalizationsSr extends AppLocalizations {
       'Заокружен DTZ50, на основу броја полупотеза до следећег узимања фигуре или потеза пешаком';
 
   @override
-  String get noGameFound => 'Партија није нађена';
+  String get noGameFound => 'Ниједна партија нађена';
 
   @override
   String get maxDepthReached => 'Достигнут максимални број потеза!';
 
   @override
   String get maybeIncludeMoreGamesFromThePreferencesMenu =>
-      'Можда укључите више партија у менију за подешавања?';
+      'Можда укључи више партија из менија за префенсе?';
 
   @override
   String get openings => 'Отварања';
@@ -2508,10 +2508,10 @@ class AppLocalizationsSr extends AppLocalizations {
       'Одиграј први потез који сугерише претраживач отварања/завршница';
 
   @override
-  String get winPreventedBy50MoveRule => 'Добитак спречен правилом о 50 потеза';
+  String get winPreventedBy50MoveRule => 'Победа спречена правилом 50 потеза';
 
   @override
-  String get lossSavedBy50MoveRule => 'Пораз спречен правилом о 50 потеза';
+  String get lossSavedBy50MoveRule => 'Пораз спречен правилом 50 потеза';
 
   @override
   String get winOr50MovesByPriorMistake => 'Победа или 50 потеза на основу претходне грешке';
@@ -2524,7 +2524,7 @@ class AppLocalizationsSr extends AppLocalizations {
       'Победа/пораз су гарантовани једино ако се после последњег узимања фигуре или потеза пешаком следи препоручена основна табела и то због могућег заокруживања DTZ вредности у Syzygy osnovnim tabelama.';
 
   @override
-  String get allSet => 'Све је спремно!';
+  String get allSet => 'Све спремно!';
 
   @override
   String get importPgn => 'Унеси PGN';
@@ -2612,7 +2612,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Придружио се $param';
+    return 'Придружио/ла се $param';
   }
 
   @override
@@ -3004,7 +3004,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get thisAccountViolatedTos => 'Овај налог није поштовао Lichess услове коришћења';
 
   @override
-  String get openingExplorerAndTablebase => 'Претраживач отварања & база података';
+  String get openingExplorerAndTablebase => 'Претраживач отварања и база позиција у завршници';
 
   @override
   String get takeback => 'Враћање потеза';
@@ -3034,10 +3034,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get blackAcceptsTakeback => 'Црни прихвата враћање потеза';
 
   @override
-  String get whiteCancelsTakeback => 'Бели одустаје од враћања потеза';
+  String get whiteCancelsTakeback => 'Бели отказује враћање потеза';
 
   @override
-  String get blackCancelsTakeback => 'Црни одустаје од враћања потеза';
+  String get blackCancelsTakeback => 'Црни отказује враћање потеза';
 
   @override
   String get yourOpponentProposesATakeback => 'Твој противник предлаже враћање потеза';
@@ -4945,9 +4945,9 @@ class AppLocalizationsSr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Мат у $count полу-потеза',
-      few: 'Мат у $count полу-потеза',
-      one: 'Мат у $count полу-потезу',
+      other: 'Мат у $count полупотеза',
+      few: 'Мат у $count полупотеза',
+      one: 'Мат у $count полупотез',
     );
     return '$_temp0';
   }

@@ -77,7 +77,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileOkButton => 'Добра';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'За дошкай';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Злева';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Зправа';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
@@ -123,7 +123,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Размяшчэнне гадзінніка';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -196,10 +196,10 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSettingsTab => 'Налады';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Падзяліцца PGN';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Падзяліцца спасылкай на гульню';
 
   @override
   String get mobileSharePositionAsFEN => 'Share position as FEN';
@@ -233,14 +233,14 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Варыянт $param не падтрымліваецца гэтай версіяй.';
   }
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Назіраць';
 
   @override
   String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';

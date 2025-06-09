@@ -530,6 +530,7 @@ class _StandingControls extends ConsumerWidget {
           onLongPress: state.hasPreviousPage
               ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
               : null,
+          // TODO l10n
           semanticsLabel: 'Previous',
           icon: const Icon(Icons.chevron_left),
         ),

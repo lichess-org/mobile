@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Домув</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">За дощков</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Злїва</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Зправа</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Задачі</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Місто годинкы</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Подїлити ся PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Подїлити ся одкликованьом бавкы</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Варіант %s не поддержує ся у сюв верзії.</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Позирати</string>
+</resources>

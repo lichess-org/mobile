@@ -96,7 +96,7 @@ class TournamentController extends _$TournamentController {
     _reload(standingsPage: 1);
   }
 
-  int _pageOf(int page) => page ~/ kStandingsPageSize + 1;
+  int _pageOf(int rank) => ((rank - 1) ~/ kStandingsPageSize) + 1;
 
   void loadLastStandingsPage() {
     if (state.hasValue) {

@@ -77,7 +77,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileOkButton => 'ΟΚ';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Παιχνίδι χωρίς σύνδεση';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Αριστερά';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Δεξιά';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Μεγέθυνση του επιλεγμένου κομματιού';
@@ -125,7 +125,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Θέση ρολογιού';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -235,7 +235,7 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Η παραλλαγή $param δεν υποστηρίζεται σε αυτήν την έκδοση.';
   }
 
   @override

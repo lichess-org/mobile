@@ -77,7 +77,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileOkButton => 'ОК';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Двама над дъската';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Ляво';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Дясно';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
@@ -123,7 +123,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Позиция на часовника';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -233,7 +233,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Вариант $param не се поддържа в тази версия.';
   }
 
   @override

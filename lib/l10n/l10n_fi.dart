@@ -9,11 +9,11 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Käyttäjätunnuksen asetukset';
 
   @override
   String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your Lichess account and will be used across all devices.';
+      'Nämä asetukset tallentuvat Lichess-tunnukseesi ja tulevat käyttöön kaikilla laitteilla.';
 
   @override
   String get mobileAllGames => 'Kaikki pelit';
@@ -22,7 +22,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileAreYouSure => 'Oletko varma?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Laudan asetukset';
 
   @override
   String get mobileCancelTakebackOffer => 'Peruuta siirron peruutuspyyntö';
@@ -77,7 +77,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Kaveria vastaan offline-tilassa';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Vasemmalla';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Oikealla';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Suurenna vedettävä nappula';
@@ -121,25 +121,25 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileRecentSearches => 'Viimeisimmät haut';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Poista kirjanmerkki';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Kellon sijainti';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Vedetyn nappulan kohde';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Ympyrä';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Neliö';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Etusivun pienohjelmat';
 
   @override
   String get mobileSettingsImmersiveMode => 'Kokoruututila';
@@ -149,7 +149,7 @@ class AppLocalizationsFi extends AppLocalizations {
       'Piilota laitteen käyttöliittymä pelatessasi. Valitse tämä, jos laitteesi navigointieleet näytön laidoilla ovat sinulle häiriöksi. Asetus vaikuttaa peli- ja tehtävänäkymiin.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Lyödyt nappulat';
 
   @override
   String get mobileSettingsPickAnImage => 'Pick an image';
@@ -234,7 +234,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Variantti $param ei ole tuettu tässä versiossa.';
   }
 
   @override

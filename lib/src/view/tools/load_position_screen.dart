@@ -66,7 +66,9 @@ class _BodyState extends State<_Body> {
               child: TextField(
                 maxLines: 500,
                 decoration: InputDecoration(
-                  hintText: context.l10n.pasteTheFenStringHere,
+                  hintText:
+                      '${context.l10n.pasteTheFenStringHere}\n\u2014\n${context.l10n.pasteThePgnStringHere}',
+                  hintMaxLines: 3,
                   suffixIcon: const Icon(Icons.paste),
                 ),
                 controller: _controller,

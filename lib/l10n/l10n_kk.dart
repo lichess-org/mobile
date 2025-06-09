@@ -77,7 +77,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileOkButton => 'Иә';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Тақтаны жаю';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Сол';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Оң';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Тасты жылжытқанда үлкейту';
@@ -122,7 +122,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Сағат орны';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -232,7 +232,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Бұл нұсқада $param шахмат түрі қамтылмаған.';
   }
 
   @override

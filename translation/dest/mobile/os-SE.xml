@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Этюдтæ</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN фæхай кæнын</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Фæхай кæнын хъазтмæ дæнцæг</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Æркаст</string>
+</resources>

@@ -41,19 +41,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return '晚上好， $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => '晚上好';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return '日安， $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => '日安';
 
   @override
   String get mobileHideVariation => '隐藏变着';
@@ -77,7 +77,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOkButton => '好';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => '面对面';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => '左侧';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => '右侧';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => '放大正在拖动的棋子';
@@ -121,7 +121,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => '棋钟位置';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -231,7 +231,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return '此版本不支持变体 $param.';
   }
 
   @override
@@ -5875,9 +5875,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileOkButton => '確認';
 
   @override
+  String get mobileOverTheBoard => '面對面';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return '名稱包含「$param」的玩家';
   }
+
+  @override
+  String get mobilePositionLeft => '靠左';
+
+  @override
+  String get mobilePositionRight => '靠右';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => '放大被拖曳的棋子';
@@ -5905,6 +5914,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileRecentSearches => '搜尋紀錄';
+
+  @override
+  String get mobileSettingsClockPosition => '棋鐘位置';
 
   @override
   String get mobileSettingsImmersiveMode => '沉浸模式';
@@ -5944,6 +5956,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileToolsTab => '工具';
+
+  @override
+  String mobileUnsupportedVariant(String param) {
+    return '此版本不支援變體 $param.';
+  }
 
   @override
   String get mobileWaitingForOpponentToJoin => '正在等待對手加入...';

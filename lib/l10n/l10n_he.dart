@@ -77,7 +77,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileOkButton => 'בסדר';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'שח-חי (על גבי לוח!)';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'שמאל';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'ימין';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'הגדלת הכלי הנגרר';
@@ -123,7 +123,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'מיקום השעון';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -233,7 +233,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return '$param לא נתמך בגרסה זו.';
   }
 
   @override
