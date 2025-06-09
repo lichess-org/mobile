@@ -57,9 +57,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
     userId: widget.user?.id,
   );
 
-  final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnTvScreen');
-  final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnTvScreen');
-
   @override
   void initState() {
     super.initState();
@@ -112,7 +109,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                         side: Side.black,
                         clock: gameState.game.clock != null
                             ? CountdownClockBuilder(
-                                key: _blackClockKey,
                                 timeLeft: gameState.game.clock!.black,
                                 delay:
                                     gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
@@ -133,7 +129,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                         side: Side.white,
                         clock: gameState.game.clock != null
                             ? CountdownClockBuilder(
-                                key: _whiteClockKey,
                                 timeLeft: gameState.game.clock!.white,
                                 clockUpdatedAt: gameState.game.clock!.at,
                                 delay:
