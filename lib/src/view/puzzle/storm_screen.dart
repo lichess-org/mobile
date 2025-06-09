@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_layout.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -115,7 +116,7 @@ class _ErrorBody extends ConsumerWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          _BoardWidget(
+                          BoardWidget(
                             size: boardSize,
                             fen: kEmptyBoardFEN,
                             orientation: Side.white,
@@ -140,7 +141,7 @@ class _ErrorBody extends ConsumerWidget {
                           padding: isTablet
                               ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
                               : EdgeInsets.zero,
-                          child: _BoardWidget(
+                          child: BoardWidget(
                             size: boardSize,
                             fen: kEmptyBoardFEN,
                             orientation: Side.white,
@@ -281,7 +282,7 @@ class _BodyState extends ConsumerState<_Body> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  _BoardWidget(
+                                  BoardWidget(
                                     boardKey: _boardKey,
                                     size: boardSize,
                                     fen: stormState.position.fen,
@@ -401,7 +402,7 @@ class _BodyState extends ConsumerState<_Body> {
                                           horizontal: kTabletBoardTableSidePadding,
                                         )
                                       : EdgeInsets.zero,
-                                  child: _BoardWidget(
+                                  child: BoardWidget(
                                     boardKey: _boardKey,
                                     size: boardSize,
                                     fen: stormState.position.fen,
@@ -479,80 +480,6 @@ class _BodyState extends ConsumerState<_Body> {
     setState(() {
       userShapes = ISet();
     });
-  }
-}
-
-class _BoardWidget extends StatelessWidget {
-  const _BoardWidget({
-    this.boardKey,
-    required this.size,
-    required this.fen,
-    required this.orientation,
-    required this.gameData,
-    this.lastMove,
-    required this.settings,
-    this.error,
-  });
-
-  final double size;
-  final String fen;
-  final Side orientation;
-  final GameData? gameData;
-  final Move? lastMove;
-  final ChessboardSettings settings;
-  final String? error;
-  final GlobalKey? boardKey;
-
-  @override
-  Widget build(BuildContext context) {
-    final board = Chessboard(
-      key: boardKey,
-      size: size,
-      fen: fen,
-      orientation: orientation,
-      game: gameData,
-      lastMove: lastMove,
-      settings: settings,
-    );
-
-    if (error != null) {
-      return SizedBox.square(
-        dimension: size,
-        child: Stack(
-          children: [
-            board,
-            _ErrorWidget(errorMessage: error!, boardSize: size),
-          ],
-        ),
-      );
-    }
-
-    return board;
-  }
-}
-
-class _ErrorWidget extends StatelessWidget {
-  const _ErrorWidget({required this.errorMessage, required this.boardSize});
-  final double boardSize;
-  final String errorMessage;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: boardSize,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            ),
-            child: Padding(padding: const EdgeInsets.all(10.0), child: Text(errorMessage)),
-          ),
-        ),
-      ),
-    );
   }
 }
 
