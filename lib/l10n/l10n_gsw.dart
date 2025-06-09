@@ -77,7 +77,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Schpill offline gäge en Mänsch';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Links';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Rächts';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Vegrösserig vu de zogene Figur';
@@ -124,7 +124,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Position vode Uhr';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -234,7 +234,7 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Variante $param wird in dere Version nöd underschtützt.';
   }
 
   @override

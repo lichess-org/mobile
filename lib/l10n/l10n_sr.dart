@@ -77,7 +77,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileOkButton => 'У реду';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Преко табле';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -2436,22 +2436,22 @@ class AppLocalizationsSr extends AppLocalizations {
   String get pawnMove => 'Потез пешаком';
 
   @override
-  String get capture => 'Једење';
+  String get capture => 'Узимање';
 
   @override
-  String get close => 'Затворите';
+  String get close => 'Затвори';
 
   @override
-  String get winning => 'Добија';
+  String get winning => 'Побеђује';
 
   @override
   String get losing => 'Губи';
 
   @override
-  String get drawn => 'Реми';
+  String get drawn => 'Ремизован';
 
   @override
-  String get unknown => 'Не зна се';
+  String get unknown => 'Непознато';
 
   @override
   String get database => 'База података';
@@ -2612,7 +2612,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Придружио се $param';
+    return 'Придружио/ла се $param';
   }
 
   @override
@@ -3034,10 +3034,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get blackAcceptsTakeback => 'Црни прихвата враћање потеза';
 
   @override
-  String get whiteCancelsTakeback => 'Бели одустаје од враћања потеза';
+  String get whiteCancelsTakeback => 'Бели отказује враћање потеза';
 
   @override
-  String get blackCancelsTakeback => 'Црни одустаје од враћања потеза';
+  String get blackCancelsTakeback => 'Црни отказује враћање потеза';
 
   @override
   String get yourOpponentProposesATakeback => 'Твој противник предлаже враћање потеза';

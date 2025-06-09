@@ -77,7 +77,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileOkButton => 'ठीक है';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'बोर्ड पर';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'बाएँ';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'दाएँ';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'घसीटते वक्त पीस बड़ा दिखाएं';
@@ -125,7 +125,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'घड़ी के लिए स्थान';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';

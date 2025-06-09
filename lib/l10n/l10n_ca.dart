@@ -77,7 +77,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileOkButton => 'D\'acord';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Juga sobre el tauler';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Esquerra';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Dreta';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Magnifica la peça arrossegada';
@@ -124,7 +124,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Posició del rellotge';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -234,7 +234,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'La variant $param no és compatible amb aquesta versió.';
   }
 
   @override

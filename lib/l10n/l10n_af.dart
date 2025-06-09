@@ -77,7 +77,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileOkButton => 'Reg';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Oor die bord';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Links';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Reg';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Vergroot gesleepte stuk';
@@ -125,7 +125,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Horlosie posisie';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -235,7 +235,7 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Variant $param word nie in hierdie weergawe ondersteun nie.';
   }
 
   @override

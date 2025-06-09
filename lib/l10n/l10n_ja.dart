@@ -77,7 +77,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'オフライン（2人対戦）';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => '左';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => '右';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'ドラッグ中の駒を拡大';
@@ -121,7 +121,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => '時計の位置';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -231,7 +231,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return '$param はこのバージョンでは対応していません.';
   }
 
   @override

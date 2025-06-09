@@ -77,7 +77,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Trên bàn cờ';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Trái';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Phải';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Phóng to quân cờ được kéo';
@@ -124,7 +124,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Vị trí đồng hồ';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -234,7 +234,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Biến thể $param không được hỗ trợ trong phiên bản này.';
   }
 
   @override

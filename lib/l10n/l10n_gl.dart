@@ -9,11 +9,11 @@ class AppLocalizationsGl extends AppLocalizations {
   AppLocalizationsGl([String locale = 'gl']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Preferencias da conta';
 
   @override
   String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your Lichess account and will be used across all devices.';
+      'Estas preferencias aplicaranse á túa conta de Lichess e serán empregadas en todos os teus dispositivos.';
 
   @override
   String get mobileAllGames => 'Todas as partidas';
@@ -22,7 +22,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileAreYouSure => 'Estás seguro?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Preferencias de taboleiro';
 
   @override
   String get mobileCancelTakebackOffer => 'Cancelar a proposta de cambio';
@@ -41,19 +41,19 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Saúdos, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Saúdos';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Bos días, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Bos días';
 
   @override
   String get mobileHideVariation => 'Ocultar variantes';
@@ -77,7 +77,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Xogar nun taboleiro virtual';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Esquerda';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Dereita';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Ampliar a peza arrastrada';
@@ -123,25 +123,25 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileRecentSearches => 'Procuras recentes';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Eliminar marcador';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Posición do reloxo';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Axustes preestablecidos';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Círculo';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Cadrado';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Trebellos da páxina de inicio';
 
   @override
   String get mobileSettingsImmersiveMode => 'Pantalla completa';
@@ -151,49 +151,49 @@ class AppLocalizationsGl extends AppLocalizations {
       'Oculta a Interface de Usuario durante o xogo. Emprégao se che amolan as iconas de navegación do sistema nos bordos da pantalla. Aplícase ás pantallas das partidas e dos crebacabezas.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Pezas capturadas';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Selecciona unha imaxe';
 
   @override
   String get mobileSettingsPickAnImageHelp =>
-      'Custom background works only in dark mode. A dark image is recommended.';
+      'O fondo personalizado só funciona no modo escuro. Recoméndase usar unha imaxe escura.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Esfumar a imaxe';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Agochar o taboleiro';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Amosar o taboleiro';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Desliza para amosar outros fondos';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Tocar ou arrastrar';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tocar dúas casas';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Debuxo de figuras';
 
   @override
   String get mobileSettingsShapeDrawingSubtitle =>
-      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+      'Debuxar figuras usando dous dedos: poñer un dedo sobre unha casa baleira e arrastrar o outro dedo pra debuxar unha figura.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Amosar o bordo';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Resposta táctil';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle =>
-      'When enabled, the device will vibrate shortly when you move or capture a piece.';
+      'Se está activada, o dispositivo vibrará ó moveres ou capturares unha peza.';
 
   @override
   String get mobileSettingsTab => 'Axustes';
@@ -226,7 +226,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileSystemColors => 'Cores do sistema';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Pulsa aquí para comezar a xogar ao xadrez.';
 
   @override
   String get mobileTheme => 'Tema';
@@ -236,7 +236,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'A variante $param non é compatíbel con esta versión.';
   }
 
   @override
@@ -246,7 +246,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileWatchTab => 'Ver';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Benvido á aplicación de Lichess!';
 
   @override
   String get activityActivity => 'Actividade';
@@ -5848,7 +5848,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get studyClearAllCommentsInThisChapter =>
-      'Borrar todos os comentarios, símbolos e marcas do capítulo';
+      'Borrar todos os comentarios, símbolos e figuras do capítulo';
 
   @override
   String get studyRightUnderTheBoard => 'Xusto debaixo do taboleiro';

@@ -77,7 +77,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileOkButton => 'Bone';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Ludi fizike kun aliulo';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Maldekstra';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Dekstra';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Pligrandigi trenitan ŝakpecon';
@@ -125,7 +125,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Horloĝa pozicio';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -235,7 +235,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Varianto $param ne estas subtenata en ĉi tiu versio.';
   }
 
   @override

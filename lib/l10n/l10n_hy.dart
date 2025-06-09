@@ -59,7 +59,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileHideVariation => 'Hide variation';
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Գլխավոր էջ';
 
   @override
   String get mobileLiveStreamers => 'Live streamers';
@@ -74,10 +74,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileNotFollowingAnyUser => 'You are not following any user.';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'Լավ';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Երկուսով խաղատախտակի առջև';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Ձախից';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Աջից';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
@@ -114,7 +114,7 @@ class AppLocalizationsHy extends AppLocalizations {
       'Play puzzles from your favorite openings, or choose a theme.';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'խնդիրներ';
 
   @override
   String get mobileRecentSearches => 'Recent searches';
@@ -123,7 +123,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Ժամացույցի դիրքը';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -196,10 +196,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileSettingsTab => 'Settings';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Տարածել PGN -ն';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Տարածել խաղի հղումը';
 
   @override
   String get mobileSharePositionAsFEN => 'Share position as FEN';
@@ -229,18 +229,18 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileTheme => 'Theme';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Գործիքներ';
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return '$param տարբերակն այս թարմացումը չի ապահովում.';
   }
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Դիտել';
 
   @override
   String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';

@@ -77,7 +77,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileOkButton => 'Гаразд';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'За дошкою';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Ліворуч';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Праворуч';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Збільшувати розмір фігури при перетягуванні';
@@ -124,7 +124,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Розташування годинника';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -146,7 +146,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+      'Приховати інтерфейс системи під час гри. Використовуйте, якщо вас турбують навігаційні жести системи по краях екрану. Застосовується до екранів гри та задач.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
@@ -234,7 +234,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Варіант $param не підтримується у цій версії.';
   }
 
   @override

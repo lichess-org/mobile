@@ -77,7 +77,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Tábla szimulálása';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Bal';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Jobb';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Mozdított bábu nagyítása';
@@ -124,7 +124,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Óra helye';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -234,7 +234,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'A $param variáns nem támogatott ebben a verzióban.';
   }
 
   @override

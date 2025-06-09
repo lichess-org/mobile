@@ -77,7 +77,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Jogar offline contra um amigo';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Esquerdo';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Direito';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Ampliar peça arrastada';
@@ -124,7 +124,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Posição do relógio';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -234,7 +234,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'A variante $param não é suportada nesta versão.';
   }
 
   @override
@@ -6482,9 +6482,18 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileOkButton => 'Ok';
 
   @override
+  String get mobileOverTheBoard => 'Xadrez OTB';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Usuários com \"$param\"';
   }
+
+  @override
+  String get mobilePositionLeft => 'Esquerda';
+
+  @override
+  String get mobilePositionRight => 'Direita';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Ampliar peça segurada';
@@ -6517,6 +6526,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileRecentSearches => 'Pesquisas recentes';
+
+  @override
+  String get mobileSettingsClockPosition => 'Posição do relógio';
 
   @override
   String get mobileSettingsImmersiveMode => 'Modo imersivo';
@@ -6560,6 +6572,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileToolsTab => 'Ferramentas';
+
+  @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variante $param não é suportada nesta versão.';
+  }
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Esperando por um oponente...';

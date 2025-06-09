@@ -77,7 +77,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOkButton => 'Tamam';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Sanal tahta';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Sol';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Sağ';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Sürüklenen parçayı büyüt';
@@ -125,7 +125,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Saat pozisyonu';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -235,7 +235,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return '$param varyantı bu versiyonda desteklenmiyor.';
   }
 
   @override

@@ -9,7 +9,7 @@ class AppLocalizationsPl extends AppLocalizations {
   AppLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Ustawienia konta';
 
   @override
   String get mobileAccountPreferencesHelp =>
@@ -22,7 +22,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileAreYouSure => 'Jesteś pewien?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Ustawienia szachownicy';
 
   @override
   String get mobileCancelTakebackOffer => 'Anuluj prośbę cofnięcia ruchu';
@@ -41,11 +41,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Dobry wieczór, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Dobry wieczór';
 
   @override
   String mobileGoodDay(String param) {
@@ -53,7 +53,7 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Miłego dnia';
 
   @override
   String get mobileHideVariation => 'Ukryj wariant';
@@ -77,7 +77,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Ze znajomym';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Z lewej strony';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Z prawej strony';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Powiększ przeciąganą bierkę';
@@ -120,10 +120,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileRecentSearches => 'Ostatnio wyszukiwane';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Usuń zakładkę';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Położenie zegara';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -132,10 +132,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Kółko';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Kwadrat';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -148,26 +148,26 @@ class AppLocalizationsPl extends AppLocalizations {
       'Ukryj interfejs użytkownika podczas gry. Włącz tę funkcjonalność, jeśli rozpraszają Cię elementy nawigacji systemu na krawędziach ekranu. Działa podczas rozgrywania partii oraz rozwiązywania zadań szachowych.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Zbite bierki';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Wybierz obraz';
 
   @override
   String get mobileSettingsPickAnImageHelp =>
-      'Custom background works only in dark mode. A dark image is recommended.';
+      'Własne tło działa tylko w trybie ciemnym. Zalecany jest ciemny obraz.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Rozmyj obraz';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Ukryj szachownicę';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Pokaż szachownicę';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Przesuń, aby wyświetlić inne tła';
 
   @override
   String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
@@ -233,7 +233,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Wariant $param nie jest obsługiwany w tej wersji.';
   }
 
   @override
@@ -243,7 +243,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileWatchTab => 'Oglądaj';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Witaj w aplikacji Lichess!';
 
   @override
   String get activityActivity => 'Aktywność';

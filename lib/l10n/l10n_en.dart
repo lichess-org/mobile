@@ -6434,9 +6434,18 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOverTheBoard => 'Over the board';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Players with \"$param\"';
   }
+
+  @override
+  String get mobilePositionLeft => 'Left';
+
+  @override
+  String get mobilePositionRight => 'Right';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
@@ -6466,6 +6475,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get mobileRecentSearches => 'Recent searches';
+
+  @override
+  String get mobileSettingsClockPosition => 'Clock position';
 
   @override
   String get mobileSettingsImmersiveMode => 'Immersive mode';
@@ -6509,6 +6521,11 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get mobileToolsTab => 'Tools';
+
+  @override
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param is not supported in this version.';
+  }
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
