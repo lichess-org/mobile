@@ -49,7 +49,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String mobileGoodDay(String param) {
-    return 'Bonjour, $param';
+    return 'Bonjour $param';
   }
 
   @override

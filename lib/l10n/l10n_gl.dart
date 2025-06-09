@@ -102,7 +102,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get mobilePuzzleStormNothingToShow =>
-      'Non hai nada que amosar. Primeiro xoga algunha quenda de Puzzle Storm.';
+      'Non aparece nada. Primeiro xoga algunha quenda de Puzzle Storm.';
 
   @override
   String get mobilePuzzleStormSubtitle =>
@@ -129,10 +129,10 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileSettingsClockPosition => 'Posición do reloxo';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Axustes preestablecidos';
+  String get mobileSettingsCustomBackgroundPresets => 'Predeterminados';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Destino da peza arrastrada';
 
   @override
   String get mobileSettingsDraggedTargetCircle => 'Círculo';
@@ -170,7 +170,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'Amosar o taboleiro';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Desliza para amosar outros fondos';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Arrastrar para amosar outros fondos';
 
   @override
   String get mobileSettingsPieceShiftMethodEither => 'Tocar ou arrastrar';
@@ -211,13 +211,13 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileSharePuzzle => 'Compartir este crebacabezas';
 
   @override
-  String get mobileShowComments => 'Amosar comentarios';
+  String get mobileShowComments => 'Amosar os comentarios';
 
   @override
   String get mobileShowResult => 'Amosar o resultado';
 
   @override
-  String get mobileShowVariations => 'Amosar variantes';
+  String get mobileShowVariations => 'Amosar as variantes';
 
   @override
   String get mobileSomethingWentWrong => 'Algo foi mal.';
@@ -2213,7 +2213,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get gameOver => 'Partida rematada';
 
   @override
-  String get waitingForOpponent => 'Agardando un rival';
+  String get waitingForOpponent => 'Agardando polo rival';
 
   @override
   String get orLetYourOpponentScanQrCode => 'Ou deixa que o teu rival escanee este código QR';
@@ -4466,7 +4466,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get solution => 'Solución';
 
   @override
-  String get waitingForAnalysis => 'Agardando análise';
+  String get waitingForAnalysis => 'Agardando pola análise';
 
   @override
   String get noMistakesFoundForWhite => 'Non hai erros das brancas';

@@ -11,7 +11,7 @@
   "mobileFeedbackButton": "Commentaires",
   "mobileGoodEvening": "Bonsoir {param}",
   "mobileGoodEveningWithoutName": "Bonsoir",
-  "mobileGoodDay": "Bonjour, {param}",
+  "mobileGoodDay": "Bonjour {param}",
   "mobileGoodDayWithoutName": "Bonjour",
   "mobileHideVariation": "Masquer les variantes",
   "mobileHomeTab": "Accueil",

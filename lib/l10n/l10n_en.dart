@@ -6392,10 +6392,20 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   AppLocalizationsEnUs() : super('en_US');
 
   @override
+  String get mobileAccountPreferences => 'Account settings';
+
+  @override
+  String get mobileAccountPreferencesHelp =>
+      'These settings are applied to your Lichess account and will be used across all devices.';
+
+  @override
   String get mobileAllGames => 'All games';
 
   @override
   String get mobileAreYouSure => 'Are you sure?';
+
+  @override
+  String get mobileBoardSettings => 'Board settings';
 
   @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
@@ -6411,6 +6421,22 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get mobileFeedbackButton => 'Feedback';
+
+  @override
+  String mobileGoodEvening(String param) {
+    return 'Good evening, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Good evening';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Good day, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Good day';
 
   @override
   String get mobileHideVariation => 'Hide variation';
@@ -6477,7 +6503,25 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileRecentSearches => 'Recent searches';
 
   @override
+  String get mobileRemoveBookmark => 'Remove the bookmark';
+
+  @override
   String get mobileSettingsClockPosition => 'Clock position';
+
+  @override
+  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+
+  @override
+  String get mobileSettingsDraggedPieceTarget => 'Target of dragged piece';
+
+  @override
+  String get mobileSettingsDraggedTargetCircle => 'Circle';
+
+  @override
+  String get mobileSettingsDraggedTargetSquare => 'Square';
+
+  @override
+  String get mobileSettingsHomeWidgets => 'Home widgets';
 
   @override
   String get mobileSettingsImmersiveMode => 'Immersive mode';
@@ -6485,6 +6529,51 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
       'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+
+  @override
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Pieces captured';
+
+  @override
+  String get mobileSettingsPickAnImage => 'Choose an image';
+
+  @override
+  String get mobileSettingsPickAnImageHelp =>
+      'Custom background works only in dark mode. A dark image is recommended.';
+
+  @override
+  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+
+  @override
+  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+
+  @override
+  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+
+  @override
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+
+  @override
+  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+
+  @override
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+
+  @override
+  String get mobileSettingsShapeDrawing => 'Shape drawing';
+
+  @override
+  String get mobileSettingsShapeDrawingSubtitle =>
+      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+
+  @override
+  String get mobileSettingsShowBorder => 'Show border';
+
+  @override
+  String get mobileSettingsTouchFeedback => 'Touch feedback';
+
+  @override
+  String get mobileSettingsTouchFeedbackSubtitle =>
+      'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
   String get mobileSettingsTab => 'Settings';
@@ -6517,6 +6606,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileSystemColors => 'System colors';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+
+  @override
   String get mobileTheme => 'Theme';
 
   @override
@@ -6532,6 +6624,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Welcome to the Lichess app!';
 
   @override
   String get activityActivity => 'Activity';

@@ -6440,10 +6440,20 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   AppLocalizationsPtBr() : super('pt_BR');
 
   @override
+  String get mobileAccountPreferences => 'Preferências de conta';
+
+  @override
+  String get mobileAccountPreferencesHelp =>
+      'Essas preferências são aplicadas à sua conta Lichess e serão usadas em todos os dispositivos.';
+
+  @override
   String get mobileAllGames => 'Todos os jogos';
 
   @override
   String get mobileAreYouSure => 'Você tem certeza?';
+
+  @override
+  String get mobileBoardSettings => 'Configurações do tabuleiro';
 
   @override
   String get mobileCancelTakebackOffer => 'Cancelar oferta de revanche';
@@ -6459,6 +6469,22 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileFeedbackButton => 'Comentários';
+
+  @override
+  String mobileGoodEvening(String param) {
+    return 'Boa noite, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Boa noite';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Bom dia, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Bom dia';
 
   @override
   String get mobileHideVariation => 'Ocultar variante forçada';
@@ -6528,7 +6554,25 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileRecentSearches => 'Pesquisas recentes';
 
   @override
+  String get mobileRemoveBookmark => 'Remover favorito';
+
+  @override
   String get mobileSettingsClockPosition => 'Posição do relógio';
+
+  @override
+  String get mobileSettingsCustomBackgroundPresets => 'Predefinições';
+
+  @override
+  String get mobileSettingsDraggedPieceTarget => 'Alvo da peça arrastada';
+
+  @override
+  String get mobileSettingsDraggedTargetCircle => 'Círculo';
+
+  @override
+  String get mobileSettingsDraggedTargetSquare => 'Casa';
+
+  @override
+  String get mobileSettingsHomeWidgets => 'Widget da tela principal';
 
   @override
   String get mobileSettingsImmersiveMode => 'Modo imersivo';
@@ -6536,6 +6580,51 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
       'Ocultar a interface do sistema enquanto joga. Utilizo isso se você está incomodado pelos gestos de navegação do sistema nas bordas do sistema. Aplicada nas telas de partida e quebra-cabeças.';
+
+  @override
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Peças capturadas';
+
+  @override
+  String get mobileSettingsPickAnImage => 'Escolha uma imagem';
+
+  @override
+  String get mobileSettingsPickAnImageHelp =>
+      'Fundo personalizado só funciona no modo escuro. Recomenda-se uma imagem escura.';
+
+  @override
+  String get mobileSettingsPickAnImageBlur => 'Desfocar a imagem';
+
+  @override
+  String get mobileSettingsPickAnImageHideBoard => 'Ocultar tabuleiro';
+
+  @override
+  String get mobileSettingsPickAnImageShowBoard => 'Exibir tabuleiro';
+
+  @override
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Deslize para exibir outros fundos';
+
+  @override
+  String get mobileSettingsPieceShiftMethodEither => 'Toque ou arraste';
+
+  @override
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Toque em duas casas';
+
+  @override
+  String get mobileSettingsShapeDrawing => 'Ferramenta de desenho';
+
+  @override
+  String get mobileSettingsShapeDrawingSubtitle =>
+      'Desenhe formas usando dois dedos: mantenha um dedo em uma casa vazia e arraste outro dedo para desenhar uma forma.';
+
+  @override
+  String get mobileSettingsShowBorder => 'Mostrar a borda';
+
+  @override
+  String get mobileSettingsTouchFeedback => 'Feedback por toque';
+
+  @override
+  String get mobileSettingsTouchFeedbackSubtitle =>
+      'Quando habilitado, o dispositivo fará uma leve vibração quando você mover ou capturar uma peça.';
 
   @override
   String get mobileSettingsTab => 'Ajustes';
@@ -6568,6 +6657,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileSystemColors => 'Cores do sistema';
 
   @override
+  String get mobileTapHereToStartPlayingChess => 'Toque aqui para começar a jogar xadrez.';
+
+  @override
   String get mobileTheme => 'Tema';
 
   @override
@@ -6583,6 +6675,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileWatchTab => 'Assistir';
+
+  @override
+  String get mobileWelcomeToLichessApp => 'Bem-vindo ao aplicativo Lichess!';
 
   @override
   String get activityActivity => 'Atividade';

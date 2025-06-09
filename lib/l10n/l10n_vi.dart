@@ -9,11 +9,11 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Tùy chỉnh tài khoản';
 
   @override
   String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your Lichess account and will be used across all devices.';
+      'Các tùy chọn này được áp dụng cho tài khoản Lichess của bạn và sẽ được sử dụng trên tất cả các thiết bị.';
 
   @override
   String get mobileAllGames => 'Tất cả ván đấu';
@@ -22,7 +22,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileAreYouSure => 'Bạn chắc chứ?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Cài đặt bàn cờ';
 
   @override
   String get mobileCancelTakebackOffer => 'Hủy đề nghị đi lại';
@@ -41,19 +41,19 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Chào buổi tối, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Chào buổi tối';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Ngày mới tốt lành, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Ngày mới tốt lành';
 
   @override
   String get mobileHideVariation => 'Ẩn các biến';
@@ -121,25 +121,25 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileRecentSearches => 'Tìm kiếm gần đây';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Bỏ đánh dấu';
 
   @override
   String get mobileSettingsClockPosition => 'Vị trí đồng hồ';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Mẫu có sẵn';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Kéo quân cờ mục tiêu';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Hình tròn';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Hình vuông';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Tiện ích trang chủ';
 
   @override
   String get mobileSettingsImmersiveMode => 'Chế độ toàn màn hình';
@@ -149,49 +149,49 @@ class AppLocalizationsVi extends AppLocalizations {
       'Ẩn giao diện hệ thống trong khi chơi. Dùng tuỳ chọn này nếu bạn bị các cử chỉ điều hướng của hệ thống ở các cạnh của màn hình làm phiền. Áp dụng cho màn hình ván đấu và câu đố.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Quân đã ăn';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Chọn một ảnh';
 
   @override
   String get mobileSettingsPickAnImageHelp =>
-      'Custom background works only in dark mode. A dark image is recommended.';
+      'Hình nền tùy chỉnh chỉ hoạt động ở chế độ tối. Một hình ảnh tối được khuyến khích.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Làm mờ ảnh';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Ẩn bàn cờ';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Hiện bàn cờ';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Vuốt để xem các hình nền khác';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Nhấn hoặc kéo';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Nhấn 2 ô vuông';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Vẽ hình';
 
   @override
   String get mobileSettingsShapeDrawingSubtitle =>
-      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+      'Vẽ hình bằng hai ngón tay: giữ một ngón tay trên một hình vuông trống và kéo một ngón tay khác để vẽ một hình dạng.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Hiển thị đường viền';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Phản hồi khi chạm';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle =>
-      'When enabled, the device will vibrate shortly when you move or capture a piece.';
+      'Khi được bật, thiết bị sẽ rung trong thời gian ngắn khi bạn di chuyển hoặc ăn một quân cờ.';
 
   @override
   String get mobileSettingsTab => 'Cài đặt';
@@ -224,7 +224,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSystemColors => 'Màu hệ thống';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Nhấn vào đây để bắt đầu chơi cờ.';
 
   @override
   String get mobileTheme => 'Giao diện';
@@ -244,7 +244,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileWatchTab => 'Xem';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Chào mừng đến với ứng dụng Lichess!';
 
   @override
   String get activityActivity => 'Hoạt động';
