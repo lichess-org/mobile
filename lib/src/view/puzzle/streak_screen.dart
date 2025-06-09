@@ -63,7 +63,7 @@ class _Load extends ConsumerWidget {
     switch (streak) {
       case AsyncValue(:final error?, :final stackTrace):
         debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
-        return Center(child: PuzzleErrorBoardWidget(errorMessage: error.toString()));
+        return PuzzleErrorBoardWidget(errorMessage: error.toString());
       case AsyncValue(:final value?):
         return _Body(
           initialPuzzleContext: PuzzleContext(
@@ -110,6 +110,26 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
+    final gameData = boardPreferences.toGameData(
+      variant: Variant.standard,
+      position: puzzleState.currentPosition,
+      playerSide: puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
+          ? PlayerSide.none
+          : puzzleState.mode == PuzzleMode.view
+          ? PlayerSide.both
+          : puzzleState.pov == Side.white
+          ? PlayerSide.white
+          : PlayerSide.black,
+      promotionMove: puzzleState.promotionMove,
+      onMove: (move, {isDrop, captured}) {
+        ref.read(ctrlProvider.notifier).onUserMove(move);
+      },
+      onPromotionSelection: (role) {
+        ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+      },
+      premovable: null,
+    );
+
     final content = PopScope(
       canPop: widget.streak.index == 0 || widget.streak.finished,
       onPopInvokedWithResult: (bool didPop, _) async {
@@ -155,28 +175,6 @@ class _BodyState extends ConsumerState<_Body> {
                           onClearShapes: _onClearShapes,
                           newShapeColor: boardPreferences.shapeColor.color,
                         ),
-                      );
-
-                      final gameData = boardPreferences.toGameData(
-                        variant: Variant.standard,
-                        position: puzzleState.currentPosition,
-                        playerSide:
-                            puzzleState.mode == PuzzleMode.load ||
-                                puzzleState.currentPosition.isGameOver
-                            ? PlayerSide.none
-                            : puzzleState.mode == PuzzleMode.view
-                            ? PlayerSide.both
-                            : puzzleState.pov == Side.white
-                            ? PlayerSide.white
-                            : PlayerSide.black,
-                        promotionMove: puzzleState.promotionMove,
-                        onMove: (move, {isDrop, captured}) {
-                          ref.read(ctrlProvider.notifier).onUserMove(move);
-                        },
-                        onPromotionSelection: (role) {
-                          ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-                        },
-                        premovable: null,
                       );
 
                       if (orientation == Orientation.landscape) {

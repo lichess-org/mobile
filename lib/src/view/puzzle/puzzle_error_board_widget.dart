@@ -8,9 +8,9 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 
 class PuzzleErrorBoardWidget extends ConsumerWidget {
-  const PuzzleErrorBoardWidget({required this.errorMessage});
+  const PuzzleErrorBoardWidget({this.errorMessage});
 
-  final String errorMessage;
+  final String? errorMessage;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
