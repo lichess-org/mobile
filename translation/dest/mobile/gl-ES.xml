@@ -28,7 +28,7 @@
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Ampliar a peza arrastrada</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Queres rematar esta quenda?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Non aparece nada. Por favor, cambia os filtros</string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Non hai nada que amosar. Primeiro xoga algunha quenda de Puzzle Storm.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Non aparece nada. Primeiro xoga algunha quenda de Puzzle Storm.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Resolve tantos crebacabezas como sexa posible en 3 minutos.</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Perderás a túa secuencia actual e o teu resultado gardarase.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Resolve crebacabezas das túas aperturas favoritas ou elixe un tema.</string>
@@ -36,7 +36,8 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Procuras recentes</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Eliminar marcador</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Posición do reloxo</string>
-  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Axustes preestablecidos</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Predeterminados</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Destino da peza arrastrada</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Círculo</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Cadrado</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Trebellos da páxina de inicio</string>
@@ -48,7 +49,7 @@
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Esfumar a imaxe</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Agochar o taboleiro</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Amosar o taboleiro</string>
-  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Desliza para amosar outros fondos</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Arrastrar para amosar outros fondos</string>
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Tocar ou arrastrar</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tocar dúas casas</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Debuxo de figuras</string>
@@ -61,9 +62,9 @@
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartir o URL da partida</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Compartir a posición coma FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Compartir este crebacabezas</string>
-  <string name="showComments" comment="Shown in the analysis screen.">Amosar comentarios</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Amosar os comentarios</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Amosar o resultado</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">Amosar variantes</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Amosar as variantes</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Algo foi mal.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Cores do sistema</string>
   <string name="tapHereToStartPlayingChess" comment="A message shown only once the first time the app is installed. Appear in a popup over the main floating action button on the home screen.">Pulsa aquí para comezar a xogar ao xadrez.</string>
