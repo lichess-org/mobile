@@ -106,8 +106,6 @@ enum _GameSource { lobby, challenge, game }
 
 class _GameScreenState extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
-  final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
-  final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
 
   @override
   void initState() {
