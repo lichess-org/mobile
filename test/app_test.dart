@@ -94,9 +94,9 @@ void main() {
 
     expect(find.byType(MainTabScaffold), findsOneWidget);
 
-    expect(find.text('Home'), findsOneWidget);
+    expect(find.text('Play'), findsOneWidget);
     expect(find.text('Puzzles'), findsOneWidget);
-    expect(find.text('Tools'), findsOneWidget);
+    expect(find.text('Learn'), findsOneWidget);
     expect(find.text('Watch'), findsOneWidget);
   });
 

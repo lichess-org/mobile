@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
@@ -283,6 +284,21 @@ class AccountScreen extends ConsumerWidget {
                   } else {
                     AppSettings.openAppSettings();
                   }
+                },
+              ),
+            ],
+          ),
+          ListSection(
+            hasLeading: true,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.alarm_outlined),
+                title: Text(context.l10n.clock),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const Icon(Icons.chevron_right)
+                    : null,
+                onTap: () {
+                  Navigator.of(context).push(ClockToolScreen.buildRoute(context));
                 },
               ),
             ],
