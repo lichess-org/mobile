@@ -25,9 +25,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 final _hotStudiesProvider = FutureProvider.autoDispose<IList<StudyPageItem>>((Ref ref) {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return _emptyHotStudies;
-
   return ref.withClientCacheFor(
     (client) => StudyRepository(ref, client)
         .getStudies(category: StudyCategory.all, order: StudyListOrder.hot)
@@ -35,7 +32,6 @@ final _hotStudiesProvider = FutureProvider.autoDispose<IList<StudyPageItem>>((Re
     const Duration(hours: 6),
   );
 });
-const _emptyHotStudies = IListConst<StudyPageItem>([]);
 
 final _myStudiesLengthProvider = FutureProvider.autoDispose<int>((Ref ref) {
   final session = ref.watch(authSessionProvider);
