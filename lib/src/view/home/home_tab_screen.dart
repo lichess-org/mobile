@@ -175,7 +175,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   ? PlatformAppBar(title: Text(context.l10n.mobileSettingsHomeWidgets))
                   : PlatformAppBar(
                       title: const Text('lichess.org'),
-                      leading: const AccountIconButton(),
+                      leading: const AccountMenu(),
                       actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
                     ),
               body: widget.editModeEnabled

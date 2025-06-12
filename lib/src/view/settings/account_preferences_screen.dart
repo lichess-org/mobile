@@ -334,7 +334,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(context.l10n.mobileAccountPreferences),
+        title: Text(context.l10n.preferencesPreferences),
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
       body: content,

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -99,6 +101,65 @@ void main() {
     expect(find.text('Learn'), findsOneWidget);
     expect(find.text('Watch'), findsOneWidget);
   });
+
+  testWidgets("don't show signOut if no session", (WidgetTester tester) async {
+    final app = await makeTestProviderScopeApp(tester, home: const Application());
+
+    await tester.pumpWidget(app);
+    // wait for the startup requests and animations to complete
+    await tester.pumpAndSettle(const Duration(milliseconds: 100));
+
+    await tester.tap(find.byIcon(Icons.account_circle_outlined));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Sign out'), findsNothing);
+    expect(find.text('Sign in'), findsOneWidget);
+  }, variant: kPlatformVariant);
+
+  testWidgets('signout', (WidgetTester tester) async {
+    final client = MockClient((request) {
+      if (request.method == 'DELETE' && request.url.path == '/api/token') {
+        return mockResponse('ok', 200);
+      }
+      return mockResponse('', 404);
+    });
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const Application(),
+      userSession: fakeSession,
+      overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
+    );
+
+    await tester.pumpWidget(app);
+    // wait for the startup requests and animations to complete
+    await tester.pumpAndSettle(const Duration(milliseconds: 100));
+
+    await tester.tap(find.byType(CircleAvatar));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Sign out'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(ListTile, 'Sign out'), warnIfMissed: false);
+    await tester.pumpAndSettle();
+
+    // confirm
+    if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
+      await tester.tap(find.widgetWithText(CupertinoActionSheetAction, 'Sign out'));
+    } else {
+      await tester.tap(find.text('OK'));
+    }
+    await tester.pump();
+
+    // expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    // wait for sign out future
+    await tester.pump(const Duration(seconds: 1));
+
+    expect(find.text('Sign out'), findsNothing);
+
+    // if not logged in, there is no circle avatar
+    expect(find.byType(CircleAvatar), findsNothing);
+  }, variant: kPlatformVariant);
 
   testWidgets('language support', (tester) async {
     for (final locale in AppLocalizations.supportedLocales) {

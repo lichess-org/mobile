@@ -1,10 +1,7 @@
-import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
@@ -14,12 +11,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_screen.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
-import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -70,10 +63,7 @@ class LearnTabScreen extends ConsumerWidget {
         }
       },
       child: PlatformScaffold(
-        appBar: PlatformAppBar(
-          leading: const AccountIconButton(),
-          title: Text(context.l10n.learnMenu),
-        ),
+        appBar: PlatformAppBar(leading: const AccountMenu(), title: Text(context.l10n.learnMenu)),
         body: const _Body(),
       ),
     );
@@ -186,61 +176,6 @@ class _Body extends ConsumerWidget {
               ],
             ),
         ],
-        ListSection(
-          header: Text(context.l10n.tools),
-          hasLeading: true,
-          children: [
-            _ToolsButton(
-              leading: const Icon(Symbols.biotech),
-              title: context.l10n.analysis,
-              onTap: () => Navigator.of(context, rootNavigator: true).push(
-                AnalysisScreen.buildRoute(
-                  context,
-                  const AnalysisOptions(
-                    orientation: Side.white,
-                    standalone: (
-                      pgn: '',
-                      isComputerAnalysisAllowed: true,
-                      variant: Variant.standard,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            _ToolsButton(
-              leading: const Icon(Symbols.explore),
-              title: context.l10n.openingExplorer,
-              onTap: isOnline
-                  ? () => Navigator.of(context, rootNavigator: true).push(
-                      OpeningExplorerScreen.buildRoute(
-                        context,
-                        const AnalysisOptions(
-                          orientation: Side.white,
-                          standalone: (
-                            pgn: '',
-                            isComputerAnalysisAllowed: false,
-                            variant: Variant.standard,
-                          ),
-                        ),
-                      ),
-                    )
-                  : null,
-            ),
-            _ToolsButton(
-              leading: const Icon(Symbols.upload_file),
-              title: context.l10n.loadPosition,
-              onTap: () => Navigator.of(context).push(LoadPositionScreen.buildRoute(context)),
-            ),
-            _ToolsButton(
-              leading: const Icon(Symbols.edit),
-              title: context.l10n.boardEditor,
-              onTap: () => Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(BoardEditorScreen.buildRoute(context)),
-            ),
-          ],
-        ),
       ],
     );
   }

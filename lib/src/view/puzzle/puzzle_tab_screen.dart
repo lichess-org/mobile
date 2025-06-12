@@ -119,7 +119,7 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          leading: const AccountIconButton(),
+          leading: const AccountMenu(),
           title: Text(context.l10n.puzzles),
           actions: const [_DashboardButton(), _HistoryButton()],
         ),
