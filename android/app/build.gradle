@@ -81,6 +81,9 @@ android {
               'proguard-rules.pro'
             )
             signingConfig signingConfigs.release
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
         }
         debug {
             applicationIdSuffix ".debug"
