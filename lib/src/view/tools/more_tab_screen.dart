@@ -1,14 +1,19 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -16,12 +21,15 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/view/account/account_screen.dart';
+import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
+import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
@@ -29,10 +37,12 @@ import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/theme_settings_screen.dart';
 import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -49,7 +59,10 @@ class MoreTabScreen extends ConsumerWidget {
         }
       },
       child: PlatformScaffold(
-        appBar: PlatformAppBar(leading: const AccountMenu(), title: const Text('lichess.org')),
+        appBar: PlatformAppBar(
+          title: const Text('lichess.org'),
+          actions: const [SocketPingRating()],
+        ),
         body: const _Body(),
       ),
     );
@@ -73,7 +86,7 @@ class _ToolsButton extends StatelessWidget {
         leading: leading,
         title: Text(title),
         trailing: Theme.of(context).platform == TargetPlatform.iOS
-            ? const Icon(Symbols.chevron_right)
+            ? const CupertinoListTileChevron()
             : null,
         onTap: onTap,
       ),
@@ -81,15 +94,26 @@ class _ToolsButton extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  bool errorLoadingFlair = false;
+
+  @override
+  Widget build(BuildContext context) {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
-    final generalPrefs = ref.watch(generalPreferencesProvider);
+    final account = ref.watch(accountProvider);
+    final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
+    final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
+
+    final generalPrefs = ref.watch(generalPreferencesProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
@@ -105,7 +129,7 @@ class _Body extends ConsumerWidget {
               style: TextStyle(color: context.lichessColors.brag),
             ),
             trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const Icon(Icons.chevron_right)
+                ? const CupertinoListTileChevron()
                 : null,
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/patron'));
@@ -116,8 +140,64 @@ class _Body extends ConsumerWidget {
     return ListView(
       controller: learnScrollController,
       children: [
-        if (Theme.of(context).platform == TargetPlatform.android && donateButton != null)
-          ListSection(hasLeading: true, children: [donateButton]),
+        ListSection(
+          header: user != null ? UserFullNameWidget(user: user) : null,
+          hasLeading: true,
+          children: [
+            if (userSession != null) ...[
+              ListTile(
+                leading: const Icon(Icons.person_outline),
+                title: Text(context.l10n.profile),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () {
+                  ref.invalidate(accountProvider);
+                  Navigator.of(context).push(ProfileScreen.buildRoute(context));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.manage_accounts_outlined),
+                title: Text(context.l10n.mobileAccountPreferences),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () {
+                  Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
+                },
+              ),
+              if (authController.isLoading)
+                const ListTile(
+                  leading: Icon(Icons.logout_outlined),
+                  title: Center(child: ButtonLoadingIndicator()),
+                )
+              else
+                ListTile(
+                  leading: const Icon(Icons.logout_outlined),
+                  title: Text(context.l10n.logOut),
+                  onTap: () {
+                    showSignOutConfirmDialog(context, ref);
+                  },
+                ),
+            ] else ...[
+              if (authController.isLoading)
+                const ListTile(
+                  leading: Icon(Icons.login_outlined),
+                  title: Center(child: ButtonLoadingIndicator()),
+                )
+              else
+                ListTile(
+                  leading: const Icon(Icons.login_outlined),
+                  title: Text(context.l10n.signIn),
+                  onTap: () {
+                    ref.read(authControllerProvider.notifier).signIn();
+                  },
+                ),
+            ],
+            if (Theme.of(context).platform == TargetPlatform.android && donateButton != null)
+              donateButton,
+          ],
+        ),
         ListSection(
           header: SettingsSectionTitle(context.l10n.tools),
           hasLeading: true,
@@ -175,7 +255,7 @@ class _Body extends ConsumerWidget {
               leading: const Icon(Icons.alarm_outlined),
               title: Text(context.l10n.clock),
               trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const Icon(Icons.chevron_right)
+                  ? const CupertinoListTileChevron()
                   : null,
               onTap: () {
                 Navigator.of(context).push(ClockToolScreen.buildRoute(context));
@@ -223,7 +303,7 @@ class _Body extends ConsumerWidget {
               leading: const Icon(Icons.palette_outlined),
               title: Text(context.l10n.mobileTheme),
               trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const Icon(Icons.chevron_right)
+                  ? const CupertinoListTileChevron()
                   : null,
               onTap: () {
                 Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
@@ -233,7 +313,7 @@ class _Body extends ConsumerWidget {
               leading: const Icon(Icons.app_registration),
               title: Text(context.l10n.mobileSettingsHomeWidgets),
               trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const Icon(Icons.chevron_right)
+                  ? const CupertinoListTileChevron()
                   : null,
               onTap: () {
                 Navigator.of(
@@ -245,7 +325,7 @@ class _Body extends ConsumerWidget {
               leading: const Icon(Symbols.chess_pawn),
               title: Text(context.l10n.mobileBoardSettings, overflow: TextOverflow.ellipsis),
               trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const Icon(Icons.chevron_right)
+                  ? const CupertinoListTileChevron()
                   : null,
               onTap: () {
                 Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
@@ -255,7 +335,7 @@ class _Body extends ConsumerWidget {
               leading: const Icon(Icons.memory_outlined),
               title: const Text('Chess engine'),
               trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const Icon(Icons.chevron_right)
+                  ? const CupertinoListTileChevron()
                   : null,
               onTap: () {
                 Navigator.of(context).push(EngineSettingsScreen.buildRoute(context));

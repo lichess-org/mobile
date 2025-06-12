@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -549,7 +550,7 @@ class _StandingControls extends ConsumerWidget {
               ? ref.read(tournamentControllerProvider(state.id).notifier).loadLastStandingsPage
               : null,
           semanticsLabel: context.l10n.studyNext,
-          icon: const Icon(Icons.chevron_right),
+          icon: const CupertinoListTileChevron(),
         ),
         if (state.tournament.me != null)
           SemanticIconButton(

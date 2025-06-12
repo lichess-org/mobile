@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -233,7 +234,7 @@ class _PuzzleMenuListTile extends StatelessWidget {
       title: Text(title, style: Styles.mainListTileTitle),
       subtitle: Text(subtitle, maxLines: 3),
       trailing: Theme.of(context).platform == TargetPlatform.iOS
-          ? const Icon(Icons.chevron_right)
+          ? const CupertinoListTileChevron()
           : null,
       onTap: onTap,
     );

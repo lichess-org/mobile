@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart' show Side, kInitialFEN;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -60,7 +61,7 @@ class _Body extends ConsumerWidget {
                 leading: const Icon(Icons.image_outlined),
                 title: Text(context.l10n.mobileSettingsPickAnImage),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const Icon(Icons.chevron_right)
+                    ? const CupertinoListTileChevron()
                     : null,
                 onTap: () async {
                   final ImagePicker picker = ImagePicker();
