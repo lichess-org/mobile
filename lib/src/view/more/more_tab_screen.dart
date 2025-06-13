@@ -16,13 +16,14 @@ import 'package:lichess_mobile/src/view/account/account_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
+import 'package:lichess_mobile/src/view/more/load_position_screen.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
-import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MoreTabScreen extends ConsumerWidget {
@@ -162,6 +163,7 @@ class _BodyState extends ConsumerState<_Body> {
           ],
         ),
         ListSection(
+          header: SettingsSectionTitle(context.l10n.aboutX('Lichess')),
           hasLeading: true,
           children: [
             ListTile(
@@ -201,6 +203,14 @@ class _BodyState extends ConsumerState<_Body> {
         ListSection(
           hasLeading: true,
           children: [
+            ListTile(
+              leading: const Icon(Symbols.database),
+              title: Text(context.l10n.database),
+              trailing: const _OpenInNewIcon(),
+              onTap: () {
+                launchUrl(Uri.parse('https://database.lichess.org'));
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.code_outlined),
               title: Text(context.l10n.sourceCode),
