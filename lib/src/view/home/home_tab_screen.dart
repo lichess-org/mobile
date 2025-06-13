@@ -172,12 +172,17 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             isEditingWidgets: widget.editModeEnabled,
             child: PlatformScaffold(
               appBar: widget.editModeEnabled
-                  ? PlatformAppBar(title: Text(context.l10n.mobileSettingsHomeWidgets))
+                  ? PlatformAppBar(
+                      title: Text(context.l10n.mobileSettingsHomeWidgets),
+                      leading: const BackButton(),
+                      automaticallyImplyLeading: false,
+                    )
                   : PlatformAppBar(
                       title: const Text('lichess.org'),
                       leading: const AccountIconButton(),
                       actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
                     ),
+              drawer: const AccountDrawer(),
               body: widget.editModeEnabled
                   ? content
                   : RefreshIndicator.adaptive(

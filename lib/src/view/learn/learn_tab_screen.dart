@@ -67,6 +67,7 @@ class LearnTabScreen extends ConsumerWidget {
           leading: const AccountIconButton(),
           title: Text(context.l10n.learnMenu),
         ),
+        drawer: const AccountDrawer(),
         body: const _Body(),
       ),
     );

@@ -1,37 +1,27 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/view/account/account_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
-import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MoreTabScreen extends ConsumerWidget {
@@ -48,16 +38,10 @@ class MoreTabScreen extends ConsumerWidget {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings_outlined),
-              tooltip: context.l10n.settingsSettings,
-              onPressed: () {
-                Navigator.of(context).push(SettingsScreen.buildRoute(context));
-              },
-            ),
-          ],
+          title: const Text('lichess.org'),
+          leading: const AccountIconButton(),
         ),
+        drawer: const AccountDrawer(),
         body: const _Body(),
       ),
     );
@@ -103,10 +87,7 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
-    final account = ref.watch(accountProvider);
-    final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
-    final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
 
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final dbSize = ref.watch(getDbSizeInBytesProvider);
@@ -114,96 +95,7 @@ class _BodyState extends ConsumerState<_Body> {
     return ListView(
       controller: moreScrollController,
       children: [
-        if (user != null)
-          ListSection(
-            hasLeading: true,
-            children: [
-              ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                leading: switch (account) {
-                  AsyncData(:final value) =>
-                    value == null
-                        ? const Icon(Icons.account_circle_outlined, size: 30)
-                        : CircleAvatar(
-                            radius: 20,
-                            foregroundImage: value.flair != null
-                                ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
-                                : null,
-                            onForegroundImageError: value.flair != null
-                                ? (error, _) {
-                                    setState(() {
-                                      errorLoadingFlair = true;
-                                    });
-                                  }
-                                : null,
-                            backgroundColor: value.flair == null || errorLoadingFlair
-                                ? null
-                                : ColorScheme.of(context).surfaceContainer,
-                            child: value.flair == null || errorLoadingFlair
-                                ? Text(value.initials)
-                                : null,
-                          ),
-                  _ => const Icon(Icons.account_circle_outlined, size: 30),
-                },
-                title: UserFullNameWidget(
-                  user: user,
-                  showFlair: false,
-                  showPatron: false,
-                  style: Styles.callout,
-                ),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const CupertinoListTileChevron()
-                    : null,
-                onTap: () {
-                  Navigator.of(context).push(AccountScreen.buildRoute(context));
-                },
-              ),
-            ],
-          )
-        else
-          ListSection(
-            hasLeading: true,
-            children: [
-              if (authController.isLoading)
-                const ListTile(
-                  leading: Icon(Icons.login_outlined),
-                  title: Center(child: ButtonLoadingIndicator()),
-                )
-              else
-                ListTile(
-                  leading: const Icon(Icons.login_outlined),
-                  title: Text(context.l10n.signIn),
-                  onTap: () {
-                    ref.read(authControllerProvider.notifier).signIn();
-                  },
-                ),
-            ],
-          ),
-        if (Theme.of(context).platform == TargetPlatform.android)
-          ListSection(
-            hasLeading: true,
-            children: [
-              ListTile(
-                leading: Icon(
-                  LichessIcons.patron,
-                  semanticLabel: context.l10n.patronLichessPatron,
-                  color: context.lichessColors.brag,
-                ),
-                title: Text(
-                  context.l10n.patronDonate,
-                  style: TextStyle(color: context.lichessColors.brag),
-                ),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const CupertinoListTileChevron()
-                    : null,
-                onTap: () {
-                  launchUrl(Uri.parse('https://lichess.org/patron'));
-                },
-              ),
-            ],
-          ),
         ListSection(
-          header: SettingsSectionTitle(context.l10n.tools),
           hasLeading: true,
           children: [
             _ToolsButton(

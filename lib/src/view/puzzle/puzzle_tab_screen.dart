@@ -124,6 +124,8 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
           title: Text(context.l10n.puzzles),
           actions: const [_DashboardButton(), _HistoryButton()],
         ),
+
+        drawer: const AccountDrawer(),
         bottomSheet: const OfflineBanner(),
         body: isTablet
             ? Row(

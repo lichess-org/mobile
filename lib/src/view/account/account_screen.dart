@@ -1,3 +1,5 @@
+import 'dart:math' show min;
+
 import 'package:app_settings/app_settings.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -6,15 +8,14 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
@@ -27,7 +28,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
@@ -69,222 +69,233 @@ class _AccountIconButtonState extends ConsumerState<AccountIconButton> {
                 child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
               ),
         onPressed: () {
-          Navigator.of(context, rootNavigator: true).push(AccountScreen.buildRoute(context));
+          Scaffold.of(context).openDrawer();
         },
       ),
       _ => IconButton(
         icon: const Icon(Icons.account_circle_outlined, size: 30),
         tooltip: context.l10n.signIn,
         onPressed: () {
-          Navigator.of(context, rootNavigator: true).push(AccountScreen.buildRoute(context));
+          Scaffold.of(context).openDrawer();
         },
       ),
     };
   }
 }
 
-class AccountScreen extends ConsumerWidget {
-  const AccountScreen({super.key});
-
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const AccountScreen());
-  }
+class AccountDrawer extends ConsumerStatefulWidget {
+  const AccountDrawer({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AccountDrawer> createState() => _AccountDrawerState();
+}
+
+class _AccountDrawerState extends ConsumerState<AccountDrawer> {
+  bool errorLoadingFlair = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final isOnline = ref.watch(
+      connectivityChangesProvider.select((s) => s.value?.isOnline ?? false),
+    );
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final authController = ref.watch(authControllerProvider);
     final account = ref.watch(accountProvider);
     final userSession = ref.watch(authSessionProvider);
     final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
-    final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
 
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user),
-        actions: const [SocketPingRating()],
-      ),
-      body: ListView(
+    return Drawer(
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      width: min(400.0, MediaQuery.sizeOf(context).width * 0.9),
+      child: ListView(
         children: [
-          ListSection(
-            hasLeading: true,
-            children: [
-              if (userSession != null) ...[
-                ListTile(
-                  leading: const Icon(Icons.person_outline),
-                  title: Text(context.l10n.profile),
-                  trailing: Theme.of(context).platform == TargetPlatform.iOS
-                      ? const Icon(Icons.chevron_right)
-                      : null,
-                  onTap: () {
-                    ref.invalidate(accountProvider);
-                    Navigator.of(context).push(ProfileScreen.buildRoute(context));
-                  },
+          if (user != null) ...[
+            ListTile(
+              leading: switch (account) {
+                AsyncData(:final value) =>
+                  value == null
+                      ? const Icon(Icons.account_circle_outlined, size: 30)
+                      : CircleAvatar(
+                          radius: 24,
+                          foregroundImage: value.flair != null
+                              ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
+                              : null,
+                          onForegroundImageError: value.flair != null
+                              ? (error, _) {
+                                  setState(() {
+                                    errorLoadingFlair = true;
+                                  });
+                                }
+                              : null,
+                          backgroundColor: value.flair == null || errorLoadingFlair
+                              ? null
+                              : ColorScheme.of(context).surfaceContainer,
+                          child: value.flair == null || errorLoadingFlair
+                              ? Text(value.initials)
+                              : null,
+                        ),
+                _ => const Icon(Icons.account_circle_outlined, size: 30),
+              },
+              title: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: UserFullNameWidget(
+                  user: user,
+                  style: Styles.callout,
+                  showFlair: false,
+                  showPatron: false,
                 ),
-                ListTile(
-                  leading: const Icon(Icons.manage_accounts_outlined),
-                  title: Text(context.l10n.mobileAccountPreferences),
-                  trailing: Theme.of(context).platform == TargetPlatform.iOS
-                      ? const Icon(Icons.chevron_right)
-                      : null,
-                  onTap: () {
-                    Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
-                  },
-                ),
-                if (authController.isLoading)
-                  const ListTile(
-                    leading: Icon(Icons.logout_outlined),
-                    title: Center(child: ButtonLoadingIndicator()),
-                  )
-                else
-                  ListTile(
-                    leading: const Icon(Icons.logout_outlined),
-                    title: Text(context.l10n.logOut),
-                    onTap: () {
-                      _showSignOutConfirmDialog(context, ref);
-                    },
-                  ),
-              ] else ...[
-                if (authController.isLoading)
-                  const ListTile(
-                    leading: Icon(Icons.login_outlined),
-                    title: Center(child: ButtonLoadingIndicator()),
-                  )
-                else
-                  ListTile(
-                    leading: const Icon(Icons.login_outlined),
-                    title: Text(context.l10n.signIn),
-                    onTap: () {
-                      ref.read(authControllerProvider.notifier).signIn();
-                    },
-                  ),
-              ],
-              if (Theme.of(context).platform == TargetPlatform.android)
-                ListTile(
-                  leading: Icon(
-                    LichessIcons.patron,
-                    semanticLabel: context.l10n.patronLichessPatron,
-                  ),
-                  title: Text(context.l10n.patronDonate),
-                  trailing: Theme.of(context).platform == TargetPlatform.iOS
-                      ? const Icon(Icons.chevron_right)
-                      : null,
-                  onTap: () {
-                    launchUrl(Uri.parse('https://lichess.org/patron'));
-                  },
-                ),
-            ],
+              ),
+              subtitle: Text(context.l10n.profile),
+              enabled: isOnline,
+              onTap: () {
+                ref.invalidate(accountProvider);
+                Navigator.of(context).push(ProfileScreen.buildRoute(context));
+              },
+            ),
+            const PlatformDivider(indent: 0),
+          ],
+          if (userSession != null) ...[
+            ListTile(
+              leading: const Icon(Icons.manage_accounts_outlined),
+              title: Text(context.l10n.mobileAccountPreferences),
+              enabled: isOnline,
+              onTap: () {
+                Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
+              },
+            ),
+            if (authController.isLoading)
+              const ListTile(
+                leading: Icon(Icons.logout_outlined),
+                enabled: false,
+                title: Center(child: ButtonLoadingIndicator()),
+              )
+            else
+              ListTile(
+                leading: const Icon(Icons.logout_outlined),
+                title: Text(context.l10n.logOut),
+                enabled: isOnline,
+                onTap: () {
+                  _showSignOutConfirmDialog(context, ref);
+                },
+              ),
+          ] else ...[
+            if (authController.isLoading)
+              const ListTile(
+                leading: Icon(Icons.login_outlined),
+                enabled: false,
+                title: Center(child: ButtonLoadingIndicator()),
+              )
+            else
+              ListTile(
+                leading: const Icon(Icons.login_outlined),
+                title: Text(context.l10n.signIn),
+                enabled: isOnline,
+                onTap: () {
+                  ref.read(authControllerProvider.notifier).signIn();
+                },
+              ),
+          ],
+          if (Theme.of(context).platform == TargetPlatform.android)
+            ListTile(
+              leading: Icon(LichessIcons.patron, semanticLabel: context.l10n.patronLichessPatron),
+              title: Text(context.l10n.patronDonate),
+              trailing: Theme.of(context).platform == TargetPlatform.iOS
+                  ? const Icon(Icons.chevron_right)
+                  : null,
+              enabled: isOnline,
+              onTap: () {
+                launchUrl(Uri.parse('https://lichess.org/patron'));
+              },
+            ),
+          const PlatformDivider(indent: 0),
+          SettingsListTile(
+            icon: const Icon(Icons.music_note_outlined),
+            settingsLabel: Text(context.l10n.sound),
+            settingsValue:
+                '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
+            onTap: () {
+              Navigator.of(context).push(SoundSettingsScreen.buildRoute(context));
+            },
           ),
-          ListSection(
-            hasLeading: true,
-            children: [
-              SettingsListTile(
-                icon: const Icon(Icons.music_note_outlined),
-                settingsLabel: Text(context.l10n.sound),
-                settingsValue:
-                    '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
-                onTap: () {
-                  Navigator.of(context).push(SoundSettingsScreen.buildRoute(context));
-                },
-              ),
-              Opacity(
-                opacity: generalPrefs.isForcedDarkMode ? 0.5 : 1.0,
-                child: SettingsListTile(
-                  icon: const Icon(Icons.brightness_medium_outlined),
-                  settingsLabel: Text(context.l10n.background),
-                  settingsValue: generalPrefs.isForcedDarkMode
-                      ? BackgroundThemeMode.dark.title(context.l10n)
-                      : generalPrefs.themeMode.title(context.l10n),
-                  onTap: generalPrefs.isForcedDarkMode
-                      ? null
-                      : () {
-                          showChoicePicker(
-                            context,
-                            choices: BackgroundThemeMode.values,
-                            selectedItem: generalPrefs.themeMode,
-                            labelBuilder: (t) => Text(t.title(context.l10n)),
-                            onSelectedItemChanged: (BackgroundThemeMode? value) => ref
-                                .read(generalPreferencesProvider.notifier)
-                                .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
-                          );
-                        },
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.palette_outlined),
-                title: Text(context.l10n.mobileTheme),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const Icon(Icons.chevron_right)
-                    : null,
-                onTap: () {
-                  Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.app_registration),
-                title: Text(context.l10n.mobileSettingsHomeWidgets),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const Icon(Icons.chevron_right)
-                    : null,
-                onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(HomeTabScreen.buildRoute(context, editModeEnabled: true));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Symbols.chess_pawn),
-                title: Text(context.l10n.mobileBoardSettings, overflow: TextOverflow.ellipsis),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const Icon(Icons.chevron_right)
-                    : null,
-                onTap: () {
-                  Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.memory_outlined),
-                title: const Text('Chess engine'),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const Icon(Icons.chevron_right)
-                    : null,
-                onTap: () {
-                  Navigator.of(context).push(EngineSettingsScreen.buildRoute(context));
-                },
-              ),
-              SettingsListTile(
-                icon: const Icon(Icons.language_outlined),
-                settingsLabel: Text(context.l10n.language),
-                settingsValue: localeToLocalizedName(
-                  generalPrefs.locale ?? Localizations.localeOf(context),
-                ),
-                onTap: () {
-                  if (Theme.of(context).platform == TargetPlatform.android) {
-                    showChoicePicker<Locale>(
-                      context,
-                      choices: AppLocalizations.supportedLocales,
-                      selectedItem: generalPrefs.locale ?? Localizations.localeOf(context),
-                      labelBuilder: (t) => Text(localeToLocalizedName(t)),
-                      onSelectedItemChanged: (Locale? locale) =>
-                          ref.read(generalPreferencesProvider.notifier).setLocale(locale),
-                    );
-                  } else {
-                    AppSettings.openAppSettings();
-                  }
-                },
-              ),
-            ],
+          Opacity(
+            opacity: generalPrefs.isForcedDarkMode ? 0.5 : 1.0,
+            child: SettingsListTile(
+              icon: const Icon(Icons.brightness_medium_outlined),
+              settingsLabel: Text(context.l10n.background),
+              settingsValue: generalPrefs.isForcedDarkMode
+                  ? BackgroundThemeMode.dark.title(context.l10n)
+                  : generalPrefs.themeMode.title(context.l10n),
+              onTap: generalPrefs.isForcedDarkMode
+                  ? null
+                  : () {
+                      showChoicePicker(
+                        context,
+                        choices: BackgroundThemeMode.values,
+                        selectedItem: generalPrefs.themeMode,
+                        labelBuilder: (t) => Text(t.title(context.l10n)),
+                        onSelectedItemChanged: (BackgroundThemeMode? value) => ref
+                            .read(generalPreferencesProvider.notifier)
+                            .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
+                      );
+                    },
+            ),
           ),
+          ListTile(
+            leading: const Icon(Icons.palette_outlined),
+            title: Text(context.l10n.mobileTheme),
+            onTap: () {
+              Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.app_registration),
+            title: Text(context.l10n.mobileSettingsHomeWidgets),
+            onTap: () {
+              Navigator.of(
+                context,
+                rootNavigator: true,
+              ).push(HomeTabScreen.buildRoute(context, editModeEnabled: true));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Symbols.chess_pawn),
+            title: Text(context.l10n.mobileBoardSettings, overflow: TextOverflow.ellipsis),
+            onTap: () {
+              Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.memory_outlined),
+            title: const Text('Chess engine'),
+            onTap: () {
+              Navigator.of(context).push(EngineSettingsScreen.buildRoute(context));
+            },
+          ),
+          SettingsListTile(
+            icon: const Icon(Icons.language_outlined),
+            settingsLabel: Text(context.l10n.language),
+            settingsValue: localeToLocalizedName(
+              generalPrefs.locale ?? Localizations.localeOf(context),
+            ),
+            onTap: () {
+              if (Theme.of(context).platform == TargetPlatform.android) {
+                showChoicePicker<Locale>(
+                  context,
+                  choices: AppLocalizations.supportedLocales,
+                  selectedItem: generalPrefs.locale ?? Localizations.localeOf(context),
+                  labelBuilder: (t) => Text(localeToLocalizedName(t)),
+                  onSelectedItemChanged: (Locale? locale) =>
+                      ref.read(generalPreferencesProvider.notifier).setLocale(locale),
+                );
+              } else {
+                AppSettings.openAppSettings();
+              }
+            },
+          ),
+          const PlatformDivider(indent: 0),
           Padding(
             padding: Styles.bodySectionPadding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                LichessMessage(style: TextTheme.of(context).bodyMedium),
-                const SizedBox(height: 10),
-                Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),
-              ],
-            ),
+            child: LichessMessage(style: TextTheme.of(context).bodyMedium),
           ),
         ],
       ),
