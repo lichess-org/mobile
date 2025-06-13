@@ -313,16 +313,19 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     return [
       if (isTablet)
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Expanded(child: _TabletCreateAGameSection()),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ...welcomeWidgets,
-                  FeaturedTournamentsWidget(featured: featuredTournaments),
+                  const SizedBox(height: 32.0),
+                  const _TabletCreateAGameSection(),
                 ],
               ),
             ),
+            Expanded(child: FeaturedTournamentsWidget(featured: featuredTournaments)),
           ],
         )
       else ...[

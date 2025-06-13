@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MoreTabScreen extends ConsumerWidget {
@@ -96,6 +97,7 @@ class _BodyState extends ConsumerState<_Body> {
       controller: moreScrollController,
       children: [
         ListSection(
+          header: SettingsSectionTitle(context.l10n.tools),
           hasLeading: true,
           children: [
             _ToolsButton(
