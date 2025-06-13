@@ -228,8 +228,9 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
               : Theme.of(context).platform == TargetPlatform.iOS
               ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
               : const PlatformDivider(height: 1, color: Colors.transparent),
-          itemBuilder: (context, index) =>
-              index == 0 ? searchBar : StudyListItem(study: studies.studies[index - 1]),
+          itemBuilder: (context, index) => index == 0
+              ? searchBar
+              : StudyListItem(study: studies.studies[index - 1], flairSize: 30.0),
         ),
         AsyncError() => FullScreenRetryRequest(onRetry: () => ref.invalidate(paginatorProvider)),
         _ => Column(
@@ -244,18 +245,16 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 }
 
 class StudyListItem extends StatelessWidget {
-  const StudyListItem({required this.study});
+  const StudyListItem({required this.study, this.flairSize, super.key});
 
   final StudyPageItem study;
+  final double? flairSize;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: StudyFlair(flair: study.flair, size: 30),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text(study.name, overflow: TextOverflow.ellipsis, maxLines: 2)],
-      ),
+      leading: StudyFlair(flair: study.flair, size: flairSize ?? 24.0),
+      title: Text(study.name, overflow: TextOverflow.ellipsis, maxLines: 2),
       subtitle: _StudySubtitle(study: study),
       onTap: () => Navigator.of(
         context,

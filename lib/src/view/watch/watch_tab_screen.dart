@@ -92,7 +92,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
         }
       },
       child: PlatformScaffold(
-        appBar: PlatformAppBar(leading: const AccountMenu(), title: Text(context.l10n.watch)),
+        appBar: PlatformAppBar(leading: const AccountIconButton(), title: Text(context.l10n.watch)),
         body: isOnline
             ? OrientationBuilder(
                 builder: (context, orientation) {

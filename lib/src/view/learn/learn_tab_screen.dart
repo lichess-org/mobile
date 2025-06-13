@@ -63,7 +63,10 @@ class LearnTabScreen extends ConsumerWidget {
         }
       },
       child: PlatformScaffold(
-        appBar: PlatformAppBar(leading: const AccountMenu(), title: Text(context.l10n.learnMenu)),
+        appBar: PlatformAppBar(
+          leading: const AccountIconButton(),
+          title: Text(context.l10n.learnMenu),
+        ),
         body: const _Body(),
       ),
     );
@@ -75,7 +78,7 @@ class _ToolsButton extends StatelessWidget {
 
   final Widget leading;
 
-  final String title;
+  final Widget title;
 
   final VoidCallback? onTap;
 
@@ -88,7 +91,7 @@ class _ToolsButton extends StatelessWidget {
           data: IconThemeData(color: ColorScheme.of(context).primary),
           child: leading,
         ),
-        title: Text(title, style: Styles.callout),
+        title: title,
         trailing: Theme.of(context).platform == TargetPlatform.iOS
             ? const Icon(Symbols.chevron_right)
             : null,
@@ -118,7 +121,7 @@ class _Body extends ConsumerWidget {
           children: [
             _ToolsButton(
               leading: const Icon(Symbols.where_to_vote),
-              title: context.l10n.coordinatesCoordinateTraining,
+              title: Text(context.l10n.coordinatesCoordinateTraining, style: Styles.callout),
               onTap: () => Navigator.of(
                 context,
                 rootNavigator: true,
@@ -150,7 +153,7 @@ class _Body extends ConsumerWidget {
                 if (haveIStudies)
                   _ToolsButton(
                     leading: const Icon(Symbols.local_library),
-                    title: context.l10n.studyMyStudies,
+                    title: Text(context.l10n.studyMyStudies),
                     onTap: isOnline
                         ? () => Navigator.of(context).push(
                             StudyListScreen.buildRoute(
@@ -163,7 +166,7 @@ class _Body extends ConsumerWidget {
                 if (haveIFavoriteStudies)
                   _ToolsButton(
                     leading: const Icon(Symbols.favorite),
-                    title: context.l10n.studyMyFavoriteStudies,
+                    title: Text(context.l10n.studyMyFavoriteStudies),
                     onTap: isOnline
                         ? () => Navigator.of(context).push(
                             StudyListScreen.buildRoute(
