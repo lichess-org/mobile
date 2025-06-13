@@ -550,7 +550,7 @@ class _StandingControls extends ConsumerWidget {
               ? ref.read(tournamentControllerProvider(state.id).notifier).loadLastStandingsPage
               : null,
           semanticsLabel: context.l10n.studyNext,
-          icon: const CupertinoListTileChevron(),
+          icon: const Icon(Icons.chevron_right),
         ),
         if (state.tournament.me != null)
           SemanticIconButton(
