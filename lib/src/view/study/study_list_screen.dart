@@ -245,16 +245,17 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 }
 
 class StudyListItem extends StatelessWidget {
-  const StudyListItem({required this.study, this.flairSize, super.key});
+  const StudyListItem({required this.study, this.flairSize, this.titleMaxLines, super.key});
 
   final StudyPageItem study;
   final double? flairSize;
+  final int? titleMaxLines;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: StudyFlair(flair: study.flair, size: flairSize ?? 24.0),
-      title: Text(study.name, overflow: TextOverflow.ellipsis, maxLines: 2),
+      title: Text(study.name, overflow: TextOverflow.ellipsis, maxLines: titleMaxLines ?? 2),
       subtitle: _StudySubtitle(study: study),
       onTap: () => Navigator.of(
         context,

@@ -141,7 +141,10 @@ class _Body extends ConsumerWidget {
             children: [
               ...(switch (ref.watch(_hotStudiesProvider)) {
                 AsyncData(:final value) =>
-                  value.take(5).map((study) => StudyListItem(study: study)).toList(growable: false),
+                  value
+                      .take(5)
+                      .map((study) => StudyListItem(study: study, titleMaxLines: 1))
+                      .toList(growable: false),
                 _ => [],
               }),
             ],
