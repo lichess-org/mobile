@@ -157,7 +157,10 @@ class _BodyState extends ConsumerState<_Body> {
                   ? const CupertinoListTileChevron()
                   : null,
               onTap: () {
-                Navigator.of(context).push(ClockToolScreen.buildRoute(context));
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(ClockToolScreen.buildRoute(context));
               },
             ),
           ],
