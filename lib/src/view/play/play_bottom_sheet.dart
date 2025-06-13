@@ -83,7 +83,7 @@ class _FloatingPlayButtonState extends ConsumerState<FloatingPlayButton> {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
+    return FloatingActionButton.extended(
       key: _buttonKey,
       onPressed: () {
         showModalBottomSheet<void>(
@@ -94,7 +94,8 @@ class _FloatingPlayButtonState extends ConsumerState<FloatingPlayButton> {
         );
       },
       tooltip: context.l10n.play,
-      child: const Icon(Symbols.chess_pawn_rounded),
+      icon: const Icon(Symbols.chess_pawn_rounded),
+      label: Text(context.l10n.play),
     );
   }
 }
