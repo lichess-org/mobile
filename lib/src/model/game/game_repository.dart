@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -134,5 +135,19 @@ class GameRepository {
       body: ids.join(','),
       mapper: LightExportedGame.fromServerJson,
     );
+  }
+
+  Future<void> saveForecasts({
+    required GameFullId gameId,
+    required IList<IList<CorrespondenceForecastStep>> steps,
+    Move? moveToPlay,
+  }) async {
+    final uri = Uri(
+      path: moveToPlay != null ? '$gameId/forecasts/${moveToPlay.uci}' : '$gameId/forecasts',
+    );
+    final response = await client.post(uri);
+    if (response.statusCode >= 400) {
+      throw http.ClientException('Failed to save forecast: ${response.statusCode}', uri);
+    }
   }
 }
