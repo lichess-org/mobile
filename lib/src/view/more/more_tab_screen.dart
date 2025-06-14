@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -16,6 +17,8 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/more/load_position_screen.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
+import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
+import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -46,44 +49,13 @@ class MoreTabScreen extends ConsumerWidget {
   }
 }
 
-class _ToolsButton extends StatelessWidget {
-  const _ToolsButton({required this.leading, required this.title, required this.onTap});
-
-  final Widget leading;
-
-  final String title;
-
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: onTap == null ? 0.5 : 1.0,
-      child: ListTile(
-        leading: leading,
-        title: Text(title),
-        trailing: Theme.of(context).platform == TargetPlatform.iOS
-            ? const CupertinoListTileChevron()
-            : null,
-        onTap: onTap,
-      ),
-    );
-  }
-}
-
-class _Body extends ConsumerStatefulWidget {
+class _Body extends ConsumerWidget {
   const _Body();
 
   @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body> {
-  bool errorLoadingFlair = false;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final session = ref.watch(authSessionProvider);
 
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
 
@@ -158,6 +130,35 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ],
         ),
+        ListSection(
+          header: SettingsSectionTitle(context.l10n.community),
+          hasLeading: true,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.groups_3_outlined),
+              title: Text(context.l10n.players),
+              enabled: isOnline,
+              trailing: Theme.of(context).platform == TargetPlatform.iOS
+                  ? const CupertinoListTileChevron()
+                  : null,
+              onTap: () {
+                Navigator.of(context, rootNavigator: true).push(PlayerScreen.buildRoute(context));
+              },
+            ),
+            if (session != null)
+              ListTile(
+                leading: const Icon(Icons.people_outline),
+                title: Text(context.l10n.friends),
+                enabled: isOnline,
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(FriendScreen.buildRoute(context));
+                },
+              ),
+          ],
+        ),
         if (Theme.of(context).platform == TargetPlatform.android)
           ListSection(
             hasLeading: true,
@@ -191,6 +192,31 @@ class _BodyState extends ConsumerState<_Body> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ToolsButton extends StatelessWidget {
+  const _ToolsButton({required this.leading, required this.title, required this.onTap});
+
+  final Widget leading;
+
+  final String title;
+
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Opacity(
+      opacity: onTap == null ? 0.5 : 1.0,
+      child: ListTile(
+        leading: leading,
+        title: Text(title),
+        trailing: Theme.of(context).platform == TargetPlatform.iOS
+            ? const CupertinoListTileChevron()
+            : null,
+        onTap: onTap,
+      ),
     );
   }
 }
