@@ -2,5 +2,4 @@
 <resources>
     <color name="bg_splash">#FFFFFF</color>
     <color name="ic_splash">#000000</color>
-    <color name="launch_black">#131416</color>
 </resources>
