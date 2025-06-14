@@ -1,36 +1,24 @@
 import 'dart:math' show min;
 
-import 'package:app_settings/app_settings.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
-import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
-import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
-import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
-import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
-import 'package:lichess_mobile/src/view/settings/theme_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccountIconButton extends ConsumerStatefulWidget {
@@ -98,7 +86,6 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final isOnline = ref.watch(
       connectivityChangesProvider.select((s) => s.value?.isOnline ?? false),
     );
-    final generalPrefs = ref.watch(generalPreferencesProvider);
     final authController = ref.watch(authControllerProvider);
     final account = ref.watch(accountProvider);
     final userSession = ref.watch(authSessionProvider);
@@ -136,6 +123,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                         ),
                 _ => const Icon(Icons.account_circle_outlined, size: 30),
               },
+              trailing: const SocketPingRating(),
               title: Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: UserFullNameWidget(
@@ -160,7 +148,10 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
               title: Text(context.l10n.mobileAccountPreferences),
               enabled: isOnline,
               onTap: () {
-                Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(AccountPreferencesScreen.buildRoute(context));
               },
             ),
             if (authController.isLoading)
@@ -182,12 +173,14 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
             if (authController.isLoading)
               const ListTile(
                 leading: Icon(Icons.login_outlined),
+                trailing: SocketPingRating(),
                 enabled: false,
                 title: Center(child: ButtonLoadingIndicator()),
               )
             else
               ListTile(
                 leading: const Icon(Icons.login_outlined),
+                trailing: const SocketPingRating(),
                 title: Text(context.l10n.signIn),
                 enabled: isOnline,
                 onTap: () {
@@ -208,94 +201,12 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
               },
             ),
           const PlatformDivider(indent: 0),
-          SettingsListTile(
-            icon: const Icon(Icons.music_note_outlined),
-            settingsLabel: Text(context.l10n.sound),
-            settingsValue:
-                '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
-            onTap: () {
-              Navigator.of(context).push(SoundSettingsScreen.buildRoute(context));
-            },
-          ),
-          Opacity(
-            opacity: generalPrefs.isForcedDarkMode ? 0.5 : 1.0,
-            child: SettingsListTile(
-              icon: const Icon(Icons.brightness_medium_outlined),
-              settingsLabel: Text(context.l10n.background),
-              settingsValue: generalPrefs.isForcedDarkMode
-                  ? BackgroundThemeMode.dark.title(context.l10n)
-                  : generalPrefs.themeMode.title(context.l10n),
-              onTap: generalPrefs.isForcedDarkMode
-                  ? null
-                  : () {
-                      showChoicePicker(
-                        context,
-                        choices: BackgroundThemeMode.values,
-                        selectedItem: generalPrefs.themeMode,
-                        labelBuilder: (t) => Text(t.title(context.l10n)),
-                        onSelectedItemChanged: (BackgroundThemeMode? value) => ref
-                            .read(generalPreferencesProvider.notifier)
-                            .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
-                      );
-                    },
-            ),
-          ),
           ListTile(
-            leading: const Icon(Icons.palette_outlined),
-            title: Text(context.l10n.mobileTheme),
+            leading: const Icon(Icons.settings_outlined),
+            title: Text(context.l10n.settingsSettings),
             onTap: () {
-              Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
+              Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute(context));
             },
-          ),
-          ListTile(
-            leading: const Icon(Icons.app_registration),
-            title: Text(context.l10n.mobileSettingsHomeWidgets),
-            onTap: () {
-              Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(HomeTabScreen.buildRoute(context, editModeEnabled: true));
-            },
-          ),
-          ListTile(
-            leading: const Icon(Symbols.chess_pawn),
-            title: Text(context.l10n.mobileBoardSettings, overflow: TextOverflow.ellipsis),
-            onTap: () {
-              Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.memory_outlined),
-            title: const Text('Chess engine'),
-            onTap: () {
-              Navigator.of(context).push(EngineSettingsScreen.buildRoute(context));
-            },
-          ),
-          SettingsListTile(
-            icon: const Icon(Icons.language_outlined),
-            settingsLabel: Text(context.l10n.language),
-            settingsValue: localeToLocalizedName(
-              generalPrefs.locale ?? Localizations.localeOf(context),
-            ),
-            onTap: () {
-              if (Theme.of(context).platform == TargetPlatform.android) {
-                showChoicePicker<Locale>(
-                  context,
-                  choices: AppLocalizations.supportedLocales,
-                  selectedItem: generalPrefs.locale ?? Localizations.localeOf(context),
-                  labelBuilder: (t) => Text(localeToLocalizedName(t)),
-                  onSelectedItemChanged: (Locale? locale) =>
-                      ref.read(generalPreferencesProvider.notifier).setLocale(locale),
-                );
-              } else {
-                AppSettings.openAppSettings();
-              }
-            },
-          ),
-          const PlatformDivider(indent: 0),
-          Padding(
-            padding: Styles.bodySectionPadding,
-            child: LichessMessage(style: TextTheme.of(context).bodyMedium),
           ),
         ],
       ),

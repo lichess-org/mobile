@@ -2,13 +2,11 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -18,12 +16,10 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/more/load_position_screen.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
-import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MoreTabScreen extends ConsumerWidget {
@@ -89,10 +85,7 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
-    final userSession = ref.watch(authSessionProvider);
-
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
-    final dbSize = ref.watch(getDbSizeInBytesProvider);
 
     return ListView(
       controller: moreScrollController,
@@ -165,124 +158,25 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ],
         ),
-        ListSection(
-          header: SettingsSectionTitle(context.l10n.aboutX('Lichess')),
-          hasLeading: true,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.info_outlined),
-              title: Text(context.l10n.aboutX('Lichess')),
-              trailing: const _OpenInNewIcon(),
-              onTap: () {
-                launchUrl(Uri.parse('https://lichess.org/about'));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.feedback_outlined),
-              title: Text(context.l10n.mobileFeedbackButton),
-              trailing: const _OpenInNewIcon(),
-              onTap: () {
-                launchUrl(Uri.parse('https://lichess.org/contact'));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.article_outlined),
-              title: Text(context.l10n.termsOfService),
-              trailing: const _OpenInNewIcon(),
-              onTap: () {
-                launchUrl(Uri.parse('https://lichess.org/terms-of-service'));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.privacy_tip_outlined),
-              title: Text(context.l10n.privacyPolicy),
-              trailing: const _OpenInNewIcon(),
-              onTap: () {
-                launchUrl(Uri.parse('https://lichess.org/privacy'));
-              },
-            ),
-          ],
-        ),
-        ListSection(
-          hasLeading: true,
-          children: [
-            ListTile(
-              leading: const Icon(Symbols.database),
-              title: Text(context.l10n.database),
-              trailing: const _OpenInNewIcon(),
-              onTap: () {
-                launchUrl(Uri.parse('https://database.lichess.org'));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.code_outlined),
-              title: Text(context.l10n.sourceCode),
-              trailing: const _OpenInNewIcon(),
-              onTap: () {
-                launchUrl(Uri.parse('https://lichess.org/source'));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.bug_report_outlined),
-              title: Text(context.l10n.contribute),
-              trailing: const _OpenInNewIcon(),
-              onTap: () {
-                launchUrl(Uri.parse('https://lichess.org/help/contribute'));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.star_border_outlined),
-              title: Text(context.l10n.thankYou),
-              trailing: const _OpenInNewIcon(),
-              onTap: () {
-                launchUrl(Uri.parse('https://lichess.org/thanks'));
-              },
-            ),
-          ],
-        ),
-        ListSection(
-          hasLeading: true,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.storage_outlined),
-              title: const Text('Local database size'),
-              trailing: dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
-            ),
-            ListTile(
-              leading: const Icon(Icons.http),
-              title: const Text('HTTP logs'),
-              onTap: () => Navigator.push(context, HttpLogScreen.buildRoute(context)),
-            ),
-          ],
-        ),
-        if (userSession != null)
+        if (Theme.of(context).platform == TargetPlatform.android)
           ListSection(
             hasLeading: true,
             children: [
-              if (Theme.of(context).platform == TargetPlatform.iOS)
-                ListTile(
-                  leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
-                  title: Text(
-                    'Delete your account',
-                    style: TextStyle(color: context.lichessColors.error),
-                  ),
-                  trailing: const _OpenInNewIcon(),
-                  onTap: () {
-                    launchUrl(lichessUri('/account/delete'));
-                  },
-                )
-              else
-                ListTile(
-                  leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
-                  title: Text(
-                    context.l10n.settingsCloseAccount,
-                    style: TextStyle(color: context.lichessColors.error),
-                  ),
-                  trailing: const _OpenInNewIcon(),
-                  onTap: () {
-                    launchUrl(lichessUri('/account/close'));
-                  },
+              ListTile(
+                leading: Icon(
+                  LichessIcons.patron,
+                  semanticLabel: context.l10n.patronLichessPatron,
+                  color: context.lichessColors.brag,
                 ),
+                title: Text(context.l10n.patronDonate),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const Icon(Icons.chevron_right)
+                    : null,
+                enabled: isOnline,
+                onTap: () {
+                  launchUrl(Uri.parse('https://lichess.org/patron'));
+                },
+              ),
             ],
           ),
         Padding(
@@ -298,18 +192,5 @@ class _BodyState extends ConsumerState<_Body> {
         ),
       ],
     );
-  }
-
-  String _getSizeString(int? bytes) => '${_bytesToMB(bytes ?? 0).toStringAsFixed(2)}MB';
-
-  double _bytesToMB(int bytes) => bytes * 0.000001;
-}
-
-class _OpenInNewIcon extends StatelessWidget {
-  const _OpenInNewIcon();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Icon(Icons.open_in_new, size: 18);
   }
 }
