@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -279,7 +280,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
   }
 }
 
-class AboutScreen extends StatelessWidget {
+class AboutScreen extends ConsumerWidget {
   const AboutScreen({super.key});
 
   static Route<void> buildRoute(BuildContext context) {
@@ -287,7 +288,9 @@ class AboutScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
+
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.about)),
       body: ListView(
@@ -378,6 +381,26 @@ class AboutScreen extends StatelessWidget {
                     : null,
                 onTap: () {
                   launchUrl(Uri.parse('https://lichess.org/thanks'));
+                },
+              ),
+            ],
+          ),
+          ListSection(
+            hasLeading: true,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.copyright_outlined),
+                title: const Text('View licences'),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () {
+                  showLicensePage(
+                    context: context,
+                    applicationName: 'Lichess',
+                    applicationVersion: packageInfo.version,
+                    applicationIcon: const Icon(LichessIcons.logo_lichess),
+                  );
                 },
               ),
             ],
