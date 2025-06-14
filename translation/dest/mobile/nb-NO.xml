@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Kontoinnstillinger</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Alle partier</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Er du sikker?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Brettinnstillinger</string>
@@ -33,8 +34,11 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Nøtter</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Nylige søk</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Klokkeposisjon</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Sirkel</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kvadrat</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Fordypelsesmodus</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Skjul systemgrensesnittet mens du spiller. Bruk dette hvis du blir forstyrret av systemets navigasjonsgester på skjermkanten. Gjelder for partier og nøtter.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Vis kantlinje</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Valg</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Del PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Del URL til partiet</string>
@@ -50,4 +54,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Varianten %s støttes ikke i denne versjonen.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Venter på motstanderen ...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Se</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Velkommen til Lichess-appen!</string>
 </resources>
