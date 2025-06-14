@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Pengaturan akun</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Pilihan ini akan diterapkan di semua akun Lichess anda dan berlaku di semua perangkat.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Semua permainan</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Apa kamu yakin?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Pengaturan papan</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Batalkan tawaran gerakan</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Hapus</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Hapus langkah yang disimpan</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Bergabung permainan</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Ulas balik</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Selamat Malam,%s</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Sembunyikan variasi</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Beranda</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Oke</string>
@@ -18,7 +26,9 @@
   <string name="showComments" comment="Shown in the analysis screen.">Tampilkan komentar</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Tampilkan hasil</string>
   <string name="showVariations" comment="Shown in the analysis screen.">Tampilkan variasi</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Alat</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Versi ini tidak mendukung varian %s.</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Menunggu lawan...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Tontonan</string>
 </resources>
