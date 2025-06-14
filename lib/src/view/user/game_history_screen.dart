@@ -84,6 +84,7 @@ class GameHistoryScreen extends ConsumerWidget {
       onPressed: () =>
           showModalBottomSheet<GameFilterState>(
             context: context,
+            useRootNavigator: true,
             isScrollControlled: true,
             builder: (_) => _FilterGames(
               filter: ref.read(gameFilterProvider(filter: gameFilter)),

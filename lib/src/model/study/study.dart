@@ -148,10 +148,10 @@ sealed class StudyChapterMeta with _$StudyChapterMeta {
 }
 
 @Freezed(fromJson: true)
-sealed class StudyPageData with _$StudyPageData {
-  const StudyPageData._();
+sealed class StudyPageItem with _$StudyPageItem {
+  const StudyPageItem._();
 
-  const factory StudyPageData({
+  const factory StudyPageItem({
     required StudyId id,
     required String name,
     required bool liked,
@@ -162,9 +162,9 @@ sealed class StudyPageData with _$StudyPageData {
     required IList<StudyMember> members,
     required IList<String> chapters,
     required String? flair,
-  }) = _StudyPageData;
+  }) = _StudyPageItem;
 
-  factory StudyPageData.fromJson(Map<String, Object?> json) => _$StudyPageDataFromJson(json);
+  factory StudyPageItem.fromJson(Map<String, Object?> json) => _$StudyPageItemFromJson(json);
 }
 
 @Freezed(fromJson: true)

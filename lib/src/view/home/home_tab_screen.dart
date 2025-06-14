@@ -172,12 +172,17 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             isEditingWidgets: widget.editModeEnabled,
             child: PlatformScaffold(
               appBar: widget.editModeEnabled
-                  ? PlatformAppBar(title: Text(context.l10n.mobileSettingsHomeWidgets))
+                  ? PlatformAppBar(
+                      title: Text(context.l10n.mobileSettingsHomeWidgets),
+                      leading: const BackButton(),
+                      automaticallyImplyLeading: false,
+                    )
                   : PlatformAppBar(
                       title: const Text('lichess.org'),
                       leading: const AccountIconButton(),
                       actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
                     ),
+              drawer: const AccountDrawer(),
               body: widget.editModeEnabled
                   ? content
                   : RefreshIndicator.adaptive(
@@ -308,16 +313,19 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     return [
       if (isTablet)
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Expanded(child: _TabletCreateAGameSection()),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ...welcomeWidgets,
-                  FeaturedTournamentsWidget(featured: featuredTournaments),
+                  const SizedBox(height: 32.0),
+                  const _TabletCreateAGameSection(),
                 ],
               ),
             ),
+            Expanded(child: FeaturedTournamentsWidget(featured: featuredTournaments)),
           ],
         )
       else ...[

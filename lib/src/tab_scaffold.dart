@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
+import 'package:lichess_mobile/src/view/learn/learn_tab_screen.dart';
+import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
-import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -17,8 +19,9 @@ import 'package:material_symbols_icons/symbols.dart';
 enum BottomTab {
   home,
   puzzles,
+  learn,
   watch,
-  tools;
+  more;
 
   String label(AppLocalizations strings) {
     switch (this) {
@@ -26,23 +29,27 @@ enum BottomTab {
         return strings.mobileHomeTab;
       case BottomTab.puzzles:
         return strings.mobilePuzzlesTab;
-      case BottomTab.tools:
-        return strings.mobileToolsTab;
+      case BottomTab.learn:
+        return strings.learnMenu;
       case BottomTab.watch:
         return strings.mobileWatchTab;
+      case BottomTab.more:
+        return strings.more;
     }
   }
 
   IconData get icon {
     switch (this) {
       case BottomTab.home:
-        return Symbols.home_rounded;
+        return LichessIcons.logo_lichess;
       case BottomTab.puzzles:
         return Symbols.extension_rounded;
       case BottomTab.watch:
         return Symbols.live_tv_rounded;
-      case BottomTab.tools:
-        return Symbols.handyman_rounded;
+      case BottomTab.learn:
+        return Symbols.school_rounded;
+      case BottomTab.more:
+        return Symbols.menu;
     }
   }
 }
@@ -58,8 +65,10 @@ final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
       return puzzlesNavigatorKey;
     case BottomTab.watch:
       return watchNavigatorKey;
-    case BottomTab.tools:
-      return toolsNavigatorKey;
+    case BottomTab.learn:
+      return learnNavigatorKey;
+    case BottomTab.more:
+      return moreNavigatorKey;
   }
 });
 
@@ -70,22 +79,26 @@ final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
       return homeScrollController;
     case BottomTab.puzzles:
       return puzzlesScrollController;
-    case BottomTab.tools:
-      return toolsScrollController;
+    case BottomTab.learn:
+      return learnScrollController;
     case BottomTab.watch:
       return watchScrollController;
+    case BottomTab.more:
+      return moreScrollController;
   }
 });
 
 final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
 final puzzlesNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'puzzles');
-final toolsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'tools');
+final learnNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'learn');
 final watchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'watch');
+final moreNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'more');
 
 final homeScrollController = ScrollController(debugLabel: 'HomeScroll');
 final puzzlesScrollController = ScrollController(debugLabel: 'PuzzlesScroll');
-final toolsScrollController = ScrollController(debugLabel: 'ToolsScroll');
+final learnScrollController = ScrollController(debugLabel: 'learnScroll');
 final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
+final moreScrollController = ScrollController(debugLabel: 'MoreScroll');
 
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver = RouteObserver<PageRoute<void>>();
 
@@ -97,13 +110,17 @@ final homeTabInteraction = _BottomTabInteraction();
 /// interactions (pop stack, scroll to top) are done.
 final puzzlesTabInteraction = _BottomTabInteraction();
 
-/// A [ChangeNotifier] that can be used to notify when the Tools tab is tapped, and all the built interactions
+/// A [ChangeNotifier] that can be used to notify when the learn tab is tapped, and all the built interactions
 /// (pop stack, scroll to top) are done.
-final toolsTabInteraction = _BottomTabInteraction();
+final learnTabInteraction = _BottomTabInteraction();
 
 /// A [ChangeNotifier] that can be used to notify when the Watch tab is tapped, and all the built in
 /// interactions (pop stack, scroll to top) are done.
 final watchTabInteraction = _BottomTabInteraction();
+
+/// A [ChangeNotifier] that can be used to notify when the More tab is tapped, and all the built in
+/// interactions (pop stack, scroll to top) are done.
+final moreTabInteraction = _BottomTabInteraction();
 
 class _BottomTabInteraction extends ChangeNotifier {
   void notifyItemTapped() {
@@ -185,10 +202,12 @@ class MainTabScaffold extends ConsumerWidget {
             homeTabInteraction.notifyItemTapped();
           case BottomTab.puzzles:
             puzzlesTabInteraction.notifyItemTapped();
-          case BottomTab.tools:
-            toolsTabInteraction.notifyItemTapped();
+          case BottomTab.learn:
+            learnTabInteraction.notifyItemTapped();
           case BottomTab.watch:
             watchTabInteraction.notifyItemTapped();
+          case BottomTab.more:
+            moreTabInteraction.notifyItemTapped();
         }
       }
     } else {
@@ -212,15 +231,21 @@ class MainTabScaffold extends ConsumerWidget {
         );
       case 2:
         return _MaterialTabView(
+          navigatorKey: learnNavigatorKey,
+          tab: BottomTab.learn,
+          builder: (context) => const LearnTabScreen(),
+        );
+      case 3:
+        return _MaterialTabView(
           navigatorKey: watchNavigatorKey,
           tab: BottomTab.watch,
           builder: (context) => const WatchTabScreen(),
         );
-      case 3:
+      case 4:
         return _MaterialTabView(
-          navigatorKey: toolsNavigatorKey,
-          tab: BottomTab.tools,
-          builder: (context) => const ToolsTabScreen(),
+          navigatorKey: moreNavigatorKey,
+          tab: BottomTab.more,
+          builder: (context) => const MoreTabScreen(),
         );
       default:
         assert(false, 'Unexpected tab');
