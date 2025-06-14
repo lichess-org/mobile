@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/learn/learn_tab_screen.dart';
@@ -40,7 +41,7 @@ enum BottomTab {
   IconData get icon {
     switch (this) {
       case BottomTab.home:
-        return Symbols.home_rounded;
+        return LichessIcons.logo_lichess;
       case BottomTab.puzzles:
         return Symbols.extension_rounded;
       case BottomTab.watch:
