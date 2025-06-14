@@ -9,11 +9,11 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Hesap tercihleri';
 
   @override
   String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your Lichess account and will be used across all devices.';
+      'Bu tercihler Lichess hesabınıza uygulanacak ve cihazlarınız arasında senkronize edilecektir.';
 
   @override
   String get mobileAllGames => 'Tüm oyunlar';
@@ -22,7 +22,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileAreYouSure => 'Emin misiniz?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Tahta seçenekleri';
 
   @override
   String get mobileCancelTakebackOffer => 'Geri alma teklifini iptal et';
@@ -41,19 +41,19 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'İyi akşamlar, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'İyi akşamlar';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'İyi günler, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'İyi günler';
 
   @override
   String get mobileHideVariation => 'Varyasyonu gizle';
@@ -77,7 +77,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOkButton => 'Tamam';
 
   @override
-  String get mobileOverTheBoard => 'Sanal tahta';
+  String get mobileOverTheBoard => 'Tahta üzerinde çevrimdışı oyna';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -91,7 +91,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePositionRight => 'Sağ';
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Sürüklenen parçayı büyüt';
+  String get mobilePrefMagnifyDraggedPiece => 'Sürüklenen taşı büyüt';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Bu oyunu bitirmek istiyor musun?';
@@ -122,22 +122,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileRecentSearches => 'Son aramalar';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Yer işaretini kaldır';
 
   @override
   String get mobileSettingsClockPosition => 'Saat pozisyonu';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Hazırlar';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Daire';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Kare';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -147,52 +147,52 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+      'Oynarken sistem arayüzünü gizle. Sistemin, ekranın kenarlarındaki gezinme hareketlerinden rahatsızsan bunu kullan. Bu ayar oyun ve bulmaca ekranlarına uygulanır.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Ele geçirilen taşlar';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Bir resim seçin';
 
   @override
   String get mobileSettingsPickAnImageHelp =>
-      'Custom background works only in dark mode. A dark image is recommended.';
+      'Özel arkaplan sadece karanlık modda çalışır. Karanlık bir resim tavsiye edilir.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Resmi bulanıklaştır';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Tahtayı gizle';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Tahtayı göster';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Diğer arkaplanlar için kaydır';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Dokun veya sürükle';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'İki kareye dokun';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Şekil çizimi';
 
   @override
   String get mobileSettingsShapeDrawingSubtitle =>
       'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Kenarları göster';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Dokunuş geribildirimi';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle =>
-      'When enabled, the device will vibrate shortly when you move or capture a piece.';
+      'Aktif olduğunda, bir taş oynatıldığında veya alındığında cihaz hafifçe titreyecektir.';
 
   @override
   String get mobileSettingsTab => 'Ayarlar';
@@ -225,7 +225,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSystemColors => 'Sistem renkleri';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Satranç oynamak için buraya dokunun.';
 
   @override
   String get mobileTheme => 'Tema';
@@ -245,7 +245,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileWatchTab => 'İzle';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Lichess uygulamasına hoşgeldiniz!';
 
   @override
   String get activityActivity => 'Son Etkinlikler';
@@ -6202,7 +6202,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+  String get studyWhiteDefeatBlackCanNotWin => 'Beyaz kaybeder fakat siyah kazanamaz';
 
   @override
   String studyNbChapters(int count) {

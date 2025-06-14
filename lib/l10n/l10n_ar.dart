@@ -6352,7 +6352,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return 'المشاهدون بإمكانهم رؤية الدراسة والتحدث في خانة الدردشة.<br><br>$param2 المساهمون بإمكانهم نقل القطع والتعديل علي الدراسة.';
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
   }
 
   @override

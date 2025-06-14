@@ -1657,7 +1657,6 @@
   "studySharedAndSaveTitle": "تم المشاركة والحفظ",
   "studySharedAndSavedText": "يمكن للأعضاء الآخرين رؤية نقلاتك في الوقت الحقيقي!<br>زيادة على ذلك، يتم حفظ كل شيء إلى الأبد.",
   "studyStudyMembersTitle": "أعضاء الدراسة",
-  "studyStudyMembersText": "المشاهدون بإمكانهم رؤية الدراسة والتحدث في خانة الدردشة.<br><br>{param2} المساهمون بإمكانهم نقل القطع والتعديل علي الدراسة.",
   "studyAddMembersText": "إضغط على زر {param}.<br>ثم قرر من يمكنه المساهمة أو لا.",
   "studyStudyChaptersTitle": "فصول الدراسة",
   "studyStudyChaptersText": "يمكن للدراسة أن تحتوي علي عدة فصول.<br>كل فصل له موقف أولي مختلف وتفريع النقلات.",

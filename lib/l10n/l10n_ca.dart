@@ -9,11 +9,11 @@ class AppLocalizationsCa extends AppLocalizations {
   AppLocalizationsCa([String locale = 'ca']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Preferencies del compte';
 
   @override
   String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your Lichess account and will be used across all devices.';
+      'Aquestes configuracions s\'apliquen al teu compte de Lichess i s\'utilitzaran en tots els dispositius.';
 
   @override
   String get mobileAllGames => 'Totes les partides';
@@ -22,7 +22,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileAreYouSure => 'Estàs segur?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Paràmetres del tauler';
 
   @override
   String get mobileCancelTakebackOffer => 'Anul·la la petició per desfer la jugada';
@@ -41,19 +41,19 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Bona tarda, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Bona tarda';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Bon dia, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Bon dia';
 
   @override
   String get mobileHideVariation => 'Amaga les variacions';
@@ -121,25 +121,25 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileRecentSearches => 'Cerques recents';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Suprimeix el marcador';
 
   @override
   String get mobileSettingsClockPosition => 'Posició del rellotge';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Predefinits';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Objectiu peça arrossegada';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Cercle';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Quadrat';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Giny de l\'inici';
 
   @override
   String get mobileSettingsImmersiveMode => 'Mode immersiu';
@@ -149,49 +149,49 @@ class AppLocalizationsCa extends AppLocalizations {
       'Amaga la interfície del sistema mentre jugues. Utilitza-ho si et molesta la navegació del sistema a les vores de la pantalla. Aplica a les pantalles de partides i problemes.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Peces capturades';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Selecciona una imatge';
 
   @override
   String get mobileSettingsPickAnImageHelp =>
-      'Custom background works only in dark mode. A dark image is recommended.';
+      'El fons personalitzat només funciona en el mode fosc. Es recomana una imatge fosca.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Difumina la imatge';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Amaga el tauler';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Mostra el tauler';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Llisca per mostrar altres fons';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Polsa o solta';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Fes clic en dues caselles';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Dibuixa una forma';
 
   @override
   String get mobileSettingsShapeDrawingSubtitle =>
-      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+      'Dibuixa formes utilitzant dos dits: Manté un dit en una casella buida i arrossega l\'altre dit per dibuixar la forma.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Mostra la vora';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Resposta tàctil';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle =>
-      'When enabled, the device will vibrate shortly when you move or capture a piece.';
+      'Quan s\'activa, el dispositiu produïra una petita vibració quan es mou o es captura una peça.';
 
   @override
   String get mobileSettingsTab => 'Configuració';
@@ -224,7 +224,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSystemColors => 'Colors del sistema';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Clica aquí per començar a jugar a escacs.';
 
   @override
   String get mobileTheme => 'Tema';
@@ -244,7 +244,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileWatchTab => 'Visualitza';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Benvingut/da l\'aplicació de Lichess.org!';
 
   @override
   String get activityActivity => 'Activitat';

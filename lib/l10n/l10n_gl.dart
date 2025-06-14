@@ -1346,7 +1346,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get preferencesInCasualGamesOnly => 'Só en partidas amigables';
 
   @override
-  String get preferencesPromoteToQueenAutomatically => 'Coroar Dama automaticamente';
+  String get preferencesPromoteToQueenAutomatically => 'Coroar a Dama automaticamente';
 
   @override
   String get preferencesExplainPromoteToQueenAutomatically =>
@@ -1473,7 +1473,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleAdvanced => 'Avanzado';
 
   @override
-  String get puzzleLengths => 'Duracións';
+  String get puzzleLengths => 'Duración';
 
   @override
   String get puzzleMates => 'Mates';
@@ -2053,7 +2053,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get puzzleThemePromotionDescription =>
-      'Coroa un dos teus peóns para convertelo en raíña ou outra peza menor.';
+      'Coroa un peón para convertelo en dama ou unha peza menor.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Final de damas';

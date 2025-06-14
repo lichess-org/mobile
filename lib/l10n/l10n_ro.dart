@@ -488,24 +488,24 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get arenaWillBeNotified =>
-      'Vei fi notificat când competiția începe, deci este în regulă să joci în altă filă în timp ce aștepți.';
+      'Vei fi notificat când competiția începe, deci este în regulă să joci în altă fereastră în timp ce aștepți.';
 
   @override
-  String get arenaIsRated => 'Această competiție este evaluată și-ți va afecta scorul.';
+  String get arenaIsRated => 'Această competiție este evaluată și îți va afecta scorul.';
 
   @override
   String get arenaIsNotRated =>
       'Această competiție *nu* este evaluată și *nu* îți va afecta scorul.';
 
   @override
-  String get arenaSomeRated => 'Unele competiții sunt evaluate și-ți vor afecta scorul.';
+  String get arenaSomeRated => 'Unele competiții sunt evaluate și îți vor afecta scorul.';
 
   @override
   String get arenaHowAreScoresCalculated => 'Cum e calculat scorul?';
 
   @override
   String get arenaHowAreScoresCalculatedAnswer =>
-      'Un câștig valorează 2 puncte, o remiză: 1 punct, iar o înfrângere nu valorează nimic.\nDacă câștigi două partide consecutiv, punctele vor fi dublate pentru următoarele partide și sunt reprezentate de o pictogramă în flăcări.\nUrmătoarele partide vor valora punctaj dublu până se va întrerupe șirul de câștiguri consecutive.\nAsta înseamnă că: un câștig va valora 4 puncte, o remiză: 2 puncte, iar o înfrângere niciun punct.\n\nDe exemplu, două câștiguri urmate de o remiză vor valora 6 puncte: 2 + 2 + (2 x 1)';
+      'Un câștig valorează 2 puncte, o remiză: 1 punct, iar o înfrângere nu valorează nimic.\nDacă vei câștiga două partide consecutive, punctele vor fi dublate pentru următoarele partide și sunt reprezentate de o pictogramă în flăcări.\nUrmătoarele partide vor valora punctaj dublu până se va întrerupe șirul de câștiguri consecutive.\nAsta înseamnă că: un câștig va valora 4 puncte, o remiză: 2 puncte, iar o înfrângere niciun punct.\n\nDe exemplu, două câștiguri urmate de o remiză vor valora 6 puncte: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
@@ -519,7 +519,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get arenaHowIsTheWinnerDecidedAnswer =>
-      'Jucătorul(-ii) care a(u) obținut cele mai multe puncte la încheierea timpului stabilit pentru turneu va fi declarat câștigător.\n\nCând doi sau mai mulți jucători au același număr de puncte, departajarea se va face pe baza perfomanței.';
+      'Jucătorii care au obținut cele mai multe puncte la încheierea timpului stabilit pentru turneu vor fi declarați câștigători.\n\nCând doi sau mai mulți jucători au același număr de puncte, departajarea se va face pe baza performanței în turneu.';
 
   @override
   String get arenaHowDoesPairingWork => 'Cum funcționează potrivirea jucătorilor?';
@@ -533,26 +533,26 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get arenaHowDoesItEndAnswer =>
-      'Competiția are un o limită de timp. Când ajunge la zero, scorurile din competiție sunt înghețate și câștigătorul este anunțat. Meciurile în desfășurare trebuie terminate, deși nu sunt luate în considerare pentru competiție.';
+      'Competiția are o limită de timp. Când ajunge la zero, scorurile din competiție sunt înghețate și câștigătorul este anunțat. Meciurile în desfășurare trebuie terminate, deși nu sunt luate în considerare pentru competiție.';
 
   @override
   String get arenaOtherRules => 'Alte reguli importante';
 
   @override
   String get arenaThereIsACountdown =>
-      'Există o numărătoare inversă pentru prima dvs. mutare. Eșuarea efectuării unei mutări în această limită de timp va duce la abandonarea meciului.';
+      'Există o numărătoare inversă pentru prima dvs. mutare. Lipsa unei mutări în această limită de timp va duce la abandonarea meciului.';
 
   @override
   String get arenaThisIsPrivate => 'Aceasta este o competiție privată';
 
   @override
   String arenaShareUrl(String param) {
-    return 'Pentru a distribui, folosiți acest URL: $param';
+    return 'Distribuie acest URL pentru a lăsa oamenii să se alăture: $param';
   }
 
   @override
   String arenaDrawStreakStandard(String param) {
-    return 'Serie de remize consecutive: Când un jucător are remize consecutive într-un turneu de tip arenă, va primi un punct doar pentru prima remiză este punctată, precum și pentru remizele în partide standard care au mai mult de $param mutări. Seria de remize poate fi întreruptă doar de o victorie, nu de o înfrângere sau remiză.';
+    return 'Serie de remize consecutive: Când un jucător are remize consecutive într-un turneu de tip arenă, va primi un punct doar pentru prima remiză, precum și pentru remizele în partide standard care au mai mult de $param mutări. Seria de remize poate fi întreruptă doar de o victorie, nu de o înfrângere sau remiză.';
   }
 
   @override
@@ -569,7 +569,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get arenaHistory => 'Istoricul turneelor de tip arenă';
 
   @override
-  String get arenaNewTeamBattle => 'Luptă în echipă';
+  String get arenaNewTeamBattle => 'Bătălie în echipă';
 
   @override
   String get arenaCustomStartDate => 'Data de început personalizată';
@@ -596,7 +596,7 @@ class AppLocalizationsRo extends AppLocalizations {
       'După 2 partide câştigate, câştigurile consecutive aduc 4 puncte în loc de 2.';
 
   @override
-  String get arenaNoBerserkAllowed => 'Niciun Berserk permis';
+  String get arenaNoBerserkAllowed => 'Berserk nu este permis';
 
   @override
   String get arenaNoArenaStreaks => 'Nicio serie de victorii în arenă';
@@ -670,7 +670,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get arenaTournamentWinners => 'Câștigători de turnee';
 
   @override
-  String get arenaTournamentShields => 'Scut turneu';
+  String get arenaTournamentShields => 'Scuturi turneu';
 
   @override
   String get arenaOnlyTitled => 'Doar jucători titrați';
@@ -693,8 +693,7 @@ class AppLocalizationsRo extends AppLocalizations {
           'Efectuarea unei remize în primele $count mutări nu va aduce niciun punct niciunui jucător.',
       few:
           'Efectuarea unei remize în primele $count mutări nu va aduce niciun punct niciunui jucător.',
-      one:
-          'Efectuarea unei remize în prima $count mutare nu va aduce niciun punct niciunui jucător.',
+      one: 'Efectuarea unei remize la prima mutare nu va aduce niciun punct niciunui jucător.',
     );
     return '$_temp0';
   }

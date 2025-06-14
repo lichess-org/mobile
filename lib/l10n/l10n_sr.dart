@@ -3625,7 +3625,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get invalidUsernameOrPassword => 'Неисправно корисничко име или лозинка';
 
   @override
-  String get incorrectPassword => 'погрешна лозинка';
+  String get incorrectPassword => 'Погрешна лозинка';
 
   @override
   String get invalidAuthenticationCode => 'Неважећи аутентикациони код';
@@ -4273,7 +4273,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get lobby => 'Лоби';
 
   @override
-  String get anonymous => 'Непознати играч';
+  String get anonymous => 'Анониман';
 
   @override
   String yourScore(String param) {
@@ -4650,11 +4650,11 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String makeSureToRead(String param1) {
-    return 'Make sure to read $param1';
+    return 'Побрини се да прочиташ $param1';
   }
 
   @override
-  String get theForumEtiquette => 'the forum etiquette';
+  String get theForumEtiquette => 'форумски бонтон';
 
   @override
   String get thisTopicIsArchived => 'Ова тема је архивирана и не може се више одговорити на њу.';
@@ -4681,22 +4681,22 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String mentionedYouInX(String param1) {
-    return 'mentioned you in \"$param1\".';
+    return 'те споменуо/ла у \"$param1\".';
   }
 
   @override
   String xMentionedYouInY(String param1, String param2) {
-    return '$param1 mentioned you in \"$param2\".';
+    return '$param1 те споменуо/ла у \"$param2\".';
   }
 
   @override
   String invitedYouToX(String param1) {
-    return 'invited you to \"$param1\".';
+    return 'те позвао/ла у \"$param1\".';
   }
 
   @override
   String xInvitedYouToY(String param1, String param2) {
-    return '$param1 invited you to \"$param2\".';
+    return '$param1 те позвао/ла у \"$param2\".';
   }
 
   @override
@@ -4704,7 +4704,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String youHaveJoinedTeamX(String param1) {
-    return 'You have joined \"$param1\".';
+    return 'Придружио/ла си се \"$param1\".';
   }
 
   @override
@@ -4736,7 +4736,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get timeAlmostUp => 'Време ускоро изтиче!';
 
   @override
-  String get clickToRevealEmailAddress => '[Click to reveal email address]';
+  String get clickToRevealEmailAddress => '[Притисни да откријеш имејл адресу]';
 
   @override
   String get download => 'Преузми';

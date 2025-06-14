@@ -9,7 +9,7 @@ class AppLocalizationsNb extends AppLocalizations {
   AppLocalizationsNb([String locale = 'nb']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Kontoinnstillinger';
 
   @override
   String get mobileAccountPreferencesHelp =>
@@ -132,10 +132,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Sirkel';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Kvadrat';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -183,7 +183,7 @@ class AppLocalizationsNb extends AppLocalizations {
       'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Vis kantlinje';
 
   @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
@@ -243,7 +243,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileWatchTab => 'Se';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Velkommen til Lichess-appen!';
 
   @override
   String get activityActivity => 'Aktivitet';

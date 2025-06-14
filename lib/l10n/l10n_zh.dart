@@ -9,11 +9,10 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => '帐户设置';
 
   @override
-  String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => '这设置应用于您的Lichess帐户，并将用于所有设备。';
 
   @override
   String get mobileAllGames => '所有对局';
@@ -22,7 +21,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileAreYouSure => '你确定吗？';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => '棋盘设置';
 
   @override
   String get mobileCancelTakebackOffer => '取消悔棋请求';
@@ -118,25 +117,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileRecentSearches => '最近搜索';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => '删除书签';
 
   @override
   String get mobileSettingsClockPosition => '棋钟位置';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => '预设';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => '拖动棋子';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => '圆圈';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => '格子';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => '主页小部件';
 
   @override
   String get mobileSettingsImmersiveMode => '沉浸模式';
@@ -146,49 +145,46 @@ class AppLocalizationsZh extends AppLocalizations {
       '下棋时隐藏系统界面。 如果您的操作受到屏幕边缘的系统导航手势干扰，请使用此功能。 适用于棋局和谜题风暴界面。';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => '被吃的棋子';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => '选择一张图片';
 
   @override
-  String get mobileSettingsPickAnImageHelp =>
-      'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => '自定义背景只适用于深色模式，建议使用深色色图像。';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => '模糊图像';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => '隐藏棋盘';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => '显示棋盘';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => '滑动以显示其他背景';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => '点击或拖动';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => '点击两个格子';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => '绘制形状';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle =>
-      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => '使用两根手指绘制形状：一根手指按住一个空格子，拖动另一根手指绘制形状。';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => '显示边框';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => '触摸反馈';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle =>
-      'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => '如果启用，当您移动或吃掉一个棋子时，设备将会短暂的振动。';
 
   @override
   String get mobileSettingsTab => '设置';
@@ -221,7 +217,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSystemColors => '系统颜色';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => '点击此处开始下棋。';
 
   @override
   String get mobileTheme => '主题';
@@ -231,7 +227,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return '此版本不支持变体 $param.';
+    return '此版本不支持 $param变体。';
   }
 
   @override
@@ -241,7 +237,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileWatchTab => '观看';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => '欢迎来到Lichess应用！';
 
   @override
   String get activityActivity => '动态';
@@ -1567,7 +1563,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$param2 在游戏中发现了 $count 个谜题',
+      other: '在$param2 的对局中发现了 $count 个谜题',
     );
     return '$_temp0';
   }
@@ -1666,7 +1662,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeDovetailMate => '燕尾杀法';
 
   @override
-  String get puzzleThemeDovetailMateDescription => '后贴面杀，王唯一能逃跑的两个格子被同一方的棋子阻挡。';
+  String get puzzleThemeDovetailMateDescription => '皇后贴面杀，王唯一能逃跑的两个格子被同一方的棋子阻挡。';
 
   @override
   String get puzzleThemeEquality => '均势';
@@ -1793,7 +1789,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeMasterVsMasterDescription => '出自两位有名棋手对局的谜题。';
 
   @override
-  String get puzzleThemeMate => '杀王';
+  String get puzzleThemeMate => '将死';
 
   @override
   String get puzzleThemeMateDescription => '有型地赢棋。';
@@ -1802,25 +1798,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeMateIn1 => '一步杀';
 
   @override
-  String get puzzleThemeMateIn1Description => '一步之内实现将杀。';
+  String get puzzleThemeMateIn1Description => '一步之内将杀。';
 
   @override
   String get puzzleThemeMateIn2 => '两步杀';
 
   @override
-  String get puzzleThemeMateIn2Description => '两步之内实现将杀。';
+  String get puzzleThemeMateIn2Description => '两步之内将杀。';
 
   @override
   String get puzzleThemeMateIn3 => '三步杀';
 
   @override
-  String get puzzleThemeMateIn3Description => '三步之内实现将杀。';
+  String get puzzleThemeMateIn3Description => '三步之内将杀。';
 
   @override
   String get puzzleThemeMateIn4 => '四步杀';
 
   @override
-  String get puzzleThemeMateIn4Description => '四步之内实现将杀。';
+  String get puzzleThemeMateIn4Description => '四步之内将杀。';
 
   @override
   String get puzzleThemeMateIn5 => '五步或更多步杀';

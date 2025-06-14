@@ -2204,8 +2204,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get waitingForOpponent => 'आप प्रतिद्वंदी की प्रतीक्षा कर रहे हैं';
 
   @override
-  String get orLetYourOpponentScanQrCode =>
-      'या अपने प्रतिद्वंद्वी को इस क्यूआर कोड को स्कैन करने दें';
+  String get orLetYourOpponentScanQrCode => 'या अपने प्रतिद्वंद्वी को इस QR कोड को स्कैन करने दें';
 
   @override
   String get waiting => 'प्रतिद्वंदी के चुनौती स्वीकार करने की प्रतीक्षा कर रहे हैं';
@@ -2258,7 +2257,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get createAGame => 'नया खेल';
 
   @override
-  String get createTheGame => 'Create the game';
+  String get createTheGame => 'नया खेल';
 
   @override
   String get whiteIsVictorious => 'सफेद विजयी हुआ';
