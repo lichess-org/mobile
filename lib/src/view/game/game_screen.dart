@@ -110,6 +110,16 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final provider = currentGameProvider(
       seek: widget.seek,
