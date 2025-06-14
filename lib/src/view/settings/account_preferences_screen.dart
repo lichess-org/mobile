@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -8,6 +9,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AccountPreferencesScreen extends ConsumerStatefulWidget {
   const AccountPreferencesScreen({super.key});
@@ -323,6 +325,29 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 ),
               ],
             ),
+            ListSection(
+              hasLeading: true,
+              children: [
+                if (Theme.of(context).platform == TargetPlatform.iOS)
+                  ListTile(
+                    leading: const Icon(Icons.dangerous_outlined),
+                    title: const Text('Delete your account'),
+                    trailing: const _OpenInNewIcon(),
+                    onTap: () {
+                      launchUrl(lichessUri('/account/delete'));
+                    },
+                  )
+                else
+                  ListTile(
+                    leading: const Icon(Icons.dangerous_outlined),
+                    title: Text(context.l10n.settingsCloseAccount),
+                    trailing: const _OpenInNewIcon(),
+                    onTap: () {
+                      launchUrl(lichessUri('/account/close'));
+                    },
+                  ),
+              ],
+            ),
           ],
         );
       },
@@ -339,5 +364,14 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
       ),
       body: content,
     );
+  }
+}
+
+class _OpenInNewIcon extends StatelessWidget {
+  const _OpenInNewIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(Icons.open_in_new, size: 18);
   }
 }

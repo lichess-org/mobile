@@ -7,12 +7,13 @@ import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
+import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
@@ -23,7 +24,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -34,6 +34,9 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isOnline = ref.watch(
+      connectivityChangesProvider.select((s) => s.value?.isOnline ?? false),
+    );
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final userSession = ref.watch(authSessionProvider);
@@ -43,6 +46,24 @@ class SettingsScreen extends ConsumerWidget {
       appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
       body: ListView(
         children: [
+          if (userSession != null)
+            ListSection(
+              hasLeading: true,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.manage_accounts_outlined),
+                  title: Text(context.l10n.mobileAccountPreferences),
+                  enabled: isOnline,
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).push(AccountPreferencesScreen.buildRoute(context));
+                  },
+                ),
+              ],
+            ),
           ListSection(
             hasLeading: true,
             children: [
@@ -158,30 +179,6 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
-          if (userSession != null)
-            ListSection(
-              hasLeading: true,
-              children: [
-                if (Theme.of(context).platform == TargetPlatform.iOS)
-                  ListTile(
-                    leading: const Icon(Icons.dangerous_outlined),
-                    title: const Text('Delete your account'),
-                    trailing: const _OpenInNewIcon(),
-                    onTap: () {
-                      launchUrl(lichessUri('/account/delete'));
-                    },
-                  )
-                else
-                  ListTile(
-                    leading: const Icon(Icons.dangerous_outlined),
-                    title: Text(context.l10n.settingsCloseAccount),
-                    trailing: const _OpenInNewIcon(),
-                    onTap: () {
-                      launchUrl(lichessUri('/account/close'));
-                    },
-                  ),
-              ],
-            ),
           Padding(
             padding: Styles.bodySectionPadding,
             child: Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),
@@ -194,13 +191,4 @@ class SettingsScreen extends ConsumerWidget {
   String _getSizeString(int? bytes) => '${_bytesToMB(bytes ?? 0).toStringAsFixed(2)}MB';
 
   double _bytesToMB(int bytes) => bytes * 0.000001;
-}
-
-class _OpenInNewIcon extends StatelessWidget {
-  const _OpenInNewIcon();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Icon(Icons.open_in_new, size: 18);
-  }
 }

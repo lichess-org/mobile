@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
-import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -154,18 +153,6 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                 ref.invalidate(accountProvider);
                 Navigator.of(context).pop();
                 Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute(context));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.manage_accounts_outlined),
-              title: Text(context.l10n.mobileAccountPreferences),
-              enabled: isOnline,
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(AccountPreferencesScreen.buildRoute(context));
               },
             ),
             if (authController.isLoading)
