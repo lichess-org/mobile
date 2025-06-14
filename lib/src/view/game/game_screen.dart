@@ -184,7 +184,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            leading: isRealTimePlayingGame ? SocketPingRating(socketUri: socketUri) : null,
+            leading: isRealTimePlayingGame ? SocketPingRatingIcon(socketUri: socketUri) : null,
             title: loadedGame != null
                 ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
                 : widget.seek != null
@@ -215,7 +215,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            leading: const SocketPingRating(),
+            leading: const SocketPingRatingIcon(),
             title: widget.seek != null
                 ? _LobbyGameTitle(seek: widget.seek!)
                 : widget.challenge != null
@@ -245,7 +245,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            leading: const SocketPingRating(),
+            leading: const SocketPingRatingIcon(),
             title: widget.seek != null
                 ? _LobbyGameTitle(seek: widget.seek!)
                 : widget.challenge != null

@@ -126,7 +126,6 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                         ),
                 _ => const Icon(Icons.account_circle_outlined, size: 30),
               },
-              trailing: const SocketPingRating(),
               title: AutoSizeText(
                 user.name,
                 style: Styles.callout,
@@ -174,14 +173,12 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
             if (authController.isLoading)
               const ListTile(
                 leading: Icon(Icons.login_outlined),
-                trailing: SocketPingRating(),
                 enabled: false,
                 title: Center(child: ButtonLoadingIndicator()),
               )
             else
               ListTile(
                 leading: const Icon(Icons.login_outlined),
-                trailing: const SocketPingRating(),
                 title: Text(context.l10n.signIn),
                 enabled: isOnline,
                 onTap: () {
@@ -218,6 +215,8 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
               Navigator.of(context, rootNavigator: true).push(AboutScreen.buildRoute(context));
             },
           ),
+          const PlatformDivider(indent: 0),
+          const SocketPingRatingListTile(),
         ],
       ),
     );
