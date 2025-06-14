@@ -1,4 +1,5 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -81,7 +82,7 @@ class SettingsScreen extends ConsumerWidget {
                 leading: const Icon(Icons.palette_outlined),
                 title: Text(context.l10n.mobileTheme),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const Icon(Icons.chevron_right)
+                    ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
                   Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
@@ -91,7 +92,7 @@ class SettingsScreen extends ConsumerWidget {
                 leading: const Icon(Icons.app_registration),
                 title: Text(context.l10n.mobileSettingsHomeWidgets),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const Icon(Icons.chevron_right)
+                    ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
                   Navigator.of(
@@ -103,7 +104,7 @@ class SettingsScreen extends ConsumerWidget {
                 leading: const Icon(Symbols.chess_pawn),
                 title: Text(context.l10n.mobileBoardSettings, overflow: TextOverflow.ellipsis),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const Icon(Icons.chevron_right)
+                    ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
                   Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
@@ -113,7 +114,7 @@ class SettingsScreen extends ConsumerWidget {
                 leading: const Icon(Icons.memory_outlined),
                 title: const Text('Chess engine'),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const Icon(Icons.chevron_right)
+                    ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
                   Navigator.of(context).push(EngineSettingsScreen.buildRoute(context));
@@ -146,80 +147,6 @@ class SettingsScreen extends ConsumerWidget {
             hasLeading: true,
             children: [
               ListTile(
-                leading: const Icon(Icons.info_outlined),
-                title: Text(context.l10n.aboutX('Lichess')),
-                trailing: const _OpenInNewIcon(),
-                onTap: () {
-                  launchUrl(Uri.parse('https://lichess.org/about'));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.feedback_outlined),
-                title: Text(context.l10n.mobileFeedbackButton),
-                trailing: const _OpenInNewIcon(),
-                onTap: () {
-                  launchUrl(Uri.parse('https://lichess.org/contact'));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.article_outlined),
-                title: Text(context.l10n.termsOfService),
-                trailing: const _OpenInNewIcon(),
-                onTap: () {
-                  launchUrl(Uri.parse('https://lichess.org/terms-of-service'));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.privacy_tip_outlined),
-                title: Text(context.l10n.privacyPolicy),
-                trailing: const _OpenInNewIcon(),
-                onTap: () {
-                  launchUrl(Uri.parse('https://lichess.org/privacy'));
-                },
-              ),
-            ],
-          ),
-          ListSection(
-            hasLeading: true,
-            children: [
-              ListTile(
-                leading: const Icon(Symbols.database),
-                title: Text(context.l10n.database),
-                trailing: const _OpenInNewIcon(),
-                onTap: () {
-                  launchUrl(Uri.parse('https://database.lichess.org'));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.code_outlined),
-                title: Text(context.l10n.sourceCode),
-                trailing: const _OpenInNewIcon(),
-                onTap: () {
-                  launchUrl(Uri.parse('https://lichess.org/source'));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.bug_report_outlined),
-                title: Text(context.l10n.contribute),
-                trailing: const _OpenInNewIcon(),
-                onTap: () {
-                  launchUrl(Uri.parse('https://lichess.org/help/contribute'));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.star_border_outlined),
-                title: Text(context.l10n.thankYou),
-                trailing: const _OpenInNewIcon(),
-                onTap: () {
-                  launchUrl(Uri.parse('https://lichess.org/thanks'));
-                },
-              ),
-            ],
-          ),
-          ListSection(
-            hasLeading: true,
-            children: [
-              ListTile(
                 leading: const Icon(Icons.storage_outlined),
                 title: const Text('Local database size'),
                 trailing: dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
@@ -237,11 +164,8 @@ class SettingsScreen extends ConsumerWidget {
               children: [
                 if (Theme.of(context).platform == TargetPlatform.iOS)
                   ListTile(
-                    leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
-                    title: Text(
-                      'Delete your account',
-                      style: TextStyle(color: context.lichessColors.error),
-                    ),
+                    leading: const Icon(Icons.dangerous_outlined),
+                    title: const Text('Delete your account'),
                     trailing: const _OpenInNewIcon(),
                     onTap: () {
                       launchUrl(lichessUri('/account/delete'));
@@ -249,11 +173,8 @@ class SettingsScreen extends ConsumerWidget {
                   )
                 else
                   ListTile(
-                    leading: Icon(Icons.dangerous_outlined, color: context.lichessColors.error),
-                    title: Text(
-                      context.l10n.settingsCloseAccount,
-                      style: TextStyle(color: context.lichessColors.error),
-                    ),
+                    leading: const Icon(Icons.dangerous_outlined),
+                    title: Text(context.l10n.settingsCloseAccount),
                     trailing: const _OpenInNewIcon(),
                     onTap: () {
                       launchUrl(lichessUri('/account/close'));

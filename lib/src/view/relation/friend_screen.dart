@@ -102,7 +102,7 @@ class OnlineFriendsWidget extends ConsumerWidget {
         data: (data) {
           return ListSection(
             header: Text(context.l10n.nbFriendsOnline(data.length)),
-            onHeaderTap: data.isEmpty ? null : () => _handleTap(context, data),
+            onHeaderTap: data.isEmpty || data.length <= 10 ? null : () => _handleTap(context, data),
             children: [
               if (data.isEmpty)
                 ListTile(
@@ -110,7 +110,7 @@ class OnlineFriendsWidget extends ConsumerWidget {
                   trailing: const CupertinoListTileChevron(),
                   onTap: () => _handleTap(context, data),
                 ),
-              for (final friend in data.take(5)) _OnlineFriendListTile(onlineFriend: friend),
+              for (final friend in data.take(10)) _OnlineFriendListTile(onlineFriend: friend),
             ],
           );
         },

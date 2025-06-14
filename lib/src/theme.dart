@@ -210,6 +210,9 @@ ThemeData _makeBackgroundImageTheme({
           ? lighten(baseTheme.colorScheme.surface, 0.1).withValues(alpha: 0.9)
           : baseTheme.colorScheme.surface.withValues(alpha: 0.9),
     ),
+    drawerTheme: DrawerThemeData(
+      backgroundColor: baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.9),
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: baseTheme.colorScheme.secondaryFixedDim,
       foregroundColor: baseTheme.colorScheme.onSecondaryFixedVariant,

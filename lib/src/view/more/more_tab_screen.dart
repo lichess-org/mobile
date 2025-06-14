@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -57,8 +56,6 @@ class _Body extends ConsumerWidget {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     final session = ref.watch(authSessionProvider);
 
-    final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
-
     return ListView(
       controller: moreScrollController,
       children: [
@@ -66,14 +63,14 @@ class _Body extends ConsumerWidget {
           header: SettingsSectionTitle(context.l10n.tools),
           hasLeading: true,
           children: [
-            _ToolsButton(
+            ListTile(
               leading: const Icon(Icons.upload_file_outlined),
-              title: context.l10n.loadPosition,
+              title: Text(context.l10n.loadPosition),
               onTap: () => Navigator.of(context).push(LoadPositionScreen.buildRoute(context)),
             ),
-            _ToolsButton(
+            ListTile(
               leading: const Icon(Icons.biotech_outlined),
-              title: context.l10n.analysis,
+              title: Text(context.l10n.analysis),
               onTap: () => Navigator.of(context, rootNavigator: true).push(
                 AnalysisScreen.buildRoute(
                   context,
@@ -88,28 +85,27 @@ class _Body extends ConsumerWidget {
                 ),
               ),
             ),
-            _ToolsButton(
+            ListTile(
               leading: const Icon(Icons.explore_outlined),
-              title: context.l10n.openingExplorer,
-              onTap: isOnline
-                  ? () => Navigator.of(context, rootNavigator: true).push(
-                      OpeningExplorerScreen.buildRoute(
-                        context,
-                        const AnalysisOptions(
-                          orientation: Side.white,
-                          standalone: (
-                            pgn: '',
-                            isComputerAnalysisAllowed: false,
-                            variant: Variant.standard,
-                          ),
-                        ),
-                      ),
-                    )
-                  : null,
+              title: Text(context.l10n.openingExplorer),
+              enabled: isOnline,
+              onTap: () => Navigator.of(context, rootNavigator: true).push(
+                OpeningExplorerScreen.buildRoute(
+                  context,
+                  const AnalysisOptions(
+                    orientation: Side.white,
+                    standalone: (
+                      pgn: '',
+                      isComputerAnalysisAllowed: false,
+                      variant: Variant.standard,
+                    ),
+                  ),
+                ),
+              ),
             ),
-            _ToolsButton(
+            ListTile(
               leading: const Icon(Icons.edit_outlined),
-              title: context.l10n.boardEditor,
+              title: Text(context.l10n.boardEditor),
               onTap: () => Navigator.of(
                 context,
                 rootNavigator: true,
@@ -182,41 +178,9 @@ class _Body extends ConsumerWidget {
           ),
         Padding(
           padding: Styles.bodySectionPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              LichessMessage(style: TextTheme.of(context).bodyMedium),
-              const SizedBox(height: 10),
-              Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),
-            ],
-          ),
+          child: LichessMessage(style: TextTheme.of(context).bodyMedium),
         ),
       ],
-    );
-  }
-}
-
-class _ToolsButton extends StatelessWidget {
-  const _ToolsButton({required this.leading, required this.title, required this.onTap});
-
-  final Widget leading;
-
-  final String title;
-
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: onTap == null ? 0.5 : 1.0,
-      child: ListTile(
-        leading: leading,
-        title: Text(title),
-        trailing: Theme.of(context).platform == TargetPlatform.iOS
-            ? const CupertinoListTileChevron()
-            : null,
-        onTap: onTap,
-      ),
     );
   }
 }

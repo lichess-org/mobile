@@ -31,7 +31,6 @@ import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -126,7 +125,6 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
         ),
 
         drawer: const AccountDrawer(),
-        bottomSheet: const OfflineBanner(),
         body: isTablet
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
