@@ -24,14 +24,14 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AccountIconButton extends ConsumerStatefulWidget {
-  const AccountIconButton({super.key});
+class AccountDrawerIconButton extends ConsumerStatefulWidget {
+  const AccountDrawerIconButton({super.key});
 
   @override
-  ConsumerState<AccountIconButton> createState() => _AccountIconButtonState();
+  ConsumerState<AccountDrawerIconButton> createState() => _AccountIconButtonState();
 }
 
-class _AccountIconButtonState extends ConsumerState<AccountIconButton> {
+class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
   bool errorLoadingFlair = false;
 
   @override
