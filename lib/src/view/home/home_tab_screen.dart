@@ -178,7 +178,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                       automaticallyImplyLeading: false,
                     )
                   : PlatformAppBar(
-                      title: const Text('lichess.org'),
+                      title: const AppBarLichessTitle(),
+                      centerTitle: true,
                       leading: const AccountDrawerIconButton(),
                       actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
                     ),

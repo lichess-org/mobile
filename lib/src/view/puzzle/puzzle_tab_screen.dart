@@ -121,6 +121,7 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
         appBar: PlatformAppBar(
           leading: const AccountDrawerIconButton(),
           title: Text(context.l10n.puzzles),
+          centerTitle: true,
           actions: const [_DashboardButton(), _HistoryButton()],
         ),
 

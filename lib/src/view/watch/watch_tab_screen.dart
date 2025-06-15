@@ -88,6 +88,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
         appBar: PlatformAppBar(
           leading: const AccountDrawerIconButton(),
           title: Text(context.l10n.watch),
+          centerTitle: true,
         ),
         drawer: const AccountDrawer(),
         body: isOnline

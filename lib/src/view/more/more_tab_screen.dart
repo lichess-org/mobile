@@ -38,7 +38,8 @@ class MoreTabScreen extends ConsumerWidget {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          title: const Text('lichess.org'),
+          title: const AppBarLichessTitle(),
+          centerTitle: true,
           leading: const AccountDrawerIconButton(),
         ),
         drawer: const AccountDrawer(),

@@ -66,6 +66,7 @@ class LearnTabScreen extends ConsumerWidget {
         appBar: PlatformAppBar(
           leading: const AccountDrawerIconButton(),
           title: Text(context.l10n.learnMenu),
+          centerTitle: true,
         ),
         drawer: const AccountDrawer(),
         body: const _Body(),
