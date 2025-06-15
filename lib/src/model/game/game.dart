@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:deep_pick/deep_pick.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -17,6 +18,8 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:result_extensions/result_extensions.dart';
 
 part 'game.freezed.dart';
 part 'game.g.dart';
@@ -355,6 +358,54 @@ sealed class CorrespondenceClockData with _$CorrespondenceClockData {
 
   Duration forSide(Side side) => side == Side.white ? white : black;
 }
+
+@freezed
+sealed class CorrespondenceForecast with _$CorrespondenceForecast {
+  const CorrespondenceForecast._();
+  const factory CorrespondenceForecast({required IList<IList<CorrespondenceForecastStep>> steps}) =
+      _CorrespondenceForecast;
+
+  factory CorrespondenceForecast.fromJson(Map<String, dynamic> json) =>
+      forecastFromPick(pick(json).required());
+
+  String toJson() => jsonEncode(
+    steps
+        .map(
+          (forecast) => forecast
+              .mapIndexed(
+                (i, step) => {
+                  'ply': step.ply,
+                  'uci': step.sanMove.move.uci,
+                  'san': step.sanMove.san,
+                  'fen': step.fen,
+                },
+              )
+              .toList(growable: false),
+        )
+        .toList(growable: false),
+  );
+}
+
+CorrespondenceForecast forecastFromPick(RequiredPick pick) => CorrespondenceForecast(
+  steps: IList(
+    pick('steps').asListOrThrow(
+      (pick) => IList(
+        pick.asListOrThrow(
+          (pick) => (
+            ply: pick('ply').asIntOrThrow(),
+            sanMove: SanMove(
+              pick('san').asStringOrThrow(),
+              Move.parse(pick('uci').asStringOrThrow())!,
+            ),
+            fen: pick('fen').asStringOrThrow(),
+          ),
+        ),
+      ),
+    ),
+  ),
+);
+
+typedef CorrespondenceForecastStep = ({int ply, SanMove sanMove, String fen});
 
 @freezed
 sealed class GameStep with _$GameStep {

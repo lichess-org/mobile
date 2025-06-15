@@ -352,6 +352,25 @@ class GameController extends _$GameController {
     }
   }
 
+  void updateForecast(CorrespondenceForecast newForecast, {Move? moveToPlay}) {
+    if (!state.hasValue) {
+      return;
+    }
+
+    ref.withClient(
+      (client) => GameRepository(
+        client,
+      ).saveForecast(gameId: gameFullId, forecast: newForecast, moveToPlay: moveToPlay),
+    );
+
+    // TODO check if we need this or if we get an update via the socket
+    state = AsyncValue.data(
+      state.requireValue.copyWith(
+        game: state.requireValue.game.copyWith(correspondenceForecast: newForecast),
+      ),
+    );
+  }
+
   void abortGame() {
     _socketClient.send('abort', null);
   }
@@ -1066,6 +1085,15 @@ sealed class GameState with _$GameState {
             variant: game.meta.variant,
             isComputerAnalysisAllowed: false,
           ),
+          conditionalPremovesOptions:
+              game.playable && game.meta.speed == Speed.correspondence && game.youAre != null
+              ? (
+                  initialSteps: game.correspondenceForecast?.steps ?? const IList.empty(),
+                  currentPly: game.lastPly,
+                  gameFullId: gameFullId,
+                  ourSide: game.youAre!,
+                )
+              : null,
         );
 
   GameChatOptions? get chatOptions => isZenModeActive || game.meta.tournament != null

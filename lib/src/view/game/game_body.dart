@@ -484,7 +484,8 @@ class _GameBottomBar extends ConsumerWidget {
                 },
                 icon: CupertinoIcons.arrowshape_turn_up_left,
               )
-            else if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence)
+            else if (gameState.game.playable &&
+                gameState.game.meta.speed == Speed.correspondence) ...[
               BottomBarButton(
                 label: 'Go to the next game',
                 icon: Icons.skip_next,
@@ -497,8 +498,19 @@ class _GameBottomBar extends ConsumerWidget {
                   },
                   orElse: () => null,
                 ),
-              )
-            else if (gameState.game.finished)
+              ),
+              BottomBarButton(
+                label: context.l10n.analysis,
+                icon: Icons.biotech,
+                // TODO I think this won't be updated if we add premove lines and then leave the screen
+                badgeLabel: gameState.game.correspondenceForecast?.steps.length.toString(),
+                onTap: () {
+                  Navigator.of(
+                    context,
+                  ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
+                },
+              ),
+            ] else if (gameState.game.finished)
               BottomBarButton(
                 label: context.l10n.mobileShowResult,
                 onTap: () {
@@ -578,6 +590,8 @@ class _GameBottomBar extends ConsumerWidget {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
+        // TODO add a badge here if we have saved premove lines.
+        // Also, maybe move it to the bottom bar if it's a correspondence game?
         if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence ||
             gameState.game.finished)
           BottomSheetAction(
