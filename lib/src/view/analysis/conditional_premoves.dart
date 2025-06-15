@@ -33,21 +33,19 @@ class ConditionalPremoves extends ConsumerWidget {
               flex: 6,
               child: Scrollbar(
                 thumbVisibility: true,
-                child: ListView(
-                  children: [
-                    ...lines.map(
-                      (line) => _SavedVariation(
-                        options,
-                        startingNode: analysisState.liveMoveNode!,
-                        path: line,
-                        onTap: () {
-                          ref
-                              .read(analysisControllerProvider(options).notifier)
-                              .userJump(UciPath.join(analysisState.pathToLiveMove!, line));
-                        },
-                      ),
-                    ),
-                  ],
+                child: ListView.separated(
+                  itemCount: lines.length,
+                  itemBuilder: (_, i) => _SavedVariation(
+                    options,
+                    startingNode: analysisState.liveMoveNode!,
+                    path: lines[i],
+                    onTap: () {
+                      ref
+                          .read(analysisControllerProvider(options).notifier)
+                          .userJump(UciPath.join(analysisState.pathToLiveMove!, lines[i]));
+                    },
+                  ),
+                  separatorBuilder: (_, _) => const Divider(),
                 ),
               ),
             ),
