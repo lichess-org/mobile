@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'study_list_paginator.g.dart';
 
-typedef StudyList = ({IList<StudyPageData> studies, int? nextPage});
+typedef StudyList = ({IList<StudyPageItem> studies, int? nextPage});
 
 /// Gets a list of studies from the paginated API.
 @riverpod

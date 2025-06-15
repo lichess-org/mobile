@@ -142,7 +142,7 @@ class _Body extends ConsumerWidget {
           title: _Title(state: state),
           actions: [
             if (state.tournament.isFinished != true)
-              SocketPingRating(socketUri: TournamentController.socketUri(id)),
+              SocketPingRatingIcon(socketUri: TournamentController.socketUri(id)),
             if (timeLeft != null)
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),

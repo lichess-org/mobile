@@ -91,7 +91,7 @@ class ContextMenuIconButton extends StatelessWidget {
             },
             arrowWidth: 0.0,
             arrowHeight: 0.0,
-            direction: PopoverDirection.top,
+            direction: PopoverDirection.bottom,
             backgroundColor: Colors.transparent,
           );
         },

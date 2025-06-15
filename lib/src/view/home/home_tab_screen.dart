@@ -26,7 +26,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/account/account_screen.dart';
+import 'package:lichess_mobile/src/view/account/account_drawer.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -172,12 +172,18 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             isEditingWidgets: widget.editModeEnabled,
             child: PlatformScaffold(
               appBar: widget.editModeEnabled
-                  ? PlatformAppBar(title: Text(context.l10n.mobileSettingsHomeWidgets))
+                  ? PlatformAppBar(
+                      title: Text(context.l10n.mobileSettingsHomeWidgets),
+                      leading: const BackButton(),
+                      automaticallyImplyLeading: false,
+                    )
                   : PlatformAppBar(
-                      title: const Text('lichess.org'),
-                      leading: const AccountIconButton(),
+                      title: const AppBarLichessTitle(),
+                      centerTitle: true,
+                      leading: const AccountDrawerIconButton(),
                       actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
                     ),
+              drawer: const AccountDrawer(),
               body: widget.editModeEnabled
                   ? content
                   : RefreshIndicator.adaptive(
@@ -308,16 +314,19 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     return [
       if (isTablet)
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Expanded(child: _TabletCreateAGameSection()),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ...welcomeWidgets,
-                  FeaturedTournamentsWidget(featured: featuredTournaments),
+                  const SizedBox(height: 32.0),
+                  const _TabletCreateAGameSection(),
                 ],
               ),
             ),
+            Expanded(child: FeaturedTournamentsWidget(featured: featuredTournaments)),
           ],
         )
       else ...[
