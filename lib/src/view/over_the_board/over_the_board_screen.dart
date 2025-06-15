@@ -263,7 +263,6 @@ class _BottomBar extends ConsumerWidget {
 
   Future<void> _showOtbGameMenu(BuildContext context, WidgetRef ref) {
     final gameState = ref.read(overTheBoardGameControllerProvider);
-
     return showAdaptiveActionSheet(
       context: context,
       actions: [
