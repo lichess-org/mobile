@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/account/account_screen.dart';
+import 'package:lichess_mobile/src/view/account/account_drawer.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
@@ -39,7 +39,7 @@ class MoreTabScreen extends ConsumerWidget {
       child: PlatformScaffold(
         appBar: PlatformAppBar(
           title: const Text('lichess.org'),
-          leading: const AccountIconButton(),
+          leading: const AccountDrawerIconButton(),
         ),
         drawer: const AccountDrawer(),
         body: const _Body(),
