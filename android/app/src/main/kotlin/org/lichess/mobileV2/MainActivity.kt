@@ -3,6 +3,8 @@ package org.lichess.mobileV2
 import android.app.ActivityManager
 import android.content.Context
 import android.graphics.Rect
+import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -11,6 +13,11 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity: FlutterActivity() {
   private val GESTURES_CHANNEL = "mobile.lichess.org/gestures_exclusion"
   private val SYSTEM_CHANNEL = "mobile.lichess.org/system"
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    installSplashScreen()
+    super.onCreate(savedInstanceState)
+  }
 
   override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
     super.configureFlutterEngine(flutterEngine)

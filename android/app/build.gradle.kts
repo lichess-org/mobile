@@ -88,4 +88,5 @@ flutter {
 dependencies {
     // Dependency required by flutter_local_notifications package
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

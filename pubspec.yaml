@@ -136,16 +136,13 @@ flutter:
   generate: true
 
 flutter_native_splash:
+  android: false
+  ios: true
+  web: false
+
   color: '#ffffff'
   image: assets/images/logo-black.png
 
   color_dark: '#000000'
   image_dark: assets/images/logo-white.png
-
-  android_12:
-    color: '#ffffff'
-    image: assets/images/android12logo-black.png
-
-    color_dark: '#000000'
-    image_dark: assets/images/android12logo-white.png
 
