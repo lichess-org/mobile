@@ -9,7 +9,7 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Настройки аккаунта';
 
   @override
   String get mobileAccountPreferencesHelp =>
@@ -22,7 +22,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileAreYouSure => 'Вы уверены?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Настройки доски';
 
   @override
   String get mobileCancelTakebackOffer => 'Отменить предложение о возврате хода';
@@ -41,19 +41,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Добрый вечер, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Добрый вечер';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Добрый день, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Добрый день';
 
   @override
   String get mobileHideVariation => 'Скрыть варианты';
@@ -121,7 +121,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileRecentSearches => 'Последние запросы';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Удалить из избранного';
 
   @override
   String get mobileSettingsClockPosition => 'Расположение часов';
@@ -162,10 +162,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'Blur the image';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Скрыть доску';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Показать доску';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
@@ -174,7 +174,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Нажатием на две клетки';
 
   @override
   String get mobileSettingsShapeDrawing => 'Shape drawing';
@@ -244,7 +244,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileWatchTab => 'Просмотр';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Добро пожаловать в приложение Lichess!';
 
   @override
   String get activityActivity => 'Активность';

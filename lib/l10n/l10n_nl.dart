@@ -2045,7 +2045,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleThemePinDescription =>
-      'Tactiek waarbij een stuk niet verzet kan worden op straffe van een aanval op een stuk van hogere waarde.';
+      'Tactiek waarbij een stuk niet verplaatst kan worden op straffe van een aanval op een stuk van hogere waarde.';
 
   @override
   String get puzzleThemePromotion => 'Promotie';

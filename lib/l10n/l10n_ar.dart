@@ -9,7 +9,7 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'تفضيلات الحساب';
 
   @override
   String get mobileAccountPreferencesHelp =>
@@ -147,14 +147,14 @@ class AppLocalizationsAr extends AppLocalizations {
       'إخفاء واجهة المستخدم أثناء التشغيل. استخدم هذا إذا كنت منزعجاً من إيماءات التنقل للنظام عند حواف الشاشة. تُطبق على شاشة المباريات و الألغاز.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'القطع المأسورة';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'اختر صورة';
 
   @override
   String get mobileSettingsPickAnImageHelp =>
-      'Custom background works only in dark mode. A dark image is recommended.';
+      'الخلفية المخصصة تعمل فقط في الوضع المظلم. يُوصى بصورة مظلمة.';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'طمس الصورة';
@@ -166,20 +166,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'إظهار اللوحة';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'إسحب لعرض خلفيات أخرى';
 
   @override
   String get mobileSettingsPieceShiftMethodEither => 'إما الضغط أو السحب';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'الضغط علي مربعين';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'رسم الأسهم';
 
   @override
   String get mobileSettingsShapeDrawingSubtitle =>
-      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+      'رسم الأسهم بإصبعين: ثبت إصبعك علي مربع فارغ و حرّك إصبعك الآخر لرسم سهم.';
 
   @override
   String get mobileSettingsShowBorder => 'إظهار الحـواف';
