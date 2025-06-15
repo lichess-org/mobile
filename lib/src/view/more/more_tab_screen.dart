@@ -57,131 +57,149 @@ class _Body extends ConsumerWidget {
     final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     final session = ref.watch(authSessionProvider);
 
-    return ListView(
-      controller: moreScrollController,
-      children: [
-        ListSection(
-          header: SettingsSectionTitle(context.l10n.tools),
-          hasLeading: true,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.upload_file_outlined),
-              title: Text(context.l10n.loadPosition),
-              onTap: () => Navigator.of(context).push(LoadPositionScreen.buildRoute(context)),
-            ),
-            ListTile(
-              leading: const Icon(Icons.biotech_outlined),
-              title: Text(context.l10n.analysis),
-              onTap: () => Navigator.of(context, rootNavigator: true).push(
-                AnalysisScreen.buildRoute(
-                  context,
-                  const AnalysisOptions(
-                    orientation: Side.white,
-                    standalone: (
-                      pgn: '',
-                      isComputerAnalysisAllowed: true,
-                      variant: Variant.standard,
+    return ListTileTheme.merge(
+      iconColor: Theme.of(context).colorScheme.primary,
+      child: ListView(
+        controller: moreScrollController,
+        children: [
+          ListSection(
+            header: SettingsSectionTitle(context.l10n.tools),
+            hasLeading: true,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.upload_file_outlined),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                title: Text(context.l10n.loadPosition),
+                onTap: () => Navigator.of(context).push(LoadPositionScreen.buildRoute(context)),
+              ),
+              ListTile(
+                leading: const Icon(Icons.biotech_outlined),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                title: Text(context.l10n.analysis),
+                onTap: () => Navigator.of(context, rootNavigator: true).push(
+                  AnalysisScreen.buildRoute(
+                    context,
+                    const AnalysisOptions(
+                      orientation: Side.white,
+                      standalone: (
+                        pgn: '',
+                        isComputerAnalysisAllowed: true,
+                        variant: Variant.standard,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.explore_outlined),
-              title: Text(context.l10n.openingExplorer),
-              enabled: isOnline,
-              onTap: () => Navigator.of(context, rootNavigator: true).push(
-                OpeningExplorerScreen.buildRoute(
-                  context,
-                  const AnalysisOptions(
-                    orientation: Side.white,
-                    standalone: (
-                      pgn: '',
-                      isComputerAnalysisAllowed: false,
-                      variant: Variant.standard,
+              ListTile(
+                leading: const Icon(Icons.explore_outlined),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                title: Text(context.l10n.openingExplorer),
+                enabled: isOnline,
+                onTap: () => Navigator.of(context, rootNavigator: true).push(
+                  OpeningExplorerScreen.buildRoute(
+                    context,
+                    const AnalysisOptions(
+                      orientation: Side.white,
+                      standalone: (
+                        pgn: '',
+                        isComputerAnalysisAllowed: false,
+                        variant: Variant.standard,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.edit_outlined),
-              title: Text(context.l10n.boardEditor),
-              onTap: () => Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(BoardEditorScreen.buildRoute(context)),
-            ),
-            ListTile(
-              leading: const Icon(Icons.alarm_outlined),
-              title: Text(context.l10n.clock),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const CupertinoListTileChevron()
-                  : null,
-              onTap: () {
-                Navigator.of(
+              ListTile(
+                leading: const Icon(Icons.edit_outlined),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                title: Text(context.l10n.boardEditor),
+                onTap: () => Navigator.of(
                   context,
                   rootNavigator: true,
-                ).push(ClockToolScreen.buildRoute(context));
-              },
-            ),
-          ],
-        ),
-        ListSection(
-          header: SettingsSectionTitle(context.l10n.community),
-          hasLeading: true,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.groups_3_outlined),
-              title: Text(context.l10n.players),
-              enabled: isOnline,
-              trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const CupertinoListTileChevron()
-                  : null,
-              onTap: () {
-                Navigator.of(context, rootNavigator: true).push(PlayerScreen.buildRoute(context));
-              },
-            ),
-            if (session != null)
+                ).push(BoardEditorScreen.buildRoute(context)),
+              ),
               ListTile(
-                leading: const Icon(Icons.people_outline),
-                title: Text(context.l10n.friends),
+                leading: const Icon(Icons.alarm_outlined),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                title: Text(context.l10n.clock),
+                onTap: () {
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(ClockToolScreen.buildRoute(context));
+                },
+              ),
+            ],
+          ),
+          ListSection(
+            header: SettingsSectionTitle(context.l10n.community),
+            hasLeading: true,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.groups_3_outlined),
+                title: Text(context.l10n.players),
                 enabled: isOnline,
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(FriendScreen.buildRoute(context));
+                  Navigator.of(context, rootNavigator: true).push(PlayerScreen.buildRoute(context));
                 },
               ),
-          ],
-        ),
-        if (Theme.of(context).platform == TargetPlatform.android)
-          ListSection(
-            hasLeading: true,
-            children: [
-              ListTile(
-                leading: Icon(
-                  LichessIcons.patron,
-                  semanticLabel: context.l10n.patronLichessPatron,
-                  color: context.lichessColors.brag,
+              if (session != null)
+                ListTile(
+                  leading: const Icon(Icons.people_outline),
+                  title: Text(context.l10n.friends),
+                  enabled: isOnline,
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  onTap: () {
+                    Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).push(FriendScreen.buildRoute(context));
+                  },
                 ),
-                title: Text(context.l10n.patronDonate),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const Icon(Icons.chevron_right)
-                    : null,
-                enabled: isOnline,
-                onTap: () {
-                  launchUrl(Uri.parse('https://lichess.org/patron'));
-                },
-              ),
             ],
           ),
-        Padding(
-          padding: Styles.bodySectionPadding,
-          child: LichessMessage(style: TextTheme.of(context).bodyMedium),
-        ),
-      ],
+          if (Theme.of(context).platform == TargetPlatform.android)
+            ListSection(
+              hasLeading: true,
+              children: [
+                ListTile(
+                  leading: Icon(
+                    LichessIcons.patron,
+                    semanticLabel: context.l10n.patronLichessPatron,
+                    color: context.lichessColors.brag,
+                  ),
+                  title: Text(context.l10n.patronDonate),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  enabled: isOnline,
+                  onTap: () {
+                    launchUrl(Uri.parse('https://lichess.org/patron'));
+                  },
+                ),
+              ],
+            ),
+          Padding(
+            padding: Styles.bodySectionPadding,
+            child: LichessMessage(style: TextTheme.of(context).bodyMedium),
+          ),
+        ],
+      ),
     );
   }
 }

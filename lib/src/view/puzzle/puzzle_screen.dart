@@ -805,7 +805,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
               ),
             ListTile(
               title: Text(context.l10n.mobileBoardSettings),
-              trailing: const Icon(CupertinoIcons.chevron_right),
+              trailing: const CupertinoListTileChevron(),
               onTap: () {
                 Navigator.of(
                   context,

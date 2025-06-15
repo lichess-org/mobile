@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -269,6 +270,9 @@ class _WatchTvWidget extends ConsumerWidget {
               .map((snapshot) {
                 return ListTile(
                   leading: Icon(snapshot.channel.icon),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
                   title: Text(snapshot.channel.label),
                   subtitle: UserFullNameWidget.player(
                     user: snapshot.player.asPlayer.user,

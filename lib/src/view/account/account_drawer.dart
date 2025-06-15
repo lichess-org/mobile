@@ -191,9 +191,6 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
             ListTile(
               leading: Icon(LichessIcons.patron, semanticLabel: context.l10n.patronLichessPatron),
               title: Text(context.l10n.patronDonate),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const Icon(Icons.chevron_right)
-                  : null,
               enabled: isOnline,
               onTap: () {
                 launchUrl(Uri.parse('https://lichess.org/patron'));

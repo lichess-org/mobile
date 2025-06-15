@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -75,34 +76,6 @@ class LearnTabScreen extends ConsumerWidget {
   }
 }
 
-class _ToolsButton extends StatelessWidget {
-  const _ToolsButton({required this.leading, required this.title, required this.onTap});
-
-  final Widget leading;
-
-  final Widget title;
-
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: onTap == null ? 0.5 : 1.0,
-      child: ListTile(
-        leading: IconTheme.merge(
-          data: IconThemeData(color: ColorScheme.of(context).primary),
-          child: leading,
-        ),
-        title: title,
-        trailing: Theme.of(context).platform == TargetPlatform.iOS
-            ? const Icon(Symbols.chevron_right)
-            : null,
-        onTap: onTap,
-      ),
-    );
-  }
-}
-
 class _Body extends ConsumerWidget {
   const _Body();
 
@@ -115,76 +88,88 @@ class _Body extends ConsumerWidget {
     final haveIFavoriteStudies =
         session != null && (ref.watch(_myFavoriteStudiesLengthProvider).valueOrNull ?? 0) > 0;
 
-    return ListView(
-      controller: learnScrollController,
-      children: [
-        ListSection(
-          hasLeading: true,
-          children: [
-            _ToolsButton(
-              leading: const Icon(Symbols.where_to_vote),
-              title: Text(context.l10n.coordinatesCoordinateTraining, style: Styles.callout),
-              onTap: () => Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(CoordinateTrainingScreen.buildRoute(context)),
-            ),
-          ],
-        ),
-        if (isOnline) ...[
+    return ListTileTheme.merge(
+      iconColor: Theme.of(context).colorScheme.primary,
+      child: ListView(
+        controller: learnScrollController,
+        children: [
           ListSection(
-            header: Text(context.l10n.studyMenu),
-            onHeaderTap: () => Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(StudyListScreen.buildRoute(context)),
             hasLeading: true,
             children: [
-              ...(switch (ref.watch(_hotStudiesProvider)) {
-                AsyncData(:final value) =>
-                  value
-                      .take(5)
-                      .map((study) => StudyListItem(study: study, titleMaxLines: 1))
-                      .toList(growable: false),
-                _ => [],
-              }),
+              ListTile(
+                leading: const Icon(Symbols.where_to_vote),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                title: Text(context.l10n.coordinatesCoordinateTraining, style: Styles.callout),
+                onTap: () => Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(CoordinateTrainingScreen.buildRoute(context)),
+              ),
             ],
           ),
-          if (haveIStudies || haveIFavoriteStudies)
+          if (isOnline) ...[
             ListSection(
+              header: Text(context.l10n.studyMenu),
+              onHeaderTap: () => Navigator.of(
+                context,
+                rootNavigator: true,
+              ).push(StudyListScreen.buildRoute(context)),
               hasLeading: true,
-              margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
               children: [
-                if (haveIStudies)
-                  _ToolsButton(
-                    leading: const Icon(Symbols.local_library),
-                    title: Text(context.l10n.studyMyStudies),
-                    onTap: isOnline
-                        ? () => Navigator.of(context).push(
-                            StudyListScreen.buildRoute(
-                              context,
-                              initialCategory: StudyCategory.mine,
-                            ),
-                          )
-                        : null,
-                  ),
-                if (haveIFavoriteStudies)
-                  _ToolsButton(
-                    leading: const Icon(Symbols.favorite),
-                    title: Text(context.l10n.studyMyFavoriteStudies),
-                    onTap: isOnline
-                        ? () => Navigator.of(context).push(
-                            StudyListScreen.buildRoute(
-                              context,
-                              initialCategory: StudyCategory.likes,
-                            ),
-                          )
-                        : null,
-                  ),
+                ...(switch (ref.watch(_hotStudiesProvider)) {
+                  AsyncData(:final value) =>
+                    value
+                        .take(5)
+                        .map((study) => StudyListItem(study: study, titleMaxLines: 1))
+                        .toList(growable: false),
+                  _ => [],
+                }),
               ],
             ),
+            if (haveIStudies || haveIFavoriteStudies)
+              ListSection(
+                hasLeading: true,
+                margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
+                children: [
+                  if (haveIStudies)
+                    ListTile(
+                      leading: const Icon(Symbols.local_library),
+                      trailing: Theme.of(context).platform == TargetPlatform.iOS
+                          ? const CupertinoListTileChevron()
+                          : null,
+                      title: Text(context.l10n.studyMyStudies),
+                      onTap: isOnline
+                          ? () => Navigator.of(context).push(
+                              StudyListScreen.buildRoute(
+                                context,
+                                initialCategory: StudyCategory.mine,
+                              ),
+                            )
+                          : null,
+                    ),
+                  if (haveIFavoriteStudies)
+                    ListTile(
+                      leading: const Icon(Symbols.favorite),
+                      trailing: Theme.of(context).platform == TargetPlatform.iOS
+                          ? const CupertinoListTileChevron()
+                          : null,
+                      title: Text(context.l10n.studyMyFavoriteStudies),
+                      onTap: isOnline
+                          ? () => Navigator.of(context).push(
+                              StudyListScreen.buildRoute(
+                                context,
+                                initialCategory: StudyCategory.likes,
+                              ),
+                            )
+                          : null,
+                    ),
+                ],
+              ),
+          ],
         ],
-      ],
+      ),
     );
   }
 }
