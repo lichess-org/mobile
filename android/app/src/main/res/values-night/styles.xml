@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Shim in the system UI overrides -->
+    <style name="SplashTheme.NightAdjusted" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+    </style>
+
     <!-- Theme applied to the Android Window as soon as the process has started.
          This theme determines the color of the Android Window while your
          Flutter UI initializes, as well as behind your Flutter UI while its
