@@ -49,32 +49,35 @@ class _FloatingPlayButtonState extends ConsumerState<FloatingPlayButton> {
         if (_buttonKey.currentContext?.mounted != true) return;
         showPopover(
           context: _buttonKey.currentContext!,
-          bodyBuilder: (context) => ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.6),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text.rich(
-                textAlign: TextAlign.center,
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    TextSpan(
-                      text: context.l10n.mobileTapHereToStartPlayingChess,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                ),
+          constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.6),
+          bodyBuilder: (context) => Container(
+            color:
+                DialogTheme.of(context).backgroundColor ??
+                ColorScheme.of(context).surfaceContainerHigh,
+            padding: const EdgeInsets.all(8.0),
+            child: Text.rich(
+              textAlign: TextAlign.center,
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  TextSpan(
+                    text: context.l10n.mobileTapHereToStartPlayingChess,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
               ),
             ),
           ),
           onPop: () {
             prefs.setBool('app_welcome_message_shown', true);
           },
+          backgroundColor:
+              DialogTheme.of(context).backgroundColor ??
+              ColorScheme.of(context).surfaceContainerHigh,
           barrierColor: Colors.black12,
-          backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
           direction: PopoverDirection.top,
         );
       });
