@@ -80,7 +80,7 @@ class SocketPingRatingListTile extends ConsumerWidget {
     final ping = ref.watch(socketPingProvider(route: socketUri));
 
     return ListTile(
-      trailing: LagIndicator(lagRating: ping.rating),
+      leading: LagIndicator(lagRating: ping.rating),
       title: ping.averageLag > Duration.zero
           ? Text.rich(
               TextSpan(

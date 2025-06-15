@@ -101,6 +101,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
         children: [
           if (user != null) ...[
             ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               leading: switch (account) {
                 AsyncData(:final value) =>
                   value == null
