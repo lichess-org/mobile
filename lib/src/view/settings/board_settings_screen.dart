@@ -12,10 +12,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BoardSettingsScreen extends StatelessWidget {
-  const BoardSettingsScreen({super.key, this.showCloseButton = false});
-
-  /// Whether to show a close button in the app bar instead of the back button.
-  final bool showCloseButton;
+  const BoardSettingsScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context, {bool fullscreenDialog = false}) {
     return buildScreenRoute(
@@ -28,10 +25,7 @@ class BoardSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: showCloseButton ? const CloseButton() : null,
-        title: Text(context.l10n.mobileBoardSettings),
-      ),
+      appBar: AppBar(title: Text(context.l10n.mobileBoardSettings)),
       body: const _Body(),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,7 +31,6 @@ import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -123,7 +123,8 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
           title: Text(context.l10n.puzzles),
           actions: const [_DashboardButton(), _HistoryButton()],
         ),
-        bottomSheet: const OfflineBanner(),
+
+        drawer: const AccountDrawer(),
         body: isTablet
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,7 +234,7 @@ class _PuzzleMenuListTile extends StatelessWidget {
       title: Text(title, style: Styles.mainListTileTitle),
       subtitle: Text(subtitle, maxLines: 3),
       trailing: Theme.of(context).platform == TargetPlatform.iOS
-          ? const Icon(Icons.chevron_right)
+          ? const CupertinoListTileChevron()
           : null,
       onTap: onTap,
     );

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Preferencias de la cuenta</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Estas preferencias se aplican a tu cuenta de Lichess y se usarán en todos los dispositivos.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Todas las partidas</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">¿Estás seguro?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Configuración del tablero</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancelar oferta de deshacer movimiento</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Limpiar</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Borrar movimiento guardado</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Únete a una partida</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Comentarios</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Hola, %s</string>
-  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">Hola</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Buenas tardes, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Buenas tardes</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Buen día, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Buen día</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Ocultar variación</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Inicio</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Presentadores en vivo</string>
@@ -16,7 +21,10 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">No hay resultados</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">No estás siguiendo a ningún usuario.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Aceptar</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Sobre el tablero</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Jugadores con \"%s\"</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">A la izquierda</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">A la derecha</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Aumentar la pieza arrastrada</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">¿Quieres finalizar esta ronda?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nada que mostrar, por favor cambia los filtros</string>
@@ -26,9 +34,29 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Realiza ejercicios de tus aperturas favoritas o elige un tema.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ejercicios</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Búsquedas recientes</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Respuesta táctil</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Modo inmersivo</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Borrar marcador</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Posición del reloj</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Ajustes</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Marcador de ubicación de la pieza arrastrada</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Círculo</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Cuadrado</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Componentes de la página de inicio</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Modo inmersivo</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Ocultar la interfaz del sistema durante la partida. Usa esto si te molestan los iconos de navegación del sistema en los bordes de la pantalla. Se aplica a las pantallas de la partida y de Puzzle Storm.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Piezas capturadas</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Selecciona una imagen</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">El fondo personalizado sólo funciona en modo oscuro. Se recomienda una imagen oscura.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Desenfocar la imagen</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Ocultar tablero</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Mostrar tablero</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Desliza para mostrar otros fondos</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Toca o arrastra</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Toca dos casillas</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Dibujo de figura</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Dibuja formas con dos dedos: mantén un dedo sobre una casilla vacía y arrastra otro dedo para dibujar una figura.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Mostrar borde</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Respuesta táctil</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Cuando está activado, el dispositivo vibrará brevemente cuando muevas o captures una pieza.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ajustes</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Compartir PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartir enlace de la partida</string>
@@ -39,8 +67,11 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Mostrar variaciones</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Algo salió mal.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Colores del sistema</string>
+  <string name="tapHereToStartPlayingChess" comment="A message shown only once the first time the app is installed. Appear in a popup over the main floating action button on the home screen.">Toca aquí para empezar a jugar al ajedrez.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Herramientas</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">La variante %s no es compatible con esta versión.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Esperando a que se una un oponente...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ver</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">¡Bienvenido a la aplicación de Lichess!</string>
 </resources>

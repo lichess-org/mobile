@@ -74,10 +74,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileNotFollowingAnyUser => 'You are not following any user.';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'কোনো সমস্যা নেই';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'একই বোর্ড/ডিভাইসে';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'বামদিকে';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'ডানদিকে';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
@@ -114,7 +114,7 @@ class AppLocalizationsBn extends AppLocalizations {
       'Play puzzles from your favorite openings, or choose a theme.';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'ধাঁধা';
 
   @override
   String get mobileRecentSearches => 'Recent searches';
@@ -123,7 +123,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'ঘড়ির পজিশন';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';

@@ -117,7 +117,7 @@ class _SectionChoices extends ConsumerWidget {
             const SizedBox(width: _kMatrixSpacing),
             Expanded(
               child: _ChoiceChip(
-                title: Text(context.l10n.custom),
+                title: Text(context.l10n.custom, textAlign: TextAlign.center),
                 onTap: isOnline
                     ? () {
                         showModalBottomSheet<void>(

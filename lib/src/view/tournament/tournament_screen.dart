@@ -142,7 +142,7 @@ class _Body extends ConsumerWidget {
           title: _Title(state: state),
           actions: [
             if (state.tournament.isFinished != true)
-              SocketPingRating(socketUri: TournamentController.socketUri(id)),
+              SocketPingRatingIcon(socketUri: TournamentController.socketUri(id)),
             if (timeLeft != null)
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
@@ -530,6 +530,7 @@ class _StandingControls extends ConsumerWidget {
           onLongPress: state.hasPreviousPage
               ? ref.read(tournamentControllerProvider(state.id).notifier).loadFirstStandingsPage
               : null,
+          // TODO l10n
           semanticsLabel: 'Previous',
           icon: const Icon(Icons.chevron_left),
         ),

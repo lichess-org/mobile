@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -170,12 +172,17 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             isEditingWidgets: widget.editModeEnabled,
             child: PlatformScaffold(
               appBar: widget.editModeEnabled
-                  ? PlatformAppBar(title: Text(context.l10n.mobileSettingsHomeWidgets))
+                  ? PlatformAppBar(
+                      title: Text(context.l10n.mobileSettingsHomeWidgets),
+                      leading: const BackButton(),
+                      automaticallyImplyLeading: false,
+                    )
                   : PlatformAppBar(
                       title: const Text('lichess.org'),
                       leading: const AccountIconButton(),
                       actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
                     ),
+              drawer: const AccountDrawer(),
               body: widget.editModeEnabled
                   ? content
                   : RefreshIndicator.adaptive(
@@ -306,16 +313,19 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     return [
       if (isTablet)
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Expanded(child: _TabletCreateAGameSection()),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ...welcomeWidgets,
-                  FeaturedTournamentsWidget(featured: featuredTournaments),
+                  const SizedBox(height: 32.0),
+                  const _TabletCreateAGameSection(),
                 ],
               ),
             ),
+            Expanded(child: FeaturedTournamentsWidget(featured: featuredTournaments)),
           ],
         )
       else ...[
@@ -475,17 +485,37 @@ class _EditableWidget extends ConsumerWidget {
   }
 }
 
+class _IsDayTimeNotifier extends AutoDisposeNotifier<bool> {
+  Timer? _timer;
+
+  @override
+  bool build() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(minutes: 1), (_) {
+      ref.invalidateSelf();
+    });
+
+    ref.onDispose(() {
+      _timer?.cancel();
+    });
+
+    final hour = DateTime.now().hour;
+    return hour >= 6 && hour < 18; // Daytime is between 6 AM and 6 PM
+  }
+}
+
+final _isDayTimeProvider = NotifierProvider.autoDispose<_IsDayTimeNotifier, bool>(
+  _IsDayTimeNotifier.new,
+  name: '_isDayTimeProvider',
+);
+
 class _GreetingWidget extends ConsumerWidget {
   const _GreetingWidget();
-
-  bool get isDayTime {
-    final hour = DateTime.now().hour;
-    return hour >= 6 && hour < 18;
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
+    final isDayTime = ref.watch(_isDayTimeProvider);
     final style = TextTheme.of(context).bodyLarge;
 
     const iconSize = 24.0;

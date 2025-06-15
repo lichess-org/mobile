@@ -9,11 +9,11 @@ class AppLocalizationsDa extends AppLocalizations {
   AppLocalizationsDa([String locale = 'da']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Kontoindstillinger';
 
   @override
   String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your Lichess account and will be used across all devices.';
+      'Disse indstillinger anvendes på din Lichess-konto og vil blive brugt på tværs af alle enheder.';
 
   @override
   String get mobileAllGames => 'Alle partier';
@@ -22,7 +22,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileAreYouSure => 'Er du sikker?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Brætindstillinger';
 
   @override
   String get mobileCancelTakebackOffer => 'Annuller tilbud om tilbagetagelse';
@@ -41,19 +41,19 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Godaften, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Godaften';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Goddag, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Goddag';
 
   @override
   String get mobileHideVariation => 'Skjul variation';
@@ -77,7 +77,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOkButton => 'Ok';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Spil offline, brug som bræt';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Venstre';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Højre';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Forstør brik, som trækkes';
@@ -120,25 +120,25 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileRecentSearches => 'Seneste søgninger';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Fjern bogmærke';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Ur-position';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Forudindstillinger';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Mål for trukket brik';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Cirkel';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Kvadrat';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Hjem-widget';
 
   @override
   String get mobileSettingsImmersiveMode => 'Fordybelsestilstand';
@@ -148,49 +148,49 @@ class AppLocalizationsDa extends AppLocalizations {
       'Skjul systemets brugerflade, mens du spiller. Brug denne funktion, hvis du er generet af systemets navigationsbevægelser i kanterne af skærmen. Gælder for parti- og Puzzle Storm-skærme.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Erobrede brikker';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Vælg et billede';
 
   @override
   String get mobileSettingsPickAnImageHelp =>
-      'Custom background works only in dark mode. A dark image is recommended.';
+      'Brugerdefineret baggrund virker kun i mørk tilstand. Et mørkt billede anbefales.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Slør billedet';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Skjul bræt';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Vis bræt';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe for at vise andre baggrunde';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Enten tryk eller træk';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tryk på to felter';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Form tegning';
 
   @override
   String get mobileSettingsShapeDrawingSubtitle =>
-      'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+      'Tegn figurer ved hjælp af to fingre: hold en finger på et tomt felt og træk en anden finger for at tegne en form.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Vis kant';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Berøringsfeedback';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle =>
-      'When enabled, the device will vibrate shortly when you move or capture a piece.';
+      'Når aktiveret, vil enheden vibrere kortvarigt, når du flytter eller erobrer en brik.';
 
   @override
   String get mobileSettingsTab => 'Indstillinger';
@@ -223,7 +223,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileSystemColors => 'Systemfarver';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Tryk her for at begynde at spille skak.';
 
   @override
   String get mobileTheme => 'Tema';
@@ -233,7 +233,7 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Variant $param er ikke understøttet i denne version.';
   }
 
   @override
@@ -243,7 +243,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileWatchTab => 'Se';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Velkommen til Lichess-appen!';
 
   @override
   String get activityActivity => 'Aktivitet';

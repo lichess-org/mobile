@@ -77,7 +77,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Proti človeku';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Leva';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Desna';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Povečaj vlečeno figuro';
@@ -124,7 +124,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Pozicija ure';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -234,7 +234,7 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'V tej različici različica $param ni podprta.';
   }
 
   @override

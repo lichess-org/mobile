@@ -77,7 +77,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Hrať offline, na jednom zariadení';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Vľavo';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Vpravo';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Zväčšiť uchopenú figúrku';
@@ -124,7 +124,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Umiestnenie hodín';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -234,7 +234,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'Variant $param nie je podporovaný v tejto verzií.';
   }
 
   @override

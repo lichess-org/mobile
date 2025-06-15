@@ -22,7 +22,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileAreYouSure => 'هل أنت متأكد؟';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'إعدادات اللوحة';
 
   @override
   String get mobileCancelTakebackOffer => 'إلغاء عرض الإسترجاع';
@@ -41,19 +41,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'مساء الخيـر، $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'مساء الخيـر';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'يـوم طيب، $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'يـوم طيب';
 
   @override
   String get mobileHideVariation => 'إخفاء النقلات المرشحة';
@@ -77,7 +77,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileOkButton => 'موافق';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'على الرقعة';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,10 +85,10 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'يسار';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'يميـن';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'تكبير القطعة المسحوبة';
@@ -119,22 +119,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileRecentSearches => 'عمليات البحث الأخيرة';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'إزالة الإشارة المرجعية';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'موضع الساعة';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'الإعدادات المسبقة';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'دائـرة';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'مربـع';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -157,19 +157,19 @@ class AppLocalizationsAr extends AppLocalizations {
       'Custom background works only in dark mode. A dark image is recommended.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'طمس الصورة';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'إخفاء اللوحة';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'إظهار اللوحة';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'إما الضغط أو السحب';
 
   @override
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
@@ -182,7 +182,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'إظهار الحـواف';
 
   @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
@@ -222,7 +222,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileSystemColors => 'ألوان النظام';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'أضغط هنا لبدء مباراة شطرنج.';
 
   @override
   String get mobileTheme => 'المظهر';
@@ -232,7 +232,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'الخيار $param غير مدعوم في هذا الإصدار.';
   }
 
   @override
@@ -6352,7 +6352,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return 'المشاهدون بإمكانهم رؤية الدراسة والتحدث في خانة الدردشة.<br><br>$param2 المساهمون بإمكانهم نقل القطع والتعديل علي الدراسة.';
+    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
   }
 
   @override

@@ -45,51 +45,49 @@ class BoardEditorScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final aspectRatio = constraints.biggest.aspectRatio;
+      body: Center(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final aspectRatio = constraints.biggest.aspectRatio;
 
-          final defaultBoardSize = constraints.biggest.shortestSide;
-          final isTablet = isTabletOrLarger(context);
-          final remainingHeight = constraints.maxHeight - defaultBoardSize;
-          final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
-          final boardSize = isTablet || isSmallScreen
-              ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-              : defaultBoardSize;
+            final defaultBoardSize = constraints.biggest.shortestSide;
+            final isTablet = isTabletOrLarger(context);
+            final boardSize = defaultBoardSize;
 
-          final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
+            final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
 
-          return Flex(
-            direction: direction,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _PieceMenu(
-                boardSize,
-                initialFen: initialFen,
-                direction: flipAxis(direction),
-                side: boardEditorState.orientation.opposite,
-                isTablet: isTablet,
-              ),
-              _BoardEditor(
-                boardSize,
-                initialFen: initialFen,
-                orientation: boardEditorState.orientation,
-                isTablet: isTablet,
-                // unlockView is safe because chessground will never modify the pieces
-                pieces: boardEditorState.pieces.unlockView,
-              ),
-              _PieceMenu(
-                boardSize,
-                initialFen: initialFen,
-                direction: flipAxis(direction),
-                side: boardEditorState.orientation,
-                isTablet: isTablet,
-              ),
-            ],
-          );
-        },
+            return Flex(
+              direction: direction,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _PieceMenu(
+                  boardSize,
+                  initialFen: initialFen,
+                  direction: flipAxis(direction),
+                  side: boardEditorState.orientation.opposite,
+                  isTablet: isTablet,
+                ),
+                _BoardEditor(
+                  boardSize,
+                  initialFen: initialFen,
+                  orientation: boardEditorState.orientation,
+                  isTablet: isTablet,
+                  // unlockView is safe because chessground will never modify the pieces
+                  pieces: boardEditorState.pieces.unlockView,
+                ),
+                _PieceMenu(
+                  boardSize,
+                  initialFen: initialFen,
+                  direction: flipAxis(direction),
+                  side: boardEditorState.orientation,
+                  isTablet: isTablet,
+                ),
+              ],
+            );
+          },
+        ),
       ),
       bottomNavigationBar: _BottomBar(initialFen),
     );

@@ -9,11 +9,11 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Hesap tercihleri';
 
   @override
   String get mobileAccountPreferencesHelp =>
-      'These preferences are applied to your Lichess account and will be used across all devices.';
+      'Bu tercihler Lichess hesabınıza uygulanacak ve cihazlarınız arasında senkronize edilecektir.';
 
   @override
   String get mobileAllGames => 'Tüm oyunlar';
@@ -22,7 +22,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileAreYouSure => 'Emin misiniz?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Tahta seçenekleri';
 
   @override
   String get mobileCancelTakebackOffer => 'Geri alma teklifini iptal et';
@@ -41,19 +41,19 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'İyi akşamlar, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'İyi akşamlar';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'İyi günler, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'İyi günler';
 
   @override
   String get mobileHideVariation => 'Varyasyonu gizle';
@@ -77,7 +77,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOkButton => 'Tamam';
 
   @override
-  String get mobileOverTheBoard => 'Over the board';
+  String get mobileOverTheBoard => 'Tahta üzerinde çevrimdışı oyna';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -85,13 +85,13 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Sol';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Sağ';
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Sürüklenen parçayı büyüt';
+  String get mobilePrefMagnifyDraggedPiece => 'Sürüklenen taşı büyüt';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Bu oyunu bitirmek istiyor musun?';
@@ -122,22 +122,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileRecentSearches => 'Son aramalar';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Yer işaretini kaldır';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Saat pozisyonu';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Hazırlar';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Daire';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Kare';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -147,52 +147,52 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mobileSettingsImmersiveModeSubtitle =>
-      'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+      'Oynarken sistem arayüzünü gizle. Sistemin, ekranın kenarlarındaki gezinme hareketlerinden rahatsızsan bunu kullan. Bu ayar oyun ve bulmaca ekranlarına uygulanır.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Ele geçirilen taşlar';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Bir resim seçin';
 
   @override
   String get mobileSettingsPickAnImageHelp =>
-      'Custom background works only in dark mode. A dark image is recommended.';
+      'Özel arkaplan sadece karanlık modda çalışır. Karanlık bir resim tavsiye edilir.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Resmi bulanıklaştır';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Tahtayı gizle';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Tahtayı göster';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Diğer arkaplanlar için kaydır';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Dokun veya sürükle';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'İki kareye dokun';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Şekil çizimi';
 
   @override
   String get mobileSettingsShapeDrawingSubtitle =>
       'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Kenarları göster';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Dokunuş geribildirimi';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle =>
-      'When enabled, the device will vibrate shortly when you move or capture a piece.';
+      'Aktif olduğunda, bir taş oynatıldığında veya alındığında cihaz hafifçe titreyecektir.';
 
   @override
   String get mobileSettingsTab => 'Ayarlar';
@@ -225,7 +225,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSystemColors => 'Sistem renkleri';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Satranç oynamak için buraya dokunun.';
 
   @override
   String get mobileTheme => 'Tema';
@@ -235,7 +235,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return '$param varyantı bu versiyonda desteklenmiyor.';
   }
 
   @override
@@ -245,7 +245,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileWatchTab => 'İzle';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Lichess uygulamasına hoşgeldiniz!';
 
   @override
   String get activityActivity => 'Son Etkinlikler';
@@ -661,7 +661,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Turnuvaya katılmak için resmî bir unvana sahip olmayı iste';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'Turnuva eşleştirmeleri şu anda kapalıdır.';
 
   @override
   String get arenaBerserkRate => 'Divane oranı';
@@ -1122,7 +1122,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get coordinatesNameSquare => 'Kareleri yaz';
 
   @override
-  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
+  String get coordinatesPracticeOnlySomeFilesAndRanks =>
+      'Sadece bazı dosyaları & rütbeleri uygulayın';
 
   @override
   String get patronDonate => 'Bağış yap';
@@ -2268,7 +2269,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get createAGame => 'Yeni bir oyun kur';
 
   @override
-  String get createTheGame => 'Create the game';
+  String get createTheGame => 'Oyunu oluştur';
 
   @override
   String get whiteIsVictorious => 'Zafer Beyazın';
@@ -2420,7 +2421,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get copyVariationPgn => 'Varyasyon PGN\'sini kopyala';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'Ana PGN\'yi kopyala';
 
   @override
   String get move => 'Hamle';
@@ -2595,7 +2596,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get claimADraw => 'Beraberlik talep et';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Beraberlik iddia edildi';
 
   @override
   String get offerDraw => 'Beraberlik teklif et';
@@ -2614,7 +2615,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return '$param katıldı';
   }
 
   @override
@@ -3014,31 +3015,31 @@ class AppLocalizationsTr extends AppLocalizations {
   String get proposeATakeback => 'Hamleyi geri almayı teklif et';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'Beyaz hamleyi geri alma önerisinde bulunuyor';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'Siyah hamleyi geri alma önerisinde bulunuyor';
 
   @override
   String get takebackPropositionSent => 'Hamleyi geri alma teklif edildi';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'Beyaz hamleyi geri almayı reddediyor';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'Siyah hamleyi geri almayı reddediyor';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'Beyaz hamleyi geri almayı kabul ediyor';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'Siyah hamleyi geri almayı kabul ediyor';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'Beyaz hamleyi geri almayı iptal ediyor';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'Siyah hamleyi geri almayı iptal ediyor';
 
   @override
   String get yourOpponentProposesATakeback => 'Rakibiniz hamleyi geri almayı teklif etti';
@@ -3338,7 +3339,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get createdBy => 'Oluşturan kişi';
 
   @override
-  String get startingIn => 'Starting in';
+  String get startingIn => 'Başlamasına';
 
   @override
   String standByX(String param) {
@@ -3894,7 +3895,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get termsOfService => 'Hizmet koşulları';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'Ünvan doğrulaması';
 
   @override
   String get sourceCode => 'Kaynak Kodu';
@@ -4135,7 +4136,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'E-posta adresiniz $param olduğunu doğrulayın';
   }
 
   @override
@@ -4169,7 +4170,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get downloadImported => 'İçeri aktarılmış oyunu indir';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Bütün oyunları indir';
 
   @override
   String get crosstable => 'Çapraz Tablo';
@@ -4922,13 +4923,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get stats => 'İstatistikler';
 
   @override
-  String get accessibility => 'Accessibility';
+  String get accessibility => 'Erişilebilirlik';
 
   @override
-  String get enableBlindMode => 'Enable blind mode';
+  String get enableBlindMode => 'Kör modunu aktifleştir';
 
   @override
-  String get disableBlindMode => 'Disable blind mode';
+  String get disableBlindMode => 'Kör modunu devre dışı bırak';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6090,17 +6091,17 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get studyWelcomeToLichessStudyText =>
-      'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+      'Bu paylaşımlı bir analiz panosudur.<br><br>Oyunları analiz etmek ve not eklemek,<br>arkadaşlarınızla pozisyonları tartışmak,<br>ve tabii ki satranç dersleri için kullanabilirsiniz!<br><br>Güçlü bir araç, nasıl çalıştığını görmek için biraz zaman ayıralım.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Paylaşıldı ve kaydedildi';
 
   @override
   String get studySharedAndSavedText =>
-      'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+      'Diğer üyeler sizin hareketlerinizi gerçek zamanlı olarak görebilir!<br>Ayrıca, her şey sonsuza kadar kaydedilir.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Çalışma üyeleri';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
@@ -6113,18 +6114,18 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Çalışma bölümleri';
 
   @override
   String get studyStudyChaptersText =>
       'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Bir pozisyona yorum yap';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return '$param düğmesine tıklayın veya sağdaki taşıma listesine sağ tıklayın.<br>Yorumlar paylaşılır ve kaydedilir.';
   }
 
   @override
@@ -6142,31 +6143,32 @@ class AppLocalizationsTr extends AppLocalizations {
       'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'Bir çalışma bölümü oluşturalım';
 
   @override
   String get studyCreateChapterText =>
-      'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+      'Bir çalışma birkaç bölümden oluşabilir.<br>Her bölümün kendine özgü bir hareket ağacı vardır<br>ve çeşitli şekillerde oluşturulabilir.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Başlangıç pozisyonundan';
 
   @override
   String get studyFromInitialPositionText =>
-      'Just a board setup for a new game.<br>Suited to explore openings.';
+      'Yeni bir oyun için sadece bir tahta kurulumu.<br>Açılışları keşfetmek için uygun.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Özel konum';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText =>
+      'Tahtayı istediğiniz gibi ayarlayın.<br>Son oyunları keşfetmek için uygun.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Mevcut bir lichess oyununu yükle';
 
   @override
   String get studyLoadExistingLichessGameText =>
-      'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+      'Lichess oyun URL\'sini yapıştırın<br>(örneğin lichess.org/7fHIU0XI)<br>bölümdeki oyun hamlelerini yüklemek için.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -6200,7 +6202,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+  String get studyWhiteDefeatBlackCanNotWin => 'Beyaz kaybeder fakat siyah kazanamaz';
 
   @override
   String studyNbChapters(int count) {
