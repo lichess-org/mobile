@@ -146,6 +146,7 @@ class GameRepository {
     final uri = Uri(
       path: moveToPlay != null ? '$gameId/forecasts/${moveToPlay.uci}' : '$gameId/forecasts',
     );
+    print('post `${forecast.toJson()} to $uri`');
     final response = await client.post(
       uri,
       body: forecast.toJson(),

@@ -87,15 +87,15 @@ sealed class Forecast with _$Forecast {
     return copyWith(lines: lines.remove(line));
   }
 
+  IList<UciPath> linesStartingWith(Move move) =>
+      lines.where((line) => line.head == UciCharPair.fromMove(move)).toIList();
+
   @useResult
   Forecast playMove(Move move) {
     assert(onMyTurn);
 
     return copyWith(
-      lines: lines
-          .where((line) => line.head == UciCharPair.fromMove(move))
-          .map((line) => line.tail)
-          .toIList(),
+      lines: linesStartingWith(move).map((line) => line.tail).toIList(),
       onMyTurn: false,
     );
   }

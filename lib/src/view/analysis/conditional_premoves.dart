@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:material_color_utilities/material_color_utilities.dart';
 
 class ConditionalPremoves extends ConsumerWidget {
   const ConditionalPremoves(this.options);
@@ -21,8 +22,6 @@ class ConditionalPremoves extends ConsumerWidget {
 
     final lines = analysisState.forecast!.lines;
 
-    final currentCandidate = analysisState.currentPremoveCandidate;
-
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -31,52 +30,29 @@ class ConditionalPremoves extends ConsumerWidget {
           children: [
             Flexible(
               flex: 6,
-              child: Scrollbar(
-                thumbVisibility: true,
-                child: ListView.separated(
-                  itemCount: lines.length,
-                  itemBuilder: (_, i) => _SavedVariation(
-                    options,
-                    startingNode: analysisState.liveMoveNode!,
-                    path: lines[i],
-                    onTap: () {
-                      ref
-                          .read(analysisControllerProvider(options).notifier)
-                          .userJump(UciPath.join(analysisState.pathToLiveMove!, lines[i]));
-                    },
-                  ),
-                  separatorBuilder: (_, _) => const Divider(),
+              child: ListView.separated(
+                itemCount: lines.length,
+                itemBuilder: (_, i) => _SavedVariation(
+                  options,
+                  startingNode: analysisState.liveMoveNode!,
+                  path: lines[i],
+                  onTap: () {
+                    ref
+                        .read(analysisControllerProvider(options).notifier)
+                        .userJump(UciPath.join(analysisState.pathToLiveMove!, lines[i]));
+                  },
                 ),
+                separatorBuilder: (_, _) => const Divider(),
               ),
             ),
             const Divider(),
-            Flexible(
-              flex: 1,
-              child: _AddVariationButton(options),
-              //child: Center(
-              //  child: currentCandidate != null
-              //      ? FilledButton.icon(
-              //          icon: const Icon(Icons.save),
-              //          onPressed: ref
-              //              .read(analysisControllerProvider(options).notifier)
-              //              .addCurrentPathAsPremove,
-              //          // TODO also render variatiojn as text
-              //          label: Column(
-              //            children: [
-              //              Text(context.l10n.addCurrentVariation),
-              //              _Variation(
-              //                startingNode: analysisState.liveMoveNode!,
-              //                path: analysisState.currentPath,
-              //              ),
-              //            ],
-              //          ),
-              //        )
-              //      : Text(context.l10n.playVariationToCreateConditionalPremoves),
-              //),
-            ),
+            Flexible(flex: 1, child: _AddVariationButton(options)),
+            if (analysisState.pendingMove != null &&
+                analysisState.linesForPendingMove?.isNotEmpty == true) ...[
+              const Divider(),
+              _PlayAndSaveButton(options),
+            ],
           ],
-          //_PlayMoveButton(options),
-          //],
         ),
       ),
     );
@@ -127,8 +103,8 @@ class _AddVariationButton extends ConsumerWidget {
   }
 }
 
-class _PlayMoveButton extends ConsumerWidget {
-  const _PlayMoveButton(this.options);
+class _PlayAndSaveButton extends ConsumerWidget {
+  const _PlayAndSaveButton(this.options);
 
   final AnalysisOptions options;
 
@@ -136,11 +112,27 @@ class _PlayMoveButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(analysisControllerProvider(options)).requireValue;
 
-    if (!analysisState.forecast!.onMyTurn) {
-      return const SizedBox.shrink();
-    }
+    final followUpLines = analysisState.linesForPendingMove!.count((path) => path.size > 1);
 
-    return const SizedBox.shrink();
+    return FilledButton.icon(
+      icon: const Icon(CupertinoIcons.play_arrow),
+      label: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            style: const TextStyle(fontWeight: FontWeight.bold),
+            context.l10n.playX(analysisState.pendingMove!.san),
+          ),
+          if (followUpLines > 0)
+            Text(context.l10n.andSaveNbPremoveLines(followUpLines))
+          else
+            Text(context.l10n.noConditionalPremoves),
+        ],
+      ),
+      onPressed: ref
+          .read(analysisControllerProvider(options).notifier)
+          .playPendingMoveAndSaveForecast,
+    );
   }
 }
 

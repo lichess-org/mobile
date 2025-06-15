@@ -45,9 +45,6 @@ typedef ConditionalPremovesOptions = ({
   /// Current saved set of premove branches, these are stored on the server.
   IList<IList<CorrespondenceForecastStep>> initialSteps,
 
-  /// The current ply number of the active game.
-  int currentPly,
-
   GameFullId gameFullId,
 
   Side ourSide,
@@ -265,7 +262,6 @@ class AnalysisController extends _$AnalysisController
       currentPath: currentPath,
       pathToLiveMove: pathToLiveMove,
       forecast: forecast,
-      youAre: options.conditionalPremovesOptions?.ourSide,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
@@ -438,15 +434,36 @@ class AnalysisController extends _$AnalysisController
       ),
     );
 
-    _syncForecast();
+    if (!state.requireValue.forecast!.onMyTurn) {
+      _syncForecast();
+    }
   }
 
-  void playAndSaveForecast(Move moveToPlay) {
-    state = AsyncData(
-      state.requireValue.copyWith(forecast: state.requireValue.forecast!.playMove(moveToPlay)),
+  void playPendingMoveAndSaveForecast() {
+    if (!state.hasValue || state.requireValue.pendingMove == null) return;
+
+    final moveToPlay = state.requireValue.pendingMove!.move;
+
+    final newForecast = state.requireValue.forecast!.playMove(moveToPlay);
+
+    final newLiveMovePath = UciPath.join(
+      state.requireValue.pathToLiveMove!,
+      UciPath.fromId(UciCharPair.fromUci(moveToPlay.uci)),
     );
 
-    _syncForecast(moveToPlay: moveToPlay);
+    ref
+        .read(gameControllerProvider(options.conditionalPremovesOptions!.gameFullId).notifier)
+        .updateForecast(
+          newForecast.toApiForecast(_root.branchAt(newLiveMovePath)!.view),
+          moveToPlay: moveToPlay,
+        );
+
+    state = AsyncData(
+      state.requireValue.copyWith(
+        forecast: state.requireValue.forecast!.playMove(moveToPlay),
+        pathToLiveMove: newLiveMovePath,
+      ),
+    );
   }
 
   void removePremovePath(UciPath path) {
@@ -457,7 +474,7 @@ class AnalysisController extends _$AnalysisController
     _syncForecast();
   }
 
-  void _syncForecast({Move? moveToPlay}) {
+  void _syncForecast() {
     final pathToLiveMove = state.requireValue.pathToLiveMove!;
     ref
         .read(gameControllerProvider(options.conditionalPremovesOptions!.gameFullId).notifier)
@@ -465,7 +482,6 @@ class AnalysisController extends _$AnalysisController
           state.requireValue.forecast!.toApiForecast(
             pathToLiveMove.isEmpty ? _root.view : _root.branchAt(pathToLiveMove)!.view,
           ),
-          moveToPlay: moveToPlay,
         );
   }
 
@@ -776,9 +792,6 @@ sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState 
     /// If this is a correspondence game, stores the current set of conditional premoves.
     required Forecast? forecast,
 
-    /// If this is an active correspondence game, the side that we're playing as.
-    Side? youAre,
-
     /// Whether the current path is on the mainline.
     required bool isOnMainline,
 
@@ -863,18 +876,31 @@ sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState 
             : root.branchesOn(pathToLiveMove!).last
       : null;
 
+  bool get branchedOffFromLiveMove =>
+      forecast != null &&
+      pathToLiveMove != null &&
+      currentPath != pathToLiveMove &&
+      currentPath.contains(pathToLiveMove!);
+
   /// If the current node branches off from the live move and is not yet saved as a premove,
   /// the part of [AnalysisState.currentPath] that would be saved as a premove line. null otherwise.
   UciPath? get currentPremoveCandidate {
-    if (pathToLiveMove == null ||
-        currentPath == pathToLiveMove ||
-        !currentPath.contains(pathToLiveMove!)) {
+    if (!branchedOffFromLiveMove) {
       return null;
     }
 
     final candidate = currentPath.stripPrefix(pathToLiveMove!);
     return forecast!.isCandidate(candidate) ? candidate : null;
   }
+
+  /// If it's our turn and we have branched off from the main line, this is the move we would play
+  /// if we to save the entire current path as a premove line.
+  SanMove? get pendingMove => forecast?.onMyTurn == true && branchedOffFromLiveMove
+      ? liveMoveNode!.childById(currentPath.stripPrefix(pathToLiveMove!).head!)?.sanMove
+      : null;
+
+  IList<UciPath>? get linesForPendingMove =>
+      pendingMove != null ? forecast?.linesStartingWith(pendingMove!.move) : null;
 
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) => isEngineAllowed && prefs.isEnabled;
