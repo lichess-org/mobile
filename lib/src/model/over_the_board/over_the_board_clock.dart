@@ -93,6 +93,16 @@ class OverTheBoardClock extends _$OverTheBoardClock {
 
     state = state.copyWith(activeClock: newSideToMove);
   }
+
+  void giveTime(Duration amount) {
+    final newTime = state.timeLeft(state.activeClock!)! + amount;
+
+    if (state.activeClock == Side.white) {
+      state = state.copyWith(whiteTimeLeft: newTime);
+    } else {
+      state = state.copyWith(blackTimeLeft: newTime);
+    }
+  }
 }
 
 @freezed
