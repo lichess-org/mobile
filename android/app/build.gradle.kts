@@ -19,8 +19,6 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "org.lichess.mobileV2"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"
-    // ndkVersion = flutter.ndkVersion
 
     compileOptions {
         // Flag required by flutter_local_notifications package
