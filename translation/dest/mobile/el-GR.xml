@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Ρυθμίσεις</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Αυτές οι ρυθμίσεις αποθηκεύονται στον λογαριασμό σας στο Lichess και θα ισχύουν σε όλες τις συσκευές σας.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Όλα τα παιχνίδια</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Είστε σίγουροι;</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Ρυθμίσεις σκακιέρας</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Ακυρώστε την προσφορά αναίρεσης της κίνησης</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Εκκαθάριση</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Εκκαθάριση αποθηκευμένης κίνησης</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Συμμετοχή σε παρτίδα</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Πείτε μας τη γνώμη σας</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Καλησπέρα, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Καλησπέρα</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Καλημέρα, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Καλημέρα</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Απόκρυψη παραλλαγής</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Αρχική</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streamers ζωντανά αυτή τη στιγμή</string>
@@ -27,6 +34,7 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Παίξτε γρίφους από τα αγαπημένα σας ανοίγματα, ή επιλέξτε θέμα.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Γρίφοι</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Πρόσφατες αναζητήσεις</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Διαγραφή σελιδοδείκτη</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Θέση ρολογιού</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Λειτουργία εστίασης</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ρυθμίσεις</string>
@@ -39,9 +47,11 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Εμφάνιση παραλλαγών</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Κάτι πήγε στραβά.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Χρώματα συστήματος</string>
+  <string name="tapHereToStartPlayingChess" comment="A message shown only once the first time the app is installed. Appear in a popup over the main floating action button on the home screen.">Πατήστε εδώ για να ξεκινήσετε να παίζετε σκάκι.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Εμφάνιση</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Εργαλεία</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Η παραλλαγή %s δεν υποστηρίζεται σε αυτήν την έκδοση.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Αναμονή για αντίπαλο...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Δείτε</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Καλώς ήρθατε στην εφαρμογή Lichess!</string>
 </resources>
