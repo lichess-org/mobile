@@ -1086,6 +1086,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get patronLichessPatron => 'Patró de Lichess';
 
   @override
+  String get patronBecomePatron => 'Fes-te patró de Lichess';
+
+  @override
   String perfStatPerfStats(String param) {
     return 'Estadístiques de $param';
   }

@@ -1086,6 +1086,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get patronLichessPatron => 'یاورِ Lichess';
 
   @override
+  String get patronBecomePatron => 'یاور Lichess بشوید';
+
+  @override
   String perfStatPerfStats(String param) {
     return 'آمار $param';
   }

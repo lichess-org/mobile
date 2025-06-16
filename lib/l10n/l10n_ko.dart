@@ -1064,6 +1064,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get patronLichessPatron => 'Lichess 후원자';
 
   @override
+  String get patronBecomePatron => 'Lichess 후원자가 되세요';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param 통계';
   }

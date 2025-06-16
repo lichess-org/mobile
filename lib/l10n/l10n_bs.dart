@@ -1106,6 +1106,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get patronLichessPatron => 'Lichess Pokrovitelj';
 
   @override
+  String get patronBecomePatron => 'Postanite Lichess Pokrovitelj';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param statistika';
   }

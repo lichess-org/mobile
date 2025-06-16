@@ -1130,6 +1130,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get patronLichessPatron => 'Lichess-спонсор';
 
   @override
+  String get patronBecomePatron => 'Стать спонсором Lichess';
+
+  @override
   String perfStatPerfStats(String param) {
     return 'Статистика $param';
   }

@@ -1086,6 +1086,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get patronLichessPatron => 'Lichess-donator';
 
   @override
+  String get patronBecomePatron => 'Bli en Lichess Patron';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param-statistik';
   }

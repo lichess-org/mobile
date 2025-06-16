@@ -1086,6 +1086,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get patronLichessPatron => 'Lichessi toetaja';
 
   @override
+  String get patronBecomePatron => 'Hakka Lichessi toetajaks';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param statistika';
   }

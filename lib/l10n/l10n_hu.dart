@@ -1086,6 +1086,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get patronLichessPatron => 'Lichess Patron';
 
   @override
+  String get patronBecomePatron => 'Támogasd a Lichesst';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param statisztika';
   }

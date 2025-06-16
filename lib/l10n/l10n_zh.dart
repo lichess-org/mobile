@@ -1064,6 +1064,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get patronLichessPatron => 'Lichess 赞助者账号';
 
   @override
+  String get patronBecomePatron => '成为 Lichess 赞助者';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param 战绩';
   }
@@ -7077,6 +7080,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get patronLichessPatron => 'Lichess 贊助者';
+
+  @override
+  String get patronBecomePatron => '成為 Lichess 贊助者';
 
   @override
   String perfStatPerfStats(String param) {

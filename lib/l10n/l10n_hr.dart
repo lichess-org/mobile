@@ -1107,6 +1107,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get patronLichessPatron => 'Lichess donacijska stranica';
 
   @override
+  String get patronBecomePatron => 'Postanite Lichess donator';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param statistika';
   }

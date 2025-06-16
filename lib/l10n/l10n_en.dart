@@ -1086,6 +1086,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get patronLichessPatron => 'Lichess Patron';
 
   @override
+  String get patronBecomePatron => 'Become a Lichess Patron';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param stats';
   }
@@ -7298,6 +7301,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get patronLichessPatron => 'Lichess Patron';
+
+  @override
+  String get patronBecomePatron => 'Become a Lichess Patron';
 
   @override
   String perfStatPerfStats(String param) {

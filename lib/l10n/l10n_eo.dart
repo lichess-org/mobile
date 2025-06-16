@@ -1086,6 +1086,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get patronLichessPatron => 'Lichess Patrono';
 
   @override
+  String get patronBecomePatron => 'Fariĝu Lichess Patrono';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param statikoj';
   }

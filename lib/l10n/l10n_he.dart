@@ -1128,6 +1128,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get patronLichessPatron => 'תומך/ת ליצ\'ס';
 
   @override
+  String get patronBecomePatron => 'הפכו לתומך/ת של ליצ\'ס';
+
+  @override
   String perfStatPerfStats(String param) {
     return 'מדדי $param';
   }

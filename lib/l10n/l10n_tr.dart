@@ -1086,6 +1086,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get patronLichessPatron => 'Lichess Destekçisi';
 
   @override
+  String get patronBecomePatron => 'Lichess Destekçisi olun';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param istatistikleri';
   }

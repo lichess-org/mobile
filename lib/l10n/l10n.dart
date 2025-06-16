@@ -1904,6 +1904,12 @@ abstract class AppLocalizations {
   /// **'Lichess Patron'**
   String get patronLichessPatron;
 
+  /// No description provided for @patronBecomePatron.
+  ///
+  /// In en, this message translates to:
+  /// **'Become a Lichess Patron'**
+  String get patronBecomePatron;
+
   /// No description provided for @perfStatPerfStats.
   ///
   /// In en, this message translates to:

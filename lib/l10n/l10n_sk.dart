@@ -1130,6 +1130,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get patronLichessPatron => 'Lichess Patrón';
 
   @override
+  String get patronBecomePatron => 'Staňte sa Lichess Patrónom';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param štatistiky';
   }

@@ -1064,6 +1064,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get patronLichessPatron => 'Lichess パトロン';
 
   @override
+  String get patronBecomePatron => 'Lichess のパトロンになる';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param の統計';
   }

@@ -1086,6 +1086,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get patronLichessPatron => 'Lichessin tukija';
 
   @override
+  String get patronBecomePatron => 'Ryhdy Lichessin tukijaksi';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param-tilastot';
   }

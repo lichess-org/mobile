@@ -1086,6 +1086,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get patronLichessPatron => 'Личес Қамқоршысы';
 
   @override
+  String get patronBecomePatron => 'Қамқоршы болыңыз';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param статистикасы';
   }

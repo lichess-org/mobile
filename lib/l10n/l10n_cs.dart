@@ -1130,6 +1130,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get patronLichessPatron => 'Lichess Patron';
 
   @override
+  String get patronBecomePatron => 'Staňte se Lichess Patronem';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param statistiky';
   }

@@ -1086,6 +1086,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get patronLichessPatron => 'Bamirës Lichess-i';
 
   @override
+  String get patronBecomePatron => 'Bëhuni një Bamirës Lichess-i';
+
+  @override
   String perfStatPerfStats(String param) {
     return 'Statistika për $param';
   }

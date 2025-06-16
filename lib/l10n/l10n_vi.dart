@@ -1064,6 +1064,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get patronLichessPatron => 'Người bảo trợ Lichess';
 
   @override
+  String get patronBecomePatron => 'Trở thành một Người bảo trợ Lichess';
+
+  @override
   String perfStatPerfStats(String param) {
     return 'Thống kê $param';
   }

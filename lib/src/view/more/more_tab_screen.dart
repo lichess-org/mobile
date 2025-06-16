@@ -181,8 +181,10 @@ class _Body extends ConsumerWidget {
                   leading: Icon(
                     LichessIcons.patron,
                     semanticLabel: context.l10n.patronLichessPatron,
+                    color: context.lichessColors.brag,
                   ),
                   title: Text(context.l10n.patronDonate),
+                  subtitle: Text(context.l10n.patronBecomePatron),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,

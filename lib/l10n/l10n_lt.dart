@@ -1130,6 +1130,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get patronLichessPatron => 'Lichess rėmėjas';
 
   @override
+  String get patronBecomePatron => 'Tapkite Lichess rėmėju';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param statistika';
   }

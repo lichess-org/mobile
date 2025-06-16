@@ -1086,6 +1086,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get patronLichessPatron => 'Lichess-ի հովանավոր';
 
   @override
+  String get patronBecomePatron => 'Դառնալ Lichess-ի հովանավոր';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param վիճակագրություն';
   }

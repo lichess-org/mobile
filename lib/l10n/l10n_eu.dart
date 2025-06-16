@@ -1086,6 +1086,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get patronLichessPatron => 'Lichess babeslea';
 
   @override
+  String get patronBecomePatron => 'Lichess Babesle bihurtu';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param estatistikak';
   }

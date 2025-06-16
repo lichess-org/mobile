@@ -42,7 +42,7 @@ const modules = [
 // list of keys (per module) to include in the ARB file
 // If a module is not listed here, all keys will be included
 const whiteLists = {
-  'patron': ['donate', 'lichessPatron'],
+  'patron': ['donate', 'lichessPatron', 'becomePatron'],
   'contact': ['contact', 'contactLichess'],
   'search': ['search'],
   'streamer': ['lichessStreamers'],

@@ -1086,6 +1086,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get patronLichessPatron => 'Lichess Gönner';
 
   @override
+  String get patronBecomePatron => 'Wird en Lichess Gönner';
+
+  @override
   String perfStatPerfStats(String param) {
     return '$param-Schtatischtike';
   }

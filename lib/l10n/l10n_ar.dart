@@ -1174,6 +1174,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get patronLichessPatron => 'راعي Lichess';
 
   @override
+  String get patronBecomePatron => 'كنّ راعياً في Lichess';
+
+  @override
   String perfStatPerfStats(String param) {
     return 'احصائيات $param';
   }
