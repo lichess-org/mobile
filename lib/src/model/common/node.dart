@@ -581,6 +581,33 @@ abstract class ViewNode {
       current = child;
     }
   }
+
+  /// Finds the child node with that id.
+  ViewBranch? childById(UciCharPair id) {
+    return children.firstWhereOrNull((node) => node.id == id);
+  }
+
+  /// Selects all branches on that path.
+  Iterable<ViewBranch> branchesOn(UciPath path) sync* {
+    UciPath currentPath = path;
+
+    ViewBranch? pickChild(ViewNode node) {
+      final id = currentPath.head;
+      if (id == null) {
+        return null;
+      }
+      return node.childById(id);
+    }
+
+    ViewNode current = this;
+    ViewBranch? child;
+
+    while ((child = pickChild(current)) != null) {
+      yield child!;
+      current = child;
+      currentPath = currentPath.tail;
+    }
+  }
 }
 
 /// An immutable view of a [Root] node.

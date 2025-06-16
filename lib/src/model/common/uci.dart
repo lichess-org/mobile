@@ -89,7 +89,18 @@ sealed class UciPath with _$UciPath {
 
   UciPath operator +(UciCharPair id) => UciPath(value + id.toString());
 
+  UciCharPair operator [](int index) {
+    assert(index >= 0 && index < size);
+    return UciCharPair(value[index * 2], value[index * 2 + 1]);
+  }
+
   bool contains(UciPath other) => value.startsWith(other.value);
+
+  UciPath stripPrefix(UciPath prefix) =>
+      contains(prefix) ? UciPath(value.substring(prefix.value.length)) : this;
+
+  UciPath truncate(int maxSize) =>
+      size <= maxSize ? this : UciPath(value.substring(0, maxSize * 2));
 
   int get size => value.length ~/ 2;
 

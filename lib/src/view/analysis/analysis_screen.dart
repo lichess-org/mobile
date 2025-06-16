@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/conditional_premoves.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
@@ -77,6 +78,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       AnalysisTab.opening,
       AnalysisTab.moves,
       if (widget.options.gameId != null) AnalysisTab.summary,
+      if (widget.options.conditionalPremovesOptions != null) AnalysisTab.conditionalPremoves,
     ];
 
     _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
@@ -314,6 +316,7 @@ class _Body extends ConsumerWidget {
         ),
         AnalysisTreeView(options),
         if (options.gameId != null) ServerAnalysisSummary(options),
+        if (options.conditionalPremovesOptions != null) ConditionalPremoves(options),
       ],
     );
   }
