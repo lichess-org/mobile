@@ -52,14 +52,13 @@ class SettingsScreen extends ConsumerWidget {
               children: [
                 ListTile(
                   leading: const Icon(Icons.manage_accounts_outlined),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
                   title: Text(context.l10n.mobileAccountPreferences),
                   enabled: isOnline,
                   onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(AccountPreferencesScreen.buildRoute(context));
+                    Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
                   },
                 ),
               ],
