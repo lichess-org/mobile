@@ -14,7 +14,7 @@ As seguintes partidas continuarán valendo dobre ata que pares de gañar.
 É dicir, unha vitoria valerá 4 puntos, unhas táboas 2 puntos e a derrota segue sen dar puntos.
 
 Por exemplo, dúas vitorias seguidas por unhas táboas valen 6 puntos: 2 + 2 + (2 x 1)</string>
-  <string name="berserk">Modo Berserk</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Modo Berserk</string>
   <string name="berserkAnswer">Cando un xogador preme no botón de Berserk ao comezo da partida, perde a metade do seu tempo no reloxo, pero a vitoria, de conseguila, valerá un punto máis.
 
 Facer o Berserk en controis de tempo con incremento tamén cancela o incremento (1+2 é unha excepción, xa que se converte en 1+0).

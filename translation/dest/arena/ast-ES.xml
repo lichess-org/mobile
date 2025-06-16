@@ -13,7 +13,7 @@
 Si ganes dos partíes siguíes, vas empezar una racha de puntuación doble, representada por un iconu d\'una llapada. A partir d\'esi momentu y mientres sigas ganando, cada partida va valir el doble; esto ye, les victories 4 puntos y les tables 2 puntos. Una derrota va siguir valiendo cero puntos.
 
 Por casu: dos victories y unes tables valen 6 puntos: 2 + 2 + (1×2)</string>
-  <string name="berserk">Modu berserk</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Modu berserk</string>
   <string name="berserkAnswer">Cuando un xugador pulsia\'l botón de berserk de primeres d\'una partida, pierde la metá del so tiempu, pero la victoria val un puntu adicional.
 
 En controles de tiempu que tienen medría, la opción berserk tamién ataya la medría (1+2 ye una esceición, yá que namá s\'ataya la medría, pero nun se parte\'l tiempu a la metá, resultando en 1+0).
