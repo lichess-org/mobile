@@ -1,6 +1,7 @@
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,11 +19,13 @@ import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -42,8 +45,6 @@ class StormScreen extends ConsumerStatefulWidget {
 }
 
 class _StormScreenState extends ConsumerState<StormScreen> {
-  final _boardKey = GlobalKey(debugLabel: 'boardOnStormScreen');
-
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
@@ -52,16 +53,14 @@ class _StormScreenState extends ConsumerState<StormScreen> {
           actions: [_StormDashboardButton(), const ToggleSoundButton()],
           title: const Text('Puzzle Storm'),
         ),
-        body: _Body(_boardKey),
+        body: const _Load(),
       ),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body(this.boardKey);
-
-  final GlobalKey boardKey;
+class _Load extends ConsumerWidget {
+  const _Load();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -69,109 +68,310 @@ class _Body extends ConsumerWidget {
 
     switch (storm) {
       case AsyncData(value: final PuzzleStormResponse data):
-        final ctrlProvider = stormControllerProvider(data.puzzles, data.timestamp);
-        final boardPreferences = ref.watch(boardPreferencesProvider);
-        final stormState = ref.watch(ctrlProvider);
-
-        ref.listen(ctrlProvider, (prev, state) {
-          if (prev?.mode != StormMode.ended && state.mode == StormMode.ended) {
-            Future.delayed(const Duration(milliseconds: 200), () {
-              if (context.mounted) {
-                _showStats(context, ref.read(ctrlProvider).stats!);
-              }
-            });
-          }
-
-          if (state.mode == StormMode.ended) {
-            clearAndroidBoardGesturesExclusion();
-          }
-        });
-
-        final content = PopScope(
-          canPop: stormState.mode != StormMode.running,
-          onPopInvokedWithResult: (bool didPop, _) async {
-            if (didPop) {
-              return;
-            }
-            final NavigatorState navigator = Navigator.of(context);
-            final shouldPop = await showAdaptiveDialog<bool>(
-              context: context,
-              builder: (context) => YesNoDialog(
-                title: Text(context.l10n.mobileAreYouSure),
-                content: Text(context.l10n.mobilePuzzleStormConfirmEndRun),
-                onYes: () {
-                  return Navigator.of(context).pop(true);
-                },
-                onNo: () => Navigator.of(context).pop(false),
-              ),
-            );
-            if (shouldPop ?? false) {
-              navigator.pop();
-            }
-          },
-          child: SafeArea(
-            // view padding can change on Android when immersive mode is enabled, so to prevent any
-            // board vertical shift, we set `maintainBottomViewPadding` to true.
-            maintainBottomViewPadding: true,
-            child: Column(
-              children: [
-                Expanded(
-                  child: BoardTable(
-                    boardKey: boardKey,
-                    orientation: stormState.pov,
-                    lastMove: stormState.lastMove as NormalMove?,
-                    fen: stormState.position.fen,
-                    interactiveBoardParams: (
-                      position: stormState.position,
-                      variant: Variant.standard,
-                      playerSide:
-                          !stormState.firstMovePlayed ||
-                              stormState.mode == StormMode.ended ||
-                              stormState.position.isGameOver
-                          ? PlayerSide.none
-                          : stormState.pov == Side.white
-                          ? PlayerSide.white
-                          : PlayerSide.black,
-                      promotionMove: stormState.promotionMove,
-                      onMove: (move, {isDrop, captured}) =>
-                          ref.read(ctrlProvider.notifier).onUserMove(move),
-                      onPromotionSelection: (role) =>
-                          ref.read(ctrlProvider.notifier).onPromotionSelection(role),
-                      premovable: null,
-                    ),
-                    topTable: _TopTable(data),
-                    bottomTable: _Combo(stormState.combo),
-                  ),
-                ),
-                _BottomBar(ctrlProvider),
-              ],
-            ),
-          ),
-        );
-
-        return Theme.of(context).platform == TargetPlatform.android
-            ? AndroidGesturesExclusionWidget(
-                boardKey: boardKey,
-                shouldExcludeGesturesOnFocusGained: () =>
-                    stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
-                shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
-                child: content,
-              )
-            : content;
+        return _Body(data: data);
       case AsyncError(:final error, :final stackTrace):
         debugPrint('SEVERE: [PuzzleStormScreen] could not load storm; $error\n$stackTrace');
-        return Center(
-          child: BoardTable(
-            topTable: kEmptyWidget,
-            bottomTable: kEmptyWidget,
-            fen: kEmptyFen,
-            orientation: Side.white,
-            errorMessage: 'An error occurred while loading the storm: $error',
-          ),
-        );
+        return PuzzleErrorBoardWidget(errorMessage: error.toString());
       case _:
         return const CenterLoadingIndicator();
     }
+  }
+}
+
+class _Body extends ConsumerStatefulWidget {
+  const _Body({required this.data});
+
+  final PuzzleStormResponse data;
+
+  @override
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  ISet<Shape> userShapes = ISet();
+  final _boardKey = GlobalKey(debugLabel: 'boardOnStormScreen');
+
+  @override
+  Widget build(BuildContext context) {
+    final ctrlProvider = stormControllerProvider(widget.data.puzzles, widget.data.timestamp);
+    final boardPreferences = ref.watch(boardPreferencesProvider);
+    final stormState = ref.watch(ctrlProvider);
+
+    ref.listen(ctrlProvider, (prev, state) {
+      if (prev?.mode != StormMode.ended && state.mode == StormMode.ended) {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          if (context.mounted) {
+            _showStats(context, ref.read(ctrlProvider).stats!);
+          }
+        });
+      }
+
+      if (state.mode == StormMode.ended) {
+        clearAndroidBoardGesturesExclusion();
+      }
+    });
+
+    final gameData = boardPreferences.toGameData(
+      variant: Variant.standard,
+      position: stormState.position,
+      playerSide:
+          !stormState.firstMovePlayed ||
+              stormState.mode == StormMode.ended ||
+              stormState.position.isGameOver
+          ? PlayerSide.none
+          : stormState.pov == Side.white
+          ? PlayerSide.white
+          : PlayerSide.black,
+      promotionMove: stormState.promotionMove,
+      onMove: (move, {isDrop, captured}) => ref.read(ctrlProvider.notifier).onUserMove(move),
+      onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
+      premovable: null,
+    );
+
+    final content = PopScope(
+      canPop: stormState.mode != StormMode.running,
+      onPopInvokedWithResult: (bool didPop, _) async {
+        if (didPop) {
+          return;
+        }
+        final NavigatorState navigator = Navigator.of(context);
+        final shouldPop = await showAdaptiveDialog<bool>(
+          context: context,
+          builder: (context) => YesNoDialog(
+            title: Text(context.l10n.mobileAreYouSure),
+            content: Text(context.l10n.mobilePuzzleStormConfirmEndRun),
+            onYes: () {
+              return Navigator.of(context).pop(true);
+            },
+            onNo: () => Navigator.of(context).pop(false),
+          ),
+        );
+        if (shouldPop ?? false) {
+          navigator.pop();
+        }
+      },
+      child: SafeArea(
+        // view padding can change on Android when immersive mode is enabled, so to prevent any
+        // board vertical shift, we set `maintainBottomViewPadding` to true.
+        maintainBottomViewPadding: true,
+        child: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: SafeArea(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final orientation = constraints.maxWidth > constraints.maxHeight
+                          ? Orientation.landscape
+                          : Orientation.portrait;
+                      final isTablet = isTabletOrLarger(context);
+
+                      final defaultSettings = boardPreferences.toBoardSettings().copyWith(
+                        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+                        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                        drawShape: DrawShapeOptions(
+                          enable: boardPreferences.enableShapeDrawings,
+                          onCompleteShape: _onCompleteShape,
+                          onClearShapes: _onClearShapes,
+                          newShapeColor: boardPreferences.shapeColor.color,
+                        ),
+                      );
+
+                      if (orientation == Orientation.landscape) {
+                        final defaultBoardSize =
+                            constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
+                        final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
+                        final boardSize = sideWidth >= 250
+                            ? defaultBoardSize
+                            : constraints.biggest.longestSide / kGoldenRatio -
+                                  (kTabletBoardTableSidePadding * 2);
+                        return Padding(
+                          padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              BoardWidget(
+                                boardKey: _boardKey,
+                                size: boardSize,
+                                fen: stormState.position.fen,
+                                orientation: stormState.pov,
+                                gameData: gameData,
+                                lastMove: stormState.lastMove as NormalMove?,
+                                settings: defaultSettings,
+                              ),
+                              const SizedBox(width: 16.0),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        StormClockWidget(clock: stormState.clock),
+                                        if (stormState.mode == StormMode.initial)
+                                          Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                context.l10n.stormMoveToStart,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                stormState.pov == Side.white
+                                                    ? context
+                                                          .l10n
+                                                          .stormYouPlayTheWhitePiecesInAllPuzzles
+                                                    : context
+                                                          .l10n
+                                                          .stormYouPlayTheBlackPiecesInAllPuzzles,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(fontSize: 12),
+                                              ),
+                                            ],
+                                          ),
+                                      ],
+                                    ),
+
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                                        vertical: 32.0,
+                                      ),
+                                      child: Center(
+                                        child: Card(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(24.0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                  LichessIcons.storm,
+                                                  size: 150.0,
+                                                  color: ColorScheme.of(context).primary,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  stormState.numSolved.toString().padRight(2),
+                                                  style: TextStyle(
+                                                    fontSize: 90.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: ColorScheme.of(context).primary,
+                                                    fontFeatures: const [
+                                                      FontFeature.tabularFigures(),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    _Combo(stormState.combo),
+                                    _BottomBar(ctrlProvider),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        final defaultBoardSize = constraints.biggest.shortestSide;
+                        final double boardSize = isTablet
+                            ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                            : defaultBoardSize;
+
+                        return Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                                ),
+                                child: _TopTable(widget.data),
+                              ),
+                            ),
+                            Padding(
+                              padding: isTablet
+                                  ? const EdgeInsets.symmetric(
+                                      horizontal: kTabletBoardTableSidePadding,
+                                    )
+                                  : EdgeInsets.zero,
+                              child: BoardWidget(
+                                boardKey: _boardKey,
+                                size: boardSize,
+                                fen: stormState.position.fen,
+                                orientation: stormState.pov,
+                                gameData: gameData,
+                                lastMove: stormState.lastMove as NormalMove?,
+                                settings: defaultSettings,
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                                ),
+                                child: _Combo(stormState.combo),
+                              ),
+                            ),
+                            _BottomBar(ctrlProvider),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    return Theme.of(context).platform == TargetPlatform.android
+        ? AndroidGesturesExclusionWidget(
+            boardKey: _boardKey,
+            shouldExcludeGesturesOnFocusGained: () =>
+                stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
+            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+            child: content,
+          )
+        : content;
+  }
+
+  void _onCompleteShape(Shape shape) {
+    if (!mounted) return;
+
+    if (userShapes.any((element) => element == shape)) {
+      setState(() {
+        userShapes = userShapes.remove(shape);
+      });
+      return;
+    } else {
+      setState(() {
+        userShapes = userShapes.add(shape);
+      });
+    }
+  }
+
+  void _onClearShapes() {
+    if (!mounted) return;
+
+    setState(() {
+      userShapes = ISet();
+    });
   }
 }
 
