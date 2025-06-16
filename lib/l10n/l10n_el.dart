@@ -9,10 +9,10 @@ class AppLocalizationsEl extends AppLocalizations {
   AppLocalizationsEl([String locale = 'el']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Ρυθμίσεις';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Αυτές οι ρυθμίσεις αποθηκεύονται στον λογαριασμό σας στο Lichess και θα ισχύουν σε όλες τις συσκευές σας.';
 
   @override
   String get mobileAllGames => 'Όλα τα παιχνίδια';
@@ -21,7 +21,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileAreYouSure => 'Είστε σίγουροι;';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Ρυθμίσεις σκακιέρας';
 
   @override
   String get mobileCancelTakebackOffer => 'Ακυρώστε την προσφορά αναίρεσης της κίνησης';
@@ -40,19 +40,19 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Καλησπέρα, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Καλησπέρα';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Καλημέρα, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Καλημέρα';
 
   @override
   String get mobileHideVariation => 'Απόκρυψη παραλλαγής';
@@ -117,7 +117,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileRecentSearches => 'Πρόσφατες αναζητήσεις';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Διαγραφή σελιδοδείκτη';
 
   @override
   String get mobileSettingsClockPosition => 'Θέση ρολογιού';
@@ -216,7 +216,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileSystemColors => 'Χρώματα συστήματος';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Πατήστε εδώ για να ξεκινήσετε να παίζετε σκάκι.';
 
   @override
   String get mobileTheme => 'Εμφάνιση';
@@ -236,7 +236,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileWatchTab => 'Δείτε';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Καλώς ήρθατε στην εφαρμογή Lichess!';
 
   @override
   String get activityActivity => 'Δραστηριότητα';
@@ -640,7 +640,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get arenaTournamentPairingsAreNowClosed => 'Οι αντιστοιχίσεις του τουρνουά έχουν κλείσει.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Ποσοστό berserk';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -907,7 +907,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastSinceHideResults => 'Εφόσον επιλέξατε να κρύψετε τα αποτελέσματα, όλες οι σκακιέρες προεπισκόπησης είναι κενές ώστε να αποφευχθούν σπόιλερς.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Ζωντανά';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1236,7 +1236,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesShowPlayerRatings => 'Εμφάνιση αξιολογήσεων παικτών';
 
   @override
-  String get preferencesShowFlairs => 'Show player flairs';
+  String get preferencesShowFlairs => 'Εμφάνιση διακριτικών παικτών';
 
   @override
   String get preferencesExplainShowPlayerRatings => 'Αυτό επιτρέπει την απόκρυψη όλων τις βαθμολογίες από την ιστοσελίδα, έτσι ώστε να μπορείτε να επικεντρωθείτε στο σκάκι. Τα παιχνίδια θα αξιολογούνται, η ρύθμιση αυτή επηρεάζει την εμφάνιση μόνο.';
@@ -1251,7 +1251,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesInGameOnly => 'Μόνο κατά τη διάρκεια του παιχνιδιού';
 
   @override
-  String get preferencesExceptInGame => 'Except in-game';
+  String get preferencesExceptInGame => 'Όχι κατά τη διάρκεια της παρτίδας';
 
   @override
   String get preferencesChessClock => 'Σκακιστικό χρονόμετρο';
@@ -2159,7 +2159,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get createAGame => 'Δημιουργήστε παιχνίδι';
 
   @override
-  String get createTheGame => 'Create the game';
+  String get createTheGame => 'Νέα παρτίδα';
 
   @override
   String get whiteIsVictorious => 'Τα λευκά νίκησαν';
@@ -2308,7 +2308,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get copyVariationPgn => 'Αντιγραφή PGN αρχείου κινήσεων';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'Αντιγραφή κύριας βαριάντας PGN';
 
   @override
   String get move => 'Κίνηση';
@@ -3048,7 +3048,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get continueFromHere => 'Συνέχεια από εδώ';
 
   @override
-  String get toStudy => 'Μελέτη';
+  String get toStudy => 'Σπουδή';
 
   @override
   String get importGame => 'Εισαγωγή παιχνιδιού';
@@ -4009,7 +4009,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get downloadImported => 'Λήψη εισαγόμενου';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Λήψη όλων των παρτίδων';
 
   @override
   String get crosstable => 'Αποτελέσματα';
@@ -4743,13 +4743,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get stats => 'Στατιστικά';
 
   @override
-  String get accessibility => 'Accessibility';
+  String get accessibility => 'Προσβασιμότητα';
 
   @override
-  String get enableBlindMode => 'Enable blind mode';
+  String get enableBlindMode => 'Ενεργοποίηση λειτουργίας για τυφλούς';
 
   @override
-  String get disableBlindMode => 'Disable blind mode';
+  String get disableBlindMode => 'Απενεργοποίηση λειτουργίας για τυφλούς';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5247,7 +5247,7 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get stormMoveToStart => 'Μετακινήστε ένα κομμάτι για να αρχίσετε';
+  String get stormMoveToStart => 'Κάντε μια κίνηση για να ξεκινήσετε';
 
   @override
   String get stormYouPlayTheWhitePiecesInAllPuzzles => 'Παίζετε με τα λευκά σε όλους τους γρίφους';
@@ -5256,7 +5256,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get stormYouPlayTheBlackPiecesInAllPuzzles => 'Παίζετε με τα μαύρα σε όλους τους γρίφους';
 
   @override
-  String get stormPuzzlesSolved => 'λυμένοι γρίφοι';
+  String get stormPuzzlesSolved => 'λυμένα τακτικά';
 
   @override
   String get stormNewDailyHighscore => 'Νέο ημερήσιο ρεκόρ!';
@@ -5361,7 +5361,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get stormWaitingToStart => 'Αναμονή για έναρξη';
 
   @override
-  String get stormCreateNewGame => 'Νέο παιχνίδι';
+  String get stormCreateNewGame => 'Νέος αγώνας';
 
   @override
   String get stormJoinPublicRace => 'Συμμετοχή σε δημόσιο αγώνα';
@@ -5379,13 +5379,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get stormSkipExplanation => 'Παραλείψτε αυτή την κίνηση για να διατηρήσετε το combo σας! Αυτό μπορείτε να το κάνετε μόνο μία φορά σε κάθε αγώνα.';
 
   @override
-  String get stormFailedPuzzles => 'Γρίφοι που δε λύθηκαν σωστά';
+  String get stormFailedPuzzles => 'Τακτικά που δε λύθηκαν σωστά';
 
   @override
-  String get stormSlowPuzzles => 'Γρίφοι που λύθηκαν αργά';
+  String get stormSlowPuzzles => 'Τακτικά που λύθηκαν αργά';
 
   @override
-  String get stormSkippedPuzzle => 'Γρίφος με κίνηση που παραλείφθηκε';
+  String get stormSkippedPuzzle => 'Τακτικό με κίνηση που παραλείφθηκε';
 
   @override
   String get stormThisWeek => 'Αυτήν την εβδομάδα';
@@ -5394,10 +5394,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get stormThisMonth => 'Aυτόν τον μήνα';
 
   @override
-  String get stormAllTime => 'Από την αρχή';
+  String get stormAllTime => 'Όλων των εποχών';
 
   @override
-  String get stormClickToReload => 'Κάντε κλικ για να ανανεώσετε τη σελίδα';
+  String get stormClickToReload => 'Επαναφόρτωση σελίδας';
 
   @override
   String get stormThisRunHasExpired => 'Αυτός ο γύρος έχει τελειώσει!';
