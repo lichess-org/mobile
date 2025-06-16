@@ -65,17 +65,15 @@ class _Body extends ConsumerWidget {
           children: [
             Theme(
               data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: Opacity(
-                opacity: openingsAvailable ? 1 : 0.5,
-                child: ExpansionTile(
-                  title: Text(context.l10n.puzzleByOpenings),
-                  trailing: const Icon(Icons.keyboard_arrow_right),
-                  onExpansionChanged: openingsAvailable
-                      ? (expanded) {
-                          Navigator.of(context).push(OpeningThemeScreen.buildRoute(context));
-                        }
-                      : null,
-                ),
+              child: ExpansionTile(
+                enabled: openingsAvailable,
+                title: Text(context.l10n.puzzleByOpenings),
+                trailing: const Icon(Icons.keyboard_arrow_right),
+                onExpansionChanged: openingsAvailable
+                    ? (expanded) {
+                        Navigator.of(context).push(OpeningThemeScreen.buildRoute(context));
+                      }
+                    : null,
               ),
             ),
             for (final category in list)
@@ -126,37 +124,35 @@ class _Category extends ConsumerWidget {
             children: themes.map((theme) {
               final isThemeAvailable = hasConnectivity || savedThemes.containsKey(theme);
 
-              return Opacity(
-                opacity: isThemeAvailable ? 1 : 0.5,
-                child: ListTile(
-                  leading: Icon(theme.icon),
-                  trailing: hasConnectivity && onlineThemes?.containsKey(theme) == true
-                      ? Padding(
-                          padding: const EdgeInsets.only(left: 6.0),
-                          child: Text('${onlineThemes![theme]!.count}', style: themeCountStyle),
-                        )
-                      : savedThemes.containsKey(theme)
-                      ? Padding(
-                          padding: const EdgeInsets.only(left: 6.0),
-                          child: Text('${savedThemes[theme]!}', style: themeCountStyle),
-                        )
-                      : null,
-                  title: Text(theme.l10n(context.l10n).name),
-                  subtitle: Text(
-                    theme.l10n(context.l10n).description,
-                    maxLines: 10,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-                  ),
-                  onTap: isThemeAvailable
-                      ? () {
-                          Navigator.of(
-                            context,
-                            rootNavigator: true,
-                          ).push(PuzzleScreen.buildRoute(context, angle: PuzzleTheme(theme)));
-                        }
-                      : null,
+              return ListTile(
+                enabled: isThemeAvailable,
+                leading: Icon(theme.icon),
+                trailing: hasConnectivity && onlineThemes?.containsKey(theme) == true
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: Text('${onlineThemes![theme]!.count}', style: themeCountStyle),
+                      )
+                    : savedThemes.containsKey(theme)
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: Text('${savedThemes[theme]!}', style: themeCountStyle),
+                      )
+                    : null,
+                title: Text(theme.l10n(context.l10n).name),
+                subtitle: Text(
+                  theme.l10n(context.l10n).description,
+                  maxLines: 10,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
                 ),
+                onTap: isThemeAvailable
+                    ? () {
+                        Navigator.of(
+                          context,
+                          rootNavigator: true,
+                        ).push(PuzzleScreen.buildRoute(context, angle: PuzzleTheme(theme)));
+                      }
+                    : null,
               );
             }).toList(),
           ),

@@ -10,6 +10,7 @@ class SettingsListTile extends StatelessWidget {
     required this.settingsValue,
     required this.onTap,
     this.explanation,
+    this.enabled = true,
     super.key,
   });
 
@@ -20,6 +21,8 @@ class SettingsListTile extends StatelessWidget {
   final Text settingsLabel;
 
   final String settingsValue;
+
+  final bool enabled;
 
   final void Function()? onTap;
 
@@ -45,6 +48,7 @@ class SettingsListTile extends StatelessWidget {
                 ).subtitleTextStyle?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
               )
             : null,
+        enabled: enabled,
         onTap: onTap,
         trailing: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.25),
@@ -218,22 +222,20 @@ class ChoicePicker<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
-      child: ListSection(
-        children: [
-          for (final value in choices)
-            ListTile(
-              selected: selectedItem == value,
-              trailing: selectedItem == value ? const Icon(Icons.check) : null,
-              contentPadding: tileContentPadding,
-              title: titleBuilder(value),
-              subtitle: subtitleBuilder?.call(value),
-              leading: leadingBuilder?.call(value),
-              onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
-            ),
-        ],
-      ),
+    return ListSection(
+      children: [
+        for (final value in choices)
+          ListTile(
+            enabled: onSelectedItemChanged != null,
+            selected: selectedItem == value,
+            trailing: selectedItem == value ? const Icon(Icons.check) : null,
+            contentPadding: tileContentPadding,
+            title: titleBuilder(value),
+            subtitle: subtitleBuilder?.call(value),
+            leading: leadingBuilder?.call(value),
+            onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
+          ),
+      ],
     );
   }
 }

@@ -256,14 +256,9 @@ class _BodyState extends ConsumerState<_Body> {
                     ),
                   ),
                   ListTile(
-                    leading: Opacity(
-                      opacity: hasAjustedColors ? 1.0 : 0.5,
-                      child: const Icon(Icons.cancel),
-                    ),
-                    title: Opacity(
-                      opacity: hasAjustedColors ? 1.0 : 0.5,
-                      child: Text(context.l10n.boardReset),
-                    ),
+                    enabled: hasAjustedColors,
+                    leading: const Icon(Icons.cancel),
+                    title: Text(context.l10n.boardReset),
                     onTap: hasAjustedColors
                         ? () {
                             setState(() {

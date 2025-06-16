@@ -210,6 +210,7 @@ class _PuzzleMenuListTile extends StatelessWidget {
     required this.subtitle,
     this.badgeLabel,
     this.onTap,
+    this.enabled = true,
   });
 
   final IconData icon;
@@ -217,10 +218,12 @@ class _PuzzleMenuListTile extends StatelessWidget {
   final String subtitle;
   final String? badgeLabel;
   final VoidCallback? onTap;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      enabled: enabled,
       leading: Badge(
         backgroundColor: ColorScheme.of(context).secondary,
         textStyle: TextStyle(
@@ -261,45 +264,35 @@ class _PuzzleMenu extends ConsumerWidget {
             Navigator.of(context).push(PuzzleThemesScreen.buildRoute(context));
           },
         ),
-        Opacity(
-          opacity: isOnline ? 1 : 0.5,
-          child: _PuzzleMenuListTile(
-            icon: LichessIcons.streak,
-            title: 'Puzzle Streak',
-            badgeLabel: switch (ref.watch(savedStreakScoreProvider)) {
-              AsyncData(:final value?) => value.toString(),
-              _ => null,
-            },
-            subtitle:
-                context.l10n.puzzleStreakDescription.characters
-                    .takeWhile((c) => c != '.')
-                    .toString() +
-                (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
-            onTap: isOnline
-                ? () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(StreakScreen.buildRoute(context));
-                  }
-                : null,
-          ),
+        _PuzzleMenuListTile(
+          enabled: isOnline,
+          icon: LichessIcons.streak,
+          title: 'Puzzle Streak',
+          badgeLabel: switch (ref.watch(savedStreakScoreProvider)) {
+            AsyncData(:final value?) => value.toString(),
+            _ => null,
+          },
+          subtitle:
+              context.l10n.puzzleStreakDescription.characters
+                  .takeWhile((c) => c != '.')
+                  .toString() +
+              (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
+          onTap: isOnline
+              ? () {
+                  Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute(context));
+                }
+              : null,
         ),
-        Opacity(
-          opacity: isOnline ? 1 : 0.5,
-          child: _PuzzleMenuListTile(
-            icon: LichessIcons.storm,
-            title: 'Puzzle Storm',
-            subtitle: context.l10n.mobilePuzzleStormSubtitle,
-            onTap: isOnline
-                ? () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(StormScreen.buildRoute(context));
-                  }
-                : null,
-          ),
+        _PuzzleMenuListTile(
+          enabled: isOnline,
+          icon: LichessIcons.storm,
+          title: 'Puzzle Storm',
+          subtitle: context.l10n.mobilePuzzleStormSubtitle,
+          onTap: isOnline
+              ? () {
+                  Navigator.of(context, rootNavigator: true).push(StormScreen.buildRoute(context));
+                }
+              : null,
         ),
       ],
     );

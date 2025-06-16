@@ -75,28 +75,24 @@ class SettingsScreen extends ConsumerWidget {
                   Navigator.of(context).push(SoundSettingsScreen.buildRoute(context));
                 },
               ),
-              Opacity(
-                opacity: generalPrefs.isForcedDarkMode ? 0.5 : 1.0,
-                child: SettingsListTile(
-                  icon: const Icon(Icons.brightness_medium_outlined),
-                  settingsLabel: Text(context.l10n.background),
-                  settingsValue: generalPrefs.isForcedDarkMode
-                      ? BackgroundThemeMode.dark.title(context.l10n)
-                      : generalPrefs.themeMode.title(context.l10n),
-                  onTap: generalPrefs.isForcedDarkMode
-                      ? null
-                      : () {
-                          showChoicePicker(
-                            context,
-                            choices: BackgroundThemeMode.values,
-                            selectedItem: generalPrefs.themeMode,
-                            labelBuilder: (t) => Text(t.title(context.l10n)),
-                            onSelectedItemChanged: (BackgroundThemeMode? value) => ref
-                                .read(generalPreferencesProvider.notifier)
-                                .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
-                          );
-                        },
-                ),
+              SettingsListTile(
+                enabled: !generalPrefs.isForcedDarkMode,
+                icon: const Icon(Icons.brightness_medium_outlined),
+                settingsLabel: Text(context.l10n.background),
+                settingsValue: generalPrefs.isForcedDarkMode
+                    ? BackgroundThemeMode.dark.title(context.l10n)
+                    : generalPrefs.themeMode.title(context.l10n),
+                onTap: () {
+                  showChoicePicker(
+                    context,
+                    choices: BackgroundThemeMode.values,
+                    selectedItem: generalPrefs.themeMode,
+                    labelBuilder: (t) => Text(t.title(context.l10n)),
+                    onSelectedItemChanged: (BackgroundThemeMode? value) => ref
+                        .read(generalPreferencesProvider.notifier)
+                        .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
+                  );
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.palette_outlined),
