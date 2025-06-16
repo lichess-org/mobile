@@ -979,13 +979,11 @@ sealed class GameState with _$GameState {
   bool get isZenModeEnabled =>
       zenModeGameSetting ?? game.prefs?.zenMode == Zen.yes || game.prefs?.zenMode == Zen.gameAuto;
 
-  bool get canPremove =>
-      game.meta.speed != Speed.correspondence && (game.prefs?.enablePremove ?? true);
+  bool get canPremove => game.meta.speed != Speed.correspondence;
   bool get canAutoQueen => autoQueenSettingOverride ?? (game.prefs?.autoQueen == AutoQueen.always);
   bool get canAutoQueenOnPremove =>
       autoQueenSettingOverride ??
       (game.prefs?.autoQueen == AutoQueen.always || game.prefs?.autoQueen == AutoQueen.premove);
-  bool get shouldConfirmResignAndDrawOffer => game.prefs?.confirmResign ?? true;
   bool get shouldConfirmMove => moveConfirmSettingOverride ?? game.prefs?.submitMove ?? false;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;

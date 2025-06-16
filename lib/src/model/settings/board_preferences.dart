@@ -42,6 +42,14 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
     await save(state.copyWith(boardTheme: boardTheme));
   }
 
+  Future<void> togglePremoves() async {
+    await save(state.copyWith(premoves: !state.premoves));
+  }
+
+  Future<void> toggleConfirmResignAndDraw() async {
+    await save(state.copyWith(confirmResignAndDraw: !state.confirmResignAndDraw));
+  }
+
   Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
     await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
   }
@@ -144,6 +152,8 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     )
     required CastlingMethod castlingMethod,
     @JsonKey(defaultValue: true) required bool moveListDisplay,
+    @JsonKey(defaultValue: true) required bool premoves,
+    @JsonKey(defaultValue: true) required bool confirmResignAndDraw,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
@@ -169,6 +179,8 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     clockPosition: ClockPosition.right,
     moveListDisplay: true,
+    premoves: true,
+    confirmResignAndDraw: true,
     pieceShiftMethod: PieceShiftMethod.either,
     castlingMethod: CastlingMethod.kingOverRook,
     enableShapeDrawings: true,
@@ -217,7 +229,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       playerSide: playerSide,
       onMove: onMove,
       onPromotionSelection: onPromotionSelection,
-      premovable: premovable,
+      premovable: premoves ? premovable : null,
       promotionMove: promotionMove,
       sideToMove: position.turn,
       validMoves: _makeLegalMoves(position, variant: variant, castlingMethod: castlingMethod),

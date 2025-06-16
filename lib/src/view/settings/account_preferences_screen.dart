@@ -131,32 +131,6 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
               header: SettingsSectionTitle(context.l10n.preferencesGameBehavior),
               hasLeading: false,
               children: [
-                SwitchSettingTile(
-                  title: Text(context.l10n.preferencesPremovesPlayingDuringOpponentTurn),
-                  value: data.premove.value,
-                  onChanged: isLoading
-                      ? null
-                      : (value) {
-                          _setPref(
-                            () => ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setPremove(BooleanPref(value)),
-                          );
-                        },
-                ),
-                SwitchSettingTile(
-                  title: Text(context.l10n.preferencesConfirmResignationAndDrawOffers),
-                  value: data.confirmResign.value,
-                  onChanged: isLoading
-                      ? null
-                      : (value) {
-                          _setPref(
-                            () => ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setConfirmResign(BooleanPref(value)),
-                          );
-                        },
-                ),
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesTakebacksWithOpponentApproval),
                   settingsValue: data.takeback.label(context),
@@ -326,6 +300,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
               ],
             ),
             ListSection(
+              header: const SettingsSectionTitle('Danger zone'),
               hasLeading: true,
               children: [
                 if (Theme.of(context).platform == TargetPlatform.iOS)

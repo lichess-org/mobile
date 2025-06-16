@@ -242,7 +242,7 @@ class GameBody extends ConsumerWidget {
                       onPromotionSelection: (role) {
                         ref.read(ctrlProvider.notifier).onPromotionSelection(role);
                       },
-                      premovable: gameState.canPremove
+                      premovable: gameState.canPremove && boardPreferences.premoves
                           ? (
                               onSetPremove: (move) {
                                 ref.read(ctrlProvider.notifier).setPremove(move);
@@ -404,6 +404,7 @@ class _GameBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
+    final boardPreferences = ref.watch(boardPreferencesProvider);
     final kidModeAsync = ref.watch(kidModeProvider);
 
     switch (ref.watch(gameControllerProvider(id))) {
@@ -515,7 +516,7 @@ class _GameBottomBar extends ConsumerWidget {
               BottomBarButton(
                 label: context.l10n.resign,
                 onTap: gameState.game.resignable
-                    ? gameState.shouldConfirmResignAndDrawOffer
+                    ? boardPreferences.confirmResignAndDraw
                           ? () => _showConfirmDialog(
                               context,
                               description: Text(context.l10n.resignTheGame),
@@ -569,6 +570,7 @@ class _GameBottomBar extends ConsumerWidget {
 
   Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
     final gameState = ref.read(gameControllerProvider(id)).requireValue;
+    final boardPreferences = ref.read(boardPreferencesProvider);
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -622,7 +624,7 @@ class _GameBottomBar extends ConsumerWidget {
         if (gameState.canOfferDraw)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.offerDraw),
-            onPressed: gameState.shouldConfirmResignAndDrawOffer
+            onPressed: boardPreferences.confirmResignAndDraw
                 ? () => _showConfirmDialog(
                     context,
                     description: Text(context.l10n.offerDraw),
@@ -637,7 +639,7 @@ class _GameBottomBar extends ConsumerWidget {
         if (gameState.game.resignable)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.resign),
-            onPressed: gameState.shouldConfirmResignAndDrawOffer
+            onPressed: boardPreferences.confirmResignAndDraw
                 ? () => _showConfirmDialog(
                     context,
                     description: Text(context.l10n.resignTheGame),

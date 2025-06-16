@@ -157,6 +157,20 @@ class _Body extends ConsumerWidget {
           hasLeading: false,
           children: [
             SwitchSettingTile(
+              title: Text(context.l10n.preferencesPremovesPlayingDuringOpponentTurn),
+              value: boardPrefs.premoves,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).togglePremoves();
+              },
+            ),
+            SwitchSettingTile(
+              title: Text(context.l10n.preferencesConfirmResignationAndDrawOffers),
+              value: boardPrefs.confirmResignAndDraw,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleConfirmResignAndDraw();
+              },
+            ),
+            SwitchSettingTile(
               title: Text(context.l10n.mobileSettingsTouchFeedback),
               value: boardPrefs.hapticFeedback,
               subtitle: Text(context.l10n.mobileSettingsTouchFeedbackSubtitle, maxLines: 5),
