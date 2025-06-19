@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -24,6 +25,7 @@ import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/text_badge.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -118,8 +120,14 @@ final _userActivityProvider = FutureProvider.autoDispose.family<IList<UserActivi
   name: 'userActivityProvider',
 );
 
+final _currentGameProvider = FutureProvider.autoDispose.family<ExportedGame, UserId>(
+  (ref, id) => ref.withClient((client) => UserRepository(client).getCurrentGame(id)),
+  name: 'currentGameProvider',
+);
+
 class _UserProfileListView extends ConsumerWidget {
   const _UserProfileListView(this.user, this.isLoading, this.setIsLoading);
+
   final User user;
   final bool isLoading;
 
@@ -131,6 +139,9 @@ class _UserProfileListView extends ConsumerWidget {
     final activity = ref.watch(_userActivityProvider(user.id));
     final nbOfGames = ref.watch(userNumberOfGamesProvider(user.lightUser)).valueOrNull ?? 0;
     final session = ref.watch(authSessionProvider);
+    final isLive = ref.watch(
+      _currentGameProvider(user.id).select((game) => game.valueOrNull?.playable ?? false),
+    );
 
     if (user.disabled == true) {
       return Center(child: Text(context.l10n.settingsThisAccountIsClosed, style: Styles.bold));
@@ -158,6 +169,7 @@ class _UserProfileListView extends ConsumerWidget {
               ListTile(
                 title: Text(context.l10n.watchGames),
                 leading: const Icon(Icons.live_tv_outlined),
+                trailing: isLive ? const TextBadge(text: 'LIVE') : null,
                 onTap: () {
                   Navigator.of(
                     context,
