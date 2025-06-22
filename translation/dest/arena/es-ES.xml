@@ -16,7 +16,7 @@ Por ejemplo:
 Tres victorias seguidas valen 8 puntos: 2 + 2 + (2×2)
 Dos victorias y unas tablas valen 6 puntos: 2 + 2 + (1×2)
 Dos victorias, una derrota y unas tablas valen 5 puntos: 2 + 2 + 0 + 1</string>
-  <string name="berserk">Modo berserk</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Modo berserk</string>
   <string name="berserkAnswer">Cuando un jugador pulsa el botón de berserk al principio de una partida, pierde la mitad de su tiempo, pero la victoria vale un punto adicional.
 
 En controles de tiempo que tienen incremento, la opción berserk también cancela el incremento (1+2 es una excepción, ya que sólo se cancela el incremento, pero no se parte el tiempo a la mitad, resultando en 1+0).

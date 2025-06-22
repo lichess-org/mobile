@@ -14,7 +14,7 @@ Saat tuplapisteitä peleistäsi aina siihen asti, kunnes et voita peliä.
 Siis voitosta saat 4 pistettä ja tasapelistä kaksi; tappiosta et saa pisteitä edelleenkään.
 
 Esimerkiksi kaksi voittoa joiden jälkeen tasapeli tuottaa 6 pistettä: 2 + 2 + (2 x 1)</string>
-  <string name="berserk">Areenaberserkki</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Areenaberserkki</string>
   <string name="berserkAnswer">Kun pelaaja klikkaa berserkkinappulaa pelin alkaessa, hän menettää puolet ajastaan pelikellossa, mutta ansaitsee voittaessaan lisäpisteen turnauksen pistetaulukkoon.
 
 Berserkkitilassa ei saa myöskään lisäaikaa siirroista, vaikka turnauksen kelloasetukset olisivat sellaiset (1+2 on poikkeus, berserkkitilassa käytössä on 1+0)

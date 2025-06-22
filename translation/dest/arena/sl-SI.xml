@@ -14,7 +14,7 @@ Naslednje partije bodo štele dvojno število točk dokler boste zmagovali.
 To pomeni, zmaga šteje 4, remi 2 in poraz ne šteje točk. 
 
 Na primer, dve zmagi, ki mu sledi remi šteje 6 točk: 2 + 2 + (2 x 1)</string>
-  <string name="berserk">Arena norenja</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Arena norenja</string>
   <string name="berserkAnswer">Ko igralec pritisne gumb Norenje ob začetku igre, izgubi polovico časa na uri, vendar zmaga šteje eno dodatno turnirsko točko.
 
 Ob Norenju z uro ki se povečuje, prekine norenje (1 +2 je izjema in da 1 +0)

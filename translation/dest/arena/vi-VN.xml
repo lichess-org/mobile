@@ -14,7 +14,7 @@ Các ván đấu sau đó sẽ tiếp tục nhân đôi điểm đến khi bạn
 Nghĩa là, một ván thắng được 4 điểm, hòa: 2 điểm, thua: 0 điểm.
 
 Ví dụ, thắng 2 ván rồi hòa 1 ván sẽ được 6 điểm: 2 + 2 + (1 x 2)</string>
-  <string name="berserk">Berserk trong Đấu trường</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Berserk trong Đấu trường</string>
   <string name="berserkAnswer">Khi người chơi nhấn nút Berserk lúc bắt đầu ván cờ, họ sẽ mất nửa thời gian của họ, nhưng nếu thắng sẽ được thêm một điểm giải đấu.
 
 Dùng Berserk trong ván tính giờ với gia số sẽ hủy bỏ gia số. (1+2 là ngoại lệ, nó sẽ là 1+0)

@@ -14,7 +14,7 @@ Lojërat vijuese do të vlejnë dyfishin e pikëve, deri sa të mos fitoni një 
 Pra, një fitore do të vlejë 4 pikë, një barazim 2 pikë dhe një humbje prapë nuk sjell pikë.
 
 Për shembull, dy fitore të ndjekura nga një barazim do të vlejnë 6 pikë: 2 + 2 + (2 x 1)</string>
-  <string name="berserk">Arena Berserk</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Arena Berserk</string>
   <string name="berserkAnswer">Kur një lojtar klikon butonin Berserk në fillim të lojës, ai humbet gjysmën e kohës që ka në dispozicion, por fitorja vlen një pikë shtesë në turne.
 
 Shkuarja Berserk në kontrollet kohë me një rritje edhe anulon rritjen. (1 + 2 është një përjashtim, ai jep 1 + 0)
