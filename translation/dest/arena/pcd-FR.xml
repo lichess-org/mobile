@@ -11,7 +11,7 @@
   <string name="howAreScoresCalculatedAnswer">Une victoire rapporte 2 points, un match nul 1 point et une défaite aucun point.
 Si vous gagnez deux parties consécutives, vous entamerez une série de points qui compteront double. Cette série est représenté par une icône en forme de flamme. Les parties qui suivront compteront alors double tant que vous gagnez. Autrement dit, une victoire vaudra 4 points, un match nul 2 points et une défaite aucun point.
 Par exemple, deux victoires suivies d\'un mach nul rapportera 6 points : 2 + 2 + (2 x 1)</string>
-  <string name="berserk">Arène Berserk</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Arène Berserk</string>
   <string name="berserkAnswer">Quand un joueur clique sur le bouton Berserk au début de la partie, il perd la moitié de son temps, mais la victoire vaudra un point de tournoi supplémentaire.
 
 L\'option Berserk annule aussi l\'incrément de temps le cas échéant. (1+2 est une exception, cela donne 1+0)

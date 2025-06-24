@@ -19,7 +19,7 @@ Per esempio:
 - Tre vittorie consecutive valgono 8 punti: 2 + 2 + (2 x 2)
 - Due vittorie, una patta e una vittoria valgono 8 punti: 2 + 2 + (2 x 1) + 2
 - Due vittorie, una sconfitta e una patta valgono 5 punti: 2 + 2 + (2 x 0) + 1</string>
-  <string name="berserk">Arena Berserk</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Arena Berserk</string>
   <string name="berserkAnswer">Quando un giocatore clicca sul pulsante Berserk, all\'inzio di una partita, il tempo a sua disposizione viene dimezzato, ma in caso di vittoria si otterrà un punto del torneo in più.
 
 Inoltre, se la cadenza di gioco prevede un incremento, la modalità Berserk lo elimina. (1+2 diventa eccezionalmente 1+0 invece di ½+0).

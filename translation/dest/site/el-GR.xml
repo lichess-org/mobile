@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">Ισοπαλία κατόπιν συμφωνίας</string>
   <string name="fiftyMovesWithoutProgress">Πενήντα κινήσεις χωρίς πρόοδο</string>
   <string name="currentGames">Παιχνίδια σε εξέλιξη</string>
-  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;">Έγινε μέλος %s</string>
+  <string name="joinedX">Έγινε μέλος %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s παιχνίδι</item>
     <item quantity="other">%s παιχνίδια</item>
@@ -364,10 +364,10 @@
   <string name="bookmarkThisGame">Προσθέστε σελιδοδείκτη για αυτό το παιχνίδι</string>
   <string name="tournament">Τουρνουά</string>
   <string name="tournaments">Πρωταθλήματα</string>
-  <string name="tournamentPoints">Πόντοι από τουρνουά</string>
+  <string name="tournamentPoints">Βαθμοί από τουρνουά</string>
   <plurals name="nbTournamentPoints">
-    <item quantity="one">%s πόντος τουρνουά</item>
-    <item quantity="other">%s πόντοι τουρνουά</item>
+    <item quantity="one">%s βαθμός τουρνουά</item>
+    <item quantity="other">%s βαθμοί τουρνουά</item>
   </plurals>
   <plurals name="nbStudies">
     <item quantity="one">%s μελέτη</item>
@@ -491,10 +491,9 @@
   <string name="makePrivateTournament">Κάντε το τουρνουά ιδιωτικό, και περιορίστε την πρόσβαση με κωδικό</string>
   <string name="join">Συμμετοχή</string>
   <string name="withdraw">Απόσυρση</string>
-  <string name="points">Πόντοι</string>
+  <string name="points">Βαθμοί</string>
   <string name="wins">Νίκες</string>
   <string name="losses">Ήττες</string>
-  <string name="createdBy">Δημιουργήθηκε από</string>
   <string name="startingIn" comment="Displayed above a timer">Εκκίνηση σε</string>
   <string name="standByX">Αναμένετε %s, αντιστοίχιση παικτών, ετοιμαστείτε!</string>
   <string name="pause">Παύση</string>
@@ -873,7 +872,7 @@
     <item quantity="other">%s δευτερόλεπτα</item>
   </plurals>
   <string name="opening">Άνοιγμα</string>
-  <string name="middlegame">Μέση φάση παιχνιδιού</string>
+  <string name="middlegame">Μέσο</string>
   <string name="endgame">Φινάλε</string>
   <string name="conditionalPremoves">Υποθετικές προκινήσεις</string>
   <string name="addCurrentVariation">Προσθέστε τρέχουσα παραλλαγή</string>
@@ -946,7 +945,7 @@
   <string name="lostAgainstTOSViolator">Χάσατε από κάποιον που παραβίασε τους όρους χρήσης του Lichess</string>
   <string name="refundXpointsTimeControlY">Επιστροφή πόντων: %1$s %2$s πόντοι βαθμολογίας.</string>
   <string name="timeAlmostUp">Ο χρόνος σας έχει σχεδόν τελειώσει!</string>
-  <string name="clickToRevealEmailAddress">[Κάντε κλικ για να δείτε τη διεύθυνση ηλεκτρονικού ταχυδρομείου]</string>
+  <string name="clickToRevealEmailAddress">[κάντε κλικ για να δείτε τη διεύθυνση email]</string>
   <string name="download">Λήψη</string>
   <string name="coachManager">Διαχειριστής προπονητή</string>
   <string name="streamerManager">Διαχειριστής streamer</string>

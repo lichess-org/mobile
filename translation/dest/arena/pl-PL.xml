@@ -14,7 +14,7 @@ Kolejne partie będą liczone podwójnie do czasu, gdy nie uda ci się wygrać p
 Tym samym wygrana będzie warta 4 punkty, remis – 2 punkty, przegrana nie da punktów. 
 
 Przykład: dwie wygrane, a po nich remis są warte 6 punktów: 2 + 2 + (2 · 1)</string>
-  <string name="berserk">Co to jest berserk?</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Co to jest berserk?</string>
   <string name="berserkAnswer">Naciśnięcie przycisku Berserk na początku partii powoduje skrócenie o połowę twojego czasu gry, ale zwycięstwo warte jest dodatkowy jeden punkt turniejowy.
 
 Berserk w partii z przyrostem czasu znosi również sam przyrost (za wyjątkiem tempa 1 + 2, które staje się 1 + 0).

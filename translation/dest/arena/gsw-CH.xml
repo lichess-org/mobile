@@ -11,7 +11,7 @@
   <string name="howAreScoresCalculatedAnswer">En Sieg git 2 Pünkt, es Remis 1 Punkt, e Niderlag 0. Nach 2 Sieg in Serie, gits für jede witeri Sieg doppleti Pünkt. 
 Das wird dur e Flamme, bi de Punktzahl, azeigt. Doppleti Pünkt gits so lang, bis es Schpiel verlore gaht oder Remis ändet. 
 Bischpil: 4 Sieg und dänn es Remis ergit 14 Pünkt ( 2 + 2 + 2x2 + 2x2 + 2x1 = 14 ) und ab dänn, wider normal.</string>
-  <string name="berserk">Arena Berserk</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Arena Berserk</string>
   <string name="berserkAnswer">Klickt en Schpiller vor Schpielbeginn uf \"Berserk\", dänn halbiert er sini Bedänkzit. 
 Wänn er das Schpiel trotzdem günnt, gits 1 zuesätzliche Turnier Punkt.
 

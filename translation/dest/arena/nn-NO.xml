@@ -11,7 +11,7 @@
   <string name="howAreScoresCalculatedAnswer">Ein siger gjev to basispoeng, ein remis eitt poeng og eit tap null poeng. Vinn du to parti på rad vert det starta ein dobbelpoeng-serie, det kjem då fram ein flamme som ikon. Partia som følgjer er då verde doble poeng heilt til du mislukkast i å vinne eit parti. Dette vil seie at ein siger er verd fire poeng, ein remis to poeng og eit tap null poeng.
 
 Til dømes gjev to sigrar med ein remis etterpå seks poeng: 2 + 2 + (2 *1)</string>
-  <string name="berserk">Arena Berserk</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Arena Berserk</string>
   <string name="berserkAnswer">Om ein spelar klikkar på Berserk-knappen når spelet startar, vert klokketida halvert, men ein eventuell siger gjev eitt ekstra turneringspoeng. For tidskontrollar med tidstillegg vil det å gå Berserk dessutan innebere at ein tapar tidstillegget. 
 (Unntak for 1+2, det gir 1+0)
 
