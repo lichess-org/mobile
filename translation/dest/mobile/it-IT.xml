@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Preferenze dell\'account</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Queste preferenze sono applicate al tuo account Lichess e saranno utilizzate su tutti i dispositivi.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Tutte le partite</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Sei sicuro?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Impostazioni scacchiera</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Annulla richiesta di ritiro mossa</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Elimina</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Cancella mossa salvata</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Unisciti a una partita</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Suggerimenti</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Buona sera, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Buona sera</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Buongiorno, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Buongiorno</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Nascondi variante</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Home</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streamer in diretta</string>
@@ -27,7 +34,9 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Tattiche</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Ricerche recenti</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Rimuovi segnalibro</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Posizione dell\'orologio</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Predefiniti</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Modalità immersiva</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Nascondi la UI di sistema mentre giochi. Attiva se i gesti di navigazione ai bordi dello schermo ti danno fastidio. Si applica alla schermata di gioco e Puzzle Storm.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Preferenze</string>

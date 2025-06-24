@@ -40,8 +40,23 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Ziel der gezogenen Figur</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Kreis</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Quadrat</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Startbildschirm Widgets</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersiver Modus</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">System-Benutzeroberfläche während der Partie ausblenden. Nutze diese Option, wenn dich das Navigationsverhalten des Systems an den Bildschirmrändern stören. Gilt für Partie- und Aufgaben-Bildschirme.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Geschlagene Figuren</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Wähle ein Bild aus</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Benutzerdefinierte Hintergründe funktionieren nur im Dunkelmodus. Ein dunkles Bild wird empfohlen.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Bild unschärfer machen</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Board verstecken</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Board anzeigen</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Wische, um andere Hintergründe anzuzeigen</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Tippe oder Ziehe</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tippe auf zwei Felder</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Formen zeichnen</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Zeichne Formen mit zwei Fingern: Halte einen Finger auf einem leeren Feld und ziehe den anderen Finger um eine Form zu zeichnen.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Rahmen anzeigen</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Haptisches Feedback</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Wen aktiviert, vibriert das Gerät kurz, wenn du ein Stück bewegst oder schlägst.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Optionen</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN teilen</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Link der Partie teilen</string>
@@ -52,9 +67,11 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Varianten anzeigen</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Etwas ist schiefgelaufen.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Systemfarben</string>
+  <string name="tapHereToStartPlayingChess" comment="A message shown only once the first time the app is installed. Appear in a popup over the main floating action button on the home screen.">Tippe hier und fange an Schach zu spielen.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Erscheinungsbild</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Werkzeuge</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variante %s wird in dieser Version nicht unterstützt.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Warte auf Beitritt eines Gegners...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Zuschauen</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Willkommen bei der Lichess-App!</string>
 </resources>
