@@ -355,7 +355,8 @@ class _Body extends ConsumerWidget {
     final evalBestMove = (currentEvalBest ?? puzzleState.node.eval?.bestMove) as NormalMove?;
 
     final content = PopScope(
-      canPop: puzzleState.mode == PuzzleMode.view,
+      canPop:
+          Theme.of(context).platform != TargetPlatform.iOS || puzzleState.mode == PuzzleMode.view,
       child: SafeArea(
         // view padding can change on Android when immersive mode is enabled, so to prevent any
         // board vertical shift, we set `maintainBottomViewPadding` to true.
