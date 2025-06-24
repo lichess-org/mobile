@@ -910,6 +910,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastLiveboard => 'Live board';
 
   @override
+  String get broadcastCommunityBroadcast => 'Community broadcast';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Created and managed by $param.';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3199,9 +3207,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get losses => 'Losses';
-
-  @override
-  String get createdBy => 'Created by';
 
   @override
   String get startingIn => 'Starting in';
@@ -7127,6 +7132,14 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get broadcastLiveboard => 'Live board';
 
   @override
+  String get broadcastCommunityBroadcast => 'Community broadcast';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Created and managed by $param.';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -9418,9 +9431,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get losses => 'Losses';
-
-  @override
-  String get createdBy => 'Created by';
 
   @override
   String get startingIn => 'Starting in';

@@ -12,7 +12,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileAccountPreferences => 'Настройки аккаунта';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Эти настройки применяются к вашему аккаунту Lichess и будут использоваться на всех устройствах.';
 
   @override
   String get mobileAllGames => 'Все игры';
@@ -144,16 +144,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Скрывать интерфейс во время игры. Воспользуйтесь, если вам мешает навигация по краям экрана. Применяется в режиме партий и задач.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Взятые фигуры';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Выбрать изображение';
 
   @override
   String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Размыть изображение';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Скрыть доску';
@@ -177,7 +177,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Показать рамку';
 
   @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
@@ -216,7 +216,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSystemColors => 'Цвет интерфейса';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Нажмите здесь, чтобы начать играть в шахматы.';
 
   @override
   String get mobileTheme => 'Оформление';
@@ -948,6 +948,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get broadcastLiveboard => 'Доска в прямом эфире';
+
+  @override
+  String get broadcastCommunityBroadcast => 'Community broadcast';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Создано и управляется $param.';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3257,9 +3265,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get losses => 'Поражения';
-
-  @override
-  String get createdBy => 'Создан';
 
   @override
   String get startingIn => 'Начинается через';

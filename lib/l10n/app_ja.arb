@@ -914,7 +914,6 @@
   "points": "ポイント",
   "wins": "勝",
   "losses": "敗",
-  "createdBy": "トーナメント作成者",
   "startingIn": "開始まで",
   "standByX": "{param} さん、現在ペアリング中です。用意して！",
   "pause": "休む",

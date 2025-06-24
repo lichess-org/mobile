@@ -924,7 +924,6 @@
   "points": "Poeng",
   "wins": "Seire",
   "losses": "Tap",
-  "createdBy": "Opprettet av",
   "startingIn": "Starter om",
   "standByX": "Vent litt {param}, kobler sammen spillere, vær klar!",
   "pause": "Pause",

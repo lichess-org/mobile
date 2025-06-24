@@ -709,7 +709,6 @@
   "points": "Punktid",
   "wins": "Võidud",
   "losses": "Kaotused",
-  "createdBy": "Loodud",
   "standByX": "Palun oodake {param}, loome mängijate paare, olge valmis!",
   "pause": "Peata",
   "resume": "Jätka",

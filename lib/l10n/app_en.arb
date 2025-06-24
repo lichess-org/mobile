@@ -511,6 +511,15 @@
   "broadcastBackToLiveMove": "Back to live move",
   "broadcastSinceHideResults": "Since you chose to hide the results, all the preview boards are empty to avoid spoilers.",
   "broadcastLiveboard": "Live board",
+  "broadcastCommunityBroadcast": "Community broadcast",
+  "broadcastCreatedAndManagedBy": "Created and managed by {param}.",
+  "@broadcastCreatedAndManagedBy": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -1703,7 +1712,6 @@
   "points": "Points",
   "wins": "Wins",
   "losses": "Losses",
-  "createdBy": "Created by",
   "startingIn": "Starting in",
   "standByX": "Stand by {param}, pairing players, get ready!",
   "@standByX": {

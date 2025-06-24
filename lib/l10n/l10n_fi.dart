@@ -40,19 +40,19 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Iltaa, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Hyvää iltaa';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Päivää, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Hyvää päivää';
 
   @override
   String get mobileHideVariation => 'Piilota muunnelma';
@@ -147,43 +147,43 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Lyödyt nappulat';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Valitse kuva';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Mukautettu taustakuva toimii vain tummassa tilassa. Tumma kuva on suositeltava.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Sumenna kuvaa';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Piilota lauta';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Näytä lauta';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Katso muita taustakuvia pyyhkäisemällä';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Joko napauta tai raahaa';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Napauta kahta ruutua';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Muotojen piirtely';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Piirrä muotoja kahta sormea käyttäen: muoto piirretään pitämällä yhtä sormea tyhjällä ruudulla ja raahamalla toista sormea.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Näytä reunukset';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Kosketuspalaute';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Kun käytössä, laite värähtelee hieman kun siirrät tai lyöt nappulan.';
 
   @override
   String get mobileSettingsTab => 'Asetukset';
@@ -216,7 +216,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileSystemColors => 'Järjestelmän värit';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Pelaa shakkia napauttamalla tätä.';
 
   @override
   String get mobileTheme => 'Teema';
@@ -236,7 +236,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileWatchTab => 'Seuraa';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Tervetuloa Lichess-sovellukseen!';
 
   @override
   String get activityActivity => 'Toiminta';
@@ -908,6 +908,14 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get broadcastLiveboard => 'Live-pelilauta';
+
+  @override
+  String get broadcastCommunityBroadcast => 'Community broadcast';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Created and managed by $param.';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3201,9 +3209,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get losses => 'Tappiot';
-
-  @override
-  String get createdBy => 'Tekijä:';
 
   @override
   String get startingIn => 'Aikaa alkuun:';

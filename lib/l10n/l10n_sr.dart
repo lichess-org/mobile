@@ -927,6 +927,14 @@ class AppLocalizationsSr extends AppLocalizations {
   String get broadcastLiveboard => 'Live board';
 
   @override
+  String get broadcastCommunityBroadcast => 'Community broadcast';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Created and managed by $param.';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2435,13 +2443,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get importPgn => 'Унеси PGN';
 
   @override
-  String get delete => 'Обриши';
+  String get delete => 'Избриши';
 
   @override
-  String get deleteThisImportedGame => 'Обриши ову увезену партију?';
+  String get deleteThisImportedGame => 'Избриши ову увезену партију?';
 
   @override
-  String get replayMode => 'Понављање партије';
+  String get replayMode => 'Начин репризе';
 
   @override
   String get realtimeReplay => 'Као уживо';
@@ -3217,9 +3225,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get losses => 'Порази';
-
-  @override
-  String get createdBy => 'Направио/ла';
 
   @override
   String get startingIn => 'Почиње за';

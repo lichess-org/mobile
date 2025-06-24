@@ -930,6 +930,14 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastLiveboard => 'Tablă live';
 
   @override
+  String get broadcastCommunityBroadcast => 'Transmisie din comunitate';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Creat și gestionat de $param.';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3229,9 +3237,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get losses => 'Înfrângeri';
-
-  @override
-  String get createdBy => 'Creat de';
 
   @override
   String get startingIn => 'Începe în';

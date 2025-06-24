@@ -910,6 +910,14 @@ class AppLocalizationsGl extends AppLocalizations {
   String get broadcastLiveboard => 'Taboleiro en directo';
 
   @override
+  String get broadcastCommunityBroadcast => 'Emisión da comunidade';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Creada e xestionada por $param.';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3201,9 +3209,6 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get losses => 'Derrotas';
-
-  @override
-  String get createdBy => 'Creado por';
 
   @override
   String get startingIn => 'Comeza en';

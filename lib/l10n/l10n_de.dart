@@ -135,7 +135,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Quadrat';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Startbildschirm Widgets';
 
   @override
   String get mobileSettingsImmersiveMode => 'Immersiver Modus';
@@ -144,46 +144,46 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'System-Benutzeroberfläche während der Partie ausblenden. Nutze diese Option, wenn dich das Navigationsverhalten des Systems an den Bildschirmrändern stören. Gilt für Partie- und Aufgaben-Bildschirme.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Geschlagene Figuren';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Wähle ein Bild aus';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Benutzerdefinierte Hintergründe funktionieren nur im Dunkelmodus. Ein dunkles Bild wird empfohlen.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Bild unschärfer machen';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Board verstecken';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Board anzeigen';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Wische, um andere Hintergründe anzuzeigen';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Tippe oder Ziehe';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tippe auf zwei Felder';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Formen zeichnen';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Zeichne Formen mit zwei Fingern: Halte einen Finger auf einem leeren Feld und ziehe den anderen Finger um eine Form zu zeichnen.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Rahmen anzeigen';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Haptisches Feedback';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Wen aktiviert, vibriert das Gerät kurz, wenn du ein Stück bewegst oder schlägst.';
 
   @override
   String get mobileSettingsTab => 'Optionen';
@@ -216,7 +216,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileSystemColors => 'Systemfarben';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Tippe hier und fange an Schach zu spielen.';
 
   @override
   String get mobileTheme => 'Erscheinungsbild';
@@ -236,7 +236,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileWatchTab => 'Zuschauen';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Willkommen bei der Lichess-App!';
 
   @override
   String get activityActivity => 'Verlauf';
@@ -908,6 +908,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get broadcastLiveboard => 'Live-Brett';
+
+  @override
+  String get broadcastCommunityBroadcast => 'Gemeinschafts-Übertragung';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Erstellt und verwaltet von $param.';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3201,9 +3209,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get losses => 'Niederlagen';
-
-  @override
-  String get createdBy => 'Erstellt von';
 
   @override
   String get startingIn => 'Beginnt in';

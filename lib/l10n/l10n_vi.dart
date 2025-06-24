@@ -890,6 +890,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastLiveboard => 'Bàn cờ trực tiếp';
 
   @override
+  String get broadcastCommunityBroadcast => 'Phát sóng cộng đồng';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Được tạo và quản lý bởi $param.';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2227,7 +2235,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get computerAnalysisDisabled => 'Phân tích từ máy tính bị vô hiệu hóa';
 
   @override
-  String get analysis => 'Bàn cờ phân tích';
+  String get analysis => 'Phân tích bàn cờ';
 
   @override
   String depthX(String param) {
@@ -3173,9 +3181,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get losses => 'Thua';
-
-  @override
-  String get createdBy => 'Tạo bởi';
 
   @override
   String get startingIn => 'Bắt đầu trong';

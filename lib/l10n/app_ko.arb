@@ -928,7 +928,6 @@
   "points": "포인트",
   "wins": "승리",
   "losses": "패배",
-  "createdBy": "토너먼트 주최자:",
   "startingIn": "대회 시작까지",
   "standByX": "{param} 님, 현재 매칭중입니다. 준비하십시오!",
   "pause": "일시 중지",

@@ -950,6 +950,14 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastLiveboard => 'Živá deska';
 
   @override
+  String get broadcastCommunityBroadcast => 'Community broadcast';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Created and managed by $param.';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3255,9 +3263,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get losses => 'Prohry';
-
-  @override
-  String get createdBy => 'Vytvořeno uživatelem';
 
   @override
   String get startingIn => 'Začíná za';

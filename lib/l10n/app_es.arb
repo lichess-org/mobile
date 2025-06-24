@@ -236,6 +236,8 @@
   "broadcastBackToLiveMove": "Volver al movimiento en directo",
   "broadcastSinceHideResults": "Como elegiste ocultar los resultados, todos los tableros de vista previa están vacíos.",
   "broadcastLiveboard": "Tablero en directo",
+  "broadcastCommunityBroadcast": "Transmisión de la comunidad",
+  "broadcastCreatedAndManagedBy": "Creada y administrada por {param}.",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} transmisión} other{{count} transmisiones}}",
   "broadcastNbViewers": "{count, plural, =1{{count} espectador} other{{count} espectadores}}",
   "challengeChallengesX": "Desafíos: {param1}",
@@ -943,7 +945,6 @@
   "points": "Puntos",
   "wins": "Victorias",
   "losses": "Derrotas",
-  "createdBy": "Creado por",
   "startingIn": "Comienza en",
   "standByX": "Espera {param}, emparejando jugadores, ¡prepárate!",
   "pause": "Pausa",
@@ -1721,6 +1722,6 @@
   "timeagoNbWeeksAgo": "{count, plural, =1{hace {count} semana} other{hace {count} semanas}}",
   "timeagoNbMonthsAgo": "{count, plural, =1{hace {count} mes} other{hace {count} meses}}",
   "timeagoNbYearsAgo": "{count, plural, =1{hace {count} año} other{hace {count} años}}",
-  "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minutos restantes} other{{count} minutos restantes}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{{count} horas restantes} other{{count} horas restantes}}"
+  "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minuto restante} other{{count} minutos restantes}}",
+  "timeagoNbHoursRemaining": "{count, plural, =1{{count} hora restante} other{{count} horas restantes}}"
 }

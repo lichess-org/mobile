@@ -890,6 +890,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastLiveboard => '实时棋局';
 
   @override
+  String get broadcastCommunityBroadcast => 'Community broadcast';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Created and managed by $param.';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3173,9 +3181,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get losses => '负';
-
-  @override
-  String get createdBy => '创建者：';
 
   @override
   String get startingIn => '开始于';
@@ -9143,9 +9148,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get losses => '負';
-
-  @override
-  String get createdBy => '創建者：';
 
   @override
   String standByX(String param) {

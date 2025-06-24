@@ -910,6 +910,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastLiveboard => 'Tablero en directo';
 
   @override
+  String get broadcastCommunityBroadcast => 'Transmisión de la comunidad';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Creada y administrada por $param.';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3201,9 +3209,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get losses => 'Derrotas';
-
-  @override
-  String get createdBy => 'Creado por';
 
   @override
   String get startingIn => 'Comienza en';
@@ -6206,7 +6211,7 @@ class AppLocalizationsEs extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count minutos restantes',
-      one: '$count minutos restantes',
+      one: '$count minuto restante',
     );
     return '$_temp0';
   }
@@ -6217,7 +6222,7 @@ class AppLocalizationsEs extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count horas restantes',
-      one: '$count horas restantes',
+      one: '$count hora restante',
     );
     return '$_temp0';
   }

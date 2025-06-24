@@ -183,7 +183,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Touch feedback';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Quando ativado, o dispositivo irá vibrar brevemente quando moves ou capturas uma peça.';
 
   @override
   String get mobileSettingsTab => 'Definições';
@@ -216,7 +216,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileSystemColors => 'Cores do sistema';
 
   @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
+  String get mobileTapHereToStartPlayingChess => 'Clica aqui para começar a jogar xadrez.';
 
   @override
   String get mobileTheme => 'Tema';
@@ -908,6 +908,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get broadcastLiveboard => 'Tabuleiro em direto';
+
+  @override
+  String get broadcastCommunityBroadcast => 'Transmissão comunitária';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Criado e administrado por $param.';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -3201,9 +3209,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get losses => 'Derrotas';
-
-  @override
-  String get createdBy => 'Criado por';
 
   @override
   String get startingIn => 'Começa em';
@@ -7129,6 +7134,14 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get broadcastLiveboard => 'Tabuleiro ao vivo';
 
   @override
+  String get broadcastCommunityBroadcast => 'Transmissão da comunidade';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Criada e gerenciada por $param.';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -9420,9 +9433,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get losses => 'Derrotas';
-
-  @override
-  String get createdBy => 'Criado por';
 
   @override
   String get startingIn => 'Começando em';

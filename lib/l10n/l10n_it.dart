@@ -9,10 +9,10 @@ class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Preferenze dell\'account';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Queste preferenze sono applicate al tuo account Lichess e saranno utilizzate su tutti i dispositivi.';
 
   @override
   String get mobileAllGames => 'Tutte le partite';
@@ -21,7 +21,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileAreYouSure => 'Sei sicuro?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Impostazioni scacchiera';
 
   @override
   String get mobileCancelTakebackOffer => 'Annulla richiesta di ritiro mossa';
@@ -40,19 +40,19 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Buona sera, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Buona sera';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Buongiorno, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Buongiorno';
 
   @override
   String get mobileHideVariation => 'Nascondi variante';
@@ -117,13 +117,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileRecentSearches => 'Ricerche recenti';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Rimuovi segnalibro';
 
   @override
   String get mobileSettingsClockPosition => 'Posizione dell\'orologio';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Predefiniti';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
@@ -908,6 +908,14 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get broadcastLiveboard => 'Scacchiera in diretta';
+
+  @override
+  String get broadcastCommunityBroadcast => 'Trasmissione della community';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Creata e gestita da $param.';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2912,10 +2920,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get blackAcceptsTakeback => 'Il Nero accetta la ripetizione della mossa';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'Il bianco rifiuta la ripetizione della mossa';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'Il nero rifiuta la ripetizione della mossa';
 
   @override
   String get yourOpponentProposesATakeback => 'Il tuo avversario chiede di ritirare la mossa';
@@ -3201,9 +3209,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get losses => 'Sconfitte';
-
-  @override
-  String get createdBy => 'Creato da';
 
   @override
   String get startingIn => 'Inizio tra';
@@ -3753,7 +3758,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get termsOfService => 'Termini di servizio';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'Verifica del titolo';
 
   @override
   String get sourceCode => 'Codice sorgente';

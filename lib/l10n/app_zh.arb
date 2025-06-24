@@ -943,7 +943,6 @@
   "points": "分数",
   "wins": "胜",
   "losses": "负",
-  "createdBy": "创建者：",
   "startingIn": "开始于",
   "standByX": "{param} 做好准备，你马上就要开始对局了！",
   "pause": "暂停",

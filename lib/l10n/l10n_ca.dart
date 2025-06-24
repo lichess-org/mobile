@@ -910,6 +910,14 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastLiveboard => 'Tauler en directe';
 
   @override
+  String get broadcastCommunityBroadcast => 'Retransmissió comunitària';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Creada i gestionada per $param.';
+  }
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -3201,9 +3209,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get losses => 'Derrotes';
-
-  @override
-  String get createdBy => 'Creat per';
 
   @override
   String get startingIn => 'Començant en';

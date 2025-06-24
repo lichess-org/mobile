@@ -862,7 +862,6 @@
   "points": "Pont",
   "wins": "Győzelmek",
   "losses": "Vereségek",
-  "createdBy": "Készítette",
   "standByX": "Állj készen {param}, hamarosan ellenfelet kapsz!",
   "pause": "Szünet",
   "resume": "Folytatás",

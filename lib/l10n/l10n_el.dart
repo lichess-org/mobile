@@ -616,10 +616,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get arenaTotal => 'Σύνολο';
 
   @override
-  String get arenaPointsAvg => 'Μέσος όρος πόντων';
+  String get arenaPointsAvg => 'Μέσος όρος βαθμών';
 
   @override
-  String get arenaPointsSum => 'Σύνολο πόντων';
+  String get arenaPointsSum => 'Σύνολο βαθμών';
 
   @override
   String get arenaRankAvg => 'Μέσος όρος κατάταξης';
@@ -665,31 +665,31 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get broadcastBroadcasts => 'Αναμεταδόσεις';
+  String get broadcastBroadcasts => 'Μεταδόσεις';
 
   @override
-  String get broadcastMyBroadcasts => 'Οι αναμεταδόσεις μου';
+  String get broadcastMyBroadcasts => 'Οι μεταδόσεις μου';
 
   @override
-  String get broadcastLiveBroadcasts => 'Αναμεταδόσεις ζωντανών τουρνουά';
+  String get broadcastLiveBroadcasts => 'Ζωντανές μεταδόσεις τουρνουά';
 
   @override
-  String get broadcastBroadcastCalendar => 'Ημερολόγιο αναμεταδόσεων';
+  String get broadcastBroadcastCalendar => 'Ημερολόγιο μεταδόσεων';
 
   @override
-  String get broadcastNewBroadcast => 'Νέα ζωντανή αναμετάδοση';
+  String get broadcastNewBroadcast => 'Νέα ζωντανή μετάδοση';
 
   @override
-  String get broadcastSubscribedBroadcasts => 'Εγγεγραμμένες αναμεταδόσεις';
+  String get broadcastSubscribedBroadcasts => 'Μεταδόσεις που έχω εγγραφεί';
 
   @override
-  String get broadcastAboutBroadcasts => 'Σχετικά με τις αναμεταδόσεις';
+  String get broadcastAboutBroadcasts => 'Σχετικά με τις μεταδόσεις';
 
   @override
-  String get broadcastHowToUseLichessBroadcasts => 'Πώς να χρησιμοποιήσετε τις αναμεταδόσεις Lichess.';
+  String get broadcastHowToUseLichessBroadcasts => 'Τρόπος χρήσης μεταδόσεων Lichess.';
 
   @override
-  String get broadcastTheNewRoundHelp => 'Ο νέος γύρος θα έχει τα ίδια μέλη και τους ίδιους συνεισφέροντες όπως ο προηγούμενος.';
+  String get broadcastTheNewRoundHelp => 'Ο νέος γύρος θα έχει τα ίδια μέλη και τους ίδιους συνεισφέροντες με τον προηγούμενο.';
 
   @override
   String get broadcastAddRound => 'Προσθήκη γύρου';
@@ -713,21 +713,21 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastTournamentDescription => 'Σύντομη περιγραφή τουρνουά';
 
   @override
-  String get broadcastFullDescription => 'Πλήρης περιγραφή γεγονότος';
+  String get broadcastFullDescription => 'Πλήρης περιγραφή τουρνουά';
 
   @override
   String broadcastFullDescriptionHelp(String param1, String param2) {
-    return 'Προαιρετική αναλυτική περιγραφή της αναμετάδοσης. Η μορφή $param1 είναι διαθέσιμη. Το μήκος πρέπει να είναι μικρότερο από $param2 χαρακτήρες.';
+    return 'Προαιρετική αναλυτική περιγραφή της μετάδοσης. Μπορείτε να χρησιμοποιήσετε $param1 και μέχρι $param2 χαρακτήρες.';
   }
 
   @override
   String get broadcastSourceSingleUrl => 'Πηγαίο URL για PGN';
 
   @override
-  String get broadcastSourceUrlHelp => 'URL για λήψη PGN ενημερώσεων. Πρέπει να είναι δημόσια προσβάσιμο μέσω διαδικτύου.';
+  String get broadcastSourceUrlHelp => 'Η διεύθυνση URL την οποία το Lichess θα χρησιμοποιήσει για τη λήψη ενημερώσεων για τα αρχεία PGN. Πρέπει να είναι δημόσια προσβάσιμη στο διαδίκτυο.';
 
   @override
-  String get broadcastSourceGameIds => 'Έως και 64 ταυτότητες παιχνιδιών Lichess, διαχωριζόμενες από κενά.';
+  String get broadcastSourceGameIds => 'Έως και 64 αναγνωριστικά (id) παρτίδων Lichess, χωρισμένα με κενά.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
@@ -735,7 +735,7 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get broadcastStartDateHelp => 'Προαιρετικό, εάν γνωρίζετε πότε αρχίζει η εκδήλωση';
+  String get broadcastStartDateHelp => 'Προαιρετικό, εάν γνωρίζετε πότε αρχίζει το τουρνουά';
 
   @override
   String get broadcastCurrentGameUrl => 'Διεύθυνση URL αυτής της παρτίδας';
@@ -750,22 +750,22 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastDeleteRound => 'Διαγραφή αυτού του γύρου';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Διαγράψτε οριστικά τον γύρο και όλες τις παρτίδες του.';
+  String get broadcastDefinitivelyDeleteRound => 'Οριστική διαγραφή του γύρου και των παρτίδων του.';
 
   @override
-  String get broadcastDeleteAllGamesOfThisRound => 'Διαγράψτε όλες τις παρτίδες αυτού του γύρου. Η πηγή μετάδοσης θα πρέπει να είναι ενεργή για να τα ξαναδημιουργήσετε.';
+  String get broadcastDeleteAllGamesOfThisRound => 'Διαγραφή όλων των παρτίδων αυτού του γύρου. Η πηγή μετάδοσης θα πρέπει να είναι ενεργή για να τις δημιουργήσετε ξανά.';
 
   @override
-  String get broadcastEditRoundStudy => 'Επεξεργασία μελέτης γύρου';
+  String get broadcastEditRoundStudy => 'Επεξεργασία σπουδής γύρου';
 
   @override
-  String get broadcastDeleteTournament => 'Διαγραφή αυτού του τουρνουά';
+  String get broadcastDeleteTournament => 'Διαγραφή τουρνουά';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Σίγουρα διαγράψτε ολόκληρο τον διαγωνισμό, όλους τους γύρους του και όλες τις παρτίδες του.';
+  String get broadcastDefinitivelyDeleteTournament => 'Οριστική διαγραφή αυτού του τουρνουά, όλων των γύρων του και όλων των παρτίδων του.';
 
   @override
-  String get broadcastShowScores => 'Εμφάνιση βαθμολογιών παικτών βάσει των αποτελεσμάτων των παρτίδων.';
+  String get broadcastShowScores => 'Εμφάνιση βαθμών των παικτών βάσει των παρτίδων τους';
 
   @override
   String get broadcastReplacePlayerTags => 'Προαιρετικό: αντικατάσταση ονομάτων, βαθμολογιών και τίτλων παικτών';
@@ -780,7 +780,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastFidePlayers => 'Παίκτες FIDE';
 
   @override
-  String get broadcastFidePlayerNotFound => 'Δε βρέθηκε παίκτης FIDE';
+  String get broadcastFidePlayerNotFound => 'Δε βρέθηκε κανένας παίκτης FIDE';
 
   @override
   String get broadcastFideProfile => 'Προφίλ FIDE';
@@ -789,7 +789,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastFederation => 'Ομοσπονδία';
 
   @override
-  String get broadcastAgeThisYear => 'Φετινή ηλικία';
+  String get broadcastAgeThisYear => 'Ηλικία';
 
   @override
   String get broadcastUnrated => 'Μη βαθμολογημένο';
@@ -810,10 +810,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastOverview => 'Επισκόπηση';
 
   @override
-  String get broadcastSubscribeTitle => 'Εγγραφείτε για να ειδοποιείστε όταν ξεκινάει ο κάθε γύρος. Μπορείτε να εναλλάξετε μεταξύ του κουδουνιού ή των push ειδοποιήσεων για αναμεταδόσεις, στις προτιμήσεις του λογαριασμού σας.';
+  String get broadcastSubscribeTitle => 'Εγγραφείτε για να λαμβάνετε ειδοποίηση στην έναρξη κάθε γύρου. Μπορείτε να προσαρμόσετε τον τρόπο ειδοποίησης (bell ή push) στις ρυθμίσεις.';
 
   @override
-  String get broadcastUploadImage => 'Ανεβάστε εικόνα τουρνουά';
+  String get broadcastUploadImage => 'Μεταφόρτωση εικόνας τουρνουά';
 
   @override
   String get broadcastNoBoardsYet => 'Δεν υπάρχουν διαθέσιμες σκακιέρες ακόμα. Θα εμφανιστούν μόλις φορτωθούν οι παρτίδες.';
@@ -829,10 +829,10 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get broadcastStartVerySoon => 'Η αναμετάδοση θα ξεκινήσει πολύ σύντομα.';
+  String get broadcastStartVerySoon => 'Η μετάδοση θα ξεκινήσει σύντομα.';
 
   @override
-  String get broadcastNotYetStarted => 'Η αναμετάδοση δεν έχει ξεκινήσει ακόμα.';
+  String get broadcastNotYetStarted => 'Η μετάδοση δεν έχει ξεκινήσει ακόμα.';
 
   @override
   String get broadcastOfficialWebsite => 'Επίσημη ιστοσελίδα';
@@ -841,7 +841,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastStandings => 'Κατάταξη';
 
   @override
-  String get broadcastOfficialStandings => 'Επίσημη Κατάταξη';
+  String get broadcastOfficialStandings => 'Επίσημη κατάταξη';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -853,25 +853,25 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String broadcastPgnSourceHelp(String param) {
-    return 'Μια δημόσια πηγή PGN πολύ λειτουργεί σε πραγματικό χρόνο για αυτόν τον γύρο. Προσφέρουμε επίσης το $param για γρηγορότερο και αποτελεσματικότερο συγχρονισμό.';
+    return 'Μια δημόσια πηγή PGN πραγματικού χρόνου για αυτόν τον γύρο. Το Lichess προσφέρει επίσης ένα $param για γρηγορότερο και αποτελεσματικότερο συγχρονισμό.';
   }
 
   @override
-  String get broadcastEmbedThisBroadcast => 'Ενσωμάτωση αυτήν την αναμετάδοση στην ιστοσελίδα σας';
+  String get broadcastEmbedThisBroadcast => 'Ενσωμάτωση μετάδοσης στην ιστοσελίδα σας';
 
   @override
   String broadcastEmbedThisRound(String param) {
-    return 'Ενσωματώστε τον $param στην ιστοσελίδα σας';
+    return 'Ενσωμάτωση $param στην ιστοσελίδα σας';
   }
 
   @override
   String get broadcastRatingDiff => 'Διαφορά βαθμολογίας';
 
   @override
-  String get broadcastGamesThisTournament => 'Παρτίδες σε αυτό το τουρνουά';
+  String get broadcastGamesThisTournament => 'Παρτίδες τουρνουά';
 
   @override
-  String get broadcastScore => 'Βαθμολογία';
+  String get broadcastScore => 'Βαθμοί';
 
   @override
   String get broadcastAllTeams => 'Όλες οι ομάδες';
@@ -880,7 +880,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastTournamentFormat => 'Μορφή τουρνουά';
 
   @override
-  String get broadcastTournamentLocation => 'Τοποθεσία Τουρνουά';
+  String get broadcastTournamentLocation => 'Τοποθεσία τουρνουά';
 
   @override
   String get broadcastTopPlayers => 'Κορυφαίοι παίκτες';
@@ -895,27 +895,35 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastOptionalDetails => 'Προαιρετικές λεπτομέρειες';
 
   @override
-  String get broadcastPastBroadcasts => 'Προηγούμενες αναμεταδόσεις';
+  String get broadcastPastBroadcasts => 'Προηγούμενες μεταδόσεις';
 
   @override
-  String get broadcastAllBroadcastsByMonth => 'Προβολή όλων των αναμεταδόσεων ανά μήνα';
+  String get broadcastAllBroadcastsByMonth => 'Προβολή όλων των μεταδόσεων ανά μήνα';
 
   @override
   String get broadcastBackToLiveMove => 'Επιστροφή στην τρέχουσα κίνηση';
 
   @override
-  String get broadcastSinceHideResults => 'Εφόσον επιλέξατε να κρύψετε τα αποτελέσματα, όλες οι σκακιέρες προεπισκόπησης είναι κενές ώστε να αποφευχθούν σπόιλερς.';
+  String get broadcastSinceHideResults => 'Επειδή επιλέξατε να κρύψετε τα αποτελέσματα, όλες οι σκακιέρες προεπισκόπησης εμφανίζονται κενές ώστε να αποφευχθούν τα spoilers.';
 
   @override
   String get broadcastLiveboard => 'Ζωντανά';
+
+  @override
+  String get broadcastCommunityBroadcast => 'Community broadcast';
+
+  @override
+  String broadcastCreatedAndManagedBy(String param) {
+    return 'Created and managed by $param.';
+  }
 
   @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count αναμεταδόσεις',
-      one: '$count αναμετάδοση',
+      other: '$count μεταδόσεις',
+      one: '$count μετάδοση',
     );
     return '$_temp0';
   }
@@ -925,8 +933,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count θεατές',
+      one: '$count θεατής',
     );
     return '$_temp0';
   }
@@ -937,10 +945,10 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get challengeChallengeToPlay => 'Προκαλέστε σε παιχνίδι';
+  String get challengeChallengeToPlay => 'Δημιουργία πρόκλησης';
 
   @override
-  String get challengeChallengeDeclined => 'Η πρόκληση απορρίφθηκε';
+  String get challengeChallengeDeclined => 'Η πρόκληση απορρίφθηκε.';
 
   @override
   String get challengeChallengeAccepted => 'Η πρόκληση έγινε δεκτή!';
@@ -949,16 +957,16 @@ class AppLocalizationsEl extends AppLocalizations {
   String get challengeChallengeCanceled => 'Η πρόκληση ακυρώθηκε.';
 
   @override
-  String get challengeRegisterToSendChallenges => 'Εγγραφείτε για να στείλετε προκλήσεις.';
+  String get challengeRegisterToSendChallenges => 'Εγγραφείτε για να δημιουργήσετε προκλήσεις.';
 
   @override
   String challengeYouCannotChallengeX(String param) {
-    return 'Δεν μπορείτε να προκαλέσετε τον $param.';
+    return 'Δεν μπορείτε να προκαλέσετε τον χρήστη $param.';
   }
 
   @override
   String challengeXDoesNotAcceptChallenges(String param) {
-    return '$param δε δέχεται προκλήσεις.';
+    return 'Ο χρήστης $param δε δέχεται προκλήσεις.';
   }
 
   @override
@@ -968,12 +976,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String challengeCannotChallengeDueToProvisionalXRating(String param) {
-    return 'Δεν είναι δυνατή η πρόκληση λόγω της προσωρινής βαθμολογίας στο $param.';
+    return 'Δεν είναι δυνατή η δημιουργία πρόκλησης επειδή έχετε προσωρινή βαθμολογία στο $param.';
   }
 
   @override
   String challengeXOnlyAcceptsChallengesFromFriends(String param) {
-    return '$param δέχεται προκλήσεις μόνο από φίλους.';
+    return 'Ο χρήστης $param δέχεται προκλήσεις μόνο από φίλους.';
   }
 
   @override
@@ -1001,10 +1009,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get challengeDeclineStandard => 'Δεν δέχομαι προκλήσεις με παραλλαγές αυτή τη στιγμή.';
 
   @override
-  String get challengeDeclineVariant => 'Δεν είμαι πρόθυμος να παίξω αυτήν την παραλλαγή αυτή τη στιγμή.';
+  String get challengeDeclineVariant => 'Δε θέλω να παίξω αυτήν την παραλλαγή.';
 
   @override
-  String get challengeDeclineNoBot => 'Δεν δέχομαι προκλήσεις από bots.';
+  String get challengeDeclineNoBot => 'Δε δέχομαι προκλήσεις από bots.';
 
   @override
   String get challengeDeclineOnlyBot => 'Δέχομαι προκλήσεις μόνο από bots.';
@@ -1016,7 +1024,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get contactContact => 'Επικοινωνία';
 
   @override
-  String get contactContactLichess => 'Επικοινωνήστε με Lichess';
+  String get contactContactLichess => 'Επικοινωνήστε με το Lichess';
 
   @override
   String get coordinatesCoordinates => 'Συντεταγμένες';
@@ -1684,7 +1692,7 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get puzzleThemeAdvancedPawn => 'Προωθημένο πιόνι';
+  String get puzzleThemeAdvancedPawn => 'Προχωρημένο πιόνι';
 
   @override
   String get puzzleThemeAdvancedPawnDescription => 'Ένα πιόνι που προάγεται ή απειλεί να προαχθεί είναι κλειδί για αυτή την τακτική.';
@@ -1693,85 +1701,85 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeAdvantage => 'Πλεονέκτημα';
 
   @override
-  String get puzzleThemeAdvantageDescription => 'Αρπάξτε την ευκαιρία ώστε να αποκτήσετε ένα αποφασιστικό πλεονέκτημα. (200cp ≤ eval ≤ 600cp)';
+  String get puzzleThemeAdvantageDescription => 'Εκμεταλλευτείτε κάθε δυνατή ευκαιρία για να αποκτήσετε καθοριστικό πλεονέκτημα. (200cp ≤ eval ≤ 600cp)';
 
   @override
   String get puzzleThemeAnastasiaMate => 'To ματ της Αναστασίας';
 
   @override
-  String get puzzleThemeAnastasiaMateDescription => 'Ένας ίππος και ένας πύργος ή βασίλισσα κάνουν ματ στον αντίπαλο βασιλιά στο περιθώριο της σκακιέρας, όταν ένα φιλικό κομμάτι του εμποδίζει την διαφυγή.';
+  String get puzzleThemeAnastasiaMateDescription => 'Ένας ίππος και ένας πύργος ή μια βασίλισσα συνεργάζονται για να κάνουν ματ, παγιδεύοντας τον αντίπαλο βασιλιά μεταξύ της άκρης της σκακιέρας και ενός φιλικού κομματιού.';
 
   @override
   String get puzzleThemeArabianMate => 'Αραβικό ματ';
 
   @override
-  String get puzzleThemeArabianMateDescription => 'Συνεργασία ίππου και πύργου για παγίδευση του αντίπαλου βασιλιά στην άκρη της σκακιέρας.';
+  String get puzzleThemeArabianMateDescription => 'Ένας ίππος και ένας πύργος συνεργάζονται για να κάνουν ματ παγιδεύοντας τον αντίπαλο βασιλιά σε μια γωνία της σκακιέρας.';
 
   @override
   String get puzzleThemeAttackingF2F7 => 'Επίθεση στο f2 ή f7';
 
   @override
-  String get puzzleThemeAttackingF2F7Description => 'Μια επίθεση που εστιάζει στο πιόνι f2 ή f7, όπως στην επίθεση Φράιντ Λίβερ.';
+  String get puzzleThemeAttackingF2F7Description => 'Μια επίθεση που εστιάζει στο πιόνι f2 ή f7, όπως στο άνοιγμα Fried Liver Attack.';
 
   @override
   String get puzzleThemeAttraction => 'Έλξη';
 
   @override
-  String get puzzleThemeAttractionDescription => 'Μια ανταλλαγή ή θυσία που ενθαρρύνει ή αναγκάζει ένα αντίπαλο κομμάτι σε ένα τετράγωνο όπου δύναται μια επακόλουθη τακτική.';
+  String get puzzleThemeAttractionDescription => 'Μια αλλαγή ή θυσία ελκύει ή αναγκάζει ένα αντίπαλο κομμάτι να μετακινηθεί σε ένα τετράγωνο και οδηγεί σε τακτικό.';
 
   @override
-  String get puzzleThemeBackRankMate => 'Ματ της τελευταίας γραμμής';
+  String get puzzleThemeBackRankMate => 'Ματ τελευταίας γραμμής';
 
   @override
   String get puzzleThemeBackRankMateDescription => 'Κάντε ματ στον βασιλιά στην τελευταία γραμμή όταν είναι παγιδευμένος εκεί από τα κομμάτια του.';
 
   @override
-  String get puzzleThemeBishopEndgame => 'Φινάλε Αξιωματικών';
+  String get puzzleThemeBishopEndgame => 'Φινάλε αξιωματικών';
 
   @override
-  String get puzzleThemeBishopEndgameDescription => 'Ένα τέλος παρτίδας μόνο με αξιωματικούς και πιόνια.';
+  String get puzzleThemeBishopEndgameDescription => 'Φινάλε μόνο με αξιωματικούς και πιόνια.';
 
   @override
-  String get puzzleThemeBodenMate => 'Ματ του Μποντάν';
+  String get puzzleThemeBodenMate => 'Ματ του Boden';
 
   @override
-  String get puzzleThemeBodenMateDescription => 'Δύο επιτιθέμενοι αξιωματικοί κινούμενοι διαγωνίως κάνουν ματ σε βασιλιά που εμποδίζεται από φιλικά κομμάτια.';
+  String get puzzleThemeBodenMateDescription => 'Δύο αξιωματικοί κινούνται διαγωνίως και κάνουν ματ σε βασιλιά που εμποδίζεται από δικά του κομμάτια.';
 
   @override
   String get puzzleThemeCastling => 'Pοκέ';
 
   @override
-  String get puzzleThemeCastlingDescription => 'Εξασφαλίστε την ασφάλεια του βασιλιά και αναπτύξτε τον πύργο για επίθεση.';
+  String get puzzleThemeCastlingDescription => 'Ασφαλίστε τον βασιλιά και αναπτύξτε τον πύργο για επίθεση.';
 
   @override
-  String get puzzleThemeCapturingDefender => 'Αιχμαλωτίστε τον αμυνόμενο';
+  String get puzzleThemeCapturingDefender => 'Αιχμαλώτιση αμυνόμενου κομματιού';
 
   @override
   String get puzzleThemeCapturingDefenderDescription => 'Απομάκρυνση κομματιού που είναι σημαντικό για την υπεράσπιση άλλου κομματιού, επιτρέποντας την αιχμαλώτιση του πλέον ανυπεράσπιστου κομματιού στην επόμενη κίνηση.';
 
   @override
-  String get puzzleThemeCrushing => 'Σύνθλιψη';
+  String get puzzleThemeCrushing => 'Σαρωτική επίθεση';
 
   @override
-  String get puzzleThemeCrushingDescription => 'Εντοπίστε το σοβαρό λάθος του αντιπάλου για να αποκτήσετε συντριπτικό πλεονέκτημα. (eval ≥ 600cp)';
+  String get puzzleThemeCrushingDescription => 'Εντοπίστε το σοβαρό λάθος του αντιπάλου και αποκτήστε καθοριστικό πλεονέκτημα. (eval ≥ 600cp)';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Ματ με δύο αξιωματικούς';
 
   @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Δύο επιτιθέμενοι αξιωματικοί σε κοντινή απόσταση κάνουν ματ σε βασιλιά που εμποδίζεται από φιλικά κομμάτια.';
+  String get puzzleThemeDoubleBishopMateDescription => 'Δύο αξιωματικοί σε γειτονικές διαγώνιους κάνουν ματ σε βασιλιά που εμποδίζεται από δικά του κομμάτια.';
 
   @override
   String get puzzleThemeDovetailMate => 'Dovetail ματ';
 
   @override
-  String get puzzleThemeDovetailMateDescription => 'Βασίλισσα κάνει ματ σε παρακείμενο βασιλιά, του οποίου τα μοναδικά δύο τετράγωνα διαφυγής εμποδίζονται από φιλικά κομμάτια.';
+  String get puzzleThemeDovetailMateDescription => 'Βασίλισσα κάνει ματ στον αντίπαλο βασιλιά, του οποίου τα μοναδικά δύο τετράγωνα διαφυγής καλύπτονται από φιλικά κομμάτια.';
 
   @override
   String get puzzleThemeEquality => 'Ισότητα';
 
   @override
-  String get puzzleThemeEqualityDescription => 'Επιστρέψτε από μια χαμένη θέση και ασφαλίστε μια κλήρωση ή μια ισορροπημένη θέση. (eval ≤ 200cp)';
+  String get puzzleThemeEqualityDescription => 'Ανακάμψτε από μια χαμένη θέση και εξασφαλίστε ισοπαλία ή μια ισορροπημένη θέση. (eval ≤ 200cp)';
 
   @override
   String get puzzleThemeKingsideAttack => 'Επίθεση στην πλευρά του βασιλιά';
@@ -1780,10 +1788,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeKingsideAttackDescription => 'Επίθεση στον αντίπαλο βασιλιά, μετά από μικρό ροκέ.';
 
   @override
-  String get puzzleThemeClearance => 'Ελευθέρωση';
+  String get puzzleThemeClearance => 'Απελευθέρωση';
 
   @override
-  String get puzzleThemeClearanceDescription => 'Μία κίνηση, συνήθως με tempo, που ελευθερώνει το τετράγωνο, στήλη ή διαγώνιο για την συνέχιση τακτικής ιδέας.';
+  String get puzzleThemeClearanceDescription => 'Μία κίνηση, συνήθως με tempo, που ελευθερώνει ένα τετράγωνο, μια στήλη ή μια διαγώνιο για την ολοκλήρωση ενός τακτικού.';
 
   @override
   String get puzzleThemeDefensiveMove => 'Αμυντική κίνηση';
@@ -1792,16 +1800,16 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeDefensiveMoveDescription => 'Μια ακριβής κίνηση ή ακολουθία κινήσεων που απαιτείται για να αποφευχθεί η απώλεια υλικού ή άλλου πλεονεκτήματος.';
 
   @override
-  String get puzzleThemeDeflection => 'Εκτροπή';
+  String get puzzleThemeDeflection => 'Αντιπερισπασμός';
 
   @override
-  String get puzzleThemeDeflectionDescription => 'Μία κίνηση που απομακρύνει ένα αντίπαλο κομμάτι από υφιστάμενο καθήκον, όπως η φύλαξη ενός τετραγώνου κλειδί. Μερικές φορές ονομάζεται και \"υπερφόρτωση\".';
+  String get puzzleThemeDeflectionDescription => 'Μία κίνηση που απομακρύνει ένα αντίπαλο κομμάτι από κάποιο άλλο του καθήκον, όπως η φύλαξη ενός σημαντικού τετραγώνου. Ονομάζεται ενίοτε και \"υπερφόρτωση\".';
 
   @override
-  String get puzzleThemeDiscoveredAttack => 'Επίθεση με αποκάλυψη';
+  String get puzzleThemeDiscoveredAttack => 'Αποκάλυψη';
 
   @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Μετακίνηση κομματιού που προηγουμένως εμπόδιζε την επίθεση από κομμάτι μεγάλης εμβέλειας, όπως ένας ίππος που εμπόδιζε έναν πύργο.';
+  String get puzzleThemeDiscoveredAttackDescription => 'Μετακίνηση ενός κομματιού (π.χ. ίππου) που εμποδίζει την επίθεση άλλου κομματιού μεγάλης εμβέλειας (π.χ. πύργου).';
 
   @override
   String get puzzleThemeDoubleCheck => 'Διπλό σαχ';
@@ -1927,7 +1935,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeMateIn5Description => 'Βρείτε μία μακρά ακολουθία κινήσεων που οδηγεί σε ματ.';
 
   @override
-  String get puzzleThemeMiddlegame => 'Μέση φάση παιχνιδιού';
+  String get puzzleThemeMiddlegame => 'Μέσο';
 
   @override
   String get puzzleThemeMiddlegameDescription => 'Μια τακτική κατά τη δεύτερη φάση του παιχνιδιού.';
@@ -2073,7 +2081,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get searchSearch => 'Αναζήτηση';
 
   @override
-  String get settingsSettings => 'Επιλογές';
+  String get settingsSettings => 'Ρυθμίσεις';
 
   @override
   String get settingsCloseAccount => 'Κλείσιμο λογαριασμού';
@@ -2082,13 +2090,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get settingsManagedAccountCannotBeClosed => 'Ο λογαριασμός σας βρίσκεται υπό διαχείριση και δεν μπορεί να κλείσει.';
 
   @override
-  String get settingsCantOpenSimilarAccount => 'Δεν θα σας επιτραπεί η δημιουργία νέου λογαριασμού με το ίδιο όνομα, ακόμα κι αν μετατρέψετε έναν μικρό σε έναν κεφαλαίο ή το αντίστροφο.';
+  String get settingsCantOpenSimilarAccount => 'Δε θα σας επιτραπεί η δημιουργία νέου λογαριασμού με το ίδιο όνομα χρήστη, ακόμα και αν μετατρέψετε ένα μικρό γράμμα σε κεφαλαίο ή αντίστροφα.';
 
   @override
-  String get settingsCancelKeepAccount => 'Ακύρωσε και διατήρησε τον λογαριασμό μου';
+  String get settingsCancelKeepAccount => 'Ακύρωση και διατήρηση του λογαριασμό μου';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Είσαστε σίγουροι ότι θέλετε να κλείσετε τον λογαριασμό σας;';
+  String get settingsCloseAccountAreYouSure => 'Θέλετε σίγουρα να κλείσετε τον λογαριασμό σας;';
 
   @override
   String get settingsThisAccountIsClosed => 'Αυτός ο λογαριασμός έχει κλείσει.';
@@ -2930,7 +2938,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get tournaments => 'Πρωταθλήματα';
 
   @override
-  String get tournamentPoints => 'Πόντοι από τουρνουά';
+  String get tournamentPoints => 'Βαθμοί από τουρνουά';
 
   @override
   String get viewTournament => 'Παρακολούθηση τουρνουά';
@@ -3194,16 +3202,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get withdraw => 'Απόσυρση';
 
   @override
-  String get points => 'Πόντοι';
+  String get points => 'Βαθμοί';
 
   @override
   String get wins => 'Νίκες';
 
   @override
   String get losses => 'Ήττες';
-
-  @override
-  String get createdBy => 'Δημιουργήθηκε από';
 
   @override
   String get startingIn => 'Εκκίνηση σε';
@@ -4326,7 +4331,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get opening => 'Άνοιγμα';
 
   @override
-  String get middlegame => 'Μέση φάση παιχνιδιού';
+  String get middlegame => 'Μέσο';
 
   @override
   String get endgame => 'Φινάλε';
@@ -4565,7 +4570,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get timeAlmostUp => 'Ο χρόνος σας έχει σχεδόν τελειώσει!';
 
   @override
-  String get clickToRevealEmailAddress => '[Κάντε κλικ για να δείτε τη διεύθυνση ηλεκτρονικού ταχυδρομείου]';
+  String get clickToRevealEmailAddress => '[κάντε κλικ για να δείτε τη διεύθυνση email]';
 
   @override
   String get download => 'Λήψη';
@@ -5023,8 +5028,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count πόντοι τουρνουά',
-      one: '$count πόντος τουρνουά',
+      other: '$count βαθμοί τουρνουά',
+      one: '$count βαθμός τουρνουά',
     );
     return '$_temp0';
   }

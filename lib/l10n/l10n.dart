@@ -1616,6 +1616,18 @@ abstract class AppLocalizations {
   /// **'Live board'**
   String get broadcastLiveboard;
 
+  /// No description provided for @broadcastCommunityBroadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'Community broadcast'**
+  String get broadcastCommunityBroadcast;
+
+  /// No description provided for @broadcastCreatedAndManagedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Created and managed by {param}.'**
+  String broadcastCreatedAndManagedBy(String param);
+
   /// No description provided for @broadcastNbBroadcasts.
   ///
   /// In en, this message translates to:
@@ -5857,12 +5869,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Losses'**
   String get losses;
-
-  /// No description provided for @createdBy.
-  ///
-  /// In en, this message translates to:
-  /// **'Created by'**
-  String get createdBy;
 
   /// No description provided for @startingIn.
   ///
