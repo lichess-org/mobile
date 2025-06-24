@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/text_badge.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
 const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
@@ -402,20 +403,10 @@ class _BroadcastCardContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               if (broadcast.isLive) ...[
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: const Text(
-                    'LIVE',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: LichessColors.red,
-                    ),
-                  ),
+                const TextBadge(
+                  text: 'LIVE',
+                  badgeColor: Colors.white,
+                  textColor: LichessColors.red,
                 ),
                 const Spacer(),
               ],
