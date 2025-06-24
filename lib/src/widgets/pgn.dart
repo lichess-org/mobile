@@ -116,6 +116,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
     required this.root,
     required this.currentPath,
     this.livePath,
+    this.premovePaths,
     required this.pgnRootComments,
     required this.notifier,
     this.shouldShowComputerAnalysis = true,
@@ -132,6 +133,10 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
 
   /// Path to the last live move in the tree if it is an ongoing game (usually broadcast or correspondence).
   final UciPath? livePath;
+
+  /// Paths relative to [DebouncedPgnTreeView.livePath] that are currently saved as premoves in an ongoing correspondence game.
+  /// We highlight these in a different color
+  final IList<UciPath>? premovePaths;
 
   /// Comments associated with the root node
   final IList<PgnComment>? pgnRootComments;
@@ -251,6 +256,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
         currentMoveKey: currentMoveKey,
         pathToCurrentMove: pathToCurrentMove,
         pathToLiveMove: pathToLiveMove,
+        premovePaths: widget.premovePaths,
         displayMode: widget.displayMode,
         notifier: widget.notifier,
       ),
@@ -268,6 +274,9 @@ typedef _PgnTreeViewParams = ({
 
   /// Path to the last live move in the tree if it is an ongoing game (usually broadcast or correspondence).
   UciPath? pathToLiveMove,
+
+  /// Paths relative to [_PgnTreeViewParams.pathToLiveMove] that are currently saved as premoves in an ongoing correspondence game.
+  IList<UciPath>? premovePaths,
 
   /// Whether to show analysis variations.
   bool shouldShowComputerAnalysis,
@@ -456,6 +465,7 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
     _updateLines(
       fullRebuild:
           oldWidget.root != widget.root ||
+          oldWidget.params.premovePaths != widget.params.premovePaths ||
           oldWidget.params.shouldShowComputerAnalysis != widget.params.shouldShowComputerAnalysis ||
           oldWidget.params.shouldShowComments != widget.params.shouldShowComments ||
           oldWidget.params.shouldShowAnnotations != widget.params.shouldShowAnnotations ||
@@ -1244,6 +1254,13 @@ class InlineMove extends ConsumerWidget {
         ? branch.eval ?? branch.serverEval
         : null;
 
+    final isPremove =
+        params.pathToLiveMove != null &&
+        path != params.pathToLiveMove &&
+        path.contains(params.pathToLiveMove!) &&
+        params.premovePaths?.any((p) => p.contains(path.stripPrefix(params.pathToLiveMove!))) ==
+            true;
+
     return InkWell(
       key: isCurrentMove ? params.currentMoveKey : null,
       borderRadius: borderRadius,
@@ -1279,7 +1296,10 @@ class InlineMove extends ConsumerWidget {
                   TextSpan(
                     text: moveWithNag,
                     style: moveTextStyle.copyWith(
-                      color: _textColor(context, isCurrentMove ? 1 : 0.9, nag: nag),
+                      color: isPremove
+                          // TODO Possibly choose a more suitable color
+                          ? LichessColors.brag
+                          : _textColor(context, isCurrentMove ? 1 : 0.9, nag: nag),
                     ),
                   ),
                 ],

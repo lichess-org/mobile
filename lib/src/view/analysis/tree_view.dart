@@ -34,6 +34,7 @@ class AnalysisTreeView extends ConsumerWidget {
             shouldShowComputerAnalysis: enableServerAnalysis,
             shouldShowComments: enableServerAnalysis && prefs.showPgnComments,
             shouldShowAnnotations: enableServerAnalysis && prefs.showAnnotations,
+            premovePaths: analysisState.forecast?.lines,
             displayMode: prefs.inlineNotation
                 ? PgnTreeDisplayMode.inlineNotation
                 : PgnTreeDisplayMode.twoColumn,

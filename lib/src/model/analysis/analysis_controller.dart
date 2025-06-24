@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/analysis/forecast.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -16,13 +18,17 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -53,11 +59,18 @@ sealed class AnalysisOptions with _$AnalysisOptions {
     required GameId gameId,
   }) = ArchivedGame;
 
+  const factory AnalysisOptions.activeCorrespondenceGame({
+    required Side orientation,
+    int? initialMoveCursor,
+    required GameFullId gameFullId,
+  }) = ActiveCorrespondenceGame;
+
   bool get isLichessGameAnalysis => this is ArchivedGame;
 
   GameId? get gameId => switch (this) {
     ArchivedGame(:final gameId) => gameId,
     Standalone() => null,
+    ActiveCorrespondenceGame(:final gameFullId) => gameFullId.gameId,
   };
 }
 
@@ -66,6 +79,8 @@ class AnalysisController extends _$AnalysisController
     with EngineEvaluationMixin
     implements PgnTreeNotifier {
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
+
+  StreamSubscription<SocketEvent>? _socketSubscription;
 
   late Root _root;
   late Variant _variant;
@@ -100,11 +115,14 @@ class AnalysisController extends _$AnalysisController
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
     ref.onDispose(() {
+      _socketSubscription?.cancel();
       disposeEngineEvaluation();
       serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
+    _socketSubscription?.cancel();
+    _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
     isOnline(ref.read(defaultClientProvider)).then((online) {
       if (!online) {
@@ -116,6 +134,7 @@ class AnalysisController extends _$AnalysisController
     late final LightOpening? opening;
     late final ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis;
     late final Division? division;
+    late final PlayableGame? activeCorrespondenceGame;
 
     ExportedGame? archivedGame;
 
@@ -128,6 +147,7 @@ class AnalysisController extends _$AnalysisController
           opening = archivedGame.data.opening;
           serverAnalysis = archivedGame.serverAnalysis;
           division = archivedGame.meta.division;
+          activeCorrespondenceGame = null;
         }
       case Standalone(:final variant, pgn: final gamePgn):
         {
@@ -136,6 +156,19 @@ class AnalysisController extends _$AnalysisController
           opening = null;
           serverAnalysis = null;
           division = null;
+          activeCorrespondenceGame = null;
+        }
+      case ActiveCorrespondenceGame(:final gameFullId):
+        {
+          final game = await ref.withClient(
+            (client) => GameRepository(client).getActiveCorrespondenceGame(gameFullId),
+          );
+          _variant = game.meta.variant;
+          pgn = game.makePgn();
+          opening = game.meta.opening;
+          serverAnalysis = null;
+          division = null;
+          activeCorrespondenceGame = game;
         }
     }
 
@@ -167,6 +200,7 @@ class AnalysisController extends _$AnalysisController
     final isComputerAnalysisAllowed = switch (options) {
       Standalone(:final isComputerAnalysisAllowed) => isComputerAnalysisAllowed,
       ArchivedGame() => isGameFinished,
+      ActiveCorrespondenceGame() => false,
     };
 
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
@@ -211,6 +245,35 @@ class AnalysisController extends _$AnalysisController
     final currentPath = options.initialMoveCursor == null ? _root.mainlinePath : path;
     final currentNode = _root.nodeAt(currentPath);
 
+    late final Forecast? forecast;
+
+    if (activeCorrespondenceGame != null) {
+      // Premove paths are saved on the server, so if the user has already added some premoves on web,
+      // we need to add them to our tree here as well.
+      final lastMainlineNode = _root.mainline.lastOrNull ?? _root;
+      // Adding nodes in the loop below changes _root.mainline, so save the current mainline path here
+      final gameMainlinePath = _root.mainlinePath;
+
+      final paths = <UciPath>[];
+      for (final line
+          in (activeCorrespondenceGame.correspondenceForecast ??
+              const IList<IList<SanMove>>.empty())) {
+        var position = lastMainlineNode.position;
+        final nodes = <Branch>[];
+        for (final sanMove in line) {
+          position = position.playUnchecked(sanMove.move);
+          nodes.add(Branch(position: position, sanMove: sanMove));
+        }
+        _root.addNodesAt(gameMainlinePath, nodes);
+
+        paths.add(UciPath.fromUciMoves(line.map((sanMove) => sanMove.move.uci)));
+      }
+
+      forecast = Forecast(onMyTurn: activeCorrespondenceGame.isMyTurn, lines: paths.lock);
+    } else {
+      forecast = null;
+    }
+
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
@@ -227,7 +290,8 @@ class AnalysisController extends _$AnalysisController
       gameId: options.gameId,
       archivedGame: archivedGame,
       currentPath: currentPath,
-      pathToLiveMove: isGameFinished ? null : _root.mainlinePath,
+      pathToLiveMove: isGameFinished ? null : currentPath,
+      forecast: forecast,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
@@ -248,16 +312,82 @@ class AnalysisController extends _$AnalysisController
     // to have a value.
     state = AsyncData(analysisState);
 
-    if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
-      socketClient.firstConnection
-          .timeout(const Duration(seconds: 3))
-          .onError((_, _) {})
-          .whenComplete(() {
+    socketClient.firstConnection
+        .timeout(const Duration(seconds: 3))
+        .onError((_, _) {})
+        .whenComplete(() {
+          if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
             requestEval();
-          });
-    }
+          } else if (options case ActiveCorrespondenceGame(:final gameFullId)) {
+            socketClient.send('startWatching', gameFullId.gameId.value);
+          }
+        });
 
     return analysisState;
+  }
+
+  Future<void> onFocusRegained() async {
+    if (options case ActiveCorrespondenceGame(:final gameFullId)) {
+      final updatedGame = await ref.withClient(
+        (client) => GameRepository(client).getActiveCorrespondenceGame(gameFullId),
+      );
+      _addNewLiveMoves(
+        updatedGame.steps
+            // Skip one more step, since the first one is the initial position
+            .skip(1 + state.requireValue.pathToLiveMove!.size)
+            .map((step) => step.sanMove!.move),
+      );
+    }
+  }
+
+  void _addNewLiveMoves(Iterable<Move> moves) {
+    final newLiveMovePath = _root.addMovesAt(state.requireValue.pathToLiveMove!, moves);
+
+    _root.promoteAt(newLiveMovePath!, toMainline: true);
+    _setPath(
+      // If the move cursor was on the live move, follow the game and move to the new live move.
+      // Otherwise, stay on the current path.
+      state.requireValue.pathToLiveMove == state.requireValue.currentPath
+          ? newLiveMovePath
+          : state.requireValue.currentPath,
+      shouldRecomputeRootView: true,
+      shouldForceShowVariation: true,
+    );
+
+    state = AsyncData(
+      state.requireValue.copyWith(
+        forecast: moves.fold(
+          state.requireValue.forecast,
+          (forecast, move) => forecast!.playMove(move),
+        ),
+        pathToLiveMove: newLiveMovePath,
+      ),
+    );
+  }
+
+  void _handleSocketEvent(SocketEvent event) {
+    if (!state.hasValue) {
+      return;
+    }
+
+    switch (event.topic) {
+      case 'fen':
+        _handleFenEvent(FenSocketEvent.fromJson(event.data as Map<String, dynamic>));
+    }
+  }
+
+  void _handleFenEvent(FenSocketEvent fenEvent) {
+    final isNewMove =
+        fenEvent.id == options.gameId &&
+        state.requireValue.liveMoveNode != null &&
+        // The server sends an initial FEN event on connection, ignore that here
+        !state.requireValue.liveMoveNode!.position.fen.startsWith(fenEvent.fen);
+
+    if (!isNewMove) {
+      return;
+    }
+
+    _addNewLiveMoves([fenEvent.lastMove]);
   }
 
   @override
@@ -389,6 +519,69 @@ class AnalysisController extends _$AnalysisController
   void deleteFromHere(UciPath path) {
     _root.deleteAt(path);
     _setPath(path.penultimate, shouldRecomputeRootView: true);
+  }
+
+  void addCurrentPathAsPremove() {
+    state = AsyncData(
+      state.requireValue.copyWith(
+        forecast: state.requireValue.forecast!.add(
+          state.requireValue.currentPath.stripPrefix(state.requireValue.pathToLiveMove!),
+        ),
+      ),
+    );
+
+    if (!state.requireValue.forecast!.onMyTurn) {
+      _syncForecast();
+    }
+  }
+
+  void playPendingMoveAndSaveForecast() {
+    if (!state.hasValue || state.requireValue.pendingMove == null) return;
+
+    final moveToPlay = state.requireValue.pendingMove!.move;
+
+    final newForecast = state.requireValue.forecast!.playMove(moveToPlay);
+
+    final newLiveMovePath = UciPath.join(
+      state.requireValue.pathToLiveMove!,
+      UciPath.fromId(UciCharPair.fromUci(moveToPlay.uci)),
+    );
+
+    ref.withClient(
+      (client) => GameRepository(client).saveForecast(
+        gameId: (options as ActiveCorrespondenceGame).gameFullId,
+        forecast: newForecast.toApiForecast(_root.branchAt(newLiveMovePath)!.view),
+        moveToPlay: moveToPlay,
+      ),
+    );
+
+    state = AsyncData(
+      state.requireValue.copyWith(
+        forecast: state.requireValue.forecast!.playMove(moveToPlay),
+        pathToLiveMove: newLiveMovePath,
+      ),
+    );
+  }
+
+  void removePremovePath(UciPath path) {
+    state = AsyncData(
+      state.requireValue.copyWith(forecast: state.requireValue.forecast!.remove(path)),
+    );
+
+    _syncForecast();
+  }
+
+  void _syncForecast() {
+    final pathToLiveMove = state.requireValue.pathToLiveMove!;
+
+    ref.withClient(
+      (client) => GameRepository(client).saveForecast(
+        gameId: (options as ActiveCorrespondenceGame).gameFullId,
+        forecast: state.requireValue.forecast!.toApiForecast(
+          pathToLiveMove.isEmpty ? _root.view : _root.branchAt(pathToLiveMove)!.view,
+        ),
+      ),
+    );
   }
 
   void updatePgnHeader(String key, String value) {
@@ -678,6 +871,9 @@ sealed class AnalysisState
     /// If this is a correspondence game, the path to the last move that has been played.
     required UciPath? pathToLiveMove,
 
+    /// If this is a correspondence game, stores the current set of conditional premoves.
+    required Forecast? forecast,
+
     /// Whether the current path is on the mainline.
     required bool isOnMainline,
 
@@ -753,6 +949,38 @@ sealed class AnalysisState
   /// Whether the engine is allowed for this analysis and variant.
   bool get isEngineAllowed =>
       isComputerAnalysisAllowed && engineSupportedVariants.contains(variant);
+
+  ViewNode? get liveMoveNode => pathToLiveMove != null
+      ? pathToLiveMove!.isEmpty
+            ? root
+            : root.branchesOn(pathToLiveMove!).last
+      : null;
+
+  bool get branchedOffFromLiveMove =>
+      forecast != null &&
+      pathToLiveMove != null &&
+      currentPath != pathToLiveMove &&
+      currentPath.contains(pathToLiveMove!);
+
+  /// If the current node branches off from the live move and is not yet saved as a premove,
+  /// the part of [AnalysisState.currentPath] that would be saved as a premove line. null otherwise.
+  UciPath? get currentPremoveCandidate {
+    if (!branchedOffFromLiveMove) {
+      return null;
+    }
+
+    final candidate = currentPath.stripPrefix(pathToLiveMove!);
+    return forecast!.isCandidate(candidate) ? candidate : null;
+  }
+
+  /// If it's our turn and we have branched off from the main line, this is the move we would play
+  /// if we to save the entire current path as a premove line.
+  SanMove? get pendingMove => forecast?.onMyTurn == true && branchedOffFromLiveMove
+      ? liveMoveNode!.childById(currentPath.stripPrefix(pathToLiveMove!).head!)?.sanMove
+      : null;
+
+  IList<UciPath>? get linesForPendingMove =>
+      pendingMove != null ? forecast?.linesStartingWith(pendingMove!.move) : null;
 
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) => isEngineAllowed && prefs.isEnabled;
