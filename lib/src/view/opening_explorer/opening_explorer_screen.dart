@@ -106,6 +106,9 @@ class _Body extends ConsumerWidget {
                                 semanticContainer: false,
                                 child: OpeningExplorerView(
                                   position: state.currentPosition,
+                                  opening: state.currentNode.isRoot
+                                      ? LightOpening(eco: '', name: context.l10n.startPosition)
+                                      : state.currentNode.opening ?? state.currentBranchOpening,
                                   onMoveSelected: (move) {
                                     ref
                                         .read(analysisControllerProvider(options).notifier)
