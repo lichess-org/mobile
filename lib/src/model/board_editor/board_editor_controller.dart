@@ -12,19 +12,23 @@ class BoardEditorController extends _$BoardEditorController {
   @override
   BoardEditorState build(String? initialFen) {
     final setup = Setup.parseFen(initialFen ?? kInitialFEN);
+    final position = Chess.fromSetup(setup, ignoreImpossibleCheck: true);
+    final pieces = readFen(initialFen ?? kInitialFEN).lock;
+
+    final castlingRights = IMap({
+      CastlingRight.whiteKing: position.castles.rookOf(Side.white, CastlingSide.king) != null,
+      CastlingRight.whiteQueen: position.castles.rookOf(Side.white, CastlingSide.queen) != null,
+      CastlingRight.blackKing: position.castles.rookOf(Side.black, CastlingSide.king) != null,
+      CastlingRight.blackQueen: position.castles.rookOf(Side.black, CastlingSide.queen) != null,
+    });
     return BoardEditorState(
       orientation: Side.white,
-      sideToPlay: Side.white,
-      pieces: readFen(initialFen ?? kInitialFEN).lock,
-      castlingRights: IMap(const {
-        CastlingRight.whiteKing: true,
-        CastlingRight.whiteQueen: true,
-        CastlingRight.blackKing: true,
-        CastlingRight.blackQueen: true,
-      }),
+      sideToPlay: setup.turn,
+      pieces: pieces,
+      castlingRights: castlingRights,
       editorPointerMode: EditorPointerMode.drag,
-      enPassantOptions: SquareSet.empty,
-      enPassantSquare: null,
+      enPassantOptions: _calculateEnPassantOptions(pieces, setup.turn),
+      enPassantSquare: setup.epSquare,
       pieceToAddOnEdit: null,
       halfmoves: setup.halfmoves,
       fullmoves: setup.fullmoves,
