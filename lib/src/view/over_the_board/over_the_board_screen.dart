@@ -276,13 +276,11 @@ class _BottomBar extends ConsumerWidget {
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
-                AnalysisOptions(
+                AnalysisOptions.standalone(
                   orientation: Side.white,
-                  standalone: (
-                    pgn: gameState.game.makePgn(),
-                    isComputerAnalysisAllowed: true,
-                    variant: gameState.game.meta.variant,
-                  ),
+                  pgn: gameState.game.makePgn(),
+                  isComputerAnalysisAllowed: true,
+                  variant: gameState.game.meta.variant,
                 ),
               ),
             ),

@@ -1051,19 +1051,17 @@ sealed class GameState with _$GameState {
   String get analysisPgn => game.makePgn();
 
   AnalysisOptions get analysisOptions => game.finished
-      ? AnalysisOptions(
+      ? AnalysisOptions.archivedGame(
           orientation: game.youAre ?? Side.white,
           initialMoveCursor: stepCursor,
           gameId: gameFullId.gameId,
         )
-      : AnalysisOptions(
+      : AnalysisOptions.standalone(
           orientation: game.youAre ?? Side.white,
           initialMoveCursor: stepCursor,
-          standalone: (
-            pgn: game.makePgn(),
-            variant: game.meta.variant,
-            isComputerAnalysisAllowed: false,
-          ),
+          pgn: game.makePgn(),
+          variant: game.meta.variant,
+          isComputerAnalysisAllowed: false,
         );
 
   GameChatOptions? get chatOptions => isZenModeActive || game.meta.tournament != null

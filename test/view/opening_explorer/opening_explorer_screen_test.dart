@@ -39,9 +39,11 @@ void main() {
     return mockResponse('', 404);
   });
 
-  const options = AnalysisOptions(
+  const options = AnalysisOptions.standalone(
     orientation: Side.white,
-    standalone: (pgn: '', isComputerAnalysisAllowed: false, variant: Variant.standard),
+    pgn: '',
+    isComputerAnalysisAllowed: false,
+    variant: Variant.standard,
   );
 
   const name = 'John';

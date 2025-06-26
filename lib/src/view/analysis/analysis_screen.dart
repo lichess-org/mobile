@@ -76,7 +76,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     tabs = [
       AnalysisTab.opening,
       AnalysisTab.moves,
-      if (widget.options.gameId != null) AnalysisTab.summary,
+      if (widget.options.isLichessGameAnalysis) AnalysisTab.summary,
     ];
 
     _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
@@ -313,7 +313,7 @@ class _Body extends ConsumerWidget {
           },
         ),
         AnalysisTreeView(options),
-        if (options.gameId != null) ServerAnalysisSummary(options),
+        if (options.isLichessGameAnalysis) ServerAnalysisSummary(options),
       ],
     );
   }

@@ -228,13 +228,11 @@ class _BodyState extends ConsumerState<_Body> {
                 Navigator.of(context).push(
                   AnalysisScreen.buildRoute(
                     context,
-                    AnalysisOptions(
+                    AnalysisOptions.standalone(
                       orientation: game.youAre!,
-                      standalone: (
-                        pgn: game.makePgn(),
-                        isComputerAnalysisAllowed: false,
-                        variant: game.variant,
-                      ),
+                      pgn: game.makePgn(),
+                      isComputerAnalysisAllowed: false,
+                      variant: game.variant,
                       initialMoveCursor: stepCursor,
                     ),
                   ),

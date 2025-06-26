@@ -45,7 +45,7 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
       if (gameId.isValid) {
         return AnalysisScreen.buildRoute(
           context,
-          AnalysisOptions(
+          AnalysisOptions.archivedGame(
             orientation: orientation == 'black' ? Side.black : Side.white,
             gameId: gameId,
             initialMoveCursor: 0,
