@@ -92,6 +92,10 @@ class GameBody extends ConsumerWidget {
     final gamePrefs = ref.watch(gamePreferencesProvider);
     final blindfoldMode = gamePrefs.blindfoldMode ?? false;
 
+    final shouldSetImmersiveMode = ref.watch(
+      boardPreferencesProvider.select((prefs) => prefs.immersiveModeWhilePlaying ?? false),
+    );
+
     switch (ref.watch(ctrlProvider)) {
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameBody] could not load game data; $e\n$s');
@@ -282,9 +286,7 @@ class GameBody extends ConsumerWidget {
         return InteractiveBoardScreen<void>(
           boardKey: boardKey,
           isInteractive: value.game.playable,
-          shouldSetImmersiveMode: ref.watch(
-            boardPreferencesProvider.select((prefs) => prefs.immersiveModeWhilePlaying ?? false),
-          ),
+          shouldSetImmersiveMode: shouldSetImmersiveMode,
           onFocusRegained: () {
             ref.read(ctrlProvider.notifier).onFocusRegained();
           },
@@ -307,6 +309,8 @@ class GameBody extends ConsumerWidget {
         );
       case final _:
         return InteractiveBoardScreen<void>(
+          isInteractive: false,
+          shouldSetImmersiveMode: shouldSetImmersiveMode,
           boardKey: boardKey,
           child: Column(
             children: [

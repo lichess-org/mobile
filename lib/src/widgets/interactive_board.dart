@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
@@ -9,11 +8,11 @@ class InteractiveBoardScreen<T> extends StatelessWidget {
   const InteractiveBoardScreen({
     required this.child,
     required this.boardKey,
+    required this.isInteractive,
+    required this.shouldSetImmersiveMode,
     this.onFocusRegained,
     this.canPop,
     this.onPopInvokedWithResult,
-    this.isInteractive = false,
-    this.shouldSetImmersiveMode = false,
     super.key,
   });
 
@@ -31,34 +30,31 @@ class InteractiveBoardScreen<T> extends StatelessWidget {
   /// Whether to enable immersive mode on Android while playing.
   final bool shouldSetImmersiveMode;
 
-  /// Global key of the board widget.
+  /// Global key of the board widget. This is needed to exclude system gestures on Android.
   final GlobalKey boardKey;
 
   final VoidCallback? onFocusRegained;
 
   @override
   Widget build(BuildContext context) {
-    final content = PreventDeviceGesturesMediaQuery(
-      preventDeviceGestures: isInteractive,
-      child: PopScope(
-        canPop: canPop ?? !isInteractive,
-        onPopInvokedWithResult: onPopInvokedWithResult,
-        child: SafeArea(
-          // view padding can change on Android when immersive mode is enabled, so to prevent any
-          // board vertical shift, we set `maintainBottomViewPadding` to true.
-          maintainBottomViewPadding: true,
-          child: FocusDetector(
-            onFocusRegained: onFocusRegained,
-            onFocusGained: () {
-              if (isInteractive) {
-                WakelockPlus.enable();
-              }
-            },
-            onFocusLost: () {
-              WakelockPlus.disable();
-            },
-            child: child,
-          ),
+    final content = PopScope(
+      canPop: canPop ?? !isInteractive,
+      onPopInvokedWithResult: onPopInvokedWithResult,
+      child: SafeArea(
+        // view padding can change on Android when immersive mode is enabled, so to prevent any
+        // board vertical shift, we set `maintainBottomViewPadding` to true.
+        maintainBottomViewPadding: true,
+        child: FocusDetector(
+          onFocusRegained: onFocusRegained,
+          onFocusGained: () {
+            if (isInteractive) {
+              WakelockPlus.enable();
+            }
+          },
+          onFocusLost: () {
+            WakelockPlus.disable();
+          },
+          child: child,
         ),
       ),
     );
@@ -66,35 +62,10 @@ class InteractiveBoardScreen<T> extends StatelessWidget {
     return Theme.of(context).platform == TargetPlatform.android
         ? AndroidGesturesExclusionWidget(
             boardKey: boardKey,
-            shouldExcludeGesturesOnFocusGained: () => isInteractive,
+            shouldExcludeGesturesOnFocusGained: isInteractive,
             shouldSetImmersiveMode: shouldSetImmersiveMode,
             child: content,
           )
         : content;
-  }
-}
-
-/// A widget that prevents device gestures from interfering with the app's functionality.
-class PreventDeviceGesturesMediaQuery extends StatelessWidget {
-  final Widget child;
-  final bool preventDeviceGestures;
-
-  const PreventDeviceGesturesMediaQuery({
-    required this.child,
-    this.preventDeviceGestures = false,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final data = MediaQuery.of(context);
-    return MediaQuery(
-      data: data.copyWith(
-        gestureSettings: preventDeviceGestures
-            ? DeviceGestureSettings(touchSlop: (data.gestureSettings.touchSlop ?? kTouchSlop) / 2)
-            : null,
-      ),
-      child: child,
-    );
   }
 }

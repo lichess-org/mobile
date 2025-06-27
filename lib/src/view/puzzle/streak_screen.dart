@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -102,6 +103,10 @@ class _BodyState extends ConsumerState<_Body> {
     );
     final puzzleState = ref.watch(ctrlProvider);
 
+    final shouldSetImmersiveMode = ref.watch(
+      boardPreferencesProvider.select((prefs) => prefs.immersiveModeWhilePlaying ?? false),
+    );
+
     ref.listen(ctrlProvider, (previous, next) {
       if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
         ref.read(puzzleStreakControllerProvider.notifier).gameOver();
@@ -111,6 +116,8 @@ class _BodyState extends ConsumerState<_Body> {
     });
 
     return InteractiveBoardScreen(
+      shouldSetImmersiveMode: shouldSetImmersiveMode,
+      isInteractive: puzzleState.mode != PuzzleMode.view,
       boardKey: _boardKey,
       canPop: widget.streak.index == 0 || widget.streak.finished,
       onPopInvokedWithResult: (bool didPop, _) async {

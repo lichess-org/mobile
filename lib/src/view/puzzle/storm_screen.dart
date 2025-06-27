@@ -64,6 +64,9 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final storm = ref.watch(stormProvider);
+    final shouldSetImmersiveMode = ref.watch(
+      boardPreferencesProvider.select((prefs) => prefs.immersiveModeWhilePlaying ?? false),
+    );
 
     switch (storm) {
       case AsyncData(value: final PuzzleStormResponse data):
@@ -86,6 +89,9 @@ class _Body extends ConsumerWidget {
 
         return InteractiveBoardScreen(
           boardKey: boardKey,
+          shouldSetImmersiveMode: shouldSetImmersiveMode,
+          isInteractive:
+              stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
           canPop: stormState.mode != StormMode.running,
           onPopInvokedWithResult: (bool didPop, _) async {
             if (didPop) {

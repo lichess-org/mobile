@@ -352,9 +352,13 @@ class _Body extends ConsumerWidget {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final currentEvalBest = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMove));
     final evalBestMove = (currentEvalBest ?? puzzleState.node.eval?.bestMove) as NormalMove?;
+    final shouldSetImmersiveMode = ref.watch(
+      boardPreferencesProvider.select((prefs) => prefs.immersiveModeWhilePlaying ?? false),
+    );
 
     return InteractiveBoardScreen<void>(
       boardKey: boardKey,
+      shouldSetImmersiveMode: shouldSetImmersiveMode,
       isInteractive: puzzleState.mode != PuzzleMode.view,
       canPop:
           Theme.of(context).platform != TargetPlatform.iOS || puzzleState.mode == PuzzleMode.view,
