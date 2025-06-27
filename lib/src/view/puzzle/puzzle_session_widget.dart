@@ -60,72 +60,69 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
       (a) => a.id == puzzleState.puzzle.puzzle.id,
     );
 
+    final orientation = MediaQuery.orientationOf(context);
+    final remainingSpace = estimateHeightMinusBoardFromContext(context);
+    final estimatedTableHeight = remainingSpace / 2;
+    const estimatedRatingWidgetHeight = 33.0;
+    final estimatedWidgetHeight = estimatedTableHeight - estimatedRatingWidgetHeight;
+    final maxHeight = orientation == Orientation.portrait
+        ? estimatedWidgetHeight >= 60
+              ? 60.0
+              : 26.0
+        : 94.0;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: OrientationBuilder(
-        builder: (context, orientation) {
-          final remainingSpace = estimateHeightMinusBoardFromContext(context);
-          final estimatedTableHeight = remainingSpace / 2;
-          const estimatedRatingWidgetHeight = 33.0;
-          final estimatedWidgetHeight = estimatedTableHeight - estimatedRatingWidgetHeight;
-          final maxHeight = orientation == Orientation.portrait
-              ? estimatedWidgetHeight >= 60
-                    ? 60.0
-                    : 26.0
-              : 60.0;
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: 26.0, maxHeight: maxHeight),
+        child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            verticalDirection: VerticalDirection.up,
+            children: [
+              for (final attempt in session.attempts)
+                _SessionItem(
+                  isCurrent: attempt.id == puzzleState.puzzle.puzzle.id,
+                  isLoading: loadingPuzzleId == attempt.id,
+                  brightness: brightness,
+                  attempt: attempt,
+                  onTap: puzzleState.puzzle.puzzle.id != attempt.id && loadingPuzzleId == null
+                      ? (id) async {
+                          final provider = puzzleProvider(id);
+                          setState(() {
+                            loadingPuzzleId = id;
+                          });
+                          try {
+                            final puzzle = await ref.read(provider.future);
+                            final nextContext = PuzzleContext(
+                              userId: widget.initialPuzzleContext.userId,
+                              angle: widget.initialPuzzleContext.angle,
+                              puzzle: puzzle,
+                            );
 
-          return ConstrainedBox(
-            constraints: BoxConstraints(minHeight: 26.0, maxHeight: maxHeight),
-            child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                verticalDirection: VerticalDirection.up,
-                children: [
-                  for (final attempt in session.attempts)
-                    _SessionItem(
-                      isCurrent: attempt.id == puzzleState.puzzle.puzzle.id,
-                      isLoading: loadingPuzzleId == attempt.id,
-                      brightness: brightness,
-                      attempt: attempt,
-                      onTap: puzzleState.puzzle.puzzle.id != attempt.id && loadingPuzzleId == null
-                          ? (id) async {
-                              final provider = puzzleProvider(id);
+                            ref.read(widget.ctrlProvider.notifier).onLoadPuzzle(nextContext);
+                          } finally {
+                            if (mounted) {
                               setState(() {
-                                loadingPuzzleId = id;
+                                loadingPuzzleId = null;
                               });
-                              try {
-                                final puzzle = await ref.read(provider.future);
-                                final nextContext = PuzzleContext(
-                                  userId: widget.initialPuzzleContext.userId,
-                                  angle: widget.initialPuzzleContext.angle,
-                                  puzzle: puzzle,
-                                );
-
-                                ref.read(widget.ctrlProvider.notifier).onLoadPuzzle(nextContext);
-                              } finally {
-                                if (mounted) {
-                                  setState(() {
-                                    loadingPuzzleId = null;
-                                  });
-                                }
-                              }
                             }
-                          : null,
-                    ),
-                  if (puzzleState.mode == PuzzleMode.view || currentAttempt == null)
-                    _SessionItem(
-                      isCurrent: currentAttempt == null,
-                      isLoading: false,
-                      brightness: brightness,
-                      key: lastAttemptKey,
-                    ),
-                ],
-              ),
-            ),
-          );
-        },
+                          }
+                        }
+                      : null,
+                ),
+              if (puzzleState.mode == PuzzleMode.view || currentAttempt == null)
+                _SessionItem(
+                  isCurrent: currentAttempt == null,
+                  isLoading: false,
+                  brightness: brightness,
+                  key: lastAttemptKey,
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
