@@ -23,7 +23,9 @@ typedef EngineGaugeBuilder = Widget Function(BuildContext context, Orientation o
 enum AnalysisTab {
   opening(Icons.explore),
   moves(LichessIcons.flow_cascade),
-  summary(Icons.area_chart);
+  summary(Icons.area_chart),
+  // TODO add hint dialog on new install to show this tab
+  conditionalPremoves(Icons.save);
 
   const AnalysisTab(this.icon);
 
@@ -37,6 +39,8 @@ enum AnalysisTab {
         return l10n.movesPlayed;
       case AnalysisTab.summary:
         return l10n.computerAnalysis;
+      case AnalysisTab.conditionalPremoves:
+        return l10n.conditionalPremoves;
     }
   }
 }

@@ -135,4 +135,33 @@ class GameRepository {
       mapper: LightExportedGame.fromServerJson,
     );
   }
+
+  Future<void> saveForecast({
+    required GameFullId gameId,
+    required String forecast,
+    Move? moveToPlay,
+  }) async {
+    final uri = Uri(
+      path: moveToPlay != null ? '$gameId/forecasts/${moveToPlay.uci}' : '$gameId/forecasts',
+    );
+    final response = await client.post(
+      uri,
+      body: forecast,
+      headers: {'Content-type': 'application/json'},
+    );
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to save forecast: ${response.body} (${response.statusCode})',
+        uri,
+      );
+    }
+  }
+
+  Future<PlayableGame> getActiveCorrespondenceGame(GameFullId id) {
+    return client.readJson(
+      Uri(path: '/$id/forecasts'),
+      headers: {'Accept': 'application/json'},
+      mapper: PlayableGame.fromServerJson,
+    );
+  }
 }
