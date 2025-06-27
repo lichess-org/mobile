@@ -351,7 +351,7 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
           Navigator.of(context).push(
             AnalysisScreen.buildRoute(
               context,
-              AnalysisOptions(
+              AnalysisOptions.archivedGame(
                 orientation: Side.white,
                 gameId: widget.game.id,
                 initialMoveCursor: widget.ply,

@@ -260,7 +260,7 @@ class GameContextMenu extends ConsumerWidget {
                   Navigator.of(context).push(
                     AnalysisScreen.buildRoute(
                       context,
-                      AnalysisOptions(orientation: orientation, gameId: game.id),
+                      AnalysisOptions.archivedGame(orientation: orientation, gameId: game.id),
                     ),
                   );
                 }

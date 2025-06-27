@@ -656,15 +656,13 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
-                AnalysisOptions(
+                AnalysisOptions.standalone(
                   orientation: puzzleState.pov,
-                  standalone: (
-                    pgn: ref
-                        .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
-                        .makePgn(),
-                    isComputerAnalysisAllowed: true,
-                    variant: Variant.standard,
-                  ),
+                  pgn: ref
+                      .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
+                      .makePgn(),
+                  isComputerAnalysisAllowed: true,
+                  variant: Variant.standard,
                   initialMoveCursor: 0,
                 ),
               ),
@@ -682,7 +680,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
               Navigator.of(context).push(
                 AnalysisScreen.buildRoute(
                   context,
-                  AnalysisOptions(
+                  AnalysisOptions.archivedGame(
                     orientation: puzzleState.pov,
                     gameId: game.id,
                     initialMoveCursor: puzzleState.puzzle.puzzle.initialPly + 1,

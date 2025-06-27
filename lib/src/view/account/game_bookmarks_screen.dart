@@ -137,7 +137,10 @@ class _BodyState extends ConsumerState<_Body> {
                                   Navigator.of(context, rootNavigator: true).push(
                                     AnalysisScreen.buildRoute(
                                       context,
-                                      AnalysisOptions(orientation: pov, gameId: game.id),
+                                      AnalysisOptions.archivedGame(
+                                        orientation: pov,
+                                        gameId: game.id,
+                                      ),
                                     ),
                                   );
                                 }

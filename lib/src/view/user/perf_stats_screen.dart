@@ -627,7 +627,7 @@ class _GameListWidget extends ConsumerWidget {
                 Navigator.of(context, rootNavigator: true).push(
                   AnalysisScreen.buildRoute(
                     context,
-                    AnalysisOptions(
+                    AnalysisOptions.archivedGame(
                       orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,
                       gameId: gameData.id,
                       initialMoveCursor: 0,

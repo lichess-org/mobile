@@ -40,7 +40,11 @@ void openGameScreen(
             )
           : AnalysisScreen.buildRoute(
               context,
-              AnalysisOptions(orientation: orientation, gameId: game.id, initialMoveCursor: 0),
+              AnalysisOptions.archivedGame(
+                orientation: orientation,
+                gameId: game.id,
+                initialMoveCursor: 0,
+              ),
             ),
     );
   } else {

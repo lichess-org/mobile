@@ -32,13 +32,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: AnalysisScreen(
-          options: AnalysisOptions(
+          options: AnalysisOptions.standalone(
             orientation: Side.white,
-            standalone: (
-              pgn: sanMoves,
-              isComputerAnalysisAllowed: false,
-              variant: Variant.standard,
-            ),
+            pgn: sanMoves,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
           ),
         ),
       );
@@ -60,13 +58,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: AnalysisScreen(
-          options: AnalysisOptions(
+          options: AnalysisOptions.standalone(
             orientation: Side.white,
-            standalone: (
-              pgn: sanMoves,
-              isComputerAnalysisAllowed: false,
-              variant: Variant.standard,
-            ),
+            pgn: sanMoves,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
           ),
         ),
       );
@@ -112,9 +108,11 @@ void main() {
           ),
         },
         home: AnalysisScreen(
-          options: AnalysisOptions(
+          options: AnalysisOptions.standalone(
             orientation: Side.white,
-            standalone: (pgn: pgn, isComputerAnalysisAllowed: false, variant: Variant.standard),
+            pgn: pgn,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
           ),
           enableDrawingShapes: false,
         ),
@@ -621,13 +619,11 @@ void main() {
             ),
           },
           home: const AnalysisScreen(
-            options: AnalysisOptions(
+            options: AnalysisOptions.standalone(
               orientation: Side.white,
-              standalone: (
-                pgn: castlingSetupPgn,
-                isComputerAnalysisAllowed: false,
-                variant: Variant.standard,
-              ),
+              pgn: castlingSetupPgn,
+              isComputerAnalysisAllowed: false,
+              variant: Variant.standard,
               initialMoveCursor: 14,
             ),
           ),
@@ -671,13 +667,11 @@ void main() {
           },
           home: AnalysisScreen(
             key: ValueKey(castlingMethod),
-            options: const AnalysisOptions(
+            options: const AnalysisOptions.standalone(
               orientation: Side.white,
-              standalone: (
-                pgn: castlingSetupPgn,
-                isComputerAnalysisAllowed: false,
-                variant: Variant.chess960,
-              ),
+              pgn: castlingSetupPgn,
+              isComputerAnalysisAllowed: false,
+              variant: Variant.chess960,
               initialMoveCursor: 14,
             ),
           ),

@@ -130,17 +130,14 @@ Future<void> makeEngineTestApp(
             gameId: broadcastGame.$3,
           )
         : AnalysisScreen(
-            options: AnalysisOptions(
-              orientation: Side.white,
-              gameId: gameId,
-              standalone: gameId == null
-                  ? (
-                      pgn: '',
-                      isComputerAnalysisAllowed: isComputerAnalysisAllowed,
-                      variant: Variant.standard,
-                    )
-                  : null,
-            ),
+            options: gameId != null
+                ? AnalysisOptions.archivedGame(orientation: Side.white, gameId: gameId)
+                : AnalysisOptions.standalone(
+                    orientation: Side.white,
+                    pgn: '',
+                    isComputerAnalysisAllowed: isComputerAnalysisAllowed,
+                    variant: Variant.standard,
+                  ),
           ),
   );
 

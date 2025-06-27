@@ -34,21 +34,30 @@ part 'analysis_controller.g.dart';
 
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
-typedef StandaloneAnalysis = ({String pgn, Variant variant, bool isComputerAnalysisAllowed});
-
 @freezed
 sealed class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
 
-  @Assert('standalone != null || gameId != null')
-  const factory AnalysisOptions({
+  const factory AnalysisOptions.standalone({
     required Side orientation,
-    StandaloneAnalysis? standalone,
-    GameId? gameId,
     int? initialMoveCursor,
-  }) = _AnalysisOptions;
+    required String pgn,
+    required Variant variant,
+    required bool isComputerAnalysisAllowed,
+  }) = Standalone;
 
-  bool get isLichessGameAnalysis => gameId != null;
+  const factory AnalysisOptions.archivedGame({
+    required Side orientation,
+    int? initialMoveCursor,
+    required GameId gameId,
+  }) = ArchivedGame;
+
+  bool get isLichessGameAnalysis => this is ArchivedGame;
+
+  GameId? get gameId => switch (this) {
+    ArchivedGame(:final gameId) => gameId,
+    Standalone() => null,
+  };
 }
 
 @riverpod
@@ -109,19 +118,24 @@ class AnalysisController extends _$AnalysisController
 
     ExportedGame? archivedGame;
 
-    if (options.gameId != null) {
-      archivedGame = await ref.watch(archivedGameProvider(id: options.gameId!).future);
-      _variant = archivedGame!.meta.variant;
-      pgn = archivedGame.makePgn();
-      opening = archivedGame.data.opening;
-      serverAnalysis = archivedGame.serverAnalysis;
-      division = archivedGame.meta.division;
-    } else {
-      _variant = options.standalone!.variant;
-      pgn = options.standalone!.pgn;
-      opening = null;
-      serverAnalysis = null;
-      division = null;
+    switch (options) {
+      case ArchivedGame(:final gameId):
+        {
+          archivedGame = await ref.watch(archivedGameProvider(id: gameId).future);
+          _variant = archivedGame!.meta.variant;
+          pgn = archivedGame.makePgn();
+          opening = archivedGame.data.opening;
+          serverAnalysis = archivedGame.serverAnalysis;
+          division = archivedGame.meta.division;
+        }
+      case Standalone(:final variant, pgn: final gamePgn):
+        {
+          _variant = variant;
+          pgn = gamePgn;
+          opening = null;
+          serverAnalysis = null;
+          division = null;
+        }
     }
 
     UciPath path = UciPath.empty;
@@ -149,9 +163,10 @@ class AnalysisController extends _$AnalysisController
 
     final isGameFinished = pgnHeaders['Result'] != '*';
 
-    final isComputerAnalysisAllowed = options.isLichessGameAnalysis
-        ? isGameFinished
-        : options.standalone!.isComputerAnalysisAllowed;
+    final isComputerAnalysisAllowed = switch (options) {
+      Standalone(:final isComputerAnalysisAllowed) => isComputerAnalysisAllowed,
+      ArchivedGame() => isGameFinished,
+    };
 
     final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
 

@@ -125,13 +125,11 @@ class _BodyState extends State<_Body> {
       final pos = Chess.fromSetup(Setup.parseFen(textInput!.trim()));
       return (
         fen: pos.fen,
-        options: AnalysisOptions(
+        options: AnalysisOptions.standalone(
           orientation: Side.white,
-          standalone: (
-            pgn: '[FEN "${pos.fen}"]',
-            isComputerAnalysisAllowed: true,
-            variant: Variant.standard,
-          ),
+          pgn: '[FEN "${pos.fen}"]',
+          isComputerAnalysisAllowed: true,
+          variant: Variant.standard,
         ),
       );
     } catch (_) {}
@@ -157,13 +155,11 @@ class _BodyState extends State<_Body> {
 
       return (
         fen: lastPosition.fen,
-        options: AnalysisOptions(
+        options: AnalysisOptions.standalone(
           orientation: Side.white,
-          standalone: (
-            pgn: textInput!,
-            isComputerAnalysisAllowed: true,
-            variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
-          ),
+          pgn: textInput!,
+          isComputerAnalysisAllowed: true,
+          variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
           initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,
         ),
       );
