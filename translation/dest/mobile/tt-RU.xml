@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">хисап язмасын көйләү</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Бу көйләнешләр Сезнең lichess хисап язмасына кулланыла һәм барлык девайсларга кулланылачак.</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Барлык уеннар</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Сез ризамы?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">шахмат тактасын көйләү</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">йөрешне кире кайтару тәкъдимен туктату</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Чистарту</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Фикер һәм тәкъдимнәр җибәрү</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Өйгә</string>
