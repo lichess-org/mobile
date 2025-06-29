@@ -15,7 +15,7 @@
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Þú munt missa núverandi döngun þína og stigin þín munu vistast.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Þrautir</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Nýlegar leitir</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Fela kerfisviðmótið á meðan spilað er. Nota skal ef stiklulátbragð kerfisins við hliðar skjásins trufla þig. Áhrif þess ná til leikja og þrauta á skjánum.</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Fela kerfisviðmótið á meðan teflt er. Nota skal ef stiklulátbragð kerfisins við hliðar skjásins trufla þig. Áhrif þess ná til leikja og þrauta á skjánum.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Stillingar</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Deila PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Deila vefslóð skákar</string>
