@@ -3653,13 +3653,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get error_email => 'Αυτή η διεύθυνση ηλεκτρονικού ταχυδρομείου δεν είναι έγκυρη';
 
   @override
-  String get error_email_acceptable => 'Αυτή η διεύθυνση ηλ. ταχυδρομείου δεν είναι αποδεκτή. Ελέγξτε την και προσπαθήστε ξανά.';
+  String get error_email_acceptable => 'Αυτή η διεύθυνση email δεν είναι αποδεκτή. Ελέγξτε την και προσπαθήστε ξανά.';
 
   @override
   String get error_email_unique => 'Η διεύθυνση ηλεκτρονικού ταχυδρομείου είναι άκυρη ή υπάρχει ήδη';
 
   @override
-  String get error_email_different => 'Έχετε ήδη αυτήν την διεύθυνση ηλ. ταχυδρομείου';
+  String get error_email_different => 'Αυτή είναι η τρέχουσα διεύθυνση email σας';
 
   @override
   String error_minLength(String param) {

@@ -123,19 +123,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsClockPosition => 'Расположение часов';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Предустановки';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Цель передвинутой фигуры';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Круг';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Квадрат';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Виджеты на главном экране';
 
   @override
   String get mobileSettingsImmersiveMode => 'Полноэкранный режим';
@@ -150,7 +150,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Выбрать изображение';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Пользовательский фон работает только в тёмном режиме. Рекомендуется использовать изображение с тёмными оттенками.';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'Размыть изображение';
@@ -162,28 +162,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'Показать доску';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Проведите для отображения других фонов';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Коснитесь или перетащите';
 
   @override
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Нажатием на две клетки';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'отрисовка фигуры';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Нарисуйте фигуру пальцами: держите один палец на пустом квадрате и двигайте другой палец, чтобы рисовать.';
 
   @override
   String get mobileSettingsShowBorder => 'Показать рамку';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Реакция на касание';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Когда включено, устройство будет вибрировать в некоторое время при перемещении или захвате фигуры.';
 
   @override
   String get mobileSettingsTab => 'Настройки';
@@ -950,7 +950,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastLiveboard => 'Доска в прямом эфире';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Трансляция сообщества';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {

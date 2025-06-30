@@ -2509,7 +2509,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Se unió hace $param';
+    return 'Se unió $param';
   }
 
   @override

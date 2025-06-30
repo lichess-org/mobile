@@ -728,7 +728,7 @@
   "drawByMutualAgreement": "Tablas de mutuo acuerdo",
   "fiftyMovesWithoutProgress": "Cincuenta movimientos sin ningún progreso",
   "currentGames": "Partidas en juego",
-  "joinedX": "Se unió hace {param}",
+  "joinedX": "Se unió {param}",
   "viewInFullSize": "Ver en tamaño completo",
   "logOut": "Cerrar sesión",
   "signIn": "Iniciar sesión",

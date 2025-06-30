@@ -5940,7 +5940,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Klik op de $param-knop, of klik met de rechtermuisknop op de zettenlijst aan de rechterkant.<br>Opmerkingen worden gedeeld en opgeslagen.';
   }
 
   @override
@@ -5965,7 +5965,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyFromInitialPositionTitle => 'Vanaf beginstelling';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'Gewoon een bord voor een nieuwe partij.<br>Geschikt om openingen te verkennen.';
 
   @override
   String get studyCustomPositionTitle => 'Aangepaste stelling';
@@ -5995,7 +5995,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyVariantsAreSupportedTitle => 'Studies ondersteunen varianten';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'Ja, je kunt crazyhouse<br>en alle lichess-varianten bestuderen!';
 
   @override
   String get studyChapterConclusionText => 'Hoofdstukken worden voor altijd bewaard.<br>Veel plezier met het ordenen van uw schaakinhoud!';

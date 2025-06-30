@@ -890,11 +890,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastLiveboard => '現局面';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'コミュニティ配信';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return '作成・管理者は $param です。';
   }
 
   @override

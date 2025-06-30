@@ -457,6 +457,7 @@
   "puzzlePlayedXTimes": "{count, plural, =1{Joué {count} fois} other{Joué {count} fois}}",
   "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =1{Un point en dessous de votre classement de problème} other{{count} points en dessous de votre classement de problème}}",
   "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =1{Un point au dessus de votre classement de problème} other{{count} points au dessus de votre classement de problème}}",
+  "puzzlePuzzlesFoundInUserGames": "{count, plural, =1{Un problème trouvé dans les parties de {param2}} other{{count} énigme trouvée dans les jeux par {param2}}}",
   "puzzleNbPlayed": "{count, plural, =1{{count} problème fait} other{{count} problèmes faits}}",
   "puzzleNbToReplay": "{count, plural, =1{{count} problème à refaire} other{{count} problèmes à refaire}}",
   "puzzleThemeAdvancedPawn": "Pion avancé",

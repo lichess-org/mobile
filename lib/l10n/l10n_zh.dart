@@ -890,7 +890,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastLiveboard => '实时棋局';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => '社区转播';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {

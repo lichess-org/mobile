@@ -1663,8 +1663,8 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles found in games by $param2',
-      one: 'One puzzle found in games by $param2',
+      other: '$count énigme trouvée dans les jeux par $param2',
+      one: 'Un problème trouvé dans les parties de $param2',
     );
     return '$_temp0';
   }

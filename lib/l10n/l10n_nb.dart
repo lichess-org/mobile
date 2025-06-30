@@ -910,11 +910,11 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastLiveboard => 'Brett i sanntid';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Fellesskapsoverføring';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'Opprettet og forvaltet av $param.';
   }
 
   @override

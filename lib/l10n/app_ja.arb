@@ -207,6 +207,8 @@
   "broadcastBackToLiveMove": "実際の手に戻る",
   "broadcastSinceHideResults": "結果を非表示にするよう選択したため、結果が見えないようプレビューボードはすべて空白です。",
   "broadcastLiveboard": "現局面",
+  "broadcastCommunityBroadcast": "コミュニティ配信",
+  "broadcastCreatedAndManagedBy": "作成・管理者は {param} です。",
   "broadcastNbBroadcasts": "{count, plural, other{{count} ブロードキャスト}}",
   "broadcastNbViewers": "{count, plural, other{{count} 人の視聴者}}",
   "challengeChallengesX": "チャレンジ：{param1}",

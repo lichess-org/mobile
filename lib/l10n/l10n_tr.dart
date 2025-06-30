@@ -99,7 +99,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePuzzleStormFilterNothingToShow => 'Gösterilecek bir şey yok, lütfen filtreleri değiştirin';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Gösterilcek bir şey yok. Birkaç kez Bulmaca Fırtınası oyunu oynayın.';
+  String get mobilePuzzleStormNothingToShow => 'Gösterilecek bir şey yok. Birkaç kez Bulmaca Fırtınası oyunu oynayın.';
 
   @override
   String get mobilePuzzleStormSubtitle => '3 dakika içerisinde mümkün olduğunca çok bulmaca çözün.';
@@ -135,7 +135,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Kare';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Ana ekran kısayolları';
 
   @override
   String get mobileSettingsImmersiveMode => 'Sürükleyici mod';
@@ -174,7 +174,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSettingsShapeDrawing => 'Şekil çizimi';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'İki parmak kullanarak şekiller çizin: şekil çizmek için bir parmağı boş bir karede tutun ve başka bir parmağı sürükleyin.';
 
   @override
   String get mobileSettingsShowBorder => 'Kenarları göster';
@@ -907,14 +907,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastSinceHideResults => 'Sonuçları gizlemeyi seçtiğiniz için, spoiler vermemek adına tüm tahta görünümleri boş olacak.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Canlı tahta';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Topluluk yayını';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return '$param tarafından oluşturuldu ve yönetiliyor.';
   }
 
   @override
@@ -933,8 +933,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count izleyici',
+      one: '$count izleyici',
     );
     return '$_temp0';
   }
@@ -5921,19 +5921,19 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 Seyirciler çalışmayı görüntüleyebilir ve sohbette konuşabilir.<br><br>$param2 Katılımcılar hamle yapabilir ve çalışmayı güncelleyebilir.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return '$param düğmesine tıklayın.<br>Sonra kimlerin katılabileceğine karar verin.';
   }
 
   @override
   String get studyStudyChaptersTitle => 'Çalışma bölümleri';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => 'Bir çalışma birden fazla bölüm içerebilir.<br>Her bir bölüm ayrı bir başlangıç konumuna ve hamle ağacına sahiptir.';
 
   @override
   String get studyCommentPositionTitle => 'Bir pozisyona yorum yap';
@@ -5944,16 +5944,16 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'Konuma yorum ekleyin';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => '!? düğmesine tıklayın ya da sağdaki hamle listesine sağ tıklayın.<br> Yorum yazıları paylaşılır ve kaydedilir.';
 
   @override
   String get studyConclusionTitle => 'Vakit ayırdığınız için teşekkürler';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => '<a href=\'/study/mine/hot\'>Önceki çalışmalarınızı</a> profil sayfanızdan bulabilirsiniz.<br>Çalışmalar hakkında ayrıca bir <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'> blog gönderisi</a> mevcuttur.<br>Usta kullanıcılar klavye kısayollarını görmek için \"?\" basabilir.<br>İyi eğlenceler!';
 
   @override
   String get studyCreateChapterTitle => 'Bir çalışma bölümü oluşturalım';
@@ -5986,7 +5986,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'PGN oyunundan';
 
   @override
   String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
@@ -6001,7 +6001,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
-  String get studyDoubleDefeat => 'Double defeat';
+  String get studyDoubleDefeat => 'Çift mağlubiyet';
 
   @override
   String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';

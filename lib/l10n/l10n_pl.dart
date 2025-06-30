@@ -4964,8 +4964,8 @@ class AppLocalizationsPl extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count ulubionych partii',
-      many: '$count ulubiona partii',
-      few: '$count ulubiona partie',
+      many: '$count ulubionych partii',
+      few: '$count ulubione partie',
       one: '$count ulubiona partia',
     );
     return '$_temp0';

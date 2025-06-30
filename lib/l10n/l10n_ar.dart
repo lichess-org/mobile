@@ -12,7 +12,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileAccountPreferences => 'تفضيلات الحساب';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'سيتم تطبيق هذه التفضيلات على حساب ليتشيس الخاص بك وسيتم إستخدامها عبر جميع الأجهزة.';
 
   @override
   String get mobileAllGames => 'جميع المباريات';
@@ -27,7 +27,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'إلغاء عرض الإسترجاع';
 
   @override
-  String get mobileClearButton => 'محو';
+  String get mobileClearButton => 'مسح';
 
   @override
   String get mobileCorrespondenceClearSavedMove => 'مسح النقل المحفوظ';
@@ -48,11 +48,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String mobileGoodDay(String param) {
-    return 'يـوم طيب، $param';
+    return 'يـوم طيـب، $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'يـوم طيب';
+  String get mobileGoodDayWithoutName => 'يـوم طيـب';
 
   @override
   String get mobileHideVariation => 'إخفاء النقلات المرشحة';
@@ -61,7 +61,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileHomeTab => 'الرئيسية';
 
   @override
-  String get mobileLiveStreamers => 'أصحاب البث المباشر';
+  String get mobileLiveStreamers => 'البثوث المباشرة';
 
   @override
   String get mobileMustBeLoggedIn => 'لعرض هذه الصفحة، قم بتسجيل الدخول.';
@@ -76,7 +76,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileOkButton => 'موافق';
 
   @override
-  String get mobileOverTheBoard => 'على الرقعة';
+  String get mobileOverTheBoard => 'على اللوحة';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -87,19 +87,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobilePositionLeft => 'يسار';
 
   @override
-  String get mobilePositionRight => 'يميـن';
+  String get mobilePositionRight => 'يمين';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'تكبير القطعة المسحوبة';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'هل تريد إنهاء هذه الجلسة؟';
+  String get mobilePuzzleStormConfirmEndRun => 'هل تريد إنهاء الجلسة؟';
 
   @override
   String get mobilePuzzleStormFilterNothingToShow => 'لا شيء لإظهاره، الرجاء تغيير إعدادات التصفية';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'لا شيء لإظهاره. العب عاصفة الألغاز.';
+  String get mobilePuzzleStormNothingToShow => 'لا شيء لإظهاره. العب بضع جلسات من عاصفة الألغاز.';
 
   @override
   String get mobilePuzzleStormSubtitle => 'حل أكبر عدد ممكن من الألغاز في ٣ دقائق.';
@@ -108,7 +108,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'ستفقد سلسلة حلولِك الحالية وستُحفظ نتيجتك.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'حل الألغاز المتعلقة بإفتتاحاتكَ المفضلة، أو اختر موضوعاً.';
+  String get mobilePuzzleThemesSubtitle => 'حل الألغاز المتعلقة بإفتتاحاتك المفضلة، أو اختر موضوعاً.';
 
   @override
   String get mobilePuzzlesTab => 'الألغاز';
@@ -126,22 +126,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileSettingsCustomBackgroundPresets => 'الإعدادات المسبقة';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'ظل القطعة المسحوبة';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'دائـرة';
+  String get mobileSettingsDraggedTargetCircle => 'دائرة';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'مربـع';
+  String get mobileSettingsDraggedTargetSquare => 'مربع';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'الواجهات الرئيسية المصغّرة';
 
   @override
   String get mobileSettingsImmersiveMode => 'وضع ملء الشاشة';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'إخفاء واجهة المستخدم أثناء التشغيل. استخدم هذا إذا كنت منزعجاً من إيماءات التنقل للنظام عند حواف الشاشة. تُطبق على شاشة المباريات و الألغاز.';
+  String get mobileSettingsImmersiveModeSubtitle => 'إخفاء واجهة الجهاز أثناء اللعب. إستخدم هذا إذا كنت منزعجاً من إيماءات التنقل للنظام عند حواف الشاشة. تُطبق على شاشة المباريات و الألغاز.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'القطع المأسورة';
@@ -180,10 +180,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileSettingsShowBorder => 'إظهار الحـواف';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'الإهتزاز عند لمس';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'عند التفعيل, سيهتز الجهاز لمدة وجيزة عند نقل أو أسر القطع.';
 
   @override
   String get mobileSettingsTab => 'الإعدادات';
@@ -236,7 +236,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileWatchTab => 'شاهد';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'مرحباً بكم في تطبيق Lichess!';
 
   @override
   String get activityActivity => 'الأنشطة';
@@ -1882,7 +1882,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeDoubleBishopMateDescription => 'فيلين يهاجمان الملك على أوتار متجاورة ويكون الملك محاصر بقطع صديقة ليحقق كش مات.';
 
   @override
-  String get puzzleThemeDovetailMate => 'كش مات \"Dovetail\"';
+  String get puzzleThemeDovetailMate => 'كش مات دوفيتيل';
 
   @override
   String get puzzleThemeDovetailMateDescription => 'الوزير يحقق كش مات للملك العدو المجاور، و تكون مربعات الهروب من كش مات مشغولة بقطع صديقة.';
@@ -1915,7 +1915,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeDeflection => 'إبعاد';
 
   @override
-  String get puzzleThemeDeflectionDescription => 'نقلة تشتت قطعة الخَصْم عن مهمة أخرى تؤديها، كالدفاع عن مربع مهم. أحيانًا يُطلق علي هذا التكتيك أيضًا \"التحميل الزائد\".';
+  String get puzzleThemeDeflectionDescription => 'نقلة تُبعد قطعة الخَصْم عن مهمة أخرى تؤديها، كالدفاع عن مربع مهم. أحيانًا يُطلق علي هذا التكتيك أيضًا \"التحميل الزائد\".';
 
   @override
   String get puzzleThemeDiscoveredAttack => 'هجوم مكشوف';
@@ -1975,7 +1975,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'بدلاً من لعب النقلة المتوقعة، يتم أولاً القيام بنقلة أخرى تشكل تهديدًا فوريًا مباشرًا يجب على الخصم الرد عليه. يُعرف أيضًا باسم \"زفيشنزوك\" أو \"أنترميزو \".';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Kill box mate';
+  String get puzzleThemeKillBoxMate => 'كش مات المِصّيدة';
 
   @override
   String get puzzleThemeKillBoxMateDescription => 'يقف الرخ بجانب ملك العدو ويدعمه وزير يساهم أيضًا في حجب خانات هروب الملك. يقوم الرخ والوزير بمحاصرة ملك العدو داخل \"صندوق قتل\" بمساحة 3×3.';
@@ -2110,7 +2110,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeRookEndgame => 'نهاية المباراة بالقلعة';
 
   @override
-  String get puzzleThemeRookEndgameDescription => 'نهاية المباراة بالقلعة و الجنود فقط.';
+  String get puzzleThemeRookEndgameDescription => 'نهاية المباراة بالقلعة و البيادق فقط.';
 
   @override
   String get puzzleThemeSacrifice => 'تضحية';
@@ -2137,10 +2137,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeSmotheredMateDescription => 'هو نمط من الكش مات بالحصان حيث أن الملك غير قادر على التحرك لأنه محاط (مخنوق) بقطعه.';
 
   @override
-  String get puzzleThemeSuperGM => 'مباراة أستاذ دولي كبير';
+  String get puzzleThemeSuperGM => 'مباريات أساتذة كبار';
 
   @override
-  String get puzzleThemeSuperGMDescription => 'ألغاز من مبارايات تم لعبها من أفضل اللاعبين في العالم.';
+  String get puzzleThemeSuperGMDescription => 'ألغاز من مبارايات أفضل لاعبين في العالم.';
 
   @override
   String get puzzleThemeTrappedPiece => 'قطعة محاصرة';
@@ -2167,10 +2167,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeXRayAttackDescription => 'القطعة تهاجم أو تدافع عن مربع, من خلال قطعة عدو.';
 
   @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
+  String get puzzleThemeZugzwang => 'زُوغْزوان';
 
   @override
-  String get puzzleThemeZugzwangDescription => 'حركات الخصم محدودة و كل الحركات تؤدي إلى تفاقم الوضع نحو الأسوء.';
+  String get puzzleThemeZugzwangDescription => 'حركات الخصم محدودة وكلها تؤدي إلى وضع أسوأ.';
 
   @override
   String get puzzleThemeMix => 'خليط';
@@ -2186,7 +2186,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'هذه الألغاز موجودة للعامة بإمكانك تحميلها من هنا$param.';
+    return 'هذه الألغاز موجودة للعامة بإمكانك تحميلها من هنا $param.';
   }
 
   @override
@@ -6370,13 +6370,13 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get timeagoJustNow => 'الان';
+  String get timeagoJustNow => 'الآن';
 
   @override
   String get timeagoRightNow => 'حاليا';
 
   @override
-  String get timeagoCompleted => 'مكتمل';
+  String get timeagoCompleted => 'منتهى';
 
   @override
   String timeagoInNbSeconds(int count) {
@@ -6384,7 +6384,7 @@ class AppLocalizationsAr extends AppLocalizations {
       count,
       locale: localeName,
       other: 'خلال $count ثانية',
-      many: 'خلال $count ثانية',
+      many: 'خلال $count ثوانِ',
       few: 'خلال $count ثوانٍ',
       two: 'خلال ثانيتين',
       one: 'خلال ثانية',
@@ -6398,11 +6398,11 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'خلال $count دقائق',
-      many: 'خلال $count دقائق',
+      other: 'خلال $count دقيقة',
+      many: 'خلال $count دقيقة',
       few: 'خلال $count دقائق',
       two: 'خلال $count دقيقتين',
-      one: 'خلال دقيقة',
+      one: 'خلال $count دقيقة',
       zero: 'خلال $count دقيقة',
     );
     return '$_temp0';
@@ -6414,7 +6414,7 @@ class AppLocalizationsAr extends AppLocalizations {
       count,
       locale: localeName,
       other: 'خلال $count ساعة',
-      many: 'خلال $count ساعة',
+      many: 'خلال $count ساعات',
       few: 'خلال $count ساعات',
       two: 'خلال ساعتين',
       one: 'خلال ساعة',
@@ -6428,8 +6428,8 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'خلال $count يوم',
-      many: 'خلال $count يوم',
+      other: 'خلال $count أيام',
+      many: 'خلال $count أيام',
       few: 'خلال $count أيام',
       two: 'خلال $count يوم',
       one: 'خلال $count يوم',
@@ -6443,11 +6443,11 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'خلال $count اسبوع',
-      many: 'خلال $count اسبوع',
-      few: 'خلال $count اسبوع',
-      two: 'خلال $count اسبوع',
-      one: 'خلال $count اسبوع',
+      other: 'خلال $count أسبوع',
+      many: 'خلال $count أسبوع',
+      few: 'خلال $count أسابيع',
+      two: 'خلال $count أسبوع',
+      one: 'خلال $count أسبوع',
       zero: 'خلال $count أسبوع',
     );
     return '$_temp0';
@@ -6460,7 +6460,7 @@ class AppLocalizationsAr extends AppLocalizations {
       locale: localeName,
       other: 'خلال $count شهر',
       many: 'خلال $count شهر',
-      few: 'خلال $count شهر',
+      few: 'خلال $count أشهر',
       two: 'خلال $count شهر',
       one: 'خلال $count شهر',
       zero: 'خلال $count شهر',
@@ -6488,12 +6488,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'منذ $count دقيقة/دقائق مضت',
-      many: 'منذ $count دقيقة/دقائق مضت',
-      few: 'منذ $count دقيقة/دقائق مضت',
-      two: 'منذ $count دقيقتين',
-      one: 'منذ $count دقيقة',
-      zero: 'منذ $count دقيقة/دقائق مضت',
+      other: 'منذ $count دقيقة مضت',
+      many: 'منذ $count دقيقة مضت',
+      few: 'منذ $count دقيقة مضت',
+      two: 'منذ $count دقيقة مضت',
+      one: 'منذ $count دقيقة مضت',
+      zero: 'منذ $count دقيقة مضت',
     );
     return '$_temp0';
   }
@@ -6503,12 +6503,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'منذ $count ساعة/ساعات مضت',
-      many: 'منذ $count ساعة/ساعات مضت',
-      few: 'منذ $count ساعة/ساعات مضت',
-      two: 'منذ $count ساعة/ساعات مضت',
-      one: 'منذ $count ساعة',
-      zero: 'منذ $count ساعة/ساعات مضت',
+      other: 'منذ $count ساعة مضت',
+      many: 'منذ $count ساعة مضت',
+      few: 'منذ $count ساعة مضت',
+      two: 'منذ $count ساعة مضت',
+      one: 'منذ $count ساعة مضت',
+      zero: 'منذ $count ساعة مضت',
     );
     return '$_temp0';
   }
@@ -6518,12 +6518,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'منذ $count يوم/أيام',
-      many: 'منذ $count يوم/أيام',
-      few: 'منذ $count يوم/أيام',
-      two: 'منذ $count يوم/أيام',
+      other: 'منذ $count يوم',
+      many: 'منذ $count يوم',
+      few: 'منذ $count يوم',
+      two: 'منذ $count يوم',
       one: 'منذ $count يوم',
-      zero: 'منذ $count يوم/أيام',
+      zero: 'منذ $count يوم',
     );
     return '$_temp0';
   }
@@ -6533,12 +6533,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'منذ $count أسابيع',
-      many: 'منذ $count أسابيع',
-      few: 'منذ $count أسابيع',
-      two: 'منذ $count أسابيع',
-      one: 'منذ $count أسابيع',
-      zero: 'منذ $count أسابيع',
+      other: 'منذ $count أسبوع',
+      many: 'منذ $count أسبوع',
+      few: 'منذ $count أسبوع',
+      two: 'منذ $count أسبوع',
+      one: 'منذ $count أسبوع',
+      zero: 'منذ $count أسبوع',
     );
     return '$_temp0';
   }
@@ -6578,12 +6578,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$countدقائق متبقية',
-      many: '$countدقيقة متبقية',
-      few: '$countدقائق متبقية',
-      two: '$countدقيقتان متبقيتان',
-      one: '$countدقيقة متبقية',
-      zero: '$countدقيقة متبقية',
+      other: '$count دقيقة متبقية',
+      many: '$count دقيقة متبقية',
+      few: '$count دقيقة متبقية',
+      two: '$count دقيقة متبقية',
+      one: '$count دقيقة متبقية',
+      zero: '$count دقيقة متبقية',
     );
     return '$_temp0';
   }
@@ -6593,12 +6593,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$countساعة متبقية',
-      many: '$countساعة متبقية',
-      few: '$count ساعات متبقية',
-      two: '$countساعتان متبقيتان',
-      one: '$countساعة واحدة متبقية',
-      zero: '$countساعة متبقية',
+      other: '$count ساعة متبقية',
+      many: '$count ساعة متبقية',
+      few: '$count ساعة متبقية',
+      two: '$count ساعة متبقية',
+      one: '$count ساعة متبقية',
+      zero: '$count ساعة متبقية',
     );
     return '$_temp0';
   }

@@ -9,7 +9,7 @@ class AppLocalizationsSr extends AppLocalizations {
   AppLocalizationsSr([String locale = 'sr']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Подешавања налога';
 
   @override
   String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
@@ -21,7 +21,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileAreYouSure => 'Да ли сте сигурни?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Подешавања табле';
 
   @override
   String get mobileCancelTakebackOffer => 'Откачи понуду за повлачење потеза';
@@ -40,19 +40,19 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Добро вече';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Добро вече';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Добар дан';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Добар дан';
 
   @override
   String get mobileHideVariation => 'Сакриј варијацију';
@@ -84,10 +84,10 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get mobilePositionLeft => 'Left';
+  String get mobilePositionLeft => 'Лево';
 
   @override
-  String get mobilePositionRight => 'Right';
+  String get mobilePositionRight => 'Десно';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Увећај фигуре које повлачиш';
@@ -120,7 +120,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Clock position';
+  String get mobileSettingsClockPosition => 'Позиција сата';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -129,10 +129,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Круг';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Квадрат';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -141,13 +141,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Режим целог екрана';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Склонити системски интерфејс у току игре. Користите ово уколико вам сметају системске навигације на угловима екрана. Примењује се и у партијама и у вежбама.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Изабери слику';
 
   @override
   String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
@@ -156,10 +156,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'Blur the image';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Сакриј таблу';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Прикажи таблу';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
@@ -174,7 +174,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileSettingsShapeDrawing => 'Shape drawing';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Нацртајте облик користећи два прста: један прст на празном пољу, а превуци други прст да нацртате облик.';
 
   @override
   String get mobileSettingsShowBorder => 'Show border';
@@ -236,7 +236,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileWatchTab => 'Гледај';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Добродошли на Личес апликацију!';
 
   @override
   String get activityActivity => 'Активност';
@@ -2186,7 +2186,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get createAGame => 'Започни нову партију';
 
   @override
-  String get createTheGame => 'Create the game';
+  String get createTheGame => 'Креирај игру';
 
   @override
   String get whiteIsVictorious => 'Бели је поебдио';
@@ -2452,13 +2452,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get replayMode => 'Начин репризе';
 
   @override
-  String get realtimeReplay => 'Као уживо';
+  String get realtimeReplay => 'Стварновремено';
 
   @override
-  String get byCPL => 'По рачунару';
+  String get byCPL => 'По ЦПГ-у';
 
   @override
-  String get enable => 'Укључи';
+  String get enable => 'Омогући';
 
   @override
   String get bestMoveArrow => 'Стрелица за најбољи потез';
@@ -2467,13 +2467,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get showVariationArrows => 'Прикажи стрелице за варијацију';
 
   @override
-  String get evaluationGauge => 'Линија за процену';
+  String get evaluationGauge => 'Мерило процене';
 
   @override
-  String get multipleLines => 'Више стрелица';
+  String get multipleLines => 'Више линија';
 
   @override
-  String get cpus => 'Процесори';
+  String get cpus => 'Процесора';
 
   @override
   String get memory => 'Меморија';
@@ -2482,7 +2482,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get infiniteAnalysis => 'Бесконачна анализа';
 
   @override
-  String get removesTheDepthLimit => 'Уклања ограничење дубине и греје рачунар';
+  String get removesTheDepthLimit => 'Уклања ограничење дубине и држи твој рачунар топлим';
 
   @override
   String get blunder => 'Груба грешка';

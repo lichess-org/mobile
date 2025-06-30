@@ -1418,7 +1418,7 @@
   "nbPlayers": "{count, plural, =1{{count} gracz} few{{count} graczy} many{{count} graczy} other{{count} graczy}}",
   "nbGames": "{count, plural, =1{{count} partia} few{{count} partie} many{{count} partii} other{{count} partii}}",
   "ratingXOverYGames": "{count, plural, =1{Ranking {count} na podstawie {param2} partii} few{Ranking {count} na podstawie {param2} partii} many{Ranking {count} na podstawie {param2} partii} other{Ranking {count} na podstawie {param2} partii}}",
-  "nbBookmarks": "{count, plural, =1{{count} ulubiona partia} few{{count} ulubiona partie} many{{count} ulubiona partii} other{{count} ulubionych partii}}",
+  "nbBookmarks": "{count, plural, =1{{count} ulubiona partia} few{{count} ulubione partie} many{{count} ulubionych partii} other{{count} ulubionych partii}}",
   "nbDays": "{count, plural, =1{{count} dzień} few{{count} dni} many{{count} dni} other{{count} dni}}",
   "nbHours": "{count, plural, =1{{count} godzina} few{{count} godziny} many{{count} godzin} other{{count} godzin}}",
   "nbMinutes": "{count, plural, =1{{count} minuta} few{{count} minuty} many{{count} minut} other{{count} minut}}",

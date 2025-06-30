@@ -217,6 +217,8 @@
   "broadcastBackToLiveMove": "Tilbake til trekk på direkten",
   "broadcastSinceHideResults": "Du valgte å skjule resultatene, så alle forhåndsvisningene av brettene er tomme for å unngå å røpe noe.",
   "broadcastLiveboard": "Brett i sanntid",
+  "broadcastCommunityBroadcast": "Fellesskapsoverføring",
+  "broadcastCreatedAndManagedBy": "Opprettet og forvaltet av {param}.",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} overføring} other{{count} overføringer}}",
   "broadcastNbViewers": "{count, plural, =1{{count} tilskuer} other{{count} tilskuere}}",
   "challengeChallengesX": "Utfordringer: {param1}",
