@@ -12,7 +12,7 @@
 2 連勝すると次のゲームから「2倍ボーナス」となり、炎のアイコンが表示されます。
 連勝後のゲームは、連勝が途切れるまで基本の点が 2 倍になります。つまり勝ちが 4 点、ドローが 2 点です。
 たとえば 2 連勝の後ドローなら合計は 2 + 2 + (2 x 1) = 6 点になります。</string>
-  <string name="berserk">バーサーク（Berserk）</string>
+  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">バーサーク（Berserk）</string>
   <string name="berserkAnswer">ゲーム開始時に時計の横の「バーサーク (berserk) 」ボタンをクリックすると、持時間が半分に減る代わりに勝った時に 1 点のボーナス点がもらえます。
 追加秒のある場合は追加秒もなくなります（ただし 1+2 は例外で 1+0 になります）。
 持時間が「0分+追加秒」の場合（0+1、0+2）はバーサークできません。
