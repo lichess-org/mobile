@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">تفضيلات الحساب</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">سيتم تطبيق هذه التفضيلات على حساب ليتشيس الخاص بك وسيتم إستخدامها عبر جميع الأجهزة.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">جميع المباريات</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">هل أنت متأكد؟</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">إعدادات اللوحة</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">إلغاء عرض الإسترجاع</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">محو</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">مسح</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">مسح النقل المحفوظ</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">الإنضمام إلى مباراة</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">الملاحظات</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">مساء الخيـر، %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">مساء الخيـر</string>
-  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">يـوم طيب، %s</string>
-  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">يـوم طيب</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">يـوم طيـب، %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">يـوم طيـب</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">إخفاء النقلات المرشحة</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">الرئيسية</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">أصحاب البث المباشر</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">البثوث المباشرة</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">لعرض هذه الصفحة، قم بتسجيل الدخول.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">لا توجد نتائج</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">أنت لا تتابع أي مستخدم.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">موافق</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">على الرقعة</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">على اللوحة</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">لاعبين بإسم \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">يسار</string>
-  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">يميـن</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">يمين</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">تكبير القطعة المسحوبة</string>
-  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">هل تريد إنهاء هذه الجلسة؟</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">هل تريد إنهاء الجلسة؟</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">لا شيء لإظهاره، الرجاء تغيير إعدادات التصفية</string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">لا شيء لإظهاره. العب عاصفة الألغاز.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">لا شيء لإظهاره. العب بضع جلسات من عاصفة الألغاز.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">حل أكبر عدد ممكن من الألغاز في ٣ دقائق.</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">ستفقد سلسلة حلولِك الحالية وستُحفظ نتيجتك.</string>
-  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">حل الألغاز المتعلقة بإفتتاحاتكَ المفضلة، أو اختر موضوعاً.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">حل الألغاز المتعلقة بإفتتاحاتك المفضلة، أو اختر موضوعاً.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">الألغاز</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">عمليات البحث الأخيرة</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">إزالة الإشارة المرجعية</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">موضع الساعة</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">الإعدادات المسبقة</string>
-  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">دائـرة</string>
-  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">مربـع</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">ظل القطعة المسحوبة</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">دائرة</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">مربع</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">الواجهات الرئيسية المصغّرة</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">وضع ملء الشاشة</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">إخفاء واجهة المستخدم أثناء التشغيل. استخدم هذا إذا كنت منزعجاً من إيماءات التنقل للنظام عند حواف الشاشة. تُطبق على شاشة المباريات و الألغاز.</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">إخفاء واجهة الجهاز أثناء اللعب. إستخدم هذا إذا كنت منزعجاً من إيماءات التنقل للنظام عند حواف الشاشة. تُطبق على شاشة المباريات و الألغاز.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">القطع المأسورة</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">اختر صورة</string>
   <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">الخلفية المخصصة تعمل فقط في الوضع المظلم. يُوصى بصورة مظلمة.</string>
@@ -52,6 +55,8 @@
   <string name="settingsShapeDrawing" comment="Entry in the settings.">رسم الأسهم</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">رسم الأسهم بإصبعين: ثبت إصبعك علي مربع فارغ و حرّك إصبعك الآخر لرسم سهم.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">إظهار الحـواف</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">الإهتزاز عند لمس</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">عند التفعيل, سيهتز الجهاز لمدة وجيزة عند نقل أو أسر القطع.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">الإعدادات</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">شارك الـ PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">شارك رابط المباراة</string>
@@ -68,4 +73,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">الخيار %s غير مدعوم في هذا الإصدار.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">في إنتظار الطرف الآخر...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">شاهد</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">مرحباً بكم في تطبيق Lichess!</string>
 </resources>
