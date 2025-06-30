@@ -56,6 +56,7 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
     ServerGamePrefs? prefs,
     PlayableClockData? clock,
     CorrespondenceClockData? correspondenceClock,
+    CorrespondenceForecast? correspondenceForecast,
     bool? boosted,
     bool? isThreefoldRepetition,
     ({Duration idle, Duration timeToMove, DateTime movedAt})? expiration,
@@ -217,6 +218,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     black: pick('black').letOrThrow(_playerFromUserGamePick),
     clock: pick('clock').letOrNull(_playableClockDataFromPick),
     correspondenceClock: pick('correspondence').letOrNull(_correspondenceClockDataFromPick),
+    correspondenceForecast: pick('forecast').letOrNull(_correspondenceForecastFromPick),
     status: pick('game', 'status').asGameStatusOrThrow(),
     winner: pick('game', 'winner').asSideOrNull(),
     boosted: pick('game', 'boosted').asBoolOrNull(),
@@ -318,6 +320,17 @@ CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
     black: pick('black').asDurationFromSecondsOrThrow(),
   );
 }
+
+CorrespondenceForecast _correspondenceForecastFromPick(RequiredPick pick) => IList(
+  pick('steps').asListOrThrow(
+    (pick) => IList(
+      pick.asListOrThrow(
+        (pick) =>
+            SanMove(pick('san').asStringOrThrow(), Move.parse(pick('uci').asStringOrThrow())!),
+      ),
+    ),
+  ),
+);
 
 Division _divisionFromPick(RequiredPick pick) {
   return Division(

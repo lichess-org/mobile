@@ -231,6 +231,14 @@ abstract class Node {
     return addNodeAt(path, newNode, prepend: prepend, replace: replace);
   }
 
+  /// Adds a list of moves at the given path and returns the new path or null if the node at the path does not exist.
+  UciPath? addMovesAt(UciPath path, Iterable<Move> moves, {bool prepend = false}) {
+    final move = moves.elementAtOrNull(0);
+    if (move == null) return path;
+    final (newPath, _) = addMoveAt(path, move, prepend: prepend);
+    return newPath != null ? addMovesAt(newPath, moves.skip(1), prepend: prepend) : null;
+  }
+
   /// The function `convertAltCastlingMove` checks if a move is an alternative
   /// castling move and converts it to the corresponding standard castling move if so.
   Move? convertAltCastlingMove(Move move) {
@@ -579,6 +587,33 @@ abstract class ViewNode {
       final child = current.children.first;
       yield child;
       current = child;
+    }
+  }
+
+  /// Finds the child node with that id.
+  ViewBranch? childById(UciCharPair id) {
+    return children.firstWhereOrNull((node) => node.id == id);
+  }
+
+  /// Selects all branches on that path.
+  Iterable<ViewBranch> branchesOn(UciPath path) sync* {
+    UciPath currentPath = path;
+
+    ViewBranch? pickChild(ViewNode node) {
+      final id = currentPath.head;
+      if (id == null) {
+        return null;
+      }
+      return node.childById(id);
+    }
+
+    ViewNode current = this;
+    ViewBranch? child;
+
+    while ((child = pickChild(current)) != null) {
+      yield child!;
+      current = child;
+      currentPath = currentPath.tail;
     }
   }
 }
