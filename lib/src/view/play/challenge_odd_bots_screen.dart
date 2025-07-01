@@ -102,20 +102,24 @@ final oddBots = _botFens.keys;
 class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
   String? fen;
   SideChoice sideChoice = SideChoice.white;
+  late int seconds;
+  late int incrementSeconds;
+
+  @override
+  void initState() {
+    super.initState();
+    final preferences = ref.read(challengePreferencesProvider);
+    //special bots have a shorter range of time controls, to prevent an error of the slider we need to check if the time stored in the preferences is within the range of the slider
+    seconds = (preferences.clock.time.inSeconds < 60 || preferences.clock.time.inSeconds > 15 * 60)
+        ? 300
+        : preferences.clock.time.inSeconds;
+    incrementSeconds = preferences.clock.increment.inSeconds > 10
+        ? 10
+        : preferences.clock.increment.inSeconds;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final preferences = ref.watch(challengePreferencesProvider);
-
-    //special bots have a shorter range of time controls, to prevent an error of the slider we need to check if the time stored in the preferences is within the range of the slider
-    int seconds =
-        (preferences.clock.time.inSeconds < 60 || preferences.clock.time.inSeconds > 15 * 60)
-        ? 300
-        : preferences.clock.time.inSeconds;
-    int incrementSeconds = preferences.clock.increment.inSeconds > 10
-        ? 10
-        : preferences.clock.increment.inSeconds;
-
     return Center(
       child: ListView(
         shrinkWrap: true,
@@ -206,7 +210,8 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       (2 * sidePadding) -
                       (2 * borderWidth * crossAxisCount)) /
                   crossAxisCount;
-              const borderRadius = 4.0 + borderWidth;
+
+              final borderRadius = Styles.boardBorderRadius.topLeft.x + borderWidth;
 
               final userBotFens = _botFens[widget.bot.name.toLowerCase()] ?? [];
               final rowCount = (userBotFens.length / crossAxisCount).ceil();
