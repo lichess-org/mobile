@@ -14,9 +14,7 @@ import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
-import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
@@ -31,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/interactive_board.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
@@ -92,6 +91,10 @@ class GameBody extends ConsumerWidget {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
     final blindfoldMode = gamePrefs.blindfoldMode ?? false;
+
+    final shouldSetImmersiveMode = ref.watch(
+      boardPreferencesProvider.select((prefs) => prefs.immersiveModeWhilePlaying ?? false),
+    );
 
     switch (ref.watch(ctrlProvider)) {
       case AsyncError(error: final e, stackTrace: final s):
@@ -208,109 +211,123 @@ class GameBody extends ConsumerWidget {
             ? Duration.zero
             : boardPreferences.pieceAnimationDuration;
 
-        return FocusDetector(
+        return InteractiveBoardScreen<void>(
+          boardKey: boardKey,
+          isInteractive: gameState.game.playable,
+          shouldSetImmersiveMode: ref.watch(
+            boardPreferencesProvider.select((prefs) => prefs.immersiveModeWhilePlaying ?? false),
+          ),
           onFocusRegained: () {
             ref.read(ctrlProvider.notifier).onFocusRegained();
           },
-          child: WakelockWidget(
-            shouldEnableOnFocusGained: () => gameState.game.playable,
-            child: Column(
-              children: [
-                Expanded(
-                  child: BoardTable(
-                    key: boardKey,
-                    boardSettingsOverrides: BoardSettingsOverrides(
-                      animationDuration: animationDuration,
-                      autoQueenPromotion: gameState.canAutoQueen,
-                      autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
-                      blindfoldMode: blindfoldMode,
-                    ),
-                    orientation: isBoardTurned ? youAre.opposite : youAre,
-                    lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
-                    interactiveBoardParams: (
-                      variant: gameState.game.meta.variant,
-                      position: gameState.currentPosition,
-                      playerSide: gameState.game.playable && !gameState.isReplaying
-                          ? youAre == Side.white
-                                ? PlayerSide.white
-                                : PlayerSide.black
-                          : PlayerSide.none,
-                      promotionMove: gameState.promotionMove,
-                      onMove: (move, {isDrop}) {
-                        ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
-                      },
-                      onPromotionSelection: (role) {
-                        ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-                      },
-                      premovable: gameState.canPremove && boardPreferences.premoves
-                          ? (
-                              onSetPremove: (move) {
-                                ref.read(ctrlProvider.notifier).setPremove(move);
-                              },
-                              premove: gameState.premove,
-                            )
-                          : null,
-                    ),
-                    topTable: topPlayer,
-                    bottomTable:
-                        gameState.canShowClaimWinCountdown &&
-                            gameState.opponentLeftCountdown != null
-                        ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
-                        : bottomPlayer,
-                    moves: gameState.game.steps
-                        .skip(1)
-                        .map((e) => e.sanMove!.san)
-                        .toList(growable: false),
-                    currentMoveIndex: gameState.stepCursor,
-                    onSelectMove: (moveIndex) {
-                      ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
-                    },
-                    zenMode: gameState.isZenModeActive,
+          child: Column(
+            children: [
+              Expanded(
+                child: BoardTable(
+                  key: boardKey,
+                  boardSettingsOverrides: BoardSettingsOverrides(
+                    animationDuration: animationDuration,
+                    autoQueenPromotion: gameState.canAutoQueen,
+                    autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
+                    blindfoldMode: blindfoldMode,
                   ),
+                  orientation: isBoardTurned ? youAre.opposite : youAre,
+                  lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
+                  interactiveBoardParams: (
+                    variant: gameState.game.meta.variant,
+                    position: gameState.currentPosition,
+                    playerSide: gameState.game.playable && !gameState.isReplaying
+                        ? youAre == Side.white
+                              ? PlayerSide.white
+                              : PlayerSide.black
+                        : PlayerSide.none,
+                    promotionMove: gameState.promotionMove,
+                    onMove: (move, {isDrop}) {
+                      ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
+                    },
+                    onPromotionSelection: (role) {
+                      ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+                    },
+                    premovable: gameState.canPremove && boardPreferences.premoves
+                        ? (
+                            onSetPremove: (move) {
+                              ref.read(ctrlProvider.notifier).setPremove(move);
+                            },
+                            premove: gameState.premove,
+                          )
+                        : null,
+                  ),
+                  topTable: topPlayer,
+                  bottomTable:
+                      gameState.canShowClaimWinCountdown && gameState.opponentLeftCountdown != null
+                      ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
+                      : bottomPlayer,
+                  moves: gameState.game.steps
+                      .skip(1)
+                      .map((e) => e.sanMove!.san)
+                      .toList(growable: false),
+                  currentMoveIndex: gameState.stepCursor,
+                  onSelectMove: (moveIndex) {
+                    ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
+                  },
+                  zenMode: gameState.isZenModeActive,
                 ),
-                _GameBottomBar(
-                  id: loadedGame.gameId,
-                  onLoadGameCallback: onLoadGameCallback,
-                  onNewOpponentCallback: onNewOpponentCallback,
-                ),
-              ],
-            ),
+              ),
+              _GameBottomBar(
+                id: loadedGame.gameId,
+                onLoadGameCallback: onLoadGameCallback,
+                onNewOpponentCallback: onNewOpponentCallback,
+              ),
+            ],
           ),
         );
 
       case AsyncData(:final value, isRefreshing: true):
-        return Column(
-          children: [
-            Expanded(
-              child: StandaloneGameLoadingBoard(
-                fen: value.game.lastPosition.fen,
-                lastMove: value.game.moveAt(value.stepCursor) as NormalMove?,
-                orientation: value.game.youAre,
+        return InteractiveBoardScreen<void>(
+          boardKey: boardKey,
+          isInteractive: value.game.playable,
+          shouldSetImmersiveMode: shouldSetImmersiveMode,
+          onFocusRegained: () {
+            ref.read(ctrlProvider.notifier).onFocusRegained();
+          },
+          child: Column(
+            children: [
+              Expanded(
+                child: StandaloneGameLoadingBoard(
+                  fen: value.game.lastPosition.fen,
+                  lastMove: value.game.moveAt(value.stepCursor) as NormalMove?,
+                  orientation: value.game.youAre,
+                ),
               ),
-            ),
-            _GameBottomBar(
-              id: loadedGame.gameId,
-              onLoadGameCallback: onLoadGameCallback,
-              onNewOpponentCallback: onNewOpponentCallback,
-            ),
-          ],
+              _GameBottomBar(
+                id: loadedGame.gameId,
+                onLoadGameCallback: onLoadGameCallback,
+                onNewOpponentCallback: onNewOpponentCallback,
+              ),
+            ],
+          ),
         );
       case final _:
-        return Column(
-          children: [
-            Expanded(
-              child: StandaloneGameLoadingBoard(
-                fen: loadedGame.lastFen,
-                lastMove: loadedGame.lastMove,
-                orientation: loadedGame.side,
+        return InteractiveBoardScreen<void>(
+          isInteractive: false,
+          shouldSetImmersiveMode: shouldSetImmersiveMode,
+          boardKey: boardKey,
+          child: Column(
+            children: [
+              Expanded(
+                child: StandaloneGameLoadingBoard(
+                  fen: loadedGame.lastFen,
+                  lastMove: loadedGame.lastMove,
+                  orientation: loadedGame.side,
+                ),
               ),
-            ),
-            _GameBottomBar(
-              id: loadedGame.gameId,
-              onLoadGameCallback: onLoadGameCallback,
-              onNewOpponentCallback: onNewOpponentCallback,
-            ),
-          ],
+              _GameBottomBar(
+                id: loadedGame.gameId,
+                onLoadGameCallback: onLoadGameCallback,
+                onNewOpponentCallback: onNewOpponentCallback,
+              ),
+            ],
+          ),
         );
     }
   }
