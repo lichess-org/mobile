@@ -19,6 +19,7 @@ analyzer:
     - lib/src/styles/lichess_icons.dart
     - lib/src/styles/social_icons.dart
     - lib/firebase_options.dart
+    - lib/firebase_stubs.dart
     - lib/l10n/*.dart
   errors:
     invalid_annotation_target: ignore
