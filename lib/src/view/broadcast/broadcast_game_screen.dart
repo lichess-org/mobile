@@ -525,11 +525,23 @@ class _PlayerWidget extends ConsumerWidget {
 
         return GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
-              (tournamentId != null)
-                  ? BroadcastPlayerResultsScreen.buildRoute(context, tournamentId!, player)
-                  : BroadcastPlayerResultsScreenLoading.buildRoute(context, roundId, player),
-            );
+            if (player.id != null) {
+              Navigator.of(context).push(
+                (tournamentId != null)
+                    ? BroadcastPlayerResultsScreen.buildRoute(
+                        context,
+                        tournamentId!,
+                        player,
+                        player.id!,
+                      )
+                    : BroadcastPlayerResultsScreenLoading.buildRoute(
+                        context,
+                        roundId,
+                        player,
+                        player.id!,
+                      ),
+              );
+            }
           },
           child: Container(
             color: ColorScheme.of(context).surfaceContainer,

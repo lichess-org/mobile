@@ -250,9 +250,11 @@ class BroadcastPlayerRow extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.of(
-          context,
-        ).push(BroadcastPlayerResultsScreen.buildRoute(context, tournamentId, player));
+        if (player.id != null) {
+          Navigator.of(context).push(
+            BroadcastPlayerResultsScreen.buildRoute(context, tournamentId, player, player.id!),
+          );
+        }
       },
       child: ColoredBox(
         color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,

@@ -162,14 +162,14 @@ sealed class BroadcastPlayer with _$BroadcastPlayer {
   const BroadcastPlayer._();
 
   const factory BroadcastPlayer({
-    required String name,
+    required String? name,
     required String? title,
     required int? rating,
     required String? federation,
     required FideId? fideId,
   }) = _BroadcastPlayer;
 
-  String get id => (fideId != null) ? fideId.toString() : name;
+  String? get id => (fideId != null) ? fideId.toString() : name;
 }
 
 @freezed
