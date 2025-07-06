@@ -13,7 +13,7 @@ Gewinnst du zwei Partien in Folge, beginnst du eine Serie mit verdoppelter Punkt
 Das bedeutet, dass du für einen Sieg vier, für ein Remis zwei und für eine Niederlage keine Punkte bekommst.
 
 Beispiel: Zwei Siege, gefolgt von einem Remis sind 6 Punkte wert: 2 + 2 + (2 * 1)</string>
-  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Arena Berserk</string>
+  <string name="berserk">Arena Berserk</string>
   <string name="berserkAnswer">Wenn ein Spieler den \"Berserk\"-Knopf zu Beginn der Partie drückt, verliert er die Hälfte seiner Zeit auf der Uhr, aber ein Sieg wird mit einem zusätzlichen Turnierpunkt honoriert.
 
 In einem Zeitmodus mit Inkrement entfernt \"Berserk\" das Inkrement. (1+2 ist eine Ausnahme, es wird zu 1+0.)
@@ -68,8 +68,8 @@ Spiele schnell und kehre zur Turnierübersicht zurück, um mehr Spiele zu spiele
   <string name="whichTeamWillYouRepresentInThisBattle">Welches Team wirst du in diesem Kampf repräsentieren?</string>
   <string name="youMustJoinOneOfTheseTeamsToParticipate">Du musst dich einem dieser Teams anschließen, um teilnehmen zu können!</string>
   <string name="created">Erstellt</string>
-  <string name="recentlyPlayed" comment="Acts as the title of a personal page featuring the tournaments a player participated in, sorted by most recent Please keep your translation brief. Example: https://lichess.org/@/thibault/tournaments/recent">Kürzlich gespielt</string>
-  <string name="bestResults" comment="Acts as the title of a personal page featuring a player's best tournament results. Please keep it brief.&#10;&#10;Example: https://lichess.org/@/thibault/tournaments/best">Beste Ergebnisse</string>
+  <string name="recentlyPlayed">Kürzlich gespielt</string>
+  <string name="bestResults">Beste Ergebnisse</string>
   <string name="tournamentStats">Turnierstatistiken</string>
   <string name="rankAvgHelp">Der Platzierungs-Durchschnitt ist ein Prozentwert deiner Platzierungen. Niedriger ist besser.
 
@@ -85,5 +85,5 @@ Ein Beispiel: Wenn man in einem Turnier von 100 Spielern Platz 3 erreicht hat = 
   <string name="onlyTitled">Nur Spieler mit Titel</string>
   <string name="onlyTitledHelp">Für die Teilnahme am Turnier ist ein offizieller Titel erforderlich</string>
   <string name="tournamentPairingsAreNowClosed">Die Turnierpaarungen sind jetzt geschlossen.</string>
-  <string name="berserkRate" comment="The percentage of games a player 'berserked' in a tournament (see https://lichess.org/tournament/help?system=arena for an explanation of berserk mode).&#10;&#10;This shows up as a part of a player's stats after a tournament has finished on the tournament's page.">Berserker-Rate</string>
+  <string name="berserkRate">Berserker-Rate</string>
 </resources>

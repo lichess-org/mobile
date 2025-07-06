@@ -11,7 +11,7 @@
   <string name="howAreScoresCalculatedAnswer">По умолчанию победа приносит 2 очка, ничья — 1 очко, а проигрыш не приносит очков вовсе. Если вы одержите 2 победы подряд, то активируется удвоение очков, отображающееся значком с пламенем. Последующие игры будут приносить вдвое больше очков, пока вы побеждаете. Таким образом, победа принесёт 4 очка, ничья принесёт 2 очка и погасит пламя, а поражение просто погасит пламя.
 
 Например, две победы при последующей ничьей принесут 6 очков: 2 + 2 + (2 × 1)</string>
-  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Берсерк на Aрене</string>
+  <string name="berserk">Берсерк на Aрене</string>
   <string name="berserkAnswer">Если один из игроков нажмёт на кнопку Берсерка до того, как сделает первый ход, он потеряет половину времени, но победа принесёт ему дополнительное турнирное очко (которое не удваивается в режиме удвоения). Также будет убрано добавление времени на ход. Исключение составляет контроль 1+2, который превращается в 1+0 в режиме Берсерка.
 
 Режим Берсерка недоступен для игр с нулевым начальным временем (0+1, 0+2).
@@ -65,8 +65,8 @@
   <string name="whichTeamWillYouRepresentInThisBattle">Какой клуб вы представляете в этом турнире?</string>
   <string name="youMustJoinOneOfTheseTeamsToParticipate">Вы должны стать членом одного из этих клубов, чтобы участвовать!</string>
   <string name="created">Создан</string>
-  <string name="recentlyPlayed" comment="Acts as the title of a personal page featuring the tournaments a player participated in, sorted by most recent Please keep your translation brief. Example: https://lichess.org/@/thibault/tournaments/recent">Недавно сыгранные</string>
-  <string name="bestResults" comment="Acts as the title of a personal page featuring a player's best tournament results. Please keep it brief.&#10;&#10;Example: https://lichess.org/@/thibault/tournaments/best">Лучшие результаты</string>
+  <string name="recentlyPlayed">Недавно сыгранные</string>
+  <string name="bestResults">Лучшие результаты</string>
   <string name="tournamentStats">Турнирная статистика</string>
   <string name="rankAvgHelp">Среднее занятое место (вхождение в процент лучших игроков). Чем ниже значение, тем лучше.
 
@@ -82,5 +82,5 @@
   <string name="onlyTitled">Только игроки со званиями</string>
   <string name="onlyTitledHelp">Требуется официальное звание для участия в турнире</string>
   <string name="tournamentPairingsAreNowClosed">Жеребьёвка турнира закончена</string>
-  <string name="berserkRate" comment="The percentage of games a player 'berserked' in a tournament (see https://lichess.org/tournament/help?system=arena for an explanation of berserk mode).&#10;&#10;This shows up as a part of a player's stats after a tournament has finished on the tournament's page.">Берсерк</string>
+  <string name="berserkRate">Берсерк</string>
 </resources>
