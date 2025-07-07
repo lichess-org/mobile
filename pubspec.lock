@@ -769,18 +769,18 @@ packages:
     dependency: "direct main"
     description:
       name: freezed_annotation
-      sha256: c87ff004c8aa6af2d531668b46a4ea379f7191dc6dfa066acd53d506da6e044b
+      sha256: "7294967ff0a6d98638e7acb774aac3af2550777accd8149c90af5b014e6d44d8"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "3.1.0"
   freezed_lint:
     dependency: "direct dev"
     description:
       name: freezed_lint
-      sha256: "579196c8fd554d55f82d1fdc2369b89f5458d75f79799d0ea7eee0bc31caa0d3"
+      sha256: "389451a2a3d220c4ec7e057dea0ded1757c78af42680f42b3f12391f3188396a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.9"
+    version: "0.0.10"
   frontend_server_client:
     dependency: transitive
     description:
