@@ -39,7 +39,7 @@
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Axustes</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Marcador d\'allugamientu de la pieza arrastrada</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Círculu</string>
-  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Casiella</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Cuadráu</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Componentes de la páxina d\'entamu</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Mou inmersivu</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Esconder l\'interfaz del sistema mientres la partida. Emplega esto si moléstente los iconos del sistema nos cantos de la pantalla. Aplica a les pantalles del xuegu y de Puzzle Storm.</string>
