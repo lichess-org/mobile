@@ -209,7 +209,7 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(RequiredPick pick) {
 
 BroadcastPlayer _playerFromPick(RequiredPick pick) {
   return BroadcastPlayer(
-    name: pick('name').asStringOrThrow(),
+    name: pick('name').asStringOrNull(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
     federation: pick('fed').asStringOrNull(),
