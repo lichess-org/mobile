@@ -9,28 +9,28 @@ class AppLocalizationsMk extends AppLocalizations {
   AppLocalizationsMk([String locale = 'mk']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Поставки за акаунтот';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Поставките се однесуваат на вашиот акаунт и ќе бидат искористени низ сите ваши уреди.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Сите игри';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Дали сте сигурни?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Поставки за табла';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Откажи ја понудата за враќање';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Исчисти';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Исчисти зачуван потег';
 
   @override
   String get mobileCustomGameJoinAGame => 'Join a game';
@@ -40,47 +40,47 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Добра вечер, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Добра вечер';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Добар ден, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Добар ден';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Сокриј варијација';
 
   @override
   String get mobileHomeTab => 'Почетна';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Стримери во живо';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Мора да сте најавени за да ја видите оваа страница.';
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Нема резултати';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Не следите ниту еден корисник.';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'ОК';
 
   @override
   String get mobileOverTheBoard => 'Игра за двајца';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Играчи со \"$param\"';
   }
 
   @override
@@ -90,13 +90,13 @@ class AppLocalizationsMk extends AppLocalizations {
   String get mobilePositionRight => 'Десно';
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobilePrefMagnifyDraggedPiece => 'Зголеми ја повлечената фигура';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Нема што да се прикаже, ве молиме променете ги филтрите';
 
   @override
   String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
@@ -6060,7 +6060,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get timeagoRightNow => 'Тукушто';
 
   @override
-  String get timeagoCompleted => 'completed';
+  String get timeagoCompleted => 'завршено';
 
   @override
   String timeagoInNbSeconds(int count) {
@@ -6210,8 +6210,8 @@ class AppLocalizationsMk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count minutes remaining',
-      one: '$count minute remaining',
+      other: 'преостануваат $count минути',
+      one: 'преостанува $count минута',
     );
     return '$_temp0';
   }
@@ -6221,8 +6221,8 @@ class AppLocalizationsMk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count hours remaining',
-      one: '$count hour remaining',
+      other: 'преостануваат $count часови',
+      one: 'преостанува $count час',
     );
     return '$_temp0';
   }

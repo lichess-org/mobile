@@ -460,7 +460,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get arenaIsItRated => 'Is it rated?';
 
   @override
-  String get arenaWillBeNotified => 'You will be notified when the tournament starts, so it is safe to play in another tab while waiting.';
+  String get arenaWillBeNotified => 'You will be notified when the tournament starts, so feel free to leave this tab idle.';
 
   @override
   String get arenaIsRated => 'This tournament is rated and will affect your rating.';
@@ -6682,7 +6682,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get arenaIsItRated => 'Is it rated?';
 
   @override
-  String get arenaWillBeNotified => 'You will be notified when the tournament starts, so it is safe to play in another tab while waiting.';
+  String get arenaWillBeNotified => 'You will be notified when the tournament starts, so feel free to leave this tab idle.';
 
   @override
   String get arenaIsRated => 'This tournament is rated and will affect your rating.';

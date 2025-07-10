@@ -40,11 +40,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Buenas tardes, $param';
+    return 'Buenas noches, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Buenas tardes';
+  String get mobileGoodEveningWithoutName => 'Buenas noches';
 
   @override
   String mobileGoodDay(String param) {

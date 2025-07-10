@@ -990,11 +990,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastLiveboard => 'اللوحة الآن';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'بث المجتمع';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'تم إنشاؤها وإدارتها بواسطة $param.';
   }
 
   @override
@@ -6221,7 +6221,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return 'يمكن لـ$param1 متفرجين رؤية الدراسة والتكلم في المحادثة <br><br>$param2 المساهمين يستطيعون القيام بالحركات وتحديث الدراسة.';
   }
 
   @override
@@ -6253,13 +6253,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get studyConclusionTitle => 'شكرًا على وقتك';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'يمكنك إيجاد <a href=\'/study/mine/hot\'>الدراسات المسبقة</a> من ملفك الشخصي. <br>هناك أيضاً <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'> منشور على المدونة عن الدراسات </a>.<br> المستخدمين المتقدمين يمكنهم الضغط على \"؟\" لرؤية اختصارات لوحة المفاتيح. <br> استمتع!';
 
   @override
   String get studyCreateChapterTitle => 'دعنا ننشئ فصل جديد';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'يمكن للدراسة أن تحتوي على عدة فصول.<br>كل فصل لديه شجرة حركات مختلفة،<br> ويمكن إنشاؤها بطرق مختلفة.';
 
   @override
   String get studyFromInitialPositionTitle => 'البدء من وضع البداية';
@@ -6271,37 +6271,37 @@ class AppLocalizationsAr extends AppLocalizations {
   String get studyCustomPositionTitle => 'موضع مخصص';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'قم بتهيئة اللوحة بطريقتك.<br> لتكون مناسبة لاستكشاف نهاية الألعاب.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'تحميل لعبة Lichess مسبقة';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText => 'قم بلصق رابط لعبة Lichess<br>(مثل lichess.org/7fHIU0XI)<br>لتحميل حركات اللعبة في الفصل.';
 
   @override
   String get studyFromFenStringTitle => 'من نص FEN';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => 'الصق موقع لعبة بصيغة FEN<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br> لتبدأ الفصل من موقع محدد.';
 
   @override
   String get studyFromPgnGameTitle => 'من PGN لعبة';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'الصق لعبة بصيغة PGN.<br> لتحميل الحركات، الأوامر، والتغييرات في الفصل.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'تدعم الدراسات أنماط الشطرنج المختلفة';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'نعم، يمكنك دراسة البيت المجنون<br>وجميع أنواع ألعاب Lichess!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => 'يتم حفظ الفصول للأبد.<br> استمتعوا بتنظيم محتوى الشطرنج خاصتكم!';
 
   @override
-  String get studyDoubleDefeat => 'Double defeat';
+  String get studyDoubleDefeat => 'هزيمة مزدوجة';
 
   @override
   String get studyBlackDefeatWhiteCanNotWin => 'الأسود مهزوم, لكن الأبيض لا يستطيع الفوز';

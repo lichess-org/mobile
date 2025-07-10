@@ -1663,8 +1663,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles found in games by $param2',
-      one: 'One puzzle found in games by $param2',
+      other: '$count bulmaca oyunlar arasında $param2 tarafından bulundu',
+      one: 'Bir bulmaca oyunlar arasında $param2 tarafından bulundu',
     );
     return '$_temp0';
   }
@@ -5980,7 +5980,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyLoadExistingLichessGameText => 'Lichess oyun URL\'sini yapıştırın<br>(örneğin lichess.org/7fHIU0XI)<br>bölümdeki oyun hamlelerini yüklemek için.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'Bir FEN dizisinden';
 
   @override
   String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';

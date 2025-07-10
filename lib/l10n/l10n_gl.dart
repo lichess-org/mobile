@@ -460,7 +460,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get arenaIsItRated => 'É puntuado?';
 
   @override
-  String get arenaWillBeNotified => 'Serás notificado cando comece o torneo, polo que podes xogar sen problema noutra lapela mentres agardas.';
+  String get arenaWillBeNotified => 'Serás notificado cando comece o torneo, polo que podes cambiar de lapela sen problema.';
 
   @override
   String get arenaIsRated => 'Este torneo é puntuado e afectará á túa puntuación.';
@@ -1292,7 +1292,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get preferencesClickTwoSquares => 'Premendo na casa de orixe e despois na de destino';
 
   @override
-  String get preferencesDragPiece => 'Arrastrando a peza';
+  String get preferencesDragPiece => 'Arrastrar a peza';
 
   @override
   String get preferencesBothClicksAndDrag => 'Ambas';

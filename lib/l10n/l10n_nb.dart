@@ -117,7 +117,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileRecentSearches => 'Nylige søk';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Fjern bokmerke';
 
   @override
   String get mobileSettingsClockPosition => 'Klokkeposisjon';
@@ -156,10 +156,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'Blur the image';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Skjul brettet';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Vis brettet';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';

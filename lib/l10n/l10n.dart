@@ -791,7 +791,7 @@ abstract class AppLocalizations {
   /// No description provided for @arenaWillBeNotified.
   ///
   /// In en, this message translates to:
-  /// **'You will be notified when the tournament starts, so it is safe to play in another tab while waiting.'**
+  /// **'You will be notified when the tournament starts, so feel free to leave this tab idle.'**
   String get arenaWillBeNotified;
 
   /// No description provided for @arenaIsRated.

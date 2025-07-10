@@ -9,7 +9,7 @@ class AppLocalizationsSr extends AppLocalizations {
   AppLocalizationsSr([String locale = 'sr']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Подешавања налога';
+  String get mobileAccountPreferences => 'Преференсе налога';
 
   @override
   String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
@@ -40,7 +40,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Добро вече';
+    return 'Добро вече, $param';
   }
 
   @override
@@ -48,7 +48,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String mobileGoodDay(String param) {
-    return 'Добар дан';
+    return 'Добар дан, $param';
   }
 
   @override
@@ -120,7 +120,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileSettingsClockPosition => 'Позиција сата';
+  String get mobileSettingsClockPosition => 'Позиција шаховског сата';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -132,7 +132,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileSettingsDraggedTargetCircle => 'Круг';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Квадрат';
+  String get mobileSettingsDraggedTargetSquare => 'Поље';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -141,7 +141,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Режим целог екрана';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Склонити системски интерфејс у току игре. Користите ово уколико вам сметају системске навигације на угловима екрана. Примењује се и у партијама и у вежбама.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Склони системско корисничко окружење током играња. Користи ово ако ти сметају навигационе гестуре система на ивицама екрана. Примењује се на партијским и проблемским екранима.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
@@ -174,7 +174,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileSettingsShapeDrawing => 'Shape drawing';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Нацртајте облик користећи два прста: један прст на празном пољу, а превуци други прст да нацртате облик.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Цртај облике користећи два прста: један прст држи на празном пољу и превуци други прст да нацрташ облик.';
 
   @override
   String get mobileSettingsShowBorder => 'Show border';
@@ -236,7 +236,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileWatchTab => 'Гледај';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Добродошли на Личес апликацију!';
+  String get mobileWelcomeToLichessApp => 'Добродошли у Lichess апликацију!';
 
   @override
   String get activityActivity => 'Активност';
@@ -2186,7 +2186,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get createAGame => 'Започни нову партију';
 
   @override
-  String get createTheGame => 'Креирај игру';
+  String get createTheGame => 'Започни партију';
 
   @override
   String get whiteIsVictorious => 'Бели је поебдио';
@@ -2440,7 +2440,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get allSet => 'Све спремно!';
 
   @override
-  String get importPgn => 'Унеси PGN';
+  String get importPgn => 'Увези PGN';
 
   @override
   String get delete => 'Избриши';
@@ -3081,7 +3081,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get importGame => 'Увези партију';
 
   @override
-  String get importGameExplanation => 'Кад прекопирате партију у PGN-у, отвори се табла за поновно проигравање,\nрачунарска анализа, прозор за ћаскање и адреса странице коју можете поделити.';
+  String get importGameExplanation => 'Налепи PGN партије да добијеш проигриву репризу, рачунарску анализу, ћаскање партије и јавни линк за дељење.';
 
   @override
   String get importGameCaveat => 'Варијације ће бити избрисане. Ако желиш да их сачуваш, увези PGN путем студије.';

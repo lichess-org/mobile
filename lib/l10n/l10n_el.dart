@@ -4132,10 +4132,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get background => 'Φόντο';
 
   @override
-  String get light => 'Φωτεινό';
+  String get light => 'Ανοιχτόχρωμο';
 
   @override
-  String get dark => 'Σκοτεινό';
+  String get dark => 'Σκουρόχρωμο';
 
   @override
   String get transparent => 'Διάφανο';
