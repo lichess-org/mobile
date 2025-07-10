@@ -123,6 +123,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remover dos Favoritos';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Posição do relógio';
 
   @override

@@ -123,6 +123,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileRemoveBookmark => 'Удалить из избранного';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Расположение часов';
 
   @override

@@ -65,7 +65,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
             children: [
               SwitchSettingTile(
                 title: Text(context.l10n.computerAnalysis),
-                value: broadcastPrefs.enableComputerAnalysis,
+                value: broadcastPrefs.enableServerAnalysis,
                 onChanged: (_) {
                   ref.read(broadcastPreferencesProvider.notifier).toggleEnableComputerAnalysis();
                 },

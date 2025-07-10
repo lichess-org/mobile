@@ -123,6 +123,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Pulksteņa novietojums';
 
   @override

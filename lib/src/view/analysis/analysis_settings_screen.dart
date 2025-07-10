@@ -60,10 +60,11 @@ class AnalysisSettingsScreen extends ConsumerWidget {
               ),
               if (value.isComputerAnalysisAllowed) ...[
                 ListSection(
+                  header: SettingsSectionTitle(context.l10n.computerAnalysis),
                   children: [
                     SwitchSettingTile(
-                      title: Text(context.l10n.computerAnalysis),
-                      value: prefs.enableComputerAnalysis,
+                      title: Text(context.l10n.mobileServerAnalysis),
+                      value: prefs.enableServerAnalysis,
                       onChanged: (_) {
                         ref
                             .read(analysisPreferencesProvider.notifier)

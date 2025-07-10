@@ -33,7 +33,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
     final pgnHeaders = ref.watch(ctrlProvider.select((value) => value.requireValue.pgnHeaders));
     final currentGameAnalysis = ref.watch(currentAnalysisProvider);
 
-    if (analysisPrefs.enableComputerAnalysis == false || !canShowGameSummary) {
+    if (analysisPrefs.enableServerAnalysis == false || !canShowGameSummary) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),

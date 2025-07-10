@@ -24,7 +24,7 @@ class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<
   }
 
   Future<void> toggleEnableComputerAnalysis() {
-    return save(state.copyWith(enableComputerAnalysis: !state.enableComputerAnalysis));
+    return save(state.copyWith(enableServerAnalysis: !state.enableServerAnalysis));
   }
 
   Future<void> toggleShowEvaluationGauge() {
@@ -61,7 +61,7 @@ sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   const AnalysisPrefs._();
 
   const factory AnalysisPrefs({
-    @JsonKey(defaultValue: true) required bool enableComputerAnalysis,
+    @JsonKey(defaultValue: true) required bool enableServerAnalysis,
     required bool showEvaluationGauge,
     @JsonKey(defaultValue: true) required bool showEngineLines,
     required bool showBestMoveArrow,
@@ -72,7 +72,7 @@ sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   }) = _AnalysisPrefs;
 
   static const defaults = AnalysisPrefs(
-    enableComputerAnalysis: true,
+    enableServerAnalysis: true,
     showEvaluationGauge: true,
     showEngineLines: true,
     showBestMoveArrow: true,

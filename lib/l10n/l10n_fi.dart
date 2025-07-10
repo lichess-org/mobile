@@ -123,6 +123,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileRemoveBookmark => 'Poista kirjanmerkki';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Kellon sijainti';
 
   @override

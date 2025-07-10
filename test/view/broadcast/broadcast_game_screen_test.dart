@@ -111,7 +111,7 @@ void main() {
         await makeEngineTestApp(
           tester,
           broadcastGame: (_tournamentId, _roundId, _gameId),
-          isComputerAnalysisEnabled: false,
+          isServerAnalysisEnabled: false,
           isEngineEnabled: false,
         );
         await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
@@ -144,7 +144,7 @@ void main() {
         await makeEngineTestApp(
           tester,
           broadcastGame: (_tournamentId, _roundId, _gameIdWithServerAnalysis),
-          isComputerAnalysisEnabled: false,
+          isServerAnalysisEnabled: false,
           isEngineEnabled: false,
         );
         await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);

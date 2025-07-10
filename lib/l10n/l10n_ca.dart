@@ -123,6 +123,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileRemoveBookmark => 'Suprimeix el marcador';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Posició del rellotge';
 
   @override

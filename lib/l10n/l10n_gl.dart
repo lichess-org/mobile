@@ -123,6 +123,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Eliminar marcador';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Posición do reloxo';
 
   @override

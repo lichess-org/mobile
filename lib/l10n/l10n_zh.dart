@@ -123,6 +123,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileRemoveBookmark => '删除书签';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => '棋钟位置';
 
   @override

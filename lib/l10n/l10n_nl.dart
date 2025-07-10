@@ -123,6 +123,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Bladwijzer verwijderen';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Positie klok';
 
   @override

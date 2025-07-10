@@ -236,7 +236,7 @@ class AnalysisController extends _$AnalysisController
       pov: options.orientation,
       contextOpening: opening,
       isComputerAnalysisAllowed: isComputerAnalysisAllowed,
-      isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
+      isServerAnalysisEnabled: prefs.enableServerAnalysis,
       evaluationContext: EvaluationContext(variant: _variant, initialPosition: _root.position),
       playersAnalysis: serverAnalysis,
       acplChartData: serverAnalysis != null ? _makeAcplChartData() : null,
@@ -686,10 +686,8 @@ sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState 
     /// Acts on both local and server analysis.
     required bool isComputerAnalysisAllowed,
 
-    /// Whether the user has enabled computer analysis.
-    ///
-    /// This is a user preference and acts both on local and server analysis.
-    required bool isComputerAnalysisEnabled,
+    /// Whether the user has enabled server analysis.
+    required bool isServerAnalysisEnabled,
 
     /// The context that the local engine is initialized with.
     required EvaluationContext evaluationContext,
@@ -744,10 +742,10 @@ sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState 
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
       isEngineAvailable(prefs) ||
-      (isComputerAnalysisAllowedAndEnabled && acplChartData != null && acplChartData!.isNotEmpty);
-
-  bool get isComputerAnalysisAllowedAndEnabled =>
-      isComputerAnalysisAllowed && isComputerAnalysisEnabled;
+      (isComputerAnalysisAllowed &&
+          isServerAnalysisEnabled &&
+          acplChartData != null &&
+          acplChartData!.isNotEmpty);
 
   /// Whether the engine is allowed for this analysis and variant.
   bool get isEngineAllowed =>

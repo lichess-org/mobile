@@ -123,6 +123,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileRemoveBookmark => 'Könyvjelző eltávolítása';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Óra helye';
 
   @override

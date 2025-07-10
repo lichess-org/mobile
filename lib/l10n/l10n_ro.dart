@@ -123,6 +123,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileRemoveBookmark => 'Îndepărtează marcajul';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Poziția ceasului';
 
   @override

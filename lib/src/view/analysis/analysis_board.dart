@@ -47,7 +47,9 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final showBestMoveArrow =
         analysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
     final showAnnotations =
-        analysisState.isComputerAnalysisAllowedAndEnabled && analysisPrefs.showAnnotations;
+        analysisState.isComputerAnalysisAllowed &&
+        analysisState.isServerAnalysisEnabled &&
+        analysisPrefs.showAnnotations;
     final currentNode = analysisState.currentNode;
 
     final bestMoves = showBestMoveArrow

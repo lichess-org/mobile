@@ -123,6 +123,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Позиција шаховског сата';
 
   @override

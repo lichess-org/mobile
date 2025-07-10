@@ -36,6 +36,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Puzzles</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recent searches</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Remove bookmark</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Server analysis</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Clock position</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Presets</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Dragged piece target</string>

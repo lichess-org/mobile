@@ -356,10 +356,10 @@ class _BroadcastGameTreeView extends ConsumerWidget {
         currentPath: state.currentPath,
         livePath: state.broadcastLivePath,
         pgnRootComments: state.pgnRootComments,
-        shouldShowComputerAnalysis: broadcastPrefs.enableComputerAnalysis,
-        shouldShowComments: broadcastPrefs.enableComputerAnalysis && broadcastPrefs.showPgnComments,
+        shouldShowComputerAnalysis: broadcastPrefs.enableServerAnalysis,
+        shouldShowComments: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showPgnComments,
         shouldShowAnnotations:
-            broadcastPrefs.enableComputerAnalysis && broadcastPrefs.showAnnotations,
+            broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
         notifier: ref.read(ctrlProvider.notifier),
         displayMode: broadcastPrefs.inlineNotation
             ? PgnTreeDisplayMode.inlineNotation
@@ -413,7 +413,7 @@ class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
     final showBestMoveArrow =
         broadcastAnalysisState.isEngineAvailable(enginePrefs) && broadcastPrefs.showBestMoveArrow;
     final showAnnotations =
-        broadcastAnalysisState.isComputerAnalysisEnabled && broadcastPrefs.showAnnotations;
+        broadcastAnalysisState.isServerAnalysisEnabled && broadcastPrefs.showAnnotations;
     final currentNode = broadcastAnalysisState.currentNode;
 
     final bestMoves = showBestMoveArrow

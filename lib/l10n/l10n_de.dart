@@ -123,6 +123,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileRemoveBookmark => 'Lesezeichen löschen';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Uhrposition';
 
   @override

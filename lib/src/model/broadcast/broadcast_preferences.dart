@@ -29,7 +29,7 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
   }
 
   Future<void> toggleEnableComputerAnalysis() {
-    return save(state.copyWith(enableComputerAnalysis: !state.enableComputerAnalysis));
+    return save(state.copyWith(enableServerAnalysis: !state.enableServerAnalysis));
   }
 
   Future<void> toggleShowEvaluationGauge() {
@@ -65,7 +65,7 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
 sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable {
   const factory BroadcastPrefs({
     required bool showEvaluationBar,
-    @JsonKey(defaultValue: true) required bool enableComputerAnalysis,
+    @JsonKey(defaultValue: true) required bool enableServerAnalysis,
     @JsonKey(defaultValue: true) required bool showEvaluationGauge,
     @JsonKey(defaultValue: true) required bool showEngineLines,
     @JsonKey(defaultValue: true) required bool showBestMoveArrow,
@@ -77,7 +77,7 @@ sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable {
 
   static const defaults = BroadcastPrefs(
     showEvaluationBar: true,
-    enableComputerAnalysis: true,
+    enableServerAnalysis: true,
     showEvaluationGauge: true,
     showEngineLines: true,
     showBestMoveArrow: true,

@@ -123,6 +123,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileRemoveBookmark => 'Bỏ đánh dấu';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Vị trí đồng hồ';
 
   @override

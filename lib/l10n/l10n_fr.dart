@@ -123,6 +123,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Supprimer le favori';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Position de l\'horloge';
 
   @override

@@ -123,6 +123,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Yer işaretini kaldır';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Saat pozisyonu';
 
   @override

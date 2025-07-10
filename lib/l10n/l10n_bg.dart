@@ -123,6 +123,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Позиция на часовника';
 
   @override

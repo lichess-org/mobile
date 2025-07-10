@@ -123,6 +123,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileRemoveBookmark => '북마크 제거';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => '시계 위치';
 
   @override

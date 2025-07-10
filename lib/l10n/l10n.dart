@@ -410,6 +410,12 @@ abstract class AppLocalizations {
   /// **'Remove bookmark'**
   String get mobileRemoveBookmark;
 
+  /// No description provided for @mobileServerAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Server analysis'**
+  String get mobileServerAnalysis;
+
   /// No description provided for @mobileSettingsClockPosition.
   ///
   /// In en, this message translates to:

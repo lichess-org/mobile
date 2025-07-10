@@ -503,7 +503,7 @@ void main() {
         await makeEngineTestApp(
           tester,
           gameId: const GameId('xze7RH66'),
-          isComputerAnalysisEnabled: false,
+          isServerAnalysisEnabled: false,
           isEngineEnabled: false,
         );
         // ensure that the eval is displayed and pending eval throttle time is over
@@ -539,7 +539,7 @@ void main() {
       ) async {
         await makeEngineTestApp(
           tester,
-          isComputerAnalysisEnabled: false,
+          isServerAnalysisEnabled: false,
           isEngineEnabled: false,
           gameId: const GameId('xze7RH66'),
         );

@@ -144,7 +144,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
         variant: Variant.standard,
         initialPosition: _root.position,
       ),
-      isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
+      isServerAnalysisEnabled: prefs.enableServerAnalysis,
       clocks: _getClocks(currentPath),
     );
 
@@ -535,10 +535,8 @@ sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements Eva
     /// The side to display the board from.
     required Side pov,
 
-    /// Whether the user has enabled computer analysis.
-    ///
-    /// This is a user preference and acts on server analysis.
-    required bool isComputerAnalysisEnabled,
+    /// Whether the user has enabled server analysis.
+    required bool isServerAnalysisEnabled,
 
     required EvaluationContext evaluationContext,
 
@@ -578,7 +576,7 @@ sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements Eva
 
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
-      isEngineAvailable(prefs) || (isComputerAnalysisEnabled && currentNode.serverEval != null);
+      isEngineAvailable(prefs) || (isServerAnalysisEnabled && currentNode.serverEval != null);
 
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) => prefs.isEnabled;
