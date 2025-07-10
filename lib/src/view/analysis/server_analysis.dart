@@ -45,7 +45,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
               if (canShowGameSummary)
                 FilledButton.tonal(
                   onPressed: () {
-                    ref.read(ctrlProvider.notifier).toggleComputerAnalysis();
+                    ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
                   },
                   child: Text(context.l10n.enable),
                 ),
