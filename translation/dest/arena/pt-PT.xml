@@ -14,7 +14,7 @@ Nos jogos seguintes continuarás a receber o dobro dos pontos até perderes algu
 Isto é, uma vitória valerá 4 pontos, um empate 2 pontos, e uma derrota não vale pontos.
 
 Por exemplo, duas vitórias seguidas de um empate valem 6 pontos: 2 + 2 + (2 × 1)</string>
-  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Arena frenética</string>
+  <string name="berserk">Arena frenética</string>
   <string name="berserkAnswer">Quando um jogador clica no botão \"frenético\" no inicio de um jogo, este perde metade do tempo de relógio, mas a vitória vale um ponto de torneio extra.
 
 Ficar frenético em jogos com incremento de tempo também cancela o incremento, (1+2 é uma exceção, pois fica 1+0).
@@ -68,8 +68,8 @@ Joga rápido e volta ao vestíbulo para jogares mais jogos e ganhares mais ponto
   <string name="whichTeamWillYouRepresentInThisBattle">Qual equipa vais representar nesta batalha?</string>
   <string name="youMustJoinOneOfTheseTeamsToParticipate">Deves juntar a uma destas equipas para participar!</string>
   <string name="created">Criado</string>
-  <string name="recentlyPlayed" comment="Acts as the title of a personal page featuring the tournaments a player participated in, sorted by most recent Please keep your translation brief. Example: https://lichess.org/@/thibault/tournaments/recent">Jogado recentemente</string>
-  <string name="bestResults" comment="Acts as the title of a personal page featuring a player's best tournament results. Please keep it brief.&#10;&#10;Example: https://lichess.org/@/thibault/tournaments/best">Melhores resultados</string>
+  <string name="recentlyPlayed">Jogado recentemente</string>
+  <string name="bestResults">Melhores resultados</string>
   <string name="tournamentStats">Estatísticas do torneio</string>
   <string name="rankAvgHelp">A média da classificação é uma percentagem da tua classificação. Menor é melhor.
 
@@ -85,5 +85,5 @@ Por exemplo, ficar em 3º lugar num torneio de 100 jogadores = 3%. Estar em 10º
   <string name="onlyTitled">Apenas jogadores titulados</string>
   <string name="onlyTitledHelp">Exigir um título oficial para entrar no torneio</string>
   <string name="tournamentPairingsAreNowClosed">Os emparelhamentos no torneio já estão fechados.</string>
-  <string name="berserkRate" comment="The percentage of games a player 'berserked' in a tournament (see https://lichess.org/tournament/help?system=arena for an explanation of berserk mode).&#10;&#10;This shows up as a part of a player's stats after a tournament has finished on the tournament's page.">Taxa Frenética</string>
+  <string name="berserkRate">Taxa Frenética</string>
 </resources>

@@ -14,7 +14,7 @@ Els següents jocs tindran doble puntuació fins que no guanyis un joc.
 Així doncs una victòria valdrà 4 punts, un empat 2 punts, i res una derrota.
 
 Per exemple, dos victòries seguides d’un empat valdrà 6 punts: 2 + 2 + (2 x 1)</string>
-  <string name="berserk" comment="Appears as a heading on the Arena tournament FAQ on https://lichess.org/tournament/help">Mode Berserk</string>
+  <string name="berserk">Mode Berserk</string>
   <string name="berserkAnswer">Quan un jugador clica el botó de berserk al principi d’una partida, perd la meitat del seu temps, però la victòria val un punt adicional.
 
 En controls de temps que tenen increment, l’opció berserk també canceŀla l’increment (1+2 és una excepció, ja que només es canceŀla l’increment, però no es parteix el temps a la meitat, resultant en 1+0).
@@ -66,8 +66,8 @@ Juga ràpid i torna al vestíbul per jugar més partits i guanyar més punts.</s
   <string name="whichTeamWillYouRepresentInThisBattle">Quin equip vols representar en aquesta batalla?</string>
   <string name="youMustJoinOneOfTheseTeamsToParticipate">Heu d\'unir-vos a un d\'aquests equips per participar!</string>
   <string name="created">Creat el</string>
-  <string name="recentlyPlayed" comment="Acts as the title of a personal page featuring the tournaments a player participated in, sorted by most recent Please keep your translation brief. Example: https://lichess.org/@/thibault/tournaments/recent">Jugat recentment</string>
-  <string name="bestResults" comment="Acts as the title of a personal page featuring a player's best tournament results. Please keep it brief.&#10;&#10;Example: https://lichess.org/@/thibault/tournaments/best">Millors resultats</string>
+  <string name="recentlyPlayed">Jugat recentment</string>
+  <string name="bestResults">Millors resultats</string>
   <string name="tournamentStats">Estadístiques del torneig</string>
   <string name="rankAvgHelp">El rànquing mitjà és un percentatge del vostre rànquing. Els valors més petits són millors.
 
@@ -83,5 +83,5 @@ Per exemple, estar en el tercer lloc en un torneig de 100 jugadors = 3%. Ser cla
   <string name="onlyTitled">Només jugadors titulats</string>
   <string name="onlyTitledHelp">Demana un títol oficial per entrar al torneig</string>
   <string name="tournamentPairingsAreNowClosed">Els emparellaments del torneig ja estan tancats.</string>
-  <string name="berserkRate" comment="The percentage of games a player 'berserked' in a tournament (see https://lichess.org/tournament/help?system=arena for an explanation of berserk mode).&#10;&#10;This shows up as a part of a player's stats after a tournament has finished on the tournament's page.">Taxa de Berserk</string>
+  <string name="berserkRate">Taxa de Berserk</string>
 </resources>
