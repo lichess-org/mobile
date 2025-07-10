@@ -309,7 +309,10 @@ bool _displaySideLineAsInline(ViewBranch node, [int depth = 0]) {
 bool _hasNonInlineSideLine(ViewNode node, _PgnTreeViewParams params, {required bool isMainline}) {
   final children = _filteredChildren(node, params.shouldShowComputerAnalysis);
   return isMainline && params.displayMode == PgnTreeDisplayMode.twoColumn
-      ? children.length >= 2 || node.children.firstOrNull?.hasTextComment == true
+      ? children.length >= 2 ||
+            (params.shouldShowComputerAnalysis &&
+                params.shouldShowComments &&
+                children.firstOrNull?.hasTextComment == true)
       : children.length > 2 || (children.length == 2 && !_displaySideLineAsInline(children[1]));
 }
 
@@ -402,16 +405,19 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
 
           if (fullRebuild || subtrees[i].containsCurrentMove || containsCurrentMove) {
             // Skip the first node which is the continuation of the mainline
-            final sidelineNodes = mainlineNodes.last.children.skip(1);
+            final filteredSidelineNodes = _filteredChildren(
+              mainlineNodes.last,
+              widget.params.shouldShowComputerAnalysis,
+            ).skip(1);
             return (
               mainLinePart: _MainLinePart(
                 params: widget.params,
                 initialPath: mainlineInitialPath,
                 nodes: mainlineNodes,
               ),
-              sidelines: sidelineNodes.isNotEmpty
+              sidelines: filteredSidelineNodes.isNotEmpty
                   ? _IndentedSideLines(
-                      sidelineNodes,
+                      filteredSidelineNodes,
                       parent: mainlineNodes.last,
                       params: widget.params,
                       initialPath: sidelineInitialPath,
