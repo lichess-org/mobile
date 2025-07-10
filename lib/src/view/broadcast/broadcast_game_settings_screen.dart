@@ -62,65 +62,45 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
             ],
           ),
           ListSection(
-            header: SettingsSectionTitle(context.l10n.computerAnalysis),
             children: [
               SwitchSettingTile(
-                title: Text(context.l10n.enable),
+                title: Text(context.l10n.computerAnalysis),
                 value: broadcastPrefs.enableComputerAnalysis,
                 onChanged: (_) {
-                  ref.read(controller.notifier).toggleComputerAnalysis();
+                  ref.read(broadcastPreferencesProvider.notifier).toggleEnableComputerAnalysis();
                 },
               ),
-              AnimatedCrossFade(
-                duration: const Duration(milliseconds: 300),
-                crossFadeState: broadcastPrefs.enableComputerAnalysis
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
-                firstChild: const SizedBox.shrink(),
-                secondChild: Column(
-                  children: [
-                    SwitchSettingTile(
-                      title: Text(context.l10n.evaluationGauge),
-                      value: broadcastPrefs.showEvaluationGauge,
-                      onChanged: (value) => ref
-                          .read(broadcastPreferencesProvider.notifier)
-                          .toggleShowEvaluationGauge(),
-                    ),
-                    SwitchSettingTile(
-                      title: Text(context.l10n.toggleGlyphAnnotations),
-                      value: broadcastPrefs.showAnnotations,
-                      onChanged: (_) =>
-                          ref.read(broadcastPreferencesProvider.notifier).toggleAnnotations(),
-                    ),
-                    SwitchSettingTile(
-                      title: Text(context.l10n.mobileShowComments),
-                      value: broadcastPrefs.showPgnComments,
-                      onChanged: (_) =>
-                          ref.read(broadcastPreferencesProvider.notifier).togglePgnComments(),
-                    ),
-                    SwitchSettingTile(
-                      title: Text(context.l10n.bestMoveArrow),
-                      value: broadcastPrefs.showBestMoveArrow,
-                      onChanged: (value) =>
-                          ref.read(broadcastPreferencesProvider.notifier).toggleShowBestMoveArrow(),
-                    ),
-                  ],
-                ),
+              SwitchSettingTile(
+                title: Text(context.l10n.evaluationGauge),
+                value: broadcastPrefs.showEvaluationGauge,
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleShowEvaluationGauge(),
+              ),
+              SwitchSettingTile(
+                title: Text(context.l10n.toggleGlyphAnnotations),
+                value: broadcastPrefs.showAnnotations,
+                onChanged: (_) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleAnnotations(),
+              ),
+              SwitchSettingTile(
+                title: Text(context.l10n.mobileShowComments),
+                value: broadcastPrefs.showPgnComments,
+                onChanged: (_) =>
+                    ref.read(broadcastPreferencesProvider.notifier).togglePgnComments(),
+              ),
+              SwitchSettingTile(
+                title: Text(context.l10n.bestMoveArrow),
+                value: broadcastPrefs.showBestMoveArrow,
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleShowBestMoveArrow(),
               ),
             ],
           ),
-          AnimatedCrossFade(
-            duration: const Duration(milliseconds: 300),
-            crossFadeState: broadcastPrefs.enableComputerAnalysis
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
-            firstChild: const SizedBox.shrink(),
-            secondChild: EngineSettingsWidget(
-              onSetEngineSearchTime: (value) =>
-                  ref.read(controller.notifier).setEngineSearchTime(value),
-              onSetNumEvalLines: (value) => ref.read(controller.notifier).setNumEvalLines(value),
-              onSetEngineCores: (value) => ref.read(controller.notifier).setEngineCores(value),
-            ),
+          EngineSettingsWidget(
+            onSetEngineSearchTime: (value) =>
+                ref.read(controller.notifier).setEngineSearchTime(value),
+            onSetNumEvalLines: (value) => ref.read(controller.notifier).setNumEvalLines(value),
+            onSetEngineCores: (value) => ref.read(controller.notifier).setEngineCores(value),
           ),
         ],
       ),

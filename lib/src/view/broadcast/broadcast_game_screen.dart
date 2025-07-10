@@ -642,7 +642,6 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
@@ -664,9 +663,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
               builder: (context, snapshot) {
                 return BottomBarButton(
                   label: context.l10n.toggleLocalEvaluation,
-                  onTap:
-                      broadcastPrefs.enableComputerAnalysis &&
-                          snapshot.connectionState != ConnectionState.waiting
+                  onTap: snapshot.connectionState != ConnectionState.waiting
                       ? () async {
                           toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
                           try {

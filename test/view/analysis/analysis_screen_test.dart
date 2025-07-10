@@ -497,8 +497,15 @@ void main() {
         expect(find.byType(Engineline), findsNothing);
       });
 
-      testWidgets('are not displayed if computer analysis is not enabled', (tester) async {
-        await makeEngineTestApp(tester, isComputerAnalysisEnabled: false);
+      testWidgets('are not displayed if computer analysis is not enabled (on an analysed game)', (
+        tester,
+      ) async {
+        await makeEngineTestApp(
+          tester,
+          gameId: const GameId('xze7RH66'),
+          isComputerAnalysisEnabled: false,
+          isEngineEnabled: false,
+        );
         // ensure that the eval is displayed and pending eval throttle time is over
         await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.byType(Engineline), findsNothing);
@@ -527,10 +534,13 @@ void main() {
         expect(find.byType(EngineGauge), findsNothing);
       });
 
-      testWidgets('is not displayed if computer analysis is not enabled', (tester) async {
+      testWidgets('is not displayed if computer analysis is not enabled (on an analysed game)', (
+        tester,
+      ) async {
         await makeEngineTestApp(
           tester,
           isComputerAnalysisEnabled: false,
+          isEngineEnabled: false,
           gameId: const GameId('xze7RH66'),
         );
         // ensure that the eval is displayed and pending eval throttle time is over
@@ -577,13 +587,6 @@ void main() {
 
       testWidgets('is not displayed if computer analysis is not allowed', (tester) async {
         await makeEngineTestApp(tester, isComputerAnalysisAllowed: false);
-        // ensure that the eval is displayed and pending eval throttle time is over
-        await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
-        expect(find.byType(BoardShapeWidget), findsNothing);
-      });
-
-      testWidgets('is not displayed if computer analysis is not enabled', (tester) async {
-        await makeEngineTestApp(tester, isComputerAnalysisEnabled: false);
         // ensure that the eval is displayed and pending eval throttle time is over
         await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.byType(BoardShapeWidget), findsNothing);

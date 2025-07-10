@@ -416,25 +416,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
-  /// Toggles the computer analysis on/off.
-  ///
-  /// Acts both on engine evaluation and server analysis.
-  Future<void> toggleComputerAnalysis() async {
-    await ref.read(broadcastPreferencesProvider.notifier).toggleEnableComputerAnalysis();
-
-    final curState = state.requireValue;
-    final engineWasAvailable = curState.isEngineAvailable(evaluationPrefs);
-
-    state = AsyncData(
-      curState.copyWith(isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled),
-    );
-
-    final computerAllowed = state.requireValue.isComputerAnalysisEnabled;
-    if (!computerAllowed && engineWasAvailable) {
-      toggleEngine();
-    }
-  }
-
   void _setPath(
     UciPath path, {
     bool shouldForceShowVariation = false,
@@ -556,7 +537,7 @@ sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements Eva
 
     /// Whether the user has enabled computer analysis.
     ///
-    /// This is a user preference and acts both on local and server analysis.
+    /// This is a user preference and acts on server analysis.
     required bool isComputerAnalysisEnabled,
 
     required EvaluationContext evaluationContext,
@@ -600,8 +581,7 @@ sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements Eva
       isEngineAvailable(prefs) || (isComputerAnalysisEnabled && currentNode.serverEval != null);
 
   @override
-  bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
-      isComputerAnalysisEnabled && prefs.isEnabled;
+  bool isEngineAvailable(EngineEvaluationPrefState prefs) => prefs.isEnabled;
 
   @override
   Position get currentPosition => currentNode.position;

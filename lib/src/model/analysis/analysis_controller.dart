@@ -390,25 +390,6 @@ class AnalysisController extends _$AnalysisController
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
-  /// Toggles the computer analysis on/off.
-  ///
-  /// Acts both on engine evaluation and server analysis.
-  Future<void> toggleComputerAnalysis() async {
-    await ref.read(analysisPreferencesProvider.notifier).toggleEnableComputerAnalysis();
-
-    final curState = state.requireValue;
-    final engineWasAvailable = curState.isEngineAvailable(evaluationPrefs);
-
-    state = AsyncData(
-      curState.copyWith(isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled),
-    );
-
-    final computerAllowed = state.requireValue.isComputerAnalysisEnabled;
-    if (!computerAllowed && engineWasAvailable) {
-      toggleEngine();
-    }
-  }
-
   void updatePgnHeader(String key, String value) {
     final headers = state.requireValue.pgnHeaders.add(key, value);
     state = AsyncData(state.requireValue.copyWith(pgnHeaders: headers));
@@ -770,7 +751,7 @@ sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState 
 
   /// Whether the engine is allowed for this analysis and variant.
   bool get isEngineAllowed =>
-      isComputerAnalysisAllowedAndEnabled && engineSupportedVariants.contains(variant);
+      isComputerAnalysisAllowed && engineSupportedVariants.contains(variant);
 
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) => isEngineAllowed && prefs.isEnabled;
