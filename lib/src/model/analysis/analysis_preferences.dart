@@ -23,7 +23,7 @@ class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<
     return fetch();
   }
 
-  Future<void> toggleEnableComputerAnalysis() {
+  Future<void> toggleServerAnalysis() {
     return save(state.copyWith(enableServerAnalysis: !state.enableServerAnalysis));
   }
 

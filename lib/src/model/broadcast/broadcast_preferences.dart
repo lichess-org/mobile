@@ -28,7 +28,7 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
     return save(state.copyWith(showEvaluationBar: !state.showEvaluationBar));
   }
 
-  Future<void> toggleEnableComputerAnalysis() {
+  Future<void> toggleServerAnalysis() {
     return save(state.copyWith(enableServerAnalysis: !state.enableServerAnalysis));
   }
 

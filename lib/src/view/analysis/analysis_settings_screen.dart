@@ -66,9 +66,7 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                       title: Text(context.l10n.mobileServerAnalysis),
                       value: prefs.enableServerAnalysis,
                       onChanged: (_) {
-                        ref
-                            .read(analysisPreferencesProvider.notifier)
-                            .toggleEnableComputerAnalysis();
+                        ref.read(analysisPreferencesProvider.notifier).toggleServerAnalysis();
                       },
                     ),
                     SwitchSettingTile(

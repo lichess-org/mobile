@@ -62,12 +62,13 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
             ],
           ),
           ListSection(
+            header: SettingsSectionTitle(context.l10n.computerAnalysis),
             children: [
               SwitchSettingTile(
-                title: Text(context.l10n.computerAnalysis),
+                title: Text(context.l10n.mobileServerAnalysis),
                 value: broadcastPrefs.enableServerAnalysis,
                 onChanged: (_) {
-                  ref.read(broadcastPreferencesProvider.notifier).toggleEnableComputerAnalysis();
+                  ref.read(broadcastPreferencesProvider.notifier).toggleServerAnalysis();
                 },
               ),
               SwitchSettingTile(
