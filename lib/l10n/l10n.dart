@@ -308,6 +308,12 @@ abstract class AppLocalizations {
   /// **'No results'**
   String get mobileNoSearchResults;
 
+  /// No description provided for @mobileNotAllFeaturesAreAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.'**
+  String get mobileNotAllFeaturesAreAvailable;
+
   /// No description provided for @mobileNotFollowingAnyUser.
   ///
   /// In en, this message translates to:
@@ -595,12 +601,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System colors'**
   String get mobileSystemColors;
-
-  /// No description provided for @mobileTapHereToStartPlayingChess.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap here to start playing chess.'**
-  String get mobileTapHereToStartPlayingChess;
 
   /// No description provided for @mobileTheme.
   ///

@@ -70,6 +70,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileNoSearchResults => 'Sonuç bulunamadı';
 
   @override
+  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+
+  @override
   String get mobileNotFollowingAnyUser => 'Hiçbir kullanıcıyı takip etmiyorsunuz.';
 
   @override
@@ -214,9 +217,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mobileSystemColors => 'Sistem renkleri';
-
-  @override
-  String get mobileTapHereToStartPlayingChess => 'Satranç oynamak için buraya dokunun.';
 
   @override
   String get mobileTheme => 'Tema';

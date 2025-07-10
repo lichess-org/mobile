@@ -70,6 +70,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileNoSearchResults => 'Ingen resultater';
 
   @override
+  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+
+  @override
   String get mobileNotFollowingAnyUser => 'Du følger ikke nogen brugere.';
 
   @override
@@ -214,9 +217,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get mobileSystemColors => 'Systemfarver';
-
-  @override
-  String get mobileTapHereToStartPlayingChess => 'Tryk her for at begynde at spille skak.';
 
   @override
   String get mobileTheme => 'Tema';

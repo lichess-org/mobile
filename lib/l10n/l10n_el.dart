@@ -70,6 +70,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileNoSearchResults => 'Δεν βρέθηκαν αποτελέσματα';
 
   @override
+  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+
+  @override
   String get mobileNotFollowingAnyUser => 'Δεν ακολουθείτε κανέναν χρήστη.';
 
   @override
@@ -214,9 +217,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobileSystemColors => 'Χρώματα συστήματος';
-
-  @override
-  String get mobileTapHereToStartPlayingChess => 'Πατήστε εδώ για να ξεκινήσετε να παίζετε σκάκι.';
 
   @override
   String get mobileTheme => 'Εμφάνιση';

@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/home_preferences.dart';
 import 'package:lichess_mobile/src/model/account/home_widgets.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_game_stor
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -45,6 +47,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeTabScreen extends ConsumerStatefulWidget {
@@ -88,6 +91,75 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
 
   bool wasOnline = true;
   bool hasRefreshed = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    showWelcomeMessage();
+  }
+
+  Future<bool> shouldDisplayWelcomeMessage() async {
+    if (LichessBinding.instance.sharedPreferences.getBool('app_welcome_message_shown') == true) {
+      return false;
+    }
+
+    if (ref.read(authSessionProvider) != null) {
+      return false;
+    }
+
+    final hasPlayedGames =
+        await (await ref.read(gameStorageProvider.future)).count(userId: null) > 0;
+
+    return !hasPlayedGames;
+  }
+
+  Future<void> showWelcomeMessage() async {
+    final prefs = LichessBinding.instance.sharedPreferences;
+    if (await shouldDisplayWelcomeMessage()) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final context = ref.read(currentNavigatorKeyProvider).currentContext;
+        if (context == null || !context.mounted) return;
+        showDialog<void>(
+          context: context,
+          builder: (context) => AlertDialog.adaptive(
+            content: Container(
+              color:
+                  DialogTheme.of(context).backgroundColor ??
+                  ColorScheme.of(context).surfaceContainerHigh,
+              padding: const EdgeInsets.all(8.0),
+              child: Text.rich(
+                textAlign: TextAlign.center,
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    TextSpan(
+                      text: context.l10n.mobileNotAllFeaturesAreAvailable,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              PlatformDialogAction(
+                child: Text(context.l10n.ok),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ).then((_) {
+          prefs.setBool('app_welcome_message_shown', true);
+        });
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

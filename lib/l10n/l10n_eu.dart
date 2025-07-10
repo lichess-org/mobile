@@ -70,6 +70,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileNoSearchResults => 'Emaitzarik ez';
 
   @override
+  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+
+  @override
   String get mobileNotFollowingAnyUser => 'Ez zaude erabiltzailerik jarraitzen.';
 
   @override
@@ -214,9 +217,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get mobileSystemColors => 'Sistemaren koloreak';
-
-  @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
 
   @override
   String get mobileTheme => 'Itxura';

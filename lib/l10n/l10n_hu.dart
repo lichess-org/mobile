@@ -70,6 +70,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileNoSearchResults => 'Nincs találat';
 
   @override
+  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+
+  @override
   String get mobileNotFollowingAnyUser => 'Jelenleg nem követsz senkit.';
 
   @override
@@ -214,9 +217,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get mobileSystemColors => 'Rendszerszínek';
-
-  @override
-  String get mobileTapHereToStartPlayingChess => 'Érints ide a játékhoz.';
 
   @override
   String get mobileTheme => 'Megjelenés';

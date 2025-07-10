@@ -70,6 +70,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileNoSearchResults => 'Sem resultados';
 
   @override
+  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+
+  @override
   String get mobileNotFollowingAnyUser => 'Não segues nenhum utilizador.';
 
   @override
@@ -214,9 +217,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mobileSystemColors => 'Cores do sistema';
-
-  @override
-  String get mobileTapHereToStartPlayingChess => 'Clica aqui para começar a jogar xadrez.';
 
   @override
   String get mobileTheme => 'Tema';
@@ -6438,9 +6438,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileSystemColors => 'Cores do sistema';
-
-  @override
-  String get mobileTapHereToStartPlayingChess => 'Toque aqui para começar a jogar xadrez.';
 
   @override
   String get mobileTheme => 'Tema';

@@ -70,6 +70,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileNoSearchResults => '无结果';
 
   @override
+  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+
+  @override
   String get mobileNotFollowingAnyUser => '你没有关注任何用户。';
 
   @override
@@ -214,9 +217,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileSystemColors => '系统颜色';
-
-  @override
-  String get mobileTapHereToStartPlayingChess => '点击此处开始下棋。';
 
   @override
   String get mobileTheme => '主题';

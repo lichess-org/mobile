@@ -70,6 +70,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileNoSearchResults => 'Niciun rezultat';
 
   @override
+  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+
+  @override
   String get mobileNotFollowingAnyUser => 'Nu urmărești niciun utilizator.';
 
   @override
@@ -214,9 +217,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get mobileSystemColors => 'Culori sistem';
-
-  @override
-  String get mobileTapHereToStartPlayingChess => 'Apăsă aici pentru a începe să joci șah.';
 
   @override
   String get mobileTheme => 'Tema';

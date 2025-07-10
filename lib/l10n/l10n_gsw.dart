@@ -70,6 +70,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileNoSearchResults => 'Nüt g\'funde';
 
   @override
+  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+
+  @override
   String get mobileNotFollowingAnyUser => 'Du folgsch keim Schpiller.';
 
   @override
@@ -214,9 +217,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobileSystemColors => 'Syschtem-Farbe';
-
-  @override
-  String get mobileTapHereToStartPlayingChess => 'Tap here to start playing chess.';
 
   @override
   String get mobileTheme => 'Farbschema';

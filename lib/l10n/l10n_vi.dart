@@ -70,6 +70,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileNoSearchResults => 'Không có kết quả';
 
   @override
+  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+
+  @override
   String get mobileNotFollowingAnyUser => 'Bạn chưa theo dõi người dùng nào.';
 
   @override
@@ -214,9 +217,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileSystemColors => 'Màu hệ thống';
-
-  @override
-  String get mobileTapHereToStartPlayingChess => 'Nhấn vào đây để bắt đầu chơi cờ.';
 
   @override
   String get mobileTheme => 'Giao diện';
