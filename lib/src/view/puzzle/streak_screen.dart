@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -25,6 +24,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/interactive_board.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:share_plus/share_plus.dart';
@@ -97,12 +97,15 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final boardPreferences = ref.watch(boardPreferencesProvider);
     final ctrlProvider = puzzleControllerProvider(
       widget.initialPuzzleContext,
       isPuzzleStreak: true,
     );
     final puzzleState = ref.watch(ctrlProvider);
+
+    final shouldSetImmersiveMode = ref.watch(
+      boardPreferencesProvider.select((prefs) => prefs.immersiveModeWhilePlaying ?? false),
+    );
 
     ref.listen(ctrlProvider, (previous, next) {
       if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
@@ -112,7 +115,10 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    final content = PopScope(
+    return InteractiveBoardScreen(
+      shouldSetImmersiveMode: shouldSetImmersiveMode,
+      isInteractive: puzzleState.mode != PuzzleMode.view,
+      boardKey: _boardKey,
       canPop: widget.streak.index == 0 || widget.streak.finished,
       onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) {
@@ -132,95 +138,81 @@ class _BodyState extends ConsumerState<_Body> {
           navigator.pop();
         }
       },
-      child: SafeArea(
-        // view padding can change on Android when immersive mode is enabled, so to prevent any
-        // board vertical shift, we set `maintainBottomViewPadding` to true.
-        maintainBottomViewPadding: true,
-        child: Column(
-          children: [
-            Expanded(
-              child: BoardTable(
-                boardKey: _boardKey,
-                orientation: puzzleState.pov,
-                lastMove: puzzleState.lastMove as NormalMove?,
-                interactiveBoardParams: (
-                  variant: Variant.standard,
-                  position: puzzleState.currentPosition,
-                  playerSide:
-                      puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
-                      ? PlayerSide.none
-                      : puzzleState.mode == PuzzleMode.view
-                      ? PlayerSide.both
-                      : puzzleState.pov == Side.white
-                      ? PlayerSide.white
-                      : PlayerSide.black,
-                  promotionMove: puzzleState.promotionMove,
-                  onMove: (move, {isDrop, captured}) {
-                    ref.read(ctrlProvider.notifier).onUserMove(move);
-                  },
-                  onPromotionSelection: (role) {
-                    ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-                  },
-                  premovable: null,
-                ),
-                topTable: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: PuzzleFeedbackWidget(
-                      puzzle: puzzleState.puzzle,
-                      state: puzzleState,
-                      onStreak: true,
-                    ),
-                  ),
-                ),
-                bottomTable: Padding(
-                  padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Icon(
-                                LichessIcons.streak,
-                                size: 50.0,
-                                color: ColorScheme.of(context).primary,
-                              ),
-                              const SizedBox(width: 8.0),
-                              Text(
-                                widget.streak.index.toString(),
-                                style: TextStyle(
-                                  fontSize: 30.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorScheme.of(context).primary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Text(context.l10n.puzzleRatingX(puzzleState.puzzle.puzzle.rating.toString())),
-                    ],
+      child: Column(
+        children: [
+          Expanded(
+            child: BoardTable(
+              boardKey: _boardKey,
+              orientation: puzzleState.pov,
+              lastMove: puzzleState.lastMove as NormalMove?,
+              interactiveBoardParams: (
+                variant: Variant.standard,
+                position: puzzleState.currentPosition,
+                playerSide:
+                    puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
+                    ? PlayerSide.none
+                    : puzzleState.mode == PuzzleMode.view
+                    ? PlayerSide.both
+                    : puzzleState.pov == Side.white
+                    ? PlayerSide.white
+                    : PlayerSide.black,
+                promotionMove: puzzleState.promotionMove,
+                onMove: (move, {isDrop, captured}) {
+                  ref.read(ctrlProvider.notifier).onUserMove(move);
+                },
+                onPromotionSelection: (role) {
+                  ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+                },
+                premovable: null,
+              ),
+              topTable: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: PuzzleFeedbackWidget(
+                    puzzle: puzzleState.puzzle,
+                    state: puzzleState,
+                    onStreak: true,
                   ),
                 ),
               ),
+              bottomTable: Padding(
+                padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              LichessIcons.streak,
+                              size: 50.0,
+                              color: ColorScheme.of(context).primary,
+                            ),
+                            const SizedBox(width: 8.0),
+                            Text(
+                              widget.streak.index.toString(),
+                              style: TextStyle(
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold,
+                                color: ColorScheme.of(context).primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Text(context.l10n.puzzleRatingX(puzzleState.puzzle.puzzle.rating.toString())),
+                  ],
+                ),
+              ),
             ),
-            _BottomBar(initialPuzzleContext: widget.initialPuzzleContext, streak: widget.streak),
-          ],
-        ),
+          ),
+          _BottomBar(initialPuzzleContext: widget.initialPuzzleContext, streak: widget.streak),
+        ],
       ),
     );
-
-    return Theme.of(context).platform == TargetPlatform.android
-        ? AndroidGesturesExclusionWidget(
-            boardKey: _boardKey,
-            shouldExcludeGesturesOnFocusGained: () => puzzleState.mode != PuzzleMode.view,
-            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
-            child: content,
-          )
-        : content;
   }
 }
 
