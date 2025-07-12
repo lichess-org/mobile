@@ -96,7 +96,8 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
               ] else if (gameState.canOfferRematch)
                 Expanded(
                   child: FilledButton(
-                    onPressed: _activateButtons &&
+                    onPressed:
+                        _activateButtons &&
                             gameState.game.opponent?.onGame == true &&
                             gameState.game.opponent?.offeringRematch != true
                         ? () {
@@ -315,8 +316,8 @@ class GameResult extends StatelessWidget {
             game.winner == null
                 ? '½-½'
                 : game.winner == Side.white
-                    ? '1-0'
-                    : '0-1',
+                ? '1-0'
+                : '0-1',
             style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
