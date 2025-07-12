@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
@@ -15,6 +18,7 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
@@ -92,12 +96,38 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
               ] else if (gameState.canOfferRematch)
                 Expanded(
                   child: FilledButton(
-                    onPressed:
-                        _activateButtons &&
+                    onPressed: _activateButtons &&
                             gameState.game.opponent?.onGame == true &&
                             gameState.game.opponent?.offeringRematch != true
                         ? () {
-                            ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+                            final game = gameState.game;
+
+                            // Check if it was an Odds Bot game
+                            if (game.meta.variant == Variant.fromPosition) {
+                              // If yes, build the detailed challenge and navigate to the new GameScreen
+                              Navigator.of(context, rootNavigator: true).push(
+                                GameScreen.buildRoute(
+                                  context,
+                                  challenge: ChallengeRequest(
+                                    destUser: game.opponent!.user!,
+                                    variant: Variant.fromPosition,
+                                    timeControl: ChallengeTimeControlType.clock,
+                                    clock: (
+                                      time: game.meta.clock!.initial,
+                                      increment: game.meta.clock!.increment,
+                                    ),
+                                    rated: false,
+                                    sideChoice: game.youAre == Side.white
+                                        ? SideChoice.white
+                                        : SideChoice.black,
+                                    initialFen: game.initialFen,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              // If it was a normal game, use the simple rematch logic
+                              ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+                            }
                           }
                         : null,
                     child: Text(context.l10n.rematch),
@@ -285,8 +315,8 @@ class GameResult extends StatelessWidget {
             game.winner == null
                 ? '½-½'
                 : game.winner == Side.white
-                ? '1-0'
-                : '0-1',
+                    ? '1-0'
+                    : '0-1',
             style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
