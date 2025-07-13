@@ -27,6 +27,7 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Розв\'язуйте задачі з улюбленими дебютами або обирайте тему.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Задачі</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Недавні пошуки</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Аналіз на сервері</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Розташування годинника</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Повноекранний режим</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Приховати інтерфейс системи під час гри. Використовуйте, якщо вас турбують навігаційні жести системи по краях екрану. Застосовується до екранів гри та задач.</string>

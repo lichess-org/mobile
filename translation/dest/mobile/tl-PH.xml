@@ -19,6 +19,7 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Mga live na streamer</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Kailangang naka-log-in ka para matingnan ito.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Walang mga resulta</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Pakitandaan na hindi lahat ng tampok mula sa lumang app o website ay kasalukuyang magagamit, ngunit kami ay dagdagan ng mga tampok sa lahat ng pagkakataon.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Hindi ka sumusunod sa anumang user.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Sa board</string>
@@ -35,6 +36,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Palaisipan</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Mga nakaraang mga searches</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Alisin ang bookmark</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Pagsusuri ng server</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Posisyon ng orasan</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Mga preset</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Na-drag na piraso ng target</string>
@@ -57,7 +59,7 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Ipakita ang gilid</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Mag-feedback kapag pumindot</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kapag naka-enable, magba-vibrate ang device kapag tumira o kumain ng piyesa.</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Settings</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Setting</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Ibahagi ang PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Ibahagi ang larong URL</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Ibahagi ang posisyon bilang FEN</string>
@@ -67,7 +69,6 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Ipakita ang mga baryasyon</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">May maling nangyari.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Mga kulay ng sistema</string>
-  <string name="tapHereToStartPlayingChess" comment="A message shown only once the first time the app is installed. Appear in a popup over the main floating action button on the home screen.">Pindutin ito para makapagsimula nang maglaro ng chess.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Kagamitan</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Ang baryanteng %s ay hindi suportado sa bersyong ito.</string>

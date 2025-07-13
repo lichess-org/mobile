@@ -19,6 +19,7 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live-striimaajat</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Sinun täytyy olla kirjautuneena nähdäksesi tämän sivun.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Ei hakutuloksia</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Ota huomioon, että kaikkia vanhan sovelluksemme tai nettisivumme toimintoja ei tällä hetkellä ole vielä käytettävissä, mutta lisäämme toimintoja koko ajan.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Et seuraa yhtäkään käyttäjää.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Kaveria vastaan offline-tilassa</string>
@@ -35,6 +36,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Tehtävät</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Viimeisimmät haut</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Poista kirjanmerkki</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Palvelinanalyysi</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Kellon sijainti</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Vedetyn nappulan kohde</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Ympyrä</string>
@@ -66,7 +68,6 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Näytä muunnelmat</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Jokin meni vikaan.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Järjestelmän värit</string>
-  <string name="tapHereToStartPlayingChess" comment="A message shown only once the first time the app is installed. Appear in a popup over the main floating action button on the home screen.">Pelaa shakkia napauttamalla tätä.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Teema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Työkalut</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variantti %s ei ole tuettu tässä versiossa.</string>

@@ -19,6 +19,7 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live streamers</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">You must be logged in to view this page.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">No results</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Please note that not all features from the old app or the website are currently available, but we are adding features all the time.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">You are not following any user.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Over the board</string>
@@ -67,7 +68,6 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Show variations</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Something went wrong.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">System colors</string>
-  <string name="tapHereToStartPlayingChess" comment="A message shown only once the first time the app is installed. Appear in a popup over the main floating action button on the home screen.">Tap here to start playing chess.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Theme</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Tools</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s is not supported in this version.</string>
