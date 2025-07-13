@@ -88,9 +88,9 @@ class _Body extends ConsumerWidget {
                           bottom: kTabletBoardTableSidePadding,
                         ),
                         child: AnalysisBoard(
-                          options,
-                          boardSize,
-                          borderRadius: isTablet ? Styles.boardBorderRadius : null,
+                          options: options,
+                          boardSize: boardSize,
+                          boardRadius: isTablet ? Styles.boardBorderRadius : null,
                           shouldReplaceChildOnUserMove: true,
                         ),
                       ),
@@ -140,8 +140,8 @@ class _Body extends ConsumerWidget {
                           // disable scrolling when dragging the board
                           onVerticalDragStart: (_) {},
                           child: AnalysisBoard(
-                            options,
-                            boardSize,
+                            options: options,
+                            boardSize: boardSize,
                             shouldReplaceChildOnUserMove: true,
                           ),
                         ),

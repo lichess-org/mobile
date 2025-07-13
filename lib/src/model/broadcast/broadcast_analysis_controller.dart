@@ -5,6 +5,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/analysis/abstract_analysis_state.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
@@ -294,9 +295,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   void onUserMove(NormalMove move) {
     if (!state.hasValue) return;
 
-    if (!state.requireValue.position.isLegal(move)) return;
+    if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.position, move)) {
+    if (isPromotionPawnMove(state.requireValue.currentPosition, move)) {
       state = AsyncData(state.requireValue.copyWith(promotionMove: move));
       return;
     }
@@ -506,7 +507,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 }
 
 @freezed
-sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements EvaluationMixinState {
+sealed class BroadcastAnalysisState
+    with _$BroadcastAnalysisState
+    implements EvaluationMixinState, AbstractAnalysisState {
   const BroadcastAnalysisState._();
 
   const factory BroadcastAnalysisState({
@@ -558,10 +561,6 @@ sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements Eva
     IList<PgnComment>? pgnRootComments,
   }) = _BroadcastGameState;
 
-  Position get position => currentNode.position;
-  bool get canGoNext => currentNode.hasChild;
-  bool get canGoBack => currentPath.size > UciPath.empty.size;
-
   /// Whether the game is new or ongoing
   bool get isNewOrOngoing => pgnHeaders['Result'] == '*';
 
@@ -570,9 +569,19 @@ sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements Eva
   /// If the game is new the path will be empty.
   UciPath? get broadcastLivePath => isNewOrOngoing ? broadcastPath : null;
 
+  /// In a broadcast analysis, the computer analysis is always allowed.
+  @override
+  bool get isComputerAnalysisAllowed => true;
+
   /// In a broadcast analysis, the cloud evals are most likely available.
   @override
   bool get alwaysRequestCloudEval => true;
+
+  /// We currently assume that all broadcast games are standard but this is incorrect as there are
+  /// Chess960 tournaments broadcasted on Lichess.
+  /// TODO: use the correct variant for broadcast game.
+  @override
+  Variant get variant => Variant.standard;
 
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
@@ -584,10 +593,13 @@ sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements Eva
   @override
   Position get currentPosition => currentNode.position;
 
+  bool get canGoNext => currentNode.hasChild;
+  bool get canGoBack => currentPath.size > UciPath.empty.size;
+
   EngineGaugeParams engineGaugeParams(EngineEvaluationPrefState prefs) => (
     isLocalEngineAvailable: isEngineAvailable(prefs),
     orientation: pov,
-    position: position,
+    position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
   );

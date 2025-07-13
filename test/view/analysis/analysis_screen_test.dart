@@ -114,7 +114,6 @@ void main() {
             isComputerAnalysisAllowed: false,
             variant: Variant.standard,
           ),
-          enableDrawingShapes: false,
         ),
       );
 
