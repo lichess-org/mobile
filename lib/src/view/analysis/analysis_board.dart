@@ -30,6 +30,12 @@ class AnalysisBoardState
   AnalysisPrefs get analysisPrefs => ref.watch(analysisPreferencesProvider);
 
   @override
+  bool get showAnnotations =>
+      analysisState.isComputerAnalysisAllowed &&
+      analysisState.isServerAnalysisEnabled &&
+      analysisPrefs.showAnnotations;
+
+  @override
   void onUserMove(NormalMove move) => ref
       .read(analysisControllerProvider(widget.options).notifier)
       .onUserMove(move, shouldReplace: widget.shouldReplaceChildOnUserMove);

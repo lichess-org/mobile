@@ -410,6 +410,10 @@ class _BroadcastBoardState
   BroadcastPrefs get analysisPrefs => ref.watch(broadcastPreferencesProvider);
 
   @override
+  bool get showAnnotations =>
+      analysisState.isServerAnalysisEnabled && analysisPrefs.showAnnotations;
+
+  @override
   void onUserMove(NormalMove move) => ref
       .read(broadcastAnalysisControllerProvider(widget.roundId, widget.gameId).notifier)
       .onUserMove(move);

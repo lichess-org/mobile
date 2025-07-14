@@ -13,6 +13,10 @@ import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
+/// An abstract widget that provides the common interface for three types of analysis boards:
+/// - Analysis board
+/// - Broadcast board
+/// - Study board
 abstract class AbstractAnalysisBoard extends ConsumerStatefulWidget {
   const AbstractAnalysisBoard({super.key, required this.boardSize, this.boardRadius});
 
@@ -20,6 +24,7 @@ abstract class AbstractAnalysisBoard extends ConsumerStatefulWidget {
   final BorderRadiusGeometry? boardRadius;
 }
 
+/// Abstract state class for analysis board widgets.
 abstract class AbstractAnalysisBoardState<
   AnalysisBoard extends AbstractAnalysisBoard,
   AnalysisState extends AbstractAnalysisState,
@@ -30,25 +35,36 @@ abstract class AbstractAnalysisBoardState<
 
   AnalysisPrefs get analysisPrefs;
 
+  /// Whether the annotations should be shown on the board.
+  bool get showAnnotations;
+
   void onUserMove(NormalMove move);
 
   void onPromotionSelection(Role? role);
 
+  /// For the study board to set a different fen if the position is `null`.
+  String get fen => analysisState.currentPosition!.fen;
+
+  /// For the study board to clear shapes when switching to a new chapter.
+  void clearShapes() {}
+
+  /// For the study board to add pgn shapes and variations arrows.
+  ISet<Shape> get extraShapes => ISet();
+
+  /// Set of shapes drawn by the user on the board (arrows, circle).
   ISet<Shape> userShapes = ISet();
 
   @override
   Widget build(BuildContext context) {
+    clearShapes();
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
+    final currentNode = analysisState.currentNode;
+    final currentPosition = analysisState.currentPosition;
+
     final showBestMoveArrow =
         analysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
-    final showAnnotations =
-        analysisState.isComputerAnalysisAllowed &&
-        analysisState.isServerAnalysisEnabled &&
-        analysisPrefs.showAnnotations;
-    final currentNode = analysisState.currentNode;
-
     final bestMoves = showBestMoveArrow
         ? pickBestClientEval(
             localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
@@ -56,7 +72,11 @@ abstract class AbstractAnalysisBoardState<
           )?.bestMoves
         : null;
     final ISet<Shape> bestMoveShapes = bestMoves != null
-        ? computeBestMoveShapes(bestMoves, currentNode.position.turn, boardPrefs.pieceSet.assets)
+        ? computeBestMoveShapes(
+            bestMoves,
+            analysisState.currentPosition!.turn,
+            boardPrefs.pieceSet.assets,
+          )
         : ISet();
 
     final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
@@ -65,21 +85,23 @@ abstract class AbstractAnalysisBoardState<
     return Chessboard(
       size: widget.boardSize,
       orientation: analysisState.pov,
-      fen: analysisState.currentPosition.fen,
+      fen: fen,
       lastMove: analysisState.lastMove as NormalMove?,
-      game: boardPrefs.toGameData(
-        variant: analysisState.variant,
-        position: analysisState.currentPosition,
-        playerSide: analysisState.currentPosition.isGameOver
-            ? PlayerSide.none
-            : analysisState.currentPosition.turn == Side.white
-            ? PlayerSide.white
-            : PlayerSide.black,
-        promotionMove: analysisState.promotionMove,
-        onMove: (move, {isDrop}) => onUserMove(move),
-        onPromotionSelection: onPromotionSelection,
-      ),
-      shapes: userShapes.union(bestMoveShapes),
+      game: (currentPosition != null)
+          ? boardPrefs.toGameData(
+              variant: analysisState.variant,
+              position: currentPosition,
+              playerSide: analysisState.currentPosition!.isGameOver
+                  ? PlayerSide.none
+                  : analysisState.currentPosition!.turn == Side.white
+                  ? PlayerSide.white
+                  : PlayerSide.black,
+              promotionMove: analysisState.promotionMove,
+              onMove: (move, {isDrop}) => onUserMove(move),
+              onPromotionSelection: onPromotionSelection,
+            )
+          : null,
+      shapes: userShapes.union(bestMoveShapes).union(extraShapes),
       annotations: sanMove != null && annotation != null
           ? altCastles.containsKey(sanMove.move.uci)
                 ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})

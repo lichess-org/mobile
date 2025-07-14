@@ -1,18 +1,11 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 
 /// Interface for Analysis's State.
 abstract class AbstractAnalysisState {
-  /// Whether computer evaluation is allowed for this analysis.
-  ///
-  /// Acts on both local and server analysis.
-  bool get isComputerAnalysisAllowed;
-
-  /// Whether the user has enabled server analysis.
-  bool get isServerAnalysisEnabled;
-
   /// Returns `true` if the engine evaluation is available (for both local and cloud).
   ///
   /// This value may depend on the current state and the user preferences.
@@ -21,15 +14,16 @@ abstract class AbstractAnalysisState {
   /// The variant of the analysis.
   Variant get variant;
 
-  /// Current position in the position tree.
-  Position get currentPosition;
+  /// Current position in the position tree. Can be `null` to support illegal position that are
+  /// found in studies.
+  Position? get currentPosition;
 
   /// The current node in the analysis view.
   ///
   /// This is an immutable copy of the actual [Node] at the `currentPath`.
   /// We don't want to use [Node.view] here because it'd copy the whole tree
   /// under the current node and it's expensive.
-  AnalysisCurrentNode get currentNode;
+  AbstractAnalysisCurrentNode get currentNode;
 
   /// The last move played.
   Move? get lastMove;
@@ -39,4 +33,11 @@ abstract class AbstractAnalysisState {
 
   /// Possible promotion move to be played.
   NormalMove? get promotionMove;
+}
+
+/// Interface for Analysis's current node.
+abstract class AbstractAnalysisCurrentNode {
+  SanMove? get sanMove;
+  IList<int>? get nags;
+  ClientEval? get eval;
 }

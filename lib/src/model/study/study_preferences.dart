@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/analysis/abstract_analysis_prefs.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -57,7 +58,7 @@ class StudyPreferences extends _$StudyPreferences with PreferencesStorage<StudyP
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class StudyPrefs with _$StudyPrefs implements Serializable {
+sealed class StudyPrefs with _$StudyPrefs implements Serializable, AbstractAnalysisPrefs {
   const StudyPrefs._();
 
   const factory StudyPrefs({

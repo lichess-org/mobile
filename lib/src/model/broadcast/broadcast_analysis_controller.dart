@@ -569,10 +569,6 @@ sealed class BroadcastAnalysisState
   /// If the game is new the path will be empty.
   UciPath? get broadcastLivePath => isNewOrOngoing ? broadcastPath : null;
 
-  /// In a broadcast analysis, the computer analysis is always allowed.
-  @override
-  bool get isComputerAnalysisAllowed => true;
-
   /// In a broadcast analysis, the cloud evals are most likely available.
   @override
   bool get alwaysRequestCloudEval => true;

@@ -773,7 +773,7 @@ sealed class AnalysisState
 }
 
 @freezed
-sealed class AnalysisCurrentNode with _$AnalysisCurrentNode {
+sealed class AnalysisCurrentNode with _$AnalysisCurrentNode implements AbstractAnalysisCurrentNode {
   const AnalysisCurrentNode._();
 
   const factory AnalysisCurrentNode({
