@@ -71,7 +71,7 @@ dependencies:
   sound_effect: ^0.1.1
   sqflite: ^2.2.5
   stream_transform: ^2.1.0
-  url_launcher: ^6.1.9
+  url_launcher: ^6.3.2
   visibility_detector: ^0.4.0
   wakelock_plus: ^1.1.1
   web_socket_channel: ^3.0.0
