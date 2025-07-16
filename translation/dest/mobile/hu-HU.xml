@@ -67,7 +67,6 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Változatok megjelenítése</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Hiba történt.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Rendszerszínek</string>
-  <string name="tapHereToStartPlayingChess" comment="A message shown only once the first time the app is installed. Appear in a popup over the main floating action button on the home screen.">Érints ide a játékhoz.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Megjelenés</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Eszközök</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">A %s variáns nem támogatott ebben a verzióban.</string>

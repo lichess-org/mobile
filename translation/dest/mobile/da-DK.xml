@@ -19,6 +19,7 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live-streamere</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du skal være logget ind for at se denne side.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Ingen resultater</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Bemærk, at ikke alle funktioner fra den gamle app eller webstedet er tilgængelige i øjeblikket, men vi tilføjer funktioner hele tiden.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du følger ikke nogen brugere.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Ok</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Spil offline, brug som bræt</string>
@@ -35,6 +36,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Opgaver</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Seneste søgninger</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Fjern bogmærke</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Server-analyse</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Ur-position</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Forudindstillinger</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Mål for trukket brik</string>
@@ -67,7 +69,6 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Vis variationer</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Noget gik galt.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Systemfarver</string>
-  <string name="tapHereToStartPlayingChess" comment="A message shown only once the first time the app is installed. Appear in a popup over the main floating action button on the home screen.">Tryk her for at begynde at spille skak.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Værktøjer</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s er ikke understøttet i denne version.</string>

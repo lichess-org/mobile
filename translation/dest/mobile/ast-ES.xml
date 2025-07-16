@@ -67,7 +67,6 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Amosar variantes</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Dalgo salió mal.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Colores del sistema</string>
-  <string name="tapHereToStartPlayingChess" comment="A message shown only once the first time the app is installed. Appear in a popup over the main floating action button on the home screen.">Toca equí para entamar a xugar al axedrez.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Ferramien.</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">La variante %s nun ye compatible con esta versión.</string>

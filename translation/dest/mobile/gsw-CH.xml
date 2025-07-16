@@ -12,6 +12,7 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live Streamer</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Muesch iglogt si, zum die Site z\'gseh.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Nüt g\'funde</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Momentan sind no nöd alli Funktione vu de alte App oder vu de Website verfüegbar, aber es chunnt laufend wieder Nois dezue.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du folgsch keim Schpiller.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Schpill offline gäge en Mänsch</string>
@@ -27,6 +28,7 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Schpill Ufgabe mit dine Lieblings-Eröffnige oder wähl es Thema.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ufgabe</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Kürzlich Gsuechts</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Server-Analyse</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Position vode Uhr</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Ibettete Modus</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">UI-System während em Schpille usblände. Benutz die Option, wänn dich d\'Navigationsgeschte am Bildschirmrand störed. Das gilt für de Schpiel- und au für de Puzzle-Storm-Bildschirm.</string>
