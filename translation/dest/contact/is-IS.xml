@@ -15,6 +15,7 @@
   <string name="wantTitle">Ég vil að titillinn minn birtist á Lichess</string>
   <string name="wantCloseAccount">Ég vil loka aðganginum mínum</string>
   <string name="closeYourAccount">Þú getur lokað aðganginum þínum á þessari síðu</string>
+  <string name="doNotAskByEmail">Ekki biðja okkur í tölvupósti um að loka aðgangi, við gerum það ekki.</string>
   <string name="wantReopen">Ég vil opna aðgang minn á ný</string>
   <string name="reopenOnThisPage">Þú getur opnað aðgang þinn á ný á þessari síðu.</string>
   <string name="doNotAskByEmailToReopen">Ekki biðja okkur í tölvupósti um að opna aðgang á ný, við gerum það ekki.</string>
@@ -49,6 +50,7 @@
   <string name="botRatingAbuse">Við ákveðnar kringumstæður þegar leikið er gegn tölvustýrðum aðgangi getur skák með stigagjöf ekki gefið stig ef það er ákveðið að leikmaðurinn sé að misnota tölvuna til að fá stig.</string>
   <string name="errorPage">Villusíða</string>
   <string name="reportErrorPage">Hafi villusíða komið upp, máttu tilkynna slíkt:</string>
+  <string name="learnHowToMakeBroadcasts">Lærðu hvernig á að gera þínar eigin útsendingar á Lichess</string>
   <string name="banAppeal">Áfrýjun vegna banns eða hamla á IP-tölu</string>
   <string name="engineAppeal">Tölvuforrit- eða svindlmerki</string>
   <string name="sendAppealTo">Þú getur sent áfrýjun til %s.</string>
