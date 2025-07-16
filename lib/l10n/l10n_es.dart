@@ -70,7 +70,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileNoSearchResults => 'No hay resultados';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Ten en cuenta que no todas las características de la aplicación anterior o del sitio web están disponibles actualmente, pero estamos agregando nuevas funciones todo el tiempo.';
 
   @override
   String get mobileNotFollowingAnyUser => 'No estás siguiendo a ningún usuario.';
@@ -123,7 +123,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileRemoveBookmark => 'Borrar marcador';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Análisis del servidor';
 
   @override
   String get mobileSettingsClockPosition => 'Posición del reloj';

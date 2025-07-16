@@ -70,7 +70,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileNoSearchResults => 'Niciun rezultat';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Te rugăm să reții că nu sunt disponibile toate funcțiile din vechea aplicație sau site web, dar adăugăm funcționalități tot timpul.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Nu urmărești niciun utilizator.';
@@ -123,7 +123,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileRemoveBookmark => 'Îndepărtează marcajul';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Analiză server';
 
   @override
   String get mobileSettingsClockPosition => 'Poziția ceasului';

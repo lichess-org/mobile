@@ -9,10 +9,10 @@ class AppLocalizationsSl extends AppLocalizations {
   AppLocalizationsSl([String locale = 'sl']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Nastavitve računa';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Te nastavitve se uporabijo za vaš račun Lichess in bodo uporabljene na vseh napravah.';
 
   @override
   String get mobileAllGames => 'Vse igre';
@@ -40,19 +40,19 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Dober večer, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Dober večer';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Dober dan. $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Dober dan';
 
   @override
   String get mobileHideVariation => 'Skrij varianto';
@@ -70,7 +70,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileNoSearchResults => 'Ni rezultatov';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Upoštevajte, da trenutno niso na voljo vse funkcije iz stare aplikacije ali spletnega mesta, vendar jih ves čas dodajamo.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Ne sledite nobenemu uporabniku.';
@@ -120,43 +120,43 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileRecentSearches => 'Nedavna iskanja';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Odstrani zaznamek';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Analiza strežnika';
 
   @override
   String get mobileSettingsClockPosition => 'Pozicija ure';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Prednastavitve';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Vlečena tarča figur';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Krog';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Polje';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Domači pripomočki';
 
   @override
   String get mobileSettingsImmersiveMode => 'Interaktivni način';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Skrij sistemski vmesnik med igranjem. Uporabite, če vas motijo navigacijske poteze ob robovih zaslona. Velja za igro in Puzzle Storm.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Osvojene figure';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Izberite sliko';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Ozadje po meri deluje samo v temnem načinu. Priporočljiva je temna slika.';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'Blur the image';
@@ -944,7 +944,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get broadcastAllBroadcastsByMonth => 'Oglejte si vse oddaje po mesecih';
 
   @override
-  String get broadcastBackToLiveMove => 'Back to live move';
+  String get broadcastBackToLiveMove => 'Nazaj na živo potezo';
 
   @override
   String get broadcastSinceHideResults => 'Ker ste se odločili skriti rezultate, so vse table za predogled prazne, da se izognete ploščam.';
@@ -953,11 +953,11 @@ class AppLocalizationsSl extends AppLocalizations {
   String get broadcastLiveboard => 'Živa deska';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Skupnostna oddaja';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'Ustvaril in upravlja $param.';
   }
 
   @override
@@ -1132,7 +1132,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get coordinatesNameSquare => 'Poimenuj polje';
 
   @override
-  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Vadite le nekatere stolpce in vrstice';
 
   @override
   String get patronDonate => 'Donirajte';
@@ -1716,8 +1716,10 @@ class AppLocalizationsSl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles found in games by $param2',
-      one: 'One puzzle found in games by $param2',
+      other: '$count ugank, najdena v igrah igralca $param2',
+      few: '$count uganke, najdena v igrah igralca $param2',
+      two: '$count uganki, najdena v igrah igralca $param2',
+      one: 'Ena uganka, najdena v igrah igralca $param2',
     );
     return '$_temp0';
   }
@@ -1920,13 +1922,13 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeIntermezzoDescription => 'Namesto pričakovane poteze, vrinemo drugo potezo ki predstavlja takojšnjo grožnjo na katero mora nasprotnik odgovorit. Z drugim imenom tudi kot \"Zwischenzug\" ali medpoteza.';
 
   @override
-  String get puzzleThemeKillBoxMate => 'Kill box mate';
+  String get puzzleThemeKillBoxMate => 'Vaba';
 
   @override
-  String get puzzleThemeKillBoxMateDescription => 'A rook is next to the enemy king and supported by a queen that also blocks the king\'s escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".';
+  String get puzzleThemeKillBoxMateDescription => 'Ob sovražnikovem kralju stoji trdnjava, ki jo podpira dama, ki prav tako blokira kraljeva pobegna polja. Trdnjava in dama ujameta sovražnikovega kralja v \"vabi\" velikosti 3 krat 3.';
 
   @override
-  String get puzzleThemeVukovicMate => 'Vukovic mate';
+  String get puzzleThemeVukovicMate => 'Vukovic mat';
 
   @override
   String get puzzleThemeVukovicMateDescription => 'Top in konj se združita, da matirata kralja. Top zagotavlja pomoč, medtem ko ga podpira tretja figura, konj pa se uporablja za blokiranje polj, kjer bi kralj pobegnil.';
@@ -2547,7 +2549,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get claimADraw => 'Zahtevaj remi';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Zahtevan remi';
 
   @override
   String get offerDraw => 'Ponudi remi';
@@ -2566,7 +2568,7 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return 'Pridružil/a se $param';
   }
 
   @override
@@ -2956,31 +2958,31 @@ class AppLocalizationsSl extends AppLocalizations {
   String get proposeATakeback => 'Zaprosi za popravek poteze';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'Bela predlaga razveljavitev poteze';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'Črni predlaga razveljavitev poteze';
 
   @override
   String get takebackPropositionSent => 'Prošnja za popravek poteze poslana';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'Beli zavrne razveljavitev poteze';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'Črni zavrne razveljavitev poteze';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'Beli sprejme razveljavitev poteze';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'Črni sprejme razveljavitev poteze';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'Beli prepliče razveljavitev poteze';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'Črni prekliče razveljavitev poteze';
 
   @override
   String get yourOpponentProposesATakeback => 'Nasprotnik prosi za popravek poteze';
@@ -3815,7 +3817,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get termsOfService => 'Pogoji uporabe';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'Preverjanje naslova';
 
   @override
   String get sourceCode => 'Izvorna koda';
@@ -4183,7 +4185,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get language => 'Jezik';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Vsi jeziki';
 
   @override
   String get background => 'Ozadje';
@@ -6152,13 +6154,13 @@ class AppLocalizationsSl extends AppLocalizations {
   String get studyChapterConclusionText => 'Poglavja so shranjena za vedno.<br>Zabavajte se z organiziranjem svoje šahovske vsebine!';
 
   @override
-  String get studyDoubleDefeat => 'Double defeat';
+  String get studyDoubleDefeat => 'Dvojni poraz';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+  String get studyBlackDefeatWhiteCanNotWin => 'Črni poraz, beli pa ne more zmagati';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+  String get studyWhiteDefeatBlackCanNotWin => 'Beli poraz, a črni ne more zmagati';
 
   @override
   String studyNbChapters(int count) {

@@ -70,7 +70,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileNoSearchResults => '検索結果なし';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'まだ旧版のアプリやウェブサイトの機能がすべて使えるわけではありませんが、今後も機能を追加していく予定です。';
 
   @override
   String get mobileNotFollowingAnyUser => '誰もフォローしていません。';
@@ -123,7 +123,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'サーバ解析';
 
   @override
   String get mobileSettingsClockPosition => '時計の位置';

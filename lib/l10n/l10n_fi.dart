@@ -70,7 +70,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileNoSearchResults => 'Ei hakutuloksia';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Ota huomioon, että kaikkia vanhan sovelluksemme tai nettisivumme toimintoja ei tällä hetkellä ole vielä käytettävissä, mutta lisäämme toimintoja koko ajan.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Et seuraa yhtäkään käyttäjää.';
@@ -123,7 +123,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileRemoveBookmark => 'Poista kirjanmerkki';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Palvelinanalyysi';
 
   @override
   String get mobileSettingsClockPosition => 'Kellon sijainti';
@@ -913,11 +913,11 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastLiveboard => 'Live-pelilauta';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Yhteisölähetys';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'Lähetyksen on luonut ja sitä hallinnoi $param.';
   }
 
   @override

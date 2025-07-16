@@ -70,7 +70,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileNoSearchResults => 'Sense resultats';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Teniu en compte que no totes les funcionalitats de l\'aplicació antiga o de la pàgina web estan disponibles actualment. Estem afegint funcionalitats cada dia.';
 
   @override
   String get mobileNotFollowingAnyUser => 'No estàs seguint a cap usuari.';
@@ -123,7 +123,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileRemoveBookmark => 'Suprimeix el marcador';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Anàlisis al servidor';
 
   @override
   String get mobileSettingsClockPosition => 'Posició del rellotge';

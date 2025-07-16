@@ -70,7 +70,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileNoSearchResults => 'Sen resultados';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Ten en conta que neste intre non están dispoñibles todas as funcións da aplicación vella ou do sitio web; porén, seguimos a engadilas día a día.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Non estás a seguir a ningún usuario.';
@@ -123,7 +123,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Eliminar marcador';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Análise no servidor';
 
   @override
   String get mobileSettingsClockPosition => 'Posición do reloxo';
@@ -2406,7 +2406,7 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => 'Xoga o primeiro movemento do explorador de aperturas/finais';
+  String get playFirstOpeningEndgameExplorerMove => 'Xogar o primeiro movemento do explorador de aperturas/finais';
 
   @override
   String get winPreventedBy50MoveRule => 'Vitoria impedida pola regra das 50 xogadas';
@@ -3871,7 +3871,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get keyEnterOrExitVariation => 'Entrar/saír da variante';
 
   @override
-  String get keyRequestComputerAnalysis => 'Solicita unha análise por computador, Aprende dos teus erros';
+  String get keyRequestComputerAnalysis => 'Solicitar unha análise por computador, Aprende dos teus erros';
 
   @override
   String get keyNextLearnFromYourMistakes => 'Seguinte (Aprende dos teus erros)';
@@ -4686,7 +4686,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get focusChat => 'Poñer o cursor na sala de conversa';
 
   @override
-  String get showHelpDialog => 'Amosa este diálogo de axuda';
+  String get showHelpDialog => 'Amosar este diálogo de axuda';
 
   @override
   String get reopenYourAccount => 'Abre de novo a túa conta';

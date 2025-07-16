@@ -138,7 +138,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileSettingsDraggedTargetCircle => 'Круг';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Поље';
+  String get mobileSettingsDraggedTargetSquare => 'Квадрат';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';

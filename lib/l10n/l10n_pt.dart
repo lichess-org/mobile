@@ -70,7 +70,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileNoSearchResults => 'Sem resultados';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Por favor, note que nem todas as funcionalidades da aplicação antiga ou do website estão atualmente disponíveis, mas estamos a adicionar funcionalidades o tempo todo.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Não segues nenhum utilizador.';
@@ -123,7 +123,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remover dos Favoritos';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Análise do servidor';
 
   @override
   String get mobileSettingsClockPosition => 'Posição do relógio';
@@ -6297,6 +6297,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileNoSearchResults => 'Sem Resultados';
 
   @override
+  String get mobileNotAllFeaturesAreAvailable => 'Nem todos os recursos do aplicativo antigo ou do site estão disponíveis no momento, mas estamos sempre adicionando recursos.';
+
+  @override
   String get mobileNotFollowingAnyUser => 'Você não está seguindo nenhum usuário.';
 
   @override
@@ -6345,6 +6348,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileRemoveBookmark => 'Remover favorito';
+
+  @override
+  String get mobileServerAnalysis => 'Análise do servidor';
 
   @override
   String get mobileSettingsClockPosition => 'Posição do relógio';
@@ -7474,7 +7480,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesShowFlairs => 'Mostrar emotes de usuário';
 
   @override
-  String get preferencesExplainShowPlayerRatings => 'Permite ocultar todas os ratings do site, para ajudar a se concentrar no jogo. As partidas continuam valendo rating.';
+  String get preferencesExplainShowPlayerRatings => 'Permite ocultar todos os ratings do site, para ajudar a se concentrar no jogo. As partidas continuam valendo rating.';
 
   @override
   String get preferencesDisplayBoardResizeHandle => 'Mostrar cursor de redimensionamento do tabuleiro';
@@ -7483,7 +7489,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesOnlyOnInitialPosition => 'Apenas na posição inicial';
 
   @override
-  String get preferencesInGameOnly => 'Durante partidas';
+  String get preferencesInGameOnly => 'Durante as partidas';
 
   @override
   String get preferencesExceptInGame => 'Exceto durante a partida';
@@ -7588,7 +7594,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesScrollOnTheBoardToReplayMoves => 'Use o scroll do mouse no tabuleiro para ir passando as jogadas';
 
   @override
-  String get preferencesCorrespondenceEmailNotification => 'Email diário listando seus jogos por correspondência';
+  String get preferencesCorrespondenceEmailNotification => 'Email diário listando suas partidas por correspondência';
 
   @override
   String get preferencesNotifyStreamStart => 'Streamer começou uma transmissão ao vivo';
@@ -7600,10 +7606,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesNotifyForumMention => 'Você foi mencionado em um comentário do fórum';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Convite para um estudo';
+  String get preferencesNotifyInvitedStudy => 'Convite para estudo';
 
   @override
-  String get preferencesNotifyGameEvent => 'Jogo por correspondência atualizado';
+  String get preferencesNotifyGameEvent => 'Atualizações de partidas por correspondência';
 
   @override
   String get preferencesNotifyChallenge => 'Desafios';
@@ -7612,7 +7618,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesNotifyTournamentSoon => 'O torneio vai começar em breve';
 
   @override
-  String get preferencesNotifyTimeAlarm => 'Está acabando o tempo no jogo por correspondência';
+  String get preferencesNotifyTimeAlarm => 'Tempo de partida por correspondência esgotando';
 
   @override
   String get preferencesNotifyBell => 'Notificação no Lichess';
@@ -7627,7 +7633,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesNotifyDevice => 'Dispositivo';
 
   @override
-  String get preferencesBellNotificationSound => 'Som da notificação';
+  String get preferencesBellNotificationSound => 'Som de notificação';
 
   @override
   String get preferencesBlindfold => 'Às cegas';

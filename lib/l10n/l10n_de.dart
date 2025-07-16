@@ -70,7 +70,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileNoSearchResults => 'Keine Ergebnisse';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Bitte beachte, dass derzeit nicht alle Funktionen der alten App oder der Website verfügbar sind, aber wir fügen ständig Funktionen hinzu.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Du folgst keinem Nutzer.';
@@ -123,7 +123,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileRemoveBookmark => 'Lesezeichen löschen';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Serveranalyse';
 
   @override
   String get mobileSettingsClockPosition => 'Uhrposition';
@@ -3455,7 +3455,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reportCheatBoostHelp => 'Füge den Link zu einer oder mehreren Partien ein und erkläre die Auffälligkeiten bezüglich des Verhaltens des Spielers. Bitte schreibe nicht einfach nur „Die schummeln (bzw. betrügen)“, sondern begründe auch, wie Du zu diesem Schluss kommst.';
 
   @override
-  String get reportUsernameHelp => 'Erkläre, was an diesem Benutzernamen beleidigend oder unangemessen ist. Sage nicht einfach \"Der Name ist beleidigend/unangemessen\", sondern erkläre, wie du zu dieser Schlussfolgerung gekommen bist. Insbesondere wenn die Beleidigung verschleiert wird, nicht auf Englisch, ist in Slang, oder ist ein historischer/kultureller Bezugspunkt.';
+  String get reportUsernameHelp => 'Erkläre, was an diesem Benutzernamen beleidigend oder unangemessen ist. Sage nicht einfach \"Der Name ist beleidigend/unangemessen\", sondern erkläre, wie du zu dieser Schlussfolgerung gekommen bist. Insbesondere wenn die Beleidigung verschleiert wird, nicht auf Englisch, Umgangssprache, oder ein historischer/kultureller Bezugspunkt ist.';
 
   @override
   String get reportProcessedFasterInEnglish => 'Ihr Bericht wird schneller bearbeitet, wenn er auf Englisch verfasst ist.';

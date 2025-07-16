@@ -70,7 +70,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileNoSearchResults => '无结果';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => '请注意，不是所有来自旧应用程序或网站的功能目前都可用，但我们会不断增加新功能。';
 
   @override
   String get mobileNotFollowingAnyUser => '你没有关注任何用户。';
@@ -123,7 +123,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileRemoveBookmark => '删除书签';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => '服务器分析';
 
   @override
   String get mobileSettingsClockPosition => '棋钟位置';
@@ -897,7 +897,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return '由 $param 创建和管理。';
   }
 
   @override

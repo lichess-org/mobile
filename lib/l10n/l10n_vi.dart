@@ -70,7 +70,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileNoSearchResults => 'Không có kết quả';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Xin lưu ý rằng không phải tất cả các tính năng từ ứng dụng cũ hoặc trang web hiện đều khả dụng, nhưng chúng tôi luôn bổ sung thêm các tính năng.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Bạn chưa theo dõi người dùng nào.';

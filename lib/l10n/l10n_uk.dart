@@ -123,7 +123,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Аналіз на сервері';
 
   @override
   String get mobileSettingsClockPosition => 'Розташування годинника';

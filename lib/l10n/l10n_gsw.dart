@@ -70,7 +70,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileNoSearchResults => 'Nüt g\'funde';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Momentan sind no nöd alli Funktione vu de alte App oder vu de Website verfüegbar, aber es chunnt laufend wieder Nois dezue.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Du folgsch keim Schpiller.';
@@ -123,7 +123,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileRemoveBookmark => 'Remove bookmark';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Server-Analyse';
 
   @override
   String get mobileSettingsClockPosition => 'Position vode Uhr';
@@ -551,7 +551,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaAllowBerserkHelp => 'Erlaubt em Schpiller sini Bedänkziit z\'halbiere, um so en Zuesatzpunkt z\'günne';
 
   @override
-  String get arenaAllowChatHelp => 'Loh d\'Schpiller ime Chatruum diskutiere';
+  String get arenaAllowChatHelp => 'Lass d\'Schpiller ime Chatruum diskutiere';
 
   @override
   String get arenaArenaStreaks => 'Arena Sieges Serie';
@@ -2120,7 +2120,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get waitingForOpponent => 'Uf de Gägner warte';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Oder loh din Gägner de QR-Code skänne';
+  String get orLetYourOpponentScanQrCode => 'Oder lass din Gägner de QR-Code skänne';
 
   @override
   String get waiting => 'Am Warte';
@@ -3531,10 +3531,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get privacyPolicy => 'Datäschutzbeschtimmige';
 
   @override
-  String get letOtherPlayersFollowYou => 'Loh anderi Schpiller dir folge';
+  String get letOtherPlayersFollowYou => 'Lass anderi Schpiller dir folge';
 
   @override
-  String get letOtherPlayersChallengeYou => 'Loh anderi Schpiller dich usefordere';
+  String get letOtherPlayersChallengeYou => 'Lass anderi Schpiller dich fordere';
 
   @override
   String get letOtherPlayersInviteYouToStudy => 'Andere Schpiller erlaube, dich zu ere Schtudie izlade';
@@ -4254,7 +4254,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get hideBestMove => 'Verschteck de bescht Zug';
 
   @override
-  String get getAHint => 'Loh dir en Tipp geh';
+  String get getAHint => 'Lass dir en Tipp geh';
 
   @override
   String get evaluatingYourMove => 'Din Zug wird g\'wertet ...';
