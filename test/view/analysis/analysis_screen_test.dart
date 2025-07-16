@@ -479,6 +479,38 @@ void main() {
         await tester.pump(kLocalEngineAfterCloudEvalDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.widgetWithText(InlineMove, '+0.2'), findsNWidgets(2));
       });
+
+      testWidgets(
+        'computer variations are displayed in the move tree when server analysis is enabled',
+        (tester) async {
+          await makeEngineTestApp(tester, gameId: const GameId('xze7RH66'));
+
+          expect(find.byType(CircularProgressIndicator), findsOne);
+          // wait for the game to be loaded
+          await tester.pump(const Duration(milliseconds: 50));
+
+          expect(find.text('Mistake. dxe6 was best.'), findsOne);
+          expect(find.text('13. dxe6'), findsOne);
+        },
+      );
+
+      testWidgets(
+        'computer variations are not displayed in the move tree when server analysis is disabled',
+        (tester) async {
+          await makeEngineTestApp(
+            tester,
+            isServerAnalysisEnabled: false,
+            gameId: const GameId('xze7RH66'),
+          );
+
+          expect(find.byType(CircularProgressIndicator), findsOne);
+          // wait for the game to be loaded
+          await tester.pump(const Duration(milliseconds: 50));
+
+          expect(find.text('Mistake. dxe6 was best.'), findsNothing);
+          expect(find.text('13. dxe6'), findsNothing);
+        },
+      );
     });
 
     group('Engine lines', () {
