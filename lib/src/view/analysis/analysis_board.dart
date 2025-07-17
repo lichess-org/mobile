@@ -44,39 +44,23 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 
+    final showBestMoveArrow =
+        analysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
     final showAnnotations =
         analysisState.isComputerAnalysisAllowed &&
         analysisState.isServerAnalysisEnabled &&
         analysisPrefs.showAnnotations;
     final currentNode = analysisState.currentNode;
 
-    ISet<Shape> bestMoveShapes() {
-      final showBestMoveArrow =
-          analysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
-      if (!showBestMoveArrow) {
-        return ISet();
-      }
-
-      final eval = pickBestClientEval(
-        localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
-        savedEval: currentNode.eval,
-      );
-      if (eval == null) {
-        return ISet();
-      }
-
-      if (eval.position.fen != currentNode.position.fen) {
-        // Eval is out of sync, this usually happens after making a move on the board.
-        // While waiting for the updated eval we don't want to show the best moves from the previous position.
-        return ISet();
-      }
-
-      return computeBestMoveShapes(
-        eval.bestMoves,
-        currentNode.position.turn,
-        boardPrefs.pieceSet.assets,
-      );
-    }
+    final bestMoves = showBestMoveArrow
+        ? pickBestClientEval(
+            localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
+            savedEval: currentNode.eval,
+          )?.bestMoves
+        : null;
+    final ISet<Shape> bestMoveShapes = bestMoves != null
+        ? computeBestMoveShapes(bestMoves, currentNode.position.turn, boardPrefs.pieceSet.assets)
+        : ISet();
 
     final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
@@ -100,7 +84,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
             .onUserMove(move, shouldReplace: widget.shouldReplaceChildOnUserMove),
         onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       ),
-      shapes: userShapes.union(bestMoveShapes()),
+      shapes: userShapes.union(bestMoveShapes),
       annotations: sanMove != null && annotation != null
           ? altCastles.containsKey(sanMove.move.uci)
                 ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
