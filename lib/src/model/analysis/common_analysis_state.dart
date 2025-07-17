@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 
 /// Interface for Analysis's State.
-abstract class AbstractAnalysisState {
+abstract class CommonAnalysisState {
   /// Returns `true` if the engine evaluation is available (for both local and cloud).
   ///
   /// This value may depend on the current state and the user preferences.
@@ -19,11 +19,7 @@ abstract class AbstractAnalysisState {
   Position? get currentPosition;
 
   /// The current node in the analysis view.
-  ///
-  /// This is an immutable copy of the actual [Node] at the `currentPath`.
-  /// We don't want to use [Node.view] here because it'd copy the whole tree
-  /// under the current node and it's expensive.
-  AbstractAnalysisCurrentNode get currentNode;
+  AnalysisCurrentNodeInterface get currentNode;
 
   /// The last move played.
   Move? get lastMove;
@@ -36,7 +32,7 @@ abstract class AbstractAnalysisState {
 }
 
 /// Interface for Analysis's current node.
-abstract class AbstractAnalysisCurrentNode {
+abstract class AnalysisCurrentNodeInterface {
   SanMove? get sanMove;
   IList<int>? get nags;
   ClientEval? get eval;

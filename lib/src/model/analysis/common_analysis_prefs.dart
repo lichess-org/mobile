@@ -1,5 +1,5 @@
 /// Interface for Analysis's prefs.
-abstract class AbstractAnalysisPrefs {
+abstract class CommonAnalysisPrefs {
   /// Whether to show the best move arrows.
   bool get showBestMoveArrow;
 

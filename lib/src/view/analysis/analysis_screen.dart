@@ -12,10 +12,10 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
@@ -251,7 +251,7 @@ class _Body extends ConsumerWidget {
       tabController: controller,
       pov: pov,
       boardBuilder: (context, boardSize, borderRadius) =>
-          AnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
+          GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
       boardHeader: boardHeader,
       boardFooter: boardFooter,
       engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge

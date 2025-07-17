@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
-import 'package:lichess_mobile/src/view/analysis/abstract_analysis_board.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings_screen.dart';
@@ -266,7 +266,7 @@ class _Body extends ConsumerWidget {
           smallBoard: broadcastPrefs.smallBoard,
           pov: pov,
           tabController: tabController,
-          boardBuilder: (context, boardSize, borderRadius) => _BroadcastBoard(
+          boardBuilder: (context, boardSize, borderRadius) => BroadcastAnalysisBoard(
             roundId: roundId,
             gameId: gameId,
             boardSize: boardSize,
@@ -385,8 +385,8 @@ class _OpeningExplorerTab extends ConsumerWidget {
   }
 }
 
-class _BroadcastBoard extends AbstractAnalysisBoard {
-  const _BroadcastBoard({
+class BroadcastAnalysisBoard extends AnalysisBoard {
+  const BroadcastAnalysisBoard({
     required this.roundId,
     required this.gameId,
     required super.boardSize,
@@ -397,11 +397,11 @@ class _BroadcastBoard extends AbstractAnalysisBoard {
   final BroadcastGameId gameId;
 
   @override
-  ConsumerState<_BroadcastBoard> createState() => _BroadcastBoardState();
+  ConsumerState<BroadcastAnalysisBoard> createState() => _BroadcastAnalysisBoardState();
 }
 
-class _BroadcastBoardState
-    extends AbstractAnalysisBoardState<_BroadcastBoard, BroadcastAnalysisState, BroadcastPrefs> {
+class _BroadcastAnalysisBoardState
+    extends AnalysisBoardState<BroadcastAnalysisBoard, BroadcastAnalysisState, BroadcastPrefs> {
   @override
   BroadcastAnalysisState get analysisState =>
       ref.watch(broadcastAnalysisControllerProvider(widget.roundId, widget.gameId)).requireValue;

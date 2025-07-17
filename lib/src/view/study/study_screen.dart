@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
-import 'package:lichess_mobile/src/view/analysis/abstract_analysis_board.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -391,7 +391,7 @@ class _Body extends ConsumerWidget {
       tabController: tabController,
       pov: pov,
       boardBuilder: (context, boardSize, borderRadius) =>
-          _StudyBoard(id: id, boardSize: boardSize, boardRadius: borderRadius),
+          StudyAnalysisBoard(id: id, boardSize: boardSize, boardRadius: borderRadius),
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
           ? (context, orientation) {
@@ -465,16 +465,17 @@ extension on PgnCommentShape {
   }
 }
 
-class _StudyBoard extends AbstractAnalysisBoard {
-  const _StudyBoard({required this.id, required super.boardSize, super.boardRadius});
+class StudyAnalysisBoard extends AnalysisBoard {
+  const StudyAnalysisBoard({required this.id, required super.boardSize, super.boardRadius});
 
   final StudyId id;
 
   @override
-  ConsumerState<_StudyBoard> createState() => _StudyBoardState();
+  ConsumerState<StudyAnalysisBoard> createState() => _StudyAnalysisBoardState();
 }
 
-class _StudyBoardState extends AbstractAnalysisBoardState<_StudyBoard, StudyState, StudyPrefs> {
+class _StudyAnalysisBoardState
+    extends AnalysisBoardState<StudyAnalysisBoard, StudyState, StudyPrefs> {
   @override
   StudyState get analysisState => ref.watch(studyControllerProvider(widget.id)).requireValue;
 

@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
+import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -87,7 +87,7 @@ class _Body extends ConsumerWidget {
                           top: kTabletBoardTableSidePadding,
                           bottom: kTabletBoardTableSidePadding,
                         ),
-                        child: AnalysisBoard(
+                        child: GameAnalysisBoard(
                           options: options,
                           boardSize: boardSize,
                           boardRadius: isTablet ? Styles.boardBorderRadius : null,
@@ -139,7 +139,7 @@ class _Body extends ConsumerWidget {
                         child: GestureDetector(
                           // disable scrolling when dragging the board
                           onVerticalDragStart: (_) {},
-                          child: AnalysisBoard(
+                          child: GameAnalysisBoard(
                             options: options,
                             boardSize: boardSize,
                             shouldReplaceChildOnUserMove: true,
