@@ -48,9 +48,6 @@ abstract class AnalysisBoardState<
   /// For the study board to set a different fen if the position is `null`.
   String get fen => analysisState.currentPosition!.fen;
 
-  /// For the study board to clear shapes when switching to a new chapter.
-  void clearShapes() {}
-
   /// For the study board to add pgn shapes and variations arrows.
   ISet<Shape> get extraShapes => ISet();
 
@@ -59,7 +56,6 @@ abstract class AnalysisBoardState<
 
   @override
   Widget build(BuildContext context) {
-    clearShapes();
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
 

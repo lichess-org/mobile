@@ -502,19 +502,6 @@ class _StudyAnalysisBoardState
       kInitialFEN;
 
   @override
-  void clearShapes() {
-    // Clear shapes when switching to a new chapter.
-    // This avoids "leftover" shapes from the previous chapter when the engine has not evaluated the new position yet.
-    ref.listen(studyControllerProvider(widget.id).select((state) => state.hasValue), (prev, next) {
-      if (prev != next) {
-        setState(() {
-          userShapes = ISet();
-        });
-      }
-    });
-  }
-
-  @override
   ISet<Shape> get extraShapes {
     final showVariationArrows =
         ref.watch(studyPreferencesProvider.select((prefs) => prefs.showVariationArrows)) &&
@@ -533,5 +520,20 @@ class _StudyAnalysisBoardState
     );
 
     return pgnShapes.union(variationArrows);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Clear shapes when switching to a new chapter.
+    // This avoids "leftover" shapes from the previous chapter when the engine has not evaluated the new position yet.
+    ref.listen(studyControllerProvider(widget.id).select((state) => state.hasValue), (prev, next) {
+      if (prev != next) {
+        setState(() {
+          userShapes = ISet();
+        });
+      }
+    });
+
+    return super.build(context);
   }
 }
