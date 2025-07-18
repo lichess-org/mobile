@@ -397,7 +397,7 @@ class GameController extends _$GameController {
   }
 
   // THIS IS THE NEW, CORRECT FUNCTION
-  void proposeOrAcceptRematch() async {
+  Future<void> proposeOrAcceptRematch() async {
     // Get the details of the game that just ended.
     final game = state.requireValue.game;
 
