@@ -396,46 +396,36 @@ class GameController extends _$GameController {
     _socketClient.send('takeback-no', null);
   }
 
-  // THIS IS THE NEW, CORRECT FUNCTION
   Future<void> proposeOrAcceptRematch() async {
-    // Get the details of the game that just ended.
     final game = state.requireValue.game;
 
-    // Check if the game was a special "from position" variant, like our Odds Bot game.
-    // This is the main branching logic, now correctly placed in the controller.
     if (game.meta.variant == Variant.fromPosition) {
-      // --- CORRECT PATH FOR ODDS BOTS ---
+      if (game.opponent?.user == null || game.meta.clock == null) {
+        return;
+      }
 
-      // Get the service that creates new games, as instructed by veloce.
       final createGameService = ref.read(createGameServiceProvider);
 
-      // Build the detailed challenge request using info from the finished game.
       final challenge = ChallengeRequest(
         destUser: game.opponent!.user!,
         variant: Variant.fromPosition,
         timeControl: ChallengeTimeControlType.clock,
         clock: (time: game.meta.clock!.initial, increment: game.meta.clock!.increment),
-        rated: false,
-        sideChoice: game.youAre == Side.white ? SideChoice.white : SideChoice.black,
+        rated: game.meta.rated,
+        sideChoice: game.youAre == Side.white ? SideChoice.black : SideChoice.white,
         initialFen: game.initialFen,
       );
 
       try {
-        // Call the service to create the new challenge and wait for the response.
         final response = await createGameService.newRealTimeChallenge(challenge);
 
-        // If the challenge was accepted, the response will contain the new game's ID.
         if (response.gameFullId != null) {
-          // Update the state with the redirect ID. The UI will see this and navigate automatically.
           state = AsyncValue.data(state.requireValue.copyWith(redirectGameId: response.gameFullId));
         }
       } catch (e, s) {
         _logger.warning('Could not create rematch challenge', e, s);
       }
     } else {
-      // --- CORRECT PATH FOR NORMAL GAMES ---
-
-      // This is the original logic. It's correct for a standard rematch.
       _socketClient.send('rematch-yes', null);
     }
   }
