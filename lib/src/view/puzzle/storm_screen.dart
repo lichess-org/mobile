@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
-import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
@@ -26,6 +25,7 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/interactive_board.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -46,14 +46,12 @@ class _StormScreenState extends ConsumerState<StormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WakelockWidget(
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [_StormDashboardButton(), const ToggleSoundButton()],
-          title: const Text('Puzzle Storm'),
-        ),
-        body: _Body(_boardKey),
+    return Scaffold(
+      appBar: AppBar(
+        actions: [_StormDashboardButton(), const ToggleSoundButton()],
+        title: const Text('Puzzle Storm'),
       ),
+      body: _Body(_boardKey),
     );
   }
 }
@@ -66,11 +64,13 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final storm = ref.watch(stormProvider);
+    final shouldSetImmersiveMode = ref.watch(
+      boardPreferencesProvider.select((prefs) => prefs.immersiveModeWhilePlaying ?? false),
+    );
 
     switch (storm) {
       case AsyncData(value: final PuzzleStormResponse data):
         final ctrlProvider = stormControllerProvider(data.puzzles, data.timestamp);
-        final boardPreferences = ref.watch(boardPreferencesProvider);
         final stormState = ref.watch(ctrlProvider);
 
         ref.listen(ctrlProvider, (prev, state) {
@@ -87,7 +87,11 @@ class _Body extends ConsumerWidget {
           }
         });
 
-        final content = PopScope(
+        return InteractiveBoardScreen(
+          boardKey: boardKey,
+          shouldSetImmersiveMode: shouldSetImmersiveMode,
+          isInteractive:
+              stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
           canPop: stormState.mode != StormMode.running,
           onPopInvokedWithResult: (bool didPop, _) async {
             if (didPop) {
@@ -109,55 +113,41 @@ class _Body extends ConsumerWidget {
               navigator.pop();
             }
           },
-          child: SafeArea(
-            // view padding can change on Android when immersive mode is enabled, so to prevent any
-            // board vertical shift, we set `maintainBottomViewPadding` to true.
-            maintainBottomViewPadding: true,
-            child: Column(
-              children: [
-                Expanded(
-                  child: BoardTable(
-                    boardKey: boardKey,
-                    orientation: stormState.pov,
-                    lastMove: stormState.lastMove as NormalMove?,
-                    fen: stormState.position.fen,
-                    interactiveBoardParams: (
-                      position: stormState.position,
-                      variant: Variant.standard,
-                      playerSide:
-                          !stormState.firstMovePlayed ||
-                              stormState.mode == StormMode.ended ||
-                              stormState.position.isGameOver
-                          ? PlayerSide.none
-                          : stormState.pov == Side.white
-                          ? PlayerSide.white
-                          : PlayerSide.black,
-                      promotionMove: stormState.promotionMove,
-                      onMove: (move, {isDrop, captured}) =>
-                          ref.read(ctrlProvider.notifier).onUserMove(move),
-                      onPromotionSelection: (role) =>
-                          ref.read(ctrlProvider.notifier).onPromotionSelection(role),
-                      premovable: null,
-                    ),
-                    topTable: _TopTable(data),
-                    bottomTable: _Combo(stormState.combo),
+          child: Column(
+            children: [
+              Expanded(
+                child: BoardTable(
+                  boardKey: boardKey,
+                  orientation: stormState.pov,
+                  lastMove: stormState.lastMove as NormalMove?,
+                  fen: stormState.position.fen,
+                  interactiveBoardParams: (
+                    position: stormState.position,
+                    variant: Variant.standard,
+                    playerSide:
+                        !stormState.firstMovePlayed ||
+                            stormState.mode == StormMode.ended ||
+                            stormState.position.isGameOver
+                        ? PlayerSide.none
+                        : stormState.pov == Side.white
+                        ? PlayerSide.white
+                        : PlayerSide.black,
+                    promotionMove: stormState.promotionMove,
+                    onMove: (move, {isDrop, captured}) =>
+                        ref.read(ctrlProvider.notifier).onUserMove(move),
+                    onPromotionSelection: (role) =>
+                        ref.read(ctrlProvider.notifier).onPromotionSelection(role),
+                    premovable: null,
                   ),
+                  topTable: _TopTable(data),
+                  bottomTable: _Combo(stormState.combo),
                 ),
-                _BottomBar(ctrlProvider),
-              ],
-            ),
+              ),
+              _BottomBar(ctrlProvider),
+            ],
           ),
         );
 
-        return Theme.of(context).platform == TargetPlatform.android
-            ? AndroidGesturesExclusionWidget(
-                boardKey: boardKey,
-                shouldExcludeGesturesOnFocusGained: () =>
-                    stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
-                shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
-                child: content,
-              )
-            : content;
       case AsyncError(:final error, :final stackTrace):
         debugPrint('SEVERE: [PuzzleStormScreen] could not load storm; $error\n$stackTrace');
         return Center(

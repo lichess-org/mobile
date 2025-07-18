@@ -39,7 +39,7 @@ class AndroidGesturesExclusionWidget extends StatefulWidget {
   /// If provided, the widget will call this callback when focus is gained,
   /// and will not exclude gestures if the callback returns false.
   /// If not provided, the widget will enable immersive mode by default.
-  final bool Function()? shouldExcludeGesturesOnFocusGained;
+  final bool? shouldExcludeGesturesOnFocusGained;
 
   /// Whether to set immersive mode with the gestures exclusion.
   ///
@@ -63,7 +63,7 @@ class _AndroidGesturesExclusionWidgetState extends State<AndroidGesturesExclusio
       data: MediaQuery.of(context).copyWith(viewPadding: initialViewPadding),
       child: FocusDetector(
         onFocusGained: () {
-          if (widget.shouldExcludeGesturesOnFocusGained?.call() ?? true) {
+          if (widget.shouldExcludeGesturesOnFocusGained ?? true) {
             setAndroidBoardGesturesExclusion(
               widget.boardKey,
               withImmersiveMode: widget.shouldSetImmersiveMode,

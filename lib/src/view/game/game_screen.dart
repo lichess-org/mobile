@@ -10,11 +10,9 @@ import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
-import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
@@ -123,7 +121,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             )
           : null,
     );
-    final boardPreferences = ref.watch(boardPreferencesProvider);
 
     switch (ref.watch(provider)) {
       case AsyncData(:final value):
@@ -137,49 +134,41 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
         final socketUri = loadedGame != null ? GameController.socketUri(loadedGame.gameId) : null;
 
-        final body = PopScope(
-          canPop: isRealTimePlayingGame != true,
-          child: SafeArea(
-            // view padding can change on Android when immersive mode is enabled, so to prevent any
-            // board vertical shift, we set `maintainBottomViewPadding` to true.
-            maintainBottomViewPadding: true,
-            child: loadedGame != null
-                ? GameBody(
-                    loadedGame: loadedGame,
-                    whiteClockKey: _whiteClockKey,
-                    blackClockKey: _blackClockKey,
-                    boardKey: _boardKey,
-                    onLoadGameCallback: (id) {
-                      if (mounted) {
-                        ref.read(provider.notifier).loadGame(id);
-                      }
-                    },
-                    onNewOpponentCallback: (game) {
-                      if (!mounted) return;
+        final body = loadedGame != null
+            ? GameBody(
+                loadedGame: loadedGame,
+                whiteClockKey: _whiteClockKey,
+                blackClockKey: _blackClockKey,
+                boardKey: _boardKey,
+                onLoadGameCallback: (id) {
+                  if (mounted) {
+                    ref.read(provider.notifier).loadGame(id);
+                  }
+                },
+                onNewOpponentCallback: (game) {
+                  if (!mounted) return;
 
-                      if (widget.source == _GameSource.lobby) {
-                        ref.read(provider.notifier).newOpponent();
-                      } else {
-                        final savedSetup = ref.read(gameSetupPreferencesProvider);
-                        Navigator.of(context, rootNavigator: true).pushReplacement(
-                          GameScreen.buildRoute(
-                            context,
-                            seek: GameSeek.newOpponentFromGame(game, savedSetup),
-                          ),
-                        );
-                      }
-                    },
-                  )
-                : widget.challenge != null && challenge != null
-                ? ChallengeDeclinedBoard(
-                    challenge: challenge,
-                    declineReason: declineReason != null
-                        ? declineReason.label(context.l10n)
-                        : ChallengeDeclineReason.generic.label(context.l10n),
-                  )
-                : const LoadGameError('Could not create the game.'),
-          ),
-        );
+                  if (widget.source == _GameSource.lobby) {
+                    ref.read(provider.notifier).newOpponent();
+                  } else {
+                    final savedSetup = ref.read(gameSetupPreferencesProvider);
+                    Navigator.of(context, rootNavigator: true).pushReplacement(
+                      GameScreen.buildRoute(
+                        context,
+                        seek: GameSeek.newOpponentFromGame(game, savedSetup),
+                      ),
+                    );
+                  }
+                },
+              )
+            : widget.challenge != null && challenge != null
+            ? ChallengeDeclinedBoard(
+                challenge: challenge,
+                declineReason: declineReason != null
+                    ? declineReason.label(context.l10n)
+                    : ChallengeDeclineReason.generic.label(context.l10n),
+              )
+            : const LoadGameError('Could not create the game.');
 
         return Scaffold(
           resizeToAvoidBottomInset: false,
@@ -195,14 +184,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
             actions: [if (loadedGame != null) _GameMenu(gameId: loadedGame.gameId)],
           ),
-          body: Theme.of(context).platform == TargetPlatform.android
-              ? AndroidGesturesExclusionWidget(
-                  boardKey: _boardKey,
-                  shouldExcludeGesturesOnFocusGained: () => isRealTimePlayingGame,
-                  shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
-                  child: body,
-                )
-              : body,
+          body: body,
         );
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameScreen] could not create game; $e\n$s');
@@ -222,7 +204,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 ? _ChallengeGameTitle(challenge: widget.challenge!)
                 : const SizedBox.shrink(),
           ),
-          body: PopScope(child: message),
+          body: message,
         );
       case _:
         final loadingBoard = widget.seek != null
@@ -252,7 +234,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 ? _ChallengeGameTitle(challenge: widget.challenge!)
                 : const SizedBox.shrink(),
           ),
-          body: PopScope(canPop: false, child: loadingBoard),
+          body: loadingBoard,
         );
     }
   }
