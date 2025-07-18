@@ -12,10 +12,10 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
@@ -38,10 +38,9 @@ import 'package:share_plus/share_plus.dart';
 final _logger = Logger('AnalysisScreen');
 
 class AnalysisScreen extends StatelessWidget {
-  const AnalysisScreen({required this.options, this.enableDrawingShapes = true, super.key});
+  const AnalysisScreen({required this.options, super.key});
 
   final AnalysisOptions options;
-  final bool enableDrawingShapes;
 
   static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
     return buildScreenRoute(context, screen: AnalysisScreen(options: options));
@@ -49,16 +48,14 @@ class AnalysisScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _AnalysisScreen(options: options, enableDrawingShapes: enableDrawingShapes);
+    return _AnalysisScreen(options: options);
   }
 }
 
 class _AnalysisScreen extends ConsumerStatefulWidget {
-  const _AnalysisScreen({required this.options, this.enableDrawingShapes = true});
+  const _AnalysisScreen({required this.options});
 
   final AnalysisOptions options;
-
-  final bool enableDrawingShapes;
 
   @override
   ConsumerState<_AnalysisScreen> createState() => _AnalysisScreenState();
@@ -113,11 +110,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
             title: _Title(variant: value.variant),
             actions: appBarActions,
           ),
-          body: _Body(
-            options: widget.options,
-            controller: _tabController,
-            enableDrawingShapes: widget.enableDrawingShapes,
-          ),
+          body: _Body(options: widget.options, controller: _tabController),
         );
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load analysis: $error', stackTrace);
@@ -205,11 +198,10 @@ class _Title extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.options, required this.controller, required this.enableDrawingShapes});
+  const _Body({required this.options, required this.controller});
 
   final TabController controller;
   final AnalysisOptions options;
-  final bool enableDrawingShapes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -258,12 +250,8 @@ class _Body extends ConsumerWidget {
       smallBoard: analysisPrefs.smallBoard,
       tabController: controller,
       pov: pov,
-      boardBuilder: (context, boardSize, borderRadius) => AnalysisBoard(
-        options,
-        boardSize,
-        borderRadius: borderRadius,
-        enableDrawingShapes: enableDrawingShapes,
-      ),
+      boardBuilder: (context, boardSize, borderRadius) =>
+          GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
       boardHeader: boardHeader,
       boardFooter: boardFooter,
       engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge

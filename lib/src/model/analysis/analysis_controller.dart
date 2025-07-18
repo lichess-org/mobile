@@ -7,6 +7,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -646,7 +647,9 @@ class AnalysisController extends _$AnalysisController
 }
 
 @freezed
-sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState {
+sealed class AnalysisState
+    with _$AnalysisState
+    implements EvaluationMixinState, CommonAnalysisState {
   const AnalysisState._();
 
   const factory AnalysisState({
@@ -770,7 +773,9 @@ sealed class AnalysisState with _$AnalysisState implements EvaluationMixinState 
 }
 
 @freezed
-sealed class AnalysisCurrentNode with _$AnalysisCurrentNode {
+sealed class AnalysisCurrentNode
+    with _$AnalysisCurrentNode
+    implements AnalysisCurrentNodeInterface {
   const AnalysisCurrentNode._();
 
   const factory AnalysisCurrentNode({
