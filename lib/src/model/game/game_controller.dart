@@ -12,9 +12,11 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -29,6 +31,7 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -393,8 +396,48 @@ class GameController extends _$GameController {
     _socketClient.send('takeback-no', null);
   }
 
-  void proposeOrAcceptRematch() {
-    _socketClient.send('rematch-yes', null);
+  // THIS IS THE NEW, CORRECT FUNCTION
+  Future<void> proposeOrAcceptRematch() async {
+    // Get the details of the game that just ended.
+    final game = state.requireValue.game;
+
+    // Check if the game was a special "from position" variant, like our Odds Bot game.
+    // This is the main branching logic, now correctly placed in the controller.
+    if (game.meta.variant == Variant.fromPosition) {
+      // --- CORRECT PATH FOR ODDS BOTS ---
+
+      // Get the service that creates new games, as instructed by veloce.
+      final createGameService = ref.read(createGameServiceProvider);
+
+      // Build the detailed challenge request using info from the finished game.
+      final challenge = ChallengeRequest(
+        destUser: game.opponent!.user!,
+        variant: Variant.fromPosition,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: game.meta.clock!.initial, increment: game.meta.clock!.increment),
+        rated: false,
+        sideChoice: game.youAre == Side.white ? SideChoice.white : SideChoice.black,
+        initialFen: game.initialFen,
+      );
+
+      try {
+        // Call the service to create the new challenge and wait for the response.
+        final response = await createGameService.newRealTimeChallenge(challenge);
+
+        // If the challenge was accepted, the response will contain the new game's ID.
+        if (response.gameFullId != null) {
+          // Update the state with the redirect ID. The UI will see this and navigate automatically.
+          state = AsyncValue.data(state.requireValue.copyWith(redirectGameId: response.gameFullId));
+        }
+      } catch (e, s) {
+        _logger.warning('Could not create rematch challenge', e, s);
+      }
+    } else {
+      // --- CORRECT PATH FOR NORMAL GAMES ---
+
+      // This is the original logic. It's correct for a standard rematch.
+      _socketClient.send('rematch-yes', null);
+    }
   }
 
   void declineRematch() {
