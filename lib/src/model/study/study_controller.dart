@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -460,7 +461,7 @@ class StudyController extends _$StudyController
 enum GamebookState { startLesson, findTheMove, correctMove, incorrectMove, lessonComplete }
 
 @freezed
-sealed class StudyState with _$StudyState implements EvaluationMixinState {
+sealed class StudyState with _$StudyState implements EvaluationMixinState, CommonAnalysisState {
   const StudyState._();
 
   const factory StudyState({
@@ -588,7 +589,7 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState {
 }
 
 @freezed
-sealed class StudyCurrentNode with _$StudyCurrentNode {
+sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrentNodeInterface {
   const StudyCurrentNode._();
 
   const factory StudyCurrentNode({

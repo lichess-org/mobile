@@ -1,26 +1,20 @@
-import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings_screen.dart';
@@ -272,8 +266,12 @@ class _Body extends ConsumerWidget {
           smallBoard: broadcastPrefs.smallBoard,
           pov: pov,
           tabController: tabController,
-          boardBuilder: (context, boardSize, borderRadius) =>
-              _BroadcastBoard(roundId, gameId, boardSize, borderRadius),
+          boardBuilder: (context, boardSize, borderRadius) => BroadcastAnalysisBoard(
+            roundId: roundId,
+            gameId: gameId,
+            boardSize: boardSize,
+            boardRadius: borderRadius,
+          ),
           boardHeader: _PlayerWidget(
             tournamentId: tournamentId,
             roundId: roundId,
@@ -387,101 +385,43 @@ class _OpeningExplorerTab extends ConsumerWidget {
   }
 }
 
-class _BroadcastBoard extends ConsumerStatefulWidget {
-  const _BroadcastBoard(this.roundId, this.gameId, this.boardSize, this.borderRadius);
+class BroadcastAnalysisBoard extends AnalysisBoard {
+  const BroadcastAnalysisBoard({
+    required this.roundId,
+    required this.gameId,
+    required super.boardSize,
+    super.boardRadius,
+  });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final double boardSize;
-  final BorderRadiusGeometry? borderRadius;
 
   @override
-  ConsumerState<_BroadcastBoard> createState() => _BroadcastBoardState();
+  ConsumerState<BroadcastAnalysisBoard> createState() => _BroadcastAnalysisBoardState();
 }
 
-class _BroadcastBoardState extends ConsumerState<_BroadcastBoard> {
-  ISet<Shape> userShapes = ISet();
+class _BroadcastAnalysisBoardState
+    extends AnalysisBoardState<BroadcastAnalysisBoard, BroadcastAnalysisState, BroadcastPrefs> {
+  @override
+  BroadcastAnalysisState get analysisState =>
+      ref.watch(broadcastAnalysisControllerProvider(widget.roundId, widget.gameId)).requireValue;
 
   @override
-  Widget build(BuildContext context) {
-    final ctrlProvider = broadcastAnalysisControllerProvider(widget.roundId, widget.gameId);
-    final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
+  BroadcastPrefs get analysisPrefs => ref.watch(broadcastPreferencesProvider);
 
-    final showBestMoveArrow =
-        broadcastAnalysisState.isEngineAvailable(enginePrefs) && broadcastPrefs.showBestMoveArrow;
-    final showAnnotations =
-        broadcastAnalysisState.isServerAnalysisEnabled && broadcastPrefs.showAnnotations;
-    final currentNode = broadcastAnalysisState.currentNode;
+  @override
+  bool get showAnnotations =>
+      analysisState.isServerAnalysisEnabled && analysisPrefs.showAnnotations;
 
-    final bestMoves = showBestMoveArrow
-        ? pickBestClientEval(
-            localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
-            savedEval: currentNode.eval,
-          )?.bestMoves
-        : null;
-    final ISet<Shape> bestMoveShapes = bestMoves != null
-        ? computeBestMoveShapes(bestMoves, currentNode.position.turn, boardPrefs.pieceSet.assets)
-        : ISet();
+  @override
+  void onUserMove(NormalMove move) => ref
+      .read(broadcastAnalysisControllerProvider(widget.roundId, widget.gameId).notifier)
+      .onUserMove(move);
 
-    final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
-    final sanMove = currentNode.sanMove;
-
-    return Chessboard(
-      size: widget.boardSize,
-      fen: broadcastAnalysisState.position.fen,
-      lastMove: broadcastAnalysisState.lastMove as NormalMove?,
-      orientation: broadcastAnalysisState.pov,
-      game: boardPrefs.toGameData(
-        variant: Variant.standard,
-        position: broadcastAnalysisState.position,
-        playerSide: broadcastAnalysisState.position.isGameOver
-            ? PlayerSide.none
-            : broadcastAnalysisState.position.turn == Side.white
-            ? PlayerSide.white
-            : PlayerSide.black,
-        promotionMove: broadcastAnalysisState.promotionMove,
-        onMove: (move, {isDrop, captured}) => ref.read(ctrlProvider.notifier).onUserMove(move),
-        onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
-      ),
-      shapes: userShapes.union(bestMoveShapes),
-      annotations: sanMove != null && annotation != null
-          ? altCastles.containsKey(sanMove.move.uci)
-                ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
-                : IMap({sanMove.move.to: annotation})
-          : null,
-      settings: boardPrefs.toBoardSettings().copyWith(
-        borderRadius: widget.borderRadius,
-        boxShadow: widget.borderRadius != null ? boardShadows : const <BoxShadow>[],
-        drawShape: DrawShapeOptions(
-          enable: boardPrefs.enableShapeDrawings,
-          onCompleteShape: _onCompleteShape,
-          onClearShapes: _onClearShapes,
-          newShapeColor: boardPrefs.shapeColor.color,
-        ),
-      ),
-    );
-  }
-
-  void _onCompleteShape(Shape shape) {
-    if (userShapes.any((element) => element == shape)) {
-      setState(() {
-        userShapes = userShapes.remove(shape);
-      });
-    } else {
-      setState(() {
-        userShapes = userShapes.add(shape);
-      });
-    }
-  }
-
-  void _onClearShapes() {
-    setState(() {
-      userShapes = ISet();
-    });
-  }
+  @override
+  void onPromotionSelection(Role? role) => ref
+      .read(broadcastAnalysisControllerProvider(widget.roundId, widget.gameId).notifier)
+      .onPromotionSelection(role);
 }
 
 enum _PlayerWidgetPosition { bottom, top }
@@ -509,7 +449,7 @@ class _PlayerWidget extends ConsumerWidget {
 
         final isCursorOnLiveMove =
             broadcastAnalysisState.currentPath == broadcastAnalysisState.broadcastLivePath;
-        final sideToMove = broadcastAnalysisState.position.turn;
+        final sideToMove = broadcastAnalysisState.currentPosition.turn;
         final side = switch (widgetPosition) {
           _PlayerWidgetPosition.bottom => broadcastAnalysisState.pov,
           _PlayerWidgetPosition.top => broadcastAnalysisState.pov.opposite,
