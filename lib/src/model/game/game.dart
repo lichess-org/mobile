@@ -356,6 +356,8 @@ sealed class CorrespondenceClockData with _$CorrespondenceClockData {
   Duration forSide(Side side) => side == Side.white ? white : black;
 }
 
+typedef CorrespondenceForecast = IList<IList<SanMove>>;
+
 @freezed
 sealed class GameStep with _$GameStep {
   const factory GameStep({

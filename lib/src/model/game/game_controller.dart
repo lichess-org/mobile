@@ -566,6 +566,12 @@ class GameController extends _$GameController {
             isThreefoldRepetition: data.threefold,
             winner: data.winner,
             status: data.status ?? curState.game.status,
+            // Update forecast: keep only the lines with the move that was just played and remove the first move
+            correspondenceForecast: curState.game.correspondenceForecast
+                ?.where((line) => line.firstOrNull?.move.uci == data.uci)
+                .map((line) => line.removeAt(0))
+                .where((line) => line.isNotEmpty)
+                .toIList(),
           ),
         );
 
@@ -1055,6 +1061,12 @@ sealed class GameState with _$GameState {
           orientation: game.youAre ?? Side.white,
           initialMoveCursor: stepCursor,
           gameId: gameFullId.gameId,
+        )
+      : game.playable && game.meta.speed == Speed.correspondence && game.youAre != null
+      ? AnalysisOptions.activeCorrespondenceGame(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          gameFullId: gameFullId,
         )
       : AnalysisOptions.standalone(
           orientation: game.youAre ?? Side.white,
