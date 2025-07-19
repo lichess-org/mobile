@@ -12,9 +12,11 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -29,6 +31,7 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -393,8 +396,38 @@ class GameController extends _$GameController {
     _socketClient.send('takeback-no', null);
   }
 
-  void proposeOrAcceptRematch() {
-    _socketClient.send('rematch-yes', null);
+  Future<void> proposeOrAcceptRematch() async {
+    final game = state.requireValue.game;
+
+    if (game.meta.variant == Variant.fromPosition) {
+      if (game.opponent?.user == null || game.meta.clock == null) {
+        return;
+      }
+
+      final createGameService = ref.read(createGameServiceProvider);
+
+      final challenge = ChallengeRequest(
+        destUser: game.opponent!.user!,
+        variant: Variant.fromPosition,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: game.meta.clock!.initial, increment: game.meta.clock!.increment),
+        rated: game.meta.rated,
+        sideChoice: game.youAre == Side.white ? SideChoice.black : SideChoice.white,
+        initialFen: game.initialFen,
+      );
+
+      try {
+        final response = await createGameService.newRealTimeChallenge(challenge);
+
+        if (response.gameFullId != null) {
+          state = AsyncValue.data(state.requireValue.copyWith(redirectGameId: response.gameFullId));
+        }
+      } catch (e, s) {
+        _logger.warning('Could not create rematch challenge', e, s);
+      }
+    } else {
+      _socketClient.send('rematch-yes', null);
+    }
   }
 
   void declineRematch() {
