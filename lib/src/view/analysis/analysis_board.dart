@@ -54,29 +54,41 @@ abstract class AnalysisBoardState<
   /// Set of shapes drawn by the user on the board (arrows, circle).
   ISet<Shape> userShapes = ISet();
 
-  @override
-  Widget build(BuildContext context) {
-    final boardPrefs = ref.watch(boardPreferencesProvider);
+  ISet<Shape> _bestMoveShapes(PieceAssets pieceAssets) {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-
-    final currentNode = analysisState.currentNode;
     final currentPosition = analysisState.currentPosition;
 
     final showBestMoveArrow =
         analysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
-    final bestMoves = showBestMoveArrow
-        ? pickBestClientEval(
-            localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
-            savedEval: currentNode.eval,
-          )?.bestMoves
-        : null;
-    final ISet<Shape> bestMoveShapes = bestMoves != null
-        ? computeBestMoveShapes(
-            bestMoves,
-            analysisState.currentPosition!.turn,
-            boardPrefs.pieceSet.assets,
-          )
-        : ISet();
+
+    if (!showBestMoveArrow || currentPosition == null) {
+      return ISet();
+    }
+
+    final eval = pickBestClientEval(
+      localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
+      savedEval: analysisState.currentNode.eval,
+    );
+
+    if (eval == null) {
+      return ISet();
+    }
+
+    if (eval.position.fen != currentPosition.fen) {
+      // Eval is out of sync, this usually happens after making a move on the board.
+      // While waiting for the updated eval we don't want to show the best moves from the previous position.
+      return ISet();
+    }
+
+    return computeBestMoveShapes(eval.bestMoves, currentPosition.turn, pieceAssets);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+
+    final currentNode = analysisState.currentNode;
+    final currentPosition = analysisState.currentPosition;
 
     final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
@@ -100,7 +112,7 @@ abstract class AnalysisBoardState<
               onPromotionSelection: onPromotionSelection,
             )
           : null,
-      shapes: userShapes.union(bestMoveShapes).union(extraShapes),
+      shapes: userShapes.union(_bestMoveShapes(boardPrefs.pieceSet.assets)).union(extraShapes),
       annotations: sanMove != null && annotation != null
           ? altCastles.containsKey(sanMove.move.uci)
                 ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
