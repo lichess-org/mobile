@@ -153,7 +153,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Velg et bilde';
 
   @override
   String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
@@ -5322,7 +5322,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get stormNewRun => 'Ny runde (hurtigtast: mellomrom)';
 
   @override
-  String get stormEndRun => 'Avslutt runden (hurtigtast: linjeskift)';
+  String get stormEndRun => 'Avslutt runden (hurtigtast: enter)';
 
   @override
   String get stormHighscores => 'Rekorder';

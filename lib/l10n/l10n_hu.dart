@@ -548,7 +548,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get arenaAllowBerserk => 'Berserk engedélyezése';
 
   @override
-  String get arenaAllowBerserkHelp => 'A játékosok saját idejük feléért cserébe többletpontot kapnak';
+  String get arenaAllowBerserkHelp => 'A játékosok felezhetik játékidejüket, hogy szerezhessenek egy extra versenypontot';
 
   @override
   String get arenaAllowChatHelp => 'Chatszoba engedélyezése a játékosoknak';
@@ -578,7 +578,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get arenaEditTournament => 'Verseny módosítása';
 
   @override
-  String get arenaEditTeamBattle => 'Csapat csata módosítása';
+  String get arenaEditTeamBattle => 'Csapatverseny módosítása';
 
   @override
   String get arenaDefender => 'Védő';
@@ -590,7 +590,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get arenaWhichTeamWillYouRepresentInThisBattle => 'Melyik csapatot fogod reprezentálni ebben a versenyben?';
 
   @override
-  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Csatlakozz az egyik csapathoz hogy részt vehess!';
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Csatlakozz az egyik csapathoz, hogy részt vehess!';
 
   @override
   String get arenaCreated => 'Létrehozva';
@@ -640,7 +640,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'A részvétel feltétele a hivatalos cím megléte';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'A verseny párosításai lezárultak.';
 
   @override
   String get arenaBerserkRate => 'Berserk rate';
@@ -1457,7 +1457,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleDownVote => 'Nem tetszett';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'A feladvány értékelésed nem fog változni. Ne feledd, a feladványoknak nincs tétje. Az értékelésed csupán segít kiválasztani az aktuális szintednek legjobban megfelelőket.';
+  String get puzzleYourPuzzleRatingWillNotChange => 'A feladvány értékszámod nem fog változni. Ne feledd, a feladványoknak nincs tétje. Az értékszámod segítségével választjuk ki a jelenlegi szintedhez illő feladványokat.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'Találd meg világos legjobb lépését.';
@@ -1731,7 +1731,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleThemeAttractionDescription => 'Csere vagy áldozat ami elmozdítja az ellenfél figuráját egy olyan mezőre ahol újabb taktika alkalmazható.';
 
   @override
-  String get puzzleThemeBackRankMate => 'Matt a hátsó soron';
+  String get puzzleThemeBackRankMate => 'Alapsori matt';
 
   @override
   String get puzzleThemeBackRankMateDescription => 'Adj mattot az alapsoron ragadt királynak, mikor a saját figurái ejtik csapdába.';
@@ -1809,7 +1809,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleThemeDeflectionDescription => 'Egy lépés amivel az ellenfél figurája kimozdítható aktuális feladatából, például egy kulcsmező felügyelete.';
 
   @override
-  String get puzzleThemeDiscoveredAttack => 'Felfedés';
+  String get puzzleThemeDiscoveredAttack => 'Felfedett támadás';
 
   @override
   String get puzzleThemeDiscoveredAttackDescription => 'Egy figura mozgatása ami előzőleg egy másik figura tűzvonalában állt, például huszár elléptetése a bástya útjából.';

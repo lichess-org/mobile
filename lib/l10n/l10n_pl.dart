@@ -12,7 +12,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileAccountPreferences => 'Ustawienia konta';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Ustawienia te są przypisane do Twojego konta Lichess i będą używane na wszystkich urządzeniach.';
 
   @override
   String get mobileAllGames => 'Wszystkie partie';
@@ -48,7 +48,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Miłego dnia, $param';
   }
 
   @override
@@ -70,7 +70,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileNoSearchResults => 'Brak wyników';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Pamiętaj, że nie wszystkie funkcje ze starej aplikacji lub strony internetowej są obecnie dostępne, ale cały czas dodajemy nowe funkcje.';
+  String get mobileNotAllFeaturesAreAvailable => 'Uwaga: nie wszystkie funkcje znane ze starej aplikacji lub strony internetowej są obecnie dostępne, ale nieustannie nad nimi pracujemy.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Nie obserwujesz żadnego gracza.';
@@ -99,25 +99,25 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobilePuzzleStormConfirmEndRun => 'Czy chcesz zakończyć tę serię?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Brak wyników, zmień proszę filtry';
+  String get mobilePuzzleStormFilterNothingToShow => 'Brak wyników, spróbuj zmienić filtry';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nic do wyświetlenia. Rozegraj kilka serii.';
+  String get mobilePuzzleStormNothingToShow => 'Nic do wyświetlenia. Rozegraj kilka serii zadań.';
 
   @override
   String get mobilePuzzleStormSubtitle => 'Rozwiąż jak najwięcej zadań w ciągu 3 minut.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'Przerwiesz swoją dobrą passę, a Twój wynik zostanie zapisany.';
+  String get mobilePuzzleStreakAbortWarning => 'Utracisz aktualną serię, ale Twój wynik zostanie zapisany.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Rozwiąż zadania z ulubionego debiutu lub wybierz motyw.';
+  String get mobilePuzzleThemesSubtitle => 'Rozwiązuj zadania ze swoich ulubionych debiutów lub wybierz motyw.';
 
   @override
   String get mobilePuzzlesTab => 'Zadania';
 
   @override
-  String get mobileRecentSearches => 'Ostatnio wyszukiwane';
+  String get mobileRecentSearches => 'Ostatnie wyszukiwania';
 
   @override
   String get mobileRemoveBookmark => 'Usuń zakładkę';
@@ -129,10 +129,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSettingsClockPosition => 'Położenie zegara';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Szablony';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Pole docelowe przeciąganej bierki';
 
   @override
   String get mobileSettingsDraggedTargetCircle => 'Kółko';
@@ -141,13 +141,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Kwadrat';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Widżety ekranu głównego';
 
   @override
   String get mobileSettingsImmersiveMode => 'Tryb pełnoekranowy';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Ukryj interfejs użytkownika podczas gry. Włącz tę funkcjonalność, jeśli rozpraszają Cię elementy nawigacji systemu na krawędziach ekranu. Działa podczas rozgrywania partii oraz rozwiązywania zadań szachowych.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Ukryj interfejs użytkownika podczas gry. Przydatne, jeśli przeszkadzają Ci gesty systemowe przy krawędziach ekranu. Działa podczas rozgrywania partii oraz rozwiązywania zadań szachowych.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Zbite bierki';
@@ -168,28 +168,28 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'Pokaż szachownicę';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Przesuń, aby wyświetlić inne tła';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Przesuń palcem, aby wyświetlić inne tła';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Naciśnij lub przeciągnij';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Klikając dwa pola';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Rysowanie po planszy';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Do rysowania kształtów użyj dwóch palców: jeden trzymaj na pustym polu, a drugim przeciągnij, aby narysować kształt.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Pokaż obramowanie';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Reakcja na dotyk';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Po włączeniu urządzenie delikatnie zawibruje, gdy wykonasz ruch lub zbijesz bierkę.';
 
   @override
   String get mobileSettingsTab => 'Ustawienia';
@@ -216,7 +216,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileShowVariations => 'Pokaż warianty';
 
   @override
-  String get mobileSomethingWentWrong => 'Coś poszło nie tak.';
+  String get mobileSomethingWentWrong => 'Ups! Coś poszło nie tak.';
 
   @override
   String get mobileSystemColors => 'Kolory systemowe';

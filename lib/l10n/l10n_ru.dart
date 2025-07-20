@@ -70,7 +70,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileNoSearchResults => 'Ничего не найденo';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Пожалуйста, обратите внимание, что не все функции старого приложения или веб-сайта в настоящее время доступны, но мы постоянно добавляем новые функции.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Вы не подписаны на других пользователей.';
@@ -123,7 +123,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileRemoveBookmark => 'Удалить из избранного';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Анализ на сервере';
 
   @override
   String get mobileSettingsClockPosition => 'Расположение часов';

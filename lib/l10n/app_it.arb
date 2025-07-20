@@ -38,6 +38,7 @@
   "mobileSettingsCustomBackgroundPresets": "Predefiniti",
   "mobileSettingsImmersiveMode": "Modalità immersiva",
   "mobileSettingsImmersiveModeSubtitle": "Nascondi la UI di sistema mentre giochi. Attiva se i gesti di navigazione ai bordi dello schermo ti danno fastidio. Si applica alla schermata di gioco e Puzzle Storm.",
+  "mobileSettingsPickAnImageShowBoard": "Mostra la scacchiera",
   "mobileSettingsTab": "Preferenze",
   "mobileShareGamePGN": "Condividi PGN",
   "mobileShareGameURL": "Condividi URL della partita",

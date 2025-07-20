@@ -147,7 +147,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Pantalla completa';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Oculta a Interface de Usuario durante o xogo. Emprégao se che amolan as iconas de navegación do sistema nos bordos da pantalla. Aplícase ás pantallas das partidas e dos crebacabezas.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Oculta a Interface de Usuario. Úsao se che amolan as iconas de navegación do sistema nos bordos da pantalla durante as partidas e os crebacabezas.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Pezas capturadas';

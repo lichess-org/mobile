@@ -9,10 +9,10 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => '帐户设置';
+  String get mobileAccountPreferences => '账号设置';
 
   @override
-  String get mobileAccountPreferencesHelp => '这设置应用于您的Lichess帐户，并将用于所有设备。';
+  String get mobileAccountPreferencesHelp => '这些设置应用于你的账号下的所有设备。';
 
   @override
   String get mobileAllGames => '所有对局';
@@ -33,7 +33,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => '清除已保存的着法';
 
   @override
-  String get mobileCustomGameJoinAGame => '加入一局游戏';
+  String get mobileCustomGameJoinAGame => '加入一场对局';
 
   @override
   String get mobileFeedbackButton => '问题反馈';
@@ -64,26 +64,26 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileLiveStreamers => '主播';
 
   @override
-  String get mobileMustBeLoggedIn => '您必须登录才能浏览此页面。';
+  String get mobileMustBeLoggedIn => '你必须登录才能浏览此页面。';
 
   @override
-  String get mobileNoSearchResults => '无结果';
+  String get mobileNoSearchResults => '无';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => '请注意，不是所有来自旧应用程序或网站的功能目前都可用，但我们会不断增加新功能。';
+  String get mobileNotAllFeaturesAreAvailable => '请注意，不是所有来自网站和旧版应用的功能都可用，但我们会不断增加新功能。';
 
   @override
   String get mobileNotFollowingAnyUser => '你没有关注任何用户。';
 
   @override
-  String get mobileOkButton => '好';
+  String get mobileOkButton => '确定';
 
   @override
   String get mobileOverTheBoard => '面对面';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return '包含\"$param\"名称的棋手';
+    return '名称中含有\"$param\"的用户';
   }
 
   @override
@@ -96,13 +96,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePrefMagnifyDraggedPiece => '放大正在拖动的棋子';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => '你想结束这组谜题风暴吗？';
+  String get mobilePuzzleStormConfirmEndRun => '你确定要结束这组游戏吗？';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => '没有结果，请更改筛选条件';
+  String get mobilePuzzleStormFilterNothingToShow => '没有符合的谜题，请更改筛选条件';
 
   @override
-  String get mobilePuzzleStormNothingToShow => '没有记录。 请下几组谜题风暴。';
+  String get mobilePuzzleStormNothingToShow => '没有记录，请先玩几组谜题风暴';
 
   @override
   String get mobilePuzzleStormSubtitle => '在 3 分钟内解开尽可能多的谜题。';
@@ -111,7 +111,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => '你将失去你目前的连胜，你的分数将被保存。';
 
   @override
-  String get mobilePuzzleThemesSubtitle => '从你最喜欢的开局解决谜题，或选择一个主题。';
+  String get mobilePuzzleThemesSubtitle => '从你喜欢的开局中解决谜题，或选择一个主题';
 
   @override
   String get mobilePuzzlesTab => '谜题';
@@ -132,34 +132,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsCustomBackgroundPresets => '预设';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => '拖动棋子';
+  String get mobileSettingsDraggedPieceTarget => '拖动棋子目标格';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => '圆圈';
+  String get mobileSettingsDraggedTargetCircle => '圆形';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => '格子';
+  String get mobileSettingsDraggedTargetSquare => '方格';
 
   @override
-  String get mobileSettingsHomeWidgets => '主页小部件';
+  String get mobileSettingsHomeWidgets => '主页组件';
 
   @override
   String get mobileSettingsImmersiveMode => '沉浸模式';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => '下棋时隐藏系统界面。 如果您的操作受到屏幕边缘的系统导航手势干扰，请使用此功能。 适用于棋局和谜题风暴界面。';
+  String get mobileSettingsImmersiveModeSubtitle => '下棋时隐藏系统界面。 如果你的操作受到屏幕边缘导航栏干扰，请使用此功能。 该功能应用于对局和谜题风暴界面。';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => '被吃的棋子';
 
   @override
-  String get mobileSettingsPickAnImage => '选择一张图片';
+  String get mobileSettingsPickAnImage => '使用本地图片';
 
   @override
-  String get mobileSettingsPickAnImageHelp => '自定义背景只适用于深色模式，建议使用深色色图像。';
+  String get mobileSettingsPickAnImageHelp => '自定义背景只适用于深色模式，建议使用颜色较深的图片。';
 
   @override
-  String get mobileSettingsPickAnImageBlur => '模糊图像';
+  String get mobileSettingsPickAnImageBlur => '模糊图片';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => '隐藏棋盘';
@@ -168,7 +168,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => '显示棋盘';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => '滑动以显示其他背景';
+  String get mobileSettingsPickAnImageSwipeToDisplay => '滑动以查看其他背景';
 
   @override
   String get mobileSettingsPieceShiftMethodEither => '点击或拖动';
@@ -177,19 +177,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => '点击两个格子';
 
   @override
-  String get mobileSettingsShapeDrawing => '绘制形状';
+  String get mobileSettingsShapeDrawing => '棋盘标记';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => '使用两根手指绘制形状：一根手指按住一个空格子，拖动另一根手指绘制形状。';
+  String get mobileSettingsShapeDrawingSubtitle => '使用两根手指进行标记：一根手指按住一个空格子，同时拖动另一根手指进行标记。';
 
   @override
-  String get mobileSettingsShowBorder => '显示边框';
+  String get mobileSettingsShowBorder => '棋盘边框';
 
   @override
   String get mobileSettingsTouchFeedback => '触摸反馈';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => '如果启用，当您移动或吃掉一个棋子时，设备将会短暂的振动。';
+  String get mobileSettingsTouchFeedbackSubtitle => '如果启用，设备会在移动或吃掉棋子时振动。';
 
   @override
   String get mobileSettingsTab => '设置';
@@ -216,10 +216,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileShowVariations => '显示变着';
 
   @override
-  String get mobileSomethingWentWrong => '出了一些问题。';
+  String get mobileSomethingWentWrong => '出了点问题。';
 
   @override
-  String get mobileSystemColors => '系统颜色';
+  String get mobileSystemColors => '使用系统颜色';
 
   @override
   String get mobileTheme => '主题';
@@ -239,7 +239,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileWatchTab => '观看';
 
   @override
-  String get mobileWelcomeToLichessApp => '欢迎来到Lichess应用！';
+  String get mobileWelcomeToLichessApp => '欢迎使用Lichess应用！';
 
   @override
   String get activityActivity => '动态';
@@ -2080,19 +2080,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get playWithAFriend => '与好友下棋';
 
   @override
-  String get playWithTheMachine => '和电脑下棋';
+  String get playWithTheMachine => '与电脑下棋';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => '邀人下棋，请分享这个网址';
+  String get toInviteSomeoneToPlayGiveThisUrl => '分享这个网址来邀请好友下棋：';
 
   @override
   String get gameOver => '棋局结束';
 
   @override
-  String get waitingForOpponent => '等待对手';
+  String get waitingForOpponent => '正在等待对手';
 
   @override
-  String get orLetYourOpponentScanQrCode => '或请您的对手扫描此二维码';
+  String get orLetYourOpponentScanQrCode => '也可以让对方扫描这个二维码：';
 
   @override
   String get waiting => '等待中';
@@ -2102,7 +2102,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String aiNameLevelAiLevel(String param1, String param2) {
-    return '$param1级別$param2';
+    return '$param1 级别$param2';
   }
 
   @override
@@ -2133,10 +2133,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get black => '黑方';
 
   @override
-  String get asWhite => '持白';
+  String get asWhite => '执白';
 
   @override
-  String get asBlack => '持黑';
+  String get asBlack => '执黑';
 
   @override
   String get randomColor => '随机选色';
@@ -2166,10 +2166,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cheatDetected => '检测到作弊';
 
   @override
-  String get kingInTheCenter => '王占中';
+  String get kingInTheCenter => '王占中央';
 
   @override
-  String get threeChecks => '三次将军胜';
+  String get threeChecks => '三次将军';
 
   @override
   String get raceFinished => '竞王结束';
@@ -2202,10 +2202,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get forceDraw => '宣布和棋';
 
   @override
-  String get talkInChat => '聊天请注意文明用语！';
+  String get talkInChat => '聊天时请注意文明用语！';
 
   @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => '第一个访问此网址的人将与你下棋。';
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => '第一个访问此网址的人将与你下棋';
 
   @override
   String get whiteResigned => '白方认输';
@@ -2220,10 +2220,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get blackLeftTheGame => '黑方离开了棋局';
 
   @override
-  String get whiteDidntMove => '白方没有走棋';
+  String get whiteDidntMove => '白方未走棋';
 
   @override
-  String get blackDidntMove => '黑方没有走棋';
+  String get blackDidntMove => '黑方未走棋';
 
   @override
   String get requestAComputerAnalysis => '请求电脑分析';
@@ -2267,7 +2267,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get showThreat => '显示威胁';
 
   @override
-  String get inLocalBrowser => '本地浏览器';
+  String get inLocalBrowser => '本地分析';
 
   @override
   String get toggleLocalEvaluation => '切换到本地分析';
@@ -2276,7 +2276,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get promoteVariation => '提升变着';
 
   @override
-  String get makeMainLine => '做为主线';
+  String get makeMainLine => '作为主线';
 
   @override
   String get deleteFromHere => '从此处开始删除';
@@ -2300,13 +2300,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get move => '着法';
 
   @override
-  String get variantLoss => '变体输棋';
+  String get variantLoss => '变种输棋';
 
   @override
-  String get variantWin => '变体胜利';
+  String get variantWin => '变种胜利';
 
   @override
-  String get insufficientMaterial => '子力不足';
+  String get insufficientMaterial => '棋子不足';
 
   @override
   String get pawnMove => '走兵';
@@ -2318,7 +2318,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get close => '关闭';
 
   @override
-  String get winning => '胜棋';
+  String get winning => '赢棋';
 
   @override
   String get losing => '输棋';
@@ -2352,7 +2352,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding => '经过四舍五入的DTZ50\'\'，是基于到下次吃子或兵动的半步数目。';
+  String get dtzWithRounding => '经过四舍五入的DTZ50\'\'，基于到下次吃子或走兵所需的一半着数';
 
   @override
   String get noGameFound => '未找到棋局';
@@ -2361,7 +2361,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get maxDepthReached => '已达到最大深度！';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu => '请尝试在“选择”菜单内包括更多棋局。';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu => '请尝试在选项里包括更多棋局';
 
   @override
   String get openings => '开局';
@@ -2374,11 +2374,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String xOpeningExplorer(String param) {
-    return '$param 开局浏览器';
+    return '$param开局浏览器';
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => '在开局/残局浏览器走第一步棋';
+  String get playFirstOpeningEndgameExplorerMove => '走开局/残局浏览器列表中的第一个着法';
 
   @override
   String get winPreventedBy50MoveRule => '因 50 回合规则未赢棋';
@@ -4739,7 +4739,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '您的对手已离开棋局。您可以在 $count 秒后宣布胜利。',
+      other: '你的对手已离开棋局，你可以在 $count 秒后宣布胜利。',
     );
     return '$_temp0';
   }
@@ -4749,7 +4749,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '离将死剩$count着',
+      other: '剩 $count 着将死',
     );
     return '$_temp0';
   }
