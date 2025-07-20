@@ -51,36 +51,36 @@
 Али када стигну до другог краја табле, постају јача фигура!</string>
   <string name="mostOfTheTimePromotingToAQueenIsBest">У већини случајева најбоље је промовисати у даму.
 Али понекад и скакач добро дође!</string>
-  <string name="pawnsMoveForward">Пешаци се крећу напред,
-али носе дијагонално!</string>
-  <string name="captureThenPromote">Носите, па онда промовишите!</string>
+  <string name="pawnsMoveForward">Пешаци се крећу право,
+али узимају дијагонално!</string>
+  <string name="captureThenPromote">Узми, онда промовиши!</string>
   <string name="useAllThePawns">Искористи све пешаке!
 Нема потребе за промоцијом.</string>
-  <string name="aPawnOnTheSecondRank">Пешак у другом реду се може померити за 2 поља одједном!</string>
-  <string name="grabAllTheStarsNoNeedToPromote">Зграбите све звезде!
+  <string name="aPawnOnTheSecondRank">Пешак на другом реду се може померити за 2 поља одједном!</string>
+  <string name="grabAllTheStarsNoNeedToPromote">Покупи све звезде!
 Нема потребе за промоцијом.</string>
-  <string name="pawnComplete">Честитамо! Пешаци немају тајне за Вас.</string>
+  <string name="pawnComplete">Честитке! Пешаци немају тајне за тебе.</string>
   <string name="pawnPromotion">Промоција пешака</string>
-  <string name="yourPawnReachedTheEndOfTheBoard">Ваш пешак је стигао до краја табле!</string>
+  <string name="yourPawnReachedTheEndOfTheBoard">Твој пешак је стигао до краја табле!</string>
   <string name="itNowPromotesToAStrongerPiece">Сада се промовише у јачу фигуру.</string>
-  <string name="selectThePieceYouWant">Изаберите фигуру коју желите!</string>
+  <string name="selectThePieceYouWant">Изабери фигуру коју желиш!</string>
   <string name="fundamentals">Основе</string>
-  <string name="capture">Ношење</string>
-  <string name="takeTheEnemyPieces">Однесите противничке фигуре</string>
-  <string name="captureIntro">Идентификујте небрањене противничке фигуре и однесите их!</string>
-  <string name="takeTheBlackPieces">Носите црне фигуре!</string>
-  <string name="takeTheBlackPiecesAndDontLoseYours">Носите црне фигуре!
-И немојте изгубити своје.</string>
-  <string name="captureComplete">Честитамо! Знате како да се борите шаховским фигурама!</string>
+  <string name="capture">Узимање</string>
+  <string name="takeTheEnemyPieces">Узми противничке фигуре</string>
+  <string name="captureIntro">Пронађи небрањене противничке фигуре и однеси их!</string>
+  <string name="takeTheBlackPieces">Узми црне фигуре!</string>
+  <string name="takeTheBlackPiecesAndDontLoseYours">Узми црне фигуре!
+И немој изгубити своје.</string>
+  <string name="captureComplete">Честитке! Знаш како да се бориш шаховским фигурама!</string>
   <string name="protection">Заштита</string>
-  <string name="keepYourPiecesSafe">Заштитите своје фигуре</string>
-  <string name="protectionIntro">Видите које фигуре Ваш противник напада и одбраните их!</string>
-  <string name="protectionComplete">Честитамо! Фигура коју не изгубите је фигура коју добијете!</string>
-  <string name="escape">Ви сте под нападом!
-Избегните претњу!</string>
+  <string name="keepYourPiecesSafe">Чувај своје фигуре</string>
+  <string name="protectionIntro">Пронађи фигуре које твој противник напада и одбрани их!</string>
+  <string name="protectionComplete">Честитке! Фигура коју не изгубиш је фигура коју добијеш!</string>
+  <string name="escape">Под нападом си!
+Избегни претњу!</string>
   <string name="noEscape">Нема излаза,
-али можете бранити!</string>
-  <string name="dontLetThemTakeAnyUndefendedPiece">Не дозволите им да Вам однесу
+али можеш бранити!</string>
+  <string name="dontLetThemTakeAnyUndefendedPiece">Не дозволи им да ти узму
 ниједну небрањену фигуру!</string>
   <string name="combat">Борба</string>
   <string name="captureAndDefendPieces">Однесите и одбраните фигуре</string>
