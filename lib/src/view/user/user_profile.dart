@@ -100,6 +100,21 @@ class UserProfileWidget extends ConsumerWidget {
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Text('${context.l10n.xRating('ECF')}: ${user.profile!.ecfRating}'),
               ),
+            if (user.profile?.rcfRating != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Text('${context.l10n.xRating('RCF')}: ${user.profile!.rcfRating}'),
+              ),
+            if (user.profile?.cfcRating != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Text('${context.l10n.xRating('CFC')}: ${user.profile!.cfcRating}'),
+              ),
+            if (user.profile?.dsbRating != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Text('${context.l10n.xRating('DSB')}: ${user.profile!.dsbRating}'),
+              ),
             if (user.profile != null)
               Padding(
                 padding: const EdgeInsets.only(bottom: 5),
