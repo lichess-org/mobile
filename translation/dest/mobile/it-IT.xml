@@ -39,6 +39,7 @@
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Predefiniti</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Modalità immersiva</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Nascondi la UI di sistema mentre giochi. Attiva se i gesti di navigazione ai bordi dello schermo ti danno fastidio. Si applica alla schermata di gioco e Puzzle Storm.</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Mostra la scacchiera</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Preferenze</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Condividi PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Condividi URL della partita</string>

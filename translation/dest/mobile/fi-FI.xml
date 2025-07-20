@@ -38,6 +38,7 @@
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Poista kirjanmerkki</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Palvelinanalyysi</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Kellon sijainti</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Esiasetukset</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Vedetyn nappulan kohde</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Ympyrä</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Neliö</string>
