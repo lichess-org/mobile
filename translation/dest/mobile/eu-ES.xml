@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Kontuaren ezarpenak</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Ezarpen hauek zure Lichess kontuari dagozkio eta zure gailu guztietan aplikatuko dira.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Partida guztiak</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ziur zaude?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Taularen ezarpenak</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Bertan behera utzi atzera-egite eskaera</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Garbitu</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Garbitu gordetako jokaldia</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Sartu partida baten</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Iritzia</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Arratsalde on, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Arratsalde on</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Egun on, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Egun on</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Ezkutatu aukera</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Hasiera</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Zuzeneko streamerrak</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Sartu egin behar zara orri hau ikusteko.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Emaitzarik ez</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Kontuan izan aplikazio zaharraren eta webgune berriaren ezaugarri guztiak ez daudela prest, baina poliki-poliki gehituko ditugu.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Ez zaude erabiltzailerik jarraitzen.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Ados</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Taula gainean</string>
@@ -27,8 +35,30 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Jokatu zure irekiera gogokoenen ariketak, edo aukeratu gai bat.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ariketak</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Azken bilaketak</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Ezabatu laster-marka</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Zerbitzariaren analisia</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Erlojuaren posizioa</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Aurrezarpenak</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Arrastatutako piezaren helburua</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Borobila</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Karratua</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Hasiera orriko widgetak</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Murgiltze modua</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Ezkutatu sistemaren interfazioa jokatzen ari zarela. Erabili hau zure telefonoaren nabigatzeko aukerek traba egiten badizute. Partida bati eta ariketen pantailei dagokie.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Harrapatutako piezak</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Aukeratu irudi bat</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Pertsonalizatutako atzeko planaok modu ilunean funtzionatzen du bakarrik. Irudi ilun bat erabiltzea gomendatzen da.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Lausotu irudia</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Taula ezkutatu</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Taula erakutsi</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Ikusi atzeko planoko beste irudi batzuk</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Sakatu edo arrastatu</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Sakatu bi lauki</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Formak marraztea</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Marraztu formak bi hatz erabiliz: mantendu hatz bat lauki huts baten eta arrastatu beste hatz bat forma bat marrazteko.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Erakutsi inguruko morra</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Ikutzeko bibrazioa</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Aktibatuta dagoenea, pieza bat mugitu edo harrapatzean gailuak bibrazio txiki bat egingo du.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ezarpenak</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Partekatu PGNa</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Partekatu partidaren URLa</string>
@@ -44,4 +74,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">%s aldaera ezin da erabili bertsio honetan.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Aurkaria sartzeko zain...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ikusi</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Ongi etorri Lichess aplikaziora!</string>
 </resources>
