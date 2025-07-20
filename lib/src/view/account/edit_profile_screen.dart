@@ -360,7 +360,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             initialValue: widget.user.profile?.realName,
             formKey: 'realName',
             formData: widget.formData,
-            maxLength: 20,
+            maxLength: 100,
           ),
 
           _NumericField(
