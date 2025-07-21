@@ -17,6 +17,9 @@ sealed class Profile with _$Profile {
     int? fideRating,
     int? uscfRating,
     int? ecfRating,
+    int? rcfRating,
+    int? cfcRating,
+    int? dsbRating,
     IList<SocialLink>? links,
   }) = _Profile;
 
@@ -38,6 +41,9 @@ sealed class Profile with _$Profile {
       fideRating: pick('fideRating').asIntOrNull(),
       uscfRating: pick('uscfRating').asIntOrNull(),
       ecfRating: pick('ecfRating').asIntOrNull(),
+      rcfRating: pick('rcfRating').asIntOrNull(),
+      cfcRating: pick('cfcRating').asIntOrNull(),
+      dsbRating: pick('dsbRating').asIntOrNull(),
       links: rawLinks
           ?.where((e) => e.trim().isNotEmpty)
           .map((e) {
