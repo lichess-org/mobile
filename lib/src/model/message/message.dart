@@ -68,10 +68,10 @@ sealed class Contact with _$Contact {
     return Contact(
       user: pick('user').asLightUserOrThrow(),
       lastMessage: LastMessage(
-        userId: pick('LastMessage', 'user').asUserIdOrThrow(),
-        text: pick('LastMessage', 'text').asStringOrThrow(),
-        date: pick('LastMessage', 'date').asDateTimeFromMillisecondsOrThrow(),
-        read: pick('LastMessage', 'read').asBoolOrThrow(),
+        userId: pick('lastMsg', 'user').asUserIdOrThrow(),
+        text: pick('lastMsg', 'text').asStringOrThrow(),
+        date: pick('lastMsg', 'date').asDateTimeFromMillisecondsOrThrow(),
+        read: pick('lastMsg', 'read').asBoolOrThrow(),
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 final _contactsProvider = FutureProvider.autoDispose<IList<Contact>>((ref) async {
@@ -67,7 +68,12 @@ class ContactsListView extends ConsumerWidget {
                 style: contact.lastMessage.read ? null : unreadStyle,
               ),
               onTap: () {
-                // Navigate to conversation view, etc.
+                Navigator.push(
+                  context,
+                  ConversationScreen.buildRoute(context, user: contact.user),
+                ).then(
+                  (value) => ref.refresh(_contactsProvider), // Refresh contacts after returning
+                );
               },
             );
           },
