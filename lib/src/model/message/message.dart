@@ -17,12 +17,15 @@ sealed class MsgData with _$MsgData {
   }) = _MsgData;
 
   factory MsgData.fromServerJson(Map<String, dynamic> json) {
-    final requiredPick = pick(json).required();
+    return MsgData.fromPick(pick(json).required());
+  }
+
+  factory MsgData.fromPick(RequiredPick pick) {
     return MsgData(
-      me: requiredPick('me').asLightUserOrThrow(),
-      isBot: requiredPick('bot').asBoolOrThrow(),
-      contacts: pick(json, 'contacts').asListOrThrow((it) => Contact.fromPick(it)).toIList(),
-      convo: pick(json, 'convo').letOrNull((it) => Convo.fromPick(it.required())),
+      me: pick('me').asLightUserOrThrow(),
+      isBot: pick('bot').asBoolOrFalse(),
+      contacts: pick('contacts').asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
+      convo: pick('convo').letOrNull((it) => Convo.fromPick(it.required())),
     );
   }
 }
@@ -37,7 +40,7 @@ sealed class Msg with _$Msg {
 
   factory Msg.fromPick(RequiredPick pick) {
     return Msg(
-      userId: pick('userId').asUserIdOrThrow(),
+      userId: pick('user').asUserIdOrThrow(),
       text: pick('text').asStringOrThrow(),
       date: pick('date').asDateTimeFromMillisecondsOrThrow(),
     );
@@ -66,7 +69,7 @@ sealed class Contact with _$Contact {
     return Contact(
       user: pick('user').asLightUserOrThrow(),
       lastMsg: LastMsg(
-        userId: pick('lastMsg', 'userId').asUserIdOrThrow(),
+        userId: pick('lastMsg', 'user').asUserIdOrThrow(),
         text: pick('lastMsg', 'text').asStringOrThrow(),
         date: pick('lastMsg', 'date').asDateTimeFromMillisecondsOrThrow(),
         read: pick('lastMsg', 'read').asBoolOrThrow(),
