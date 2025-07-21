@@ -10,8 +10,7 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 final _contactsProvider = FutureProvider.autoDispose<IList<Contact>>((ref) async {
   final repo = ref.watch(messageRepositoryProvider);
-  final msgData = await repo.loadContacts();
-  return msgData.contacts;
+  return await repo.loadContacts();
 });
 
 class ContactsScreen extends StatelessWidget {
@@ -60,12 +59,12 @@ class ContactsListView extends ConsumerWidget {
                   : const Icon(Icons.cloud_off, color: Colors.grey),
               title: UserFullNameWidget(user: contact.user, showFlair: true, showPatron: true),
               subtitle: Text(
-                contact.lastMsg.text,
-                style: contact.lastMsg.read ? null : unreadStyle,
+                contact.lastMessage.text,
+                style: contact.lastMessage.read ? null : unreadStyle,
               ),
               trailing: Text(
-                relativeDate(context.l10n, contact.lastMsg.date),
-                style: contact.lastMsg.read ? null : unreadStyle,
+                relativeDate(context.l10n, contact.lastMessage.date),
+                style: contact.lastMessage.read ? null : unreadStyle,
               ),
               onTap: () {
                 // Navigate to conversation view, etc.

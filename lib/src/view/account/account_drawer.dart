@@ -157,7 +157,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.inbox_outlined),
+              leading: const Icon(Icons.email_outlined),
               title: Text(context.l10n.inbox),
               enabled: isOnline,
               onTap: () {

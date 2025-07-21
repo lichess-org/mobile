@@ -1,3 +1,5 @@
+import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
@@ -16,27 +18,28 @@ class MessageRepository {
 
   final LichessClient client;
 
-  Future<MsgData> loadContacts() {
+  Future<IList<Contact>> loadContacts() {
     return client.readJson(
       Uri(path: '/inbox'),
       headers: {'Accept': 'application/json'},
-      mapper: (Map<String, dynamic> json) => MsgData.fromServerJson(json),
+      mapper: (Map<String, dynamic> json) =>
+          pick(json).required()('contacts').asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
     );
   }
 
-  Future<MsgData> loadConvo(UserId userId) {
+  Future<ConversationData> loadConvo(UserId userId) {
     return client.readJson(
       Uri(path: '/inbox/$userId'),
       headers: {'Accept': 'application/json'},
-      mapper: (Map<String, dynamic> json) => MsgData.fromServerJson(json),
+      mapper: (Map<String, dynamic> json) => ConversationData.fromServerJson(json),
     );
   }
 
-  Future<MsgData> getMore(UserId userId, DateTime before) {
+  Future<ConversationData> getMore(UserId userId, DateTime before) {
     return client.readJson(
       Uri(path: '/inbox/$userId', queryParameters: {'before': before.millisecondsSinceEpoch}),
       headers: {'Accept': 'application/json'},
-      mapper: (Map<String, dynamic> json) => MsgData.fromServerJson(json),
+      mapper: (Map<String, dynamic> json) => ConversationData.fromServerJson(json),
     );
   }
 }

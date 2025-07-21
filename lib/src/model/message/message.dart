@@ -8,38 +8,37 @@ import 'package:lichess_mobile/src/utils/json.dart';
 part 'message.freezed.dart';
 
 @freezed
-sealed class MsgData with _$MsgData {
-  const factory MsgData({
+sealed class ConversationData with _$ConversationData {
+  const factory ConversationData({
     required LightUser me,
     required bool isBot,
-    required IList<Contact> contacts,
-    Convo? convo,
-  }) = _MsgData;
+    required Convo convo,
+  }) = _ConversationData;
 
-  factory MsgData.fromServerJson(Map<String, dynamic> json) {
-    return MsgData.fromPick(pick(json).required());
+  factory ConversationData.fromServerJson(Map<String, dynamic> json) {
+    return ConversationData.fromPick(pick(json).required());
   }
 
-  factory MsgData.fromPick(RequiredPick pick) {
-    return MsgData(
+  factory ConversationData.fromPick(RequiredPick pick) {
+    return ConversationData(
       me: pick('me').asLightUserOrThrow(),
       isBot: pick('bot').asBoolOrFalse(),
-      contacts: pick('contacts').asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
-      convo: pick('convo').letOrNull((it) => Convo.fromPick(it.required())),
+      convo: pick('convo').letOrThrow((it) => Convo.fromPick(it.required())),
     );
   }
 }
 
 @freezed
-sealed class Msg with _$Msg {
-  const factory Msg({required UserId userId, required String text, required DateTime date}) = _Msg;
+sealed class Message with _$Message {
+  const factory Message({required UserId userId, required String text, required DateTime date}) =
+      _Message;
 
-  factory Msg.fromServerJson(Map<String, dynamic> json) {
-    return Msg.fromPick(pick(json).required());
+  factory Message.fromServerJson(Map<String, dynamic> json) {
+    return Message.fromPick(pick(json).required());
   }
 
-  factory Msg.fromPick(RequiredPick pick) {
-    return Msg(
+  factory Message.fromPick(RequiredPick pick) {
+    return Message(
       userId: pick('user').asUserIdOrThrow(),
       text: pick('text').asStringOrThrow(),
       date: pick('date').asDateTimeFromMillisecondsOrThrow(),
@@ -48,18 +47,18 @@ sealed class Msg with _$Msg {
 }
 
 @freezed
-sealed class LastMsg with _$LastMsg {
-  const factory LastMsg({
+sealed class LastMessage with _$LastMessage {
+  const factory LastMessage({
     required UserId userId,
     required String text,
     required DateTime date,
     required bool read,
-  }) = _LastMsg;
+  }) = _LastMessage;
 }
 
 @freezed
 sealed class Contact with _$Contact {
-  const factory Contact({required LightUser user, required LastMsg lastMsg}) = _Contact;
+  const factory Contact({required LightUser user, required LastMessage lastMessage}) = _Contact;
 
   factory Contact.fromServerJson(Map<String, dynamic> json) {
     return Contact.fromPick(pick(json).required());
@@ -68,11 +67,11 @@ sealed class Contact with _$Contact {
   factory Contact.fromPick(RequiredPick pick) {
     return Contact(
       user: pick('user').asLightUserOrThrow(),
-      lastMsg: LastMsg(
-        userId: pick('lastMsg', 'user').asUserIdOrThrow(),
-        text: pick('lastMsg', 'text').asStringOrThrow(),
-        date: pick('lastMsg', 'date').asDateTimeFromMillisecondsOrThrow(),
-        read: pick('lastMsg', 'read').asBoolOrThrow(),
+      lastMessage: LastMessage(
+        userId: pick('LastMessage', 'user').asUserIdOrThrow(),
+        text: pick('LastMessage', 'text').asStringOrThrow(),
+        date: pick('LastMessage', 'date').asDateTimeFromMillisecondsOrThrow(),
+        read: pick('LastMessage', 'read').asBoolOrThrow(),
       ),
     );
   }
@@ -84,7 +83,7 @@ typedef Relations = ({bool? inward, bool? outward});
 sealed class Convo with _$Convo {
   const factory Convo({
     required LightUser user,
-    required IList<Msg> messages,
+    required IList<Message> messages,
     required Relations relations,
     required bool postable,
     ModDetails? modDetails,
@@ -97,7 +96,7 @@ sealed class Convo with _$Convo {
   factory Convo.fromPick(RequiredPick pick) {
     return Convo(
       user: pick('user').asLightUserOrThrow(),
-      messages: pick('msgs').asListOrThrow((it) => Msg.fromPick(it)).toIList(),
+      messages: pick('msgs').asListOrThrow((it) => Message.fromPick(it)).toIList(),
       relations: (inward: pick('in').asBoolOrNull(), outward: pick('out').asBoolOrNull()),
       postable: pick('postable').asBoolOrThrow(),
       modDetails: pick('modDetails').letOrNull(

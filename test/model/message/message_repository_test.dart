@@ -32,17 +32,13 @@ void main() {
 
       final repo = MessageRepository(client);
 
-      final msgData = await repo.loadContacts();
+      final contacts = await repo.loadContacts();
 
-      expect(msgData.me.name, 'veloce');
-      expect(msgData.contacts.length, 2);
-      expect(msgData.contacts.first.user.name, 'chabrot');
-      expect(
-        msgData.contacts.first.lastMsg.text,
-        'https://github.com/veloce/lichobile/issues/1659',
-      );
-      expect(msgData.contacts[1].user.name, 'thibault');
-      expect(msgData.contacts[1].lastMsg.userId.value, 'thibault');
+      expect(contacts.length, 2);
+      expect(contacts.first.user.name, 'chabrot');
+      expect(contacts.first.lastMessage.text, 'https://github.com/veloce/lichobile/issues/1659');
+      expect(contacts[1].user.name, 'thibault');
+      expect(contacts[1].lastMessage.userId.value, 'thibault');
     });
   });
 }
