@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-
-final _contactsProvider = FutureProvider.autoDispose<ContactsData>((ref) async {
-  final repo = ref.watch(messageRepositoryProvider);
-  return await repo.loadContacts();
-});
 
 class ContactsScreen extends StatelessWidget {
   const ContactsScreen({super.key});
@@ -40,7 +34,7 @@ class ContactsListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final contactsAsync = ref.watch(_contactsProvider);
+    final contactsAsync = ref.watch(contactsProvider);
 
     final unreadStyle = TextStyle(
       color: ColorScheme.of(context).primary,
@@ -69,9 +63,7 @@ class ContactsListView extends ConsumerWidget {
                 Navigator.push(
                   context,
                   ConversationScreen.buildRoute(context, user: contact.user),
-                ).then(
-                  (value) => ref.refresh(_contactsProvider), // Refresh contacts after returning
-                );
+                ).then((value) => ref.refresh(contactsProvider));
               },
             );
           },

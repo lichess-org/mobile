@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -95,6 +96,10 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final userSession = ref.watch(authSessionProvider);
     final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
 
+    final inboxUnreadCount = ref.watch(
+      contactsProvider.select((s) => s.valueOrNull?.unreadCount ?? 0),
+    );
+
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       width: min(350.0, MediaQuery.sizeOf(context).width * 0.8),
@@ -157,7 +162,11 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.email_outlined),
+              leading: Badge.count(
+                isLabelVisible: inboxUnreadCount > 0,
+                count: inboxUnreadCount,
+                child: const Icon(Icons.mail_outline),
+              ),
               title: Text(context.l10n.inbox),
               enabled: isOnline,
               onTap: () {

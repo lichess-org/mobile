@@ -135,7 +135,7 @@ class _DateBubble extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.tertiaryContainer.withValues(alpha: 0.4),
+            color: Theme.of(context).colorScheme.tertiaryContainer.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Text(
@@ -145,7 +145,7 @@ class _DateBubble extends StatelessWidget {
                 ? context.l10n.yesterday
                 : formatted,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onTertiaryContainer.withValues(alpha: 0.7),
+              color: Theme.of(context).colorScheme.onTertiaryContainer.withValues(alpha: 0.8),
               fontSize: 13,
               fontWeight: FontWeight.w600,
             ),

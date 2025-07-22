@@ -7,7 +7,34 @@ import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'message.freezed.dart';
 
-typedef ContactsData = ({IList<Contact> contacts, LightUser me, bool isBot});
+@freezed
+sealed class Contacts with _$Contacts {
+  const Contacts._();
+
+  const factory Contacts({
+    required IList<Contact> contacts,
+    required LightUser me,
+    required bool isBot,
+  }) = _Contacts;
+
+  factory Contacts.fromServerJson(Map<String, dynamic> json) {
+    return Contacts.fromPick(pick(json).required());
+  }
+
+  factory Contacts.fromPick(RequiredPick pick) {
+    return Contacts(
+      contacts: pick('contacts').asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
+      me: pick('me').asLightUserOrThrow(),
+      isBot: pick('bot').asBoolOrFalse(),
+    );
+  }
+
+  int get unreadCount {
+    return contacts
+        .where((contact) => !contact.lastMessage.read && contact.lastMessage.userId != me.id)
+        .length;
+  }
+}
 
 @freezed
 sealed class ConversationData with _$ConversationData {
