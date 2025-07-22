@@ -73,15 +73,26 @@ class ConversationScreen extends ConsumerWidget {
     final messageStateAsync = ref.watch(messageControllerProvider(user.id));
 
     return Scaffold(
-      appBar: AppBar(title: UserFullNameWidget(user: user, showFlair: true, showPatron: true)),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: messageStateAsync.when(
-                data: (state) {
-                  final items = buildDisplayItems(state.convo.messages, state.me.id);
-                  return ListView.builder(
+      appBar: AppBar(
+        title: UserFullNameWidget(
+          user: user,
+          showFlair: true,
+          showPatron: true,
+          shouldShowOnline: true,
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: messageStateAsync.when(
+              data: (state) {
+                final items = buildDisplayItems(state.convo.messages, state.me.id);
+                return GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: ListView.builder(
+                    // remove the automatic bottom padding of the ListView which is here taken care
+                    // of by the _MessageInput
+                    padding: MediaQuery.paddingOf(context).copyWith(bottom: 0),
                     reverse: true,
                     itemCount: items.length,
                     itemBuilder: (context, index) {
@@ -93,15 +104,15 @@ class ConversationScreen extends ConsumerWidget {
                       }
                       return const SizedBox.shrink();
                     },
-                  );
-                },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, st) => Center(child: Text('Error: $e')),
-              ),
+                  ),
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, st) => Center(child: Text('Error: $e')),
             ),
-            _MessageInput(userId: user.id),
-          ],
-        ),
+          ),
+          _MessageInput(userId: user.id),
+        ],
       ),
     );
   }
@@ -208,24 +219,35 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      child: Row(
-        children: [
-          Expanded(child: TextField(controller: controller)),
-          IconButton(
-            icon: const Icon(Icons.send),
-            onPressed: () {
-              final text = controller.text.trim();
-              if (text.isNotEmpty) {
-                ref
-                    .read(messageControllerProvider(widget.userId).notifier)
-                    .sendMessage(widget.userId, text);
-                controller.clear();
-              }
-            },
-          ),
-        ],
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: controller,
+                keyboardType: TextInputType.text,
+                minLines: 1,
+                maxLines: 4,
+                enableSuggestions: true,
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.send),
+              onPressed: () {
+                final text = controller.text.trim();
+                if (text.isNotEmpty) {
+                  ref
+                      .read(messageControllerProvider(widget.userId).notifier)
+                      .sendMessage(widget.userId, text);
+                  controller.clear();
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

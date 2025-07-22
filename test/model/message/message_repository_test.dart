@@ -32,7 +32,8 @@ void main() {
 
       final repo = MessageRepository(client);
 
-      final contacts = await repo.loadContacts();
+      final data = await repo.loadContacts();
+      final contacts = data.contacts;
 
       expect(contacts.length, 2);
       expect(contacts.first.user.name, 'chabrot');

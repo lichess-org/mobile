@@ -1,4 +1,3 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
@@ -9,7 +8,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-final _contactsProvider = FutureProvider.autoDispose<IList<Contact>>((ref) async {
+final _contactsProvider = FutureProvider.autoDispose<ContactsData>((ref) async {
   final repo = ref.watch(messageRepositoryProvider);
   return await repo.loadContacts();
 });
@@ -50,22 +49,21 @@ class ContactsListView extends ConsumerWidget {
 
     switch (contactsAsync) {
       case AsyncData(:final value):
+        final contacts = value.contacts;
         return ListView.builder(
-          itemCount: value.length,
+          itemCount: contacts.length,
           itemBuilder: (context, index) {
-            final contact = value[index];
+            final contact = contacts[index];
+            final isRead = contact.lastMessage.read || contact.lastMessage.userId == value.me.id;
             return ListTile(
               leading: contact.user.isOnline == true
                   ? const Icon(Icons.cloud, color: Colors.green)
                   : const Icon(Icons.cloud_off, color: Colors.grey),
               title: UserFullNameWidget(user: contact.user, showFlair: true, showPatron: true),
-              subtitle: Text(
-                contact.lastMessage.text,
-                style: contact.lastMessage.read ? null : unreadStyle,
-              ),
+              subtitle: Text(contact.lastMessage.text, style: isRead ? null : unreadStyle),
               trailing: Text(
                 relativeDate(context.l10n, contact.lastMessage.date),
-                style: contact.lastMessage.read ? null : unreadStyle,
+                style: isRead ? null : unreadStyle,
               ),
               onTap: () {
                 Navigator.push(

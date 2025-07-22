@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -18,12 +19,18 @@ class MessageRepository {
 
   final LichessClient client;
 
-  Future<IList<Contact>> loadContacts() {
+  Future<ContactsData> loadContacts() {
     return client.readJson(
       Uri(path: '/inbox'),
       headers: {'Accept': 'application/json'},
-      mapper: (Map<String, dynamic> json) =>
-          pick(json).required()('contacts').asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
+      mapper: (Map<String, dynamic> json) {
+        final p = pick(json).required();
+        return (
+          contacts: p('contacts').asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
+          me: p('me').asLightUserOrThrow(),
+          isBot: p('bot').asBoolOrFalse(),
+        );
+      },
     );
   }
 

@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,6 +14,9 @@ part 'message_controller.g.dart';
 class MessageController extends _$MessageController {
   late SocketClient _client;
   StreamSubscription<SocketEvent>? _socketSubscription;
+  Timer? _setReadTimer;
+
+  LightUser? get _me => ref.read(authSessionProvider)?.user;
 
   @override
   Future<ConversationData> build(UserId userId) async {
@@ -19,7 +24,11 @@ class MessageController extends _$MessageController {
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
+      _setReadTimer?.cancel();
     });
+
+    _setReadTimer?.cancel();
+    _setReadTimer = Timer(const Duration(seconds: 1), markAsRead);
 
     final repo = ref.read(messageRepositoryProvider);
     final convoData = await repo.loadConvo(userId);
@@ -50,14 +59,24 @@ class MessageController extends _$MessageController {
     final message = Message.fromServerJson(data);
     final convo = state.requireValue.convo;
     final newMessages = convo.messages.insert(0, message);
+    if (message.userId == userId) {
+      markAsRead();
+    }
     state = AsyncData(state.requireValue.copyWith(convo: convo.copyWith(messages: newMessages)));
   }
 
   void sendMessage(UserId destUserId, String text) {
-    _client.send('msgSend', {'dest': destUserId, 'text': text});
+    if (text.isEmpty || _me == null) {
+      return;
+    }
+    _client.send('msgSend', {'dest': '$destUserId', 'text': text});
+    final message = Message(userId: _me!.id, text: text, date: DateTime.now());
+    final convo = state.requireValue.convo;
+    final newMessages = convo.messages.insert(0, message);
+    state = AsyncData(state.requireValue.copyWith(convo: convo.copyWith(messages: newMessages)));
   }
 
-  void markAsRead(UserId userId) {
+  void markAsRead() {
     _client.send('msgRead', userId.toString());
   }
 

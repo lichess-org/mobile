@@ -7,6 +7,8 @@ import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'message.freezed.dart';
 
+typedef ContactsData = ({IList<Contact> contacts, LightUser me, bool isBot});
+
 @freezed
 sealed class ConversationData with _$ConversationData {
   const factory ConversationData({
