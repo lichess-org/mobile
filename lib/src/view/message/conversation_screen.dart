@@ -23,13 +23,75 @@ class MessageItem extends DisplayItem {
   MessageItem(this.message, this.isMe);
 }
 
-class ConversationScreen extends ConsumerWidget {
+class ConversationScreen extends StatelessWidget {
   final LightUser user;
 
   const ConversationScreen({super.key, required this.user});
 
   static Route<dynamic> buildRoute(BuildContext context, {required LightUser user}) {
     return buildScreenRoute(context, screen: ConversationScreen(user: user));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: UserFullNameWidget(
+          user: user,
+          showFlair: true,
+          showPatron: true,
+          shouldShowOnline: true,
+        ),
+      ),
+      body: _Body(user: user),
+    );
+  }
+}
+
+class _Body extends ConsumerWidget {
+  final LightUser user;
+
+  const _Body({required this.user});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final messageStateAsync = ref.watch(messageControllerProvider(user.id));
+
+    switch (messageStateAsync) {
+      case AsyncData(:final value):
+        final items = buildDisplayItems(value.convo.messages, value.me.id);
+        return Column(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: ListView.builder(
+                  // remove the automatic bottom padding of the ListView which is here taken care
+                  // of by the _MessageInput
+                  padding: MediaQuery.paddingOf(context).copyWith(bottom: 0),
+                  reverse: true,
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    if (item is DateItem) {
+                      return _DateBubble(date: item.date);
+                    } else if (item is MessageItem) {
+                      return _MessageBubble(message: item.message, isMe: item.isMe);
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ),
+            ),
+            _MessageInput(user: user, data: value),
+          ],
+        );
+      case AsyncError(error: final e, stackTrace: final st):
+        debugPrint('Error loading messages for ${user.id}: $e\n$st');
+        return Center(child: Text('Error: $e'));
+      case _:
+        return const Center(child: CircularProgressIndicator());
+    }
   }
 
   List<DisplayItem> buildDisplayItems(IList<Message> messages, UserId myId) {
@@ -66,55 +128,6 @@ class ConversationScreen extends ConsumerWidget {
       }
     }
     return items;
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final messageStateAsync = ref.watch(messageControllerProvider(user.id));
-
-    return Scaffold(
-      appBar: AppBar(
-        title: UserFullNameWidget(
-          user: user,
-          showFlair: true,
-          showPatron: true,
-          shouldShowOnline: true,
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: messageStateAsync.when(
-              data: (state) {
-                final items = buildDisplayItems(state.convo.messages, state.me.id);
-                return GestureDetector(
-                  onTap: () => FocusScope.of(context).unfocus(),
-                  child: ListView.builder(
-                    // remove the automatic bottom padding of the ListView which is here taken care
-                    // of by the _MessageInput
-                    padding: MediaQuery.paddingOf(context).copyWith(bottom: 0),
-                    reverse: true,
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      final item = items[index];
-                      if (item is DateItem) {
-                        return _DateBubble(date: item.date);
-                      } else if (item is MessageItem) {
-                        return _MessageBubble(message: item.message, isMe: item.isMe);
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, st) => Center(child: Text('Error: $e')),
-            ),
-          ),
-          _MessageInput(userId: user.id),
-        ],
-      ),
-    );
   }
 }
 
@@ -207,8 +220,10 @@ class _MessageBubble extends StatelessWidget {
 }
 
 class _MessageInput extends ConsumerStatefulWidget {
-  final UserId userId;
-  const _MessageInput({required this.userId});
+  const _MessageInput({required this.user, required this.data});
+
+  final LightUser user;
+  final ConversationData data;
 
   @override
   ConsumerState<_MessageInput> createState() => _MessageInputState();
@@ -217,36 +232,53 @@ class _MessageInput extends ConsumerStatefulWidget {
 class _MessageInputState extends ConsumerState<_MessageInput> {
   final controller = TextEditingController();
 
+  bool get isBlocked =>
+      widget.data.convo.relations.inward == false || widget.data.convo.relations.outward == false;
+
+  bool get isBot => widget.data.isBot;
+
+  bool get canPost => widget.data.convo.postable;
+
+  bool get readOnly => isBlocked || isBot || !canPost;
+
   @override
   Widget build(BuildContext context) {
+    final sendButton = IconButton(
+      icon: Icon(readOnly ? Icons.block : Icons.send),
+      onPressed: () {
+        final text = controller.text.trim();
+        if (text.isNotEmpty) {
+          ref
+              .read(messageControllerProvider(widget.user.id).notifier)
+              .sendMessage(widget.user.id, text);
+          controller.clear();
+        }
+      },
+    );
+
     return SafeArea(
       top: false,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: controller,
-                keyboardType: TextInputType.text,
-                minLines: 1,
-                maxLines: 4,
-                enableSuggestions: true,
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.send),
-              onPressed: () {
-                final text = controller.text.trim();
-                if (text.isNotEmpty) {
-                  ref
-                      .read(messageControllerProvider(widget.userId).notifier)
-                      .sendMessage(widget.userId, text);
-                  controller.clear();
-                }
-              },
-            ),
-          ],
+        child: TextField(
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+            suffixIcon: sendButton,
+            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            hintText: isBlocked
+                ? 'This conversation is blocked.'
+                : isBot
+                ? 'Bot accounts cannot send nor receive messages.'
+                : !canPost
+                ? "${widget.user.name} doesn't accept new messages."
+                : null,
+          ),
+          controller: controller,
+          keyboardType: TextInputType.text,
+          minLines: 1,
+          maxLines: 4,
+          enableSuggestions: true,
+          readOnly: readOnly,
         ),
       ),
     );
