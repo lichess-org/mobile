@@ -11,6 +11,7 @@ class PlatformSearchBar extends StatelessWidget {
     this.onClear,
     this.onTap,
     this.onSubmitted,
+    this.onChanged,
     this.focusNode,
   });
 
@@ -39,6 +40,9 @@ class PlatformSearchBar extends StatelessWidget {
   /// Callback when the search term is submitted.
   final void Function(String term)? onSubmitted;
 
+  /// Callback when the search term changes.
+  final void Function(String term)? onChanged;
+
   /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
@@ -60,6 +64,7 @@ class PlatformSearchBar extends StatelessWidget {
         onTap: onTap,
         focusNode: focusNode,
         onSubmitted: onSubmitted,
+        onChanged: onChanged,
         hintText: hintText,
         autoFocus: autoFocus,
       ),
@@ -69,6 +74,7 @@ class PlatformSearchBar extends StatelessWidget {
         focusNode: focusNode,
         onSuffixTap: onClear,
         onSubmitted: onSubmitted,
+        onChanged: onChanged,
         placeholder: hintText,
         autofocus: autoFocus,
       ),

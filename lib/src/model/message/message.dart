@@ -141,12 +141,19 @@ typedef ModDetails = ({bool kid, bool openInbox});
 sealed class SearchResult with _$SearchResult {
   const factory SearchResult({
     required IList<Contact> contacts,
-    required IList<User> friends,
-    required IList<User> users,
+    required IList<LightUser> friends,
+    required IList<LightUser> users,
   }) = _SearchResult;
-}
 
-@freezed
-sealed class Search with _$Search {
-  const factory Search({required String input, SearchResult? result}) = _Search;
+  factory SearchResult.fromJson(Map<String, dynamic> json) {
+    return SearchResult.fromPick(pick(json).required());
+  }
+
+  factory SearchResult.fromPick(RequiredPick pick) {
+    return SearchResult(
+      contacts: pick('contacts').asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
+      friends: pick('friends').asListOrEmpty((it) => it.asLightUserOrThrow()).toIList(),
+      users: pick('users').asListOrEmpty((it) => it.asLightUserOrThrow()).toIList(),
+    );
+  }
 }

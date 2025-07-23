@@ -48,4 +48,12 @@ class MessageRepository {
       mapper: (Map<String, dynamic> json) => ConversationData.fromServerJson(json),
     );
   }
+
+  Future<SearchResult> search(String query) {
+    return client.readJson(
+      Uri(path: '/inbox/search', queryParameters: {'q': query}),
+      headers: {'Accept': 'application/json'},
+      mapper: (Map<String, dynamic> json) => SearchResult.fromJson(json),
+    );
+  }
 }
