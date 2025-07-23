@@ -1,5 +1,11 @@
 #!/bin/sh
-
+#
+# Because Flutter is not adding the symbols of libapp.so to the App Bundle, this
+# script add the libapp.so symbols to the archive native-debug-symbols.zip in order
+# to upload them to the Play Console with Fastlane.
+#
+# See https://github.com/flutter/flutter/issues/170664.
+ 
 SYMBOLS_DIR=build/app/outputs/native-debug-symbols/release
 LIBAPP_DIR=build/app/outputs/bundle/release/symbols
 
