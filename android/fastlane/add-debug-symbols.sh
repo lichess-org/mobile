@@ -5,7 +5,8 @@
 # to upload them to the Play Console with Fastlane.
 #
 # See https://github.com/flutter/flutter/issues/170664.
- 
+
+cd ../..
 SYMBOLS_DIR=build/app/outputs/native-debug-symbols/release
 LIBAPP_DIR=build/app/outputs/bundle/release/symbols
 
