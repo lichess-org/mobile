@@ -9,12 +9,14 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/conditional_premoves.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
@@ -73,7 +75,10 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     tabs = [
       AnalysisTab.opening,
       AnalysisTab.moves,
-      if (widget.options.isLichessGameAnalysis) AnalysisTab.summary,
+      if (widget.options case ArchivedGame())
+        AnalysisTab.summary
+      else if (widget.options case ActiveCorrespondenceGame())
+        AnalysisTab.conditionalPremoves,
     ];
 
     _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
@@ -246,63 +251,73 @@ class _Body extends ConsumerWidget {
       );
     }
 
-    return AnalysisLayout(
-      smallBoard: analysisPrefs.smallBoard,
-      tabController: controller,
-      pov: pov,
-      boardBuilder: (context, boardSize, borderRadius) =>
-          GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
-      boardHeader: boardHeader,
-      boardFooter: boardFooter,
-      engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
-          ? (context, orientation) {
-              return orientation == Orientation.portrait
-                  ? EngineGauge(
-                      displayMode: EngineGaugeDisplayMode.horizontal,
-                      params: analysisState.engineGaugeParams(enginePrefs),
-                      engineLinesState: isEngineAvailable && numEvalLines > 0
-                          ? analysisPrefs.showEngineLines
-                                ? EngineLinesShowState.expanded
-                                : EngineLinesShowState.collapsed
-                          : null,
-                      onTap: () {
-                        ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
-                      },
-                    )
-                  : Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                      child: EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.vertical,
+    return FocusDetector(
+      onFocusRegained: () {
+        if (context.mounted) {
+          ref.read(analysisControllerProvider(options).notifier).onFocusRegained();
+        }
+      },
+      child: AnalysisLayout(
+        smallBoard: analysisPrefs.smallBoard,
+        tabController: controller,
+        pov: pov,
+        boardBuilder: (context, boardSize, borderRadius) =>
+            GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
+        boardHeader: boardHeader,
+        boardFooter: boardFooter,
+        engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
+            ? (context, orientation) {
+                return orientation == Orientation.portrait
+                    ? EngineGauge(
+                        displayMode: EngineGaugeDisplayMode.horizontal,
                         params: analysisState.engineGaugeParams(enginePrefs),
-                      ),
-                    );
-            }
-          : null,
-      engineLines: isEngineAvailable && numEvalLines > 0 && analysisPrefs.showEngineLines
-          ? EngineLines(
-              onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-              savedEval: currentNode.eval,
-              isGameOver: currentNode.position.isGameOver,
-            )
-          : null,
-      bottomBar: _BottomBar(options: options),
-      children: [
-        OpeningExplorerView(
-          shouldDisplayGames: analysisState.isComputerAnalysisAllowed,
-          position: currentNode.position,
-          opening: kOpeningAllowedVariants.contains(analysisState.variant)
-              ? analysisState.currentNode.isRoot
-                    ? LightOpening(eco: '', name: context.l10n.startPosition)
-                    : analysisState.currentNode.opening ?? analysisState.currentBranchOpening
-              : null,
-          onMoveSelected: (move) {
-            ref.read(ctrlProvider.notifier).onUserMove(move);
-          },
-        ),
-        AnalysisTreeView(options),
-        if (options.isLichessGameAnalysis) ServerAnalysisSummary(options),
-      ],
+                        engineLinesState: isEngineAvailable && numEvalLines > 0
+                            ? analysisPrefs.showEngineLines
+                                  ? EngineLinesShowState.expanded
+                                  : EngineLinesShowState.collapsed
+                            : null,
+                        onTap: () {
+                          ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
+                        },
+                      )
+                    : Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
+                        child: EngineGauge(
+                          displayMode: EngineGaugeDisplayMode.vertical,
+                          params: analysisState.engineGaugeParams(enginePrefs),
+                        ),
+                      );
+              }
+            : null,
+        engineLines: isEngineAvailable && numEvalLines > 0 && analysisPrefs.showEngineLines
+            ? EngineLines(
+                onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
+                savedEval: currentNode.eval,
+                isGameOver: currentNode.position.isGameOver,
+              )
+            : null,
+        bottomBar: _BottomBar(options: options),
+        children: [
+          OpeningExplorerView(
+            shouldDisplayGames: analysisState.isComputerAnalysisAllowed,
+            position: currentNode.position,
+            opening: kOpeningAllowedVariants.contains(analysisState.variant)
+                ? analysisState.currentNode.isRoot
+                      ? LightOpening(eco: '', name: context.l10n.startPosition)
+                      : analysisState.currentNode.opening ?? analysisState.currentBranchOpening
+                : null,
+            onMoveSelected: (move) {
+              ref.read(ctrlProvider.notifier).onUserMove(move);
+            },
+          ),
+          AnalysisTreeView(options),
+          if (options case ArchivedGame())
+            ServerAnalysisSummary(options)
+          else if (options case ActiveCorrespondenceGame())
+            ConditionalPremoves(options),
+        ],
+      ),
     );
   }
 }

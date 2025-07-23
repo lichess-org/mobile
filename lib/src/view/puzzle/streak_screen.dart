@@ -104,6 +104,26 @@ class _BodyState extends ConsumerState<_Body> {
     );
     final puzzleState = ref.watch(ctrlProvider);
 
+    ref.listen(puzzleStreakControllerProvider, (previous, next) {
+      if (previous?.hasValue == true && next.hasValue) {
+        final currentPuzzle = next.requireValue.puzzle;
+        final previousPuzzle = previous!.requireValue.puzzle;
+
+        if (currentPuzzle.puzzle.id != previousPuzzle.puzzle.id) {
+          final session = ref.read(authSessionProvider);
+          ref
+              .read(ctrlProvider.notifier)
+              .onLoadPuzzle(
+                PuzzleContext(
+                  puzzle: currentPuzzle,
+                  angle: widget.initialPuzzleContext.angle,
+                  userId: session?.user.id,
+                ),
+              );
+        }
+      }
+    });
+
     ref.listen(ctrlProvider, (previous, next) {
       if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
         ref.read(puzzleStreakControllerProvider.notifier).gameOver();

@@ -165,7 +165,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsPickAnImageHideBoard => 'Hide board';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Mostra la scacchiera';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';

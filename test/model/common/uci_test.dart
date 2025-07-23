@@ -51,6 +51,38 @@ void main() {
       expect(const UciPath('TdTe').last, const UciCharPair('T', 'e'));
     });
 
+    test('UciPath.operator []', () {
+      expect(const UciPath('Td')[0], const UciCharPair('T', 'd'));
+      expect(const UciPath('TdTe')[0], const UciCharPair('T', 'd'));
+      expect(const UciPath('TdTe')[1], const UciCharPair('T', 'e'));
+
+      expect(() => UciPath.empty[0], throwsAssertionError);
+      expect(() => const UciPath('TdTe')[2], throwsAssertionError);
+      expect(() => const UciPath('TdTe')[-1], throwsAssertionError);
+    });
+
+    test('UciPath.stripPrefix', () {
+      const path = UciPath('AaBbCcDdEe');
+      expect(path.stripPrefix(UciPath.empty), path);
+      expect(path.stripPrefix(const UciPath('Aa')), const UciPath('BbCcDdEe'));
+      expect(path.stripPrefix(path), UciPath.empty);
+
+      expect(path.stripPrefix(const UciPath('Nope')), path);
+      expect(path.stripPrefix(const UciPath('Bb')), path);
+    });
+
+    test('UciPath.truncate', () {
+      expect(UciPath.empty.truncate(0), UciPath.empty);
+      expect(UciPath.empty.truncate(123), UciPath.empty);
+
+      expect(const UciPath('Td').truncate(1), const UciPath('Td'));
+      expect(const UciPath('TdTe').truncate(1), const UciPath('Td'));
+      expect(const UciPath('TdTe').truncate(2), const UciPath('TdTe'));
+      expect(const UciPath('TdTeTf').truncate(2), const UciPath('TdTe'));
+      expect(const UciPath('TdTeTf').truncate(3), const UciPath('TdTeTf'));
+      expect(const UciPath('TdTeTf').truncate(4), const UciPath('TdTeTf'));
+    });
+
     test('UciPath.contains', () {
       expect(UciPath.empty.contains(UciPath.empty), true);
       expect(const UciPath('Td').contains(UciPath.empty), true);

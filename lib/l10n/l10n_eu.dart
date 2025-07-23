@@ -9,10 +9,10 @@ class AppLocalizationsEu extends AppLocalizations {
   AppLocalizationsEu([String locale = 'eu']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Kontuaren ezarpenak';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Ezarpen hauek zure Lichess kontuari dagozkio eta zure gailu guztietan aplikatuko dira.';
 
   @override
   String get mobileAllGames => 'Partida guztiak';
@@ -21,7 +21,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileAreYouSure => 'Ziur zaude?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Taularen ezarpenak';
 
   @override
   String get mobileCancelTakebackOffer => 'Bertan behera utzi atzera-egite eskaera';
@@ -40,19 +40,19 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Arratsalde on, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Arratsalde on';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Egun on, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Egun on';
 
   @override
   String get mobileHideVariation => 'Ezkutatu aukera';
@@ -70,7 +70,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileNoSearchResults => 'Emaitzarik ez';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Kontuan izan aplikazio zaharraren eta webgune berriaren ezaugarri guztiak ez daudela prest, baina poliki-poliki gehituko ditugu.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Ez zaude erabiltzailerik jarraitzen.';
@@ -120,76 +120,76 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileRecentSearches => 'Azken bilaketak';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Ezabatu laster-marka';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Zerbitzariaren analisia';
 
   @override
   String get mobileSettingsClockPosition => 'Erlojuaren posizioa';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Aurrezarpenak';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Arrastatutako piezaren helburua';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Borobila';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Karratua';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Hasiera orriko widgetak';
 
   @override
   String get mobileSettingsImmersiveMode => 'Murgiltze modua';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Ezkutatu sistemaren interfazioa jokatzen ari zarela. Erabili hau zure telefonoaren nabigatzeko aukerek traba egiten badizute. Partida bati eta ariketen pantailei dagokie.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Harrapatutako piezak';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Aukeratu irudi bat';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Pertsonalizatutako atzeko planaok modu ilunean funtzionatzen du bakarrik. Irudi ilun bat erabiltzea gomendatzen da.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Lausotu irudia';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Taula ezkutatu';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Taula erakutsi';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Ikusi atzeko planoko beste irudi batzuk';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Sakatu edo arrastatu';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Sakatu bi lauki';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Formak marraztea';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Marraztu formak bi hatz erabiliz: mantendu hatz bat lauki huts baten eta arrastatu beste hatz bat forma bat marrazteko.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Erakutsi inguruko morra';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Ikutzeko bibrazioa';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Aktibatuta dagoenea, pieza bat mugitu edo harrapatzean gailuak bibrazio txiki bat egingo du.';
 
   @override
   String get mobileSettingsTab => 'Ezarpenak';
@@ -239,7 +239,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileWatchTab => 'Ikusi';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Ongi etorri Lichess aplikaziora!';
 
   @override
   String get activityActivity => 'Jarduera';
@@ -913,11 +913,11 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastLiveboard => 'Zuzeneko taula';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Komunitatearen zuzenekoa';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return '$param erabiltzaileak sortu eta kudeatua.';
   }
 
   @override
@@ -1666,8 +1666,8 @@ class AppLocalizationsEu extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles found in games by $param2',
-      one: 'One puzzle found in games by $param2',
+      other: '$count ariketa aurkitu dira $param2 erabiltzailearen partidetan',
+      one: 'Ariketa bat aurkitu da $param2 erabiltzailearen partidetan',
     );
     return '$_temp0';
   }
@@ -2512,7 +2512,7 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return 'Noiz sartu zen $param';
   }
 
   @override
@@ -2902,31 +2902,31 @@ class AppLocalizationsEu extends AppLocalizations {
   String get proposeATakeback => 'Jokaldia atzera egiteko eskatu';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'Zuriak atzera egitea proposatu du';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'Beltzak atzera egitea proposatu du';
 
   @override
   String get takebackPropositionSent => 'Jokaldia atzera egiteko eskaria bidali da';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'Zuriak ez du onartu atzera egitea';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'Beltzak ez du onartu atzera egitea';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'Zuriak atzera egitea onartu du';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'Beltzak atzera egitea onartu du';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'Zuriak atzera egiteko eskaera bertan behera utzi du';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'Beltzak atzera egiteko eskaera bertan behera utzi du';
 
   @override
   String get yourOpponentProposesATakeback => 'Zure aurkariak jokaldia atzera egiteko eskatu dizu';
@@ -3761,7 +3761,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get termsOfService => 'ToS';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'Titulua egiaztatzea';
 
   @override
   String get sourceCode => 'Iturburu kodea';
@@ -5908,109 +5908,109 @@ class AppLocalizationsEu extends AppLocalizations {
   String get studyGetTheTour => 'Laguntzarik behar? Etorri gurekin!';
 
   @override
-  String get studyWelcomeToLichessStudyTitle => 'Welcome to Lichess Study!';
+  String get studyWelcomeToLichessStudyTitle => 'Ongi etorri Lichess Study-ra!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'Hau partekatutako analisi taula bat da.<br><br><br><br>Erabili partidak analizatu edo komentatzeko,<br><br><br>eztabaidatu posizioak lagunekin,<br><br>eta erabili xake klaseetan!<br><br><br><br>Tresna ahaltsua da, hartu denbora bat nola dabilen ikasteko.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'Partekatuta eta gordeta';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => 'Beste kide batzuk zure jokaldiak denbora errealean ikusi ditzakete!<br>Gainera, dena betiko gordetzen da.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'Azterlanaren kideak';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 Ikusleek zure azterlanak ikusi eta txatean komentatu dezakete.<br><br>$param2 Laguntzaileek jokaldiak egin eta azterlana eguneratu dezakete.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'Egin klik $param botoina. <br>Gero erabaki nork lagundu dezakeen.';
   }
 
   @override
-  String get studyStudyChaptersTitle => 'Study chapters';
+  String get studyStudyChaptersTitle => 'Azterlanaren kapituluak';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => 'Azterlan batek kapitulu bat baino gehiago eduki ditzake.<br>Kapitulu bakoitzak hasierako posizio eta jokaldi-zuhaitz ezberdina du.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Posizio bat komentatu';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'Egin klik $param botoian edo egin klik jokaldi zerrendan. <br>Iruzkinak partekatu eta gorde egiten dira.';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'Iruzkindu posizioa';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Egin klik !? botoian, edo jokaldi zerrendan.<br>Iruzkinen ikonoak partekatu eta gorde egiten dira.';
 
   @override
   String get studyConclusionTitle => 'Eskerrik asko zure denboragatik';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'Zure <a href=\'/study/mine/hot\'>aurreko azterlanak</a> zure profilean ikusi ditzakezu.<br>Gainera <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>azterlanei buruzko blogeko artikulu bat</a> ere badago.<br>Erabiltzaile ahaltsuek \"?\" sakatu dezakete beste lasterbide batzuk ikusteko.';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'Azterlan kapitulu berri bat sortu dezagun';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'Azterlan batek hainbat kapitulu izan ditzake.<br>Kapitulu bakoitzak bere jokaldi zuhaitza du,<br>eta hainbat eratan sortu daiteke.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'Hasierako posiziotik aurrera';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'Partida berri baterako taularen ezarpenak.<br>Adibidez irekierak aztertzeko.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Posizio pertsonalizatua';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Konfiguratu taula zuk nahi duzun moduan.<br>Adibidez finalak aztertzeko.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Igo Lichess-en dagoen joko bat';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText => 'Itsatsi lichesseko partida batn URLa<br>(adibidez lichess.org/7fHIU0XI)<br>partidaren jokaldiak kapituluan kargatzeko.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'FEN kate batetik';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => 'Itsatsu FEN formatuko posizio bat<i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>kapitulua posizio batetik hasteko.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'PGN partida batetik';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Itsatsu PGN formatuan dagoen partida bat<br>bertatik jokaldiak, komentarioak eta barianteak kapitulura kargatzeko.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'Azterlanetan aldaerak erabili daitezke';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'Bai, Crazyhouse<br> eta Lichess bariante guztiak aztertu ditzazkezu!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => 'Kapituluak betirako gordetzen dira.<br>Ondo pasa zure xake edukiak antolatzen!';
 
   @override
-  String get studyDoubleDefeat => 'Double defeat';
+  String get studyDoubleDefeat => 'Porrot bikoitza';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+  String get studyBlackDefeatWhiteCanNotWin => 'Beltzen porrota, baina Txuriek irabazi ezin';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+  String get studyWhiteDefeatBlackCanNotWin => 'Txurien porrota, baina Beltzek irabazi ezin';
 
   @override
   String studyNbChapters(int count) {

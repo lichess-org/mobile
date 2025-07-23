@@ -234,6 +234,8 @@ class _BodyState extends ConsumerState<_Body> {
                       isComputerAnalysisAllowed: false,
                       variant: game.variant,
                       initialMoveCursor: stepCursor,
+                      // TODO implement offline storage and syncing of conditional premoves in CorrespondenceService and OfflineCorrespondenceGame
+                      // Until then, we do not enable conditional premoves in offline correspondence games
                     ),
                   ),
                 );

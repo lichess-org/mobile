@@ -5,10 +5,10 @@
   <string name="toInviteSomeoneToPlayGiveThisUrl">Gefðu upp þessa vefslóð til að bjóða einhverjum að tefla</string>
   <string name="gameOver">Búið spil</string>
   <string name="waitingForOpponent">Bið eftir andstæðingi</string>
-  <string name="orLetYourOpponentScanQrCode">Eða láttu andstæðing þinn skanna þennan QR kóða</string>
+  <string name="orLetYourOpponentScanQrCode">Eða láttu andstæðing þinn skanna þennan QR-kóða</string>
   <string name="waiting">Bið</string>
   <string name="yourTurn">Þú átt leik</string>
-  <string name="aiNameLevelAiLevel">%1$s erfiðleiki %2$s</string>
+  <string name="aiNameLevelAiLevel">%1$s erfiðleikastig %2$s</string>
   <string name="level">Stig</string>
   <string name="strength">Styrkleiki</string>
   <string name="toggleTheChat">Virkja spjall</string>
@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Kóngur á miðborðinu</string>
   <string name="threeChecks">Þrjár skákir</string>
   <string name="raceFinished">Kapphlaupi lokið</string>
-  <string name="variantEnding">Ending afbrigðis</string>
+  <string name="variantEnding">Lok afbrigðisins</string>
   <string name="newOpponent">Nýr andstæðingur</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Andstæðingur þinn vill tefla aðra skák við þig</string>
   <string name="joinTheGame">Hefja skák</string>
@@ -92,7 +92,7 @@
   <string name="averageRatingX">Meðal Elo: %s</string>
   <string name="recentGames">Síðustu skákir</string>
   <string name="topGames">Bestu skákir</string>
-  <string name="masterDbExplanation">OTB skákir %1$s+ FIDE-stiga skákmanna frá %2$s til %3$s</string>
+  <string name="masterDbExplanation">Staðarskákir með skákmönnum sem hafa %1$s+ í skákstigum frá árinu %2$s til %3$s</string>
   <plurals name="mateInXHalfMoves">
     <item quantity="one">Mát í %s hálfleik</item>
     <item quantity="other">Mát í %s hálfleikum</item>
@@ -186,7 +186,7 @@
   <string name="rememberMe">Muna eftir innskráningunni minni</string>
   <string name="youNeedAnAccountToDoThat">Þú þarft aðgang til að geta þetta</string>
   <string name="signUp">Nýskráning</string>
-  <string name="computersAreNotAllowedToPlay">Skákforrit eða skákmenn sem nota aðstoð skákforrita mega ekki tefla. Vinsamlegast fáðu ekki hjálp frá skákforritum, gagnagrunnum eða öðrum leikmönnum meðan þú teflir. Mundu líka að við mælum sérstaklega á móti að stofna marga aðganga og þarflaus stofnun of margra aðganga verður að banni.</string>
+  <string name="computersAreNotAllowedToPlay">Skákforrit eða skákmenn sem nota aðstoð skákforrita mega ekki tefla. Vinsamlegast fáðu ekki hjálp frá skákforritum, gagnagrunnum eða öðrum leikmönnum meðan þú teflir. Mundu líka að við mælum sérstaklega á móti því að stofna marga aðganga og þarflaus stofnun of margra aðganga verður að banni.</string>
   <string name="games">Skákir</string>
   <string name="forum">Umræðukorkur</string>
   <string name="xPostedInForumY">%1$s póstað í umræðu %2$s</string>
@@ -416,7 +416,7 @@
   <string name="reset">Hreinsa</string>
   <string name="apply">Virkja</string>
   <string name="save">Vista</string>
-  <string name="leaderboard">Stigaborð</string>
+  <string name="leaderboard">Stigatafla</string>
   <string name="screenshotCurrentPosition">Taka skjáskot af núverandi stöðu</string>
   <string name="gameAsGIF">Skák sem GIF-snið</string>
   <string name="pasteTheFenStringHere">Límdu FEN strenginn hér</string>
@@ -751,10 +751,11 @@
   <string name="downloadRaw">Hlaða niður óunnu eintaki</string>
   <string name="downloadImported">Niðurhali hlaðið inn</string>
   <string name="downloadAllGames">Hlaða niður öllum skákum</string>
-  <string name="crosstable">Stigatafla</string>
+  <string name="crosstable">Mótstafla</string>
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">Skrunaðu yfir taflborðið til þess að gera leik í skákinni.</string>
   <string name="analysisShapesHowTo">Ýttu á skiptilykil og smelltu eða hægrismelltu til að teikna hringi og örvar á borðið.</string>
   <string name="letOtherPlayersMessageYou">Leyfa öðrum leikmönnum að senda þér skilaboð</string>
+  <string name="receiveForumNotifications">Fá tilkynningar þegar minnst er á mann á umræðukorkinum</string>
   <string name="shareYourInsightsData">Deila greiningum</string>
   <string name="withNobody">Með engum</string>
   <string name="withFriends">Með vinum</string>
@@ -864,6 +865,7 @@
   <string name="addCurrentVariation">Bæta núverandi afbrigði við</string>
   <string name="noConditionalPremoves">Engir skilyrtir forleikir</string>
   <string name="playX">Leika %s</string>
+  <string name="showUnreadLichessMessage">Þú hefur fengið einkaskilaboð frá Lichess.</string>
   <string name="clickHereToReadIt">Ýttu hér til að lesa það</string>
   <string name="sorry">Afsakaðu :(</string>
   <string name="weHadToTimeYouOutForAWhile">Við þurftum að setja þig í stutt leikbann.</string>
@@ -887,11 +889,11 @@
   <string name="bullet" comment="Probably best left untranslated. Leave it as 'Bullet' unless your language has a better word for it.">Leifturskák</string>
   <string name="blitz" comment="Probably best left untranslated. Leave it as 'Blitz' unless your language has a better word for it.">Hraðskák</string>
   <string name="rapid">Atskák</string>
-  <string name="classical">Hefðbundin Skák</string>
+  <string name="classical">Kappskák</string>
   <string name="ultraBulletDesc">Brjálæðislega fljótar skákir: minna en 30 sekúndur</string>
   <string name="bulletDesc">Mjög hraðar skákir: styttri en 3 mínútur</string>
   <string name="blitzDesc">Hraðar skákir: 3 til 8 mínútur</string>
-  <string name="rapidDesc">Örar skákir: 8 til 25 mínútur</string>
+  <string name="rapidDesc">Atskákir: 8 til 25 mínútur</string>
   <string name="classicalDesc">Hefðbundnar skákir: 25 mínútur eða meira</string>
   <string name="correspondenceDesc">Bréfskák: einn eða fleiri dagar á leik</string>
   <string name="puzzleDesc">Þjálfari í grunnatriðum skákar</string>
@@ -930,7 +932,7 @@
   <string name="cancelTournament">Aflýsa mótinu</string>
   <string name="tournDescription">Lýsing móts</string>
   <string name="tournDescriptionHelp">Er nokkuð sérstakt sem óskað er eftir að upplýsa þátttakendur um? Reyndu að hafa það stutt. Tenglar sem styðja Markdown eru í boði: [heiti](https://url)</string>
-  <string name="ratedFormHelp">Leikir gilda til stiga og hafa áhrif á stig leikmanna</string>
+  <string name="ratedFormHelp">Skákir gilda til stiga og hafa áhrif á stig leikmanna</string>
   <string name="onlyMembersOfTeam">Eingöngu meðlimir liðs</string>
   <string name="noRestriction">Engar hömlur</string>
   <string name="minimumRatedGames">Lágmarksfjöldi leikja með stigagjöf</string>

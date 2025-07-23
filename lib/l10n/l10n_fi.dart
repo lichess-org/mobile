@@ -129,7 +129,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileSettingsClockPosition => 'Kellon sijainti';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Esiasetukset';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Vedetyn nappulan kohde';
