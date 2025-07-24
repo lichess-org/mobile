@@ -1,21 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/localizations.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:unifiedpush/unifiedpush.dart';
 
 part 'notification_service.g.dart';
 
@@ -81,9 +78,6 @@ class NotificationService {
   /// The stream subscription for notification responses.
   StreamSubscription<NotificationResponse>? _responseStreamSubscription;
 
-  /// Whether the device has been registered for push notifications.
-  bool _registeredDevice = false;
-
   AppLocalizations get _l10n => _ref.read(localizationsProvider).strings;
 
   FlutterLocalNotificationsPlugin get _notificationDisplay =>
@@ -97,59 +91,68 @@ class NotificationService {
   ///
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
-  Future<void> start() async {
-    // listen for connectivity changes to register device once the app is online
-    _connectivitySubscription = _ref.listen(connectivityChangesProvider, (prev, current) async {
-      if (current.value?.isOnline == true && !_registeredDevice) {
-        try {
-          await registerDevice();
-          _registeredDevice = true;
-        } catch (e, st) {
-          _logger.severe('Could not setup push notifications; $e\n$st');
-        }
+  Future<void> start() {
+    return UnifiedPush.initialize(
+      onNewEndpoint: onNewEndpoint,
+      onRegistrationFailed: onRegistrationFailed,
+      onUnregistered: onUnregistered,
+      onMessage: onMessage,
+    ).then((registered) {
+      if (registered) {
+        UnifiedPush.register(vapid: kLichessVapidPublicKey);
       }
     });
+  }
 
-    // Listen for incoming messages while the app is in the foreground.
-    LichessBinding.instance.firebaseMessagingOnMessage.listen((RemoteMessage message) {
-      _processFcmMessage(message, fromBackground: false);
-    });
-
-    // Listen for incoming messages while the app is in the background.
-    LichessBinding.instance.firebaseMessagingOnBackgroundMessage(
-      _firebaseMessagingBackgroundHandler,
-    );
-
-    // Request permission to receive notifications. Pop-up will appear only
-    // once.
-    await LichessBinding.instance.firebaseMessaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-      announcement: false,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-    );
-
-    // Listen for token refresh and update the token on the server accordingly.
-    _fcmTokenRefreshSubscription = LichessBinding.instance.firebaseMessaging.onTokenRefresh.listen((
-      String token,
-    ) {
-      _registerToken(token);
-    });
-
-    // Get any messages which caused the application to open from
-    // a terminated state.
-    final RemoteMessage? initialMessage = await LichessBinding.instance.firebaseMessaging
-        .getInitialMessage();
-
-    if (initialMessage != null) {
-      _handleFcmMessageOpenedApp(initialMessage);
+  void onNewEndpoint(PushEndpoint endpoint, String instance) {
+    if (endpoint.pubKeySet == null) {
+      _logger.warning('no public key found');
+      return;
     }
 
-    // Handle any other interaction that caused the app to open when in background.
-    LichessBinding.instance.firebaseMessagingOnMessageOpenedApp.listen(_handleFcmMessageOpenedApp);
+    final body = {
+      'endpoint': endpoint.url,
+      'keys': {'auth': endpoint.pubKeySet!.auth, 'p256dh': endpoint.pubKeySet!.pubKey},
+    };
+
+    _ref
+        .withClient(
+          (client) => client.post(
+            Uri(path: '/push/subscribe'),
+            body: jsonEncode(body),
+            headers: {'Content-Type': 'application/json'},
+          ),
+        )
+        .then((response) {
+          final statusCode = response.statusCode;
+          if (200 <= statusCode && statusCode < 300) {
+            _logger.info('new endpoint sent succesfully');
+          } else {
+            _logger.warning('new endpoint sent but request failed with status code $statusCode');
+          }
+        })
+        .catchError((Object err) {
+          _logger.warning('sending new endpoint failed with error $err');
+        });
+  }
+
+  void onRegistrationFailed(FailedReason reason, String instance) {
+    _logger.warning('registration failed for reason: $reason');
+  }
+
+  void onUnregistered(String instance) {
+    _logger.info('device unregistered');
+  }
+
+  void onMessage(PushMessage message, String instance) {
+    final content = jsonDecode(utf8.decode(message.content)) as Map<String, dynamic>;
+    final channel = content['tag'] as String;
+    _notificationDisplay.show(
+      0,
+      content['title'] as String,
+      content['body'] as String,
+      NotificationDetails(android: AndroidNotificationDetails(channel, channel)),
+    );
   }
 
   /// Shows a notification.
@@ -200,146 +203,21 @@ class NotificationService {
     _responseStreamController.add((response, notification));
   }
 
-  /// Handle an FCM message that caused the application to open
-  void _handleFcmMessageOpenedApp(RemoteMessage message) {
-    final parsedMessage = FcmMessage.fromRemoteMessage(message);
-
-    switch (parsedMessage) {
-      case final CorresGameUpdateFcmMessage corresMessage:
-        final notification = CorresGameUpdateNotification.fromFcmMessage(corresMessage);
-        _responseStreamController.add((
-          NotificationResponse(
-            notificationResponseType: NotificationResponseType.selectedNotification,
-            id: notification.id,
-            payload: jsonEncode(notification.payload),
-          ),
-          notification,
-        ));
-
-      // TODO: handle other notification types
-      case UnhandledFcmMessage(data: final data):
-        _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
-
-      case MalformedFcmMessage(data: final data):
-        _logger.severe('Received malformed FCM message: $data');
-    }
-  }
-
-  /// Process a message received from the Firebase Cloud Messaging service.
-  ///
-  /// If the message contains a [RemoteMessage.notification] field and if it is
-  /// received while the app was in foreground, the notification is by default not
-  /// shown to the user.
-  /// Depending on the message type, we may as well show a local notification.
-  ///
-  /// Some messages (whether or not they have an associated notification), have
-  /// a [RemoteMessage.data] field used to update the application state according
-  /// to the message type.
-  ///
-  /// A special data field, 'lichess.iosBadge', is used to update the iOS app's
-  /// badge count according to the value held by the server.
-  Future<void> _processFcmMessage(
-    RemoteMessage message, {
-
-    /// Whether the message was received while the app was in the background.
-    required bool fromBackground,
-  }) async {
-    _logger.fine(
-      'Processing a FCM message from ${fromBackground ? 'background' : 'foreground'}: ${message.data}',
-    );
-
-    final parsedMessage = FcmMessage.fromRemoteMessage(message);
-
-    _fcmMessageStreamController.add((message: parsedMessage, fromBackground: fromBackground));
-
-    switch (parsedMessage) {
-      case CorresGameUpdateFcmMessage(fullId: final fullId, notification: final notification):
-        if (fromBackground == false && notification != null) {
-          await show(CorresGameUpdateNotification(fullId, notification.title!, notification.body!));
-        }
-
-      // TODO: handle other notification types
-
-      case UnhandledFcmMessage(data: final data):
-        _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
-
-      case MalformedFcmMessage(data: final data):
-        _logger.severe('Received malformed FCM message: $data');
-    }
-
-    // update badge
-    final badge = message.data['lichess.iosBadge'] as String?;
-    if (badge != null) {
-      try {
-        await BadgeService.instance.setBadge(int.parse(badge));
-      } catch (e) {
-        _logger.severe('Could not parse badge: $badge');
-      }
-    }
-  }
-
   /// Register the device for push notifications.
-  Future<void> registerDevice() async {
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      final apnsToken = await LichessBinding.instance.firebaseMessaging.getAPNSToken();
-      if (apnsToken == null) {
-        _logger.warning('APNS token is null');
-        return;
+  Future<void> registerDevice() {
+    _logger.info('register device for the first time');
+    return UnifiedPush.tryUseCurrentOrDefaultDistributor().then((success) {
+      if (success) {
+        UnifiedPush.register(vapid: kLichessVapidPublicKey);
+      } else {
+        _logger.info('could not find a distributor');
       }
-    }
-    final token = await LichessBinding.instance.firebaseMessaging.getToken();
-    if (token != null) {
-      await _registerToken(token);
-    }
+    });
   }
 
   /// Unregister the device from push notifications.
-  Future<void> unregister() async {
+  Future<void> unregister() {
     _logger.info('will unregister');
-    final session = _ref.read(authSessionProvider);
-    if (session == null) {
-      return;
-    }
-    try {
-      await _ref.withClient((client) => client.post(Uri(path: '/mobile/unregister')));
-    } catch (e, st) {
-      _logger.severe('could not unregister device; $e', e, st);
-    }
-  }
-
-  Future<void> _registerToken(String token) async {
-    final settings = await LichessBinding.instance.firebaseMessaging.getNotificationSettings();
-    if (settings.authorizationStatus == AuthorizationStatus.denied) {
-      return;
-    }
-    _logger.info('will register fcmToken: $token');
-    final session = _ref.read(authSessionProvider);
-    if (session == null) {
-      return;
-    }
-    try {
-      await _ref.withClient((client) => client.post(Uri(path: '/mobile/register/firebase/$token')));
-    } catch (e, st) {
-      _logger.severe('could not register device; $e', e, st);
-    }
-  }
-
-  @pragma('vm:entry-point')
-  static Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    // create a new provider scope for the background isolate
-    final ref = ProviderContainer();
-
-    final lichessBinding = AppLichessBinding.ensureInitialized();
-    await lichessBinding.preloadSharedPreferences();
-    await ref.read(preloadedDataProvider.future);
-
-    try {
-      await ref.read(notificationServiceProvider)._processFcmMessage(message, fromBackground: true);
-
-      ref.dispose();
-    } catch (e) {
-      _logger.severe('Error when processing an FCM background message: $e');
-      ref.dispose();
-    }
+    return UnifiedPush.unregister();
   }
 }
