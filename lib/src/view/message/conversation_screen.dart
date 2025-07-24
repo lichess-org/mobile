@@ -1,8 +1,6 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -10,7 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-abstract class DisplayItem {}
+sealed class DisplayItem {}
 
 class DateItem extends DisplayItem {
   final DateTime date;
@@ -22,6 +20,8 @@ class MessageItem extends DisplayItem {
   final bool isMe;
   MessageItem(this.message, this.isMe);
 }
+
+class GetMoreItem extends DisplayItem {}
 
 class ConversationScreen extends StatelessWidget {
   final LightUser user;
@@ -59,7 +59,7 @@ class _Body extends ConsumerWidget {
 
     switch (messageStateAsync) {
       case AsyncData(:final value):
-        final items = buildDisplayItems(value.convo.messages, value.me.id);
+        final items = buildDisplayItems(value);
         return Column(
           children: [
             Expanded(
@@ -73,17 +73,25 @@ class _Body extends ConsumerWidget {
                   itemCount: items.length,
                   itemBuilder: (context, index) {
                     final item = items[index];
-                    if (item is DateItem) {
-                      return _DateBubble(date: item.date);
-                    } else if (item is MessageItem) {
-                      return _MessageBubble(message: item.message, isMe: item.isMe);
+                    switch (item) {
+                      case DateItem(:final date):
+                        return _DateBubble(date: date);
+                      case MessageItem(:final message, :final isMe):
+                        return _MessageBubble(message: message, isMe: isMe);
+                      case GetMoreItem():
+                        return Center(
+                          child: TextButton(
+                            onPressed: () =>
+                                ref.read(messageControllerProvider(user.id).notifier).getMore(),
+                            child: const Text('Load more'),
+                          ),
+                        );
                     }
-                    return const SizedBox.shrink();
                   },
                 ),
               ),
             ),
-            _MessageInput(user: user, data: value),
+            _MessageInput(user: user, state: value),
           ],
         );
       case AsyncError(error: final e, stackTrace: final st):
@@ -94,7 +102,8 @@ class _Body extends ConsumerWidget {
     }
   }
 
-  List<DisplayItem> buildDisplayItems(IList<Message> messages, UserId myId) {
+  List<DisplayItem> buildDisplayItems(ConversationState state) {
+    final messages = state.convo.messages;
     final items = <DisplayItem>[];
     DateTime? currentDate;
     final List<Message> dayMessages = [];
@@ -107,7 +116,7 @@ class _Body extends ConsumerWidget {
 
       if (isNewDay && dayMessages.isNotEmpty) {
         for (final m in dayMessages) {
-          items.add(MessageItem(m, m.userId == myId));
+          items.add(MessageItem(m, m.userId == state.me.id));
         }
         items.add(DateItem(currentDate!));
         dayMessages.clear();
@@ -118,11 +127,16 @@ class _Body extends ConsumerWidget {
 
       if (isLast) {
         for (final m in dayMessages) {
-          items.add(MessageItem(m, m.userId == myId));
+          items.add(MessageItem(m, m.userId == state.me.id));
         }
         items.add(DateItem(currentDate));
       }
     }
+
+    if (state.canGetMoreSince != null) {
+      items.add(GetMoreItem());
+    }
+
     return items;
   }
 }
@@ -144,7 +158,7 @@ class _DateBubble extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.tertiaryContainer.withValues(alpha: 0.5),
+            color: Theme.of(context).colorScheme.tertiaryContainer.withValues(alpha: 0.7),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Text(
@@ -216,10 +230,10 @@ class _MessageBubble extends StatelessWidget {
 }
 
 class _MessageInput extends ConsumerStatefulWidget {
-  const _MessageInput({required this.user, required this.data});
+  const _MessageInput({required this.user, required this.state});
 
   final LightUser user;
-  final ConversationData data;
+  final ConversationState state;
 
   @override
   ConsumerState<_MessageInput> createState() => _MessageInputState();
@@ -229,11 +243,11 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
   final controller = TextEditingController();
 
   bool get isBlocked =>
-      widget.data.convo.relations.inward == false || widget.data.convo.relations.outward == false;
+      widget.state.convo.relations.inward == false || widget.state.convo.relations.outward == false;
 
-  bool get isBot => widget.data.isBot;
+  bool get isBot => widget.state.isBot;
 
-  bool get canPost => widget.data.convo.postable;
+  bool get canPost => widget.state.convo.postable;
 
   bool get readOnly => isBlocked || isBot || !canPost;
 

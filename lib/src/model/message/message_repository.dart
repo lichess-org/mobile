@@ -43,7 +43,10 @@ class MessageRepository {
 
   Future<ConversationData> getMore(UserId userId, DateTime before) {
     return client.readJson(
-      Uri(path: '/inbox/$userId', queryParameters: {'before': before.millisecondsSinceEpoch}),
+      Uri(
+        path: '/inbox/$userId',
+        queryParameters: {'before': before.millisecondsSinceEpoch.toString()},
+      ),
       headers: {'Accept': 'application/json'},
       mapper: (Map<String, dynamic> json) => ConversationData.fromServerJson(json),
     );
