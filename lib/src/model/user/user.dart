@@ -34,8 +34,11 @@ extension LightUserExtension on Pick {
       final name =
           requiredPick('username').asStringOrNull() ?? requiredPick('name').asStringOrThrow();
 
+      // If the id is not present, we assume the user is identified by their name.
+      final id = requiredPick('id').asUserIdOrNull() ?? UserId.fromUserName(name);
+
       return LightUser(
-        id: requiredPick('id').asUserIdOrThrow(),
+        id: id,
         name: name,
         title: requiredPick('title').asStringOrNull(),
         flair: requiredPick('flair').asStringOrNull(),
