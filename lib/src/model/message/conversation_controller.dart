@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'conversation_controller.g.dart';
@@ -19,6 +20,9 @@ class ConversationController extends _$ConversationController {
   late SocketClient _client;
   StreamSubscription<SocketEvent>? _socketSubscription;
   Timer? _setReadTimer;
+  Timer? _contactTypingTimer;
+
+  final Throttler _typingThrottler = Throttler(const Duration(seconds: 3));
 
   LightUser? get _me => ref.read(authSessionProvider)?.user;
 
@@ -29,6 +33,8 @@ class ConversationController extends _$ConversationController {
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _setReadTimer?.cancel();
+      _typingThrottler.cancel();
+      _contactTypingTimer?.cancel();
     });
 
     _setReadTimer?.cancel();
@@ -83,8 +89,10 @@ class ConversationController extends _$ConversationController {
     _client.send('msgRead', userId.toString());
   }
 
-  void typing(String destUserId) {
-    _client.send('msgType', destUserId);
+  void setTyping(UserId destUserId) {
+    _typingThrottler(() {
+      _client.send('msgType', destUserId.toString());
+    });
   }
 
   void _connectSocket() {
@@ -102,8 +110,7 @@ class ConversationController extends _$ConversationController {
       case 'msgNew':
         _handleIncomingMessage(event.data as Map<String, dynamic>);
       case 'msgType':
-        // TODO handle typing event
-        break;
+        _handleContactTyping();
     }
   }
 
@@ -114,7 +121,21 @@ class ConversationController extends _$ConversationController {
     if (message.userId == userId) {
       markAsRead();
     }
-    state = AsyncData(state.requireValue.copyWith(convo: convo.copyWith(messages: newMessages)));
+    state = AsyncData(
+      state.requireValue.copyWith(
+        convo: convo.copyWith(messages: newMessages),
+        contactTyping: false,
+      ),
+    );
+  }
+
+  void _handleContactTyping() {
+    state = AsyncData(state.requireValue.copyWith(contactTyping: true));
+
+    _contactTypingTimer?.cancel();
+    _contactTypingTimer = Timer(const Duration(seconds: 3), () {
+      state = AsyncData(state.requireValue.copyWith(contactTyping: false));
+    });
   }
 }
 
@@ -125,5 +146,6 @@ sealed class ConversationState with _$ConversationState {
     required bool isBot,
     required Convo convo,
     DateTime? canGetMoreSince,
+    bool? contactTyping,
   }) = _ConversationState;
 }

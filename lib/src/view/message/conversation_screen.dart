@@ -23,6 +23,8 @@ class MessageItem extends DisplayItem {
 
 class GetMoreItem extends DisplayItem {}
 
+class ContactTypingItem extends DisplayItem {}
+
 class ConversationScreen extends StatelessWidget {
   final LightUser user;
 
@@ -87,6 +89,8 @@ class _Body extends ConsumerWidget {
                             child: const Text('Load more'),
                           ),
                         );
+                      case ContactTypingItem():
+                        return _ContactTyping(user: user);
                     }
                   },
                 ),
@@ -108,6 +112,8 @@ class _Body extends ConsumerWidget {
     final items = <DisplayItem>[];
     DateTime? currentDate;
     final List<Message> dayMessages = [];
+
+    items.add(ContactTypingItem());
 
     for (int i = 0; i < messages.length; i++) {
       final message = messages[i];
@@ -139,6 +145,36 @@ class _Body extends ConsumerWidget {
     }
 
     return items;
+  }
+}
+
+class _ContactTyping extends ConsumerWidget {
+  final LightUser user;
+
+  const _ContactTyping({required this.user});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isTyping = ref.watch(
+      conversationControllerProvider(
+        user.id,
+      ).select((state) => state.valueOrNull?.contactTyping == true),
+    );
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: isTyping
+          ? Text(
+              '${user.name} is typing...',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
+              ),
+            )
+          : Text(
+              '', // Empty text to maintain layout when not typing
+              style: TextStyle(fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize),
+            ),
+    );
   }
 }
 
@@ -251,6 +287,16 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
   bool get canPost => widget.state.convo.postable;
 
   bool get readOnly => isBlocked || isBot || !canPost;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(() {
+      if (controller.text.isNotEmpty) {
+        ref.read(conversationControllerProvider(widget.user.id).notifier).setTyping(widget.user.id);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
