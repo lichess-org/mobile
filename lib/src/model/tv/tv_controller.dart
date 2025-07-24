@@ -151,6 +151,15 @@ class TvController extends _$TvController {
     }
   }
 
+  void goToMove(int index) {
+    if (state.hasValue) {
+      final curState = state.requireValue;
+      if (index >= 0 && index < curState.game.steps.length) {
+        state = AsyncValue.data(curState.copyWith(stepCursor: index));
+      }
+    }
+  }
+
   void _playReplayMoveSound(String san) {
     final soundService = ref.read(soundServiceProvider);
     if (san.contains('x')) {
