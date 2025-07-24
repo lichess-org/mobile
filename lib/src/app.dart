@@ -10,6 +10,8 @@ import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -18,6 +20,9 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/play/quick_game_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 /// Application initialization and main entry point.
 class AppInitializationScreen extends ConsumerWidget {
@@ -56,9 +61,12 @@ class Application extends ConsumerStatefulWidget {
   ConsumerState<Application> createState() => _AppState();
 }
 
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class _AppState extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
   bool _firstTimeOnlineCheck = false;
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -98,6 +106,27 @@ class _AppState extends ConsumerState<Application> {
     });
 
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initializeQuickActions();
+
+      final ctx = navigatorKey.currentContext;
+      if (ctx == null) return;
+
+      const QuickActions quickActions = QuickActions();
+      quickActions.setShortcutItems(<ShortcutItem>[
+        ShortcutItem(
+          type: 'play_game',
+          localizedTitle: AppLocalizations.of(ctx).quickPairing,
+          icon: 'chess_knight',
+        ),
+        ShortcutItem(
+          type: 'play_puzzles',
+          localizedTitle: AppLocalizations.of(ctx).puzzleThemeMix,
+          icon: 'extension',
+        ),
+      ]);
+    });
   }
 
   @override
@@ -109,6 +138,7 @@ class _AppState extends ConsumerState<Application> {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return MaterialApp(
+      navigatorKey: navigatorKey,
       localizationsDelegates: const [
         ...AppLocalizations.localizationsDelegates,
         MaterialLocalizationsEo.delegate,
@@ -135,5 +165,27 @@ class _AppState extends ConsumerState<Application> {
       },
       navigatorObservers: [rootNavPageRouteObserver],
     );
+  }
+
+  void initializeQuickActions() {
+    const QuickActions quickActions = QuickActions();
+    quickActions.initialize((String shortcutType) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final ctx = navigatorKey.currentContext;
+        if (ctx == null) return;
+
+        if (shortcutType == 'play_game') {
+          Navigator.of(
+            ctx,
+            rootNavigator: true,
+          ).push(MaterialPageRoute<void>(builder: (ctx) => const QuickGameScreen()));
+        } else if (shortcutType == 'play_puzzles') {
+          Navigator.of(
+            ctx,
+            rootNavigator: true,
+          ).push(PuzzleScreen.buildRoute(ctx, angle: const PuzzleTheme(PuzzleThemeKey.mix)));
+        }
+      });
+    });
   }
 }
