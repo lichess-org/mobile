@@ -106,11 +106,9 @@ class _Body extends ConsumerWidget {
       final isLast = i == messages.length - 1;
 
       if (isNewDay && dayMessages.isNotEmpty) {
-        // Add previous day's messages first
         for (final m in dayMessages) {
           items.add(MessageItem(m, m.userId == myId));
         }
-        // Add DateItem for previous day
         items.add(DateItem(currentDate!));
         dayMessages.clear();
       }
@@ -119,11 +117,9 @@ class _Body extends ConsumerWidget {
       dayMessages.add(message);
 
       if (isLast) {
-        // Add current day's messages
         for (final m in dayMessages) {
           items.add(MessageItem(m, m.userId == myId));
         }
-        // Add DateItem for current day
         items.add(DateItem(currentDate));
       }
     }
