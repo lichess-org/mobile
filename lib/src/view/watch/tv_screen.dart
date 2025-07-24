@@ -150,6 +150,9 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                           : blackPlayerWidget,
                       moves: game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false),
                       currentMoveIndex: gameState.stepCursor,
+                      onSelectMove: (index) {
+                        ref.read(_tvGameCtrl.notifier).goToMove(index);
+                      },
                       lastMove: game.moveAt(gameState.stepCursor),
                     );
                   },
