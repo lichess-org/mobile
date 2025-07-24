@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/message/conversation_controller.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
-import 'package:lichess_mobile/src/model/message/message_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -55,7 +55,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final messageStateAsync = ref.watch(messageControllerProvider(user.id));
+    final messageStateAsync = ref.watch(conversationControllerProvider(user.id));
 
     switch (messageStateAsync) {
       case AsyncData(:final value):
@@ -81,8 +81,9 @@ class _Body extends ConsumerWidget {
                       case GetMoreItem():
                         return Center(
                           child: TextButton(
-                            onPressed: () =>
-                                ref.read(messageControllerProvider(user.id).notifier).getMore(),
+                            onPressed: () => ref
+                                .read(conversationControllerProvider(user.id).notifier)
+                                .getMore(),
                             child: const Text('Load more'),
                           ),
                         );
@@ -259,7 +260,7 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
         final text = controller.text.trim();
         if (text.isNotEmpty) {
           ref
-              .read(messageControllerProvider(widget.user.id).notifier)
+              .read(conversationControllerProvider(widget.user.id).notifier)
               .sendMessage(widget.user.id, text);
           controller.clear();
         }

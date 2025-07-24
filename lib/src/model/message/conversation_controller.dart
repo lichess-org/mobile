@@ -9,13 +9,13 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'message_controller.g.dart';
-part 'message_controller.freezed.dart';
+part 'conversation_controller.g.dart';
+part 'conversation_controller.freezed.dart';
 
 const kMessagesPerPage = 100;
 
 @riverpod
-class MessageController extends _$MessageController {
+class ConversationController extends _$ConversationController {
   late SocketClient _client;
   StreamSubscription<SocketEvent>? _socketSubscription;
   Timer? _setReadTimer;
