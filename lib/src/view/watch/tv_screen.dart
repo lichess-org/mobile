@@ -113,7 +113,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                               },
                             )
                           : null,
-                      materialDiff: game.lastMaterialDiffAt(Side.black),
+                      materialDiff: game.materialDiffAt(gameState.stepCursor, Side.black),
                     );
                     final whitePlayerWidget = GamePlayer(
                       game: game.copyWith(white: game.white.setOnGame(true)),
@@ -133,7 +133,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                               },
                             )
                           : null,
-                      materialDiff: game.lastMaterialDiffAt(Side.white),
+                      materialDiff: game.materialDiffAt(gameState.stepCursor, Side.white),
                     );
 
                     return BoardTable(
