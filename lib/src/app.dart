@@ -194,13 +194,11 @@ class _AppState extends ConsumerState<Application> {
           if (index != null) {
             final recentRequests = ref.watch(recentGameSeekProvider).requests;
             final targetSeek = recentRequests[index];
-            Navigator.of(
-              ctx,
-              rootNavigator: true,
-            ).push(GameScreen.buildRoute(ctx, seek: GameSeek.parseGameSeekFromRequestBody(targetSeek)));
+            Navigator.of(ctx, rootNavigator: true).push(
+              GameScreen.buildRoute(ctx, seek: GameSeek.parseGameSeekFromRequestBody(targetSeek)),
+            );
           }
-        } 
-        else if (shortcutType == 'play_puzzles') {
+        } else if (shortcutType == 'play_puzzles') {
           Navigator.of(
             ctx,
             rootNavigator: true,

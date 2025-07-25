@@ -179,9 +179,7 @@ class RecentGameSeekPrefs implements Serializable {
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'requests': requests,
-    };
+    return {'requests': requests};
   }
 
   factory RecentGameSeekPrefs.fromJson(Map<String, dynamic> json) {
@@ -214,14 +212,15 @@ class RecentGameSeekPrefs implements Serializable {
   static const empty = RecentGameSeekPrefs(requests: []);
 }
 
-final recentGameSeekProvider =
-    NotifierProvider<RecentGameSeekNotifier, RecentGameSeekPrefs>(
-        RecentGameSeekNotifier.new);
+final recentGameSeekProvider = NotifierProvider<RecentGameSeekNotifier, RecentGameSeekPrefs>(
+  RecentGameSeekNotifier.new,
+);
 
 class RecentGameSeekNotifier extends Notifier<RecentGameSeekPrefs>
     with PreferencesStorage<RecentGameSeekPrefs> {
   @override
-  PrefCategory get prefCategory => PrefCategory.gameSeeks;
+  @protected
+  final prefCategory = PrefCategory.gameSeeks;
 
   @override
   RecentGameSeekPrefs fromJson(Map<String, dynamic> json) {
@@ -229,6 +228,7 @@ class RecentGameSeekNotifier extends Notifier<RecentGameSeekPrefs>
   }
 
   @override
+  @protected
   RecentGameSeekPrefs get defaults => RecentGameSeekPrefs.empty;
 
   @override
@@ -242,8 +242,7 @@ class RecentGameSeekNotifier extends Notifier<RecentGameSeekPrefs>
   }
 
   Future<void> clearRequests() async {
-    await LichessBinding.instance.sharedPreferences
-        .remove(prefCategory.storageKey);
+    await LichessBinding.instance.sharedPreferences.remove(prefCategory.storageKey);
     state = RecentGameSeekPrefs.empty;
   }
 }
