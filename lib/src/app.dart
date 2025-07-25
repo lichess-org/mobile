@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -20,7 +21,7 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/play/quick_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:quick_actions/quick_actions.dart';
 
@@ -108,6 +109,8 @@ class _AppState extends ConsumerState<Application> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final recentRequests = ref.watch(recentGameSeekProvider).requests;
+
       initializeQuickActions();
 
       final ctx = navigatorKey.currentContext;
@@ -116,15 +119,25 @@ class _AppState extends ConsumerState<Application> {
       const QuickActions quickActions = QuickActions();
       quickActions.setShortcutItems(<ShortcutItem>[
         ShortcutItem(
-          type: 'play_game',
-          localizedTitle: AppLocalizations.of(ctx).quickPairing,
-          icon: 'chess_knight',
-        ),
-        ShortcutItem(
           type: 'play_puzzles',
           localizedTitle: AppLocalizations.of(ctx).puzzleThemeMix,
           icon: 'extension',
         ),
+
+        ...recentRequests.asMap().entries.map((entry) {
+          final index = entry.key;
+          final req = entry.value;
+
+          final time = req['time'] ?? '-';
+          final increment = req['increment'] ?? '0';
+          final rated = req['rated'] == 'true' ? '🏅' : '';
+
+          return ShortcutItem(
+            type: 'recent_seek_$index',
+            localizedTitle: '$time+$increment $rated',
+            icon: 'schedule',
+          );
+        }),
       ]);
     });
   }
@@ -174,12 +187,18 @@ class _AppState extends ConsumerState<Application> {
         final ctx = navigatorKey.currentContext;
         if (ctx == null) return;
 
-        if (shortcutType == 'play_game') {
-          Navigator.of(
-            ctx,
-            rootNavigator: true,
-          ).push(MaterialPageRoute<void>(builder: (ctx) => const QuickGameScreen()));
-        } else if (shortcutType == 'play_puzzles') {
+        if (shortcutType.startsWith('recent_seek_')) {
+          final index = int.tryParse(shortcutType.split('_').last);
+          if (index != null) {
+            final recentRequests = ref.watch(recentGameSeekProvider).requests;
+            final targetSeek = recentRequests[index];
+            Navigator.of(
+              ctx,
+              rootNavigator: true,
+            ).push(GameScreen.buildRoute(ctx, seek: GameSeek.parseGameSeekFromRequestBody(targetSeek)));
+          }
+        } 
+        else if (shortcutType == 'play_puzzles') {
           Navigator.of(
             ctx,
             rootNavigator: true,

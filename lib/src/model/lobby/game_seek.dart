@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -9,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'game_seek.freezed.dart';
@@ -113,4 +116,134 @@ sealed class GameSeek with _$GameSeek {
     if (variant != null) 'variant': variant!.name,
     if (ratingRange != null) 'ratingRange': '${ratingRange!.$1}-${ratingRange!.$2}',
   };
+
+  factory GameSeek.parseGameSeekFromRequestBody(Map<String, String> requestBody) {
+    Duration? time;
+    Duration? increment;
+    int? days;
+    bool rated = false;
+    Variant? variant;
+    (int, int)? ratingRange;
+
+    if (requestBody.containsKey('time')) {
+      final timeMinutes = double.tryParse(requestBody['time']!) ?? 0;
+      time = Duration(seconds: (timeMinutes * 60).toInt());
+    }
+
+    if (requestBody.containsKey('increment')) {
+      final incSeconds = int.tryParse(requestBody['increment']!) ?? 0;
+      increment = Duration(seconds: incSeconds);
+    }
+
+    if (requestBody.containsKey('days')) {
+      days = int.tryParse(requestBody['days']!);
+    }
+
+    if (requestBody.containsKey('rated')) {
+      rated = requestBody['rated']!.toLowerCase() == 'true';
+    }
+
+    if (requestBody.containsKey('variant')) {
+      final variantName = requestBody['variant']!;
+      variant = Variant.values.firstWhere(
+        (v) => v.name == variantName,
+        orElse: () => Variant.standard,
+      );
+    }
+
+    if (requestBody.containsKey('ratingRange')) {
+      final parts = requestBody['ratingRange']!.split('-');
+      if (parts.length == 2) {
+        final min = int.tryParse(parts[0]);
+        final max = int.tryParse(parts[1]);
+        if (min != null && max != null) {
+          ratingRange = (min, max);
+        }
+      }
+    }
+
+    return GameSeek(
+      clock: (time!, increment!),
+      days: days,
+      rated: rated,
+      variant: variant,
+      ratingRange: ratingRange,
+    );
+  }
+}
+
+class RecentGameSeekPrefs implements Serializable {
+  final List<Map<String, String>> requests;
+
+  const RecentGameSeekPrefs({required this.requests});
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'requests': requests,
+    };
+  }
+
+  factory RecentGameSeekPrefs.fromJson(Map<String, dynamic> json) {
+    final rawList = json['requests'] as List<dynamic>? ?? [];
+    return RecentGameSeekPrefs(
+      requests: rawList.map((item) {
+        final map = Map<String, dynamic>.from(item as Map);
+        return map.map((key, value) => MapEntry(key, value.toString()));
+      }).toList(),
+    );
+  }
+
+  RecentGameSeekPrefs copyWithAdded(Map<String, String> newRequest) {
+    final existing = requests.where((r) => !_mapEquals(r, newRequest)).toList();
+    final updated = [newRequest, ...existing];
+    if (updated.length > 3) {
+      updated.removeRange(3, updated.length);
+    }
+    return RecentGameSeekPrefs(requests: updated);
+  }
+
+  static bool _mapEquals(Map<String, String> a, Map<String, String> b) {
+    if (a.length != b.length) return false;
+    for (final key in a.keys) {
+      if (a[key] != b[key]) return false;
+    }
+    return true;
+  }
+
+  static const empty = RecentGameSeekPrefs(requests: []);
+}
+
+final recentGameSeekProvider =
+    NotifierProvider<RecentGameSeekNotifier, RecentGameSeekPrefs>(
+        RecentGameSeekNotifier.new);
+
+class RecentGameSeekNotifier extends Notifier<RecentGameSeekPrefs>
+    with PreferencesStorage<RecentGameSeekPrefs> {
+  @override
+  PrefCategory get prefCategory => PrefCategory.gameSeeks;
+
+  @override
+  RecentGameSeekPrefs fromJson(Map<String, dynamic> json) {
+    return RecentGameSeekPrefs.fromJson(json);
+  }
+
+  @override
+  RecentGameSeekPrefs get defaults => RecentGameSeekPrefs.empty;
+
+  @override
+  RecentGameSeekPrefs build() {
+    return fetch();
+  }
+
+  Future<void> addRequest(Map<String, String> request) async {
+    final updated = state.copyWithAdded(request);
+    await save(updated);
+  }
+
+  Future<void> clearRequests() async {
+    await LichessBinding.instance.sharedPreferences
+        .remove(prefCategory.storageKey);
+    state = RecentGameSeekPrefs.empty;
+  }
 }
