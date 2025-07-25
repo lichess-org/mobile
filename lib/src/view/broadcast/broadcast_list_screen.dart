@@ -130,9 +130,10 @@ class _Body extends ConsumerWidget {
                   slivers: [
                     if (section.$3.isNotEmpty)
                       SliverAppBar(
-                        backgroundColor: Theme.of(
+                        centerTitle: false,
+                        backgroundColor: ColorScheme.of(
                           context,
-                        ).appBarTheme.backgroundColor?.withValues(alpha: 1),
+                        ).surfaceContainerHigh.withValues(alpha: 1),
                         automaticallyImplyLeading: false,
                         primary: false,
                         title: AppBarTitleText(section.$2),
