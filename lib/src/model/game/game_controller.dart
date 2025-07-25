@@ -1018,13 +1018,7 @@ sealed class GameState with _$GameState {
       game.resignable &&
       (game.meta.rules == null || !game.meta.rules!.contains(GameRule.noClaimWin));
 
-  bool get canOfferRematch =>
-      game.rematch == null &&
-      game.rematchable &&
-      (game.finished ||
-          (game.aborted &&
-              (!game.meta.rated || !{GameSource.lobby, GameSource.pool}.contains(game.source)))) &&
-      game.boosted != true;
+  bool get canOfferRematch => game.rematch == null && game.rematchable;
 
   /// Time left to move for the active player if an expiration is set
   Duration? get timeToMove {
