@@ -208,12 +208,21 @@ class GameController extends _$GameController {
       assert(false, 'game steps cannot be empty on cancel move');
       return;
     }
-    state = AsyncValue.data(
+    final (GameState newState, bool _) = _tryCancelMoveConfirmation(curState);
+    state = AsyncValue.data(newState);
+  }
+
+  (GameState, bool) _tryCancelMoveConfirmation(GameState curState) {
+    if (curState.moveToConfirm == null) {
+      return (curState, false);
+    }
+    return (
       curState.copyWith(
         game: curState.game.copyWith(steps: curState.game.steps.removeLast()),
         stepCursor: curState.stepCursor - 1,
         moveToConfirm: null,
       ),
+      true,
     );
   }
 
@@ -244,7 +253,12 @@ class GameController extends _$GameController {
 
   void cursorAt(int cursor) {
     if (state.hasValue) {
-      state = AsyncValue.data(state.requireValue.copyWith(stepCursor: cursor, premove: null));
+      final currentCursor = state.requireValue.stepCursor;
+      if (currentCursor == cursor) {
+        return;
+      }
+      final (newState, _) = _tryCancelMoveConfirmation(state.requireValue);
+      state = AsyncValue.data(newState.copyWith(stepCursor: cursor, premove: null));
       final san = state.requireValue.game.stepAt(cursor).sanMove?.san;
       if (san != null) {
         _playReplayMoveSound(san);
@@ -272,10 +286,14 @@ class GameController extends _$GameController {
     if (state.hasValue) {
       final curState = state.requireValue;
       if (curState.stepCursor > 0) {
+        final (newState, didCancel) = _tryCancelMoveConfirmation(curState);
         state = AsyncValue.data(
-          curState.copyWith(stepCursor: curState.stepCursor - 1, premove: null),
+          newState.copyWith(
+            stepCursor: didCancel ? newState.stepCursor : newState.stepCursor - 1,
+            premove: null,
+          ),
         );
-        final san = curState.game.stepAt(curState.stepCursor - 1).sanMove?.san;
+        final san = state.requireValue.game.stepAt(state.requireValue.stepCursor).sanMove?.san;
         if (san != null) {
           _playReplayMoveSound(san);
         }
