@@ -162,21 +162,21 @@ class _UserProfileListView extends ConsumerWidget {
       children: [
         UserProfileWidget(user: user),
         PerfCards(user: user, isMe: false),
-        if (session != null)
-          ListSection(
-            hasLeading: true,
-            children: [
-              ListTile(
-                title: Text(context.l10n.watchGames),
-                leading: const Icon(Icons.live_tv_outlined),
-                trailing: isLive ? const TextBadge(text: 'LIVE') : null,
-                onTap: () {
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(TvScreen.buildRoute(context, user: user.lightUser));
-                },
-              ),
+        ListSection(
+          hasLeading: true,
+          children: [
+            ListTile(
+              title: Text(context.l10n.watchGames),
+              leading: const Icon(Icons.live_tv_outlined),
+              trailing: isLive ? const TextBadge(text: 'LIVE') : null,
+              onTap: () {
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(TvScreen.buildRoute(context, user: user.lightUser));
+              },
+            ),
+            if (session != null) ...[
               if (user.canChallenge == true)
                 ListTile(
                   title: Text(context.l10n.challengeChallengeToPlay),
@@ -223,7 +223,8 @@ class _UserProfileListView extends ConsumerWidget {
                 },
               ),
             ],
-          ),
+          ],
+        ),
         UserActivityWidget(activity: activity),
         RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: user.lightUser),
       ],

@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class BroadcastSearchScreen extends StatefulWidget {
   const BroadcastSearchScreen();
@@ -57,68 +56,32 @@ class _BroadcastSearchScreenState extends State<BroadcastSearchScreen> {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class _Body extends ConsumerWidget {
   const _Body(this.searchTerm);
 
   final String searchTerm;
 
   @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _scrollListener() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
-      final provider = broadcastsSearchPaginatorProvider(widget.searchTerm);
-      final broadcastList = ref.read(provider);
-
-      if (!broadcastList.isLoading) {
-        ref.read(provider.notifier).next();
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final broadcastList = ref.watch(broadcastsSearchPaginatorProvider(widget.searchTerm));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final broadcastList = ref.watch(broadcastsSearchPaginatorProvider(searchTerm));
 
     return SafeArea(
       child: broadcastList.when(
         skipLoadingOnReload: true,
         data: (value) {
           final broadcasts = value.broadcasts;
+          final hasMorePages = value.nextPage != null && value.nextPage! <= 20;
+          final notifier = ref.read(broadcastsSearchPaginatorProvider(searchTerm).notifier);
 
           return (broadcasts.isNotEmpty)
               ? ListView.separated(
-                  controller: _scrollController,
                   separatorBuilder: (context, index) => PlatformDivider(
                     height: 1,
                     indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
                   ),
-                  itemCount: broadcasts.length,
-                  itemBuilder: (context, index) =>
-                      (broadcastList.isLoading && index >= broadcasts.length - 1)
-                      ? const Shimmer(
-                          child: ShimmerLoading(
-                            isLoading: true,
-                            child: BroadcastListTile.loading(),
-                          ),
-                        )
+                  itemCount: broadcasts.length + (hasMorePages ? 1 : 0),
+                  itemBuilder: (context, index) => (hasMorePages && index == broadcasts.length)
+                      ? BroadcastNextPageTile(notifier.next)
                       : BroadcastListTile(broadcast: broadcasts[index]),
                 )
               : Center(

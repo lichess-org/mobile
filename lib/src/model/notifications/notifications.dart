@@ -62,11 +62,32 @@ sealed class FcmMessage {
           } else {
             return MalformedFcmMessage(message.data);
           }
+        case 'newMessage':
+          final conversationId = message.data['lichess.threadId'] as String?;
+          if (conversationId != null) {
+            return NewMessageFcmMessage(UserId(conversationId), notification: message.notification);
+          } else {
+            return MalformedFcmMessage(message.data);
+          }
         default:
           return UnhandledFcmMessage(message.data);
       }
     }
   }
+}
+
+/// An [FcmMessage] that represents a new message in a private conversation.
+@immutable
+class NewMessageFcmMessage extends FcmMessage {
+  const NewMessageFcmMessage(this.conversationId, {required this.notification});
+
+  final UserId conversationId;
+
+  @override
+  final RemoteNotification? notification;
+
+  @override
+  String toString() => 'NewMessageFcmMessage(conversationId: $conversationId)';
 }
 
 /// An [FcmMessage] that represents a correspondence game update.
@@ -201,6 +222,60 @@ class PlaybanNotification extends LocalNotification {
       importance: Importance.max,
       priority: Priority.max,
       autoCancel: false,
+    ),
+    iOS: DarwinNotificationDetails(threadIdentifier: channelId),
+  );
+}
+
+/// A notification for a new message in a private conversation.
+///
+/// This notification is shown when a new message is received in a private conversation.
+/// It is created from a [NewMessageFcmMessage] and contains the conversation ID. The title and
+/// message are the same as the title and body of the FCM message's [RemoteNotification].
+class NewMessageNotification extends LocalNotification {
+  const NewMessageNotification(this.conversationId, String title, String message)
+    : _title = title,
+      _message = message;
+
+  final UserId conversationId;
+  final String _title;
+  final String _message;
+
+  factory NewMessageNotification.fromFcmMessage(NewMessageFcmMessage message) {
+    return NewMessageNotification(
+      message.conversationId,
+      message.notification?.title ?? '',
+      message.notification?.body ?? '',
+    );
+  }
+
+  @override
+  String get channelId => 'newMessage';
+
+  @override
+  int get id => conversationId.hashCode;
+
+  @override
+  Map<String, dynamic> get _concretePayload => {
+    'conversationId': conversationId.toJson(),
+    'title': _title,
+    'message': _message,
+  };
+
+  @override
+  String title(AppLocalizations l10n) => _title;
+
+  @override
+  String body(AppLocalizations _) => _message;
+
+  @override
+  NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
+    android: AndroidNotificationDetails(
+      channelId,
+      l10n.preferencesNotifyInboxMsg,
+      importance: Importance.max,
+      priority: Priority.high,
+      autoCancel: true,
     ),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
@@ -12,7 +11,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 enum _BroadcastFilter {
   all,
@@ -96,117 +94,69 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class _Body extends ConsumerWidget {
   const _Body(this.filter);
 
   final _BroadcastFilter filter;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body> {
-  final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _scrollListener() {
-    if (widget.filter == _BroadcastFilter.all &&
-        _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
-      final broadcastList = ref.read(broadcastsPaginatorProvider);
-
-      if (!broadcastList.isLoading) {
-        ref.read(broadcastsPaginatorProvider.notifier).next();
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final broadcastList = ref.watch(broadcastsPaginatorProvider);
 
-    if (!broadcastList.hasValue && broadcastList.isLoading) {
-      return const Center(child: CircularProgressIndicator.adaptive());
-    }
-
-    final sections = [
-      (
-        'ongoing',
-        context.l10n.broadcastOngoing,
-        broadcastList.requireValue.active
-            .where((b) => b.isLive || widget.filter != _BroadcastFilter.live)
-            .toList(),
-      ),
-      (
-        'past',
-        context.l10n.broadcastPastBroadcasts,
-        broadcastList.requireValue.past
-            .where((b) => widget.filter == _BroadcastFilter.all)
-            .toList(),
-      ),
-    ];
-
     return RefreshIndicator.adaptive(
-      key: _refreshIndicatorKey,
-      onRefresh: () async => ref.refresh(broadcastsPaginatorProvider),
-      child: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          for (final section in sections)
-            SliverMainAxisGroup(
-              key: ValueKey(section.$1),
-              slivers: [
-                if (section.$3.isNotEmpty)
-                  SliverAppBar(
-                    centerTitle: false,
-                    backgroundColor: ColorScheme.of(
-                      context,
-                    ).surfaceContainerHigh.withValues(alpha: 1),
-                    automaticallyImplyLeading: false,
-                    primary: false,
-                    title: AppBarTitleText(section.$2),
-                    pinned: true,
-                  ),
-                SliverPadding(
-                  padding: Styles.sectionBottomPadding,
-                  sliver: SliverList.separated(
-                    separatorBuilder: (context, index) => PlatformDivider(
-                      height: 1,
-                      indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
-                    ),
-                    itemCount: section.$3.length,
-                    itemBuilder: (context, index) =>
-                        (section.$1 == 'past' &&
-                            broadcastList.isLoading &&
-                            index >= section.$3.length - 1)
-                        ? const Shimmer(
-                            child: ShimmerLoading(
-                              isLoading: true,
-                              child: BroadcastListTile.loading(),
-                            ),
-                          )
-                        : BroadcastListTile(broadcast: section.$3[index]),
-                  ),
-                ),
-              ],
+      onRefresh: () => ref.refresh(broadcastsPaginatorProvider.future),
+      child: broadcastList.when(
+        data: (value) {
+          final sections = [
+            (
+              'ongoing',
+              context.l10n.broadcastOngoing,
+              switch (filter) {
+                _BroadcastFilter.all => value.active,
+                _BroadcastFilter.live => value.active.where((b) => b.isLive),
+              }.toList(growable: false),
             ),
-          const SliverSafeArea(
-            top: false,
-            sliver: SliverToBoxAdapter(child: SizedBox(height: 16.0)),
-          ),
-        ],
+            if (filter == _BroadcastFilter.all)
+              ('past', context.l10n.broadcastPastBroadcasts, value.past.toList(growable: false)),
+          ];
+          final hasMorePages = value.nextPage != null && value.nextPage! <= 20;
+          final notifier = ref.read(broadcastsPaginatorProvider.notifier);
+
+          return CustomScrollView(
+            slivers: [
+              for (final section in sections)
+                SliverMainAxisGroup(
+                  key: ValueKey(section.$1),
+                  slivers: [
+                    if (section.$3.isNotEmpty)
+                      SliverAppBar(
+                        centerTitle: false,
+                        backgroundColor: ColorScheme.of(
+                          context,
+                        ).surfaceContainerHigh.withValues(alpha: 1),
+                        automaticallyImplyLeading: false,
+                        primary: false,
+                        title: AppBarTitleText(section.$2),
+                        pinned: true,
+                      ),
+                    SliverList.separated(
+                      separatorBuilder: (context, index) => PlatformDivider(
+                        height: 1,
+                        indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
+                      ),
+                      itemCount: section.$3.length + (section.$1 == 'past' && hasMorePages ? 1 : 0),
+                      itemBuilder: (context, index) =>
+                          (section.$1 == 'past' && hasMorePages && index == section.$3.length)
+                          ? BroadcastNextPageTile(notifier.next)
+                          : BroadcastListTile(broadcast: section.$3[index]),
+                    ),
+                  ],
+                ),
+            ],
+          );
+        },
+        error: (_, _) => const Center(child: Text('Cannot load broadcasts')),
+        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       ),
     );
   }
