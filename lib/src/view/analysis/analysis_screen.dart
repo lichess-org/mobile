@@ -24,8 +24,8 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
+import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -73,7 +73,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     super.initState();
 
     tabs = [
-      AnalysisTab.opening,
+      AnalysisTab.explorer,
       AnalysisTab.moves,
       if (widget.options case ArchivedGame())
         AnalysisTab.summary
@@ -299,7 +299,7 @@ class _Body extends ConsumerWidget {
             : null,
         bottomBar: _BottomBar(options: options),
         children: [
-          OpeningExplorerView(
+          ExplorerView(
             shouldDisplayGames: analysisState.isComputerAnalysisAllowed,
             position: currentNode.position,
             opening: kOpeningAllowedVariants.contains(analysisState.variant)

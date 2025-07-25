@@ -5,27 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-const _kTableRowVerticalPadding = 10.0;
-const _kTableRowHorizontalPadding = 8.0;
-const _kTableRowPadding = EdgeInsets.symmetric(
-  horizontal: _kTableRowHorizontalPadding,
-  vertical: _kTableRowVerticalPadding,
-);
-const _kHeaderTextStyle = TextStyle(fontSize: 12);
-
-Color _whiteBoxColor(BuildContext context) => Theme.of(context).brightness == Brightness.dark
-    ? Colors.white.withValues(alpha: 0.8)
-    : Colors.white;
-
-Color _blackBoxColor(BuildContext context) => Theme.of(context).brightness == Brightness.light
-    ? Colors.black.withValues(alpha: 0.7)
-    : Colors.black;
 
 class OpeningNameHeader extends StatelessWidget {
   const OpeningNameHeader({required this.opening, super.key});
@@ -35,7 +20,7 @@ class OpeningNameHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: _kTableRowPadding,
+      padding: kTableRowPadding,
       decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
       child: GestureDetector(
         onTap: opening.name == context.l10n.startPosition
@@ -116,22 +101,22 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
           children: [
             Padding(
-              padding: _kTableRowPadding,
-              child: Text(context.l10n.move, style: _kHeaderTextStyle),
+              padding: kTableRowPadding,
+              child: Text(context.l10n.move, style: kHeaderTextStyle),
             ),
             Padding(
-              padding: _kTableRowPadding,
-              child: Text(context.l10n.games, style: _kHeaderTextStyle),
+              padding: kTableRowPadding,
+              child: Text(context.l10n.games, style: kHeaderTextStyle),
             ),
             Padding(
-              padding: _kTableRowPadding,
+              padding: kTableRowPadding,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: Text(
                       context.l10n.whiteDrawBlack,
-                      style: _kHeaderTextStyle,
+                      style: kHeaderTextStyle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -152,19 +137,19 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             children: [
               TableRowInkWell(
                 onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
-                child: Padding(padding: _kTableRowPadding, child: Text(move.san)),
+                child: Padding(padding: kTableRowPadding, child: Text(move.san)),
               ),
               TableRowInkWell(
                 onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
                 child: Padding(
-                  padding: _kTableRowPadding,
+                  padding: kTableRowPadding,
                   child: Text('${formatNum(move.games)} ($percentGames%)'),
                 ),
               ),
               TableRowInkWell(
                 onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
                 child: Padding(
-                  padding: _kTableRowPadding,
+                  padding: kTableRowPadding,
                   child: _WinPercentageChart(
                     whiteWins: move.white,
                     draws: move.draws,
@@ -184,13 +169,13 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             ),
             children: [
               Container(
-                padding: _kTableRowPadding,
+                padding: kTableRowPadding,
                 alignment: Alignment.centerLeft,
                 child: const Icon(Icons.functions),
               ),
-              Padding(padding: _kTableRowPadding, child: Text('${formatNum(games)} (100%)')),
+              Padding(padding: kTableRowPadding, child: Text('${formatNum(games)} (100%)')),
               Padding(
-                padding: _kTableRowPadding,
+                padding: kTableRowPadding,
                 child: _WinPercentageChart(
                   whiteWins: whiteWins,
                   draws: draws,
@@ -204,14 +189,14 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             decoration: BoxDecoration(color: ColorScheme.of(context).surfaceContainerLow),
             children: [
               Padding(
-                padding: _kTableRowPadding,
+                padding: kTableRowPadding,
                 child: Text(
                   String.fromCharCode(Icons.not_interested_outlined.codePoint),
                   style: TextStyle(fontFamily: Icons.not_interested_outlined.fontFamily),
                 ),
               ),
-              Padding(padding: _kTableRowPadding, child: Text(context.l10n.noGameFound)),
-              const Padding(padding: _kTableRowPadding, child: SizedBox.shrink()),
+              Padding(padding: kTableRowPadding, child: Text(context.l10n.noGameFound)),
+              const Padding(padding: kTableRowPadding, child: SizedBox.shrink()),
             ],
           ),
       ],
@@ -225,7 +210,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
       (int index) => TableRow(
         children: [
           Padding(
-            padding: _kTableRowPadding,
+            padding: kTableRowPadding,
             child: Container(
               height: 20,
               width: double.infinity,
@@ -236,7 +221,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: _kTableRowPadding,
+            padding: kTableRowPadding,
             child: Container(
               height: 20,
               width: double.infinity,
@@ -247,7 +232,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: _kTableRowPadding,
+            padding: kTableRowPadding,
             child: Container(
               height: 20,
               width: double.infinity,
@@ -313,7 +298,7 @@ class OpeningExplorerHeaderTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: _kTableRowPadding,
+      padding: kTableRowPadding,
       decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
       child: child,
     );
@@ -344,7 +329,7 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
     const paddingResultBox = EdgeInsets.all(5);
 
     return Container(
-      padding: _kTableRowPadding,
+      padding: kTableRowPadding,
       color: widget.color,
       child: InkWell(
         onTap: () {
@@ -386,7 +371,7 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
                     width: widthResultBox,
                     padding: paddingResultBox,
                     decoration: BoxDecoration(
-                      color: _whiteBoxColor(context),
+                      color: whiteBoxColor(context),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: const Text(
@@ -400,7 +385,7 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
                     width: widthResultBox,
                     padding: paddingResultBox,
                     decoration: BoxDecoration(
-                      color: _blackBoxColor(context),
+                      color: blackBoxColor(context),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: const Text(
@@ -470,7 +455,7 @@ class _WinPercentageChart extends StatelessWidget {
           Expanded(
             flex: percentWhite,
             child: ColoredBox(
-              color: _whiteBoxColor(context),
+              color: whiteBoxColor(context),
               child: Text(
                 label(percentWhite),
                 textAlign: TextAlign.center,
@@ -492,7 +477,7 @@ class _WinPercentageChart extends StatelessWidget {
           Expanded(
             flex: percentBlack,
             child: ColoredBox(
-              color: _blackBoxColor(context),
+              color: blackBoxColor(context),
               child: Text(
                 label(percentBlack),
                 textAlign: TextAlign.center,
