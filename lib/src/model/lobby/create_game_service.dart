@@ -57,7 +57,7 @@ class CreateGameService {
 
   /// Create a new game from the lobby.
   Future<GameFullId> newLobbyGame(GameSeek seek) async {
-    ref.read(recentGameSeekProvider.notifier).addRequest(seek.requestBody);
+    ref.read(recentGameSeekProvider.notifier).addSeek(seek);
     if (_lobbyConnection != null) {
       throw StateError('Already creating a game.');
     }

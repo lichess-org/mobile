@@ -15,13 +15,14 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'game_seek.freezed.dart';
+part 'game_seek.g.dart';
 
 /// A seek is a request to play a game with a specific time control, variant,
 /// and rating range.
 ///
 /// See corresponding API docs:
 /// https://lichess.org/api#tag/Board/operation/apiBoardSeek
-@freezed
+@Freezed(fromJson: true, toJson: true)
 sealed class GameSeek with _$GameSeek {
   const GameSeek._();
 
@@ -117,99 +118,36 @@ sealed class GameSeek with _$GameSeek {
     if (ratingRange != null) 'ratingRange': '${ratingRange!.$1}-${ratingRange!.$2}',
   };
 
-  factory GameSeek.parseGameSeekFromRequestBody(Map<String, String> requestBody) {
-    Duration? time;
-    Duration? increment;
-    int? days;
-    bool rated = false;
-    Variant? variant;
-    (int, int)? ratingRange;
-
-    if (requestBody.containsKey('time')) {
-      final timeMinutes = double.tryParse(requestBody['time']!) ?? 0;
-      time = Duration(seconds: (timeMinutes * 60).toInt());
-    }
-
-    if (requestBody.containsKey('increment')) {
-      final incSeconds = int.tryParse(requestBody['increment']!) ?? 0;
-      increment = Duration(seconds: incSeconds);
-    }
-
-    if (requestBody.containsKey('days')) {
-      days = int.tryParse(requestBody['days']!);
-    }
-
-    if (requestBody.containsKey('rated')) {
-      rated = requestBody['rated']!.toLowerCase() == 'true';
-    }
-
-    if (requestBody.containsKey('variant')) {
-      final variantName = requestBody['variant']!;
-      variant = Variant.values.firstWhere(
-        (v) => v.name == variantName,
-        orElse: () => Variant.standard,
-      );
-    }
-
-    if (requestBody.containsKey('ratingRange')) {
-      final parts = requestBody['ratingRange']!.split('-');
-      if (parts.length == 2) {
-        final min = int.tryParse(parts[0]);
-        final max = int.tryParse(parts[1]);
-        if (min != null && max != null) {
-          ratingRange = (min, max);
-        }
-      }
-    }
-
-    return GameSeek(
-      clock: (time!, increment!),
-      days: days,
-      rated: rated,
-      variant: variant,
-      ratingRange: ratingRange,
-    );
-  }
+  factory GameSeek.fromJson(Map<String, dynamic> json) => _$GameSeekFromJson(json);
 }
 
 class RecentGameSeekPrefs implements Serializable {
-  final List<Map<String, String>> requests;
+  final List<GameSeek> seeks;
 
-  const RecentGameSeekPrefs({required this.requests});
+  const RecentGameSeekPrefs({required this.seeks});
 
   @override
   Map<String, dynamic> toJson() {
-    return {'requests': requests};
+    return {'seeks': seeks.map((e) => e.toJson()).toList()};
   }
 
   factory RecentGameSeekPrefs.fromJson(Map<String, dynamic> json) {
-    final rawList = json['requests'] as List<dynamic>? ?? [];
+    final rawList = json['seeks'] as List<dynamic>? ?? [];
     return RecentGameSeekPrefs(
-      requests: rawList.map((item) {
-        final map = Map<String, dynamic>.from(item as Map);
-        return map.map((key, value) => MapEntry(key, value.toString()));
-      }).toList(),
+      seeks: rawList.map((item) => GameSeek.fromJson(item as Map<String, dynamic>)).toList(),
     );
   }
 
-  RecentGameSeekPrefs copyWithAdded(Map<String, String> newRequest) {
-    final existing = requests.where((r) => !_mapEquals(r, newRequest)).toList();
+  RecentGameSeekPrefs copyWithAdded(GameSeek newRequest) {
+    final existing = seeks.where((r) => r != newRequest).toList();
     final updated = [newRequest, ...existing];
     if (updated.length > 3) {
       updated.removeRange(3, updated.length);
     }
-    return RecentGameSeekPrefs(requests: updated);
+    return RecentGameSeekPrefs(seeks: updated);
   }
 
-  static bool _mapEquals(Map<String, String> a, Map<String, String> b) {
-    if (a.length != b.length) return false;
-    for (final key in a.keys) {
-      if (a[key] != b[key]) return false;
-    }
-    return true;
-  }
-
-  static const empty = RecentGameSeekPrefs(requests: []);
+  static const empty = RecentGameSeekPrefs(seeks: []);
 }
 
 final recentGameSeekProvider = NotifierProvider<RecentGameSeekNotifier, RecentGameSeekPrefs>(
@@ -236,8 +174,8 @@ class RecentGameSeekNotifier extends Notifier<RecentGameSeekPrefs>
     return fetch();
   }
 
-  Future<void> addRequest(Map<String, String> request) async {
-    final updated = state.copyWithAdded(request);
+  Future<void> addSeek(GameSeek seek) async {
+    final updated = state.copyWithAdded(seek);
     await save(updated);
   }
 

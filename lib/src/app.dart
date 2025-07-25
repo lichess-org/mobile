@@ -111,7 +111,7 @@ class _AppState extends ConsumerState<Application> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final recentRequests = ref.watch(recentGameSeekProvider).requests;
+      final recentSeeks = ref.watch(recentGameSeekProvider).seeks;
 
       initializeQuickActions();
 
@@ -126,13 +126,13 @@ class _AppState extends ConsumerState<Application> {
           icon: 'extension',
         ),
 
-        ...recentRequests.asMap().entries.map((entry) {
+        ...recentSeeks.asMap().entries.map((entry) {
           final index = entry.key;
-          final req = entry.value;
+          final seek = entry.value;
 
-          final time = req['time'] ?? '-';
-          final increment = req['increment'] ?? '0';
-          final rated = req['rated'] == 'true' ? '🏅' : '';
+          final time = seek.clock != null ? seek.clock!.$1.inMinutes.toString() : '-';
+          final increment = seek.clock != null ? seek.clock!.$2.inSeconds.toString() : '0';
+          final rated = seek.rated ? '🏅' : '';
 
           return ShortcutItem(
             type: 'recent_seek_$index',
@@ -192,11 +192,11 @@ class _AppState extends ConsumerState<Application> {
         if (shortcutType.startsWith('recent_seek_')) {
           final index = int.tryParse(shortcutType.split('_').last);
           if (index != null) {
-            final recentRequests = ref.watch(recentGameSeekProvider).requests;
-            final targetSeek = recentRequests[index];
-            Navigator.of(ctx, rootNavigator: true).push(
-              GameScreen.buildRoute(ctx, seek: GameSeek.parseGameSeekFromRequestBody(targetSeek)),
-            );
+            final recentSeeks = ref.watch(recentGameSeekProvider).seeks;
+            Navigator.of(
+              ctx,
+              rootNavigator: true,
+            ).push(GameScreen.buildRoute(ctx, seek: recentSeeks[index]));
           }
         } else if (shortcutType == 'play_puzzles') {
           Navigator.of(
