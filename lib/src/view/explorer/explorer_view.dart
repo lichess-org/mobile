@@ -30,11 +30,11 @@ class ExplorerView extends ConsumerWidget {
     required this.position,
     required this.onMoveSelected,
     this.opening,
-    this.shouldDisplayGames = true,
+    this.isComputerAnalysisAllowed = true,
   });
 
   final Position position;
-  final bool shouldDisplayGames;
+  final bool isComputerAnalysisAllowed;
   final Opening? opening;
   final void Function(NormalMove) onMoveSelected;
 
@@ -54,12 +54,13 @@ class ExplorerView extends ConsumerWidget {
     if (position.isInsufficientMaterial) {
       return Center(child: Text(context.l10n.insufficientMaterial));
     }
-    if (tablebaseRelevant) {
+    // Tablebase is only relevant for positions with 8 or fewer pieces and not allowed for Correspondence games.
+    if (tablebaseRelevant && isComputerAnalysisAllowed) {
       return TablebaseView(position: position, onMoveSelected: onMoveSelected);
     }
 
     return OpeningExplorerView(
-      shouldDisplayGames: shouldDisplayGames,
+      shouldDisplayGames: isComputerAnalysisAllowed,
       position: position,
       opening: opening,
       onMoveSelected: onMoveSelected,

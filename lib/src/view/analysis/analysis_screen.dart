@@ -300,7 +300,7 @@ class _Body extends ConsumerWidget {
         bottomBar: _BottomBar(options: options),
         children: [
           ExplorerView(
-            shouldDisplayGames: analysisState.isComputerAnalysisAllowed,
+            isComputerAnalysisAllowed: analysisState.isComputerAnalysisAllowed,
             position: currentNode.position,
             opening: kOpeningAllowedVariants.contains(analysisState.variant)
                 ? analysisState.currentNode.isRoot
