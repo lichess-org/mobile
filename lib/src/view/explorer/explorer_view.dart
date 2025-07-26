@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/explorer/tablebase_view.dart';
 
@@ -44,6 +45,15 @@ class ExplorerView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (position.isCheckmate) {
+      return Center(child: Text(context.l10n.checkmate));
+    }
+    if (position.isStalemate) {
+      return Center(child: Text(context.l10n.stalemate));
+    }
+    if (position.isInsufficientMaterial) {
+      return Center(child: Text(context.l10n.insufficientMaterial));
+    }
     if (tablebaseRelevant) {
       return TablebaseView(position: position, onMoveSelected: onMoveSelected);
     }
