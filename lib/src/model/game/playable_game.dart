@@ -101,7 +101,11 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
   bool get drawable =>
       playable && lastPosition.fullmoves >= 2 && !(me?.offeringDraw == true) && !hasAI;
   bool get rematchable =>
-      meta.tournament == null && (meta.rules == null || !meta.rules!.contains(GameRule.noRematch));
+      (meta.rules == null || !meta.rules!.contains(GameRule.noRematch)) &&
+      (finished ||
+          (aborted && (!meta.rated || !{GameSource.lobby, GameSource.pool}.contains(source)))) &&
+      meta.tournament == null &&
+      boosted != true;
   bool get canTakeback =>
       takebackable &&
       playable &&
