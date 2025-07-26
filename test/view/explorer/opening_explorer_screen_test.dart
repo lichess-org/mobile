@@ -8,12 +8,12 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
-import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
+import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
+import 'package:lichess_mobile/src/view/explorer/opening_explorer_screen.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
