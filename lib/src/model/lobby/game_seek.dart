@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -9,16 +11,18 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'game_seek.freezed.dart';
+part 'game_seek.g.dart';
 
 /// A seek is a request to play a game with a specific time control, variant,
 /// and rating range.
 ///
 /// See corresponding API docs:
 /// https://lichess.org/api#tag/Board/operation/apiBoardSeek
-@freezed
+@Freezed(fromJson: true, toJson: true)
 sealed class GameSeek with _$GameSeek {
   const GameSeek._();
 
@@ -113,4 +117,70 @@ sealed class GameSeek with _$GameSeek {
     if (variant != null) 'variant': variant!.name,
     if (ratingRange != null) 'ratingRange': '${ratingRange!.$1}-${ratingRange!.$2}',
   };
+
+  factory GameSeek.fromJson(Map<String, dynamic> json) => _$GameSeekFromJson(json);
+}
+
+class RecentGameSeekPrefs implements Serializable {
+  final List<GameSeek> seeks;
+
+  const RecentGameSeekPrefs({required this.seeks});
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {'seeks': seeks.map((e) => e.toJson()).toList()};
+  }
+
+  factory RecentGameSeekPrefs.fromJson(Map<String, dynamic> json) {
+    final rawList = json['seeks'] as List<dynamic>? ?? [];
+    return RecentGameSeekPrefs(
+      seeks: rawList.map((item) => GameSeek.fromJson(item as Map<String, dynamic>)).toList(),
+    );
+  }
+
+  RecentGameSeekPrefs copyWithAdded(GameSeek newRequest) {
+    final existing = seeks.where((r) => r != newRequest).toList();
+    final updated = [newRequest, ...existing];
+    if (updated.length > 3) {
+      updated.removeRange(3, updated.length);
+    }
+    return RecentGameSeekPrefs(seeks: updated);
+  }
+
+  static const empty = RecentGameSeekPrefs(seeks: []);
+}
+
+final recentGameSeekProvider = NotifierProvider<RecentGameSeekNotifier, RecentGameSeekPrefs>(
+  RecentGameSeekNotifier.new,
+);
+
+class RecentGameSeekNotifier extends Notifier<RecentGameSeekPrefs>
+    with PreferencesStorage<RecentGameSeekPrefs> {
+  @override
+  @protected
+  final prefCategory = PrefCategory.gameSeeks;
+
+  @override
+  RecentGameSeekPrefs fromJson(Map<String, dynamic> json) {
+    return RecentGameSeekPrefs.fromJson(json);
+  }
+
+  @override
+  @protected
+  RecentGameSeekPrefs get defaults => RecentGameSeekPrefs.empty;
+
+  @override
+  RecentGameSeekPrefs build() {
+    return fetch();
+  }
+
+  Future<void> addSeek(GameSeek seek) async {
+    final updated = state.copyWithAdded(seek);
+    await save(updated);
+  }
+
+  Future<void> clearRequests() async {
+    await LichessBinding.instance.sharedPreferences.remove(prefCategory.storageKey);
+    state = RecentGameSeekPrefs.empty;
+  }
 }
