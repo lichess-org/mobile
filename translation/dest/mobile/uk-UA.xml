@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Налаштування облікового запису</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Усі ігри</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ви впевнені?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Налаштування дошки</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Скасувати пропозицію повернення ходу</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Очистити</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Очистити збережений хід</string>
@@ -31,6 +33,7 @@
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Розташування годинника</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Повноекранний режим</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Приховати інтерфейс системи під час гри. Використовуйте, якщо вас турбують навігаційні жести системи по краях екрану. Застосовується до екранів гри та задач.</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Показати дошку</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Налашт.</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Поділитися PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Поділитися посиланням на гру</string>
