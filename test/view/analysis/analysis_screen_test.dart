@@ -1125,6 +1125,11 @@ void main() {
       // Now play d4, which should save (1...d5 2. c4) and (1...Nf6 2. c4) as premove lines
       await tester.tap(find.text('Play d4'));
 
+      // wait for confirm dialog to appear
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('OK'));
+
       expect(playedMoveUci, 'd2d4');
       expect(lastForecastJsonRequest, {
         [

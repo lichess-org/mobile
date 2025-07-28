@@ -8,6 +8,8 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 
 class ConditionalPremoves extends ConsumerWidget {
   const ConditionalPremoves(this.options);
@@ -21,38 +23,35 @@ class ConditionalPremoves extends ConsumerWidget {
 
     final lines = analysisState.forecast!.lines;
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              flex: 9,
-              child: ListView.separated(
-                itemCount: lines.length,
-                itemBuilder: (_, i) => _SavedVariation(
-                  options,
-                  startingNode: analysisState.liveMoveNode!,
-                  path: lines[i],
-                  onTap: () {
-                    ref
-                        .read(analysisControllerProvider(options).notifier)
-                        .userJump(UciPath.join(analysisState.pathToLiveMove!, lines[i]));
-                  },
-                ),
-                separatorBuilder: (_, _) => const Divider(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: ListView.separated(
+              itemCount: lines.length,
+              itemBuilder: (_, i) => _SavedVariation(
+                options,
+                startingNode: analysisState.liveMoveNode!,
+                path: lines[i],
+                onTap: () {
+                  ref
+                      .read(analysisControllerProvider(options).notifier)
+                      .userJump(UciPath.join(analysisState.pathToLiveMove!, lines[i]));
+                },
               ),
+              separatorBuilder: (_, _) => const Divider(),
             ),
-            const Divider(),
-            Flexible(flex: 2, child: _AddVariationButton(options)),
-            if (analysisState.pendingMove != null &&
-                analysisState.linesForPendingMove?.isNotEmpty == true) ...[
-              const Divider(),
-              _PlayAndSaveButton(options),
-            ],
+          ),
+          const PlatformDivider(indent: 0),
+          _AddVariationButton(options),
+          if (analysisState.pendingMove != null &&
+              analysisState.linesForPendingMove?.isNotEmpty == true) ...[
+            const PlatformDivider(indent: 0),
+            _PlayAndSaveButton(options),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -69,8 +68,10 @@ class _AddVariationButton extends ConsumerWidget {
 
     final icon = analysisState.currentPremoveCandidate != null ? Icons.save : Icons.info;
 
-    return GestureDetector(
-      onTap: ref.read(analysisControllerProvider(options).notifier).addCurrentPathAsPremove,
+    return InkWell(
+      onTap: analysisState.currentPremoveCandidate != null
+          ? ref.read(analysisControllerProvider(options).notifier).addCurrentPathAsPremove
+          : null,
       child: Row(
         children: [
           Padding(padding: const EdgeInsets.all(8.0), child: Icon(icon)),
@@ -84,6 +85,8 @@ class _AddVariationButton extends ConsumerWidget {
                           color: ColorScheme.of(context).onSurface.withValues(alpha: 0.7),
                         ),
                         context.l10n.addCurrentVariation,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       _Variation(
                         startingNode: analysisState.liveMoveNode!,
@@ -92,7 +95,13 @@ class _AddVariationButton extends ConsumerWidget {
                       ),
                     ],
                   )
-                : Center(child: Text(context.l10n.playVariationToCreateConditionalPremoves)),
+                : Center(
+                    child: Text(
+                      context.l10n.playVariationToCreateConditionalPremoves,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
           ),
         ],
       ),
@@ -112,9 +121,10 @@ class _PlayAndSaveButton extends ConsumerWidget {
     final followUpLines = analysisState.linesForPendingMove!.count((path) => path.size > 1);
 
     return FilledButton.icon(
-      icon: const Icon(CupertinoIcons.play_arrow),
+      icon: const Icon(Icons.play_arrow),
       label: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -126,9 +136,15 @@ class _PlayAndSaveButton extends ConsumerWidget {
             Text(context.l10n.noConditionalPremoves),
         ],
       ),
-      onPressed: ref
-          .read(analysisControllerProvider(options).notifier)
-          .playPendingMoveAndSaveForecast,
+      onPressed: () {
+        showConfirmDialog<void>(
+          context,
+          title: Text(context.l10n.confirmMove),
+          onConfirm: ref
+              .read(analysisControllerProvider(options).notifier)
+              .playPendingMoveAndSaveForecast,
+        );
+      },
     );
   }
 }
