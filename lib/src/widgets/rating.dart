@@ -20,7 +20,7 @@ class RatingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      '${rating.round()}${provisional == true || deviation > kProvisionalDeviation ? '?' : ''}',
+      '${rating.floor()}${provisional == true || deviation > kProvisionalDeviation ? '?' : ''}',
       style: style,
     );
   }
