@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +19,14 @@ class DateItem extends DisplayItem {
 class MessageItem extends DisplayItem {
   final Message message;
   final bool isMe;
-  MessageItem(this.message, this.isMe);
+  final int groupLength;
+  final int groupIndex;
+  MessageItem(
+    this.message, {
+    required this.isMe,
+    required this.groupLength,
+    required this.groupIndex,
+  });
 }
 
 class GetMoreItem extends DisplayItem {}
@@ -79,7 +87,12 @@ class _Body extends ConsumerWidget {
                       case DateItem(:final date):
                         return _DateBubble(date: date);
                       case MessageItem(:final message, :final isMe):
-                        return _MessageBubble(message: message, isMe: isMe);
+                        return _MessageBubble(
+                          message: message,
+                          isMe: isMe,
+                          groupLength: item.groupLength,
+                          groupIndex: item.groupIndex,
+                        );
                       case GetMoreItem():
                         return Center(
                           child: TextButton(
@@ -115,6 +128,18 @@ class _Body extends ConsumerWidget {
 
     items.add(ContactTypingItem());
 
+    void processDayMessages() {
+      final byUser = groupBy(dayMessages, (m) => m.userId);
+      for (final group in byUser.values) {
+        for (var i = 0; i < group.length; i++) {
+          final m = group[i];
+          items.add(
+            MessageItem(m, isMe: m.userId == state.me.id, groupLength: group.length, groupIndex: i),
+          );
+        }
+      }
+    }
+
     for (int i = 0; i < messages.length; i++) {
       final message = messages[i];
       final messageDate = DateTime(message.date.year, message.date.month, message.date.day);
@@ -122,9 +147,7 @@ class _Body extends ConsumerWidget {
       final isLast = i == messages.length - 1;
 
       if (isNewDay && dayMessages.isNotEmpty) {
-        for (final m in dayMessages) {
-          items.add(MessageItem(m, m.userId == state.me.id));
-        }
+        processDayMessages();
         items.add(DateItem(currentDate!));
         dayMessages.clear();
       }
@@ -133,9 +156,7 @@ class _Body extends ConsumerWidget {
       dayMessages.add(message);
 
       if (isLast) {
-        for (final m in dayMessages) {
-          items.add(MessageItem(m, m.userId == state.me.id));
-        }
+        processDayMessages();
         items.add(DateItem(currentDate));
       }
     }
@@ -217,9 +238,17 @@ class _DateBubble extends StatelessWidget {
 }
 
 class _MessageBubble extends StatelessWidget {
+  const _MessageBubble({
+    required this.message,
+    required this.isMe,
+    required this.groupLength,
+    required this.groupIndex,
+  });
+
   final Message message;
   final bool isMe;
-  const _MessageBubble({required this.message, required this.isMe});
+  final int groupLength;
+  final int groupIndex;
 
   Color _bubbleColor(BuildContext context) {
     return isMe
@@ -231,6 +260,13 @@ class _MessageBubble extends StatelessWidget {
     return isMe ? ColorScheme.of(context).onSecondaryContainer : ColorScheme.of(context).onSurface;
   }
 
+  bool get isInGroup => groupLength > 1;
+  bool get isFirstInGroup => groupIndex == 0;
+  bool get isLastInGroup => groupIndex == groupLength - 1;
+
+  static const _bubbleRadius = Radius.circular(16);
+  static const _inGroupRadius = Radius.circular(4);
+
   @override
   Widget build(BuildContext context) {
     final time = DateFormat.Hm().format(message.date);
@@ -239,15 +275,36 @@ class _MessageBubble extends StatelessWidget {
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       widthFactor: 0.85,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        margin: EdgeInsets.only(
+          bottom: !isInGroup || isFirstInGroup ? 8 : 2,
+          top: !isInGroup || isLastInGroup ? 8 : 2,
+          left: 8,
+          right: 8,
+        ),
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
         decoration: BoxDecoration(
           color: _bubbleColor(context),
           borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(16),
-            topRight: const Radius.circular(16),
-            bottomLeft: isMe ? const Radius.circular(16) : Radius.zero,
-            bottomRight: isMe ? Radius.zero : const Radius.circular(16),
+            topLeft: isMe
+                ? _bubbleRadius
+                : isInGroup && !isLastInGroup
+                ? _inGroupRadius
+                : _bubbleRadius,
+            topRight: isMe
+                ? isInGroup && !isLastInGroup
+                      ? _inGroupRadius
+                      : _bubbleRadius
+                : _bubbleRadius,
+            bottomLeft: isMe
+                ? _bubbleRadius
+                : isInGroup && !isFirstInGroup
+                ? _inGroupRadius
+                : _bubbleRadius,
+            bottomRight: isMe
+                ? isInGroup && !isFirstInGroup
+                      ? _inGroupRadius
+                      : _bubbleRadius
+                : _bubbleRadius,
           ),
         ),
         child: Column(
