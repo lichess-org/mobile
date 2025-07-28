@@ -1,6 +1,8 @@
 {
+  "mobileAccountPreferences": "Налаштування облікового запису",
   "mobileAllGames": "Усі ігри",
   "mobileAreYouSure": "Ви впевнені?",
+  "mobileBoardSettings": "Налаштування дошки",
   "mobileCancelTakebackOffer": "Скасувати пропозицію повернення ходу",
   "mobileClearButton": "Очистити",
   "mobileCorrespondenceClearSavedMove": "Очистити збережений хід",
@@ -30,6 +32,7 @@
   "mobileSettingsClockPosition": "Розташування годинника",
   "mobileSettingsImmersiveMode": "Повноекранний режим",
   "mobileSettingsImmersiveModeSubtitle": "Приховати інтерфейс системи під час гри. Використовуйте, якщо вас турбують навігаційні жести системи по краях екрану. Застосовується до екранів гри та задач.",
+  "mobileSettingsPickAnImageShowBoard": "Показати дошку",
   "mobileSettingsTab": "Налашт.",
   "mobileShareGamePGN": "Поділитися PGN",
   "mobileShareGameURL": "Поділитися посиланням на гру",

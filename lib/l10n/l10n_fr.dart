@@ -984,7 +984,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String challengeXOnlyAcceptsChallengesFromFriends(String param) {
-    return '$param n’accepte que les défis de ses ami(e)s.';
+    return '$param n’accepte que les défis de ses amis.';
   }
 
   @override

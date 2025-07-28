@@ -913,7 +913,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastLiveboard => 'Live-bord';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Gemeenschapsuitzending';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {

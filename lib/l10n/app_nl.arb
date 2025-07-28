@@ -237,6 +237,7 @@
   "broadcastBackToLiveMove": "Terug naar de actuele stelling",
   "broadcastSinceHideResults": "Omdat je ervoor kiest om de resultaten te verbergen, zijn alle borden leeg om spoilers te voorkomen.",
   "broadcastLiveboard": "Live-bord",
+  "broadcastCommunityBroadcast": "Gemeenschapsuitzending",
   "broadcastCreatedAndManagedBy": "Aangemaakt en beheerd door {param}.",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} uitzending} other{{count} uitzendingen}}",
   "broadcastNbViewers": "{count, plural, =1{{count} kijker} other{{count} kijkers}}",
