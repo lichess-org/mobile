@@ -27,6 +27,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Prekliči ponudbo za preklic poteze';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'Počisti';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Problemi';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Nedavna iskanja';
@@ -514,13 +523,13 @@ class AppLocalizationsSl extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Kako se izračuna točke?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Zmaga šteje 2 točki, remi 1 točko in poraz nič.\nČe zmagate zaporedoma 2 partiji se začne serija dvojnega točkovanja, ki je označena z ikono plamena.\nNaslednje partije bodo štele dvojno število točk dokler boste zmagovali.\nTo pomeni, zmaga šteje 4, remi 2 in poraz ne šteje točk. \n\nNa primer, dve zmagi, ki mu sledi remi šteje 6 točk: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Zmaga šteje 2 točki, remi 1 točko in poraz nič.\r\nČe zmagate zaporedoma 2 partiji se začne serija dvojnega točkovanja, ki je označena z ikono plamena.\r\nNaslednje partije bodo štele dvojno število točk dokler boste zmagovali.\r\nTo pomeni, zmaga šteje 4, remi 2 in poraz ne šteje točk. \r\n\r\nNa primer, dve zmagi, ki mu sledi remi šteje 6 točk: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena norenja';
 
   @override
-  String get arenaBerserkAnswer => 'Ko igralec pritisne gumb Norenje ob začetku igre, izgubi polovico časa na uri, vendar zmaga šteje eno dodatno turnirsko točko.\n\nOb Norenju z uro ki se povečuje, prekine norenje (1 +2 je izjema in da 1 +0)\n\nNorenje ni na voljo pri partijah z začetnim časom 0 (0+1,0+2.)\n\nNorenje podeli dodatno točko kadar igralec odigra vsaj 7 potez.';
+  String get arenaBerserkAnswer => 'Ko igralec pritisne gumb Norenje ob začetku igre, izgubi polovico časa na uri, vendar zmaga šteje eno dodatno turnirsko točko.\r\n\r\nOb Norenju z uro ki se povečuje, prekine norenje (1 +2 je izjema in da 1 +0)\r\n\r\nNorenje ni na voljo pri partijah z začetnim časom 0 (0+1,0+2.)\r\n\r\nNorenje podeli dodatno točko kadar igralec odigra vsaj 7 potez.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Kako se določi zmagovalca?';
@@ -532,7 +541,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Kako deluje izbira parov?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Ob začetku turnirja se pari določijo glede na njihov rating.\nOb koncu partije se sestavi pare iz prostih igralcev. Prosti igralci dobijo tistega prostega nasprotnika, ki ima rating blizu. To zagotovi kratek čas čakanja, vendar se lahko zgodi, da vsak ne igra z vsakim igralcem.\nIgrajte hitro in se vrnite v čakalno vrsto v igralni dvorani, ter si tako zagotovite več iger in več točk.';
+  String get arenaHowDoesPairingWorkAnswer => 'Ob začetku turnirja se pari določijo glede na njihov rating.\r\nOb koncu partije se sestavi pare iz prostih igralcev. Prosti igralci dobijo tistega prostega nasprotnika, ki ima rating blizu. To zagotovi kratek čas čakanja, vendar se lahko zgodi, da vsak ne igra z vsakim igralcem.\r\nIgrajte hitro in se vrnite v čakalno vrsto v igralni dvorani, ter si tako zagotovite več iger in več točk.';
 
   @override
   String get arenaHowDoesItEnd => 'Kako se zaključi?';
@@ -641,7 +650,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get arenaTournamentStats => 'Statistika turnirja';
 
   @override
-  String get arenaRankAvgHelp => 'Povprečje uvrstitve je odstotek vaše uvrstitve. Nižje je bolje.\n\nNa primer, 3. mesto na turnirju s 100 igralci = 3%. 10. mesto na turnirju s 1000 igralci = 1%.';
+  String get arenaRankAvgHelp => 'Povprečje uvrstitve je odstotek vaše uvrstitve. Nižje je bolje.\r\n\r\nNa primer, 3. mesto na turnirju s 100 igralci = 3%. 10. mesto na turnirju s 1000 igralci = 1%.';
 
   @override
   String get arenaMedians => 'mediane';
@@ -1653,7 +1662,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Išči uganke';
 
   @override
-  String get puzzleFromMyGamesNone => 'V bazi podatkov nimate ugank, vendar vas ima Lichess še vedno zelo rad.\nIgrajte hitre in klasične igre, da povečate možnosti za dodajanje svoje uganke!';
+  String get puzzleFromMyGamesNone => 'V bazi podatkov nimate ugank, vendar vas ima Lichess še vedno zelo rad.\r\nIgrajte hitre in klasične igre, da povečate možnosti za dodajanje svoje uganke!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trenirajte, analizirajte, izboljšajte';
@@ -1754,7 +1763,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeAdvancedPawn => 'Promovirani kmet';
 
   @override
-  String get puzzleThemeAdvancedPawnDescription => '85 / 5000\nTranslation results\nEden od vaših kmetov je globoko na nasprotnikovem področju in ima morda možnost za promocijo.';
+  String get puzzleThemeAdvancedPawnDescription => '85 / 5000\r\nTranslation results\r\nEden od vaših kmetov je globoko na nasprotnikovem področju in ima morda možnost za promocijo.';
 
   @override
   String get puzzleThemeAdvantage => 'Prednost';
@@ -4650,7 +4659,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get tournDescriptionHelp => 'Kaj posebnega želite povedati udeležencem? Poskusite, da bo kratek. Na voljo so povezave do oznak: [name] (https://url)';
 
   @override
-  String get ratedFormHelp => 'Igre so rangirane\nin vplivajo na rejtinge igralcev';
+  String get ratedFormHelp => 'Igre so rangirane\r\nin vplivajo na rejtinge igralcev';
 
   @override
   String get onlyMembersOfTeam => 'Samo člani ekipe';
@@ -4669,7 +4678,7 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Prilepite veljaven FEN, da začnete vsako igro z določenega položaja.\nDeluje samo za standardne igre, ne pa tudi z različicami.\n$param lahko ustvarite položaj FEN, nato pa ga prilepite sem.\nPustite prazno, da začnete igre iz običajnega začetnega položaja.';
+    return 'Prilepite veljaven FEN, da začnete vsako igro z določenega položaja.\r\nDeluje samo za standardne igre, ne pa tudi z različicami.\r\n$param lahko ustvarite položaj FEN, nato pa ga prilepite sem.\r\nPustite prazno, da začnete igre iz običajnega začetnega položaja.';
   }
 
   @override
@@ -4801,7 +4810,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get showMeEverything => 'Prikaži vse';
 
   @override
-  String get lichessPatronInfo => 'Lichess je dobrodelna in popolnoma brezplačna odprtokodna programska oprema.\nVsi operativni stroški, razvoj in vsebina se financirajo izključno iz donacij uporabnikov.';
+  String get lichessPatronInfo => 'Lichess je dobrodelna in popolnoma brezplačna odprtokodna programska oprema.\r\nVsi operativni stroški, razvoj in vsebina se financirajo izključno iz donacij uporabnikov.';
 
   @override
   String get nothingToSeeHere => 'Tukaj trenutno ni ničesar za videti.';

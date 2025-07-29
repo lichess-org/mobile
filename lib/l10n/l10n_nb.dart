@@ -27,6 +27,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Avbryt tilbud om å angre';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'Tøm';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Nøtter';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Nylige søk';
@@ -478,13 +487,13 @@ class AppLocalizationsNb extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Hvordan beregnes poengene?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'En seier gir to basispoeng, en remis ett poeng og et tap null poeng. Vinner du to partier på rad startes en dobbelpoeng-serie som illustreres ved hjelp av et flammelignende ikon. Etterfølgende partier er da verd doble poeng inntil du mislykkes i å vinne et parti. Dette innebærer at en seier er verdt fire poeng, en remis to poeng og et tap null poeng.\n\nEksempelvis gir to seire etterfulgt av en remis seks poeng: 2 + 2 + (2 *1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'En seier gir to basispoeng, en remis ett poeng og et tap null poeng. Vinner du to partier på rad startes en dobbelpoeng-serie som illustreres ved hjelp av et flammelignende ikon. Etterfølgende partier er da verd doble poeng inntil du mislykkes i å vinne et parti. Dette innebærer at en seier er verdt fire poeng, en remis to poeng og et tap null poeng.\r\n\r\nEksempelvis gir to seire etterfulgt av en remis seks poeng: 2 + 2 + (2 *1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Dersom en spiller klikker Berserk-knappen ved spillestart, halveres spillerens betenkningstid, men til gjengjeld vil en eventuell seier gi ett ekstra turneringspoeng. For tidskontroller med tidstillegg vil det å gå Berserk dessuten medføre at tidstillegget mistes. \n(Unntaket er 1+2, det gir 1+0)\n\nBerserk er ikke mulig for partier med null i starttid (0+1, 0+2).\n\nBerserk gir ett ekstrapoeng bare om du spiller minst 7 trekk i partiet.';
+  String get arenaBerserkAnswer => 'Dersom en spiller klikker Berserk-knappen ved spillestart, halveres spillerens betenkningstid, men til gjengjeld vil en eventuell seier gi ett ekstra turneringspoeng. For tidskontroller med tidstillegg vil det å gå Berserk dessuten medføre at tidstillegget mistes. \r\n(Unntaket er 1+2, det gir 1+0)\r\n\r\nBerserk er ikke mulig for partier med null i starttid (0+1, 0+2).\r\n\r\nBerserk gir ett ekstrapoeng bare om du spiller minst 7 trekk i partiet.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Hvordan kåres vinneren?';
@@ -605,7 +614,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get arenaTournamentStats => 'Turneringsstatistikk';
 
   @override
-  String get arenaRankAvgHelp => 'Prosentrangering er plasseringen din uttrykt som en prosentverdi. Lavere er bedre.\n\nFor eksempel tilsvarer en tredjeplass i en turnering med 100 spillere 3 %. En tiendeplass i en turnering med 1000 spillere tilsvarer 1 %.';
+  String get arenaRankAvgHelp => 'Prosentrangering er plasseringen din uttrykt som en prosentverdi. Lavere er bedre.\r\n\r\nFor eksempel tilsvarer en tredjeplass i en turnering med 100 spillere 3 %. En tiendeplass i en turnering med 1000 spillere tilsvarer 1 %.';
 
   @override
   String get arenaMedians => 'medianer';
@@ -1609,7 +1618,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Søk etter sjakknøtter';
 
   @override
-  String get puzzleFromMyGamesNone => 'Du har ingen sjakknøtter i databasen, men Lichess setter like fullt umåtelig stor pris på deg.\nSpill partier i hurtigsjakk og klassisk sjakk for å øke sjansen for å få med en sjakknøtt!';
+  String get puzzleFromMyGamesNone => 'Du har ingen sjakknøtter i databasen, men Lichess setter like fullt umåtelig stor pris på deg.\r\nSpill partier i hurtigsjakk og klassisk sjakk for å øke sjansen for å få med en sjakknøtt!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Øv, analyser, bli bedre';
@@ -4594,7 +4603,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get tournDescriptionHelp => 'Noe du vil si til deltakerne? Vær kortfattet. Markdown-lenker kan brukes: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Partiene er ratet\nog påvirker spillernes rating';
+  String get ratedFormHelp => 'Partiene er ratet\r\nog påvirker spillernes rating';
 
   @override
   String get onlyMembersOfTeam => 'Kun lagmedlemmer';
@@ -4613,7 +4622,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Lim inn gyldig FEN for å begynne hvert parti fra gitt stilling.\nDet fungerer bare for standardpartier, ikke for varianter.\nDu kan bruke $param for å generere en FEN-stilling, som du limer inn her.\nLa feltet stå tomt for å begynne partiene fra den normale utgangsstillingen.';
+    return 'Lim inn gyldig FEN for å begynne hvert parti fra gitt stilling.\r\nDet fungerer bare for standardpartier, ikke for varianter.\r\nDu kan bruke $param for å generere en FEN-stilling, som du limer inn her.\r\nLa feltet stå tomt for å begynne partiene fra den normale utgangsstillingen.';
   }
 
   @override
@@ -4745,7 +4754,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get showMeEverything => 'Vis meg alt';
 
   @override
-  String get lichessPatronInfo => 'Lichess er en ideell forening, basert på fri programvare med åpen kildekode.\nAlle kostnader for drift, utvikling og innhold finansieres utelukkende av brukerbidrag.';
+  String get lichessPatronInfo => 'Lichess er en ideell forening, basert på fri programvare med åpen kildekode.\r\nAlle kostnader for drift, utvikling og innhold finansieres utelukkende av brukerbidrag.';
 
   @override
   String get nothingToSeeHere => 'Ingenting her for nå.';

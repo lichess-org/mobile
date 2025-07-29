@@ -27,6 +27,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'Clear';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Problemi';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Recent searches';
@@ -495,25 +504,25 @@ class AppLocalizationsBs extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Kako se rezultati računaju?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Pobjeda donosi 2 boda, remi 1 bod, a poraz ne donosi nijedan bod.\nAko pobjedite dvije partije za redom, započet će te niz dvostrukih bodova, označen malom ikonicom plamena.\nSljedeće partije će vrijediti dvostruko bodova sve dok ne doživite poraz. To znači da će pobjeda vrijediti 4 boda, remi: 2 boda, a poraz i dalje neće donijeti bodove.\n\nNpr. dvije pobjede i jedan remi vrijedit će 6 bodova: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Pobjeda donosi 2 boda, remi 1 bod, a poraz ne donosi nijedan bod.\r\nAko pobjedite dvije partije za redom, započet će te niz dvostrukih bodova, označen malom ikonicom plamena.\r\nSljedeće partije će vrijediti dvostruko bodova sve dok ne doživite poraz. To znači da će pobjeda vrijediti 4 boda, remi: 2 boda, a poraz i dalje neće donijeti bodove.\r\n\r\nNpr. dvije pobjede i jedan remi vrijedit će 6 bodova: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Kada igrač klikne \"Berserk\" dugme na početku partije, izgubit će polovinu vremena, ali pobjeda vrijedi jedan dodatni turnirski bod.\n\nBerserk u vremenskim kontrolama s dodatkom takođe uklanja vremenski dodatak. (1+2 je izuzetak, jer se tada dobija 1+0)\n\nBerserk nije dostupan s partijama s početnim vremenom 0 (0+1, 0+2).\n\nBerserk osigurava dodatni bod samo ako je odigrano barem 7 poteza u partiji.';
+  String get arenaBerserkAnswer => 'Kada igrač klikne \"Berserk\" dugme na početku partije, izgubit će polovinu vremena, ali pobjeda vrijedi jedan dodatni turnirski bod.\r\n\r\nBerserk u vremenskim kontrolama s dodatkom takođe uklanja vremenski dodatak. (1+2 je izuzetak, jer se tada dobija 1+0)\r\n\r\nBerserk nije dostupan s partijama s početnim vremenom 0 (0+1, 0+2).\r\n\r\nBerserk osigurava dodatni bod samo ako je odigrano barem 7 poteza u partiji.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Kako se odlučuje pobjednik?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Igrač(i) s najviše bodova nakon isteka zadanog turnirskog vremenskog ograničenja će biti proglašen(i) pobjednikom/pobjednicima.\n\nAko dva igrača imaju isti broj bodova, performans na turniru je odlučujući faktor.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Igrač(i) s najviše bodova nakon isteka zadanog turnirskog vremenskog ograničenja će biti proglašen(i) pobjednikom/pobjednicima.\r\n\r\nAko dva igrača imaju isti broj bodova, performans na turniru je odlučujući faktor.';
 
   @override
   String get arenaHowDoesPairingWork => 'Kako funkcionira uparivanje?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Na početku turnira, igrači su upareni na osnovu njihovog rejtinga.\nČim završite partiju, vratite se u turnirski lobi: tada će te biti upareni sa igračem koji ima približan turnirski rezultat kao i Vi. Na ovaj način se osigurava minimalno čekanje, međutim moguće je da nećete igrati sa svim igračima u turniru.\nIgrajte brzo i vratite se u lobi da igrate više partija i da osvojite što više bodova.';
+  String get arenaHowDoesPairingWorkAnswer => 'Na početku turnira, igrači su upareni na osnovu njihovog rejtinga.\r\nČim završite partiju, vratite se u turnirski lobi: tada će te biti upareni sa igračem koji ima približan turnirski rezultat kao i Vi. Na ovaj način se osigurava minimalno čekanje, međutim moguće je da nećete igrati sa svim igračima u turniru.\r\nIgrajte brzo i vratite se u lobi da igrate više partija i da osvojite što više bodova.';
 
   @override
   String get arenaHowDoesItEnd => 'Kako turnir završava?';
@@ -622,7 +631,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\r\n\r\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -1629,7 +1638,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Pretražite probleme';
 
   @override
-  String get puzzleFromMyGamesNone => 'Nemate probleme u bazi podataka, ali Vas Lichess i dalje mnogo voli.\nIgrajte ubrzani i klasični šah kako biste povećali šanse da bude dodan Vaš problem!';
+  String get puzzleFromMyGamesNone => 'Nemate probleme u bazi podataka, ali Vas Lichess i dalje mnogo voli.\r\nIgrajte ubrzani i klasični šah kako biste povećali šanse da bude dodan Vaš problem!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trenirajte, analizirajte, usavršavajte se';
@@ -3093,7 +3102,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get importGame => 'Unesite partiju';
 
   @override
-  String get importGameExplanation => 'Kada zalijepite PGN neke partije, dobijate reprizu partije koju možete detaljno pregledati, \nračunarsku analizu, mogućnost dopisivanja i link za slanje drugima.';
+  String get importGameExplanation => 'Kada zalijepite PGN neke partije, dobijate reprizu partije koju možete detaljno pregledati, \r\nračunarsku analizu, mogućnost dopisivanja i link za slanje drugima.';
 
   @override
   String get importGameCaveat => 'Varijante će biti izbrisane. Da ih sačuvate, uvezite PGN posredstvom studije.';
@@ -4616,10 +4625,10 @@ class AppLocalizationsBs extends AppLocalizations {
   String get tournDescription => 'Opis turnira';
 
   @override
-  String get tournDescriptionHelp => 'Postoji li nešto posebno što bi htjeli reći učesnicima? Pokušajte biti kratki.\nMarkdown linkovi su dostupni: [name](https://url)';
+  String get tournDescriptionHelp => 'Postoji li nešto posebno što bi htjeli reći učesnicima? Pokušajte biti kratki.\r\nMarkdown linkovi su dostupni: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Igre se ocjenjuju\ni utječu na ocjenu igrača';
+  String get ratedFormHelp => 'Igre se ocjenjuju\r\ni utječu na ocjenu igrača';
 
   @override
   String get onlyMembersOfTeam => 'Samo članovi tima';
@@ -4638,7 +4647,7 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Zalijepite važeći FEN da biste započeli svaku igru sa određene pozicije.\nRadi samo za standardne igre, ne sa vrstama.\nMožete koristiti $param za generisanje FEN pozicije, a zatim ga zalijepite ovdje.\nOstavite prazno za početak igre sa normalne početne pozicije.';
+    return 'Zalijepite važeći FEN da biste započeli svaku igru sa određene pozicije.\r\nRadi samo za standardne igre, ne sa vrstama.\r\nMožete koristiti $param za generisanje FEN pozicije, a zatim ga zalijepite ovdje.\r\nOstavite prazno za početak igre sa normalne početne pozicije.';
   }
 
   @override
@@ -4770,7 +4779,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess je dobrotvorni i potpuno besplatan softver otvorenog koda.\nSvi operativni troškovi, razvoj i sadržaj finansiraju se isključivo od donacija korisnikâ.';
+  String get lichessPatronInfo => 'Lichess je dobrotvorni i potpuno besplatan softver otvorenog koda.\r\nSvi operativni troškovi, razvoj i sadržaj finansiraju se isključivo od donacija korisnikâ.';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';

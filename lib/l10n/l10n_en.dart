@@ -27,6 +27,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'Clear';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Recent searches';
@@ -478,25 +487,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'How are scores calculated?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'A win has a base score of 2 points, a draw 1 point, and a loss is worth no points.\nIf you win two games consecutively you will start a double-point streak, represented by a flame icon.\nThe following games will continue to be worth double points until you fail to win a game.\nThat is, a win will be worth 4 points, a draw 2 points and a loss will still not award any points.\n\nFor example, two wins followed by a draw will be worth 6 points: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'A win has a base score of 2 points, a draw 1 point, and a loss is worth no points.\r\nIf you win two games consecutively you will start a double-point streak, represented by a flame icon.\r\nThe following games will continue to be worth double points until you fail to win a game.\r\nThat is, a win will be worth 4 points, a draw 2 points and a loss will still not award any points.\r\n\r\nFor example, two wins followed by a draw will be worth 6 points: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'When a player clicks the Berserk button at the beginning of the game, they lose half of their clock time, but the win is worth one extra tournament point.\n\nGoing Berserk in time controls with an increment also cancels the increment (1+2 is an exception, it gives 1+0).\n\nBerserk is not available for games with zero initial time (0+1, 0+2).\n\nBerserk only grants an extra point if you play at least 7 moves in the game.';
+  String get arenaBerserkAnswer => 'When a player clicks the Berserk button at the beginning of the game, they lose half of their clock time, but the win is worth one extra tournament point.\r\n\r\nGoing Berserk in time controls with an increment also cancels the increment (1+2 is an exception, it gives 1+0).\r\n\r\nBerserk is not available for games with zero initial time (0+1, 0+2).\r\n\r\nBerserk only grants an extra point if you play at least 7 moves in the game.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'How is the winner decided?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'The player(s) with the most points after the tournament\'s set time limit will be announced the winner(s).\n\nWhen two or more players have the same number of points, the tournament performance is the tie break.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'The player(s) with the most points after the tournament\'s set time limit will be announced the winner(s).\r\n\r\nWhen two or more players have the same number of points, the tournament performance is the tie break.';
 
   @override
   String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'At the beginning of the tournament, players are paired based on their rating.\nAs soon as you finish a game, return to the tournament lobby: you will then be paired with a player close to your ranking. This ensures minimum wait time, however, you may not face all other players in the tournament.\nPlay fast and return to the lobby to play more games and win more points.';
+  String get arenaHowDoesPairingWorkAnswer => 'At the beginning of the tournament, players are paired based on their rating.\r\nAs soon as you finish a game, return to the tournament lobby: you will then be paired with a player close to your ranking. This ensures minimum wait time, however, you may not face all other players in the tournament.\r\nPlay fast and return to the lobby to play more games and win more points.';
 
   @override
   String get arenaHowDoesItEnd => 'How does it end?';
@@ -605,7 +614,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\r\n\r\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -1609,7 +1618,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Search puzzles';
 
   @override
-  String get puzzleFromMyGamesNone => 'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
+  String get puzzleFromMyGamesNone => 'You have no puzzles in the database, but Lichess still loves you very much.\r\n\r\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Train, analyse, improve';
@@ -4611,7 +4620,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Paste a valid FEN to start every game from a given position.\nIt only works for standard games, not with variants.\nYou can use the $param to generate a FEN position, then paste it here.\nLeave empty to start games from the normal initial position.';
+    return 'Paste a valid FEN to start every game from a given position.\r\nIt only works for standard games, not with variants.\r\nYou can use the $param to generate a FEN position, then paste it here.\r\nLeave empty to start games from the normal initial position.';
   }
 
   @override
@@ -4743,7 +4752,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software.\r\nAll operating costs, development, and content are funded solely by user donations.';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
@@ -6700,25 +6709,25 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get arenaHowAreScoresCalculated => 'How are scores calculated?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'A win has a base score of 2 points, a draw 1 point, and a loss is worth no points.\nIf you win two games consecutively you will start a double point streak, represented by a flame icon.\nThe following games will continue to be worth double points until you fail to win a game.\nThat is, a win will be worth 4 points, a draw 2 points, and a loss will still not award any points.\n\nFor example, two wins followed by a draw will be worth 6 points: 2 + 2 + (2 × 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'A win has a base score of 2 points, a draw 1 point, and a loss is worth no points.\r\nIf you win two games consecutively you will start a double point streak, represented by a flame icon.\r\nThe following games will continue to be worth double points until you fail to win a game.\r\nThat is, a win will be worth 4 points, a draw 2 points, and a loss will still not award any points.\r\n\r\nFor example, two wins followed by a draw will be worth 6 points: 2 + 2 + (2 × 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'When a player clicks the Berserk button at the beginning of the game, they lose half of their clock time, but the win is worth one extra tournament point.\n\nGoing Berserk in time controls with an increment also cancels the increment. (1+2 is an exception, it gives 1+0)\n\nBerserk is not available for games with zero initial time (0+1, 0+2).\n\nBerserk only grants an extra point if you play at least 7 moves in the game.';
+  String get arenaBerserkAnswer => 'When a player clicks the Berserk button at the beginning of the game, they lose half of their clock time, but the win is worth one extra tournament point.\r\n\r\nGoing Berserk in time controls with an increment also cancels the increment. (1+2 is an exception, it gives 1+0)\r\n\r\nBerserk is not available for games with zero initial time (0+1, 0+2).\r\n\r\nBerserk only grants an extra point if you play at least 7 moves in the game.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'How is the winner decided?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'The player(s) with the most points after the tournament\'s set time limit will be announced the winner(s).\n\nWhen two or more players have the same number of points, the tournament performance is the tie break.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'The player(s) with the most points after the tournament\'s set time limit will be announced the winner(s).\r\n\r\nWhen two or more players have the same number of points, the tournament performance is the tie break.';
 
   @override
   String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'At the beginning of the tournament, players are paired based on their rating.\nAs soon as you finish a game, return to the tournament lobby: you will then be paired with a player close to your ranking. This ensures minimum wait time, however you may not face all other players in the tournament.\nPlay fast and return to the lobby to play more games and win more points.';
+  String get arenaHowDoesPairingWorkAnswer => 'At the beginning of the tournament, players are paired based on their rating.\r\nAs soon as you finish a game, return to the tournament lobby: you will then be paired with a player close to your ranking. This ensures minimum wait time, however you may not face all other players in the tournament.\r\nPlay fast and return to the lobby to play more games and win more points.';
 
   @override
   String get arenaHowDoesItEnd => 'How does it end?';
@@ -6827,7 +6836,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\r\n\r\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -7831,7 +7840,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get puzzleSearchPuzzles => 'Search puzzles';
 
   @override
-  String get puzzleFromMyGamesNone => 'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
+  String get puzzleFromMyGamesNone => 'You have no puzzles in the database, but Lichess still loves you very much.\r\n\r\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Train, analyse, improve';
@@ -10835,7 +10844,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String positionInputHelp(String param) {
-    return 'Paste a valid FEN to start every game from a given position.\nIt only works for standard games, not with variants.\nYou can use the $param to generate a FEN position, then paste it here.\nLeave empty to start games from the normal initial position.';
+    return 'Paste a valid FEN to start every game from a given position.\r\nIt only works for standard games, not with variants.\r\nYou can use the $param to generate a FEN position, then paste it here.\r\nLeave empty to start games from the normal initial position.';
   }
 
   @override
@@ -10967,7 +10976,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software.\r\nAll operating costs, development, and content are funded solely by user donations.';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';

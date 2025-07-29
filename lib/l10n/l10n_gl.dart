@@ -27,6 +27,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Cancelar a proposta de cambio';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'Borrar';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Problemas';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Procuras recentes';
@@ -478,13 +487,13 @@ class AppLocalizationsGl extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Como se calculan os puntos de torneo?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Unha vitoria ten unha puntuación por defecto de 2 puntos, unhas táboas suman 1 punto e as derrotas ningún punto.\nSe gañas dúas partidas seguidas, comezarás unha secuencia de puntuación dobre, representada por unha icona de lapa.\nAs seguintes partidas continuarán valendo dobre ata que pares de gañar.\nÉ dicir, unha vitoria valerá 4 puntos, unhas táboas 2 puntos e a derrota segue sen dar puntos.\n\nPor exemplo, dúas vitorias seguidas por unhas táboas valen 6 puntos: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Unha vitoria ten unha puntuación por defecto de 2 puntos, unhas táboas suman 1 punto e as derrotas ningún punto.\r\nSe gañas dúas partidas seguidas, comezarás unha secuencia de puntuación dobre, representada por unha icona de lapa.\r\nAs seguintes partidas continuarán valendo dobre ata que pares de gañar.\r\nÉ dicir, unha vitoria valerá 4 puntos, unhas táboas 2 puntos e a derrota segue sen dar puntos.\r\n\r\nPor exemplo, dúas vitorias seguidas por unhas táboas valen 6 puntos: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Modo Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Cando un xogador preme no botón de Berserk ao comezo da partida, perde a metade do seu tempo no reloxo, pero a vitoria, de conseguila, valerá un punto máis.\n\nFacer o Berserk en controis de tempo con incremento tamén cancela o incremento (1+2 é unha excepción, xa que se converte en 1+0).\n\nO modo Berserk non está dispoñible en partidas con tempo inicial cero (0+1, 0+2).\n\nO modo Berserk só garante un punto adicional no caso de que se realicen polo menos 7 xogadas na partida.';
+  String get arenaBerserkAnswer => 'Cando un xogador preme no botón de Berserk ao comezo da partida, perde a metade do seu tempo no reloxo, pero a vitoria, de conseguila, valerá un punto máis.\r\n\r\nFacer o Berserk en controis de tempo con incremento tamén cancela o incremento (1+2 é unha excepción, xa que se converte en 1+0).\r\n\r\nO modo Berserk non está dispoñible en partidas con tempo inicial cero (0+1, 0+2).\r\n\r\nO modo Berserk só garante un punto adicional no caso de que se realicen polo menos 7 xogadas na partida.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Como se decide o gañador?';
@@ -496,7 +505,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Como funcionan os emparellamentos?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Ao comezo do torneo, os xogadores son emparellados segundo a súa puntuación.\nAsí que rematas unha partida, voltas á sala de espera: alí serás emparellado cun xogador que estea preto na clasificación. Isto garante un mínimo tempo de espera, aínda que pode que non xogues contra todos os xogadores do torneo.\nXoga rápido e volta á sala de espera para xogar máis partidas e gañar máis puntos.';
+  String get arenaHowDoesPairingWorkAnswer => 'Ao comezo do torneo, os xogadores son emparellados segundo a súa puntuación.\r\nAsí que rematas unha partida, voltas á sala de espera: alí serás emparellado cun xogador que estea preto na clasificación. Isto garante un mínimo tempo de espera, aínda que pode que non xogues contra todos os xogadores do torneo.\r\nXoga rápido e volta á sala de espera para xogar máis partidas e gañar máis puntos.';
 
   @override
   String get arenaHowDoesItEnd => 'Como remata?';
@@ -605,7 +614,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get arenaTournamentStats => 'Estatísticas do torneo';
 
   @override
-  String get arenaRankAvgHelp => 'A clasificación media é unha porcentaxe da túa clasificación. Canto máis baixa, mellor.\n\nPor exemplo, ficar en 3º lugar nun torneo de 100 xogadores = 3%. Ficar 10º nun torneo de 1000 xogadores = 1%.';
+  String get arenaRankAvgHelp => 'A clasificación media é unha porcentaxe da túa clasificación. Canto máis baixa, mellor.\r\n\r\nPor exemplo, ficar en 3º lugar nun torneo de 100 xogadores = 3%. Ficar 10º nun torneo de 1000 xogadores = 1%.';
 
   @override
   String get arenaMedians => 'medianas';
@@ -1609,14 +1618,14 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Busca crebacabezas';
 
   @override
-  String get puzzleFromMyGamesNone => 'Non tes crebacabezas na base de datos e aínda así Lichess quérete moito.\nXoga partidas rápidas e clásicas para ter máis opcións de que se engadan os teus crebacabezas!';
+  String get puzzleFromMyGamesNone => 'Non tes crebacabezas na base de datos e aínda así Lichess quérete moito.\r\nXoga partidas rápidas e clásicas para ter máis opcións de que se engadan os teus crebacabezas!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Adestra, analiza, mellora';
 
   @override
   String puzzlePercentSolved(String param) {
-    return '$param\nresoltos';
+    return '$param\r\nresoltos';
   }
 
   @override
@@ -4613,7 +4622,7 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Pega un FEN válido para comezar as partidas dende unha posición determinada.\nSó funciona en partidas estándar, non en variantes.\nPodes empregar o $param para xerar unha posición FEN e despois pegala aquí.\nDeixa en branco para comezar as partidas dende a posición inicial normal.';
+    return 'Pega un FEN válido para comezar as partidas dende unha posición determinada.\r\nSó funciona en partidas estándar, non en variantes.\r\nPodes empregar o $param para xerar unha posición FEN e despois pegala aquí.\r\nDeixa en branco para comezar as partidas dende a posición inicial normal.';
   }
 
   @override
@@ -4745,7 +4754,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get showMeEverything => 'Amósamo todo';
 
   @override
-  String get lichessPatronInfo => 'Lichess é unha organización benéfica e un programa totalmente libre e de código aberto.\nTodos os custos de funcionamento, desenvolvemento e contidos fináncianse unicamente mediante as doazóns dos usuarios.';
+  String get lichessPatronInfo => 'Lichess é unha organización benéfica e un programa totalmente libre e de código aberto.\r\nTodos os custos de funcionamento, desenvolvemento e contidos fináncianse unicamente mediante as doazóns dos usuarios.';
 
   @override
   String get nothingToSeeHere => 'Nada que ver aquí polo de agora.';

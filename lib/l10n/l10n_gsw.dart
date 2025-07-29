@@ -27,6 +27,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Zugsrücknam-Offerte zruggzieh';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'Leere';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Ufgabe';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Kürzlich Gsuechts';
@@ -478,25 +487,25 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Wie werded d\'Pünkt berächnet?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'En Sieg git 2 Pünkt, es Remis 1 Punkt, e Niderlag 0. Nach 2 Sieg in Serie, gits für jede witeri Sieg doppleti Pünkt. \nDas wird dur e Flamme, bi de Punktzahl, azeigt. Doppleti Pünkt gits so lang, bis es Schpiel verlore gaht oder Remis ändet. \nBischpil: 4 Sieg und dänn es Remis ergit 14 Pünkt ( 2 + 2 + 2x2 + 2x2 + 2x1 = 14 ) und ab dänn, wider normal.';
+  String get arenaHowAreScoresCalculatedAnswer => 'En Sieg git 2 Pünkt, es Remis 1 Punkt, e Niderlag 0. Nach 2 Sieg in Serie, gits für jede witeri Sieg doppleti Pünkt. \r\nDas wird dur e Flamme, bi de Punktzahl, azeigt. Doppleti Pünkt gits so lang, bis es Schpiel verlore gaht oder Remis ändet. \r\nBischpil: 4 Sieg und dänn es Remis ergit 14 Pünkt ( 2 + 2 + 2x2 + 2x2 + 2x1 = 14 ) und ab dänn, wider normal.';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Klickt en Schpiller vor Schpielbeginn uf \"Berserk\", dänn halbiert er sini Bedänkzit. \nWänn er das Schpiel trotzdem günnt, gits 1 zuesätzliche Turnier Punkt.\n\nIm Zitmodus mit Inkrement entfernt \"Berserk\" das Inkrement. \n(1+2 isch e Usnahm, es wird zu 1+0.)\n\nBi Schpiel ohni Grundbedänkziit (0+1, 0+2) isch \"Berserk\" nöd möglich.\n\nDe zuesätzlich \"Berserk Punkt\" gits nur, wänn im Schpiel \nmeh als 6 Züg gschpillt worde sind.';
+  String get arenaBerserkAnswer => 'Klickt en Schpiller vor Schpielbeginn uf \"Berserk\", dänn halbiert er sini Bedänkzit. \r\nWänn er das Schpiel trotzdem günnt, gits 1 zuesätzliche Turnier Punkt.\r\n\r\nIm Zitmodus mit Inkrement entfernt \"Berserk\" das Inkrement. \r\n(1+2 isch e Usnahm, es wird zu 1+0.)\r\n\r\nBi Schpiel ohni Grundbedänkziit (0+1, 0+2) isch \"Berserk\" nöd möglich.\r\n\r\nDe zuesätzlich \"Berserk Punkt\" gits nur, wänn im Schpiel \r\nmeh als 6 Züg gschpillt worde sind.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Wie wird de Sieger ermittlet?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'De/die Schpiller wo bi Turnierändi die meischte Pünkt händ werded als Sieger bekanntgeh. \nWänn 2 oder meh Schpiller glich vill Pünkt händ, entscheidet d\'Turnierleischtig d\'Reihefolg.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'De/die Schpiller wo bi Turnierändi die meischte Pünkt händ werded als Sieger bekanntgeh. \r\nWänn 2 oder meh Schpiller glich vill Pünkt händ, entscheidet d\'Turnierleischtig d\'Reihefolg.';
 
   @override
   String get arenaHowDoesPairingWork => 'Wie werded d\'Paarige gmacht?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Am Afang werded d\'Paarige gemäss de Wertigszahl g\'macht. \nSobald es Schpiel fertig isch, gahts zrugg id Turnierübersicht und es werded Schpiller \nmit ähnlichem Rang paaret. Mer schpillt, im Turnier, nie gäge all Schpiller. \nWänn me sofort z\'rugg id Übersicht gaht, chann me meh schpille und so meh Pünkt mache!';
+  String get arenaHowDoesPairingWorkAnswer => 'Am Afang werded d\'Paarige gemäss de Wertigszahl g\'macht. \r\nSobald es Schpiel fertig isch, gahts zrugg id Turnierübersicht und es werded Schpiller \r\nmit ähnlichem Rang paaret. Mer schpillt, im Turnier, nie gäge all Schpiller. \r\nWänn me sofort z\'rugg id Übersicht gaht, chann me meh schpille und so meh Pünkt mache!';
 
   @override
   String get arenaHowDoesItEnd => 'Wie ändet es Turnier?';
@@ -605,7 +614,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaTournamentStats => 'Turnier - Schtatistike';
 
   @override
-  String get arenaRankAvgHelp => 'De Rangdurchschnitt isch en Prozäntsatz vu dim Rang. Niedriger isch besser.\n\nBischpil: Rang 3 ime Turnier mit 100 Schpiler = 3% oder Rang 10 bi 1000 Schpiler = 1 %.';
+  String get arenaRankAvgHelp => 'De Rangdurchschnitt isch en Prozäntsatz vu dim Rang. Niedriger isch besser.\r\n\r\nBischpil: Rang 3 ime Turnier mit 100 Schpiler = 3% oder Rang 10 bi 1000 Schpiler = 1 %.';
 
   @override
   String get arenaMedians => 'mittleri Wert';
@@ -1046,16 +1055,16 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get coordinatesKnowingTheChessBoard => 'D\'Koordinate vom Schachbrätt z\'känne, \nisch e wichtigi Fähigkeit:';
+  String get coordinatesKnowingTheChessBoard => 'D\'Koordinate vom Schachbrätt z\'känne, \r\nisch e wichtigi Fähigkeit:';
 
   @override
-  String get coordinatesMostChessCourses => 'Die meischte Schach Kürs und Üebige \nverwänded die algebraischi Notazion.';
+  String get coordinatesMostChessCourses => 'Die meischte Schach Kürs und Üebige \r\nverwänded die algebraischi Notazion.';
 
   @override
-  String get coordinatesTalkToYourChessFriends => 'Es machts eifacher mit Schachfründe z\'rede, \nwänn alli die \"Schach-Schprach\" verschtöhnd.';
+  String get coordinatesTalkToYourChessFriends => 'Es machts eifacher mit Schachfründe z\'rede, \r\nwänn alli die \"Schach-Schprach\" verschtöhnd.';
 
   @override
-  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Me chann es Schpiel effektiver analysiere, \nwänn me d\'Koordinate schnäll gseht.';
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Me chann es Schpiel effektiver analysiere, \r\nwänn me d\'Koordinate schnäll gseht.';
 
   @override
   String get coordinatesACoordinateAppears => 'Uf em Brätt erschint e Koordinate (z.B. \"c3\") und du muesch ufs entschprächendi Fäld klicke.';
@@ -1609,7 +1618,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Suech Ufgabe';
 
   @override
-  String get puzzleFromMyGamesNone => 'Du häsch kei Ufgabe i de Datäbank, aber Lichess schätzt dich immerno sehr.\n\nSchpill schnälli und au klassischi Schpiel, will so erhöht sich d\'Chance, dass Ufgabe vu dine eigene Schpiel zuegfüegt werded!';
+  String get puzzleFromMyGamesNone => 'Du häsch kei Ufgabe i de Datäbank, aber Lichess schätzt dich immerno sehr.\r\n\r\nSchpill schnälli und au klassischi Schpiel, will so erhöht sich d\'Chance, dass Ufgabe vu dine eigene Schpiel zuegfüegt werded!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trainiere analysiere und besser werde';
@@ -2534,7 +2543,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get signUp => 'Regischtriere';
 
   @override
-  String get computersAreNotAllowedToPlay => 'Computer und Computer-Understützig isch nöd erlaubt. Bitte lass dir bim Schpille nöd vu Schachengines, Datäbanke oder andere Schpiller hälfe. \nAu vum Erschtelle vu mehrere Konte wird dringend abgrate - übermässigs Multikonteverhalte chann zume Usschluss fühere.';
+  String get computersAreNotAllowedToPlay => 'Computer und Computer-Understützig isch nöd erlaubt. Bitte lass dir bim Schpille nöd vu Schachengines, Datäbanke oder andere Schpiller hälfe. \r\nAu vum Erschtelle vu mehrere Konte wird dringend abgrate - übermässigs Multikonteverhalte chann zume Usschluss fühere.';
 
   @override
   String get games => 'Schpiel';
@@ -3080,7 +3089,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get thisIsAChessCaptcha => 'Das isch es Schach Captcha.';
 
   @override
-  String get clickOnTheBoardToMakeYourMove => 'Klick ufs Brätt und mach en Zug, \nzum bewise dass du en Mänsch bisch.';
+  String get clickOnTheBoardToMakeYourMove => 'Klick ufs Brätt und mach en Zug, \r\nzum bewise dass du en Mänsch bisch.';
 
   @override
   String get captcha_fail => 'Bitte lös die Schach Ufgab.';
@@ -3799,19 +3808,19 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get returnToSimulHomepage => 'Zrugg zur Simultanschach Startsite';
 
   @override
-  String get aboutSimul => 'Bim Simultanschach schpillt 1 Simultanschpiller \nglichzitig gäge beliebig vill Simultangägner.';
+  String get aboutSimul => 'Bim Simultanschach schpillt 1 Simultanschpiller \r\nglichzitig gäge beliebig vill Simultangägner.';
 
   @override
-  String get aboutSimulImage => 'Hät de Bobby Fischer, bi 50 Gägner, 47 Sieg \nund 2 Remis gschafft - nu 1 Schpiel hät er verlore.';
+  String get aboutSimulImage => 'Hät de Bobby Fischer, bi 50 Gägner, 47 Sieg \r\nund 2 Remis gschafft - nu 1 Schpiel hät er verlore.';
 
   @override
-  String get aboutSimulRealLife => 'Bim Simultanschach schpillt 1 Simultanschpiller \nglichzitig gäge beliebig vill Simultangägner, \nso lang, bis alli Schpiel fertig gschpillt sind.';
+  String get aboutSimulRealLife => 'Bim Simultanschach schpillt 1 Simultanschpiller \r\nglichzitig gäge beliebig vill Simultangägner, \r\nso lang, bis alli Schpiel fertig gschpillt sind.';
 
   @override
-  String get aboutSimulRules => 'Wie bi reale Simultanschach Veraschtaltige, gaht \nde Simultanschpiller vu eim Simultangägner zum \nNächschte und macht bi jedem Brätt 1 Zug.';
+  String get aboutSimulRules => 'Wie bi reale Simultanschach Veraschtaltige, gaht \r\nde Simultanschpiller vu eim Simultangägner zum \r\nNächschte und macht bi jedem Brätt 1 Zug.';
 
   @override
-  String get aboutSimulSettings => 'Zugsrücknahme, zuesätzlichi Zit oder Revanche \ngits nöd und es isch nie g\'wertet.';
+  String get aboutSimulSettings => 'Zugsrücknahme, zuesätzlichi Zit oder Revanche \r\ngits nöd und es isch nie g\'wertet.';
 
   @override
   String get create => 'Erschtelle';
@@ -4594,7 +4603,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get tournDescriptionHelp => 'Wottsch de Teilnehmer öppis Speziells mitteile? Probier dich churz z\'fasse. Url mit Name sind möglich: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Alli Schpiel sind g\'wertet\nund beiflussed dini Wertig';
+  String get ratedFormHelp => 'Alli Schpiel sind g\'wertet\r\nund beiflussed dini Wertig';
 
   @override
   String get onlyMembersOfTeam => 'Nur Mitglider vum Team';
@@ -4613,7 +4622,7 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'E gültigi FEN schtartet jedes Schpiel ab ere beschtimmte Schtellig. \nDas funktioniert nur für Schtandardschpiel und nöd für Variante!\nDu chasch mit $param so e FEN-Schtellig generiere und \nsie dänn im Fäld \"Afangsposition\" ifüege oder das \nFäld leer lah und all Schpiel normal schtarte.';
+    return 'E gültigi FEN schtartet jedes Schpiel ab ere beschtimmte Schtellig. \r\nDas funktioniert nur für Schtandardschpiel und nöd für Variante!\r\nDu chasch mit $param so e FEN-Schtellig generiere und \r\nsie dänn im Fäld \"Afangsposition\" ifüege oder das \r\nFäld leer lah und all Schpiel normal schtarte.';
   }
 
   @override
@@ -4745,7 +4754,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get showMeEverything => 'Zeig mer alles';
 
   @override
-  String get lichessPatronInfo => 'Lichess isch e Wohltätigkeitsorganisation und e völlig choschtelosi/freii Open-Source-Software.\nAlli Betriebs-Choschte, d\'Entwicklig und d\'Inhält werded usschliesslich dur Benutzerschpände finanziert.';
+  String get lichessPatronInfo => 'Lichess isch e Wohltätigkeitsorganisation und e völlig choschtelosi/freii Open-Source-Software.\r\nAlli Betriebs-Choschte, d\'Entwicklig und d\'Inhält werded usschliesslich dur Benutzerschpände finanziert.';
 
   @override
   String get nothingToSeeHere => 'Da gits im monumäntan nüt z\'gseh.';

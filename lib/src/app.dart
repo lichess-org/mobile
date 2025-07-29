@@ -7,7 +7,10 @@ import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/message/message_service.dart';
@@ -132,12 +135,22 @@ class _AppState extends ConsumerState<Application> {
 
           final time = seek.clock != null ? seek.clock!.$1.inMinutes.toString() : '-';
           final increment = seek.clock != null ? seek.clock!.$2.inSeconds.toString() : '0';
-          final rated = seek.rated ? '🏅' : '';
+          final rated = seek.rated ? AppLocalizations.of(ctx).mobileRatedGame : AppLocalizations.of(ctx).mobileCasualGame;
+
+          final variant = (seek.variant == Variant.standard)
+              ? Variant.standard.label
+              : (seek.variant != null && seek.timeIncrement != null)
+                  ? Perf.fromVariantAndSpeed(
+                      seek.variant!,
+                      Speed.fromTimeIncrement(seek.timeIncrement!),
+                    ).shortTitle
+                  : ' ';
 
           return ShortcutItem(
             type: 'recent_seek_$index',
-            localizedTitle: '$time+$increment $rated',
-            icon: 'schedule',
+            localizedTitle: '$time+$increment $rated $variant',
+            localizedSubtitle: AppLocalizations.of(ctx).mobileRecentlyPlayed,
+            icon: 'add_icon',
           );
         }),
       ]);

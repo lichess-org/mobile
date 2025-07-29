@@ -27,6 +27,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Hủy đề nghị đi lại';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'Xóa';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Câu đố';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Tìm kiếm gần đây';
@@ -460,25 +469,25 @@ class AppLocalizationsVi extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Điểm được tính thế nào?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Điểm cơ sở cho một ván thắng là 2 điểm, hòa: 1 điểm, thua: 0 điểm.\nNếu bạn thắng hai ván liên tiếp bạn sẽ bắt đầu có chuỗi nhân đôi điểm, thể hiện bằng hình ngọn lửa.\nCác ván đấu sau đó sẽ tiếp tục nhân đôi điểm đến khi bạn thua một ván.\nNghĩa là, một ván thắng được 4 điểm, hòa: 2 điểm, thua: 0 điểm.\n\nVí dụ, thắng 2 ván rồi hòa 1 ván sẽ được 6 điểm: 2 + 2 + (1 x 2)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Điểm cơ sở cho một ván thắng là 2 điểm, hòa: 1 điểm, thua: 0 điểm.\r\nNếu bạn thắng hai ván liên tiếp bạn sẽ bắt đầu có chuỗi nhân đôi điểm, thể hiện bằng hình ngọn lửa.\r\nCác ván đấu sau đó sẽ tiếp tục nhân đôi điểm đến khi bạn thua một ván.\r\nNghĩa là, một ván thắng được 4 điểm, hòa: 2 điểm, thua: 0 điểm.\r\n\r\nVí dụ, thắng 2 ván rồi hòa 1 ván sẽ được 6 điểm: 2 + 2 + (1 x 2)';
 
   @override
   String get arenaBerserk => 'Berserk trong Đấu trường';
 
   @override
-  String get arenaBerserkAnswer => 'Khi người chơi nhấn nút Berserk lúc bắt đầu ván cờ, họ sẽ mất nửa thời gian của họ, nhưng nếu thắng sẽ được thêm một điểm giải đấu.\n\nDùng Berserk trong ván tính giờ với gia số sẽ hủy bỏ gia số. (1+2 là ngoại lệ, nó sẽ là 1+0)\n\nBerserk không áp dụng cho ván đấu không có thời gian bắt đầu (0+1, 0+2).\n\nBerserk chỉ thêm điểm nếu bạn chơi ít nhất 7 nước trong một ván.';
+  String get arenaBerserkAnswer => 'Khi người chơi nhấn nút Berserk lúc bắt đầu ván cờ, họ sẽ mất nửa thời gian của họ, nhưng nếu thắng sẽ được thêm một điểm giải đấu.\r\n\r\nDùng Berserk trong ván tính giờ với gia số sẽ hủy bỏ gia số. (1+2 là ngoại lệ, nó sẽ là 1+0)\r\n\r\nBerserk không áp dụng cho ván đấu không có thời gian bắt đầu (0+1, 0+2).\r\n\r\nBerserk chỉ thêm điểm nếu bạn chơi ít nhất 7 nước trong một ván.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Cách xác định người chiến thắng?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => '(Những) kỳ thủ có điểm cao nhất sau khi giải đấu kết thúc sẽ là (những) người thắng cuộc.\n\nNếu hai kỳ thủ bằng điểm nhau, kết quả sẽ quyết định qua điểm số phụ.';
+  String get arenaHowIsTheWinnerDecidedAnswer => '(Những) kỳ thủ có điểm cao nhất sau khi giải đấu kết thúc sẽ là (những) người thắng cuộc.\r\n\r\nNếu hai kỳ thủ bằng điểm nhau, kết quả sẽ quyết định qua điểm số phụ.';
 
   @override
   String get arenaHowDoesPairingWork => 'Cặp đấu được chọn ra sao?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Lúc bắt đầu giải đấu, các kỳ thủ sẽ được xếp cặp dựa theo hệ số của họ. Ngay khi bạn kết thúc một ván và trở lại phòng chờ: bạn sẽ được xếp cặp với kỳ thủ có thứ hạng gần bạn. Điều này giúp giảm thời gian chờ, tuy nhiên bạn có thể không được đấu với mọi kỳ thủ khác trong giải đấu.\nChơi nhanh và trở lại phòng chờ để chơi được nhiều ván và giành nhiều điểm hơn.';
+  String get arenaHowDoesPairingWorkAnswer => 'Lúc bắt đầu giải đấu, các kỳ thủ sẽ được xếp cặp dựa theo hệ số của họ. Ngay khi bạn kết thúc một ván và trở lại phòng chờ: bạn sẽ được xếp cặp với kỳ thủ có thứ hạng gần bạn. Điều này giúp giảm thời gian chờ, tuy nhiên bạn có thể không được đấu với mọi kỳ thủ khác trong giải đấu.\r\nChơi nhanh và trở lại phòng chờ để chơi được nhiều ván và giành nhiều điểm hơn.';
 
   @override
   String get arenaHowDoesItEnd => 'Giải kết thúc ra sao?';
@@ -587,7 +596,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get arenaTournamentStats => 'Thống kê giải đấu';
 
   @override
-  String get arenaRankAvgHelp => 'Thứ hạng trung bình là phần trăm thứ hạng của bạn. Thấp hơn là tốt hơn.\n\nVí dụ: được hạng 3 trong một giải đấu có 100 kỳ thủ = 3%. Hạng 10 trong giải đấu 1000 kỳ thủ = 1%.';
+  String get arenaRankAvgHelp => 'Thứ hạng trung bình là phần trăm thứ hạng của bạn. Thấp hơn là tốt hơn.\r\n\r\nVí dụ: được hạng 3 trong một giải đấu có 100 kỳ thủ = 3%. Hạng 10 trong giải đấu 1000 kỳ thủ = 1%.';
 
   @override
   String get arenaMedians => 'trung vị';
@@ -1587,7 +1596,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Tìm câu đố';
 
   @override
-  String get puzzleFromMyGamesNone => 'Bạn không có câu đố nào trong dữ liệu, nhưng Lichess vẫn rất yêu mến bạn.\n\nHãy chơi thêm nhiều ván cờ nhanh và cờ chậm để có cơ hội có một câu đố từ ván cờ của riêng bạn!';
+  String get puzzleFromMyGamesNone => 'Bạn không có câu đố nào trong dữ liệu, nhưng Lichess vẫn rất yêu mến bạn.\r\n\r\nHãy chơi thêm nhiều ván cờ nhanh và cờ chậm để có cơ hội có một câu đố từ ván cờ của riêng bạn!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Rèn luyện, phân tích, cải thiện';
@@ -3040,7 +3049,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get importGame => 'Nhập ván cờ';
 
   @override
-  String get importGameExplanation => 'Dán PGN của ván đấu để xem lại trên trình duyệt, phân tích bằng máy tính, \ntrò chuyện trong ván đấu và có một URL có thể chia sẻ công khai.';
+  String get importGameExplanation => 'Dán PGN của ván đấu để xem lại trên trình duyệt, phân tích bằng máy tính, \r\ntrò chuyện trong ván đấu và có một URL có thể chia sẻ công khai.';
 
   @override
   String get importGameCaveat => 'Các biến sẽ bị xóa. Để giữ chúng, hãy nhập PGN thông qua một nghiên cứu.';
@@ -4585,7 +4594,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Dán một FEN hợp lệ để bắt đầu tất cả ván đấu bằng một thế cờ nhất định đó.\nNó chỉ dùng được cho cờ vua tiêu chuẩn, không được với các biến thể.\nBạn có thể dùng $param để tạo ra một FEN rồi dán ở đây.\nBỏ trống để bắt đầu tất cả ván đấu bằng thế trận ban đầu bình thường.';
+    return 'Dán một FEN hợp lệ để bắt đầu tất cả ván đấu bằng một thế cờ nhất định đó.\r\nNó chỉ dùng được cho cờ vua tiêu chuẩn, không được với các biến thể.\r\nBạn có thể dùng $param để tạo ra một FEN rồi dán ở đây.\r\nBỏ trống để bắt đầu tất cả ván đấu bằng thế trận ban đầu bình thường.';
   }
 
   @override
@@ -4717,7 +4726,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get showMeEverything => 'Cho tôi xem mọi thứ nào';
 
   @override
-  String get lichessPatronInfo => 'Lichess là một tổ chức phi lợi nhuận và là phần mềm hoàn toàn miễn phí/mã nguồn mở.\nMọi chi phí vận hành, phát triển, và nội dung được tài trợ bởi những đóng góp của người dùng.';
+  String get lichessPatronInfo => 'Lichess là một tổ chức phi lợi nhuận và là phần mềm hoàn toàn miễn phí/mã nguồn mở.\r\nMọi chi phí vận hành, phát triển, và nội dung được tài trợ bởi những đóng góp của người dùng.';
 
   @override
   String get nothingToSeeHere => 'Không có gì để xem ở đây vào lúc này.';

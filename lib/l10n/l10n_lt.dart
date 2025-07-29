@@ -27,6 +27,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'Clear';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Užduotys';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Recent searches';
@@ -514,13 +523,13 @@ class AppLocalizationsLt extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Kaip apskaičiuojami taškai?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Pergalė vertinama 2 taškais, lygiosios: 1 tašku, o pralaimėjimas taškų nevertas.\nJeigu laimite dvi partijas iš eilės, pradėsite dvigubų taškų seriją, žymimą liepsnos piktograma.\nTolimesnės partijos bus vertos dvigubai daugiau taškų tol, kol nebelaimėsite.\nT. y., pergalė bus verta 4 taškų, lygiosios: 2 taškų, o pralaimėjimas taškų nepelnys.\n\nPavyzdžiui, dvi pergalės ir tada įvykusios lygiosios bus įvertinta 6 taškais: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Pergalė vertinama 2 taškais, lygiosios: 1 tašku, o pralaimėjimas taškų nevertas.\r\nJeigu laimite dvi partijas iš eilės, pradėsite dvigubų taškų seriją, žymimą liepsnos piktograma.\r\nTolimesnės partijos bus vertos dvigubai daugiau taškų tol, kol nebelaimėsite.\r\nT. y., pergalė bus verta 4 taškų, lygiosios: 2 taškų, o pralaimėjimas taškų nepelnys.\r\n\r\nPavyzdžiui, dvi pergalės ir tada įvykusios lygiosios bus įvertinta 6 taškais: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Įsiutimas arenoje';
 
   @override
-  String get arenaBerserkAnswer => 'Žaidėjui partijos pradžioje paspaudus mygtuką „Įsiūtis“, jie praras pusę suteikiamo laiko ėjimams, tačiau pergalė bus verta vieno papildomo turnyrinio taško.\n\n„Įsiūtis“ laiko kontrolėse su prieaugiu kartu dar panaikins ir jį (1+2 yra išimtis, bus duodama 1+0).\n\n„Įsiūtis“ nėra galimas partijose su nuliniu pradiniu laiku (0+1, 0+2).\n\n„Įsiūtis“ suteiks papildomą tašką tik sužaidus bent 7 ėjimus partijoje.';
+  String get arenaBerserkAnswer => 'Žaidėjui partijos pradžioje paspaudus mygtuką „Įsiūtis“, jie praras pusę suteikiamo laiko ėjimams, tačiau pergalė bus verta vieno papildomo turnyrinio taško.\r\n\r\n„Įsiūtis“ laiko kontrolėse su prieaugiu kartu dar panaikins ir jį (1+2 yra išimtis, bus duodama 1+0).\r\n\r\n„Įsiūtis“ nėra galimas partijose su nuliniu pradiniu laiku (0+1, 0+2).\r\n\r\n„Įsiūtis“ suteiks papildomą tašką tik sužaidus bent 7 ėjimus partijoje.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Kaip nustatomas laimėtojas?';
@@ -532,7 +541,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Kaip veikia suporavimas?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Turnyro pradžioje žaidėjai suporuojami atsižvelgiant į jų reitingus.\nKai tik baigiate partiją, grįžkite į turnyro laukiamąjį: tuomet būsite suporuoti su žaidėju, artimus jūsų reitingui. Tai užtikrina mažiausią laukimo laiką, visgi jūs galite nesusidurti su visais kitais turnyro žaidėjais.\nŽaisdami greitai ir grįždami į laukiamąjį sužaisite daugiau partijų ir galėsite pelnyti daugiau taškų.';
+  String get arenaHowDoesPairingWorkAnswer => 'Turnyro pradžioje žaidėjai suporuojami atsižvelgiant į jų reitingus.\r\nKai tik baigiate partiją, grįžkite į turnyro laukiamąjį: tuomet būsite suporuoti su žaidėju, artimus jūsų reitingui. Tai užtikrina mažiausią laukimo laiką, visgi jūs galite nesusidurti su visais kitais turnyro žaidėjais.\r\nŽaisdami greitai ir grįždami į laukiamąjį sužaisite daugiau partijų ir galėsite pelnyti daugiau taškų.';
 
   @override
   String get arenaHowDoesItEnd => 'Kaip jis baigiasi?';
@@ -641,7 +650,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get arenaTournamentStats => 'Turnyro statistika';
 
   @override
-  String get arenaRankAvgHelp => 'Reitingo vidurkis-tai jūsų reitingas procentais. Mažesnis yra geresnis.\n\nPavyzdžiui, užėmus 3 vietą 100 žaidėjų turnyre = 3%. Užėmus 10-ą vietą 1000 žaidėjų turnyre = 1%.';
+  String get arenaRankAvgHelp => 'Reitingo vidurkis-tai jūsų reitingas procentais. Mažesnis yra geresnis.\r\n\r\nPavyzdžiui, užėmus 3 vietą 100 žaidėjų turnyre = 3%. Užėmus 10-ą vietą 1000 žaidėjų turnyre = 1%.';
 
   @override
   String get arenaMedians => 'medianos';
@@ -1653,7 +1662,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Ieškoti galvosūkių';
 
   @override
-  String get puzzleFromMyGamesNone => 'Jūs galvosūkių duomenų bazėje neturite, bet Lichess vis tiek jus labai myli.\nŽaiskite greituosius ir klasikinius žaidimus ir taip padidinkite šansus, kad bus pridėtas galvosūkis iš jūsų partijos!';
+  String get puzzleFromMyGamesNone => 'Jūs galvosūkių duomenų bazėje neturite, bet Lichess vis tiek jus labai myli.\r\nŽaiskite greituosius ir klasikinius žaidimus ir taip padidinkite šansus, kad bus pridėtas galvosūkis iš jūsų partijos!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Treniruokitės, analizuokite, tobulinkitės';
@@ -3122,7 +3131,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get importGame => 'Importuoti partiją';
 
   @override
-  String get importGameExplanation => 'Įkeldami partijos PGN gausite naršomą peržiūrą,\nkompiuterinę analizę, partijos pokalbį bei URL dalinimuisi.';
+  String get importGameExplanation => 'Įkeldami partijos PGN gausite naršomą peržiūrą,\r\nkompiuterinę analizę, partijos pokalbį bei URL dalinimuisi.';
 
   @override
   String get importGameCaveat => 'Variacijos bus ištrintos. Norėdami jas pasilikti importuokite PGN per studiją.';
@@ -4648,7 +4657,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get tournDescriptionHelp => 'Yra kažkas, ką turi žinoti dalyviai? Stenkitės perteikti trumpai. Galimos Markdown nuorodos: [pavadinimas](https://url)';
 
   @override
-  String get ratedFormHelp => 'Partijos reitinguotos\nir daro įtaką žaidėjų reitingams';
+  String get ratedFormHelp => 'Partijos reitinguotos\r\nir daro įtaką žaidėjų reitingams';
 
   @override
   String get onlyMembersOfTeam => 'Tik komandos nariai';
@@ -4667,7 +4676,7 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Norėdami pradėti žaidimą nuo specifinės pozicijos, įklijuokite teisingą FEN.\nVeikia tik standartiniams žaidimams, ne variantams.\nNorėdami sugeneruoti FEN poziciją galite naudotis $param, tada ją įklijuokite čia.\nPalikite tuščią norėdami pradėti žaidimą nuo įprastos pradinės pozicijos.';
+    return 'Norėdami pradėti žaidimą nuo specifinės pozicijos, įklijuokite teisingą FEN.\r\nVeikia tik standartiniams žaidimams, ne variantams.\r\nNorėdami sugeneruoti FEN poziciją galite naudotis $param, tada ją įklijuokite čia.\r\nPalikite tuščią norėdami pradėti žaidimą nuo įprastos pradinės pozicijos.';
   }
 
   @override
@@ -4799,7 +4808,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get showMeEverything => 'Rodyti viską';
 
   @override
-  String get lichessPatronInfo => 'Lichess yra labdara ir pilnai atviro kodo/libre projektas.\nVisos veikimo išlaidos, programavimas ir turinys yra padengti išskirtinai tik vartotojų parama.';
+  String get lichessPatronInfo => 'Lichess yra labdara ir pilnai atviro kodo/libre projektas.\r\nVisos veikimo išlaidos, programavimas ir turinys yra padengti išskirtinai tik vartotojų parama.';
 
   @override
   String get nothingToSeeHere => 'Nieko naujo.';

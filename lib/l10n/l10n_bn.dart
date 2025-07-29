@@ -27,6 +27,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'চাল ফেরত নেওয়ার অফার বাতিল করুন';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'মুছে ফেলুন';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'ধাঁধা';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Recent searches';
@@ -478,13 +487,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'কিভাবে স্কোর গণনা করা হয়?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'একটি জয়ের বেস স্কোর ২ পয়েন্ট, সমানের স্কোর: ১ পয়েন্ট, এবং হারার কোন পয়েন্ট নেই.\nযদি আপনি পরপর দুইটা খেলা জিতেন আপনি শুরু করতে পারবেন দ্বিগুন কষ পয়েন্ট, একটি আলীক আইকন দ্বারা প্রতিনিধিত্ব.\nনিম্নে খেলাটি দ্বিগুন পয়েন্ট দিতে অব্যাহত থাকবে যতক্ষণ না আপনি একটি খেলা জয়লাভ করতে ব্যর্থ হন.\nএটা হবে একট ৪ পয়েন্টের জয়, সমান: ২ পয়েন্ট, এবং হারায় দেখার মতো কোন পয়েন্ট থাকবে না.\n\nযেমন, দুটি জয় করে অনুসরন করা হবে একটি সমান ৬ পয়েন্ট: ২ + ২ +২ (২ x ১)';
+  String get arenaHowAreScoresCalculatedAnswer => 'একটি জয়ের বেস স্কোর ২ পয়েন্ট, সমানের স্কোর: ১ পয়েন্ট, এবং হারার কোন পয়েন্ট নেই.\r\nযদি আপনি পরপর দুইটা খেলা জিতেন আপনি শুরু করতে পারবেন দ্বিগুন কষ পয়েন্ট, একটি আলীক আইকন দ্বারা প্রতিনিধিত্ব.\r\nনিম্নে খেলাটি দ্বিগুন পয়েন্ট দিতে অব্যাহত থাকবে যতক্ষণ না আপনি একটি খেলা জয়লাভ করতে ব্যর্থ হন.\r\nএটা হবে একট ৪ পয়েন্টের জয়, সমান: ২ পয়েন্ট, এবং হারায় দেখার মতো কোন পয়েন্ট থাকবে না.\r\n\r\nযেমন, দুটি জয় করে অনুসরন করা হবে একটি সমান ৬ পয়েন্ট: ২ + ২ +২ (২ x ১)';
 
   @override
   String get arenaBerserk => 'ক্ষিপ্ত রণক্ষেত্র';
 
   @override
-  String get arenaBerserkAnswer => 'যখন একজন খেলোয়াড় খেলার শুরুতে ক্ষিপ্ত বাটনে ক্লিক করে, তারা তাদের ঘড়ির অর্ধেক সময় হারায়, কিন্তু জয় হয় অতিরিক্ত প্রতিযোগিতা পয়েন্টে\n\nক্ষিপ্ত সময় বাড়ানোর সাথে সাথে বাড়তি সময় বৃদ্ধিও করা যাবে (0+1, 0+2).\n\nপ্রাথমিক শূন্য সমায় নিয়ে ক্ষিপ্ত সহজলভ্য না খেলার জন্য (0+1, 0+2).\n\nযদি আপনি কমপক্ষে ৭ টি চাল দিন তাহলে ক্ষিপ্তের অতিরিক্ত একটি পয়েন্ট অনুদান হবে.';
+  String get arenaBerserkAnswer => 'যখন একজন খেলোয়াড় খেলার শুরুতে ক্ষিপ্ত বাটনে ক্লিক করে, তারা তাদের ঘড়ির অর্ধেক সময় হারায়, কিন্তু জয় হয় অতিরিক্ত প্রতিযোগিতা পয়েন্টে\r\n\r\nক্ষিপ্ত সময় বাড়ানোর সাথে সাথে বাড়তি সময় বৃদ্ধিও করা যাবে (0+1, 0+2).\r\n\r\nপ্রাথমিক শূন্য সমায় নিয়ে ক্ষিপ্ত সহজলভ্য না খেলার জন্য (0+1, 0+2).\r\n\r\nযদি আপনি কমপক্ষে ৭ টি চাল দিন তাহলে ক্ষিপ্তের অতিরিক্ত একটি পয়েন্ট অনুদান হবে.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'কিভাবে জয়ী সিদ্ধান্ত নিয়েছে?';
@@ -496,13 +505,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'কিভাবে জোরায় কাজ করে?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'প্রতিযোগিতার শুরুর সময়, খেলোয়াড়দের জোড়া তাদের অনুপাতের ভিত্তিতে আছে.\nযত তাড়া তাড়ি আপনি খেলা শেষ করবেন, প্রতিযোগিতার উপশালায় ফিরে আসুন: আপনি তারপর আপনার অনুপাতের খেলোয়াড়ের সাথে জোড়া করা হবে.\nএটা সর্বনিম্ন অপেক্ষা সময় নিশ্চিত, যাইহক আপনার হয়তো প্রতিযোগিতার সকল খেলোয়াড়দের মুখোমুখি না হতে পারে.\nদ্রুত খেলুন আবং আরো খেলা খেলার জন্য উপশালায় ফিরে আসুন এবং আরো পয়েন্ট জিয়ুন.';
+  String get arenaHowDoesPairingWorkAnswer => 'প্রতিযোগিতার শুরুর সময়, খেলোয়াড়দের জোড়া তাদের অনুপাতের ভিত্তিতে আছে.\r\nযত তাড়া তাড়ি আপনি খেলা শেষ করবেন, প্রতিযোগিতার উপশালায় ফিরে আসুন: আপনি তারপর আপনার অনুপাতের খেলোয়াড়ের সাথে জোড়া করা হবে.\r\nএটা সর্বনিম্ন অপেক্ষা সময় নিশ্চিত, যাইহক আপনার হয়তো প্রতিযোগিতার সকল খেলোয়াড়দের মুখোমুখি না হতে পারে.\r\nদ্রুত খেলুন আবং আরো খেলা খেলার জন্য উপশালায় ফিরে আসুন এবং আরো পয়েন্ট জিয়ুন.';
 
   @override
   String get arenaHowDoesItEnd => 'কিভাবে এটা শেষ হবে?';
 
   @override
-  String get arenaHowDoesItEndAnswer => 'প্রতিযোগিতার একটি কাউন্টডাউন আছে. যখন এটা শূন্যতে পৌওছায়, যখন প্রতিযোগিতার অনুপাতে জমে, এবং বিজয়ীকে ঘোষনা করা হয়.\nএই খেলায় অগ্রগতি শেষ হতে হবে, যাইহক তারা প্রতিযোগিতার জন্য গণনা করতে পারবেনা.';
+  String get arenaHowDoesItEndAnswer => 'প্রতিযোগিতার একটি কাউন্টডাউন আছে. যখন এটা শূন্যতে পৌওছায়, যখন প্রতিযোগিতার অনুপাতে জমে, এবং বিজয়ীকে ঘোষনা করা হয়.\r\nএই খেলায় অগ্রগতি শেষ হতে হবে, যাইহক তারা প্রতিযোগিতার জন্য গণনা করতে পারবেনা.';
 
   @override
   String get arenaOtherRules => 'অন্যান্য গুরুত্বপূর্ন নিয়ম';
@@ -605,7 +614,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\r\n\r\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -1609,7 +1618,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleSearchPuzzles => 'ধাঁধা খুজুন';
 
   @override
-  String get puzzleFromMyGamesNone => 'ডাটাবেজে আপনার কোনো ধাঁধা নেই।\nআপনার খেলা থেকে ধাঁধা নেয়ার সম্ভাবনা বাড়াতে র‍্যাপিড এবং ক্লাসিক খেলুন।';
+  String get puzzleFromMyGamesNone => 'ডাটাবেজে আপনার কোনো ধাঁধা নেই।\r\nআপনার খেলা থেকে ধাঁধা নেয়ার সম্ভাবনা বাড়াতে র‍্যাপিড এবং ক্লাসিক খেলুন।';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'প্রশিক্ষণ, বিশ্লেষণ, উন্নতি';
@@ -3068,7 +3077,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get importGame => 'খেলা আমদানী';
 
   @override
-  String get importGameExplanation => 'যখন একটি খেলার PGN যোগ করবেন আপনি পাবেন একটি ব্রাউজাবেল উত্তর,\nএকটি কম্পিউটার বিশ্লেষণ, একটি খেলা আলাপ এবং একটি ভাগাভাগি করার URL.';
+  String get importGameExplanation => 'যখন একটি খেলার PGN যোগ করবেন আপনি পাবেন একটি ব্রাউজাবেল উত্তর,\r\nএকটি কম্পিউটার বিশ্লেষণ, একটি খেলা আলাপ এবং একটি ভাগাভাগি করার URL.';
 
   @override
   String get importGameCaveat => 'Variations will be erased. To keep them, import the PGN via a study.';
@@ -4063,7 +4072,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
-    return 'বাচ্চা ধরনের মধ্যে, লিচেস লোগো পায় একটি $param প্রতীক,\nতাই আপনি জানতে পারবেন আপনার বাচ্চা নিরাপদ.';
+    return 'বাচ্চা ধরনের মধ্যে, লিচেস লোগো পায় একটি $param প্রতীক,\r\nতাই আপনি জানতে পারবেন আপনার বাচ্চা নিরাপদ.';
   }
 
   @override
@@ -4591,7 +4600,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get tournDescription => 'টুর্নামেন্টের বর্ণনা';
 
   @override
-  String get tournDescriptionHelp => 'অংশগ্রহণকারীদের কিছু বলতে চান? সংক্ষেপে লেখার চেষ্টা করুন।\nMarkdown links ব্যবহারযোগ্য: [name](https://url)';
+  String get tournDescriptionHelp => 'অংশগ্রহণকারীদের কিছু বলতে চান? সংক্ষেপে লেখার চেষ্টা করুন।\r\nMarkdown links ব্যবহারযোগ্য: [name](https://url)';
 
   @override
   String get ratedFormHelp => 'খেলাগুলো রেটেড/পয়েন্ট ভিত্তিক এবং খেলোয়াড়দের রেটিং এ প্রভাব ফেলবে';
@@ -4745,7 +4754,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get showMeEverything => 'সবকিছু দেখানো হোক';
 
   @override
-  String get lichessPatronInfo => 'লিচেস একটি অলাভজনক এবং সম্পূর্ণ বিনামূল্য/লিব্রা ওপেন সোর্স সফটওয়্যার।\nসকল পরিচালনা খরচ, উন্নয়ন, এবং বিষয়বস্তু ব্যবহারকারীদের দানের মাধ্যমে সংগৃহীত হয়।';
+  String get lichessPatronInfo => 'লিচেস একটি অলাভজনক এবং সম্পূর্ণ বিনামূল্য/লিব্রা ওপেন সোর্স সফটওয়্যার।\r\nসকল পরিচালনা খরচ, উন্নয়ন, এবং বিষয়বস্তু ব্যবহারকারীদের দানের মাধ্যমে সংগৃহীত হয়।';
 
   @override
   String get nothingToSeeHere => 'এই মুহূর্তে এখানে দেখার কিছু নেই.';

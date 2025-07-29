@@ -27,6 +27,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'टेकबैक ऑफर कैंसल करें';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'सब हटाएं';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'पजल';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'हाल के सर्च';
@@ -478,13 +487,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'कैसे स्कोर की गणना कर रहे हैं?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'एक जीत में 2 अंक का एक बेस स्कोर है, एक ड्रॉ: 1 अंक, और एक नुकसान का कोई अंक नहीं है\nयदि आप लगातार दो गेम जीतते हैं तो आप एक डबल आइकन की शुरुआत करेंगे, जिसका प्रतिनिधित्व एक लौ आइकन होगा।\nनिम्नलिखित गेम दोहरे अंक के लायक बने रहेंगे जब तक कि आप गेम जीतने में असफल हों।\nयही है, एक जीत 4 अंक के लायक होगी, एक ड्रॉ: 2 अंक, और एक नुकसान कोई अंक नहीं रह जाएगा\n\nउदाहरण के लिए, एक ड्रॉ के बाद दो जीत के लायक 6 अंक होंगे: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'एक जीत में 2 अंक का एक बेस स्कोर है, एक ड्रॉ: 1 अंक, और एक नुकसान का कोई अंक नहीं है\r\nयदि आप लगातार दो गेम जीतते हैं तो आप एक डबल आइकन की शुरुआत करेंगे, जिसका प्रतिनिधित्व एक लौ आइकन होगा।\r\nनिम्नलिखित गेम दोहरे अंक के लायक बने रहेंगे जब तक कि आप गेम जीतने में असफल हों।\r\nयही है, एक जीत 4 अंक के लायक होगी, एक ड्रॉ: 2 अंक, और एक नुकसान कोई अंक नहीं रह जाएगा\r\n\r\nउदाहरण के लिए, एक ड्रॉ के बाद दो जीत के लायक 6 अंक होंगे: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'अखाड़ा निडर';
 
   @override
-  String get arenaBerserkAnswer => 'जब कोई खिलाड़ी खेल की शुरुआत में निडर बटन पर क्लिक करता है, तो वे अपने घड़ी का आधा हिस्सा खो देते हैं, लेकिन जीत एक अतिरिक्त टूर्नामेंट बिंदु के बराबर होती है।\n\nनिडर के साथ समय की वृद्धि रद्द हो जाता है। (1 + 2 एक अपवाद है, यह 1 + 0 देता है)\n\nशून्य प्रारंभिक समय (0 + 1, 0 + 2) के साथ खेल के लिए निडर उपलब्ध नहीं है।\n\nनिडर केवल एक अतिरिक्त बिंदु प्रदान करता है यदि आप खेल में कम से कम 7 चालें खेलते हैं।';
+  String get arenaBerserkAnswer => 'जब कोई खिलाड़ी खेल की शुरुआत में निडर बटन पर क्लिक करता है, तो वे अपने घड़ी का आधा हिस्सा खो देते हैं, लेकिन जीत एक अतिरिक्त टूर्नामेंट बिंदु के बराबर होती है।\r\n\r\nनिडर के साथ समय की वृद्धि रद्द हो जाता है। (1 + 2 एक अपवाद है, यह 1 + 0 देता है)\r\n\r\nशून्य प्रारंभिक समय (0 + 1, 0 + 2) के साथ खेल के लिए निडर उपलब्ध नहीं है।\r\n\r\nनिडर केवल एक अतिरिक्त बिंदु प्रदान करता है यदि आप खेल में कम से कम 7 चालें खेलते हैं।';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'कैसे विजेता का फैसला किया है?';
@@ -496,7 +505,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'पेयरिंग काम कैसे करता है?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'टूर्नामेंट की शुरुआत में खिलाड़ियों को उनकी रेटिंग के आधार पर जोड़ा जाता है।\nजैसे ही आप एक खेल खत्म करते हैं, टूर्नामेंट लॉबी पर वापस लौटें: आपको फिर से आपकी रैंकिंग के करीब खिलाड़ी के साथ रखा जाएगा। यह न्यूनतम प्रतीक्षा समय सुनिश्चित करता है, हालांकि आप टूर्नामेंट में अन्य सभी खिलाड़ियों का सामना नहीं कर सकते हैं।\nतेजी से खेलते हैं और अधिक गेम खेलने और अधिक अंक जीतने के लिए लॉबी पर लौटें।';
+  String get arenaHowDoesPairingWorkAnswer => 'टूर्नामेंट की शुरुआत में खिलाड़ियों को उनकी रेटिंग के आधार पर जोड़ा जाता है।\r\nजैसे ही आप एक खेल खत्म करते हैं, टूर्नामेंट लॉबी पर वापस लौटें: आपको फिर से आपकी रैंकिंग के करीब खिलाड़ी के साथ रखा जाएगा। यह न्यूनतम प्रतीक्षा समय सुनिश्चित करता है, हालांकि आप टूर्नामेंट में अन्य सभी खिलाड़ियों का सामना नहीं कर सकते हैं।\r\nतेजी से खेलते हैं और अधिक गेम खेलने और अधिक अंक जीतने के लिए लॉबी पर लौटें।';
 
   @override
   String get arenaHowDoesItEnd => 'यह कैसे समाप्त होता है?';
@@ -605,7 +614,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get arenaTournamentStats => 'टूर्नामेंट आँकड़े';
 
   @override
-  String get arenaRankAvgHelp => 'रैंक औसत आपकी रैंकिंग का एक प्रतिशत है। कम बेहतर है।\n\nउदाहरण के लिए, 100 खिलाड़ियों के टूर्नामेंट में तीसरा स्थान प्राप्त होना = 3%। 1000 खिलाड़ियों के टूर्नामेंट में 10वें स्थान पर होना = 1%।';
+  String get arenaRankAvgHelp => 'रैंक औसत आपकी रैंकिंग का एक प्रतिशत है। कम बेहतर है।\r\n\r\nउदाहरण के लिए, 100 खिलाड़ियों के टूर्नामेंट में तीसरा स्थान प्राप्त होना = 3%। 1000 खिलाड़ियों के टूर्नामेंट में 10वें स्थान पर होना = 1%।';
 
   @override
   String get arenaMedians => 'माध्यिकाओं';
@@ -1609,7 +1618,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleSearchPuzzles => 'पज़ल खोजे';
 
   @override
-  String get puzzleFromMyGamesNone => 'आपके डेटाबेस में कोई पहेली नहीं है, लेकिन लिचेस अभी भी आपसे बहुत प्यार करता है।\n\nआपकी कोई पहेली जुड़ने की संभावना बढ़ाने के लिए तेज़ और शास्त्रीय गेम खेलें!';
+  String get puzzleFromMyGamesNone => 'आपके डेटाबेस में कोई पहेली नहीं है, लेकिन लिचेस अभी भी आपसे बहुत प्यार करता है।\r\n\r\nआपकी कोई पहेली जुड़ने की संभावना बढ़ाने के लिए तेज़ और शास्त्रीय गेम खेलें!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Train, analyse, improve';
@@ -3583,17 +3592,17 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String victoryVsYInZ(String param1, String param2, String param3) {
-    return '$param1 बनाम $param2\n$param3 में';
+    return '$param1 बनाम $param2\r\n$param3 में';
   }
 
   @override
   String defeatVsYInZ(String param1, String param2, String param3) {
-    return '$param1 बनाम $param2\n$param3 में';
+    return '$param1 बनाम $param2\r\n$param3 में';
   }
 
   @override
   String drawVsYInZ(String param1, String param2, String param3) {
-    return '$param1 बनाम $param2\n$param3 में';
+    return '$param1 बनाम $param2\r\n$param3 में';
   }
 
   @override
@@ -4611,7 +4620,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'किसी निर्धारित स्थिति से खेल आरंभ करने के लिए एक वैध FEN डालें।\nयह केवल मूल खेलों के लिए काम करता है, रूपांतरण के साथ नहीं।\nआप $param का प्रयोग FEN स्थिति को प्राप्त करने के लिए कर सकते हैं फिर उसे यहाँ डाल दीजिए।\nप्रारम्भिक स्थिति से खेल को शुरू करने के लिए इसे रिक्त छोड़ दें।';
+    return 'किसी निर्धारित स्थिति से खेल आरंभ करने के लिए एक वैध FEN डालें।\r\nयह केवल मूल खेलों के लिए काम करता है, रूपांतरण के साथ नहीं।\r\nआप $param का प्रयोग FEN स्थिति को प्राप्त करने के लिए कर सकते हैं फिर उसे यहाँ डाल दीजिए।\r\nप्रारम्भिक स्थिति से खेल को शुरू करने के लिए इसे रिक्त छोड़ दें।';
   }
 
   @override
@@ -4743,7 +4752,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess एक चैरिटी और पूरी तरह से फ्री/लिबर ओपन सोर्स सॉफ्टवेयर है।\nसभी परिचालन लागत, विकास और सामग्री पूरी तरह से उपयोगकर्ता दान द्वारा वित्त पोषित हैं।';
+  String get lichessPatronInfo => 'Lichess एक चैरिटी और पूरी तरह से फ्री/लिबर ओपन सोर्स सॉफ्टवेयर है।\r\nसभी परिचालन लागत, विकास और सामग्री पूरी तरह से उपयोगकर्ता दान द्वारा वित्त पोषित हैं।';
 
   @override
   String get nothingToSeeHere => 'इस समय यहां देखने को कुछ भी नहीं है।';

@@ -27,6 +27,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'Clear';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'խնդիրներ';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Recent searches';
@@ -478,13 +487,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Ինչպե՞ս են հաշվարկվում միավորները';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Հաղթանակը գնահատվում է 2 միավոր, ոչ-ոքին՝ 1, իսկ պարտության համար միավոր չի տրվում:\nԵթե հաղթում եք երկու խաղում անընդմեջ՝ ակտիվանում է միավորների կրկնապատկումը, որը ցուցադրվում է կրակի պատկերով:\nՀաջորդ խաղերում նույնպես միավորները կկրկնապատկվեն՝ մինչև առաջին պարտություն:\nԱյսինքն` հաղթանակը 4 միավոր է, ոչ-ոքին՝ 2 , իսկ պարտությունը՝ 0:\n\nՕրինակ, երկու հաղթանակը և ոչ-ոքին իրար հետ ընդհանուր կդառնան 6 միավոր՝ 2 + 2 + (2 х 1)։';
+  String get arenaHowAreScoresCalculatedAnswer => 'Հաղթանակը գնահատվում է 2 միավոր, ոչ-ոքին՝ 1, իսկ պարտության համար միավոր չի տրվում:\r\nԵթե հաղթում եք երկու խաղում անընդմեջ՝ ակտիվանում է միավորների կրկնապատկումը, որը ցուցադրվում է կրակի պատկերով:\r\nՀաջորդ խաղերում նույնպես միավորները կկրկնապատկվեն՝ մինչև առաջին պարտություն:\r\nԱյսինքն` հաղթանակը 4 միավոր է, ոչ-ոքին՝ 2 , իսկ պարտությունը՝ 0:\r\n\r\nՕրինակ, երկու հաղթանակը և ոչ-ոքին իրար հետ ընդհանուր կդառնան 6 միավոր՝ 2 + 2 + (2 х 1)։';
 
   @override
   String get arenaBerserk => 'Բերսերքն Արենայում';
 
   @override
-  String get arenaBerserkAnswer => 'Եթե խաղից առաջ խաղացողը սեղմում է Բերսերքի կոճակը, ապա կորցնում է իր ժամանակի կեսը, սակայն հաղթանակի դեպքում ստանում է լրացուցիչ միավոր:\n\nԺամանակի ավելացման դեպքում էլ Բերսերքը չեղարկում է այդ ավելացումը (1+2-ը բացառություն է՝ այն դառնում է 1+0)։\n\nԲերսերքը հասանելի չէ 0 րոպեով սկսվող պարտիաներում՝ (0+1, 0+2)։\n\nԲերսերքը կտա Ձեզ հավելյալ միավոր, եթե պարտիայում կատարվել է ամենաքիչը 7 քայլ:';
+  String get arenaBerserkAnswer => 'Եթե խաղից առաջ խաղացողը սեղմում է Բերսերքի կոճակը, ապա կորցնում է իր ժամանակի կեսը, սակայն հաղթանակի դեպքում ստանում է լրացուցիչ միավոր:\r\n\r\nԺամանակի ավելացման դեպքում էլ Բերսերքը չեղարկում է այդ ավելացումը (1+2-ը բացառություն է՝ այն դառնում է 1+0)։\r\n\r\nԲերսերքը հասանելի չէ 0 րոպեով սկսվող պարտիաներում՝ (0+1, 0+2)։\r\n\r\nԲերսերքը կտա Ձեզ հավելյալ միավոր, եթե պարտիայում կատարվել է ամենաքիչը 7 քայլ:';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Ինչպե՞ս է որոշվում հաղթողը';
@@ -496,7 +505,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Ինչպե՞ս են կազմվում զույգերը';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Մրցաշարի սկզբում զույգերը կազմվում են ըստ անհատական վարկանիշների:\nԽաղի ավարտից հետո սեղմեք «Դեպի մրցաշար» վերադարձի կոճակը, որից հետո Դուք կստանաք նոր մրցակից՝ ըստ Ձեր զբաղեցրած դիրքի: Վիճակահանությունը կտևի ոչ այդքան երկար, սակայն բոլորի հետ խաղալ չեք կարող, միայն Ձեր մոտակայքում գտնվող խաղացողներից կկազմվի զույգը:\nԽաղացեք արագ և վերադարձեք մրցաշարի հիմնական էջ, որպեսզի խաղաք շատ խաղեր և հավաքեք շատ միավորներ:';
+  String get arenaHowDoesPairingWorkAnswer => 'Մրցաշարի սկզբում զույգերը կազմվում են ըստ անհատական վարկանիշների:\r\nԽաղի ավարտից հետո սեղմեք «Դեպի մրցաշար» վերադարձի կոճակը, որից հետո Դուք կստանաք նոր մրցակից՝ ըստ Ձեր զբաղեցրած դիրքի: Վիճակահանությունը կտևի ոչ այդքան երկար, սակայն բոլորի հետ խաղալ չեք կարող, միայն Ձեր մոտակայքում գտնվող խաղացողներից կկազմվի զույգը:\r\nԽաղացեք արագ և վերադարձեք մրցաշարի հիմնական էջ, որպեսզի խաղաք շատ խաղեր և հավաքեք շատ միավորներ:';
 
   @override
   String get arenaHowDoesItEnd => 'Ինչպե՞ս է ավարտվում մրցաշարը';
@@ -605,7 +614,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\r\n\r\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -4613,7 +4622,7 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Տեղադրեք FEN-ի ճիշտ տողը, որպեսզի յուրաքանչյուր խաղ սկսվի տվյալ դիրքից:\nՍա աշխատում է միայն ստանդարտ խաղերի համար, բայց ոչ տարբերակների հետ:\nԴուք կարող եք օգտագործել $param՝ FEN դիրքը ստեղծելու համար, այնուհետև տեղադրեք այն այստեղ:\nԴաշտը թողեք դատարկ, որպեսզի խաղերը սկսվեն սովորական մեկնարկային դիրքից:';
+    return 'Տեղադրեք FEN-ի ճիշտ տողը, որպեսզի յուրաքանչյուր խաղ սկսվի տվյալ դիրքից:\r\nՍա աշխատում է միայն ստանդարտ խաղերի համար, բայց ոչ տարբերակների հետ:\r\nԴուք կարող եք օգտագործել $param՝ FEN դիրքը ստեղծելու համար, այնուհետև տեղադրեք այն այստեղ:\r\nԴաշտը թողեք դատարկ, որպեսզի խաղերը սկսվեն սովորական մեկնարկային դիրքից:';
   }
 
   @override
@@ -4745,7 +4754,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get showMeEverything => 'Show me everything';
 
   @override
-  String get lichessPatronInfo => 'Lichess-ը բարեգործական կազմակերպություն է, որը տրամադրում է բաց նախնական կոդով ազատ և անվճար ծրագրային ապահովում։\nՕպերացիոն բոլոր ծախսերը, մշակումները և կոնտենտը ֆինանսավորվում են բացառապես օգտատերերի նվիրաբերությունների հաշվին։';
+  String get lichessPatronInfo => 'Lichess-ը բարեգործական կազմակերպություն է, որը տրամադրում է բաց նախնական կոդով ազատ և անվճար ծրագրային ապահովում։\r\nՕպերացիոն բոլոր ծախսերը, մշակումները և կոնտենտը ֆինանսավորվում են բացառապես օգտատերերի նվիրաբերությունների հաշվին։';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';

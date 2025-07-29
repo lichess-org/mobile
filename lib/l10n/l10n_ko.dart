@@ -27,6 +27,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileCancelTakebackOffer => '무르기 요청 취소';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => '지우기';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => '퍼즐';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => '최근 검색어';
@@ -460,25 +469,25 @@ class AppLocalizationsKo extends AppLocalizations {
   String get arenaHowAreScoresCalculated => '점수는 어떻게 계산되나요?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => '승리하면 기본 점수 2점, 비기면 1점, 패할 시 0점을 얻습니다.\n두개의 대국을 연속적으로 이기면 불꽃 모양의 아이콘을 얻으며, 더블 포인트 기록을 시작합니다.\n다음 대국들에서는 패배할 때까지 두 배의 점수를 얻습니다.\n말인 즉슨, 승리시 4점, 무승부시 2점, 패배시는 전과 같이 0점으로 취급됩니다.\n\n예를 들어, 두 번 승리 후 한 번 비길 경우에는 6점을 얻습니다: 2 + 2 (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => '승리하면 기본 점수 2점, 비기면 1점, 패할 시 0점을 얻습니다.\r\n두개의 대국을 연속적으로 이기면 불꽃 모양의 아이콘을 얻으며, 더블 포인트 기록을 시작합니다.\r\n다음 대국들에서는 패배할 때까지 두 배의 점수를 얻습니다.\r\n말인 즉슨, 승리시 4점, 무승부시 2점, 패배시는 전과 같이 0점으로 취급됩니다.\r\n\r\n예를 들어, 두 번 승리 후 한 번 비길 경우에는 6점을 얻습니다: 2 + 2 (2 x 1)';
 
   @override
   String get arenaBerserk => '버서크（Berserk）';
 
   @override
-  String get arenaBerserkAnswer => '대국을 시작할 때, 옆의 \"버서크 (berserk)\" 버튼을 클릭하면, 가진 시간이 절반으로 깎이는 대신에 이길 경우 1점의 보너스 점수를 얻을 수 있습니다.\n\n증초가 있는 타임 컨트롤에서는 증초도 사라집니다. (단, 1+2 는 예외로, 1+0이 됩니다.)\n\n초기 시간이 0일 경우 (예: 0+1,0+2), 버서크에 돌입할 수 없습니다.\n\n버서크로 인한 보너스 점수를 얻기 위해서는 적어도 7수를 두어야 합니다.';
+  String get arenaBerserkAnswer => '대국을 시작할 때, 옆의 \"버서크 (berserk)\" 버튼을 클릭하면, 가진 시간이 절반으로 깎이는 대신에 이길 경우 1점의 보너스 점수를 얻을 수 있습니다.\r\n\r\n증초가 있는 타임 컨트롤에서는 증초도 사라집니다. (단, 1+2 는 예외로, 1+0이 됩니다.)\r\n\r\n초기 시간이 0일 경우 (예: 0+1,0+2), 버서크에 돌입할 수 없습니다.\r\n\r\n버서크로 인한 보너스 점수를 얻기 위해서는 적어도 7수를 두어야 합니다.';
 
   @override
   String get arenaHowIsTheWinnerDecided => '승자는 어떻게 결정합니까?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => '토너먼트의 예정된 종료시각에 가장 많은 점수를 가지고 있는 플레이어가 승자로 결정됩니다.\n\n두 플레이어가 같은 점수일 경우에는, 토너먼트 내에서의 퍼포먼스 레이팅으로 승자를 가릅니다.';
+  String get arenaHowIsTheWinnerDecidedAnswer => '토너먼트의 예정된 종료시각에 가장 많은 점수를 가지고 있는 플레이어가 승자로 결정됩니다.\r\n\r\n두 플레이어가 같은 점수일 경우에는, 토너먼트 내에서의 퍼포먼스 레이팅으로 승자를 가릅니다.';
 
   @override
   String get arenaHowDoesPairingWork => '대전 매칭은 어떻게 이루어집니까?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => '토너먼트가 시작할 때에는, 레이팅을 기준으로 플레이어들이 매칭됩니다.\n게임을 끝내면 바로 토너먼토 로비에 돌아오십시오. 그러면 자신의 토너먼트 순위와 제일 가까운 플레이어와 매칭될 것입니다. 이 방법에 따르면 기다리는 시간이 최소화되지만, 토너먼트 내의 모든 플레이어와 만날 수 없을 수도 있습니다.\n빠르게 두고 로비에 나와 많은 게임을 플레이하여 더 많은 점수를 얻으십시오.';
+  String get arenaHowDoesPairingWorkAnswer => '토너먼트가 시작할 때에는, 레이팅을 기준으로 플레이어들이 매칭됩니다.\r\n게임을 끝내면 바로 토너먼토 로비에 돌아오십시오. 그러면 자신의 토너먼트 순위와 제일 가까운 플레이어와 매칭될 것입니다. 이 방법에 따르면 기다리는 시간이 최소화되지만, 토너먼트 내의 모든 플레이어와 만날 수 없을 수도 있습니다.\r\n빠르게 두고 로비에 나와 많은 게임을 플레이하여 더 많은 점수를 얻으십시오.';
 
   @override
   String get arenaHowDoesItEnd => '토너먼트는 어떻게 종료됩니까?';
@@ -587,7 +596,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get arenaTournamentStats => '토너먼트 통계';
 
   @override
-  String get arenaRankAvgHelp => '백분위 순위는 말 그대로 순위의 백분율입니다. 즉, 백분위 순위는 낮을수록 더 높은 순위를 의미합니다. \n\n예를 들어, 100명의 참가자가 참여하는 토너먼트에서 3위를 차지하면 3%가 되고, 1000명의 참가자가 참여하는 토너먼트에서 10위를 차지하면 1%가 됩니다.';
+  String get arenaRankAvgHelp => '백분위 순위는 말 그대로 순위의 백분율입니다. 즉, 백분위 순위는 낮을수록 더 높은 순위를 의미합니다. \r\n\r\n예를 들어, 100명의 참가자가 참여하는 토너먼트에서 3위를 차지하면 3%가 되고, 1000명의 참가자가 참여하는 토너먼트에서 10위를 차지하면 1%가 됩니다.';
 
   @override
   String get arenaMedians => '중앙값';
@@ -1587,7 +1596,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleSearchPuzzles => '퍼즐 찾기';
 
   @override
-  String get puzzleFromMyGamesNone => '데이터베이스에 퍼즐이 없습니다만, Lichess는 여전히 당신을 사랑합니다.\n래피드나 클래시컬 게임을 플레이해서 당신의 퍼즐이 추가될 확률을 높이세요!';
+  String get puzzleFromMyGamesNone => '데이터베이스에 퍼즐이 없습니다만, Lichess는 여전히 당신을 사랑합니다.\r\n래피드나 클래시컬 게임을 플레이해서 당신의 퍼즐이 추가될 확률을 높이세요!';
 
   @override
   String get puzzlePuzzleDashboardDescription => '훈련, 분석, 개선';
@@ -4585,7 +4594,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return '모든 대국을 주어진 포지션으로 시작하려면 FEN을 붙여넣으세요.\n일반 대국이 아닌 변형 체스에는 적용되지 않습니다.\nFEN 포지션을 생성하기 위해 $param를 사용할 수 있습니다.\n비워두면 일반 시작 포지션에서 시작합니다.';
+    return '모든 대국을 주어진 포지션으로 시작하려면 FEN을 붙여넣으세요.\r\n일반 대국이 아닌 변형 체스에는 적용되지 않습니다.\r\nFEN 포지션을 생성하기 위해 $param를 사용할 수 있습니다.\r\n비워두면 일반 시작 포지션에서 시작합니다.';
   }
 
   @override
@@ -4717,7 +4726,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get showMeEverything => '모두 보기';
 
   @override
-  String get lichessPatronInfo => 'Lichess는 비영리 기구이며 완전한 무료/자유 오픈소스 소프트웨어입니다.\n모든 운영 비용, 개발, 컨텐츠 조달은 전적으로 사용자들의 기부로 이루어집니다.';
+  String get lichessPatronInfo => 'Lichess는 비영리 기구이며 완전한 무료/자유 오픈소스 소프트웨어입니다.\r\n모든 운영 비용, 개발, 컨텐츠 조달은 전적으로 사용자들의 기부로 이루어집니다.';
 
   @override
   String get nothingToSeeHere => '지금은 여기에 볼 것이 없습니다.';

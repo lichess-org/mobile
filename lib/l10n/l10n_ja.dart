@@ -27,6 +27,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileCancelTakebackOffer => '待ったをキャンセル';
 
   @override
+  String get mobileCasualGame => '(Casual)';
+
+  @override
   String get mobileClearButton => 'クリア';
 
   @override
@@ -115,6 +118,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => '問題';
+
+  @override
+  String get mobileRatedGame => '(Rated)';
+
+  @override
+  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => '最近の検索';
@@ -460,13 +469,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'スコアの計算方法は？';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => '基本は勝ちが 2 点、ドローが 1 点、負けが 0 点です。\n2 連勝すると次のゲームから「2倍ボーナス」となり、炎のアイコンが表示されます。\n連勝後のゲームは、連勝が途切れるまで基本の点が 2 倍になります。つまり勝ちが 4 点、ドローが 2 点です。\nたとえば 2 連勝の後ドローなら合計は 2 + 2 + (2 x 1) = 6 点になります。';
+  String get arenaHowAreScoresCalculatedAnswer => '基本は勝ちが 2 点、ドローが 1 点、負けが 0 点です。\r\n2 連勝すると次のゲームから「2倍ボーナス」となり、炎のアイコンが表示されます。\r\n連勝後のゲームは、連勝が途切れるまで基本の点が 2 倍になります。つまり勝ちが 4 点、ドローが 2 点です。\r\nたとえば 2 連勝の後ドローなら合計は 2 + 2 + (2 x 1) = 6 点になります。';
 
   @override
   String get arenaBerserk => 'バーサーク（Berserk）';
 
   @override
-  String get arenaBerserkAnswer => 'ゲーム開始時に時計の横の「バーサーク (berserk) 」ボタンをクリックすると、持時間が半分に減る代わりに勝った時に 1 点のボーナス点がもらえます。\n追加秒のある場合は追加秒もなくなります（ただし 1+2 は例外で 1+0 になります）。\n持時間が「0分+追加秒」の場合（0+1、0+2）はバーサークできません。\nバーサーク勝ちのボーナス点を得るには少なくとも 7 手指す必要があります。';
+  String get arenaBerserkAnswer => 'ゲーム開始時に時計の横の「バーサーク (berserk) 」ボタンをクリックすると、持時間が半分に減る代わりに勝った時に 1 点のボーナス点がもらえます。\r\n追加秒のある場合は追加秒もなくなります（ただし 1+2 は例外で 1+0 になります）。\r\n持時間が「0分+追加秒」の場合（0+1、0+2）はバーサークできません。\r\nバーサーク勝ちのボーナス点を得るには少なくとも 7 手指す必要があります。';
 
   @override
   String get arenaHowIsTheWinnerDecided => '優勝者の決め方は？';
@@ -478,7 +487,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get arenaHowDoesPairingWork => '対局の組み合わせはどう決まりますか？';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'トーナメントの最初はレーティングによって組み合わせが決まります。対局が終わったらすぐにトーナメント・ロビーに戻ってください。間もなく順位の近い相手と対局の組み合わせが決まります。これによって待ち時間は少なくなりますが、ただし他のすべての参加者とは対局しないかもしれません。\n早く指して早くロビーに戻れば、それだけ対局数が増えてポイントも増えるでしょう。';
+  String get arenaHowDoesPairingWorkAnswer => 'トーナメントの最初はレーティングによって組み合わせが決まります。対局が終わったらすぐにトーナメント・ロビーに戻ってください。間もなく順位の近い相手と対局の組み合わせが決まります。これによって待ち時間は少なくなりますが、ただし他のすべての参加者とは対局しないかもしれません。\r\n早く指して早くロビーに戻れば、それだけ対局数が増えてポイントも増えるでしょう。';
 
   @override
   String get arenaHowDoesItEnd => '終了のしかたは？';
@@ -587,7 +596,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get arenaTournamentStats => 'トーナメントの統計';
 
   @override
-  String get arenaRankAvgHelp => '平均順位はあなたの順位の百分位です。低いほど優秀です。\n\nたとえば 100 人参加のトーナメントで 3 位なら 3 %、 1000 人参加のトーナメントで 10 位なら 1 %となります。';
+  String get arenaRankAvgHelp => '平均順位はあなたの順位の百分位です。低いほど優秀です。\r\n\r\nたとえば 100 人参加のトーナメントで 3 位なら 3 %、 1000 人参加のトーナメントで 10 位なら 1 %となります。';
 
   @override
   String get arenaMedians => '中央値';
@@ -3040,7 +3049,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get importGame => '棋譜をインポート';
 
   @override
-  String get importGameExplanation => 'ゲームの PGN を貼りつけると、ブラウザ上でのリプレイ、\nコンピュータ解析、ゲームチャット、共有可能 URL が得られます。';
+  String get importGameExplanation => 'ゲームの PGN を貼りつけると、ブラウザ上でのリプレイ、\r\nコンピュータ解析、ゲームチャット、共有可能 URL が得られます。';
 
   @override
   String get importGameCaveat => '変化手順は消えます。残したい場合は研究を経由して PGN をインポートしてください。';
@@ -4566,7 +4575,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tournDescriptionHelp => '参加者に特に説明しておきたいことはありますか？　短く書いてください。リンクも入れられます：[name](https://url)';
 
   @override
-  String get ratedFormHelp => 'レート戦です\nプレイヤーのレーティングが動きます';
+  String get ratedFormHelp => 'レート戦です\r\nプレイヤーのレーティングが動きます';
 
   @override
   String get onlyMembersOfTeam => 'チームメンバーのみ';
@@ -4585,7 +4594,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return '有効な FEN をペーストすると全対局がその局面から始まります。\n通常ルールのチェスだけで、バリアントには使えません。\n$param を使えば FEN が作れます。それをここにペーストするだけです。\n通常の開始局面から始める場合はここは空白のままです。';
+    return '有効な FEN をペーストすると全対局がその局面から始まります。\r\n通常ルールのチェスだけで、バリアントには使えません。\r\n$param を使えば FEN が作れます。それをここにペーストするだけです。\r\n通常の開始局面から始める場合はここは空白のままです。';
   }
 
   @override
@@ -4717,7 +4726,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get showMeEverything => 'すべてを表示';
 
   @override
-  String get lichessPatronInfo => 'Lichess は非営利組織であり、完全に無料/自由なオープンソースソフトウェアです。\n運営費、開発、コンテンツを支えているのはすべてユーザーの寄付です。';
+  String get lichessPatronInfo => 'Lichess は非営利組織であり、完全に無料/自由なオープンソースソフトウェアです。\r\n運営費、開発、コンテンツを支えているのはすべてユーザーの寄付です。';
 
   @override
   String get nothingToSeeHere => '今は何もありません。';
