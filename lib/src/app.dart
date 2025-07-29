@@ -135,16 +135,18 @@ class _AppState extends ConsumerState<Application> {
 
           final time = seek.clock != null ? seek.clock!.$1.inMinutes.toString() : '-';
           final increment = seek.clock != null ? seek.clock!.$2.inSeconds.toString() : '0';
-          final rated = seek.rated ? AppLocalizations.of(ctx).mobileRatedGame : AppLocalizations.of(ctx).mobileCasualGame;
+          final rated = seek.rated
+              ? AppLocalizations.of(ctx).mobileRatedGame
+              : AppLocalizations.of(ctx).mobileCasualGame;
 
           final variant = (seek.variant == Variant.standard)
               ? Variant.standard.label
               : (seek.variant != null && seek.timeIncrement != null)
-                  ? Perf.fromVariantAndSpeed(
-                      seek.variant!,
-                      Speed.fromTimeIncrement(seek.timeIncrement!),
-                    ).shortTitle
-                  : ' ';
+              ? Perf.fromVariantAndSpeed(
+                  seek.variant!,
+                  Speed.fromTimeIncrement(seek.timeIncrement!),
+                ).shortTitle
+              : ' ';
 
           return ShortcutItem(
             type: 'recent_seek_$index',
