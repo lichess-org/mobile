@@ -11,7 +11,7 @@ Future<Contacts> contacts(Ref ref) {
   // We call this each time the account drawer is opened, so let's cache it for a short while.
   return ref.withClientCacheFor(
     (client) => MessageRepository(client).loadContacts(),
-    const Duration(minutes: 5),
+    const Duration(seconds: 10),
   );
 }
 
