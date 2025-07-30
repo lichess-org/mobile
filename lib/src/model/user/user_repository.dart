@@ -49,6 +49,10 @@ class UserRepository {
     );
   }
 
+  Future<Crosstable> getCrosstable(UserId id1, UserId id2) {
+    return client.readJson(Uri(path: '/api/crosstable/$id1/$id2'), mapper: Crosstable.fromJson);
+  }
+
   Future<IList<UserActivity>> getActivity(UserId id) {
     return client.readJsonList(Uri(path: '/api/user/$id/activity'), mapper: _userActivityFromJson);
   }

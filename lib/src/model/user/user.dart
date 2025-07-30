@@ -429,3 +429,18 @@ class UserRatingHistoryPoint {
 
   const UserRatingHistoryPoint({required this.date, required this.elo});
 }
+
+@freezed
+sealed class Crosstable with _$Crosstable {
+  const factory Crosstable({required Map<UserId, int> users, required int nbGames}) = _Crosstable;
+
+  factory Crosstable.fromJson(Map<String, dynamic> json) {
+    return Crosstable(
+      nbGames: pick(json, 'nbGames').required().asIntOrThrow(),
+      users: pick(
+        json,
+        'users',
+      ).asMapOrThrow<String, int>().map((key, value) => MapEntry(UserId(key), value)),
+    );
+  }
+}

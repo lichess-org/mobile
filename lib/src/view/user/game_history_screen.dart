@@ -62,7 +62,9 @@ class GameHistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
     final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user));
-    final title = filtersInUse.count == 0
+    final title = gameFilter.opponent != null
+        ? Text('Games vs ${gameFilter.opponent!.username}')
+        : filtersInUse.count == 0
         ? nbGamesAsync.when(
             data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
             loading: () => const ButtonLoadingIndicator(),
