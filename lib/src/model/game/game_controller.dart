@@ -138,7 +138,8 @@ class GameController extends _$GameController {
       return;
     }
 
-    if (_socketClient.route != socketUri(gameFullId)) {
+    final currentClient = ref.read(socketPoolProvider).currentClient;
+    if (currentClient.route != _socketClient.route) {
       _socketClient = _openSocket();
     } else if (!_socketClient.isConnected) {
       _socketClient.connect();
