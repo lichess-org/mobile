@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -120,6 +119,25 @@ class _Body extends ConsumerWidget {
     }
   }
 
+  List<List<Message>> _groupContiguousByUser(List<Message> messages) {
+    final grouped = <List<Message>>[];
+    if (messages.isEmpty) return grouped;
+
+    var currentGroup = <Message>[];
+    for (final message in messages) {
+      if (currentGroup.isEmpty || currentGroup.last.userId == message.userId) {
+        currentGroup.add(message);
+      } else {
+        grouped.add(currentGroup);
+        currentGroup = [message];
+      }
+    }
+    if (currentGroup.isNotEmpty) {
+      grouped.add(currentGroup);
+    }
+    return grouped;
+  }
+
   List<DisplayItem> buildDisplayItems(ConversationState state) {
     final messages = state.convo.messages;
     final items = <DisplayItem>[];
@@ -129,8 +147,8 @@ class _Body extends ConsumerWidget {
     items.add(ContactTypingItem());
 
     void processDayMessages() {
-      final byUser = groupBy(dayMessages, (m) => m.userId);
-      for (final group in byUser.values) {
+      final byUser = _groupContiguousByUser(dayMessages);
+      for (final group in byUser) {
         for (var i = 0; i < group.length; i++) {
           final m = group[i];
           items.add(
