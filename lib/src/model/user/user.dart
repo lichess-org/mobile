@@ -96,6 +96,8 @@ sealed class User with _$User {
   LightUser get lightUser =>
       LightUser(id: id, name: username, title: title, isPatron: isPatron, flair: flair);
 
+  bool get isBot => title == 'BOT';
+
   factory User.fromServerJson(Map<String, dynamic> json) => User.fromPick(pick(json).required());
 
   factory User.fromPick(RequiredPick pick) {

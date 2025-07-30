@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/user/perf_cards.dart';
@@ -139,6 +141,7 @@ class _UserProfileListView extends ConsumerWidget {
     final activity = ref.watch(_userActivityProvider(user.id));
     final nbOfGames = ref.watch(userNumberOfGamesProvider(user.lightUser)).valueOrNull ?? 0;
     final session = ref.watch(authSessionProvider);
+    final kidMode = ref.watch(kidModeProvider);
     final isLive = ref.watch(
       _currentGameProvider(user.id).select((game) => game.valueOrNull?.playable ?? false),
     );
@@ -182,6 +185,17 @@ class _UserProfileListView extends ConsumerWidget {
                   title: Text(context.l10n.challengeChallengeToPlay),
                   leading: const Icon(LichessIcons.crossed_swords),
                   onTap: () => UserScreen.challengeUser(user, context: context, ref: ref),
+                ),
+              if (user.blocking != true && !user.isBot && kidMode.valueOrNull == false)
+                ListTile(
+                  leading: const Icon(Icons.chat_bubble_outline),
+                  title: Text(context.l10n.composeMessage),
+                  onTap: () {
+                    Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).push(ConversationScreen.buildRoute(context, user: user.lightUser));
+                  },
                 ),
               if (user.followable == true && user.following != true)
                 ListTile(
