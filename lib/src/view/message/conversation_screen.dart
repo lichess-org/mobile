@@ -253,7 +253,7 @@ class _MessageBubble extends StatelessWidget {
   Color _bubbleColor(BuildContext context) {
     return isMe
         ? ColorScheme.of(context).secondaryContainer
-        : ColorScheme.of(context).surfaceContainerHighest;
+        : ColorScheme.of(context).surfaceContainer;
   }
 
   Color _textColor(BuildContext context) {
