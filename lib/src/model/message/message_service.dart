@@ -55,6 +55,11 @@ class MessageService {
   Future<void> _onNotificationResponse(UserId conversationId) async {
     final user = await ref.withClient((client) => UserRepository(client).getUser(conversationId));
 
+    if (user.kid == true) {
+      // If the user is in kid mode, we don't open the conversation screen.
+      return;
+    }
+
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
 

@@ -94,6 +94,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final authController = ref.watch(authControllerProvider);
     final account = ref.watch(accountProvider);
     final userSession = ref.watch(authSessionProvider);
+    final kidMode = account.valueOrNull?.kid ?? false;
     final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
 
     final inboxUnreadCount = ref.watch(
@@ -161,19 +162,23 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                 Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute(context));
               },
             ),
-            ListTile(
-              leading: Badge.count(
-                isLabelVisible: inboxUnreadCount > 0,
-                count: inboxUnreadCount,
-                child: const Icon(Icons.mail_outline),
+            if (account.hasValue && !kidMode)
+              ListTile(
+                leading: Badge.count(
+                  isLabelVisible: inboxUnreadCount > 0,
+                  count: inboxUnreadCount,
+                  child: const Icon(Icons.mail_outline),
+                ),
+                title: Text(context.l10n.inbox),
+                enabled: isOnline,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(ContactsScreen.buildRoute(context));
+                },
               ),
-              title: Text(context.l10n.inbox),
-              enabled: isOnline,
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context, rootNavigator: true).push(ContactsScreen.buildRoute(context));
-              },
-            ),
             if (authController.isLoading)
               const ListTile(
                 leading: Icon(Icons.logout_outlined),
