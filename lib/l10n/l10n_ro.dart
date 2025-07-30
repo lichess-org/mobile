@@ -27,9 +27,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Anulați propunerea de revanșă';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Resetare';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Puzzle-uri';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Căutări recente';

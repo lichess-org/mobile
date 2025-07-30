@@ -7,27 +7,19 @@ import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
-import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/message/message_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/quick_actions.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
-import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
-import 'package:quick_actions/quick_actions.dart';
 
 /// Application initialization and main entry point.
 class AppInitializationScreen extends ConsumerWidget {
@@ -65,8 +57,6 @@ class Application extends ConsumerStatefulWidget {
   @override
   ConsumerState<Application> createState() => _AppState();
 }
-
-GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class _AppState extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
@@ -114,48 +104,10 @@ class _AppState extends ConsumerState<Application> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final recentSeeks = ref.watch(recentGameSeekProvider).seeks;
-
-      initializeQuickActions();
-
       final ctx = navigatorKey.currentContext;
-      if (ctx == null) return;
-
-      const QuickActions quickActions = QuickActions();
-      quickActions.setShortcutItems(<ShortcutItem>[
-        ShortcutItem(
-          type: 'play_puzzles',
-          localizedTitle: AppLocalizations.of(ctx).puzzleThemeMix,
-          icon: 'extension',
-        ),
-
-        ...recentSeeks.asMap().entries.map((entry) {
-          final index = entry.key;
-          final seek = entry.value;
-
-          final time = seek.clock != null ? seek.clock!.$1.inMinutes.toString() : '-';
-          final increment = seek.clock != null ? seek.clock!.$2.inSeconds.toString() : '0';
-          final rated = seek.rated
-              ? AppLocalizations.of(ctx).mobileRatedGame
-              : AppLocalizations.of(ctx).mobileCasualGame;
-
-          final variant = (seek.variant == Variant.standard)
-              ? Variant.standard.label
-              : (seek.variant != null && seek.timeIncrement != null)
-              ? Perf.fromVariantAndSpeed(
-                  seek.variant!,
-                  Speed.fromTimeIncrement(seek.timeIncrement!),
-                ).shortTitle
-              : ' ';
-
-          return ShortcutItem(
-            type: 'recent_seek_$index',
-            localizedTitle: '$time+$increment $rated $variant',
-            localizedSubtitle: AppLocalizations.of(ctx).mobileRecentlyPlayed,
-            icon: 'add_icon',
-          );
-        }),
-      ]);
+      if (ctx != null) {
+        ref.read(quickActionServiceProvider).start(ctx);
+      }
     });
   }
 
@@ -195,31 +147,5 @@ class _AppState extends ConsumerState<Application> {
       },
       navigatorObservers: [rootNavPageRouteObserver],
     );
-  }
-
-  void initializeQuickActions() {
-    const QuickActions quickActions = QuickActions();
-    quickActions.initialize((String shortcutType) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final ctx = navigatorKey.currentContext;
-        if (ctx == null) return;
-
-        if (shortcutType.startsWith('recent_seek_')) {
-          final index = int.tryParse(shortcutType.split('_').last);
-          if (index != null) {
-            final recentSeeks = ref.watch(recentGameSeekProvider).seeks;
-            Navigator.of(
-              ctx,
-              rootNavigator: true,
-            ).push(GameScreen.buildRoute(ctx, seek: recentSeeks[index]));
-          }
-        } else if (shortcutType == 'play_puzzles') {
-          Navigator.of(
-            ctx,
-            rootNavigator: true,
-          ).push(PuzzleScreen.buildRoute(ctx, angle: const PuzzleTheme(PuzzleThemeKey.mix)));
-        }
-      });
-    });
   }
 }

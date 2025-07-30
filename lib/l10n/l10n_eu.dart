@@ -27,9 +27,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Bertan behera utzi atzera-egite eskaera';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Garbitu';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Ariketak';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Azken bilaketak';

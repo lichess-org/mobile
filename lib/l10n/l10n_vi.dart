@@ -27,9 +27,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Hủy đề nghị đi lại';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Xóa';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Câu đố';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Tìm kiếm gần đây';

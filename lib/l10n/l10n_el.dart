@@ -27,9 +27,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Ακυρώστε την προσφορά αναίρεσης της κίνησης';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Εκκαθάριση';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Γρίφοι';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Πρόσφατες αναζητήσεις';

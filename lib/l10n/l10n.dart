@@ -230,12 +230,6 @@ abstract class AppLocalizations {
   /// **'Cancel takeback offer'**
   String get mobileCancelTakebackOffer;
 
-  /// No description provided for @mobileCasualGame.
-  ///
-  /// In en, this message translates to:
-  /// **'(Casual)'**
-  String get mobileCasualGame;
-
   /// No description provided for @mobileClearButton.
   ///
   /// In en, this message translates to:
@@ -403,18 +397,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Puzzles'**
   String get mobilePuzzlesTab;
-
-  /// No description provided for @mobileRatedGame.
-  ///
-  /// In en, this message translates to:
-  /// **'(Rated)'**
-  String get mobileRatedGame;
-
-  /// No description provided for @mobileRecentlyPlayed.
-  ///
-  /// In en, this message translates to:
-  /// **'Recently played'**
-  String get mobileRecentlyPlayed;
 
   /// No description provided for @mobileRecentSearches.
   ///

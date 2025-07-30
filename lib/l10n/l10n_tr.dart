@@ -27,9 +27,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Geri alma teklifini iptal et';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Temizle';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Bulmacalar';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Son aramalar';

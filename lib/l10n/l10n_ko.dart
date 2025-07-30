@@ -27,9 +27,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileCancelTakebackOffer => '무르기 요청 취소';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => '지우기';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => '퍼즐';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => '최근 검색어';

@@ -27,9 +27,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'رد درخواست برگرداندن';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'پاکسازی';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'معماها';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'واپسین جستجوها';

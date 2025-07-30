@@ -27,9 +27,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Откачи понуду за повлачење потеза';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Очисти';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Вежбе';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Скорашње претраге';

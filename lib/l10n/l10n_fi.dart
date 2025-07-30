@@ -27,9 +27,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Peruuta siirron peruutuspyyntö';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Tyhjennä';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Tehtävät';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Viimeisimmät haut';

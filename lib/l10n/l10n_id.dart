@@ -27,9 +27,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Batalkan tawaran gerakan';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Hapus';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Teka-teki';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Recent searches';

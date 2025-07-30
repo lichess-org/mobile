@@ -27,9 +27,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Zrušiť žiadosť o vrátenie ťahu';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Odstrániť';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Úlohy';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Posledné vyhľadávania';

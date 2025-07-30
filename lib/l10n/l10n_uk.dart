@@ -27,9 +27,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Скасувати пропозицію повернення ходу';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Очистити';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Задачі';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Недавні пошуки';

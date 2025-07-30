@@ -27,9 +27,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Nuligi proponon pri malmovo';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Malplenigi';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Puzloj';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Lastaj serĉoj';

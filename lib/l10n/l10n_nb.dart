@@ -27,9 +27,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Avbryt tilbud om å angre';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Tøm';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Nøtter';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Nylige søk';

@@ -6,7 +6,6 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Are you sure?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Board settings</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancel takeback offer</string>
-  <string name="casualGame" comment="This is shown in quick actions to show the name is casual">(Casual)</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Clear</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Clear saved move</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Join a game</string>
@@ -35,8 +34,6 @@
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">You will lose your current streak and your score will be saved.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Play puzzles from your favorite openings, or choose a theme.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Puzzles</string>
-  <string name="ratedGame" comment="This is shown in quick actions to show the name is rated">(Rated)</string>
-  <string name="recentlyPlayed" comment="Subtitle shown in quick actions for a recently played game">Recently played</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recent searches</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Remove bookmark</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Server analysis</string>

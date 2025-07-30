@@ -27,9 +27,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Zrušit nabídku vrácení tahu';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Vymazat';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Úlohy';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Nedávná vyhledávání';

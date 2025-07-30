@@ -27,9 +27,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Annulla richiesta di ritiro mossa';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Elimina';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Tattiche';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Ricerche recenti';

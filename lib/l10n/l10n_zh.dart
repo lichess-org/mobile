@@ -27,9 +27,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileCancelTakebackOffer => '取消悔棋请求';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => '清空';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => '谜题';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => '最近搜索';

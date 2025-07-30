@@ -27,9 +27,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Visszalépés kérésének visszavonása';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'Törlés';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => 'Feladvány';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => 'Keresési előzmények';

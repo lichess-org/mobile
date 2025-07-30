@@ -27,9 +27,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileCancelTakebackOffer => '待ったをキャンセル';
 
   @override
-  String get mobileCasualGame => '(Casual)';
-
-  @override
   String get mobileClearButton => 'クリア';
 
   @override
@@ -118,12 +115,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mobilePuzzlesTab => '問題';
-
-  @override
-  String get mobileRatedGame => '(Rated)';
-
-  @override
-  String get mobileRecentlyPlayed => 'Recently played';
 
   @override
   String get mobileRecentSearches => '最近の検索';

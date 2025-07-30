@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_seek.freezed.dart';
 part 'game_seek.g.dart';
@@ -121,41 +122,25 @@ sealed class GameSeek with _$GameSeek {
   factory GameSeek.fromJson(Map<String, dynamic> json) => _$GameSeekFromJson(json);
 }
 
-class RecentGameSeekPrefs implements Serializable {
-  final List<GameSeek> seeks;
+@Freezed(fromJson: true, toJson: true)
+sealed class RecentGameSeekPrefs with _$RecentGameSeekPrefs implements Serializable {
+  const RecentGameSeekPrefs._();
 
-  const RecentGameSeekPrefs({required this.seeks});
+  const factory RecentGameSeekPrefs({required IList<GameSeek> seeks}) = _RecentGameSeekPrefs;
 
-  @override
-  Map<String, dynamic> toJson() {
-    return {'seeks': seeks.map((e) => e.toJson()).toList()};
-  }
+  factory RecentGameSeekPrefs.fromJson(Map<String, dynamic> json) =>
+      _$RecentGameSeekPrefsFromJson(json);
 
-  factory RecentGameSeekPrefs.fromJson(Map<String, dynamic> json) {
-    final rawList = json['seeks'] as List<dynamic>? ?? [];
-    return RecentGameSeekPrefs(
-      seeks: rawList.map((item) => GameSeek.fromJson(item as Map<String, dynamic>)).toList(),
-    );
-  }
+  static const empty = RecentGameSeekPrefs(seeks: IListConst([]));
 
   RecentGameSeekPrefs copyWithAdded(GameSeek newRequest) {
-    final existing = seeks.where((r) => r != newRequest).toList();
-    final updated = [newRequest, ...existing];
-    if (updated.length > 3) {
-      updated.removeRange(3, updated.length);
-    }
-    return RecentGameSeekPrefs(seeks: updated);
+    final updated = [newRequest, ...seeks.where((r) => r != newRequest)];
+    return copyWith(seeks: IList(updated.take(3).toList()));
   }
-
-  static const empty = RecentGameSeekPrefs(seeks: []);
 }
 
-final recentGameSeekProvider = NotifierProvider<RecentGameSeekNotifier, RecentGameSeekPrefs>(
-  RecentGameSeekNotifier.new,
-);
-
-class RecentGameSeekNotifier extends Notifier<RecentGameSeekPrefs>
-    with PreferencesStorage<RecentGameSeekPrefs> {
+@Riverpod(keepAlive: true)
+class RecentGameSeek extends _$RecentGameSeek with PreferencesStorage<RecentGameSeekPrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.gameSeeks;
