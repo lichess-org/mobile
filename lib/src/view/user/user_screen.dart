@@ -180,6 +180,30 @@ class _UserProfileListView extends ConsumerWidget {
         ListSection(
           hasLeading: true,
           children: [
+            if (session != null &&
+                crosstable?.valueOrNull != null &&
+                (crosstable?.valueOrNull?.nbGames ?? 0) > 0) ...[
+              () {
+                final crosstableData = crosstable!.valueOrNull!;
+                final currentUserScore = crosstableData.users[session.user.id] ?? 0;
+                final otherUserScore = crosstableData.users[user.id] ?? 0;
+
+                return ListTile(
+                  title: Text(context.l10n.yourScore('$currentUserScore - $otherUserScore')),
+                  leading: const Icon(Icons.scoreboard),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      GameHistoryScreen.buildRoute(
+                        context,
+                        user: session.user,
+                        isOnline: connectivity.valueOrNull?.isOnline == true,
+                        gameFilter: GameFilterState(opponent: user),
+                      ),
+                    );
+                  },
+                );
+              }(),
+            ],
             ListTile(
               title: Text(context.l10n.watchGames),
               leading: const Icon(Icons.live_tv_outlined),
@@ -199,29 +223,6 @@ class _UserProfileListView extends ConsumerWidget {
                   onTap: () => UserScreen.challengeUser(user, context: context, ref: ref),
                 ),
 
-              if (crosstable?.valueOrNull != null &&
-                  (crosstable?.valueOrNull?.nbGames ?? 0) > 0) ...[
-                () {
-                  final crosstableData = crosstable!.valueOrNull!;
-                  final currentUserScore = crosstableData.users[session.user.id] ?? 0;
-                  final otherUserScore = crosstableData.users[user.id] ?? 0;
-
-                  return ListTile(
-                    title: Text(context.l10n.yourScore('$currentUserScore - $otherUserScore')),
-                    leading: const Icon(Icons.sports_score),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        GameHistoryScreen.buildRoute(
-                          context,
-                          user: session.user,
-                          isOnline: connectivity.valueOrNull?.isOnline == true,
-                          gameFilter: GameFilterState(opponent: user),
-                        ),
-                      );
-                    },
-                  );
-                }(),
-              ],
               if (user.blocking != true && !user.isBot && kidMode.valueOrNull == false)
                 ListTile(
                   leading: const Icon(Icons.chat_bubble_outline),

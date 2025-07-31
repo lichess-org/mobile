@@ -431,8 +431,28 @@ class UserRatingHistoryPoint {
 }
 
 @freezed
+sealed class CrosstableMatchup with _$CrosstableMatchup {
+  const factory CrosstableMatchup({required IMap<UserId, int> users, required int nbGames}) =
+      _CrosstableMatchup;
+
+  factory CrosstableMatchup.fromJson(Map<String, dynamic> json) {
+    return CrosstableMatchup(
+      nbGames: pick(json, 'nbGames').required().asIntOrThrow(),
+      users: pick(
+        json,
+        'users',
+      ).asMapOrThrow<String, int>().map((key, value) => MapEntry(UserId(key), value)).toIMap(),
+    );
+  }
+}
+
+@freezed
 sealed class Crosstable with _$Crosstable {
-  const factory Crosstable({required Map<UserId, int> users, required int nbGames}) = _Crosstable;
+  const factory Crosstable({
+    required IMap<UserId, int> users,
+    required int nbGames,
+    CrosstableMatchup? matchup,
+  }) = _Crosstable;
 
   factory Crosstable.fromJson(Map<String, dynamic> json) {
     return Crosstable(
@@ -440,7 +460,10 @@ sealed class Crosstable with _$Crosstable {
       users: pick(
         json,
         'users',
-      ).asMapOrThrow<String, int>().map((key, value) => MapEntry(UserId(key), value)),
+      ).asMapOrThrow<String, int>().map((key, value) => MapEntry(UserId(key), value)).toIMap(),
+      matchup: pick(json, 'matchup').letOrNull((matchupPick) {
+        return CrosstableMatchup.fromJson(matchupPick.asMapOrEmpty<String, dynamic>());
+      }),
     );
   }
 }

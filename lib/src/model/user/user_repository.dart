@@ -49,8 +49,11 @@ class UserRepository {
     );
   }
 
-  Future<Crosstable> getCrosstable(UserId id1, UserId id2) {
-    return client.readJson(Uri(path: '/api/crosstable/$id1/$id2'), mapper: Crosstable.fromJson);
+  Future<Crosstable> getCrosstable(UserId id1, UserId id2, {bool matchup = false}) {
+    return client.readJson(
+      Uri(path: '/api/crosstable/$id1/$id2', queryParameters: {'matchup': matchup.toString()}),
+      mapper: Crosstable.fromJson,
+    );
   }
 
   Future<IList<UserActivity>> getActivity(UserId id) {
