@@ -1057,10 +1057,10 @@ packages:
     dependency: "direct main"
     description:
       name: material_symbols_icons
-      sha256: "7c50901b39d1ad645ee25d920aed008061e1fd541a897b4ebf2c01d966dbf16b"
+      sha256: ef20d86fb34c2b59eb7553c4d795bb8a7ec8c890c53ffd3148c64f7adc46ae50
       url: "https://pub.dev"
     source: hosted
-    version: "4.2815.1"
+    version: "4.2858.1"
   meta:
     dependency: "direct main"
     description:
@@ -1518,10 +1518,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: "84731e8bfd8303a3389903e01fb2141b6e59b5973cacbb0929021df08dddbe8b"
+      sha256: "6ef422a4525ecc601db6c0a2233ff448c731307906e92cabc9ba292afaae16a6"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.5"
+    version: "2.5.6"
   sqflite_common_ffi:
     dependency: "direct dev"
     description:
