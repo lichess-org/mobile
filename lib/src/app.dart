@@ -71,6 +71,7 @@ class _AppState extends ConsumerState<Application> {
     ref.read(challengeServiceProvider).start();
     ref.read(accountServiceProvider).start();
     ref.read(correspondenceServiceProvider).start();
+    ref.read(quickActionServiceProvider).start();
 
     // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
@@ -102,13 +103,6 @@ class _AppState extends ConsumerState<Application> {
     });
 
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final ctx = navigatorKey.currentContext;
-      if (ctx != null) {
-        ref.read(quickActionServiceProvider).start(ctx);
-      }
-    });
   }
 
   @override
