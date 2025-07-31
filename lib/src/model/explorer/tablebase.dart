@@ -18,7 +18,7 @@ enum TablebaseCategory {
   loss,
 }
 
-@Freezed(fromJson: true)
+@freezed
 sealed class TablebaseEntry with _$TablebaseEntry {
   const TablebaseEntry._();
 
@@ -52,7 +52,7 @@ sealed class TablebaseEntry with _$TablebaseEntry {
   }
 }
 
-@Freezed(fromJson: true)
+@freezed
 sealed class TablebaseMove with _$TablebaseMove {
   const TablebaseMove._();
 
@@ -102,6 +102,6 @@ TablebaseCategory _parseTablebaseCategory(String value) {
     'maybe-loss' => TablebaseCategory.maybeLoss,
     'syzygy-loss' => TablebaseCategory.syzygyLoss,
     'loss' => TablebaseCategory.loss,
-    _ => throw ArgumentError('Unknown tablebase category: $value'),
+    _ => TablebaseCategory.unknown,
   };
 }

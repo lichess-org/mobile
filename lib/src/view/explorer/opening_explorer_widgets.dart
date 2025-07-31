@@ -20,7 +20,7 @@ class OpeningNameHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: kTableRowPadding,
+      padding: kExplorerTableRowPadding,
       decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
       child: GestureDetector(
         onTap: opening.name == context.l10n.startPosition
@@ -101,15 +101,15 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
           children: [
             Padding(
-              padding: kTableRowPadding,
+              padding: kExplorerTableRowPadding,
               child: Text(context.l10n.move, style: kHeaderTextStyle),
             ),
             Padding(
-              padding: kTableRowPadding,
+              padding: kExplorerTableRowPadding,
               child: Text(context.l10n.games, style: kHeaderTextStyle),
             ),
             Padding(
-              padding: kTableRowPadding,
+              padding: kExplorerTableRowPadding,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -137,19 +137,19 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             children: [
               TableRowInkWell(
                 onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
-                child: Padding(padding: kTableRowPadding, child: Text(move.san)),
+                child: Padding(padding: kExplorerTableRowPadding, child: Text(move.san)),
               ),
               TableRowInkWell(
                 onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
                 child: Padding(
-                  padding: kTableRowPadding,
+                  padding: kExplorerTableRowPadding,
                   child: Text('${formatNum(move.games)} ($percentGames%)'),
                 ),
               ),
               TableRowInkWell(
                 onTap: () => onMoveSelected?.call(NormalMove.fromUci(move.uci)),
                 child: Padding(
-                  padding: kTableRowPadding,
+                  padding: kExplorerTableRowPadding,
                   child: _WinPercentageChart(
                     whiteWins: move.white,
                     draws: move.draws,
@@ -169,13 +169,13 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             ),
             children: [
               Container(
-                padding: kTableRowPadding,
+                padding: kExplorerTableRowPadding,
                 alignment: Alignment.centerLeft,
                 child: const Icon(Icons.functions),
               ),
-              Padding(padding: kTableRowPadding, child: Text('${formatNum(games)} (100%)')),
+              Padding(padding: kExplorerTableRowPadding, child: Text('${formatNum(games)} (100%)')),
               Padding(
-                padding: kTableRowPadding,
+                padding: kExplorerTableRowPadding,
                 child: _WinPercentageChart(
                   whiteWins: whiteWins,
                   draws: draws,
@@ -189,14 +189,14 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             decoration: BoxDecoration(color: ColorScheme.of(context).surfaceContainerLow),
             children: [
               Padding(
-                padding: kTableRowPadding,
+                padding: kExplorerTableRowPadding,
                 child: Text(
                   String.fromCharCode(Icons.not_interested_outlined.codePoint),
                   style: TextStyle(fontFamily: Icons.not_interested_outlined.fontFamily),
                 ),
               ),
-              Padding(padding: kTableRowPadding, child: Text(context.l10n.noGameFound)),
-              const Padding(padding: kTableRowPadding, child: SizedBox.shrink()),
+              Padding(padding: kExplorerTableRowPadding, child: Text(context.l10n.noGameFound)),
+              const Padding(padding: kExplorerTableRowPadding, child: SizedBox.shrink()),
             ],
           ),
       ],
@@ -210,7 +210,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
       (int index) => TableRow(
         children: [
           Padding(
-            padding: kTableRowPadding,
+            padding: kExplorerTableRowPadding,
             child: Container(
               height: 20,
               width: double.infinity,
@@ -221,7 +221,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: kTableRowPadding,
+            padding: kExplorerTableRowPadding,
             child: Container(
               height: 20,
               width: double.infinity,
@@ -232,7 +232,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             ),
           ),
           Padding(
-            padding: kTableRowPadding,
+            padding: kExplorerTableRowPadding,
             child: Container(
               height: 20,
               width: double.infinity,
@@ -298,7 +298,7 @@ class OpeningExplorerHeaderTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: kTableRowPadding,
+      padding: kExplorerTableRowPadding,
       decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
       child: child,
     );
@@ -329,7 +329,7 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
     const paddingResultBox = EdgeInsets.all(5);
 
     return Container(
-      padding: kTableRowPadding,
+      padding: kExplorerTableRowPadding,
       color: widget.color,
       child: InkWell(
         onTap: () {

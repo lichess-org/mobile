@@ -439,6 +439,7 @@ class _Body extends ConsumerWidget {
                 onMoveSelected: (move) {
                   ref.read(studyControllerProvider(id).notifier).onUserMove(move);
                 },
+                isComputerAnalysisAllowed: true,
               );
             } else {
               return const Center(child: Text('Opening explorer not available.'));

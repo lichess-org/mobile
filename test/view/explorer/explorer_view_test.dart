@@ -32,7 +32,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: Scaffold(
-          body: ExplorerView(position: position, onMoveSelected: (move) {}),
+          body: ExplorerView(
+            position: position,
+            onMoveSelected: (move) {},
+            isComputerAnalysisAllowed: true,
+          ),
         ),
         overrides: [defaultClientProvider.overrideWithValue(mockClient)],
       );
@@ -52,7 +56,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: Scaffold(
-          body: ExplorerView(position: position, onMoveSelected: (move) => {}),
+          body: ExplorerView(
+            position: position,
+            onMoveSelected: (move) => {},
+            isComputerAnalysisAllowed: true,
+          ),
         ),
         overrides: [defaultClientProvider.overrideWithValue(mockClient)],
       );
@@ -72,7 +80,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: Scaffold(
-          body: ExplorerView(position: position, onMoveSelected: (move) => {}),
+          body: ExplorerView(
+            position: position,
+            onMoveSelected: (move) => {},
+            isComputerAnalysisAllowed: true,
+          ),
         ),
         overrides: [defaultClientProvider.overrideWithValue(mockClient)],
       );
@@ -90,7 +102,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: Scaffold(
-          body: ExplorerView(position: position, onMoveSelected: (move) => {}),
+          body: ExplorerView(
+            position: position,
+            onMoveSelected: (move) => {},
+            isComputerAnalysisAllowed: true,
+          ),
         ),
         overrides: [defaultClientProvider.overrideWithValue(mockClient)],
       );
@@ -115,7 +131,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: Scaffold(
-          body: ExplorerView(position: position, onMoveSelected: (move) => {}),
+          body: ExplorerView(
+            position: position,
+            onMoveSelected: (move) => {},
+            isComputerAnalysisAllowed: true,
+          ),
         ),
         overrides: [defaultClientProvider.overrideWithValue(mockClient)],
       );
@@ -133,7 +153,11 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: Scaffold(
-          body: ExplorerView(position: position, onMoveSelected: (move) => {}),
+          body: ExplorerView(
+            position: position,
+            onMoveSelected: (move) => {},
+            isComputerAnalysisAllowed: true,
+          ),
         ),
         overrides: [defaultClientProvider.overrideWithValue(mockClient)],
       );

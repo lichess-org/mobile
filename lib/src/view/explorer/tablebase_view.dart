@@ -233,7 +233,7 @@ class _TablebaseHeaderTile extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: ColorScheme.of(context).surfaceDim,
-      padding: kTableRowPadding,
+      padding: kExplorerTableRowPadding,
       child: DefaultTextStyle.merge(
         style: const TextStyle(fontWeight: FontWeight.bold),
         child: child,
@@ -327,7 +327,7 @@ class _TablebaseMoveRow extends StatelessWidget {
       onTap: onMoveSelected != null ? () => onMoveSelected!(NormalMove.fromUci(move.uci)) : null,
       child: Container(
         color: color,
-        padding: kTableRowPadding,
+        padding: kExplorerTableRowPadding,
         child: Row(
           children: [
             Expanded(
@@ -351,14 +351,14 @@ class _TablebaseLoadingPlaceholder extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 20 + (kTableRowVerticalPadding * 2),
+          height: 20 + (kExplorerTableRowVerticalPadding * 2),
           color: Colors.grey[300],
           margin: const EdgeInsets.only(bottom: 8),
         ),
         ...List.generate(
           position.legalMoves.length,
           (index) => Container(
-            height: 20 + (kTableRowVerticalPadding * 2),
+            height: 20 + (kExplorerTableRowVerticalPadding * 2),
             color: Colors.grey[200],
             margin: const EdgeInsets.only(bottom: 1),
           ),

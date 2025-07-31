@@ -9,11 +9,11 @@ import 'package:lichess_mobile/src/view/explorer/tablebase_view.dart';
 /// Unified explorer view that shows either opening explorer or tablebase
 /// based on the position state (opening vs endgame)
 
-const kTableRowVerticalPadding = 10.0;
-const kTableRowHorizontalPadding = 8.0;
-const kTableRowPadding = EdgeInsets.symmetric(
-  horizontal: kTableRowHorizontalPadding,
-  vertical: kTableRowVerticalPadding,
+const kExplorerTableRowVerticalPadding = 10.0;
+const kExplorerTableRowHorizontalPadding = 8.0;
+const kExplorerTableRowPadding = EdgeInsets.symmetric(
+  horizontal: kExplorerTableRowHorizontalPadding,
+  vertical: kExplorerTableRowVerticalPadding,
 );
 const kHeaderTextStyle = TextStyle(fontSize: 12);
 
@@ -29,8 +29,8 @@ class ExplorerView extends ConsumerWidget {
   const ExplorerView({
     required this.position,
     required this.onMoveSelected,
+    required this.isComputerAnalysisAllowed,
     this.opening,
-    this.isComputerAnalysisAllowed = true,
   });
 
   final Position position;
