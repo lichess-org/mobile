@@ -3,7 +3,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'tablebase.freezed.dart';
-part 'tablebase.g.dart';
 
 enum TablebaseCategory {
   win,
