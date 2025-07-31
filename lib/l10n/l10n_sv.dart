@@ -478,13 +478,13 @@ class AppLocalizationsSv extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Hur räknas poängen?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'En vinst har baspoäng 2, remi 1 och förlust 0 poäng. Om du vinner två partier i rad så startar en dubbelpoängserie representerad av en flamma som ikon. Efterföljande partier är då värda dubbla poäng tills du misslyckas med att vinna ett parti. En vinst är då värd 4 poäng, remi 2 och förlust 0 poäng.\r\n\r\nEtt exempel, två vinster följt av en remi är värt 6 poäng: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'En vinst har baspoäng 2, remi 1 och förlust 0 poäng. Om du vinner två partier i rad så startar en dubbelpoängserie representerad av en flamma som ikon. Efterföljande partier är då värda dubbla poäng tills du misslyckas med att vinna ett parti. En vinst är då värd 4 poäng, remi 2 och förlust 0 poäng.\n\nEtt exempel, två vinster följt av en remi är värt 6 poäng: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena-Bärsärk';
 
   @override
-  String get arenaBerserkAnswer => 'När en spelare klickar på Bärsärk-knappen i början av partiet, halveras dennes betänketid, men en vinst blir värd en extra turneringspoäng. Att gå Bärsärk vid tidskontroller med tidstillägg medför också att tidstillägget förloras. \r\n(1+2 är ett undantag, vilket blir 1+0)\r\n\r\nBärsärk är ej möjligt för partier med noll i starttid (0+1, 0+2).\r\n\r\nBärsärk ger en extrapoäng endast om du spelar minst 7 drag i partiet.';
+  String get arenaBerserkAnswer => 'När en spelare klickar på Bärsärk-knappen i början av partiet, halveras dennes betänketid, men en vinst blir värd en extra turneringspoäng. Att gå Bärsärk vid tidskontroller med tidstillägg medför också att tidstillägget förloras. \n(1+2 är ett undantag, vilket blir 1+0)\n\nBärsärk är ej möjligt för partier med noll i starttid (0+1, 0+2).\n\nBärsärk ger en extrapoäng endast om du spelar minst 7 drag i partiet.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Hur avgörs vem som vunnit turneringen?';
@@ -605,7 +605,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get arenaTournamentStats => 'Turneringsstatistik';
 
   @override
-  String get arenaRankAvgHelp => 'Rankningsgenomsnittet är en procentsats baserad på din rankning. Lägre är bättre.\r\n\r\nTill exempel: Rankad 3 i en turnering på 100 spelare = 3%. Rankad 10 i en turnering på 1000 spelare = 1%.';
+  String get arenaRankAvgHelp => 'Rankningsgenomsnittet är en procentsats baserad på din rankning. Lägre är bättre.\n\nTill exempel: Rankad 3 i en turnering på 100 spelare = 3%. Rankad 10 i en turnering på 1000 spelare = 1%.';
 
   @override
   String get arenaMedians => 'medianer';
@@ -1609,7 +1609,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Sök schackproblem';
 
   @override
-  String get puzzleFromMyGamesNone => 'Du har inga schackproblem i databasen, men Lichess tycker om dig väldigt mycket ändå.\r\nSpela snabbschack och klassiska partier för att öka dina chanser att få ett av dina schackproblem tillagt!';
+  String get puzzleFromMyGamesNone => 'Du har inga schackproblem i databasen, men Lichess tycker om dig väldigt mycket ändå.\nSpela snabbschack och klassiska partier för att öka dina chanser att få ett av dina schackproblem tillagt!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Träna, analysera, förbättra';
@@ -4594,7 +4594,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get tournDescriptionHelp => 'Något speciellt du vill berätta för deltagarna? Försök att hålla det kort. Markdown länkar finns tillgängliga: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Partier är rankade\r\noch påverkar spelares rating';
+  String get ratedFormHelp => 'Partier är rankade\noch påverkar spelares rating';
 
   @override
   String get onlyMembersOfTeam => 'Endast medlemmar i lag';
@@ -4613,7 +4613,7 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Klistra in en giltig FEN för att starta varje spel från en given position.\r\nDet fungerar endast för standardspel, inte med varianter.\r\nDu kan använda $param för att generera en FEN-position, sedan klistra in den här.\r\nLämna tomt för att starta spel från den normala startpositionen.';
+    return 'Klistra in en giltig FEN för att starta varje spel från en given position.\nDet fungerar endast för standardspel, inte med varianter.\nDu kan använda $param för att generera en FEN-position, sedan klistra in den här.\nLämna tomt för att starta spel från den normala startpositionen.';
   }
 
   @override
@@ -4745,7 +4745,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get showMeEverything => 'Visa mig allt';
 
   @override
-  String get lichessPatronInfo => 'Lichess är en välgörenhet och helt gratis/fri programvara med öppen källkod.\r\nAlla driftskostnader, utveckling och innehåll finansieras enbart av användardonationer.';
+  String get lichessPatronInfo => 'Lichess är en välgörenhet och helt gratis/fri programvara med öppen källkod.\nAlla driftskostnader, utveckling och innehåll finansieras enbart av användardonationer.';
 
   @override
   String get nothingToSeeHere => 'Här finns ingenting att se för tillfället.';

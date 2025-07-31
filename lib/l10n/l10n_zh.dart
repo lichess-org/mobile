@@ -460,25 +460,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get arenaHowAreScoresCalculated => '分数是如何计算的？';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => '赢局的基础分数是2分，平局1分，输局不得分。如果你连胜两局将开始双倍积分，以火焰图标表示。接下来的对局将继续获得双倍积分，直到你输棋为止。也就是说，在双倍积分的情况下赢局值4分，平局2分。输局仍然不得分。 \r\n\r\n例如两场胜利紧接着一场平局得6分： 2 + 2 + (2 x 1)。';
+  String get arenaHowAreScoresCalculatedAnswer => '赢局的基础分数是2分，平局1分，输局不得分。如果你连胜两局将开始双倍积分，以火焰图标表示。接下来的对局将继续获得双倍积分，直到你输棋为止。也就是说，在双倍积分的情况下赢局值4分，平局2分。输局仍然不得分。 \n\n例如两场胜利紧接着一场平局得6分： 2 + 2 + (2 x 1)。';
 
   @override
   String get arenaBerserk => '狂暴锦标赛';
 
   @override
-  String get arenaBerserkAnswer => '如果棋手在棋局开始时点击“狂暴”按钮，将会损失一半的时间，但战胜该局将多得 1 分。\r\n\r\n如果棋局时限有加秒，那么启动狂暴会导致神速方加秒被取消。(唯一的例外是 1+2, 在这个情况下启动神速会把神速方的时限变为 1+0)。\r\n\r\n在无基础局时的棋局 (如 0+1、0+2 等) ，狂暴功能被禁用。\r\n\r\n只有走过 7 步棋以上的棋局会有狂暴加分。';
+  String get arenaBerserkAnswer => '如果棋手在棋局开始时点击“狂暴”按钮，将会损失一半的时间，但战胜该局将多得 1 分。\n\n如果棋局时限有加秒，那么启动狂暴会导致神速方加秒被取消。(唯一的例外是 1+2, 在这个情况下启动神速会把神速方的时限变为 1+0)。\n\n在无基础局时的棋局 (如 0+1、0+2 等) ，狂暴功能被禁用。\n\n只有走过 7 步棋以上的棋局会有狂暴加分。';
 
   @override
   String get arenaHowIsTheWinnerDecided => '赢家是如何决定的？';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => '在锦标赛设定时间限制结束时积分最多的玩家将被宣布为获胜者。\r\n\r\n当两个或两个以上的玩家拥有相同分数时，锦标赛的表现是決勝。';
+  String get arenaHowIsTheWinnerDecidedAnswer => '在锦标赛设定时间限制结束时积分最多的玩家将被宣布为获胜者。\n\n当两个或两个以上的玩家拥有相同分数时，锦标赛的表现是決勝。';
 
   @override
   String get arenaHowDoesPairingWork => '棋手是怎么配对的？';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => '在锦标赛开始时，系统会根据棋手的等级分进行配对。一局结束后，回到锦标赛主页等待。此后你会和与你锦标赛名次接近的棋手配对，这尽可能降低了等待时间。然而，你不一定会和锦标赛所有其他棋手下棋。\r\n\r\n为了下更多的棋局以得到更多的锦标赛积分，尽量快地下完每一盘棋并回到主页。';
+  String get arenaHowDoesPairingWorkAnswer => '在锦标赛开始时，系统会根据棋手的等级分进行配对。一局结束后，回到锦标赛主页等待。此后你会和与你锦标赛名次接近的棋手配对，这尽可能降低了等待时间。然而，你不一定会和锦标赛所有其他棋手下棋。\n\n为了下更多的棋局以得到更多的锦标赛积分，尽量快地下完每一盘棋并回到主页。';
 
   @override
   String get arenaHowDoesItEnd => '锦标赛如何结束？';
@@ -587,7 +587,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get arenaTournamentStats => '锦标赛统计';
 
   @override
-  String get arenaRankAvgHelp => '等级平均值是您排名的百分比。较低的排名越好。\r\n\r\n例如，在 100 个玩家的锦标赛中排名第三名 = 3%。在 1000 个玩家的锦标赛中排名第 10 名 = 1%。';
+  String get arenaRankAvgHelp => '等级平均值是您排名的百分比。较低的排名越好。\n\n例如，在 100 个玩家的锦标赛中排名第三名 = 3%。在 1000 个玩家的锦标赛中排名第 10 名 = 1%。';
 
   @override
   String get arenaMedians => '中位数';
@@ -1587,7 +1587,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleSearchPuzzles => '搜索谜题';
 
   @override
-  String get puzzleFromMyGamesNone => '你下过的棋局暂时没有被纳入到谜题数据库中，但 Lichess 将一如既往地记着你所走的每一步。\r\n多下快棋和慢棋可以提升你的棋局被纳入谜题数据库的概率哦！';
+  String get puzzleFromMyGamesNone => '你下过的棋局暂时没有被纳入到谜题数据库中，但 Lichess 将一如既往地记着你所走的每一步。\n多下快棋和慢棋可以提升你的棋局被纳入谜题数据库的概率哦！';
 
   @override
   String get puzzlePuzzleDashboardDescription => '训练、分析、提升';
@@ -4566,7 +4566,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tournDescriptionHelp => '你还有其他信息要告诉参赛者们吗？请不要写太多。可以使用 Markdown 来写链接：[文字](https://url)';
 
   @override
-  String get ratedFormHelp => '排位赛\r\n将影响玩家的等级分';
+  String get ratedFormHelp => '排位赛\n将影响玩家的等级分';
 
   @override
   String get onlyMembersOfTeam => '仅团队成员';
@@ -4585,7 +4585,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return '将一个有效的 FEN 粘贴于此作为所有对局的起始位置。\r\n仅适用于标准国际象棋，对变体无效。\r\n你可以试用 $param 来生成 FEN，然后将其粘贴到这里。\r\n置空表示以标准位置开始比赛。';
+    return '将一个有效的 FEN 粘贴于此作为所有对局的起始位置。\n仅适用于标准国际象棋，对变体无效。\n你可以试用 $param 来生成 FEN，然后将其粘贴到这里。\n置空表示以标准位置开始比赛。';
   }
 
   @override
@@ -6496,13 +6496,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get arenaHowAreScoresCalculated => '分數是如何計算的？';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => '贏家將會得到2積分，平局1積分，輸家0分。\r\n如果您連續贏了2場以上的棋局，您將會開始以火焰符號標示的連勝次數。\r\n在連勝後您將會收到兩倍的積分直到輸棋。\r\n換句話說：贏得 4 積分，平局得 2 積分，但是輸家依舊沒有積分。\r\n\r\n例如：連贏兩場加上一局平局，您將會得到 2 + 2 + ( 2 x 1 ) = 6 積分';
+  String get arenaHowAreScoresCalculatedAnswer => '贏家將會得到2積分，平局1積分，輸家0分。\n如果您連續贏了2場以上的棋局，您將會開始以火焰符號標示的連勝次數。\n在連勝後您將會收到兩倍的積分直到輸棋。\n換句話說：贏得 4 積分，平局得 2 積分，但是輸家依舊沒有積分。\n\n例如：連贏兩場加上一局平局，您將會得到 2 + 2 + ( 2 x 1 ) = 6 積分';
 
   @override
   String get arenaBerserk => '狂暴選項';
 
   @override
-  String get arenaBerserkAnswer => '狂暴模式若開啟，玩家時間將會砍半，不過在獲勝時將會多 1 積分\r\n\r\n在狂暴模式下，加時制將會被停用（1+2 是一個例外，它將會改為 1+0）。\r\n\r\n狂暴模式將不會被允許在零初始時間模式時開啟（例如：0+1，0+2）。\r\n\r\n狂暴模式只會在您下了 7 步棋以上才會得到加成分數。';
+  String get arenaBerserkAnswer => '狂暴模式若開啟，玩家時間將會砍半，不過在獲勝時將會多 1 積分\n\n在狂暴模式下，加時制將會被停用（1+2 是一個例外，它將會改為 1+0）。\n\n狂暴模式將不會被允許在零初始時間模式時開啟（例如：0+1，0+2）。\n\n狂暴模式只會在您下了 7 步棋以上才會得到加成分數。';
 
   @override
   String get arenaHowIsTheWinnerDecided => '贏家是怎麼決定的？';
@@ -6514,7 +6514,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get arenaHowDoesPairingWork => '對手是如何配對的?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => '在錦標賽開始時，系統將會以您的模式評分為基礎分配對手。\r\n在您完成了第一場棋局後，系統將會分配與您排名相近的玩家作為對手，這會需要一點時間做分配。\r\n迅速完成棋局並獲勝就可以得到更多積分。';
+  String get arenaHowDoesPairingWorkAnswer => '在錦標賽開始時，系統將會以您的模式評分為基礎分配對手。\n在您完成了第一場棋局後，系統將會分配與您排名相近的玩家作為對手，這會需要一點時間做分配。\n迅速完成棋局並獲勝就可以得到更多積分。';
 
   @override
   String get arenaHowDoesItEnd => '錦標賽何時會結束？';
@@ -6623,7 +6623,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get arenaTournamentStats => '錦標賽得分';
 
   @override
-  String get arenaRankAvgHelp => '平均等地表示你的等地百分比。越低越好。\r\n\r\n舉例而言，在 100 人中被評等地 3 表示 %3；在 1000 人中被評等地 10 表示 %1';
+  String get arenaRankAvgHelp => '平均等地表示你的等地百分比。越低越好。\n\n舉例而言，在 100 人中被評等地 3 表示 %3；在 1000 人中被評等地 10 表示 %1';
 
   @override
   String get arenaMedians => '中位數';
@@ -7118,7 +7118,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return '越低的數值代表積分越穩定。 數值高於$param1時的積分會被判定為浮動積分。\r\n要被列入排名之中，該數值需低於$param2(標準西洋棋) 或是$param3(西洋棋變體)。';
+    return '越低的數值代表積分越穩定。 數值高於$param1時的積分會被判定為浮動積分。\n要被列入排名之中，該數值需低於$param2(標準西洋棋) 或是$param3(西洋棋變體)。';
   }
 
   @override
@@ -7576,7 +7576,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get puzzleFailed => '失敗';
 
   @override
-  String get puzzleStreakDescription => '累積你的連勝，解著漸漸變難的題目。 沒有時間限制，不要急。走錯一步，將會是遊戲結束！\r\n不過每一局中你都有跳過一步棋的機會。';
+  String get puzzleStreakDescription => '累積你的連勝，解著漸漸變難的題目。 沒有時間限制，不要急。走錯一步，將會是遊戲結束！\n不過每一局中你都有跳過一步棋的機會。';
 
   @override
   String puzzleYourStreakX(String param) {
@@ -7602,7 +7602,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get puzzleSearchPuzzles => '尋找謎題';
 
   @override
-  String get puzzleFromMyGamesNone => '你在資料庫中沒有謎題，但 Lichess 仍然非常愛你。\r\n遊玩一些快速和經典遊戲，以增加從你的棋局中生成謎題的機會！';
+  String get puzzleFromMyGamesNone => '你在資料庫中沒有謎題，但 Lichess 仍然非常愛你。\n遊玩一些快速和經典遊戲，以增加從你的棋局中生成謎題的機會！';
 
   @override
   String get puzzlePuzzleDashboardDescription => '訓練、分析、改進';
@@ -10510,7 +10510,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get tournDescriptionHelp => '有甚麼特別要告訴參賽者的嗎？盡量不要太長。可以使用 Markdown 網址 [name](https://url)。';
 
   @override
-  String get ratedFormHelp => '比賽為積分賽\r\n會影響到棋手的積分';
+  String get ratedFormHelp => '比賽為積分賽\n會影響到棋手的積分';
 
   @override
   String get onlyMembersOfTeam => '只限隊員';
@@ -10529,7 +10529,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String positionInputHelp(String param) {
-    return '將一個有效的 FEN 貼上於此作為所有對局的起始位置。\r\n僅適用於標準西洋棋，對變種無效。\r\n你可以試用 $param 來生成 FEN，然後將其貼上到這裡。\r\n置空表示以預設位置開始比賽。';
+    return '將一個有效的 FEN 貼上於此作為所有對局的起始位置。\n僅適用於標準西洋棋，對變種無效。\n你可以試用 $param 來生成 FEN，然後將其貼上到這裡。\n置空表示以預設位置開始比賽。';
   }
 
   @override
@@ -10661,7 +10661,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get showMeEverything => '全部顯示';
 
   @override
-  String get lichessPatronInfo => 'Lichess是個慈善、完全免費且開源的軟體。\r\n一切營運成本、開發和內容皆來自用戶之捐贈。';
+  String get lichessPatronInfo => 'Lichess是個慈善、完全免費且開源的軟體。\n一切營運成本、開發和內容皆來自用戶之捐贈。';
 
   @override
   String get nothingToSeeHere => '目前這裡沒有什麼好看的。';

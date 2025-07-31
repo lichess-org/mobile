@@ -478,25 +478,25 @@ class AppLocalizationsFr extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Comment les scores sont-ils calculés ?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Une victoire rapporte 2 points, un match nul 1 point et une défaite aucun point.\r\nSi vous gagnez deux parties consécutives, vous entamerez une série de points qui compteront double. Cette série est représenté par une icône en forme de flamme. Les parties qui suivront compteront alors double tant que vous gagnez. Autrement dit, une victoire vaudra 4 points, un match nul 2 points et une défaite aucun point.\r\nPar exemple, deux victoires suivies d\'un mach nul rapportera 6 points : 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Une victoire rapporte 2 points, un match nul 1 point et une défaite aucun point.\nSi vous gagnez deux parties consécutives, vous entamerez une série de points qui compteront double. Cette série est représenté par une icône en forme de flamme. Les parties qui suivront compteront alors double tant que vous gagnez. Autrement dit, une victoire vaudra 4 points, un match nul 2 points et une défaite aucun point.\nPar exemple, deux victoires suivies d\'un mach nul rapportera 6 points : 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arène Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Quand un joueur clique sur le bouton Berserk au début de la partie, il perd la moitié de son temps, mais la victoire vaudra un point de tournoi supplémentaire.\r\n\r\nL\'option Berserk annule aussi l\'incrément de temps le cas échéant. (1+2 est une exception, cela donne 1+0)\r\n\r\nLe bouton Berserk n\'est pas disponible pour les parties sans aucun temps initial (0+1, 0+2).\r\n\r\nL\'option Berserk ne rapporte de point supplémentaire que si vous jouez au moins 7 coups dans la partie.';
+  String get arenaBerserkAnswer => 'Quand un joueur clique sur le bouton Berserk au début de la partie, il perd la moitié de son temps, mais la victoire vaudra un point de tournoi supplémentaire.\n\nL\'option Berserk annule aussi l\'incrément de temps le cas échéant. (1+2 est une exception, cela donne 1+0)\n\nLe bouton Berserk n\'est pas disponible pour les parties sans aucun temps initial (0+1, 0+2).\n\nL\'option Berserk ne rapporte de point supplémentaire que si vous jouez au moins 7 coups dans la partie.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Comment le gagnant est-il déterminé ?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Le joueur avec le plus de points à la fin du temps imparti pour le tournoi sera déclaré vainqueur.\r\n\r\nEn cas d\'égalité au nombre de points, les joueurs sont départagés par leur cote de performance lors du tournoi.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Le joueur avec le plus de points à la fin du temps imparti pour le tournoi sera déclaré vainqueur.\n\nEn cas d\'égalité au nombre de points, les joueurs sont départagés par leur cote de performance lors du tournoi.';
 
   @override
   String get arenaHowDoesPairingWork => 'Comment sont déterminés les appariements ?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Au début du tournoi, les joueurs sont appariés en fonction de leur cote.\r\nDès que vous avez terminé votre partie, retournez à la page d\'accueil du tournoi : vous serez alors apparié avec un joueur qui possède un classement proche du vôtre. Cela garantit un temps d\'attente minimum entre les parties, toutefois il est possible que vous n\'affrontiez pas tous les autres joueurs du tournoi.\r\nJouez vite et retournez à la page d\'accueil du tournoi pour jouer plus de parties et gagner plus de points.';
+  String get arenaHowDoesPairingWorkAnswer => 'Au début du tournoi, les joueurs sont appariés en fonction de leur cote.\nDès que vous avez terminé votre partie, retournez à la page d\'accueil du tournoi : vous serez alors apparié avec un joueur qui possède un classement proche du vôtre. Cela garantit un temps d\'attente minimum entre les parties, toutefois il est possible que vous n\'affrontiez pas tous les autres joueurs du tournoi.\nJouez vite et retournez à la page d\'accueil du tournoi pour jouer plus de parties et gagner plus de points.';
 
   @override
   String get arenaHowDoesItEnd => 'Quand le tournoi finit-il ?';
@@ -605,7 +605,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get arenaTournamentStats => 'Statistiques du tournoi';
 
   @override
-  String get arenaRankAvgHelp => 'Le classement moyen est un pourcentage de votre classement. Plus il est bas, mieux c\'est.\r\n\r\nPar exemple, être classé 3e dans un tournoi de 100 joueurs = 3 %. Être classé 10e dans un tournoi de 1 000 joueurs = 1 %.';
+  String get arenaRankAvgHelp => 'Le classement moyen est un pourcentage de votre classement. Plus il est bas, mieux c\'est.\n\nPar exemple, être classé 3e dans un tournoi de 100 joueurs = 3 %. Être classé 10e dans un tournoi de 1 000 joueurs = 1 %.';
 
   @override
   String get arenaMedians => 'médianes';
@@ -1609,7 +1609,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Rechercher des problèmes';
 
   @override
-  String get puzzleFromMyGamesNone => 'Vous n\'avez pas de problèmes dans la base de données, mais Lichess vous aime toujours.\r\nJouez des parties rapides et classiques pour augmenter vos chances qu\'une de vos parties soit utilisée comme problème !';
+  String get puzzleFromMyGamesNone => 'Vous n\'avez pas de problèmes dans la base de données, mais Lichess vous aime toujours.\nJouez des parties rapides et classiques pour augmenter vos chances qu\'une de vos parties soit utilisée comme problème !';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'S\'entraîner, analyser, s\'améliorer';
@@ -4594,7 +4594,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tournDescriptionHelp => 'Quelque chose de spécial à dire aux participants ? Soyez bref. Des liens Markdown sont disponibles : [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Les parties sont classées\r\net ont un impact sur le classement des joueurs';
+  String get ratedFormHelp => 'Les parties sont classées\net ont un impact sur le classement des joueurs';
 
   @override
   String get onlyMembersOfTeam => 'Seulement les membres de l\'équipe';
@@ -4613,7 +4613,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Collez un FEN valide pour commencer chaque partie à partir d\'une position donnée.\r\nCela ne fonctionne que pour les parties normales, pas avec les variantes.\r\nVous pouvez utiliser le $param pour créer une position FEN puis la coller ici.\r\nLaissez vide pour commencer les parties à partir de la position initiale normale.';
+    return 'Collez un FEN valide pour commencer chaque partie à partir d\'une position donnée.\nCela ne fonctionne que pour les parties normales, pas avec les variantes.\nVous pouvez utiliser le $param pour créer une position FEN puis la coller ici.\nLaissez vide pour commencer les parties à partir de la position initiale normale.';
   }
 
   @override
@@ -4745,7 +4745,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get showMeEverything => 'Tout afficher';
 
   @override
-  String get lichessPatronInfo => 'Lichess est une association à but non lucratif et un logiciel open source entièrement libre.\r\nTous les coûts d\'exploitation, le développement et le contenu sont financés uniquement par les dons des utilisateurs.';
+  String get lichessPatronInfo => 'Lichess est une association à but non lucratif et un logiciel open source entièrement libre.\nTous les coûts d\'exploitation, le développement et le contenu sont financés uniquement par les dons des utilisateurs.';
 
   @override
   String get nothingToSeeHere => 'Rien à voir ici pour le moment.';

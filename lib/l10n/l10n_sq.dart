@@ -478,25 +478,25 @@ class AppLocalizationsSq extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Si llogariten pikët?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Një fitore vlerësohet me 2 pikë, një barazim me 1 pikë dhe një humbje nuk vlen asnjë pikë.\r\nNëse fitoni dy ndeshje rresht, do të filloni një brez të dyfishtë, të përfaqësuar nga një ikonë e flakës.\r\nLojërat vijuese do të vlejnë dyfishin e pikëve, deri sa të mos fitoni një lojë.\r\nPra, një fitore do të vlejë 4 pikë, një barazim 2 pikë dhe një humbje prapë nuk sjell pikë.\r\n\r\nPër shembull, dy fitore të ndjekura nga një barazim do të vlejnë 6 pikë: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Një fitore vlerësohet me 2 pikë, një barazim me 1 pikë dhe një humbje nuk vlen asnjë pikë.\nNëse fitoni dy ndeshje rresht, do të filloni një brez të dyfishtë, të përfaqësuar nga një ikonë e flakës.\nLojërat vijuese do të vlejnë dyfishin e pikëve, deri sa të mos fitoni një lojë.\nPra, një fitore do të vlejë 4 pikë, një barazim 2 pikë dhe një humbje prapë nuk sjell pikë.\n\nPër shembull, dy fitore të ndjekura nga një barazim do të vlejnë 6 pikë: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Kur një lojtar klikon butonin Berserk në fillim të lojës, ai humbet gjysmën e kohës që ka në dispozicion, por fitorja vlen një pikë shtesë në turne.\r\n\r\nShkuarja Berserk në kontrollet kohë me një rritje edhe anulon rritjen. (1 + 2 është një përjashtim, ai jep 1 + 0)\r\n\r\nBerserk nuk është në dispozicion për lojëra me zero kohë fillestare (0 + 1, 0 + 2).\r\n\r\nBerserk jep vetëm një pikë shtesë nëse luani të paktën 7 lëvizje në lojë.';
+  String get arenaBerserkAnswer => 'Kur një lojtar klikon butonin Berserk në fillim të lojës, ai humbet gjysmën e kohës që ka në dispozicion, por fitorja vlen një pikë shtesë në turne.\n\nShkuarja Berserk në kontrollet kohë me një rritje edhe anulon rritjen. (1 + 2 është një përjashtim, ai jep 1 + 0)\n\nBerserk nuk është në dispozicion për lojëra me zero kohë fillestare (0 + 1, 0 + 2).\n\nBerserk jep vetëm një pikë shtesë nëse luani të paktën 7 lëvizje në lojë.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Si caktohet fituesi?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Lojtari(ët) me më shumë pikë në përfundim të afatit të caktuar të turneut do të shpallet fitues.\r\n\r\nKur dy lojtarë kanë të njëjtin numër pikësh, performanca e turneut është thyerja e barazimit.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Lojtari(ët) me më shumë pikë në përfundim të afatit të caktuar të turneut do të shpallet fitues.\n\nKur dy lojtarë kanë të njëjtin numër pikësh, performanca e turneut është thyerja e barazimit.';
 
   @override
   String get arenaHowDoesPairingWork => 'Si funksionin çiftimi?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Në fillim të turneut, lojtarët çiftohen bazuar në klasifikimin e tyre.\r\nSapo të përfundoni një lojë, kthehuni te holli i turneut: do të çiftoheni atëherë me një lojtar me renditje të afërt me tuajën. Kjo siguron kohë minimale pritjeje, por mund të mos përballeni me krejt lojtarët e tjerë në turne.\r\nLuani shpejt dhe kthehuni në holl, që të luani më shumë lojëra dhe të fitoni më shumë pikë.';
+  String get arenaHowDoesPairingWorkAnswer => 'Në fillim të turneut, lojtarët çiftohen bazuar në klasifikimin e tyre.\nSapo të përfundoni një lojë, kthehuni te holli i turneut: do të çiftoheni atëherë me një lojtar me renditje të afërt me tuajën. Kjo siguron kohë minimale pritjeje, por mund të mos përballeni me krejt lojtarët e tjerë në turne.\nLuani shpejt dhe kthehuni në holl, që të luani më shumë lojëra dhe të fitoni më shumë pikë.';
 
   @override
   String get arenaHowDoesItEnd => 'Si përfundon tournament?';
@@ -605,7 +605,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get arenaTournamentStats => 'Statistika turneu';
 
   @override
-  String get arenaRankAvgHelp => 'Renditja mesatare është një përqindje e renditjes tuaj. Sa më e ulët, aq më mirë.\r\n\r\nPër shembull, të qenët i renditur i 3-i në një turne me 100 lojtarë = 3%. Renditja si i 10-it në një turne me 1000 lojtarë = 1%.';
+  String get arenaRankAvgHelp => 'Renditja mesatare është një përqindje e renditjes tuaj. Sa më e ulët, aq më mirë.\n\nPër shembull, të qenët i renditur i 3-i në një turne me 100 lojtarë = 3%. Renditja si i 10-it në një turne me 1000 lojtarë = 1%.';
 
   @override
   String get arenaMedians => 'mesatare';
@@ -1609,7 +1609,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Kërkoni në ushtrime';
 
   @override
-  String get puzzleFromMyGamesNone => 'S’keni ushtrime te baza e të dhënave, por Lichess-i prapë ju do fort.\r\n\r\nLuani lojëra të shpejta dhe klasike, që të rriten shanset tuaja për të pasur një ushtrim nga tuajt të shtuar atje!';
+  String get puzzleFromMyGamesNone => 'S’keni ushtrime te baza e të dhënave, por Lichess-i prapë ju do fort.\n\nLuani lojëra të shpejta dhe klasike, që të rriten shanset tuaja për të pasur një ushtrim nga tuajt të shtuar atje!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Stërvituni, analizoni, përmirësohuni';
@@ -3068,7 +3068,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get importGame => 'Importo lojën';
 
   @override
-  String get importGameExplanation => 'Ngjitni një PGN loje, që të merrni një përsëritje\r\ntë lojës në shfletues, analizë kompjuterike, bisedë\r\nloje dhe URL për ta ndarë me të tjerë.';
+  String get importGameExplanation => 'Ngjitni një PGN loje, që të merrni një përsëritje\ntë lojës në shfletues, analizë kompjuterike, bisedë\nloje dhe URL për ta ndarë me të tjerë.';
 
   @override
   String get importGameCaveat => 'Variacionet do të fshihen. Për t\'i mbajtur ato, importoni PGN përmes një studimi.';
@@ -4594,7 +4594,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get tournDescriptionHelp => 'Ndonjë gjë e veçantë që dëshironi t’u thoni pjesëmarrësve? Përpiquni të jetë me pak fjalë. Mund të përdoren lidhje Markdown: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Lojërat vlerësohen\r\ndhe ndikojnë te vlerësimet e lojëtarëve';
+  String get ratedFormHelp => 'Lojërat vlerësohen\ndhe ndikojnë te vlerësimet e lojëtarëve';
 
   @override
   String get onlyMembersOfTeam => 'Vetëm pjesëmarrës të ekipit';
@@ -4613,7 +4613,7 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Ngjitni një FEN të vlefshëm, që çdo lojë të niset prej një pozicioni të dhënë.\r\nFunksionon vetëm për lojëra standarde, jo me variante.\r\nMund të përdorni $param për të prodhuar një pozicion FEN, mandej ta ngjitni këtu.\r\nQë lojërat të fillojnë nga pozicioni fillestar normal, lëreni të zbrazët.';
+    return 'Ngjitni një FEN të vlefshëm, që çdo lojë të niset prej një pozicioni të dhënë.\nFunksionon vetëm për lojëra standarde, jo me variante.\nMund të përdorni $param për të prodhuar një pozicion FEN, mandej ta ngjitni këtu.\nQë lojërat të fillojnë nga pozicioni fillestar normal, lëreni të zbrazët.';
   }
 
   @override
@@ -4745,7 +4745,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get showMeEverything => 'Shfaqmë gjithçka';
 
   @override
-  String get lichessPatronInfo => 'Lichess është një program bamirësie dhe krejtësisht falas/libre, me burim të hapët.\r\nKrejt kostot operative, zhvillimi dhe lënda financohen vetëm me dhurime nga përdoruesit.';
+  String get lichessPatronInfo => 'Lichess është një program bamirësie dhe krejtësisht falas/libre, me burim të hapët.\nKrejt kostot operative, zhvillimi dhe lënda financohen vetëm me dhurime nga përdoruesit.';
 
   @override
   String get nothingToSeeHere => 'S’ka ç’shihet këtu tani.';

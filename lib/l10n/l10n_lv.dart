@@ -495,25 +495,25 @@ class AppLocalizationsLv extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Kā tiek aprēķināti rezultāti?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer => 'Par uzvaru piešķir 2 punktus, par neizšķirtu - 1 punktu un par zaudējumu - nevienu.\r\nJa uzvarēsiet divas spēles pēc kārtas, sāksies divkāršo punktu sērija, ko attēlo ar liesmas ikonu.\r\nTurpmākās spēles būs vērtas divreiz vairāk punktu līdz brīdim, kad neizdosies uzvarēt.\r\nTas ir, par uzvaru piešķirs 4 punktus, par neizšķirtu - 2 punktus un par zaudējumu - joprojām nevienu.\r\n\r\nPiemēram, pēc divām uzvarām panākot neizšķirtu iegūst 6 punktus: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Par uzvaru piešķir 2 punktus, par neizšķirtu - 1 punktu un par zaudējumu - nevienu.\nJa uzvarēsiet divas spēles pēc kārtas, sāksies divkāršo punktu sērija, ko attēlo ar liesmas ikonu.\nTurpmākās spēles būs vērtas divreiz vairāk punktu līdz brīdim, kad neizdosies uzvarēt.\nTas ir, par uzvaru piešķirs 4 punktus, par neizšķirtu - 2 punktus un par zaudējumu - joprojām nevienu.\n\nPiemēram, pēc divām uzvarām panākot neizšķirtu iegūst 6 punktus: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Kurbada Arēna';
 
   @override
-  String get arenaBerserkAnswer => 'Kad spēlētājs, spēlei sākoties, nospiež uz Kurbada pogas, viņš zaudē pusi no sava pulksteņa laika, taču par uzvaru tiek piešķirts viens papildus punkts.\r\n\r\nSpēlējot Kurbadu, laika kontrolēm ar inkrementu tiek noņemts inkrements. (1+2 ir izņēmums, tas pārvēršas par 1+0)\r\n\r\nKurbads nav pieejams spēlēm ar nulles sākotnējo laiku (0+1, 0+2).\r\n\r\nPapildus punkts tiek piešķirts tikai tad, ja Kurbada spēlē izdarīti vismaz 7 gājieni.';
+  String get arenaBerserkAnswer => 'Kad spēlētājs, spēlei sākoties, nospiež uz Kurbada pogas, viņš zaudē pusi no sava pulksteņa laika, taču par uzvaru tiek piešķirts viens papildus punkts.\n\nSpēlējot Kurbadu, laika kontrolēm ar inkrementu tiek noņemts inkrements. (1+2 ir izņēmums, tas pārvēršas par 1+0)\n\nKurbads nav pieejams spēlēm ar nulles sākotnējo laiku (0+1, 0+2).\n\nPapildus punkts tiek piešķirts tikai tad, ja Kurbada spēlē izdarīti vismaz 7 gājieni.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Kā tiek noteikts uzvarētājs?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'Turnīra laikam beidzoties, spēlētājus, kam visvairāk punktu, pasludinās par uzvarētājiem.\r\n\r\nJa vairākiem spēlētājiem ir vienāds punktu skaits, uzvarošo nosaka pēc turnīra snieguma.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Turnīra laikam beidzoties, spēlētājus, kam visvairāk punktu, pasludinās par uzvarētājiem.\n\nJa vairākiem spēlētājiem ir vienāds punktu skaits, uzvarošo nosaka pēc turnīra snieguma.';
 
   @override
   String get arenaHowDoesPairingWork => 'Kā notiek sapārošana?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Turnīram sākoties, spēlētājus sapāro atbilstoši reitingam.\r\nTiklīdz spēle beigusies, atgriezies turnīra vestibilā: tad tiksi sapārots ar nākamo spēlētāju vistuvāk tavam reitingam.\r\nTādā veidā tiek panākts mazāks gaidīšanas laiks, taču var gadīties, ka netiksies ar katru turnīra spēlētāju.\r\nSpēlē ātri un atgriezies vestibilā lai spēlētu vairāk spēļu un iegūtu vairāk punktu.';
+  String get arenaHowDoesPairingWorkAnswer => 'Turnīram sākoties, spēlētājus sapāro atbilstoši reitingam.\nTiklīdz spēle beigusies, atgriezies turnīra vestibilā: tad tiksi sapārots ar nākamo spēlētāju vistuvāk tavam reitingam.\nTādā veidā tiek panākts mazāks gaidīšanas laiks, taču var gadīties, ka netiksies ar katru turnīra spēlētāju.\nSpēlē ātri un atgriezies vestibilā lai spēlētu vairāk spēļu un iegūtu vairāk punktu.';
 
   @override
   String get arenaHowDoesItEnd => 'Kā turnīri beidzas?';
@@ -622,7 +622,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\r\n\r\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaMedians => 'medians';
@@ -1628,7 +1628,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Meklēt uzdevumus';
 
   @override
-  String get puzzleFromMyGamesNone => 'Mums ļoti žēl, bet jums nav neviena uzdevuma datu bāzē.\r\n\r\nSpēlējiet ātrās vai klasiskajās spēlēs, lai paaugstinātu varbūtību, ka no tām tiks izveidots uzdevums!';
+  String get puzzleFromMyGamesNone => 'Mums ļoti žēl, bet jums nav neviena uzdevuma datu bāzē.\n\nSpēlējiet ātrās vai klasiskajās spēlēs, lai paaugstinātu varbūtību, ka no tām tiks izveidots uzdevums!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trenēties, izpētīt un uzlabot prasmes';
@@ -4637,7 +4637,7 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String positionInputHelp(String param) {
-    return 'Ielīmējiet derīgu FEN, lai sāktu katru spēli no dotās pozīcijas.\r\nŠis darbojas tikai ar standarta spēlēm nevis variantiem.\r\nVarat izmantot rīku \"$param\", lai izveidotu FEN pozīciju, tad ielīmējiet to šeit.\r\nAtstājiet tukšu, lai spēles sāktos no parastās pozīcijas.';
+    return 'Ielīmējiet derīgu FEN, lai sāktu katru spēli no dotās pozīcijas.\nŠis darbojas tikai ar standarta spēlēm nevis variantiem.\nVarat izmantot rīku \"$param\", lai izveidotu FEN pozīciju, tad ielīmējiet to šeit.\nAtstājiet tukšu, lai spēles sāktos no parastās pozīcijas.';
   }
 
   @override
@@ -4769,7 +4769,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get showMeEverything => 'Rādīt visu';
 
   @override
-  String get lichessPatronInfo => 'Lichess ir labdarības organizācija un pilnībā bezmaksas/brīva atvērtā koda programmatūra.\r\nVisas izmaksas, izstrādāšanu un saturu finansē vienīgi lietotāju ziedojumi.';
+  String get lichessPatronInfo => 'Lichess ir labdarības organizācija un pilnībā bezmaksas/brīva atvērtā koda programmatūra.\nVisas izmaksas, izstrādāšanu un saturu finansē vienīgi lietotāju ziedojumi.';
 
   @override
   String get nothingToSeeHere => 'Šobrīd te nav, ko parādīt.';
