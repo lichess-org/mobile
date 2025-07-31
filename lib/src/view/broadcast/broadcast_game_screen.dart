@@ -23,7 +23,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
+import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -86,7 +86,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
   void initState() {
     super.initState();
 
-    tabs = [AnalysisTab.opening, AnalysisTab.moves];
+    tabs = [AnalysisTab.explorer, AnalysisTab.moves];
 
     _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
   }
@@ -378,9 +378,10 @@ class _OpeningExplorerTab extends ConsumerWidget {
     final ctrlProvider = broadcastAnalysisControllerProvider(roundId, gameId);
     final state = ref.watch(ctrlProvider).requireValue;
 
-    return OpeningExplorerView(
+    return ExplorerView(
       position: state.currentNode.position,
       onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
+      isComputerAnalysisAllowed: true,
     );
   }
 }

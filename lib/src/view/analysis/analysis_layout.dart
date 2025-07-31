@@ -21,7 +21,7 @@ typedef BoardBuilder =
 typedef EngineGaugeBuilder = Widget Function(BuildContext context, Orientation orientation);
 
 enum AnalysisTab {
-  opening(Icons.explore),
+  explorer(Icons.explore),
   moves(LichessIcons.flow_cascade),
   summary(Icons.area_chart),
   // TODO add hint dialog on new install to show this tab
@@ -33,8 +33,8 @@ enum AnalysisTab {
 
   String l10n(AppLocalizations l10n) {
     switch (this) {
-      case AnalysisTab.opening:
-        return l10n.openingExplorer;
+      case AnalysisTab.explorer:
+        return l10n.openingExplorerAndTablebase;
       case AnalysisTab.moves:
         return l10n.movesPlayed;
       case AnalysisTab.summary:
