@@ -18,4 +18,5 @@ targets:
           - lib/src/model/**/*.dart
           - lib/src/network/*.dart
           - lib/src/db/*.dart
+          - lib/src/quick_actions.dart
           - lib/src/**/*_providers.dart
