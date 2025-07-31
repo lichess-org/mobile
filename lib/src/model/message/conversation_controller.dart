@@ -99,6 +99,7 @@ class ConversationController extends _$ConversationController {
     final pool = ref.read(socketPoolProvider);
     _client = pool.open(Uri(path: kDefaultSocketRoute));
 
+    _socketSubscription?.cancel();
     _socketSubscription = _client.stream.listen(_onSocketEvent);
   }
 
