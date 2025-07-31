@@ -432,7 +432,7 @@ class UserRatingHistoryPoint {
 
 @freezed
 sealed class CrosstableMatchup with _$CrosstableMatchup {
-  const factory CrosstableMatchup({required IMap<UserId, int> users, required int nbGames}) =
+  const factory CrosstableMatchup({required IMap<UserId, double> users, required int nbGames}) =
       _CrosstableMatchup;
 
   factory CrosstableMatchup.fromJson(Map<String, dynamic> json) {
@@ -441,7 +441,7 @@ sealed class CrosstableMatchup with _$CrosstableMatchup {
       users: pick(
         json,
         'users',
-      ).asMapOrThrow<String, int>().map((key, value) => MapEntry(UserId(key), value)).toIMap(),
+      ).asMapOrThrow<String, double>().map((key, value) => MapEntry(UserId(key), value)).toIMap(),
     );
   }
 }
@@ -449,7 +449,7 @@ sealed class CrosstableMatchup with _$CrosstableMatchup {
 @freezed
 sealed class Crosstable with _$Crosstable {
   const factory Crosstable({
-    required IMap<UserId, int> users,
+    required IMap<UserId, double> users,
     required int nbGames,
     CrosstableMatchup? matchup,
   }) = _Crosstable;
@@ -460,7 +460,7 @@ sealed class Crosstable with _$Crosstable {
       users: pick(
         json,
         'users',
-      ).asMapOrThrow<String, int>().map((key, value) => MapEntry(UserId(key), value)).toIMap(),
+      ).asMapOrThrow<String, double>().map((key, value) => MapEntry(UserId(key), value)).toIMap(),
       matchup: pick(json, 'matchup').letOrNull((matchupPick) {
         return CrosstableMatchup.fromJson(matchupPick.asMapOrEmpty<String, dynamic>());
       }),

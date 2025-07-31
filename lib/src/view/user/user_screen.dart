@@ -143,6 +143,12 @@ class _UserProfileListView extends ConsumerWidget {
 
   final void Function(bool value) setIsLoading;
 
+  String _scoreDisplay(double score) {
+    final integerPart = score.truncate();
+    final decimalPart = score - integerPart;
+    return '$integerPart${decimalPart == 0.5 ? '½' : ''}';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recentGames = ref.watch(userRecentGamesProvider(userId: user.id));
@@ -189,8 +195,12 @@ class _UserProfileListView extends ConsumerWidget {
                 final otherUserScore = crosstableData.users[user.id] ?? 0;
 
                 return ListTile(
-                  title: Text(context.l10n.yourScore('$currentUserScore - $otherUserScore')),
-                  leading: const Icon(Icons.scoreboard),
+                  title: Text(
+                    context.l10n.yourScore(
+                      '${_scoreDisplay(currentUserScore)} - ${_scoreDisplay(otherUserScore)}',
+                    ),
+                  ),
+                  leading: const Icon(Icons.scoreboard_outlined),
                   onTap: () {
                     Navigator.of(context).push(
                       GameHistoryScreen.buildRoute(
@@ -236,7 +246,7 @@ class _UserProfileListView extends ConsumerWidget {
                 ),
               if (user.followable == true && user.following != true)
                 ListTile(
-                  leading: const Icon(Icons.person_add),
+                  leading: const Icon(Icons.person_add_outlined),
                   title: Text(context.l10n.follow),
                   onTap: isLoading
                       ? null
@@ -244,7 +254,7 @@ class _UserProfileListView extends ConsumerWidget {
                 )
               else if (user.following == true)
                 ListTile(
-                  leading: const Icon(Icons.person_remove),
+                  leading: const Icon(Icons.person_remove_outlined),
                   title: Text(context.l10n.unfollow),
                   onTap: isLoading
                       ? null
@@ -252,7 +262,7 @@ class _UserProfileListView extends ConsumerWidget {
                 ),
               if (user.following != true && user.blocking != true)
                 ListTile(
-                  leading: const Icon(Icons.block),
+                  leading: const Icon(Icons.block_outlined),
                   title: Text(context.l10n.block),
                   onTap: isLoading
                       ? null
@@ -260,14 +270,14 @@ class _UserProfileListView extends ConsumerWidget {
                 )
               else if (user.blocking == true)
                 ListTile(
-                  leading: const Icon(Icons.block),
+                  leading: const Icon(Icons.block_outlined),
                   title: Text(context.l10n.unblock),
                   onTap: isLoading
                       ? null
                       : () => userAction((client) => RelationRepository(client).unblock(user.id)),
                 ),
               ListTile(
-                leading: const Icon(Icons.report_problem),
+                leading: const Icon(Icons.report_problem_outlined),
                 title: Text(context.l10n.reportXToModerators(user.username)),
                 onTap: () {
                   launchUrl(lichessUri('/report', {'username': user.id, 'login': session.user.id}));

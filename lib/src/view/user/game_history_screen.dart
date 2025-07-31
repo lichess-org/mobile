@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
@@ -62,13 +63,13 @@ class GameHistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
     final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user));
-    final title = gameFilter.opponent != null
-        ? Text('Games vs ${gameFilter.opponent!.username}')
+    final title = user != null && gameFilter.opponent != null
+        ? AppBarTitleText(context.l10n.resVsX(user!.name, gameFilter.opponent!.username))
         : filtersInUse.count == 0
         ? nbGamesAsync.when(
-            data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+            data: (nbGames) => AppBarTitleText(context.l10n.nbGames(nbGames)),
             loading: () => const ButtonLoadingIndicator(),
-            error: (e, s) => Text(context.l10n.mobileAllGames),
+            error: (e, s) => AppBarTitleText(context.l10n.mobileAllGames),
           )
         : Text(filtersInUse.selectionLabel(context.l10n));
     final filterBtn = SemanticIconButton(
