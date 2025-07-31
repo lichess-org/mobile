@@ -63,6 +63,7 @@ class GameRepository {
               if (filter.perfs.isNotEmpty)
                 'perfType': filter.perfs.map((perf) => perf.name).join(','),
               if (filter.side != null) 'color': filter.side!.name,
+              if (filter.opponent != null) 'vs': filter.opponent!.id.value,
               if (withBookmarked) 'withBookmarked': 'true',
             },
           ),
