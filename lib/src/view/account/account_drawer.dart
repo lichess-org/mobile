@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -76,6 +77,10 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
   }
 }
 
+final _unreadMessagesProvider = FutureProvider.autoDispose<UnreadMessages>((ref) {
+  return ref.watch(messageRepositoryProvider).unreadMessages();
+});
+
 class AccountDrawer extends ConsumerStatefulWidget {
   const AccountDrawer({super.key});
 
@@ -97,9 +102,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final kidMode = account.valueOrNull?.kid ?? false;
     final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
 
-    final inboxUnreadCount = ref.watch(
-      contactsProvider.select((s) => s.valueOrNull?.unreadCount ?? 0),
-    );
+    final unreadMessages = ref.watch(_unreadMessagesProvider).valueOrNull?.unread ?? 0;
 
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -165,8 +168,8 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
             if (account.hasValue && !kidMode)
               ListTile(
                 leading: Badge.count(
-                  isLabelVisible: inboxUnreadCount > 0,
-                  count: inboxUnreadCount,
+                  isLabelVisible: unreadMessages > 0,
+                  count: unreadMessages,
                   child: const Icon(Icons.mail_outline),
                 ),
                 title: Text(context.l10n.inbox),
