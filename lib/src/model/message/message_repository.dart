@@ -25,6 +25,15 @@ class MessageRepository {
 
   final LichessClient client;
 
+  Future<UnreadMessages> unreadMessages() {
+    return client.readJson(
+      Uri(path: '/inbox/unread-count'),
+      headers: {'Accept': 'application/json'},
+      mapper: (Map<String, dynamic> json) =>
+          (unread: json['unread'] as int, lichess: json['lichess'] as bool? ?? false),
+    );
+  }
+
   Future<Contacts> loadContacts() {
     return client.readJson(
       Uri(path: '/inbox'),
