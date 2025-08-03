@@ -944,7 +944,8 @@ sealed class AnalysisState
       (isComputerAnalysisAllowed &&
           isServerAnalysisEnabled &&
           acplChartData != null &&
-          acplChartData!.isNotEmpty);
+          acplChartData!.isNotEmpty &&
+          currentNode.serverEval != null);
 
   /// Whether the engine is allowed for this analysis and variant.
   bool get isEngineAllowed =>
