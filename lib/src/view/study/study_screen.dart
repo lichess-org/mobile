@@ -22,7 +22,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
+import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
@@ -146,7 +146,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
     super.initState();
 
     tabs = [
-      if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.opening,
+      if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.explorer,
       AnalysisTab.moves,
     ];
 
@@ -161,7 +161,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
     // anymore, we keep the tabs as they are.
     // In theory, studies mixing chapters with and without opening explorer should be pretty rare.
     if (tabs.length < 2 && widget.studyState.isOpeningExplorerAvailable) {
-      tabs = [AnalysisTab.opening, AnalysisTab.moves];
+      tabs = [AnalysisTab.explorer, AnalysisTab.moves];
       _tabController = TabController(
         vsync: this,
         initialIndex: tabs.length - 1,
@@ -432,13 +432,14 @@ class _Body extends ConsumerWidget {
       bottomBar: StudyBottomBar(id: id),
       children: tabs.map((tab) {
         switch (tab) {
-          case AnalysisTab.opening:
+          case AnalysisTab.explorer:
             if (studyState.isOpeningExplorerAvailable && studyState.currentNode.position != null) {
-              return OpeningExplorerView(
+              return ExplorerView(
                 position: studyState.currentNode.position!,
                 onMoveSelected: (move) {
                   ref.read(studyControllerProvider(id).notifier).onUserMove(move);
                 },
+                isComputerAnalysisAllowed: true,
               );
             } else {
               return const Center(child: Text('Opening explorer not available.'));
