@@ -129,11 +129,6 @@ final _currentGameProvider = FutureProvider.autoDispose.family<ExportedGame, Use
   (ref, id) => ref.withClient((client) => UserRepository(client).getCurrentGame(id)),
   name: 'currentGameProvider',
 );
-final _crosstableProvider = FutureProvider.autoDispose.family<Crosstable, (UserId, UserId)>(
-  (ref, userIds) =>
-      ref.withClient((client) => UserRepository(client).getCrosstable(userIds.$1, userIds.$2)),
-  name: 'crosstableProvider',
-);
 
 class _UserProfileListView extends ConsumerWidget {
   const _UserProfileListView(this.user, this.isLoading, this.setIsLoading);
@@ -161,7 +156,7 @@ class _UserProfileListView extends ConsumerWidget {
       _currentGameProvider(user.id).select((game) => game.valueOrNull?.playable ?? false),
     );
     final crosstable = session != null
-        ? ref.watch(_crosstableProvider((session.user.id, user.id)))
+        ? ref.watch(crosstableProvider(session.user.id, user.id, matchup: false))
         : null;
 
     if (user.disabled == true) {
