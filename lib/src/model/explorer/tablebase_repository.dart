@@ -29,7 +29,7 @@ class TablebaseRepository {
 
   Future<TablebaseEntry> getTablebaseEntry(String fen) {
     return client.readJson(
-      Uri.http(kLichessTablebaseHost, '/standard', {'fen': fen}),
+      Uri.https(kLichessTablebaseHost, '/standard', {'fen': fen}),
       mapper: TablebaseEntry.fromJson,
     );
   }
