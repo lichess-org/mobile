@@ -155,10 +155,6 @@ sealed class Tournament with _$Tournament {
 
   Tournament updateFromPartialServerJson(Map<String, Object?> json) =>
       _updateTournamentFromPartialPick(this, pick(json).required());
-
-  Tournament updateStandingsFromServerJson(Map<String, Object?> json) {
-    return copyWith(standing: pick(json).asStandingPageOrThrow());
-  }
 }
 
 Tournament _tournamentFromPick(RequiredPick pick) {
@@ -422,20 +418,16 @@ extension TournamentExtension on Pick {
     }
   }
 
-  StandingPage asStandingPageOrThrow() {
-    final requiredPick = this.required();
-    return (
-      page: requiredPick('page').asIntOrThrow(),
-      players: requiredPick(
-        'players',
-      ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
-    );
-  }
-
   StandingPage? asStandingPageOrNull() {
     if (value == null) return null;
     try {
-      return asStandingPageOrThrow();
+      final requiredPick = this.required();
+      return (
+        page: requiredPick('page').asIntOrThrow(),
+        players: requiredPick(
+          'players',
+        ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
+      );
     } catch (_) {
       return null;
     }

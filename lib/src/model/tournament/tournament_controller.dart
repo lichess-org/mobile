@@ -64,7 +64,7 @@ class TournamentController extends _$TournamentController {
 
     _watchFeaturedGameIfChanged(previous: null, current: tournament.featuredGame?.id);
 
-    return TournamentState(tournament: tournament);
+    return TournamentState(tournament: tournament, standingsPage: 1);
   }
 
   void onFocusRegained() {
@@ -82,48 +82,36 @@ class TournamentController extends _$TournamentController {
 
   void loadNextStandingsPage() {
     if (state.hasValue) {
-      _loadPage(state.requireValue.standingsPage + 1);
+      _reload(standingsPage: state.requireValue.standingsPage + 1);
     }
   }
 
   void loadPreviousStandingsPage() {
     if (state.hasValue) {
-      _loadPage(state.requireValue.standingsPage - 1);
+      _reload(standingsPage: state.requireValue.standingsPage - 1);
     }
   }
 
   void loadFirstStandingsPage() {
-    _loadPage(1);
+    _reload(standingsPage: 1);
   }
 
   int _pageOf(int rank) => ((rank - 1) ~/ kStandingsPageSize) + 1;
 
   void loadLastStandingsPage() {
     if (state.hasValue) {
-      _loadPage(_pageOf(state.requireValue.tournament.nbPlayers));
+      _reload(standingsPage: _pageOf(state.requireValue.tournament.nbPlayers));
     }
   }
 
   void jumpToMyPage() {
     if (state.valueOrNull?.tournament.me != null) {
-      _loadPage(_pageOf(state.requireValue.tournament.me!.rank));
+      _reload(standingsPage: _pageOf(state.requireValue.tournament.me!.rank));
     }
   }
 
-  Future<void> _loadPage(int page) async {
-    if (!state.hasValue) {
-      return;
-    }
-
-    final tournament = await ref
-        .read(tournamentRepositoryProvider)
-        .goToPage(state.requireValue.tournament, page);
-
-    state = AsyncValue.data(state.requireValue.copyWith(tournament: tournament));
-  }
-
-  Future<void> _reload() async {
-    _logger.fine('Refreshing tournament data');
+  Future<void> _reload({required int standingsPage}) async {
+    _logger.fine('Refreshing tournament data (with standings page $standingsPage)');
 
     if (!state.hasValue) {
       return;
@@ -131,12 +119,12 @@ class TournamentController extends _$TournamentController {
 
     final tournament = await ref
         .read(tournamentRepositoryProvider)
-        .reload(state.requireValue.tournament);
+        .reload(state.requireValue.tournament, standingsPage: standingsPage);
 
     if (tournament.me?.pauseDelay != null) {
       _pauseDelayTimer?.cancel();
       _pauseDelayTimer = Timer(tournament.me!.pauseDelay!, () {
-        _reload();
+        _reload(standingsPage: standingsPage);
       });
     }
 
@@ -145,7 +133,9 @@ class TournamentController extends _$TournamentController {
       current: tournament.featuredGame?.id,
     );
 
-    state = AsyncValue.data(state.requireValue.copyWith(tournament: tournament));
+    state = AsyncValue.data(
+      state.requireValue.copyWith(tournament: tournament, standingsPage: standingsPage),
+    );
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -157,7 +147,7 @@ class TournamentController extends _$TournamentController {
 
     switch (event.topic) {
       case 'reload':
-        _reload();
+        _reload(standingsPage: state.requireValue.standingsPage);
 
       case 'fen':
         final json = event.data as Map<String, dynamic>;
@@ -217,7 +207,8 @@ class TournamentController extends _$TournamentController {
 sealed class TournamentState with _$TournamentState {
   const TournamentState._();
 
-  const factory TournamentState({required Tournament tournament}) = _TournamentState;
+  const factory TournamentState({required Tournament tournament, required int standingsPage}) =
+      _TournamentState;
 
   String get name => tournament.meta.fullName;
   TournamentId get id => tournament.id;
@@ -230,8 +221,6 @@ sealed class TournamentState with _$TournamentState {
       tournament.me?.pauseDelay == null &&
       tournament.verdicts.accepted &&
       tournament.isFinished != true;
-
-  int get standingsPage => tournament.standing?.page ?? 1;
 
   int get firstRankOfPage => (standingsPage - 1) * kStandingsPageSize + 1;
   bool get hasPreviousPage => standingsPage > 1;
