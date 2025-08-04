@@ -27,9 +27,9 @@ dependencies:
   device_info_plus: ^11.0.0
   dynamic_system_colors: ^1.8.0
   fast_immutable_collections: ^11.0.0
-  firebase_core: ^3.0.0
-  firebase_crashlytics: ^4.0.0
-  firebase_messaging: ^15.0.0
+  firebase_core: ^4.0.0
+  firebase_crashlytics: ^5.0.0
+  firebase_messaging: ^16.0.0
   fl_chart: ^1.0.0
   flutter:
     sdk: flutter
