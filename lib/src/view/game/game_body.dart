@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -102,17 +101,16 @@ class GameBody extends ConsumerWidget {
       case AsyncData(value: final gameState, isRefreshing: false):
         final youAre = gameState.game.youAre ?? Side.white;
 
-        AsyncValue<Crosstable>? crosstable;
         // If playing against Stockfish, user is null
-        if (gameState.game.white.user != null && gameState.game.black.user != null) {
-          crosstable = ref.watch(
-            crosstableProvider(
-              gameState.game.white.user!.id,
-              gameState.game.black.user!.id,
-              matchup: true,
-            ),
-          );
-        }
+        final crosstable = gameState.game.white.user != null && gameState.game.black.user != null
+            ? ref.watch(
+                crosstableProvider(
+                  gameState.game.white.user!.id,
+                  gameState.game.black.user!.id,
+                  matchup: true,
+                ),
+              )
+            : null;
         final crosstableData = crosstable?.valueOrNull;
         final matchupData = crosstableData?.matchup;
 

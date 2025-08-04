@@ -96,13 +96,17 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     final game = gameState.game;
                     final position = gameState.game.positionAt(gameState.stepCursor);
 
-                    AsyncValue<Crosstable>? crosstable;
                     // If Stockfish is playing, user is null
-                    if (game.white.user != null && game.black.user != null) {
-                      crosstable = ref.watch(
-                        crosstableProvider(game.white.user!.id, game.black.user!.id, matchup: true),
-                      );
-                    }
+                    final crosstable = game.white.user != null && game.black.user != null
+                        ? ref.watch(
+                            crosstableProvider(
+                              game.white.user!.id,
+                              game.black.user!.id,
+                              matchup: true,
+                            ),
+                          )
+                        : null;
+
                     final crosstableData = crosstable?.valueOrNull;
                     final matchupData = crosstableData?.matchup;
                     final blackPlayerWidget = GamePlayer(
