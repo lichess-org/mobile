@@ -297,6 +297,27 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                     );
                   },
                 ),
+                SettingsListTile(
+                  settingsLabel: Text(context.l10n.letOtherPlayersMessageYou),
+                  settingsValue: data.message.label(context),
+                  onTap: () {
+                    showChoicePicker(
+                      context,
+                      choices: Message.values,
+                      selectedItem: data.message,
+                      labelBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (Message? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setMessage(value ?? data.message),
+                              );
+                            },
+                    );
+                  },
+                ),
               ],
             ),
             ListSection(
