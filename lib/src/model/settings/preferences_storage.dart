@@ -22,6 +22,7 @@ enum PrefCategory {
   overTheBoard('preferences.overTheBoard'),
   challenge('preferences.challenge'),
   gameSetup('preferences.gameSetup'),
+  gameSeeks('preferences.gameSeeks'),
   game('preferences.game'),
   coordinateTraining('preferences.coordinateTraining'),
   openingExplorer('preferences.opening_explorer'),
