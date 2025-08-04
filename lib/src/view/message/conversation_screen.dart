@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 sealed class DisplayItem {}
@@ -50,6 +51,9 @@ class ConversationScreen extends StatelessWidget {
           showFlair: true,
           showPatron: true,
           shouldShowOnline: true,
+          onTap: () {
+            Navigator.push(context, UserScreen.buildRoute(context, user));
+          },
         ),
       ),
       body: _Body(user: user),

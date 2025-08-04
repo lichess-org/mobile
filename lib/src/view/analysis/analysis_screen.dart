@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -344,6 +345,7 @@ class _PlayerWidget extends StatelessWidget {
               rating: player.rating,
               provisional: player.provisional,
               aiLevel: player.aiLevel,
+              onTap: () => Navigator.of(context).push(UserScreen.buildRoute(context, player.user!)),
             )
           else
             Text(player.fullName(context.l10n)),
