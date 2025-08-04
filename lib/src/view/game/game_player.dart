@@ -93,7 +93,7 @@ class GamePlayer extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: ColorScheme.of(context).primary,
+                      color: ColorScheme.of(context).onPrimaryContainer,
                     ),
                   ),
                 ),
