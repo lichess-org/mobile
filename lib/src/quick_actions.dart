@@ -22,6 +22,7 @@ part 'quick_actions.g.dart';
 QuickActionService quickActionService(Ref ref) {
   final service = QuickActionService(ref);
   ref.listen<RecentGameSeekPrefs>(recentGameSeekProvider, (previous, next) {
+    if (previous?.seeks == next.seeks) return;
     service.setQuickActions(next.seeks);
   });
   return service;
