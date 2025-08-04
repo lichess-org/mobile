@@ -123,7 +123,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileRemoveBookmark => 'Bỏ đánh dấu';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Phân tích trên máy chủ';
 
   @override
   String get mobileSettingsClockPosition => 'Vị trí đồng hồ';
@@ -835,17 +835,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastWebmastersPage => 'trang nhà phát triển web';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Nguồn PGN công khai, thời gian thực cho vòng này. Chúng tôi cũng cung cấp $param để đồng bộ hóa nhanh hơn và hiệu quả hơn.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Nhúng chương trình phát sóng này vào trang web của bạn';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Nhúng $param vào trang web của bạn';
-  }
 
   @override
   String get broadcastRatingDiff => 'Độ thay đổi hệ số';
@@ -4733,6 +4723,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Tắt chế độ mù';
+
+  @override
+  String get copyToClipboard => 'Sao chép vào bảng nhớ tạm';
 
   @override
   String opponentLeftCounter(int count) {

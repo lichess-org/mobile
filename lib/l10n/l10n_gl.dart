@@ -855,17 +855,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get broadcastWebmastersPage => 'páxina do administrador web';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Unha fonte dos PGN pública e en tempo real para esta rolda. Tamén ofrecemos unha $param para unha sincronización máis rápida e eficiente.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Incrustar esta emisión na túa páxina web';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Incrustar a $param na túa páxina web';
-  }
 
   @override
   String get broadcastRatingDiff => 'Diferenza de puntuación';
@@ -4761,6 +4751,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Desactivar o modo de accesibilidade web';
+
+  @override
+  String get copyToClipboard => 'Copiar ao portapapeis';
 
   @override
   String opponentLeftCounter(int count) {

@@ -855,17 +855,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastWebmastersPage => 'webmasters page';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
-  }
 
   @override
   String get broadcastRatingDiff => 'Rating diff';
@@ -4763,6 +4753,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get disableBlindMode => 'Disable blind mode';
 
   @override
+  String get copyToClipboard => 'Copy to clipboard';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5325,10 +5318,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get stormEndRun => 'Futam vége (gyorsbillentyű: Enter)';
 
   @override
-  String get stormHighscores => 'Legjobb pontszámaid';
+  String get stormHighscores => 'Rekordok';
 
   @override
-  String get stormViewBestRuns => 'Napi legjobb futamjaid';
+  String get stormViewBestRuns => 'Legjobb futamok';
 
   @override
   String get stormBestRunOfDay => 'Napi legjobb futam';
@@ -5483,7 +5476,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get studyDateAddedOldest => 'Hozzáadva (legrégebbi)';
 
   @override
-  String get studyRecentlyUpdated => 'Nemrégiben frissítve';
+  String get studyRecentlyUpdated => 'Legutóbb frissítve';
 
   @override
   String get studyMostPopular => 'Legnépszerűbb';
@@ -5528,7 +5521,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get studyPgnTags => 'PGN címkék';
 
   @override
-  String get studyLike => 'Kedvel';
+  String get studyLike => 'Tetszik';
 
   @override
   String get studyUnlike => 'Mégse tetszik';

@@ -12,7 +12,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileAccountPreferences => 'Налаштування облікового запису';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Ці налаштування застосовуються до вашого облікового запису Lichess і будуть використовуватися на всіх пристроях.';
 
   @override
   String get mobileAllGames => 'Усі ігри';
@@ -40,19 +40,19 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Добрий вечір, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Добрий вечір';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Добрий день, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Добрий день';
 
   @override
   String get mobileHideVariation => 'Сховати варіанти';
@@ -70,7 +70,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileNoSearchResults => 'Немає результатів ';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Зверніть увагу, що не всі функції зі старого додатку або сайту наразі доступні, але ми додаємо функції постійно.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Ви ні на кого не підписані.';
@@ -120,7 +120,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileRecentSearches => 'Недавні пошуки';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Видалити закладку';
 
   @override
   String get mobileServerAnalysis => 'Аналіз на сервері';
@@ -135,10 +135,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Коло';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Квадрат';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -159,10 +159,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Розмити зображення';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Сховати дошку';
 
   @override
   String get mobileSettingsPickAnImageShowBoard => 'Показати дошку';
@@ -239,7 +239,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileWatchTab => 'Дивитися';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Вітаємо в додатку Lichess!';
 
   @override
   String get activityActivity => 'Активність';
@@ -895,17 +895,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastWebmastersPage => 'webmasters page';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Публічне джерело PGN у реальному часі для цього раунду. Ми також пропонуємо $param для швидшої й ефективнішої синхронізації.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Вбудувати цю трансляцію на своєму сайті';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Вбудувати $param на своєму сайті';
-  }
 
   @override
   String get broadcastRatingDiff => 'Різниця у рейтингу';
@@ -1716,8 +1706,10 @@ class AppLocalizationsUk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles found in games by $param2',
-      one: 'One puzzle found in games by $param2',
+      other: '$count задач знайдено в іграх від $param2',
+      many: '$count задач знайдено в іграх від $param2',
+      few: '$count задачі знайдено в іграх від $param2',
+      one: 'Одну задачу знайдено в іграх від $param2',
     );
     return '$_temp0';
   }
@@ -4815,6 +4807,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Вимкнути режим для незрячих';
+
+  @override
+  String get copyToClipboard => 'Скопіювати до буферу обміну';
 
   @override
   String opponentLeftCounter(int count) {

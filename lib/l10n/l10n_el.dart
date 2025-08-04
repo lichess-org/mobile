@@ -70,7 +70,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileNoSearchResults => 'Δεν βρέθηκαν αποτελέσματα';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Παρακαλούμε σημειώστε ότι προς το παρόν δεν είναι διαθέσιμα όλα τα χαρακτηριστικά της ιστοσελίδας ή της παλιάς εφαρμογής, ωστόσο προσθέτουμε συνεχώς νέες λειτουργίες.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Δεν ακολουθείτε κανέναν χρήστη.';
@@ -123,7 +123,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Διαγραφή σελιδοδείκτη';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Ανάλυση στον σέρβερ';
 
   @override
   String get mobileSettingsClockPosition => 'Θέση ρολογιού';
@@ -855,17 +855,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastWebmastersPage => 'σελίδα για webmasters';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Μια δημόσια πηγή PGN πραγματικού χρόνου για αυτόν τον γύρο. Το Lichess προσφέρει επίσης ένα $param για γρηγορότερο και αποτελεσματικότερο συγχρονισμό.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Ενσωμάτωση μετάδοσης στην ιστοσελίδα σας';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Ενσωμάτωση $param στην ιστοσελίδα σας';
-  }
 
   @override
   String get broadcastRatingDiff => 'Διαφορά βαθμολογίας';
@@ -913,11 +903,11 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastLiveboard => 'Ζωντανά';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Μετάδοση της κοινότητας';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'Δημιουργήθηκε και διαχειρίζεται από τον $param.';
   }
 
   @override
@@ -4761,6 +4751,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Απενεργοποίηση λειτουργίας για τυφλούς';
+
+  @override
+  String get copyToClipboard => 'Αντιγραφή στο πρόχειρο';
 
   @override
   String opponentLeftCounter(int count) {

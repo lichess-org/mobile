@@ -875,17 +875,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastWebmastersPage => 'pagina administratorilor de site';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'O sursă publică de PGN în timp real pentru această rundă. De asemenea, oferim un $param pentru o sincronizare mai rapidă și mai eficientă.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Încorporează această transmisiune în site-ul tău';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Încorporează $param în site-ul tău';
-  }
 
   @override
   String get broadcastRatingDiff => 'Diferență rating';
@@ -4789,6 +4779,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Dezactivează modul fără vedere';
+
+  @override
+  String get copyToClipboard => 'Copiază în memorie';
 
   @override
   String opponentLeftCounter(int count) {

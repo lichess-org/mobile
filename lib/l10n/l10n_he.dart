@@ -895,17 +895,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastWebmastersPage => 'עמוד המתכנתים';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'קישור ל־PGN פומבי המתעדכן בשידור חי. אנו מציעים גם $param לסנכרון מיטבי ומהיר.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'הטמעת ההקרנה באתר האינטרנט שלך';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'הטמעת $param באתר האינטרנט שלך';
-  }
 
   @override
   String get broadcastRatingDiff => 'הפרש הדירוג';
@@ -4813,6 +4803,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Disable blind mode';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

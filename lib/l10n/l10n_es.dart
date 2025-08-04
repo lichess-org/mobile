@@ -855,17 +855,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastWebmastersPage => 'la página del webmaster';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Una fuente PGN pública en tiempo real para esta ronda. También ofrecemos $param para una sincronización más rápida y eficiente.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Inserta esta transmisión en tu sitio web';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Inserta la $param en tu sitio web';
-  }
 
   @override
   String get broadcastRatingDiff => 'Diferencia de puntuación';
@@ -4761,6 +4751,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Desactivar modo para no videntes';
+
+  @override
+  String get copyToClipboard => 'Copiar al portapapeles';
 
   @override
   String opponentLeftCounter(int count) {

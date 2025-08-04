@@ -855,17 +855,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastWebmastersPage => 'ağ yöneticileri sayfası';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Bu turun açık, gerçek zamanlı PGN kaynağı. Daha hızlı ve verimli senkronizasyon için $param\'ımız da bulunmaktadır.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'İnternet sitenizde bu yayını gömülü paylaşın';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return '${param}u İnternet sitenizde gömülü paylaşın';
-  }
 
   @override
   String get broadcastRatingDiff => 'Puan farkı';
@@ -4761,6 +4751,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Kör modunu devre dışı bırak';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

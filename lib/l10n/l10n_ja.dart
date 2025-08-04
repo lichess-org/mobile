@@ -835,17 +835,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastWebmastersPage => 'ウェブ管理者のページ';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'このラウンドについて公表されたリアルタイムの PGN です。$param も利用でき、高速かつ高効率の同期が行なえます。';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'この中継をウェブサイトに埋め込む';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return '$param をウェブサイトに埋め込む';
-  }
 
   @override
   String get broadcastRatingDiff => 'レーティングの差';
@@ -4733,6 +4723,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get disableBlindMode => '視覚障害モードをオフに';
+
+  @override
+  String get copyToClipboard => 'クリップボードにコピー';
 
   @override
   String opponentLeftCounter(int count) {

@@ -855,17 +855,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastWebmastersPage => 'faqe webmaster-ësh';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Një burim publik,, PGN, i atypëratyshëm për këtë raund. Ofrojmë gjithashtu edhe një $param, për njëkohësim më të shpejtë dhe më efikas.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Trupëzojeni këtë transmetim në sajtin tuaj';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Trupëzojeni $param në sajtin tuaj';
-  }
 
   @override
   String get broadcastRatingDiff => 'Rating diff';
@@ -4761,6 +4751,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Çaktivizo mënyrën për të verbër';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

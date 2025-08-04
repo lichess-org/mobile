@@ -895,17 +895,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get broadcastWebmastersPage => 'Stran administratorja turnirja';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Javen, v realnem času dostopen PGN vir tega kola. Ponujamo tudi iskanje s $param za hitrejše iskanje in bolj učinkovito sinhronizacijo.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Vgradite prenos v živo v svojo spletno stran.';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Vgradite $param v svojo spletno stran.';
-  }
 
   @override
   String get broadcastRatingDiff => 'Razlika v ratingu';
@@ -4817,6 +4807,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Izključite slepi način';
+
+  @override
+  String get copyToClipboard => 'Kopiraj v odložišče';
 
   @override
   String opponentLeftCounter(int count) {

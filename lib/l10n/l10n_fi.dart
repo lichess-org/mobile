@@ -855,17 +855,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastWebmastersPage => 'webmasterin sivulta';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Tämän kierroksen julkinen ja reaaliaikainen PGN-tiedosto. Nopeampaan ja tehokkaampaan synkronisointiin on tarjolla myös $param.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Upota tämä lähetys sivustoosi';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Upota $param sivustoosi';
-  }
 
   @override
   String get broadcastRatingDiff => 'Vahvuuslukujen erotus';
@@ -4761,6 +4751,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Poistu sokean käyttäjän tilasta';
+
+  @override
+  String get copyToClipboard => 'Kopioi leikepöydälle';
 
   @override
   String opponentLeftCounter(int count) {

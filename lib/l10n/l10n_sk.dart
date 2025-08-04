@@ -895,17 +895,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastWebmastersPage => 'stránke tvorcu';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Verejný zdroj PGN v reálnom čase pre toto kolo. Ponúkame tiež $param na rýchlejšiu a efektívnejšiu synchronizáciu.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Vložiť toto vysielanie na webovú stránku';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Vložiť $param na webovú stránku';
-  }
 
   @override
   String get broadcastRatingDiff => 'Ratingový rozdiel';
@@ -4817,6 +4807,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Zrušiť režim naslepo';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

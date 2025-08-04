@@ -9,10 +9,10 @@ class AppLocalizationsFa extends AppLocalizations {
   AppLocalizationsFa([String locale = 'fa']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'تنظیمات حساب کاربری';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'این تنظیمات به اکانت لیچستون اعمال میشود و در سراسر دستگاه های شما استفاده میشود.';
 
   @override
   String get mobileAllGames => 'همه بازی‌ها';
@@ -21,7 +21,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileAreYouSure => 'مطمئنید؟';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'تنظیمات صفحه';
 
   @override
   String get mobileCancelTakebackOffer => 'رد درخواست برگرداندن';
@@ -40,19 +40,19 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'عصر بخیر، $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'عصر بخیر';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'صبح بخیر، $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'روز بخیر';
 
   @override
   String get mobileHideVariation => 'پنهانیدن وَرتِش';
@@ -70,7 +70,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileNoSearchResults => 'بدون پیامد';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'توجه داشته باشین که تمام غابلیت های نرم‌افزار های قدیمی و وبسایت در حال حاضر موجود هستند، ولی ما در تمام مدت داریم غابلیت های جدید اضافه میکنیم.';
 
   @override
   String get mobileNotFollowingAnyUser => 'شما هیچ کاربری را نمی‌دنبالید.';
@@ -99,7 +99,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobilePuzzleStormConfirmEndRun => 'می‌خواهید این دور را به پایان برسانید؟';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'چیزی برای نمایش نیست، خواهشمندیم پالایه‌ها را دگرسان کنید.';
+  String get mobilePuzzleStormFilterNothingToShow => 'چیزی برای نمایش نیست، خواهشمندیم فیلتر ها را عوض کنید';
 
   @override
   String get mobilePuzzleStormNothingToShow => 'چیزی برای نمایش نیست، چند دور معماباران بازی کنید.';
@@ -120,28 +120,28 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileRecentSearches => 'واپسین جستجوها';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'حذف نشانه';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'تحلیل سرور';
 
   @override
   String get mobileSettingsClockPosition => 'جای ساعت';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'پیش فرض ها';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'دایره';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'مربع';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'علامت های صفحه ی خانه';
 
   @override
   String get mobileSettingsImmersiveMode => 'حالت فراگیر';
@@ -150,31 +150,31 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'مهره‌های زده‌شده';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'انتخاب عکس';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'پس زمینه انتخوابی فقط در حالت سیاه کار میکند. عکس سیاه پیشنهاد میشود';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'تصویر را تار کنید';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'تاپدید کردن صفحه';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'پدیدار کردن صفحه';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'یا بکشید یا ضربه بزنید';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'انتخاب دو مربع مبدا و مقصد';
 
   @override
   String get mobileSettingsShapeDrawing => 'Shape drawing';
@@ -183,13 +183,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'نمایش حاشیه';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'بازخورد لمسی';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'در صورت فعال شدن ، دستگاه شما زمانی که حرکتی انجام میدهید یا مهره ای را میگیرید و ویبره میشود';
 
   @override
   String get mobileSettingsTab => 'تنظیمات';
@@ -239,7 +239,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileWatchTab => 'تماشا';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'به نرم‌افزار lichess خوش آمدید';
 
   @override
   String get activityActivity => 'فعالیت';
@@ -855,17 +855,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastWebmastersPage => 'صفحهٔ وبداران';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'یک منبع عمومی و بی‌درنگ PGN برای این دور. ما همچنین $param را برای همگامِش تندتر و کارآمدتر پیشنهاد می‌دهیم.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'جاسازی این پخش زنده در وبگاه‌تان';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'جاسازی $param در وبگاه‌تان';
-  }
 
   @override
   String get broadcastRatingDiff => 'اختلاف درجه‌بندی';
@@ -2322,7 +2312,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get copyVariationPgn => 'رونوشت‌گیری PGN ِ وَرتِش';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'کپی کردن PGN بازی';
 
   @override
   String get move => 'حرکت';
@@ -2493,7 +2483,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get claimADraw => 'ادعای تساوی';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'بازی در تساوی پایان یافت';
 
   @override
   String get offerDraw => 'پیشنهاد مساوی';
@@ -2512,7 +2502,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return 'عضو شده در $param';
   }
 
   @override
@@ -2902,31 +2892,31 @@ class AppLocalizationsFa extends AppLocalizations {
   String get proposeATakeback => 'پیشنهاد برگردان';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'سفید درخواست بازپسگیری میکند';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'سیاه درخواست بازپسگیری میکند';
 
   @override
   String get takebackPropositionSent => 'برگردان فرستاده شد';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'سفید درخواست بازپسگیری را رد میکند';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'سیاه درخواست بازپسگیری را رد میکند';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'سفید درخواست بازپسگیری را تائید میکند';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'سیاه درخواست بازپسگیری را تائید میکند';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'سفید درخواست بازپسگیری را لغو میکند';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'سیاه درخواست بازپسگیری را لغو میکند';
 
   @override
   String get yourOpponentProposesATakeback => 'حریف‌تان پیشنهاد «برگرداندن» می‌دهد';
@@ -3214,7 +3204,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get losses => 'باخت‌ها';
 
   @override
-  String get startingIn => 'Starting in';
+  String get startingIn => 'شروع در';
 
   @override
   String standByX(String param) {
@@ -3761,7 +3751,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get termsOfService => 'شرایطِ استفاده';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'تائید عنوان';
 
   @override
   String get sourceCode => 'کد منبع';
@@ -3979,14 +3969,14 @@ class AppLocalizationsFa extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'اگر رایانامه را نمی‌بینید، مکان‌های دیگری مانند پوشه‌های ناخواسته، هرزنامه، اجتماعی یا سایر موردها را بررسی کنید.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'اگر ایمیل را در 5 دقیقه دریافت نکرده اید';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'فولدر های junk, spam و دیگر را چک کنید';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'تائید کنید که $param ایمیل شما هست';
   }
 
   @override
@@ -4129,7 +4119,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get language => 'زبان';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'تمام زبان ها';
 
   @override
   String get background => 'زمینه';
@@ -4754,13 +4744,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get stats => 'آمار';
 
   @override
-  String get accessibility => 'Accessibility';
+  String get accessibility => 'دسترسی';
 
   @override
-  String get enableBlindMode => 'Enable blind mode';
+  String get enableBlindMode => 'فعال‌سازی حالت نابینایی';
 
   @override
-  String get disableBlindMode => 'Disable blind mode';
+  String get disableBlindMode => 'غیرفعال سازی حالت نابینایی';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

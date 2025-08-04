@@ -874,17 +874,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get broadcastWebmastersPage => 'stranica web-mastera';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Javni, u stvarnom vremenu PGN izvor za ovu rundu. Nudimo također $param za bržu i efikasniju sinkronizaciju.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Uvežite ovo emitovanje u vašu web stranicu';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Uvežite $param u vašu web-stranicu';
-  }
 
   @override
   String get broadcastRatingDiff => 'Razlika u rejtingu';
@@ -4786,6 +4776,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Disable blind mode';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {
