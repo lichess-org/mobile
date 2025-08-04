@@ -27,6 +27,7 @@
   <string name="announcePiecesOnRankOrFile">Annoncer brikker på en række eller en linje. Eksempel: s a, s 1.</string>
   <string name="goToBoard">Gå til brættet. Standardfelt er e-4. Du kan angive et felt: bræt a-1 eller b a-1 vil tage dig til felt a-1.</string>
   <string name="movePiece">For at flytte en brik, skal du bruge standard algebraisk notation.</string>
+  <string name="promotion">For at fremme til andet end en dronning, brug equals. For eksempel a-8-equals-n forfremmer til en springer.</string>
   <string name="king">konge</string>
   <string name="whiteKing">hvid konge</string>
   <string name="blackKing">sort konge</string>
