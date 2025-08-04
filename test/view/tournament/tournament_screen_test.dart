@@ -155,15 +155,6 @@ String makeTournamentJson({
 ''';
 }
 
-String makeStandingJson({required List<StandingPlayer> standings, required int page}) {
-  return '''
-{
-  "page": $page,
-  "players": [ ${standingPlayersToJson(standings)} ]
-}
-''';
-}
-
 String makeReloadedTournamentJson({
   required List<StandingPlayer> standings,
   required int page,
@@ -239,14 +230,24 @@ void main() {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/tournament/82QbxlJb') {
           return mockResponse(
-            makeTournamentJson(standings: makeTestPlayers(10), nbPlayers: 13),
+            makeTournamentJson(standings: makeTestPlayers(10), nbPlayers: 11),
             200,
           );
         }
-        if (request.url.path == '/tournament/82QbxlJb/standing/1') {
-          return mockResponse(makeStandingJson(standings: makeTestPlayers(10), page: 1), 200);
-        } else if (request.url.path == '/tournament/82QbxlJb/standing/2') {
-          return mockResponse(makeStandingJson(standings: makeTestPlayers(3), page: 2), 200);
+        // Should use the reloadEndpoint field to reload the tournament
+        if (request.url.path == '/https%253A//http.lichess.org/tournament/82QbxlJb' &&
+            request.url.queryParameters['partial'] == 'true') {
+          if (request.url.queryParameters['page'] == '1') {
+            return mockResponse(
+              makeReloadedTournamentJson(standings: makeTestPlayers(10), page: 1, nbPlayers: 11),
+              200,
+            );
+          } else if (request.url.queryParameters['page'] == '2') {
+            return mockResponse(
+              makeReloadedTournamentJson(standings: makeTestPlayers(3), page: 2, nbPlayers: 13),
+              200,
+            );
+          }
         }
         return mockResponse('', 404);
       });
@@ -274,7 +275,7 @@ void main() {
         expect(find.text('player$i'), findsOneWidget);
       }
 
-      expect(find.text('1-10 / 13'), findsOneWidget);
+      expect(find.text('1-10 / 11'), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.chevron_right));
       // Wait for next page of standings to load
@@ -295,7 +296,7 @@ void main() {
         expect(find.text('player$i'), findsOneWidget);
       }
 
-      expect(find.text('1-10 / 13'), findsOneWidget);
+      expect(find.text('1-10 / 11'), findsOneWidget);
     });
 
     testWidgets('Displays featured game', (WidgetTester tester) async {
@@ -359,22 +360,29 @@ void main() {
             200,
           );
         }
-        if (request.url.path == '/tournament/82QbxlJb/standing/1') {
-          return mockResponse(makeStandingJson(standings: makeTestPlayers(10), page: 1), 200);
-        } else if (request.url.path == '/tournament/82QbxlJb/standing/2') {
-          return mockResponse(makeStandingJson(standings: makeTestPlayers(2), page: 2), 200);
-        }
         if (request.url.path == '/https%253A//http.lichess.org/tournament/82QbxlJb' &&
             request.url.queryParameters['partial'] == 'true') {
-          return mockResponse(
-            makeReloadedTournamentJson(
-              me: (gameId: null, pauseDelay: null, rank: 11, withdraw: null),
-              standings: makeTestPlayers(10),
-              page: 1,
-              nbPlayers: 12,
-            ),
-            200,
-          );
+          if (request.url.queryParameters['page'] == '1') {
+            return mockResponse(
+              makeReloadedTournamentJson(
+                me: (gameId: null, pauseDelay: null, rank: 11, withdraw: null),
+                standings: makeTestPlayers(10),
+                page: 1,
+                nbPlayers: 12,
+              ),
+              200,
+            );
+          } else if (request.url.queryParameters['page'] == '2') {
+            return mockResponse(
+              makeReloadedTournamentJson(
+                me: (gameId: null, pauseDelay: null, rank: 11, withdraw: null),
+                standings: makeTestPlayers(2),
+                page: 2,
+                nbPlayers: 12,
+              ),
+              200,
+            );
+          }
         }
         return mockResponse('', 404);
       });
