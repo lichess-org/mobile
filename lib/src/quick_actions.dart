@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -34,6 +35,8 @@ class QuickActionService {
 
   final QuickActions quickActions = const QuickActions();
 
+  TargetPlatform get platform => defaultTargetPlatform;
+
   void start() {
     final recentSeeks = ref.read(recentGameSeekProvider).seeks;
     quickActions.initialize((String shortcutType) {
@@ -60,7 +63,11 @@ class QuickActionService {
 
   void setQuickActions(IList<GameSeek> recentSeeks) {
     quickActions.setShortcutItems(<ShortcutItem>[
-      ShortcutItem(type: 'play_puzzles', localizedTitle: l10n.puzzleThemeMix, icon: 'extension'),
+      ShortcutItem(
+        type: 'play_puzzles',
+        localizedTitle: l10n.puzzleDesc,
+        icon: platform == TargetPlatform.iOS ? 'ExtensionIcon' : 'extension',
+      ),
 
       ...recentSeeks.asMap().entries.map((entry) {
         final index = entry.key;
@@ -71,19 +78,16 @@ class QuickActionService {
         final rated = seek.rated ? l10n.ratedTournament : l10n.casualTournament;
 
         final variant = (seek.variant == Variant.standard)
-            ? Variant.standard.label
+            ? ''
             : (seek.variant != null && seek.timeIncrement != null)
-            ? Perf.fromVariantAndSpeed(
-                seek.variant!,
-                Speed.fromTimeIncrement(seek.timeIncrement!),
-              ).shortTitle
-            : ' ';
+            ? ' • ${Perf.fromVariantAndSpeed(seek.variant!, Speed.fromTimeIncrement(seek.timeIncrement!)).shortTitle}'
+            : '';
 
         return ShortcutItem(
           type: 'recent_seek_$index',
-          localizedTitle: '$time+$increment $rated $variant',
+          localizedTitle: '$time+$increment $rated$variant',
           localizedSubtitle: l10n.recentGames,
-          icon: 'add_icon',
+          icon: platform == TargetPlatform.iOS ? 'PlusIcon' : 'add_icon',
         );
       }),
     ]);

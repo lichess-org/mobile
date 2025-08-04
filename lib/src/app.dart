@@ -61,7 +61,6 @@ class Application extends ConsumerStatefulWidget {
 class _AppState extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
   bool _firstTimeOnlineCheck = false;
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -114,7 +113,6 @@ class _AppState extends ConsumerState<Application> {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return MaterialApp(
-      navigatorKey: navigatorKey,
       localizationsDelegates: const [
         ...AppLocalizations.localizationsDelegates,
         MaterialLocalizationsEo.delegate,
