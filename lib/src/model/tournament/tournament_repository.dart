@@ -64,9 +64,7 @@ class TournamentRepository {
   Future<Tournament> reload(Tournament tournament) {
     return client.readJson(
       Uri(
-        // The /api/ endpoint caps the page to 200 (see https://github.com/lichess-org/lila/blob/ddd8c1e7535b13fd0ff2504a19cac530e4c2b70b/app/controllers/Tournament.scala#L128),
-        // so use the internal endpoint instead.
-        path: tournament.reloadEndpoint ?? '/tournament/${tournament.id}',
+        path: tournament.reloadEndpoint ?? '/api/tournament/${tournament.id}',
         queryParameters: {
           if (tournament.standing != null) 'page': tournament.standing!.page.toString(),
           'partial': 'true',
