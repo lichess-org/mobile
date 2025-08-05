@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -167,6 +168,8 @@ class _MessageBubble extends ConsumerWidget {
                     fontWeight: FontWeight.bold,
                     color: _textColor(context, brightness),
                   ),
+                  onTap: () =>
+                      Navigator.of(context).push(UserScreen.buildRoute(context, message.user!)),
                 ),
               Text(message.message, style: TextStyle(color: _textColor(context, brightness))),
             ],
