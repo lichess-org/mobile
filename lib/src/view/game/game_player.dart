@@ -28,6 +28,7 @@ class GamePlayer extends StatelessWidget {
   const GamePlayer({
     required this.game,
     required this.side,
+    this.matchupScore,
     this.clock,
     this.materialDiff,
     this.materialDifferenceFormat,
@@ -51,6 +52,7 @@ class GamePlayer extends StatelessWidget {
   /// if confirm move preference is enabled, used to display confirmation buttons
   final ({VoidCallback confirm, VoidCallback cancel})? confirmMoveCallbacks;
 
+  final double? matchupScore;
   final bool shouldLinkToUserProfile;
   final bool mePlaying;
   final bool canGoForward;
@@ -79,6 +81,24 @@ class GamePlayer extends StatelessWidget {
                 ? MainAxisAlignment.start
                 : MainAxisAlignment.end,
             children: [
+              if (matchupScore != null) ...[
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+                  decoration: BoxDecoration(
+                    color: ColorScheme.of(context).primaryContainer,
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Text(
+                    _scoreDisplay(matchupScore!),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: ColorScheme.of(context).onPrimaryContainer,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 5),
+              ],
               if (tournament?.ranks != null)
                 Text(
                   '#${side == Side.white ? tournament?.ranks?.white : tournament?.ranks?.black} ',
@@ -262,6 +282,12 @@ class ConfirmMove extends StatelessWidget {
       ],
     );
   }
+}
+
+String _scoreDisplay(double score) {
+  final integerPart = score.truncate();
+  final decimalPart = score - integerPart;
+  return '$integerPart${decimalPart == 0.5 ? '½' : ''}';
 }
 
 class MoveExpiration extends ConsumerStatefulWidget {

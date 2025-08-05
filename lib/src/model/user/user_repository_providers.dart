@@ -91,3 +91,11 @@ Future<IList<UserRatingHistoryPerf>> userRatingHistory(Ref ref, {required UserId
     const Duration(minutes: 1),
   );
 }
+
+@riverpod
+Future<Crosstable> crosstable(Ref ref, UserId userId1, UserId userId2, {bool matchup = true}) {
+  return ref.withClient(
+    (LichessClient client) =>
+        UserRepository(client).getCrosstable(userId1, userId2, matchup: matchup),
+  );
+}

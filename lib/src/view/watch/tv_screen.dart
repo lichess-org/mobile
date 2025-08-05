@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -95,9 +96,23 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     final game = gameState.game;
                     final position = gameState.game.positionAt(gameState.stepCursor);
 
+                    // If Stockfish is playing, user is null
+                    final crosstable = game.white.user != null && game.black.user != null
+                        ? ref.watch(
+                            crosstableProvider(
+                              game.white.user!.id,
+                              game.black.user!.id,
+                              matchup: true,
+                            ),
+                          )
+                        : null;
+
+                    final crosstableData = crosstable?.valueOrNull;
+                    final matchupData = crosstableData?.matchup;
                     final blackPlayerWidget = GamePlayer(
                       game: game.copyWith(black: game.black.setOnGame(true)),
                       side: Side.black,
+                      matchupScore: matchupData?.users[game.black.user!.id],
                       clock: gameState.game.clock != null
                           ? CountdownClockBuilder(
                               key: _blackClockKey,
@@ -118,6 +133,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     final whitePlayerWidget = GamePlayer(
                       game: game.copyWith(white: game.white.setOnGame(true)),
                       side: Side.white,
+                      matchupScore: matchupData?.users[game.white.user!.id],
                       clock: gameState.game.clock != null
                           ? CountdownClockBuilder(
                               key: _whiteClockKey,

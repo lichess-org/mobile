@@ -438,10 +438,10 @@ sealed class CrosstableMatchup with _$CrosstableMatchup {
   factory CrosstableMatchup.fromJson(Map<String, dynamic> json) {
     return CrosstableMatchup(
       nbGames: pick(json, 'nbGames').required().asIntOrThrow(),
-      users: pick(
-        json,
-        'users',
-      ).asMapOrThrow<String, double>().map((key, value) => MapEntry(UserId(key), value)).toIMap(),
+      users: pick(json, 'users')
+          .asMapOrThrow<String, num>()
+          .map((key, value) => MapEntry(UserId(key), value.toDouble()))
+          .toIMap(),
     );
   }
 }
@@ -457,10 +457,10 @@ sealed class Crosstable with _$Crosstable {
   factory Crosstable.fromJson(Map<String, dynamic> json) {
     return Crosstable(
       nbGames: pick(json, 'nbGames').required().asIntOrThrow(),
-      users: pick(
-        json,
-        'users',
-      ).asMapOrThrow<String, double>().map((key, value) => MapEntry(UserId(key), value)).toIMap(),
+      users: pick(json, 'users')
+          .asMapOrThrow<String, num>()
+          .map((key, value) => MapEntry(UserId(key), value.toDouble()))
+          .toIMap(),
       matchup: pick(json, 'matchup').letOrNull((matchupPick) {
         return CrosstableMatchup.fromJson(matchupPick.asMapOrEmpty<String, dynamic>());
       }),

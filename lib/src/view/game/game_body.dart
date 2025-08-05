@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
@@ -100,9 +101,23 @@ class GameBody extends ConsumerWidget {
       case AsyncData(value: final gameState, isRefreshing: false):
         final youAre = gameState.game.youAre ?? Side.white;
 
+        // If playing against Stockfish, user is null
+        final crosstable = gameState.game.white.user != null && gameState.game.black.user != null
+            ? ref.watch(
+                crosstableProvider(
+                  gameState.game.white.user!.id,
+                  gameState.game.black.user!.id,
+                  matchup: true,
+                ),
+              )
+            : null;
+        final crosstableData = crosstable?.valueOrNull;
+        final matchupData = crosstableData?.matchup;
+
         final black = GamePlayer(
           game: gameState.game,
           side: Side.black,
+          matchupScore: matchupData?.users[gameState.game.black.user!.id],
           materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
               : null,
@@ -150,6 +165,7 @@ class GameBody extends ConsumerWidget {
         final white = GamePlayer(
           game: gameState.game,
           side: Side.white,
+          matchupScore: matchupData?.users[gameState.game.white.user!.id],
           materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
               : null,
