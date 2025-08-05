@@ -273,7 +273,11 @@ class GameController extends _$GameController {
       final curState = state.requireValue;
       if (curState.stepCursor < curState.game.steps.length - 1) {
         state = AsyncValue.data(
-          curState.copyWith(stepCursor: curState.stepCursor + 1, premove: null),
+          curState.copyWith(
+            stepCursor: curState.stepCursor + 1,
+            premove: null,
+            promotionMove: null,
+          ),
         );
         final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
         if (san != null) {
@@ -292,6 +296,7 @@ class GameController extends _$GameController {
           newState.copyWith(
             stepCursor: didCancel ? newState.stepCursor : newState.stepCursor - 1,
             premove: null,
+            promotionMove: null,
           ),
         );
         final san = state.requireValue.game.stepAt(state.requireValue.stepCursor).sanMove?.san;

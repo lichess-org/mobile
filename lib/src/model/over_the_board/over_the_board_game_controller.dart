@@ -107,13 +107,13 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
 
   void goForward() {
     if (state.canGoForward) {
-      state = state.copyWith(stepCursor: state.stepCursor + 1);
+      state = state.copyWith(stepCursor: state.stepCursor + 1, promotionMove: null);
     }
   }
 
   void goBack() {
     if (state.canGoBack) {
-      state = state.copyWith(stepCursor: state.stepCursor - 1);
+      state = state.copyWith(stepCursor: state.stepCursor - 1, promotionMove: null);
     }
   }
 

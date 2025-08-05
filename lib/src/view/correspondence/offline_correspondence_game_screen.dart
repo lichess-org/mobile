@@ -303,6 +303,7 @@ class _BodyState extends ConsumerState<_Body> {
     if (stepCursor > 0) {
       setState(() {
         stepCursor = stepCursor - 1;
+        promotionMove = null;
       });
       _playReplayMoveSound();
     }
@@ -312,6 +313,7 @@ class _BodyState extends ConsumerState<_Body> {
     if (stepCursor < game.steps.length - 1) {
       setState(() {
         stepCursor = stepCursor + 1;
+        promotionMove = null;
       });
       _playReplayMoveSound();
     }
