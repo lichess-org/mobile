@@ -74,6 +74,29 @@ sealed class AnalysisOptions with _$AnalysisOptions {
   };
 }
 
+enum AnalysisGameResult {
+  whiteWins,
+  blackWins,
+  draw,
+  other;
+
+  static AnalysisGameResult resultFromPgnResult(String? result) {
+    return switch (result) {
+      '1-0' => AnalysisGameResult.whiteWins,
+      '0-1' => AnalysisGameResult.blackWins,
+      '½-½' => AnalysisGameResult.draw,
+      _ => AnalysisGameResult.other,
+    };
+  }
+
+  String? resultToString(Side side) => switch (this) {
+    whiteWins => side == Side.white ? '1' : '0',
+    blackWins => side == Side.white ? '0' : '1',
+    draw => '½',
+    other => null,
+  };
+}
+
 @riverpod
 class AnalysisController extends _$AnalysisController
     with EngineEvaluationMixin

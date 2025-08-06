@@ -492,14 +492,14 @@ class _PlayerWidget extends ConsumerWidget {
                 if (game.isOver) ...[
                   Text(
                     game.status.resultToString(side),
-                    style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 16.0),
                 ],
                 Expanded(
                   child: BroadcastPlayerWidget(
                     player: player,
-                    textStyle: const TextStyle().copyWith(fontWeight: FontWeight.bold),
+                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 if (liveClock != null || pastClock != null)
