@@ -32,7 +32,7 @@ class Aggregator {
 
   Future<T> call<T>(Uri uri, {required T Function(Map<String, dynamic>) mapper}) async {
     if (_pending == null) {
-      _pending = (Future<void>.delayed(const Duration(milliseconds: 50)), ISet(const {}));
+      _pending = (Future<void>.delayed(const Duration(milliseconds: 50)), ISet({uri}));
     } else {
       _pending = (_pending!.$1, _pending!.$2.add(uri));
     }
