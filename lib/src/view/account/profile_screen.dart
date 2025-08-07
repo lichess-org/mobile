@@ -46,7 +46,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
-    final activity = ref.watch(_accountActivityProvider);
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: account.when(
@@ -68,6 +67,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           if (user == null) {
             return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
           }
+          final activity = ref.watch(_accountActivityProvider);
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
           return RefreshIndicator.adaptive(
