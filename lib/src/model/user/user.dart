@@ -34,8 +34,11 @@ extension LightUserExtension on Pick {
       final name =
           requiredPick('username').asStringOrNull() ?? requiredPick('name').asStringOrThrow();
 
+      // If the id is not present, we assume the user is identified by their name.
+      final id = requiredPick('id').asUserIdOrNull() ?? UserId.fromUserName(name);
+
       return LightUser(
-        id: requiredPick('id').asUserIdOrThrow(),
+        id: id,
         name: name,
         title: requiredPick('title').asStringOrNull(),
         flair: requiredPick('flair').asStringOrNull(),
@@ -92,6 +95,8 @@ sealed class User with _$User {
 
   LightUser get lightUser =>
       LightUser(id: id, name: username, title: title, isPatron: isPatron, flair: flair);
+
+  bool get isBot => title == 'BOT';
 
   factory User.fromServerJson(Map<String, dynamic> json) => User.fromPick(pick(json).required());
 
@@ -423,4 +428,42 @@ class UserRatingHistoryPoint {
   final int elo;
 
   const UserRatingHistoryPoint({required this.date, required this.elo});
+}
+
+@freezed
+sealed class CrosstableMatchup with _$CrosstableMatchup {
+  const factory CrosstableMatchup({required IMap<UserId, double> users, required int nbGames}) =
+      _CrosstableMatchup;
+
+  factory CrosstableMatchup.fromJson(Map<String, dynamic> json) {
+    return CrosstableMatchup(
+      nbGames: pick(json, 'nbGames').required().asIntOrThrow(),
+      users: pick(
+        json,
+        'users',
+      ).asMapOrThrow<String, double>().map((key, value) => MapEntry(UserId(key), value)).toIMap(),
+    );
+  }
+}
+
+@freezed
+sealed class Crosstable with _$Crosstable {
+  const factory Crosstable({
+    required IMap<UserId, double> users,
+    required int nbGames,
+    CrosstableMatchup? matchup,
+  }) = _Crosstable;
+
+  factory Crosstable.fromJson(Map<String, dynamic> json) {
+    return Crosstable(
+      nbGames: pick(json, 'nbGames').required().asIntOrThrow(),
+      users: pick(
+        json,
+        'users',
+      ).asMapOrThrow<String, double>().map((key, value) => MapEntry(UserId(key), value)).toIMap(),
+      matchup: pick(json, 'matchup').letOrNull((matchupPick) {
+        return CrosstableMatchup.fromJson(matchupPick.asMapOrEmpty<String, dynamic>());
+      }),
+    );
+  }
 }

@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -17,6 +18,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/message/contacts_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -92,7 +94,12 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final authController = ref.watch(authControllerProvider);
     final account = ref.watch(accountProvider);
     final userSession = ref.watch(authSessionProvider);
+    final kidMode = account.valueOrNull?.kid ?? false;
     final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
+
+    final inboxUnreadCount = ref.watch(
+      contactsProvider.select((s) => s.valueOrNull?.unreadCount ?? 0),
+    );
 
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -155,6 +162,23 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                 Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute(context));
               },
             ),
+            if (account.hasValue && !kidMode)
+              ListTile(
+                leading: Badge.count(
+                  isLabelVisible: inboxUnreadCount > 0,
+                  count: inboxUnreadCount,
+                  child: const Icon(Icons.mail_outline),
+                ),
+                title: Text(context.l10n.inbox),
+                enabled: isOnline,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(ContactsScreen.buildRoute(context));
+                },
+              ),
             if (authController.isLoading)
               const ListTile(
                 leading: Icon(Icons.logout_outlined),

@@ -36,6 +36,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Câu đố</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Tìm kiếm gần đây</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Bỏ đánh dấu</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Phân tích trên máy chủ</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Vị trí đồng hồ</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Mẫu có sẵn</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Kéo quân cờ mục tiêu</string>

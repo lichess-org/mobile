@@ -480,23 +480,7 @@
     }
   },
   "broadcastWebmastersPage": "webmasters page",
-  "broadcastPgnSourceHelp": "A public, real-time PGN source for this round. We also offer a {param} for faster and more efficient synchronisation.",
-  "@broadcastPgnSourceHelp": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
   "broadcastEmbedThisBroadcast": "Embed this broadcast in your website",
-  "broadcastEmbedThisRound": "Embed {param} in your website",
-  "@broadcastEmbedThisRound": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
   "broadcastRatingDiff": "Rating diff",
   "broadcastGamesThisTournament": "Games in this tournament",
   "broadcastScore": "Score",
@@ -2682,6 +2666,7 @@
   "accessibility": "Accessibility",
   "enableBlindMode": "Enable blind mode",
   "disableBlindMode": "Disable blind mode",
+  "copyToClipboard": "Copy to clipboard",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {

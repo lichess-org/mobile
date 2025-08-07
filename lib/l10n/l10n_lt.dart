@@ -895,17 +895,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastWebmastersPage => 'žiniatinklio valdytojų puslapis';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Viešas realaus laiko PGN šaltinis šiam turui. Taip pat siūlome $param greitesniam ir efektyvesniam sinchronizavimui.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Įterpkite šią transliaciją į savo svetainę';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Įterpkite $param į savo svetainę';
-  }
 
   @override
   String get broadcastRatingDiff => 'Reitingo skirtumas';
@@ -4815,6 +4805,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Disable blind mode';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

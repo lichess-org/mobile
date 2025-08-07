@@ -23,6 +23,11 @@ const kLichessOpeningExplorerHost = String.fromEnvironment(
   defaultValue: 'explorer.lichess.ovh',
 );
 
+const kLichessTablebaseHost = String.fromEnvironment(
+  'LICHESS_TABLEBASE_HOST',
+  defaultValue: 'tablebase.lichess.ovh',
+);
+
 const kLichessVapidPublicKey = String.fromEnvironment(
   'LICHESS_VAPID_PUBLIC_KEY',
   defaultValue:

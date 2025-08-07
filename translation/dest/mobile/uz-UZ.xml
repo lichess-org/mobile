@@ -2,11 +2,16 @@
 <resources>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Barcha o\'yinlar</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ishonchingiz komilmi?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Taxta sozlamalari</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cheklov taklifi</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Tozalash</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Saqlangan harakatni tozalash</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">O\'yinga qo\'shiling</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Fikr-mulohaza</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kech, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kech</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kun, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kun</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Variantni yashirish</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Uy</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Jonli translyatorlar</string>
@@ -27,8 +32,13 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Sevimli ochilishlaringizdan jumboqlarni o\'ynang yoki mavzuni tanlang.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Masalalar</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Oxirgi qidiruvlar</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Xatchoʻpni oʻchirish</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Server tahlili</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Soatlar joylashuvi</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Aylana</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kvadrat</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersiv rejim</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Rasm tanlang</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sozlamalar</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN-ni baham ko\'ring</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Oʻyin URL manzilini baham koʻring</string>

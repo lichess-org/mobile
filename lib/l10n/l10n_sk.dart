@@ -9,10 +9,10 @@ class AppLocalizationsSk extends AppLocalizations {
   AppLocalizationsSk([String locale = 'sk']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Preferencie účtu';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Tieto preferencie sa použijú na Vaše konto Lichess a budú sa používať vo všetkých zariadeniach.';
 
   @override
   String get mobileAllGames => 'Všetky partie';
@@ -21,7 +21,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileAreYouSure => 'Ste si istý?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Predvoľby šachovnice';
 
   @override
   String get mobileCancelTakebackOffer => 'Zrušiť žiadosť o vrátenie ťahu';
@@ -40,19 +40,19 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Dobrý večer, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Dobrý večer';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Dobrý deň, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Dobrý deň';
 
   @override
   String get mobileHideVariation => 'Skryť varianty';
@@ -70,7 +70,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileNoSearchResults => 'Nič sa nenašlo';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Upozorňujeme, že v súčasnosti nie sú k dispozícii všetky funkcie zo starej aplikácie alebo webstránky. Funkcie však neustále pridávame.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Nesledujete žiadneho používateľa.';
@@ -120,28 +120,28 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileRecentSearches => 'Posledné vyhľadávania';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Odstrániť záložku';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Analýza na serveri';
 
   @override
   String get mobileSettingsClockPosition => 'Umiestnenie hodín';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Predvoľby';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Cieľové políčko ťahanej figúrky';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Kruh';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Štvorec';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Widgety na domovskej stránke';
 
   @override
   String get mobileSettingsImmersiveMode => 'Režim celej obrazovky';
@@ -150,40 +150,40 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Skrytie používateľského rozhrania systému počas hrania. Túto funkciu použite, ak vám prekážajú navigačné gestá systému na okrajoch obrazovky. Platí pre obrazovky s partiami a úlohami.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Zobraté figúry';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Vybrať obrázok';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Vlastné pozadie funguje len v tmavom režime. Odporúča sa tmavý obrázok.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Rozmazať obrázok';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Skryť šachovnicu';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Zobraziť šachovnicu';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Potiahnutím zobraziť ďalšie pozadia';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Ťuknite alebo potiahnite';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Ťuknúť na dve políčka';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Kreslenie šípok/kruhov';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Kreslenie šípok/kruhov pomocou dvoch prstov: podržte jeden prst na prázdnom štvorci a ťahaním druhého prsta nakreslite požadovaný útvar.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Zobraziť okraj';
 
   @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
@@ -895,17 +895,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastWebmastersPage => 'stránke tvorcu';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Verejný zdroj PGN v reálnom čase pre toto kolo. Ponúkame tiež $param na rýchlejšiu a efektívnejšiu synchronizáciu.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Vložiť toto vysielanie na webovú stránku';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Vložiť $param na webovú stránku';
-  }
 
   @override
   String get broadcastRatingDiff => 'Ratingový rozdiel';
@@ -953,11 +943,11 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastLiveboard => 'Aktuálna pozícia';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Vysielanie člena komunity';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'Vytvoril a spravuje $param.';
   }
 
   @override
@@ -4817,6 +4807,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Zrušiť režim naslepo';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

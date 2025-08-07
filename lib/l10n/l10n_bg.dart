@@ -40,19 +40,19 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Добър вечер, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Добър вечер';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Дoбър ден, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Дoбър ден';
 
   @override
   String get mobileHideVariation => 'Скрий вариацията';
@@ -70,7 +70,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileNoSearchResults => 'Няма резултати';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Моля забележете, че не всички функции от старото приложение или уеб-сайта са достъпни в момента, но ние постоянно добавяме нови функции.';
 
   @override
   String get mobileNotFollowingAnyUser => 'You are not following any user.';
@@ -83,7 +83,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Играчи, съдържащи \"$param\"';
   }
 
   @override
@@ -135,10 +135,10 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Кръг';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Квадрат';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -147,7 +147,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Режим \"Цял екран\"';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Скрий интерфейса по време на игрите. Използвайте това, ако системната навигация по краищата на екрана Ви пречи. В сила е по време на игри и задачи.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
@@ -162,10 +162,10 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'Blur the image';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Скрий дъската';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Покажи дъската';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
@@ -239,7 +239,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileWatchTab => 'Гледай';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Добре дошли в приложението Lichess!';
 
   @override
   String get activityActivity => 'Дейност';
@@ -855,17 +855,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastWebmastersPage => 'webmasters page';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
-  }
 
   @override
   String get broadcastRatingDiff => 'Rating diff';
@@ -913,11 +903,11 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastLiveboard => 'Live board';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Излъчване от общността';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'Създадено и управлявано от $param.';
   }
 
   @override
@@ -1666,8 +1656,8 @@ class AppLocalizationsBg extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles found in games by $param2',
-      one: 'One puzzle found in games by $param2',
+      other: '$count задачи са намерени в игрите на $param2',
+      one: 'Една задача е намерена в игрите на $param2',
     );
     return '$_temp0';
   }
@@ -2173,7 +2163,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get createAGame => 'Създай игра';
 
   @override
-  String get createTheGame => 'Create the game';
+  String get createTheGame => 'Създай играта';
 
   @override
   String get whiteIsVictorious => 'Белите победиха';
@@ -2512,7 +2502,7 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return 'Присъедини се $param';
   }
 
   @override
@@ -2902,31 +2892,31 @@ class AppLocalizationsBg extends AppLocalizations {
   String get proposeATakeback => 'Предложи връщане на ход';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'Белите предлагат връщане на хода';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'Черните предлагат връщане на хода';
 
   @override
   String get takebackPropositionSent => 'Предложение за връщане на ход изпратено';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'Белите отказаха връщането на хода';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'Черните отказаха връщането на хода';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'Белите приеха връщането на хода';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'Черните приеха връщането на хода';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'Белите отмениха предложението за връщане';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'Черните отмениха предложението за връщане';
 
   @override
   String get yourOpponentProposesATakeback => 'Вашият противник предлага връщане';
@@ -3761,7 +3751,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get termsOfService => 'Условия';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'Потвърждение на титлата';
 
   @override
   String get sourceCode => 'Изходен код';
@@ -4754,13 +4744,16 @@ class AppLocalizationsBg extends AppLocalizations {
   String get stats => 'Статистика';
 
   @override
-  String get accessibility => 'Accessibility';
+  String get accessibility => 'Достъпност';
 
   @override
-  String get enableBlindMode => 'Enable blind mode';
+  String get enableBlindMode => 'Включи режима за незрящи';
 
   @override
-  String get disableBlindMode => 'Disable blind mode';
+  String get disableBlindMode => 'Изключи режима за незрящи';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

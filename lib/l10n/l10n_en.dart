@@ -855,17 +855,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastWebmastersPage => 'webmasters page';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
-  }
 
   @override
   String get broadcastRatingDiff => 'Rating diff';
@@ -4761,6 +4751,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disableBlindMode => 'Disable blind mode';
 
   @override
+  String get copyToClipboard => 'Copy to clipboard';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6348,6 +6341,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileRemoveBookmark => 'Remove the bookmark';
 
   @override
+  String get mobileServerAnalysis => 'Server analysis';
+
+  @override
   String get mobileSettingsClockPosition => 'Clock position';
 
   @override
@@ -7077,17 +7073,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get broadcastWebmastersPage => 'webmasters page';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronization.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
-  }
 
   @override
   String get broadcastRatingDiff => 'Rating diff';
@@ -10983,6 +10969,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get disableBlindMode => 'Disable blind mode';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

@@ -9,10 +9,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   AppLocalizationsGsw([String locale = 'gsw']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Konto Ischtellige';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Die Ischtellige gälted uf dim Lichess-Account und uf allne Grät.';
 
   @override
   String get mobileAllGames => 'All Schpiel';
@@ -21,7 +21,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileAreYouSure => 'Bisch sicher?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Brätt-Ischtellige';
 
   @override
   String get mobileCancelTakebackOffer => 'Zugsrücknam-Offerte zruggzieh';
@@ -40,19 +40,19 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Guete Abig, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Guete Abig';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Guete Tag, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Guete Tag';
 
   @override
   String get mobileHideVariation => 'Variante verberge';
@@ -120,7 +120,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileRecentSearches => 'Kürzlich Gsuechts';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Buechzeiche entferne';
 
   @override
   String get mobileServerAnalysis => 'Server-Analyse';
@@ -129,19 +129,19 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsClockPosition => 'Position vode Uhr';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Vorischtellige';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Markierig, zogeni Figur';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Chreis';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Vieregg';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Home Widgets';
 
   @override
   String get mobileSettingsImmersiveMode => 'Ibettete Modus';
@@ -150,40 +150,40 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'UI-System während em Schpille usblände. Benutz die Option, wänn dich d\'Navigationsgeschte am Bildschirmrand störed. Das gilt für de Schpiel- und au für de Puzzle-Storm-Bildschirm.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'g\'schlageni Figure';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'wähl es Bild';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Eigeni Hindergründ funktioniered nur im Dunkelmodus. Es dunkles Bild wird empfohlen.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Bild undütlich mache';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Bild verstecke';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Brätt zeige';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Wüsche, zum anderi Hindergründ zeige';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Atippe oder Ziehe';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tipp uf zwei Fälder';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Form Zeichnig';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Mach Forme, mit zwei Finger: Heb ein Finger uf es leers Fäld und zieh mit em Andere, zum e Form zeichne.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Zeig de Rand';
 
   @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
@@ -855,17 +855,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastWebmastersPage => 'Webmaster Site';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Öffentlichi, real-time PGN Quälle, für die Rundi. Mir offeriered au $param für e schnälleri und effiziänteri Synchronisation.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Nimm die Überträgig uf dini Website';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Nimm $param uf dini Website';
-  }
 
   @override
   String get broadcastRatingDiff => 'Wertigs Differänz';
@@ -2902,31 +2892,31 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get proposeATakeback => 'Zugsrücknahm vorschlah';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'Wiss wott de Zug zrugg neh';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'Schwarz wott de Zug zrugg neh';
 
   @override
   String get takebackPropositionSent => 'Vorschlag zur Zugsrücknahm gsändet';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'Wiss lähnt d\'Rücknahm ab';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'Schwarz lähnt d\'Rücknahm ab';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'Wiss akzeptiert d\'Rücknahm';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'Schwarz akzeptiert d\'Rücknahm';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'Wiss zieht d\'Afrag zrugg';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'Schwarz zieht d\'Afrag zrugg';
 
   @override
   String get yourOpponentProposesATakeback => 'Din Gägner wott de letscht Zug zruggneh';
@@ -3761,7 +3751,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get termsOfService => 'Nutzigs-Bedingige';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'Überprüefig vum Titel';
 
   @override
   String get sourceCode => 'Quällcode';
@@ -4761,6 +4751,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Blindmodus deaktiviere';
+
+  @override
+  String get copyToClipboard => 'Kopier ufs Clipboard';
 
   @override
   String opponentLeftCounter(int count) {

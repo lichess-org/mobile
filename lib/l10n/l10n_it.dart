@@ -70,7 +70,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileNoSearchResults => 'Nessun risultato';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Da notare che non tutte le funzionalità della vecchia app o del sito web sono attualmente disponibili, ma stiamo continuamente aggiungendo funzionalità.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Non stai seguendo nessun utente.';
@@ -123,7 +123,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileRemoveBookmark => 'Rimuovi segnalibro';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Analisi sul server';
 
   @override
   String get mobileSettingsClockPosition => 'Posizione dell\'orologio';
@@ -135,10 +135,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Circolare';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Quadrato';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -150,10 +150,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Nascondi la UI di sistema mentre giochi. Attiva se i gesti di navigazione ai bordi dello schermo ti danno fastidio. Si applica alla schermata di gioco e Puzzle Storm.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Pezzi catturati';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Scegli un\'immagine';
 
   @override
   String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
@@ -855,17 +855,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastWebmastersPage => 'pagina dei gestori web';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Una sorgente PGN pubblica per questo round. Viene offerta anche un\'$param per una sincronizzazione più rapida ed efficiente.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Incorpora questa trasmissione nel tuo sito web';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Incorpora $param nel tuo sito web';
-  }
 
   @override
   String get broadcastRatingDiff => 'Differenza di punteggio';
@@ -4761,6 +4751,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Disattiva \"modalità non vedenti\"';
+
+  @override
+  String get copyToClipboard => 'Copia negli appunti';
 
   @override
   String opponentLeftCounter(int count) {

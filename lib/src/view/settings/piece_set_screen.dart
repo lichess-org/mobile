@@ -74,7 +74,11 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
                 constraints: const BoxConstraints(maxWidth: 264),
                 child: Stack(
                   children: [
-                    boardPrefs.boardTheme.thumbnail,
+                    BrightnessHueFilter(
+                      brightness: boardPrefs.brightness,
+                      hue: boardPrefs.hue,
+                      child: boardPrefs.boardTheme.thumbnail,
+                    ),
                     Row(
                       children: [
                         for (final img in getPieceImages(pieceSet)) Image(image: img, height: 44),

@@ -1099,4 +1099,5 @@ Wszystkie koszty operacyjne, rozwój i treści są finansowane wyłącznie z dar
   <string name="accessibility">Ułatwienia dostępu</string>
   <string name="enableBlindMode">Włącz tryb gry \"na ślepo\"</string>
   <string name="disableBlindMode">Wyłącz tryb gry \"na ślepo\"</string>
+  <string name="copyToClipboard">Kopiuj do schowka</string>
 </resources>

@@ -855,17 +855,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get broadcastWebmastersPage => 'webbmasterns sida';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'En offentlig PGN-källa i realtid för denna omgång. Vi erbjuder även en $param för snabbare och effektivare synkronisering.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Infoga denna sändning på din webbplats';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Infoga $param på din webbplats';
-  }
 
   @override
   String get broadcastRatingDiff => 'Rating diff';
@@ -4761,6 +4751,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Inaktivera blind-läge';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

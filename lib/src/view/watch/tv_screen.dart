@@ -113,7 +113,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                               },
                             )
                           : null,
-                      materialDiff: game.lastMaterialDiffAt(Side.black),
+                      materialDiff: game.materialDiffAt(gameState.stepCursor, Side.black),
                     );
                     final whitePlayerWidget = GamePlayer(
                       game: game.copyWith(white: game.white.setOnGame(true)),
@@ -133,7 +133,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                               },
                             )
                           : null,
-                      materialDiff: game.lastMaterialDiffAt(Side.white),
+                      materialDiff: game.materialDiffAt(gameState.stepCursor, Side.white),
                     );
 
                     return BoardTable(
@@ -150,6 +150,9 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                           : blackPlayerWidget,
                       moves: game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false),
                       currentMoveIndex: gameState.stepCursor,
+                      onSelectMove: (index) {
+                        ref.read(_tvGameCtrl.notifier).goToMove(index);
+                      },
                       lastMove: game.moveAt(gameState.stepCursor),
                     );
                   },

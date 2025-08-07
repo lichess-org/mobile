@@ -855,17 +855,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastWebmastersPage => 'pàgina d\'administració';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Un origen públic en PGN públic en temps real d\'aquesta ronda. També oferim un $param per una sincronització més ràpida i eficient.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Incrusta aquesta retransmissió al vostre lloc web';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Incrusta $param al vostre lloc web';
-  }
 
   @override
   String get broadcastRatingDiff => 'Diferència puntuació';
@@ -4761,6 +4751,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Desactivar el mode cec';
+
+  @override
+  String get copyToClipboard => 'Copia al porta-retalls';
 
   @override
   String opponentLeftCounter(int count) {

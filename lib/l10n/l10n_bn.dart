@@ -9,22 +9,22 @@ class AppLocalizationsBn extends AppLocalizations {
   AppLocalizationsBn([String locale = 'bn']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'একাউন্ট নির্বাচনী পছন্দসমূহ';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'আপনার নির্বাচন করা পছন্দগুলি, লিচেস একাউন্টে যুক্ত করা হলো এবং ভবিষ্যতে সমস্ত ডিভাইসে ব্যবহৃত হবে.';
 
   @override
-  String get mobileAllGames => 'সব গেম';
+  String get mobileAllGames => 'সমস্ত গেমসমূহ';
 
   @override
   String get mobileAreYouSure => 'আপনি কি নিশ্চিত?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'বোর্ড সেটিংস';
 
   @override
-  String get mobileCancelTakebackOffer => 'চাল ফেরত নেওয়ার অফার বাতিল করুন';
+  String get mobileCancelTakebackOffer => 'চাল ফেরত নেওয়ার প্রস্তাব বাতিল করুন';
 
   @override
   String get mobileClearButton => 'মুছে ফেলুন';
@@ -33,26 +33,26 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'একটি গেমে যুক্ত হোন';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'প্রতিক্রিয়া';
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'শুভ সন্ধ্যা, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'শুভ সন্ধ্যা';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'শুভ দিন, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'শুভ দিন';
 
   @override
   String get mobileHideVariation => 'Hide variation';
@@ -70,10 +70,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileNoSearchResults => 'No results';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'অনুগ্রহ করে লক্ষ্য করুন, পুরনো অ্যাপ অথবা ওয়েবসাইটের সমস্ত উপাদান ও বৈশিষ্ট্য সমূহ বর্তমানে উপলব্ধ নয়, কিন্ত আমরা উপাদানগুলি সর্বদা যুক্ত করতে থাকছি.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'আপনি কোনো ব্যবহারকারীকে ফলো করছেন না.';
 
   @override
   String get mobileOkButton => 'কোনো সমস্যা নেই';
@@ -126,7 +126,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileServerAnalysis => 'Server analysis';
 
   @override
-  String get mobileSettingsClockPosition => 'ঘড়ির পজিশন';
+  String get mobileSettingsClockPosition => 'ঘড়ির অবস্থান';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Presets';
@@ -855,17 +855,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get broadcastWebmastersPage => 'webmasters page';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'A public, real-time PGN source for this round. We also offer a $param for faster and more efficient synchronisation.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Embed this broadcast in your website';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Embed $param in your website';
-  }
 
   @override
   String get broadcastRatingDiff => 'Rating diff';
@@ -4761,6 +4751,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Disable blind mode';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

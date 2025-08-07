@@ -855,17 +855,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastWebmastersPage => 'webmasterraren webgune';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Txanda honen zuzeneko PGN iturburua. $param ere eskaintzen dugu sinkronizazio zehatzagoa nahi baduzu.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Txertatu zuzeneko hau zure webgunean';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Txertatu $param zure webgunean';
-  }
 
   @override
   String get broadcastRatingDiff => 'Elo diferentzia';
@@ -4761,6 +4751,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get disableBlindMode => 'Desaktibatu modu-itsua';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

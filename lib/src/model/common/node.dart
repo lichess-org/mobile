@@ -529,7 +529,19 @@ class Root extends Node {
         if (move != null) {
           final newPos = frame.to.position.play(move);
           final isMainline = stack.isEmpty;
-          final comments = childFrom.data.comments?.map(PgnComment.fromPgn);
+          final comments = childFrom.data.comments?.map(PgnComment.fromPgn).map((c) {
+            if (c.eval == null && isLichessAnalysis && isMainline && newPos.isCheckmate) {
+              return PgnComment(
+                text: c.text,
+                clock: c.clock,
+                emt: c.emt,
+                // lichess analysis does not provide eval for checkmate, and we want it to be displayed
+                // in the eval bar
+                eval: PgnEvaluation.mate(mate: newPos.turn == Side.white ? -1 : 1, depth: 1),
+              );
+            }
+            return c;
+          });
 
           final branch = Branch(
             sanMove: SanMove(childFrom.data.san, move),
@@ -703,13 +715,7 @@ sealed class ViewBranch extends ViewNode with _$ViewBranch {
   /// For now we only trust the eval coming from lichess analysis.
   ExternalEval? get serverEval {
     final pgnEval = lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
-    return pgnEval != null
-        ? ExternalEval(
-            cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
-            mate: pgnEval.mate,
-            depth: pgnEval.depth,
-          )
-        : null;
+    return pgnEval != null ? ExternalEval.fromPgnEval(pgnEval) : null;
   }
 
   @override

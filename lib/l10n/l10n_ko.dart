@@ -835,17 +835,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastWebmastersPage => '웹마스터 페이지';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return '이 라운드의 공개된, 실시간 PGN 소스 입니다. 보다 더 빠르고 효율적인 동기화를 위해 $param도 제공됩니다.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => '이 방송을 웹사이트에 삽입하세요';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return '$param을(를) 웹사이트에 삽입하세요';
-  }
 
   @override
   String get broadcastRatingDiff => '레이팅 차이';
@@ -4733,6 +4723,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get disableBlindMode => '시각장애 모드 비활성화하기';
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
 
   @override
   String opponentLeftCounter(int count) {

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -7,6 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 const _kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
 const _kHandsetThumbnailSize = 80.0;
@@ -207,6 +209,49 @@ class BroadcastListTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class BroadcastNextPageTile extends StatefulWidget {
+  const BroadcastNextPageTile(this.nextPageFunction);
+
+  final Future<void> Function() nextPageFunction;
+
+  @override
+  State<BroadcastNextPageTile> createState() => _BroadcastNextPageTileState();
+}
+
+class _BroadcastNextPageTileState extends State<BroadcastNextPageTile> {
+  late Future<void> nextPageFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    nextPageFuture = widget.nextPageFunction();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: null,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          if (kDebugMode) {
+            debugPrint(
+              'SEVERE: [BroadcastNextPageTile] could not load next page; ${snapshot.error}',
+            );
+          }
+          return const Padding(
+            padding: Styles.verticalBodyPadding,
+            child: Center(child: Text('Could not load the next broadcasts')),
+          );
+        }
+
+        return const Shimmer(
+          child: ShimmerLoading(isLoading: true, child: BroadcastListTile.loading()),
+        );
+      },
     );
   }
 }

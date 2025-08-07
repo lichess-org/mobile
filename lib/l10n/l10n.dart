@@ -1514,23 +1514,11 @@ abstract class AppLocalizations {
   /// **'webmasters page'**
   String get broadcastWebmastersPage;
 
-  /// No description provided for @broadcastPgnSourceHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'A public, real-time PGN source for this round. We also offer a {param} for faster and more efficient synchronisation.'**
-  String broadcastPgnSourceHelp(String param);
-
   /// No description provided for @broadcastEmbedThisBroadcast.
   ///
   /// In en, this message translates to:
   /// **'Embed this broadcast in your website'**
   String get broadcastEmbedThisBroadcast;
-
-  /// No description provided for @broadcastEmbedThisRound.
-  ///
-  /// In en, this message translates to:
-  /// **'Embed {param} in your website'**
-  String broadcastEmbedThisRound(String param);
 
   /// No description provided for @broadcastRatingDiff.
   ///
@@ -8725,6 +8713,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disable blind mode'**
   String get disableBlindMode;
+
+  /// No description provided for @copyToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy to clipboard'**
+  String get copyToClipboard;
 
   /// No description provided for @opponentLeftCounter.
   ///

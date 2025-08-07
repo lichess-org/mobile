@@ -855,17 +855,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastWebmastersPage => 'página webmasters';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Uma fonte PGN pública em tempo real para esta ronda. Oferecemos também a $param para uma sincronização mais rápida e eficiente.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Incorporar esta transmissão no teu website';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Incorporar $param no teu website';
-  }
 
   @override
   String get broadcastRatingDiff => 'Diferença de Elo';
@@ -4763,6 +4753,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get disableBlindMode => 'Desativar o modo cego';
 
   @override
+  String get copyToClipboard => 'Copy to clipboard';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7082,17 +7075,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get broadcastWebmastersPage => 'página dos webmasters';
 
   @override
-  String broadcastPgnSourceHelp(String param) {
-    return 'Uma fonte PGN pública ao vivo desta rodada. Há também a $param para uma sincronização mais rápida e eficiente.';
-  }
-
-  @override
   String get broadcastEmbedThisBroadcast => 'Incorporar essa transmissão em seu site';
-
-  @override
-  String broadcastEmbedThisRound(String param) {
-    return 'Incorporar $param em seu site';
-  }
 
   @override
   String get broadcastRatingDiff => 'Diferência de pontos';
@@ -10988,6 +10971,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get disableBlindMode => 'Desabilitar modo às cegas';
+
+  @override
+  String get copyToClipboard => 'Copiar para a área de transferência';
 
   @override
   String opponentLeftCounter(int count) {
