@@ -1,0 +1,39 @@
+name: Upload the APK to Github
+# Enable manual run
+on: workflow_dispatch
+
+# Declare default permissions as read only.
+permissions: read-all
+
+jobs:
+  fastlane-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+      - run: flutter doctor -v
+
+      - name: Checkout mobile code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Code generation
+        run: dart run build_runner build
+
+      - name: Build the APK
+        run: flutter build apk -v --obfuscate --split-debug-info=./build/app/outputs/bundle/release/symbols --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=$WS_SECRET
+        env:
+          WS_SECRET: ${{ secrets.WS_SECRET }}
+
+      - name: Upload the APK
+        uses: actions/upload-artifact@v4
+        with:
+          path: build/app/outputs/flutter-apk/app-release.apk
