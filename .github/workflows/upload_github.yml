@@ -6,7 +6,7 @@ on: workflow_dispatch
 permissions: read-all
 
 jobs:
-  fastlane-deploy:
+  github-upload:
     runs-on: ubuntu-latest
     steps:
       - name: Set up JDK 17
