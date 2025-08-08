@@ -6,14 +6,10 @@ import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_repository.g.dart';
@@ -95,7 +91,6 @@ class AccountRepository {
   AccountRepository(this.client);
 
   final LichessClient client;
-  final Logger _log = Logger('AccountRepository');
 
   Future<User> getProfile() {
     return client.readJson(
@@ -116,17 +111,7 @@ class AccountRepository {
   Future<IList<OngoingGame>> getOngoingGames({int? nb}) {
     return client.readJson(
       Uri(path: '/api/account/playing', queryParameters: nb != null ? {'nb': nb.toString()} : null),
-      mapper: (Map<String, dynamic> json) {
-        final list = json['nowPlaying'];
-        if (list is! List<dynamic>) {
-          _log.severe('Could not read json object as {nowPlaying: []}: expected a list.');
-          throw Exception('Could not read json object as {nowPlaying: []}');
-        }
-        return list
-            .map((e) => _ongoingGameFromJson(e as Map<String, dynamic>))
-            .where((e) => e.variant.isPlaySupported)
-            .toIList();
-      },
+      mapper: ongoingGamesFromServerJson,
     );
   }
 
@@ -175,27 +160,5 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
     follow: BooleanPref(pick('follow').asBoolOrThrow()),
     challenge: Challenge.fromInt(pick('challenge').asIntOrThrow()),
     message: Message.fromInt(pick('message').asIntOrThrow()),
-  );
-}
-
-OngoingGame _ongoingGameFromJson(Map<String, dynamic> json) {
-  return _ongoingGameFromPick(pick(json).required());
-}
-
-OngoingGame _ongoingGameFromPick(RequiredPick pick) {
-  return OngoingGame(
-    id: GameId(pick('gameId').asStringOrThrow()),
-    fullId: GameFullId(pick('fullId').asStringOrThrow()),
-    orientation: pick('color').asSideOrThrow(),
-    fen: pick('fen').asStringOrThrow(),
-    lastMove: pick('lastMove').asUciMoveOrNull(),
-    perf: pick('perf').asPerfOrThrow(),
-    speed: pick('speed').asSpeedOrThrow(),
-    variant: pick('variant').asVariantOrThrow(),
-    opponent: pick('opponent').asLightUserOrNull(),
-    opponentRating: pick('opponent', 'rating').asIntOrNull(),
-    opponentAiLevel: pick('opponent', 'aiLevel').asIntOrNull(),
-    secondsLeft: pick('secondsLeft').asIntOrNull(),
-    isMyTurn: pick('isMyTurn').asBoolOrThrow(),
   );
 }

@@ -1,11 +1,16 @@
+import 'package:deep_pick/deep_pick.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
@@ -120,7 +125,36 @@ void main() {
       expect(channels, isA<TvChannels>());
       expect(streamers, isA<IList<Streamer>>());
     });
-  });
+
+    // test('aggregates home endpoint', () async {
+    //   int requestsCount = 0;
+
+    //   final mockClient = MockClient((request) {
+    //     requestsCount++;
+    //     if (request.url.path == '/api/mobile/home') {
+    //       return mockResponse(watchEndpointResponse, 200);
+    //     }
+    //     return mockResponse('', 404);
+    //   });
+
+    //   final aggregator = await mockClientAggregator(mockClient);
+
+    //   final accountUri = Uri(path: '/api/account', queryParameters: {'playban': '1'});
+    //   final ongoingGamesUri = Uri(path: '/api/account/playing');
+    //   final recentGamesUri = Uri(path: '/api/games/user/testuser');
+    //   final tournamentsUri = Uri(path: '/tournament/featured');
+    //   // final inboxUri = Uri(path: '/inbox/unread-count');
+
+    //   final [account, ongoingGames, recentGames, tournaments] = await Future.wait([
+    //     aggregator.readJson(accountUri, mapper: User.fromServerJson),
+    //     aggregator.readJson(ongoingGamesUri, mapper: ongoingGamesFromServerJson),
+    //     aggregator.readNdJsonList(recentGamesUri, mapper: LightExportedGame.fromServerJson),
+    //     aggregator.readJson(tournamentsUri, mapper: (Map<String, dynamic> json) => pick(json, 'featured').asTournamentListOrThrow(),
+    //   ]);
+
+    //   expect(requestsCount, 1);
+    // });
+  // });
 }
 
 const watchEndpointResponse = '''
