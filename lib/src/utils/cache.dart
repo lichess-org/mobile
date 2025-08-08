@@ -23,6 +23,8 @@ class MemoryCache<K, V> {
   /// Checks if cache is not empty.
   bool get isNotEmpty => !isEmpty;
 
+  Iterable<K> get keys => _cache.keys;
+
   /// If cache contains a value for the [key], returns the value.
   V? read(K key) {
     if (_expiryAwareContains(key)) {

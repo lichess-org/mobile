@@ -1,6 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/cache.dart';
+import 'package:logging/logging.dart';
+
+final _logger = Logger('Aggregator');
 
 typedef GroupedFuture = Future<Map<String, dynamic>>;
 
@@ -21,6 +26,11 @@ final Map<Uri, ISet<({String key, RegExp pathRegexp})>> _groupedUris = {
   }),
 };
 
+/// A provider that aggregates requests to the Lichess API.
+final aggregatorProvider = Provider<Aggregator>((ref) {
+  return Aggregator(ref.read(lichessClientProvider));
+}, name: 'AggregatorProvider');
+
 /// Aggregator is used to group multiple requests to the same endpoint.
 class Aggregator {
   Aggregator(this.client);
@@ -29,9 +39,8 @@ class Aggregator {
 
   (Future<void>, ISet<Uri>)? _pending;
 
-  final MemoryCache<ISet<Uri>, ({Uri groupUri, GroupedFuture future})> _groupRequests = MemoryCache(
-    defaultExpiry: const Duration(seconds: 5),
-  );
+  final MemoryCache<ISet<Uri>, ({Uri targetGroupUri, GroupedFuture future})> _groupRequests =
+      MemoryCache(defaultExpiry: const Duration(seconds: 5));
 
   Future<T> call<T>(Uri uri, {required T Function(Map<String, dynamic>) mapper}) async {
     if (_pending == null) {
@@ -42,35 +51,40 @@ class Aggregator {
 
     await _pending!.$1;
 
-    final (_, uris) = _pending!;
-    _pending = null;
+    if (_pending != null) {
+      final (_, uris) = _pending!;
+      _pending = null;
 
-    if (uris.length == 1) {
-      return client.readJson(uri, mapper: mapper);
-    }
+      if (uris.length == 1) {
+        return client.readJson(uri, mapper: mapper);
+      }
 
-    for (final group in _groupedUris.entries) {
-      // test that list of uris matches the group
-      // TODO: for now this doesn't work if an uri can be in multiple groups
-      if (uris.any((e) => group.value.any((g) => g.pathRegexp.hasMatch(e.path)))) {
-        _groupRequests.putIfAbsent(
-          uris,
-          () => (groupUri: group.key, future: client.readJson(group.key, mapper: (x) => x)),
-        );
+      for (final group in _groupedUris.entries) {
+        // test that list of uris matches the group
+        // TODO: for now this doesn't work if an uri can be in multiple groups
+        if (uris.any((e) => group.value.any((g) => g.pathRegexp.hasMatch(e.path)))) {
+          _groupRequests.putIfAbsent(
+            uris,
+            () => (targetGroupUri: group.key, future: client.readJson(group.key, mapper: (x) => x)),
+          );
+        }
       }
     }
 
-    final entry = _groupRequests[uris];
-    if (entry != null) {
+    final uris = _groupRequests.keys.firstWhereOrNull((key) => key.any((e) => e.path == uri.path));
+
+    if (uris != null) {
+      final entry = _groupRequests[uris]!;
       final aggregated = await entry.future;
-      final group = _groupedUris[entry.groupUri]!;
+      final group = _groupedUris[entry.targetGroupUri]!;
       final jsonKey = group.firstWhere((e) => e.pathRegexp.hasMatch(uri.path)).key;
       final Map<String, dynamic> result = aggregated[jsonKey] as Map<String, dynamic>;
 
       return mapper(result);
     }
 
-    assert(false, 'No group found for $uris, this should not happen.');
+    _logger.warning('No aggregation found for URI: $uri');
+
     return client.readJson(uri, mapper: mapper);
   }
 }
