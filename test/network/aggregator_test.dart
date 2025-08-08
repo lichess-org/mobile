@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
@@ -126,35 +127,49 @@ void main() {
       expect(streamers, isA<IList<Streamer>>());
     });
 
-    // test('aggregates home endpoint', () async {
-    //   int requestsCount = 0;
+    test('aggregates home endpoint', () async {
+      int requestsCount = 0;
 
-    //   final mockClient = MockClient((request) {
-    //     requestsCount++;
-    //     if (request.url.path == '/api/mobile/home') {
-    //       return mockResponse(watchEndpointResponse, 200);
-    //     }
-    //     return mockResponse('', 404);
-    //   });
+      final mockClient = MockClient((request) {
+        requestsCount++;
+        if (request.url.path == '/api/mobile/home') {
+          return mockResponse(homeEndpointResponse, 200);
+        }
+        return mockResponse('', 404);
+      });
 
-    //   final aggregator = await mockClientAggregator(mockClient);
+      final aggregator = await mockClientAggregator(mockClient);
 
-    //   final accountUri = Uri(path: '/api/account', queryParameters: {'playban': '1'});
-    //   final ongoingGamesUri = Uri(path: '/api/account/playing');
-    //   final recentGamesUri = Uri(path: '/api/games/user/testuser');
-    //   final tournamentsUri = Uri(path: '/tournament/featured');
-    //   // final inboxUri = Uri(path: '/inbox/unread-count');
+      final accountUri = Uri(path: '/api/account', queryParameters: {'playban': '1'});
+      final ongoingGamesUri = Uri(path: '/api/account/playing');
+      final recentGamesUri = Uri(path: '/api/games/user/testuser');
+      final tournamentsUri = Uri(path: '/tournament/featured');
+      final inboxUri = Uri(path: '/inbox/unread-count');
 
-    //   final [account, ongoingGames, recentGames, tournaments] = await Future.wait([
-    //     aggregator.readJson(accountUri, mapper: User.fromServerJson),
-    //     aggregator.readJson(ongoingGamesUri, mapper: ongoingGamesFromServerJson),
-    //     aggregator.readNdJsonList(recentGamesUri, mapper: LightExportedGame.fromServerJson),
-    //     aggregator.readJson(tournamentsUri, mapper: (Map<String, dynamic> json) => pick(json, 'featured').asTournamentListOrThrow(),
-    //   ]);
+      final [account, ongoingGames, recentGames, tournaments, inbox] = await Future.wait([
+        aggregator.readJson(accountUri, mapper: User.fromServerJson),
+        aggregator.readJson(ongoingGamesUri, mapper: ongoingGamesFromServerJson),
+        aggregator.readNdJsonList(recentGamesUri, mapper: LightExportedGame.fromServerJson),
+        aggregator.readJson(
+          tournamentsUri,
+          mapper: (Map<String, dynamic> json) => pick(json, 'featured').asTournamentListOrThrow(),
+        ),
+        aggregator.readJson(
+          inboxUri,
+          mapper: (Map<String, dynamic> json) {
+            return (unread: json['unread'] as int, lichess: json['lichess'] as bool? ?? false);
+          },
+        ),
+      ]);
 
-    //   expect(requestsCount, 1);
-    // });
-  // });
+      expect(requestsCount, 1);
+      expect(account, isA<User>());
+      expect(ongoingGames, isA<IList<OngoingGame>>());
+      expect(recentGames, isA<IList<LightExportedGame>>());
+      expect(tournaments, isA<IList<LightTournament>>());
+      expect(inbox, isA<UnreadMessages>());
+    });
+  });
 }
 
 const watchEndpointResponse = '''
@@ -254,5 +269,83 @@ const watchEndpointResponse = '''
         }
     }
   ]
+}
+''';
+
+const homeEndpointResponse = '''
+{
+  "account": {
+    "id": "testUser",
+    "username": "testUser",
+    "createdAt": 1290415680000,
+    "seenAt": 1290415680000,
+    "title": "GM",
+    "patron": true,
+    "perfs": {
+      "blitz": {
+        "games": 2340,
+        "rating": 1681,
+        "rd": 30,
+        "prog": 10
+      },
+      "rapid": {
+        "games": 2340,
+        "rating": 1677,
+        "rd": 30,
+        "prog": 10
+      },
+      "classical": {
+        "games": 2340,
+        "rating": 1618,
+        "rd": 30,
+        "prog": 10
+      }
+    },
+    "profile": {
+      "country": "France",
+      "location": "Lille",
+      "bio": "test bio",
+      "firstName": "John",
+      "lastName": "Doe",
+      "fideRating": 1800,
+      "links": "http://test.com"
+    }
+  },
+  "ongoingGames": {
+    "nowPlaying": [
+      {
+        "gameId": "rCRw1AuO",
+        "fullId": "rCRw1AuOvonq",
+        "color": "black",
+        "fen": "r1bqkbnr/pppp2pp/2n1pp2/8/8/3PP3/PPPB1PPP/RN1QKBNR w KQkq - 2 4",
+        "hasMoved": true,
+        "isMyTurn": false,
+        "lastMove": "b8c6",
+        "opponent": {
+          "id": "philippe",
+          "rating": 1790,
+          "username": "Philippe"
+        },
+        "perf": "correspondence",
+        "rated": false,
+        "secondsLeft": 1209600,
+        "source": "friend",
+        "speed": "correspondence",
+        "variant": {
+          "key": "standard",
+          "name": "Standard"
+        }
+      }
+    ]
+  },
+  "recentGames": [
+    {"id":"Huk88k3D","rated":false,"variant":"fromPosition","speed":"blitz","perf":"blitz","createdAt":1673716450321,"lastMoveAt":1673716450321,"status":"noStart","players":{"white":{"user":{"name":"MightyNanook","id":"mightynanook"},"rating":1116,"provisional":true},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1772}},"initialFen":"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1","winner":"black","tournament":"ZZQ9tunK","clock":{"initial":300,"increment":0,"totalTime":300},"lastFen":"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1"},
+    {"id":"g2bzFol8","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673553626465,"lastMoveAt":1673553936657,"status":"resign","players":{"white":{"user":{"name":"SchallUndRausch","id":"schallundrausch"},"rating":1751,"ratingDiff":-5},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1767,"ratingDiff":5}},"winner":"black","clock":{"initial":180,"increment":2,"totalTime":260},"lastFen":"r7/pppk4/4p1B1/3pP3/6Pp/q1P1P1nP/P1QK1r2/R5R1 w - - 1 1"},
+    {"id":"9WLmxmiB","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673553299064,"lastMoveAt":1673553615438,"status":"resign","players":{"white":{"user":{"name":"Dr-Alaakour","id":"dr-alaakour"},"rating":1806,"ratingDiff":5},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1772,"ratingDiff":-5}},"winner":"white","clock":{"initial":180,"increment":0,"totalTime":180},"lastFen":"2b1Q1k1/p1r4p/1p2p1p1/3pN3/2qP4/P4R2/1P3PPP/4R1K1 b - - 0 1"}
+  ],
+  "tournaments": {"featured": []},
+  "inbox": {
+    "unread": 5
+  }
 }
 ''';
