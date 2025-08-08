@@ -13,22 +13,24 @@ void main() {
     FakeClient.reset();
   });
 
+  Future<Aggregator> makeAggregator() async {
+    final container = await makeContainer(
+      overrides: [
+        httpClientFactoryProvider.overrideWith((ref) {
+          return FakeHttpClientFactory(() => FakeClient());
+        }),
+      ],
+    );
+    return container.read(aggregatorProvider);
+  }
+
   group('Aggregator', () {
     test('if only one request is made within 50ms, it will make an atomic request', () async {
-      final container = await makeContainer(
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => FakeClient());
-          }),
-        ],
-      );
-      final aggregator = container.read(aggregatorProvider);
-
+      final aggregator = await makeAggregator();
       final uri = Uri(path: '/api/test');
 
       final response = await aggregator(uri, mapper: (data) => data);
 
-      // Check that the request was made
       final requests = FakeClient.verifyRequests();
       expect(requests.length, 1);
       expect(
@@ -39,14 +41,7 @@ void main() {
     });
 
     test('non supported uris will not aggregate and make atomic request after 50ms', () async {
-      final container = await makeContainer(
-        overrides: [
-          httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => FakeClient());
-          }),
-        ],
-      );
-      final aggregator = container.read(aggregatorProvider);
+      final aggregator = await makeAggregator();
 
       final uri1 = Uri(path: '/api/test1');
       final uri2 = Uri(path: '/api/test2');
