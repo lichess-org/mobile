@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/cache.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('Aggregator');
@@ -11,7 +12,9 @@ typedef GroupedFuture = Future<Map<String, dynamic>>;
 
 final Uri _homeUri = Uri(path: '/api/mobile/home');
 final Uri _watchUri = Uri(path: '/api/mobile/watch');
-final Map<Uri, ISet<({String key, RegExp pathRegexp})>> _groupedUris = {
+
+/// Map of target URIs to their grouped client-side URIs and JSON keys.
+final Map<Uri, ISet<({String key, RegExp pathRegexp})>> _targetUris = {
   _homeUri: ISet({
     (key: 'account', pathRegexp: RegExp(r'^\/api\/account$')),
     (key: 'recentGames', pathRegexp: RegExp(r'^\/api\/games\/user\/[\w-]+$')),
@@ -26,12 +29,24 @@ final Map<Uri, ISet<({String key, RegExp pathRegexp})>> _groupedUris = {
   }),
 };
 
-/// A provider that aggregates requests to the Lichess API.
+/// A provider for the [Aggregator] service.
 final aggregatorProvider = Provider<Aggregator>((ref) {
   return Aggregator(ref.read(lichessClientProvider));
 }, name: 'AggregatorProvider');
 
 /// Aggregator is used to group multiple requests to the same endpoint.
+///
+/// This service should be used for endpoints that are frequently called in a short time span in a specific
+/// context, such as the home screen or watch screen.
+///
+/// It will wait for 50ms after the first request call and during that time it will collect more that
+/// can be aggregated into a single request.
+/// The result of that aggregated request is in turn cached for 5 seconds.
+///
+/// There is a match with a target server grouped endpoint, only
+/// if all uris grouped client side match the target server endpoint configuration.
+///
+/// If there is no match, it will make atomic requests for each uri after the 50ms delay.
 class Aggregator {
   Aggregator(this.client);
 
@@ -42,7 +57,45 @@ class Aggregator {
   final MemoryCache<ISet<Uri>, ({Uri targetGroupUri, GroupedFuture future})> _groupRequests =
       MemoryCache(defaultExpiry: const Duration(seconds: 5));
 
-  Future<T> call<T>(Uri uri, {required T Function(Map<String, dynamic>) mapper}) async {
+  Future<T> readJson<T>(
+    Uri url, {
+    Map<String, String>? headers,
+    required T Function(Map<String, dynamic>) mapper,
+  }) => _call<T>(
+    url,
+    atomicClientCall: () => client.readJson(url, headers: headers, mapper: mapper),
+    mapper: (json) => mapper(json as Map<String, dynamic>),
+  );
+
+  Future<IList<T>> readJsonList<T>(
+    Uri url, {
+    Map<String, String>? headers,
+    required T? Function(Map<String, dynamic>) mapper,
+  }) => _call<IList<T>>(
+    url,
+    atomicClientCall: () => client.readJsonList(url, headers: headers, mapper: mapper),
+    mapper: (json) => decodeObjectList<T>(json, mapper: mapper),
+  );
+
+  Future<IList<T>> readNdJsonList<T>(
+    Uri url, {
+    Map<String, String>? headers,
+    required T Function(Map<String, dynamic>) mapper,
+  }) => _call<IList<T>>(
+    url,
+    atomicClientCall: () => client.readNdJsonList(url, headers: headers, mapper: mapper),
+    mapper: (json) => decodeObjectList<T>(json, mapper: mapper),
+  );
+
+  Future<U> _call<U>(
+    Uri uri, {
+
+    /// The atomic client call to make if no aggregation is found.
+    required Future<U> Function() atomicClientCall,
+
+    /// The mapper function to apply to the corresponding value found in aggregated JSON response.
+    required U Function(Object) mapper,
+  }) async {
     if (_pending == null) {
       _pending = (Future<void>.delayed(const Duration(milliseconds: 50)), ISet({uri}));
     } else {
@@ -51,18 +104,19 @@ class Aggregator {
 
     await _pending!.$1;
 
+    // aggregating time has elapsed, process the pending requests once
     if (_pending != null) {
       final (_, uris) = _pending!;
       _pending = null;
 
       if (uris.length == 1) {
-        return client.readJson(uri, mapper: mapper);
+        return atomicClientCall();
       }
 
-      for (final group in _groupedUris.entries) {
-        // test that list of uris matches the group
-        // TODO: for now this doesn't work if an uri can be in multiple groups
-        if (uris.any((e) => group.value.any((g) => g.pathRegexp.hasMatch(e.path)))) {
+      for (final group in _targetUris.entries) {
+        // test that list of uris matches all the group uris
+        // if so, we can aggregate the requests
+        if (uris.every((e) => group.value.any((g) => g.pathRegexp.hasMatch(e.path)))) {
           _groupRequests.putIfAbsent(
             uris,
             () => (targetGroupUri: group.key, future: client.readJson(group.key, mapper: (x) => x)),
@@ -72,19 +126,18 @@ class Aggregator {
     }
 
     final uris = _groupRequests.keys.firstWhereOrNull((key) => key.any((e) => e.path == uri.path));
-
     if (uris != null) {
       final entry = _groupRequests[uris]!;
       final aggregated = await entry.future;
-      final group = _groupedUris[entry.targetGroupUri]!;
+      final group = _targetUris[entry.targetGroupUri]!;
       final jsonKey = group.firstWhere((e) => e.pathRegexp.hasMatch(uri.path)).key;
-      final Map<String, dynamic> result = aggregated[jsonKey] as Map<String, dynamic>;
+      final result = aggregated[jsonKey] as Object;
 
       return mapper(result);
     }
 
     _logger.warning('No aggregation found for URI: $uri');
 
-    return client.readJson(uri, mapper: mapper);
+    return atomicClientCall();
   }
 }

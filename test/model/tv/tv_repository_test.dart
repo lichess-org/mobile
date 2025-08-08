@@ -8,7 +8,28 @@ import '../../test_helpers.dart';
 void main() {
   group('TvRepository.channels', () {
     test('correctly parse JSON', () async {
-      const response = '''
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/tv/channels') {
+          return mockResponse(tvChannelsResponse, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final repo = TvRepository(mockClient);
+
+      final result = await repo.channels();
+
+      expect(result, isA<TvChannels>());
+
+      // supported channels only
+      expect(result.length, 13);
+
+      expect(result[TvChannel.best]?.user.name, 'Chessisnotfair');
+    });
+  });
+}
+
+const tvChannelsResponse = '''
 {
     "antichess": {
         "color": "white",
@@ -163,24 +184,3 @@ void main() {
     }
 }
 ''';
-
-      final mockClient = MockClient((request) {
-        if (request.url.path == '/api/tv/channels') {
-          return mockResponse(response, 200);
-        }
-        return mockResponse('', 404);
-      });
-
-      final repo = TvRepository(mockClient);
-
-      final result = await repo.channels();
-
-      expect(result, isA<TvChannels>());
-
-      // supported channels only
-      expect(result.length, 13);
-
-      expect(result[TvChannel.best]?.user.name, 'Chessisnotfair');
-    });
-  });
-}

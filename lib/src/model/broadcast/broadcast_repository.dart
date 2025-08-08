@@ -16,7 +16,7 @@ class BroadcastRepository {
   Future<BroadcastList> getBroadcasts({int page = 1}) {
     return client.readJson(
       Uri(path: '/api/broadcast/top', queryParameters: {'page': page.toString()}),
-      mapper: _makeBroadcastResponseFromJson,
+      mapper: broadcastListFromServerJson,
     );
   }
 
@@ -68,7 +68,7 @@ class BroadcastRepository {
   }
 }
 
-BroadcastList _makeBroadcastResponseFromJson(Map<String, dynamic> json) {
+BroadcastList broadcastListFromServerJson(Map<String, dynamic> json) {
   return (
     active: pick(json, 'active').asListOrThrow(_broadcastFromPick).toIList(),
     past: pick(json, 'past', 'currentPageResults').asListOrThrow(_broadcastFromPick).toIList(),

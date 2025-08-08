@@ -61,7 +61,7 @@ class UserRepository {
   }
 
   Future<IList<Streamer>> getLiveStreamers() {
-    return client.readJsonList(Uri(path: '/api/streamer/live'), mapper: _streamersFromJson);
+    return client.readJsonList(Uri(path: '/api/streamer/live'), mapper: Streamer.fromServerJson);
   }
 
   Future<IMap<Perf, LeaderboardUser>> getTop1() {
@@ -262,27 +262,6 @@ UserPerfGame _userPerfGameFromPick(RequiredPick pick) {
     opponentId: opId('id').asStringOrNull(),
     opponentName: opId('name').asStringOrNull(),
     opponentTitle: opId('title').asStringOrNull(),
-  );
-}
-
-Streamer _streamersFromJson(Map<String, dynamic> json) => _streamersFromPick(pick(json).required());
-
-Streamer _streamersFromPick(RequiredPick pick) {
-  final stream = pick('stream');
-  final streamer = pick('streamer');
-  return Streamer(
-    username: pick('name').asStringOrThrow(),
-    id: pick('id').asUserIdOrThrow(),
-    patron: pick('patron').asBoolOrNull(),
-    platform: stream('service').asStringOrThrow(),
-    status: stream('status').asStringOrThrow(),
-    lang: stream('lang').asStringOrThrow(),
-    streamerName: streamer('name').asStringOrThrow(),
-    headline: streamer('headline').asStringOrNull(),
-    title: pick('title').asStringOrNull(),
-    image: streamer('image').asStringOrNull(),
-    twitch: streamer('twitch').asStringOrNull(),
-    youTube: streamer('youTube').asStringOrNull(),
   );
 }
 
