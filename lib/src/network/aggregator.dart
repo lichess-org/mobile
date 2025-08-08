@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/cache.dart';
 
 typedef GroupedFuture = Future<Map<String, dynamic>>;
 
@@ -28,7 +29,9 @@ class Aggregator {
 
   (Future<void>, ISet<Uri>)? _pending;
 
-  final Map<ISet<Uri>, ({Uri groupUri, GroupedFuture future, int nbExtracted})> _groupRequests = {};
+  final MemoryCache<ISet<Uri>, ({Uri groupUri, GroupedFuture future})> _groupRequests = MemoryCache(
+    defaultExpiry: const Duration(seconds: 5),
+  );
 
   Future<T> call<T>(Uri uri, {required T Function(Map<String, dynamic>) mapper}) async {
     if (_pending == null) {
@@ -52,11 +55,7 @@ class Aggregator {
       if (uris.any((e) => group.value.any((g) => g.pathRegexp.hasMatch(e.path)))) {
         _groupRequests.putIfAbsent(
           uris,
-          () => (
-            groupUri: group.key,
-            future: client.readJson(group.key, mapper: (x) => x),
-            nbExtracted: 0,
-          ),
+          () => (groupUri: group.key, future: client.readJson(group.key, mapper: (x) => x)),
         );
       }
     }
@@ -68,20 +67,10 @@ class Aggregator {
       final jsonKey = group.firstWhere((e) => e.pathRegexp.hasMatch(uri.path)).key;
       final Map<String, dynamic> result = aggregated[jsonKey] as Map<String, dynamic>;
 
-      _groupRequests.update(
-        uris,
-        (value) =>
-            (groupUri: value.groupUri, future: value.future, nbExtracted: value.nbExtracted + 1),
-      );
-
-      if (_groupRequests[uris]!.nbExtracted == uris.length) {
-        _groupRequests.remove(uris);
-      }
-
       return mapper(result);
     }
 
-    assert(false, 'No group found for $uris, this cannot happen.');
+    assert(false, 'No group found for $uris, this should not happen.');
     return client.readJson(uri, mapper: mapper);
   }
 }
