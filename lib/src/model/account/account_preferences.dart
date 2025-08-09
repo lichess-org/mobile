@@ -1,10 +1,10 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_preferences.g.dart';
@@ -27,6 +27,7 @@ typedef AccountPrefState = ({
   // privacy
   BooleanPref follow,
   Challenge challenge,
+  Message message,
 });
 
 /// A provider that tells if the user wants to see ratings in the app.
@@ -67,6 +68,7 @@ final defaultAccountPreferences = (
   submitMove: SubmitMove({SubmitMoveChoice.correspondence}),
   follow: const BooleanPref(true),
   challenge: Challenge.registered,
+  message: Message.always,
 );
 
 /// Get the account preferences for the current user.
@@ -105,6 +107,7 @@ class AccountPreferences extends _$AccountPreferences {
   Future<void> setSubmitMove(SubmitMove value) => _setPref('submitMove', value);
   Future<void> setFollow(BooleanPref value) => _setPref('follow', value);
   Future<void> setChallenge(Challenge value) => _setPref('challenge', value);
+  Future<void> setMessage(Message value) => _setPref('message', value);
 
   Future<void> _setPref<T>(String key, AccountPref<T> value) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
@@ -152,14 +155,14 @@ enum Zen implements AccountPref<int> {
   @override
   String get toFormData => value.toString();
 
-  String label(BuildContext context) {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case Zen.no:
-        return context.l10n.no;
+        return l10n.no;
       case Zen.yes:
-        return context.l10n.yes;
+        return l10n.yes;
       case Zen.gameAuto:
-        return context.l10n.preferencesInGameOnly;
+        return l10n.preferencesInGameOnly;
     }
   }
 
@@ -190,14 +193,14 @@ enum ShowRatings implements AccountPref<int> {
   @override
   String get toFormData => value.toString();
 
-  String label(BuildContext context) {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case ShowRatings.no:
-        return context.l10n.no;
+        return l10n.no;
       case ShowRatings.yes:
-        return context.l10n.yes;
+        return l10n.yes;
       case ShowRatings.exceptInGame:
-        return context.l10n.preferencesExceptInGame;
+        return l10n.preferencesExceptInGame;
     }
   }
 
@@ -227,12 +230,12 @@ enum PieceNotation implements AccountPref<int> {
   @override
   String get toFormData => value.toString();
 
-  String label(BuildContext context) {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case PieceNotation.symbol:
-        return context.l10n.preferencesChessPieceSymbol;
+        return l10n.preferencesChessPieceSymbol;
       case PieceNotation.letter:
-        return context.l10n.preferencesPgnLetter;
+        return l10n.preferencesPgnLetter;
     }
   }
 
@@ -261,14 +264,14 @@ enum AutoQueen implements AccountPref<int> {
   @override
   String get toFormData => value.toString();
 
-  String label(BuildContext context) {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case AutoQueen.never:
-        return context.l10n.never;
+        return l10n.never;
       case AutoQueen.premove:
-        return context.l10n.preferencesWhenPremoving;
+        return l10n.preferencesWhenPremoving;
       case AutoQueen.always:
-        return context.l10n.always;
+        return l10n.always;
     }
   }
 
@@ -299,14 +302,14 @@ enum AutoThreefold implements AccountPref<int> {
   @override
   String get toFormData => value.toString();
 
-  String label(BuildContext context) {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case AutoThreefold.never:
-        return context.l10n.never;
+        return l10n.never;
       case AutoThreefold.time:
-        return context.l10n.preferencesWhenTimeRemainingLessThanThirtySeconds;
+        return l10n.preferencesWhenTimeRemainingLessThanThirtySeconds;
       case AutoThreefold.always:
-        return context.l10n.always;
+        return l10n.always;
     }
   }
 
@@ -337,14 +340,14 @@ enum Takeback implements AccountPref<int> {
   @override
   String get toFormData => value.toString();
 
-  String label(BuildContext context) {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case Takeback.never:
-        return context.l10n.never;
+        return l10n.never;
       case Takeback.casual:
-        return context.l10n.preferencesInCasualGamesOnly;
+        return l10n.preferencesInCasualGamesOnly;
       case Takeback.always:
-        return context.l10n.always;
+        return l10n.always;
     }
   }
 
@@ -375,14 +378,14 @@ enum Moretime implements AccountPref<int> {
   @override
   String get toFormData => value.toString();
 
-  String label(BuildContext context) {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case Moretime.never:
-        return context.l10n.never;
+        return l10n.never;
       case Moretime.casual:
-        return context.l10n.preferencesInCasualGamesOnly;
+        return l10n.preferencesInCasualGamesOnly;
       case Moretime.always:
-        return context.l10n.always;
+        return l10n.always;
     }
   }
 
@@ -415,18 +418,18 @@ enum Challenge implements AccountPref<int> {
   @override
   String get toFormData => value.toString();
 
-  String label(BuildContext context) {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case Challenge.never:
-        return context.l10n.never;
+        return l10n.never;
       case Challenge.rating:
-        return context.l10n.ifRatingIsPlusMinusX('300');
+        return l10n.ifRatingIsPlusMinusX('300');
       case Challenge.friends:
-        return context.l10n.onlyFriends;
+        return l10n.onlyFriends;
       case Challenge.registered:
-        return context.l10n.ifRegistered;
+        return l10n.ifRegistered;
       case Challenge.always:
-        return context.l10n.always;
+        return l10n.always;
     }
   }
 
@@ -448,6 +451,44 @@ enum Challenge implements AccountPref<int> {
   }
 }
 
+enum Message implements AccountPref<int> {
+  never(1),
+  friends(2),
+  always(3);
+
+  const Message(this.value);
+
+  @override
+  final int value;
+
+  @override
+  String get toFormData => value.toString();
+
+  String label(AppLocalizations l10n) {
+    switch (this) {
+      case Message.never:
+        return l10n.onlyExistingConversations;
+      case Message.friends:
+        return l10n.onlyFriends;
+      case Message.always:
+        return l10n.always;
+    }
+  }
+
+  static Message fromInt(int value) {
+    switch (value) {
+      case 1:
+        return Message.never;
+      case 2:
+        return Message.friends;
+      case 3:
+        return Message.always;
+      default:
+        throw Exception('Invalid value for Message');
+    }
+  }
+}
+
 class SubmitMove implements AccountPref<int> {
   SubmitMove(Iterable<SubmitMoveChoice> choices) : choices = ISet(choices.toSet());
 
@@ -459,12 +500,12 @@ class SubmitMove implements AccountPref<int> {
   @override
   String get toFormData => value.toString();
 
-  String label(BuildContext context) {
+  String label(AppLocalizations l10n) {
     if (choices.isEmpty) {
-      return context.l10n.never;
+      return l10n.never;
     }
 
-    return choices.map((choice) => choice.label(context)).join(', ');
+    return choices.map((choice) => choice.label(l10n)).join(', ');
   }
 
   factory SubmitMove.fromInt(int value) =>
@@ -482,18 +523,18 @@ enum SubmitMoveChoice {
 
   final int value;
 
-  String label(BuildContext context) {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case SubmitMoveChoice.unlimited:
-        return context.l10n.unlimited;
+        return l10n.unlimited;
       case SubmitMoveChoice.correspondence:
-        return context.l10n.correspondence;
+        return l10n.correspondence;
       case SubmitMoveChoice.classical:
-        return context.l10n.classical;
+        return l10n.classical;
       case SubmitMoveChoice.rapid:
-        return context.l10n.rapid;
+        return l10n.rapid;
       case SubmitMoveChoice.blitz:
-        return 'Blitz';
+        return l10n.blitz;
     }
   }
 
