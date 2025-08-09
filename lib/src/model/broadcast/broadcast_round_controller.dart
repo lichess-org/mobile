@@ -6,6 +6,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -177,6 +179,12 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     );
 
     _sendEvalMultiGet();
+
+    // Add delay before invalidating team matches to allow server to update scores
+    Future.delayed(
+      const Duration(seconds: 5),
+      () => ref.invalidate(broadcastTeamMatchesProvider(broadcastRoundId)),
+    );
   }
 
   void _handleClockEvent(SocketEvent event) {
@@ -235,6 +243,11 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     );
   }
 
+  void clearObservedGames() {
+    if (!state.hasValue) return;
+    state = AsyncData(state.requireValue.copyWith(observedGames: ISet()));
+  }
+
   void addObservedGame(BroadcastGameId gameId) {
     if (state.valueOrNull?.games.containsKey(gameId) != true) return;
 
@@ -257,6 +270,8 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
   void _sendEvalMultiGet() {
     final round = state.requireValue;
+    final prefs = ref.read(broadcastPreferencesProvider);
+    if (prefs.showEvaluationGauge == false || round.observedGames.isEmpty) return;
 
     _socketClient.send('evalGetMulti', {
       'fens': [for (final id in round.observedGames) round.games[id]!.fen],

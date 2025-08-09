@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_teams_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -27,13 +28,15 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 enum BroadcastRoundTab {
   overview,
   boards,
-  players;
+  players,
+  teams;
 
   static BroadcastRoundTab? tabOrNullFromString(String tab) {
     return switch (tab) {
       'overview' => BroadcastRoundTab.overview,
       'boards' => BroadcastRoundTab.boards,
       'players' => BroadcastRoundTab.players,
+      'teams' => BroadcastRoundTab.teams,
       _ => null,
     };
   }
@@ -130,19 +133,33 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   @override
   void initState() {
     super.initState();
+    final hasTeamsTab = widget.broadcast.tour.teamTable == true;
+    final tabCount = hasTeamsTab ? 4 : 3;
+
     _tabController = TabController(
       initialIndex: widget.initialTab?.index ?? 0,
-      length: 3,
+      length: tabCount,
       vsync: this,
     );
+    _tabController.addListener(_onTabChanged);
+
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(_onTabChanged);
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _onTabChanged() {
+    if (_tabController.indexIsChanging) {
+      final currentRoundId = _selectedRoundId ?? widget.broadcast.roundToLinkId;
+
+      ref.read(broadcastRoundControllerProvider(currentRoundId).notifier).clearObservedGames();
+    }
   }
 
   void setTournamentId(BroadcastTournamentId tournamentId) {
@@ -182,6 +199,8 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
               Tab(text: context.l10n.broadcastOverview),
               Tab(text: context.l10n.broadcastBoards),
               Tab(text: context.l10n.players),
+              if (asyncTournament.value?.data.teamTable == true)
+                Tab(text: context.l10n.broadcastTeams),
             ],
           ),
           actions: [
@@ -217,6 +236,16 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
               _ => const SizedBox.shrink(),
             },
             BroadcastPlayersTab(tournamentId: _selectedTournamentId),
+            if (asyncTournament.value?.data.teamTable == true) ...[
+              switch (asyncTournament) {
+                AsyncData(:final value) => BroadcastTeamsTab(
+                  roundId: _selectedRoundId ?? value.defaultRoundId,
+                  tournamentId: _selectedTournamentId,
+                  tournamentSlug: widget.broadcast.tour.slug,
+                ),
+                _ => const SizedBox.shrink(),
+              },
+            ],
           ],
         ),
         bottomNavigationBar: switch (asyncTournament) {
