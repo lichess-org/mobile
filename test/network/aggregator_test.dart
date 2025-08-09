@@ -80,30 +80,78 @@ void main() {
       },
     );
 
-    test('supported uris will still aggregate if the group is not complete', () async {
+    test(
+      'supported uris will still aggregate if the group is not complete but has more than half of the target group',
+      () async {
+        int requestsCount = 0;
+
+        final mockClient = MockClient((request) {
+          requestsCount++;
+          if (request.url.path == '/api/mobile/watch') {
+            return mockResponse(watchEndpointResponse, 200);
+          }
+          return mockResponse('', 404);
+        });
+
+        final aggregator = await mockClientAggregator(mockClient);
+
+        final broadcastUri = Uri(path: '/api/broadcast/top', queryParameters: {'page': '1'});
+        final tvUri = Uri(path: '/api/tv/channels');
+
+        final [broadcasts, channels] = await Future.wait([
+          aggregator.readJson(broadcastUri, atomicMapper: broadcastListFromServerJson),
+          aggregator.readJson(tvUri, atomicMapper: tvChannelsFromServerJson),
+        ]);
+
+        expect(requestsCount, 1);
+        expect(broadcasts, isA<BroadcastList>());
+        expect(channels, isA<TvChannels>());
+      },
+    );
+
+    test('supported uris will not aggregate if group has less than half of target group', () async {
       int requestsCount = 0;
 
       final mockClient = MockClient((request) {
         requestsCount++;
-        if (request.url.path == '/api/mobile/watch') {
-          return mockResponse(watchEndpointResponse, 200);
+        if (request.url.path == '/api/account') {
+          return mockResponse(accountResponse, 200);
+        }
+        if (request.url.path == '/api/account/playing') {
+          return mockResponse(ongoingGameResponse, 200);
         }
         return mockResponse('', 404);
       });
 
       final aggregator = await mockClientAggregator(mockClient);
 
-      final broadcastUri = Uri(path: '/api/broadcast/top', queryParameters: {'page': '1'});
-      final tvUri = Uri(path: '/api/tv/channels');
+      final accountUri = Uri(path: '/api/account', queryParameters: {'playban': '1'});
+      final ongoingGamesUri = Uri(path: '/api/account/playing');
 
-      final [broadcasts, channels] = await Future.wait([
-        aggregator.readJson(broadcastUri, atomicMapper: broadcastListFromServerJson),
-        aggregator.readJson(tvUri, atomicMapper: tvChannelsFromServerJson),
+      final [account, ongoingGames] = await Future.wait([
+        aggregator.readJson(
+          accountUri,
+          atomicMapper: User.fromServerJson,
+          aggregatedMapper: (json) => User.fromServerJson(json as Map<String, dynamic>),
+        ),
+        aggregator.readJson(
+          ongoingGamesUri,
+          atomicMapper: ongoingGamesFromServerJson,
+          aggregatedMapper: (json) {
+            if (json is! List<dynamic>) {
+              throw Exception('Could not read json object as {nowPlaying: []}');
+            }
+            return json
+                .map((e) => OngoingGame.fromServerJson(e as Map<String, dynamic>))
+                .where((e) => e.variant.isPlaySupported)
+                .toIList();
+          },
+        ),
       ]);
 
-      expect(requestsCount, 1);
-      expect(broadcasts, isA<BroadcastList>());
-      expect(channels, isA<TvChannels>());
+      expect(requestsCount, 2);
+      expect(account, isA<User>());
+      expect(ongoingGames, isA<IList<OngoingGame>>());
     });
 
     test('aggregates watch endpoint', () async {
@@ -370,5 +418,75 @@ const homeEndpointResponse = '''
   "inbox": {
     "unread": 5
   }
+}
+''';
+
+const accountResponse = '''
+{
+  "id": "testUser",
+    "username": "testUser",
+    "createdAt": 1290415680000,
+    "seenAt": 1290415680000,
+    "title": "GM",
+    "patron": true,
+    "perfs": {
+      "blitz": {
+        "games": 2340,
+        "rating": 1681,
+        "rd": 30,
+        "prog": 10
+      },
+      "rapid": {
+        "games": 2340,
+        "rating": 1677,
+        "rd": 30,
+        "prog": 10
+      },
+      "classical": {
+        "games": 2340,
+        "rating": 1618,
+        "rd": 30,
+        "prog": 10
+      }
+    },
+    "profile": {
+      "country": "France",
+      "location": "Lille",
+      "bio": "test bio",
+      "firstName": "John",
+      "lastName": "Doe",
+      "fideRating": 1800,
+      "links": "http://test.com"
+    }
+}
+''';
+
+const ongoingGameResponse = '''
+{
+  "nowPlaying": [
+    {
+      "gameId": "rCRw1AuO",
+      "fullId": "rCRw1AuOvonq",
+      "color": "black",
+      "fen": "r1bqkbnr/pppp2pp/2n1pp2/8/8/3PP3/PPPB1PPP/RN1QKBNR w KQkq - 2 4",
+      "hasMoved": true,
+      "isMyTurn": false,
+      "lastMove": "b8c6",
+      "opponent": {
+        "id": "philippe",
+        "rating": 1790,
+        "username": "Philippe"
+      },
+      "perf": "correspondence",
+      "rated": false,
+      "secondsLeft": 1209600,
+      "source": "friend",
+      "speed": "correspondence",
+      "variant": {
+        "key": "standard",
+        "name": "Standard"
+      }
+    }
+  ]
 }
 ''';

@@ -130,13 +130,16 @@ class Aggregator {
       }
 
       for (final group in _targetUris.entries) {
-        // test that list of uris matches all the group uris
-        // if so, we can aggregate the requests
-        if (uris.every((e) => group.value.any((g) => g.pathRegexp.hasMatch(e.path)))) {
+        // No point in making an aggregated request if we don't have enough accumulated URIs
+        final hasEnoughUris = uris.length >= group.value.length / 2;
+        if (hasEnoughUris &&
+            // test that list of uris matches all the group uris
+            uris.every((e) => group.value.any((g) => g.pathRegexp.hasMatch(e.path)))) {
           _groupRequests.putIfAbsent(
             uris,
             () => (targetGroupUri: group.key, future: client.readJson(group.key, mapper: (x) => x)),
           );
+          break;
         }
       }
     }
