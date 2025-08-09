@@ -41,36 +41,44 @@ void main() {
     return container.read(aggregatorProvider);
   }
 
+  final String aggrInterval = '${kAggregationInterval.inMilliseconds}ms';
+
   group('Aggregator', () {
-    test('if only one request is made within 50ms, it will make an atomic request', () async {
-      final aggregator = await fakeClientAggregator();
-      final uri = Uri(path: '/api/test');
+    test(
+      'if only one request is made within $aggrInterval, it will make an atomic request',
+      () async {
+        final aggregator = await fakeClientAggregator();
+        final uri = Uri(path: '/api/test');
 
-      final response = await aggregator.readJson(uri, atomicMapper: (data) => data);
+        final response = await aggregator.readJson(uri, atomicMapper: (data) => data);
 
-      final requests = FakeClient.verifyRequests();
-      expect(requests.length, 1);
-      expect(requests.first.url.path, uri.path);
-      expect(response, isNotNull);
-    });
-
-    test('non supported uris will not aggregate and make atomic request after 50ms', () async {
-      final aggregator = await fakeClientAggregator();
-
-      final uri1 = Uri(path: '/api/test1');
-      final uri2 = Uri(path: '/api/test2');
-
-      fakeAsync((async) {
-        aggregator.readJson(uri1, atomicMapper: (data) => data);
-        aggregator.readJson(uri2, atomicMapper: (data) => data);
-
-        async.elapse(const Duration(milliseconds: 50));
-
-        // Check that the requests were made separately
         final requests = FakeClient.verifyRequests();
-        expect(requests.length, 2);
-      });
-    });
+        expect(requests.length, 1);
+        expect(requests.first.url.path, uri.path);
+        expect(response, isNotNull);
+      },
+    );
+
+    test(
+      'non supported uris will not aggregate and make atomic request after $aggrInterval',
+      () async {
+        final aggregator = await fakeClientAggregator();
+
+        final uri1 = Uri(path: '/api/test1');
+        final uri2 = Uri(path: '/api/test2');
+
+        fakeAsync((async) {
+          aggregator.readJson(uri1, atomicMapper: (data) => data);
+          aggregator.readJson(uri2, atomicMapper: (data) => data);
+
+          async.elapse(kAggregationInterval);
+
+          // Check that the requests were made separately
+          final requests = FakeClient.verifyRequests();
+          expect(requests.length, 2);
+        });
+      },
+    );
 
     test('supported uris will still aggregate if the group is not complete', () async {
       int requestsCount = 0;

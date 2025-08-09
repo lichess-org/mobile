@@ -10,6 +10,8 @@ final _logger = Logger('Aggregator');
 
 typedef GroupedFuture = Future<Map<String, dynamic>>;
 
+const kAggregationInterval = Duration(milliseconds: 5);
+
 final Uri _homeUri = Uri(path: '/api/mobile/home');
 final Uri _watchUri = Uri(path: '/api/mobile/watch');
 
@@ -39,14 +41,14 @@ final aggregatorProvider = Provider<Aggregator>((ref) {
 /// This service should be used for endpoints that are frequently called in a short time span in a specific
 /// context, such as the home screen or watch screen.
 ///
-/// It will wait for 50ms after the first request call and during that time it will collect more that
+/// It will wait for [kAggregationInterval] after the first request call and during that time it will collect more that
 /// can be aggregated into a single request.
 /// The result of that aggregated request is in turn cached for 5 seconds.
 ///
 /// There is a match with a target server grouped endpoint, only
 /// if all uris grouped client side match the target server endpoint configuration.
 ///
-/// If there is no match, it will make atomic requests for each uri after the 50ms delay.
+/// If there is no match, it will make atomic requests for each uri after the [kAggregationInterval] delay.
 class Aggregator {
   Aggregator(this.client);
 
@@ -104,7 +106,7 @@ class Aggregator {
     required U Function(Object) mapper,
   }) async {
     if (_pending == null) {
-      _pending = (Future<void>.delayed(const Duration(milliseconds: 50)), ISet({uri}));
+      _pending = (Future<void>.delayed(kAggregationInterval), ISet({uri}));
     } else {
       _pending = (_pending!.$1, _pending!.$2.add(uri));
     }
