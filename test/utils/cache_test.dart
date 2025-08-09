@@ -24,6 +24,14 @@ void main() {
     expect(cachedValue, value);
   });
 
+  test('keys are aware of expiry', () {
+    fakeAsync((async) {
+      expect(memoryCache.keys, contains(key));
+      async.elapse(const Duration(seconds: 2));
+      expect(memoryCache.keys, isNot(contains(key)));
+    });
+  });
+
   test('add if item is absent', () {
     const newValue = 'value1';
     fakeAsync((async) {
