@@ -3,6 +3,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -21,19 +22,7 @@ class OngoingGamesNotifier extends AsyncNotifier<IList<OngoingGame>> {
     if (session == null) return Future.value(IList());
 
     return ref.withAggregatorCacheFor(
-      (aggregator) => aggregator.readJson(
-        Uri(path: '/api/account/playing', queryParameters: {'nb': '50'}),
-        atomicMapper: ongoingGamesFromServerJson,
-        aggregatedMapper: (json) {
-          if (json is! List<dynamic>) {
-            throw Exception('Could not read json object as {nowPlaying: []}');
-          }
-          return json
-              .map((e) => OngoingGame.fromServerJson(e as Map<String, dynamic>))
-              .where((e) => e.variant.isPlaySupported)
-              .toIList();
-        },
-      ),
+      (client, aggregator) => AccountRepository(client, aggregator).getOngoingGames(nb: 50),
       // cache is useful to reduce the number of requests to the server because this is used by
       // both the correspondence service to sync games and the home screen to display ongoing games
       const Duration(minutes: 1),

@@ -728,15 +728,19 @@ extension ClientRefExtension on Ref {
   ///
   /// If [fn] throws with a [SocketException], the provider is not kept alive, this
   /// allows to retry the request later.
-  Future<U> withAggregatorCacheFor<U>(Future<U> Function(Aggregator) fn, Duration duration) async {
+  Future<U> withAggregatorCacheFor<U>(
+    Future<U> Function(LichessClient, Aggregator) fn,
+    Duration duration,
+  ) async {
     final link = keepAlive();
     final timer = Timer(duration, link.close);
+    final client = read(lichessClientProvider);
     final aggregator = read(aggregatorProvider);
     onDispose(() {
       timer.cancel();
     });
     try {
-      return await fn(aggregator);
+      return await fn(client, aggregator);
     } on SocketException catch (_) {
       link.close();
       rethrow;

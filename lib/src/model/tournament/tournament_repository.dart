@@ -1,10 +1,12 @@
 import 'dart:io' show File;
 
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,14 +14,24 @@ part 'tournament_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 TournamentRepository tournamentRepository(Ref ref) {
-  return TournamentRepository(ref.read(lichessClientProvider), ref);
+  return TournamentRepository(ref.read(lichessClientProvider), ref.read(aggregatorProvider), ref);
 }
 
 class TournamentRepository {
-  TournamentRepository(this.client, Ref ref) : _ref = ref;
+  TournamentRepository(this.client, this.aggregator, Ref ref) : _ref = ref;
 
   final Ref _ref;
   final http.Client client;
+  final Aggregator aggregator;
+
+  Future<IList<LightTournament>> featured() {
+    return aggregator.readJson(
+      Uri(path: '/tournament/featured'),
+      headers: {'Accept': 'application/json'},
+      aggregatedMapper: (json) => pick(json).asTournamentListOrThrow(),
+      atomicMapper: (Map<String, dynamic> json) => pick(json, 'featured').asTournamentListOrThrow(),
+    );
+  }
 
   Future<TournamentLists> getTournaments() {
     return client.readJson(

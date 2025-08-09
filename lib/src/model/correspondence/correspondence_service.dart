@@ -104,7 +104,7 @@ class CorrespondenceService {
 
     ref.withClient((client) async {
       try {
-        final gameRepository = GameRepository(client);
+        final gameRepository = ref.read(gameRepositoryProvider);
         final ongoingGames = await ref.read(ongoingGamesProvider.future);
         for (final sg in storedOngoingGames) {
           final game = ongoingGames.firstWhereOrNull((e) => e.id == sg.$2.id);

@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/flair_provider.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
@@ -467,13 +466,13 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                               return value == null;
                             });
                             final future = Result.capture(
-                              ref.withClient(
-                                (client) => AccountRepository(client).saveProfile(
-                                  widget.formData.map(
-                                    (key, value) => MapEntry(key, value.toString()),
+                              ref
+                                  .read(accountRepositoryProvider)
+                                  .saveProfile(
+                                    widget.formData.map(
+                                      (key, value) => MapEntry(key, value.toString()),
+                                    ),
                                   ),
-                                ),
-                              ),
                             );
 
                             setState(() {

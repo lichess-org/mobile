@@ -8,14 +8,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 /// A provider that gets the conversation data for the current user.
 final contactsProvider = FutureProvider.autoDispose<Contacts>((ref) {
   // We call this each time the account drawer is opened, so let's cache it for a short while.
-  return ref.withClientCacheFor(
-    (client) => MessageRepository(client).loadContacts(),
+  return ref.withAggregatorCacheFor(
+    (client, aggregator) => MessageRepository(client, aggregator).loadContacts(),
     const Duration(seconds: 10),
   );
 });
 
 final messageRepositoryProvider = Provider<MessageRepository>((ref) {
-  return MessageRepository(ref.read(lichessClientProvider));
+  return MessageRepository(ref.read(lichessClientProvider), ref.read(aggregatorProvider));
 });
 
 /// A provider that gets the unread messages count for the current user.
@@ -30,15 +30,16 @@ final unreadMessagesProvider = FutureProvider.autoDispose<UnreadMessages>((ref) 
 });
 
 class MessageRepository {
-  const MessageRepository(this.client);
+  const MessageRepository(this.client, this.aggregator);
 
   final LichessClient client;
+  final Aggregator aggregator;
 
   Future<UnreadMessages> unreadMessages() {
-    return client.readJson(
+    return aggregator.readJson(
       Uri(path: '/inbox/unread-count'),
       headers: {'Accept': 'application/json'},
-      mapper: (Map<String, dynamic> json) =>
+      atomicMapper: (Map<String, dynamic> json) =>
           (unread: json['unread'] as int, lichess: json['lichess'] as bool? ?? false),
     );
   }

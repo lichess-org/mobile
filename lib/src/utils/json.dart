@@ -17,7 +17,6 @@ IList<T> decodeObjectList<T>(Object? json, {required T? Function(Map<String, dyn
 
   final List<T> list = [];
   for (final e in json) {
-    print('Reading JSON object: $e');
     if (e is! Map<String, dynamic>) {
       _logger.severe('Could not read JSON object as $T: expected an object.');
       throw Exception('Could not read JSON object as $T: expected an object.');
