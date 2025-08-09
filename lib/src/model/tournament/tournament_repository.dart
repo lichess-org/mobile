@@ -28,7 +28,6 @@ class TournamentRepository {
     return aggregator.readJson(
       Uri(path: '/tournament/featured'),
       headers: {'Accept': 'application/json'},
-      aggregatedMapper: (json) => pick(json).asTournamentListOrThrow(),
       atomicMapper: (Map<String, dynamic> json) => pick(json, 'featured').asTournamentListOrThrow(),
     );
   }

@@ -176,7 +176,6 @@ void main() {
         aggregator.readNdJsonList(recentGamesUri, mapper: LightExportedGame.fromServerJson),
         aggregator.readJson(
           tournamentsUri,
-          aggregatedMapper: (json) => pick(json).asTournamentListOrThrow(),
           atomicMapper: (Map<String, dynamic> json) =>
               pick(json, 'featured').asTournamentListOrThrow(),
         ),
@@ -367,7 +366,7 @@ const homeEndpointResponse = '''
     {"id":"g2bzFol8","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673553626465,"lastMoveAt":1673553936657,"status":"resign","players":{"white":{"user":{"name":"SchallUndRausch","id":"schallundrausch"},"rating":1751,"ratingDiff":-5},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1767,"ratingDiff":5}},"winner":"black","clock":{"initial":180,"increment":2,"totalTime":260},"lastFen":"r7/pppk4/4p1B1/3pP3/6Pp/q1P1P1nP/P1QK1r2/R5R1 w - - 1 1"},
     {"id":"9WLmxmiB","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673553299064,"lastMoveAt":1673553615438,"status":"resign","players":{"white":{"user":{"name":"Dr-Alaakour","id":"dr-alaakour"},"rating":1806,"ratingDiff":5},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1772,"ratingDiff":-5}},"winner":"white","clock":{"initial":180,"increment":0,"totalTime":180},"lastFen":"2b1Q1k1/p1r4p/1p2p1p1/3pN3/2qP4/P4R2/1P3PPP/4R1K1 b - - 0 1"}
   ],
-  "tournaments": [],
+  "tournaments": {"featured": []},
   "inbox": {
     "unread": 5
   }
