@@ -8,8 +8,6 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger('Aggregator');
 
-typedef GroupedFuture = Future<Map<String, dynamic>>;
-
 const kAggregationInterval = Duration(milliseconds: 5);
 
 final Uri _homeUri = Uri(path: '/api/mobile/home');
@@ -30,6 +28,8 @@ final Map<Uri, ISet<({String key, RegExp pathRegexp})>> _targetUris = {
     (key: 'streamers', pathRegexp: RegExp(r'^\/api\/streamer\/live$')),
   }),
 };
+
+typedef CachedAggregatorRequest = ({Uri targetGroupUri, Future<Map<String, dynamic>> future});
 
 /// A provider for the [Aggregator] service.
 final aggregatorProvider = Provider<Aggregator>((ref) {
@@ -57,8 +57,9 @@ class Aggregator {
 
   (Future<void>, ISet<Uri>)? _pending;
 
-  final MemoryCache<ISet<Uri>, ({Uri targetGroupUri, GroupedFuture future})> _groupRequests =
-      MemoryCache(defaultExpiry: const Duration(seconds: 5));
+  final MemoryCache<ISet<Uri>, CachedAggregatorRequest> _groupRequests = MemoryCache(
+    defaultExpiry: const Duration(seconds: 5),
+  );
 
   Future<T> readJson<T>(
     Uri url, {
