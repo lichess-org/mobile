@@ -41,18 +41,19 @@ final aggregatorProvider = Provider<Aggregator>((ref) {
 /// This service should be used for endpoints that are frequently called in a short time span in a specific
 /// context, such as the home screen or watch screen.
 ///
-/// It will wait for [kAggregationInterval] after the first request call and during that time it will collect more that
+/// It will wait for [aggregationInterval] after the first request call and during that time it will collect more that
 /// can be aggregated into a single request.
 /// The result of that aggregated request is in turn cached for 5 seconds.
 ///
 /// There is a match with a target server grouped endpoint, only
 /// if all uris grouped client side match the target server endpoint configuration.
 ///
-/// If there is no match, it will make atomic requests for each uri after the [kAggregationInterval] delay.
+/// If there is no match, it will make atomic requests for each uri after the [aggregationInterval] delay.
 class Aggregator {
-  Aggregator(this.client);
+  Aggregator(this.client, {this.aggregationInterval = kAggregationInterval});
 
   final LichessClient client;
+  final Duration aggregationInterval;
 
   (Future<void>, ISet<Uri>)? _pending;
 
@@ -105,8 +106,14 @@ class Aggregator {
     /// The mapper function to apply to the corresponding value found in aggregated JSON response.
     required U Function(Object) mapper,
   }) async {
+    // Aggregation is disabled for widget tests to avoid dealing with timer and extra complexity.
+    // The Aggregator is tested on its own.
+    if (aggregationInterval == Duration.zero) {
+      return atomicClientCall();
+    }
+
     if (_pending == null) {
-      _pending = (Future<void>.delayed(kAggregationInterval), ISet({uri}));
+      _pending = (Future<void>.delayed(aggregationInterval), ISet({uri}));
     } else {
       _pending = (_pending!.$1, _pending!.$2.add(uri));
     }
