@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/user/game_history_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
@@ -38,9 +39,26 @@ Future<IList<LightExportedGameWithPov>> myRecentGames(Ref ref) async {
   final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   final session = ref.watch(authSessionProvider);
   if (session != null && online) {
-    return ref.withClient(
-      (client) => GameRepository(client).getUserGames(session.user.id, max: kNumberOfRecentGames),
-    );
+    final aggregator = ref.read(aggregatorProvider);
+    return aggregator
+        .readNdJsonList(
+          Uri(
+            path: '/api/games/user/${session.user.id}',
+            queryParameters: {'nb': '$kNumberOfRecentGames'},
+          ),
+          mapper: LightExportedGame.fromServerJson,
+        )
+        .then(
+          (value) => value
+              .map(
+                (e) => (
+                  game: e,
+                  // we know here user is not null for at least one of the players
+                  pov: e.white.user?.id == session.user.id ? Side.white : Side.black,
+                ),
+              )
+              .toIList(),
+        );
   } else {
     final storage = await ref.watch(gameStorageProvider.future);
     return storage

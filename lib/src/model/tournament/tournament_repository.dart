@@ -1,7 +1,6 @@
 import 'dart:io' show File;
 
 import 'package:deep_pick/deep_pick.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -21,14 +20,6 @@ class TournamentRepository {
 
   final Ref _ref;
   final http.Client client;
-
-  Future<IList<LightTournament>> featured() {
-    return client.readJson(
-      Uri(path: '/tournament/featured'),
-      headers: {'Accept': 'application/json'},
-      mapper: (Map<String, dynamic> json) => pick(json, 'featured').asTournamentListOrThrow(),
-    );
-  }
 
   Future<TournamentLists> getTournaments() {
     return client.readJson(

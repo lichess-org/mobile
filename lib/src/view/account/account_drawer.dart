@@ -40,31 +40,36 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
+    final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
     return switch (account) {
-      AsyncData(:final value) => IconButton(
-        tooltip: value == null ? context.l10n.signIn : value.username,
-        icon: value == null
-            ? const Icon(Icons.account_circle_outlined, size: 30)
-            : CircleAvatar(
-                radius: 16,
-                foregroundImage: value.flair != null
-                    ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
-                    : null,
-                onForegroundImageError: value.flair != null
-                    ? (error, _) {
-                        setState(() {
-                          errorLoadingFlair = true;
-                        });
-                      }
-                    : null,
-                backgroundColor: value.flair == null || errorLoadingFlair
-                    ? null
-                    : ColorScheme.of(context).surfaceContainer,
-                child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
-              ),
-        onPressed: () {
-          Scaffold.of(context).openDrawer();
-        },
+      AsyncData(:final value) => Badge.count(
+        count: unreadMessages,
+        isLabelVisible: unreadMessages > 0,
+        child: IconButton(
+          tooltip: value == null ? context.l10n.signIn : value.username,
+          icon: value == null
+              ? const Icon(Icons.account_circle_outlined, size: 30)
+              : CircleAvatar(
+                  radius: 16,
+                  foregroundImage: value.flair != null
+                      ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
+                      : null,
+                  onForegroundImageError: value.flair != null
+                      ? (error, _) {
+                          setState(() {
+                            errorLoadingFlair = true;
+                          });
+                        }
+                      : null,
+                  backgroundColor: value.flair == null || errorLoadingFlair
+                      ? null
+                      : ColorScheme.of(context).surfaceContainer,
+                  child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
+                ),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
       ),
       _ => IconButton(
         icon: const Icon(Icons.account_circle_outlined, size: 30),
