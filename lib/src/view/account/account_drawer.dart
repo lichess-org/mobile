@@ -42,6 +42,7 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
     final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
     return switch (account) {
       AsyncData(:final value) => Badge.count(
+        offset: const Offset(-4, 0),
         count: unreadMessages,
         isLabelVisible: unreadMessages > 0,
         child: IconButton(
