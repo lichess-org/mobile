@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -40,31 +39,37 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
+    final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
     return switch (account) {
-      AsyncData(:final value) => IconButton(
-        tooltip: value == null ? context.l10n.signIn : value.username,
-        icon: value == null
-            ? const Icon(Icons.account_circle_outlined, size: 30)
-            : CircleAvatar(
-                radius: 16,
-                foregroundImage: value.flair != null
-                    ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
-                    : null,
-                onForegroundImageError: value.flair != null
-                    ? (error, _) {
-                        setState(() {
-                          errorLoadingFlair = true;
-                        });
-                      }
-                    : null,
-                backgroundColor: value.flair == null || errorLoadingFlair
-                    ? null
-                    : ColorScheme.of(context).surfaceContainer,
-                child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
-              ),
-        onPressed: () {
-          Scaffold.of(context).openDrawer();
-        },
+      AsyncData(:final value) => Badge.count(
+        offset: const Offset(-4, 0),
+        count: unreadMessages,
+        isLabelVisible: unreadMessages > 0,
+        child: IconButton(
+          tooltip: value == null ? context.l10n.signIn : value.username,
+          icon: value == null
+              ? const Icon(Icons.account_circle_outlined, size: 30)
+              : CircleAvatar(
+                  radius: 16,
+                  foregroundImage: value.flair != null
+                      ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
+                      : null,
+                  onForegroundImageError: value.flair != null
+                      ? (error, _) {
+                          setState(() {
+                            errorLoadingFlair = true;
+                          });
+                        }
+                      : null,
+                  backgroundColor: value.flair == null || errorLoadingFlair
+                      ? null
+                      : ColorScheme.of(context).surfaceContainer,
+                  child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
+                ),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
       ),
       _ => IconButton(
         icon: const Icon(Icons.account_circle_outlined, size: 30),
@@ -76,10 +81,6 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
     };
   }
 }
-
-final _unreadMessagesProvider = FutureProvider.autoDispose<UnreadMessages>((ref) {
-  return ref.watch(messageRepositoryProvider).unreadMessages();
-});
 
 class AccountDrawer extends ConsumerStatefulWidget {
   const AccountDrawer({super.key});
@@ -102,7 +103,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final kidMode = account.valueOrNull?.kid ?? false;
     final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
 
-    final unreadMessages = ref.watch(_unreadMessagesProvider).valueOrNull?.unread ?? 0;
+    final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
 
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),

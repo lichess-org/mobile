@@ -6,7 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -104,7 +104,7 @@ class CorrespondenceService {
 
     ref.withClient((client) async {
       try {
-        final gameRepository = GameRepository(client);
+        final gameRepository = ref.read(gameRepositoryProvider);
         final ongoingGames = await ref.read(ongoingGamesProvider.future);
         for (final sg in storedOngoingGames) {
           final game = ongoingGames.firstWhereOrNull((e) => e.id == sg.$2.id);

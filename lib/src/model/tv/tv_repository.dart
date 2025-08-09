@@ -16,11 +16,11 @@ class TvRepository {
   final http.Client client;
 
   Future<TvChannels> channels() {
-    return client.readJson(Uri(path: '/api/tv/channels'), mapper: _tvGamesFromJson);
+    return client.readJson(Uri(path: '/api/tv/channels'), mapper: tvChannelsFromServerJson);
   }
 }
 
-TvChannels _tvGamesFromJson(Map<String, dynamic> json) {
+TvChannels tvChannelsFromServerJson(Map<String, dynamic> json) {
   final map = pick(json).asMapOrEmpty<String, Map<String, dynamic>>();
   return IMap({
     for (final entry in map.entries)

@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -7,12 +8,21 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
+/// A provider for the [GameRepository].
+final gameRepositoryProvider = Provider<GameRepository>((ref) {
+  final client = ref.read(lichessClientProvider);
+  final aggregator = ref.read(aggregatorProvider);
+  return GameRepository(client, aggregator);
+}, name: 'GameRepositoryProvider');
+
 class GameRepository {
-  const GameRepository(this.client);
+  const GameRepository(this.client, this.aggregator);
 
   final LichessClient client;
+  final Aggregator aggregator;
 
   Future<ExportedGame> getGame(GameId id, {bool withBookmarked = false}) {
     return client.readJson(
@@ -49,7 +59,7 @@ class GameRepository {
     assert(!filter.perfs.contains(Perf.puzzle));
     assert(!filter.perfs.contains(Perf.storm));
     assert(!filter.perfs.contains(Perf.streak));
-    return client
+    return aggregator
         .readNdJsonList(
           Uri(
             path: '/api/games/user/$userId',

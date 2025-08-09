@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_repository_providers.g.dart';
@@ -16,9 +15,7 @@ Future<ExportedGame> archivedGame(Ref ref, {required GameId id}) async {
   ExportedGame game;
   try {
     final isLoggedIn = ref.watch(isLoggedInProvider);
-    game = await ref.withClient(
-      (client) => GameRepository(client).getGame(id, withBookmarked: isLoggedIn),
-    );
+    game = await ref.read(gameRepositoryProvider).getGame(id, withBookmarked: isLoggedIn);
   } catch (_) {
     final gameStorage = await ref.watch(gameStorageProvider.future);
     final storedGame = await gameStorage.fetch(gameId: id);
@@ -33,5 +30,5 @@ Future<ExportedGame> archivedGame(Ref ref, {required GameId id}) async {
 
 @riverpod
 Future<IList<LightExportedGame>> gamesById(Ref ref, {required ISet<GameId> ids}) {
-  return ref.withClient((client) => GameRepository(client).getGamesByIds(ids));
+  return ref.read(gameRepositoryProvider).getGamesByIds(ids);
 }

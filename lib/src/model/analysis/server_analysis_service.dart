@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -71,7 +70,7 @@ class ServerAnalysisService {
     );
 
     try {
-      await ref.withClient((client) => GameRepository(client).requestServerAnalysis(id.gameId));
+      await ref.read(gameRepositoryProvider).requestServerAnalysis(id.gameId);
       _currentAnalysis.value = id.gameId;
     } catch (e) {
       _socketSubscription?.$2.cancel();

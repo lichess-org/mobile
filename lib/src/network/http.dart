@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -712,6 +713,34 @@ extension ClientRefExtension on Ref {
     });
     try {
       return await fn(client);
+    } on SocketException catch (_) {
+      link.close();
+      rethrow;
+    } on ClientException catch (_) {
+      link.close();
+      rethrow;
+    }
+  }
+
+  /// Runs [fn] with the [Aggregator] and keeps the provider alive for [duration].
+  ///
+  /// This is primarily used for caching network requests in a [FutureProvider].
+  ///
+  /// If [fn] throws with a [SocketException], the provider is not kept alive, this
+  /// allows to retry the request later.
+  Future<U> withAggregatorCacheFor<U>(
+    Future<U> Function(LichessClient, Aggregator) fn,
+    Duration duration,
+  ) async {
+    final link = keepAlive();
+    final timer = Timer(duration, link.close);
+    final client = read(lichessClientProvider);
+    final aggregator = read(aggregatorProvider);
+    onDispose(() {
+      timer.cancel();
+    });
+    try {
+      return await fn(client, aggregator);
     } on SocketException catch (_) {
       link.close();
       rethrow;

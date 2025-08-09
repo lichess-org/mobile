@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_preferences.g.dart';
@@ -86,7 +85,7 @@ class AccountPreferences extends _$AccountPreferences {
     }
 
     try {
-      return ref.withClient((client) => AccountRepository(client).getPreferences());
+      return ref.read(accountRepositoryProvider).getPreferences();
     } catch (e) {
       debugPrint('[AccountPreferences] Error getting account preferences: $e');
       return defaultAccountPreferences;
@@ -111,7 +110,7 @@ class AccountPreferences extends _$AccountPreferences {
 
   Future<void> _setPref<T>(String key, AccountPref<T> value) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    await ref.withClient((client) => AccountRepository(client).setPreference(key, value));
+    await ref.read(accountRepositoryProvider).setPreference(key, value);
     ref.invalidateSelf();
   }
 }

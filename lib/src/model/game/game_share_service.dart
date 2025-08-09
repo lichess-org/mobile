@@ -83,7 +83,7 @@ class GameShareService {
               '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}',
             ),
           ),
-      _ref.withClient((client) => GameRepository(client).getGame(id)),
+      _ref.read(gameRepositoryProvider).getGame(id),
     ]).timeout(const Duration(seconds: 1));
 
     final gifResp = resp[0] as Response;

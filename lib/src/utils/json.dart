@@ -1,8 +1,38 @@
 import 'dart:ui' show Color, Locale;
 
 import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:logging/logging.dart';
+
+final _logger = Logger('JsonUtils');
+
+/// Reads a JSON list of objects and maps it using the provided mapper function.
+IList<T> decodeObjectList<T>(Object? json, {required T? Function(Map<String, dynamic>) mapper}) {
+  if (json is! List<dynamic>) {
+    _logger.severe('Could not read JSON object as List: expected a list.');
+    throw Exception('Could not read JSON object as List: expected a list.');
+  }
+
+  final List<T> list = [];
+  for (final e in json) {
+    if (e is! Map<String, dynamic>) {
+      _logger.severe('Could not read JSON object as $T: expected an object.');
+      throw Exception('Could not read JSON object as $T: expected an object.');
+    }
+    try {
+      final mapped = mapper(e);
+      if (mapped != null) {
+        list.add(mapped);
+      }
+    } catch (e, st) {
+      _logger.severe('Could not read JSON object as $T: $e', e, st);
+      throw Exception('Could not read JSON object as $T: $e');
+    }
+  }
+  return IList(list);
+}
 
 class LocaleConverter implements JsonConverter<Locale?, Map<String, dynamic>?> {
   const LocaleConverter();

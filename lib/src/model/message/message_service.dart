@@ -35,6 +35,7 @@ class MessageService {
       switch (fcmMessage) {
         case NewMessageFcmMessage():
           ref.invalidate(contactsProvider);
+          ref.invalidate(unreadMessagesProvider);
         case _:
           break;
       }
