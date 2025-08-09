@@ -46,7 +46,7 @@ void main() {
       final aggregator = await fakeClientAggregator();
       final uri = Uri(path: '/api/test');
 
-      final response = await aggregator.readJson(uri, mapper: (data) => data);
+      final response = await aggregator.readJson(uri, atomicMapper: (data) => data);
 
       final requests = FakeClient.verifyRequests();
       expect(requests.length, 1);
@@ -61,8 +61,8 @@ void main() {
       final uri2 = Uri(path: '/api/test2');
 
       fakeAsync((async) {
-        aggregator.readJson(uri1, mapper: (data) => data);
-        aggregator.readJson(uri2, mapper: (data) => data);
+        aggregator.readJson(uri1, atomicMapper: (data) => data);
+        aggregator.readJson(uri2, atomicMapper: (data) => data);
 
         async.elapse(const Duration(milliseconds: 50));
 
@@ -89,8 +89,8 @@ void main() {
       final tvUri = Uri(path: '/api/tv/channels');
 
       final [broadcasts, channels] = await Future.wait([
-        aggregator.readJson(broadcastUri, mapper: broadcastListFromServerJson),
-        aggregator.readJson(tvUri, mapper: tvChannelsFromServerJson),
+        aggregator.readJson(broadcastUri, atomicMapper: broadcastListFromServerJson),
+        aggregator.readJson(tvUri, atomicMapper: tvChannelsFromServerJson),
       ]);
 
       expect(requestsCount, 1);
@@ -116,8 +116,8 @@ void main() {
       final streamerUri = Uri(path: '/api/streamer/live');
 
       final [broadcasts, channels, streamers] = await Future.wait([
-        aggregator.readJson(broadcastUri, mapper: broadcastListFromServerJson),
-        aggregator.readJson(tvUri, mapper: tvChannelsFromServerJson),
+        aggregator.readJson(broadcastUri, atomicMapper: broadcastListFromServerJson),
+        aggregator.readJson(tvUri, atomicMapper: tvChannelsFromServerJson),
         aggregator.readJsonList(streamerUri, mapper: Streamer.fromServerJson),
       ]);
 
@@ -147,16 +147,34 @@ void main() {
       final inboxUri = Uri(path: '/inbox/unread-count');
 
       final [account, ongoingGames, recentGames, tournaments, inbox] = await Future.wait([
-        aggregator.readJson(accountUri, mapper: User.fromServerJson),
-        aggregator.readJson(ongoingGamesUri, mapper: ongoingGamesFromServerJson),
+        aggregator.readJson(
+          accountUri,
+          atomicMapper: User.fromServerJson,
+          aggregatedMapper: (json) => User.fromServerJson(json as Map<String, dynamic>),
+        ),
+        aggregator.readJson(
+          ongoingGamesUri,
+          atomicMapper: ongoingGamesFromServerJson,
+          aggregatedMapper: (json) {
+            if (json is! List<dynamic>) {
+              throw Exception('Could not read json object as {nowPlaying: []}');
+            }
+            return json
+                .map((e) => OngoingGame.fromServerJson(e as Map<String, dynamic>))
+                .where((e) => e.variant.isPlaySupported)
+                .toIList();
+          },
+        ),
         aggregator.readNdJsonList(recentGamesUri, mapper: LightExportedGame.fromServerJson),
         aggregator.readJson(
           tournamentsUri,
-          mapper: (Map<String, dynamic> json) => pick(json, 'featured').asTournamentListOrThrow(),
+          aggregatedMapper: (json) => pick(json).asTournamentListOrThrow(),
+          atomicMapper: (Map<String, dynamic> json) =>
+              pick(json, 'featured').asTournamentListOrThrow(),
         ),
         aggregator.readJson(
           inboxUri,
-          mapper: (Map<String, dynamic> json) {
+          atomicMapper: (Map<String, dynamic> json) {
             return (unread: json['unread'] as int, lichess: json['lichess'] as bool? ?? false);
           },
         ),

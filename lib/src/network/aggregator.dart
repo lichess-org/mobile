@@ -60,11 +60,18 @@ class Aggregator {
   Future<T> readJson<T>(
     Uri url, {
     Map<String, String>? headers,
-    required T Function(Map<String, dynamic>) mapper,
+
+    /// The mapper function to apply to the atomic JSON response.
+    required T Function(Map<String, dynamic>) atomicMapper,
+
+    /// The mapper function to apply to the corresponding value found in aggregated JSON response.
+    ///
+    /// If not provided, the [atomicMapper] will be used for aggregation.
+    T Function(Object)? aggregatedMapper,
   }) => _call<T>(
     url,
-    atomicClientCall: () => client.readJson(url, headers: headers, mapper: mapper),
-    mapper: (json) => mapper(json as Map<String, dynamic>),
+    atomicClientCall: () => client.readJson(url, headers: headers, mapper: atomicMapper),
+    mapper: aggregatedMapper ?? (json) => atomicMapper(json as Map<String, dynamic>),
   );
 
   Future<IList<T>> readJsonList<T>(
