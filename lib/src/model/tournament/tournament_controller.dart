@@ -117,7 +117,7 @@ class TournamentController extends _$TournamentController {
 
     final tournament = await ref
         .read(tournamentRepositoryProvider)
-        .goToPage(state.requireValue.tournament, page);
+        .loadPage(state.requireValue.tournament, page);
 
     state = AsyncValue.data(state.requireValue.copyWith(tournament: tournament));
   }

@@ -75,7 +75,7 @@ class TournamentRepository {
     );
   }
 
-  Future<Tournament> goToPage(Tournament tournament, int page) {
+  Future<Tournament> loadPage(Tournament tournament, int page) {
     return client.readJson(
       Uri(path: '/tournament/${tournament.id}/standing/$page'),
       headers: {'Accept': 'application/json'},
