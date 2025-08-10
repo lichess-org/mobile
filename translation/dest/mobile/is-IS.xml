@@ -55,7 +55,7 @@
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Annaðhvort pikka eða draga</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Ýttu á tvo reiti</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Formteikning</string>
-  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Teiknaðu form með tveimur fingrum: haltu öðrum fingri á tómum reit og dragðu annan fingur til að teikna form.</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">Teiknaðu form með tveimur fingrum: haltu öðrum fingri á tómum reit og dragðu annan fingur til að teikna form.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Sýna ramma</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Snertiviðbrögð</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Þegar þetta er virkt mun tækið titra snubbótt er þú leikur eða drepur taflmann.</string>
