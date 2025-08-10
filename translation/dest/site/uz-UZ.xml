@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">O\'zaro kelishuv asosida durrang natija qayd etildi</string>
   <string name="fiftyMovesWithoutProgress">Ellikta yurish birorta rivojsiz</string>
   <string name="currentGames">Joriy vaqtdagi o\'yinlar</string>
-  <string name="joinedX">%s qoʻshildi</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">%s qoʻshildi</string>
   <plurals name="nbGames">
     <item quantity="one">%s o\'yin</item>
     <item quantity="other">%s o\'yinlar</item>
@@ -479,7 +479,7 @@
   <string name="openTournaments">Ochiq turnir</string>
   <string name="duration">Davomiyligi</string>
   <string name="winner">G\'olib</string>
-  <string name="standing">Musobaqa jadvali</string>
+  <string name="standings">Turnir jadvali</string>
   <string name="createANewTournament">Yangi turnir yaratish</string>
   <string name="tournamentCalendar">Turnir kalendari</string>
   <string name="conditionOfEntry">Kirish sharti:</string>

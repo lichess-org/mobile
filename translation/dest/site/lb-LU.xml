@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">Remis duerch Eenegung</string>
   <string name="fiftyMovesWithoutProgress">50 Zich ouni Progrès</string>
   <string name="currentGames">Lafend Partien</string>
-  <string name="joinedX">%s bäigetrueden</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">%s bäigetrueden</string>
   <plurals name="nbGames">
     <item quantity="one">%s Partie</item>
     <item quantity="other">%s Partien</item>
@@ -479,7 +479,7 @@
   <string name="openTournaments">Oppen Turnéieren</string>
   <string name="duration">Dauer</string>
   <string name="winner">Gewënner</string>
-  <string name="standing">Stand</string>
+  <string name="standings">Stand</string>
   <string name="createANewTournament">Neien Turnéier kreéieren</string>
   <string name="tournamentCalendar">Turnéierkalenner</string>
   <string name="conditionOfEntry">Teilnahmebedingung:</string>

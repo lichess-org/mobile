@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">Empate por acordo mútuo</string>
   <string name="fiftyMovesWithoutProgress">Cinquenta jogadas sem progresso</string>
   <string name="currentGames">Partidas atuais</string>
-  <string name="joinedX">Registrou-se %s</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">Registrou-se %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s partida</item>
     <item quantity="other">%s partidas</item>
@@ -479,7 +479,7 @@
   <string name="openTournaments">Torneios abertos</string>
   <string name="duration">Duração</string>
   <string name="winner">Vencedor</string>
-  <string name="standing">Colocação</string>
+  <string name="standings">Classificação</string>
   <string name="createANewTournament">Criar novo torneio</string>
   <string name="tournamentCalendar">Calendário do torneio</string>
   <string name="conditionOfEntry">Condições de participação:</string>

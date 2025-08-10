@@ -160,7 +160,7 @@
   <string name="drawByMutualAgreement">Нерешено по договору</string>
   <string name="fiftyMovesWithoutProgress">Педесет потеза без прогреса</string>
   <string name="currentGames">Партије у току</string>
-  <string name="joinedX">Придружио/ла се %s</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">Придружио/ла се %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s партија</item>
     <item quantity="few">%s партије</item>
@@ -488,7 +488,6 @@
   <string name="openTournaments">Отворени турнири</string>
   <string name="duration">Трајање</string>
   <string name="winner">Победник</string>
-  <string name="standing">Позиција</string>
   <string name="createANewTournament">Направи нови турнир</string>
   <string name="tournamentCalendar">Календар турнира</string>
   <string name="conditionOfEntry">Услови за улаз:</string>
