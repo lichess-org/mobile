@@ -25,9 +25,10 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
 class CreateChallengeBottomSheet extends ConsumerStatefulWidget {
-  const CreateChallengeBottomSheet(this.user);
+  const CreateChallengeBottomSheet(this.user, {this.positionFen});
 
   final LightUser user;
+  final String? positionFen;
 
   @override
   ConsumerState<CreateChallengeBottomSheet> createState() => _CreateChallengeBottomSheetState();
@@ -42,6 +43,13 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
   @override
   void initState() {
     super.initState();
+    if (widget.positionFen != null) {
+      fromPositionFenInput = widget.positionFen;
+      _controller.text = widget.positionFen!;
+      ref.read(challengePreferencesProvider.notifier).setVariant(Variant.fromPosition);
+    } else {
+      fromPositionFenInput = null;
+    }
     _controller.addListener(() {
       setState(() {
         fromPositionFenInput = _controller.text;
