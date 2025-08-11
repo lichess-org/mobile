@@ -235,7 +235,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
           onFocusRegained: () {
             if (context.mounted && _focusLostAt != null) {
               final duration = DateTime.now().difference(_focusLostAt!);
-              if (duration.inSeconds < 30) {
+              if (duration.inSeconds < 10) {
                 return;
               }
               _refreshData(isOnline: status.isOnline);

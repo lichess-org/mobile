@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
@@ -7,19 +8,20 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 /// A provider that gets the conversation data for the current user.
 final contactsProvider = FutureProvider.autoDispose<Contacts>((ref) {
-  // We call this each time the account drawer is opened, so let's cache it for a short while.
-  return ref.withAggregatorCacheFor(
-    (client, aggregator) => MessageRepository(client, aggregator).loadContacts(),
-    const Duration(seconds: 10),
-  );
-});
+  return ref.read(messageRepositoryProvider).loadContacts();
+}, name: 'ContactsProvider');
 
+/// A provider for [MessageRepository].
 final messageRepositoryProvider = Provider<MessageRepository>((ref) {
   return MessageRepository(ref.read(lichessClientProvider), ref.read(aggregatorProvider));
-});
+}, name: 'MessageRepositoryProvider');
 
 /// A provider that gets the unread messages count for the current user.
 final unreadMessagesProvider = FutureProvider.autoDispose<UnreadMessages>((ref) {
+  final session = ref.watch(authSessionProvider);
+  if (session == null) {
+    return Future.value((unread: 0, lichess: false));
+  }
   final aggregator = ref.watch(aggregatorProvider);
   return aggregator.readJson(
     Uri(path: '/inbox/unread-count'),
@@ -27,7 +29,7 @@ final unreadMessagesProvider = FutureProvider.autoDispose<UnreadMessages>((ref) 
       return (unread: json['unread'] as int, lichess: json['lichess'] as bool? ?? false);
     },
   );
-});
+}, name: 'UnreadMessagesProvider');
 
 class MessageRepository {
   const MessageRepository(this.client, this.aggregator);

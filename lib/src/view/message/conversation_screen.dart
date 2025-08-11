@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/message/conversation_controller.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
+import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
@@ -33,7 +35,7 @@ class GetMoreItem extends DisplayItem {}
 
 class ContactTypingItem extends DisplayItem {}
 
-class ConversationScreen extends StatelessWidget {
+class ConversationScreen extends ConsumerStatefulWidget {
   final LightUser user;
 
   const ConversationScreen({super.key, required this.user});
@@ -43,20 +45,46 @@ class ConversationScreen extends StatelessWidget {
   }
 
   @override
+  ConsumerState<ConversationScreen> createState() => _ConversationScreenState();
+}
+
+class _ConversationScreenState extends ConsumerState<ConversationScreen> with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      rootNavPageRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    rootNavPageRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPop() {
+    ref.invalidate(unreadMessagesProvider);
+    super.didPop();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: UserFullNameWidget(
-          user: user,
+          user: widget.user,
           showFlair: true,
           showPatron: true,
           shouldShowOnline: true,
           onTap: () {
-            Navigator.push(context, UserScreen.buildRoute(context, user));
+            Navigator.push(context, UserScreen.buildRoute(context, widget.user));
           },
         ),
       ),
-      body: _Body(user: user),
+      body: _Body(user: widget.user),
     );
   }
 }
