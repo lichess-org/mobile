@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_detail_tile.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
@@ -67,7 +68,7 @@ class GameHistoryScreen extends ConsumerWidget {
         ? AppBarTitleText(context.l10n.resVsX(user!.name, gameFilter.opponent!.username))
         : filtersInUse.count == 0
         ? nbGamesAsync.when(
-            data: (nbGames) => AppBarTitleText(context.l10n.nbGames(nbGames)),
+            data: (nbGames) => AppBarTitleText(context.l10n.nbGames(nbGames).localizeNumbers()),
             loading: () => const ButtonLoadingIndicator(),
             error: (e, s) => AppBarTitleText(context.l10n.mobileAllGames),
           )
