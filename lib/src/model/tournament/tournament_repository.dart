@@ -54,6 +54,14 @@ class TournamentRepository {
     );
   }
 
+  Future<TournamentPlayer> getTournamentPlayer(TournamentId tournamentId, UserId userId) {
+    return client.readJson(
+      Uri(path: '/tournament/$tournamentId/player/$userId'),
+      headers: {'Accept': 'application/json'},
+      mapper: (Map<String, dynamic> json) => TournamentPlayer.fromServerJson(json),
+    );
+  }
+
   Future<bool> downloadTournamentGames(TournamentId id, File file, {UserId? userId}) {
     final client = _ref.read(defaultClientProvider);
     return downloadFile(
