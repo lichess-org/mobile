@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
 import '../../test_helpers.dart';
@@ -32,9 +31,8 @@ void main() {
         return mockResponse('', 404);
       });
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
 
-      final repo = UserRepository(client);
+      final repo = container.read(userRepositoryProvider);
 
       final result = await repo.getUser(testUserId);
 
@@ -88,8 +86,7 @@ void main() {
         return mockResponse('', 404);
       });
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = UserRepository(client);
+      final repo = container.read(userRepositoryProvider);
 
       final result = await repo.getUser(testUserId);
 
@@ -142,8 +139,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = UserRepository(client);
+      final repo = container.read(userRepositoryProvider);
 
       final result = await repo.getPerfStats(testUserId, testPerf);
 
@@ -396,8 +392,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = UserRepository(client);
+      final repo = container.read(userRepositoryProvider);
 
       final result = await repo.getPerfStats(testUserId, testPerf);
 
@@ -421,8 +416,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = UserRepository(client);
+      final repo = container.read(userRepositoryProvider);
       final result = await repo.getUsersStatuses(ids);
 
       expect(result, isA<IList<UserStatus>>());
@@ -458,8 +452,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = UserRepository(client);
+      final repo = container.read(userRepositoryProvider);
       final result = await repo.getUsersStatuses(ids);
 
       expect(result, isA<IList<UserStatus>>());
@@ -481,8 +474,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = UserRepository(client);
+      final repo = container.read(userRepositoryProvider);
 
       final result = await repo.getTop1();
 
@@ -516,8 +508,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = UserRepository(client);
+      final repo = container.read(userRepositoryProvider);
 
       final result = await repo.getLeaderboard();
 
@@ -535,8 +526,7 @@ void main() {
     });
 
     final container = await lichessClientContainer(mockClient);
-    final client = container.read(lichessClientProvider);
-    final repo = UserRepository(client);
+    final repo = container.read(userRepositoryProvider);
     final result = await repo.getActivity(const UserId('testUser'));
 
     expect(result, isA<IList<UserActivity>>());

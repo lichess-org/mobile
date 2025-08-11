@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -37,7 +36,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
 final _accountActivityProvider = FutureProvider.autoDispose<IList<UserActivity>>((ref) {
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();
-  return ref.withClient((client) => UserRepository(client).getActivity(session.user.id));
+  return ref.read(userRepositoryProvider).getActivity(session.user.id);
 }, name: 'userActivityProvider');
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {

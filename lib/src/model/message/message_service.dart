@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -54,7 +53,7 @@ class MessageService {
 
   /// Handles a notification response that caused the app to open.
   Future<void> _onNotificationResponse(UserId conversationId) async {
-    final user = await ref.withClient((client) => UserRepository(client).getUser(conversationId));
+    final user = await ref.read(userRepositoryProvider).getUser(conversationId);
 
     if (user.kid == true) {
       // If the user is in kid mode, we don't open the conversation screen.

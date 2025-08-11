@@ -193,9 +193,7 @@ class _BroadcastGameMenu extends ConsumerWidget {
           label: context.l10n.mobileShareGamePGN,
           onPressed: () async {
             try {
-              final pgn = await ref.withClient(
-                (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
-              );
+              final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
               if (context.mounted) {
                 launchShareDialog(context, ShareParams(text: pgn));
               }

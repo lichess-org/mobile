@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
@@ -31,27 +30,26 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 const kThumbnailImageSize = 40.0;
 
-final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) {
-  return ref.withClient((client) async {
-    final channels = await TvRepository(client).channels();
-    return TvChannel.values
-        .map((channel) => MapEntry(channel, channels[channel]))
-        .where((entry) => entry.value != null)
-        .map(
-          (entry) => TvGameSnapshot(
-            channel: entry.key,
-            id: entry.value!.id,
-            orientation: entry.value!.side ?? Side.white,
-            player: FeaturedPlayer(
-              name: entry.value!.user.name,
-              title: entry.value!.user.title,
-              side: entry.value!.side ?? Side.white,
-              rating: entry.value!.rating,
-            ),
+final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) async {
+  final repository = ref.watch(tvRepositoryProvider);
+  final channels = await repository.channels();
+  return TvChannel.values
+      .map((channel) => MapEntry(channel, channels[channel]))
+      .where((entry) => entry.value != null)
+      .map(
+        (entry) => TvGameSnapshot(
+          channel: entry.key,
+          id: entry.value!.id,
+          orientation: entry.value!.side ?? Side.white,
+          player: FeaturedPlayer(
+            name: entry.value!.user.name,
+            title: entry.value!.user.title,
+            side: entry.value!.side ?? Side.white,
+            rating: entry.value!.rating,
           ),
-        )
-        .toIList();
-  });
+        ),
+      )
+      .toIList();
 });
 
 class WatchTabScreen extends ConsumerStatefulWidget {
@@ -72,6 +70,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   Widget build(BuildContext context) {
     ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
       if (prev != BottomTab.watch && current == BottomTab.watch) {
+        ref.invalidate(broadcastsPaginatorProvider);
         ref.invalidate(featuredChannelsProvider);
         ref.invalidate(liveStreamersProvider);
       }

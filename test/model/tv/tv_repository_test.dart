@@ -3,6 +3,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 
+import '../../test_container.dart';
 import '../../test_helpers.dart';
 
 void main() {
@@ -15,7 +16,8 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = TvRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(tvRepositoryProvider);
 
       final result = await repo.channels();
 

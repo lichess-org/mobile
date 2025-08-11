@@ -3,7 +3,6 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
 import '../../test_helpers.dart';
@@ -26,8 +25,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = BroadcastRepository(client);
+      final repo = container.read(broadcastRepositoryProvider);
 
       final response = await repo.getBroadcasts();
 
@@ -52,8 +50,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = BroadcastRepository(client);
+      final repo = container.read(broadcastRepositoryProvider);
 
       final response = await repo.getRound(const BroadcastRoundId(roundId));
 
