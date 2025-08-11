@@ -232,6 +232,9 @@ sealed class TournamentState with _$TournamentState {
   /// True if the user has joined the tournament and is not withdrawn.
   bool get joined => tournament.me != null && tournament.me!.withdraw != true;
 
+  bool get isSpectator =>
+      tournament.isFinished == true || tournament.me == null || tournament.me!.withdraw == true;
+
   ChatOptions? get chatOptions => tournament.chat != null
       ? TournamentChatOptions(id: tournament.id, writeable: tournament.chat!.writeable)
       : null;
