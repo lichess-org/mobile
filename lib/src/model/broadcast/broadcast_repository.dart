@@ -2,21 +2,31 @@ import 'package:clock/clock.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
+/// A provider for the [BroadcastRepository].
+final broadcastRepositoryProvider = Provider<BroadcastRepository>((ref) {
+  final client = ref.read(lichessClientProvider);
+  final aggregator = ref.read(aggregatorProvider);
+  return BroadcastRepository(client, aggregator);
+}, name: 'BroadcastRepositoryProvider');
+
 class BroadcastRepository {
-  BroadcastRepository(this.client);
+  BroadcastRepository(this.client, this.aggregator);
 
   final LichessClient client;
+  final Aggregator aggregator;
 
   Future<BroadcastList> getBroadcasts({int page = 1}) {
-    return client.readJson(
+    return aggregator.readJson(
       Uri(path: '/api/broadcast/top', queryParameters: {'page': page.toString()}),
-      mapper: _makeBroadcastResponseFromJson,
+      atomicMapper: broadcastListFromServerJson,
     );
   }
 
@@ -68,7 +78,7 @@ class BroadcastRepository {
   }
 }
 
-BroadcastList _makeBroadcastResponseFromJson(Map<String, dynamic> json) {
+BroadcastList broadcastListFromServerJson(Map<String, dynamic> json) {
   return (
     active: pick(json, 'active').asListOrThrow(_broadcastFromPick).toIList(),
     past: pick(json, 'past', 'currentPageResults').asListOrThrow(_broadcastFromPick).toIList(),

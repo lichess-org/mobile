@@ -15,58 +15,57 @@ const _kAutoCompleteDebounceTimer = Duration(milliseconds: 300);
 
 @riverpod
 Future<User> user(Ref ref, {required UserId id}) {
-  return ref.withClient((client) => UserRepository(client).getUser(id, withCanChallenge: true));
+  return ref.read(userRepositoryProvider).getUser(id, withCanChallenge: true);
 }
 
 @riverpod
 Future<(User, UserStatus)> userAndStatus(Ref ref, {required UserId id}) {
-  return ref.withClient((client) {
-    final repo = UserRepository(client);
-    return Future.wait([
-      repo.getUser(id, withCanChallenge: true),
-      repo.getUsersStatuses({id}.lock),
-    ], eagerError: true).then((value) => (value[0] as User, (value[1] as IList<UserStatus>).first));
-  });
+  final repo = ref.read(userRepositoryProvider);
+  return Future.wait([
+    repo.getUser(id, withCanChallenge: true),
+    repo.getUsersStatuses({id}.lock),
+  ], eagerError: true).then((value) => (value[0] as User, (value[1] as IList<UserStatus>).first));
 }
 
 @riverpod
 Future<UserPerfStats> userPerfStats(Ref ref, {required UserId id, required Perf perf}) {
-  return ref.withClient((client) => UserRepository(client).getPerfStats(id, perf));
+  return ref.read(userRepositoryProvider).getPerfStats(id, perf);
 }
 
 @riverpod
 Future<IList<UserStatus>> userStatuses(Ref ref, {required ISet<UserId> ids}) {
-  return ref.withClient((client) => UserRepository(client).getUsersStatuses(ids));
+  return ref.read(userRepositoryProvider).getUsersStatuses(ids);
 }
 
 @riverpod
 Future<IList<Streamer>> liveStreamers(Ref ref) {
-  return ref.withClientCacheFor(
-    (client) => UserRepository(client).getLiveStreamers(),
+  return ref.withAggregatorCacheFor(
+    (client, aggregator) => UserRepository(client, aggregator).getLiveStreamers(),
     const Duration(minutes: 1),
   );
 }
 
 @riverpod
 Future<Top1Leaderboard> top1(Ref ref) {
-  return ref.withClientCacheFor(
-    (client) => UserRepository(client).getTop1(),
+  return ref.withAggregatorCacheFor(
+    (client, aggregator) => UserRepository(client, aggregator).getTop1(),
     const Duration(hours: 12),
   );
 }
 
 @riverpod
 Future<Leaderboard> leaderboard(Ref ref) {
-  return ref.withClientCacheFor(
-    (client) => UserRepository(client).getLeaderboard(),
+  return ref.withAggregatorCacheFor(
+    (client, aggregator) => UserRepository(client, aggregator).getLeaderboard(),
     const Duration(hours: 2),
   );
 }
 
 @riverpod
 Future<IList<User>> onlineBots(Ref ref) {
-  return ref.withClientCacheFor(
-    (client) => UserRepository(client).getOnlineBots().then((bots) => bots.toIList()),
+  return ref.withAggregatorCacheFor(
+    (client, aggregator) =>
+        UserRepository(client, aggregator).getOnlineBots().then((bots) => bots.toIList()),
     const Duration(hours: 5),
   );
 }
@@ -81,21 +80,18 @@ Future<IList<LightUser>> autoCompleteUser(Ref ref, String term) async {
     throw Exception('Cancelled');
   }
 
-  return ref.withClient((client) => UserRepository(client).autocompleteUser(term));
+  return ref.read(userRepositoryProvider).autocompleteUser(term);
 }
 
 @riverpod
 Future<IList<UserRatingHistoryPerf>> userRatingHistory(Ref ref, {required UserId id}) {
-  return ref.withClientCacheFor(
-    (client) => UserRepository(client).getRatingHistory(id),
+  return ref.withAggregatorCacheFor(
+    (client, aggregator) => UserRepository(client, aggregator).getRatingHistory(id),
     const Duration(minutes: 1),
   );
 }
 
 @riverpod
 Future<Crosstable> crosstable(Ref ref, UserId userId1, UserId userId2, {bool matchup = true}) {
-  return ref.withClient(
-    (LichessClient client) =>
-        UserRepository(client).getCrosstable(userId1, userId2, matchup: matchup),
-  );
+  return ref.read(userRepositoryProvider).getCrosstable(userId1, userId2, matchup: matchup);
 }

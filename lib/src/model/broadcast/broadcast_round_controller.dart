@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -72,9 +71,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       },
     );
 
-    final round = await ref.withClient(
-      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
-    );
+    final round = await ref.read(broadcastRepositoryProvider).getRound(broadcastRoundId);
 
     return BroadcastRoundState(round: round.round, games: round.games, observedGames: ISet());
   }
@@ -83,9 +80,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     if (state.hasValue == false) return;
 
     final key = _key;
-    final round = await ref.withClient(
-      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
-    );
+    final round = await ref.read(broadcastRepositoryProvider).getRound(broadcastRoundId);
     // check provider is still mounted
     if (key == _key) {
       state = AsyncData(

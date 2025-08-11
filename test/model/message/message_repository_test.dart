@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
 import '../../test_helpers.dart';
@@ -28,9 +27,8 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
 
-      final repo = MessageRepository(client);
+      final repo = container.read(messageRepositoryProvider);
 
       final data = await repo.loadContacts();
       final contacts = data.contacts;

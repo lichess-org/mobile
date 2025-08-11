@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_game.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -47,7 +46,7 @@ class LiveTvChannels extends _$LiveTvChannels {
   }
 
   Future<IMap<TvChannel, TvGameSnapshot>> _doStartWatching() async {
-    final repoGames = await ref.withClient((client) => TvRepository(client).channels());
+    final repoGames = await ref.read(tvRepositoryProvider).channels();
 
     _socketClient = ref.read(socketPoolProvider).open(Uri(path: kDefaultSocketRoute));
 
@@ -56,7 +55,7 @@ class LiveTvChannels extends _$LiveTvChannels {
 
     _socketReadySubscription?.cancel();
     _socketReadySubscription = _socketClient.connectedStream.listen((_) async {
-      final repoGames = await ref.withClient((client) => TvRepository(client).channels());
+      final repoGames = await ref.read(tvRepositoryProvider).channels();
       _socketWatch(repoGames);
     });
 

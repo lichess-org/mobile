@@ -5,7 +5,6 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
 import '../../test_helpers.dart';
@@ -27,9 +26,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-
-      final repo = GameRepository(client);
+      final repo = container.read(gameRepositoryProvider);
 
       final result = await repo.getUserGames(const UserId('testUser'));
       expect(result, isA<IList<LightExportedGameWithPov>>());
@@ -56,8 +53,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = GameRepository(client);
+      final repo = container.read(gameRepositoryProvider);
       final result = await repo.getGamesByIds(ids);
 
       expect(result, isA<IList<LightExportedGame>>());
@@ -80,8 +76,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = GameRepository(client);
+      final repo = container.read(gameRepositoryProvider);
       final game = await repo.getGame(const GameId('qVChCOTc'));
 
       expect(game, isA<ExportedGame>());
@@ -103,8 +98,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = GameRepository(client);
+      final repo = container.read(gameRepositoryProvider);
       final result = await repo.getGame(const GameId('1vdsvmxp'));
 
       expect(result, isA<ExportedGame>());

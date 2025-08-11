@@ -133,6 +133,8 @@ class AnalysisController extends _$AnalysisController
   @protected
   Root get positionTree => _root;
 
+  GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
+
   @override
   Future<AnalysisState> build(AnalysisOptions options) async {
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
@@ -183,9 +185,7 @@ class AnalysisController extends _$AnalysisController
         }
       case ActiveCorrespondenceGame(:final gameFullId):
         {
-          final game = await ref.withClient(
-            (client) => GameRepository(client).getActiveCorrespondenceGame(gameFullId),
-          );
+          final game = await _gameRepository.getActiveCorrespondenceGame(gameFullId);
           _variant = game.meta.variant;
           pgn = game.makePgn();
           opening = game.meta.opening;
@@ -351,9 +351,7 @@ class AnalysisController extends _$AnalysisController
 
   Future<void> onFocusRegained() async {
     if (options case ActiveCorrespondenceGame(:final gameFullId)) {
-      final updatedGame = await ref.withClient(
-        (client) => GameRepository(client).getActiveCorrespondenceGame(gameFullId),
-      );
+      final updatedGame = await _gameRepository.getActiveCorrespondenceGame(gameFullId);
       _addNewLiveMoves(
         updatedGame.steps
             // Skip one more step, since the first one is the initial position
@@ -570,12 +568,10 @@ class AnalysisController extends _$AnalysisController
       UciPath.fromId(UciCharPair.fromUci(moveToPlay.uci)),
     );
 
-    ref.withClient(
-      (client) => GameRepository(client).saveForecast(
-        gameId: (options as ActiveCorrespondenceGame).gameFullId,
-        forecast: newForecast.toApiForecast(_root.branchAt(newLiveMovePath)!.view),
-        moveToPlay: moveToPlay,
-      ),
+    _gameRepository.saveForecast(
+      gameId: (options as ActiveCorrespondenceGame).gameFullId,
+      forecast: newForecast.toApiForecast(_root.branchAt(newLiveMovePath)!.view),
+      moveToPlay: moveToPlay,
     );
 
     state = AsyncData(
@@ -597,12 +593,10 @@ class AnalysisController extends _$AnalysisController
   void _syncForecast() {
     final pathToLiveMove = state.requireValue.pathToLiveMove!;
 
-    ref.withClient(
-      (client) => GameRepository(client).saveForecast(
-        gameId: (options as ActiveCorrespondenceGame).gameFullId,
-        forecast: state.requireValue.forecast!.toApiForecast(
-          pathToLiveMove.isEmpty ? _root.view : _root.branchAt(pathToLiveMove)!.view,
-        ),
+    _gameRepository.saveForecast(
+      gameId: (options as ActiveCorrespondenceGame).gameFullId,
+      forecast: state.requireValue.forecast!.toApiForecast(
+        pathToLiveMove.isEmpty ? _root.view : _root.branchAt(pathToLiveMove)!.view,
       ),
     );
   }

@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -200,6 +201,11 @@ Future<Widget> makeTestProviderScope(
       // ignore: scoped_providers_should_specify_dependencies
       httpClientFactoryProvider.overrideWith((ref) {
         return FakeHttpClientFactory(() => mockClient);
+      }),
+      // ignore: scoped_providers_should_specify_dependencies
+      aggregatorProvider.overrideWith((ref) {
+        // Use a zero aggregation interval to disable aggregation for tests.
+        return Aggregator(ref.read(lichessClientProvider), aggregationInterval: Duration.zero);
       }),
       // ignore: scoped_providers_should_specify_dependencies
       webSocketChannelFactoryProvider.overrideWith((ref) {
