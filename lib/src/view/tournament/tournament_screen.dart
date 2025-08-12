@@ -1168,18 +1168,11 @@ class _PairingTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournamentState = ref.watch(tournamentControllerProvider(tournamentId));
-    final result = pairing.status == GameStatus.started
-        ? '*'
-        : pairing.status == GameStatus.draw
-        ? '½'
-        : pairing.win == true
-        ? '1'
-        : '0';
 
-    final resultColor = pairing.win == true
-        ? context.lichessColors.good
-        : pairing.win == false
-        ? context.lichessColors.error
+    final resultColor = pairing.score != null && pairing.score! >= 4
+        ? LichessColors.brag
+        : pairing.score != null && pairing.score! > 1
+        ? LichessColors.good
         : null;
 
     return ListTile(
@@ -1231,7 +1224,7 @@ class _PairingTile extends ConsumerWidget {
             height: 24,
             child: Center(
               child: Text(
-                result,
+                pairing.score?.toString() ?? '*',
                 style: TextStyle(fontWeight: FontWeight.bold, color: resultColor, fontSize: 15),
               ),
             ),

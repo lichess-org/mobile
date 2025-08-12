@@ -613,7 +613,7 @@ void main() {
     expect(find.text('Performance'), findsOneWidget);
     expect(find.text('2150'), findsOneWidget);
     expect(find.text('Games played'), findsOneWidget);
-    expect(find.text('3'), findsOneWidget);
+    expect(find.text('3'), findsAtLeast(1));
     expect(find.text('Win rate'), findsOneWidget);
     expect(find.text('67%'), findsOneWidget); // 2 wins out of 3 games
     expect(find.text('Berserk rate'), findsOneWidget);
