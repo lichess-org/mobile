@@ -63,14 +63,25 @@ class TournamentRepository {
     );
   }
 
-  Future<Tournament> reload(Tournament tournament, {required int standingsPage}) {
+  Future<Tournament> reload(Tournament tournament) {
     return client.readJson(
       Uri(
         path: tournament.reloadEndpoint ?? '/api/tournament/${tournament.id}',
-        queryParameters: {'page': standingsPage.toString(), 'partial': 'true'},
+        queryParameters: {
+          if (tournament.standing != null) 'page': tournament.standing!.page.toString(),
+          'partial': 'true',
+        },
       ),
       headers: {'Accept': 'application/json'},
       mapper: (Map<String, dynamic> json) => tournament.updateFromPartialServerJson(json),
+    );
+  }
+
+  Future<Tournament> loadPage(Tournament tournament, int page) {
+    return client.readJson(
+      Uri(path: '/tournament/${tournament.id}/standing/$page'),
+      headers: {'Accept': 'application/json'},
+      mapper: (Map<String, dynamic> json) => tournament.updateStandingsFromServerJson(json),
     );
   }
 
