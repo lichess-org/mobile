@@ -76,6 +76,14 @@ class BroadcastRepository {
       mapper: _makePlayerWithGameResultsFromJson,
     );
   }
+
+  Future<IList<BroadcastTeamMatch>> getTeamMatches(BroadcastRoundId roundId) {
+    return client.readJson(
+      Uri(path: 'broadcast/$roundId/teams'),
+      mapper: (json) =>
+          pick(json, 'table').asListOrThrow<BroadcastTeamMatch>(_teamMatchFromPick).toIList(),
+    );
+  }
 }
 
 BroadcastList broadcastListFromServerJson(Map<String, dynamic> json) {
@@ -111,6 +119,7 @@ BroadcastTournamentData _tournamentDataFromPick(RequiredPick pick) => BroadcastT
   tier: pick('tier').asIntOrNull(),
   imageUrl: pick('image').asStringOrNull(),
   description: pick('description').asStringOrNull(),
+  teamTable: pick('teamTable').asBoolOrFalse(),
   information: (
     format: pick('info', 'format').asStringOrNull(),
     timeControl: pick('info', 'tc').asStringOrNull(),
@@ -295,5 +304,31 @@ BroadcastPlayerGameResult _playerGameResultFromPick(RequiredPick pick) {
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     points: points,
     opponent: _playerFromPick(pick('opponent').required()),
+  );
+}
+
+BroadcastTeamMatch _teamMatchFromPick(RequiredPick pick) {
+  final teams = pick('teams').asListOrThrow(_teamFromPick).toIList();
+  if (teams.length != 2) {
+    throw FormatException('Expected exactly 2 teams in a match, got ${teams.length}');
+  }
+  return BroadcastTeamMatch(
+    team1: teams[0],
+    team2: teams[1],
+    games: pick('games').asListOrThrow(_teamGameFromPick).toIList(),
+  );
+}
+
+BroadcastTeam _teamFromPick(RequiredPick pick) {
+  return BroadcastTeam(
+    name: pick('name').asStringOrThrow(),
+    points: pick('points').asDoubleOrThrow(),
+  );
+}
+
+BroadcastTeamGame _teamGameFromPick(RequiredPick pick) {
+  return BroadcastTeamGame(
+    id: pick('id').asBroadcastGameIdOrThrow(),
+    pov: pick('pov').asSideOrThrow(),
   );
 }
