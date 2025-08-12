@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">கணக்கு விருப்பத்தேர்வுகள்</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">இந்த விருப்பத்தேர்வுகள் உங்கள் Lichess கணக்கிற்குப் பயன்படுத்தப்படும், மேலும் அவை எல்லா சாதனங்களிலும் பயன்படுத்தப்படும்.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">அனைத்து விளையாட்டுகள்</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">நீங்கள் உறுதியாக இருக்கிறீர்களா?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">பலகை அமைப்புகள்</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">திரும்பப் பெறுவதற்கான சலுகையை ரத்துசெய்</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">தெளிவு</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">சேமிக்கப்பட்ட நகர்வை அழிக்கவும்</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">ஒரு விளையாட்டில் சேரவும்</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">பின்னூட்டம்</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">மாலை வணக்கம், %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">மாலை வணக்கம்</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">நல்ல நாள், %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">நல்ல நாள்</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">மாறுபாட்டை மறை</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">வீடு</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">நேரடி ஸ்ட்ரீமர்கள்</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">இந்தப் பக்கத்தைப் பார்க்க நீங்கள் உள்நுழைந்திருக்க வேண்டும்.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">முடிவுகள் இல்லை</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">பழைய செயலி அல்லது வலைத்தளத்தில் உள்ள அனைத்து அம்சங்களும் தற்போது கிடைக்கவில்லை என்பதை நினைவில் கொள்ளவும், ஆனால் நாங்கள் எப்போதும் அம்சங்களைச் சேர்த்து வருகிறோம்.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">நீங்கள் எந்த பயனரையும் பின்தொடரவில்லை.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">சரி</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">பலகையின் மீது</string>
@@ -27,8 +35,21 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">உங்களுக்குப் பிடித்த திறப்புகளிலிருந்து புதிர்களை விளையாடுங்கள் அல்லது தீம் ஒன்றைத் தேர்ந்தெடுக்கவும்.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">புதிர்கள்</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">சமீபத்திய தேடல்கள்</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">புக்மார்க்கை அகற்று</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">சேவையக பகுப்பாய்வு</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">கடிகார நிலை</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">முன்னமைவுகள்</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">வட்டம்</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">சதுரம்</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">மூழ்கும் முறை</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">கைப்பற்றப்பட்ட உருப்படிகள்</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">ஒரு படத்தைத் தேர்ந்தெடுக்கவும்</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">தனிப்பயன் பின்னணி இருண்ட பயன்முறையில் மட்டுமே செயல்படும். ஒரு இருண்ட படம் பரிந்துரைக்கப்படுகிறது.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">படத்தை மங்கலாக்கு</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">பலகையை மறை</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">பலகையைக் காட்டு</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">தட்டவும் அல்லது இழுக்கவும்</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">இரண்டு சதுரங்களைத் தட்டவும்</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">அமைப்புகள்</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN ஐப் பகிரவும்</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">விளையாட்டு URL ஐப் பகிரவும்</string>

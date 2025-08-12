@@ -4,6 +4,7 @@
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Te nastavitve se uporabijo za vaš račun Lichess in bodo uporabljene na vseh napravah.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Vse igre</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ali ste prepričani?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Nastavitve šahovnice</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Prekliči ponudbo za preklic poteze</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Počisti</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Počisti shranjeno potezo</string>
@@ -47,6 +48,17 @@
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Osvojene figure</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Izberite sliko</string>
   <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Ozadje po meri deluje samo v temnem načinu. Priporočljiva je temna slika.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Zamegli sliko</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Skrij šahovnico</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Prikaži šahovnico</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Podrsaj za prikaz ostalih ozadij</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Tapni ali povleci</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tapni dve polji</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Risanje oblik</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">Riši oblike z dvema prstoma: drži en prst na praznem polju in povleci drug prst da narišeš obliko.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Prikaži okvir šahovnice</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Odzivnost na dotik</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Ko je nastavitev omogočena, bo naprava izvedla kratko vibracijo ko premaknete ali vzamete figuro.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Nastavitve</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Deli PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Deli igro URL</string>
@@ -62,4 +74,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">V tej različici različica %s ni podprta.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Čakanje, da se nasprotnik pridruži...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Glej</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Dobrodošli v Lichess aplikaciji!</string>
 </resources>
