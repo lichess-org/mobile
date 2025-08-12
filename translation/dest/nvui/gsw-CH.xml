@@ -10,6 +10,7 @@
   <string name="actions">Aktione</string>
   <string name="yourClock">Dini Zit</string>
   <string name="opponentClock">Zit vum Gägner</string>
+  <string name="gameStart">Schpiel-Start</string>
   <string name="king">König</string>
   <string name="whiteKing">wisse König</string>
   <string name="blackKing">schwarze König</string>

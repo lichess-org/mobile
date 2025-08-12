@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">بە رەزاماندی هەردولا یەکسان بوون</string>
   <string name="fiftyMovesWithoutProgress">پەنجا جوڵە بەبێ هیچ پێشکەوتنێک</string>
   <string name="currentGames">یارییەکانی ئێستا</string>
-  <string name="joinedX">%s بەشدار بووە</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">%s بەشدار بووە</string>
   <plurals name="nbGames">
     <item quantity="one">%s یاری</item>
     <item quantity="other">%s یاریەکان</item>
@@ -479,7 +479,7 @@
   <string name="openTournaments">پاڵەوانیەتی کراوە</string>
   <string name="duration">ماوە</string>
   <string name="winner">براوە</string>
-  <string name="standing">ریزبەند</string>
+  <string name="standings">ڕیزبەندییەکان</string>
   <string name="createANewTournament">پاڵەوانیەتیەکی نوێ دروست بکە</string>
   <string name="tournamentCalendar">ساڵنامەی پاڵەوانێتیەکان</string>
   <string name="conditionOfEntry">مەرجی چوونە ژوورەوە:</string>

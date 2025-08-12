@@ -170,7 +170,7 @@
   <string name="drawByMutualAgreement">పరస్పర ఒప్పందం ద్వారా సమాన స్థానం</string>
   <string name="fiftyMovesWithoutProgress">పురోగతి లేకుండా యాభై కదలికలు</string>
   <string name="currentGames">ఇప్పటి ఆటలు</string>
-  <string name="joinedX">జాయిన్ అయ్యాడు %s</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">జాయిన్ అయ్యాడు %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s ఆట </item>
     <item quantity="other">%s ఆటలు</item>
@@ -483,7 +483,6 @@
   <string name="openTournaments">ఓపెన్ టోర్నమెంట్లు</string>
   <string name="duration">వ్యవధి</string>
   <string name="winner">విజేత</string>
-  <string name="standing">నిలబడి</string>
   <string name="createANewTournament">క్రొత్త టోర్నమెంట్‌ను సృష్టించండి</string>
   <string name="tournamentCalendar">టోర్నమెంట్ క్యాలెండర్</string>
   <string name="conditionOfEntry">ప్రవేశ అవసరాలు:</string>

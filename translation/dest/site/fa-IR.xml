@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">تساوی با توافق طرفین</string>
   <string name="fiftyMovesWithoutProgress">قانون ۵۰ حرکت</string>
   <string name="currentGames">بازی‌های جاری</string>
-  <string name="joinedX">عضو شده در %s</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">عضو شده در %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s بازی</item>
     <item quantity="other">%s بازی</item>
@@ -479,7 +479,7 @@
   <string name="openTournaments">باز کردن مسابقه</string>
   <string name="duration">مدت</string>
   <string name="winner">برنده</string>
-  <string name="standing">رده‌بندی</string>
+  <string name="standings">رده‌بندی</string>
   <string name="createANewTournament">ایجاد یک مسابقهٔ نو</string>
   <string name="tournamentCalendar">گاهشمار مسابقات</string>
   <string name="conditionOfEntry">شرایط ورود:</string>

@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">Ισοπαλία κατόπιν συμφωνίας</string>
   <string name="fiftyMovesWithoutProgress">Πενήντα κινήσεις χωρίς πρόοδο</string>
   <string name="currentGames">Παιχνίδια σε εξέλιξη</string>
-  <string name="joinedX">Έγινε μέλος %s</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">Έγινε μέλος %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s παιχνίδι</item>
     <item quantity="other">%s παιχνίδια</item>
@@ -480,7 +480,7 @@
   <string name="openTournaments">Ανοικτά τουρνουά</string>
   <string name="duration">Διάρκεια</string>
   <string name="winner">Νικητής</string>
-  <string name="standing">Κατάταξη</string>
+  <string name="standings">Κατάταξη</string>
   <string name="createANewTournament">Δημιουργήστε νέο τουρνουά</string>
   <string name="tournamentCalendar">Ημερολόγιο τουρνουά</string>
   <string name="conditionOfEntry">Προϋπόθεση εισόδου:</string>
