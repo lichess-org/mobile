@@ -132,7 +132,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsCustomBackgroundPresets => 'پیش فرض ها';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'هدف مهره کشیده شده';
 
   @override
   String get mobileSettingsDraggedTargetCircle => 'دایره';
@@ -168,7 +168,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'پدیدار کردن صفحه';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'برای نمایش تنظیمات دیگر انگشت خود را بکشید';
 
   @override
   String get mobileSettingsPieceShiftMethodEither => 'یا بکشید یا ضربه بزنید';
@@ -177,10 +177,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'انتخاب دو مربع مبدا و مقصد';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'فلش کشیدن';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'فلش ها را با دو انگشت بکشید: یک انگشت در یک خانه ی خالی و انگشت دیگر را بکشید تا بتوانسد فلش بکشید.';
 
   @override
   String get mobileSettingsShowBorder => 'نمایش حاشیه';
@@ -839,9 +839,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get broadcastOfficialWebsite => 'وبگاه رسمی';
-
-  @override
-  String get broadcastStandings => 'رده‌بندی';
 
   @override
   String get broadcastOfficialStandings => 'رده‌بندی رسمی';
@@ -3162,7 +3159,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get winner => 'برنده';
 
   @override
-  String get standing => 'رده‌بندی';
+  String get standings => 'رده‌بندی';
 
   @override
   String get createANewTournament => 'ایجاد یک مسابقهٔ نو';

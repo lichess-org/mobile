@@ -841,9 +841,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Officiële website';
 
   @override
-  String get broadcastStandings => 'Klassement';
-
-  @override
   String get broadcastOfficialStandings => 'Officiële standen';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get winner => 'Winnaar';
 
   @override
-  String get standing => 'Ranglijst';
+  String get standings => 'Klassement';
 
   @override
   String get createANewTournament => 'Start een nieuw toernooi';

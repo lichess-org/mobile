@@ -821,9 +821,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastOfficialWebsite => '공식 웹사이트';
 
   @override
-  String get broadcastStandings => '순위';
-
-  @override
   String get broadcastOfficialStandings => '공식 순위';
 
   @override
@@ -3134,7 +3131,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get winner => '승자';
 
   @override
-  String get standing => '순위';
+  String get standings => '순위';
 
   @override
   String get createANewTournament => '새 토너먼트 생성';

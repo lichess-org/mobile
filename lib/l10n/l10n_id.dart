@@ -822,9 +822,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Official website';
 
   @override
-  String get broadcastStandings => 'Standings';
-
-  @override
   String get broadcastOfficialStandings => 'Official Standings';
 
   @override
@@ -3138,7 +3135,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get winner => 'Pemenang';
 
   @override
-  String get standing => 'Klasemen';
+  String get standings => 'Standings';
 
   @override
   String get createANewTournament => 'Buat turnamen baru';

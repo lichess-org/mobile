@@ -861,9 +861,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Website-ul oficial';
 
   @override
-  String get broadcastStandings => 'Clasament';
-
-  @override
   String get broadcastOfficialStandings => 'Clasament oficial';
 
   @override
@@ -3190,7 +3187,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get winner => 'Câștigător';
 
   @override
-  String get standing => 'Clasament';
+  String get standings => 'Clasament';
 
   @override
   String get createANewTournament => 'Creați un turneu nou';

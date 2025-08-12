@@ -881,9 +881,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Oficialus tinklapis';
 
   @override
-  String get broadcastStandings => 'Rezultatai';
-
-  @override
   String get broadcastOfficialStandings => 'Oficialūs rezultatai';
 
   @override
@@ -3216,7 +3213,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get winner => 'Nugalėtojas';
 
   @override
-  String get standing => 'Turmyrinė lentelė';
+  String get standings => 'Rezultatai';
 
   @override
   String get createANewTournament => 'Sukurti naują turnyrą';

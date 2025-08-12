@@ -21,7 +21,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileAreYouSure => 'Ali ste prepričani?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Nastavitve šahovnice';
 
   @override
   String get mobileCancelTakebackOffer => 'Prekliči ponudbo za preklic poteze';
@@ -159,37 +159,37 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileSettingsPickAnImageHelp => 'Ozadje po meri deluje samo v temnem načinu. Priporočljiva je temna slika.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Zamegli sliko';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Skrij šahovnico';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Prikaži šahovnico';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Podrsaj za prikaz ostalih ozadij';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Tapni ali povleci';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tapni dve polji';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Risanje oblik';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Riši oblike z dvema prstoma: drži en prst na praznem polju in povleci drug prst da narišeš obliko.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Prikaži okvir šahovnice';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Odzivnost na dotik';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Ko je nastavitev omogočena, bo naprava izvedla kratko vibracijo ko premaknete ali vzamete figuro.';
 
   @override
   String get mobileSettingsTab => 'Nastavitve';
@@ -239,7 +239,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileWatchTab => 'Glej';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Dobrodošli v Lichess aplikaciji!';
 
   @override
   String get activityActivity => 'Aktivnost';
@@ -879,9 +879,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get broadcastOfficialWebsite => 'Uradna spletna stran';
-
-  @override
-  String get broadcastStandings => 'Lestvica';
 
   @override
   String get broadcastOfficialStandings => 'Uradna lestvica';
@@ -3218,7 +3215,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get winner => 'Zmagovalec';
 
   @override
-  String get standing => 'Lestvica';
+  String get standings => 'Lestvica';
 
   @override
   String get createANewTournament => 'Ustvari turnir';

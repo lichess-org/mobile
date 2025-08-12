@@ -841,9 +841,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Virallinen verkkosivu';
 
   @override
-  String get broadcastStandings => 'Tulostaulu';
-
-  @override
   String get broadcastOfficialStandings => 'Virallinen tulostaulu';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get winner => 'Voittaja';
 
   @override
-  String get standing => 'Sija';
+  String get standings => 'Tulostaulu';
 
   @override
   String get createANewTournament => 'Luo uusi turnaus';

@@ -841,9 +841,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Webgune ofiziala';
 
   @override
-  String get broadcastStandings => 'Sailkapena';
-
-  @override
   String get broadcastOfficialStandings => 'Sailkapen ofiziala';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get winner => 'Irabazlea';
 
   @override
-  String get standing => 'Sailkapen-taula';
+  String get standings => 'Sailkapena';
 
   @override
   String get createANewTournament => 'Txapelketa berria sortu';

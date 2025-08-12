@@ -1490,12 +1490,6 @@ abstract class AppLocalizations {
   /// **'Official website'**
   String get broadcastOfficialWebsite;
 
-  /// No description provided for @broadcastStandings.
-  ///
-  /// In en, this message translates to:
-  /// **'Standings'**
-  String get broadcastStandings;
-
   /// No description provided for @broadcastOfficialStandings.
   ///
   /// In en, this message translates to:
@@ -5780,11 +5774,11 @@ abstract class AppLocalizations {
   /// **'Winner'**
   String get winner;
 
-  /// No description provided for @standing.
+  /// No description provided for @standings.
   ///
   /// In en, this message translates to:
-  /// **'Standing'**
-  String get standing;
+  /// **'Standings'**
+  String get standings;
 
   /// No description provided for @createANewTournament.
   ///

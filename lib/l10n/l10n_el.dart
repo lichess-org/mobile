@@ -841,9 +841,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Επίσημη ιστοσελίδα';
 
   @override
-  String get broadcastStandings => 'Κατάταξη';
-
-  @override
   String get broadcastOfficialStandings => 'Επίσημη κατάταξη';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get winner => 'Νικητής';
 
   @override
-  String get standing => 'Κατάταξη';
+  String get standings => 'Κατάταξη';
 
   @override
   String get createANewTournament => 'Δημιουργήστε νέο τουρνουά';

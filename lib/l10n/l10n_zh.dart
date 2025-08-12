@@ -821,9 +821,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastOfficialWebsite => '官网';
 
   @override
-  String get broadcastStandings => '积分榜';
-
-  @override
   String get broadcastOfficialStandings => '官方排名';
 
   @override
@@ -2073,7 +2070,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get playWithTheMachine => '与电脑下棋';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => '分享这个网址来邀请好友下棋：';
+  String get toInviteSomeoneToPlayGiveThisUrl => '分享这个网址以邀请好友下棋';
 
   @override
   String get gameOver => '棋局结束';
@@ -2474,7 +2471,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return '加入了$param';
+    return '于 $param 加入';
   }
 
   @override
@@ -3134,7 +3131,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get winner => '获胜者';
 
   @override
-  String get standing => '名次';
+  String get standings => '排名';
 
   @override
   String get createANewTournament => '建立新的锦标赛';
@@ -4725,7 +4722,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get disableBlindMode => '关闭视障模式';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => '复制到剪贴板';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6929,9 +6926,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get broadcastOfficialWebsite => '官網';
-
-  @override
-  String get broadcastStandings => '排行榜';
 
   @override
   String get broadcastOfficialStandings => '官方排名';
@@ -9175,7 +9169,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get winner => '贏家';
 
   @override
-  String get standing => '名次';
+  String get standings => '排行榜';
 
   @override
   String get createANewTournament => '建立新的錦標賽';

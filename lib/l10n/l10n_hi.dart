@@ -841,9 +841,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Official website';
 
   @override
-  String get broadcastStandings => 'Standings';
-
-  @override
   String get broadcastOfficialStandings => 'Official Standings';
 
   @override
@@ -2301,7 +2298,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get collapseVariations => 'विविधताओं को मिटाये';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'विविधताओं का विस्तार करें';
 
   @override
   String get forceVariation => 'बल भिन्नता';
@@ -2310,7 +2307,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get copyVariationPgn => 'प्रतिलिपि भिन्नता पीजीएन';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'मेनलाइन PGN की प्रतिलिपि बनाएँ';
 
   @override
   String get move => 'चाल';
@@ -3160,7 +3157,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get winner => 'विजयी';
 
   @override
-  String get standing => 'पद';
+  String get standings => 'Standings';
 
   @override
   String get createANewTournament => 'नयी प्रतियोगिता आरम्भ करें';
