@@ -15,9 +15,9 @@ import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
+import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
@@ -445,7 +445,7 @@ class _Standing extends ConsumerWidget {
           ...List.generate(
             10,
             (i) => standing.players.getOrNull(i),
-          ).nonNulls.map((player) => _StandingPlayer(player: player)),
+          ).nonNulls.map((player) => _StandingPlayer(player: player, state: state)),
         ],
       ),
     );
@@ -453,13 +453,14 @@ class _Standing extends ConsumerWidget {
 }
 
 class _StandingPlayer extends ConsumerWidget {
-  const _StandingPlayer({required this.player});
+  const _StandingPlayer({required this.player, required this.state});
 
   final StandingPlayer player;
+  final TournamentState state;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tournamentId = context.findAncestorWidgetOfExactType<_Body>()?.id;
+    final tournamentId = state.id;
     return ListTile(
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
       visualDensity: VisualDensity.compact,
@@ -479,7 +480,7 @@ class _StandingPlayer extends ConsumerWidget {
         children: [
           Visibility.maintain(
             visible: player.sheet.fire,
-            child: const Icon(LichessIcons.blitz, size: 15, color: LichessColors.brag),
+            child: Icon(LichessIcons.blitz, size: 15, color: context.lichessColors.brag),
           ),
           Text(
             player.score.toString().padLeft(2),
@@ -487,11 +488,9 @@ class _StandingPlayer extends ConsumerWidget {
           ),
         ],
       ),
-      onTap: tournamentId != null
-          ? () {
-              _showPlayerDetails(context, ref, tournamentId, player.user.id);
-            }
-          : null,
+      onTap: () {
+        _showPlayerDetails(context, ref, tournamentId, player.user.id);
+      },
     );
   }
 }
@@ -511,9 +510,9 @@ class _Scores extends StatelessWidget {
               '$score',
               style: TextStyle(
                 color: score >= 4
-                    ? LichessColors.brag
+                    ? context.lichessColors.brag
                     : score > 1
-                    ? LichessColors.good
+                    ? context.lichessColors.good
                     : textShade(context, 0.5),
                 letterSpacing: 0.5,
                 fontFeatures: const [FontFeature.tabularFigures()],
@@ -977,9 +976,6 @@ void _showPlayerDetails(
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-    ),
     builder: (context) {
       return DraggableScrollableSheet(
         initialChildSize: 0.6,
@@ -987,24 +983,21 @@ void _showPlayerDetails(
         maxChildSize: 0.9,
         expand: false,
         builder: (context, scrollController) {
-          return FutureBuilder<TournamentPlayer>(
-            future: ref
-                .read(tournamentRepositoryProvider)
-                .getTournamentPlayer(tournamentId, userId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator.adaptive());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error loading player data: ${snapshot.error}'));
-              } else if (snapshot.hasData) {
-                return _TournamentPlayerDetails(
-                  player: snapshot.data!,
+          return Consumer(
+            builder: (context, ref, child) {
+              final playerAsync = ref.watch(tournamentPlayerProvider(tournamentId, userId));
+
+              return switch (playerAsync) {
+                AsyncData(value: final player) => _TournamentPlayerDetails(
+                  player: player,
                   tournamentId: tournamentId,
                   scrollController: scrollController,
-                );
-              } else {
-                return const Center(child: Text('No player data found'));
-              }
+                ),
+                AsyncError(error: final error) => Center(
+                  child: Text('Error loading player data: $error'),
+                ),
+                _ => const Center(child: CircularProgressIndicator.adaptive()),
+              };
             },
           );
         },
@@ -1067,7 +1060,7 @@ class _TournamentPlayerDetails extends ConsumerWidget {
                   label: context.l10n.stormScore,
                   value: '${player.score}',
                   prefix: player.fire
-                      ? const Icon(LichessIcons.blitz, size: 15, color: LichessColors.brag)
+                      ? Icon(LichessIcons.blitz, size: 15, color: context.lichessColors.brag)
                       : null,
                 ),
                 if (player.performance != null)
@@ -1170,9 +1163,9 @@ class _PairingTile extends ConsumerWidget {
     final tournamentState = ref.watch(tournamentControllerProvider(tournamentId));
 
     final resultColor = pairing.score != null && pairing.score! >= 4
-        ? LichessColors.brag
+        ? context.lichessColors.brag
         : pairing.score != null && pairing.score! > 1
-        ? LichessColors.good
+        ? context.lichessColors.good
         : null;
 
     return ListTile(
