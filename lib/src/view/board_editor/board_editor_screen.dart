@@ -305,31 +305,28 @@ class _BottomBar extends ConsumerWidget {
                     );
                     return;
                   }
-                  showModalBottomSheet<void>(
-                    context: context,
-                    isScrollControlled: true,
-                    useRootNavigator: true,
-                    builder: (context) {
-                      return SearchScreen(
-                        onUserTap: (user) {
-                          if (user.id == session.user.id) {
-                            showSnackBar(
-                              context,
-                              'You cannot challenge yourself',
-                              type: SnackBarType.error,
-                            );
-                          }
-                          showModalBottomSheet<void>(
-                            context: context,
-                            isScrollControlled: true,
-                            useRootNavigator: true,
-                            builder: (context) {
-                              return CreateChallengeBottomSheet(user, positionFen: editorState.fen);
-                            },
+                  Navigator.of(context).push(
+                    SearchScreen.buildRoute(
+                      context,
+                      onUserTap: (user) {
+                        if (user.id == session.user.id) {
+                          showSnackBar(
+                            context,
+                            'You cannot challenge yourself',
+                            type: SnackBarType.error,
                           );
-                        },
-                      );
-                    },
+                        }
+                        showModalBottomSheet<void>(
+                          context: context,
+                          isScrollControlled: true,
+                          useRootNavigator: true,
+                          builder: (context) {
+                            return CreateChallengeBottomSheet(user, positionFen: editorState.fen);
+                          },
+                        );
+                      },
+                      title: 'Challenge from position',
+                    ),
                   );
                 },
               ),

@@ -16,14 +16,19 @@ import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 const _kSaveHistoryDebouncTimer = Duration(seconds: 2);
 
 class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({this.onUserTap});
+  const SearchScreen({this.onUserTap, this.title});
 
   final void Function(LightUser)? onUserTap;
+  final String? title;
 
-  static Route<dynamic> buildRoute(BuildContext context, {void Function(LightUser)? onUserTap}) {
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    void Function(LightUser)? onUserTap,
+    String? title,
+  }) {
     return buildScreenRoute(
       context,
-      screen: SearchScreen(onUserTap: onUserTap),
+      screen: SearchScreen(onUserTap: onUserTap, title: title),
       fullscreenDialog: true,
     );
   }
@@ -83,13 +88,28 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
     final body = _Body(_term, setSearchText, widget.onUserTap);
 
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80, // Custom height to fit the search bar
-        title: searchBar,
-      ),
-      body: body,
-    );
+    if (widget.title != null) {
+      return Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 80, // Custom height to fit the search bar
+          title: Text(widget.title!),
+        ),
+        body: Column(
+          children: [
+            Expanded(child: body),
+            Padding(padding: const EdgeInsets.all(8.0), child: searchBar),
+          ],
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 80, // Custom height to fit the search bar
+          title: searchBar,
+        ),
+        body: body,
+      );
+    }
   }
 }
 
