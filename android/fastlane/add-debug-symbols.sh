@@ -1,8 +1,8 @@
 #!/bin/sh
 #
 # Because Flutter is not adding the symbols of libapp.so to the App Bundle, this
-# script add the libapp.so symbols to the App Bundle in order to upload them to
-# the Play Console with Fastlane.
+# script create a native-debug-symbols folder including the libapp.so symbols that
+# will be uploaded to the Play Console with Fastlane.
 #
 # See https://github.com/flutter/flutter/issues/170664.
 
@@ -10,16 +10,17 @@
 # Go to project root dir
 cd $(dirname $0)/../..
 
-APPBUNDLE_DIR=build/app/outputs/bundle/release
-cd $APPBUNDLE_DIR
+# Go to App Bundle files
+cd build/app/outputs/bundle/release
 
-SYMBOLS_DIR=symbols
-SYMBOLS_BUNDLE=BUNDLE-METADATA/com.android.tools.build.debugsymbols
+mkdir native-debug-symbols
 
-mkdir -p $SYMBOLS_BUNDLE/{arm64-v8a,armeabi-v7a,x86_64}
+SYMBOLS_BUNDLE_PATH=BUNDLE-METADATA/com.android.tools.build.debugsymbols
+unzip app-release.aab $SYMBOLS_BUNDLE_PATH/* -d tmp-extract-dir
+cp -r tmp-extract-dir/$SYMBOLS_BUNDLE_PATH/* native-debug-symbols
 
-cp $SYMBOLS_DIR/app.android-arm64.symbols $SYMBOLS_BUNDLE/arm64-v8a/libapp.so.dbg
-cp $SYMBOLS_DIR/app.android-arm.symbols   $SYMBOLS_BUNDLE/armeabi-v7a/libapp.so.dbg
-cp $SYMBOLS_DIR/app.android-x64.symbols   $SYMBOLS_BUNDLE/x86_64/libapp.so.dbg
+cp symbols/app.android-arm64.symbols native-debug-symbols/arm64-v8a/libapp.so.dbg
+cp symbols/app.android-arm.symbols   native-debug-symbols/armeabi-v7a/libapp.so.dbg
+cp symbols/app.android-x64.symbols   native-debug-symbols/x86_64/libapp.so.dbg
 
-zip -r app-release.aab BUNDLE-METADATA
+zip -r native-debug-symbols.zip native-debug-symbols

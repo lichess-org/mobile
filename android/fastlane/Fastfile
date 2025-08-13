@@ -43,5 +43,6 @@ def deploy_to_play_store(track)
     track: track,
     aab: '../build/app/outputs/bundle/release/app-release.aab',
     json_key_data: ENV['PLAY_STORE_CONFIG_JSON'],
+    mapping: '../build/app/outputs/bundle/release/native-debug-symbols.zip',
   )
 end
