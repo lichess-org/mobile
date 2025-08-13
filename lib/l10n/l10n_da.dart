@@ -841,9 +841,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Officielt websted';
 
   @override
-  String get broadcastStandings => 'Stillinger';
-
-  @override
   String get broadcastOfficialStandings => 'Officiel stilling';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get winner => 'Vinder';
 
   @override
-  String get standing => 'Stilling';
+  String get standings => 'Stillinger';
 
   @override
   String get createANewTournament => 'Opret en ny turnering';

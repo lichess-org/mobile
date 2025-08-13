@@ -150,7 +150,7 @@
   </plurals>
   <string name="drawByMutualAgreement">Үзара килешү буенча тиңлек</string>
   <string name="currentGames">Хәзерге уеннар</string>
-  <string name="joinedX">%s кушылды</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">%s кушылды</string>
   <plurals name="nbGames">
     <item quantity="other">%s уен</item>
   </plurals>
@@ -401,7 +401,6 @@
   <string name="openTournaments">Ачык бәйгеләр</string>
   <string name="duration">Озаклыгы</string>
   <string name="winner">Җиңүче</string>
-  <string name="standing">Урыны</string>
   <string name="createANewTournament">Яңа бәйге башламак</string>
   <string name="tournamentCalendar">Бәйге календаре</string>
   <string name="conditionOfEntry">Керу тәлапләре:</string>

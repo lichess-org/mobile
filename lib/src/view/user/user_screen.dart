@@ -121,12 +121,12 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 }
 
 final _userActivityProvider = FutureProvider.autoDispose.family<IList<UserActivity>, UserId>(
-  (ref, id) => ref.withClient((client) => UserRepository(client).getActivity(id)),
+  (ref, id) => ref.read(userRepositoryProvider).getActivity(id),
   name: 'userActivityProvider',
 );
 
 final _currentGameProvider = FutureProvider.autoDispose.family<ExportedGame, UserId>(
-  (ref, id) => ref.withClient((client) => UserRepository(client).getCurrentGame(id)),
+  (ref, id) => ref.read(userRepositoryProvider).getCurrentGame(id),
   name: 'currentGameProvider',
 );
 

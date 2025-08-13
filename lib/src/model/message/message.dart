@@ -7,6 +7,8 @@ import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'message.freezed.dart';
 
+typedef UnreadMessages = ({int unread, bool lichess});
+
 @freezed
 sealed class Contacts with _$Contacts {
   const Contacts._();

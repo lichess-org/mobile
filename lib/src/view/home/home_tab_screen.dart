@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_g
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
+import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -234,7 +235,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
           onFocusRegained: () {
             if (context.mounted && _focusLostAt != null) {
               final duration = DateTime.now().difference(_focusLostAt!);
-              if (duration.inSeconds < 60) {
+              if (duration.inSeconds < 10) {
                 return;
               }
               _refreshData(isOnline: status.isOnline);
@@ -474,6 +475,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   Future<void> _refreshData({required bool isOnline}) {
     return Future.wait([
       ref.refresh(myRecentGamesProvider.future),
+      if (isOnline) ref.refresh(unreadMessagesProvider.future),
       if (isOnline) ref.refresh(accountProvider.future),
       if (isOnline) ref.refresh(ongoingGamesProvider.future),
       if (isOnline) ref.refresh(featuredTournamentsProvider.future),

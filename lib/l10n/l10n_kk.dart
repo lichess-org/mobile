@@ -841,9 +841,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Official website';
 
   @override
-  String get broadcastStandings => 'Standings';
-
-  @override
   String get broadcastOfficialStandings => 'Official Standings';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get winner => 'Жеңімпаз';
 
   @override
-  String get standing => 'Орны';
+  String get standings => 'Standings';
 
   @override
   String get createANewTournament => 'Жаңа жарыс құру';
@@ -3488,7 +3485,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get incorrectPassword => 'Құпиясөз қате';
 
   @override
-  String get invalidAuthenticationCode => 'Өкіл-растама құлыпсөзі қате';
+  String get invalidAuthenticationCode => 'Өкіл-растау құлыпсаны қате';
 
   @override
   String get emailMeALink => 'Поштама сілтеме жібер';
@@ -3981,7 +3978,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String weHaveSentYouAnEmailTo(String param) {
-    return 'Біз хатты $param-ға жібердік. Құпиясөзді арылту үшін хаттағы сілтемеге басыңыз.';
+    return 'Біз $param хат жібердік. Құпиясөзді қайта орнату үшін хаттағы сілтемеге басыңыз.';
   }
 
   @override

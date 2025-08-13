@@ -841,9 +841,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Website oficial';
 
   @override
-  String get broadcastStandings => 'Classificações';
-
-  @override
   String get broadcastOfficialStandings => 'Classificações oficiais';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get winner => 'Vencedor';
 
   @override
-  String get standing => 'Classificação';
+  String get standings => 'Classificações';
 
   @override
   String get createANewTournament => 'Criar um torneio';
@@ -7061,9 +7058,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get broadcastOfficialWebsite => 'Site oficial';
 
   @override
-  String get broadcastStandings => 'Classificação';
-
-  @override
   String get broadcastOfficialStandings => 'Classificação oficial';
 
   @override
@@ -9382,7 +9376,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get winner => 'Vencedor';
 
   @override
-  String get standing => 'Colocação';
+  String get standings => 'Classificação';
 
   @override
   String get createANewTournament => 'Criar novo torneio';

@@ -26,9 +26,9 @@ final _followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, ILis
   ref,
 ) async {
   final following = await ref.withClient((client) => RelationRepository(client).getFollowing());
-  final statuses = await ref.withClient(
-    (client) => UserRepository(client).getUsersStatuses(following.map((user) => user.id).toISet()),
-  );
+  final statuses = await ref
+      .read(userRepositoryProvider)
+      .getUsersStatuses(following.map((user) => user.id).toISet());
   return (following, statuses);
 });
 

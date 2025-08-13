@@ -469,7 +469,6 @@
   "broadcastStartVerySoon": "The broadcast will start very soon.",
   "broadcastNotYetStarted": "The broadcast has not yet started.",
   "broadcastOfficialWebsite": "Official website",
-  "broadcastStandings": "Standings",
   "broadcastOfficialStandings": "Official Standings",
   "broadcastIframeHelp": "More options on the {param}",
   "@broadcastIframeHelp": {
@@ -1683,7 +1682,7 @@
   "openTournaments": "Open tournaments",
   "duration": "Duration",
   "winner": "Winner",
-  "standing": "Standing",
+  "standings": "Standings",
   "createANewTournament": "Create a new tournament",
   "tournamentCalendar": "Tournament calendar",
   "conditionOfEntry": "Entry requirements:",

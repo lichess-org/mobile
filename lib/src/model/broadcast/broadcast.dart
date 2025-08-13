@@ -93,6 +93,7 @@ sealed class BroadcastTournamentData with _$BroadcastTournamentData {
     required String? description,
     // PRIVATE=-1, NORMAL=3, HIGH=4, BEST=5
     int? tier,
+    bool? teamTable,
     required BroadcastTournamentInformation information,
   }) = _BroadcastTournamentData;
 }
@@ -214,3 +215,23 @@ sealed class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
 }
 
 enum RoundStatus { live, finished, upcoming }
+
+@freezed
+sealed class BroadcastTeam with _$BroadcastTeam {
+  const factory BroadcastTeam({required String name, required double points}) = _BroadcastTeam;
+}
+
+@freezed
+sealed class BroadcastTeamGame with _$BroadcastTeamGame {
+  const factory BroadcastTeamGame({required BroadcastGameId id, required Side pov}) =
+      _BroadcastTeamGame;
+}
+
+@freezed
+sealed class BroadcastTeamMatch with _$BroadcastTeamMatch {
+  const factory BroadcastTeamMatch({
+    required BroadcastTeam team1,
+    required BroadcastTeam team2,
+    required IList<BroadcastTeamGame> games,
+  }) = _BroadcastTeamMatch;
+}

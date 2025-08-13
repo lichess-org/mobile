@@ -841,9 +841,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Sajti zyrtar';
 
   @override
-  String get broadcastStandings => 'Standings';
-
-  @override
   String get broadcastOfficialStandings => 'Official Standings';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get winner => 'Fituesi';
 
   @override
-  String get standing => 'Pozicionet';
+  String get standings => 'Standings';
 
   @override
   String get createANewTournament => 'Krijoni një turne të ri';

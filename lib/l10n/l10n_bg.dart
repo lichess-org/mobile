@@ -841,9 +841,6 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Официален уебсайт';
 
   @override
-  String get broadcastStandings => 'Класиране';
-
-  @override
   String get broadcastOfficialStandings => 'Official Standings';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get winner => 'Победител';
 
   @override
-  String get standing => 'Място';
+  String get standings => 'Класиране';
 
   @override
   String get createANewTournament => 'Създаване на нов турнир';

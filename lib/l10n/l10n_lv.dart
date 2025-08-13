@@ -860,9 +860,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Official website';
 
   @override
-  String get broadcastStandings => 'Standings';
-
-  @override
   String get broadcastOfficialStandings => 'Official Standings';
 
   @override
@@ -3186,7 +3183,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get winner => 'Uzvarētājs';
 
   @override
-  String get standing => 'Pozīcija';
+  String get standings => 'Standings';
 
   @override
   String get createANewTournament => 'Izveidot jaunu turnīru';

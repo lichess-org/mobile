@@ -15,7 +15,9 @@ import '../../test_provider_scope.dart';
 
 void main() {
   group('Broadcast round screen', () {
-    testWidgets('Check that all tabs are present', variant: kPlatformVariant, (tester) async {
+    testWidgets('Check that all tabs except the teams tab are present', variant: kPlatformVariant, (
+      tester,
+    ) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: BroadcastRoundScreen(broadcast: _finishedBroadcast),
@@ -39,6 +41,7 @@ void main() {
       expect(find.text('Overview'), findsOneWidget);
       expect(find.text('Boards'), findsOneWidget);
       expect(find.text('Players'), findsOneWidget);
+      expect(find.text('Teams'), findsNothing);
     });
 
     testWidgets('Check that the screen can be loaded from round id', variant: kPlatformVariant, (
@@ -72,6 +75,7 @@ void main() {
       expect(find.text('Overview'), findsOneWidget);
       expect(find.text('Boards'), findsOneWidget);
       expect(find.text('Players'), findsOneWidget);
+      expect(find.text('Teams'), findsNothing);
     });
   });
 
@@ -172,7 +176,7 @@ void main() {
       expect(find.text('Seville, Spain'), findsOneWidget);
       expect(find.text('Xu, Bonelli, Jacobson'), findsOneWidget);
       expect(find.text('Official website'), findsOneWidget);
-      expect(find.text('Standings'), findsOneWidget);
+      expect(find.text('Official Standings'), findsOneWidget);
     });
   });
 
@@ -407,6 +411,65 @@ void main() {
 
       expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
       expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
+    });
+  });
+  group('Test teams tab', () {
+    testWidgets('Check that teams tab is present when teamTable is true', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _liveTeamBroadcast),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) => LichessClient(_liveTeamBroadcastClient, ref)),
+        ],
+      );
+
+      await tester.pumpWidget(app);
+
+      // Load the tournament
+      await tester.pump();
+
+      // Load the round
+      await tester.pump();
+
+      // Verify tabs
+      expect(find.text('Overview'), findsOneWidget);
+      expect(find.text('Boards'), findsOneWidget);
+      expect(find.text('Players'), findsOneWidget);
+      expect(find.text('Teams'), findsOneWidget);
+    });
+
+    testWidgets('Check teams tab content is displayed correctly', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(
+          broadcast: _liveTeamBroadcast,
+          initialTab: BroadcastRoundTab.teams,
+        ),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) => LichessClient(_liveTeamBroadcastClient, ref)),
+        ],
+      );
+
+      await tester.pumpWidget(app);
+
+      // Load the tournament
+      await tester.pump();
+
+      // Load the round
+      await tester.pump();
+
+      // Load the teams data
+      await tester.pump();
+
+      // Verify team names are displayed
+      expect(find.text('Team A'), findsOneWidget);
+      expect(find.text('Team B'), findsOneWidget);
+      expect(find.text('Team C'), findsOneWidget);
+      expect(find.text('Team D'), findsOneWidget);
+
+      expect(find.text('1 - 0'), findsOneWidget);
+
+      expect(find.byType(Card), findsNWidgets(2));
     });
   });
 }
@@ -1226,4 +1289,119 @@ const _livePlayersWithoutScoresResponse = '''
     "played": 4
   }
 ]
+''';
+
+final _liveTeamBroadcastClient = MockClient((request) {
+  if (request.url.path == '/api/broadcast/AAAAAAAA') {
+    return mockResponse(
+      _liveTeamTournamentResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/api/broadcast/-/-/00000000') {
+    return mockResponse(
+      _liveRoundResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/broadcast/AAAAAAAA/players') {
+    return mockResponse(
+      _livePlayersResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/broadcast/00000000/teams') {
+    return mockResponse(
+      _teamMatchesResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  return mockResponse('', 404);
+});
+
+const _liveTeamTournamentResponse = '''
+{
+  "tour": {
+    "id": "AAAAAAAA",
+    "name": "Test tournament",
+    "slug": "test-tournament",
+    "dates": [
+      1735671720000
+    ],
+    "image": "",
+    "teamTable": true
+  },
+  "rounds": [
+    {
+      "id": "00000000",
+      "name": "Test round",
+      "slug": "test-round",
+      "ongoing": "true"
+    }
+  ],
+  "defaultRoundId": "00000000"
+}
+''';
+
+final _liveTeamBroadcast = Broadcast(
+  tour: BroadcastTournamentData(
+    id: const BroadcastTournamentId('AAAAAAAA'),
+    name: 'Test tournament',
+    slug: 'test-tournament',
+    imageUrl: '',
+    description: null,
+    tier: null,
+    teamTable: true,
+    information: (
+      dates: (startsAt: DateTime.fromMillisecondsSinceEpoch(1735671720000), endsAt: null),
+      format: null,
+      location: null,
+      players: null,
+      website: null,
+      standings: null,
+      timeControl: null,
+    ),
+  ),
+  round: const BroadcastRound(
+    id: BroadcastRoundId('00000000'),
+    name: 'Test round',
+    slug: 'test-round',
+    status: RoundStatus.live,
+    startsAt: null,
+    finishedAt: null,
+    startsAfterPrevious: false,
+  ),
+  roundToLinkId: const BroadcastRoundId('00000000'),
+  group: null,
+);
+
+const _teamMatchesResponse = '''
+{
+  "table": [
+    {
+      "teams": [
+        {"name": "Team A", "points": 1},
+        {"name": "Team B", "points": 0}
+      ],
+      "games": [
+        {"id": "111111", "pov": "white"},
+        {"id": "222222", "pov": "black"}
+      ]
+    },
+    {
+      "teams": [
+        {"name": "Team C", "points": 0.5},
+        {"name": "Team D", "points": 1.5}
+      ],
+      "games": [
+        {"id": "3333333", "pov": "white"},
+        {"id": "4444444", "pov": "black"}
+      ]
+    }
+  ]
+}
 ''';

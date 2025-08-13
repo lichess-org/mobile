@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">Remis ved overenskomst</string>
   <string name="fiftyMovesWithoutProgress">Femti trekk uten framgang</string>
   <string name="currentGames">Partier som spilles nå</string>
-  <string name="joinedX">Ble med %s</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">Ble med %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s parti</item>
     <item quantity="other">%s partier</item>
@@ -479,7 +479,7 @@
   <string name="openTournaments">Åpne turneringer</string>
   <string name="duration">Varighet</string>
   <string name="winner">Vinner</string>
-  <string name="standing">Resultatliste</string>
+  <string name="standings">Resultatliste</string>
   <string name="createANewTournament">Opprett en ny turnering</string>
   <string name="tournamentCalendar">Turneringskalender</string>
   <string name="conditionOfEntry">Betingelse for å delta:</string>

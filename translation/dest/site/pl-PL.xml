@@ -186,7 +186,7 @@
   <string name="drawByMutualAgreement">Remis za obopólną zgodą</string>
   <string name="fiftyMovesWithoutProgress">50 posunięć bez bicia i ruchu pionem</string>
   <string name="currentGames">Partie w toku</string>
-  <string name="joinedX">Dołączono %s</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">Dołączono %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s partia</item>
     <item quantity="few">%s partie</item>
@@ -551,7 +551,7 @@
   <string name="openTournaments">Dostępne turnieje</string>
   <string name="duration">Czas trwania</string>
   <string name="winner">Zwycięzca</string>
-  <string name="standing">Miejsce</string>
+  <string name="standings">Klasyfikacja</string>
   <string name="createANewTournament">Nowy turniej</string>
   <string name="tournamentCalendar">Kalendarz turniejowy</string>
   <string name="conditionOfEntry">Warunki przystąpienia:</string>

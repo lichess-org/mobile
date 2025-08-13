@@ -54,6 +54,11 @@ extension GameExtension on Pick {
       if (gameStatus != null) {
         return gameStatus;
       }
+    } else if (value is int) {
+      return GameStatus.values.firstWhere(
+        (status) => status.value == value,
+        orElse: () => GameStatus.unknown,
+      );
     }
     throw PickException("value $value at $debugParsingExit can't be casted to GameStatus");
   }

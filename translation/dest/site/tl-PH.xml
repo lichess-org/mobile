@@ -167,7 +167,7 @@
   <string name="drawByMutualAgreement">Iguhit sa pamamagitan ng kasunduan sa isa\'t isa</string>
   <string name="fiftyMovesWithoutProgress">Limampu\'t gumagalaw nang walang pag-unlad</string>
   <string name="currentGames">Mga laro ngayon</string>
-  <string name="joinedX">Sumali %s</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">Sumali %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s na laro</item>
     <item quantity="other">%s na mga laro</item>
@@ -452,7 +452,7 @@
   <string name="openTournaments">Bukas na mga paligsahan</string>
   <string name="duration">Tagal</string>
   <string name="winner">Nanalo</string>
-  <string name="standing">Katayuan</string>
+  <string name="standings">Mga Standing</string>
   <string name="createANewTournament">Gumawa ng baong torneo</string>
   <string name="tournamentCalendar">Kalendaryo ng mga paligsahan</string>
   <string name="conditionOfEntry">Kondisyon para makapasok:</string>

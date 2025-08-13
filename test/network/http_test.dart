@@ -384,7 +384,7 @@ class FakeClient extends http.BaseClient {
       case '/will/return/301':
         return http.StreamedResponse(_streamBody('301'), 301);
       default:
-        return http.StreamedResponse(_streamBody('200'), 200);
+        return http.StreamedResponse(_streamBody('''{"result": "ok"}'''), 200);
     }
   }
 }

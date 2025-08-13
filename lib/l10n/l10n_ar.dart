@@ -921,9 +921,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastOfficialWebsite => 'الموقع الرسمي';
 
   @override
-  String get broadcastStandings => 'الترتيب';
-
-  @override
   String get broadcastOfficialStandings => 'الترتيب الرسمي';
 
   @override
@@ -1493,7 +1490,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzlePuzzles => 'الألغاز';
 
   @override
-  String get puzzlePuzzleThemes => 'خصائص الألغاز';
+  String get puzzlePuzzleThemes => 'أفكار الألغاز';
 
   @override
   String get puzzleRecommended => 'مقترح';
@@ -1505,19 +1502,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleMotifs => 'الأفكار الرئيسية';
 
   @override
-  String get puzzleAdvanced => 'خيارات أعمق';
+  String get puzzleAdvanced => 'الأفكار المتقدمة';
 
   @override
   String get puzzleLengths => 'الأطوال';
 
   @override
-  String get puzzleMates => 'الحلفاء';
+  String get puzzleMates => 'كشّات';
 
   @override
   String get puzzleGoals => 'الغايات';
 
   @override
-  String get puzzleOrigin => 'الأصل';
+  String get puzzleOrigin => 'المصدر';
 
   @override
   String get puzzleSpecialMoves => 'نقلات مميزة';
@@ -1544,7 +1541,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleFindTheBestMoveForBlack => 'جد أفضل نقلة للأسود.';
 
   @override
-  String get puzzleToGetPersonalizedPuzzles => 'للحصول على ألغاز خاصة بك:';
+  String get puzzleToGetPersonalizedPuzzles => 'للحصول على ألغاز خصيصة لك:';
 
   @override
   String puzzlePuzzleId(String param) {
@@ -1558,7 +1555,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleDailyPuzzle => 'اللغز اليومي';
 
   @override
-  String get puzzleClickToSolve => 'انقر للحل';
+  String get puzzleClickToSolve => 'إضغط للحل';
 
   @override
   String get puzzleGoodMove => 'نقلة جيدة';
@@ -1576,13 +1573,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzlePuzzleComplete => 'تم حل اللغز!';
 
   @override
-  String get puzzleByOpenings => 'من الافتتاحات';
+  String get puzzleByOpenings => 'من الإفتتاحات';
 
   @override
-  String get puzzlePuzzlesByOpenings => 'ألغاز من الافتتاحات';
+  String get puzzlePuzzlesByOpenings => 'ألغاز من الإفتتاحات';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost => 'الافتتاحات التي استخدمتها في معظم المبارايات المقيمة';
+  String get puzzleOpeningsYouPlayedTheMost => 'أكثر الإفتتاحات لعباً من مبارياتك المقيمة';
 
   @override
   String get puzzleUseFindInPage => 'استخدم خاصية \"البحث في الصفحة\" في المتصفح للعثور على افتتاحك المفضل!';
@@ -1591,7 +1588,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleUseCtrlF => 'أضغط Ctrl و f لتبحث عن افتتاحك المفضل!';
 
   @override
-  String get puzzleNotTheMove => 'هذه ليست الحركة الصحيحة!';
+  String get puzzleNotTheMove => 'هذه ليست النقلة الصحيحة!';
 
   @override
   String get puzzleTrySomethingElse => 'جرب شيئا آخر.';
@@ -1637,7 +1634,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleAddAnotherTheme => 'إضافة نوع آخر';
 
   @override
-  String get puzzleNextPuzzle => 'اللغز الموالي';
+  String get puzzleNextPuzzle => 'اللغز التالي';
 
   @override
   String get puzzleJumpToNextPuzzleImmediately => 'انتقل للغز التالي مباشرة';
@@ -1655,10 +1652,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleHistory => 'سجل الألغاز';
 
   @override
-  String get puzzleSolved => 'حلت';
+  String get puzzleSolved => 'محلولة';
 
   @override
-  String get puzzleFailed => 'فشلت';
+  String get puzzleFailed => 'خطأ';
 
   @override
   String get puzzleStreakDescription => 'حل الألغاز بشكل مطرد وبناء سلسلة الفوز. لا توجد ساعة، لذا خذ وقتك. نقلة خاطئة واحدة، وقد انتهت اللعبة! ولكن يمكنك تخطي حركة واحدة في كل دورة.';
@@ -1690,7 +1687,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleFromMyGamesNone => 'ليس لديك أي ألغز في قاعدة البيانات، لكن Lichess تحبك جداً.\nإلعب مبارايات سريعة أو مبارايات كلاسيكية لزيادة فرصك في الحصول على ألغازك الخاصة!';
 
   @override
-  String get puzzlePuzzleDashboardDescription => 'تدرب،حلل،تطور';
+  String get puzzlePuzzleDashboardDescription => 'تـدرب، حـلل، تـطور';
 
   @override
   String puzzlePercentSolved(String param) {
@@ -2040,7 +2037,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeMateIn5Description => 'اكتشف سلسلة من الحركات الممتابعة التي تقود إلى كش مات.';
 
   @override
-  String get puzzleThemeMiddlegame => 'مرحلة وسط اللعبة';
+  String get puzzleThemeMiddlegame => 'وسط المباراة';
 
   @override
   String get puzzleThemeMiddlegameDescription => 'تكتيك خلال وسط المباراة.';
@@ -2052,7 +2049,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeOneMoveDescription => 'لغز بحركة واحدة فقط.';
 
   @override
-  String get puzzleThemeOpening => 'افتتاح';
+  String get puzzleThemeOpening => 'إفتتاح';
 
   @override
   String get puzzleThemeOpeningDescription => 'تكتيك في مرحلة الافتتاح.';
@@ -2103,7 +2100,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeRookEndgame => 'نهاية المباراة بالقلعة';
 
   @override
-  String get puzzleThemeRookEndgameDescription => 'نهاية المباراة بالقلعة و البيادق فقط.';
+  String get puzzleThemeRookEndgameDescription => 'نهاية المباراة بالقلاع و البيادق فقط.';
 
   @override
   String get puzzleThemeSacrifice => 'تضحية';
@@ -3274,7 +3271,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get winner => 'الفائز';
 
   @override
-  String get standing => 'الترتيب';
+  String get standings => 'الترتيب';
 
   @override
   String get createANewTournament => 'ابدأ مسابقة جديدة';

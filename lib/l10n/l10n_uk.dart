@@ -150,10 +150,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Приховати інтерфейс системи під час гри. Використовуйте, якщо вас турбують навігаційні жести системи по краях екрану. Застосовується до екранів гри та задач.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Взяті фігури';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Вибрати зображення';
 
   @override
   String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
@@ -171,13 +171,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Натисніть, або перенесіть';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Натиснути на два поля';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Малювання фігур';
 
   @override
   String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
@@ -879,9 +879,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get broadcastOfficialWebsite => 'Офіційний вебсайт';
-
-  @override
-  String get broadcastStandings => 'Турнірна таблиця';
 
   @override
   String get broadcastOfficialStandings => 'Офіційна турнірна таблиця';
@@ -2368,7 +2365,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get copyVariationPgn => 'Скопіювати PGN варіанту';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'Копіювати pgn головної лінії';
 
   @override
   String get move => 'Хід';
@@ -2948,31 +2945,31 @@ class AppLocalizationsUk extends AppLocalizations {
   String get proposeATakeback => 'Запропонувати повернути хід';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'Білі пропонують повернення ходу';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'Чорні пропонують повернення ходу';
 
   @override
   String get takebackPropositionSent => 'Пропозицію повернути хід відправлено';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'Білі відхилили поверненням ходу';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'Чорні відхилили повернення ходу';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'Білі прийняли повернення ходу';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'Чорні прийняли повернення ходу';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'Білі скасовують повернення ходу';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'Чорні скасовують повернення ходу';
 
   @override
   String get yourOpponentProposesATakeback => 'Ваш суперник пропонує повернути хід';
@@ -3218,7 +3215,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get winner => 'Переможець';
 
   @override
-  String get standing => 'Турнірна таблиця';
+  String get standings => 'Турнірна Таблиця';
 
   @override
   String get createANewTournament => 'Створити новий турнір';
@@ -3807,7 +3804,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get termsOfService => 'Умови користування';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'Титульна перевірка';
 
   @override
   String get sourceCode => 'Вихідний код';

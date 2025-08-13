@@ -186,10 +186,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Zeig de Rand';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Haptischi Rückmäldig';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Wens aktiviert isch, vibriert s Grät churz, wenn du e Figur bewegsch oder schlosch.';
 
   @override
   String get mobileSettingsTab => 'Ischtelle';
@@ -239,7 +239,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileWatchTab => 'Luege';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Willkomme bi de Lichess-App!';
 
   @override
   String get activityActivity => 'Aktivitäte';
@@ -839,9 +839,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get broadcastOfficialWebsite => 'Offizielli Website';
-
-  @override
-  String get broadcastStandings => 'Tabälle';
 
   @override
   String get broadcastOfficialStandings => 'Offizielli Ranglischte';
@@ -3162,7 +3159,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get winner => 'Sieger';
 
   @override
-  String get standing => 'Tabälle';
+  String get standings => 'Ranglischte';
 
   @override
   String get createANewTournament => 'Erschtell es neus Turnier';

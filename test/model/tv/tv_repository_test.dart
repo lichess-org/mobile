@@ -3,12 +3,35 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 
+import '../../test_container.dart';
 import '../../test_helpers.dart';
 
 void main() {
   group('TvRepository.channels', () {
     test('correctly parse JSON', () async {
-      const response = '''
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/tv/channels') {
+          return mockResponse(tvChannelsResponse, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(tvRepositoryProvider);
+
+      final result = await repo.channels();
+
+      expect(result, isA<TvChannels>());
+
+      // supported channels only
+      expect(result.length, 13);
+
+      expect(result[TvChannel.best]?.user.name, 'Chessisnotfair');
+    });
+  });
+}
+
+const tvChannelsResponse = '''
 {
     "antichess": {
         "color": "white",
@@ -163,24 +186,3 @@ void main() {
     }
 }
 ''';
-
-      final mockClient = MockClient((request) {
-        if (request.url.path == '/api/tv/channels') {
-          return mockResponse(response, 200);
-        }
-        return mockResponse('', 404);
-      });
-
-      final repo = TvRepository(mockClient);
-
-      final result = await repo.channels();
-
-      expect(result, isA<TvChannels>());
-
-      // supported channels only
-      expect(result.length, 13);
-
-      expect(result[TvChannel.best]?.user.name, 'Chessisnotfair');
-    });
-  });
-}

@@ -821,9 +821,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Website chính thức';
 
   @override
-  String get broadcastStandings => 'Bảng xếp hạng';
-
-  @override
   String get broadcastOfficialStandings => 'Bảng xếp hạng Chính thức';
 
   @override
@@ -2099,7 +2096,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get level => 'Cấp độ';
 
   @override
-  String get strength => 'Độ mạnh';
+  String get strength => 'Sức mạnh';
 
   @override
   String get toggleTheChat => 'Bật/Tắt trò chuyện';
@@ -2195,7 +2192,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get talkInChat => 'Hãy cư xử thân thiện trong cuộc trò chuyện!';
 
   @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Người đầu tiên sử dụng URL này sẽ bắt đầu chơi với bạn.';
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Người đầu tiên sử dụng đường dẫn này sẽ bắt đầu chơi với bạn.';
 
   @override
   String get whiteResigned => 'Bên trắng chịu thua';
@@ -2474,7 +2471,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Tham gia hôm $param';
+    return 'Đã tham gia $param';
   }
 
   @override
@@ -3134,7 +3131,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get winner => 'Người chiến thắng';
 
   @override
-  String get standing => 'Thứ hạng';
+  String get standings => 'Bảng xếp hạng';
 
   @override
   String get createANewTournament => 'Tạo giải đấu mới';

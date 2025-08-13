@@ -841,9 +841,6 @@ class AppLocalizationsSv extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Officiell webbplats';
 
   @override
-  String get broadcastStandings => 'Ställningar';
-
-  @override
   String get broadcastOfficialStandings => 'Officiella ställningar';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get winner => 'Vinnare';
 
   @override
-  String get standing => 'Ställning';
+  String get standings => 'Ställningar';
 
   @override
   String get createANewTournament => 'Skapa en ny turnering';

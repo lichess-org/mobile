@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -113,9 +112,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       },
     );
 
-    final pgn = await ref.withClient(
-      (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
-    );
+    final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
 
     final game = PgnGame.parsePgn(pgn);
     final pgnHeaders = IMap(game.headers);
@@ -166,9 +163,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     if (!state.hasValue) return;
     final key = _key;
 
-    final pgn = await ref.withClient(
-      (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
-    );
+    final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
 
     // check provider is still mounted
     if (key == _key) {

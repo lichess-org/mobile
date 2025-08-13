@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">Berdinketa horrela adostu delako</string>
   <string name="fiftyMovesWithoutProgress">50 jokaldi aurrera egin gabe</string>
   <string name="currentGames">Oraingo partidak</string>
-  <string name="joinedX">Noiz sartu zen %s</string>
+  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">Noiz sartu zen %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s partida</item>
     <item quantity="other">%s partida</item>
@@ -479,7 +479,7 @@
   <string name="openTournaments">Txapelketa irekiak</string>
   <string name="duration">Iraupena</string>
   <string name="winner">Irabazlea</string>
-  <string name="standing">Sailkapen-taula</string>
+  <string name="standings">Sailkapena</string>
   <string name="createANewTournament">Txapelketa berria sortu</string>
   <string name="tournamentCalendar">Txapelketa-egutegia</string>
   <string name="conditionOfEntry">Parte hartzeko baldintza:</string>

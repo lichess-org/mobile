@@ -38,3 +38,7 @@ linter:
     avoid_redundant_argument_values: false
     sort_pub_dependencies: true
     sort_unnamed_constructors_first: false
+
+custom_lint:
+  rules:
+    - avoid_manual_providers_as_generated_provider_dependency: false

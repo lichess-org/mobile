@@ -881,9 +881,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastOfficialWebsite => 'האתר הרשמי';
 
   @override
-  String get broadcastStandings => 'תוצאות';
-
-  @override
   String get broadcastOfficialStandings => 'טבלת מובילים רשמית';
 
   @override
@@ -3214,7 +3211,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get winner => 'מנצח';
 
   @override
-  String get standing => 'מקום';
+  String get standings => 'תוצאות';
 
   @override
   String get createANewTournament => 'יצירת טורניר חדש';
