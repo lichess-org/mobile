@@ -96,7 +96,8 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
   bool get abortable =>
       playable &&
       lastPosition.fullmoves <= 1 &&
-      (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
+      (meta.rules == null || !meta.rules!.contains(GameRule.noAbort)) &&
+      meta.tournament == null;
   bool get resignable => playable && !abortable;
   bool get drawable =>
       playable && lastPosition.fullmoves >= 2 && !(me?.offeringDraw == true) && !hasAI;
