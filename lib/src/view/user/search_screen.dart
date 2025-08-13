@@ -16,19 +16,21 @@ import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 const _kSaveHistoryDebouncTimer = Duration(seconds: 2);
 
 class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({this.onUserTap, this.title});
+  const SearchScreen({this.onUserTap, this.title, this.autoFocus = true, super.key});
 
   final void Function(LightUser)? onUserTap;
-  final String? title;
+  final Widget? title;
+  final bool autoFocus;
 
   static Route<dynamic> buildRoute(
     BuildContext context, {
     void Function(LightUser)? onUserTap,
-    String? title,
+    Widget? title,
+    bool autoFocus = true,
   }) {
     return buildScreenRoute(
       context,
-      screen: SearchScreen(onUserTap: onUserTap, title: title),
+      screen: SearchScreen(onUserTap: onUserTap, title: title, autoFocus: autoFocus),
       fullscreenDialog: true,
     );
   }
@@ -83,33 +85,29 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     final searchBar = PlatformSearchBar(
       hintText: context.l10n.searchSearch,
       controller: _searchController,
-      autoFocus: true,
+      autoFocus: widget.autoFocus,
     );
 
     final body = _Body(_term, setSearchText, widget.onUserTap);
 
-    if (widget.title != null) {
-      return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 80, // Custom height to fit the search bar
-          title: Text(widget.title!),
-        ),
-        body: Column(
-          children: [
-            Expanded(child: body),
-            Padding(padding: const EdgeInsets.all(8.0), child: searchBar),
-          ],
-        ),
-      );
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 80, // Custom height to fit the search bar
-          title: searchBar,
-        ),
-        body: body,
-      );
-    }
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: widget.title == null
+            ? kToolbarHeight
+            : null, // Custom height to fit the search bar
+        title: widget.title ?? searchBar,
+        bottom: widget.title != null
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: searchBar,
+                ),
+              )
+            : null,
+      ),
+      body: body,
+    );
   }
 }
 

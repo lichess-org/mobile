@@ -294,7 +294,8 @@ class _BottomBar extends ConsumerWidget {
                 },
               ),
               BottomSheetAction(
-                makeLabel: (context) => const Text('Challenge From Position'),
+                // TODO: l10n
+                makeLabel: (context) => const Text('Challenge from position'),
                 onPressed: () {
                   final session = ref.read(authSessionProvider);
                   if (session == null) {
@@ -325,7 +326,8 @@ class _BottomBar extends ConsumerWidget {
                           },
                         );
                       },
-                      title: 'Challenge from position',
+                      // TODO: l10n
+                      title: const Text('Challenge from position'),
                     ),
                   );
                 },
