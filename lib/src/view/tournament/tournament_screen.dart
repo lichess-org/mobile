@@ -1020,96 +1020,104 @@ class _TournamentPlayerDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournamentState = ref.watch(tournamentControllerProvider(tournamentId));
-    return ListView(
-      controller: scrollController,
-      padding: const EdgeInsets.all(16),
+    return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  Text('#${player.rank}', style: const TextStyle(fontSize: 20)),
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: UserFullNameWidget(
-                      user: player.user,
-                      rating: player.rating,
-                      style: Styles.title,
-                      onTap: tournamentState.valueOrNull?.isSpectator == true
-                          ? () => Navigator.of(
-                              context,
-                            ).push(UserScreen.buildRoute(context, player.user))
-                          : null,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Text('#${player.rank}', style: const TextStyle(fontSize: 20)),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: UserFullNameWidget(
+                        user: player.user,
+                        rating: player.rating,
+                        style: Styles.title,
+                        onTap: tournamentState.valueOrNull?.isSpectator == true
+                            ? () => Navigator.of(
+                                context,
+                              ).push(UserScreen.buildRoute(context, player.user))
+                            : null,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)),
-          ],
-        ),
-
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-            child: Column(
-              children: [
-                _StatRow(
-                  label: context.l10n.stormScore,
-                  value: '${player.score}',
-                  prefix: player.fire
-                      ? Icon(LichessIcons.blitz, size: 15, color: context.lichessColors.brag)
-                      : null,
-                ),
-                if (player.performance != null)
-                  _StatRow(
-                    label: context.l10n.performance,
-                    value: player.performance.toString() + (player.stats.game < 3 ? '?' : ''),
-                  ),
-                if (player.stats.game > 0) ...[
-                  _StatRow(label: context.l10n.gamesPlayed, value: '${player.stats.game}'),
-                  if (player.stats.win > 0)
-                    _StatRow(
-                      label: context.l10n.winRate,
-                      value: '${((player.stats.win / player.stats.game) * 100).round()}%',
-                    ),
-                  _StatRow(
-                    label: context.l10n.arenaBerserkRate,
-                    value: '${((player.stats.berserk / player.stats.game) * 100).round()}%',
-                  ),
-                ],
-                if (player.pairings.isNotEmpty)
-                  _StatRow(
-                    label: context.l10n.averageOpponent,
-                    value: '${_calculateAverageOpponentRating(player)}',
-                  ),
-              ],
-            ),
+              IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)),
+            ],
           ),
         ),
+        Expanded(
+          child: ListView(
+            controller: scrollController,
+            padding: const EdgeInsets.all(16),
+            children: [
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                  child: Column(
+                    children: [
+                      _StatRow(
+                        label: context.l10n.stormScore,
+                        value: '${player.score}',
+                        prefix: player.fire
+                            ? Icon(LichessIcons.blitz, size: 15, color: context.lichessColors.brag)
+                            : null,
+                      ),
+                      if (player.performance != null)
+                        _StatRow(
+                          label: context.l10n.performance,
+                          value: player.performance.toString() + (player.stats.game < 3 ? '?' : ''),
+                        ),
+                      if (player.stats.game > 0) ...[
+                        _StatRow(label: context.l10n.gamesPlayed, value: '${player.stats.game}'),
+                        if (player.stats.win > 0)
+                          _StatRow(
+                            label: context.l10n.winRate,
+                            value: '${((player.stats.win / player.stats.game) * 100).round()}%',
+                          ),
+                        _StatRow(
+                          label: context.l10n.arenaBerserkRate,
+                          value: '${((player.stats.berserk / player.stats.game) * 100).round()}%',
+                        ),
+                      ],
+                      if (player.pairings.isNotEmpty)
+                        _StatRow(
+                          label: context.l10n.averageOpponent,
+                          value: '${_calculateAverageOpponentRating(player)}',
+                        ),
+                    ],
+                  ),
+                ),
+              ),
 
-        if (player.pairings.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Text(context.l10n.games, style: Styles.sectionTitle),
-          const SizedBox(height: 8),
-          Card(
-            child: Column(
-              children: [
-                ...player.pairings.asMap().entries.map(
-                  (entry) => _PairingTile(
-                    pairing: entry.value,
-                    tournamentId: tournamentId,
-                    player: player.user,
-                    index: entry.key,
-                    nbGames: player.pairings.length,
+              if (player.pairings.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                Text(context.l10n.games, style: Styles.sectionTitle),
+                const SizedBox(height: 8),
+                Card(
+                  child: Column(
+                    children: [
+                      ...player.pairings.asMap().entries.map(
+                        (entry) => _PairingTile(
+                          pairing: entry.value,
+                          tournamentId: tournamentId,
+                          player: player.user,
+                          index: entry.key,
+                          nbGames: player.pairings.length,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
-            ),
+            ],
           ),
-        ],
+        ),
       ],
     );
   }
