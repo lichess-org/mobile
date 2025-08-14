@@ -410,5 +410,78 @@ void main() {
       expect(find.text('What would you play in this position?'), findsOneWidget);
       expect(find.text("That's not the move!"), findsNothing);
     });
+    testWidgets('Illegal Position in Study Chapter', (WidgetTester tester) async {
+      final mockRepository = MockStudyRepository();
+
+      final studyChapter1 = makeStudy(
+        chapter: makeChapter(id: const StudyChapterId('1')),
+        chapters: IList(const [
+          StudyChapterMeta(id: StudyChapterId('1'), name: 'Legal Chapter', fen: null),
+          StudyChapterMeta(id: StudyChapterId('2'), name: 'Illegal Chapter', fen: null),
+        ]),
+      );
+
+      final studyChapter2 = studyChapter1.copyWith(
+        chapter: makeChapter(id: const StudyChapterId('2')),
+      );
+
+      // First chapter has a valid position
+      when(
+        () => mockRepository.getStudy(id: testId),
+      ).thenAnswer((_) async => (studyChapter1, '1. e4 e5'));
+
+      when(
+        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
+      ).thenAnswer((_) async => (studyChapter1, '1. e4 e5'));
+
+      // Second chapter has an illegal position (no pieces on Board)
+      when(
+        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
+      ).thenAnswer(
+        (_) async => (
+          studyChapter2,
+          '''
+[FEN "8/8/8/8/8/8/8/8 w - - 0 1"]
+{ Random comment } { [%csl Gd5,Ge5,Ge4,Gd4] }
+    ''',
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(id: testId),
+        overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // First chapter should load normally
+      expect(find.text('1. Legal Chapter'), findsOneWidget);
+
+      // Navigate to second chapter with illegal position
+      await tester.tap(find.text('Next chapter'));
+      await tester.pumpAndSettle();
+
+      // Second chapter should still load, but with static board
+      expect(find.text('2. Illegal Chapter'), findsOneWidget);
+
+      // Verify we can navigate back to first chapter
+      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('1 Legal Chapter', findRichText: true));
+      await tester.pumpAndSettle();
+
+      expect(find.text('1. Legal Chapter'), findsOneWidget);
+      // Verify we can navigate back to first chapter
+      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.pumpAndSettle();
+
+      //Check that also via the chapter list the illegal chapter can be navigated to
+      await tester.tap(find.text('2 Illegal Chapter', findRichText: true));
+      await tester.pumpAndSettle();
+      expect(find.text('2. Illegal Chapter'), findsOneWidget);
+    });
   });
 }

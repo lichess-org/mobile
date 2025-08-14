@@ -133,7 +133,7 @@ class StudyController extends _$StudyController
     try {
       _root = Root.fromPgnGame(game);
     } on PositionSetupException {
-      return StudyState(
+      final illegalPositionState = StudyState(
         variant: variant,
         study: study,
         currentPath: UciPath.empty,
@@ -152,6 +152,8 @@ class StudyController extends _$StudyController
         gamebookActive: false,
         pgn: pgn,
       );
+      state = AsyncData(illegalPositionState);
+      return illegalPositionState;
     }
 
     const currentPath = UciPath.empty;
@@ -221,6 +223,7 @@ class StudyController extends _$StudyController
     if (state.requireValue.isAtStartOfChapter &&
         state.requireValue.gamebookActive &&
         state.requireValue.gamebookComment == null &&
+        state.requireValue.currentPosition != null &&
         state.requireValue.currentPosition!.turn != state.requireValue.pov) {
       _opponentFirstMoveTimer = Timer(const Duration(milliseconds: 750), () {
         userNext();
