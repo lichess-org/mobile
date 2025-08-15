@@ -134,8 +134,7 @@ class FeaturedTournamentsWidget extends ConsumerWidget {
           },
           children: [
             for (final tournament in value)
-              if (playSupportedVariants.contains(tournament.meta.variant))
-                _TournamentListItem(tournament: tournament),
+              if (tournament.isSupportedInApp) _TournamentListItem(tournament: tournament),
           ],
         );
 
