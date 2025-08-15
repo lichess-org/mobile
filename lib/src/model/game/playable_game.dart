@@ -264,9 +264,8 @@ GameMeta _playableGameMetaFromPick(RequiredPick pick) {
     daysPerTurn: pick('correspondence').letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
     startedAtTurn: pick('game', 'startedAtTurn').asIntOrNull(),
     rules: pick('game', 'rules').letOrNull(
-      (it) => ISet(
-        pick.asListOrThrow((e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown),
-      ),
+      (it) =>
+          ISet(it.asListOrThrow((e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown)),
     ),
     division: pick('division').letOrNull(_divisionFromPick),
     tournament: pick('tournament').letOrNull(_playableGameTournamentDataFromPick),
