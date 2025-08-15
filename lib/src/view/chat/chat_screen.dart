@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -10,6 +11,7 @@ import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
   const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
@@ -143,6 +145,7 @@ class _MessageBubble extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
     final brightness = Theme.of(context).brightness;
 
     return FractionallySizedBox(
@@ -150,30 +153,53 @@ class _MessageBubble extends ConsumerWidget {
       widthFactor: 0.9,
       child: Align(
         alignment: you ? Alignment.centerRight : Alignment.centerLeft,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.0),
-            color: _bubbleColor(context, brightness),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (showUsername && message.user != null)
-                UserFullNameWidget(
-                  user: message.user,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: _textColor(context, brightness),
-                  ),
-                  onTap: () =>
-                      Navigator.of(context).push(UserScreen.buildRoute(context, message.user!)),
-                ),
-              Text(message.message, style: TextStyle(color: _textColor(context, brightness))),
-            ],
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16.0),
+                color: _bubbleColor(context, brightness),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (showUsername && message.user != null)
+                    UserFullNameWidget(
+                      user: message.user,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: _textColor(context, brightness),
+                      ),
+                      onTap: () =>
+                          Navigator.of(context).push(UserScreen.buildRoute(context, message.user!)),
+                    ),
+                  Text(message.message, style: TextStyle(color: _textColor(context, brightness))),
+                ],
+              ),
+            ),
+            if (!you && session != null)
+              IconButton(
+                icon: const Icon(Icons.report_problem_outlined),
+                color: Colors.grey,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                onPressed: () {
+                  if (message.user != null) {
+                    launchUrl(
+                      lichessUri('/report', {
+                        'username': message.user!.id,
+                        'login': session.user.id,
+                      }),
+                    );
+                  }
+                },
+              ),
+          ],
         ),
       ),
     );
