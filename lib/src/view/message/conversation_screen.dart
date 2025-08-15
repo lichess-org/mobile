@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/model/message/conversation_controller.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -360,7 +363,13 @@ class _MessageBubble extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(message.text, style: TextStyle(color: _textColor(context))),
+            Linkify(
+              onOpen: (link) => onLinkifyOpen(context, link),
+              linkifiers: kLichessLinkifiers,
+              text: message.text,
+              style: TextStyle(color: _textColor(context)),
+              linkStyle: Styles.linkStyle,
+            ),
             const SizedBox(height: 4),
             Text(
               time,
