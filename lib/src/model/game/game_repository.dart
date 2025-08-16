@@ -175,4 +175,20 @@ class GameRepository {
       mapper: PlayableGame.fromServerJson,
     );
   }
+
+  Future<void> chatFlag(FlagData report) async {
+    final uri = Uri(path: '/report/flag');
+    final body = {
+      'username': report.userId.value,
+      'resource': 'game/${report.gameId}',
+      'text': report.text,
+    };
+    final response = await client.post(uri, headers: {'Accept': 'application/json'}, body: body);
+
+    if (response.statusCode >= 400) {
+      throw http.ClientException('Failed to flag: ${response.statusCode}', uri);
+    }
+  }
 }
+
+typedef FlagData = ({UserId userId, GameId gameId, String text});
