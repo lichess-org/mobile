@@ -9,10 +9,13 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
   const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
@@ -109,8 +112,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
                       return (message.username == 'lichess')
                           ? _MessageAction(message: message.message)
                           : (message.username == session?.user.name)
-                          ? _MessageBubble(you: true, message: message)
+                          ? _MessageBubble(options: widget.options, you: true, message: message)
                           : _MessageBubble(
+                              options: widget.options,
                               you: false,
                               message: message,
                               showUsername: widget.options.isPublic,
@@ -132,9 +136,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
 }
 
 class _MessageBubble extends ConsumerWidget {
-  const _MessageBubble({required this.you, required this.message, this.showUsername = false});
+  const _MessageBubble({
+    required this.options,
+    required this.you,
+    required this.message,
+    this.showUsername = false,
+  });
 
   final bool you;
+  final ChatOptions options;
   final ChatMessage message;
   final bool showUsername;
 
@@ -148,40 +158,65 @@ class _MessageBubble extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final brightness = Theme.of(context).brightness;
 
-    return FractionallySizedBox(
-      alignment: you ? Alignment.centerRight : Alignment.centerLeft,
-      widthFactor: 0.9,
-      child: Align(
-        alignment: you ? Alignment.centerRight : Alignment.centerLeft,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.0),
-            color: _bubbleColor(context, brightness),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (showUsername && message.user != null)
-                UserFullNameWidget(
-                  user: message.user,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: _textColor(context, brightness),
-                  ),
-                  onTap: () =>
-                      Navigator.of(context).push(UserScreen.buildRoute(context, message.user!)),
+    return ChatBubbleContextMenu(
+      message: message.message,
+      actions: [
+        if (you == false && message.user != null)
+          BottomSheetContextMenuAction(
+            onPressed: () async {
+              final result = await showAdaptiveDialog<bool>(
+                context: context,
+                builder: (context) => YesNoDialog(
+                  content: Text(context.l10n.reportXToModerators('"${message.message}"')),
+                  onYes: () {
+                    return Navigator.of(context).pop(true);
+                  },
+                  onNo: () => Navigator.of(context).pop(false),
                 ),
-              Linkify(
-                onOpen: (link) => onLinkifyOpen(context, link),
-                linkifiers: kLichessLinkifiers,
-                text: message.message,
-                style: TextStyle(color: _textColor(context, brightness)),
-                linkStyle: Styles.linkStyle,
-              ),
-            ],
+              );
+              if (result == true) {
+                ref.read(chatControllerProvider(options).notifier).reportMessage(message);
+              }
+            },
+            icon: Icons.report_problem_outlined,
+            child: const Text('Report'),
+          ),
+      ],
+      child: FractionallySizedBox(
+        alignment: you ? Alignment.centerRight : Alignment.centerLeft,
+        widthFactor: 0.9,
+        child: Align(
+          alignment: you ? Alignment.centerRight : Alignment.centerLeft,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.0),
+              color: _bubbleColor(context, brightness),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (showUsername && message.user != null)
+                  UserFullNameWidget(
+                    user: message.user,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: _textColor(context, brightness),
+                    ),
+                    onTap: () =>
+                        Navigator.of(context).push(UserScreen.buildRoute(context, message.user!)),
+                  ),
+                Linkify(
+                  onOpen: (link) => onLinkifyOpen(context, link),
+                  linkifiers: kLichessLinkifiers,
+                  text: message.message,
+                  style: TextStyle(color: _textColor(context, brightness)),
+                  linkStyle: Styles.linkStyle,
+                ),
+              ],
+            ),
           ),
         ),
       ),

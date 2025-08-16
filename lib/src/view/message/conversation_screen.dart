@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -324,58 +325,61 @@ class _MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final time = DateFormat.Hm().format(message.date);
 
-    return FractionallySizedBox(
-      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-      widthFactor: 0.85,
-      child: Container(
-        margin: EdgeInsets.only(
-          bottom: !isInGroup || isFirstInGroup ? 8 : 2,
-          top: !isInGroup || isLastInGroup ? 8 : 2,
-          left: 8,
-          right: 8,
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-        decoration: BoxDecoration(
-          color: _bubbleColor(context),
-          borderRadius: BorderRadius.only(
-            topLeft: isMe
-                ? _bubbleRadius
-                : isInGroup && !isLastInGroup
-                ? _inGroupRadius
-                : _bubbleRadius,
-            topRight: isMe
-                ? isInGroup && !isLastInGroup
-                      ? _inGroupRadius
-                      : _bubbleRadius
-                : _bubbleRadius,
-            bottomLeft: isMe
-                ? _bubbleRadius
-                : isInGroup && !isFirstInGroup
-                ? _inGroupRadius
-                : _bubbleRadius,
-            bottomRight: isMe
-                ? isInGroup && !isFirstInGroup
-                      ? _inGroupRadius
-                      : _bubbleRadius
-                : _bubbleRadius,
+    return ChatBubbleContextMenu(
+      message: message.text,
+      child: FractionallySizedBox(
+        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+        widthFactor: 0.85,
+        child: Container(
+          margin: EdgeInsets.only(
+            bottom: !isInGroup || isFirstInGroup ? 8 : 2,
+            top: !isInGroup || isLastInGroup ? 8 : 2,
+            left: 8,
+            right: 8,
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Linkify(
-              onOpen: (link) => onLinkifyOpen(context, link),
-              linkifiers: kLichessLinkifiers,
-              text: message.text,
-              style: TextStyle(color: _textColor(context)),
-              linkStyle: Styles.linkStyle,
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+          decoration: BoxDecoration(
+            color: _bubbleColor(context),
+            borderRadius: BorderRadius.only(
+              topLeft: isMe
+                  ? _bubbleRadius
+                  : isInGroup && !isLastInGroup
+                  ? _inGroupRadius
+                  : _bubbleRadius,
+              topRight: isMe
+                  ? isInGroup && !isLastInGroup
+                        ? _inGroupRadius
+                        : _bubbleRadius
+                  : _bubbleRadius,
+              bottomLeft: isMe
+                  ? _bubbleRadius
+                  : isInGroup && !isFirstInGroup
+                  ? _inGroupRadius
+                  : _bubbleRadius,
+              bottomRight: isMe
+                  ? isInGroup && !isFirstInGroup
+                        ? _inGroupRadius
+                        : _bubbleRadius
+                  : _bubbleRadius,
             ),
-            const SizedBox(height: 4),
-            Text(
-              time,
-              style: TextStyle(fontSize: 11, color: _textColor(context).withValues(alpha: 0.6)),
-            ),
-          ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Linkify(
+                onOpen: (link) => onLinkifyOpen(context, link),
+                linkifiers: kLichessLinkifiers,
+                text: message.text,
+                style: TextStyle(color: _textColor(context)),
+                linkStyle: Styles.linkStyle,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                time,
+                style: TextStyle(fontSize: 11, color: _textColor(context).withValues(alpha: 0.6)),
+              ),
+            ],
+          ),
         ),
       ),
     );
