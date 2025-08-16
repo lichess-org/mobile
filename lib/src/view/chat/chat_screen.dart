@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -163,7 +162,7 @@ class _MessageBubble extends ConsumerWidget {
     return ChatBubbleContextMenu(
       message: message.message,
       actions: [
-        if (you == false && message.user != null && options.id is GameAnyId)
+        if (you == false && message.user != null)
           BottomSheetContextMenuAction(
             onPressed: () async {
               final result = await showAdaptiveDialog<bool>(
@@ -177,11 +176,7 @@ class _MessageBubble extends ConsumerWidget {
                 ),
               );
               if (result == true) {
-                ref.read(gameRepositoryProvider).chatFlag((
-                  userId: message.user!.id,
-                  gameId: (options.id as GameAnyId).gameId,
-                  text: message.message,
-                ));
+                ref.read(chatControllerProvider(options).notifier).reportMessage(message);
               }
             },
             icon: Icons.report_problem_outlined,
