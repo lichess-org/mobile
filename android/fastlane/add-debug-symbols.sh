@@ -23,4 +23,5 @@ cp symbols/app.android-arm64.symbols native-debug-symbols/arm64-v8a/libapp.so.db
 cp symbols/app.android-arm.symbols   native-debug-symbols/armeabi-v7a/libapp.so.dbg
 cp symbols/app.android-x64.symbols   native-debug-symbols/x86_64/libapp.so.dbg
 
-zip -r native-debug-symbols.zip native-debug-symbols
+cd native-debug-symbols
+zip -r native-debug-symbols.zip .
