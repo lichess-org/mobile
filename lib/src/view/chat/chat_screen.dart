@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -178,7 +181,13 @@ class _MessageBubble extends ConsumerWidget {
                       onTap: () =>
                           Navigator.of(context).push(UserScreen.buildRoute(context, message.user!)),
                     ),
-                  Text(message.message, style: TextStyle(color: _textColor(context, brightness))),
+                  Linkify(
+                    onOpen: (link) => onLinkifyOpen(context, link),
+                    linkifiers: kLichessLinkifiers,
+                    text: message.message,
+                    style: TextStyle(color: _textColor(context, brightness)),
+                    linkStyle: Styles.linkStyle,
+                  ),
                 ],
               ),
             ),
