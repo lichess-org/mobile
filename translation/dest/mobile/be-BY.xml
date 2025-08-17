@@ -5,12 +5,13 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Галоўная</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Няма вынікаў</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Добра</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">За дошкай</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">За дошкай</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Гульцы з «%s»</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Злева</string>
-  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Зправа</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Справа</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Задачы</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Нядаўнія пошукі</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Выдаліць закладку</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Размяшчэнне гадзінніка</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Поўнаэкранны рэжым</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Налады</string>
