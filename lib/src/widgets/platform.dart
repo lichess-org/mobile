@@ -18,6 +18,8 @@ class PlatformWidget extends StatelessWidget {
         return androidBuilder(context);
       case TargetPlatform.iOS:
         return iosBuilder(context);
+      case TargetPlatform.linux:
+        return androidBuilder(context);
       default:
         assert(false, 'Unexpected platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
