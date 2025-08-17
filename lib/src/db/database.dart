@@ -5,8 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sqflite/sqflite.dart';
-
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 part 'database.g.dart';
 
 const kLichessDatabaseName = 'lichess_mobile.db';
@@ -23,6 +22,9 @@ final _logger = Logger('Database');
 
 @Riverpod(keepAlive: true)
 Future<Database> database(Ref ref) async {
+  if (Platform.isLinux) {
+    databaseFactory = databaseFactoryFfi;
+  }
   final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
   return openAppDatabase(databaseFactory, dbPath);
 }

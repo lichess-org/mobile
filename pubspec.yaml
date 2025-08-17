@@ -71,6 +71,7 @@ dependencies:
   signal_strength_indicator: ^0.4.1
   sound_effect: ^0.1.1
   sqflite: ^2.2.5
+  sqflite_common_ffi: ^2.2.3
   stream_transform: ^2.1.0
   url_launcher: ^6.1.9
   visibility_detector: ^0.4.0
@@ -91,7 +92,6 @@ dev_dependencies:
   mocktail_image_network: ^1.2.0
   riverpod_generator: ^2.1.0
   riverpod_lint: ^2.3.3
-  sqflite_common_ffi: ^2.2.3
   stream_channel: ^2.1.2
 
 dependency_overrides:
