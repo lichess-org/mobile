@@ -66,16 +66,19 @@ sealed class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
     timeIncrement: TimeIncrement(600, 0),
     customVariant: Variant.standard,
     customRated: false,
-    customRatingDelta: (-500, 500),
+    customRatingDelta: kDefaultRatingDelta,
     customDaysPerTurn: 3,
   );
 
   Perf get realTimePerf =>
       Perf.fromVariantAndSpeed(customVariant, Speed.fromTimeIncrement(timeIncrement));
 
-  /// Returns the rating range for the custom setup, or null if the user
-  /// doesn't have a rating for the custom setup perf.
+  /// Returns the real time rating range for the custom setup.
+  ///
+  /// Returns null if the rating delta is the default (no custom range).
+  /// Returns null if the user doesn't have a rating for the custom setup perf.
   (int, int)? realTimeRatingRange(User user) {
+    if (customRatingDelta == kDefaultRatingDelta) return null;
     final perf = user.perfs[realTimePerf];
     if (perf == null) return null;
     if (perf.provisional == true) return null;
@@ -84,7 +87,12 @@ sealed class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
     return (min, max);
   }
 
+  /// Returns the correspondence rating range for the custom setup.
+  ///
+  /// Returns null if the rating delta is the default (no custom range).
+  /// Returns null if the user doesn't have a rating on correspondence perf.
   (int, int)? correspondenceRatingRange(User user) {
+    if (customRatingDelta == kDefaultRatingDelta) return null;
     final perf = user.perfs[Perf.correspondence];
     if (perf == null) return null;
     if (perf.provisional == true) return null;
@@ -101,6 +109,8 @@ sealed class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
     }
   }
 }
+
+const kDefaultRatingDelta = (-500, 500);
 
 const kSubtractingRatingRange = [-500, -450, -400, -350, -300, -250, -200, -150, -100, -50, 0];
 
