@@ -5,6 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -19,6 +20,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -208,6 +210,8 @@ class _StudyMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     final state = ref.watch(studyControllerProvider(id)).requireValue;
+    final studyPrefs = ref.watch(studyPreferencesProvider);
+    final kidModeAsync = ref.watch(kidModeProvider);
 
     return ContextMenuIconButton(
       semanticsLabel: 'Study menu',
@@ -340,6 +344,10 @@ class _StudyMenu extends ConsumerWidget {
             );
           },
         ),
+        if (studyPrefs.showChatRoomButtonOverflowMenu &&
+            state.chatOptions != null &&
+            kidModeAsync.valueOrNull == false)
+          ChatContextMenuAction(options: state.chatOptions!),
       ],
     );
   }

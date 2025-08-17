@@ -24,6 +24,12 @@ class StudyPreferences extends _$StudyPreferences with PreferencesStorage<StudyP
     return fetch();
   }
 
+  Future<void> toogleShowChatRoomButtonOverflowMenu() {
+    return save(
+      state.copyWith(showChatRoomButtonOverflowMenu: !state.showChatRoomButtonOverflowMenu),
+    );
+  }
+
   Future<void> toggleShowVariationArrows() {
     return save(state.copyWith(showVariationArrows: !state.showVariationArrows));
   }
@@ -63,6 +69,8 @@ sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysi
 
   const factory StudyPrefs({
     required bool showVariationArrows,
+
+    @JsonKey(defaultValue: false) required bool showChatRoomButtonOverflowMenu,
     @JsonKey(defaultValue: true) required bool showEvaluationGauge,
     @JsonKey(defaultValue: true) required bool showEngineLines,
     @JsonKey(defaultValue: true) required bool showBestMoveArrow,
@@ -73,6 +81,7 @@ sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysi
   }) = _StudyPrefs;
 
   static const defaults = StudyPrefs(
+    showChatRoomButtonOverflowMenu: false,
     showVariationArrows: false,
     showEvaluationGauge: true,
     showEngineLines: true,

@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
+import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
@@ -35,6 +36,8 @@ class _AnalysisBottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final kidModeAsync = ref.watch(kidModeProvider);
+    final studyPrefs = ref.watch(studyPreferencesProvider);
+
     final state = ref.watch(studyControllerProvider(id)).valueOrNull;
     if (state == null) {
       return const BottomBar(children: []);
@@ -49,7 +52,9 @@ class _AnalysisBottomBar extends ConsumerWidget {
 
     return BottomBar(
       children: [
-        if (state.chatOptions != null && kidModeAsync.valueOrNull == false)
+        if (state.chatOptions != null &&
+            kidModeAsync.valueOrNull == false &&
+            studyPrefs.showChatRoomButtonOverflowMenu == false)
           ChatBottomBarButton(options: state.chatOptions!, showLabel: true),
         _ChapterButton(state: state),
         _NextChapterButton(
@@ -94,10 +99,13 @@ class _GamebookBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).requireValue;
     final kidModeAsync = ref.watch(kidModeProvider);
+    final studyPrefs = ref.watch(studyPreferencesProvider);
 
     return BottomBar(
       children: [
-        if (state.chatOptions != null && kidModeAsync.valueOrNull == false)
+        if (state.chatOptions != null &&
+            kidModeAsync.valueOrNull == false &&
+            studyPrefs.showChatRoomButtonOverflowMenu == false)
           ChatBottomBarButton(options: state.chatOptions!, showLabel: true),
         _ChapterButton(state: state),
         ...switch (state.gamebookState) {
