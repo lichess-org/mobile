@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -32,6 +34,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final kidModeAsync = ref.watch(kidModeProvider);
     final state = ref.watch(studyControllerProvider(id)).valueOrNull;
     if (state == null) {
       return const BottomBar(children: []);
@@ -46,6 +49,8 @@ class _AnalysisBottomBar extends ConsumerWidget {
 
     return BottomBar(
       children: [
+        if (state.chatOptions != null && kidModeAsync.valueOrNull == false)
+          ChatBottomBarButton(options: state.chatOptions!, showLabel: true),
         _ChapterButton(state: state),
         _NextChapterButton(
           id: id,
@@ -88,9 +93,12 @@ class _GamebookBottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(id)).requireValue;
+    final kidModeAsync = ref.watch(kidModeProvider);
 
     return BottomBar(
       children: [
+        if (state.chatOptions != null && kidModeAsync.valueOrNull == false)
+          ChatBottomBarButton(options: state.chatOptions!, showLabel: true),
         _ChapterButton(state: state),
         ...switch (state.gamebookState) {
           GamebookState.findTheMove => [

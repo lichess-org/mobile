@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -65,6 +66,19 @@ abstract class TournamentChatOptions extends ChatOptions with _$TournamentChatOp
   bool get isPublic => true;
 }
 
+@freezed
+abstract class StudyChatOptions extends ChatOptions with _$StudyChatOptions {
+  const StudyChatOptions._();
+  const factory StudyChatOptions({required StudyId id, required bool writeable}) =
+      _StudyChatOptions;
+
+  @override
+  LightUser? get opponent => null;
+
+  @override
+  bool get isPublic => true;
+}
+
 /// A provider that gets the chat unread messages
 @riverpod
 Future<int> chatUnread(Ref ref, ChatOptions options) async {
@@ -94,6 +108,9 @@ class ChatController extends _$ChatController {
       ),
       TournamentChatOptions(:final id) => ref.watch(
         tournamentControllerProvider(id).selectAsync((s) => s.tournament.chat?.lines),
+      ),
+      StudyChatOptions(:final id) => ref.watch(
+        studyControllerProvider(id).selectAsync((s) => s.study.chat?.lines),
       ),
     };
 
@@ -126,6 +143,11 @@ class ChatController extends _$ChatController {
       TournamentChatOptions(:final id) => {
         'username': username,
         'resource': 'tournament/$id',
+        'text': message.message,
+      },
+      StudyChatOptions(:final id) => {
+        'username': username,
+        'resource': 'study/$id',
         'text': message.message,
       },
     };

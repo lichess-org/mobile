@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -589,6 +590,9 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
 
   PlayerSide get playerSide =>
       gamebookActive ? (pov == Side.white ? PlayerSide.white : PlayerSide.black) : PlayerSide.both;
+
+  ChatOptions? get chatOptions =>
+      study.chat != null ? StudyChatOptions(id: study.id, writeable: study.chat!.writeable) : null;
 }
 
 @freezed
