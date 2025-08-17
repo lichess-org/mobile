@@ -164,7 +164,7 @@
   <string name="drawByMutualAgreement">КӀиязулго разилъиялдалъун ращад ккей</string>
   <string name="fiftyMovesWithoutProgress">ЦебетӀей гьечӀого кӀикъоялда анцӀго хъурщи</string>
   <string name="currentGames">Гьанжесел хӀаял</string>
-  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">%s жувана</string>
+  <string name="joinedX">%s жувана</string>
   <plurals name="nbGames">
     <item quantity="one">%s хӀай</item>
     <item quantity="other">%s хӀай</item>

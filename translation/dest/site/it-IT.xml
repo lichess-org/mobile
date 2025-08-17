@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">Patta per comune accordo</string>
   <string name="fiftyMovesWithoutProgress">Cinquanta mosse senza progresso</string>
   <string name="currentGames">Partite in corso</string>
-  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">Iscritto %s</string>
+  <string name="joinedX">Iscritto %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s partita</item>
     <item quantity="other">%s partite</item>

@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">Ισοπαλία κατόπιν συμφωνίας</string>
   <string name="fiftyMovesWithoutProgress">Πενήντα κινήσεις χωρίς πρόοδο</string>
   <string name="currentGames">Παιχνίδια σε εξέλιξη</string>
-  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">Έγινε μέλος %s</string>
+  <string name="joinedX">Έγινε μέλος %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s παιχνίδι</item>
     <item quantity="other">%s παιχνίδια</item>
