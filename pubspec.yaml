@@ -48,7 +48,7 @@ dependencies:
   flutter_spinkit: ^5.2.0
   freezed_annotation: ^3.0.0
   http: ^1.1.0
-  image_picker: ^1.1.2
+  image_picker: ^1.2.0
   intl: ^0.20.2
   json_annotation: ^4.7.0
   l10n_esperanto: ^2.0.13
