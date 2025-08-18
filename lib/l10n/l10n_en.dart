@@ -3446,7 +3446,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a cheated game.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game with suspected cheating.';
 
   @override
   String by(String param) {
@@ -9663,7 +9663,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a cheated game.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game with suspected cheating.';
 
   @override
   String by(String param) {

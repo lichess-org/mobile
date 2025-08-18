@@ -4,7 +4,6 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
 import '../../test_helpers.dart';
@@ -20,8 +19,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = ChallengeRepository(client);
+      final repo = container.read(challengeRepositoryProvider);
       final result = await repo.list();
 
       expect(result.inward, isA<IList<Challenge>>());
@@ -39,8 +37,7 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = ChallengeRepository(client);
+      final repo = container.read(challengeRepositoryProvider);
       final result = await repo.show(const ChallengeId('H9fIRZUk'));
 
       expect(result, isA<Challenge>());

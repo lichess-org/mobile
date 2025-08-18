@@ -4750,7 +4750,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get disableBlindMode => 'Kör modunu devre dışı bırak';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Panoya kopyala';
 
   @override
   String opponentLeftCounter(int count) {

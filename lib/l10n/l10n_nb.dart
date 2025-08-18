@@ -4750,7 +4750,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get disableBlindMode => 'Deaktiver blindemodus';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Kopier til utklippstavlen';
 
   @override
   String opponentLeftCounter(int count) {

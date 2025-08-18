@@ -3289,7 +3289,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get ifNoneLeaveEmpty => 'Leeg indien n.v.t.';
+  String get ifNoneLeaveEmpty => 'Indien geen, leeg laten';
 
   @override
   String get profile => 'Profiel';
@@ -3515,7 +3515,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get privacy => 'Privacy';
 
   @override
-  String get privacyPolicy => 'privacybeleid';
+  String get privacyPolicy => 'Acceptatiebeleid';
 
   @override
   String get letOtherPlayersFollowYou => 'Andere spelers mogen je volgen';
@@ -5656,7 +5656,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyDeleteThisChapter => 'Wil je dit hoofdstuk verwijderen? Je kan dit niet ongedaan maken!';
 
   @override
-  String get studyClearAllCommentsInThisChapter => 'Verwijder alle aantekeningen, tekens en getekende figuren in dit hoofdstuk?';
+  String get studyClearAllCommentsInThisChapter => 'Wis alle opmerkingen, glyphs en getekende vormen in dit hoofdstuk';
 
   @override
   String get studyRightUnderTheBoard => 'Recht onder het bord';
@@ -5946,7 +5946,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyConclusionTitle => 'Bedankt voor je tijd';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'Je kunt je <a href=\'/studie/mine/hot\'>vorige studies</a> vinden op je profielpagina.<br>Er is ook een <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blogpost over studies</a>.<br>Power users kunnen op \"?\" drukken om sneltoetsen te zien.<br>Veel plezier!';
 
   @override
   String get studyCreateChapterTitle => 'Laten we een studiehoofdstuk maken';
@@ -5964,7 +5964,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyCustomPositionTitle => 'Aangepaste stelling';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Richt het bord op jouw manier in <br>Geschikt om eindspellen te verkennen.';
 
   @override
   String get studyLoadExistingLichessGameTitle => 'Laad een bestaande lichess-partij';
@@ -6040,7 +6040,7 @@ class AppLocalizationsNl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Plak je PGN tekst hier, tot $count spellen mogelijk',
+      other: 'Plak hier spellen als PGN-tekst. Voor elk spel wordt een nieuw hoofdstuk gemaakt. De studie kan maximaal $count hoofdstukken hebben.',
       one: 'Plak je PGN tekst hier, tot $count spel mogelijk',
     );
     return '$_temp0';

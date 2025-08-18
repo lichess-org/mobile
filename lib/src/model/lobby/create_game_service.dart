@@ -41,6 +41,7 @@ class CreateGameService {
   final Logger _log;
 
   LichessClient get lichessClient => ref.read(lichessClientProvider);
+  ChallengeRepository get challengeRepository => ref.read(challengeRepositoryProvider);
 
   /// The current lobby connection if we are creating a game from the lobby.
   StreamSubscription<SocketEvent>? _lobbyConnection;
@@ -133,8 +134,7 @@ class CreateGameService {
     try {
       _log.info('Creating new challenge game');
 
-      final repo = ChallengeRepository(lichessClient);
-      final challenge = await repo.create(challengeReq);
+      final challenge = await challengeRepository.create(challengeReq);
 
       final socketPool = ref.read(socketPoolProvider);
       final socketClient = socketPool.open(
@@ -157,7 +157,7 @@ class CreateGameService {
         socketClient.stream.listen((event) async {
           if (event.topic == 'reload') {
             try {
-              final updatedChallenge = await repo.show(challenge.id);
+              final updatedChallenge = await challengeRepository.show(challenge.id);
               if (updatedChallenge.gameFullId != null) {
                 completer.complete((
                   gameFullId: updatedChallenge.gameFullId,
@@ -197,7 +197,7 @@ class CreateGameService {
 
     _log.info('Creating new correspondence challenge');
 
-    return ref.withClient((client) => ChallengeRepository(client).create(challenge));
+    return challengeRepository.create(challenge);
   }
 
   /// Cancel the current game creation.
@@ -217,7 +217,7 @@ class CreateGameService {
     if (id != null) {
       try {
         _log.info('Cancelling challenge');
-        await ChallengeRepository(lichessClient).cancel(id);
+        await challengeRepository.cancel(id);
       } catch (e) {
         _log.warning('Failed to cancel challenge: $e', e);
         rethrow;

@@ -170,7 +170,7 @@
   <string name="drawByMutualAgreement">పరస్పర ఒప్పందం ద్వారా సమాన స్థానం</string>
   <string name="fiftyMovesWithoutProgress">పురోగతి లేకుండా యాభై కదలికలు</string>
   <string name="currentGames">ఇప్పటి ఆటలు</string>
-  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">జాయిన్ అయ్యాడు %s</string>
+  <string name="joinedX">జాయిన్ అయ్యాడు %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s ఆట </item>
     <item quantity="other">%s ఆటలు</item>

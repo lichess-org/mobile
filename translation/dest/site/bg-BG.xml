@@ -167,7 +167,7 @@
   <string name="drawByMutualAgreement">Реми по взаимно съгласие</string>
   <string name="fiftyMovesWithoutProgress">Петдесет хода без напредък</string>
   <string name="currentGames">Текущи игри</string>
-  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">Присъедини се %s</string>
+  <string name="joinedX">Присъедини се %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s Партия</item>
     <item quantity="other">%s Партии</item>

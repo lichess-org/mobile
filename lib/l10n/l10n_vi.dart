@@ -454,7 +454,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get arenaIsNotRated => 'Giải đấu này *không* xếp hạng và sẽ *không* ảnh hưởng đến hệ số của bạn.';
 
   @override
-  String get arenaSomeRated => 'Một số giải đấu có xếp hạng và sẽ ảnh hưởng đến hệ số của bạn.';
+  String get arenaSomeRated => 'Ngáo à';
 
   @override
   String get arenaHowAreScoresCalculated => 'Điểm được tính thế nào?';
@@ -2058,7 +2058,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsCancelKeepAccount => 'Hủy và giữ lại tài khoản của tôi';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Bạn chắc chắn là bạn muốn đóng tài khoản của mình?';
+  String get settingsCloseAccountAreYouSure => 'Bạn chắc chắn là bạn muốn đóng tài khoản của mình không?';
 
   @override
   String get settingsThisAccountIsClosed => 'Tài khoản này đã bị đóng';

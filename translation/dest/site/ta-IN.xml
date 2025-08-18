@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">இருதரப்பு ஒத்துழைப்புடன் இழுபறி</string>
   <string name="fiftyMovesWithoutProgress">முன்னேற்றம் இல்லாமல் ஐம்பது நகர்வுகள்</string>
   <string name="currentGames">தற்பொழுதைய ஆட்டங்கள்</string>
-  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">%s இல் இணைந்தார்</string>
+  <string name="joinedX">%s இல் இணைந்தார்</string>
   <plurals name="nbGames">
     <item quantity="one">%s ஆட்டம்</item>
     <item quantity="other">%s ஆட்டங்கள்</item>

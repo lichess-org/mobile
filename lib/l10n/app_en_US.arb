@@ -1022,7 +1022,7 @@
   "reportCheatBoostHelp": "Paste a link to the game(s) and explain what is wrong with this user's behavior. Don't just say \"they cheat,\" but tell us how you came to this conclusion.",
   "reportUsernameHelp": "Explain why this username is offensive. Don't just say \"it's offensive/inappropriate,\" but tell us how you came to this conclusion, especially if the offense is obscure, not in English, in slang, or a historical/cultural reference.",
   "reportProcessedFasterInEnglish": "Your report will be processed faster if written in English.",
-  "error_provideOneCheatedGameLink": "Please provide at least one link to a cheated game.",
+  "error_provideOneCheatedGameLink": "Please provide at least one link to a game with suspected cheating.",
   "by": "by {param}",
   "importedByX": "Imported by {param}",
   "thisTopicIsNowClosed": "This topic is now closed.",

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
@@ -12,6 +13,8 @@ part 'tournament_providers.g.dart';
 
 @riverpod
 Future<IList<LightTournament>> featuredTournaments(Ref ref) {
+  // logged in users get personalized featured tournaments
+  ref.watch(authSessionProvider);
   return ref.read(tournamentRepositoryProvider).featured();
 }
 
