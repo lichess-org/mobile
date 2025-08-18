@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">Draw by mutual agreement</string>
   <string name="fiftyMovesWithoutProgress">Fifty moves without progress</string>
   <string name="currentGames">Current games</string>
-  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;&#10;Note that the 'ago' is already in %s">Joined %s</string>
+  <string name="joinedX">Joined %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s game</item>
     <item quantity="other">%s games</item>
@@ -576,7 +576,7 @@
   <string name="reportCheatBoostHelp">Paste the link to the game(s) and explain what is wrong about this user's behaviour. Don't just say "they cheat", but tell us how you came to this conclusion.</string>
   <string name="reportUsernameHelp">Explain what about this username is offensive. Don't just say "it's offensive/inappropriate", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.</string>
   <string name="reportProcessedFasterInEnglish">Your report will be processed faster if written in English.</string>
-  <string name="error.provideOneCheatedGameLink">Please provide at least one link to a cheated game.</string>
+  <string name="error.provideOneCheatedGameLink">Please provide at least one link to a game with suspected cheating.</string>
   <string name="by">by %s</string>
   <string name="importedByX">Imported by %s</string>
   <string name="thisTopicIsNowClosed">This topic is now closed.</string>
