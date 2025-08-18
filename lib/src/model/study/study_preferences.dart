@@ -63,7 +63,6 @@ sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysi
 
   const factory StudyPrefs({
     required bool showVariationArrows,
-
     @JsonKey(defaultValue: true) required bool showEvaluationGauge,
     @JsonKey(defaultValue: true) required bool showEngineLines,
     @JsonKey(defaultValue: true) required bool showBestMoveArrow,
