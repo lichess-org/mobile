@@ -1418,6 +1418,7 @@
   "accessibility": "Erişilebilirlik",
   "enableBlindMode": "Kör modunu aktifleştir",
   "disableBlindMode": "Kör modunu devre dışı bırak",
+  "copyToClipboard": "Panoya kopyala",
   "opponentLeftCounter": "{count, plural, =1{Rakibiniz oyundan ayrıldı. {count} saniye sonra galibiyet talep edebilirsiniz.} other{Rakibiniz oyundan ayrıldı. {count} saniye sonra galibiyet talep edebilirsiniz.}}",
   "mateInXHalfMoves": "{count, plural, =1{{count} yarım hamle sonra mat} other{{count} yarım hamlede mat}}",
   "nbBlunders": "{count, plural, =1{{count} vahim hata} other{{count} vahim hata}}",

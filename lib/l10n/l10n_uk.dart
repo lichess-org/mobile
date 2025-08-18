@@ -129,10 +129,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsClockPosition => 'Розташування годинника';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Шаблони';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Перетягнута ціль';
 
   @override
   String get mobileSettingsDraggedTargetCircle => 'Коло';
@@ -141,7 +141,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Квадрат';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Домашні віджети';
 
   @override
   String get mobileSettingsImmersiveMode => 'Повноекранний режим';
@@ -156,7 +156,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Вибрати зображення';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Користувацький фон активний лише в темному режимі. Рекомендується темне зображення.';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'Розмити зображення';
@@ -168,7 +168,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'Показати дошку';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Проведіть для показу інших фонів';
 
   @override
   String get mobileSettingsPieceShiftMethodEither => 'Натисніть, або перенесіть';
@@ -180,16 +180,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsShapeDrawing => 'Малювання фігур';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Намалюйте фігури за допомогою двох пальців: прикладіть палець до порожнього квадрата та перетягніть інший палець, щоб намалювати форму.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Показувати межі дошки';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Тактильний зворотний зв\'язок';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Коли активовано, пристрій вібруватиме при русі або захопленні фігури.';
 
   @override
   String get mobileSettingsTab => 'Налашт.';
@@ -714,7 +714,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastMyBroadcasts => 'Мої трансляції';
 
   @override
-  String get broadcastLiveBroadcasts => 'Онлайн трансляції турнірів';
+  String get broadcastLiveBroadcasts => 'Прямі трансляції турнірів';
 
   @override
   String get broadcastBroadcastCalendar => 'Календар трансляцій';
@@ -741,7 +741,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastOngoing => 'Поточні';
 
   @override
-  String get broadcastUpcoming => 'Майбутні';
+  String get broadcastUpcoming => 'Найближчі';
 
   @override
   String get broadcastRoundName => 'Назва раунду';
@@ -756,11 +756,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastTournamentDescription => 'Короткий опис турніру';
 
   @override
-  String get broadcastFullDescription => 'Повний опис події';
+  String get broadcastFullDescription => 'Повний опис турніру';
 
   @override
   String broadcastFullDescriptionHelp(String param1, String param2) {
-    return 'Необов\'язковий довгий опис трансляції. Наявна розмітка $param1. Довжина має бути менша ніж $param2 символів.';
+    return 'Необов\'язковий довгий опис трансляції. $param1 доступний. Довжина має бути менша ніж $param2 символів.';
   }
 
   @override
@@ -889,7 +889,7 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasters page';
+  String get broadcastWebmastersPage => 'сторінка webmasters';
 
   @override
   String get broadcastEmbedThisBroadcast => 'Вбудувати цю трансляцію на своєму сайті';
@@ -940,11 +940,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastLiveboard => 'Наживо';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Трансляція спільноти';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'Створено та адмініструється $param.';
   }
 
   @override
@@ -1395,13 +1395,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesYourPreferencesHaveBeenSaved => 'Ваші налаштування збережено.';
 
   @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Прокрутіть колесом миші на дошці, для того щоб відтворити ходи';
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Прокрутити колесом миші на дошці, для відтворення ходів';
 
   @override
   String get preferencesCorrespondenceEmailNotification => 'Щоденне сповіщення на електронну пошту зі списком ваших заочних ігор';
 
   @override
-  String get preferencesNotifyStreamStart => 'Стример почав трансляцію';
+  String get preferencesNotifyStreamStart => 'Стрімер почав трансляцію';
 
   @override
   String get preferencesNotifyInboxMsg => 'Нове вхідне повідомлення';
@@ -5806,7 +5806,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyDeleteThisChapter => 'Видалити цей розділ? Відновити буде неможливо!';
 
   @override
-  String get studyClearAllCommentsInThisChapter => 'Очистити всі коментарі та позначки з цього розділу?';
+  String get studyClearAllCommentsInThisChapter => 'Очистити всі коментарі та позначки з цього розділу';
 
   @override
   String get studyRightUnderTheBoard => 'Відразу під шахівницею';
@@ -5903,10 +5903,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyEnableSync => 'Увімкнути синхронізацію';
 
   @override
-  String get studyYesKeepEveryoneOnTheSamePosition => 'Так: однакова позиція для всіх';
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Так, однакова позиція для всіх';
 
   @override
-  String get studyNoLetPeopleBrowseFreely => 'Ні: дозволити вільний перегляд';
+  String get studyNoLetPeopleBrowseFreely => 'Ні, дозволити вільний перегляд';
 
   @override
   String get studyPinnedStudyComment => 'Закріплений коментар дослідження';
@@ -6034,7 +6034,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyPlayAgain => 'Грати знову';
 
   @override
-  String get studyWhatWouldYouPlay => 'Що б ви грали в цій позиції?';
+  String get studyWhatWouldYouPlay => 'Що б Ви зіграли в цій позиції?';
 
   @override
   String get studyYouCompletedThisLesson => 'Вітаємо! Ви завершили цей урок.';
@@ -6087,7 +6087,7 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Анотування позиції';
+  String get studyAnnotatePositionTitle => 'Додати примітку до позиції';
 
   @override
   String get studyAnnotatePositionText => 'Натисніть кнопку !? або клацніть правою кнопкою миші на список ходів справа.<br>Символьні анотації зберігаються та доступні всім.';
@@ -6099,58 +6099,58 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyConclusionText => 'Ви можете знайти свої <a href=\'/study/mine/hot\'>попередні дослідження</a> на сторінці профілю.<br>Також радимо ознайомитися з <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>блогом про дослідження</a>.<br>Досвідчені користувачі можуть натиснути \"?\", щоб побачити комбінації клавіш.<br>Бажаємо успіхів!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'Створімо студію';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'Студія може містити декілька розділів.<br>Кожен розділ містить унікальне розгалуження ходів,<br>і може бути відтворене багатьма способами.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'З початкової позиції';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'Підготовка дошки до нової партії.<br>Підходить для дослідження дебютів.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'Довільна позиція';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'Розставте фігури на дошці, як бажаєте.<br>Підходить для дослідження ендшпілів.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadExistingLichessGameTitle => 'Завантажити партію з бази Lichess';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText => 'Вставте URL партії Lichess<br>(наприклад, lichess.org/7fHIU0XI)<br>для завантаження гри в розділ.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'З рядка FEN';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => 'Вставте позицію у форматі FEN<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>для початку розділу з цієї позиції.';
 
   @override
-  String get studyFromPgnGameTitle => 'From a PGN game';
+  String get studyFromPgnGameTitle => 'З гри в форматі PGN';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'Вставте гру в форматі PGN,<br>щоб завантажити до розділу ходи, коментарі та варіації.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'Студії доступні для різних режимів';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'Так, Ви можете вивчати Crazyhouse<br>та усі інші режими Lichess!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => 'Розділі зберігаються назавжди.<br>Насолоджуйтесь організацією власного шахового контенту!';
 
   @override
   String get studyDoubleDefeat => 'Подвійна поразка';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin => 'Поразка чорних, але білі не виграли';
+  String get studyBlackDefeatWhiteCanNotWin => 'Чорні програють, але Білі не можуть виграти';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'Поразка білих, але чорні не виграли';
+  String get studyWhiteDefeatBlackCanNotWin => 'Білі програють, але Чорні не можуть виграти';
 
   @override
   String studyNbChapters(int count) {

@@ -90,7 +90,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobilePositionLeft => 'Злева';
 
   @override
-  String get mobilePositionRight => 'Зправа';
+  String get mobilePositionRight => 'Справа';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
@@ -120,7 +120,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileRecentSearches => 'Нядаўнія пошукі';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Выдаліць закладку';
 
   @override
   String get mobileServerAnalysis => 'Server analysis';

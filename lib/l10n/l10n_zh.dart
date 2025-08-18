@@ -67,7 +67,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileMustBeLoggedIn => '你必须登录才能浏览此页面。';
 
   @override
-  String get mobileNoSearchResults => '无';
+  String get mobileNoSearchResults => '无结果';
 
   @override
   String get mobileNotAllFeaturesAreAvailable => '请注意，不是所有来自网站和旧版应用的功能都可用，但我们会不断增加新功能。';
@@ -183,7 +183,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsShapeDrawingSubtitle => '使用两根手指进行标记：一根手指按住一个空格子，同时拖动另一根手指进行标记。';
 
   @override
-  String get mobileSettingsShowBorder => '棋盘边框';
+  String get mobileSettingsShowBorder => '显示边框';
 
   @override
   String get mobileSettingsTouchFeedback => '触摸反馈';

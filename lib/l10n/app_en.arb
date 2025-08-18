@@ -1810,7 +1810,7 @@
   "reportCheatBoostHelp": "Paste the link to the game(s) and explain what is wrong about this user's behaviour. Don't just say \"they cheat\", but tell us how you came to this conclusion.",
   "reportUsernameHelp": "Explain what about this username is offensive. Don't just say \"it's offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.",
   "reportProcessedFasterInEnglish": "Your report will be processed faster if written in English.",
-  "error_provideOneCheatedGameLink": "Please provide at least one link to a cheated game.",
+  "error_provideOneCheatedGameLink": "Please provide at least one link to a game with suspected cheating.",
   "by": "by {param}",
   "@by": {
     "placeholders": {

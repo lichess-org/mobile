@@ -4750,7 +4750,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get disableBlindMode => 'Desaktibatu modu-itsua';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Kopiatu arbelera';
 
   @override
   String opponentLeftCounter(int count) {
