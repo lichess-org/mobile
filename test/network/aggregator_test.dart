@@ -6,6 +6,8 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
@@ -199,10 +201,18 @@ void main() {
       final accountUri = Uri(path: '/api/account', queryParameters: {'playban': '1'});
       final ongoingGamesUri = Uri(path: '/api/account/playing');
       final recentGamesUri = Uri(path: '/api/games/user/testuser');
+      final challengesUri = Uri(path: '/api/challenge');
       final tournamentsUri = Uri(path: '/tournament/featured');
       final inboxUri = Uri(path: '/inbox/unread-count');
 
-      final [account, ongoingGames, recentGames, tournaments, inbox] = await Future.wait([
+      final [
+        account,
+        ongoingGames,
+        recentGames,
+        challenges,
+        tournaments,
+        inbox,
+      ] = await Future.wait([
         aggregator.readJson(
           accountUri,
           atomicMapper: User.fromServerJson,
@@ -223,6 +233,16 @@ void main() {
         ),
         aggregator.readNdJsonList(recentGamesUri, mapper: LightExportedGame.fromServerJson),
         aggregator.readJson(
+          challengesUri,
+          atomicMapper: (json) {
+            final listPick = pick(json).required();
+            final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
+            final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
+
+            return (inward: inward.lock, outward: outward.lock);
+          },
+        ),
+        aggregator.readJson(
           tournamentsUri,
           atomicMapper: (Map<String, dynamic> json) =>
               pick(json, 'featured').asTournamentListOrThrow(),
@@ -239,6 +259,7 @@ void main() {
       expect(account, isA<User>());
       expect(ongoingGames, isA<IList<OngoingGame>>());
       expect(recentGames, isA<IList<LightExportedGame>>());
+      expect(challenges, isA<ChallengesList>());
       expect(tournaments, isA<IList<LightTournament>>());
       expect(inbox, isA<UnreadMessages>());
     });
@@ -414,6 +435,7 @@ const homeEndpointResponse = '''
     {"id":"g2bzFol8","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673553626465,"lastMoveAt":1673553936657,"status":"resign","players":{"white":{"user":{"name":"SchallUndRausch","id":"schallundrausch"},"rating":1751,"ratingDiff":-5},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1767,"ratingDiff":5}},"winner":"black","clock":{"initial":180,"increment":2,"totalTime":260},"lastFen":"r7/pppk4/4p1B1/3pP3/6Pp/q1P1P1nP/P1QK1r2/R5R1 w - - 1 1"},
     {"id":"9WLmxmiB","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673553299064,"lastMoveAt":1673553615438,"status":"resign","players":{"white":{"user":{"name":"Dr-Alaakour","id":"dr-alaakour"},"rating":1806,"ratingDiff":5},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1772,"ratingDiff":-5}},"winner":"white","clock":{"initial":180,"increment":0,"totalTime":180},"lastFen":"2b1Q1k1/p1r4p/1p2p1p1/3pN3/2qP4/P4R2/1P3PPP/4R1K1 b - - 0 1"}
   ],
+  "challenges": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "out" } ], "out": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "out" } ] },
   "tournaments": {"featured": []},
   "inbox": {
     "unread": 5

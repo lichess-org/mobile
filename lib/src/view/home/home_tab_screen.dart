@@ -475,6 +475,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   Future<void> _refreshData({required bool isOnline}) {
     return Future.wait([
       ref.refresh(myRecentGamesProvider.future),
+      if (isOnline) ref.refresh(challengesProvider.future),
       if (isOnline) ref.refresh(unreadMessagesProvider.future),
       if (isOnline) ref.refresh(accountProvider.future),
       if (isOnline) ref.refresh(ongoingGamesProvider.future),

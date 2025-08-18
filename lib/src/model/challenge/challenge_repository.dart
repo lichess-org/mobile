@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -13,21 +14,22 @@ part 'challenge_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 ChallengeRepository challengeRepository(Ref ref) {
-  return ChallengeRepository(ref.read(lichessClientProvider));
+  return ChallengeRepository(ref.read(lichessClientProvider), ref.read(aggregatorProvider));
 }
 
 typedef ChallengesList = ({IList<Challenge> inward, IList<Challenge> outward});
 
 class ChallengeRepository {
-  const ChallengeRepository(this.client);
+  const ChallengeRepository(this.client, this.aggregator);
 
   final LichessClient client;
+  final Aggregator aggregator;
 
   Future<ChallengesList> list() {
     final uri = Uri(path: '/api/challenge');
-    return client.readJson(
+    return aggregator.readJson(
       uri,
-      mapper: (json) {
+      atomicMapper: (json) {
         final listPick = pick(json).required();
         final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
         final outward = listPick('out').asListOrEmpty(Challenge.fromPick);

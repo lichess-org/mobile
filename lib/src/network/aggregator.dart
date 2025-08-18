@@ -19,6 +19,7 @@ final Map<Uri, ISet<({String key, RegExp pathRegexp})>> _targetUris = {
     (key: 'account', pathRegexp: RegExp(r'^\/api\/account$')),
     (key: 'recentGames', pathRegexp: RegExp(r'^\/api\/games\/user\/[\w-]+$')),
     (key: 'ongoingGames', pathRegexp: RegExp(r'^\/api\/account\/playing$')),
+    (key: 'challenges', pathRegexp: RegExp(r'^\/api\/challenge$')),
     (key: 'tournaments', pathRegexp: RegExp(r'^\/tournament\/featured$')),
     (key: 'inbox', pathRegexp: RegExp(r'^\/inbox\/unread-count$')),
   }),
