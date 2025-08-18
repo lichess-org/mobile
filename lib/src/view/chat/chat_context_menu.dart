@@ -35,7 +35,7 @@ class ChatBubbleContextMenu extends StatelessWidget {
               onPressed: () async {
                 await Clipboard.setData(ClipboardData(text: message));
                 if (!context.mounted) return;
-                showSnackBar(context, 'Successfully copied to clipboard');
+                showSnackBar(context, 'Message copied.');
               },
               icon: Icons.copy_all_outlined,
               child: Text(context.l10n.copyToClipboard),
