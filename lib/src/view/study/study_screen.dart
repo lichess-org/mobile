@@ -210,7 +210,6 @@ class _StudyMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     final state = ref.watch(studyControllerProvider(id)).requireValue;
-    final studyPrefs = ref.watch(studyPreferencesProvider);
     final kidModeAsync = ref.watch(kidModeProvider);
 
     return ContextMenuIconButton(
@@ -344,10 +343,16 @@ class _StudyMenu extends ConsumerWidget {
             );
           },
         ),
-        if (studyPrefs.showChatRoomButtonOverflowMenu &&
-            state.chatOptions != null &&
-            kidModeAsync.valueOrNull == false)
-          ChatContextMenuAction(options: state.chatOptions!),
+        if (state.chatOptions != null && kidModeAsync.valueOrNull == false)
+          ContextMenuAction(
+            label: context.l10n.chatRoom,
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(ChatScreen.buildRoute(context, options: state.chatOptions!));
+            },
+            icon: Icons.chat_bubble_outline,
+          ),
       ],
     );
   }

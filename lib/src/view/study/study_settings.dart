@@ -36,13 +36,6 @@ class StudySettingsScreen extends ConsumerWidget {
           ListSection(
             children: [
               SwitchSettingTile(
-                title: const Text('Show chat room button in overflow menu'),
-                value: studyPrefs.showChatRoomButtonOverflowMenu,
-                onChanged: (value) => ref
-                    .read(studyPreferencesProvider.notifier)
-                    .toogleShowChatRoomButtonOverflowMenu(),
-              ),
-              SwitchSettingTile(
                 title: Text(context.l10n.inlineNotation),
                 value: studyPrefs.inlineNotation,
                 onChanged: (value) =>

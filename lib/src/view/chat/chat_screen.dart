@@ -14,26 +14,8 @@ import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-
-class ChatContextMenuAction extends ConsumerWidget {
-  const ChatContextMenuAction({required this.options, super.key});
-
-  final ChatOptions options;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ContextMenuAction(
-      label: context.l10n.chatRoom,
-      onPressed: () {
-        Navigator.of(context).push(ChatScreen.buildRoute(context, options: options));
-      },
-      icon: Icons.chat_bubble_outline,
-    );
-  }
-}
 
 class ChatBottomBarButton extends ConsumerWidget {
   const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
