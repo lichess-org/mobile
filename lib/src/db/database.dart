@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 part 'database.g.dart';
@@ -25,8 +26,20 @@ Future<Database> database(Ref ref) async {
   if (Platform.isLinux) {
     databaseFactory = databaseFactoryFfi;
   }
-  final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
+  final dbPath = await _databasePath;
   return openAppDatabase(databaseFactory, dbPath);
+}
+
+/// Returns the database path including filename.
+Future<String> get _databasePath async {
+  // Use specific db path on Linux
+  if (Platform.isLinux) {
+    final directory = await getApplicationSupportDirectory();
+    return join(directory.path, kLichessDatabaseName);
+  }
+
+  // Use default db path
+  return join(await getDatabasesPath(), kLichessDatabaseName);
 }
 
 /// Returns the sqlite version as an integer.
