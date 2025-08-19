@@ -84,6 +84,7 @@ const locales = [
   'ja-JP',
   'kk-KZ',
   'ko-KR',
+  'lb-LU',
   'lt-LT',
   'lv-LV',
   'mk-MK',
