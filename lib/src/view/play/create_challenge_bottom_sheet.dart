@@ -293,7 +293,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
             ),
             if (account != null)
               ExpandedSection(
-                expand: preferences.variant != Variant.fromPosition,
+                expand: preferences.isRatedAllowed,
                 child: ListTile(
                   title: Text(context.l10n.rated),
                   trailing: Switch.adaptive(
@@ -344,19 +344,28 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                   ),
                                 );
 
-                            await _pendingCorrespondenceChallenge!;
+                            try {
+                              await _pendingCorrespondenceChallenge!;
 
-                            if (!context.mounted) return;
+                              if (!context.mounted) return;
 
-                            Navigator.of(
-                              context,
-                            ).popUntil((route) => route is! ModalBottomSheetRoute);
+                              Navigator.of(
+                                context,
+                              ).popUntil((route) => route is! ModalBottomSheetRoute);
 
-                            showSnackBar(
-                              context,
-                              'Challenge created. You can access it from the home tab.',
-                              type: SnackBarType.success,
-                            );
+                              showSnackBar(
+                                context,
+                                'Challenge created. You can access it from the home tab.',
+                                type: SnackBarType.success,
+                              );
+                            } catch (e) {
+                              if (!context.mounted) return;
+                              showSnackBar(
+                                context,
+                                'Could not create challenge: $e',
+                                type: SnackBarType.error,
+                              );
+                            }
                           }
                         : null,
                     child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
