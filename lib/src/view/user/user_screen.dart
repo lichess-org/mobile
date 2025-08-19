@@ -141,7 +141,10 @@ class _UserProfileListView extends ConsumerWidget {
   String _scoreDisplay(double score) {
     final integerPart = score.truncate();
     final decimalPart = score - integerPart;
-    return '$integerPart${decimalPart == 0.5 ? '½' : ''}';
+
+    return integerPart == 0 && decimalPart == 0.5
+        ? '½'
+        : '$integerPart${decimalPart == 0.5 ? '½' : ''}';
   }
 
   @override
