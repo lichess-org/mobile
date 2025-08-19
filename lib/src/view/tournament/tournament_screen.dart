@@ -1172,9 +1172,11 @@ class _PairingTile extends ConsumerWidget {
 
     final resultColor = pairing.score != null && pairing.score! >= 4
         ? context.lichessColors.brag
-        : pairing.score != null && pairing.score! > 1
+        : pairing.win == true
         ? context.lichessColors.good
-        : null;
+        : pairing.status == GameStatus.draw
+        ? null
+        : context.lichessColors.error;
 
     return ListTile(
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),
