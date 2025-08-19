@@ -32,13 +32,11 @@ Future<Database> database(Ref ref) async {
 
 /// Returns the database path including filename.
 Future<String> get _databasePath async {
-  // Use specific db path on Linux
   if (Platform.isLinux) {
     final directory = await getApplicationSupportDirectory();
     return join(directory.path, kLichessDatabaseName);
   }
 
-  // Use default db path
   return join(await getDatabasesPath(), kLichessDatabaseName);
 }
 
