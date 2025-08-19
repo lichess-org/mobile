@@ -144,7 +144,7 @@ class StudyController extends _$StudyController
         // since the position is illegal and `isComputerAnalysisAllowed` is false anyway.
         evaluationContext: EvaluationContext(
           variant: variant,
-          initialPosition: study.chapter.setup.variant.initialPosition,
+          initialPosition: Variant.standard.initialPosition,
         ),
         pgnRootComments: rootComments,
         pov: orientation,
