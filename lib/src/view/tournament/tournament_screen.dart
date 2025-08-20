@@ -1174,7 +1174,8 @@ class _PairingTile extends ConsumerWidget {
         ? context.lichessColors.brag
         : pairing.win == true
         ? context.lichessColors.good
-        : pairing.status == GameStatus.draw
+        : pairing.status == GameStatus.draw ||
+              pairing.status == GameStatus.insufficientMaterialClaim
         ? null
         : context.lichessColors.error;
 
