@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -20,7 +21,7 @@ class RecentGamesWidget extends ConsumerWidget {
     required this.recentGames,
     required this.user,
     required this.nbOfGames,
-    this.maxGamesToShow = 10,
+    this.maxGamesToShow = kNumberOfRecentGames,
     super.key,
   });
 
