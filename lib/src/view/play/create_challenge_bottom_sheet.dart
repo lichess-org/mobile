@@ -11,12 +11,12 @@ import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/play/pending_corres_challenge_dialog.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
@@ -330,42 +330,20 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                   );
                                 }
                               : null
-                        : timeControl == ChallengeTimeControlType.correspondence &&
-                              snapshot.connectionState != ConnectionState.waiting
-                        ? () async {
-                            final createGameService = ref.read(createGameServiceProvider);
-                            _pendingCorrespondenceChallenge = createGameService
-                                .newCorrespondenceChallenge(
-                                  preferences.makeRequest(
-                                    widget.user,
-                                    preferences.variant != Variant.fromPosition
-                                        ? null
-                                        : fromPositionFenInput,
-                                  ),
-                                );
-
-                            try {
-                              await _pendingCorrespondenceChallenge!;
-
-                              if (!context.mounted) return;
-
-                              Navigator.of(
-                                context,
-                              ).popUntil((route) => route is! ModalBottomSheetRoute);
-
-                              showSnackBar(
-                                context,
-                                'Challenge created. You can access it from the home tab.',
-                                type: SnackBarType.success,
-                              );
-                            } catch (e) {
-                              if (!context.mounted) return;
-                              showSnackBar(
-                                context,
-                                'Could not create challenge: $e',
-                                type: SnackBarType.error,
-                              );
-                            }
+                        : timeControl == ChallengeTimeControlType.correspondence
+                        ? () {
+                            showAdaptiveDialog<void>(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (context) => PendingCorresChallengeDialog(
+                                request: preferences.makeRequest(
+                                  widget.user,
+                                  preferences.variant != Variant.fromPosition
+                                      ? null
+                                      : fromPositionFenInput,
+                                ),
+                              ),
+                            );
                           }
                         : null,
                     child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
