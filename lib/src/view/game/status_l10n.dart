@@ -31,6 +31,8 @@ String gameStatusL10n(
           : winner == Side.black
           ? context.l10n.whiteLeftTheGame
           : context.l10n.blackLeftTheGame;
+    case GameStatus.insufficientMaterialClaim:
+      return '${context.l10n.insufficientMaterial} • ${context.l10n.draw}';
     case GameStatus.draw:
       if (lastPosition.isInsufficientMaterial) {
         return '${context.l10n.insufficientMaterial} • ${context.l10n.draw}';

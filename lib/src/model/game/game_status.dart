@@ -29,6 +29,9 @@ enum GameStatus {
   /// We don't know why the game ended.
   unknownFinish(38),
 
+  /// If a player offers a draw and their opponent has insufficient material to win, the game is called a draw.
+  insufficientMaterialClaim(39),
+
   /// Chess variant special endings.
   variantEnd(60);
 
