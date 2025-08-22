@@ -23,7 +23,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'game_history.freezed.dart';
 part 'game_history.g.dart';
 
-const kNumberOfRecentGames = 20;
+const kNumberOfRecentGames = 10;
 
 const _nbPerPage = 20;
 
@@ -57,7 +57,9 @@ Future<IList<LightExportedGameWithPov>> myRecentGames(Ref ref) async {
 /// A provider that fetches the recent games from the server for a given user.
 @riverpod
 Future<IList<LightExportedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
-  return ref.read(gameRepositoryProvider).getUserGames(userId, withBookmarked: true);
+  return ref
+      .read(gameRepositoryProvider)
+      .getUserGames(userId, withBookmarked: true, max: kNumberOfRecentGames);
 }
 
 /// A provider that fetches the total number of games played by given user, or the current app user if no user is provided.
