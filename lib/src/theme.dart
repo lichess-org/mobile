@@ -142,7 +142,7 @@ ThemeData _makeDefaultTheme(
             backgroundColor: theme.colorScheme.surface.withValues(alpha: kCupertinoBarOpacity),
           )
         : null,
-    bottomAppBarTheme: BottomAppBarThemeData(
+    bottomAppBarTheme: BottomAppBarTheme(
       color: theme.colorScheme.surface,
       elevation: isIOS ? 0 : null,
     ),
@@ -249,7 +249,7 @@ ThemeData _makeBackgroundImageTheme({
                 : seedColor.withValues(alpha: kCupertinoBarOpacity),
           )
         : null,
-    bottomAppBarTheme: BottomAppBarThemeData(
+    bottomAppBarTheme: BottomAppBarTheme(
       color: isBackgroundImage
           ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
           : seedColor,

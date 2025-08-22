@@ -30,25 +30,26 @@ Future<void> showChoicePicker<T>(
               builder: (context) {
                 final List<Widget> choiceWidgets = choices
                     .map((value) {
-                      return RadioListTile<T>(title: labelBuilder(value), value: value);
+                      return RadioListTile<T>(
+                        title: labelBuilder(value),
+                        value: value,
+                        groupValue: selectedItem,
+                        onChanged: (v) {
+                          if (v != null && onSelectedItemChanged != null) {
+                            onSelectedItemChanged(v);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      );
                     })
                     .toList(growable: false);
-                return RadioGroup(
-                  groupValue: selectedItem,
-                  onChanged: (value) {
-                    if (value != null && onSelectedItemChanged != null) {
-                      onSelectedItemChanged(value);
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: choiceWidgets.length >= 10
-                      ? SizedBox(
-                          width: double.maxFinite,
-                          height: deviceHeight * 0.6,
-                          child: ListView(shrinkWrap: true, children: choiceWidgets),
-                        )
-                      : ListBody(children: choiceWidgets),
-                );
+                return choiceWidgets.length >= 10
+                    ? SizedBox(
+                        width: double.maxFinite,
+                        height: deviceHeight * 0.6,
+                        child: ListView(shrinkWrap: true, children: choiceWidgets),
+                      )
+                    : ListBody(children: choiceWidgets);
               },
             ),
             actions: [
