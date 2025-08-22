@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -142,7 +143,9 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     ),
                     subtitle: NonLinearSlider(
                       value: seconds,
-                      values: List.generate(15, (i) => (i + 1) * 60),
+                      values: kAvailableTimesInSeconds
+                          .where((t) => t >= 60 && t <= 15 * 60)
+                          .toList(),
                       labelBuilder: clockLabelInMinutes,
                       onChange: (num value) {
                         setState(() {
@@ -178,7 +181,9 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     ),
                     subtitle: NonLinearSlider(
                       value: incrementSeconds,
-                      values: List.generate(11, (i) => i),
+                      values: kAvailableIncrementsInSeconds
+                          .where((t) => t >= 0 && t <= 10)
+                          .toList(),
                       onChange: (num value) {
                         setState(() {
                           incrementSeconds = value.toInt();
