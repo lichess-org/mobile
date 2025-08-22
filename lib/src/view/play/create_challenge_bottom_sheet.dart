@@ -383,6 +383,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                         ),
                                       ],
                                     ),
+                                    duration: const Duration(seconds: 5),
                                   ),
                                 );
                               } else {
@@ -392,7 +393,6 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                       // TODO l10n
                                       'Challenge created: you will be notified when the game starts.\nYou can access it from the home tab.',
                                     ),
-                                    duration: Duration(seconds: 4),
                                   ),
                                 );
                               }
