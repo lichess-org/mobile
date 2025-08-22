@@ -125,7 +125,7 @@ class CreateGameService {
     assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
 
     if (_challengeConnection != null) {
-      throw StateError('Already creating a game.');
+      throw StateError('Already creating a challenge.');
     }
 
     // ensure the pending connection is closed in any case
@@ -190,14 +190,73 @@ class CreateGameService {
 
   /// Create a new correspondence challenge.
   ///
-  /// Returns the created challenge immediately. If the challenge is accepted,
-  /// a notification will be sent to the user when the game starts.
-  Future<Challenge> newCorrespondenceChallenge(ChallengeRequest challenge) {
-    assert(challenge.timeControl == ChallengeTimeControlType.correspondence);
+  /// It will wait a little bit in case of an immediate decline (e.g. bots), in that case a
+  /// [ChallengeDeclineReason] will be returned.
+  /// Otherwise, it means the challenge was created successfully.
+  Future<ChallengeDeclineReason?> newCorrespondenceChallenge(ChallengeRequest challengeReq) async {
+    assert(challengeReq.timeControl == ChallengeTimeControlType.correspondence);
 
-    _log.info('Creating new correspondence challenge');
+    if (_challengeConnection != null) {
+      throw StateError('Already creating a challenge.');
+    }
 
-    return challengeRepository.create(challenge);
+    // ensure the pending connection is closed in any case
+    final completer = Completer<ChallengeDeclineReason?>()..future.whenComplete(dispose);
+
+    try {
+      _log.info('Creating new correspondence challenge');
+
+      final challenge = await challengeRepository.create(challengeReq);
+
+      final socketPool = ref.read(socketPoolProvider);
+      final socketClient = socketPool.open(
+        Uri(
+          path: '/challenge/${challenge.id}/socket/v5',
+          queryParameters: {'v': challenge.socketVersion.toString()},
+        ),
+      );
+
+      _challengeConnection = (
+        challenge.id,
+        socketClient.connectedStream.listen((_) {
+          socketClient.send('ping', null);
+          _challengePingTimer?.cancel();
+          _challengePingTimer = Timer.periodic(
+            const Duration(seconds: 9),
+            (_) => socketClient.send('ping', null),
+          );
+        }),
+        socketClient.stream.listen((event) async {
+          if (event.topic == 'reload') {
+            try {
+              final updatedChallenge = await challengeRepository.show(challenge.id);
+              if (updatedChallenge.status == ChallengeStatus.declined) {
+                completer.complete(
+                  updatedChallenge.declineReason ?? ChallengeDeclineReason.generic,
+                );
+              }
+            } catch (e) {
+              _log.warning('Failed to reload challenge', e);
+            }
+          }
+        }),
+      );
+
+      // wait a bit to see if the challenge is declined immediately
+      await Future<void>.delayed(const Duration(seconds: 1));
+      // if the completer is not yet completed, complete it with null
+      if (!completer.isCompleted) {
+        completer.complete(null);
+      }
+    } catch (e) {
+      _log.warning('Failed to create challenge', e);
+      // if the completer is not yet completed, complete it with an error
+      if (!completer.isCompleted) {
+        completer.completeError(e);
+      }
+    }
+
+    return completer.future;
   }
 
   /// Cancel the current game creation.
