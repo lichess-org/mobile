@@ -193,7 +193,7 @@ class _TestBottomSheetOpener extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 useRootNavigator: true,
-                builder: (_) => CreateChallengeBottomSheet(user),
+                builder: (_) => CreateChallengeBottomSheet(user: user),
               ),
               child: const Text('Open'),
             ),

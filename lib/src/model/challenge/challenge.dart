@@ -111,7 +111,8 @@ sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements 
   const ChallengeRequest._();
 
   const factory ChallengeRequest({
-    required LightUser destUser,
+    // If null, it's an open challenge that anyone (even anonymous users) can accept.
+    LightUser? destUser,
     required Variant variant,
     required ChallengeTimeControlType timeControl,
     ({Duration time, Duration increment})? clock,

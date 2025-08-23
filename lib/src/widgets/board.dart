@@ -50,16 +50,7 @@ class BoardWidget extends StatelessWidget {
         child: Stack(
           children: [
             board,
-            SizedBox.square(
-              dimension: size,
-              child: Center(
-                child: SizedBox(
-                  width: (size / 8) * 6.6,
-                  height: (size / 8) * 4.6,
-                  child: boardOverlay,
-                ),
-              ),
-            ),
+            Positioned.fill(child: Center(child: boardOverlay)),
           ],
         ),
       );

@@ -1,13 +1,17 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
+import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
@@ -16,6 +20,8 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 class LobbyScreenLoadingContent extends StatefulWidget {
   const LobbyScreenLoadingContent(this.seek, this.cancelGameCreation);
@@ -37,44 +43,41 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
         orientation: Side.white,
         boardParams: GameBoardParams.emptyBoard,
         moves: const [],
-        boardOverlay: Card(
-          color: Theme.of(context).dialogTheme.backgroundColor,
-          elevation: 2.0,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(context.l10n.mobileWaitingForOpponentToJoin),
-                const SizedBox(height: 26.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(widget.seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
-                    const SizedBox(width: 8.0),
-                    Text(
-                      widget.seek.timeIncrement?.display ??
-                          '${context.l10n.daysPerTurn}: ${widget.seek.days}',
-                      style: TextTheme.of(context).titleLarge,
-                    ),
-                  ],
-                ),
-                //Do not show rating range if the default values (-500, +500) are used
-                if (widget.seek.ratingRange != null &&
-                    !(widget.seek.ratingRange!.$1 + 1000 == widget.seek.ratingRange!.$2)) ...[
-                  const SizedBox(height: 8.0),
-                  RatingPrefAware(
-                    child: Text(
-                      '${widget.seek.ratingRange!.$1}-${widget.seek.ratingRange!.$2}',
-                      style: TextTheme.of(context).titleMedium,
-                    ),
+        boardOverlay: _BoardOverlayCard(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(context.l10n.mobileWaitingForOpponentToJoin),
+              const SizedBox(height: 26.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(widget.seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
+                  const SizedBox(width: 8.0),
+                  Text(
+                    widget.seek.timeIncrement?.display ??
+                        '${context.l10n.daysPerTurn}: ${widget.seek.days}',
+                    style: TextTheme.of(context).titleLarge,
                   ),
                 ],
-                const SizedBox(height: 16.0),
-                _LobbyNumbers(),
+              ),
+              //Do not show rating range if the default values (-500, +500) are used
+              if (widget.seek.ratingRange != null &&
+                  !(widget.seek.ratingRange!.$1 + 1000 == widget.seek.ratingRange!.$2)) ...[
+                const SizedBox(height: 8.0),
+                RatingPrefAware(
+                  child: Text(
+                    '${widget.seek.ratingRange!.$1}-${widget.seek.ratingRange!.$2}',
+                    style: TextTheme.of(context).titleMedium,
+                  ),
+                ),
               ],
-            ),
+              const SizedBox(height: 16.0),
+              _LobbyNumbers(),
+            ],
           ),
         ),
         userActionsBar: BottomBar(
@@ -117,17 +120,17 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
   }
 }
 
-class ChallengeLoadingContent extends StatefulWidget {
-  const ChallengeLoadingContent(this.challenge, this.cancelChallenge);
+class UserChallengeLoadingContent extends StatefulWidget {
+  const UserChallengeLoadingContent(this.challenge, this.cancelChallenge);
 
   final ChallengeRequest challenge;
   final Future<void> Function() cancelChallenge;
 
   @override
-  State<ChallengeLoadingContent> createState() => _ChallengeLoadingContentState();
+  State<UserChallengeLoadingContent> createState() => _UserChallengeLoadingContentState();
 }
 
-class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
+class _UserChallengeLoadingContentState extends State<UserChallengeLoadingContent> {
   Future<void>? _cancelChallengeFuture;
 
   @override
@@ -137,39 +140,34 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
         orientation: Side.white,
         boardParams: GameBoardParams.emptyBoard,
         moves: const [],
-        boardOverlay: Card(
-          color: Theme.of(context).dialogTheme.backgroundColor,
-          elevation: 2.0,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(context.l10n.waitingForOpponent),
-                const SizedBox(height: 16.0),
-                UserFullNameWidget(
-                  user: widget.challenge.destUser,
-                  style: TextTheme.of(context).titleLarge,
-                ),
-                const SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      widget.challenge.perf.icon,
-                      color: DefaultTextStyle.of(context).style.color,
-                    ),
-                    const SizedBox(width: 8.0),
-                    Text(
-                      widget.challenge.timeIncrement?.display ??
-                          '${context.l10n.daysPerTurn}: ${widget.challenge.days}',
-                      style: TextTheme.of(context).titleLarge,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+        boardOverlay: _BoardOverlayCard(
+          padding: const EdgeInsets.all(40.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(context.l10n.waitingForOpponent),
+              const SizedBox(height: 16.0),
+              UserFullNameWidget(
+                user: widget.challenge.destUser,
+                style: TextTheme.of(context).titleLarge,
+              ),
+              const SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(widget.challenge.perf.icon, color: DefaultTextStyle.of(context).style.color),
+                  const SizedBox(width: 8.0),
+                  Text(
+                    widget.challenge.timeIncrement?.display ??
+                        '${context.l10n.daysPerTurn}: ${widget.challenge.days}',
+                    style: TextTheme.of(context).titleLarge,
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
         userActionsBar: BottomBar(
@@ -208,6 +206,163 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class OpenChallengeLoadingContent extends ConsumerStatefulWidget {
+  const OpenChallengeLoadingContent(this.challenge, this.cancelChallenge);
+
+  final Challenge challenge;
+  final Future<void> Function() cancelChallenge;
+
+  @override
+  ConsumerState<OpenChallengeLoadingContent> createState() => _OpenChallengeLoadingContentState();
+}
+
+class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadingContent> {
+  Future<void>? _cancelChallengeFuture;
+
+  @override
+  Widget build(BuildContext context) {
+    final challengeLink = 'https://$kLichessHost/${widget.challenge.id}';
+
+    final qrColor = ref.watch(currentBrightnessProvider) == Brightness.dark
+        ? Colors.white
+        : Colors.black;
+
+    return Column(
+      children: [
+        Expanded(
+          child: SafeArea(
+            child: GameLayout(
+              orientation: Side.white,
+              boardParams: GameBoardParams.emptyBoard,
+              moves: const [],
+              boardOverlay: _BoardOverlayCard(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 12.0,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          widget.challenge.perf.icon,
+                          color: DefaultTextStyle.of(context).style.color,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Text(
+                          widget.challenge.timeIncrement?.display ??
+                              '${context.l10n.daysPerTurn}: ${widget.challenge.days}',
+                          style: TextTheme.of(context).titleLarge,
+                        ),
+                      ],
+                    ),
+                    Text(context.l10n.toInviteSomeoneToPlayGiveThisUrl),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: GestureDetector(
+                        onTap: () async {
+                          await Clipboard.setData(ClipboardData(text: challengeLink));
+                          if (!context.mounted) return;
+                          showSnackBar(context, 'Copied.'); // TODO l10n
+                        },
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              const WidgetSpan(
+                                alignment: PlaceholderAlignment.middle,
+                                child: Icon(Icons.copy),
+                              ),
+                              TextSpan(text: ' $challengeLink'),
+                            ],
+                          ),
+                          style: TextTheme.of(context).bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Text(context.l10n.theFirstPersonToComeOnThisUrlWillPlayWithYou),
+
+                    Container(
+                      padding: const EdgeInsets.all(4.0),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: QrImageView(
+                        data: challengeLink,
+                        eyeStyle: QrEyeStyle(color: qrColor, eyeShape: QrEyeShape.square),
+                        dataModuleStyle: QrDataModuleStyle(
+                          color: qrColor,
+                          dataModuleShape: QrDataModuleShape.square,
+                        ),
+                        version: QrVersions.auto,
+                        size: 120.0,
+                        padding: const EdgeInsets.all(12.0),
+                      ),
+                    ),
+
+                    Text(context.l10n.orLetYourOpponentScanQrCode),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        BottomBar(
+          children: [
+            BottomBarButton(
+              label: 'Share challenge URL', // TODO l10n
+              onTap: () => launchShareDialog(context, ShareParams(text: challengeLink)),
+              showLabel: true,
+              icon: Icons.share,
+            ),
+            FutureBuilder(
+              future: _cancelChallengeFuture,
+              builder: (context, snapshot) {
+                return BottomBarButton(
+                  onTap: snapshot.connectionState == ConnectionState.waiting
+                      ? null
+                      : () async {
+                          setState(() {
+                            _cancelChallengeFuture = widget.cancelChallenge();
+                          });
+                          try {
+                            await _cancelChallengeFuture;
+                          } catch (_) {
+                            if (context.mounted) {
+                              showSnackBar(
+                                context,
+                                'Error cancelling challenge',
+                                type: SnackBarType.error,
+                              );
+                            }
+                          }
+                          if (context.mounted) {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          }
+                        },
+                  label: context.l10n.cancel,
+                  showLabel: true,
+                  icon: CupertinoIcons.xmark,
+                );
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -261,6 +416,7 @@ class LoadingPlayerWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
             flex: 6,
@@ -350,45 +506,36 @@ class ChallengeDeclinedBoard extends StatelessWidget {
               orientation: Side.white,
               boardParams: GameBoardParams.emptyBoard,
               moves: const [],
-              boardOverlay: Card(
-                color: Theme.of(context).dialogTheme.backgroundColor,
-                elevation: 2.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          context.l10n.challengeChallengeDeclined,
-                          style: TextTheme.of(context).titleMedium,
-                        ),
-                        const SizedBox(height: 8.0),
-                        Divider(height: 26.0, thickness: 0.0, color: textColor),
-                        Text(declineReason, style: const TextStyle(fontStyle: FontStyle.italic)),
-                        Divider(height: 26.0, thickness: 0.0, color: textColor),
-                        if (challenge.destUser != null)
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text(' — '),
-                                UserFullNameWidget(user: challenge.destUser?.user),
-                                if (challenge.destUser?.lagRating != null) ...[
-                                  const SizedBox(width: 6.0),
-                                  LagIndicator(
-                                    lagRating: challenge.destUser!.lagRating!,
-                                    size: 13.0,
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ),
-                      ],
+              boardOverlay: _BoardOverlayCard(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      context.l10n.challengeChallengeDeclined,
+                      style: TextTheme.of(context).titleMedium,
                     ),
-                  ),
+                    const SizedBox(height: 8.0),
+                    Divider(height: 26.0, thickness: 0.0, color: textColor),
+                    Text(declineReason, style: const TextStyle(fontStyle: FontStyle.italic)),
+                    Divider(height: 26.0, thickness: 0.0, color: textColor),
+                    if (challenge.destUser != null)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(' — '),
+                            UserFullNameWidget(user: challenge.destUser?.user),
+                            if (challenge.destUser?.lagRating != null) ...[
+                              const SizedBox(width: 6.0),
+                              LagIndicator(lagRating: challenge.destUser!.lagRating!, size: 13.0),
+                            ],
+                          ],
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -433,5 +580,22 @@ class _LobbyNumbers extends ConsumerWidget {
         ],
       );
     }
+  }
+}
+
+class _BoardOverlayCard extends StatelessWidget {
+  const _BoardOverlayCard({this.padding, required this.child});
+
+  final EdgeInsetsGeometry? padding;
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Theme.of(context).dialogTheme.backgroundColor,
+      elevation: 2.0,
+      child: Padding(padding: padding ?? const EdgeInsets.all(30.0), child: child),
+    );
   }
 }
