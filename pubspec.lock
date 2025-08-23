@@ -700,13 +700,14 @@ packages:
     source: hosted
     version: "0.1.0"
   flutter_secure_storage_linux:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: flutter_secure_storage_linux
-      sha256: "9b4b73127e857cd3117d43a70fa3dddadb6e0b253be62e6a6ab85caa0742182c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
+      path: flutter_secure_storage_linux
+      ref: "v10.0.0-beta.4-literal_operator_fix"
+      resolved-ref: b24fada37569fc042b01205dfbb9cd46d837b4fc
+      url: "https://github.com/christianfl/flutter_secure_storage.git"
+    source: git
+    version: "2.0.0"
   flutter_secure_storage_platform_interface:
     dependency: transitive
     description:
@@ -735,10 +736,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_slidable
-      sha256: ab7dbb16f783307c9d7762ede2593ce32c220ba2ba0fd540a3db8e9a3acba71a
+      sha256: e6bd17290cf0d011f9ed66c74d4159b8fe3b3050afedac0f11fab1ba8687e710
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "4.0.1"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -1555,7 +1556,7 @@ packages:
     source: hosted
     version: "2.5.6"
   sqflite_common_ffi:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: sqflite_common_ffi
       sha256: "9faa2fedc5385ef238ce772589f7718c24cdddd27419b609bb9c6f703ea27988"
