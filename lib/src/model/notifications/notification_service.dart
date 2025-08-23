@@ -274,6 +274,13 @@ class NotificationService {
           await show(NewMessageNotification(userId, notification.title!, notification.body!));
         }
 
+      // nothing to do here as it should be handled by the socket
+      case ChallengeCreateFcmMessage():
+        break;
+
+      // case ChallengeAcceptFcmMessage():
+      // // TODO: show notification
+
       case UnhandledFcmMessage(data: final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
 

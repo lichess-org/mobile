@@ -69,6 +69,26 @@ sealed class FcmMessage {
           } else {
             return MalformedFcmMessage(message.data);
           }
+        case 'challengeCreate':
+          final challengeId = message.data['lichess.challengeId'] as String?;
+          if (challengeId != null) {
+            return ChallengeCreateFcmMessage(
+              ChallengeId(challengeId),
+              notification: message.notification,
+            );
+          } else {
+            return MalformedFcmMessage(message.data);
+          }
+        case 'challengeAccept':
+          final challengeId = message.data['lichess.challengeId'] as String?;
+          if (challengeId != null) {
+            return ChallengeAcceptFcmMessage(
+              ChallengeId(challengeId),
+              notification: message.notification,
+            );
+          } else {
+            return MalformedFcmMessage(message.data);
+          }
         default:
           return UnhandledFcmMessage(message.data);
       }
@@ -97,6 +117,28 @@ class CorresGameUpdateFcmMessage extends FcmMessage {
 
   final GameFullId fullId;
   final PlayableGame? game;
+
+  @override
+  final RemoteNotification? notification;
+}
+
+/// An [FcmMessage] sent when a challenge is created.
+@immutable
+class ChallengeCreateFcmMessage extends FcmMessage {
+  const ChallengeCreateFcmMessage(this.id, {required this.notification});
+
+  final ChallengeId id;
+
+  @override
+  final RemoteNotification? notification;
+}
+
+/// An [FcmMessage] sent when a challenge is accepted.
+@immutable
+class ChallengeAcceptFcmMessage extends FcmMessage {
+  const ChallengeAcceptFcmMessage(this.id, {required this.notification});
+
+  final ChallengeId id;
 
   @override
   final RemoteNotification? notification;
