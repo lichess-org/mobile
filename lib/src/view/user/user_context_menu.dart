@@ -44,7 +44,7 @@ class UserContextMenu extends ConsumerWidget {
                   const SizedBox(height: 8.0),
                   if (value.profile?.bio != null)
                     Linkify(
-                      onOpen: (link) => onLinkifyOpen(context, link),
+                      onOpen: (link) async => await onLinkifyOpen(context, link, ref),
                       linkifiers: kLichessLinkifiers,
                       text: value.profile!.bio!,
                       maxLines: 20,

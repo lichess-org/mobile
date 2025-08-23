@@ -219,6 +219,23 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 )
               : body,
         );
+      case AsyncData(value: OpenChallengeCreatedState(:final challenge)):
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            leading: const SocketPingRatingIcon(),
+            title: _ChallengeGameTitle(
+              challenge: (widget.source as UserChallengeSource).challengeRequest,
+            ),
+          ),
+          body: PopScope(
+            canPop: false,
+            child: OpenChallengeLoadingContent(
+              challenge,
+              ref.read(createGameServiceProvider).cancelChallenge,
+            ),
+          ),
+        );
       case AsyncError(error: final e, stackTrace: final s):
         debugPrint('SEVERE: [GameScreen] could not create game; $e\n$s');
 
@@ -247,7 +264,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             seek,
             () => ref.read(createGameServiceProvider).cancelSeek(),
           ),
-          UserChallengeSource(:final challengeRequest) => ChallengeLoadingContent(
+          UserChallengeSource(:final challengeRequest) => UserChallengeLoadingContent(
             challengeRequest,
             () => ref.read(createGameServiceProvider).cancelChallenge(),
           ),

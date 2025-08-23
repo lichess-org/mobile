@@ -210,7 +210,7 @@ class _MessageBubble extends ConsumerWidget {
                     ).push(UserOrProfileScreen.buildRoute(context, message.user!)),
                   ),
                 Linkify(
-                  onOpen: (link) => onLinkifyOpen(context, link),
+                  onOpen: (link) async => await onLinkifyOpen(context, link, ref),
                   linkifiers: kLichessLinkifiers,
                   text: message.message,
                   style: TextStyle(color: _textColor(context, brightness)),

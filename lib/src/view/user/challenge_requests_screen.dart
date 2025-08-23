@@ -19,24 +19,121 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 class ChallengeRequestsScreen extends StatelessWidget {
-  const ChallengeRequestsScreen({super.key});
+  const ChallengeRequestsScreen({required this.incomingChallenge, super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ChallengeRequestsScreen());
+  final Challenge? incomingChallenge;
+
+  static Route<dynamic> buildRoute(BuildContext context, {Challenge? incomingChallenge}) {
+    return buildScreenRoute(
+      context,
+      screen: ChallengeRequestsScreen(incomingChallenge: incomingChallenge),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.preferencesNotifyChallenge)),
-      body: _Body(),
+      body: _Body(incomingChallenge: incomingChallenge),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
+void _showConfirmDialog(WidgetRef ref, BuildContext context, Challenge challenge) {
+  showAdaptiveActionSheet<void>(
+    context: context,
+    title: challenge.variant.isPlaySupported ? const Text('Do you accept the challenge?') : null,
+    actions: [
+      if (challenge.variant.isPlaySupported)
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.accept),
+          leading: Icon(Icons.check, color: context.lichessColors.good),
+          isDefaultAction: true,
+          onPressed: () => _acceptChallenge(ref, context, challenge),
+        ),
+      BottomSheetAction(
+        makeLabel: (context) => Text(context.l10n.decline),
+        leading: Icon(Icons.clear, color: context.lichessColors.error),
+        isDestructiveAction: true,
+        onPressed: () => _showDeclineDialog(ref, context, challenge),
+      ),
+    ],
+  );
+}
+
+Future<void> _declineChallenge(
+  WidgetRef ref,
+  Challenge challenge,
+  ChallengeDeclineReason? reason,
+) async {
+  ref.read(challengeRepositoryProvider).decline(challenge.id, reason: reason);
+  ref.read(notificationServiceProvider).cancel(challenge.id.value.hashCode);
+}
+
+void _showDeclineDialog(WidgetRef ref, BuildContext context, Challenge challenge) {
+  showAdaptiveActionSheet<ChallengeDeclineReason>(
+    context: context,
+    title: Text(context.l10n.decline),
+    actions: ChallengeDeclineReason.values
+        .map(
+          (reason) => BottomSheetAction(
+            makeLabel: (context) => Text(reason.label(context.l10n)),
+            leading: Icon(Icons.close, color: context.lichessColors.error),
+            isDestructiveAction: true,
+            onPressed: () {
+              _declineChallenge(ref, challenge, reason);
+            },
+          ),
+        )
+        .toList(),
+  );
+}
+
+Future<void> _acceptChallenge(WidgetRef ref, BuildContext context, Challenge challenge) async {
+  // Cancel any pending lobby seek before accepting, to prevent being matched into a new game
+  // while accepting a challenge.
+  try {
+    await ref.read(createGameServiceProvider).cancelSeek();
+  } catch (_) {}
+  final fullId = await ref.read(challengeServiceProvider).acceptChallenge(challenge.id);
+  if (!context.mounted) return;
+  if (fullId == null) {
+    return showSnackBar(context, 'Failed to accept challenge', type: SnackBarType.error);
+  }
+  Navigator.of(
+    context,
+    rootNavigator: true,
+  ).push(GameScreen.buildRoute(context, source: ExistingGameSource(fullId)));
+}
+
+class _Body extends ConsumerStatefulWidget {
+  const _Body({required this.incomingChallenge});
+
+  final Challenge? incomingChallenge;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends ConsumerState<_Body> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.incomingChallenge != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Correspondence games are currently not supported when not logged in,
+        // so only allow real time challenges.
+        if (widget.incomingChallenge!.timeControl == ChallengeTimeControlType.clock) {
+          _showConfirmDialog(ref, context, widget.incomingChallenge!);
+        } else {
+          showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final challengesAsync = ref.watch(challengesProvider);
     final authUser = ref.watch(authControllerProvider);
 
@@ -88,93 +185,23 @@ class _ChallengeListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Future<void> acceptChallenge() async {
-      // Cancel any pending lobby seek before accepting, to prevent being matched into a new game
-      // while accepting a challenge.
-      try {
-        await ref.read(createGameServiceProvider).cancelSeek();
-      } catch (_) {}
-      final fullId = await ref.read(challengeServiceProvider).acceptChallenge(challenge.id);
-      if (!context.mounted) return;
-      if (fullId == null) {
-        return showSnackBar(context, 'Failed to accept challenge', type: SnackBarType.error);
-      }
-      Navigator.of(
-        context,
-        rootNavigator: true,
-      ).push(GameScreen.buildRoute(context, source: ExistingGameSource(fullId)));
-    }
-
-    Future<void> declineChallenge(ChallengeDeclineReason? reason) async {
-      ref.read(challengeRepositoryProvider).decline(challenge.id, reason: reason);
-      ref.read(notificationServiceProvider).cancel(challenge.id.value.hashCode);
-    }
-
-    void showDeclineDialog() {
-      showAdaptiveActionSheet<ChallengeDeclineReason>(
-        context: context,
-        title: Text(context.l10n.decline),
-        actions: ChallengeDeclineReason.values
-            .map(
-              (reason) => BottomSheetAction(
-                makeLabel: (context) => Text(reason.label(context.l10n)),
-                leading: Icon(Icons.close, color: context.lichessColors.error),
-                isDestructiveAction: true,
-                onPressed: () {
-                  declineChallenge(reason);
-                },
-              ),
-            )
-            .toList(),
-      );
-    }
-
-    void showConfirmDialog() {
-      showAdaptiveActionSheet<void>(
-        context: context,
-        title: challenge.variant.isPlaySupported
-            ? const Text('Do you accept the challenge?')
-            : null,
-        actions: [
-          if (challenge.variant.isPlaySupported)
-            BottomSheetAction(
-              makeLabel: (context) => Text(context.l10n.accept),
-              leading: Icon(Icons.check, color: context.lichessColors.good),
-              isDefaultAction: true,
-              onPressed: acceptChallenge,
-            ),
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.decline),
-            leading: Icon(Icons.clear, color: context.lichessColors.error),
-            isDestructiveAction: true,
-            onPressed: showDeclineDialog,
-          ),
-        ],
-      );
-    }
-
-    void showMissingAccountMessage() {
-      showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
-    }
-
     return ChallengeListItem(
       challenge: challenge,
       challengerUser: challengerUser,
       onPressed: challenge.direction == ChallengeDirection.inward
-          ? authUser == null
-                ? showMissingAccountMessage
-                : showConfirmDialog
+          ? () => _showConfirmDialog(ref, context, challenge)
           : null,
       onAccept:
+          // TODO if outward challenge, can we press it to take us to the game screen?
           challenge.direction == ChallengeDirection.outward || !challenge.variant.isPlaySupported
           ? null
-          : authUser == null
-          ? showMissingAccountMessage
-          : acceptChallenge,
+          : () => _acceptChallenge(ref, context, challenge),
       onCancel: challenge.direction == ChallengeDirection.outward
           ? () => ref.read(challengeRepositoryProvider).cancel(challenge.id)
           : null,
-      onDecline: challenge.direction == ChallengeDirection.inward ? declineChallenge : null,
+      onDecline: challenge.direction == ChallengeDirection.inward
+          ? (reason) => _declineChallenge(ref, challenge, reason)
+          : null,
     );
   }
 }

@@ -289,7 +289,7 @@ class _DateBubble extends StatelessWidget {
   }
 }
 
-class _MessageBubble extends StatelessWidget {
+class _MessageBubble extends ConsumerWidget {
   const _MessageBubble({
     required this.message,
     required this.isMe,
@@ -320,7 +320,7 @@ class _MessageBubble extends StatelessWidget {
   static const _inGroupRadius = Radius.circular(4);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final time = DateFormat.Hm().format(message.date);
 
     return ChatBubbleContextMenu(
@@ -365,7 +365,7 @@ class _MessageBubble extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Linkify(
-                onOpen: (link) => onLinkifyOpen(context, link),
+                onOpen: (link) async => await onLinkifyOpen(context, link, ref),
                 linkifiers: kLichessLinkifiers,
                 text: message.text,
                 style: TextStyle(color: _textColor(context)),

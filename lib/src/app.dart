@@ -117,7 +117,7 @@ class _AppState extends ConsumerState<Application> {
     });
 
     super.initState();
-    _initAppLinks();
+    _initAppLinks(ref);
     _initSharingIntent();
   }
 
@@ -158,8 +158,8 @@ class _AppState extends ConsumerState<Application> {
     );
   }
 
-  Future<void> _initAppLinks() async {
-    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+  Future<void> _initAppLinks(WidgetRef ref) async {
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) async {
       // File links are handled by the sharing intent logic, so we can ignore them here.
       if (uri.scheme == 'file' || uri.scheme == 'content') {
         return;
@@ -170,7 +170,7 @@ class _AppState extends ConsumerState<Application> {
       }
       final context = _navigatorKey.currentContext;
       if (context != null && context.mounted) {
-        handleAppLink(context, uri);
+        await handleAppLink(context, uri, ref);
       }
     });
   }

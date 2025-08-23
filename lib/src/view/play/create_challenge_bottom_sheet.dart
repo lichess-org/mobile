@@ -27,9 +27,9 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 
 class CreateChallengeBottomSheet extends ConsumerStatefulWidget {
-  const CreateChallengeBottomSheet(this.user, {this.positionFen});
+  const CreateChallengeBottomSheet({this.user, this.positionFen});
 
-  final LightUser user;
+  final LightUser? user;
   final String? positionFen;
 
   @override

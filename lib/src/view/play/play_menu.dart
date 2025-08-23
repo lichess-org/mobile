@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/correspondence_challenges_screen.dart';
+import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/create_game_widget.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -77,6 +78,22 @@ class PlayMenu extends ConsumerWidget {
               },
               leading: const Icon(Icons.table_restaurant_outlined),
               title: Text(context.l10n.mobileOverTheBoard),
+            ),
+            ListTile(
+              onTap: () {
+                // Pops the play bottom sheet
+                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  useRootNavigator: true,
+                  builder: (context) {
+                    return const CreateChallengeBottomSheet(user: null);
+                  },
+                );
+              },
+              leading: const Icon(LichessIcons.crossed_swords),
+              title: Text(context.l10n.challengeAFriend),
             ),
           ],
         ),

@@ -1,135 +1,276 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/app_links.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
+import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
+import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockBuildContext extends Mock implements BuildContext {}
+import 'example_data.dart';
+import 'model/game/game_socket_example_data.dart';
+import 'network/fake_websocket_channel.dart';
+import 'test_provider_scope.dart';
+
+class MockGameRespository extends Mock implements GameRepository {}
+
+class MockChallengeRepository extends Mock implements ChallengeRepository {}
+
+class _TestWidget extends ConsumerWidget {
+  const _TestWidget({required this.uri});
+
+  final Uri uri;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ElevatedButton(
+      onPressed: () {
+        handleAppLink(context, uri, ref);
+      },
+      child: const Text('test link'),
+    );
+  }
+}
+
+Future<void> triggerAppLink(
+  WidgetTester tester,
+  Uri appLinkUri, {
+  Map<ProviderOrFamily, Override>? overrides,
+}) async {
+  final app = await makeTestProviderScopeApp(
+    tester,
+    overrides: overrides,
+    home: _TestWidget(uri: appLinkUri),
+  );
+  await tester.pumpWidget(app);
+  await tester.tap(find.text('test link'));
+}
 
 void main() {
-  late MockBuildContext mockContext;
-
-  setUp(() {
-    mockContext = MockBuildContext();
-  });
-
   group('resolveAppLinkUri', () {
-    test('returns null for an empty path', () {
+    testWidgets('Nothing happens for an empty path', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/');
-      final result = resolveAppLinkUri(mockContext, uri);
-      expect(result, isNull);
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle(); // Wait for any navigation to complete
+      expect(find.text('test link'), findsOneWidget); // Still on the same screen
     });
 
-    test('resolves /study/{id} to StudyScreen route', () {
+    testWidgets('resolves /study/{id} to StudyScreen route', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/study/p9uY0321');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle(); // Wait study screen to load
       expect(
-        resolveAppLinkUri(mockContext, uri)!.first,
-        isA<MaterialScreenRoute>().having(
-          (r) => r.screen,
-          'screen',
-          isA<StudyScreen>().having((s) => s.id, 'id', 'p9uY0321'),
-        ),
+        tester.widget(find.byType(StudyScreen)),
+        isA<StudyScreen>().having((s) => s.id, 'id', 'p9uY0321'),
       );
     });
 
-    test('resolves /training/{id} to PuzzleScreen route', () {
+    testWidgets('resolves /training/{id} to PuzzleScreen route', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/training/61044');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle(); // Wait puzzle screen to load
       expect(
-        resolveAppLinkUri(mockContext, uri)!.first,
-        isA<MaterialScreenRoute>().having(
-          (r) => r.screen,
-          'screen',
-          isA<PuzzleScreen>().having((s) => s.puzzleId, 'id', '61044'),
-        ),
+        tester.widget(find.byType(PuzzleScreen)),
+        isA<PuzzleScreen>().having((s) => s.puzzleId, 'id', '61044'),
       );
     });
 
-    test('resolves /tournament/{id} to TournamentScreen route', () {
+    testWidgets('resolves /tournament/{id} to TournamentScreen route', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/tournament/61044');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle(); // Wait tournament screen to load
       expect(
-        resolveAppLinkUri(mockContext, uri)!.first,
-        isA<MaterialScreenRoute>().having(
-          (r) => r.screen,
-          'screen',
-          isA<TournamentScreen>().having((s) => s.id, 'tournament id', '61044'),
-        ),
+        tester.widget(find.byType(TournamentScreen)),
+        isA<TournamentScreen>().having((s) => s.id, 'id', '61044'),
       );
     });
 
-    test('resolves /broadcast/.../{roundId}/{gameId} to two routes (stacking)', () {
+    testWidgets('resolves /broadcast/.../{roundId}/{gameId} to two routes (stacking)', (
+      WidgetTester tester,
+    ) async {
       // Broadcast URLs have many segments: /broadcast/slug/name/roundId/gameId
       final uri = Uri.parse(
         'https://lichess.org/broadcast/candidates-2024/round-1/abcde123/zxcvb456',
       );
-      final routes = resolveAppLinkUri(mockContext, uri);
-      // Should have Round screen followed by Game screen
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle(); // Wait for navigation to complete
+
       expect(
-        routes?.first,
-        isA<MaterialScreenRoute>().having(
-          (r) => r.screen,
-          'screen',
-          isA<BroadcastRoundScreenLoading>().having((s) => s.roundId, 'id', 'abcde123'),
-        ),
+        tester.widget(find.byType(BroadcastGameScreen)),
+        isA<BroadcastGameScreen>().having((s) => s.gameId, 'id', 'zxcvb456'),
       );
+
+      await tester.pageBack(); // Should have pushed round screen first, game screen on top of it
+      await tester.pumpAndSettle(); // Wait for navigation to complete
+
       expect(
-        routes?.last,
-        isA<MaterialScreenRoute>().having(
-          (r) => r.screen,
-          'screen',
-          isA<BroadcastGameScreen>().having((s) => s.gameId, 'id', 'zxcvb456'),
-        ),
+        tester.widget(find.byType(BroadcastRoundScreenLoading)),
+        isA<BroadcastRoundScreenLoading>().having((s) => s.roundId, 'id', 'abcde123'),
       );
     });
 
-    test('resolves /gameid link', () {
+    final finishedGame = generateExportedGames(count: 1).first.copyWith(status: GameStatus.draw);
+
+    testWidgets('resolves /gameid link for finished game', (WidgetTester tester) async {
       // lichess.org/gameid -> Opens analysis at the first move
-      final uri = Uri.parse('https://lichess.org/qwertyui');
+      final uri = Uri.parse('https://lichess.org/${finishedGame.id.value}');
+      final mockGameRepository = MockGameRespository();
+      when(() => mockGameRepository.getGame(finishedGame.id)).thenAnswer((_) async => finishedGame);
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
+        },
+      );
+      await tester.pumpAndSettle(); // Wait analysis screen to load
+
       expect(
-        resolveAppLinkUri(mockContext, uri)!.first,
-        isA<MaterialScreenRoute>().having(
-          (r) => r.screen,
-          'screen',
-          isA<AnalysisScreen>()
-              .having((s) => s.options.gameId, 'id', 'qwertyui')
-              .having((s) => s.options.initialMoveCursor, 'move number', 0),
-        ),
+        tester.widget(find.byType(AnalysisScreen)),
+        isA<AnalysisScreen>()
+            .having((s) => s.options.gameId, 'id', finishedGame.id.value)
+            .having((s) => s.options.initialMoveCursor, 'move number', 0),
       );
     });
 
-    test('resolves /gameid analysis link with ply fragment', () {
+    testWidgets('resolves /gameid link for finished game with ply fragment', (
+      WidgetTester tester,
+    ) async {
       // lichess.org/gameid#20 -> Opens analysis at move 20
-      final uri = Uri.parse('https://lichess.org/qwertyui#20');
+      final uri = Uri.parse('https://lichess.org/${finishedGame.id.value}#20');
+      final mockGameRepository = MockGameRespository();
+      when(() => mockGameRepository.getGame(finishedGame.id)).thenAnswer((_) async => finishedGame);
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
+        },
+      );
+      await tester.pumpAndSettle(); // Wait for analysis screen to load
+
       expect(
-        resolveAppLinkUri(mockContext, uri)!.first,
-        isA<MaterialScreenRoute>().having(
-          (r) => r.screen,
-          'screen',
-          isA<AnalysisScreen>()
-              .having((s) => s.options.gameId, 'id', 'qwertyui')
-              .having((s) => s.options.initialMoveCursor, 'move number', 20),
-        ),
+        tester.widget(find.byType(AnalysisScreen)),
+        isA<AnalysisScreen>()
+            .having((s) => s.options.gameId, 'id', finishedGame.id.value)
+            .having((s) => s.options.initialMoveCursor, 'move number', 20),
       );
     });
 
-    test('resolves /gameid/black analysis link', () {
-      final uri = Uri.parse('https://lichess.org/qwertyui/black');
+    testWidgets('resolves /gameid/black finished game link', (WidgetTester tester) async {
+      final uri = Uri.parse('https://lichess.org/${finishedGame.id.value}/black');
+      final mockGameRepository = MockGameRespository();
+      when(() => mockGameRepository.getGame(finishedGame.id)).thenAnswer((_) async => finishedGame);
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
+        },
+      );
+      await tester.pumpAndSettle(); // Wait for analysis screen to load
+
       expect(
-        resolveAppLinkUri(mockContext, uri)!.first,
-        isA<MaterialScreenRoute>().having(
-          (r) => r.screen,
-          'screen',
-          isA<AnalysisScreen>()
-              .having((s) => s.options.gameId, 'id', 'qwertyui')
-              .having((s) => s.options.orientation, 'player color', Side.black),
+        tester.widget(find.byType(AnalysisScreen)),
+        isA<AnalysisScreen>()
+            .having((s) => s.options.gameId, 'id', finishedGame.id.value)
+            .having((s) => s.options.orientation, 'player color', Side.black),
+      );
+    });
+
+    testWidgets('resolves /gameid link for ongoing game', (WidgetTester tester) async {
+      final mockGameRepository = MockGameRespository();
+      final ongoingGame = generateExportedGames(count: 1).first.copyWith(
+        status: GameStatus.started,
+        black: const Player(
+          user: LightUser(id: UserId('blackId'), name: 'Black'),
+        ),
+        white: const Player(
+          user: LightUser(id: UserId('whiteId'), name: 'White'),
         ),
       );
+      when(() => mockGameRepository.getGame(ongoingGame.id)).thenAnswer((_) async => ongoingGame);
+
+      final uri = Uri.parse('https://lichess.org/${ongoingGame.id.value}');
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
+        },
+      );
+
+      await tester.pump(kFakeWebSocketConnectionLag);
+
+      sendServerSocketMessages(Uri(path: '/watch/${ongoingGame.id.value}/white/v6'), [
+        makeFullEvent(
+          ongoingGame.id,
+          '',
+          whiteUserName: ongoingGame.white.user!.name,
+          blackUserName: ongoingGame.black.user!.name,
+        ),
+      ]);
+      await tester.pump(); // Process socket message
+
+      await tester.pumpAndSettle(); // Wait for TV screen to load
+
+      expect(
+        tester.widget(find.byType(TvScreen)),
+        isA<TvScreen>().having((s) => s.initialGame?.$1, 'id', ongoingGame.id),
+      );
+    });
+
+    testWidgets('resolves /challengeId link for open challenge', (WidgetTester tester) async {
+      const challenge = Challenge(
+        id: ChallengeId('abcdefgh'),
+        status: ChallengeStatus.created,
+        variant: Variant.standard,
+        speed: Speed.blitz,
+        timeControl: ChallengeTimeControlType.clock,
+        rated: true,
+        sideChoice: SideChoice.white,
+      );
+      final uri = Uri.parse('https://lichess.org/${challenge.id.value}');
+      final mockChallengeRepository = MockChallengeRepository();
+      when(() => mockChallengeRepository.show(challenge.id)).thenAnswer((_) async => challenge);
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          challengeRepositoryProvider: challengeRepositoryProvider.overrideWith(
+            (_) => mockChallengeRepository,
+          ),
+        },
+      );
+      await tester.pumpAndSettle(); // Wait for challenge screen to load
+
+      expect(
+        tester.widget(find.byType(ChallengeRequestsScreen)),
+        isA<ChallengeRequestsScreen>().having((s) => s.incomingChallenge, 'challenge', challenge),
+      );
+      expect(find.text('Do you accept the challenge?'), findsOneWidget);
     });
   });
 }

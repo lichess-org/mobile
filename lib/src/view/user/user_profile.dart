@@ -64,7 +64,7 @@ class UserProfileWidget extends ConsumerWidget {
               Padding(padding: const EdgeInsets.only(bottom: 5), child: userFullName),
             if (user.profile?.bio != null)
               Linkify(
-                onOpen: (link) => onLinkifyOpen(context, link),
+                onOpen: (link) async => await onLinkifyOpen(context, link, ref),
                 linkifiers: kLichessLinkifiers,
                 text: user.profile!.bio!,
                 maxLines: bioMaxLines,
