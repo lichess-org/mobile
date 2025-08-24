@@ -841,9 +841,6 @@ class AppLocalizationsMk extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Official website';
 
   @override
-  String get broadcastStandings => 'Standings';
-
-  @override
   String get broadcastOfficialStandings => 'Official Standings';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get winner => 'Победник';
 
   @override
-  String get standing => 'Положба';
+  String get standings => 'Standings';
 
   @override
   String get createANewTournament => 'Отвори нов турнир';

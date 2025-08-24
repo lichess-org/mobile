@@ -479,7 +479,7 @@
   <string name="openTournaments">Åpne turneringer</string>
   <string name="duration">Varighet</string>
   <string name="winner">Vinner</string>
-  <string name="standing">Resultatliste</string>
+  <string name="standings">Resultatliste</string>
   <string name="createANewTournament">Opprett en ny turnering</string>
   <string name="tournamentCalendar">Turneringskalender</string>
   <string name="conditionOfEntry">Betingelse for å delta:</string>
@@ -1009,4 +1009,5 @@ Alle kostnader for drift, utvikling og innhold finansieres utelukkende av bruker
   <string name="accessibility">Tilgjengelighet</string>
   <string name="enableBlindMode">Aktiver blindemodus</string>
   <string name="disableBlindMode">Deaktiver blindemodus</string>
+  <string name="copyToClipboard">Kopier til utklippstavlen</string>
 </resources>

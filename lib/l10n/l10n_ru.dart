@@ -881,9 +881,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Официальный веб-сайт';
 
   @override
-  String get broadcastStandings => 'Турнирная таблица';
-
-  @override
   String get broadcastOfficialStandings => 'Официальная турнирная таблица';
 
   @override
@@ -3218,7 +3215,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get winner => 'Победитель';
 
   @override
-  String get standing => 'Турнирная таблица';
+  String get standings => 'Турнирная таблица';
 
   @override
   String get createANewTournament => 'Создать турнир';
@@ -4809,7 +4806,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get disableBlindMode => 'Выключить слепой режим';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Скопировать в буфер обмена';
 
   @override
   String opponentLeftCounter(int count) {

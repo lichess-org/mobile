@@ -36,7 +36,7 @@ void main() {
         ),
         daysPerTurn: null,
         startedAtTurn: null,
-        rules: null,
+        rules: ISet(const [GameRule.noClaimWin]),
         opening: null,
       ),
     );
@@ -73,6 +73,7 @@ const _gameJson = '''
         "id": 20,
         "name": "started"
       },
+      "rules": ["noClaimWin"],
       "createdAt": 1685698678928,
       "pgn": "e4 e6 Nf3 f6"
   },

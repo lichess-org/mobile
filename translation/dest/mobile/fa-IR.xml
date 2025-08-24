@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">تنظیمات حساب کاربری</string>
-  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">این تنظیمات به اکانت لیچستون اعمال میشود و در سراسر دستگاه های شما استفاده میشود.</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">این تنظیمات به اکانت لیچس‌تان اعمال می‌شود و در سراسر دستگاه های شما استفاده می‌شود.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">همه بازی‌ها</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">مطمئنید؟</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">تنظیمات صفحه</string>
@@ -22,7 +22,7 @@
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">توجه داشته باشین که تمام غابلیت های نرم‌افزار های قدیمی و وبسایت در حال حاضر موجود هستند، ولی ما در تمام مدت داریم غابلیت های جدید اضافه میکنیم.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">شما هیچ کاربری را نمی‌دنبالید.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">باشه</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">سَرِ صفحه</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">سَرِ صفحه</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">کاربران با پیوند «%s»</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">چپ</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">راست</string>
@@ -39,18 +39,23 @@
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">تحلیل سرور</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">جای ساعت</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">پیش فرض ها</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">هدف مهره کشیده شده</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">دایره</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">مربع</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">علامت های صفحه ی خانه</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">حالت فراگیر</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">پنهان کردن رابط کاربری سیستم موقع بازی. اگر ژست‌های حرکتی سیستم (مثل دکمهٔ بازگشت) در لبه‌های صفحه مزاحمتان است، از این گزینه استفاده کنید. این تنظیم برای صفحه‌های بازی و معما اعمال می‌شود.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">مهره‌های زده‌شده</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">انتخاب عکس</string>
   <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">پس زمینه انتخوابی فقط در حالت سیاه کار میکند. عکس سیاه پیشنهاد میشود</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">تصویر را تار کنید</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">تاپدید کردن صفحه</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">پدیدار کردن صفحه</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">برای نمایش تنظیمات دیگر انگشت خود را بکشید</string>
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">یا بکشید یا ضربه بزنید</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">انتخاب دو مربع مبدا و مقصد</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">فلش کشیدن</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">فلش ها را با دو انگشت بکشید: یک انگشت در یک خانه ی خالی و انگشت دیگر را بکشید تا بتوانسد فلش بکشید.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">نمایش حاشیه</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">بازخورد لمسی</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">در صورت فعال شدن ، دستگاه شما زمانی که حرکتی انجام میدهید یا مهره ای را میگیرید و ویبره میشود</string>

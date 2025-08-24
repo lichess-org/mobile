@@ -90,7 +90,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobilePositionLeft => 'Злева';
 
   @override
-  String get mobilePositionRight => 'Зправа';
+  String get mobilePositionRight => 'Справа';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
@@ -120,7 +120,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileRecentSearches => 'Нядаўнія пошукі';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Выдаліць закладку';
 
   @override
   String get mobileServerAnalysis => 'Server analysis';
@@ -877,9 +877,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get broadcastOfficialWebsite => 'Official website';
-
-  @override
-  String get broadcastStandings => 'Standings';
 
   @override
   String get broadcastOfficialStandings => 'Official Standings';
@@ -3210,7 +3207,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get winner => 'Пераможца';
 
   @override
-  String get standing => 'Турнірная табліца';
+  String get standings => 'Standings';
 
   @override
   String get createANewTournament => 'Стварыць новы турнір';

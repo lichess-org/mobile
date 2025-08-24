@@ -841,9 +841,6 @@ class AppLocalizationsGl extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Páxina web oficial';
 
   @override
-  String get broadcastStandings => 'Clasificación';
-
-  @override
   String get broadcastOfficialStandings => 'Clasificación oficial';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get winner => 'Gañador';
 
   @override
-  String get standing => 'Posición';
+  String get standings => 'Clasificación';
 
   @override
   String get createANewTournament => 'Crear un novo torneo';
@@ -3451,7 +3448,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get reportProcessedFasterInEnglish => 'A túa denuncia será procesada máis rápido se está escrita en Inglés.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Por favor, incorpora cando menos unha ligazón a unha partida na que se fixeron trampas.';
+  String get error_provideOneCheatedGameLink => 'Por favor, proporciona cando menos unha ligazón a unha partida na que sospeites que se fixeron trampas.';
 
   @override
   String by(String param) {
@@ -6140,8 +6137,8 @@ class AppLocalizationsGl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hai $count minutos',
-      one: 'Hai $count minuto',
+      other: 'hai $count minutos',
+      one: 'hai $count minuto',
     );
     return '$_temp0';
   }
@@ -6151,8 +6148,8 @@ class AppLocalizationsGl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hai $count horas',
-      one: 'Hai $count hora',
+      other: 'hai $count horas',
+      one: 'hai $count hora',
     );
     return '$_temp0';
   }
@@ -6162,8 +6159,8 @@ class AppLocalizationsGl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hai $count días',
-      one: 'Hai $count día',
+      other: 'hai $count días',
+      one: 'hai $count día',
     );
     return '$_temp0';
   }
@@ -6173,8 +6170,8 @@ class AppLocalizationsGl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hai $count semanas',
-      one: 'Hai $count semana',
+      other: 'hai $count semanas',
+      one: 'hai $count semana',
     );
     return '$_temp0';
   }
@@ -6184,8 +6181,8 @@ class AppLocalizationsGl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hai $count meses',
-      one: 'Hai $count mes',
+      other: 'hai $count meses',
+      one: 'hai $count mes',
     );
     return '$_temp0';
   }
@@ -6195,8 +6192,8 @@ class AppLocalizationsGl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hai $count anos',
-      one: 'Hai $count ano',
+      other: 'hai $count anos',
+      one: 'hai $count ano',
     );
     return '$_temp0';
   }

@@ -156,7 +156,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Scegli un\'immagine';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Lo sfondo personalizzato funziona solo in modalità scura. Si consiglia di usare un\'immagine scura.';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'Blur the image';
@@ -839,9 +839,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get broadcastOfficialWebsite => 'Sito web ufficiale';
-
-  @override
-  String get broadcastStandings => 'Classifica';
 
   @override
   String get broadcastOfficialStandings => 'Classifica Ufficiale';
@@ -3162,7 +3159,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get winner => 'Vincitore';
 
   @override
-  String get standing => 'Classifica';
+  String get standings => 'Classifica';
 
   @override
   String get createANewTournament => 'Crea un nuovo torneo';

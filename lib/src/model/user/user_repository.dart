@@ -1,19 +1,29 @@
 import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
+/// A provider for the [UserRepository].
+final userRepositoryProvider = Provider<UserRepository>((ref) {
+  final client = ref.read(lichessClientProvider);
+  final aggregator = ref.read(aggregatorProvider);
+  return UserRepository(client, aggregator);
+}, name: 'UserRepositoryProvider');
+
 class UserRepository {
-  UserRepository(this.client);
+  UserRepository(this.client, this.aggregator);
 
   final LichessClient client;
+  final Aggregator aggregator;
 
   Future<User> getUser(UserId id, {bool withCanChallenge = false}) {
     return client.readJson(
@@ -61,7 +71,10 @@ class UserRepository {
   }
 
   Future<IList<Streamer>> getLiveStreamers() {
-    return client.readJsonList(Uri(path: '/api/streamer/live'), mapper: _streamersFromJson);
+    return aggregator.readJsonList(
+      Uri(path: '/api/streamer/live'),
+      mapper: Streamer.fromServerJson,
+    );
   }
 
   Future<IMap<Perf, LeaderboardUser>> getTop1() {
@@ -262,27 +275,6 @@ UserPerfGame _userPerfGameFromPick(RequiredPick pick) {
     opponentId: opId('id').asStringOrNull(),
     opponentName: opId('name').asStringOrNull(),
     opponentTitle: opId('title').asStringOrNull(),
-  );
-}
-
-Streamer _streamersFromJson(Map<String, dynamic> json) => _streamersFromPick(pick(json).required());
-
-Streamer _streamersFromPick(RequiredPick pick) {
-  final stream = pick('stream');
-  final streamer = pick('streamer');
-  return Streamer(
-    username: pick('name').asStringOrThrow(),
-    id: pick('id').asUserIdOrThrow(),
-    patron: pick('patron').asBoolOrNull(),
-    platform: stream('service').asStringOrThrow(),
-    status: stream('status').asStringOrThrow(),
-    lang: stream('lang').asStringOrThrow(),
-    streamerName: streamer('name').asStringOrThrow(),
-    headline: streamer('headline').asStringOrNull(),
-    title: pick('title').asStringOrNull(),
-    image: streamer('image').asStringOrNull(),
-    twitch: streamer('twitch').asStringOrNull(),
-    youTube: streamer('youTube').asStringOrNull(),
   );
 }
 

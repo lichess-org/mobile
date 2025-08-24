@@ -821,9 +821,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastOfficialWebsite => '公式サイト';
 
   @override
-  String get broadcastStandings => '順位';
-
-  @override
   String get broadcastOfficialStandings => '公式順位';
 
   @override
@@ -3134,7 +3131,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get winner => '勝者';
 
   @override
-  String get standing => '順位';
+  String get standings => '順位';
 
   @override
   String get createANewTournament => '新しいトーナメントを作る';

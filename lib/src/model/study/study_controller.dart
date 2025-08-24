@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -133,7 +134,7 @@ class StudyController extends _$StudyController
     try {
       _root = Root.fromPgnGame(game);
     } on PositionSetupException {
-      return StudyState(
+      final illegalPositionState = StudyState(
         variant: variant,
         study: study,
         currentPath: UciPath.empty,
@@ -144,7 +145,7 @@ class StudyController extends _$StudyController
         // since the position is illegal and `isComputerAnalysisAllowed` is false anyway.
         evaluationContext: EvaluationContext(
           variant: variant,
-          initialPosition: study.chapter.setup.variant.initialPosition,
+          initialPosition: Variant.standard.initialPosition,
         ),
         pgnRootComments: rootComments,
         pov: orientation,
@@ -152,6 +153,8 @@ class StudyController extends _$StudyController
         gamebookActive: false,
         pgn: pgn,
       );
+      state = AsyncData(illegalPositionState);
+      return illegalPositionState;
     }
 
     const currentPath = UciPath.empty;
@@ -221,6 +224,7 @@ class StudyController extends _$StudyController
     if (state.requireValue.isAtStartOfChapter &&
         state.requireValue.gamebookActive &&
         state.requireValue.gamebookComment == null &&
+        state.requireValue.currentPosition != null &&
         state.requireValue.currentPosition!.turn != state.requireValue.pov) {
       _opponentFirstMoveTimer = Timer(const Duration(milliseconds: 750), () {
         userNext();
@@ -586,6 +590,9 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
 
   PlayerSide get playerSide =>
       gamebookActive ? (pov == Side.white ? PlayerSide.white : PlayerSide.black) : PlayerSide.both;
+
+  ChatOptions? get chatOptions =>
+      study.chat != null ? StudyChatOptions(id: study.id, writeable: study.chat!.writeable) : null;
 }
 
 @freezed

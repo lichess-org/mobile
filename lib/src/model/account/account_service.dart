@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/model/notifications/notifications.dart'
     show LocalNotification, PlaybanNotification;
 import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan, User;
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
@@ -122,7 +121,7 @@ class AccountService {
     final session = _ref.read(authSessionProvider);
     if (session == null) return;
 
-    await _ref.withClient((client) => AccountRepository(client).bookmark(id, bookmark: bookmark));
+    await _ref.read(accountRepositoryProvider).bookmark(id, bookmark: bookmark);
 
     _bookmarkChangesController.add((id, bookmark));
   }

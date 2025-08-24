@@ -168,7 +168,7 @@
   <string name="drawByMutualAgreement">Remis durch Einigung</string>
   <string name="fiftyMovesWithoutProgress">50 Züge ohne Spielfortschritt</string>
   <string name="currentGames">Laufende Partien</string>
-  <string name="joinedX">Ist vor %s beigetreten</string>
+  <string name="joinedX">Ist %s beigetreten</string>
   <plurals name="nbGames">
     <item quantity="one">%s Partie</item>
     <item quantity="other">%s Partien</item>
@@ -479,7 +479,7 @@
   <string name="openTournaments">Offene Turniere</string>
   <string name="duration">Dauer</string>
   <string name="winner">Gewinner</string>
-  <string name="standing">Tabelle</string>
+  <string name="standings">Tabelle</string>
   <string name="createANewTournament">Neues Turnier erstellen</string>
   <string name="tournamentCalendar">Turnierkalender</string>
   <string name="conditionOfEntry">Teilnahmebedingung:</string>

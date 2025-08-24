@@ -70,7 +70,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileNoSearchResults => 'Sonuç bulunamadı';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Eski uygulamadaki veya web sitesindeki tüm özelliklerin şu anda mevcut olmadığını, ancak her zaman özellik eklediğimizi lütfen unutmayın.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Hiçbir kullanıcıyı takip etmiyorsunuz.';
@@ -123,7 +123,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Yer işaretini kaldır';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Sunucu analizi';
 
   @override
   String get mobileSettingsClockPosition => 'Saat pozisyonu';
@@ -132,7 +132,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSettingsCustomBackgroundPresets => 'Hazırlar';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Sürüklenen taşın hedefi';
 
   @override
   String get mobileSettingsDraggedTargetCircle => 'Daire';
@@ -839,9 +839,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get broadcastOfficialWebsite => 'Resmî site';
-
-  @override
-  String get broadcastStandings => 'Sıralamalar';
 
   @override
   String get broadcastOfficialStandings => 'Resmi Sıralamalar';
@@ -3162,7 +3159,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get winner => 'Kazanan';
 
   @override
-  String get standing => 'Sıralama';
+  String get standings => 'Sıralamalar';
 
   @override
   String get createANewTournament => 'Yeni bir turnuva oluştur';
@@ -4753,7 +4750,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get disableBlindMode => 'Kör modunu devre dışı bırak';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Panoya kopyala';
 
   @override
   String opponentLeftCounter(int count) {

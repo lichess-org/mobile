@@ -12,7 +12,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileAccountPreferences => 'تنظیمات حساب کاربری';
 
   @override
-  String get mobileAccountPreferencesHelp => 'این تنظیمات به اکانت لیچستون اعمال میشود و در سراسر دستگاه های شما استفاده میشود.';
+  String get mobileAccountPreferencesHelp => 'این تنظیمات به اکانت لیچس‌تان اعمال می‌شود و در سراسر دستگاه های شما استفاده می‌شود.';
 
   @override
   String get mobileAllGames => 'همه بازی‌ها';
@@ -132,7 +132,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsCustomBackgroundPresets => 'پیش فرض ها';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'هدف مهره کشیده شده';
 
   @override
   String get mobileSettingsDraggedTargetCircle => 'دایره';
@@ -147,7 +147,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'حالت فراگیر';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'پنهان کردن رابط کاربری سیستم موقع بازی. اگر ژست‌های حرکتی سیستم (مثل دکمهٔ بازگشت) در لبه‌های صفحه مزاحمتان است، از این گزینه استفاده کنید. این تنظیم برای صفحه‌های بازی و معما اعمال می‌شود.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'مهره‌های زده‌شده';
@@ -168,7 +168,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'پدیدار کردن صفحه';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'برای نمایش تنظیمات دیگر انگشت خود را بکشید';
 
   @override
   String get mobileSettingsPieceShiftMethodEither => 'یا بکشید یا ضربه بزنید';
@@ -177,10 +177,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'انتخاب دو مربع مبدا و مقصد';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'فلش کشیدن';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'فلش ها را با دو انگشت بکشید: یک انگشت در یک خانه ی خالی و انگشت دیگر را بکشید تا بتوانسد فلش بکشید.';
 
   @override
   String get mobileSettingsShowBorder => 'نمایش حاشیه';
@@ -640,10 +640,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'نیاز به یک عنوان رسمی برای پیوستن به مسابقه است';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'The tournament pairings are now closed.';
+  String get arenaTournamentPairingsAreNowClosed => 'تعیین حریف به اتمام رسیده است.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'امتیاز برسرک';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -730,7 +730,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastSourceUrlHelp => 'وب‌نشانی‌ای که Lichess برای دریافت به‌روزرسانی‌های PGN می‌بررسد. آن باید از راه اینترنت در دسترس همگان باشد.';
 
   @override
-  String get broadcastSourceGameIds => 'تا ۶۴ شناسهٔ بازی Lichess، جداشده با فاصله.';
+  String get broadcastSourceGameIds => 'تا ۶۴ شناسهٔ بازی لیچس، جداشده با فاصله.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
@@ -841,9 +841,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastOfficialWebsite => 'وبگاه رسمی';
 
   @override
-  String get broadcastStandings => 'رده‌بندی';
-
-  @override
   String get broadcastOfficialStandings => 'رده‌بندی رسمی';
 
   @override
@@ -894,20 +891,20 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastAllBroadcastsByMonth => 'دیدن پخش‌های هر ماه';
 
   @override
-  String get broadcastBackToLiveMove => 'Back to live move';
+  String get broadcastBackToLiveMove => 'بازگشت به حرکت زنده';
 
   @override
-  String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
+  String get broadcastSinceHideResults => 'چون شما پنهان کردن نتایج را انتخاب کردید، تمام صفحه‌های پیش‌نمایش برای جلوگیری از لو رفتن نتیجه، خالی هستند.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'صفحه زنده';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'پخش همگانی';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'ایجاد و مدیریت‌شده توسط $param.';
   }
 
   @override
@@ -926,8 +923,8 @@ class AppLocalizationsFa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viewers',
-      one: '$count viewer',
+      other: '$count تماشاگرها',
+      one: '$count تماشاگر',
     );
     return '$_temp0';
   }
@@ -1078,7 +1075,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get coordinatesNameSquare => 'خانه را بِنامید';
 
   @override
-  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'تمرین فقط روی ستون‌ها و ردیف‌های مشخص';
 
   @override
   String get patronDonate => 'کمک مالی';
@@ -1384,7 +1381,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesNotifyTimeAlarm => 'هشدار تنگی زمان';
 
   @override
-  String get preferencesNotifyBell => 'اعلان زنگی در Lichess';
+  String get preferencesNotifyBell => 'اعلان زنگی در لیچس';
 
   @override
   String get preferencesNotifyPush => 'اعلان اَفزاره، هنگامی که در Lichess نیستید';
@@ -1656,8 +1653,8 @@ class AppLocalizationsFa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles found in games by $param2',
-      one: 'One puzzle found in games by $param2',
+      other: '$count معما در بازی‌های $param2 پیدا شد',
+      one: 'یک معما در بازی‌های $param2 پیدا شد',
     );
     return '$_temp0';
   }
@@ -1862,10 +1859,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'رُخ در کنار شاه دشمن قرار دارد و توسط یک وزیر حمایت می‌شود که همچنین مسیرهای فرار شاه را مسدود کرده است. رُخ و وزیر شاه دشمن را در یک \"جعبه مرگ\" ۳ در ۳ گیر انداخته‌اند.';
 
   @override
-  String get puzzleThemeVukovicMate => 'Vukovic mate';
+  String get puzzleThemeVukovicMate => 'مات ووکویچ';
 
   @override
-  String get puzzleThemeVukovicMateDescription => 'A rook and knight team up to mate the king. The rook delivers mate while supported by a third piece, and the knight is used to block the king\'s escape squares.';
+  String get puzzleThemeVukovicMateDescription => 'یک رخ و یک اسب برای مات کردن شاه همکاری می‌کنند. رخ در حالی که توسط مهرهٔ سومی پشتیبانی می‌شود، مات می‌کند و اسب برای مسدود کردن خانه‌های فرار شاه استفاده می‌شود.';
 
   @override
   String get puzzleThemeKnightEndgame => 'آخربازی اسب';
@@ -2086,7 +2083,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get settingsCantOpenSimilarAccount => 'شما نمی توانید حساب جدیدی با این نام کاربری باز کنید، حتی اگر با دستگاه دیگری وارد شوید.';
 
   @override
-  String get settingsCancelKeepAccount => 'Cancel and keep my account';
+  String get settingsCancelKeepAccount => 'لغو و نگهداری حساب کاربری';
 
   @override
   String get settingsCloseAccountAreYouSure => 'آیا از بستن حساب کابری خود مطمئن هستید؟';
@@ -2101,7 +2098,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get playWithTheMachine => 'بازی با رایانه';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'برای دعوت کسی به بازی، این وب‌نشانی را دهید';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'برای دعوت یک نفر به بازی، این آدرس را به او بدهید';
 
   @override
   String get gameOver => 'پایان بازی';
@@ -2110,7 +2107,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get waitingForOpponent => 'انتطار برای حریف';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'یا اجازه دهید حریف‌تان این کد QR را اسکن کنند';
+  String get orLetYourOpponentScanQrCode => 'یا از حریفتان بخواهید این کد QR را اسکن کندl';
 
   @override
   String get waiting => 'در حال انتظار';
@@ -2166,16 +2163,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get createTheGame => 'ایجاد بازی';
 
   @override
-  String get whiteIsVictorious => 'سفید برنده است';
+  String get whiteIsVictorious => 'سفید برنده شد';
 
   @override
-  String get blackIsVictorious => 'سیاه برنده است';
+  String get blackIsVictorious => 'سیاه برنده شد';
 
   @override
   String get youPlayTheWhitePieces => 'شما با مهره سفید بازی میکنید';
 
   @override
-  String get youPlayTheBlackPieces => 'شما با مهره سیاه بازی می کنید';
+  String get youPlayTheBlackPieces => 'شما با مهره سیاه بازی می‌کنید';
 
   @override
   String get itsYourTurn => 'نوبت شماست!';
@@ -2199,7 +2196,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get newOpponent => 'حریف جدید';
 
   @override
-  String get yourOpponentWantsToPlayANewGameWithYou => 'حریف شما می خواهد که دوباره با شما بازی کند';
+  String get yourOpponentWantsToPlayANewGameWithYou => 'حریفتان می‌خواهد یک بازی جدید با شما انجام دهد';
 
   @override
   String get joinTheGame => 'به بازی بپیوندید';
@@ -2366,7 +2363,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String masterDbExplanation(String param1, String param2, String param3) {
-    return 'دو میلیون بازی حقیقی بازیکنان دارای امتیاز بیشتر از $param1 در درجه‌بندی فیده از $param2 تا $param3';
+    return 'دو میلیون بازی رسمی بازیکنان با امتیاز $param1+ فیده از $param2 تا $param3';
   }
 
   @override
@@ -2423,7 +2420,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get delete => 'حذف';
 
   @override
-  String get deleteThisImportedGame => 'آیا این بازیِ درونبُرده پاک شود؟';
+  String get deleteThisImportedGame => 'آیا این بازیِ فراخوانده شده پاک شود؟';
 
   @override
   String get replayMode => 'حالت بازپخش';
@@ -2637,7 +2634,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get error_namePassword => 'خواهشانه از نام کاربری‌تان برای گذرواژه‌تان استفاده نکنید.';
 
   @override
-  String get blankedPassword => 'شما از گذرواژهٔ یکسانی در وبگاه دیگری بهراییده‌اید و آن وبگاه به خطر افتاده است. برای اطمینان از ایمنی حساب Lichessتان، به شما نیاز داریم تا گذرواژهٔ نویی را تعیین کنید. از درک‌تان سپاسگزاریم.';
+  String get blankedPassword => 'شما از گذرواژهٔ یکسانی در وبگاه دیگری بهراییده‌اید و آن وبگاه به خطر افتاده است. برای اطمینان از ایمنی حساب لیچس‌تان، به شما نیاز داریم تا گذرواژهٔ نویی را تعیین کنید. از درک‌تان سپاسگزاریم.';
 
   @override
   String get youAreLeavingLichess => 'در حال ترک lichess هستید';
@@ -3162,7 +3159,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get winner => 'برنده';
 
   @override
-  String get standing => 'رده‌بندی';
+  String get standings => 'رده‌بندی';
 
   @override
   String get createANewTournament => 'ایجاد یک مسابقهٔ نو';
@@ -3337,7 +3334,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get clearSavedMoves => 'حرکت های واضح';
 
   @override
-  String get previouslyOnLichessTV => 'بازی پیشین در Lichess';
+  String get previouslyOnLichessTV => 'بازی پیشین در لیچس';
 
   @override
   String get onlinePlayers => 'بازیکنان بَرخط';
@@ -3995,7 +3992,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get networkLagBetweenYouAndLichess => 'تاخیر شبکه میان شما و Lichess';
+  String get networkLagBetweenYouAndLichess => 'تاخیر شبکه میان شما و لیچس';
 
   @override
   String get timeToProcessAMoveOnLichessServer => 'زمانِ پردازش یک حرکت در کارسازِ Lichess';
@@ -4053,7 +4050,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
-    return 'در حالت کودک، نماد Lichess نقشک $param را می‌گیرد، بنابراین می‌دانید کودکان‌تان در امانند.';
+    return 'در حالت کودک، نماد لیچس نقشک $param را می‌گیرد، بنابراین می‌دانید کودکان‌تان در امانند.';
   }
 
   @override
@@ -4409,7 +4406,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'با پیروی از همهٔ خط‌مشی‌های Lichess، موافقم.';
+  String get agreementPolicy => 'با پیروی از همهٔ خط‌مشی‌های لیچس، موافقم.';
 
   @override
   String get searchOrStartNewDiscussion => 'جستجو یا شروع کردن مکالمه جدید';
@@ -4717,7 +4714,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get until => 'تا وقتی که';
 
   @override
-  String get lichessDbExplanation => 'بازی‌های رسمی برگزاریده در Lichess';
+  String get lichessDbExplanation => 'بازی‌های رسمی برگزاریده در لیچس';
 
   @override
   String get switchSides => 'تعویض سمت';
@@ -4753,7 +4750,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get disableBlindMode => 'غیرفعال سازی حالت نابینایی';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'کپی در کلیپ‌بورد';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5432,7 +5429,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get streamerLichessStreamers => 'بَرخَط-محتواسازان Lichess';
+  String get streamerLichessStreamers => 'استریمر های لیچس';
 
   @override
   String get studyPrivate => 'خصوصی';
@@ -5904,106 +5901,106 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'به بخش مطالعه لیچس خوش‌آمدید!';
 
   @override
-  String get studyWelcomeToLichessStudyText => 'This is a shared analysis board.<br><br>Use it to analyse and annotate games,<br>discuss positions with friends,<br>and of course for chess lessons!<br><br>It\'s a powerful tool, let\'s take some time to see how it works.';
+  String get studyWelcomeToLichessStudyText => 'این یک تختهٔ تحلیل اشتراکی است. از آن برای تحلیل و یادداشت‌گذاری بازی‌ها، گفتگو دربارهٔ وضعیت‌ها با دوستان و البته برای درس‌های شطرنج استفاده کنید! این یک ابزار قدرتمند است؛ بیایید با نحوهٔ کار آن آشنا شویم.';
 
   @override
-  String get studySharedAndSaveTitle => 'Shared and saved';
+  String get studySharedAndSaveTitle => 'اشتراک‌گذاری و ذخیره‌سازی';
 
   @override
-  String get studySharedAndSavedText => 'Other members can see your moves in real time!<br>Plus, everything is saved forever.';
+  String get studySharedAndSavedText => 'سایر اعضا می‌توانند حرکات شما را به‌صورت زنده ببینند! به‌علاوه، همه‌چیز برای همیشه ذخیره می‌شود.';
 
   @override
-  String get studyStudyMembersTitle => 'Study members';
+  String get studyStudyMembersTitle => 'اعضای مطالعه';
 
   @override
   String studyStudyMembersText(String param1, String param2) {
-    return '$param1 Spectators can view the study and talk in the chat.<br><br>$param2 Contributors can make moves and update the study.';
+    return '$param1 تماشاگر می‌توانند مطالعه را مشاهده کرده و در گفتگو شرکت کنند. $param2 مشارکت‌کننده می‌توانند حرکت انجام دهند و مطالعه را به‌روزرسانی کنند.';
   }
 
   @override
   String studyAddMembersText(String param) {
-    return 'Click the $param button.<br>Then decide who can contribute or not.';
+    return 'روی دکمهٔ $param کلیک کنید. سپس تصمیم بگیرید چه کسانی می‌توانند مشارکت کنند.';
   }
 
   @override
   String get studyStudyChaptersTitle => 'فصل های قابل مطالعه';
 
   @override
-  String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
+  String get studyStudyChaptersText => 'یک مطالعه می‌تواند شامل چندین فصل باشد. هر فصل یک وضعیت اولیه و درخت حرکات مشخص دارد.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'نظر دادن روی یک وضعیت';
 
   @override
   String studyCommentPositionText(String param) {
-    return 'Click the $param button, or right click on the move list on the right.<br>Comments are shared and saved.';
+    return 'روی دکمهٔ $param کلیک کنید، یا روی لیست حرکات در سمت راست، راست-کلیک کنید. نظرات به اشتراک گذاشته و ذخیره می‌شوند.';
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'یادداشت‌گذاری روی یک وضعیت';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'روی دکمهٔ !؟ کلیک کنید، یا روی لیست حرکات در سمت راست، راست-کلیک کنید. علائم یادداشت‌گذاری به اشتراک گذاشته و ذخیره می‌شوند.';
 
   @override
   String get studyConclusionTitle => 'ممنون از وقتی که گذاشتید';
 
   @override
-  String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> from your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
+  String get studyConclusionText => 'شما می‌توانید مطالعه‌های قبلی خود را از صفحهٔ پروفایلتان پیدا کنید، همچنین یک پست وبلاگ دربارهٔ مطالعه‌ها وجود دارد. کاربران حرفه‌ای می‌توانند کلید «؟» را برای دیدن میان‌برهای صفحه‌کلید فشار دهند. خوش بگذره!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'بیایید یک فصل مطالعه بسازیم';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree,<br>and can be created in various ways.';
+  String get studyCreateChapterText => 'یک مطالعه می‌تواند چندین فصل داشته باشد. هر فصل درخت حرکات متمایزی دارد و می‌تواند به روش‌های مختلفی ایجاد شود.';
 
   @override
-  String get studyFromInitialPositionTitle => 'From initial position';
+  String get studyFromInitialPositionTitle => 'از وضعیت اولیه';
 
   @override
-  String get studyFromInitialPositionText => 'Just a board setup for a new game.<br>Suited to explore openings.';
+  String get studyFromInitialPositionText => 'فقط چیدمان مهره‌ها برای یک بازی جدید. مناسب برای بررسی شروع بازی‌ها.';
 
   @override
-  String get studyCustomPositionTitle => 'Custom position';
+  String get studyCustomPositionTitle => 'وضعیت سفارشی';
 
   @override
-  String get studyCustomPositionText => 'Setup the board your way.<br>Suited to explore endgames.';
+  String get studyCustomPositionText => 'صفحه را به روش خود بچینید. مناسب برای بررسی آخر بازی‌ها.';
 
   @override
   String get studyLoadExistingLichessGameTitle => 'بازی قبلی در لیچس را بارگذاری کن';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadExistingLichessGameText => 'یک آدرس بازی از لیچس (مانند lichess.org/7fHIU0XI) جای‌گذاری کنید تا حرکات بازی در این فصل بارگذاری شود.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'از یک رشتهٔ FEN';
 
   @override
-  String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';
+  String get studyFromFenStringText => 'یک وضعیت با فرمت FEN مانند r1b2rk1/pp3ppp/1qnbpn2/3p4/3P1B2/2PB1N2/PP1N1PPP/R2Q1RK1 w - - 1 10 جای‌گذاری کنید تا فصل از آن وضعیت شروع شود.';
 
   @override
   String get studyFromPgnGameTitle => 'از بازی یک فایل PGN';
 
   @override
-  String get studyFromPgnGameText => 'Paste a game in PGN format.<br>to load moves, comments and variations in the chapter.';
+  String get studyFromPgnGameText => 'یک بازی با فرمت PGN جای‌گذاری کنید تا حرکات، نظرات و شاخه‌ها در این فصل بارگذاری شوند.';
 
   @override
-  String get studyVariantsAreSupportedTitle => 'Studies support variants';
+  String get studyVariantsAreSupportedTitle => 'مطالعه‌ها از واریانت‌ها پشتیبانی می‌کنند';
 
   @override
-  String get studyVariantsAreSupportedText => 'Yes, you can study crazyhouse<br>and all lichess variants!';
+  String get studyVariantsAreSupportedText => 'بله، شما می‌توانید شطرنج دیوانه‌وار (Crazyhouse) و تمام واریانت‌های لیچس را مطالعه کنید!';
 
   @override
-  String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
+  String get studyChapterConclusionText => 'فصل‌ها برای همیشه ذخیره می‌شوند. از سازماندهی محتوای شطرنجی خود لذت ببرید!';
 
   @override
-  String get studyDoubleDefeat => 'Double defeat';
+  String get studyDoubleDefeat => 'باخت دوطرفه';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+  String get studyBlackDefeatWhiteCanNotWin => 'سیاه باخت، اما سفید نمی‌تواند ببرد';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+  String get studyWhiteDefeatBlackCanNotWin => 'سفید باخت، اما سیاه نمی‌تواند ببرد';
 
   @override
   String studyNbChapters(int count) {

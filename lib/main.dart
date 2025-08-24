@@ -29,7 +29,9 @@ Future<void> main() async {
 
   await initializeLocalNotifications(locale);
 
-  await lichessBinding.initializeFirebase();
+  if (defaultTargetPlatform != TargetPlatform.linux) {
+    await lichessBinding.initializeFirebase();
+  }
 
   if (defaultTargetPlatform == TargetPlatform.android) {
     await androidDisplayInitialization(widgetsBinding);

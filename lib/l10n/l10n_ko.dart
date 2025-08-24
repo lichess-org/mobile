@@ -12,7 +12,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileAccountPreferences => '계정 환경설정';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => '이 환경설정은 Lichess 계정에 저장되며, 모든 기기에서 공유됩니다.';
 
   @override
   String get mobileAllGames => '모든 대국';
@@ -70,7 +70,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileNoSearchResults => '결과 없음';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => '아직 기존 앱과 웹사이트의 모든 기능이 지원되는 것은 아니지만, 지속적으로 기능을 추가하고 있습니다.';
 
   @override
   String get mobileNotFollowingAnyUser => '팔로우한 사용자가 없습니다.';
@@ -123,7 +123,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileRemoveBookmark => '북마크 제거';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => '서버 분석';
 
   @override
   String get mobileSettingsClockPosition => '시계 위치';
@@ -147,7 +147,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSettingsImmersiveMode => '전체 화면 모드';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+  String get mobileSettingsImmersiveModeSubtitle => '플레이 중 시스템 UI를 숨깁니다. 화면 모서리의 네비게이션 제스쳐 때문에 방해되는 경우 사용하세요. 게임과 퍼즐 플레이에 모두 적용됩니다.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => '잡힌 기물';
@@ -156,7 +156,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSettingsPickAnImage => '이미지 선택';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => '사용자 지정 배경은 다크 모드 사용 시에만 적용되므로 어두운 이미지 사용을 추천합니다.';
 
   @override
   String get mobileSettingsPickAnImageBlur => '이미지 블러처리 하기';
@@ -165,31 +165,31 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSettingsPickAnImageHideBoard => '체스판 숨기기';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => '보드 보이기';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => '스와이프로 배경 바꾸기';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => '탭 또는 드래그';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => '두 칸 탭하기';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => '모양 그리기';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => '두 손가락을 사용해 모양을 그릴 수 있습니다. 한 손가락을 빈 칸에 두고, 다른 하나로 칸을 탭하거나 드래그해서 모양을 그리세요.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => '윤곽선 보이기';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => '터치 피드백';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => '기물을 움직이거나 잡았을 때 기기가 짧게 진동합니다.';
 
   @override
   String get mobileSettingsTab => '설정';
@@ -229,7 +229,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return '$param 변형 게임은 이 버전에서 지원되지 않습니다.';
   }
 
   @override
@@ -819,9 +819,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get broadcastOfficialWebsite => '공식 웹사이트';
-
-  @override
-  String get broadcastStandings => '순위';
 
   @override
   String get broadcastOfficialStandings => '공식 순위';
@@ -3134,7 +3131,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get winner => '승자';
 
   @override
-  String get standing => '순위';
+  String get standings => '순위';
 
   @override
   String get createANewTournament => '새 토너먼트 생성';

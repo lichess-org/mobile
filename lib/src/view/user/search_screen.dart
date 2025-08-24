@@ -16,14 +16,21 @@ import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 const _kSaveHistoryDebouncTimer = Duration(seconds: 2);
 
 class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({this.onUserTap});
+  const SearchScreen({this.onUserTap, this.title, this.autoFocus = true, super.key});
 
   final void Function(LightUser)? onUserTap;
+  final Widget? title;
+  final bool autoFocus;
 
-  static Route<dynamic> buildRoute(BuildContext context, {void Function(LightUser)? onUserTap}) {
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    void Function(LightUser)? onUserTap,
+    Widget? title,
+    bool autoFocus = true,
+  }) {
     return buildScreenRoute(
       context,
-      screen: SearchScreen(onUserTap: onUserTap),
+      screen: SearchScreen(onUserTap: onUserTap, title: title, autoFocus: autoFocus),
       fullscreenDialog: true,
     );
   }
@@ -78,15 +85,26 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     final searchBar = PlatformSearchBar(
       hintText: context.l10n.searchSearch,
       controller: _searchController,
-      autoFocus: true,
+      autoFocus: widget.autoFocus,
     );
 
     final body = _Body(_term, setSearchText, widget.onUserTap);
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80, // Custom height to fit the search bar
-        title: searchBar,
+        toolbarHeight: widget.title == null
+            ? kToolbarHeight
+            : null, // Custom height to fit the search bar
+        title: widget.title ?? searchBar,
+        bottom: widget.title != null
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: searchBar,
+                ),
+              )
+            : null,
       ),
       body: body,
     );

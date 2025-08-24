@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/model/message/conversation_controller.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
+import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 sealed class DisplayItem {}
@@ -32,7 +39,7 @@ class GetMoreItem extends DisplayItem {}
 
 class ContactTypingItem extends DisplayItem {}
 
-class ConversationScreen extends StatelessWidget {
+class ConversationScreen extends ConsumerStatefulWidget {
   final LightUser user;
 
   const ConversationScreen({super.key, required this.user});
@@ -42,17 +49,46 @@ class ConversationScreen extends StatelessWidget {
   }
 
   @override
+  ConsumerState<ConversationScreen> createState() => _ConversationScreenState();
+}
+
+class _ConversationScreenState extends ConsumerState<ConversationScreen> with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      rootNavPageRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    rootNavPageRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPop() {
+    ref.invalidate(unreadMessagesProvider);
+    super.didPop();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: UserFullNameWidget(
-          user: user,
+          user: widget.user,
           showFlair: true,
           showPatron: true,
           shouldShowOnline: true,
+          onTap: () {
+            Navigator.push(context, UserScreen.buildRoute(context, widget.user));
+          },
         ),
       ),
-      body: _Body(user: user),
+      body: _Body(user: widget.user),
     );
   }
 }
@@ -289,52 +325,61 @@ class _MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final time = DateFormat.Hm().format(message.date);
 
-    return FractionallySizedBox(
-      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-      widthFactor: 0.85,
-      child: Container(
-        margin: EdgeInsets.only(
-          bottom: !isInGroup || isFirstInGroup ? 8 : 2,
-          top: !isInGroup || isLastInGroup ? 8 : 2,
-          left: 8,
-          right: 8,
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-        decoration: BoxDecoration(
-          color: _bubbleColor(context),
-          borderRadius: BorderRadius.only(
-            topLeft: isMe
-                ? _bubbleRadius
-                : isInGroup && !isLastInGroup
-                ? _inGroupRadius
-                : _bubbleRadius,
-            topRight: isMe
-                ? isInGroup && !isLastInGroup
-                      ? _inGroupRadius
-                      : _bubbleRadius
-                : _bubbleRadius,
-            bottomLeft: isMe
-                ? _bubbleRadius
-                : isInGroup && !isFirstInGroup
-                ? _inGroupRadius
-                : _bubbleRadius,
-            bottomRight: isMe
-                ? isInGroup && !isFirstInGroup
-                      ? _inGroupRadius
-                      : _bubbleRadius
-                : _bubbleRadius,
+    return ChatBubbleContextMenu(
+      message: message.text,
+      child: FractionallySizedBox(
+        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+        widthFactor: 0.85,
+        child: Container(
+          margin: EdgeInsets.only(
+            bottom: !isInGroup || isFirstInGroup ? 8 : 2,
+            top: !isInGroup || isLastInGroup ? 8 : 2,
+            left: 8,
+            right: 8,
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(message.text, style: TextStyle(color: _textColor(context))),
-            const SizedBox(height: 4),
-            Text(
-              time,
-              style: TextStyle(fontSize: 11, color: _textColor(context).withValues(alpha: 0.6)),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+          decoration: BoxDecoration(
+            color: _bubbleColor(context),
+            borderRadius: BorderRadius.only(
+              topLeft: isMe
+                  ? _bubbleRadius
+                  : isInGroup && !isLastInGroup
+                  ? _inGroupRadius
+                  : _bubbleRadius,
+              topRight: isMe
+                  ? isInGroup && !isLastInGroup
+                        ? _inGroupRadius
+                        : _bubbleRadius
+                  : _bubbleRadius,
+              bottomLeft: isMe
+                  ? _bubbleRadius
+                  : isInGroup && !isFirstInGroup
+                  ? _inGroupRadius
+                  : _bubbleRadius,
+              bottomRight: isMe
+                  ? isInGroup && !isFirstInGroup
+                        ? _inGroupRadius
+                        : _bubbleRadius
+                  : _bubbleRadius,
             ),
-          ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Linkify(
+                onOpen: (link) => onLinkifyOpen(context, link),
+                linkifiers: kLichessLinkifiers,
+                text: message.text,
+                style: TextStyle(color: _textColor(context)),
+                linkStyle: Styles.linkStyle,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                time,
+                style: TextStyle(fontSize: 11, color: _textColor(context).withValues(alpha: 0.6)),
+              ),
+            ],
+          ),
         ),
       ),
     );

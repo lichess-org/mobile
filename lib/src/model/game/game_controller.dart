@@ -9,8 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
@@ -30,7 +30,6 @@ import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
@@ -64,6 +63,8 @@ class GameController extends _$GameController {
 
   ChessClock? _clock;
   late SocketClient _socketClient;
+
+  GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
 
   @override
   Future<GameState> build(GameFullId gameFullId) {
@@ -273,7 +274,11 @@ class GameController extends _$GameController {
       final curState = state.requireValue;
       if (curState.stepCursor < curState.game.steps.length - 1) {
         state = AsyncValue.data(
-          curState.copyWith(stepCursor: curState.stepCursor + 1, premove: null),
+          curState.copyWith(
+            stepCursor: curState.stepCursor + 1,
+            premove: null,
+            promotionMove: null,
+          ),
         );
         final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
         if (san != null) {
@@ -292,6 +297,7 @@ class GameController extends _$GameController {
           newState.copyWith(
             stepCursor: didCancel ? newState.stepCursor : newState.stepCursor - 1,
             premove: null,
+            promotionMove: null,
           ),
         );
         final san = state.requireValue.game.stepAt(state.requireValue.stepCursor).sanMove?.san;
@@ -900,7 +906,7 @@ class GameController extends _$GameController {
   }
 
   Future<ExportedGame> _getPostGameData() {
-    return ref.withClient((client) => GameRepository(client).getGame(gameFullId.gameId));
+    return _gameRepository.getGame(gameFullId.gameId);
   }
 
   Future<void> _onFinishedGameLoad(PlayableGame game) async {

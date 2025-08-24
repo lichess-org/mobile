@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
+const kSettingsTileTitleMaxLines = 3;
+
 /// A platform agnostic tappable list tile that represents a settings value.
 class SettingsListTile extends StatelessWidget {
   const SettingsListTile({
@@ -56,7 +58,7 @@ class SettingsListTile extends StatelessWidget {
             settingsValue,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.end,
-            maxLines: 2,
+            maxLines: kSettingsTileTitleMaxLines,
             style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
           ),
         ),
@@ -179,7 +181,7 @@ class _SettingsTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle.merge(
-      maxLines: 2,
+      maxLines: kSettingsTileTitleMaxLines,
       overflow: TextOverflow.ellipsis,
       child: Text.rich(TextSpan(children: [title.textSpan ?? TextSpan(text: title.data)])),
     );

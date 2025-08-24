@@ -193,9 +193,7 @@ class _BroadcastGameMenu extends ConsumerWidget {
           label: context.l10n.mobileShareGamePGN,
           onPressed: () async {
             try {
-              final pgn = await ref.withClient(
-                (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
-              );
+              final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
               if (context.mounted) {
                 launchShareDialog(context, ShareParams(text: pgn));
               }
@@ -492,14 +490,14 @@ class _PlayerWidget extends ConsumerWidget {
                 if (game.isOver) ...[
                   Text(
                     game.status.resultToString(side),
-                    style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 16.0),
                 ],
                 Expanded(
                   child: BroadcastPlayerWidget(
                     player: player,
-                    textStyle: const TextStyle().copyWith(fontWeight: FontWeight.bold),
+                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 if (liveClock != null || pastClock != null)

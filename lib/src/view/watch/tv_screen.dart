@@ -7,16 +7,17 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -95,9 +96,23 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     final game = gameState.game;
                     final position = gameState.game.positionAt(gameState.stepCursor);
 
+                    // If Stockfish is playing, user is null
+                    final crosstable = game.white.user != null && game.black.user != null
+                        ? ref.watch(
+                            crosstableProvider(
+                              game.white.user!.id,
+                              game.black.user!.id,
+                              matchup: true,
+                            ),
+                          )
+                        : null;
+
+                    final crosstableData = crosstable?.valueOrNull;
+                    final matchupData = crosstableData?.matchup;
                     final blackPlayerWidget = GamePlayer(
                       game: game.copyWith(black: game.black.setOnGame(true)),
                       side: Side.black,
+                      matchupScore: matchupData?.users[game.black.user!.id],
                       clock: gameState.game.clock != null
                           ? CountdownClockBuilder(
                               key: _blackClockKey,
@@ -118,6 +133,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     final whitePlayerWidget = GamePlayer(
                       game: game.copyWith(white: game.white.setOnGame(true)),
                       side: Side.white,
+                      matchupScore: matchupData?.users[game.white.user!.id],
                       clock: gameState.game.clock != null
                           ? CountdownClockBuilder(
                               key: _whiteClockKey,
@@ -136,7 +152,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       materialDiff: game.materialDiffAt(gameState.stepCursor, Side.white),
                     );
 
-                    return BoardTable(
+                    return GameLayout(
                       orientation: gameState.orientation,
                       fen: position.fen,
                       boardSettingsOverrides: const BoardSettingsOverrides(
@@ -154,10 +170,47 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                         ref.read(_tvGameCtrl.notifier).goToMove(index);
                       },
                       lastMove: game.moveAt(gameState.stepCursor),
+                      userActionsBar: BottomBar(
+                        children: [
+                          BottomBarButton(
+                            label: context.l10n.flipBoard,
+                            onTap: () => _flipBoard(ref),
+                            icon: CupertinoIcons.arrow_2_squarepath,
+                          ),
+                          RepeatButton(
+                            onLongPress: ref.read(_tvGameCtrl.notifier).canGoBack()
+                                ? () => _moveBackward(ref)
+                                : null,
+                            child: BottomBarButton(
+                              key: const ValueKey('goto-previous'),
+                              onTap: ref.read(_tvGameCtrl.notifier).canGoBack()
+                                  ? () => _moveBackward(ref)
+                                  : null,
+                              label: 'Previous',
+                              icon: CupertinoIcons.chevron_back,
+                              showTooltip: false,
+                            ),
+                          ),
+                          RepeatButton(
+                            onLongPress: ref.read(_tvGameCtrl.notifier).canGoForward()
+                                ? () => _moveForward(ref)
+                                : null,
+                            child: BottomBarButton(
+                              key: const ValueKey('goto-next'),
+                              icon: CupertinoIcons.chevron_forward,
+                              label: context.l10n.next,
+                              onTap: ref.read(_tvGameCtrl.notifier).canGoForward()
+                                  ? () => _moveForward(ref)
+                                  : null,
+                              showTooltip: false,
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   },
                   loading: () => const Shimmer(
-                    child: BoardTable(
+                    child: GameLayout(
                       topTable: LoadingPlayerWidget(),
                       bottomTable: LoadingPlayerWidget(),
                       orientation: Side.white,
@@ -167,7 +220,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                   ),
                   error: (err, stackTrace) {
                     debugPrint('SEVERE: [TvScreen] could not load stream; $err\n$stackTrace');
-                    return const BoardTable(
+                    return const GameLayout(
                       topTable: kEmptyWidget,
                       bottomTable: kEmptyWidget,
                       orientation: Side.white,
@@ -177,43 +230,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     );
                   },
                 ),
-              ),
-              BottomBar(
-                children: [
-                  BottomBarButton(
-                    label: context.l10n.flipBoard,
-                    onTap: () => _flipBoard(ref),
-                    icon: CupertinoIcons.arrow_2_squarepath,
-                  ),
-                  RepeatButton(
-                    onLongPress: ref.read(_tvGameCtrl.notifier).canGoBack()
-                        ? () => _moveBackward(ref)
-                        : null,
-                    child: BottomBarButton(
-                      key: const ValueKey('goto-previous'),
-                      onTap: ref.read(_tvGameCtrl.notifier).canGoBack()
-                          ? () => _moveBackward(ref)
-                          : null,
-                      label: 'Previous',
-                      icon: CupertinoIcons.chevron_back,
-                      showTooltip: false,
-                    ),
-                  ),
-                  RepeatButton(
-                    onLongPress: ref.read(_tvGameCtrl.notifier).canGoForward()
-                        ? () => _moveForward(ref)
-                        : null,
-                    child: BottomBarButton(
-                      key: const ValueKey('goto-next'),
-                      icon: CupertinoIcons.chevron_forward,
-                      label: context.l10n.next,
-                      onTap: ref.read(_tvGameCtrl.notifier).canGoForward()
-                          ? () => _moveForward(ref)
-                          : null,
-                      showTooltip: false,
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

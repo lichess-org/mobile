@@ -23,18 +23,20 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class CreateChallengeBottomSheet extends ConsumerStatefulWidget {
-  const CreateChallengeBottomSheet(this.user);
+  const CreateChallengeBottomSheet(this.user, {this.positionFen});
 
   final LightUser user;
+  final String? positionFen;
 
   @override
   ConsumerState<CreateChallengeBottomSheet> createState() => _CreateChallengeBottomSheetState();
 }
 
 class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBottomSheet> {
-  Future<Challenge>? _pendingCorrespondenceChallenge;
+  Future<ChallengeDeclineReason?>? _pendingCorrespondenceChallenge;
   final _controller = TextEditingController();
 
   String? fromPositionFenInput;
@@ -42,6 +44,13 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
   @override
   void initState() {
     super.initState();
+    if (widget.positionFen != null) {
+      fromPositionFenInput = widget.positionFen;
+      _controller.text = widget.positionFen!;
+      ref.read(challengePreferencesProvider.notifier).setVariant(Variant.fromPosition);
+    } else {
+      fromPositionFenInput = null;
+    }
     _controller.addListener(() {
       setState(() {
         fromPositionFenInput = _controller.text;
@@ -285,7 +294,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
             ),
             if (account != null)
               ExpandedSection(
-                expand: preferences.variant != Variant.fromPosition,
+                expand: preferences.isRatedAllowed,
                 child: ListTile(
                   title: Text(context.l10n.rated),
                   trailing: Switch.adaptive(
@@ -326,29 +335,80 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                               snapshot.connectionState != ConnectionState.waiting
                         ? () async {
                             final createGameService = ref.read(createGameServiceProvider);
-                            _pendingCorrespondenceChallenge = createGameService
-                                .newCorrespondenceChallenge(
-                                  preferences.makeRequest(
-                                    widget.user,
-                                    preferences.variant != Variant.fromPosition
-                                        ? null
-                                        : fromPositionFenInput,
+                            setState(() {
+                              _pendingCorrespondenceChallenge = createGameService
+                                  .newCorrespondenceChallenge(
+                                    preferences.makeRequest(
+                                      widget.user,
+                                      preferences.variant != Variant.fromPosition
+                                          ? null
+                                          : fromPositionFenInput,
+                                    ),
+                                  );
+                            });
+
+                            try {
+                              final maybeDeclined = await _pendingCorrespondenceChallenge;
+
+                              if (!context.mounted) return;
+
+                              Navigator.of(
+                                context,
+                              ).popUntil((route) => route is! ModalBottomSheetRoute);
+
+                              if (maybeDeclined != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(context.l10n.challengeChallengeDeclined),
+                                        const SizedBox(height: 8.0),
+                                        const Divider(height: 26.0, thickness: 0.0),
+                                        Text(
+                                          maybeDeclined.label(context.l10n),
+                                          style: const TextStyle(fontStyle: FontStyle.italic),
+                                        ),
+                                        const Divider(height: 26.0, thickness: 0.0),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Text(' — '),
+                                              UserFullNameWidget(user: widget.user),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    duration: const Duration(seconds: 5),
                                   ),
                                 );
-
-                            await _pendingCorrespondenceChallenge!;
-
-                            if (!context.mounted) return;
-
-                            Navigator.of(
-                              context,
-                            ).popUntil((route) => route is! ModalBottomSheetRoute);
-
-                            showSnackBar(
-                              context,
-                              'Challenge created. You can access it from the home tab.',
-                              type: SnackBarType.success,
-                            );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      // TODO l10n
+                                      'Challenge created: you will be notified when the game starts.\nYou can access it from the home tab.',
+                                    ),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                showSnackBar(
+                                  context,
+                                  context.l10n.mobileSomethingWentWrong,
+                                  type: SnackBarType.error,
+                                );
+                              }
+                            } finally {
+                              setState(() {
+                                _pendingCorrespondenceChallenge = null;
+                              });
+                            }
                           }
                         : null,
                     child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),

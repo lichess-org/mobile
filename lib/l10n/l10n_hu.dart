@@ -481,7 +481,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get arenaHowAreScoresCalculatedAnswer => 'Egy győzelem alapból 2 pont, egy döntetlen 1 pont, a vereség pedig nem ér pontot.\nHa egymás után két játszmát nyersz, beindul a pont duplázási sorozatod, amit egy láng ikon jelez.\nA következő játszmákért egészen addig dupla pontot kapsz, ameddig nem veszítesz.\nVagyis egy győzelem 4 pontot, egy döntetlen 2 pontot, és a vereség továbbra is nulla pontot ér.\n\nPéldául két győzelem után egy döntetlen, az összesen 6 pont: 2 + 2 + (2 x 1)';
 
   @override
-  String get arenaBerserk => 'Berserk Aréna';
+  String get arenaBerserk => 'Aréna Berserk';
 
   @override
   String get arenaBerserkAnswer => 'Amikor valaki rákattint a Berserk gombra a játszma kezdetekor, elveszti a gondolkodási idejének a felét, de győzelem esetén egy extra pontot kap.\n\nNövekményes gondolkodási időknél a növekmény is eltűnik (az 1+2 kivétel, amiből 1+0 lesz).\n\nNem lehet Berserk-elni, amikor nulla a kezdő idő (0+1, 0+2).\n\nBerserk-nél az extra pont csak legalább 7 lépés megtétele után jár.';
@@ -643,7 +643,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get arenaTournamentPairingsAreNowClosed => 'A verseny párosításai lezárultak.';
 
   @override
-  String get arenaBerserkRate => 'Berserk rate';
+  String get arenaBerserkRate => 'Berserk arány';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -839,9 +839,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get broadcastOfficialWebsite => 'Official website';
-
-  @override
-  String get broadcastStandings => 'Standings';
 
   @override
   String get broadcastOfficialStandings => 'Official Standings';
@@ -2089,7 +2086,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
+  String get settingsCloseAccountAreYouSure => 'Biztos zárolni akarod a fiókodat?';
 
   @override
   String get settingsThisAccountIsClosed => 'Ez a fiók zárolva van.';
@@ -3162,7 +3159,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get winner => 'Győztes';
 
   @override
-  String get standing => 'Állás';
+  String get standings => 'Standings';
 
   @override
   String get createANewTournament => 'Új verseny indítása';

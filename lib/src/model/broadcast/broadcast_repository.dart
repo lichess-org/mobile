@@ -2,21 +2,31 @@ import 'package:clock/clock.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
+/// A provider for the [BroadcastRepository].
+final broadcastRepositoryProvider = Provider<BroadcastRepository>((ref) {
+  final client = ref.read(lichessClientProvider);
+  final aggregator = ref.read(aggregatorProvider);
+  return BroadcastRepository(client, aggregator);
+}, name: 'BroadcastRepositoryProvider');
+
 class BroadcastRepository {
-  BroadcastRepository(this.client);
+  BroadcastRepository(this.client, this.aggregator);
 
   final LichessClient client;
+  final Aggregator aggregator;
 
   Future<BroadcastList> getBroadcasts({int page = 1}) {
-    return client.readJson(
+    return aggregator.readJson(
       Uri(path: '/api/broadcast/top', queryParameters: {'page': page.toString()}),
-      mapper: _makeBroadcastResponseFromJson,
+      atomicMapper: broadcastListFromServerJson,
     );
   }
 
@@ -66,9 +76,17 @@ class BroadcastRepository {
       mapper: _makePlayerWithGameResultsFromJson,
     );
   }
+
+  Future<IList<BroadcastTeamMatch>> getTeamMatches(BroadcastRoundId roundId) {
+    return client.readJson(
+      Uri(path: 'broadcast/$roundId/teams'),
+      mapper: (json) =>
+          pick(json, 'table').asListOrThrow<BroadcastTeamMatch>(_teamMatchFromPick).toIList(),
+    );
+  }
 }
 
-BroadcastList _makeBroadcastResponseFromJson(Map<String, dynamic> json) {
+BroadcastList broadcastListFromServerJson(Map<String, dynamic> json) {
   return (
     active: pick(json, 'active').asListOrThrow(_broadcastFromPick).toIList(),
     past: pick(json, 'past', 'currentPageResults').asListOrThrow(_broadcastFromPick).toIList(),
@@ -101,6 +119,7 @@ BroadcastTournamentData _tournamentDataFromPick(RequiredPick pick) => BroadcastT
   tier: pick('tier').asIntOrNull(),
   imageUrl: pick('image').asStringOrNull(),
   description: pick('description').asStringOrNull(),
+  teamTable: pick('teamTable').asBoolOrFalse(),
   information: (
     format: pick('info', 'format').asStringOrNull(),
     timeControl: pick('info', 'tc').asStringOrNull(),
@@ -285,5 +304,31 @@ BroadcastPlayerGameResult _playerGameResultFromPick(RequiredPick pick) {
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     points: points,
     opponent: _playerFromPick(pick('opponent').required()),
+  );
+}
+
+BroadcastTeamMatch _teamMatchFromPick(RequiredPick pick) {
+  final teams = pick('teams').asListOrThrow(_teamFromPick).toIList();
+  if (teams.length != 2) {
+    throw FormatException('Expected exactly 2 teams in a match, got ${teams.length}');
+  }
+  return BroadcastTeamMatch(
+    team1: teams[0],
+    team2: teams[1],
+    games: pick('games').asListOrThrow(_teamGameFromPick).toIList(),
+  );
+}
+
+BroadcastTeam _teamFromPick(RequiredPick pick) {
+  return BroadcastTeam(
+    name: pick('name').asStringOrThrow(),
+    points: pick('points').asDoubleOrThrow(),
+  );
+}
+
+BroadcastTeamGame _teamGameFromPick(RequiredPick pick) {
+  return BroadcastTeamGame(
+    id: pick('id').asBroadcastGameIdOrThrow(),
+    pov: pick('pov').asSideOrThrow(),
   );
 }

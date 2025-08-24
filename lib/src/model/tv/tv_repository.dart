@@ -1,26 +1,38 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_game.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
 typedef TvChannels = IMap<TvChannel, TvGame>;
 
-class TvRepository {
-  const TvRepository(this.client);
+/// A provider for the [TvRepository].
+final tvRepositoryProvider = Provider<TvRepository>((ref) {
+  final client = ref.read(lichessClientProvider);
+  final aggregator = ref.read(aggregatorProvider);
+  return TvRepository(client, aggregator);
+}, name: 'TvRepositoryProvider');
 
-  final http.Client client;
+class TvRepository {
+  const TvRepository(this.client, this.aggregator);
+
+  final LichessClient client;
+  final Aggregator aggregator;
 
   Future<TvChannels> channels() {
-    return client.readJson(Uri(path: '/api/tv/channels'), mapper: _tvGamesFromJson);
+    return aggregator.readJson(
+      Uri(path: '/api/tv/channels'),
+      atomicMapper: tvChannelsFromServerJson,
+    );
   }
 }
 
-TvChannels _tvGamesFromJson(Map<String, dynamic> json) {
+TvChannels tvChannelsFromServerJson(Map<String, dynamic> json) {
   final map = pick(json).asMapOrEmpty<String, Map<String, dynamic>>();
   return IMap({
     for (final entry in map.entries)

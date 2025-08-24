@@ -881,9 +881,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Oficiální stránka';
 
   @override
-  String get broadcastStandings => 'Pořadí';
-
-  @override
   String get broadcastOfficialStandings => 'Oficiální pořadí';
 
   @override
@@ -3216,7 +3213,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get winner => 'Vítěz';
 
   @override
-  String get standing => 'Umístění';
+  String get standings => 'Pořadí';
 
   @override
   String get createANewTournament => 'Vytvořit turnaj';

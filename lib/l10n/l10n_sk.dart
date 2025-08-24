@@ -881,9 +881,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Oficiálna webstránka';
 
   @override
-  String get broadcastStandings => 'Poradie';
-
-  @override
   String get broadcastOfficialStandings => 'Oficiálne poradie';
 
   @override
@@ -3218,7 +3215,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get winner => 'Víťaz';
 
   @override
-  String get standing => 'Poradie';
+  String get standings => 'Poradie';
 
   @override
   String get createANewTournament => 'Vytvoriť nový turnaj';

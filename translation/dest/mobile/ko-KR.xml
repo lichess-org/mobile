@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">계정 환경설정</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">이 환경설정은 Lichess 계정에 저장되며, 모든 기기에서 공유됩니다.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">모든 대국</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">확실하십니까?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">체스판 설정</string>
@@ -18,9 +19,10 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">방송 중인 스트리머</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">이 페이지를 보려면 로그인해야 합니다.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">결과 없음</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">아직 기존 앱과 웹사이트의 모든 기능이 지원되는 것은 아니지만, 지속적으로 기능을 추가하고 있습니다.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">팔로우한 사용자가 없습니다.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">확인</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">로컬 게임</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">로컬 게임</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">닉네임에 \"%s\"가 포함된 플레이어</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">왼쪽</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">오른쪽</string>
@@ -34,6 +36,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">퍼즐</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">최근 검색어</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">북마크 제거</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">서버 분석</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">시계 위치</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">프리셋</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">드래그된 기물 타겟</string>
@@ -41,10 +44,21 @@
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">칸</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">홈 위젯</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">전체 화면 모드</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">플레이 중 시스템 UI를 숨깁니다. 화면 모서리의 네비게이션 제스쳐 때문에 방해되는 경우 사용하세요. 게임과 퍼즐 플레이에 모두 적용됩니다.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">잡힌 기물</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">이미지 선택</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">사용자 지정 배경은 다크 모드 사용 시에만 적용되므로 어두운 이미지 사용을 추천합니다.</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">이미지 블러처리 하기</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">체스판 숨기기</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">보드 보이기</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">스와이프로 배경 바꾸기</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">탭 또는 드래그</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">두 칸 탭하기</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">모양 그리기</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">두 손가락을 사용해 모양을 그릴 수 있습니다. 한 손가락을 빈 칸에 두고, 다른 하나로 칸을 탭하거나 드래그해서 모양을 그리세요.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">윤곽선 보이기</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">터치 피드백</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">기물을 움직이거나 잡았을 때 기기가 짧게 진동합니다.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">설정</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN 공유</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">게임 URL 공유</string>
@@ -57,6 +71,7 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">시스템 색상</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">테마</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">도구</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">%s 변형 게임은 이 버전에서 지원되지 않습니다.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">상대 참가를 기다리는 중...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">관람</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Lichess 앱에 오신 것을 환영합니다!</string>

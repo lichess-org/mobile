@@ -39,31 +39,37 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
+    final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
     return switch (account) {
-      AsyncData(:final value) => IconButton(
-        tooltip: value == null ? context.l10n.signIn : value.username,
-        icon: value == null
-            ? const Icon(Icons.account_circle_outlined, size: 30)
-            : CircleAvatar(
-                radius: 16,
-                foregroundImage: value.flair != null
-                    ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
-                    : null,
-                onForegroundImageError: value.flair != null
-                    ? (error, _) {
-                        setState(() {
-                          errorLoadingFlair = true;
-                        });
-                      }
-                    : null,
-                backgroundColor: value.flair == null || errorLoadingFlair
-                    ? null
-                    : ColorScheme.of(context).surfaceContainer,
-                child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
-              ),
-        onPressed: () {
-          Scaffold.of(context).openDrawer();
-        },
+      AsyncData(:final value) => Badge.count(
+        offset: const Offset(-4, 0),
+        count: unreadMessages,
+        isLabelVisible: unreadMessages > 0,
+        child: IconButton(
+          tooltip: value == null ? context.l10n.signIn : value.username,
+          icon: value == null
+              ? const Icon(Icons.account_circle_outlined, size: 30)
+              : CircleAvatar(
+                  radius: 16,
+                  foregroundImage: value.flair != null
+                      ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
+                      : null,
+                  onForegroundImageError: value.flair != null
+                      ? (error, _) {
+                          setState(() {
+                            errorLoadingFlair = true;
+                          });
+                        }
+                      : null,
+                  backgroundColor: value.flair == null || errorLoadingFlair
+                      ? null
+                      : ColorScheme.of(context).surfaceContainer,
+                  child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
+                ),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
       ),
       _ => IconButton(
         icon: const Icon(Icons.account_circle_outlined, size: 30),
@@ -97,9 +103,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final kidMode = account.valueOrNull?.kid ?? false;
     final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
 
-    final inboxUnreadCount = ref.watch(
-      contactsProvider.select((s) => s.valueOrNull?.unreadCount ?? 0),
-    );
+    final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
 
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -165,8 +169,8 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
             if (account.hasValue && !kidMode)
               ListTile(
                 leading: Badge.count(
-                  isLabelVisible: inboxUnreadCount > 0,
-                  count: inboxUnreadCount,
+                  isLabelVisible: unreadMessages > 0,
+                  count: unreadMessages,
                   child: const Icon(Icons.mail_outline),
                 ),
                 title: Text(context.l10n.inbox),

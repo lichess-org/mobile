@@ -479,7 +479,7 @@
   <string name="openTournaments">Oppen Turnéieren</string>
   <string name="duration">Dauer</string>
   <string name="winner">Gewënner</string>
-  <string name="standing">Stand</string>
+  <string name="standings">Stand</string>
   <string name="createANewTournament">Neien Turnéier kreéieren</string>
   <string name="tournamentCalendar">Turnéierkalenner</string>
   <string name="conditionOfEntry">Teilnahmebedingung:</string>
@@ -996,4 +996,5 @@ All Betriebskäschten, Entwécklung an Inhalter ginn ausschließlech vun Benotze
   <string name="stats">Statistiken</string>
   <string name="enableBlindMode">Blannemodus aktivéieren</string>
   <string name="disableBlindMode">Blannemodus desaktivéieren</string>
+  <string name="copyToClipboard">An den Tëschespäicher kopéieren</string>
 </resources>

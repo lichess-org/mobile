@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
@@ -155,6 +156,10 @@ sealed class Tournament with _$Tournament {
 
   Tournament updateFromPartialServerJson(Map<String, Object?> json) =>
       _updateTournamentFromPartialPick(this, pick(json).required());
+
+  Tournament updateStandingsFromServerJson(Map<String, Object?> json) {
+    return copyWith(standing: pick(json).asStandingPageOrThrow());
+  }
 }
 
 Tournament _tournamentFromPick(RequiredPick pick) {
@@ -418,16 +423,20 @@ extension TournamentExtension on Pick {
     }
   }
 
+  StandingPage asStandingPageOrThrow() {
+    final requiredPick = this.required();
+    return (
+      page: requiredPick('page').asIntOrThrow(),
+      players: requiredPick(
+        'players',
+      ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
+    );
+  }
+
   StandingPage? asStandingPageOrNull() {
     if (value == null) return null;
     try {
-      final requiredPick = this.required();
-      return (
-        page: requiredPick('page').asIntOrThrow(),
-        players: requiredPick(
-          'players',
-        ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
-      );
+      return asStandingPageOrThrow();
     } catch (_) {
       return null;
     }
@@ -441,4 +450,83 @@ extension TournamentExtension on Pick {
       return null;
     }
   }
+}
+
+typedef PlayerStats = ({int game, int berserk, int win});
+
+@freezed
+sealed class TournamentPlayer with _$TournamentPlayer {
+  const TournamentPlayer._();
+
+  factory TournamentPlayer({
+    required LightUser user,
+    required int rating,
+    required int score,
+    required bool fire,
+    required int? performance,
+    required int rank,
+    required PlayerStats stats,
+    required IList<TournamentPairing> pairings,
+  }) = _TournamentPlayer;
+  factory TournamentPlayer.fromServerJson(Map<String, Object?> json) =>
+      _tournamentPlayerFromPick(pick(json).required());
+}
+
+@freezed
+sealed class TournamentPairing with _$TournamentPairing {
+  const TournamentPairing._();
+
+  const factory TournamentPairing({
+    required GameId gameId,
+    required Side color,
+    required LightUser opponent,
+    required int opponentRating,
+    required bool? win,
+    required GameStatus? status,
+    required int? score,
+    required bool berserk,
+  }) = _TournamentPairing;
+}
+
+TournamentPlayer _tournamentPlayerFromPick(RequiredPick pick) {
+  final player = pick('player').required();
+  return TournamentPlayer(
+    user: LightUser(
+      id: UserId.fromUserName(player('id').asStringOrThrow()),
+      name: player('name').asStringOrThrow(),
+      title: player('title').asStringOrNull(),
+      flair: player('flair').asStringOrNull(),
+      isPatron: player('patron').asBoolOrNull(),
+    ),
+    rating: player('rating').asIntOrThrow(),
+    score: player('score').asIntOrThrow(),
+    fire: player('fire').asBoolOrFalse(),
+    stats: (
+      game: player('nb', 'game').asIntOrThrow(),
+      berserk: player('nb', 'berserk').asIntOrThrow(),
+      win: player('nb', 'win').asIntOrThrow(),
+    ),
+    performance: player('performance').asIntOrNull(),
+    rank: player('rank').asIntOrThrow(),
+    pairings: pick('pairings').asListOrThrow(_pairingFromPick).toIList(),
+  );
+}
+
+TournamentPairing _pairingFromPick(RequiredPick pick) {
+  return TournamentPairing(
+    gameId: pick('id').asGameIdOrThrow(),
+    color: pick('color').asSideOrThrow(),
+    opponent: LightUser(
+      id: UserId.fromUserName(pick('op', 'name').asStringOrThrow()),
+      name: pick('op', 'name').asStringOrThrow(),
+      title: pick('op', 'title').asStringOrNull(),
+      flair: pick('op', 'flair').asStringOrNull(),
+      isPatron: pick('op', 'patron').asBoolOrNull(),
+    ),
+    opponentRating: pick('op', 'rating').asIntOrThrow(),
+    win: pick('win').asBoolOrNull(),
+    status: pick('status').asGameStatusOrThrow(),
+    score: pick('score').asIntOrNull(),
+    berserk: pick('berserk').asBoolOrFalse(),
+  );
 }

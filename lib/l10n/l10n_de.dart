@@ -189,7 +189,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Haptisches Feedback';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'Wen aktiviert, vibriert das Gerät kurz, wenn du ein Stück bewegst oder schlägst.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Wenn aktiviert, vibriert dein Gerät kurz, wenn du eine Figur bewegst oder schlägst.';
 
   @override
   String get mobileSettingsTab => 'Optionen';
@@ -839,9 +839,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get broadcastOfficialWebsite => 'Offizielle Webseite';
-
-  @override
-  String get broadcastStandings => 'Rangliste';
 
   @override
   String get broadcastOfficialStandings => 'Offizielle Rangliste';
@@ -2502,7 +2499,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Ist vor $param beigetreten';
+    return 'Ist $param beigetreten';
   }
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get winner => 'Gewinner';
 
   @override
-  String get standing => 'Tabelle';
+  String get standings => 'Tabelle';
 
   @override
   String get createANewTournament => 'Neues Turnier erstellen';

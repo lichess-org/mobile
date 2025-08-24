@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -239,15 +240,21 @@ class _Body extends ConsumerWidget {
               analysisState.currentPosition.ply,
             )
           : null;
+      final resultString = analysisState.pgnHeaders.get('Result');
+      final result = resultString != null
+          ? AnalysisGameResult.resultFromPgnResult(resultString)
+          : null;
       boardFooter = _PlayerWidget(
         player: footerPlayer,
         clock: footerClock,
         isSideToMove: analysisState.currentPosition.turn == pov,
+        result: result?.resultToString(pov),
       );
       boardHeader = _PlayerWidget(
         player: headerPlayer,
         clock: headerClock,
         isSideToMove: analysisState.currentPosition.turn == pov.opposite,
+        result: result?.resultToString(pov.opposite),
       );
     }
 
@@ -323,10 +330,16 @@ class _Body extends ConsumerWidget {
 }
 
 class _PlayerWidget extends StatelessWidget {
-  const _PlayerWidget({required this.player, required this.clock, required this.isSideToMove});
+  const _PlayerWidget({
+    required this.player,
+    required this.clock,
+    required this.isSideToMove,
+    this.result,
+  });
 
   final Player player;
   final Duration? clock;
+  final String? result;
   final bool isSideToMove;
 
   @override
@@ -336,17 +349,25 @@ class _PlayerWidget extends StatelessWidget {
       color: ColorScheme.of(context).surfaceContainer,
       padding: const EdgeInsets.only(left: 8.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          if (result != null) ...[
+            Text(result!, style: const TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(width: 16.0),
+          ],
           if (player.user != null)
-            UserFullNameWidget.player(
-              user: player.user,
-              rating: player.rating,
-              provisional: player.provisional,
-              aiLevel: player.aiLevel,
+            Expanded(
+              child: UserFullNameWidget.player(
+                user: player.user,
+                rating: player.rating,
+                provisional: player.provisional,
+                aiLevel: player.aiLevel,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+                onTap: () =>
+                    Navigator.of(context).push(UserScreen.buildRoute(context, player.user!)),
+              ),
             )
           else
-            Text(player.fullName(context.l10n)),
+            Expanded(child: Text(player.fullName(context.l10n))),
           if (clock != null) _Clock(timeLeft: clock!, isSideToMove: isSideToMove),
         ],
       ),

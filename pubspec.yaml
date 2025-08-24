@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.17.3+001703 # See README.md for details about versioning
+version: 0.17.7+001707 # See README.md for details about versioning
 
 environment:
   # this should be updated with every new flutter stable release
@@ -40,7 +40,7 @@ dependencies:
   flutter_markdown: ^0.7.3+1
   flutter_native_splash: ^2.3.5
   flutter_riverpod: ^2.3.4
-  flutter_secure_storage: ^9.2.0
+  flutter_secure_storage: ^10.0.0-beta.4
   flutter_slidable: ^4.0.0
   flutter_spinkit: ^5.2.0
   freezed_annotation: ^3.0.0
@@ -68,6 +68,7 @@ dependencies:
   signal_strength_indicator: ^0.4.1
   sound_effect: ^0.1.1
   sqflite: ^2.2.5
+  sqflite_common_ffi: ^2.2.3
   stream_transform: ^2.1.0
   unifiedpush: ^6.0.2
   url_launcher: ^6.1.9
@@ -89,8 +90,14 @@ dev_dependencies:
   mocktail_image_network: ^1.2.0
   riverpod_generator: ^2.1.0
   riverpod_lint: ^2.3.3
-  sqflite_common_ffi: ^2.2.3
   stream_channel: ^2.1.2
+
+dependency_overrides:
+  flutter_secure_storage_linux:
+    git:
+      url: https://github.com/christianfl/flutter_secure_storage.git
+      path: flutter_secure_storage_linux
+      ref: v10.0.0-beta.4-literal_operator_fix
 
 flutter:
   # The following line ensures that the Material Icons font is

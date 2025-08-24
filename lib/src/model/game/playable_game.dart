@@ -96,7 +96,8 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
   bool get abortable =>
       playable &&
       lastPosition.fullmoves <= 1 &&
-      (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
+      (meta.rules == null || !meta.rules!.contains(GameRule.noAbort)) &&
+      meta.tournament == null;
   bool get resignable => playable && !abortable;
   bool get drawable =>
       playable && lastPosition.fullmoves >= 2 && !(me?.offeringDraw == true) && !hasAI;
@@ -263,9 +264,8 @@ GameMeta _playableGameMetaFromPick(RequiredPick pick) {
     daysPerTurn: pick('correspondence').letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
     startedAtTurn: pick('game', 'startedAtTurn').asIntOrNull(),
     rules: pick('game', 'rules').letOrNull(
-      (it) => ISet(
-        pick.asListOrThrow((e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown),
-      ),
+      (it) =>
+          ISet(it.asListOrThrow((e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown)),
     ),
     division: pick('division').letOrNull(_divisionFromPick),
     tournament: pick('tournament').letOrNull(_playableGameTournamentDataFromPick),

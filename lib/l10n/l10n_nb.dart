@@ -841,9 +841,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Offisiell nettside';
 
   @override
-  String get broadcastStandings => 'Resultatliste';
-
-  @override
   String get broadcastOfficialStandings => 'Offisiell tabell';
 
   @override
@@ -3162,7 +3159,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get winner => 'Vinner';
 
   @override
-  String get standing => 'Resultatliste';
+  String get standings => 'Resultatliste';
 
   @override
   String get createANewTournament => 'Opprett en ny turnering';
@@ -4753,7 +4750,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get disableBlindMode => 'Deaktiver blindemodus';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Kopier til utklippstavlen';
 
   @override
   String opponentLeftCounter(int count) {

@@ -841,9 +841,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Site Web officiel';
 
   @override
-  String get broadcastStandings => 'Classement';
-
-  @override
   String get broadcastOfficialStandings => 'Résultats officiels';
 
   @override
@@ -2095,7 +2092,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Ce compte a été fermé.';
 
   @override
-  String get playWithAFriend => 'Jouer avec un·e ami·e';
+  String get playWithAFriend => 'Inviter à une partie';
 
   @override
   String get playWithTheMachine => 'Jouer contre l\'ordinateur';
@@ -3162,7 +3159,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get winner => 'Vainqueur';
 
   @override
-  String get standing => 'Classement';
+  String get standings => 'Classement';
 
   @override
   String get createANewTournament => 'Créer un nouveau tournoi';

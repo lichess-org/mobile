@@ -9,10 +9,10 @@ class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'खाता प्राथमिकताएं';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'ये प्राथमिकताएं आपके लीचेस खाते पर लागू होती हैं और सभी डिवाइसों पर उपयोग की जाएंगी।';
 
   @override
   String get mobileAllGames => 'सारे गेम्स';
@@ -21,7 +21,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileAreYouSure => 'पक्का?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'बोर्ड सेटिंग्स';
 
   @override
   String get mobileCancelTakebackOffer => 'टेकबैक ऑफर कैंसल करें';
@@ -40,19 +40,19 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'शुभ संध्या, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'शुभ संध्या';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'शुभ दिन, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'शुभ दिन';
 
   @override
   String get mobileHideVariation => 'वेरिएशन छुपाएं';
@@ -70,7 +70,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileNoSearchResults => 'कोई रिजल्ट नहीं मिला';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'कृपया ध्यान दें कि पुराने ऐप या वेबसाइट की सभी सुविधाएं वर्तमान में उपलब्ध नहीं हैं, लेकिन हम लगातार सुविधाएं जोड़ रहे हैं।';
 
   @override
   String get mobileNotFollowingAnyUser => 'आप किसी यूजर को फॉलो नहीं कर रहे।';
@@ -120,76 +120,76 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileRecentSearches => 'हाल के सर्च';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'बुकमार्क हटाएँ';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'सर्वर विश्लेषण';
 
   @override
   String get mobileSettingsClockPosition => 'घड़ी के लिए स्थान';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'प्रीसेट';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'खींचा गया टुकड़े का लक्ष्य';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'घेरा';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'वर्ग';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'होम विजेट';
 
   @override
   String get mobileSettingsImmersiveMode => 'इमर्सिव मोड';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'खेलते समय सिस्टम UI छिपाएँ। अगर आपको स्क्रीन के किनारों पर सिस्टम के नेविगेशन जेस्चर से परेशानी हो रही है, तो इसका इस्तेमाल करें। यह गेम और पज़ल स्क्रीन पर लागू होता है।';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'पकड़े गए मोहरे';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'एक छवि चुनें';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'कस्टम बैकग्राउंड केवल डार्क मोड में ही काम करता है। डार्क इमेज की सलाह दी जाती है।';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'छवि को धुंधला करें';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'बोर्ड को छिपाएं';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'बोर्ड दिखाएं';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'अन्य पृष्ठभूमि प्रदर्शित करने के लिए स्वाइप करें';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'या तो टैप करें या खींचें';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'दो वर्गों पर टैप करें';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'आकृति चित्रण';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'दो अंगुलियों का उपयोग करके आकृतियाँ बनाएँ: एक उंगली को खाली वर्ग पर रखें और दूसरी उंगली को आकृति बनाने के लिए खींचें।';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'सीमा दिखाएं';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'स्पर्श पर प्रतिक्रिया';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'सक्षम होने पर, जब आप कोई मोहरा हटाएंगे या लेंगे तो डिवाइस शीघ्र ही कंपन करेगा।';
 
   @override
   String get mobileSettingsTab => 'सेटिंग';
@@ -229,7 +229,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param is not supported in this version.';
+    return 'इस संस्करण में $param वेरिएंट समर्थित नहीं है।';
   }
 
   @override
@@ -239,7 +239,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileWatchTab => 'टीवी';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'लीचेस ऐप पर आपका स्वागत है!';
 
   @override
   String get activityActivity => 'कार्यकलाप';
@@ -839,9 +839,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get broadcastOfficialWebsite => 'Official website';
-
-  @override
-  String get broadcastStandings => 'Standings';
 
   @override
   String get broadcastOfficialStandings => 'Official Standings';
@@ -2301,7 +2298,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get collapseVariations => 'विविधताओं को मिटाये';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'विविधताओं का विस्तार करें';
 
   @override
   String get forceVariation => 'बल भिन्नता';
@@ -2310,7 +2307,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get copyVariationPgn => 'प्रतिलिपि भिन्नता पीजीएन';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'मेनलाइन PGN की प्रतिलिपि बनाएँ';
 
   @override
   String get move => 'चाल';
@@ -3160,7 +3157,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get winner => 'विजयी';
 
   @override
-  String get standing => 'पद';
+  String get standings => 'Standings';
 
   @override
   String get createANewTournament => 'नयी प्रतियोगिता आरम्भ करें';

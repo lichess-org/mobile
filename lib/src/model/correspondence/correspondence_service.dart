@@ -6,7 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -102,35 +102,33 @@ class CorrespondenceService {
 
     final storedOngoingGames = await (await _storage).fetchOngoingGames(_session?.user.id);
 
-    ref.withClient((client) async {
-      try {
-        final gameRepository = GameRepository(client);
-        final ongoingGames = await ref.read(ongoingGamesProvider.future);
-        for (final sg in storedOngoingGames) {
-          final game = ongoingGames.firstWhereOrNull((e) => e.id == sg.$2.id);
-          if (game == null) {
-            _log.info(
-              'Deleting correspondence game ${sg.$2.id} because it is not present on the server anymore',
-            );
-            (await _storage).delete(sg.$2.id);
-          }
+    try {
+      final gameRepository = ref.read(gameRepositoryProvider);
+      final ongoingGames = await ref.read(ongoingGamesProvider.future);
+      for (final sg in storedOngoingGames) {
+        final game = ongoingGames.firstWhereOrNull((e) => e.id == sg.$2.id);
+        if (game == null) {
+          _log.info(
+            'Deleting correspondence game ${sg.$2.id} because it is not present on the server anymore',
+          );
+          (await _storage).delete(sg.$2.id);
         }
-
-        final playableGames = await gameRepository.getMyGamesByIds(
-          ISet(ongoingGames.map((e) => e.id)),
-        );
-
-        await Future.wait([
-          for (final playableGame in playableGames)
-            updateStoredGame(
-              ongoingGames.firstWhere((e) => e.id == playableGame.id).fullId,
-              playableGame,
-            ),
-        ]);
-      } catch (e, s) {
-        _log.warning('Failed to sync correspondence games', e, s);
       }
-    });
+
+      final playableGames = await gameRepository.getMyGamesByIds(
+        ISet(ongoingGames.map((e) => e.id)),
+      );
+
+      await Future.wait([
+        for (final playableGame in playableGames)
+          updateStoredGame(
+            ongoingGames.firstWhere((e) => e.id == playableGame.id).fullId,
+            playableGame,
+          ),
+      ]);
+    } catch (e, s) {
+      _log.warning('Failed to sync correspondence games', e, s);
+    }
   }
 
   /// Plays correspondence moves that were registered while the user was offline.

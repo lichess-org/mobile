@@ -841,9 +841,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastOfficialWebsite => 'Official website';
 
   @override
-  String get broadcastStandings => 'Standings';
-
-  @override
   String get broadcastOfficialStandings => 'Official Standings';
 
   @override
@@ -3160,7 +3157,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get winner => 'Winner';
 
   @override
-  String get standing => 'Standing';
+  String get standings => 'Standings';
 
   @override
   String get createANewTournament => 'Create a new tournament';
@@ -3449,7 +3446,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a cheated game.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game with suspected cheating.';
 
   @override
   String by(String param) {
@@ -7059,9 +7056,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get broadcastOfficialWebsite => 'Official website';
 
   @override
-  String get broadcastStandings => 'Standings';
-
-  @override
   String get broadcastOfficialStandings => 'Official Standings';
 
   @override
@@ -9380,7 +9374,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get winner => 'Winner';
 
   @override
-  String get standing => 'Standing';
+  String get standings => 'Standings';
 
   @override
   String get createANewTournament => 'Create a new tournament';
@@ -9669,7 +9663,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a cheated game.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game with suspected cheating.';
 
   @override
   String by(String param) {

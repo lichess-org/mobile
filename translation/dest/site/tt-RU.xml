@@ -61,6 +61,7 @@
   <string name="usingServerAnalysis">Сервер анализын куллану</string>
   <string name="loadingEngine">Движок йөкләнә...</string>
   <string name="calculatingMoves">Хәрәкәтләр хисаплана...</string>
+  <string name="engineFailed">Йөрткеч йөкләгәндә хата килеп чыкты</string>
   <string name="cloudAnalysis">Болыт анализы</string>
   <string name="goDeeper">Тирәңрәк</string>
   <string name="showThreat">Янауны күрсәтү</string>
@@ -401,7 +402,6 @@
   <string name="openTournaments">Ачык бәйгеләр</string>
   <string name="duration">Озаклыгы</string>
   <string name="winner">Җиңүче</string>
-  <string name="standing">Урыны</string>
   <string name="createANewTournament">Яңа бәйге башламак</string>
   <string name="tournamentCalendar">Бәйге календаре</string>
   <string name="conditionOfEntry">Керу тәлапләре:</string>

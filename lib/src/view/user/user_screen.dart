@@ -121,18 +121,13 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 }
 
 final _userActivityProvider = FutureProvider.autoDispose.family<IList<UserActivity>, UserId>(
-  (ref, id) => ref.withClient((client) => UserRepository(client).getActivity(id)),
+  (ref, id) => ref.read(userRepositoryProvider).getActivity(id),
   name: 'userActivityProvider',
 );
 
 final _currentGameProvider = FutureProvider.autoDispose.family<ExportedGame, UserId>(
-  (ref, id) => ref.withClient((client) => UserRepository(client).getCurrentGame(id)),
+  (ref, id) => ref.read(userRepositoryProvider).getCurrentGame(id),
   name: 'currentGameProvider',
-);
-final _crosstableProvider = FutureProvider.autoDispose.family<Crosstable, (UserId, UserId)>(
-  (ref, userIds) =>
-      ref.withClient((client) => UserRepository(client).getCrosstable(userIds.$1, userIds.$2)),
-  name: 'crosstableProvider',
 );
 
 class _UserProfileListView extends ConsumerWidget {
@@ -146,7 +141,10 @@ class _UserProfileListView extends ConsumerWidget {
   String _scoreDisplay(double score) {
     final integerPart = score.truncate();
     final decimalPart = score - integerPart;
-    return '$integerPart${decimalPart == 0.5 ? '½' : ''}';
+
+    return integerPart == 0 && decimalPart == 0.5
+        ? '½'
+        : '$integerPart${decimalPart == 0.5 ? '½' : ''}';
   }
 
   @override
@@ -161,7 +159,7 @@ class _UserProfileListView extends ConsumerWidget {
       _currentGameProvider(user.id).select((game) => game.valueOrNull?.playable ?? false),
     );
     final crosstable = session != null
-        ? ref.watch(_crosstableProvider((session.user.id, user.id)))
+        ? ref.watch(crosstableProvider(session.user.id, user.id, matchup: false))
         : null;
 
     if (user.disabled == true) {

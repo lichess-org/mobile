@@ -20,9 +20,9 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 
 class OfflineCorrespondenceGameScreen extends StatefulWidget {
   const OfflineCorrespondenceGameScreen({required this.initialGame, super.key});
@@ -182,8 +182,7 @@ class _BodyState extends ConsumerState<_Body> {
       children: [
         Expanded(
           child: SafeArea(
-            bottom: false,
-            child: BoardTable(
+            child: GameLayout(
               orientation: isBoardTurned ? youAre!.opposite : youAre!,
               lastMove: game.moveAt(stepCursor) as NormalMove?,
               interactiveBoardParams: (
@@ -208,92 +207,92 @@ class _BodyState extends ConsumerState<_Body> {
               onSelectMove: (moveIndex) {
                 // ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
               },
-            ),
-          ),
-        ),
-        BottomBar(
-          children: [
-            BottomBarButton(
-              label: context.l10n.flipBoard,
-              onTap: () {
-                setState(() {
-                  isBoardTurned = !isBoardTurned;
-                });
-              },
-              icon: CupertinoIcons.arrow_2_squarepath,
-            ),
-            BottomBarButton(
-              label: context.l10n.analysis,
-              onTap: () {
-                Navigator.of(context).push(
-                  AnalysisScreen.buildRoute(
-                    context,
-                    AnalysisOptions.standalone(
-                      orientation: game.youAre!,
-                      pgn: game.makePgn(),
-                      isComputerAnalysisAllowed: false,
-                      variant: game.variant,
-                      initialMoveCursor: stepCursor,
-                      // TODO implement offline storage and syncing of conditional premoves in CorrespondenceService and OfflineCorrespondenceGame
-                      // Until then, we do not enable conditional premoves in offline correspondence games
+              userActionsBar: BottomBar(
+                children: [
+                  BottomBarButton(
+                    label: context.l10n.flipBoard,
+                    onTap: () {
+                      setState(() {
+                        isBoardTurned = !isBoardTurned;
+                      });
+                    },
+                    icon: CupertinoIcons.arrow_2_squarepath,
+                  ),
+                  BottomBarButton(
+                    label: context.l10n.analysis,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        AnalysisScreen.buildRoute(
+                          context,
+                          AnalysisOptions.standalone(
+                            orientation: game.youAre!,
+                            pgn: game.makePgn(),
+                            isComputerAnalysisAllowed: false,
+                            variant: game.variant,
+                            initialMoveCursor: stepCursor,
+                            // TODO implement offline storage and syncing of conditional premoves in CorrespondenceService and OfflineCorrespondenceGame
+                            // Until then, we do not enable conditional premoves in offline correspondence games
+                          ),
+                        ),
+                      );
+                    },
+                    icon: Icons.biotech,
+                  ),
+                  BottomBarButton(
+                    label: 'Go to the next game',
+                    icon: Icons.skip_next,
+                    onTap: offlineOngoingGames.maybeWhen(
+                      data: (games) {
+                        final nextTurn = games
+                            .whereNot((g) => g.$2.id == game.id)
+                            .firstWhereOrNull((g) => g.$2.isMyTurn);
+                        return nextTurn != null
+                            ? () {
+                                widget.onGameChanged(nextTurn);
+                              }
+                            : null;
+                      },
+                      orElse: () => null,
                     ),
                   ),
-                );
-              },
-              icon: Icons.biotech,
-            ),
-            BottomBarButton(
-              label: 'Go to the next game',
-              icon: Icons.skip_next,
-              onTap: offlineOngoingGames.maybeWhen(
-                data: (games) {
-                  final nextTurn = games
-                      .whereNot((g) => g.$2.id == game.id)
-                      .firstWhereOrNull((g) => g.$2.isMyTurn);
-                  return nextTurn != null
-                      ? () {
-                          widget.onGameChanged(nextTurn);
-                        }
-                      : null;
-                },
-                orElse: () => null,
+                  BottomBarButton(
+                    label: context.l10n.mobileCorrespondenceClearSavedMove,
+                    onTap: game.registeredMoveAtPgn != null
+                        ? () {
+                            showConfirmDialog<void>(
+                              context,
+                              title: Text(context.l10n.mobileCorrespondenceClearSavedMove),
+                              isDestructiveAction: true,
+                              onConfirm: () => deleteRegisteredMove(),
+                            );
+                          }
+                        : null,
+                    icon: Icons.save,
+                  ),
+                  RepeatButton(
+                    onLongPress: canGoBackward ? () => moveBackward() : null,
+                    child: BottomBarButton(
+                      onTap: canGoBackward ? () => moveBackward() : null,
+                      label: 'Previous',
+                      icon: CupertinoIcons.chevron_back,
+                      showTooltip: false,
+                    ),
+                  ),
+                  Expanded(
+                    child: RepeatButton(
+                      onLongPress: canGoForward ? () => moveForward() : null,
+                      child: BottomBarButton(
+                        onTap: canGoForward ? () => moveForward() : null,
+                        label: context.l10n.next,
+                        icon: CupertinoIcons.chevron_forward,
+                        showTooltip: false,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            BottomBarButton(
-              label: context.l10n.mobileCorrespondenceClearSavedMove,
-              onTap: game.registeredMoveAtPgn != null
-                  ? () {
-                      showConfirmDialog<void>(
-                        context,
-                        title: Text(context.l10n.mobileCorrespondenceClearSavedMove),
-                        isDestructiveAction: true,
-                        onConfirm: () => deleteRegisteredMove(),
-                      );
-                    }
-                  : null,
-              icon: Icons.save,
-            ),
-            RepeatButton(
-              onLongPress: canGoBackward ? () => moveBackward() : null,
-              child: BottomBarButton(
-                onTap: canGoBackward ? () => moveBackward() : null,
-                label: 'Previous',
-                icon: CupertinoIcons.chevron_back,
-                showTooltip: false,
-              ),
-            ),
-            Expanded(
-              child: RepeatButton(
-                onLongPress: canGoForward ? () => moveForward() : null,
-                child: BottomBarButton(
-                  onTap: canGoForward ? () => moveForward() : null,
-                  label: context.l10n.next,
-                  icon: CupertinoIcons.chevron_forward,
-                  showTooltip: false,
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ],
     );
@@ -303,6 +302,7 @@ class _BodyState extends ConsumerState<_Body> {
     if (stepCursor > 0) {
       setState(() {
         stepCursor = stepCursor - 1;
+        promotionMove = null;
       });
       _playReplayMoveSound();
     }
@@ -312,6 +312,7 @@ class _BodyState extends ConsumerState<_Body> {
     if (stepCursor < game.steps.length - 1) {
       setState(() {
         stepCursor = stepCursor + 1;
+        promotionMove = null;
       });
       _playReplayMoveSound();
     }

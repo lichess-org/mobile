@@ -235,12 +235,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 widget.challenge!,
                 () => ref.read(createGameServiceProvider).cancelChallenge(),
               )
-            : const Column(
-                children: [
-                  Expanded(child: StandaloneGameLoadingBoard()),
-                  BottomBar.empty(),
-                ],
-              );
+            : const StandaloneGameLoadingContent(userActionsBar: BottomBar.empty());
 
         return Scaffold(
           resizeToAvoidBottomInset: false,
