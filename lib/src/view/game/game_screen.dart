@@ -33,76 +33,36 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 /// Screen to play a game, or to show a challenge or to show current user's past games.
 ///
 /// The screen can be created in three ways:
-/// - From the lobby, to play a game with a random opponent: using a [GameSeek] as [seek].
-/// - From a challenge, to accept or decline a challenge: using a [ChallengeRequest] as [challenge].
-/// - From a game id, to show a game that is already in progress: using a [GameFullId] as [initialGameId].
+/// - From the lobby, to play a game with a random opponent: using [CurrentGameSource.lobby].
+/// - From a challenge, to accept or decline a challenge: using a [CurrentGameSource.userChallenge].
+/// - From a game id, to show a game that is already in progress: using [CurrentGameSource.loadedGame].
 ///
 /// The screen will show a loading board while the game is being created.
 class GameScreen extends ConsumerStatefulWidget {
-  const GameScreen({
-    this.seek,
-    this.initialGameId,
-    this.challenge,
-    this.loadingFen,
-    this.loadingLastMove,
-    this.loadingOrientation,
-    this.lastMoveAt,
-    super.key,
-  }) : assert(
-         initialGameId != null || seek != null || challenge != null,
-         'Either a seek, a challenge or an initial game id must be provided.',
-       );
+  const GameScreen({required this.source, this.loadingPosition, this.lastMoveAt, super.key});
 
-  final GameSeek? seek;
-  final GameFullId? initialGameId;
-  final ChallengeRequest? challenge;
+  final GameScreenSource source;
 
-  final String? loadingFen;
-  final Move? loadingLastMove;
-  final Side? loadingOrientation;
+  final LoadingPosition? loadingPosition;
 
   /// The date of the last move played in the game. If null, the game is in progress.
   final DateTime? lastMoveAt;
 
-  _GameSource get source {
-    if (initialGameId != null) {
-      return _GameSource.game;
-    } else if (challenge != null) {
-      return _GameSource.challenge;
-    } else {
-      return _GameSource.lobby;
-    }
-  }
-
   static Route<dynamic> buildRoute(
     BuildContext context, {
-    GameSeek? seek,
-    GameFullId? initialGameId,
-    ChallengeRequest? challenge,
-    String? loadingFen,
-    Move? loadingLastMove,
-    Side? loadingOrientation,
+    required GameScreenSource source,
+    LoadingPosition? loadingPosition,
     DateTime? lastMoveAt,
   }) {
     return buildScreenRoute(
       context,
-      screen: GameScreen(
-        seek: seek,
-        initialGameId: initialGameId,
-        challenge: challenge,
-        loadingFen: loadingFen,
-        loadingLastMove: loadingLastMove,
-        loadingOrientation: loadingOrientation,
-        lastMoveAt: lastMoveAt,
-      ),
+      screen: GameScreen(source: source, loadingPosition: loadingPosition, lastMoveAt: lastMoveAt),
     );
   }
 
   @override
   ConsumerState<GameScreen> createState() => _GameScreenState();
 }
-
-enum _GameSource { lobby, challenge, game }
 
 class _GameScreenState extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
@@ -111,31 +71,34 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = currentGameProvider(
-      seek: widget.seek,
-      challenge: widget.challenge,
-      game: widget.initialGameId != null
-          ? (
-              gameId: widget.initialGameId!,
-              lastFen: widget.loadingFen,
-              lastMove: widget.loadingLastMove,
-              side: widget.loadingOrientation,
-            )
-          : null,
-    );
+    final provider = currentGameProvider(widget.source);
     final boardPreferences = ref.watch(boardPreferencesProvider);
 
     switch (ref.watch(provider)) {
-      case AsyncData(:final value):
-        final (game: loadedGame, challenge: challenge, declineReason: declineReason) = value;
+      case AsyncData(
+        value: ChallengeDeclinedState(
+          response: ChallengeDeclinedResponse(:final challenge, :final declineReason),
+        ),
+      ):
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: _ChallengeGameTitle(
+              challenge: (widget.source as UserChallengeSource).challengeRequest,
+            ),
+          ),
+          body: ChallengeDeclinedBoard(
+            challenge: challenge,
+            declineReason: declineReason != null
+                ? declineReason.label(context.l10n)
+                : ChallengeDeclineReason.generic.label(context.l10n),
+          ),
+        );
+      case AsyncData(value: GameCreatedState(:final createdGameId)):
         final isRealTimePlayingGame =
-            (loadedGame != null
-                    ? ref.watch(isRealTimePlayableGameProvider(loadedGame.gameId))
-                    : const AsyncValue.data(true))
-                .valueOrNull ??
-            false;
+            ref.watch(isRealTimePlayableGameProvider(createdGameId)).valueOrNull ?? false;
 
-        final socketUri = loadedGame != null ? GameController.socketUri(loadedGame.gameId) : null;
+        final socketUri = GameController.socketUri(createdGameId);
 
         final body = PopScope(
           canPop: isRealTimePlayingGame != true,
@@ -143,41 +106,38 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             // view padding can change on Android when immersive mode is enabled, so to prevent any
             // board vertical shift, we set `maintainBottomViewPadding` to true.
             maintainBottomViewPadding: true,
-            child: loadedGame != null
-                ? GameBody(
-                    loadedGame: loadedGame,
-                    whiteClockKey: _whiteClockKey,
-                    blackClockKey: _blackClockKey,
-                    boardKey: _boardKey,
-                    onLoadGameCallback: (id) {
-                      if (mounted) {
-                        ref.read(provider.notifier).loadGame(id);
-                      }
-                    },
-                    onNewOpponentCallback: (game) {
-                      if (!mounted) return;
+            child: GameBody(
+              gameId: createdGameId,
+              // Only show the initial loading position if this is still the game that the GameScreen
+              // was created for. This will not be the case when searching for a new opponent after the game.
+              loadingPosition: switch (widget.source) {
+                ExistingGameSource(:final id) when id == createdGameId => widget.loadingPosition,
+                _ => null,
+              },
+              whiteClockKey: _whiteClockKey,
+              blackClockKey: _blackClockKey,
+              boardKey: _boardKey,
+              onLoadGameCallback: (id) {
+                if (mounted) {
+                  ref.read(provider.notifier).loadGame(id);
+                }
+              },
+              onNewOpponentCallback: (game) {
+                if (!mounted) return;
 
-                      if (widget.source == _GameSource.lobby) {
-                        ref.read(provider.notifier).newOpponent();
-                      } else {
-                        final savedSetup = ref.read(gameSetupPreferencesProvider);
-                        Navigator.of(context, rootNavigator: true).pushReplacement(
-                          GameScreen.buildRoute(
-                            context,
-                            seek: GameSeek.newOpponentFromGame(game, savedSetup),
-                          ),
-                        );
-                      }
-                    },
-                  )
-                : widget.challenge != null && challenge != null
-                ? ChallengeDeclinedBoard(
-                    challenge: challenge,
-                    declineReason: declineReason != null
-                        ? declineReason.label(context.l10n)
-                        : ChallengeDeclineReason.generic.label(context.l10n),
-                  )
-                : const LoadGameError('Could not create the game.'),
+                if (widget.source is LobbySource) {
+                  ref.read(provider.notifier).newOpponent();
+                } else {
+                  final savedSetup = ref.read(gameSetupPreferencesProvider);
+                  Navigator.of(context, rootNavigator: true).pushReplacement(
+                    GameScreen.buildRoute(
+                      context,
+                      source: LobbySource(GameSeek.newOpponentFromGame(game, savedSetup)),
+                    ),
+                  );
+                }
+              },
+            ),
           ),
         );
 
@@ -185,15 +145,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: isRealTimePlayingGame ? SocketPingRatingIcon(socketUri: socketUri) : null,
-            title: loadedGame != null
-                ? _StandaloneGameTitle(id: loadedGame.gameId, lastMoveAt: widget.lastMoveAt)
-                : widget.seek != null
-                ? _LobbyGameTitle(seek: widget.seek!)
-                : widget.challenge != null
-                ? _ChallengeGameTitle(challenge: widget.challenge!)
-                : const SizedBox.shrink(),
-
-            actions: [if (loadedGame != null) _GameMenu(gameId: loadedGame.gameId)],
+            title: _StandaloneGameTitle(id: createdGameId, lastMoveAt: widget.lastMoveAt),
+            actions: [_GameMenu(gameId: createdGameId)],
           ),
           body: Theme.of(context).platform == TargetPlatform.android
               ? AndroidGesturesExclusionWidget(
@@ -216,36 +169,43 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: const SocketPingRatingIcon(),
-            title: widget.seek != null
-                ? _LobbyGameTitle(seek: widget.seek!)
-                : widget.challenge != null
-                ? _ChallengeGameTitle(challenge: widget.challenge!)
-                : const SizedBox.shrink(),
+            title: switch (widget.source) {
+              LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
+              UserChallengeSource(:final challengeRequest) => _ChallengeGameTitle(
+                challenge: challengeRequest,
+              ),
+              _ => const SizedBox.shrink(),
+            },
           ),
           body: PopScope(child: message),
         );
       case _:
-        final loadingBoard = widget.seek != null
-            ? LobbyScreenLoadingContent(
-                widget.seek!,
-                () => ref.read(createGameServiceProvider).cancelSeek(),
-              )
-            : widget.challenge != null
-            ? ChallengeLoadingContent(
-                widget.challenge!,
-                () => ref.read(createGameServiceProvider).cancelChallenge(),
-              )
-            : const StandaloneGameLoadingContent(userActionsBar: BottomBar.empty());
+        final loadingBoard = switch (widget.source) {
+          LobbySource(:final seek) => LobbyScreenLoadingContent(
+            seek,
+            () => ref.read(createGameServiceProvider).cancelSeek(),
+          ),
+          UserChallengeSource(:final challengeRequest) => ChallengeLoadingContent(
+            challengeRequest,
+            () => ref.read(createGameServiceProvider).cancelChallenge(),
+          ),
+          ExistingGameSource() => StandaloneGameLoadingContent(
+            position: widget.loadingPosition,
+            userActionsBar: const BottomBar.empty(),
+          ),
+        };
 
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: const SocketPingRatingIcon(),
-            title: widget.seek != null
-                ? _LobbyGameTitle(seek: widget.seek!)
-                : widget.challenge != null
-                ? _ChallengeGameTitle(challenge: widget.challenge!)
-                : const SizedBox.shrink(),
+            title: switch (widget.source) {
+              LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
+              UserChallengeSource(:final challengeRequest) => _ChallengeGameTitle(
+                challenge: challengeRequest,
+              ),
+              _ => const SizedBox.shrink(),
+            },
           ),
           body: PopScope(canPop: false, child: loadingBoard),
         );

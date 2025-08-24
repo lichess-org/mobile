@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
@@ -16,12 +17,19 @@ import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'create_game_service.g.dart';
+part 'create_game_service.freezed.dart';
 
-typedef ChallengeResponse = ({
-  GameFullId? gameFullId,
-  Challenge? challenge,
-  ChallengeDeclineReason? declineReason,
-});
+@freezed
+sealed class ChallengeResponse with _$ChallengeResponse {
+  const ChallengeResponse._();
+
+  factory ChallengeResponse.accepted({required GameFullId gameFullId}) = ChallengeAcceptedResponse;
+
+  factory ChallengeResponse.declined({
+    required Challenge challenge,
+    required ChallengeDeclineReason? declineReason,
+  }) = ChallengeDeclinedResponse;
+}
 
 /// A provider for the [CreateGameService].
 @riverpod
@@ -159,17 +167,16 @@ class CreateGameService {
             try {
               final updatedChallenge = await challengeRepository.show(challenge.id);
               if (updatedChallenge.gameFullId != null) {
-                completer.complete((
-                  gameFullId: updatedChallenge.gameFullId,
-                  challenge: null,
-                  declineReason: null,
-                ));
+                completer.complete(
+                  ChallengeResponse.accepted(gameFullId: updatedChallenge.gameFullId!),
+                );
               } else if (updatedChallenge.status == ChallengeStatus.declined) {
-                completer.complete((
-                  gameFullId: null,
-                  challenge: challenge,
-                  declineReason: updatedChallenge.declineReason,
-                ));
+                completer.complete(
+                  ChallengeResponse.declined(
+                    challenge: challenge,
+                    declineReason: updatedChallenge.declineReason,
+                  ),
+                );
               }
             } catch (e) {
               _log.warning('Failed to reload challenge', e);

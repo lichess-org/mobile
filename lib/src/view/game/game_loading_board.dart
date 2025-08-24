@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
+import 'package:lichess_mobile/src/view/game/game_body.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
@@ -237,17 +238,9 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
 }
 
 class StandaloneGameLoadingContent extends StatelessWidget {
-  const StandaloneGameLoadingContent({
-    this.fen,
-    this.lastMove,
-    this.orientation,
-    this.userActionsBar,
-    super.key,
-  });
+  const StandaloneGameLoadingContent({this.position, this.userActionsBar, super.key});
 
-  final String? fen;
-  final Side? orientation;
-  final Move? lastMove;
+  final LoadingPosition? position;
   final Widget? userActionsBar;
 
   @override
@@ -255,9 +248,9 @@ class StandaloneGameLoadingContent extends StatelessWidget {
     return Shimmer(
       child: SafeArea(
         child: GameLayout(
-          orientation: orientation ?? Side.white,
-          fen: fen ?? kEmptyFen,
-          lastMove: lastMove as NormalMove?,
+          orientation: position?.orientation ?? Side.white,
+          fen: position?.fen ?? kEmptyFen,
+          lastMove: position?.lastMove as NormalMove?,
           topTable: const LoadingPlayerWidget(),
           bottomTable: const LoadingPlayerWidget(),
           moves: const [],
