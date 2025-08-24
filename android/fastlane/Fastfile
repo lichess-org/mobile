@@ -38,11 +38,9 @@ end
 
 def deploy_to_play_store(track)
   sh "flutter build appbundle -v --obfuscate --split-debug-info=./build/app/outputs/bundle/release/symbols --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{ENV['WS_SECRET']}"
-  sh "./add-debug-symbols.sh"
   upload_to_play_store(
     track: track,
     aab: '../build/app/outputs/bundle/release/app-release.aab',
     json_key_data: ENV['PLAY_STORE_CONFIG_JSON'],
-    mapping: '../build/app/outputs/bundle/release/native-debug-symbols/native-debug-symbols.zip',
   )
 end
