@@ -118,7 +118,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
     this.livePath,
     this.premovePaths,
     required this.pgnRootComments,
-    required this.notifier,
+    this.notifier,
     this.shouldShowComputerAnalysis = true,
     this.shouldShowAnnotations = true,
     this.shouldShowComments = true,
@@ -126,7 +126,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   });
 
   /// Root of the PGN tree to display
-  final ViewRoot root;
+  final ViewNode root;
 
   /// Path to the currently selected move in the tree
   final UciPath currentPath;
@@ -142,7 +142,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   final IList<PgnComment>? pgnRootComments;
 
   /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move or collapsing variations
-  final PgnTreeNotifier notifier;
+  final PgnTreeNotifier? notifier;
 
   /// Whether to show computer analysis informations.
   ///
@@ -295,7 +295,7 @@ typedef _PgnTreeViewParams = ({
   GlobalKey currentMoveKey,
 
   /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move.
-  PgnTreeNotifier notifier,
+  PgnTreeNotifier? notifier,
 });
 
 /// Filter node children when computer analysis is disabled
@@ -328,7 +328,7 @@ bool _hasNonInlineSideLine(ViewNode node, _PgnTreeViewParams params, {required b
 /// Splits the mainline into parts, where each part is a sequence of moves that are displayed on the same line.
 ///
 /// A part ends when a mainline node has a sideline that should not be displayed inline.
-Iterable<List<ViewNode>> _mainlineParts(ViewRoot root, _PgnTreeViewParams params) =>
+Iterable<List<ViewNode>> _mainlineParts(ViewNode root, _PgnTreeViewParams params) =>
     [root, ...root.mainline]
         .splitAfter((n) => _hasNonInlineSideLine(n, params, isMainline: true))
         .takeWhile((nodes) => nodes.firstOrNull?.children.isNotEmpty == true);
@@ -337,7 +337,7 @@ class _PgnTreeView extends StatefulWidget {
   const _PgnTreeView({required this.root, required this.rootComments, required this.params});
 
   /// Root of the PGN tree
-  final ViewRoot root;
+  final ViewNode root;
 
   /// Comments associated with the root node
   final IList<PgnComment>? rootComments;
@@ -1144,15 +1144,17 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
             ...sideLineWidgets,
             if (_hasCollapsedLines)
               GestureDetector(
+                onTap: widget.params.notifier != null
+                    ? () {
+                        widget.params.notifier?.expandVariations(widget.initialPath);
+                      }
+                    : null,
                 child: Icon(
                   Icons.add_box,
                   color: _textColor(context, 0.6),
                   key: _sideLinesStartKeys.last,
                   size: _baseTextStyle.fontSize! + 5,
                 ),
-                onTap: () {
-                  widget.params.notifier.expandVariations(widget.initialPath);
-                },
               ),
           ],
         ),
@@ -1264,24 +1266,26 @@ class InlineMove extends ConsumerWidget {
     return InkWell(
       key: isCurrentMove ? params.currentMoveKey : null,
       borderRadius: borderRadius,
-      onTap: () => params.notifier.userJump(path),
-      onLongPress: () {
-        showModalBottomSheet<void>(
-          context: context,
-          isDismissible: true,
-          isScrollControlled: true,
-          showDragHandle: true,
-          builder: (context) => _MoveContextMenu(
-            notifier: params.notifier,
-            title: ply.isOdd
-                ? '${(ply / 2).ceil()}. $moveWithNag'
-                : '${(ply / 2).ceil()}... $moveWithNag',
-            path: path,
-            branch: branch,
-            lineInfo: lineInfo,
-          ),
-        );
-      },
+      onTap: params.notifier != null ? () => params.notifier?.userJump(path) : null,
+      onLongPress: params.notifier != null
+          ? () {
+              showModalBottomSheet<void>(
+                context: context,
+                isDismissible: true,
+                isScrollControlled: true,
+                showDragHandle: true,
+                builder: (context) => _MoveContextMenu(
+                  notifier: params.notifier,
+                  title: ply.isOdd
+                      ? '${(ply / 2).ceil()}. $moveWithNag'
+                      : '${(ply / 2).ceil()}... $moveWithNag',
+                  path: path,
+                  branch: branch,
+                  lineInfo: lineInfo,
+                ),
+              );
+            }
+          : null,
       child: Container(
         padding: kInlineMovePadding,
         decoration: _boxDecoration(context, isCurrentMove, isLiveMove),
@@ -1333,7 +1337,7 @@ class _MoveContextMenu extends ConsumerWidget {
   final UciPath path;
   final ViewBranch branch;
   final _LineInfo lineInfo;
-  final PgnTreeNotifier notifier;
+  final PgnTreeNotifier? notifier;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1391,23 +1395,23 @@ class _MoveContextMenu extends ConsumerWidget {
           BottomSheetContextMenuAction(
             icon: Icons.subtitles_off,
             child: Text(context.l10n.collapseVariations),
-            onPressed: () => notifier.collapseVariations(lineInfo.pathToLine),
+            onPressed: () => notifier?.collapseVariations(lineInfo.pathToLine),
           ),
           BottomSheetContextMenuAction(
             icon: Icons.expand_less,
             child: Text(context.l10n.promoteVariation),
-            onPressed: () => notifier.promoteVariation(path, false),
+            onPressed: () => notifier?.promoteVariation(path, false),
           ),
           BottomSheetContextMenuAction(
             icon: Icons.check,
             child: Text(context.l10n.makeMainLine),
-            onPressed: () => notifier.promoteVariation(path, true),
+            onPressed: () => notifier?.promoteVariation(path, true),
           ),
         ],
         BottomSheetContextMenuAction(
           icon: Icons.delete,
           child: Text(context.l10n.deleteFromHere),
-          onPressed: () => notifier.deleteFromHere(path),
+          onPressed: () => notifier?.deleteFromHere(path),
         ),
       ],
     );

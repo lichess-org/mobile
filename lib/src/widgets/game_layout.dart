@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 
 typedef InteractiveBoardParams = ({
@@ -22,7 +22,7 @@ typedef InteractiveBoardParams = ({
   Premovable? premovable,
 });
 
-/// Board layout that adapts to screen size and aspect ratio.
+/// Layout for game screens that adapts to screen size and aspect ratio
 ///
 /// On portrait mode, the board will be displayed in the middle of the screen,
 /// with the table spaces on top and bottom.
@@ -32,9 +32,9 @@ typedef InteractiveBoardParams = ({
 /// An optional move list can be displayed above the top table space.
 ///
 /// An optional overlay or error message can be displayed on top of the board.
-class BoardTable extends ConsumerStatefulWidget {
-  /// Creates a board table with the given values.
-  const BoardTable({
+class GameLayout extends ConsumerStatefulWidget {
+  /// Creates a game layout with the given values.
+  const GameLayout({
     required this.orientation,
     this.fen,
     this.interactiveBoardParams,
@@ -43,23 +43,22 @@ class BoardTable extends ConsumerStatefulWidget {
     this.topTable = const SizedBox.shrink(),
     this.bottomTable = const SizedBox.shrink(),
     this.shapes,
-    this.engineGauge,
     this.moves,
     this.currentMoveIndex = 0,
     this.onSelectMove,
     this.boardOverlay,
     this.errorMessage,
-    this.showEngineGaugePlaceholder = false,
     this.boardKey,
     this.zenMode = false,
+    this.userActionsBar,
     super.key,
   }) : assert(
          fen != null || interactiveBoardParams != null,
          'Either a fen or interactiveBoardParams must be provided',
        );
 
-  /// Creates an empty board table (useful for loading).
-  const BoardTable.empty({this.moves, this.showEngineGaugePlaceholder = false, this.errorMessage})
+  /// Creates an empty game layout (useful for loading).
+  const GameLayout.empty({this.moves, this.errorMessage})
     : orientation = Side.white,
       fen = kEmptyFen,
       interactiveBoardParams = null,
@@ -68,12 +67,12 @@ class BoardTable extends ConsumerStatefulWidget {
       topTable = const SizedBox.shrink(),
       bottomTable = const SizedBox.shrink(),
       shapes = null,
-      engineGauge = null,
       currentMoveIndex = 0,
       onSelectMove = null,
       boardOverlay = null,
       boardKey = null,
-      zenMode = false;
+      zenMode = false,
+      userActionsBar = null;
 
   final String? fen;
 
@@ -98,9 +97,6 @@ class BoardTable extends ConsumerStatefulWidget {
   /// Widget that will appear at the bottom of the board.
   final Widget bottomTable;
 
-  /// Optional engine gauge that will be displayed next to the board.
-  final EngineGaugeParams? engineGauge;
-
   /// Optional list of moves that will be displayed on top of the board.
   final List<String>? moves;
 
@@ -116,17 +112,18 @@ class BoardTable extends ConsumerStatefulWidget {
   /// Optional widget that will be displayed on top of the board.
   final Widget? boardOverlay;
 
-  /// Whether to show the engine gauge placeholder.
-  final bool showEngineGaugePlaceholder;
-
   /// If true, the move list will be hidden
   final bool zenMode;
 
+  /// Optional widget that contains various user actions, usually a `BottomBar`.
+  /// Displayed below the board, or below the move list if landscape mode is used.
+  final Widget? userActionsBar;
+
   @override
-  ConsumerState<BoardTable> createState() => _BoardTableState();
+  ConsumerState<GameLayout> createState() => _GameLayoutState();
 }
 
-class _BoardTableState extends ConsumerState<BoardTable> {
+class _GameLayoutState extends ConsumerState<GameLayout> {
   ISet<Shape> userShapes = ISet();
 
   @override
@@ -183,7 +180,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                _BoardWidget(
+                BoardWidget(
                   size: boardSize,
                   fen: fen,
                   orientation: widget.orientation,
@@ -195,15 +192,6 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
                 ),
-                if (widget.engineGauge != null) ...[
-                  const SizedBox(width: 4.0),
-                  EngineGauge(
-                    params: widget.engineGauge!,
-                    displayMode: EngineGaugeDisplayMode.vertical,
-                  ),
-                ] else if (widget.showEngineGaugePlaceholder) ...[
-                  const SizedBox(width: kEvalGaugeSize + 4.0),
-                ],
                 const SizedBox(width: 16.0),
                 Expanded(
                   child: Column(
@@ -214,7 +202,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                       if (boardPrefs.moveListDisplay && !widget.zenMode && slicedMoves != null)
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            padding: const EdgeInsets.only(top: 16.0),
                             child: MoveList(
                               type: MoveListType.stacked,
                               slicedMoves: slicedMoves,
@@ -225,6 +213,13 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                         )
                       else
                         const Spacer(),
+
+                      if (widget.userActionsBar != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: widget.userActionsBar,
+                        ),
+
                       widget.bottomTable,
                     ],
                   ),
@@ -267,23 +262,11 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   child: widget.topTable,
                 ),
               ),
-              if (widget.engineGauge != null)
-                Padding(
-                  padding: isTablet
-                      ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                      : EdgeInsets.zero,
-                  child: EngineGauge(
-                    params: widget.engineGauge!,
-                    displayMode: EngineGaugeDisplayMode.horizontal,
-                  ),
-                )
-              else if (widget.showEngineGaugePlaceholder)
-                const SizedBox(height: kEvalGaugeSize),
               Padding(
                 padding: isTablet
                     ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
                     : EdgeInsets.zero,
-                child: _BoardWidget(
+                child: BoardWidget(
                   size: boardSize,
                   fen: fen,
                   orientation: widget.orientation,
@@ -304,6 +287,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                   child: widget.bottomTable,
                 ),
               ),
+              if (widget.userActionsBar != null) widget.userActionsBar!,
             ],
           );
         }
@@ -332,104 +316,6 @@ class _BoardTableState extends ConsumerState<BoardTable> {
     setState(() {
       userShapes = ISet();
     });
-  }
-}
-
-class _BoardWidget extends StatelessWidget {
-  const _BoardWidget({
-    required this.size,
-    required this.fen,
-    required this.orientation,
-    required this.gameData,
-    this.lastMove,
-    this.shapes,
-    required this.settings,
-    this.boardOverlay,
-    this.error,
-    this.boardKey,
-  });
-
-  final double size;
-  final String fen;
-  final Side orientation;
-  final GameData? gameData;
-  final Move? lastMove;
-  final ISet<Shape>? shapes;
-  final ChessboardSettings settings;
-  final String? error;
-  final Widget? boardOverlay;
-  final GlobalKey? boardKey;
-
-  @override
-  Widget build(BuildContext context) {
-    final board = Chessboard(
-      key: boardKey,
-      size: size,
-      fen: fen,
-      orientation: orientation,
-      game: gameData,
-      lastMove: lastMove,
-      shapes: shapes,
-      settings: settings,
-    );
-
-    if (boardOverlay != null) {
-      return SizedBox.square(
-        dimension: size,
-        child: Stack(
-          children: [
-            board,
-            SizedBox.square(
-              dimension: size,
-              child: Center(
-                child: SizedBox(
-                  width: (size / 8) * 6.6,
-                  height: (size / 8) * 4.6,
-                  child: boardOverlay,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    } else if (error != null) {
-      return SizedBox.square(
-        dimension: size,
-        child: Stack(
-          children: [
-            board,
-            _ErrorWidget(errorMessage: error!, boardSize: size),
-          ],
-        ),
-      );
-    }
-
-    return board;
-  }
-}
-
-class _ErrorWidget extends StatelessWidget {
-  const _ErrorWidget({required this.errorMessage, required this.boardSize});
-  final double boardSize;
-  final String errorMessage;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: boardSize,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            ),
-            child: Padding(padding: const EdgeInsets.all(10.0), child: Text(errorMessage)),
-          ),
-        ),
-      ),
-    );
   }
 }
 

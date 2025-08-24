@@ -9,9 +9,9 @@ import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
-import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -33,52 +33,61 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
     return Column(
       children: [
         Expanded(
-          child: BoardTable(
-            orientation: Side.white,
-            fen: kEmptyFen,
-            topTable: const SizedBox.shrink(),
-            bottomTable: const SizedBox.shrink(),
-            moves: const [],
-            boardOverlay: Card(
-              color: Theme.of(context).dialogTheme.backgroundColor,
-              elevation: 2.0,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(context.l10n.mobileWaitingForOpponentToJoin),
-                    const SizedBox(height: 26.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          widget.seek.perf.icon,
-                          color: DefaultTextStyle.of(context).style.color,
-                        ),
-                        const SizedBox(width: 8.0),
+          child: SafeArea(
+            child: GameLayout(
+              orientation: Side.white,
+              fen: kEmptyFen,
+              topTable: const SizedBox.shrink(),
+              bottomTable: const SizedBox.shrink(),
+              moves: const [],
+              boardOverlay: Card(
+                color: Theme.of(context).dialogTheme.backgroundColor,
+                elevation: 2.0,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(context.l10n.mobileWaitingForOpponentToJoin),
+                      const SizedBox(height: 26.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            widget.seek.perf.icon,
+                            color: DefaultTextStyle.of(context).style.color,
+                          ),
+                          const SizedBox(width: 8.0),
+                          Text(
+                            widget.seek.timeIncrement?.display ??
+                                '${context.l10n.daysPerTurn}: ${widget.seek.days}',
+                            style: TextTheme.of(context).titleLarge,
+                          ),
+                        ],
+                      ),
+                      if (widget.seek.ratingRange != null) ...[
+                        const SizedBox(height: 8.0),
                         Text(
-                          widget.seek.timeIncrement?.display ??
-                              '${context.l10n.daysPerTurn}: ${widget.seek.days}',
-                          style: TextTheme.of(context).titleLarge,
-                        ),
-                      ],
-                    ),
-                    //Do not show rating range if the default values (-500, +500) are used
-                    if (widget.seek.ratingRange != null &&
-                        !(widget.seek.ratingRange!.$1 + 1000 == widget.seek.ratingRange!.$2)) ...[
-                      const SizedBox(height: 8.0),
-                      RatingPrefAware(
-                        child: Text(
                           '${widget.seek.ratingRange!.$1}-${widget.seek.ratingRange!.$2}',
                           style: TextTheme.of(context).titleMedium,
                         ),
-                      ),
+                      ],
+                      //Do not show rating range if the default values (-500, +500) are used
+                      if (widget.seek.ratingRange != null &&
+                          !(widget.seek.ratingRange!.$1 + 1000 == widget.seek.ratingRange!.$2)) ...[
+                        const SizedBox(height: 8.0),
+                        RatingPrefAware(
+                          child: Text(
+                            '${widget.seek.ratingRange!.$1}-${widget.seek.ratingRange!.$2}',
+                            style: TextTheme.of(context).titleMedium,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 16.0),
+                      _LobbyNumbers(),
                     ],
-                    const SizedBox(height: 16.0),
-                    _LobbyNumbers(),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -142,44 +151,46 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
     return Column(
       children: [
         Expanded(
-          child: BoardTable(
-            orientation: Side.white,
-            fen: kEmptyFen,
-            topTable: const SizedBox.shrink(),
-            bottomTable: const SizedBox.shrink(),
-            moves: const [],
-            boardOverlay: Card(
-              color: Theme.of(context).dialogTheme.backgroundColor,
-              elevation: 2.0,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(context.l10n.waitingForOpponent),
-                    const SizedBox(height: 16.0),
-                    UserFullNameWidget(
-                      user: widget.challenge.destUser,
-                      style: TextTheme.of(context).titleLarge,
-                    ),
-                    const SizedBox(height: 16.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          widget.challenge.perf.icon,
-                          color: DefaultTextStyle.of(context).style.color,
-                        ),
-                        const SizedBox(width: 8.0),
-                        Text(
-                          widget.challenge.timeIncrement?.display ??
-                              '${context.l10n.daysPerTurn}: ${widget.challenge.days}',
-                          style: TextTheme.of(context).titleLarge,
-                        ),
-                      ],
-                    ),
-                  ],
+          child: SafeArea(
+            child: GameLayout(
+              orientation: Side.white,
+              fen: kEmptyFen,
+              topTable: const SizedBox.shrink(),
+              bottomTable: const SizedBox.shrink(),
+              moves: const [],
+              boardOverlay: Card(
+                color: Theme.of(context).dialogTheme.backgroundColor,
+                elevation: 2.0,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(context.l10n.waitingForOpponent),
+                      const SizedBox(height: 16.0),
+                      UserFullNameWidget(
+                        user: widget.challenge.destUser,
+                        style: TextTheme.of(context).titleLarge,
+                      ),
+                      const SizedBox(height: 16.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            widget.challenge.perf.icon,
+                            color: DefaultTextStyle.of(context).style.color,
+                          ),
+                          const SizedBox(width: 8.0),
+                          Text(
+                            widget.challenge.timeIncrement?.display ??
+                                '${context.l10n.daysPerTurn}: ${widget.challenge.days}',
+                            style: TextTheme.of(context).titleLarge,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -235,7 +246,7 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer(
-      child: BoardTable(
+      child: GameLayout(
         orientation: orientation ?? Side.white,
         fen: fen ?? kEmptyFen,
         lastMove: lastMove as NormalMove?,
@@ -304,13 +315,15 @@ class LoadGameError extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          child: BoardTable(
-            orientation: Side.white,
-            fen: kEmptyFen,
-            topTable: const SizedBox.shrink(),
-            bottomTable: const SizedBox.shrink(),
-            moves: const [],
-            errorMessage: errorMessage,
+          child: SafeArea(
+            child: GameLayout(
+              orientation: Side.white,
+              fen: kEmptyFen,
+              topTable: const SizedBox.shrink(),
+              bottomTable: const SizedBox.shrink(),
+              moves: const [],
+              errorMessage: errorMessage,
+            ),
           ),
         ),
         BottomBar(
@@ -342,46 +355,51 @@ class ChallengeDeclinedBoard extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          child: BoardTable(
-            orientation: Side.white,
-            fen: kEmptyFen,
-            topTable: const SizedBox.shrink(),
-            bottomTable: const SizedBox.shrink(),
-            moves: const [],
-            boardOverlay: Card(
-              color: Theme.of(context).dialogTheme.backgroundColor,
-              elevation: 2.0,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        context.l10n.challengeChallengeDeclined,
-                        style: TextTheme.of(context).titleMedium,
-                      ),
-                      const SizedBox(height: 8.0),
-                      Divider(height: 26.0, thickness: 0.0, color: textColor),
-                      Text(declineReason, style: const TextStyle(fontStyle: FontStyle.italic)),
-                      Divider(height: 26.0, thickness: 0.0, color: textColor),
-                      if (challenge.destUser != null)
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text(' — '),
-                              UserFullNameWidget(user: challenge.destUser?.user),
-                              if (challenge.destUser?.lagRating != null) ...[
-                                const SizedBox(width: 6.0),
-                                LagIndicator(lagRating: challenge.destUser!.lagRating!, size: 13.0),
-                              ],
-                            ],
-                          ),
+          child: SafeArea(
+            child: GameLayout(
+              orientation: Side.white,
+              fen: kEmptyFen,
+              topTable: const SizedBox.shrink(),
+              bottomTable: const SizedBox.shrink(),
+              moves: const [],
+              boardOverlay: Card(
+                color: Theme.of(context).dialogTheme.backgroundColor,
+                elevation: 2.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          context.l10n.challengeChallengeDeclined,
+                          style: TextTheme.of(context).titleMedium,
                         ),
-                    ],
+                        const SizedBox(height: 8.0),
+                        Divider(height: 26.0, thickness: 0.0, color: textColor),
+                        Text(declineReason, style: const TextStyle(fontStyle: FontStyle.italic)),
+                        Divider(height: 26.0, thickness: 0.0, color: textColor),
+                        if (challenge.destUser != null)
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(' — '),
+                                UserFullNameWidget(user: challenge.destUser?.user),
+                                if (challenge.destUser?.lagRating != null) ...[
+                                  const SizedBox(width: 6.0),
+                                  LagIndicator(
+                                    lagRating: challenge.destUser!.lagRating!,
+                                    size: 13.0,
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),
