@@ -19,9 +19,10 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live-Streamer</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du muss ageloggt si fir dës Säit ze gesinn.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Keng Resultater</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Bedenkt wgl., datt am Moment net all Funktioune vun der aler App oder vun der Websäit disponibel sinn, mee et komme stänneg nei Funktiounen derbäi.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du follows kengem Benotzer.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Lokal Partie</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Lokal Partie</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Spiller mat „%s“</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Lénks</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Riets</string>
@@ -35,6 +36,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Aufgaben</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Rezent Sichen</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Lieszeechen ewechhuelen</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Serveranalys</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Auer-Positioun</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Virastellungen</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Zil vun der Figur, déi geréckelt gëtt</string>
