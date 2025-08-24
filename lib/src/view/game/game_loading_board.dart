@@ -236,23 +236,33 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
   }
 }
 
-class StandaloneGameLoadingBoard extends StatelessWidget {
-  const StandaloneGameLoadingBoard({this.fen, this.lastMove, this.orientation, super.key});
+class StandaloneGameLoadingContent extends StatelessWidget {
+  const StandaloneGameLoadingContent({
+    this.fen,
+    this.lastMove,
+    this.orientation,
+    this.userActionsBar,
+    super.key,
+  });
 
   final String? fen;
   final Side? orientation;
   final Move? lastMove;
+  final Widget? userActionsBar;
 
   @override
   Widget build(BuildContext context) {
     return Shimmer(
-      child: GameLayout(
-        orientation: orientation ?? Side.white,
-        fen: fen ?? kEmptyFen,
-        lastMove: lastMove as NormalMove?,
-        topTable: const LoadingPlayerWidget(),
-        bottomTable: const LoadingPlayerWidget(),
-        moves: const [],
+      child: SafeArea(
+        child: GameLayout(
+          orientation: orientation ?? Side.white,
+          fen: fen ?? kEmptyFen,
+          lastMove: lastMove as NormalMove?,
+          topTable: const LoadingPlayerWidget(),
+          bottomTable: const LoadingPlayerWidget(),
+          moves: const [],
+          userActionsBar: userActionsBar,
+        ),
       ),
     );
   }

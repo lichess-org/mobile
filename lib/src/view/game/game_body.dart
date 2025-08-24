@@ -289,38 +289,26 @@ class GameBody extends ConsumerWidget {
         );
 
       case AsyncData(:final value, isRefreshing: true):
-        return Column(
-          children: [
-            Expanded(
-              child: StandaloneGameLoadingBoard(
-                fen: value.game.lastPosition.fen,
-                lastMove: value.game.moveAt(value.stepCursor) as NormalMove?,
-                orientation: value.game.youAre,
-              ),
-            ),
-            _GameBottomBar(
-              id: loadedGame.gameId,
-              onLoadGameCallback: onLoadGameCallback,
-              onNewOpponentCallback: onNewOpponentCallback,
-            ),
-          ],
+        return StandaloneGameLoadingContent(
+          fen: value.game.lastPosition.fen,
+          lastMove: value.game.moveAt(value.stepCursor) as NormalMove?,
+          orientation: value.game.youAre,
+          userActionsBar: _GameBottomBar(
+            id: loadedGame.gameId,
+            onLoadGameCallback: onLoadGameCallback,
+            onNewOpponentCallback: onNewOpponentCallback,
+          ),
         );
       case final _:
-        return Column(
-          children: [
-            Expanded(
-              child: StandaloneGameLoadingBoard(
-                fen: loadedGame.lastFen,
-                lastMove: loadedGame.lastMove,
-                orientation: loadedGame.side,
-              ),
-            ),
-            _GameBottomBar(
-              id: loadedGame.gameId,
-              onLoadGameCallback: onLoadGameCallback,
-              onNewOpponentCallback: onNewOpponentCallback,
-            ),
-          ],
+        return StandaloneGameLoadingContent(
+          fen: loadedGame.lastFen,
+          lastMove: loadedGame.lastMove,
+          orientation: loadedGame.side,
+          userActionsBar: _GameBottomBar(
+            id: loadedGame.gameId,
+            onLoadGameCallback: onLoadGameCallback,
+            onNewOpponentCallback: onNewOpponentCallback,
+          ),
         );
     }
   }
