@@ -379,7 +379,8 @@ class _BodyState extends ConsumerState<_Body> {
         : null;
 
     final content = PopScope(
-      canPop: puzzleState.mode == PuzzleMode.view,
+      canPop:
+          Theme.of(context).platform != TargetPlatform.iOS || puzzleState.mode == PuzzleMode.view,
       child: SafeArea(
         // view padding can change on Android when immersive mode is enabled, so to prevent any
         // board vertical shift, we set `maintainBottomViewPadding` to true.
@@ -813,15 +814,13 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
-                AnalysisOptions(
+                AnalysisOptions.standalone(
                   orientation: puzzleState.pov,
-                  standalone: (
-                    pgn: ref
-                        .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
-                        .makePgn(),
-                    isComputerAnalysisAllowed: true,
-                    variant: Variant.standard,
-                  ),
+                  pgn: ref
+                      .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
+                      .makePgn(),
+                  isComputerAnalysisAllowed: true,
+                  variant: Variant.standard,
                   initialMoveCursor: 0,
                 ),
               ),
@@ -839,7 +838,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
               Navigator.of(context).push(
                 AnalysisScreen.buildRoute(
                   context,
-                  AnalysisOptions(
+                  AnalysisOptions.archivedGame(
                     orientation: puzzleState.pov,
                     gameId: game.id,
                     initialMoveCursor: puzzleState.puzzle.puzzle.initialPly + 1,
@@ -962,8 +961,8 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                       },
               ),
             ListTile(
-              title: const Text('Board settings'),
-              trailing: const Icon(CupertinoIcons.chevron_right),
+              title: Text(context.l10n.mobileBoardSettings),
+              trailing: const CupertinoListTileChevron(),
               onTap: () {
                 Navigator.of(
                   context,

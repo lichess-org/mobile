@@ -32,14 +32,12 @@ class ThemeSettingsScreen extends ConsumerWidget {
   }
 }
 
-String shapeColorL10n(BuildContext context, ShapeColor shapeColor) =>
-    // TODO add l10n
-    switch (shapeColor) {
-      ShapeColor.green => 'Green',
-      ShapeColor.red => 'Red',
-      ShapeColor.blue => 'Blue',
-      ShapeColor.yellow => 'Yellow',
-    };
+String shapeColorL10n(BuildContext context, ShapeColor shapeColor) => switch (shapeColor) {
+  ShapeColor.green => 'Green',
+  ShapeColor.red => 'Red',
+  ShapeColor.blue => 'Blue',
+  ShapeColor.yellow => 'Yellow',
+};
 
 class _Body extends ConsumerStatefulWidget {
   const _Body();
@@ -174,7 +172,9 @@ class _BodyState extends ConsumerState<_Body> {
                   ),
                   SettingsListTile(
                     icon: const Icon(LichessIcons.arrow_full_upperright),
-                    settingsLabel: const Text('Shape color'),
+                    settingsLabel: const Text('Drawn shape color'),
+                    explanation:
+                        'This color is only used for shapes drawn by hand using two fingers.',
                     settingsValue: shapeColorL10n(context, boardPrefs.shapeColor),
                     onTap: () {
                       showChoicePicker(
@@ -256,14 +256,9 @@ class _BodyState extends ConsumerState<_Body> {
                     ),
                   ),
                   ListTile(
-                    leading: Opacity(
-                      opacity: hasAjustedColors ? 1.0 : 0.5,
-                      child: const Icon(Icons.cancel),
-                    ),
-                    title: Opacity(
-                      opacity: hasAjustedColors ? 1.0 : 0.5,
-                      child: Text(context.l10n.boardReset),
-                    ),
+                    enabled: hasAjustedColors,
+                    leading: const Icon(Icons.cancel),
+                    title: Text(context.l10n.boardReset),
                     onTap: hasAjustedColors
                         ? () {
                             setState(() {

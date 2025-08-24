@@ -22,10 +22,12 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 /// A screen that displays a paginated list of studies
 class StudyListScreen extends ConsumerStatefulWidget {
-  const StudyListScreen({super.key});
+  const StudyListScreen({this.initialCategory, super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const StudyListScreen());
+  final StudyCategory? initialCategory;
+
+  static Route<dynamic> buildRoute(BuildContext context, {StudyCategory? initialCategory}) {
+    return buildScreenRoute(context, screen: StudyListScreen(initialCategory: initialCategory));
   }
 
   @override
@@ -33,10 +35,12 @@ class StudyListScreen extends ConsumerStatefulWidget {
 }
 
 class _StudyListScreenState extends ConsumerState<StudyListScreen> {
-  StudyCategory category = StudyCategory.all;
+  late StudyCategory category;
   StudyListOrder order = StudyListOrder.hot;
 
   String? search;
+
+  final currentCategoryKey = GlobalKey(debugLabel: 'studyCurrentCategoryKey');
 
   final _searchController = TextEditingController();
 
@@ -50,7 +54,13 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
   @override
   void initState() {
     super.initState();
+    category = widget.initialCategory ?? StudyCategory.all;
     _scrollController.addListener(_scrollListener);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (currentCategoryKey.currentContext != null) {
+        Scrollable.ensureVisible(currentCategoryKey.currentContext!, alignment: 0.5);
+      }
+    });
   }
 
   @override
@@ -115,41 +125,42 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
       appBar: PlatformAppBar(
         title: Text(sessionUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
         actions: [
-          ContextMenuIconButton(
-            consumeOutsideTap: true,
-            icon: const Icon(Icons.sort_outlined),
-            semanticsLabel: 'Sort studies',
-            actions: [
-              ContextMenuAction(
-                icon: order == StudyListOrder.hot ? Icons.check : null,
-                label: context.l10n.studyHot,
-                onPressed: () => setState(() {
-                  order = StudyListOrder.hot;
-                }),
-              ),
-              ContextMenuAction(
-                icon: order == StudyListOrder.newest ? Icons.check : null,
-                label: context.l10n.studyDateAddedNewest,
-                onPressed: () => setState(() {
-                  order = StudyListOrder.newest;
-                }),
-              ),
-              ContextMenuAction(
-                icon: order == StudyListOrder.updated ? Icons.check : null,
-                label: context.l10n.studyRecentlyUpdated,
-                onPressed: () => setState(() {
-                  order = StudyListOrder.updated;
-                }),
-              ),
-              ContextMenuAction(
-                icon: order == StudyListOrder.popular ? Icons.check : null,
-                label: context.l10n.studyMostPopular,
-                onPressed: () => setState(() {
-                  order = StudyListOrder.popular;
-                }),
-              ),
-            ],
-          ),
+          if (_searchController.value.text.isEmpty)
+            ContextMenuIconButton(
+              consumeOutsideTap: true,
+              icon: const Icon(Icons.sort_outlined),
+              semanticsLabel: 'Sort studies',
+              actions: [
+                ContextMenuAction(
+                  icon: order == StudyListOrder.hot ? Icons.check : null,
+                  label: context.l10n.studyHot,
+                  onPressed: () => setState(() {
+                    order = StudyListOrder.hot;
+                  }),
+                ),
+                ContextMenuAction(
+                  icon: order == StudyListOrder.newest ? Icons.check : null,
+                  label: context.l10n.studyDateAddedNewest,
+                  onPressed: () => setState(() {
+                    order = StudyListOrder.newest;
+                  }),
+                ),
+                ContextMenuAction(
+                  icon: order == StudyListOrder.updated ? Icons.check : null,
+                  label: context.l10n.studyRecentlyUpdated,
+                  onPressed: () => setState(() {
+                    order = StudyListOrder.updated;
+                  }),
+                ),
+                ContextMenuAction(
+                  icon: order == StudyListOrder.popular ? Icons.check : null,
+                  label: context.l10n.studyMostPopular,
+                  onPressed: () => setState(() {
+                    order = StudyListOrder.popular;
+                  }),
+                ),
+              ],
+            ),
         ],
         bottom: sessionUser != null
             ? PreferredSize(
@@ -158,46 +169,49 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
                   height: 50.0,
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
-                    child: ListView.separated(
+                    child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      itemCount: StudyCategory.values.length,
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      separatorBuilder: (context, index) => const SizedBox(width: 8.0),
-                      itemBuilder: (context, index) {
-                        final cat = StudyCategory.values[index];
-                        return ChoiceChip(
-                          showCheckmark: false,
-                          label: Text(cat.l10n(context.l10n)),
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                          selected: category == cat,
-                          onSelected: (selected) {
-                            if (selected) {
-                              setState(() {
-                                category = cat;
-                                if ([
-                                  StudyCategory.mine,
-                                  StudyCategory.public,
-                                  StudyCategory.private,
-                                ].contains(cat)) {
-                                  search = null;
-                                  _searchController.value = TextEditingValue(
-                                    text: 'owner:${sessionUser.id} ',
-                                  );
-                                } else if (cat == StudyCategory.member) {
-                                  search = null;
-                                  _searchController.value = TextEditingValue(
-                                    text: 'member:${sessionUser.id} ',
-                                  );
-                                } else {
-                                  search = null;
-                                  _searchController.clear();
-                                }
-                              });
-                            }
-                          },
-                        );
-                      },
+                      child: Row(
+                        spacing: 8.0,
+                        children: StudyCategory.values.map((cat) {
+                          return ChoiceChip(
+                            key: cat == category ? currentCategoryKey : null,
+                            showCheckmark: false,
+                            label: Text(cat.l10n(context.l10n)),
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            selected: category == cat,
+                            onSelected: (selected) {
+                              if (selected) {
+                                setState(() {
+                                  category = cat;
+                                  if ([
+                                    StudyCategory.mine,
+                                    StudyCategory.public,
+                                    StudyCategory.private,
+                                  ].contains(cat)) {
+                                    search = null;
+                                    _searchController.value = TextEditingValue(
+                                      text: 'owner:${sessionUser.id} ',
+                                    );
+                                  } else if (cat == StudyCategory.member) {
+                                    search = null;
+                                    _searchController.value = TextEditingValue(
+                                      text: 'member:${sessionUser.id} ',
+                                    );
+                                  } else {
+                                    search = null;
+                                    _searchController.clear();
+                                  }
+                                });
+                              }
+                            },
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),
@@ -214,8 +228,9 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
               : Theme.of(context).platform == TargetPlatform.iOS
               ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
               : const PlatformDivider(height: 1, color: Colors.transparent),
-          itemBuilder: (context, index) =>
-              index == 0 ? searchBar : _StudyListItem(study: studies.studies[index - 1]),
+          itemBuilder: (context, index) => index == 0
+              ? searchBar
+              : StudyListItem(study: studies.studies[index - 1], flairSize: 30.0),
         ),
         AsyncError() => FullScreenRetryRequest(onRetry: () => ref.invalidate(paginatorProvider)),
         _ => Column(
@@ -229,19 +244,18 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
   }
 }
 
-class _StudyListItem extends StatelessWidget {
-  const _StudyListItem({required this.study});
+class StudyListItem extends StatelessWidget {
+  const StudyListItem({required this.study, this.flairSize, this.titleMaxLines, super.key});
 
-  final StudyPageData study;
+  final StudyPageItem study;
+  final double? flairSize;
+  final int? titleMaxLines;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: _StudyFlair(flair: study.flair, size: 30),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Text(study.name, overflow: TextOverflow.ellipsis, maxLines: 2)],
-      ),
+      leading: StudyFlair(flair: study.flair, size: flairSize ?? 24.0),
+      title: Text(study.name, overflow: TextOverflow.ellipsis, maxLines: titleMaxLines ?? 2),
       subtitle: _StudySubtitle(study: study),
       onTap: () => Navigator.of(
         context,
@@ -264,7 +278,7 @@ class _StudyListItem extends StatelessWidget {
 class _ContextMenu extends ConsumerWidget {
   const _ContextMenu({required this.study});
 
-  final StudyPageData study;
+  final StudyPageItem study;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -289,7 +303,7 @@ class _ContextMenu extends ConsumerWidget {
 class _StudyChapters extends StatelessWidget {
   const _StudyChapters({required this.study});
 
-  final StudyPageData study;
+  final StudyPageItem study;
 
   @override
   Widget build(BuildContext context) {
@@ -311,7 +325,7 @@ class _StudyChapters extends StatelessWidget {
 class _StudyMembers extends StatelessWidget {
   const _StudyMembers({required this.study});
 
-  final StudyPageData study;
+  final StudyPageItem study;
 
   @override
   Widget build(BuildContext context) {
@@ -337,8 +351,8 @@ class _StudyMembers extends StatelessWidget {
   }
 }
 
-class _StudyFlair extends StatelessWidget {
-  const _StudyFlair({required this.flair, required this.size});
+class StudyFlair extends StatelessWidget {
+  const StudyFlair({required this.flair, required this.size});
 
   final String? flair;
 
@@ -362,7 +376,7 @@ class _StudyFlair extends StatelessWidget {
 class _StudySubtitle extends StatelessWidget {
   const _StudySubtitle({required this.study});
 
-  final StudyPageData study;
+  final StudyPageItem study;
 
   @override
   Widget build(BuildContext context) {

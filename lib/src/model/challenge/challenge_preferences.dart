@@ -80,6 +80,12 @@ sealed class ChallengePrefs with _$ChallengePrefs implements Serializable {
       ? Speed.fromTimeIncrement(TimeIncrement(clock.time.inSeconds, clock.increment.inSeconds))
       : Speed.correspondence;
 
+  // for correspondence game only standard can be rated
+  // for real time fromPosition cannot be rated
+  bool get isRatedAllowed => timeControl == ChallengeTimeControlType.clock
+      ? variant != Variant.fromPosition
+      : variant == Variant.standard;
+
   ChallengeRequest makeRequest(LightUser destUser, [String? initialFen]) {
     return ChallengeRequest(
       destUser: destUser,
@@ -87,7 +93,7 @@ sealed class ChallengePrefs with _$ChallengePrefs implements Serializable {
       timeControl: timeControl,
       clock: timeControl == ChallengeTimeControlType.clock ? clock : null,
       days: timeControl == ChallengeTimeControlType.correspondence ? days : null,
-      rated: rated,
+      rated: isRatedAllowed && rated,
       sideChoice: sideChoice,
       initialFen: initialFen,
     );

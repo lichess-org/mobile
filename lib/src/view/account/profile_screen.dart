@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -37,7 +36,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
 final _accountActivityProvider = FutureProvider.autoDispose<IList<UserActivity>>((ref) {
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();
-  return ref.withClient((client) => UserRepository(client).getActivity(session.user.id));
+  return ref.read(userRepositoryProvider).getActivity(session.user.id);
 }, name: 'userActivityProvider');
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
@@ -46,7 +45,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
-    final activity = ref.watch(_accountActivityProvider);
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: account.when(
@@ -68,6 +66,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           if (user == null) {
             return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
           }
+          final activity = ref.watch(_accountActivityProvider);
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
           return RefreshIndicator.adaptive(

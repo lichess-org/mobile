@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -18,7 +19,6 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -112,9 +112,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       },
     );
 
-    final pgn = await ref.withClient(
-      (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
-    );
+    final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
 
     final game = PgnGame.parsePgn(pgn);
     final pgnHeaders = IMap(game.headers);
@@ -144,7 +142,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
         variant: Variant.standard,
         initialPosition: _root.position,
       ),
-      isComputerAnalysisEnabled: prefs.enableComputerAnalysis,
+      isServerAnalysisEnabled: prefs.enableServerAnalysis,
       clocks: _getClocks(currentPath),
     );
 
@@ -165,9 +163,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     if (!state.hasValue) return;
     final key = _key;
 
-    final pgn = await ref.withClient(
-      (client) => BroadcastRepository(client).getGamePgn(roundId, gameId),
-    );
+    final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
 
     // check provider is still mounted
     if (key == _key) {
@@ -294,9 +290,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   void onUserMove(NormalMove move) {
     if (!state.hasValue) return;
 
-    if (!state.requireValue.position.isLegal(move)) return;
+    if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.position, move)) {
+    if (isPromotionPawnMove(state.requireValue.currentPosition, move)) {
       state = AsyncData(state.requireValue.copyWith(promotionMove: move));
       return;
     }
@@ -416,25 +412,6 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
-  /// Toggles the computer analysis on/off.
-  ///
-  /// Acts both on engine evaluation and server analysis.
-  Future<void> toggleComputerAnalysis() async {
-    await ref.read(broadcastPreferencesProvider.notifier).toggleEnableComputerAnalysis();
-
-    final curState = state.requireValue;
-    final engineWasAvailable = curState.isEngineAvailable(evaluationPrefs);
-
-    state = AsyncData(
-      curState.copyWith(isComputerAnalysisEnabled: !curState.isComputerAnalysisEnabled),
-    );
-
-    final computerAllowed = state.requireValue.isComputerAnalysisEnabled;
-    if (!computerAllowed && engineWasAvailable) {
-      toggleEngine();
-    }
-  }
-
   void _setPath(
     UciPath path, {
     bool shouldForceShowVariation = false,
@@ -525,7 +502,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 }
 
 @freezed
-sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements EvaluationMixinState {
+sealed class BroadcastAnalysisState
+    with _$BroadcastAnalysisState
+    implements EvaluationMixinState, CommonAnalysisState {
   const BroadcastAnalysisState._();
 
   const factory BroadcastAnalysisState({
@@ -554,10 +533,8 @@ sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements Eva
     /// The side to display the board from.
     required Side pov,
 
-    /// Whether the user has enabled computer analysis.
-    ///
-    /// This is a user preference and acts both on local and server analysis.
-    required bool isComputerAnalysisEnabled,
+    /// Whether the user has enabled server analysis.
+    required bool isServerAnalysisEnabled,
 
     required EvaluationContext evaluationContext,
 
@@ -579,10 +556,6 @@ sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements Eva
     IList<PgnComment>? pgnRootComments,
   }) = _BroadcastGameState;
 
-  Position get position => currentNode.position;
-  bool get canGoNext => currentNode.hasChild;
-  bool get canGoBack => currentPath.size > UciPath.empty.size;
-
   /// Whether the game is new or ongoing
   bool get isNewOrOngoing => pgnHeaders['Result'] == '*';
 
@@ -595,21 +568,29 @@ sealed class BroadcastAnalysisState with _$BroadcastAnalysisState implements Eva
   @override
   bool get alwaysRequestCloudEval => true;
 
+  /// We currently assume that all broadcast games are standard but this is incorrect as there are
+  /// Chess960 tournaments broadcasted on Lichess.
+  /// TODO: use the correct variant for broadcast game.
+  @override
+  Variant get variant => Variant.standard;
+
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
-      isEngineAvailable(prefs) || (isComputerAnalysisEnabled && currentNode.serverEval != null);
+      isEngineAvailable(prefs) || (isServerAnalysisEnabled && currentNode.serverEval != null);
 
   @override
-  bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
-      isComputerAnalysisEnabled && prefs.isEnabled;
+  bool isEngineAvailable(EngineEvaluationPrefState prefs) => prefs.isEnabled;
 
   @override
   Position get currentPosition => currentNode.position;
 
+  bool get canGoNext => currentNode.hasChild;
+  bool get canGoBack => currentPath.size > UciPath.empty.size;
+
   EngineGaugeParams engineGaugeParams(EngineEvaluationPrefState prefs) => (
     isLocalEngineAvailable: isEngineAvailable(prefs),
     orientation: pov,
-    position: position,
+    position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
   );

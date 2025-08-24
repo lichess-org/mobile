@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="community">ชุมชน</string>
+  <string name="byMonth">ตามเดือน</string>
+  <string name="byTopic">ตามหัวข้อ</string>
+  <string name="byLichess">โดย Lichess</string>
+  <string name="myFriends">เพื่อนของฉัน</string>
+  <string name="myLikes">การกดชอบ</string>
+  <string name="likedBlogs">ชอบบล็อกโพสต์</string>
+  <string name="continueReadingPost">อ่านโพสต์นี้ต่อ</string>
+  <string name="lichessBlogPostsFromXYear">บล็อกโพสต์ของ Lichessใน %s</string>
+  <string name="previousBlogPosts">บล็อกโพสต์ที่แล้ว</string>
+  <string name="xBlog">บล็อกของ %s</string>
+  <string name="newPost">โพสต์ใหม่</string>
+  <string name="editYourBlogPost">แก้ไขโพสต์ของคุณ</string>
+  <string name="saveDraft">บันทึกฉบับร่าง</string>
+  <string name="postTitle">หัวข้อโพสต์</string>
+  <string name="postIntro">บทนำโพสต์</string>
+  <string name="postBody">เนื้อหาโพสต์</string>
+  <string name="drafts">แบบร่าง</string>
+  <string name="published">เผยแพร่ไปแล้ว</string>
+  <string name="createBlogDiscussion">เปิดใช้งานคอมเมนต์</string>
+  <plurals name="nbViews">
+    <item quantity="other">คนดู %s</item>
+  </plurals>
+  <string name="latestBlogPosts">โพสต์บล็อกล่าสุด</string>
+  <string name="uploadAnImageForYourPost">อัปโหลดรูปสำหรับบล็อกของคุณ</string>
+  <string name="imageCredit">เครดิตภาพ</string>
+  <string name="selectPostTopics">เลือกหัวข้อที่โพสต์ของคุณเกี่ยวกับ</string>
+  <string name="inappropriateContentAccountClosed">อะไรก็ตามที่ไม่เหมาะสมอาจทำให้บัญชีของคุณโดนปิดได้</string>
+  <string name="blogTips">เคล็ดลับง่ายๆของเราในการเขียนบล็อกที่ดี</string>
+  <string name="discussThisBlogPostInTheForum">หารือเรื่องบล็อกโพสต์ในฟอรั่ม</string>
+  <string name="youBlockedByBlogAuthor">คุณถูกปิดกั้นโดยผู้เขียนบล็อก</string>
+</resources>

@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_detail_tile.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
@@ -22,6 +23,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
@@ -62,11 +64,13 @@ class GameHistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
     final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user));
-    final title = filtersInUse.count == 0
+    final title = user != null && gameFilter.opponent != null
+        ? AppBarTitleText(context.l10n.resVsX(user!.name, gameFilter.opponent!.username))
+        : filtersInUse.count == 0
         ? nbGamesAsync.when(
-            data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+            data: (nbGames) => AppBarTitleText(context.l10n.nbGames(nbGames).localizeNumbers()),
             loading: () => const ButtonLoadingIndicator(),
-            error: (e, s) => Text(context.l10n.mobileAllGames),
+            error: (e, s) => AppBarTitleText(context.l10n.mobileAllGames),
           )
         : Text(filtersInUse.selectionLabel(context.l10n));
     final filterBtn = SemanticIconButton(
@@ -84,6 +88,7 @@ class GameHistoryScreen extends ConsumerWidget {
       onPressed: () =>
           showModalBottomSheet<GameFilterState>(
             context: context,
+            useRootNavigator: true,
             isScrollControlled: true,
             builder: (_) => _FilterGames(
               filter: ref.read(gameFilterProvider(filter: gameFilter)),
@@ -275,7 +280,10 @@ class _BodyState extends ConsumerState<_Body> {
                                   Navigator.of(context, rootNavigator: true).push(
                                     AnalysisScreen.buildRoute(
                                       context,
-                                      AnalysisOptions(orientation: pov, gameId: game.id),
+                                      AnalysisOptions.archivedGame(
+                                        orientation: pov,
+                                        gameId: game.id,
+                                      ),
                                     ),
                                   );
                                 }
@@ -303,7 +311,7 @@ class _BodyState extends ConsumerState<_Body> {
                                     : Icons.bookmark_add_outlined,
                                 // TODO l10n
                                 label: game.isBookmarked
-                                    ? 'Remove bookmark'
+                                    ? context.l10n.mobileRemoveBookmark
                                     : context.l10n.bookmarkThisGame,
                               ),
                             ],

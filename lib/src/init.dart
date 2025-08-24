@@ -95,6 +95,7 @@ Future<void> initializeLocalNotifications(Locale locale) async {
           ChallengeNotification.darwinUnplayableVariantCategory(l10n),
         ],
       ),
+      linux: const LinuxInitializationSettings(defaultActionName: 'Action'),
     ),
     onDidReceiveNotificationResponse: NotificationService.onDidReceiveNotificationResponse,
     // onDidReceiveBackgroundNotificationResponse: notificationTapBackground,

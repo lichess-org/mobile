@@ -56,6 +56,7 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
     ServerGamePrefs? prefs,
     PlayableClockData? clock,
     CorrespondenceClockData? correspondenceClock,
+    CorrespondenceForecast? correspondenceForecast,
     bool? boosted,
     bool? isThreefoldRepetition,
     ({Duration idle, Duration timeToMove, DateTime movedAt})? expiration,
@@ -95,12 +96,17 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
   bool get abortable =>
       playable &&
       lastPosition.fullmoves <= 1 &&
-      (meta.rules == null || !meta.rules!.contains(GameRule.noAbort));
+      (meta.rules == null || !meta.rules!.contains(GameRule.noAbort)) &&
+      meta.tournament == null;
   bool get resignable => playable && !abortable;
   bool get drawable =>
       playable && lastPosition.fullmoves >= 2 && !(me?.offeringDraw == true) && !hasAI;
   bool get rematchable =>
-      meta.tournament == null && (meta.rules == null || !meta.rules!.contains(GameRule.noRematch));
+      (meta.rules == null || !meta.rules!.contains(GameRule.noRematch)) &&
+      (finished ||
+          (aborted && (!meta.rated || !{GameSource.lobby, GameSource.pool}.contains(source)))) &&
+      meta.tournament == null &&
+      boosted != true;
   bool get canTakeback =>
       takebackable &&
       playable &&
@@ -217,6 +223,7 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
     black: pick('black').letOrThrow(_playerFromUserGamePick),
     clock: pick('clock').letOrNull(_playableClockDataFromPick),
     correspondenceClock: pick('correspondence').letOrNull(_correspondenceClockDataFromPick),
+    correspondenceForecast: pick('forecast').letOrNull(_correspondenceForecastFromPick),
     status: pick('game', 'status').asGameStatusOrThrow(),
     winner: pick('game', 'winner').asSideOrNull(),
     boosted: pick('game', 'boosted').asBoolOrNull(),
@@ -257,9 +264,8 @@ GameMeta _playableGameMetaFromPick(RequiredPick pick) {
     daysPerTurn: pick('correspondence').letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
     startedAtTurn: pick('game', 'startedAtTurn').asIntOrNull(),
     rules: pick('game', 'rules').letOrNull(
-      (it) => ISet(
-        pick.asListOrThrow((e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown),
-      ),
+      (it) =>
+          ISet(it.asListOrThrow((e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown)),
     ),
     division: pick('division').letOrNull(_divisionFromPick),
     tournament: pick('tournament').letOrNull(_playableGameTournamentDataFromPick),
@@ -318,6 +324,17 @@ CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
     black: pick('black').asDurationFromSecondsOrThrow(),
   );
 }
+
+CorrespondenceForecast _correspondenceForecastFromPick(RequiredPick pick) => IList(
+  pick('steps').asListOrThrow(
+    (pick) => IList(
+      pick.asListOrThrow(
+        (pick) =>
+            SanMove(pick('san').asStringOrThrow(), Move.parse(pick('uci').asStringOrThrow())!),
+      ),
+    ),
+  ),
+);
 
 Division _divisionFromPick(RequiredPick pick) {
   return Division(

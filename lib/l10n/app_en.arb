@@ -1,27 +1,41 @@
 {
+  "mobileAccountPreferences": "Account preferences",
+  "mobileAccountPreferencesHelp": "These preferences are applied to your Lichess account and will be used across all devices.",
   "mobileAllGames": "All games",
   "mobileAreYouSure": "Are you sure?",
+  "mobileBoardSettings": "Board settings",
   "mobileCancelTakebackOffer": "Cancel takeback offer",
   "mobileClearButton": "Clear",
   "mobileCorrespondenceClearSavedMove": "Clear saved move",
   "mobileCustomGameJoinAGame": "Join a game",
   "mobileFeedbackButton": "Feedback",
-  "mobileGreeting": "Hello, {param}",
-  "@mobileGreeting": {
+  "mobileGoodEvening": "Good evening, {param}",
+  "@mobileGoodEvening": {
     "placeholders": {
       "param": {
         "type": "String"
       }
     }
   },
-  "mobileGreetingWithoutName": "Hello",
+  "mobileGoodEveningWithoutName": "Good evening",
+  "mobileGoodDay": "Good day, {param}",
+  "@mobileGoodDay": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "mobileGoodDayWithoutName": "Good day",
   "mobileHideVariation": "Hide variation",
   "mobileHomeTab": "Home",
   "mobileLiveStreamers": "Live streamers",
   "mobileMustBeLoggedIn": "You must be logged in to view this page.",
   "mobileNoSearchResults": "No results",
+  "mobileNotAllFeaturesAreAvailable": "Please note that not all features from the old app or the website are currently available, but we are adding features all the time.",
   "mobileNotFollowingAnyUser": "You are not following any user.",
   "mobileOkButton": "OK",
+  "mobileOverTheBoard": "Over the board",
   "mobilePlayersMatchingSearchTerm": "Players with \"{param}\"",
   "@mobilePlayersMatchingSearchTerm": {
     "placeholders": {
@@ -30,6 +44,8 @@
       }
     }
   },
+  "mobilePositionLeft": "Left",
+  "mobilePositionRight": "Right",
   "mobilePrefMagnifyDraggedPiece": "Magnify dragged piece",
   "mobilePuzzleStormConfirmEndRun": "Do you want to end this run?",
   "mobilePuzzleStormFilterNothingToShow": "Nothing to show, please change the filters",
@@ -39,9 +55,30 @@
   "mobilePuzzleThemesSubtitle": "Play puzzles from your favorite openings, or choose a theme.",
   "mobilePuzzlesTab": "Puzzles",
   "mobileRecentSearches": "Recent searches",
-  "mobileSettingsHapticFeedback": "Haptic feedback",
+  "mobileRemoveBookmark": "Remove bookmark",
+  "mobileServerAnalysis": "Server analysis",
+  "mobileSettingsClockPosition": "Clock position",
+  "mobileSettingsCustomBackgroundPresets": "Presets",
+  "mobileSettingsDraggedPieceTarget": "Dragged piece target",
+  "mobileSettingsDraggedTargetCircle": "Circle",
+  "mobileSettingsDraggedTargetSquare": "Square",
+  "mobileSettingsHomeWidgets": "Home widgets",
   "mobileSettingsImmersiveMode": "Immersive mode",
   "mobileSettingsImmersiveModeSubtitle": "Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and puzzle screens.",
+  "mobileSettingsMaterialDifferenceCapturedPieces": "Captured pieces",
+  "mobileSettingsPickAnImage": "Pick an image",
+  "mobileSettingsPickAnImageHelp": "Custom background works only in dark mode. A dark image is recommended.",
+  "mobileSettingsPickAnImageBlur": "Blur the image",
+  "mobileSettingsPickAnImageHideBoard": "Hide board",
+  "mobileSettingsPickAnImageShowBoard": "Show board",
+  "mobileSettingsPickAnImageSwipeToDisplay": "Swipe to display other backgrounds",
+  "mobileSettingsPieceShiftMethodEither": "Either tap or drag",
+  "mobileSettingsPieceShiftMethodTapTwoSquares": "Tap two squares",
+  "mobileSettingsShapeDrawing": "Shape drawing",
+  "mobileSettingsShapeDrawingSubtitle": "Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.",
+  "mobileSettingsShowBorder": "Show border",
+  "mobileSettingsTouchFeedback": "Touch feedback",
+  "mobileSettingsTouchFeedbackSubtitle": "When enabled, the device will vibrate shortly when you move or capture a piece.",
   "mobileSettingsTab": "Settings",
   "mobileShareGamePGN": "Share PGN",
   "mobileShareGameURL": "Share game URL",
@@ -54,8 +91,17 @@
   "mobileSystemColors": "System colors",
   "mobileTheme": "Theme",
   "mobileToolsTab": "Tools",
+  "mobileUnsupportedVariant": "Variant {param} is not supported in this version.",
+  "@mobileUnsupportedVariant": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "mobileWaitingForOpponentToJoin": "Waiting for opponent to join...",
   "mobileWatchTab": "Watch",
+  "mobileWelcomeToLichessApp": "Welcome to Lichess app!",
   "activityActivity": "Activity",
   "activityHostedALiveStream": "Hosted a live stream",
   "activityRankedInSwissTournament": "Ranked #{param1} in {param2}",
@@ -241,7 +287,7 @@
   "arenaArena": "Arena",
   "arenaArenaTournaments": "Arena tournaments",
   "arenaIsItRated": "Is it rated?",
-  "arenaWillBeNotified": "You will be notified when the tournament starts, so it is safe to play in another tab while waiting.",
+  "arenaWillBeNotified": "You will be notified when the tournament starts, so feel free to leave this tab idle.",
   "arenaIsRated": "This tournament is rated and will affect your rating.",
   "arenaIsNotRated": "This tournament is *not* rated and will *not* affect your rating.",
   "arenaSomeRated": "Some tournaments are rated and will affect your rating.",
@@ -423,7 +469,6 @@
   "broadcastStartVerySoon": "The broadcast will start very soon.",
   "broadcastNotYetStarted": "The broadcast has not yet started.",
   "broadcastOfficialWebsite": "Official website",
-  "broadcastStandings": "Standings",
   "broadcastOfficialStandings": "Official Standings",
   "broadcastIframeHelp": "More options on the {param}",
   "@broadcastIframeHelp": {
@@ -434,23 +479,7 @@
     }
   },
   "broadcastWebmastersPage": "webmasters page",
-  "broadcastPgnSourceHelp": "A public, real-time PGN source for this round. We also offer a {param} for faster and more efficient synchronisation.",
-  "@broadcastPgnSourceHelp": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
   "broadcastEmbedThisBroadcast": "Embed this broadcast in your website",
-  "broadcastEmbedThisRound": "Embed {param} in your website",
-  "@broadcastEmbedThisRound": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
   "broadcastRatingDiff": "Rating diff",
   "broadcastGamesThisTournament": "Games in this tournament",
   "broadcastScore": "Score",
@@ -466,6 +495,15 @@
   "broadcastBackToLiveMove": "Back to live move",
   "broadcastSinceHideResults": "Since you chose to hide the results, all the preview boards are empty to avoid spoilers.",
   "broadcastLiveboard": "Live board",
+  "broadcastCommunityBroadcast": "Community broadcast",
+  "broadcastCreatedAndManagedBy": "Created and managed by {param}.",
+  "@broadcastCreatedAndManagedBy": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -552,8 +590,42 @@
   "challengeInviteLichessUser": "Or invite a Lichess user:",
   "contactContact": "Contact",
   "contactContactLichess": "Contact Lichess",
+  "coordinatesCoordinates": "Coordinates",
+  "coordinatesCoordinateTraining": "Coordinate training",
+  "coordinatesAverageScoreAsWhiteX": "Average score as white: {param}",
+  "@coordinatesAverageScoreAsWhiteX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "coordinatesAverageScoreAsBlackX": "Average score as black: {param}",
+  "@coordinatesAverageScoreAsBlackX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "coordinatesKnowingTheChessBoard": "Knowing the chessboard coordinates is a very important skill for several reasons:",
+  "coordinatesMostChessCourses": "Most chess courses and exercises use the algebraic notation extensively.",
+  "coordinatesTalkToYourChessFriends": "It makes it easier to talk to your chess friends, since you both understand the 'language of chess'.",
+  "coordinatesYouCanAnalyseAGameMoreEffectively": "You can analyse a game more effectively if you can quickly recognise coordinates.",
+  "coordinatesACoordinateAppears": "A coordinate appears on the board and you must click on the corresponding square.",
+  "coordinatesASquareIsHighlightedExplanation": "A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").",
+  "coordinatesYouHaveThirtySeconds": "You have 30 seconds to correctly map as many squares as possible!",
+  "coordinatesGoAsLongAsYouWant": "Go as long as you want, there is no time limit!",
+  "coordinatesShowCoordinates": "Show coordinates",
+  "coordinatesShowCoordsOnAllSquares": "Coordinates on every square",
+  "coordinatesShowPieces": "Show pieces",
+  "coordinatesStartTraining": "Start training",
+  "coordinatesFindSquare": "Find square",
+  "coordinatesNameSquare": "Name square",
+  "coordinatesPracticeOnlySomeFilesAndRanks": "Practice only some files & ranks",
   "patronDonate": "Donate",
   "patronLichessPatron": "Lichess Patron",
+  "patronBecomePatron": "Become a Lichess Patron",
   "perfStatPerfStats": "{param} stats",
   "@perfStatPerfStats": {
     "placeholders": {
@@ -1610,7 +1682,7 @@
   "openTournaments": "Open tournaments",
   "duration": "Duration",
   "winner": "Winner",
-  "standing": "Standing",
+  "standings": "Standings",
   "createANewTournament": "Create a new tournament",
   "tournamentCalendar": "Tournament calendar",
   "conditionOfEntry": "Entry requirements:",
@@ -1624,7 +1696,6 @@
   "points": "Points",
   "wins": "Wins",
   "losses": "Losses",
-  "createdBy": "Created by",
   "startingIn": "Starting in",
   "standByX": "Stand by {param}, pairing players, get ready!",
   "@standByX": {
@@ -1739,7 +1810,7 @@
   "reportCheatBoostHelp": "Paste the link to the game(s) and explain what is wrong about this user's behaviour. Don't just say \"they cheat\", but tell us how you came to this conclusion.",
   "reportUsernameHelp": "Explain what about this username is offensive. Don't just say \"it's offensive/inappropriate\", but tell us how you came to this conclusion, especially if the insult is obfuscated, not in english, is in slang, or is a historical/cultural reference.",
   "reportProcessedFasterInEnglish": "Your report will be processed faster if written in English.",
-  "error_provideOneCheatedGameLink": "Please provide at least one link to a cheated game.",
+  "error_provideOneCheatedGameLink": "Please provide at least one link to a game with suspected cheating.",
   "by": "by {param}",
   "@by": {
     "placeholders": {
@@ -2594,6 +2665,7 @@
   "accessibility": "Accessibility",
   "enableBlindMode": "Enable blind mode",
   "disableBlindMode": "Disable blind mode",
+  "copyToClipboard": "Copy to clipboard",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {

@@ -42,6 +42,14 @@ class BoardPreferences extends _$BoardPreferences with PreferencesStorage<BoardP
     await save(state.copyWith(boardTheme: boardTheme));
   }
 
+  Future<void> togglePremoves() async {
+    await save(state.copyWith(premoves: !state.premoves));
+  }
+
+  Future<void> toggleConfirmResignAndDraw() async {
+    await save(state.copyWith(confirmResignAndDraw: !state.confirmResignAndDraw));
+  }
+
   Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
     await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
   }
@@ -144,6 +152,8 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     )
     required CastlingMethod castlingMethod,
     @JsonKey(defaultValue: true) required bool moveListDisplay,
+    @JsonKey(defaultValue: true) required bool premoves,
+    @JsonKey(defaultValue: true) required bool confirmResignAndDraw,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
@@ -169,6 +179,8 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     clockPosition: ClockPosition.right,
     moveListDisplay: true,
+    premoves: true,
+    confirmResignAndDraw: true,
     pieceShiftMethod: PieceShiftMethod.either,
     castlingMethod: CastlingMethod.kingOverRook,
     enableShapeDrawings: true,
@@ -217,7 +229,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       playerSide: playerSide,
       onMove: onMove,
       onPromotionSelection: onPromotionSelection,
-      premovable: premovable,
+      premovable: premoves ? premovable : null,
       promotionMove: promotionMove,
       sideToMove: position.turn,
       validMoves: _makeLegalMoves(position, variant: variant, castlingMethod: castlingMethod),
@@ -408,21 +420,16 @@ enum BoardTheme {
 }
 
 enum MaterialDifferenceFormat {
-  materialDifference(label: 'Material difference'),
-  capturedPieces(label: 'Captured pieces'),
-  hidden(label: 'Hidden');
-
-  const MaterialDifferenceFormat({required this.label});
-
-  final String label;
+  materialDifference,
+  capturedPieces,
+  hidden;
 
   bool get visible => this != MaterialDifferenceFormat.hidden;
 
   String l10n(AppLocalizations l10n) => switch (this) {
-    //TODO: Add l10n
-    MaterialDifferenceFormat.materialDifference => materialDifference.label,
-    MaterialDifferenceFormat.capturedPieces => capturedPieces.label,
-    MaterialDifferenceFormat.hidden => hidden.label,
+    MaterialDifferenceFormat.materialDifference => l10n.preferencesMaterialDifference,
+    MaterialDifferenceFormat.capturedPieces => l10n.mobileSettingsMaterialDifferenceCapturedPieces,
+    MaterialDifferenceFormat.hidden => l10n.puzzleHidden, // should be good to reuse this
   };
 }
 
@@ -430,10 +437,9 @@ enum ClockPosition {
   left,
   right;
 
-  // TODO: l10n
-  String get label => switch (this) {
-    ClockPosition.left => 'Left',
-    ClockPosition.right => 'Right',
+  String label(AppLocalizations l10n) => switch (this) {
+    ClockPosition.left => l10n.mobilePositionLeft,
+    ClockPosition.right => l10n.mobilePositionRight,
   };
 }
 
@@ -450,8 +456,8 @@ enum CastlingMethod {
   };
 }
 
-String dragTargetKindLabel(DragTargetKind kind) => switch (kind) {
-  DragTargetKind.circle => 'Circle',
-  DragTargetKind.square => 'Square',
-  DragTargetKind.none => 'None',
+String dragTargetKindLabel(AppLocalizations l10n, DragTargetKind kind) => switch (kind) {
+  DragTargetKind.circle => l10n.mobileSettingsDraggedTargetCircle,
+  DragTargetKind.square => l10n.mobileSettingsDraggedTargetSquare,
+  DragTargetKind.none => l10n.none,
 };

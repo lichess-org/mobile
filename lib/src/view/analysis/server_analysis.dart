@@ -33,7 +33,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
     final pgnHeaders = ref.watch(ctrlProvider.select((value) => value.requireValue.pgnHeaders));
     final currentGameAnalysis = ref.watch(currentAnalysisProvider);
 
-    if (analysisPrefs.enableComputerAnalysis == false || !canShowGameSummary) {
+    if (analysisPrefs.enableServerAnalysis == false || !canShowGameSummary) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -45,7 +45,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
               if (canShowGameSummary)
                 FilledButton.tonal(
                   onPressed: () {
-                    ref.read(ctrlProvider.notifier).toggleComputerAnalysis();
+                    ref.read(analysisPreferencesProvider.notifier).toggleServerAnalysis();
                   },
                   child: Text(context.l10n.enable),
                 ),

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/analysis/common_analysis_prefs.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -23,8 +24,8 @@ class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<
     return fetch();
   }
 
-  Future<void> toggleEnableComputerAnalysis() {
-    return save(state.copyWith(enableComputerAnalysis: !state.enableComputerAnalysis));
+  Future<void> toggleServerAnalysis() {
+    return save(state.copyWith(enableServerAnalysis: !state.enableServerAnalysis));
   }
 
   Future<void> toggleShowEvaluationGauge() {
@@ -57,11 +58,11 @@ class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
+sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable, CommonAnalysisPrefs {
   const AnalysisPrefs._();
 
   const factory AnalysisPrefs({
-    @JsonKey(defaultValue: true) required bool enableComputerAnalysis,
+    @JsonKey(defaultValue: true) required bool enableServerAnalysis,
     required bool showEvaluationGauge,
     @JsonKey(defaultValue: true) required bool showEngineLines,
     required bool showBestMoveArrow,
@@ -72,7 +73,7 @@ sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   }) = _AnalysisPrefs;
 
   static const defaults = AnalysisPrefs(
-    enableComputerAnalysis: true,
+    enableServerAnalysis: true,
     showEvaluationGauge: true,
     showEngineLines: true,
     showBestMoveArrow: true,

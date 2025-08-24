@@ -5,12 +5,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
@@ -20,11 +18,13 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
+import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
@@ -32,7 +32,6 @@ import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:logging/logging.dart';
@@ -149,7 +148,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
     super.initState();
 
     tabs = [
-      if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.opening,
+      if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.explorer,
       AnalysisTab.moves,
     ];
 
@@ -164,7 +163,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
     // anymore, we keep the tabs as they are.
     // In theory, studies mixing chapters with and without opening explorer should be pretty rare.
     if (tabs.length < 2 && widget.studyState.isOpeningExplorerAvailable) {
-      tabs = [AnalysisTab.opening, AnalysisTab.moves];
+      tabs = [AnalysisTab.explorer, AnalysisTab.moves];
       _tabController = TabController(
         vsync: this,
         initialIndex: tabs.length - 1,
@@ -211,6 +210,7 @@ class _StudyMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     final state = ref.watch(studyControllerProvider(id)).requireValue;
+    final kidModeAsync = ref.watch(kidModeProvider);
 
     return ContextMenuIconButton(
       semanticsLabel: 'Study menu',
@@ -343,6 +343,16 @@ class _StudyMenu extends ConsumerWidget {
             );
           },
         ),
+        if (state.chatOptions != null && kidModeAsync.valueOrNull == false)
+          ContextMenuAction(
+            label: context.l10n.chatRoom,
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(ChatScreen.buildRoute(context, options: state.chatOptions!));
+            },
+            icon: Icons.chat_bubble_outline,
+          ),
       ],
     );
   }
@@ -394,7 +404,7 @@ class _Body extends ConsumerWidget {
       tabController: tabController,
       pov: pov,
       boardBuilder: (context, boardSize, borderRadius) =>
-          _StudyBoard(id: id, boardSize: boardSize, borderRadius: borderRadius),
+          StudyAnalysisBoard(id: id, boardSize: boardSize, boardRadius: borderRadius),
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
           ? (context, orientation) {
@@ -435,13 +445,14 @@ class _Body extends ConsumerWidget {
       bottomBar: StudyBottomBar(id: id),
       children: tabs.map((tab) {
         switch (tab) {
-          case AnalysisTab.opening:
+          case AnalysisTab.explorer:
             if (studyState.isOpeningExplorerAvailable && studyState.currentNode.position != null) {
-              return OpeningExplorerView(
+              return ExplorerView(
                 position: studyState.currentNode.position!,
                 onMoveSelected: (move) {
                   ref.read(studyControllerProvider(id).notifier).onUserMove(move);
                 },
+                isComputerAnalysisAllowed: true,
               );
             } else {
               return const Center(child: Text('Opening explorer not available.'));
@@ -468,21 +479,62 @@ extension on PgnCommentShape {
   }
 }
 
-class _StudyBoard extends ConsumerStatefulWidget {
-  const _StudyBoard({required this.id, required this.boardSize, this.borderRadius});
+class StudyAnalysisBoard extends AnalysisBoard {
+  const StudyAnalysisBoard({required this.id, required super.boardSize, super.boardRadius});
 
   final StudyId id;
 
-  final double boardSize;
-
-  final BorderRadiusGeometry? borderRadius;
-
   @override
-  ConsumerState<_StudyBoard> createState() => _StudyBoardState();
+  ConsumerState<StudyAnalysisBoard> createState() => _StudyAnalysisBoardState();
 }
 
-class _StudyBoardState extends ConsumerState<_StudyBoard> {
-  ISet<Shape> userShapes = ISet();
+class _StudyAnalysisBoardState
+    extends AnalysisBoardState<StudyAnalysisBoard, StudyState, StudyPrefs> {
+  @override
+  StudyState get analysisState => ref.watch(studyControllerProvider(widget.id)).requireValue;
+
+  @override
+  StudyPrefs get analysisPrefs => ref.watch(studyPreferencesProvider);
+
+  @override
+  bool get showAnnotations => analysisPrefs.showAnnotations;
+
+  @override
+  void onUserMove(NormalMove move) {
+    ref.read(studyControllerProvider(widget.id).notifier).onUserMove(move);
+  }
+
+  @override
+  void onPromotionSelection(Role? role) {
+    ref.read(studyControllerProvider(widget.id).notifier).onPromotionSelection(role);
+  }
+
+  @override
+  String get fen =>
+      analysisState.currentPosition?.board.fen ??
+      analysisState.study.currentChapterMeta.fen ??
+      kInitialFEN;
+
+  @override
+  ISet<Shape> get extraShapes {
+    final showVariationArrows =
+        ref.watch(studyPreferencesProvider.select((prefs) => prefs.showVariationArrows)) &&
+        !analysisState.gamebookActive &&
+        analysisState.currentNode.children.length > 1;
+
+    final pgnShapes = ISet(analysisState.pgnShapes.map((shape) => shape.chessground));
+
+    final variationArrows = ISet<Shape>(
+      showVariationArrows
+          ? analysisState.currentNode.children.mapIndexed((i, move) {
+              final color = Colors.white.withValues(alpha: i == 0 ? 0.9 : 0.5);
+              return Arrow(color: color, orig: (move as NormalMove).from, dest: move.to);
+            }).toList()
+          : [],
+    );
+
+    return pgnShapes.union(variationArrows);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -495,105 +547,7 @@ class _StudyBoardState extends ConsumerState<_StudyBoard> {
         });
       }
     });
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final studyPrefs = ref.watch(studyPreferencesProvider);
-    final studyState = ref.watch(studyControllerProvider(widget.id)).requireValue;
 
-    final currentNode = studyState.currentNode;
-    final position = currentNode.position;
-
-    final showVariationArrows =
-        ref.watch(studyPreferencesProvider.select((prefs) => prefs.showVariationArrows)) &&
-        !studyState.gamebookActive &&
-        currentNode.children.length > 1;
-
-    final pgnShapes = ISet(studyState.pgnShapes.map((shape) => shape.chessground));
-
-    final variationArrows = ISet<Shape>(
-      showVariationArrows
-          ? currentNode.children.mapIndexed((i, move) {
-              final color = Colors.white.withValues(alpha: i == 0 ? 0.9 : 0.5);
-              return Arrow(color: color, orig: (move as NormalMove).from, dest: move.to);
-            }).toList()
-          : [],
-    );
-
-    final showAnnotationsOnBoard = studyPrefs.showAnnotations;
-
-    final showBestMoveArrow =
-        studyState.isEngineAvailable(enginePrefs) && studyPrefs.showBestMoveArrow;
-
-    final bestMoves = showBestMoveArrow
-        ? pickBestClientEval(
-            localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
-            savedEval: currentNode.eval,
-          )?.bestMoves
-        : null;
-    final ISet<Shape> bestMoveShapes = bestMoves != null
-        ? computeBestMoveShapes(bestMoves, currentNode.position!.turn, boardPrefs.pieceSet.assets)
-        : ISet();
-
-    final sanMove = currentNode.sanMove;
-    final annotation = makeAnnotation(studyState.currentNode.nags);
-
-    return Chessboard(
-      size: widget.boardSize,
-      settings: boardPrefs.toBoardSettings().copyWith(
-        borderRadius: widget.borderRadius,
-        boxShadow: widget.borderRadius != null ? boardShadows : const <BoxShadow>[],
-        drawShape: DrawShapeOptions(
-          enable: true,
-          onCompleteShape: _onCompleteShape,
-          onClearShapes: _onClearShapes,
-          newShapeColor: boardPrefs.shapeColor.color,
-        ),
-      ),
-      fen:
-          studyState.currentPosition?.board.fen ??
-          studyState.study.currentChapterMeta.fen ??
-          kInitialFEN,
-      lastMove: studyState.lastMove as NormalMove?,
-      orientation: studyState.pov,
-      shapes: pgnShapes.union(userShapes).union(variationArrows).union(bestMoveShapes),
-      annotations: showAnnotationsOnBoard && sanMove != null && annotation != null
-          ? altCastles.containsKey(sanMove.move.uci)
-                ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
-                : IMap({sanMove.move.to: annotation})
-          : null,
-      game: position != null
-          ? boardPrefs.toGameData(
-              variant: studyState.variant,
-              position: position,
-              playerSide: studyState.playerSide,
-              promotionMove: studyState.promotionMove,
-              onMove: (move, {isDrop, captured}) {
-                ref.read(studyControllerProvider(widget.id).notifier).onUserMove(move);
-              },
-              onPromotionSelection: (role) {
-                ref.read(studyControllerProvider(widget.id).notifier).onPromotionSelection(role);
-              },
-            )
-          : null,
-    );
-  }
-
-  void _onCompleteShape(Shape shape) {
-    if (userShapes.any((element) => element == shape)) {
-      setState(() {
-        userShapes = userShapes.remove(shape);
-      });
-      return;
-    } else {
-      setState(() {
-        userShapes = userShapes.add(shape);
-      });
-    }
-  }
-
-  void _onClearShapes() {
-    setState(() {
-      userShapes = ISet();
-    });
+    return super.build(context);
   }
 }

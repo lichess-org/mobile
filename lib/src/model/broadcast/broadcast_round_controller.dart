@@ -6,11 +6,12 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -72,9 +73,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       },
     );
 
-    final round = await ref.withClient(
-      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
-    );
+    final round = await ref.read(broadcastRepositoryProvider).getRound(broadcastRoundId);
 
     return BroadcastRoundState(round: round.round, games: round.games, observedGames: ISet());
   }
@@ -83,9 +82,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     if (state.hasValue == false) return;
 
     final key = _key;
-    final round = await ref.withClient(
-      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
-    );
+    final round = await ref.read(broadcastRepositoryProvider).getRound(broadcastRoundId);
     // check provider is still mounted
     if (key == _key) {
       state = AsyncData(
@@ -177,6 +174,12 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     );
 
     _sendEvalMultiGet();
+
+    // Add delay before invalidating team matches to allow server to update scores
+    Future.delayed(
+      const Duration(seconds: 5),
+      () => ref.refresh(broadcastTeamMatchesProvider(broadcastRoundId)),
+    );
   }
 
   void _handleClockEvent(SocketEvent event) {
@@ -235,6 +238,11 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     );
   }
 
+  void clearObservedGames() {
+    if (!state.hasValue) return;
+    state = AsyncData(state.requireValue.copyWith(observedGames: ISet()));
+  }
+
   void addObservedGame(BroadcastGameId gameId) {
     if (state.valueOrNull?.games.containsKey(gameId) != true) return;
 
@@ -257,6 +265,8 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
   void _sendEvalMultiGet() {
     final round = state.requireValue;
+    final prefs = ref.read(broadcastPreferencesProvider);
+    if (prefs.showEvaluationGauge == false || round.observedGames.isEmpty) return;
 
     _socketClient.send('evalGetMulti', {
       'fens': [for (final id in round.observedGames) round.games[id]!.fen],

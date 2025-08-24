@@ -25,37 +25,35 @@ class PlayMenu extends ConsumerWidget {
         ),
         _Section(
           children: [
-            _CreateGamePlatformButton(
-              onTap: isOnline
-                  ? () {
-                      // Pops the play bottom sheet
-                      Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                      Navigator.of(
-                        context,
-                        rootNavigator: true,
-                      ).push(CorrespondenceChallengesScreen.buildRoute(context));
-                    }
-                  : null,
-              icon: Perf.correspondence.icon,
-              label: context.l10n.correspondence,
+            ListTile(
+              enabled: isOnline,
+              onTap: () {
+                // Pops the play bottom sheet
+                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(CorrespondenceChallengesScreen.buildRoute(context));
+              },
+              leading: Icon(Perf.correspondence.icon),
+              title: Text(context.l10n.correspondence),
             ),
-            _CreateGamePlatformButton(
-              onTap: isOnline
-                  ? () {
-                      // Pops the play bottom sheet
-                      Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+            ListTile(
+              enabled: isOnline,
+              onTap: () {
+                // Pops the play bottom sheet
+                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
 
-                      Navigator.of(context).push(TournamentListScreen.buildRoute(context));
-                    }
-                  : null,
-              icon: LichessIcons.tournament_cup,
-              label: context.l10n.arenaArenaTournaments,
+                Navigator.of(context).push(TournamentListScreen.buildRoute(context));
+              },
+              leading: const Icon(LichessIcons.tournament_cup),
+              title: Text(context.l10n.arenaArenaTournaments),
             ),
           ],
         ),
         _Section(
           children: [
-            _CreateGamePlatformButton(
+            ListTile(
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
@@ -64,8 +62,8 @@ class PlayMenu extends ConsumerWidget {
                   rootNavigator: true,
                 ).push(OverTheBoardScreen.buildRoute(context));
               },
-              icon: Icons.table_restaurant_outlined,
-              label: 'Over the board',
+              leading: const Icon(Icons.table_restaurant_outlined),
+              title: Text(context.l10n.mobileOverTheBoard),
             ),
           ],
         ),
@@ -82,23 +80,5 @@ class _Section extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListSection(hasLeading: true, materialFilledCard: true, children: children);
-  }
-}
-
-class _CreateGamePlatformButton extends StatelessWidget {
-  const _CreateGamePlatformButton({required this.icon, required this.label, required this.onTap});
-
-  final IconData icon;
-
-  final String label;
-
-  final void Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: onTap == null ? 0.5 : 1.0,
-      child: ListTile(leading: Icon(icon), title: Text(label), onTap: onTap),
-    );
   }
 }

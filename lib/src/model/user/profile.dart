@@ -17,6 +17,9 @@ sealed class Profile with _$Profile {
     int? fideRating,
     int? uscfRating,
     int? ecfRating,
+    int? rcfRating,
+    int? cfcRating,
+    int? dsbRating,
     IList<SocialLink>? links,
   }) = _Profile;
 
@@ -38,6 +41,9 @@ sealed class Profile with _$Profile {
       fideRating: pick('fideRating').asIntOrNull(),
       uscfRating: pick('uscfRating').asIntOrNull(),
       ecfRating: pick('ecfRating').asIntOrNull(),
+      rcfRating: pick('rcfRating').asIntOrNull(),
+      cfcRating: pick('cfcRating').asIntOrNull(),
+      dsbRating: pick('dsbRating').asIntOrNull(),
       links: rawLinks
           ?.where((e) => e.trim().isNotEmpty)
           .map((e) {
@@ -80,21 +86,24 @@ enum LinkSite {
   mastodon(
     'Mastodon',
     IListConst([
+      'mastodon.social',
+      'mastodon.online',
       'mstdn.social',
+      'masto.ai',
       'fosstodon.org',
       'gensokyo.social',
       'ravenation.club',
       'mastodon.art',
-      'mastodon.lol',
       'mastodon.green',
       'mas.to',
       'mindly.social',
       'mastodon.world',
-      'masthead.social',
       'techhub.social',
+      'im-in.space',
+      'mastodon.cloud',
     ]),
   ),
-  twitter('Twitter', IListConst(['twitter.com'])),
+  twitter('x', IListConst(['twitter.com', 'x.com'])),
   bluesky('Bluesky', IListConst(['bsky.app'])),
   facebook('Facebook', IListConst(['facebook.com'])),
   instagram('Instagram', IListConst(['instagram.com'])),
@@ -104,7 +113,6 @@ enum LinkSite {
   gitlab('GitLab', IListConst(['gitlab.com'])),
   vkontakte('VKontakte', IListConst(['vk.com'])),
   chessCom('Chess.com', IListConst(['chess.com'])),
-  chess24('Chess24', IListConst(['chess24.com'])),
   chessMonitor('ChessMonitor', IListConst(['chessmonitor.com'])),
   chessTempo('ChessTempo', IListConst(['chesstempo.com']));
 

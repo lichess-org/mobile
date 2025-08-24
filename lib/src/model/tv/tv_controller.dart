@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -67,12 +66,12 @@ class TvController extends _$TvController {
       id = game.$1;
       orientation = game.$2;
     } else if (channel != null) {
-      final channels = await ref.withClient((client) => TvRepository(client).channels());
+      final channels = await ref.read(tvRepositoryProvider).channels();
       final channelGame = channels[channel!]!;
       id = channelGame.id;
       orientation = channelGame.side ?? Side.white;
     } else if (userId != null) {
-      final game = await ref.withClient((client) => UserRepository(client).getCurrentGame(userId!));
+      final game = await ref.read(userRepositoryProvider).getCurrentGame(userId!);
       id = game.id;
       orientation = game.playerSideOf(userId!) ?? Side.white;
     } else {
@@ -147,6 +146,15 @@ class TvController extends _$TvController {
         if (san != null) {
           _playReplayMoveSound(san);
         }
+      }
+    }
+  }
+
+  void goToMove(int index) {
+    if (state.hasValue) {
+      final curState = state.requireValue;
+      if (index >= 0 && index < curState.game.steps.length) {
+        state = AsyncValue.data(curState.copyWith(stepCursor: index));
       }
     }
   }

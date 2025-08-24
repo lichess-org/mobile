@@ -224,14 +224,14 @@ class _BodyState extends ConsumerState<_Body> {
                       Navigator.of(context).push(
                         AnalysisScreen.buildRoute(
                           context,
-                          AnalysisOptions(
+                          AnalysisOptions.standalone(
                             orientation: game.youAre!,
-                            standalone: (
-                              pgn: game.makePgn(),
-                              isComputerAnalysisAllowed: false,
-                              variant: game.variant,
-                            ),
+                            pgn: game.makePgn(),
+                            isComputerAnalysisAllowed: false,
+                            variant: game.variant,
                             initialMoveCursor: stepCursor,
+                            // TODO implement offline storage and syncing of conditional premoves in CorrespondenceService and OfflineCorrespondenceGame
+                            // Until then, we do not enable conditional premoves in offline correspondence games
                           ),
                         ),
                       );
@@ -302,6 +302,7 @@ class _BodyState extends ConsumerState<_Body> {
     if (stepCursor > 0) {
       setState(() {
         stepCursor = stepCursor - 1;
+        promotionMove = null;
       });
       _playReplayMoveSound();
     }
@@ -311,6 +312,7 @@ class _BodyState extends ConsumerState<_Body> {
     if (stepCursor < game.steps.length - 1) {
       setState(() {
         stepCursor = stepCursor + 1;
+        promotionMove = null;
       });
       _playReplayMoveSound();
     }

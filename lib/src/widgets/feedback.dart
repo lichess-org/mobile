@@ -8,15 +8,16 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:popover/popover.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const threeBounceLoadingIndicator = SpinKitThreeBounce(color: Colors.grey, size: 15);
 
-/// A widget that shows the lag rating of the current socket connection.
+/// A icon that shows the lag rating of the current socket connection.
 ///
 /// If [socketUri] is provided, it will be used to get the lag rating from that socket route only,
 /// otherwise it will use the default socket route.
-class SocketPingRating extends ConsumerWidget {
-  const SocketPingRating({this.socketUri, super.key});
+class SocketPingRatingIcon extends ConsumerWidget {
+  const SocketPingRatingIcon({this.socketUri, super.key});
 
   final Uri? socketUri;
 
@@ -64,6 +65,46 @@ class SocketPingRating extends ConsumerWidget {
           transitionDuration: Duration.zero,
           popoverTransitionBuilder: (_, child) => child,
         );
+      },
+    );
+  }
+}
+
+class SocketPingRatingListTile extends ConsumerWidget {
+  const SocketPingRatingListTile({this.socketUri, super.key});
+
+  final Uri? socketUri;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ping = ref.watch(socketPingProvider(route: socketUri));
+
+    return ListTile(
+      leading: LagIndicator(lagRating: ping.rating),
+      title: ping.averageLag > Duration.zero
+          ? Text.rich(
+              TextSpan(
+                text: 'PING ',
+                children: [
+                  TextSpan(
+                    text: '${ping.averageLag.inMilliseconds}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: ColorScheme.of(context).onSurface,
+                    ),
+                  ),
+                  const TextSpan(text: ' ms'),
+                ],
+              ),
+              style: TextStyle(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.7)),
+            )
+          : Text(
+              context.l10n.noNetwork,
+              style: TextStyle(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.7)),
+            ),
+      enabled: ping.averageLag > Duration.zero,
+      onTap: () {
+        launchUrl(Uri.parse('https://lichess.org/lag'));
       },
     );
   }

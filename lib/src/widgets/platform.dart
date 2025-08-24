@@ -13,14 +13,10 @@ class PlatformWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        return androidBuilder(context);
-      case TargetPlatform.iOS:
-        return iosBuilder(context);
-      default:
-        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
-        return const SizedBox.shrink();
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return iosBuilder(context);
+    } else {
+      return androidBuilder(context);
     }
   }
 }
@@ -66,6 +62,7 @@ class PlatformScaffold extends StatelessWidget {
     this.appBar,
     this.floatingActionButton,
     this.persistentFooterButtons,
+    this.drawer,
     this.bottomSheet,
     this.bottomNavigationBar,
     this.extendBody,
@@ -75,6 +72,7 @@ class PlatformScaffold extends StatelessWidget {
   final Widget? body;
   final Widget? floatingActionButton;
   final List<Widget>? persistentFooterButtons;
+  final Widget? drawer;
   final Widget? bottomSheet;
   final Widget? bottomNavigationBar;
   final bool? extendBody;
@@ -91,6 +89,7 @@ class PlatformScaffold extends StatelessWidget {
       extendBody: extendBody ?? hasExtendedBodyParentScaffold,
       appBar: appBar,
       body: body,
+      drawer: drawer,
       persistentFooterButtons: persistentFooterButtons,
       floatingActionButton: floatingActionButton,
       bottomSheet: bottomSheet,
@@ -108,14 +107,22 @@ class PlatformScaffold extends StatelessWidget {
 }
 
 class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
-  PlatformAppBar({super.key, this.leading, this.title, this.actions, this.bottom, this.centerTitle})
-    : preferredSize = _PreferredAppBarSize(kToolbarHeight, bottom?.preferredSize.height);
+  PlatformAppBar({
+    super.key,
+    this.leading,
+    this.title,
+    this.actions,
+    this.bottom,
+    this.centerTitle,
+    this.automaticallyImplyLeading = true,
+  }) : preferredSize = _PreferredAppBarSize(kToolbarHeight, bottom?.preferredSize.height);
 
   final Widget? leading;
   final Widget? title;
   final List<Widget>? actions;
   final PreferredSizeWidget? bottom;
   final bool? centerTitle;
+  final bool automaticallyImplyLeading;
 
   @override
   final Size preferredSize;
@@ -129,6 +136,7 @@ class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: actions,
       bottom: bottom,
       centerTitle: centerTitle,
+      automaticallyImplyLeading: automaticallyImplyLeading,
     );
 
     return isIOS

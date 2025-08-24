@@ -231,6 +231,14 @@ abstract class Node {
     return addNodeAt(path, newNode, prepend: prepend, replace: replace);
   }
 
+  /// Adds a list of moves at the given path and returns the new path or null if the node at the path does not exist.
+  UciPath? addMovesAt(UciPath path, Iterable<Move> moves, {bool prepend = false}) {
+    final move = moves.elementAtOrNull(0);
+    if (move == null) return path;
+    final (newPath, _) = addMoveAt(path, move, prepend: prepend);
+    return newPath != null ? addMovesAt(newPath, moves.skip(1), prepend: prepend) : null;
+  }
+
   /// The function `convertAltCastlingMove` checks if a move is an alternative
   /// castling move and converts it to the corresponding standard castling move if so.
   Move? convertAltCastlingMove(Move move) {
@@ -521,7 +529,19 @@ class Root extends Node {
         if (move != null) {
           final newPos = frame.to.position.play(move);
           final isMainline = stack.isEmpty;
-          final comments = childFrom.data.comments?.map(PgnComment.fromPgn);
+          final comments = childFrom.data.comments?.map(PgnComment.fromPgn).map((c) {
+            if (c.eval == null && isLichessAnalysis && isMainline && newPos.isCheckmate) {
+              return PgnComment(
+                text: c.text,
+                clock: c.clock,
+                emt: c.emt,
+                // lichess analysis does not provide eval for checkmate, and we want it to be displayed
+                // in the eval bar
+                eval: PgnEvaluation.mate(mate: newPos.turn == Side.white ? -1 : 1, depth: 1),
+              );
+            }
+            return c;
+          });
 
           final branch = Branch(
             sanMove: SanMove(childFrom.data.san, move),
@@ -579,6 +599,33 @@ abstract class ViewNode {
       final child = current.children.first;
       yield child;
       current = child;
+    }
+  }
+
+  /// Finds the child node with that id.
+  ViewBranch? childById(UciCharPair id) {
+    return children.firstWhereOrNull((node) => node.id == id);
+  }
+
+  /// Selects all branches on that path.
+  Iterable<ViewBranch> branchesOn(UciPath path) sync* {
+    UciPath currentPath = path;
+
+    ViewBranch? pickChild(ViewNode node) {
+      final id = currentPath.head;
+      if (id == null) {
+        return null;
+      }
+      return node.childById(id);
+    }
+
+    ViewNode current = this;
+    ViewBranch? child;
+
+    while ((child = pickChild(current)) != null) {
+      yield child!;
+      current = child;
+      currentPath = currentPath.tail;
     }
   }
 }
@@ -668,13 +715,7 @@ sealed class ViewBranch extends ViewNode with _$ViewBranch {
   /// For now we only trust the eval coming from lichess analysis.
   ExternalEval? get serverEval {
     final pgnEval = lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
-    return pgnEval != null
-        ? ExternalEval(
-            cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,
-            mate: pgnEval.mate,
-            depth: pgnEval.depth,
-          )
-        : null;
+    return pgnEval != null ? ExternalEval.fromPgnEval(pgnEval) : null;
   }
 
   @override

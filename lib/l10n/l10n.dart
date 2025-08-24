@@ -130,13 +130,12 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -192,8 +191,20 @@ abstract class AppLocalizations {
     Locale('uk'),
     Locale('vi'),
     Locale('zh'),
-    Locale('zh', 'TW'),
+    Locale('zh', 'TW')
   ];
+
+  /// No description provided for @mobileAccountPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Account preferences'**
+  String get mobileAccountPreferences;
+
+  /// No description provided for @mobileAccountPreferencesHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'These preferences are applied to your Lichess account and will be used across all devices.'**
+  String get mobileAccountPreferencesHelp;
 
   /// No description provided for @mobileAllGames.
   ///
@@ -206,6 +217,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure?'**
   String get mobileAreYouSure;
+
+  /// No description provided for @mobileBoardSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Board settings'**
+  String get mobileBoardSettings;
 
   /// No description provided for @mobileCancelTakebackOffer.
   ///
@@ -237,17 +254,29 @@ abstract class AppLocalizations {
   /// **'Feedback'**
   String get mobileFeedbackButton;
 
-  /// No description provided for @mobileGreeting.
+  /// No description provided for @mobileGoodEvening.
   ///
   /// In en, this message translates to:
-  /// **'Hello, {param}'**
-  String mobileGreeting(String param);
+  /// **'Good evening, {param}'**
+  String mobileGoodEvening(String param);
 
-  /// No description provided for @mobileGreetingWithoutName.
+  /// No description provided for @mobileGoodEveningWithoutName.
   ///
   /// In en, this message translates to:
-  /// **'Hello'**
-  String get mobileGreetingWithoutName;
+  /// **'Good evening'**
+  String get mobileGoodEveningWithoutName;
+
+  /// No description provided for @mobileGoodDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Good day, {param}'**
+  String mobileGoodDay(String param);
+
+  /// No description provided for @mobileGoodDayWithoutName.
+  ///
+  /// In en, this message translates to:
+  /// **'Good day'**
+  String get mobileGoodDayWithoutName;
 
   /// No description provided for @mobileHideVariation.
   ///
@@ -279,6 +308,12 @@ abstract class AppLocalizations {
   /// **'No results'**
   String get mobileNoSearchResults;
 
+  /// No description provided for @mobileNotAllFeaturesAreAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.'**
+  String get mobileNotAllFeaturesAreAvailable;
+
   /// No description provided for @mobileNotFollowingAnyUser.
   ///
   /// In en, this message translates to:
@@ -291,11 +326,29 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get mobileOkButton;
 
+  /// No description provided for @mobileOverTheBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Over the board'**
+  String get mobileOverTheBoard;
+
   /// No description provided for @mobilePlayersMatchingSearchTerm.
   ///
   /// In en, this message translates to:
   /// **'Players with \"{param}\"'**
   String mobilePlayersMatchingSearchTerm(String param);
+
+  /// No description provided for @mobilePositionLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Left'**
+  String get mobilePositionLeft;
+
+  /// No description provided for @mobilePositionRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Right'**
+  String get mobilePositionRight;
 
   /// No description provided for @mobilePrefMagnifyDraggedPiece.
   ///
@@ -351,11 +404,53 @@ abstract class AppLocalizations {
   /// **'Recent searches'**
   String get mobileRecentSearches;
 
-  /// No description provided for @mobileSettingsHapticFeedback.
+  /// No description provided for @mobileRemoveBookmark.
   ///
   /// In en, this message translates to:
-  /// **'Haptic feedback'**
-  String get mobileSettingsHapticFeedback;
+  /// **'Remove bookmark'**
+  String get mobileRemoveBookmark;
+
+  /// No description provided for @mobileServerAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Server analysis'**
+  String get mobileServerAnalysis;
+
+  /// No description provided for @mobileSettingsClockPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Clock position'**
+  String get mobileSettingsClockPosition;
+
+  /// No description provided for @mobileSettingsCustomBackgroundPresets.
+  ///
+  /// In en, this message translates to:
+  /// **'Presets'**
+  String get mobileSettingsCustomBackgroundPresets;
+
+  /// No description provided for @mobileSettingsDraggedPieceTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Dragged piece target'**
+  String get mobileSettingsDraggedPieceTarget;
+
+  /// No description provided for @mobileSettingsDraggedTargetCircle.
+  ///
+  /// In en, this message translates to:
+  /// **'Circle'**
+  String get mobileSettingsDraggedTargetCircle;
+
+  /// No description provided for @mobileSettingsDraggedTargetSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Square'**
+  String get mobileSettingsDraggedTargetSquare;
+
+  /// No description provided for @mobileSettingsHomeWidgets.
+  ///
+  /// In en, this message translates to:
+  /// **'Home widgets'**
+  String get mobileSettingsHomeWidgets;
 
   /// No description provided for @mobileSettingsImmersiveMode.
   ///
@@ -368,6 +463,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.'**
   String get mobileSettingsImmersiveModeSubtitle;
+
+  /// No description provided for @mobileSettingsMaterialDifferenceCapturedPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Captured pieces'**
+  String get mobileSettingsMaterialDifferenceCapturedPieces;
+
+  /// No description provided for @mobileSettingsPickAnImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick an image'**
+  String get mobileSettingsPickAnImage;
+
+  /// No description provided for @mobileSettingsPickAnImageHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom background works only in dark mode. A dark image is recommended.'**
+  String get mobileSettingsPickAnImageHelp;
+
+  /// No description provided for @mobileSettingsPickAnImageBlur.
+  ///
+  /// In en, this message translates to:
+  /// **'Blur the image'**
+  String get mobileSettingsPickAnImageBlur;
+
+  /// No description provided for @mobileSettingsPickAnImageHideBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide board'**
+  String get mobileSettingsPickAnImageHideBoard;
+
+  /// No description provided for @mobileSettingsPickAnImageShowBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Show board'**
+  String get mobileSettingsPickAnImageShowBoard;
+
+  /// No description provided for @mobileSettingsPickAnImageSwipeToDisplay.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe to display other backgrounds'**
+  String get mobileSettingsPickAnImageSwipeToDisplay;
+
+  /// No description provided for @mobileSettingsPieceShiftMethodEither.
+  ///
+  /// In en, this message translates to:
+  /// **'Either tap or drag'**
+  String get mobileSettingsPieceShiftMethodEither;
+
+  /// No description provided for @mobileSettingsPieceShiftMethodTapTwoSquares.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap two squares'**
+  String get mobileSettingsPieceShiftMethodTapTwoSquares;
+
+  /// No description provided for @mobileSettingsShapeDrawing.
+  ///
+  /// In en, this message translates to:
+  /// **'Shape drawing'**
+  String get mobileSettingsShapeDrawing;
+
+  /// No description provided for @mobileSettingsShapeDrawingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.'**
+  String get mobileSettingsShapeDrawingSubtitle;
+
+  /// No description provided for @mobileSettingsShowBorder.
+  ///
+  /// In en, this message translates to:
+  /// **'Show border'**
+  String get mobileSettingsShowBorder;
+
+  /// No description provided for @mobileSettingsTouchFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Touch feedback'**
+  String get mobileSettingsTouchFeedback;
+
+  /// No description provided for @mobileSettingsTouchFeedbackSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When enabled, the device will vibrate shortly when you move or capture a piece.'**
+  String get mobileSettingsTouchFeedbackSubtitle;
 
   /// No description provided for @mobileSettingsTab.
   ///
@@ -441,6 +620,12 @@ abstract class AppLocalizations {
   /// **'Tools'**
   String get mobileToolsTab;
 
+  /// No description provided for @mobileUnsupportedVariant.
+  ///
+  /// In en, this message translates to:
+  /// **'Variant {param} is not supported in this version.'**
+  String mobileUnsupportedVariant(String param);
+
   /// No description provided for @mobileWaitingForOpponentToJoin.
   ///
   /// In en, this message translates to:
@@ -452,6 +637,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Watch'**
   String get mobileWatchTab;
+
+  /// No description provided for @mobileWelcomeToLichessApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Lichess app!'**
+  String get mobileWelcomeToLichessApp;
 
   /// No description provided for @activityActivity.
   ///
@@ -606,7 +797,7 @@ abstract class AppLocalizations {
   /// No description provided for @arenaWillBeNotified.
   ///
   /// In en, this message translates to:
-  /// **'You will be notified when the tournament starts, so it is safe to play in another tab while waiting.'**
+  /// **'You will be notified when the tournament starts, so feel free to leave this tab idle.'**
   String get arenaWillBeNotified;
 
   /// No description provided for @arenaIsRated.
@@ -1299,12 +1490,6 @@ abstract class AppLocalizations {
   /// **'Official website'**
   String get broadcastOfficialWebsite;
 
-  /// No description provided for @broadcastStandings.
-  ///
-  /// In en, this message translates to:
-  /// **'Standings'**
-  String get broadcastStandings;
-
   /// No description provided for @broadcastOfficialStandings.
   ///
   /// In en, this message translates to:
@@ -1323,23 +1508,11 @@ abstract class AppLocalizations {
   /// **'webmasters page'**
   String get broadcastWebmastersPage;
 
-  /// No description provided for @broadcastPgnSourceHelp.
-  ///
-  /// In en, this message translates to:
-  /// **'A public, real-time PGN source for this round. We also offer a {param} for faster and more efficient synchronisation.'**
-  String broadcastPgnSourceHelp(String param);
-
   /// No description provided for @broadcastEmbedThisBroadcast.
   ///
   /// In en, this message translates to:
   /// **'Embed this broadcast in your website'**
   String get broadcastEmbedThisBroadcast;
-
-  /// No description provided for @broadcastEmbedThisRound.
-  ///
-  /// In en, this message translates to:
-  /// **'Embed {param} in your website'**
-  String broadcastEmbedThisRound(String param);
 
   /// No description provided for @broadcastRatingDiff.
   ///
@@ -1430,6 +1603,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Live board'**
   String get broadcastLiveboard;
+
+  /// No description provided for @broadcastCommunityBroadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'Community broadcast'**
+  String get broadcastCommunityBroadcast;
+
+  /// No description provided for @broadcastCreatedAndManagedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Created and managed by {param}.'**
+  String broadcastCreatedAndManagedBy(String param);
 
   /// No description provided for @broadcastNbBroadcasts.
   ///
@@ -1593,6 +1778,120 @@ abstract class AppLocalizations {
   /// **'Contact Lichess'**
   String get contactContactLichess;
 
+  /// No description provided for @coordinatesCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates'**
+  String get coordinatesCoordinates;
+
+  /// No description provided for @coordinatesCoordinateTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinate training'**
+  String get coordinatesCoordinateTraining;
+
+  /// No description provided for @coordinatesAverageScoreAsWhiteX.
+  ///
+  /// In en, this message translates to:
+  /// **'Average score as white: {param}'**
+  String coordinatesAverageScoreAsWhiteX(String param);
+
+  /// No description provided for @coordinatesAverageScoreAsBlackX.
+  ///
+  /// In en, this message translates to:
+  /// **'Average score as black: {param}'**
+  String coordinatesAverageScoreAsBlackX(String param);
+
+  /// No description provided for @coordinatesKnowingTheChessBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowing the chessboard coordinates is a very important skill for several reasons:'**
+  String get coordinatesKnowingTheChessBoard;
+
+  /// No description provided for @coordinatesMostChessCourses.
+  ///
+  /// In en, this message translates to:
+  /// **'Most chess courses and exercises use the algebraic notation extensively.'**
+  String get coordinatesMostChessCourses;
+
+  /// No description provided for @coordinatesTalkToYourChessFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'It makes it easier to talk to your chess friends, since you both understand the \'language of chess\'.'**
+  String get coordinatesTalkToYourChessFriends;
+
+  /// No description provided for @coordinatesYouCanAnalyseAGameMoreEffectively.
+  ///
+  /// In en, this message translates to:
+  /// **'You can analyse a game more effectively if you can quickly recognise coordinates.'**
+  String get coordinatesYouCanAnalyseAGameMoreEffectively;
+
+  /// No description provided for @coordinatesACoordinateAppears.
+  ///
+  /// In en, this message translates to:
+  /// **'A coordinate appears on the board and you must click on the corresponding square.'**
+  String get coordinatesACoordinateAppears;
+
+  /// No description provided for @coordinatesASquareIsHighlightedExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'A square is highlighted on the board and you must enter its coordinate (e.g. \"e4\").'**
+  String get coordinatesASquareIsHighlightedExplanation;
+
+  /// No description provided for @coordinatesYouHaveThirtySeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'You have 30 seconds to correctly map as many squares as possible!'**
+  String get coordinatesYouHaveThirtySeconds;
+
+  /// No description provided for @coordinatesGoAsLongAsYouWant.
+  ///
+  /// In en, this message translates to:
+  /// **'Go as long as you want, there is no time limit!'**
+  String get coordinatesGoAsLongAsYouWant;
+
+  /// No description provided for @coordinatesShowCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Show coordinates'**
+  String get coordinatesShowCoordinates;
+
+  /// No description provided for @coordinatesShowCoordsOnAllSquares.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates on every square'**
+  String get coordinatesShowCoordsOnAllSquares;
+
+  /// No description provided for @coordinatesShowPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Show pieces'**
+  String get coordinatesShowPieces;
+
+  /// No description provided for @coordinatesStartTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Start training'**
+  String get coordinatesStartTraining;
+
+  /// No description provided for @coordinatesFindSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Find square'**
+  String get coordinatesFindSquare;
+
+  /// No description provided for @coordinatesNameSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Name square'**
+  String get coordinatesNameSquare;
+
+  /// No description provided for @coordinatesPracticeOnlySomeFilesAndRanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Practice only some files & ranks'**
+  String get coordinatesPracticeOnlySomeFilesAndRanks;
+
   /// No description provided for @patronDonate.
   ///
   /// In en, this message translates to:
@@ -1604,6 +1903,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lichess Patron'**
   String get patronLichessPatron;
+
+  /// No description provided for @patronBecomePatron.
+  ///
+  /// In en, this message translates to:
+  /// **'Become a Lichess Patron'**
+  String get patronBecomePatron;
 
   /// No description provided for @perfStatPerfStats.
   ///
@@ -5469,11 +5774,11 @@ abstract class AppLocalizations {
   /// **'Winner'**
   String get winner;
 
-  /// No description provided for @standing.
+  /// No description provided for @standings.
   ///
   /// In en, this message translates to:
-  /// **'Standing'**
-  String get standing;
+  /// **'Standings'**
+  String get standings;
 
   /// No description provided for @createANewTournament.
   ///
@@ -5552,12 +5857,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Losses'**
   String get losses;
-
-  /// No description provided for @createdBy.
-  ///
-  /// In en, this message translates to:
-  /// **'Created by'**
-  String get createdBy;
 
   /// No description provided for @startingIn.
   ///
@@ -6036,7 +6335,7 @@ abstract class AppLocalizations {
   /// No description provided for @error_provideOneCheatedGameLink.
   ///
   /// In en, this message translates to:
-  /// **'Please provide at least one link to a cheated game.'**
+  /// **'Please provide at least one link to a game with suspected cheating.'**
   String get error_provideOneCheatedGameLink;
 
   /// No description provided for @by.
@@ -8409,6 +8708,12 @@ abstract class AppLocalizations {
   /// **'Disable blind mode'**
   String get disableBlindMode;
 
+  /// No description provided for @copyToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy to clipboard'**
+  String get copyToClipboard;
+
   /// No description provided for @opponentLeftCounter.
   ///
   /// In en, this message translates to:
@@ -10243,200 +10548,94 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>[
-    'af',
-    'ar',
-    'az',
-    'be',
-    'bg',
-    'bn',
-    'bs',
-    'ca',
-    'cs',
-    'da',
-    'de',
-    'el',
-    'en',
-    'eo',
-    'es',
-    'et',
-    'eu',
-    'fa',
-    'fi',
-    'fr',
-    'gl',
-    'gsw',
-    'he',
-    'hi',
-    'hr',
-    'hu',
-    'hy',
-    'id',
-    'it',
-    'ja',
-    'kk',
-    'ko',
-    'lt',
-    'lv',
-    'mk',
-    'nb',
-    'nl',
-    'pl',
-    'pt',
-    'ro',
-    'ru',
-    'sk',
-    'sl',
-    'sq',
-    'sr',
-    'sv',
-    'tr',
-    'uk',
-    'vi',
-    'zh',
-  ].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['af', 'ar', 'az', 'be', 'bg', 'bn', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'gl', 'gsw', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lt', 'lv', 'mk', 'nb', 'nl', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
   // Lookup logic when language+country codes are specified.
   switch (locale.languageCode) {
-    case 'en':
-      {
-        switch (locale.countryCode) {
-          case 'US':
-            return AppLocalizationsEnUs();
-        }
-        break;
-      }
-    case 'pt':
-      {
-        switch (locale.countryCode) {
-          case 'BR':
-            return AppLocalizationsPtBr();
-        }
-        break;
-      }
-    case 'zh':
-      {
-        switch (locale.countryCode) {
-          case 'TW':
-            return AppLocalizationsZhTw();
-        }
-        break;
-      }
+    case 'en': {
+  switch (locale.countryCode) {
+    case 'US': return AppLocalizationsEnUs();
+   }
+  break;
+   }
+    case 'pt': {
+  switch (locale.countryCode) {
+    case 'BR': return AppLocalizationsPtBr();
+   }
+  break;
+   }
+    case 'zh': {
+  switch (locale.countryCode) {
+    case 'TW': return AppLocalizationsZhTw();
+   }
+  break;
+   }
   }
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'af':
-      return AppLocalizationsAf();
-    case 'ar':
-      return AppLocalizationsAr();
-    case 'az':
-      return AppLocalizationsAz();
-    case 'be':
-      return AppLocalizationsBe();
-    case 'bg':
-      return AppLocalizationsBg();
-    case 'bn':
-      return AppLocalizationsBn();
-    case 'bs':
-      return AppLocalizationsBs();
-    case 'ca':
-      return AppLocalizationsCa();
-    case 'cs':
-      return AppLocalizationsCs();
-    case 'da':
-      return AppLocalizationsDa();
-    case 'de':
-      return AppLocalizationsDe();
-    case 'el':
-      return AppLocalizationsEl();
-    case 'en':
-      return AppLocalizationsEn();
-    case 'eo':
-      return AppLocalizationsEo();
-    case 'es':
-      return AppLocalizationsEs();
-    case 'et':
-      return AppLocalizationsEt();
-    case 'eu':
-      return AppLocalizationsEu();
-    case 'fa':
-      return AppLocalizationsFa();
-    case 'fi':
-      return AppLocalizationsFi();
-    case 'fr':
-      return AppLocalizationsFr();
-    case 'gl':
-      return AppLocalizationsGl();
-    case 'gsw':
-      return AppLocalizationsGsw();
-    case 'he':
-      return AppLocalizationsHe();
-    case 'hi':
-      return AppLocalizationsHi();
-    case 'hr':
-      return AppLocalizationsHr();
-    case 'hu':
-      return AppLocalizationsHu();
-    case 'hy':
-      return AppLocalizationsHy();
-    case 'id':
-      return AppLocalizationsId();
-    case 'it':
-      return AppLocalizationsIt();
-    case 'ja':
-      return AppLocalizationsJa();
-    case 'kk':
-      return AppLocalizationsKk();
-    case 'ko':
-      return AppLocalizationsKo();
-    case 'lt':
-      return AppLocalizationsLt();
-    case 'lv':
-      return AppLocalizationsLv();
-    case 'mk':
-      return AppLocalizationsMk();
-    case 'nb':
-      return AppLocalizationsNb();
-    case 'nl':
-      return AppLocalizationsNl();
-    case 'pl':
-      return AppLocalizationsPl();
-    case 'pt':
-      return AppLocalizationsPt();
-    case 'ro':
-      return AppLocalizationsRo();
-    case 'ru':
-      return AppLocalizationsRu();
-    case 'sk':
-      return AppLocalizationsSk();
-    case 'sl':
-      return AppLocalizationsSl();
-    case 'sq':
-      return AppLocalizationsSq();
-    case 'sr':
-      return AppLocalizationsSr();
-    case 'sv':
-      return AppLocalizationsSv();
-    case 'tr':
-      return AppLocalizationsTr();
-    case 'uk':
-      return AppLocalizationsUk();
-    case 'vi':
-      return AppLocalizationsVi();
-    case 'zh':
-      return AppLocalizationsZh();
+    case 'af': return AppLocalizationsAf();
+    case 'ar': return AppLocalizationsAr();
+    case 'az': return AppLocalizationsAz();
+    case 'be': return AppLocalizationsBe();
+    case 'bg': return AppLocalizationsBg();
+    case 'bn': return AppLocalizationsBn();
+    case 'bs': return AppLocalizationsBs();
+    case 'ca': return AppLocalizationsCa();
+    case 'cs': return AppLocalizationsCs();
+    case 'da': return AppLocalizationsDa();
+    case 'de': return AppLocalizationsDe();
+    case 'el': return AppLocalizationsEl();
+    case 'en': return AppLocalizationsEn();
+    case 'eo': return AppLocalizationsEo();
+    case 'es': return AppLocalizationsEs();
+    case 'et': return AppLocalizationsEt();
+    case 'eu': return AppLocalizationsEu();
+    case 'fa': return AppLocalizationsFa();
+    case 'fi': return AppLocalizationsFi();
+    case 'fr': return AppLocalizationsFr();
+    case 'gl': return AppLocalizationsGl();
+    case 'gsw': return AppLocalizationsGsw();
+    case 'he': return AppLocalizationsHe();
+    case 'hi': return AppLocalizationsHi();
+    case 'hr': return AppLocalizationsHr();
+    case 'hu': return AppLocalizationsHu();
+    case 'hy': return AppLocalizationsHy();
+    case 'id': return AppLocalizationsId();
+    case 'it': return AppLocalizationsIt();
+    case 'ja': return AppLocalizationsJa();
+    case 'kk': return AppLocalizationsKk();
+    case 'ko': return AppLocalizationsKo();
+    case 'lt': return AppLocalizationsLt();
+    case 'lv': return AppLocalizationsLv();
+    case 'mk': return AppLocalizationsMk();
+    case 'nb': return AppLocalizationsNb();
+    case 'nl': return AppLocalizationsNl();
+    case 'pl': return AppLocalizationsPl();
+    case 'pt': return AppLocalizationsPt();
+    case 'ro': return AppLocalizationsRo();
+    case 'ru': return AppLocalizationsRu();
+    case 'sk': return AppLocalizationsSk();
+    case 'sl': return AppLocalizationsSl();
+    case 'sq': return AppLocalizationsSq();
+    case 'sr': return AppLocalizationsSr();
+    case 'sv': return AppLocalizationsSv();
+    case 'tr': return AppLocalizationsTr();
+    case 'uk': return AppLocalizationsUk();
+    case 'vi': return AppLocalizationsVi();
+    case 'zh': return AppLocalizationsZh();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
+    'that was used.'
   );
 }

@@ -67,8 +67,7 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
   /// The description of the challenge.
   String description(AppLocalizations l10n) {
     if (!variant.isPlaySupported) {
-      // TODO: l10n
-      return 'This variant is not yet supported on the app.';
+      return l10n.mobileUnsupportedVariant(variant.label);
     }
 
     final time = switch (timeControl) {
@@ -133,11 +132,11 @@ sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements 
 
   Map<String, dynamic> get toRequestBody {
     return {
+      'variant': variant.name,
       if (clock != null) 'clock.limit': clock!.time.inSeconds.toString(),
       if (clock != null) 'clock.increment': clock!.increment.inSeconds.toString(),
       if (days != null) 'days': days.toString(),
-      'rated': variant == Variant.fromPosition ? 'false' : rated.toString(),
-      'variant': variant.name,
+      if (rated) 'rated': 'true',
       if (variant == Variant.fromPosition) 'fen': initialFen,
       if (sideChoice != SideChoice.random) 'color': sideChoice.name,
     };

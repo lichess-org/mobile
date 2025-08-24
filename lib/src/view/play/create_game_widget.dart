@@ -122,10 +122,12 @@ class CreateGameWidget extends ConsumerWidget {
                       ? () {
                           showModalBottomSheet<void>(
                             context: context,
+                            constraints: BoxConstraints(
+                              minHeight: MediaQuery.sizeOf(context).height * 0.4,
+                            ),
                             isScrollControlled: true,
                             builder: (BuildContext context) {
                               return BottomSheetScrollableContainer(
-                                padding: const EdgeInsets.only(top: 32.0, bottom: 16.0),
                                 children: [
                                   PlayRatingRange(
                                     perf: userPerf,

@@ -37,7 +37,7 @@ class OverTheBoardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Over the board'), // TODO: l10n
+        title: Text(context.l10n.mobileOverTheBoard),
         actions: [
           SemanticIconButton(
             onPressed: () => showConfigureDisplaySettings(context),
@@ -275,13 +275,11 @@ class _BottomBar extends ConsumerWidget {
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
                 context,
-                AnalysisOptions(
+                AnalysisOptions.standalone(
                   orientation: Side.white,
-                  standalone: (
-                    pgn: gameState.game.makePgn(),
-                    isComputerAnalysisAllowed: true,
-                    variant: gameState.game.meta.variant,
-                  ),
+                  pgn: gameState.game.makePgn(),
+                  isComputerAnalysisAllowed: true,
+                  variant: gameState.game.meta.variant,
                 ),
               ),
             ),

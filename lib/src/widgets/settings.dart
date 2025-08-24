@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
+const kSettingsTileTitleMaxLines = 3;
+
 /// A platform agnostic tappable list tile that represents a settings value.
 class SettingsListTile extends StatelessWidget {
   const SettingsListTile({
@@ -10,6 +12,7 @@ class SettingsListTile extends StatelessWidget {
     required this.settingsValue,
     required this.onTap,
     this.explanation,
+    this.enabled = true,
     super.key,
   });
 
@@ -20,6 +23,8 @@ class SettingsListTile extends StatelessWidget {
   final Text settingsLabel;
 
   final String settingsValue;
+
+  final bool enabled;
 
   final void Function()? onTap;
 
@@ -45,6 +50,7 @@ class SettingsListTile extends StatelessWidget {
                 ).subtitleTextStyle?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
               )
             : null,
+        enabled: enabled,
         onTap: onTap,
         trailing: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.25),
@@ -52,7 +58,7 @@ class SettingsListTile extends StatelessWidget {
             settingsValue,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.end,
-            maxLines: 2,
+            maxLines: kSettingsTileTitleMaxLines,
             style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
           ),
         ),
@@ -102,6 +108,7 @@ class SwitchSettingTile extends StatelessWidget {
 class SliderSettingsTile extends StatefulWidget {
   const SliderSettingsTile({
     this.icon,
+    this.title,
     required this.value,
     required this.values,
     required this.onChangeEnd,
@@ -109,6 +116,7 @@ class SliderSettingsTile extends StatefulWidget {
   });
 
   final Widget? icon;
+  final Widget? title;
   final double value;
   final List<double> values;
   final void Function(double value) onChangeEnd;
@@ -142,7 +150,8 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
 
     return ListTile(
       leading: widget.icon,
-      title: slider,
+      title: widget.title ?? slider,
+      subtitle: widget.title != null ? slider : null,
       trailing: widget.labelBuilder != null
           ? Text(widget.labelBuilder!.call(widget.values[_index]))
           : null,
@@ -172,7 +181,7 @@ class _SettingsTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle.merge(
-      maxLines: 2,
+      maxLines: kSettingsTileTitleMaxLines,
       overflow: TextOverflow.ellipsis,
       child: Text.rich(TextSpan(children: [title.textSpan ?? TextSpan(text: title.data)])),
     );
@@ -215,22 +224,20 @@ class ChoicePicker<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
-      child: ListSection(
-        children: [
-          for (final value in choices)
-            ListTile(
-              selected: selectedItem == value,
-              trailing: selectedItem == value ? const Icon(Icons.check) : null,
-              contentPadding: tileContentPadding,
-              title: titleBuilder(value),
-              subtitle: subtitleBuilder?.call(value),
-              leading: leadingBuilder?.call(value),
-              onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
-            ),
-        ],
-      ),
+    return ListSection(
+      children: [
+        for (final value in choices)
+          ListTile(
+            enabled: onSelectedItemChanged != null,
+            selected: selectedItem == value,
+            trailing: selectedItem == value ? const Icon(Icons.check) : null,
+            contentPadding: tileContentPadding,
+            title: titleBuilder(value),
+            subtitle: subtitleBuilder?.call(value),
+            leading: leadingBuilder?.call(value),
+            onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
+          ),
+      ],
     );
   }
 }

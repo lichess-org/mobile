@@ -10,6 +10,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
@@ -659,17 +660,45 @@ void main() {
     });
 
     testWidgets('for an unfinished correspondence game', (WidgetTester tester) async {
-      await createTestGame(
-        tester,
-        pgn: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Qf3 Rb8 Bd3',
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final fullEventString = makeFullEvent(
+        gameFullId.gameId,
+        'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Qf3 Rb8 Bd3',
+        whiteUserName: 'Peter',
+        blackUserName: 'Steven',
+        socketVersion: 0,
         clock: null,
         correspondenceClock: (
           daysPerTurn: 3,
           white: const Duration(days: 3),
           black: const Duration(days: 2, hours: 22, minutes: 49, seconds: 59),
         ),
-        socketVersion: 0,
       );
+
+      // AnalysisScreen uses this to get the game data
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/$gameFullId/forecasts') {
+          return mockResponse(
+            jsonEncode(
+              SocketEvent.fromJson(jsonDecode(fullEventString) as Map<String, dynamic>).data,
+            ),
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(initialGameId: gameFullId),
+        overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(mockClient, ref))],
+      );
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 10));
+
+      sendServerSocketMessages(GameController.socketUri(gameFullId), [fullEventString]);
+      await tester.pump();
+
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byKey(const Key('d3-whitebishop')), findsOneWidget);
       expect(find.byKey(const Key('b5-lastMove')), findsOneWidget);

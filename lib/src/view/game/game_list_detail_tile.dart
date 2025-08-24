@@ -62,7 +62,6 @@ class GameListDetailTile extends StatelessWidget {
             ),
             game: game,
             mySide: mySide,
-            showGameSummary: false,
             onPressedBookmark: onPressedBookmark,
           ),
         );

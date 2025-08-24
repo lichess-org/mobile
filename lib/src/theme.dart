@@ -142,7 +142,7 @@ ThemeData _makeDefaultTheme(
             backgroundColor: theme.colorScheme.surface.withValues(alpha: kCupertinoBarOpacity),
           )
         : null,
-    bottomAppBarTheme: BottomAppBarTheme(
+    bottomAppBarTheme: BottomAppBarThemeData(
       color: theme.colorScheme.surface,
       elevation: isIOS ? 0 : null,
     ),
@@ -164,12 +164,6 @@ ThemeData _makeDefaultTheme(
     menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
     bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
     sliderTheme: kSliderTheme,
-    pageTransitionsTheme: const PageTransitionsTheme(
-      builders: {
-        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
-        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-      },
-    ),
     extensions: [lichessCustomColors.harmonized(theme.colorScheme)],
   );
 }
@@ -209,6 +203,9 @@ ThemeData _makeBackgroundImageTheme({
       backgroundColor: isIOS
           ? lighten(baseTheme.colorScheme.surface, 0.1).withValues(alpha: 0.9)
           : baseTheme.colorScheme.surface.withValues(alpha: 0.9),
+    ),
+    drawerTheme: DrawerThemeData(
+      backgroundColor: baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.9),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: baseTheme.colorScheme.secondaryFixedDim,
@@ -252,19 +249,19 @@ ThemeData _makeBackgroundImageTheme({
                 : seedColor.withValues(alpha: kCupertinoBarOpacity),
           )
         : null,
-    bottomAppBarTheme: BottomAppBarTheme(
+    bottomAppBarTheme: BottomAppBarThemeData(
       color: isBackgroundImage
           ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
           : seedColor,
       elevation: isIOS ? 0 : null,
     ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
-    pageTransitionsTheme: const PageTransitionsTheme(
+    pageTransitionsTheme: PageTransitionsTheme(
       builders: {
-        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(
-          backgroundColor: Colors.transparent,
+        TargetPlatform.android: ZoomPageTransitionsBuilder(
+          backgroundColor: seedColor.withValues(alpha: 0),
         ),
-        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
       },
     ),
 

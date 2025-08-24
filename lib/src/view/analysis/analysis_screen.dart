@@ -9,22 +9,25 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/conditional_premoves.dart';
+import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
+import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -38,10 +41,9 @@ import 'package:share_plus/share_plus.dart';
 final _logger = Logger('AnalysisScreen');
 
 class AnalysisScreen extends StatelessWidget {
-  const AnalysisScreen({required this.options, this.enableDrawingShapes = true, super.key});
+  const AnalysisScreen({required this.options, super.key});
 
   final AnalysisOptions options;
-  final bool enableDrawingShapes;
 
   static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
     return buildScreenRoute(context, screen: AnalysisScreen(options: options));
@@ -49,16 +51,14 @@ class AnalysisScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _AnalysisScreen(options: options, enableDrawingShapes: enableDrawingShapes);
+    return _AnalysisScreen(options: options);
   }
 }
 
 class _AnalysisScreen extends ConsumerStatefulWidget {
-  const _AnalysisScreen({required this.options, this.enableDrawingShapes = true});
+  const _AnalysisScreen({required this.options});
 
   final AnalysisOptions options;
-
-  final bool enableDrawingShapes;
 
   @override
   ConsumerState<_AnalysisScreen> createState() => _AnalysisScreenState();
@@ -74,9 +74,12 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     super.initState();
 
     tabs = [
-      AnalysisTab.opening,
+      AnalysisTab.explorer,
       AnalysisTab.moves,
-      if (widget.options.gameId != null) AnalysisTab.summary,
+      if (widget.options case ArchivedGame())
+        AnalysisTab.summary
+      else if (widget.options case ActiveCorrespondenceGame())
+        AnalysisTab.conditionalPremoves,
     ];
 
     _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
@@ -113,11 +116,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
             title: _Title(variant: value.variant),
             actions: appBarActions,
           ),
-          body: _Body(
-            options: widget.options,
-            controller: _tabController,
-            enableDrawingShapes: widget.enableDrawingShapes,
-          ),
+          body: _Body(options: widget.options, controller: _tabController),
         );
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load analysis: $error', stackTrace);
@@ -205,11 +204,10 @@ class _Title extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.options, required this.controller, required this.enableDrawingShapes});
+  const _Body({required this.options, required this.controller});
 
   final TabController controller;
   final AnalysisOptions options;
-  final bool enableDrawingShapes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -242,88 +240,106 @@ class _Body extends ConsumerWidget {
               analysisState.currentPosition.ply,
             )
           : null;
+      final resultString = analysisState.pgnHeaders.get('Result');
+      final result = resultString != null
+          ? AnalysisGameResult.resultFromPgnResult(resultString)
+          : null;
       boardFooter = _PlayerWidget(
         player: footerPlayer,
         clock: footerClock,
         isSideToMove: analysisState.currentPosition.turn == pov,
+        result: result?.resultToString(pov),
       );
       boardHeader = _PlayerWidget(
         player: headerPlayer,
         clock: headerClock,
         isSideToMove: analysisState.currentPosition.turn == pov.opposite,
+        result: result?.resultToString(pov.opposite),
       );
     }
 
-    return AnalysisLayout(
-      smallBoard: analysisPrefs.smallBoard,
-      tabController: controller,
-      pov: pov,
-      boardBuilder: (context, boardSize, borderRadius) => AnalysisBoard(
-        options,
-        boardSize,
-        borderRadius: borderRadius,
-        enableDrawingShapes: enableDrawingShapes,
-      ),
-      boardHeader: boardHeader,
-      boardFooter: boardFooter,
-      engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
-          ? (context, orientation) {
-              return orientation == Orientation.portrait
-                  ? EngineGauge(
-                      displayMode: EngineGaugeDisplayMode.horizontal,
-                      params: analysisState.engineGaugeParams(enginePrefs),
-                      engineLinesState: analysisState.isEngineAvailable(enginePrefs)
-                          ? analysisPrefs.showEngineLines
-                                ? EngineLinesShowState.expanded
-                                : EngineLinesShowState.collapsed
-                          : null,
-                      onTap: () {
-                        ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
-                      },
-                    )
-                  : Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                      child: EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.vertical,
+    return FocusDetector(
+      onFocusRegained: () {
+        if (context.mounted) {
+          ref.read(analysisControllerProvider(options).notifier).onFocusRegained();
+        }
+      },
+      child: AnalysisLayout(
+        smallBoard: analysisPrefs.smallBoard,
+        tabController: controller,
+        pov: pov,
+        boardBuilder: (context, boardSize, borderRadius) =>
+            GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
+        boardHeader: boardHeader,
+        boardFooter: boardFooter,
+        engineGaugeBuilder: analysisState.hasAvailableEval(enginePrefs) && showEvaluationGauge
+            ? (context, orientation) {
+                return orientation == Orientation.portrait
+                    ? EngineGauge(
+                        displayMode: EngineGaugeDisplayMode.horizontal,
                         params: analysisState.engineGaugeParams(enginePrefs),
-                      ),
-                    );
-            }
-          : null,
-      engineLines: isEngineAvailable && analysisPrefs.showEngineLines && numEvalLines > 0
-          ? EngineLines(
-              onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-              savedEval: currentNode.eval,
-              isGameOver: currentNode.position.isGameOver,
-            )
-          : null,
-      bottomBar: _BottomBar(options: options),
-      children: [
-        OpeningExplorerView(
-          shouldDisplayGames: analysisState.isComputerAnalysisAllowed,
-          position: currentNode.position,
-          opening: kOpeningAllowedVariants.contains(analysisState.variant)
-              ? analysisState.currentNode.isRoot
-                    ? LightOpening(eco: '', name: context.l10n.startPosition)
-                    : analysisState.currentNode.opening ?? analysisState.currentBranchOpening
-              : null,
-          onMoveSelected: (move) {
-            ref.read(ctrlProvider.notifier).onUserMove(move);
-          },
-        ),
-        AnalysisTreeView(options),
-        if (options.gameId != null) ServerAnalysisSummary(options),
-      ],
+                        engineLinesState: isEngineAvailable && numEvalLines > 0
+                            ? analysisPrefs.showEngineLines
+                                  ? EngineLinesShowState.expanded
+                                  : EngineLinesShowState.collapsed
+                            : null,
+                        onTap: () {
+                          ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
+                        },
+                      )
+                    : Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
+                        child: EngineGauge(
+                          displayMode: EngineGaugeDisplayMode.vertical,
+                          params: analysisState.engineGaugeParams(enginePrefs),
+                        ),
+                      );
+              }
+            : null,
+        engineLines: isEngineAvailable && numEvalLines > 0 && analysisPrefs.showEngineLines
+            ? EngineLines(
+                onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
+                savedEval: currentNode.eval,
+                isGameOver: currentNode.position.isGameOver,
+              )
+            : null,
+        bottomBar: _BottomBar(options: options),
+        children: [
+          ExplorerView(
+            isComputerAnalysisAllowed: analysisState.isComputerAnalysisAllowed,
+            position: currentNode.position,
+            opening: kOpeningAllowedVariants.contains(analysisState.variant)
+                ? analysisState.currentNode.isRoot
+                      ? LightOpening(eco: '', name: context.l10n.startPosition)
+                      : analysisState.currentNode.opening ?? analysisState.currentBranchOpening
+                : null,
+            onMoveSelected: (move) {
+              ref.read(ctrlProvider.notifier).onUserMove(move);
+            },
+          ),
+          AnalysisTreeView(options),
+          if (options case ArchivedGame())
+            ServerAnalysisSummary(options)
+          else if (options case ActiveCorrespondenceGame())
+            ConditionalPremoves(options),
+        ],
+      ),
     );
   }
 }
 
 class _PlayerWidget extends StatelessWidget {
-  const _PlayerWidget({required this.player, required this.clock, required this.isSideToMove});
+  const _PlayerWidget({
+    required this.player,
+    required this.clock,
+    required this.isSideToMove,
+    this.result,
+  });
 
   final Player player;
   final Duration? clock;
+  final String? result;
   final bool isSideToMove;
 
   @override
@@ -333,17 +349,25 @@ class _PlayerWidget extends StatelessWidget {
       color: ColorScheme.of(context).surfaceContainer,
       padding: const EdgeInsets.only(left: 8.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          if (result != null) ...[
+            Text(result!, style: const TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(width: 16.0),
+          ],
           if (player.user != null)
-            UserFullNameWidget.player(
-              user: player.user,
-              rating: player.rating,
-              provisional: player.provisional,
-              aiLevel: player.aiLevel,
+            Expanded(
+              child: UserFullNameWidget.player(
+                user: player.user,
+                rating: player.rating,
+                provisional: player.provisional,
+                aiLevel: player.aiLevel,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+                onTap: () =>
+                    Navigator.of(context).push(UserScreen.buildRoute(context, player.user!)),
+              ),
             )
           else
-            Text(player.fullName(context.l10n)),
+            Expanded(child: Text(player.fullName(context.l10n))),
           if (clock != null) _Clock(timeLeft: clock!, isSideToMove: isSideToMove),
         ],
       ),

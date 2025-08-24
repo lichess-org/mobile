@@ -1,4 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Postavke računa</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Ove postavke se primjenjuju na vaš Lichess račun i koristit će se na svim uređajima.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Sve partije</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Jeste li sigurni?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Postavke ploče</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Otkaži ponudu za preuzimanje</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Rasčisti</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Obriši sačuvani potez</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Pridruži se igri</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Povratne informacije</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Dobro veče, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Dobro veče</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Dobar dan, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Dobar dan</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Sakrij varijaciju</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Početna</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Uživo prenosioci</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Morate biti prijavljeni da biste vidjeli ovu stranicu.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Bez rezultata</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Imajte na umu da trenutno nisu dostupne sve funkcije iz stare aplikacije ili web stranice, ali stalno dodajemo nove funkcije.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Ne pratite nijednog korisnika.</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">U redu</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Preko ploče</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Igrači sa \"%s\"</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Lijevo</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Desno</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Uvećaj prevučeni dio</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Želite li prekinuti ovo trčanje?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nema ništa za prikaz, molimo promijenite filtere</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nema ništa za prikazati. Odigrajte nekoliko rundi Puzzle Storma.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Riješite što više zagonetki za 3 minute.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Izgubit ćete trenutni niz i vaš rezultat će biti sačuvan.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Igrajte zagonetke iz svojih omiljenih otvaranja ili odaberite temu.</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Zagonetke</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Nedavne pretrage</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Ukloni oznaku</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Analiza servera</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Položaj sata</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Unaprijed postavljene postavke</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Ciljani dio prevučenog dijela</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Krug</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kvadrat</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Početna stranica s dodacima</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Imerzivni način rada</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Sakrij korisnički interfejs sistema tokom igranja. Koristite ovo ako vas smetaju navigacijski gestovi sistema na rubovima ekrana. Odnosi se na ekrane igara i slagalica.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Zarobljeni dijelovi</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Odaberite sliku</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Prilagođena pozadina funkcioniše samo u tamnom režimu. Preporučuje se tamna slika.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Zamuti sliku</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Sakrij ploču</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Prikaži ploču</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Prevucite prstom za prikaz drugih pozadina</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Dodirnite ili prevucite</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Dodirnite dva kvadrata</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Crtanje oblika</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">Crtanje oblika pomoću dva prsta: držite jedan prst na praznom kvadratu i povucite drugi prst da biste nacrtali oblik.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Prikaži okvir</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Povratne informacije dodirom</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kada je omogućeno, uređaj će kratko vibrirati kada pomaknete ili uhvatite figuru.</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Postavke</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Podijeli PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Podijeli URL igre</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Podijelite poziciju kao FEN</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Podijelite ovu zagonetku</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Prikaži komentare</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Prikaži rezultat</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Prikaži varijacije</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Izvinite, ali nešto je pošlo po zlu.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Sistemske boje</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Alati</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Varijanta %s nije podržana u ovoj verziji.</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Čekamo da se protivnik pridruži...</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Gledaj</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Dobrodošli u Lichess aplikaciju!</string>
 </resources>

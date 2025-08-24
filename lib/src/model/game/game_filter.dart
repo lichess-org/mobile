@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_filter.freezed.dart';
@@ -23,8 +24,11 @@ class GameFilter extends _$GameFilter {
 sealed class GameFilterState with _$GameFilterState {
   const GameFilterState._();
 
-  const factory GameFilterState({@Default(ISet<Perf>.empty()) ISet<Perf> perfs, Side? side}) =
-      _GameFilterState;
+  const factory GameFilterState({
+    @Default(ISet<Perf>.empty()) ISet<Perf> perfs,
+    Side? side,
+    User? opponent,
+  }) = _GameFilterState;
 
   /// Returns a translated label of the selected filters.
   String selectionLabel(AppLocalizations l10n) {

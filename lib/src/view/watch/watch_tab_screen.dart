@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -11,12 +12,12 @@ import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/account/account_screen.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/account/account_drawer.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
@@ -29,35 +30,26 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 const kThumbnailImageSize = 40.0;
 
-const _featuredChannelsSet = ISetConst({
-  TvChannel.best,
-  TvChannel.bullet,
-  TvChannel.blitz,
-  TvChannel.rapid,
-  TvChannel.classical,
-});
-
-final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) {
-  return ref.withClient((client) async {
-    final channels = await TvRepository(client).channels();
-    return _featuredChannelsSet
-        .map((channel) => MapEntry(channel, channels[channel]))
-        .where((entry) => entry.value != null)
-        .map(
-          (entry) => TvGameSnapshot(
-            channel: entry.key,
-            id: entry.value!.id,
-            orientation: entry.value!.side ?? Side.white,
-            player: FeaturedPlayer(
-              name: entry.value!.user.name,
-              title: entry.value!.user.title,
-              side: entry.value!.side ?? Side.white,
-              rating: entry.value!.rating,
-            ),
+final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) async {
+  final repository = ref.watch(tvRepositoryProvider);
+  final channels = await repository.channels();
+  return TvChannel.values
+      .map((channel) => MapEntry(channel, channels[channel]))
+      .where((entry) => entry.value != null)
+      .map(
+        (entry) => TvGameSnapshot(
+          channel: entry.key,
+          id: entry.value!.id,
+          orientation: entry.value!.side ?? Side.white,
+          player: FeaturedPlayer(
+            name: entry.value!.user.name,
+            title: entry.value!.user.title,
+            side: entry.value!.side ?? Side.white,
+            rating: entry.value!.rating,
           ),
-        )
-        .toIList();
-  });
+        ),
+      )
+      .toIList();
 });
 
 class WatchTabScreen extends ConsumerStatefulWidget {
@@ -78,6 +70,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   Widget build(BuildContext context) {
     ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
       if (prev != BottomTab.watch && current == BottomTab.watch) {
+        ref.invalidate(broadcastsPaginatorProvider);
         ref.invalidate(featuredChannelsProvider);
         ref.invalidate(liveStreamersProvider);
       }
@@ -92,7 +85,12 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
         }
       },
       child: PlatformScaffold(
-        appBar: PlatformAppBar(leading: const AccountIconButton(), title: Text(context.l10n.watch)),
+        appBar: PlatformAppBar(
+          leading: const AccountDrawerIconButton(),
+          title: Text(context.l10n.watch),
+          centerTitle: true,
+        ),
+        drawer: const AccountDrawer(),
         body: isOnline
             ? OrientationBuilder(
                 builder: (context, orientation) {
@@ -162,11 +160,22 @@ class _BodyState extends ConsumerState<_Body> {
     final broadcastList = ref.watch(broadcastsPaginatorProvider);
     final featuredChannels = ref.watch(featuredChannelsProvider);
     final streamers = ref.watch(liveStreamersProvider);
+    final isTablet = isTabletOrLarger(context);
 
     final content = [
       if (_worker != null) _BroadcastWidget(broadcastList, _worker!),
-      _WatchTvWidget(featuredChannels),
-      _StreamerWidget(streamers),
+      if (isTablet)
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: _WatchTvWidget(featuredChannels)),
+            Expanded(child: _StreamerWidget(streamers)),
+          ],
+        )
+      else ...[
+        _WatchTvWidget(featuredChannels),
+        _StreamerWidget(streamers),
+      ],
     ];
 
     return ListView(controller: watchScrollController, children: content);
@@ -227,8 +236,17 @@ class _WatchTvWidget extends ConsumerWidget {
 
   const _WatchTvWidget(this.featuredChannels);
 
+  static const _handsetFeaturedChannelsSet = ISetConst({
+    TvChannel.best,
+    TvChannel.bullet,
+    TvChannel.blitz,
+    TvChannel.rapid,
+    TvChannel.classical,
+  });
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isTablet = isTabletOrLarger(context);
     return featuredChannels.when(
       data: (data) {
         if (data.isEmpty) {
@@ -244,9 +262,16 @@ class _WatchTvWidget extends ConsumerWidget {
                 }
               }),
           children: data
+              .where((snapshot) {
+                if (isTablet) return true;
+                return _handsetFeaturedChannelsSet.contains(snapshot.channel);
+              })
               .map((snapshot) {
                 return ListTile(
                   leading: Icon(snapshot.channel.icon),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
                   title: Text(snapshot.channel.label),
                   subtitle: UserFullNameWidget.player(
                     user: snapshot.player.asPlayer.user,
@@ -294,10 +319,10 @@ class _StreamerWidget extends ConsumerWidget {
 
   const _StreamerWidget(this.streamers);
 
-  static const int numberOfItems = 5;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final numberOfItems = isTabletOrLarger(context) ? 10 : 5;
+
     return streamers.when(
       data: (data) {
         if (data.isEmpty) {

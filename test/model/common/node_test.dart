@@ -58,6 +58,8 @@ void main() {
       final nodeList = root.branchesOn(path);
       expect(nodeList.length, equals(1));
       expect(nodeList.first, equals(root.nodeAt(path) as Branch));
+
+      expect(nodeList.map((n) => n.view), root.view.branchesOn(path));
     });
 
     test('branchesOn, with variation', () {
@@ -76,6 +78,8 @@ void main() {
       final nodeList = root.branchesOn(newPath);
       expect(nodeList.length, equals(3));
       expect(nodeList.last, equals(newNode));
+
+      expect(nodeList.map((n) => n.view), root.view.branchesOn(newPath));
     });
 
     test('mainline', () {
@@ -285,6 +289,33 @@ void main() {
         testNode.children.first.position.fen,
         equals('rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2'),
       );
+    });
+
+    test('addMovesAt', () {
+      final root = Root.fromPgnMoves('e4 e5');
+      final moves = [Move.parse('b8c6')!, Move.parse('d2d4')!];
+      final newPath = root.addMovesAt(UciPath.fromId(UciCharPair.fromUci('e2e4')), moves);
+
+      expect(
+        newPath,
+        equals(
+          UciPath.fromIds([
+            UciCharPair.fromUci('e2e4'),
+            UciCharPair.fromUci('b8c6'),
+            UciCharPair.fromUci('d2d4'),
+          ]),
+        ),
+      );
+
+      final lastNewNode = root.branchAt(newPath!)!;
+      expect(lastNewNode.position.ply, 3);
+      expect(lastNewNode.sanMove, SanMove('d4', Move.parse('d2d4')!));
+      expect(
+        lastNewNode.position.fen,
+        'r1bqkbnr/pppppppp/2n5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2',
+      );
+
+      expect(root.children.first.children.length, 2);
     });
 
     test('deleteAt', () {

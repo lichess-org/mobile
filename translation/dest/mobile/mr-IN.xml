@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">मुखपृष्ठ</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ठिक आहे</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">पटावर खेळा</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">डावा</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">उजवा</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">कोडी</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">घड्याळाची जागा</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">सेटिंग्ज</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN पाठवा</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">खेळाची URL पाठवा</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">साधने</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">पहा</string>
+</resources>

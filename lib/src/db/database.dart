@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sqflite/sqflite.dart';
-
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 part 'database.g.dart';
 
 const kLichessDatabaseName = 'lichess_mobile.db';
@@ -23,8 +23,21 @@ final _logger = Logger('Database');
 
 @Riverpod(keepAlive: true)
 Future<Database> database(Ref ref) async {
-  final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
+  if (Platform.isLinux) {
+    databaseFactory = databaseFactoryFfi;
+  }
+  final dbPath = await _databasePath;
   return openAppDatabase(databaseFactory, dbPath);
+}
+
+/// Returns the database path including filename.
+Future<String> get _databasePath async {
+  if (Platform.isLinux) {
+    final directory = await getApplicationSupportDirectory();
+    return join(directory.path, kLichessDatabaseName);
+  }
+
+  return join(await getDatabasesPath(), kLichessDatabaseName);
 }
 
 /// Returns the sqlite version as an integer.

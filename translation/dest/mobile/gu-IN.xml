@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">ડાબી તરફ</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">જમણી તરફ</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">કોઈ પરિણામ મળ્યું નથી, કૃપા કરીને ફિલ્ટર્સમાં ફેરફાર કરો</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">કોયડા</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ઘડિયાળનું સ્થળ</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">કસ્ટમ બેકગ્રાઉન્ડ ફક્ત ડાર્ક મોડમાં જ કામ કરે છે. આ માટે એક ડાર્ક તસ્વીર હોવી જરૂરી છે.</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">આકાર દોરવા માટે બે આંગળીઓનો ઉપયોગ કરો: એક આંગળી ખાલી ખાના પર રાખો અને બીજી આંગળી ખેંચીને આકાર દોરો.</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">જ્યારે ચાલુ કરશો, ત્યારે મહોરું ખસેડતી વખતે અથવા કબજે કરતી વખતે ડિવાઇસ ટૂંક સમય માટે વાઇબ્રેટ થશે.</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">વોચ</string>
+</resources>

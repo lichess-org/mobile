@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -619,15 +618,13 @@ class _GameListWidget extends ConsumerWidget {
           _GameListTile(
             onTap: () async {
               final gameIds = ISet(games.map((g) => g.gameId));
-              final list = await ref.withClient(
-                (client) => GameRepository(client).getGamesByIds(gameIds),
-              );
+              final list = await ref.read(gameRepositoryProvider).getGamesByIds(gameIds);
               final gameData = list.firstWhereOrNull((g) => g.id == game.gameId);
               if (context.mounted && gameData != null && gameData.variant.isReadSupported) {
                 Navigator.of(context, rootNavigator: true).push(
                   AnalysisScreen.buildRoute(
                     context,
-                    AnalysisOptions(
+                    AnalysisOptions.archivedGame(
                       orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,
                       gameId: gameData.id,
                       initialMoveCursor: 0,

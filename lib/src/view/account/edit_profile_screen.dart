@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/flair_provider.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
@@ -40,6 +39,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     'fideRating': null,
     'uscfRating': null,
     'ecfRating': null,
+    'rcfRating': null,
+    'cfcRating': null,
+    'dsbRating': null,
     'links': null,
   };
 
@@ -56,6 +58,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             _formData['fideRating'] != user.profile?.fideRating ||
             _formData['uscfRating'] != user.profile?.uscfRating ||
             _formData['ecfRating'] != user.profile?.ecfRating ||
+            _formData['rcfRating'] != user.profile?.rcfRating ||
+            _formData['cfcRating'] != user.profile?.cfcRating ||
+            _formData['dsbRating'] != user.profile?.dsbRating ||
             _formData['links'] != user.profile?.links?.map((e) => e.url).join('\r\n');
       }
     }
@@ -360,7 +365,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             initialValue: widget.user.profile?.realName,
             formKey: 'realName',
             formData: widget.formData,
-            maxLength: 20,
+            maxLength: 100,
           ),
 
           _NumericField(
@@ -399,6 +404,42 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
               return null;
             },
           ),
+          _NumericField(
+            label: context.l10n.xRating('RCF'),
+            initialValue: widget.user.profile?.rcfRating,
+            formKey: 'rcfRating',
+            formData: widget.formData,
+            validator: (value) {
+              if (value != null && (value < 0 || value > 3000)) {
+                return 'Rating must be between 0 and 3000';
+              }
+              return null;
+            },
+          ),
+          _NumericField(
+            label: context.l10n.xRating('CFC'),
+            initialValue: widget.user.profile?.cfcRating,
+            formKey: 'cfcRating',
+            formData: widget.formData,
+            validator: (value) {
+              if (value != null && (value < 200 || value > 3000)) {
+                return 'Rating must be between 200 and 3000';
+              }
+              return null;
+            },
+          ),
+          _NumericField(
+            label: context.l10n.xRating('DSB'),
+            initialValue: widget.user.profile?.dsbRating,
+            formKey: 'dsbRating',
+            formData: widget.formData,
+            validator: (value) {
+              if (value != null && (value < 0 || value > 3000)) {
+                return 'Rating must be between 0 and 3000';
+              }
+              return null;
+            },
+          ),
           _TextField(
             label: context.l10n.socialMediaLinks,
             initialValue: initialLinks,
@@ -425,13 +466,13 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                               return value == null;
                             });
                             final future = Result.capture(
-                              ref.withClient(
-                                (client) => AccountRepository(client).saveProfile(
-                                  widget.formData.map(
-                                    (key, value) => MapEntry(key, value.toString()),
+                              ref
+                                  .read(accountRepositoryProvider)
+                                  .saveProfile(
+                                    widget.formData.map(
+                                      (key, value) => MapEntry(key, value.toString()),
+                                    ),
                                   ),
-                                ),
-                              ),
                             );
 
                             setState(() {

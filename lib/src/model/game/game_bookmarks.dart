@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_bookmarks.freezed.dart';
@@ -19,6 +18,8 @@ const _nbPerPage = 20;
 @riverpod
 class GameBookmarksPaginator extends _$GameBookmarksPaginator {
   final _list = <LightExportedGameWithPov>[];
+
+  GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
 
   @override
   Future<GameBookmarksPaginatorState> build() async {
@@ -37,7 +38,7 @@ class GameBookmarksPaginator extends _$GameBookmarksPaginator {
       );
     }
 
-    final games = ref.withClient((client) => GameRepository(client).getBookmarkedGames(session));
+    final games = _gameRepository.getBookmarkedGames(session);
 
     _list.addAll(await games);
 
@@ -60,10 +61,10 @@ class GameBookmarksPaginator extends _$GameBookmarksPaginator {
     final currentVal = state.requireValue;
     state = AsyncData(currentVal.copyWith(isLoading: true));
     try {
-      final value = await ref.withClient(
-        (client) => GameRepository(
-          client,
-        ).getBookmarkedGames(session, max: _nbPerPage, until: _list.last.game.createdAt),
+      final value = await _gameRepository.getBookmarkedGames(
+        session,
+        max: _nbPerPage,
+        until: _list.last.game.createdAt,
       );
       if (value.isEmpty) {
         state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));

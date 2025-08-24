@@ -8,8 +8,8 @@
 
 ### What to work on
 
-To find a task to work on, you can check the [good first issue](https://github.com/lichess-org/mobile/labels/good%20first%20issue)
-and [help wanted](https://github.com/lichess-org/mobile/labels/help%20wanted)
+To find a task to work on, you can check the [good first issue](https://github.com/lichess-org/mobile/labels/%22good%20first%20issue%22)
+and [help wanted](https://github.com/lichess-org/mobile/labels/%22help%20wanted%22)
 labels on GitHub.
 
 These tags are useful, but there are many other good issues that are not tagged with

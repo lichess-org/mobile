@@ -1,33 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">帳號設定</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">這些設定將應用於您帳號下的所有裝置。</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">所有棋局</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">您確定嗎？</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">棋盤設定</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">取消悔棋請求</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">清除</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">清除已儲存移動</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">加入棋局</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">問題反饋</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">您好， %s</string>
-  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">您好</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">隱藏變化</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">首頁</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Lichess 實況主</string>
-  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">你必須登入才能查看此頁面。</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">您必須登入才能查看此頁面。</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">沒有任何搜尋結果</string>
-  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">您未追蹤任何使用者。</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">請注意，目前尚未提供舊版 App 或網站的所有功能，但我們會持續新增。</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">您尚未追蹤任何使用者。</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">確認</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">實體對弈</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">名稱包含「%s」的玩家</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">靠左</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">靠右</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">放大被拖曳的棋子</string>
-  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">是否中斷於此？</string>
-  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">沒有內容可顯示，請更改篩選條件</string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">沒有內容可顯示。您可以進行一些 Puzzle Storm 。</string>
-  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">在三分鐘內解開盡可能多的謎題</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">這將失去目前的連勝並且將儲存目前成績。</string>
-  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">從您喜歡的開局進行謎題，或選擇一個主題。</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">是否中斷？</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">無內容可顯示，請更改篩選條件</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">無內容可顯示。請遊玩幾場 Puzzle Storm 。</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">在 3 分鐘內盡可能解開最多的謎題。</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">您的連勝紀錄將會中斷，分數會被儲存。</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">從您偏好的開局開始挑戰謎題，或選擇特定主題。</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">謎題</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">搜尋紀錄</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">震動回饋</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">沉浸模式</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">移除書籤</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">伺服器分析</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">棋鐘位置</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">預設集</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">拖曳目標</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">圓形</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">方形</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">首頁配置</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">沉浸模式</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">對弈時隱藏系統介面。若您會被螢幕邊緣的系統導覽手勢干擾，請使用此功能。</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">吃子</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">選擇圖片</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">自訂背景僅在深色模式下運作，建議使用深色圖片。</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">模糊圖片</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">隱藏棋盤</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">顯示棋盤</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">滑動以顯示其他背景</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">點擊或拖曳</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">點擊方格</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">繪製標記</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">用雙指繪製標記：將一指按住空格，再用另一指拖曳繪製。</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">顯示邊框</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">震動回饋</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">啟用後，移動棋子或吃子時裝置會短暫震動。</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">設定</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">分享 PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">分享對局網址</string>
@@ -40,6 +67,8 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">系統顏色</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">佈景主題</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">工具</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">此版本不支援變體 %s。</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">正在等待對手加入...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">觀戰</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">歡迎使用 Lichess 應用程式！</string>
 </resources>

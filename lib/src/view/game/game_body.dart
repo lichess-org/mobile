@@ -7,12 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
@@ -100,9 +102,23 @@ class GameBody extends ConsumerWidget {
       case AsyncData(value: final gameState, isRefreshing: false):
         final youAre = gameState.game.youAre ?? Side.white;
 
+        // If playing against Stockfish, user is null
+        final crosstable = gameState.game.white.user != null && gameState.game.black.user != null
+            ? ref.watch(
+                crosstableProvider(
+                  gameState.game.white.user!.id,
+                  gameState.game.black.user!.id,
+                  matchup: true,
+                ),
+              )
+            : null;
+        final crosstableData = crosstable?.valueOrNull;
+        final matchupData = crosstableData?.matchup;
+
         final black = GamePlayer(
           game: gameState.game,
           side: Side.black,
+          matchupScore: matchupData?.users[gameState.game.black.user!.id],
           materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
               : null,
@@ -150,6 +166,7 @@ class GameBody extends ConsumerWidget {
         final white = GamePlayer(
           game: gameState.game,
           side: Side.white,
+          matchupScore: matchupData?.users[gameState.game.white.user!.id],
           materialDiff: boardPreferences.materialDifferenceFormat.visible
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
               : null,
@@ -214,60 +231,58 @@ class GameBody extends ConsumerWidget {
           },
           child: WakelockWidget(
             shouldEnableOnFocusGained: () => gameState.game.playable,
-            child: SafeArea(
-              child: GameLayout(
-                key: boardKey,
-                boardSettingsOverrides: BoardSettingsOverrides(
-                  animationDuration: animationDuration,
-                  autoQueenPromotion: gameState.canAutoQueen,
-                  autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
-                  blindfoldMode: blindfoldMode,
-                ),
-                orientation: isBoardTurned ? youAre.opposite : youAre,
-                lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
-                interactiveBoardParams: (
-                  variant: gameState.game.meta.variant,
-                  position: gameState.currentPosition,
-                  playerSide: gameState.game.playable && !gameState.isReplaying
-                      ? youAre == Side.white
-                            ? PlayerSide.white
-                            : PlayerSide.black
-                      : PlayerSide.none,
-                  promotionMove: gameState.promotionMove,
-                  onMove: (move, {isDrop}) {
-                    ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
-                  },
-                  onPromotionSelection: (role) {
-                    ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-                  },
-                  premovable: gameState.canPremove
-                      ? (
-                          onSetPremove: (move) {
-                            ref.read(ctrlProvider.notifier).setPremove(move);
-                          },
-                          premove: gameState.premove,
-                        )
-                      : null,
-                ),
-                topTable: topPlayer,
-                bottomTable:
-                    gameState.canShowClaimWinCountdown && gameState.opponentLeftCountdown != null
-                    ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
-                    : bottomPlayer,
-                moves: gameState.game.steps
-                    .skip(1)
-                    .map((e) => e.sanMove!.san)
-                    .toList(growable: false),
-                currentMoveIndex: gameState.stepCursor,
-                onSelectMove: (moveIndex) {
-                  ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
+            child: GameLayout(
+              key: boardKey,
+              boardSettingsOverrides: BoardSettingsOverrides(
+                animationDuration: animationDuration,
+                autoQueenPromotion: gameState.canAutoQueen,
+                autoQueenPromotionOnPremove: gameState.canAutoQueenOnPremove,
+                blindfoldMode: blindfoldMode,
+              ),
+              orientation: isBoardTurned ? youAre.opposite : youAre,
+              lastMove: gameState.game.moveAt(gameState.stepCursor) as NormalMove?,
+              interactiveBoardParams: (
+                variant: gameState.game.meta.variant,
+                position: gameState.currentPosition,
+                playerSide: gameState.game.playable && !gameState.isReplaying
+                    ? youAre == Side.white
+                          ? PlayerSide.white
+                          : PlayerSide.black
+                    : PlayerSide.none,
+                promotionMove: gameState.promotionMove,
+                onMove: (move, {isDrop}) {
+                  ref.read(ctrlProvider.notifier).userMove(move, isDrop: isDrop);
                 },
-                zenMode: gameState.isZenModeActive,
-                userActionsBar: _GameBottomBar(
-                  id: loadedGame.gameId,
-                  onLoadGameCallback: onLoadGameCallback,
-                  onNewOpponentCallback: onNewOpponentCallback,
-                ),
+                onPromotionSelection: (role) {
+                  ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+                },
+                premovable: gameState.canPremove && boardPreferences.premoves
+                    ? (
+                        onSetPremove: (move) {
+                          ref.read(ctrlProvider.notifier).setPremove(move);
+                        },
+                        premove: gameState.premove,
+                      )
+                    : null,
+              ),
+              topTable: topPlayer,
+              bottomTable:
+                  gameState.canShowClaimWinCountdown && gameState.opponentLeftCountdown != null
+                  ? _ClaimWinCountdown(countdown: gameState.opponentLeftCountdown!)
+                  : bottomPlayer,
+              moves: gameState.game.steps
+                  .skip(1)
+                  .map((e) => e.sanMove!.san)
+                  .toList(growable: false),
+              currentMoveIndex: gameState.stepCursor,
+              onSelectMove: (moveIndex) {
+                ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
+              },
+              zenMode: gameState.isZenModeActive,
+              userActionsBar: _GameBottomBar(
+                id: loadedGame.gameId,
+                onLoadGameCallback: onLoadGameCallback,
+                onNewOpponentCallback: onNewOpponentCallback,
               ),
             ),
           ),
@@ -399,6 +414,7 @@ class _GameBottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
+    final boardPreferences = ref.watch(boardPreferencesProvider);
     final kidModeAsync = ref.watch(kidModeProvider);
 
     switch (ref.watch(gameControllerProvider(id))) {
@@ -407,6 +423,8 @@ class _GameBottomBar extends ConsumerWidget {
             gamePrefs.enableChat == true &&
             gameState.chatOptions != null &&
             kidModeAsync.valueOrNull == false;
+        final numPremoveLines = gameState.game.correspondenceForecast?.length;
+
         return BottomBar(
           children: [
             BottomBarButton(
@@ -479,7 +497,8 @@ class _GameBottomBar extends ConsumerWidget {
                 },
                 icon: CupertinoIcons.arrowshape_turn_up_left,
               )
-            else if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence)
+            else if (gameState.game.playable &&
+                gameState.game.meta.speed == Speed.correspondence) ...[
               BottomBarButton(
                 label: 'Go to the next game',
                 icon: Icons.skip_next,
@@ -492,8 +511,18 @@ class _GameBottomBar extends ConsumerWidget {
                   },
                   orElse: () => null,
                 ),
-              )
-            else if (gameState.game.finished)
+              ),
+              BottomBarButton(
+                label: context.l10n.analysis,
+                icon: Icons.biotech,
+                badgeLabel: (numPremoveLines ?? 0) > 0 ? numPremoveLines.toString() : null,
+                onTap: () {
+                  Navigator.of(
+                    context,
+                  ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
+                },
+              ),
+            ] else if (gameState.game.finished)
               BottomBarButton(
                 label: context.l10n.mobileShowResult,
                 onTap: () {
@@ -510,7 +539,7 @@ class _GameBottomBar extends ConsumerWidget {
               BottomBarButton(
                 label: context.l10n.resign,
                 onTap: gameState.game.resignable
-                    ? gameState.shouldConfirmResignAndDrawOffer
+                    ? boardPreferences.confirmResignAndDraw
                           ? () => _showConfirmDialog(
                               context,
                               description: Text(context.l10n.resignTheGame),
@@ -564,6 +593,7 @@ class _GameBottomBar extends ConsumerWidget {
 
   Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
     final gameState = ref.read(gameControllerProvider(id)).requireValue;
+    final boardPreferences = ref.read(boardPreferencesProvider);
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -617,7 +647,7 @@ class _GameBottomBar extends ConsumerWidget {
         if (gameState.canOfferDraw)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.offerDraw),
-            onPressed: gameState.shouldConfirmResignAndDrawOffer
+            onPressed: boardPreferences.confirmResignAndDraw
                 ? () => _showConfirmDialog(
                     context,
                     description: Text(context.l10n.offerDraw),
@@ -632,7 +662,7 @@ class _GameBottomBar extends ConsumerWidget {
         if (gameState.game.resignable)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.resign),
-            onPressed: gameState.shouldConfirmResignAndDrawOffer
+            onPressed: boardPreferences.confirmResignAndDraw
                 ? () => _showConfirmDialog(
                     context,
                     description: Text(context.l10n.resignTheGame),

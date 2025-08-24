@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="broadcasts">Излъчване</string>
+  <string name="myBroadcasts">Моите излъчвания</string>
+  <plurals name="nbBroadcasts">
+    <item quantity="one">%s излъчване</item>
+    <item quantity="other">%s излъчвания</item>
+  </plurals>
+  <string name="liveBroadcasts">Излъчвания на турнир на живо</string>
+  <string name="broadcastCalendar">Календар на излъчванията</string>
+  <string name="newBroadcast">Нови предавания на живо</string>
+  <string name="subscribedBroadcasts">Излчвания които следя</string>
+  <string name="addRound">Добави рунд</string>
+  <string name="ongoing">Текущи</string>
+  <string name="upcoming">Предстоящи</string>
+  <string name="roundName">Име на рунда</string>
+  <string name="roundNumber">Номер на рунда</string>
+  <string name="tournamentName">Име на турнира</string>
+  <string name="tournamentDescription">Кратко описание на турнира</string>
+  <string name="fullDescription">Пълно описание на събитието</string>
+  <string name="fullDescriptionHelp">Незадължително дълго описание на излъчването. %1$s е налично. Дължината трябва да по-малка от %2$s знака.</string>
+  <string name="sourceSingleUrl">URL на PGN източника</string>
+  <string name="sourceUrlHelp">Уебадресът, който Lichess ще проверява, за да получи осъвременявания на PGN. Той трябва да е публично достъпен от интернет.</string>
+  <string name="sourceGameIds">До 64 идентификатора на игри в Lichess, разделени с празни места.</string>
+  <string name="startDateHelp">По избор, ако знаете, кога започва събитието</string>
+  <string name="currentGameUrl">URL на настоящата партия</string>
+  <string name="downloadAllRounds">Изтегли всички рундове</string>
+  <string name="resetRound">Нулирай този рунд</string>
+  <string name="deleteRound">Изтрий този рунд</string>
+  <string name="definitivelyDeleteRound">Окончателно изтрийте този рунд и всичките му игри.</string>
+  <string name="deleteAllGamesOfThisRound">Изтрийте този рунд и всичките му игри. Източникът трябва да е активен за да можете да ги възстановите.</string>
+  <string name="deleteTournament">Изтрий този турнир</string>
+  <string name="definitivelyDeleteTournament">Окончателно изтрий целия турнир, всичките му рундове и игри.</string>
+  <string name="replacePlayerTags">По избор: промени имената на играчите, рейтингите и титлите</string>
+  <string name="fideFederations">ФИДЕ федерации</string>
+  <string name="fideProfile">ФИДЕ профил</string>
+  <string name="federation">Федерация</string>
+  <string name="ageThisYear">Възраст (тази година)</string>
+  <string name="openLichess">Отвори в Lichess</string>
+  <string name="teams">Отбори</string>
+  <string name="boards">Дъски</string>
+  <string name="overview">Общ преглед</string>
+  <string name="startsAfter">Започва след %s</string>
+  <string name="startVerySoon">Излъчването ще започне след малко.</string>
+  <string name="officialWebsite">Официален уебсайт</string>
+  <string name="gamesThisTournament">Игри в този турнир</string>
+  <string name="score">Резултат</string>
+  <string name="tournamentFormat">Формат на състезанието</string>
+  <string name="tournamentLocation">Място на състезанието</string>
+  <string name="timezone">Часова зона</string>
+  <string name="pastBroadcasts">Минали излъчвания</string>
+  <string name="allBroadcastsByMonth">Виж всички излъчвания по месец</string>
+  <string name="communityBroadcast">Излъчване от общността</string>
+  <string name="createdAndManagedBy">Създадено и управлявано от %s.</string>
+</resources>

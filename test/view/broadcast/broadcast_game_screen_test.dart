@@ -111,7 +111,8 @@ void main() {
         await makeEngineTestApp(
           tester,
           broadcastGame: (_tournamentId, _roundId, _gameId),
-          isComputerAnalysisEnabled: false,
+          isServerAnalysisEnabled: false,
+          isEngineEnabled: false,
         );
         await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(Engineline), findsNothing);
@@ -143,7 +144,8 @@ void main() {
         await makeEngineTestApp(
           tester,
           broadcastGame: (_tournamentId, _roundId, _gameIdWithServerAnalysis),
-          isComputerAnalysisEnabled: false,
+          isServerAnalysisEnabled: false,
+          isEngineEnabled: false,
         );
         await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(EngineGauge), findsNothing);
@@ -186,16 +188,6 @@ void main() {
           tester,
           broadcastGame: (_tournamentId, _roundId, _gameId),
           showBestMoveArrow: false,
-        );
-        await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
-        expect(find.byType(BoardShapeWidget), findsNothing);
-      });
-
-      testWidgets('is not displayed if computer analysis is not enabled', (tester) async {
-        await makeEngineTestApp(
-          tester,
-          broadcastGame: (_tournamentId, _roundId, _gameId),
-          isComputerAnalysisEnabled: false,
         );
         await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(BoardShapeWidget), findsNothing);

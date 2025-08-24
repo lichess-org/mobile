@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">সব গেম</string>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">একাউন্ট নির্বাচনী পছন্দসমূহ</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">আপনার নির্বাচন করা পছন্দগুলি, লিচেস একাউন্টে যুক্ত করা হলো এবং ভবিষ্যতে সমস্ত ডিভাইসে ব্যবহৃত হবে.</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">সমস্ত গেমসমূহ</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">আপনি কি নিশ্চিত?</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">চাল ফেরত নেওয়ার অফার বাতিল করুন</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">বোর্ড সেটিংস</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">চাল ফেরত নেওয়ার প্রস্তাব বাতিল করুন</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">মুছে ফেলুন</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">একটি গেমে যুক্ত হোন</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">প্রতিক্রিয়া</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">শুভ সন্ধ্যা, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">শুভ সন্ধ্যা</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">শুভ দিন, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">শুভ দিন</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">হোম</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">অনুগ্রহ করে লক্ষ্য করুন, পুরনো অ্যাপ অথবা ওয়েবসাইটের সমস্ত উপাদান ও বৈশিষ্ট্য সমূহ বর্তমানে উপলব্ধ নয়, কিন্ত আমরা উপাদানগুলি সর্বদা যুক্ত করতে থাকছি.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">আপনি কোনো ব্যবহারকারীকে ফলো করছেন না.</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">কোনো সমস্যা নেই</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">একই বোর্ড/ডিভাইসে</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">বামদিকে</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ডানদিকে</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ধাঁধা</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ঘড়ির অবস্থান</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">সেটিংস</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN শেয়ার করুন</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">খেলার লিংক শেয়ার করুন</string>

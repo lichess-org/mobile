@@ -216,6 +216,17 @@ class NotificationService {
           notification,
         ));
 
+      case final NewMessageFcmMessage newMessage:
+        final notification = NewMessageNotification.fromFcmMessage(newMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
       // TODO: handle other notification types
       case UnhandledFcmMessage(data: final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
@@ -258,7 +269,10 @@ class NotificationService {
           await show(CorresGameUpdateNotification(fullId, notification.title!, notification.body!));
         }
 
-      // TODO: handle other notification types
+      case NewMessageFcmMessage(conversationId: final userId, notification: final notification):
+        if (fromBackground == false && notification != null) {
+          await show(NewMessageNotification(userId, notification.title!, notification.body!));
+        }
 
       case UnhandledFcmMessage(data: final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');

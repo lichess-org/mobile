@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -74,9 +75,8 @@ class GameSettings extends ConsumerWidget {
               },
             ),
             ListTile(
-              // TODO translate
-              title: const Text('Board settings'),
-              trailing: const Icon(Icons.chevron_right),
+              title: Text(context.l10n.mobileBoardSettings),
+              trailing: const CupertinoListTileChevron(),
               onTap: () {
                 Navigator.of(
                   context,

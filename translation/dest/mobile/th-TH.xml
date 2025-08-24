@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">การตั้งค่าบัญชี</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">การตั้งค่าเหล่านี้จะถูกใช้กับบัญชี Lichess ของคุณและจะนำไปใช้กับอุปกรณ์ทุกเครื่อง</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">เกมทั้งหมด</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">คุณแน่ใจไหม?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">ตั้งค่ากระดาน</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">ยกเลิกการขอเดินอีกครั้ง</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">ล้าง</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">ลบการเดินที่บันทึกไว้</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">เข้าร่วมเกม</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">ข้อเสนอแนะ</string>
-  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">สวัสดี %s</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">สวัสดีตอนเย็น %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">สวัสดีตอนเย็น</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">สบายดีไหม %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">สวัสดี</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">ซ่อนการเดินอื่นๆ</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">หน้าหลัก</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">ผู้สตรีมสด</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">คุณต้องเข้าสู่ระบบเพื่อเข้าถึงหน้านี้</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ไม่มีผลการค้นหา</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">โปรดทราบว่าคุณลักษณะบางอย่างจากแอปหรือเว็บไซต์เก่ายังไม่พร้อมใช้งานในขณะนี้ แต่เรากำลังเพิ่มคุณลักษณะใหม่ๆ อยู่ตลอดเวลา</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">คุณยังไม่ได้ติดตามใครเลย</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">เล่นกระดานเดียวกัน</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">ผู้เล่นที่มี \"%s\"</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">ซ้าย</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ขวา</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">ขยายตัวหมากที่ลาก</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">คุณต้องการจบรอนนี้ไหม?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">ไม่มีอะไรให้เห็น, โปรดเปลี่ยนฟิลเตอร์ด้วย</string>
@@ -25,8 +35,30 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">แก้ปริศนาหมากรุกจากการเปิดหมากที่คุณชอบหรือเลือกธีมก็ได้</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ปริศนา</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">การค้นหาล่าสุด</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">การตอบสนองแบบสัมผัส</string>
-  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">โหมดดื่มด่ำ</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">ลบบุ๊กมาร์ก</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">เซอร์เวอร์ตัววิเคราะห์</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ตำแหน่งนาฬิกา</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">ที่ตั้งไว้ล่วงหน้า</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">รูปลักษณ์แสดงจุดเดินหมาก</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">วงกลม</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">สี่เหลี่ยม</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">วิดเจ็ตหน้าแรก</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">โหมดดื่มด่ำ</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">ซ่อน UI ของระบบขณะเล่นเกม ใช้สิ่งนี้หากคุณรู้สึกไม่สบายใจกับท่าทางนำทางของระบบที่ขอบหน้าจอ ใช้ได้กับหน้าจอเกมและตอนแก้ปริศนาหมากรุก</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">หมากที่ถูกกิน</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">เลือกรูปภาพ</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">พื้นหลังแบบกำหนดเองใช้งานได้เฉพาะในโหมดมืดเท่านั้น แนะนำให้ใช้ภาพสีเข้ม</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">เบลอภาพ</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">ซ่อนกระดาน</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">แสดงกระดาน</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">เลื่อนเพื่อแสดงพื้นหลังอื่นๆ</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">ไม่กดก็ลากหมาก</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">คลิกช่องสองช่อง</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">วาดรูปร่าง</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.&#10;&#10;Note that you need to be on an analysis board to use this feature.">วาดรูปทรงโดยใช้สองนิ้ว โดยวางนิ้วหนึ่งไว้บนช่องว่างและลากอีกนิ้วหนึ่งเพื่อวาดรูปทรง</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">แสดงเส้นขอบ</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">ข้อเสนอแนะการแตะ</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">เมื่อเปิดใช้งาน อุปกรณ์จะสั่นชั่วครู่เมื่อคุณเดินหรือกินตัวหมาก</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">การตั้งค่า</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">แชร์ PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">แชร์ URL เกม</string>
@@ -39,6 +71,8 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">สีของระบบ</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">ธีม</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">เครื่องมือ</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">ตัวแปรกติกา %s ไม่รองรับในเวอร์ชั่นนี้</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">กำลังรอผู้เล่นให้เข้าร่วม...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ดู</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">ยินดีต้อนรับสู่แอป Lichess</string>
 </resources>

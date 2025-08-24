@@ -20,6 +20,7 @@ class UserFullNameWidget extends ConsumerWidget {
     this.showFlair = true,
     this.showPatron = true,
     this.style,
+    this.onTap,
     super.key,
   });
 
@@ -32,6 +33,7 @@ class UserFullNameWidget extends ConsumerWidget {
     this.showFlair = true,
     this.showPatron = true,
     this.style,
+    this.onTap,
     super.key,
   });
 
@@ -54,6 +56,9 @@ class UserFullNameWidget extends ConsumerWidget {
   /// If the user is a patron, show the patron icon in front of their name. Defaults to `true`.
   final bool showPatron;
 
+  /// Callback when the user taps on the name.
+  final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provisionalStr = provisional == true ? '?' : '';
@@ -72,7 +77,7 @@ class UserFullNameWidget extends ConsumerWidget {
 
     final contextTextStyle = style ?? DefaultTextStyle.of(context).style;
 
-    return Row(
+    final content = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (user != null && shouldShowOnline == true)
@@ -131,5 +136,9 @@ class UserFullNameWidget extends ConsumerWidget {
         ],
       ],
     );
+    if (onTap != null) {
+      return GestureDetector(onTap: onTap, child: content);
+    }
+    return content;
   }
 }

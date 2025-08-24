@@ -19,6 +19,7 @@ analyzer:
     - lib/src/styles/lichess_icons.dart
     - lib/src/styles/social_icons.dart
     - lib/firebase_options.dart
+    - lib/firebase_stubs.dart
     - lib/l10n/*.dart
   errors:
     invalid_annotation_target: ignore
@@ -37,3 +38,7 @@ linter:
     avoid_redundant_argument_values: false
     sort_pub_dependencies: true
     sort_unnamed_constructors_first: false
+
+custom_lint:
+  rules:
+    - avoid_manual_providers_as_generated_provider_dependency: false

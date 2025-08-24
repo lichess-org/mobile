@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Baile</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Thar an gclár</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Ar chlé</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Ar dheis</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Fadhbanna</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Suíomh an chloig</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Socruithe</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Roinn PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Comhroinn URL an chluiche</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Uirlisí</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Ní thacaítear le leagan %s sa leagan seo.</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Féach</string>
+</resources>

@@ -1,11 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Хисап язмасын көйләү</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Бу көйләнешләр Сезнең Lichess хисап язмасына кулланыла һәм барлык девайсларга кулланылачак.</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Барлык уеннар</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Сез ризамы?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Шахмат тактасын көйләү</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Йөрешне кире кайтару тәкъдимен туктату</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Чистарту</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Сакл. хәрәкәтне бетерү</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Уенга кушылу</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Фикер һәм тәкъдимнәр җибәрү</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Хәерле кич, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Хәерле кич</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Хәерле көн, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Хәерле көн</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Вариантны качыру</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Өйгә</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Эфирдагы стримерлар</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Бу битне карау өчен теркәлегез.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Нәтиҗә юк</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Беркемгә дә язылмадыгыз.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Ярар</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Тактада</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" белән уенчылар</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Сул</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Уң</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Сайланган ташны зурайту</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Бу серияне тәмамларга телисезме?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Берни табылмады, фильтрларны үзгәртегез</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Берни юк. Puzzle Stormның берничә мәсьәләсен чишеп карагыз.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 минут эчендә мөмкин кадәр мәсьәләләрне чишегез.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Сериягез бетәр һәм нәтиҗәсе сакланыр.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Яраткан дебютларыгыздан мәсьәләләр уйнагыз, йә тема сайлагыз.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Башваткыч</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Соңгы эзләүләр</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Кыстарманы бетерү</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Серверда анализ</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Сәгать позициясе</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Сайланган таш максаты</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Түгәрәк</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Шакмак</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Төп экран виджетлары</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Тулы экран режимы</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Уйнаганда интерфейсны качыру. Экран читендәге системаның навигация ишарәләре сезне борчыса, моны кулланыгыз. Уен һәм мәсьәлә экраннына кагыла.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Алынган ташлар</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Сүрәт сайлау</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Шәхси фон караңгы режимда гына эшли. Караңгы сүрәт сайлау киңәш ителә.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Сүрәтне тоныкланыдру</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Тактаны яшерү</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Тактаны күрсәтү</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Башка фоннарны күрү өчен сыпырыгыз</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Кагылып йә тартып</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Ике шакмакка басып</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Хәрәкәтне сызып</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Ике бармак белән хәрәкәтне сызыгыз: бер бармакны буш шакмакка куеп башка бармак белән фигураны төшерегез.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Рамканы күрсәтү</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Кагылганда тавыш</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Яндырылган булса, таш күчергәндә яки алганда җайланмагыз тибрәнәчәк.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Көйләүләр</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PNG бүлешү</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Уен URL бүлешү</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">FEN итеп бүлешү</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Мәсьәләне бүлешү</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Фикерләр күрсәтү</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Нәтиҗәне күрү</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Вариантларны күрсәтү</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Хата килеп чыкты.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Система төсләре</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">Тема</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Кораллар</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Вариант %s бу версиядә булышынмый.</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Көндәш көтелә...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Карау</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Lichess кушымтасына рәхим итегез!</string>
 </resources>

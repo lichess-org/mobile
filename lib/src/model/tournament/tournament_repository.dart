@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -13,20 +14,21 @@ part 'tournament_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 TournamentRepository tournamentRepository(Ref ref) {
-  return TournamentRepository(ref.read(lichessClientProvider), ref);
+  return TournamentRepository(ref.read(lichessClientProvider), ref.read(aggregatorProvider), ref);
 }
 
 class TournamentRepository {
-  TournamentRepository(this.client, Ref ref) : _ref = ref;
+  TournamentRepository(this.client, this.aggregator, Ref ref) : _ref = ref;
 
   final Ref _ref;
   final http.Client client;
+  final Aggregator aggregator;
 
   Future<IList<LightTournament>> featured() {
-    return client.readJson(
+    return aggregator.readJson(
       Uri(path: '/tournament/featured'),
       headers: {'Accept': 'application/json'},
-      mapper: (Map<String, dynamic> json) => pick(json, 'featured').asTournamentListOrThrow(),
+      atomicMapper: (Map<String, dynamic> json) => pick(json, 'featured').asTournamentListOrThrow(),
     );
   }
 
@@ -52,6 +54,14 @@ class TournamentRepository {
     );
   }
 
+  Future<TournamentPlayer> getTournamentPlayer(TournamentId tournamentId, UserId userId) {
+    return client.readJson(
+      Uri(path: '/tournament/$tournamentId/player/$userId'),
+      headers: {'Accept': 'application/json'},
+      mapper: (Map<String, dynamic> json) => TournamentPlayer.fromServerJson(json),
+    );
+  }
+
   Future<bool> downloadTournamentGames(TournamentId id, File file, {UserId? userId}) {
     final client = _ref.read(defaultClientProvider);
     return downloadFile(
@@ -61,14 +71,25 @@ class TournamentRepository {
     );
   }
 
-  Future<Tournament> reload(Tournament tournament, {required int standingsPage}) {
+  Future<Tournament> reload(Tournament tournament) {
     return client.readJson(
       Uri(
         path: tournament.reloadEndpoint ?? '/api/tournament/${tournament.id}',
-        queryParameters: {'page': standingsPage.toString(), 'partial': 'true'},
+        queryParameters: {
+          if (tournament.standing != null) 'page': tournament.standing!.page.toString(),
+          'partial': 'true',
+        },
       ),
       headers: {'Accept': 'application/json'},
       mapper: (Map<String, dynamic> json) => tournament.updateFromPartialServerJson(json),
+    );
+  }
+
+  Future<Tournament> loadPage(Tournament tournament, int page) {
+    return client.readJson(
+      Uri(path: '/tournament/${tournament.id}/standing/$page'),
+      headers: {'Accept': 'application/json'},
+      mapper: (Map<String, dynamic> json) => tournament.updateStandingsFromServerJson(json),
     );
   }
 

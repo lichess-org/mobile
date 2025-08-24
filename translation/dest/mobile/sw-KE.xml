@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Mapendeleo ya akaunti</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Mapendeleo haya yamewekwa kwenye akaunti yako ya Lichess na yatatumika kwenye vifaa vyako vyote.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Michezo yote</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Una uhakika?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Mipangilio ya ubao</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Nyumbani</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Juu ya ubao</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Kushoto</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Kulia</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Nafasi ya saa</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Mipangilio</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Shiriki PGN</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Shiriki URL ya mchezo</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Lahaja %s haitumiki katika toleo hili.</string>
 </resources>

@@ -3,6 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -24,6 +25,7 @@ sealed class Study with _$Study {
     required IList<String> topics,
     required IList<StudyChapterMeta> chapters,
     required StudyChapter chapter,
+    ChatData? chat,
 
     /// Hints to display in "gamebook"/"interactive" mode
     /// Index corresponds to the current ply.
@@ -73,6 +75,7 @@ Study _studyFromPick(RequiredPick pick) {
     liked: study('liked').asBoolOrThrow(),
     likes: study('likes').asIntOrThrow(),
     ownerId: study('ownerId').asUserIdOrNull(),
+    chat: study('chat').letOrNull((p) => chatDataFromPick(p)),
     features: (
       cloneable: study('features', 'cloneable').asBoolOrFalse(),
       chat: study('features', 'chat').asBoolOrFalse(),
@@ -148,10 +151,10 @@ sealed class StudyChapterMeta with _$StudyChapterMeta {
 }
 
 @Freezed(fromJson: true)
-sealed class StudyPageData with _$StudyPageData {
-  const StudyPageData._();
+sealed class StudyPageItem with _$StudyPageItem {
+  const StudyPageItem._();
 
-  const factory StudyPageData({
+  const factory StudyPageItem({
     required StudyId id,
     required String name,
     required bool liked,
@@ -162,9 +165,9 @@ sealed class StudyPageData with _$StudyPageData {
     required IList<StudyMember> members,
     required IList<String> chapters,
     required String? flair,
-  }) = _StudyPageData;
+  }) = _StudyPageItem;
 
-  factory StudyPageData.fromJson(Map<String, Object?> json) => _$StudyPageDataFromJson(json);
+  factory StudyPageItem.fromJson(Map<String, Object?> json) => _$StudyPageItemFromJson(json);
 }
 
 @Freezed(fromJson: true)

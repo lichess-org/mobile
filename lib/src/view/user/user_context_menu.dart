@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -14,8 +15,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:linkify/linkify.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class UserContextMenu extends ConsumerWidget {
   const UserContextMenu({this.user, this.userId, super.key})
@@ -45,20 +44,8 @@ class UserContextMenu extends ConsumerWidget {
                   const SizedBox(height: 8.0),
                   if (value.profile?.bio != null)
                     Linkify(
-                      onOpen: (link) {
-                        if (link.originText.startsWith('@')) {
-                          final username = link.originText.substring(1);
-                          Navigator.of(context).push(
-                            UserScreen.buildRoute(
-                              context,
-                              LightUser(id: UserId.fromUserName(username), name: username),
-                            ),
-                          );
-                        } else {
-                          launchUrl(Uri.parse(link.url));
-                        }
-                      },
-                      linkifiers: const [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()],
+                      onOpen: (link) => onLinkifyOpen(context, link),
+                      linkifiers: kLichessLinkifiers,
                       text: value.profile!.bio!,
                       maxLines: 20,
                       overflow: TextOverflow.ellipsis,

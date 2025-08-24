@@ -41,6 +41,7 @@ class CreateGameService {
   final Logger _log;
 
   LichessClient get lichessClient => ref.read(lichessClientProvider);
+  ChallengeRepository get challengeRepository => ref.read(challengeRepositoryProvider);
 
   /// The current lobby connection if we are creating a game from the lobby.
   StreamSubscription<SocketEvent>? _lobbyConnection;
@@ -57,6 +58,7 @@ class CreateGameService {
 
   /// Create a new game from the lobby.
   Future<GameFullId> newLobbyGame(GameSeek seek) async {
+    ref.read(recentGameSeekProvider.notifier).addSeek(seek);
     if (_lobbyConnection != null) {
       throw StateError('Already creating a game.');
     }
@@ -123,7 +125,7 @@ class CreateGameService {
     assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
 
     if (_challengeConnection != null) {
-      throw StateError('Already creating a game.');
+      throw StateError('Already creating a challenge.');
     }
 
     // ensure the pending connection is closed in any case
@@ -132,8 +134,7 @@ class CreateGameService {
     try {
       _log.info('Creating new challenge game');
 
-      final repo = ChallengeRepository(lichessClient);
-      final challenge = await repo.create(challengeReq);
+      final challenge = await challengeRepository.create(challengeReq);
 
       final socketPool = ref.read(socketPoolProvider);
       final socketClient = socketPool.open(
@@ -156,7 +157,7 @@ class CreateGameService {
         socketClient.stream.listen((event) async {
           if (event.topic == 'reload') {
             try {
-              final updatedChallenge = await repo.show(challenge.id);
+              final updatedChallenge = await challengeRepository.show(challenge.id);
               if (updatedChallenge.gameFullId != null) {
                 completer.complete((
                   gameFullId: updatedChallenge.gameFullId,
@@ -189,14 +190,73 @@ class CreateGameService {
 
   /// Create a new correspondence challenge.
   ///
-  /// Returns the created challenge immediately. If the challenge is accepted,
-  /// a notification will be sent to the user when the game starts.
-  Future<Challenge> newCorrespondenceChallenge(ChallengeRequest challenge) {
-    assert(challenge.timeControl == ChallengeTimeControlType.correspondence);
+  /// It will wait a little bit in case of an immediate decline (e.g. bots), in that case a
+  /// [ChallengeDeclineReason] will be returned.
+  /// Otherwise, it means the challenge was created successfully.
+  Future<ChallengeDeclineReason?> newCorrespondenceChallenge(ChallengeRequest challengeReq) async {
+    assert(challengeReq.timeControl == ChallengeTimeControlType.correspondence);
 
-    _log.info('Creating new correspondence challenge');
+    if (_challengeConnection != null) {
+      throw StateError('Already creating a challenge.');
+    }
 
-    return ref.withClient((client) => ChallengeRepository(client).create(challenge));
+    // ensure the pending connection is closed in any case
+    final completer = Completer<ChallengeDeclineReason?>()..future.whenComplete(dispose);
+
+    try {
+      _log.info('Creating new correspondence challenge');
+
+      final challenge = await challengeRepository.create(challengeReq);
+
+      final socketPool = ref.read(socketPoolProvider);
+      final socketClient = socketPool.open(
+        Uri(
+          path: '/challenge/${challenge.id}/socket/v5',
+          queryParameters: {'v': challenge.socketVersion.toString()},
+        ),
+      );
+
+      _challengeConnection = (
+        challenge.id,
+        socketClient.connectedStream.listen((_) {
+          socketClient.send('ping', null);
+          _challengePingTimer?.cancel();
+          _challengePingTimer = Timer.periodic(
+            const Duration(seconds: 9),
+            (_) => socketClient.send('ping', null),
+          );
+        }),
+        socketClient.stream.listen((event) async {
+          if (event.topic == 'reload') {
+            try {
+              final updatedChallenge = await challengeRepository.show(challenge.id);
+              if (updatedChallenge.status == ChallengeStatus.declined) {
+                completer.complete(
+                  updatedChallenge.declineReason ?? ChallengeDeclineReason.generic,
+                );
+              }
+            } catch (e) {
+              _log.warning('Failed to reload challenge', e);
+            }
+          }
+        }),
+      );
+
+      // wait a bit to see if the challenge is declined immediately
+      await Future<void>.delayed(const Duration(seconds: 1));
+      // if the completer is not yet completed, complete it with null
+      if (!completer.isCompleted) {
+        completer.complete(null);
+      }
+    } catch (e) {
+      _log.warning('Failed to create challenge', e);
+      // if the completer is not yet completed, complete it with an error
+      if (!completer.isCompleted) {
+        completer.completeError(e);
+      }
+    }
+
+    return completer.future;
   }
 
   /// Cancel the current game creation.
@@ -216,7 +276,7 @@ class CreateGameService {
     if (id != null) {
       try {
         _log.info('Cancelling challenge');
-        await ChallengeRepository(lichessClient).cancel(id);
+        await challengeRepository.cancel(id);
       } catch (e) {
         _log.warning('Failed to cancel challenge: $e', e);
         rethrow;

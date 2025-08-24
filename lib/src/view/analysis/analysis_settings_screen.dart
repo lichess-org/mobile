@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
+import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -58,63 +58,45 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              if (value.isComputerAnalysisAllowed)
+              if (value.isComputerAnalysisAllowed) ...[
                 ListSection(
                   header: SettingsSectionTitle(context.l10n.computerAnalysis),
                   children: [
                     SwitchSettingTile(
-                      title: Text(context.l10n.enable),
-                      value: prefs.enableComputerAnalysis,
+                      title: Text(context.l10n.mobileServerAnalysis),
+                      value: prefs.enableServerAnalysis,
                       onChanged: (_) {
-                        ref.read(ctrlProvider.notifier).toggleComputerAnalysis();
+                        ref.read(analysisPreferencesProvider.notifier).toggleServerAnalysis();
                       },
                     ),
-                    AnimatedCrossFade(
-                      duration: const Duration(milliseconds: 300),
-                      crossFadeState: value.isComputerAnalysisAllowedAndEnabled
-                          ? CrossFadeState.showSecond
-                          : CrossFadeState.showFirst,
-                      firstChild: const SizedBox.shrink(),
-                      secondChild: Column(
-                        children: [
-                          SwitchSettingTile(
-                            title: Text(context.l10n.evaluationGauge),
-                            value: prefs.showEvaluationGauge,
-                            onChanged: (value) => ref
-                                .read(analysisPreferencesProvider.notifier)
-                                .toggleShowEvaluationGauge(),
-                          ),
-                          SwitchSettingTile(
-                            title: Text(context.l10n.toggleGlyphAnnotations),
-                            value: prefs.showAnnotations,
-                            onChanged: (_) =>
-                                ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
-                          ),
-                          SwitchSettingTile(
-                            title: Text(context.l10n.mobileShowComments),
-                            value: prefs.showPgnComments,
-                            onChanged: (_) =>
-                                ref.read(analysisPreferencesProvider.notifier).togglePgnComments(),
-                          ),
-                          SwitchSettingTile(
-                            title: Text(context.l10n.bestMoveArrow),
-                            value: prefs.showBestMoveArrow,
-                            onChanged: (value) => ref
-                                .read(analysisPreferencesProvider.notifier)
-                                .toggleShowBestMoveArrow(),
-                          ),
-                        ],
-                      ),
+                    SwitchSettingTile(
+                      title: Text(context.l10n.evaluationGauge),
+                      value: prefs.showEvaluationGauge,
+                      onChanged: (value) => ref
+                          .read(analysisPreferencesProvider.notifier)
+                          .toggleShowEvaluationGauge(),
+                    ),
+                    SwitchSettingTile(
+                      title: Text(context.l10n.toggleGlyphAnnotations),
+                      value: prefs.showAnnotations,
+                      onChanged: (_) =>
+                          ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
+                    ),
+                    SwitchSettingTile(
+                      title: Text(context.l10n.mobileShowComments),
+                      value: prefs.showPgnComments,
+                      onChanged: (_) =>
+                          ref.read(analysisPreferencesProvider.notifier).togglePgnComments(),
+                    ),
+                    SwitchSettingTile(
+                      title: Text(context.l10n.bestMoveArrow),
+                      value: prefs.showBestMoveArrow,
+                      onChanged: (value) =>
+                          ref.read(analysisPreferencesProvider.notifier).toggleShowBestMoveArrow(),
                     ),
                   ],
                 ),
-              AnimatedCrossFade(
-                duration: const Duration(milliseconds: 300),
-                crossFadeState: value.isComputerAnalysisAllowedAndEnabled
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
-                firstChild: const SizedBox.shrink(),
-                secondChild: EngineSettingsWidget(
+                EngineSettingsWidget(
                   onSetEngineSearchTime: (value) {
                     ref.read(ctrlProvider.notifier).setEngineSearchTime(value);
                   },
@@ -125,7 +107,7 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                     ref.read(ctrlProvider.notifier).setNumEvalLines(value);
                   },
                 ),
-              ),
+              ],
             ],
           ),
         );

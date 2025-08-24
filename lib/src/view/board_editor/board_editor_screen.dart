@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -15,9 +16,12 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_filters.dart';
+import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
+import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -45,51 +49,49 @@ class BoardEditorScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final aspectRatio = constraints.biggest.aspectRatio;
+      body: Center(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final aspectRatio = constraints.biggest.aspectRatio;
 
-          final defaultBoardSize = constraints.biggest.shortestSide;
-          final isTablet = isTabletOrLarger(context);
-          final remainingHeight = constraints.maxHeight - defaultBoardSize;
-          final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
-          final boardSize = isTablet || isSmallScreen
-              ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-              : defaultBoardSize;
+            final defaultBoardSize = constraints.biggest.shortestSide;
+            final isTablet = isTabletOrLarger(context);
+            final boardSize = defaultBoardSize;
 
-          final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
+            final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
 
-          return Flex(
-            direction: direction,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _PieceMenu(
-                boardSize,
-                initialFen: initialFen,
-                direction: flipAxis(direction),
-                side: boardEditorState.orientation.opposite,
-                isTablet: isTablet,
-              ),
-              _BoardEditor(
-                boardSize,
-                initialFen: initialFen,
-                orientation: boardEditorState.orientation,
-                isTablet: isTablet,
-                // unlockView is safe because chessground will never modify the pieces
-                pieces: boardEditorState.pieces.unlockView,
-              ),
-              _PieceMenu(
-                boardSize,
-                initialFen: initialFen,
-                direction: flipAxis(direction),
-                side: boardEditorState.orientation,
-                isTablet: isTablet,
-              ),
-            ],
-          );
-        },
+            return Flex(
+              direction: direction,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _PieceMenu(
+                  boardSize,
+                  initialFen: initialFen,
+                  direction: flipAxis(direction),
+                  side: boardEditorState.orientation.opposite,
+                  isTablet: isTablet,
+                ),
+                _BoardEditor(
+                  boardSize,
+                  initialFen: initialFen,
+                  orientation: boardEditorState.orientation,
+                  isTablet: isTablet,
+                  // unlockView is safe because chessground will never modify the pieces
+                  pieces: boardEditorState.pieces.unlockView,
+                ),
+                _PieceMenu(
+                  boardSize,
+                  initialFen: initialFen,
+                  direction: flipAxis(direction),
+                  side: boardEditorState.orientation,
+                  isTablet: isTablet,
+                ),
+              ],
+            );
+          },
+        ),
       ),
       bottomNavigationBar: _BottomBar(initialFen),
     );
@@ -292,6 +294,45 @@ class _BottomBar extends ConsumerWidget {
                 },
               ),
               BottomSheetAction(
+                // TODO: l10n
+                makeLabel: (context) => const Text('Challenge from position'),
+                onPressed: () {
+                  final session = ref.read(authSessionProvider);
+                  if (session == null) {
+                    showSnackBar(
+                      context,
+                      context.l10n.challengeRegisterToSendChallenges,
+                      type: SnackBarType.error,
+                    );
+                    return;
+                  }
+                  Navigator.of(context).push(
+                    SearchScreen.buildRoute(
+                      context,
+                      onUserTap: (user) {
+                        if (user.id == session.user.id) {
+                          showSnackBar(
+                            context,
+                            'You cannot challenge yourself',
+                            type: SnackBarType.error,
+                          );
+                        }
+                        showModalBottomSheet<void>(
+                          context: context,
+                          isScrollControlled: true,
+                          useRootNavigator: true,
+                          builder: (context) {
+                            return CreateChallengeBottomSheet(user, positionFen: editorState.fen);
+                          },
+                        );
+                      },
+                      // TODO: l10n
+                      title: const Text('Challenge from position'),
+                    ),
+                  );
+                },
+              ),
+              BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.clearBoard),
                 onPressed: () {
                   ref.read(editorController.notifier).loadFen(kEmptyFen);
@@ -318,13 +359,11 @@ class _BottomBar extends ConsumerWidget {
                   Navigator.of(context).push(
                     AnalysisScreen.buildRoute(
                       context,
-                      AnalysisOptions(
+                      AnalysisOptions.standalone(
                         orientation: editorState.orientation,
-                        standalone: (
-                          pgn: editorState.pgn!,
-                          isComputerAnalysisAllowed: true,
-                          variant: Variant.fromPosition,
-                        ),
+                        pgn: editorState.pgn!,
+                        isComputerAnalysisAllowed: true,
+                        variant: Variant.fromPosition,
                       ),
                     ),
                   );

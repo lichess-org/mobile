@@ -4,8 +4,8 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/app_links.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -14,8 +14,6 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
-import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
@@ -64,20 +62,8 @@ class UserProfileWidget extends ConsumerWidget {
               Padding(padding: const EdgeInsets.only(bottom: 5), child: userFullName),
             if (user.profile?.bio != null)
               Linkify(
-                onOpen: (link) {
-                  if (link.originText.startsWith('@')) {
-                    final username = link.originText.substring(1);
-                    Navigator.of(context).push(
-                      UserScreen.buildRoute(
-                        context,
-                        LightUser(id: UserId.fromUserName(username), name: username),
-                      ),
-                    );
-                  } else {
-                    launchUrl(Uri.parse(link.url));
-                  }
-                },
-                linkifiers: const [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()],
+                onOpen: (link) => onLinkifyOpen(context, link),
+                linkifiers: kLichessLinkifiers,
                 text: user.profile!.bio!.replaceAll('\n', ' '),
                 maxLines: bioMaxLines,
                 style: bioStyle,
@@ -99,6 +85,21 @@ class UserProfileWidget extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Text('${context.l10n.xRating('ECF')}: ${user.profile!.ecfRating}'),
+              ),
+            if (user.profile?.rcfRating != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Text('${context.l10n.xRating('RCF')}: ${user.profile!.rcfRating}'),
+              ),
+            if (user.profile?.cfcRating != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Text('${context.l10n.xRating('CFC')}: ${user.profile!.cfcRating}'),
+              ),
+            if (user.profile?.dsbRating != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Text('${context.l10n.xRating('DSB')}: ${user.profile!.dsbRating}'),
               ),
             if (user.profile != null)
               Padding(

@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart' show Side, kInitialFEN;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -58,9 +59,9 @@ class _Body extends ConsumerWidget {
             children: [
               ListTile(
                 leading: const Icon(Icons.image_outlined),
-                title: const Text('Pick an image'),
+                title: Text(context.l10n.mobileSettingsPickAnImage),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const Icon(Icons.chevron_right)
+                    ? const CupertinoListTileChevron()
                     : null,
                 onTap: () async {
                   final ImagePicker picker = ImagePicker();
@@ -126,13 +127,13 @@ class _Body extends ConsumerWidget {
               ),
             ],
           ),
-          const Padding(
+          Padding(
             padding: Styles.horizontalBodyPadding,
-            child: Text('Custom background works only in dark mode. A dark image is recommended.'),
+            child: Text(context.l10n.mobileSettingsPickAnImageHelp),
           ),
         ],
         ListSection(
-          header: const SettingsSectionTitle('Presets'),
+          header: SettingsSectionTitle(context.l10n.mobileSettingsCustomBackgroundPresets),
           backgroundColor: ColorScheme.of(context).surfaceContainerLowest,
           children: [
             GridView.builder(
@@ -271,9 +272,12 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                   bottom: MediaQuery.paddingOf(context).bottom + 16.0,
                   left: orientation == Orientation.portrait ? 0 : null,
                   right: 0,
-                  child: const Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text('Swipe to display other backgrounds', textAlign: TextAlign.center),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      context.l10n.mobileSettingsPickAnImageSwipeToDisplay,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ],
@@ -464,7 +468,10 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                         children: [
                           Icon(blur ? Icons.check_circle : Icons.circle_outlined, size: 16),
                           const SizedBox(width: 6.0),
-                          const Text('Blur the image', textAlign: TextAlign.center),
+                          Text(
+                            context.l10n.mobileSettingsPickAnImageBlur,
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
                     ),
@@ -480,7 +487,11 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                    child: Text(showBoard ? 'Hide board' : 'Show board'),
+                    child: Text(
+                      showBoard
+                          ? context.l10n.mobileSettingsPickAnImageHideBoard
+                          : context.l10n.mobileSettingsPickAnImageShowBoard,
+                    ),
                     onPressed: () => {
                       setState(() {
                         showBoard = !showBoard;

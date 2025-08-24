@@ -9,8 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
@@ -30,7 +30,6 @@ import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
@@ -64,6 +63,8 @@ class GameController extends _$GameController {
 
   ChessClock? _clock;
   late SocketClient _socketClient;
+
+  GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
 
   @override
   Future<GameState> build(GameFullId gameFullId) {
@@ -138,7 +139,8 @@ class GameController extends _$GameController {
       return;
     }
 
-    if (_socketClient.route != socketUri(gameFullId)) {
+    final currentClient = ref.read(socketPoolProvider).currentClient;
+    if (currentClient.route != _socketClient.route) {
       _socketClient = _openSocket();
     } else if (!_socketClient.isConnected) {
       _socketClient.connect();
@@ -208,12 +210,21 @@ class GameController extends _$GameController {
       assert(false, 'game steps cannot be empty on cancel move');
       return;
     }
-    state = AsyncValue.data(
+    final (GameState newState, bool _) = _tryCancelMoveConfirmation(curState);
+    state = AsyncValue.data(newState);
+  }
+
+  (GameState, bool) _tryCancelMoveConfirmation(GameState curState) {
+    if (curState.moveToConfirm == null) {
+      return (curState, false);
+    }
+    return (
       curState.copyWith(
         game: curState.game.copyWith(steps: curState.game.steps.removeLast()),
         stepCursor: curState.stepCursor - 1,
         moveToConfirm: null,
       ),
+      true,
     );
   }
 
@@ -244,7 +255,12 @@ class GameController extends _$GameController {
 
   void cursorAt(int cursor) {
     if (state.hasValue) {
-      state = AsyncValue.data(state.requireValue.copyWith(stepCursor: cursor, premove: null));
+      final currentCursor = state.requireValue.stepCursor;
+      if (currentCursor == cursor) {
+        return;
+      }
+      final (newState, _) = _tryCancelMoveConfirmation(state.requireValue);
+      state = AsyncValue.data(newState.copyWith(stepCursor: cursor, premove: null));
       final san = state.requireValue.game.stepAt(cursor).sanMove?.san;
       if (san != null) {
         _playReplayMoveSound(san);
@@ -258,7 +274,11 @@ class GameController extends _$GameController {
       final curState = state.requireValue;
       if (curState.stepCursor < curState.game.steps.length - 1) {
         state = AsyncValue.data(
-          curState.copyWith(stepCursor: curState.stepCursor + 1, premove: null),
+          curState.copyWith(
+            stepCursor: curState.stepCursor + 1,
+            premove: null,
+            promotionMove: null,
+          ),
         );
         final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
         if (san != null) {
@@ -272,10 +292,15 @@ class GameController extends _$GameController {
     if (state.hasValue) {
       final curState = state.requireValue;
       if (curState.stepCursor > 0) {
+        final (newState, didCancel) = _tryCancelMoveConfirmation(curState);
         state = AsyncValue.data(
-          curState.copyWith(stepCursor: curState.stepCursor - 1, premove: null),
+          newState.copyWith(
+            stepCursor: didCancel ? newState.stepCursor : newState.stepCursor - 1,
+            premove: null,
+            promotionMove: null,
+          ),
         );
-        final san = curState.game.stepAt(curState.stepCursor - 1).sanMove?.san;
+        final san = state.requireValue.game.stepAt(state.requireValue.stepCursor).sanMove?.san;
         if (san != null) {
           _playReplayMoveSound(san);
         }
@@ -566,6 +591,12 @@ class GameController extends _$GameController {
             isThreefoldRepetition: data.threefold,
             winner: data.winner,
             status: data.status ?? curState.game.status,
+            // Update forecast: keep only the lines with the move that was just played and remove the first move
+            correspondenceForecast: curState.game.correspondenceForecast
+                ?.where((line) => line.firstOrNull?.move.uci == data.uci)
+                .map((line) => line.removeAt(0))
+                .where((line) => line.isNotEmpty)
+                .toIList(),
           ),
         );
 
@@ -875,7 +906,7 @@ class GameController extends _$GameController {
   }
 
   Future<ExportedGame> _getPostGameData() {
-    return ref.withClient((client) => GameRepository(client).getGame(gameFullId.gameId));
+    return _gameRepository.getGame(gameFullId.gameId);
   }
 
   Future<void> _onFinishedGameLoad(PlayableGame game) async {
@@ -979,13 +1010,11 @@ sealed class GameState with _$GameState {
   bool get isZenModeEnabled =>
       zenModeGameSetting ?? game.prefs?.zenMode == Zen.yes || game.prefs?.zenMode == Zen.gameAuto;
 
-  bool get canPremove =>
-      game.meta.speed != Speed.correspondence && (game.prefs?.enablePremove ?? true);
+  bool get canPremove => game.meta.speed != Speed.correspondence;
   bool get canAutoQueen => autoQueenSettingOverride ?? (game.prefs?.autoQueen == AutoQueen.always);
   bool get canAutoQueenOnPremove =>
       autoQueenSettingOverride ??
       (game.prefs?.autoQueen == AutoQueen.always || game.prefs?.autoQueen == AutoQueen.premove);
-  bool get shouldConfirmResignAndDrawOffer => game.prefs?.confirmResign ?? true;
   bool get shouldConfirmMove => moveConfirmSettingOverride ?? game.prefs?.submitMove ?? false;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
@@ -1014,13 +1043,7 @@ sealed class GameState with _$GameState {
       game.resignable &&
       (game.meta.rules == null || !game.meta.rules!.contains(GameRule.noClaimWin));
 
-  bool get canOfferRematch =>
-      game.rematch == null &&
-      game.rematchable &&
-      (game.finished ||
-          (game.aborted &&
-              (!game.meta.rated || !{GameSource.lobby, GameSource.pool}.contains(game.source)))) &&
-      game.boosted != true;
+  bool get canOfferRematch => game.rematch == null && game.rematchable;
 
   /// Time left to move for the active player if an expiration is set
   Duration? get timeToMove {
@@ -1053,19 +1076,23 @@ sealed class GameState with _$GameState {
   String get analysisPgn => game.makePgn();
 
   AnalysisOptions get analysisOptions => game.finished
-      ? AnalysisOptions(
+      ? AnalysisOptions.archivedGame(
           orientation: game.youAre ?? Side.white,
           initialMoveCursor: stepCursor,
           gameId: gameFullId.gameId,
         )
-      : AnalysisOptions(
+      : game.playable && game.meta.speed == Speed.correspondence && game.youAre != null
+      ? AnalysisOptions.activeCorrespondenceGame(
           orientation: game.youAre ?? Side.white,
           initialMoveCursor: stepCursor,
-          standalone: (
-            pgn: game.makePgn(),
-            variant: game.meta.variant,
-            isComputerAnalysisAllowed: false,
-          ),
+          gameFullId: gameFullId,
+        )
+      : AnalysisOptions.standalone(
+          orientation: game.youAre ?? Side.white,
+          initialMoveCursor: stepCursor,
+          pgn: game.makePgn(),
+          variant: game.meta.variant,
+          isComputerAnalysisAllowed: false,
         );
 
   GameChatOptions? get chatOptions => isZenModeActive || game.meta.tournament != null

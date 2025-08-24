@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Поставки за акаунтот</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Поставките се однесуваат на вашиот акаунт и ќе бидат искористени низ сите ваши уреди.</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Сите игри</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Дали сте сигурни?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Поставки за табла</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Откажи ја понудата за враќање</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Исчисти</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Исчисти зачуван потег</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Повратна информација</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Тактилен фидбек</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добра вечер, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добра вечер</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добар ден, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добар ден</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Сокриј варијација</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Почетна</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Стримери во живо</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Мора да сте најавени за да ја видите оваа страница.</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Нема резултати</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Не следите ниту еден корисник.</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ОК</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Игра за двајца</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Играчи со \"%s\"</string>
+  <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Лево</string>
+  <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Десно</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Зголеми ја повлечената фигура</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Нема што да се прикаже, ве молиме променете ги филтрите</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Проблеми</string>
+  <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Позиција на часовникот</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Поставки</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Сподели PGN запис</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Сподели URL од партијата</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Системски бои</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Алатки</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Варијацијата %s не е поддржана во оваа верзија.</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Гледај</string>
 </resources>

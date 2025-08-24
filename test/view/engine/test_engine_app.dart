@@ -30,7 +30,7 @@ Future<void> makeEngineTestApp(
 
   /// Whether the computer analysis is allowed (only for analysis screen)
   bool isComputerAnalysisAllowed = true,
-  bool isComputerAnalysisEnabled = true,
+  bool isServerAnalysisEnabled = true,
   bool isEngineEnabled = true,
   bool isCloudEvalEnabled = true,
   bool showBestMoveArrow = true,
@@ -47,7 +47,7 @@ Future<void> makeEngineTestApp(
       PrefCategory.analysis.storageKey: jsonEncode(
         AnalysisPrefs.defaults
             .copyWith(
-              enableComputerAnalysis: isComputerAnalysisEnabled,
+              enableServerAnalysis: isServerAnalysisEnabled,
               showBestMoveArrow: showBestMoveArrow,
             )
             .toJson(),
@@ -55,7 +55,7 @@ Future<void> makeEngineTestApp(
       PrefCategory.broadcast.storageKey: jsonEncode(
         BroadcastPrefs.defaults
             .copyWith(
-              enableComputerAnalysis: isComputerAnalysisEnabled,
+              enableServerAnalysis: isServerAnalysisEnabled,
               showBestMoveArrow: showBestMoveArrow,
             )
             .toJson(),
@@ -130,17 +130,14 @@ Future<void> makeEngineTestApp(
             gameId: broadcastGame.$3,
           )
         : AnalysisScreen(
-            options: AnalysisOptions(
-              orientation: Side.white,
-              gameId: gameId,
-              standalone: gameId == null
-                  ? (
-                      pgn: '',
-                      isComputerAnalysisAllowed: isComputerAnalysisAllowed,
-                      variant: Variant.standard,
-                    )
-                  : null,
-            ),
+            options: gameId != null
+                ? AnalysisOptions.archivedGame(orientation: Side.white, gameId: gameId)
+                : AnalysisOptions.standalone(
+                    orientation: Side.white,
+                    pgn: '',
+                    isComputerAnalysisAllowed: isComputerAnalysisAllowed,
+                    variant: Variant.standard,
+                  ),
           ),
   );
 

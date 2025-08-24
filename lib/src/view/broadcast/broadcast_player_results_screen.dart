@@ -20,17 +20,27 @@ import 'package:lichess_mobile/src/widgets/stat_card.dart';
 class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
   final BroadcastPlayer player;
+  final String playerId;
 
-  const BroadcastPlayerResultsScreenLoading({required this.roundId, required this.player});
+  const BroadcastPlayerResultsScreenLoading({
+    required this.roundId,
+    required this.player,
+    required this.playerId,
+  });
 
   static Route<dynamic> buildRoute(
     BuildContext context,
     BroadcastRoundId roundId,
     BroadcastPlayer player,
+    String playerId,
   ) {
     return buildScreenRoute(
       context,
-      screen: BroadcastPlayerResultsScreenLoading(roundId: roundId, player: player),
+      screen: BroadcastPlayerResultsScreenLoading(
+        roundId: roundId,
+        player: player,
+        playerId: playerId,
+      ),
     );
   }
 
@@ -42,6 +52,7 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
       AsyncData(value: final tournamentId) => BroadcastPlayerResultsScreen(
         tournamentId: tournamentId,
         player: player,
+        playerId: playerId,
       ),
       AsyncError(:final error) => Scaffold(
         appBar: AppBar(title: const Text('')),
@@ -58,17 +69,27 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
 class BroadcastPlayerResultsScreen extends StatelessWidget {
   final BroadcastTournamentId tournamentId;
   final BroadcastPlayer player;
+  final String playerId;
 
-  const BroadcastPlayerResultsScreen({required this.tournamentId, required this.player});
+  const BroadcastPlayerResultsScreen({
+    required this.tournamentId,
+    required this.player,
+    required this.playerId,
+  });
 
   static Route<dynamic> buildRoute(
     BuildContext context,
     BroadcastTournamentId tournamentId,
     BroadcastPlayer player,
+    String playerId,
   ) {
     return buildScreenRoute(
       context,
-      screen: BroadcastPlayerResultsScreen(tournamentId: tournamentId, player: player),
+      screen: BroadcastPlayerResultsScreen(
+        tournamentId: tournamentId,
+        player: player,
+        playerId: playerId,
+      ),
     );
   }
 
@@ -78,7 +99,7 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
       appBar: AppBar(
         title: BroadcastPlayerWidget(player: player, showFederation: false, showRating: false),
       ),
-      body: _Body(tournamentId, player.id),
+      body: _Body(tournamentId, playerId),
     );
   }
 }

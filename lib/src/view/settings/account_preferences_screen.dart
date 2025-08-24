@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -8,6 +9,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AccountPreferencesScreen extends ConsumerStatefulWidget {
   const AccountPreferencesScreen({super.key});
@@ -48,19 +50,26 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
 
         return ListView(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                context.l10n.mobileAccountPreferencesHelp,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
             ListSection(
               header: SettingsSectionTitle(context.l10n.preferencesDisplay),
               hasLeading: false,
               children: [
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesZenMode),
-                  settingsValue: data.zenMode.label(context),
+                  settingsValue: data.zenMode.label(context.l10n),
                   onTap: () {
                     showChoicePicker(
                       context,
                       choices: Zen.values,
                       selectedItem: data.zenMode,
-                      labelBuilder: (t) => Text(t.label(context)),
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
                       onSelectedItemChanged: isLoading
                           ? null
                           : (Zen? value) {
@@ -75,13 +84,13 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 ),
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesPgnPieceNotation),
-                  settingsValue: data.pieceNotation.label(context),
+                  settingsValue: data.pieceNotation.label(context.l10n),
                   onTap: () {
                     showChoicePicker(
                       context,
                       choices: PieceNotation.values,
                       selectedItem: data.pieceNotation,
-                      labelBuilder: (t) => Text(t.label(context)),
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
                       onSelectedItemChanged: isLoading
                           ? null
                           : (PieceNotation? value) {
@@ -96,13 +105,13 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 ),
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesShowPlayerRatings),
-                  settingsValue: data.showRatings.label(context),
+                  settingsValue: data.showRatings.label(context.l10n),
                   onTap: () {
                     showChoicePicker(
                       context,
                       choices: ShowRatings.values,
                       selectedItem: data.showRatings,
-                      labelBuilder: (t) => Text(t.label(context)),
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
                       onSelectedItemChanged: isLoading
                           ? null
                           : (ShowRatings? value) {
@@ -122,41 +131,15 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
               header: SettingsSectionTitle(context.l10n.preferencesGameBehavior),
               hasLeading: false,
               children: [
-                SwitchSettingTile(
-                  title: Text(context.l10n.preferencesPremovesPlayingDuringOpponentTurn),
-                  value: data.premove.value,
-                  onChanged: isLoading
-                      ? null
-                      : (value) {
-                          _setPref(
-                            () => ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setPremove(BooleanPref(value)),
-                          );
-                        },
-                ),
-                SwitchSettingTile(
-                  title: Text(context.l10n.preferencesConfirmResignationAndDrawOffers),
-                  value: data.confirmResign.value,
-                  onChanged: isLoading
-                      ? null
-                      : (value) {
-                          _setPref(
-                            () => ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setConfirmResign(BooleanPref(value)),
-                          );
-                        },
-                ),
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesTakebacksWithOpponentApproval),
-                  settingsValue: data.takeback.label(context),
+                  settingsValue: data.takeback.label(context.l10n),
                   onTap: () {
                     showChoicePicker(
                       context,
                       choices: Takeback.values,
                       selectedItem: data.takeback,
-                      labelBuilder: (t) => Text(t.label(context)),
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
                       onSelectedItemChanged: isLoading
                           ? null
                           : (Takeback? value) {
@@ -171,13 +154,13 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 ),
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesPromoteToQueenAutomatically),
-                  settingsValue: data.autoQueen.label(context),
+                  settingsValue: data.autoQueen.label(context.l10n),
                   onTap: () {
                     showChoicePicker(
                       context,
                       choices: AutoQueen.values,
                       selectedItem: data.autoQueen,
-                      labelBuilder: (t) => Text(t.label(context)),
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
                       onSelectedItemChanged: isLoading
                           ? null
                           : (AutoQueen? value) {
@@ -194,13 +177,13 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   settingsLabel: Text(
                     context.l10n.preferencesClaimDrawOnThreefoldRepetitionAutomatically,
                   ),
-                  settingsValue: data.autoThreefold.label(context),
+                  settingsValue: data.autoThreefold.label(context.l10n),
                   onTap: () {
                     showChoicePicker(
                       context,
                       choices: AutoThreefold.values,
                       selectedItem: data.autoThreefold,
-                      labelBuilder: (t) => Text(t.label(context)),
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
                       onSelectedItemChanged: isLoading
                           ? null
                           : (AutoThreefold? value) {
@@ -215,13 +198,13 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 ),
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesMoveConfirmation),
-                  settingsValue: data.submitMove.label(context),
+                  settingsValue: data.submitMove.label(context.l10n),
                   onTap: () {
                     showMultipleChoicesPicker(
                       context,
                       choices: SubmitMoveChoice.values,
                       selectedItems: data.submitMove.choices,
-                      labelBuilder: (t) => Text(t.label(context)),
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
                     ).then((value) {
                       if (value != null) {
                         _setPref(
@@ -242,13 +225,13 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
               children: [
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesGiveMoreTime),
-                  settingsValue: data.moretime.label(context),
+                  settingsValue: data.moretime.label(context.l10n),
                   onTap: () {
                     showChoicePicker(
                       context,
                       choices: Moretime.values,
                       selectedItem: data.moretime,
-                      labelBuilder: (t) => Text(t.label(context)),
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
                       onSelectedItemChanged: isLoading
                           ? null
                           : (Moretime? value) {
@@ -295,13 +278,13 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 ),
                 SettingsListTile(
                   settingsLabel: Text(context.l10n.letOtherPlayersChallengeYou),
-                  settingsValue: data.challenge.label(context),
+                  settingsValue: data.challenge.label(context.l10n),
                   onTap: () {
                     showChoicePicker(
                       context,
                       choices: Challenge.values,
                       selectedItem: data.challenge,
-                      labelBuilder: (t) => Text(t.label(context)),
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
                       onSelectedItemChanged: isLoading
                           ? null
                           : (Challenge? value) {
@@ -314,6 +297,51 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                     );
                   },
                 ),
+                SettingsListTile(
+                  settingsLabel: Text(context.l10n.letOtherPlayersMessageYou),
+                  settingsValue: data.message.label(context.l10n),
+                  onTap: () {
+                    showChoicePicker(
+                      context,
+                      choices: Message.values,
+                      selectedItem: data.message,
+                      labelBuilder: (t) => Text(t.label(context.l10n)),
+                      onSelectedItemChanged: isLoading
+                          ? null
+                          : (Message? value) {
+                              _setPref(
+                                () => ref
+                                    .read(accountPreferencesProvider.notifier)
+                                    .setMessage(value ?? data.message),
+                              );
+                            },
+                    );
+                  },
+                ),
+              ],
+            ),
+            ListSection(
+              header: const SettingsSectionTitle('Danger zone'),
+              hasLeading: true,
+              children: [
+                if (Theme.of(context).platform == TargetPlatform.iOS)
+                  ListTile(
+                    leading: const Icon(Icons.dangerous_outlined),
+                    title: const Text('Delete your account'),
+                    trailing: const _OpenInNewIcon(),
+                    onTap: () {
+                      launchUrl(lichessUri('/account/delete'));
+                    },
+                  )
+                else
+                  ListTile(
+                    leading: const Icon(Icons.dangerous_outlined),
+                    title: Text(context.l10n.settingsCloseAccount),
+                    trailing: const _OpenInNewIcon(),
+                    onTap: () {
+                      launchUrl(lichessUri('/account/close'));
+                    },
+                  ),
               ],
             ),
           ],
@@ -327,10 +355,19 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(context.l10n.preferencesPreferences),
+        title: Text(context.l10n.mobileAccountPreferences),
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
       body: content,
     );
+  }
+}
+
+class _OpenInNewIcon extends StatelessWidget {
+  const _OpenInNewIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(Icons.open_in_new, size: 18);
   }
 }

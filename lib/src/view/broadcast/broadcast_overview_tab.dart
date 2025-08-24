@@ -64,7 +64,7 @@ class BroadcastOverviewTab extends ConsumerWidget {
                 if (information.standings != null)
                   _BroadcastOverviewCard(
                     Icons.link,
-                    context.l10n.broadcastStandings,
+                    context.l10n.broadcastOfficialStandings,
                     information.standings,
                   ),
               ],

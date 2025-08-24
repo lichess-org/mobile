@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
@@ -11,8 +12,10 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
@@ -63,6 +66,19 @@ abstract class TournamentChatOptions extends ChatOptions with _$TournamentChatOp
   bool get isPublic => true;
 }
 
+@freezed
+abstract class StudyChatOptions extends ChatOptions with _$StudyChatOptions {
+  const StudyChatOptions._();
+  const factory StudyChatOptions({required StudyId id, required bool writeable}) =
+      _StudyChatOptions;
+
+  @override
+  LightUser? get opponent => null;
+
+  @override
+  bool get isPublic => true;
+}
+
 /// A provider that gets the chat unread messages
 @riverpod
 Future<int> chatUnread(Ref ref, ChatOptions options) async {
@@ -93,6 +109,9 @@ class ChatController extends _$ChatController {
       TournamentChatOptions(:final id) => ref.watch(
         tournamentControllerProvider(id).selectAsync((s) => s.tournament.chat?.lines),
       ),
+      StudyChatOptions(:final id) => ref.watch(
+        studyControllerProvider(id).selectAsync((s) => s.study.chat?.lines),
+      ),
     };
 
     final filteredMessages = _selectMessages(initialMessages ?? _kEmptyMessages);
@@ -107,6 +126,38 @@ class ChatController extends _$ChatController {
   /// Sends a message to the chat.
   void postMessage(String message) {
     ref.read(socketPoolProvider).currentClient.send('talk', message);
+  }
+
+  Future<void> reportMessage(ChatMessage message) async {
+    final username = message.username;
+    if (username == null) {
+      throw ArgumentError('Cannot report a message without a username');
+    }
+    final uri = Uri(path: '/report/flag');
+    final body = switch (options) {
+      GameChatOptions(:final id) => {
+        'username': username,
+        'resource': 'game/${id.gameId}',
+        'text': message.message,
+      },
+      TournamentChatOptions(:final id) => {
+        'username': username,
+        'resource': 'tournament/$id',
+        'text': message.message,
+      },
+      StudyChatOptions(:final id) => {
+        'username': username,
+        'resource': 'study/$id',
+        'text': message.message,
+      },
+    };
+    final response = await ref
+        .read(lichessClientProvider)
+        .post(uri, headers: {'Accept': 'application/json'}, body: body);
+
+    if (response.statusCode >= 400) {
+      throw http.ClientException('Failed to flag: ${response.statusCode}', uri);
+    }
   }
 
   /// Resets the unread messages count to 0 and saves the number of read messages.

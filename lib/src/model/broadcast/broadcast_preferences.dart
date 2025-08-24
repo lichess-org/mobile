@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/analysis/common_analysis_prefs.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -28,8 +29,8 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
     return save(state.copyWith(showEvaluationBar: !state.showEvaluationBar));
   }
 
-  Future<void> toggleEnableComputerAnalysis() {
-    return save(state.copyWith(enableComputerAnalysis: !state.enableComputerAnalysis));
+  Future<void> toggleServerAnalysis() {
+    return save(state.copyWith(enableServerAnalysis: !state.enableServerAnalysis));
   }
 
   Future<void> toggleShowEvaluationGauge() {
@@ -62,10 +63,10 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable {
+sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, CommonAnalysisPrefs {
   const factory BroadcastPrefs({
     required bool showEvaluationBar,
-    @JsonKey(defaultValue: true) required bool enableComputerAnalysis,
+    @JsonKey(defaultValue: true) required bool enableServerAnalysis,
     @JsonKey(defaultValue: true) required bool showEvaluationGauge,
     @JsonKey(defaultValue: true) required bool showEngineLines,
     @JsonKey(defaultValue: true) required bool showBestMoveArrow,
@@ -77,7 +78,7 @@ sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable {
 
   static const defaults = BroadcastPrefs(
     showEvaluationBar: true,
-    enableComputerAnalysis: true,
+    enableServerAnalysis: true,
     showEvaluationGauge: true,
     showEngineLines: true,
     showBestMoveArrow: true,

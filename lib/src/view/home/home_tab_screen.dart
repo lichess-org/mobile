@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/home_preferences.dart';
 import 'package:lichess_mobile/src/model/account/home_widgets.dart';
@@ -13,6 +16,8 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_game_stor
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/game/game_storage.dart';
+import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -24,7 +29,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/account/account_screen.dart';
+import 'package:lichess_mobile/src/view/account/account_drawer.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -43,6 +48,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeTabScreen extends ConsumerStatefulWidget {
@@ -86,6 +92,75 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
 
   bool wasOnline = true;
   bool hasRefreshed = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    showWelcomeMessage();
+  }
+
+  Future<bool> shouldDisplayWelcomeMessage() async {
+    if (LichessBinding.instance.sharedPreferences.getBool('app_welcome_message_shown') == true) {
+      return false;
+    }
+
+    if (ref.read(authSessionProvider) != null) {
+      return false;
+    }
+
+    final hasPlayedGames =
+        await (await ref.read(gameStorageProvider.future)).count(userId: null) > 0;
+
+    return !hasPlayedGames;
+  }
+
+  Future<void> showWelcomeMessage() async {
+    final prefs = LichessBinding.instance.sharedPreferences;
+    if (await shouldDisplayWelcomeMessage()) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final context = ref.read(currentNavigatorKeyProvider).currentContext;
+        if (context == null || !context.mounted) return;
+        showDialog<void>(
+          context: context,
+          builder: (context) => AlertDialog.adaptive(
+            content: Container(
+              color:
+                  DialogTheme.of(context).backgroundColor ??
+                  ColorScheme.of(context).surfaceContainerHigh,
+              padding: const EdgeInsets.all(8.0),
+              child: Text.rich(
+                textAlign: TextAlign.center,
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    TextSpan(
+                      text: context.l10n.mobileNotAllFeaturesAreAvailable,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              PlatformDialogAction(
+                child: Text(context.l10n.ok),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ).then((_) {
+          prefs.setBool('app_welcome_message_shown', true);
+        });
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +235,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
           onFocusRegained: () {
             if (context.mounted && _focusLostAt != null) {
               final duration = DateTime.now().difference(_focusLostAt!);
-              if (duration.inSeconds < 60) {
+              if (duration.inSeconds < 10) {
                 return;
               }
               _refreshData(isOnline: status.isOnline);
@@ -170,12 +245,18 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             isEditingWidgets: widget.editModeEnabled,
             child: PlatformScaffold(
               appBar: widget.editModeEnabled
-                  ? PlatformAppBar(title: const Text('Home widgets'))
+                  ? PlatformAppBar(
+                      title: Text(context.l10n.mobileSettingsHomeWidgets),
+                      leading: const BackButton(),
+                      automaticallyImplyLeading: false,
+                    )
                   : PlatformAppBar(
-                      title: const Text('lichess.org'),
-                      leading: const AccountIconButton(),
+                      title: const AppBarLichessTitle(),
+                      centerTitle: true,
+                      leading: const AccountDrawerIconButton(),
                       actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
                     ),
+              drawer: const AccountDrawer(),
               body: widget.editModeEnabled
                   ? content
                   : RefreshIndicator.adaptive(
@@ -232,7 +313,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       const _EditableWidget(
         widget: HomeEditableWidget.hello,
         shouldShow: true,
-        child: _HelloWidget(),
+        child: _GreetingWidget(),
       ),
       _EditableWidget(
         widget: HomeEditableWidget.perfCards,
@@ -274,7 +355,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     required bool isTablet,
   }) {
     final welcomeWidgets = [
-      const _HelloWidget(),
+      const _GreetingWidget(),
       Padding(
         padding: Styles.bodySectionPadding,
         child: LichessMessage(style: TextTheme.of(context).bodyLarge),
@@ -306,16 +387,19 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     return [
       if (isTablet)
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Expanded(child: _TabletCreateAGameSection()),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ...welcomeWidgets,
-                  FeaturedTournamentsWidget(featured: featuredTournaments),
+                  const SizedBox(height: 32.0),
+                  const _TabletCreateAGameSection(),
                 ],
               ),
             ),
+            Expanded(child: FeaturedTournamentsWidget(featured: featuredTournaments)),
           ],
         )
       else ...[
@@ -349,7 +433,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       const _EditableWidget(
         widget: HomeEditableWidget.hello,
         shouldShow: true,
-        child: _HelloWidget(),
+        child: _GreetingWidget(),
       ),
       if (status.isOnline)
         _EditableWidget(
@@ -391,6 +475,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   Future<void> _refreshData({required bool isOnline}) {
     return Future.wait([
       ref.refresh(myRecentGamesProvider.future),
+      if (isOnline) ref.refresh(challengesProvider.future),
+      if (isOnline) ref.refresh(unreadMessagesProvider.future),
       if (isOnline) ref.refresh(accountProvider.future),
       if (isOnline) ref.refresh(ongoingGamesProvider.future),
       if (isOnline) ref.refresh(featuredTournamentsProvider.future),
@@ -475,19 +561,37 @@ class _EditableWidget extends ConsumerWidget {
   }
 }
 
-class _HelloWidget extends ConsumerWidget {
-  const _HelloWidget();
+class _IsDayTimeNotifier extends AutoDisposeNotifier<bool> {
+  Timer? _timer;
 
-  /// Returns the string representing the current time of day
-  /// Used in the greeting widget to provide visual time indicator
-  String getTimeOfDayIcon() {
+  @override
+  bool build() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(minutes: 1), (_) {
+      ref.invalidateSelf();
+    });
+
+    ref.onDispose(() {
+      _timer?.cancel();
+    });
+
     final hour = DateTime.now().hour;
-    return hour >= 6 && hour < 18 ? '☀️' : '🌙';
+    return hour >= 6 && hour < 18; // Daytime is between 6 AM and 6 PM
   }
+}
+
+final _isDayTimeProvider = NotifierProvider.autoDispose<_IsDayTimeNotifier, bool>(
+  _IsDayTimeNotifier.new,
+  name: '_isDayTimeProvider',
+);
+
+class _GreetingWidget extends ConsumerWidget {
+  const _GreetingWidget();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
+    final isDayTime = ref.watch(_isDayTimeProvider);
     final style = TextTheme.of(context).bodyLarge;
 
     const iconSize = 24.0;
@@ -506,18 +610,28 @@ class _HelloWidget extends ConsumerWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(getTimeOfDayIcon(), style: const TextStyle(fontSize: iconSize, height: 1.0)),
+              Text(
+                isDayTime ? '☀️' : '🌙',
+                style: const TextStyle(fontSize: iconSize, height: 1.0),
+              ),
               const SizedBox(width: 5.0),
               if (user != null)
                 Flexible(
                   child: l10nWithWidget(
-                    context.l10n.mobileGreeting,
+                    isDayTime ? context.l10n.mobileGoodDay : context.l10n.mobileGoodEvening,
                     Text(user.name, style: style),
                     textStyle: style,
                   ),
                 )
               else
-                Flexible(child: Text(context.l10n.mobileGreetingWithoutName, style: style)),
+                Flexible(
+                  child: Text(
+                    isDayTime
+                        ? context.l10n.mobileGoodDayWithoutName
+                        : context.l10n.mobileGoodEveningWithoutName,
+                    style: style,
+                  ),
+                ),
             ],
           ),
         ),

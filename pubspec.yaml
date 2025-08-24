@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.15.16+001516 # See README.md for details about versioning
+version: 0.17.5+001705 # See README.md for details about versioning
 
 environment:
   # this should be updated with every new flutter stable release
@@ -27,9 +27,9 @@ dependencies:
   device_info_plus: ^11.0.0
   dynamic_system_colors: ^1.8.0
   fast_immutable_collections: ^11.0.0
-  firebase_core: ^3.0.0
-  firebase_crashlytics: ^4.0.0
-  firebase_messaging: ^15.0.0
+  firebase_core: ^4.0.0
+  firebase_crashlytics: ^5.0.0
+  firebase_messaging: ^16.0.0
   fl_chart: ^1.0.0
   flutter:
     sdk: flutter
@@ -43,7 +43,7 @@ dependencies:
   flutter_markdown: ^0.7.3+1
   flutter_native_splash: ^2.3.5
   flutter_riverpod: ^2.3.4
-  flutter_secure_storage: ^9.2.0
+  flutter_secure_storage: ^10.0.0-beta.4
   flutter_slidable: ^4.0.0
   flutter_spinkit: ^5.2.0
   freezed_annotation: ^3.0.0
@@ -63,6 +63,7 @@ dependencies:
   path_provider: ^2.1.5
   popover: ^0.3.0
   pub_semver: ^2.1.4
+  quick_actions: ^1.1.0
   result_extensions: ^0.2.0
   riverpod_annotation: ^2.3.0
   share_plus: ^11.0.0
@@ -70,15 +71,12 @@ dependencies:
   signal_strength_indicator: ^0.4.1
   sound_effect: ^0.1.1
   sqflite: ^2.2.5
+  sqflite_common_ffi: ^2.2.3
   stream_transform: ^2.1.0
   url_launcher: ^6.1.9
   visibility_detector: ^0.4.0
   wakelock_plus: ^1.1.1
   web_socket_channel: ^3.0.0
-
-# Temporary dependency override for custom_lint_visitor
-dependency_overrides:
-  custom_lint_visitor: 1.0.0+7.3.0
 
 dev_dependencies:
   build_runner: ^2.3.2
@@ -94,8 +92,14 @@ dev_dependencies:
   mocktail_image_network: ^1.2.0
   riverpod_generator: ^2.1.0
   riverpod_lint: ^2.3.3
-  sqflite_common_ffi: ^2.2.3
   stream_channel: ^2.1.2
+
+dependency_overrides:
+  flutter_secure_storage_linux:
+    git:
+      url: https://github.com/christianfl/flutter_secure_storage.git
+      path: flutter_secure_storage_linux
+      ref: v10.0.0-beta.4-literal_operator_fix
 
 flutter:
   # The following line ensures that the Material Icons font is
@@ -136,16 +140,13 @@ flutter:
   generate: true
 
 flutter_native_splash:
+  android: false
+  ios: true
+  web: false
+
   color: '#ffffff'
   image: assets/images/logo-black.png
 
   color_dark: '#000000'
   image_dark: assets/images/logo-white.png
-
-  android_12:
-    color: '#ffffff'
-    image: assets/images/android12logo-black.png
-
-    color_dark: '#000000'
-    image_dark: assets/images/android12logo-white.png
 

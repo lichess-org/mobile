@@ -64,7 +64,7 @@ class TournamentController extends _$TournamentController {
 
     _watchFeaturedGameIfChanged(previous: null, current: tournament.featuredGame?.id);
 
-    return TournamentState(tournament: tournament, standingsPage: 1);
+    return TournamentState(tournament: tournament);
   }
 
   void onFocusRegained() {
@@ -82,36 +82,48 @@ class TournamentController extends _$TournamentController {
 
   void loadNextStandingsPage() {
     if (state.hasValue) {
-      _reload(standingsPage: state.requireValue.standingsPage + 1);
+      _loadPage(state.requireValue.standingsPage + 1);
     }
   }
 
   void loadPreviousStandingsPage() {
     if (state.hasValue) {
-      _reload(standingsPage: state.requireValue.standingsPage - 1);
+      _loadPage(state.requireValue.standingsPage - 1);
     }
   }
 
   void loadFirstStandingsPage() {
-    _reload(standingsPage: 1);
+    _loadPage(1);
   }
 
-  int _pageOf(int page) => page ~/ kStandingsPageSize + 1;
+  int _pageOf(int rank) => ((rank - 1) ~/ kStandingsPageSize) + 1;
 
   void loadLastStandingsPage() {
     if (state.hasValue) {
-      _reload(standingsPage: _pageOf(state.requireValue.tournament.nbPlayers));
+      _loadPage(_pageOf(state.requireValue.tournament.nbPlayers));
     }
   }
 
   void jumpToMyPage() {
     if (state.valueOrNull?.tournament.me != null) {
-      _reload(standingsPage: _pageOf(state.requireValue.tournament.me!.rank));
+      _loadPage(_pageOf(state.requireValue.tournament.me!.rank));
     }
   }
 
-  Future<void> _reload({required int standingsPage}) async {
-    _logger.fine('Refreshing tournament data (with standings page $standingsPage)');
+  Future<void> _loadPage(int page) async {
+    if (!state.hasValue) {
+      return;
+    }
+
+    final tournament = await ref
+        .read(tournamentRepositoryProvider)
+        .loadPage(state.requireValue.tournament, page);
+
+    state = AsyncValue.data(state.requireValue.copyWith(tournament: tournament));
+  }
+
+  Future<void> _reload() async {
+    _logger.fine('Refreshing tournament data');
 
     if (!state.hasValue) {
       return;
@@ -119,12 +131,12 @@ class TournamentController extends _$TournamentController {
 
     final tournament = await ref
         .read(tournamentRepositoryProvider)
-        .reload(state.requireValue.tournament, standingsPage: standingsPage);
+        .reload(state.requireValue.tournament);
 
     if (tournament.me?.pauseDelay != null) {
       _pauseDelayTimer?.cancel();
       _pauseDelayTimer = Timer(tournament.me!.pauseDelay!, () {
-        _reload(standingsPage: standingsPage);
+        _reload();
       });
     }
 
@@ -133,9 +145,7 @@ class TournamentController extends _$TournamentController {
       current: tournament.featuredGame?.id,
     );
 
-    state = AsyncValue.data(
-      state.requireValue.copyWith(tournament: tournament, standingsPage: standingsPage),
-    );
+    state = AsyncValue.data(state.requireValue.copyWith(tournament: tournament));
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -147,7 +157,7 @@ class TournamentController extends _$TournamentController {
 
     switch (event.topic) {
       case 'reload':
-        _reload(standingsPage: state.requireValue.standingsPage);
+        _reload();
 
       case 'fen':
         final json = event.data as Map<String, dynamic>;
@@ -207,8 +217,7 @@ class TournamentController extends _$TournamentController {
 sealed class TournamentState with _$TournamentState {
   const TournamentState._();
 
-  const factory TournamentState({required Tournament tournament, required int standingsPage}) =
-      _TournamentState;
+  const factory TournamentState({required Tournament tournament}) = _TournamentState;
 
   String get name => tournament.meta.fullName;
   TournamentId get id => tournament.id;
@@ -222,6 +231,8 @@ sealed class TournamentState with _$TournamentState {
       tournament.verdicts.accepted &&
       tournament.isFinished != true;
 
+  int get standingsPage => tournament.standing?.page ?? 1;
+
   int get firstRankOfPage => (standingsPage - 1) * kStandingsPageSize + 1;
   bool get hasPreviousPage => standingsPage > 1;
   bool get hasNextPage => tournament.nbPlayers > standingsPage * kStandingsPageSize;
@@ -231,6 +242,9 @@ sealed class TournamentState with _$TournamentState {
 
   /// True if the user has joined the tournament and is not withdrawn.
   bool get joined => tournament.me != null && tournament.me!.withdraw != true;
+
+  bool get isSpectator =>
+      tournament.isFinished == true || tournament.me == null || tournament.me!.withdraw == true;
 
   ChatOptions? get chatOptions => tournament.chat != null
       ? TournamentChatOptions(id: tournament.id, writeable: tournament.chat!.writeable)

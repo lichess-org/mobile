@@ -200,7 +200,7 @@ class ListSectionHeader extends StatelessWidget {
     return OpacityButton(
       onPressed: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.only(bottom: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

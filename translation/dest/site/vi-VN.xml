@@ -10,7 +10,7 @@
   <string name="yourTurn">Đến lượt bạn</string>
   <string name="aiNameLevelAiLevel">%1$s cấp độ %2$s</string>
   <string name="level">Cấp độ</string>
-  <string name="strength">Độ mạnh</string>
+  <string name="strength">Sức mạnh</string>
   <string name="toggleTheChat">Bật/Tắt trò chuyện</string>
   <string name="chat">Trò chuyện</string>
   <string name="resign">Chịu thua</string>
@@ -45,7 +45,7 @@
   <string name="forceResignation">Giành chiến thắng</string>
   <string name="forceDraw">Bắt buộc hòa</string>
   <string name="talkInChat">Hãy cư xử thân thiện trong cuộc trò chuyện!</string>
-  <string name="theFirstPersonToComeOnThisUrlWillPlayWithYou">Người đầu tiên sử dụng URL này sẽ bắt đầu chơi với bạn.</string>
+  <string name="theFirstPersonToComeOnThisUrlWillPlayWithYou">Người đầu tiên sử dụng đường dẫn này sẽ bắt đầu chơi với bạn.</string>
   <string name="whiteResigned">Bên trắng chịu thua</string>
   <string name="blackResigned">Bên đen chịu thua</string>
   <string name="whiteLeftTheGame">Bên trắng đã rời khỏi ván cờ</string>
@@ -56,7 +56,7 @@
   <string name="computerAnalysis">Phân tích từ máy tính</string>
   <string name="computerAnalysisAvailable">Có sẵn phân tích từ máy tính</string>
   <string name="computerAnalysisDisabled">Phân tích từ máy tính bị vô hiệu hóa</string>
-  <string name="analysis">Bàn cờ phân tích</string>
+  <string name="analysis">Phân tích bàn cờ</string>
   <string name="depthX">Độ sâu %s</string>
   <string name="usingServerAnalysis">Sử dụng phân tích nhờ máy chủ</string>
   <string name="loadingEngine">Đang tải động cơ máy tính...</string>
@@ -159,7 +159,7 @@
   <string name="drawByMutualAgreement">Hòa theo thỏa thuận hai bên</string>
   <string name="fiftyMovesWithoutProgress">50 nước không có tiến triển</string>
   <string name="currentGames">Các ván cờ đang diễn ra</string>
-  <string name="joinedX" comment="%s is a date relative to today&#10;&#10;e.g. &quot;Joined 2 months ago&quot;">Tham gia hôm %s</string>
+  <string name="joinedX">Đã tham gia %s</string>
   <plurals name="nbGames">
     <item quantity="other">%s ván cờ</item>
   </plurals>
@@ -444,7 +444,7 @@ trò chuyện trong ván đấu và có một URL có thể chia sẻ công khai
   <string name="openTournaments">Các giải đấu mở</string>
   <string name="duration">Thời lượng</string>
   <string name="winner">Người chiến thắng</string>
-  <string name="standing">Thứ hạng</string>
+  <string name="standings">Bảng xếp hạng</string>
   <string name="createANewTournament">Tạo giải đấu mới</string>
   <string name="tournamentCalendar">Lịch giải đấu</string>
   <string name="conditionOfEntry">Điều kiện tham gia:</string>
@@ -458,7 +458,6 @@ trò chuyện trong ván đấu và có một URL có thể chia sẻ công khai
   <string name="points">Điểm</string>
   <string name="wins">Thắng</string>
   <string name="losses">Thua</string>
-  <string name="createdBy">Tạo bởi</string>
   <string name="startingIn" comment="Displayed above a timer">Bắt đầu trong</string>
   <string name="standByX">%s chờ nhé, đang xếp cặp đấu, chuẩn bị sẵn sàng!</string>
   <string name="pause">Tạm rút</string>
@@ -965,4 +964,5 @@ Mọi chi phí vận hành, phát triển, và nội dung được tài trợ b�
   <string name="accessibility">Hỗ trợ tiếp cận</string>
   <string name="enableBlindMode">Bật chế độ mù</string>
   <string name="disableBlindMode">Tắt chế độ mù</string>
+  <string name="copyToClipboard">Sao chép vào bảng nhớ tạm</string>
 </resources>

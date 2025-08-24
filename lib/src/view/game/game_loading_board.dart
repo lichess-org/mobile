@@ -7,6 +7,8 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
@@ -69,6 +71,17 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
                         Text(
                           '${widget.seek.ratingRange!.$1}-${widget.seek.ratingRange!.$2}',
                           style: TextTheme.of(context).titleMedium,
+                        ),
+                      ],
+                      //Do not show rating range if the default values (-500, +500) are used
+                      if (widget.seek.ratingRange != null &&
+                          !(widget.seek.ratingRange!.$1 + 1000 == widget.seek.ratingRange!.$2)) ...[
+                        const SizedBox(height: 8.0),
+                        RatingPrefAware(
+                          child: Text(
+                            '${widget.seek.ratingRange!.$1}-${widget.seek.ratingRange!.$2}',
+                            style: TextTheme.of(context).titleMedium,
+                          ),
                         ),
                       ],
                       const SizedBox(height: 16.0),
@@ -426,9 +439,9 @@ class _LobbyNumbers extends ConsumerWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(context.l10n.nbPlayers(nbPlayers)),
+          Text(context.l10n.nbPlayers(nbPlayers).localizeNumbers()),
           const SizedBox(height: 8.0),
-          Text(context.l10n.nbGamesInPlay(nbGames)),
+          Text(context.l10n.nbGamesInPlay(nbGames).localizeNumbers()),
         ],
       );
     }
