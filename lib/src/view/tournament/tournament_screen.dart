@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
@@ -102,7 +103,7 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
           Navigator.of(
             context,
             rootNavigator: true,
-          ).push(GameScreen.buildRoute(context, initialGameId: currentGameId));
+          ).push(GameScreen.buildRoute(context, source: ExistingGameSource(currentGameId)));
         }
       },
     );

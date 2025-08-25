@@ -9,6 +9,7 @@ targets:
         generate_for:
           - lib/src/model/**/*.dart
           - lib/src/**/*_models.dart
+          - lib/src/**/*_providers.dart
         options:
           from_json: false
           to_json: false

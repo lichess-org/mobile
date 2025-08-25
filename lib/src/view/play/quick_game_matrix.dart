@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/playban.dart';
 
@@ -95,7 +96,7 @@ class _SectionChoices extends ConsumerWidget {
                         Navigator.of(context, rootNavigator: true).push(
                           GameScreen.buildRoute(
                             context,
-                            seek: GameSeek.fastPairing(choice, session),
+                            source: LobbySource(GameSeek.fastPairing(choice, session)),
                           ),
                         );
                       }

@@ -33,6 +33,7 @@ import 'package:lichess_mobile/src/view/account/account_drawer.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
@@ -683,10 +684,12 @@ class _OngoingGamesCarousel extends ConsumerWidget {
             Navigator.of(context, rootNavigator: true).push(
               GameScreen.buildRoute(
                 context,
-                initialGameId: game.fullId,
-                loadingFen: game.fen,
-                loadingOrientation: game.orientation,
-                loadingLastMove: game.lastMove,
+                source: ExistingGameSource(game.fullId),
+                loadingPosition: (
+                  fen: game.fen,
+                  orientation: game.orientation,
+                  lastMove: game.lastMove,
+                ),
               ),
             );
           },

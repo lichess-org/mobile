@@ -1,5 +1,6 @@
-import 'package:dartchess/dartchess.dart' show Move, Side;
+import 'package:dartchess/dartchess.dart' show Side;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -10,13 +11,52 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_screen_providers.g.dart';
+part 'game_screen_providers.freezed.dart';
 
-typedef LoadedGame = ({GameFullId gameId, String? lastFen, Move? lastMove, Side? side});
-typedef CurrentGameState = ({
-  LoadedGame? game,
-  Challenge? challenge,
-  ChallengeDeclineReason? declineReason,
-});
+sealed class CurrentGameState {}
+
+/// This is used in the following cases:
+/// - A game that had already been created is loaded.
+/// - A game has been created from a lobby seek.
+/// - A challenge has been accepted and a game has been created from it.
+@freezed
+sealed class GameCreatedState with _$GameCreatedState implements CurrentGameState {
+  const GameCreatedState._();
+
+  const factory GameCreatedState(GameFullId createdGameId) = _GameCreatedState;
+}
+
+/// A real time challenge has been declined.
+@freezed
+sealed class ChallengeDeclinedState with _$ChallengeDeclinedState implements CurrentGameState {
+  const ChallengeDeclinedState._();
+
+  const factory ChallengeDeclinedState(ChallengeDeclinedResponse response) =
+      _ChallengeDeclinedState;
+}
+
+sealed class GameScreenSource {}
+
+@freezed
+sealed class ExistingGameSource with _$ExistingGameSource implements GameScreenSource {
+  const ExistingGameSource._();
+
+  const factory ExistingGameSource(GameFullId id) = _ExistingGameSource;
+}
+
+@freezed
+sealed class LobbySource with _$LobbySource implements GameScreenSource {
+  const LobbySource._();
+
+  const factory LobbySource(GameSeek seek) = _LobbySource;
+}
+
+@freezed
+sealed class UserChallengeSource with _$UserChallengeSource implements GameScreenSource {
+  const UserChallengeSource._();
+
+  const factory UserChallengeSource(ChallengeRequest challengeRequest) = _UserChallengeSource;
+}
 
 /// A provider that returns the currently loaded [GameFullId] for the [GameScreen].
 ///
@@ -25,71 +65,36 @@ typedef CurrentGameState = ({
 @riverpod
 class CurrentGame extends _$CurrentGame {
   @override
-  Future<CurrentGameState> build({
-    GameSeek? seek,
-    ChallengeRequest? challenge,
-    ({GameFullId gameId, String? lastFen, Move? lastMove, Side? side})? game,
-  }) {
-    assert(
-      game != null || seek != null || challenge != null,
-      'Either a seek, challenge or a game id must be provided.',
-    );
-
+  Future<CurrentGameState> build(GameScreenSource source) {
     final service = ref.watch(createGameServiceProvider);
 
-    if (seek != null) {
-      return service
-          .newLobbyGame(seek)
-          .then(
-            (id) => (
-              game: (gameId: id, lastFen: null, lastMove: null, side: null),
-              challenge: null,
-              declineReason: null,
+    return switch (source) {
+      LobbySource(:final seek) => service.newLobbyGame(seek).then((id) => GameCreatedState(id)),
+      UserChallengeSource(:final challengeRequest) =>
+        service
+            .newRealTimeChallenge(challengeRequest)
+            .then(
+              (data) => switch (data) {
+                ChallengeAcceptedResponse(:final gameFullId) => GameCreatedState(gameFullId),
+                ChallengeDeclinedResponse() => ChallengeDeclinedState(data),
+              },
             ),
-          );
-    } else if (challenge != null) {
-      return service
-          .newRealTimeChallenge(challenge)
-          .then(
-            (data) => (
-              game: data.gameFullId != null
-                  ? (gameId: data.gameFullId!, lastFen: null, lastMove: null, side: null)
-                  : null,
-              challenge: data.challenge,
-              declineReason: data.declineReason,
-            ),
-          );
-    }
-
-    return Future.value((game: game!, challenge: null, declineReason: null));
+      ExistingGameSource(:final id) => Future.value(GameCreatedState(id)),
+    };
   }
 
   /// Search for a new opponent (lobby only).
   Future<void> newOpponent() async {
-    if (seek != null) {
+    if (source case LobbySource(:final seek)) {
       final service = ref.read(createGameServiceProvider);
       state = const AsyncValue.loading();
-      state = AsyncValue.data(
-        await service
-            .newLobbyGame(seek!)
-            .then(
-              (id) => (
-                game: (gameId: id, lastFen: null, lastMove: null, side: null),
-                challenge: null,
-                declineReason: null,
-              ),
-            ),
-      );
+      state = AsyncValue.data(await service.newLobbyGame(seek).then((id) => GameCreatedState(id)));
     }
   }
 
   /// Load a game from its id.
   void loadGame(GameFullId id) {
-    state = AsyncValue.data((
-      game: (gameId: id, lastFen: null, lastMove: null, side: null),
-      challenge: null,
-      declineReason: null,
-    ));
+    state = AsyncValue.data(GameCreatedState(id));
   }
 }
 

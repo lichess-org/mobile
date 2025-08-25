@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/play/common_play_widgets.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -165,10 +166,12 @@ class CreateGameWidget extends ConsumerWidget {
                     return;
                   }
 
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(GameScreen.buildRoute(context, seek: GameSeek.custom(playPrefs, account)));
+                  Navigator.of(context, rootNavigator: true).push(
+                    GameScreen.buildRoute(
+                      context,
+                      source: LobbySource(GameSeek.custom(playPrefs, account)),
+                    ),
+                  );
                 }
               : null,
           child: Text(context.l10n.createAGame),

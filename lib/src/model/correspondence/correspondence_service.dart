@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -87,7 +88,7 @@ class CorrespondenceService {
     Navigator.of(
       context,
       rootNavigator: true,
-    ).push(GameScreen.buildRoute(context, initialGameId: fullId));
+    ).push(GameScreen.buildRoute(context, source: ExistingGameSource(fullId)));
   }
 
   /// Syncs offline correspondence games with the server.

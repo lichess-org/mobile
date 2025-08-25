@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:share_plus/share_plus.dart';
@@ -32,10 +33,12 @@ void openGameScreen(
       game.fullId != null
           ? GameScreen.buildRoute(
               context,
-              initialGameId: game.fullId,
-              loadingOrientation: orientation,
-              loadingFen: loadingFen,
-              loadingLastMove: loadingLastMove,
+              source: ExistingGameSource(game.fullId!),
+              loadingPosition: (
+                fen: loadingFen,
+                lastMove: loadingLastMove,
+                orientation: orientation,
+              ),
               lastMoveAt: lastMoveAt,
             )
           : AnalysisScreen.buildRoute(

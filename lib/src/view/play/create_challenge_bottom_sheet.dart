@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
@@ -321,11 +322,13 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                   Navigator.of(context, rootNavigator: true).push(
                                     GameScreen.buildRoute(
                                       context,
-                                      challenge: preferences.makeRequest(
-                                        widget.user,
-                                        preferences.variant != Variant.fromPosition
-                                            ? null
-                                            : fromPositionFenInput,
+                                      source: UserChallengeSource(
+                                        preferences.makeRequest(
+                                          widget.user,
+                                          preferences.variant != Variant.fromPosition
+                                              ? null
+                                              : fromPositionFenInput,
+                                        ),
                                       ),
                                     ),
                                   );

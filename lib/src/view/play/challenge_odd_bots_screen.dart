@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
@@ -269,17 +270,19 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       Navigator.of(context, rootNavigator: true).push(
                         GameScreen.buildRoute(
                           context,
-                          challenge: ChallengeRequest(
-                            destUser: widget.bot,
-                            variant: Variant.fromPosition,
-                            timeControl: ChallengeTimeControlType.clock,
-                            clock: (
-                              time: Duration(seconds: seconds),
-                              increment: Duration(seconds: incrementSeconds),
+                          source: UserChallengeSource(
+                            ChallengeRequest(
+                              destUser: widget.bot,
+                              variant: Variant.fromPosition,
+                              timeControl: ChallengeTimeControlType.clock,
+                              clock: (
+                                time: Duration(seconds: seconds),
+                                increment: Duration(seconds: incrementSeconds),
+                              ),
+                              rated: false,
+                              sideChoice: sideChoice,
+                              initialFen: fen,
                             ),
-                            rated: false,
-                            sideChoice: sideChoice,
-                            initialFen: fen,
                           ),
                         ),
                       );
