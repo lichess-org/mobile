@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/widgets/non_visual_board.dart';
 
 class BoardWidget extends StatelessWidget {
   const BoardWidget({
@@ -30,6 +31,20 @@ class BoardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQueryData = MediaQuery.of(context);
+    
+    if (mediaQueryData.accessibleNavigation) {
+      return NonVisualBoard(
+        size: size,
+        fen: fen,
+        orientation: orientation,
+        gameData: gameData,
+        lastMove: lastMove,
+        shapes: shapes,
+        settings: settings,
+      );
+    }
+    
     final board = Chessboard(
       key: boardKey,
       size: size,
