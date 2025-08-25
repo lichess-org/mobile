@@ -321,6 +321,20 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
               ],
             ),
             ListSection(
+              header: const SettingsSectionTitle('Authentication'),
+              hasLeading: true,
+              children: [
+                  ListTile(
+                    leading: const Icon(Icons.lock),
+                    title: const Text('Change password'),
+                    trailing: const _OpenInNewIcon(),
+                    onTap: () {
+                      launchUrl(lichessUri('/account/passwd'));
+                    }
+                  ),
+              ],
+            ),
+            ListSection(
               header: const SettingsSectionTitle('Danger zone'),
               hasLeading: true,
               children: [
