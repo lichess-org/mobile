@@ -1722,5 +1722,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} місяць тому} few{{count} місяці тому} many{{count} місяців тому} other{{count} місяця тому}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} рік тому} few{{count} роки тому} many{{count} років тому} other{{count} року тому}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{залишилася {count} хвилина} few{залишилося {count} хвилини} many{залишилося {count} хвилин} other{залишилося {count} хвилини}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{залишилася {count} година} few{залишилося {count} години} many{залишилося {count} годин} other{залишилося {count} години}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{залишилася {count} година} few{залишилося {count} години} many{залишилося {count} годин} other{залишилося {count} години}}",
+  "tfaTwoFactorAuth": "Двофакторна автентифікація"
 }

@@ -1633,5 +1633,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{לפני חודש {count}} =2{לפני {count} חודשים} many{לפני {count} חודשים} other{לפני {count} חודשים}}",
   "timeagoNbYearsAgo": "{count, plural, =1{לפני שנה {count}} =2{לפני {count} שנים} many{לפני {count} שנים} other{לפני {count} שנים}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{דקה {count} נותרה} =2{{count} דקות נותרו} many{{count} דקות נותרו} other{{count} דקות נותרו}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{שעה {count} נותרה} =2{{count} שעות נותרו} many{{count} שעות נותרו} other{{count} שעות נותרו}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{שעה {count} נותרה} =2{{count} שעות נותרו} many{{count} שעות נותרו} other{{count} שעות נותרו}}",
+  "tfaTwoFactorAuth": "אימות דו־שלבי"
 }

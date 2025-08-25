@@ -6403,4 +6403,7 @@ class AppLocalizationsHe extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'אימות דו־שלבי';
 }

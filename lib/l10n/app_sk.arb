@@ -1718,5 +1718,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{pred {count} mesiacom} few{pred {count} mesiacmi} many{pred {count} mesiacmi} other{pred {count} mesiacmi}}",
   "timeagoNbYearsAgo": "{count, plural, =1{pred {count} rokom} few{pred {count} rokmi} many{pred {count} rokmi} other{pred {count} rokmi}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{ostáva {count} minúta} few{ostávajú {count} minúty} many{ostáva {count} minút} other{ostáva {count} minút}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{ostáva {count} hodina} few{ostávajú {count} hodiny} many{ostáva {count} hodín} other{ostáva {count} hodín}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{ostáva {count} hodina} few{ostávajú {count} hodiny} many{ostáva {count} hodín} other{ostáva {count} hodín}}",
+  "tfaTwoFactorAuth": "Dvojstupňové overenie"
 }

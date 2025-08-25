@@ -321,12 +321,12 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
               ],
             ),
             ListSection(
-              header: const SettingsSectionTitle('Security'),
+              header: SettingsSectionTitle(context.l10n.security),
               hasLeading: true,
               children: [
                 ListTile(
                   leading: const Icon(Icons.lock),
-                  title: const Text('Change password'),
+                  title: Text(context.l10n.changePassword),
                   trailing: const _OpenInNewIcon(),
                   onTap: () {
                     launchUrl(lichessUri('/account/passwd'));
@@ -334,7 +334,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                 ),
                 ListTile(
                   leading: const Icon(Icons.security),
-                  title: const Text('Two-factor authentication'),
+                  title: Text(context.l10n.tfaTwoFactorAuth),
                   trailing: const _OpenInNewIcon(),
                   onTap: () {
                     launchUrl(lichessUri('/account/twofactor'));

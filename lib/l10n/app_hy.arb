@@ -1462,5 +1462,6 @@
   "timeagoNbDaysAgo": "{count, plural, =1{{count} օր առաջ} other{{count} օր առաջ}}",
   "timeagoNbWeeksAgo": "{count, plural, =1{{count} շաբաթ առաջ} other{{count} շաբաթ առաջ}}",
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} ամիս առաջ} other{{count} ամիս առաջ}}",
-  "timeagoNbYearsAgo": "{count, plural, =1{{count} տարի առաջ} other{{count} տարի առաջ}}"
+  "timeagoNbYearsAgo": "{count, plural, =1{{count} տարի առաջ} other{{count} տարի առաջ}}",
+  "tfaTwoFactorAuth": "Երկգործոն նույնականացում"
 }

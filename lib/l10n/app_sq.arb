@@ -1660,5 +1660,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} muaj më parë} other{para {count} muajve}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} vit më parë} other{para {count} viteve}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Edhe {count} minutë} other{Edhe {count} minuta}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{Edhe {count} orë} other{Edhe {count} orë}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{Edhe {count} orë} other{Edhe {count} orë}}",
+  "tfaTwoFactorAuth": "Mirëfilltësim dyfaktorësh"
 }

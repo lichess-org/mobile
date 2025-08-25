@@ -1468,5 +1468,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} месяц таму} few{{count} месяцы таму} many{{count} месяцаў таму} other{{count} месяцаў таму}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} год таму} few{{count} гады таму} many{{count} гадоў таму} other{{count} гадоў таму}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Засталася {count} хвіліна} few{Засталося {count} хвіліны} many{Засталося {count} хвілін} other{Засталося {count} хвіліны}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{Засталася {count} гадзіна} few{Засталося {count} гадзіны} many{Засталося {count} гадзін} other{Засталося {count} гадзіны}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{Засталася {count} гадзіна} few{Засталося {count} гадзіны} many{Засталося {count} гадзін} other{Засталося {count} гадзіны}}",
+  "tfaTwoFactorAuth": "Двухфактарная аўтэнтыфікацыя"
 }

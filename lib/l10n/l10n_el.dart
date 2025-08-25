@@ -6219,4 +6219,7 @@ class AppLocalizationsEl extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Έλεγχος ταυτότητας δύο παραγόντων';
 }

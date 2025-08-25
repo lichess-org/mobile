@@ -1686,5 +1686,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} månad sedan} other{{count} månader sedan}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} år sedan} other{{count} år sedan}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minut återstår} other{{count} minuter återstår}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{{count} timme återstår} other{{count} timmar återstår}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{{count} timme återstår} other{{count} timmar återstår}}",
+  "tfaTwoFactorAuth": "Tvåfaktorsautentisering"
 }

@@ -1385,5 +1385,6 @@
   "timeagoJustNow": "управо сада",
   "timeagoRightNow": "управо сад",
   "timeagoCompleted": "завршено",
-  "timeagoInNbSeconds": "{count, plural, =1{за {count} секунди} few{за {count} сати} other{за {count} дана}}"
+  "timeagoInNbSeconds": "{count, plural, =1{за {count} секунди} few{за {count} сати} other{за {count} дана}}",
+  "tfaTwoFactorAuth": "Двофакторска аутентификација"
 }

@@ -1722,5 +1722,6 @@
   "timeagoNbMonthsAgo": "{count, plural, other{{count} tháng trước}}",
   "timeagoNbYearsAgo": "{count, plural, other{{count} năm trước}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{còn {count} phút}}",
-  "timeagoNbHoursRemaining": "{count, plural, other{còn {count} giờ}}"
+  "timeagoNbHoursRemaining": "{count, plural, other{còn {count} giờ}}",
+  "tfaTwoFactorAuth": "Xác thực 2 bước"
 }

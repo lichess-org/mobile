@@ -1722,5 +1722,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} kuukausi sitten} other{{count} kuukautta sitten}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} vuosi sitten} other{{count} vuotta sitten}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minuutti jäljellä} other{{count} minuuttia jäljellä}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{{count} tunti jäljellä} other{{count} tuntia jäljellä}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{{count} tunti jäljellä} other{{count} tuntia jäljellä}}",
+  "tfaTwoFactorAuth": "Kaksivaiheinen tunnistautuminen"
 }

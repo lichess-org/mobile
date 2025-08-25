@@ -6217,6 +6217,9 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Two-factor authentication';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -12434,4 +12437,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Two-factor authentication';
 }

@@ -6219,6 +6219,9 @@ class AppLocalizationsPt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -12436,4 +12439,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
 }

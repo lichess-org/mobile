@@ -1722,5 +1722,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} miesiąc temu} few{{count} miesiące temu} many{{count} miesięcy temu} other{{count} miesięcy temu}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} rok temu} few{{count} lata temu} many{{count} lat temu} other{{count} lat temu}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Pozostała {count} minuta} few{Pozostały {count} minuty} many{Pozostało {count} minut} other{Pozostało {count} minut}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{Pozostała {count} godzina} few{Pozostały {count} godziny} many{Pozostało {count} godzin} other{Pozostało {count} godzin}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{Pozostała {count} godzina} few{Pozostały {count} godziny} many{Pozostało {count} godzin} other{Pozostało {count} godzin}}",
+  "tfaTwoFactorAuth": "Uwierzytelnianie dwuskładnikowe"
 }

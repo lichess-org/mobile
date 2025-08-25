@@ -1722,5 +1722,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{Pred {count} mesecem} =2{Pred {count} mesecema} few{Pred {count} meseci} other{Pred {count} meseci}}",
   "timeagoNbYearsAgo": "{count, plural, =1{Pred {count} letom} =2{Pred {count} letoma} few{Pred {count} leti} other{Pred {count} leti}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{še {count} minuta} =2{še {count} minuti} few{še {count} minute} other{še {count} minut}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{še {count} ura} =2{še {count} uri} few{še {count} ure} other{še {count} ur}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{še {count} ura} =2{še {count} uri} few{še {count} ure} other{še {count} ur}}",
+  "tfaTwoFactorAuth": "Dvojna avtentikacija"
 }

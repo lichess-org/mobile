@@ -6217,4 +6217,7 @@ class AppLocalizationsAz extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => '2 mərhələli təsdiqləmə';
 }
