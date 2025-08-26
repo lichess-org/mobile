@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -89,10 +90,12 @@ class OngoingGamePreview extends ConsumerWidget {
         Navigator.of(context, rootNavigator: true).push(
           GameScreen.buildRoute(
             context,
-            initialGameId: game.fullId,
-            loadingFen: game.fen,
-            loadingOrientation: game.orientation,
-            loadingLastMove: game.lastMove,
+            source: ExistingGameSource(game.fullId),
+            loadingPosition: (
+              fen: game.fen,
+              orientation: game.orientation,
+              lastMove: game.lastMove,
+            ),
           ),
         );
       },

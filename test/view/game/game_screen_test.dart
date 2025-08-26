@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:mocktail/mocktail.dart';
@@ -47,7 +48,7 @@ void main() {
     testWidgets('a game directly with initialGameId', (WidgetTester tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const GameScreen(initialGameId: testGameFullId),
+        home: const GameScreen(source: ExistingGameSource(testGameFullId)),
         overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
       await tester.pumpWidget(app);
@@ -95,7 +96,9 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const GameScreen(
-          seek: GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true),
+          source: LobbySource(
+            GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true),
+          ),
         ),
         overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
@@ -334,7 +337,7 @@ void main() {
     testWidgets('displays tournament info', (WidgetTester tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const GameScreen(initialGameId: GameFullId('qVChCOTcHSeW')),
+        home: const GameScreen(source: ExistingGameSource(GameFullId('qVChCOTcHSeW'))),
         overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
       await tester.pumpWidget(app);
@@ -356,7 +359,7 @@ void main() {
     testWidgets('supports berserking', (WidgetTester tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const GameScreen(initialGameId: GameFullId('qVChCOTcHSeW')),
+        home: const GameScreen(source: ExistingGameSource(GameFullId('qVChCOTcHSeW'))),
         overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(client, ref))],
       );
       await tester.pumpWidget(app);
@@ -690,7 +693,7 @@ void main() {
 
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const GameScreen(initialGameId: gameFullId),
+        home: const GameScreen(source: ExistingGameSource(gameFullId)),
         overrides: [lichessClientProvider.overrideWith((ref) => LichessClient(mockClient, ref))],
       );
       await tester.pumpWidget(app);
@@ -854,7 +857,7 @@ Future<void> createTestGame(
   const gameFullId = GameFullId('qVChCOTcHSeW');
   final app = await makeTestProviderScopeApp(
     tester,
-    home: const GameScreen(initialGameId: gameFullId),
+    home: const GameScreen(source: ExistingGameSource(gameFullId)),
     defaultPreferences: defaultPreferences,
     overrides: [
       lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
@@ -897,7 +900,7 @@ Future<void> loadFinishedTestGame(
   final gameFullId = GameFullId('${gameId.value}test');
   final app = await makeTestProviderScopeApp(
     tester,
-    home: GameScreen(initialGameId: gameFullId),
+    home: GameScreen(source: ExistingGameSource(gameFullId)),
     overrides: [
       lichessClientProvider.overrideWith((ref) => LichessClient(client, ref)),
       ...?overrides,

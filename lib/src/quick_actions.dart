@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -50,7 +51,7 @@ class QuickActionService {
           Navigator.of(
             context,
             rootNavigator: true,
-          ).push(GameScreen.buildRoute(context, seek: recentSeeks[index]));
+          ).push(GameScreen.buildRoute(context, source: LobbySource(recentSeeks[index])));
         }
       } else if (shortcutType == 'play_puzzles') {
         Navigator.of(
