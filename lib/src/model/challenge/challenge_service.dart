@@ -16,8 +16,10 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -111,8 +113,7 @@ class ChallengeService {
 
     switch (actionid) {
       case 'accept':
-        final fullId = await acceptChallenge(challengeId);
-        _goToGameScreen(fullId);
+        await _acceptChallenge(challengeId);
 
       case 'decline':
         final context = ref.read(currentNavigatorKeyProvider).currentContext;
@@ -139,9 +140,15 @@ class ChallengeService {
     return await challengeRepo.show(id).then((challenge) => challenge.gameFullId);
   }
 
-  void _goToGameScreen(GameFullId? fullId) {
+  Future<void> _acceptChallenge(ChallengeId id) async {
+    final fullId = await acceptChallenge(id);
+
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
+
+    if (fullId == null) {
+      return showSnackBar(context, 'Failed to accept challenge', type: SnackBarType.error);
+    }
 
     final rootNavState = Navigator.of(context, rootNavigator: true);
     if (rootNavState.canPop()) {
@@ -151,7 +158,7 @@ class ChallengeService {
     Navigator.of(
       context,
       rootNavigator: true,
-    ).push(GameScreen.buildRoute(context, initialGameId: fullId));
+    ).push(GameScreen.buildRoute(context, source: ExistingGameSource(fullId)));
   }
 
   void _showDeclineDialog(BuildContext context, ChallengeId id) {
@@ -187,10 +194,7 @@ class ChallengeService {
             makeLabel: (context) => Text(context.l10n.accept),
             leading: Icon(Icons.check, color: context.lichessColors.good),
             isDefaultAction: true,
-            onPressed: () async {
-              final fullId = await acceptChallenge(challenge.id);
-              _goToGameScreen(fullId);
-            },
+            onPressed: () async => await _acceptChallenge(challenge.id),
           ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.decline),

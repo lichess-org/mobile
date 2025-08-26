@@ -36,6 +36,8 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
+typedef LoadingPosition = ({String? fen, Move? lastMove, Side? orientation});
+
 /// Game body for the [GameScreen].
 ///
 /// This widget is responsible for displaying the board, the clocks, the players,
@@ -47,7 +49,8 @@ import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 /// prevent the user from going back to the previous screen.
 class GameBody extends ConsumerWidget {
   const GameBody({
-    required this.loadedGame,
+    required this.gameId,
+    this.loadingPosition,
     required this.whiteClockKey,
     required this.blackClockKey,
     required this.onLoadGameCallback,
@@ -55,7 +58,9 @@ class GameBody extends ConsumerWidget {
     required this.boardKey,
   });
 
-  final LoadedGame loadedGame;
+  final GameFullId gameId;
+
+  final LoadingPosition? loadingPosition;
 
   /// [GlobalKey] for the white clock.
   ///
@@ -84,7 +89,7 @@ class GameBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = gameControllerProvider(loadedGame.gameId);
+    final ctrlProvider = gameControllerProvider(gameId);
 
     ref.listen(
       ctrlProvider,
@@ -280,7 +285,7 @@ class GameBody extends ConsumerWidget {
               },
               zenMode: gameState.isZenModeActive,
               userActionsBar: _GameBottomBar(
-                id: loadedGame.gameId,
+                id: gameId,
                 onLoadGameCallback: onLoadGameCallback,
                 onNewOpponentCallback: onNewOpponentCallback,
               ),
@@ -290,22 +295,22 @@ class GameBody extends ConsumerWidget {
 
       case AsyncData(:final value, isRefreshing: true):
         return StandaloneGameLoadingContent(
-          fen: value.game.lastPosition.fen,
-          lastMove: value.game.moveAt(value.stepCursor) as NormalMove?,
-          orientation: value.game.youAre,
+          position: (
+            fen: value.game.lastPosition.fen,
+            lastMove: value.game.moveAt(value.stepCursor),
+            orientation: value.game.youAre,
+          ),
           userActionsBar: _GameBottomBar(
-            id: loadedGame.gameId,
+            id: gameId,
             onLoadGameCallback: onLoadGameCallback,
             onNewOpponentCallback: onNewOpponentCallback,
           ),
         );
       case final _:
         return StandaloneGameLoadingContent(
-          fen: loadedGame.lastFen,
-          lastMove: loadedGame.lastMove,
-          orientation: loadedGame.side,
+          position: loadingPosition,
           userActionsBar: _GameBottomBar(
-            id: loadedGame.gameId,
+            id: gameId,
             onLoadGameCallback: onLoadGameCallback,
             onNewOpponentCallback: onNewOpponentCallback,
           ),
@@ -325,7 +330,7 @@ class GameBody extends ConsumerWidget {
         if (context.mounted) {
           // when Zen mode is disabled, reload chat data
           ref
-              .read(gameControllerProvider(loadedGame.gameId).notifier)
+              .read(gameControllerProvider(gameId).notifier)
               .onToggleChat(state.requireValue.chatOptions != null);
         }
       }
@@ -339,10 +344,8 @@ class GameBody extends ConsumerWidget {
           if (context.mounted) {
             showAdaptiveDialog<void>(
               context: context,
-              builder: (context) => GameResultDialog(
-                id: loadedGame.gameId,
-                onNewOpponentCallback: onNewOpponentCallback,
-              ),
+              builder: (context) =>
+                  GameResultDialog(id: gameId, onNewOpponentCallback: onNewOpponentCallback),
               barrierDismissible: true,
             );
           }
@@ -372,7 +375,7 @@ class GameBody extends ConsumerWidget {
         if (context.mounted) {
           showAdaptiveDialog<void>(
             context: context,
-            builder: (context) => _ClaimWinDialog(id: loadedGame.gameId),
+            builder: (context) => _ClaimWinDialog(id: gameId),
             barrierDismissible: true,
           );
         }
