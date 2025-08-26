@@ -65,7 +65,7 @@ sealed class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
   static const defaults = GameSetupPrefs(
     timeIncrement: TimeIncrement(600, 0),
     customVariant: Variant.standard,
-    customRated: false,
+    customRated: true,
     customRatingDelta: kDefaultRatingDelta,
     customDaysPerTurn: 3,
   );
