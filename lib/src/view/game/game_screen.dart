@@ -32,10 +32,10 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 /// Screen to play a game, or to show a challenge or to show current user's past games.
 ///
-/// The screen can be created in three ways:
-/// - From the lobby, to play a game with a random opponent: using [CurrentGameSource.lobby].
-/// - From a challenge, to accept or decline a challenge: using a [CurrentGameSource.userChallenge].
-/// - From a game id, to show a game that is already in progress: using [CurrentGameSource.loadedGame].
+/// The screen can be opened in three ways:
+/// - From the lobby, to play a game with a random opponent: using [LobbySource].
+/// - From a challenge, to accept or decline a challenge: using a [UserChallengeSource].
+/// - From an existing game: using [ExistingGameSource].
 ///
 /// The screen will show a loading board while the game is being created.
 class GameScreen extends ConsumerStatefulWidget {
@@ -71,10 +71,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = currentGameProvider(widget.source);
     final boardPreferences = ref.watch(boardPreferencesProvider);
 
-    switch (ref.watch(provider)) {
+    switch (ref.watch(gameScreenLoaderProvider(widget.source))) {
       case AsyncData(
         value: ChallengeDeclinedState(
           response: ChallengeDeclinedResponse(:final challenge, :final declineReason),
@@ -119,14 +118,14 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               boardKey: _boardKey,
               onLoadGameCallback: (id) {
                 if (mounted) {
-                  ref.read(provider.notifier).loadGame(id);
+                  ref.read(gameScreenLoaderProvider(widget.source).notifier).loadGame(id);
                 }
               },
               onNewOpponentCallback: (game) {
                 if (!mounted) return;
 
                 if (widget.source is LobbySource) {
-                  ref.read(provider.notifier).newOpponent();
+                  ref.read(gameScreenLoaderProvider(widget.source).notifier).newOpponent();
                 } else {
                   final savedSetup = ref.read(gameSetupPreferencesProvider);
                   Navigator.of(context, rootNavigator: true).pushReplacement(

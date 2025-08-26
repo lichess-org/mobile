@@ -8,19 +8,27 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_screen_providers.g.dart';
 part 'game_screen_providers.freezed.dart';
 
-sealed class CurrentGameState {}
+/// The state of the [GameScreen].
+///
+/// It can be:
+/// - [GameCreatedState]: A game has been created or loaded.
+/// - [ChallengeDeclinedState]: A real time challenge has been declined.
+sealed class GameScreenState {}
 
+/// Game screen state when a game has been created or loaded.
+///
 /// This is used in the following cases:
 /// - A game that had already been created is loaded.
 /// - A game has been created from a lobby seek.
 /// - A challenge has been accepted and a game has been created from it.
 @freezed
-sealed class GameCreatedState with _$GameCreatedState implements CurrentGameState {
+sealed class GameCreatedState with _$GameCreatedState implements GameScreenState {
   const GameCreatedState._();
 
   const factory GameCreatedState(GameFullId createdGameId) = _GameCreatedState;
@@ -28,15 +36,25 @@ sealed class GameCreatedState with _$GameCreatedState implements CurrentGameStat
 
 /// A real time challenge has been declined.
 @freezed
-sealed class ChallengeDeclinedState with _$ChallengeDeclinedState implements CurrentGameState {
+sealed class ChallengeDeclinedState with _$ChallengeDeclinedState implements GameScreenState {
   const ChallengeDeclinedState._();
 
   const factory ChallengeDeclinedState(ChallengeDeclinedResponse response) =
       _ChallengeDeclinedState;
 }
 
+/// The source from which the [GameScreen] was opened.
+///
+/// It can be:
+/// - An existing game, see [ExistingGameSource].
+/// - A lobby seek, see [LobbySource].
+/// - A user challenge, see [UserChallengeSource].
+///
+/// In case of a lobby seek or a user challenge, a new game will be created and the screen will show
+/// a loading indicator until the game is created.
 sealed class GameScreenSource {}
 
+/// An existing game source for [GameScreen], identified by its [GameFullId].
 @freezed
 sealed class ExistingGameSource with _$ExistingGameSource implements GameScreenSource {
   const ExistingGameSource._();
@@ -44,6 +62,7 @@ sealed class ExistingGameSource with _$ExistingGameSource implements GameScreenS
   const factory ExistingGameSource(GameFullId id) = _ExistingGameSource;
 }
 
+/// A lobby source for [GameScreen], identified by the [GameSeek] from which the game will be created.
 @freezed
 sealed class LobbySource with _$LobbySource implements GameScreenSource {
   const LobbySource._();
@@ -51,6 +70,7 @@ sealed class LobbySource with _$LobbySource implements GameScreenSource {
   const factory LobbySource(GameSeek seek) = _LobbySource;
 }
 
+/// A user challenge source for [GameScreen], identified by the [ChallengeRequest] from which the game will be created.
 @freezed
 sealed class UserChallengeSource with _$UserChallengeSource implements GameScreenSource {
   const UserChallengeSource._();
@@ -58,14 +78,11 @@ sealed class UserChallengeSource with _$UserChallengeSource implements GameScree
   const factory UserChallengeSource(ChallengeRequest challengeRequest) = _UserChallengeSource;
 }
 
-/// A provider that returns the currently loaded [GameFullId] for the [GameScreen].
-///
-/// If the [gameId] is provided, it will simply return it.
-/// If not, it uses the [CreateGameService] to create a new game from the lobby or from a challenge.
+/// A provider that loads or creates a game for the [GameScreen].
 @riverpod
-class CurrentGame extends _$CurrentGame {
+class GameScreenLoader extends _$GameScreenLoader {
   @override
-  Future<CurrentGameState> build(GameScreenSource source) {
+  Future<GameScreenState> build(GameScreenSource source) {
     final service = ref.watch(createGameServiceProvider);
 
     return switch (source) {
