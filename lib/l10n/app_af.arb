@@ -1579,5 +1579,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} maand gelede} other{{count} maande gelede}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} jaar gelede} other{{count} jare gelede}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{nog {count} minuut oor} other{nog {count} minute oor}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{nog {count} uur oor} other{nog {count} ure oor}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{nog {count} uur oor} other{nog {count} ure oor}}",
+  "tfaTwoFactorAuth": "Tweeledige verifikasie"
 }

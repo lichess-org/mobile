@@ -6125,6 +6125,9 @@ class AppLocalizationsZh extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => '双重认证';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -12026,4 +12029,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => '兩步驟驗證';
 }

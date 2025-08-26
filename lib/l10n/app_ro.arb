@@ -1722,5 +1722,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{cu o lună în urmă} few{cu {count} luni în urmă} other{cu {count} de luni în urmă}}",
   "timeagoNbYearsAgo": "{count, plural, =1{cu un an în urmă} few{cu {count} ani în urmă} other{cu {count} de ani în urmă}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{un minut rămas} few{{count} minute rămase} other{{count} de minute rămase}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{o oră rămasă} few{{count} ore rămase} other{{count} de ore rămase}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{o oră rămasă} few{{count} ore rămase} other{{count} de ore rămase}}",
+  "tfaTwoFactorAuth": "Autentificare în doi pași"
 }

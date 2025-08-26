@@ -1516,5 +1516,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} महीने पहले} other{{count} महीने पहले}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} वर्ष पहले} other{{count} वर्षों पहले}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} मिनट बचा है} other{{count} मिनट बचे हैं}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{{count} घंटा बचा है} other{{count} घंटे बचे हैं}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{{count} घंटा बचा है} other{{count} घंटे बचे हैं}}",
+  "tfaTwoFactorAuth": "दो-चरण प्रमाणीकरण"
 }

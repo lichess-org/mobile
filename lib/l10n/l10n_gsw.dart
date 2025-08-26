@@ -6219,4 +6219,7 @@ class AppLocalizationsGsw extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Zwei-Faktor-Autentifizierig';
 }

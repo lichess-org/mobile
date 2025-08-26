@@ -1722,5 +1722,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} месяц назад} few{{count} месяца назад} many{{count} месяцев назад} other{{count} месяцев назад}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} год назад} few{{count} года назад} many{{count} лет назад} other{{count} лет назад}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{осталась {count} минута} few{осталось {count} минуты} many{осталось {count} минут} other{осталось {count} минут}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{остался {count} час} few{осталось {count} часа} many{осталось {count} часов} other{осталось {count} часов}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{остался {count} час} few{осталось {count} часа} many{осталось {count} часов} other{осталось {count} часов}}",
+  "tfaTwoFactorAuth": "Двухфакторная аутентификация"
 }

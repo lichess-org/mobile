@@ -10537,6 +10537,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{{count} hour remaining} other{{count} hours remaining}}'**
   String timeagoNbHoursRemaining(int count);
+
+  /// No description provided for @tfaTwoFactorAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-factor authentication'**
+  String get tfaTwoFactorAuth;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

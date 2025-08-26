@@ -1303,5 +1303,6 @@
   "studyNbMembers": "{count, plural, =1{{count} Üzv} other{{count} Üzv}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər} other{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər}}",
   "timeagoJustNow": "elə indi",
-  "timeagoRightNow": "indicə"
+  "timeagoRightNow": "indicə",
+  "tfaTwoFactorAuth": "2 mərhələli təsdiqləmə"
 }

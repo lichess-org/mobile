@@ -6219,4 +6219,7 @@ class AppLocalizationsEu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Bi faktoreko autentifikazioa';
 }

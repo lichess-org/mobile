@@ -6219,4 +6219,7 @@ class AppLocalizationsIt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Autenticazione a due fattori';
 }

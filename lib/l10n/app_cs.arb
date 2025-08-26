@@ -1686,5 +1686,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{před {count} měsícem} few{před {count} měsíci} many{před {count} měsíci} other{před {count} měsíci}}",
   "timeagoNbYearsAgo": "{count, plural, =1{před {count} rokem} few{před {count} lety} many{před {count} lety} other{před {count} lety}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Zbývá {count} minuta} few{Zbývají {count} minuty} many{Zbývá {count} minut} other{Zbývá {count} minut}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{Zbývá {count} hodina} few{Zbývají {count} hodiny} many{Zbývá {count} hodin} other{Zbývá {count} hodin}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{Zbývá {count} hodina} few{Zbývají {count} hodiny} many{Zbývá {count} hodin} other{Zbývá {count} hodin}}",
+  "tfaTwoFactorAuth": "Dvoufázové ověření"
 }

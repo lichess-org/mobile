@@ -1384,5 +1384,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} kuu tagasi} other{{count} kuud tagasi}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} aasta tagasi} other{{count} aastat tagasi}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minut jäänud} other{{count} minutit jäänud}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{{count} tund jäänud} other{{count} tundi jäänud}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{{count} tund jäänud} other{{count} tundi jäänud}}",
+  "tfaTwoFactorAuth": "Kaheastmeline autentimine"
 }

@@ -6219,4 +6219,7 @@ class AppLocalizationsTr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'İki faktörlü kimlik doğrulama';
 }

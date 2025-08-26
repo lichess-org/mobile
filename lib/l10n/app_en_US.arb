@@ -1722,5 +1722,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} month ago} other{{count} months ago}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} year ago} other{{count} years ago}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minute remaining} other{{count} minutes remaining}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{{count} hour remaining} other{{count} hours remaining}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{{count} hour remaining} other{{count} hours remaining}}",
+  "tfaTwoFactorAuth": "Two-factor authentication"
 }

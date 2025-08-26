@@ -1500,5 +1500,6 @@
   "timeagoNbDaysAgo": "{count, plural, =0{pirms {count} dienām} =1{pirms {count} dienas} other{pirms {count} dienām}}",
   "timeagoNbWeeksAgo": "{count, plural, =0{pirms {count} nedēļām} =1{pirms {count} nedēļas} other{pirms {count} nedēļām}}",
   "timeagoNbMonthsAgo": "{count, plural, =0{pirms {count} mēnešiem} =1{pirms {count} mēneša} other{pirms {count} mēnešiem}}",
-  "timeagoNbYearsAgo": "{count, plural, =0{pirms {count} gadiem} =1{pirms {count} gada} other{pirms {count} gadiem}}"
+  "timeagoNbYearsAgo": "{count, plural, =0{pirms {count} gadiem} =1{pirms {count} gada} other{pirms {count} gadiem}}",
+  "tfaTwoFactorAuth": "Divfaktoru autentifikācija"
 }

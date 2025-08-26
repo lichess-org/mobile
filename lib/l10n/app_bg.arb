@@ -1610,5 +1610,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{преди {count} месец} other{преди {count} месеца}}",
   "timeagoNbYearsAgo": "{count, plural, =1{преди {count} година} other{преди {count} години}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{остава {count} минутa} other{остават {count} минути}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{остава {count} час} other{остават {count} часа}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{остава {count} час} other{остават {count} часа}}",
+  "tfaTwoFactorAuth": "Двуфакторно удостоверяване"
 }

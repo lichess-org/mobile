@@ -1337,5 +1337,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} মাস আগে} other{{count} মাস আগে}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} বছর আগে} other{{count} বছর আগে}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} মিনিট বাকি} other{{count} মিনিট বাকি}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{{count} ঘন্টা বাকি} other{{count} ঘন্টা বাকি}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{{count} ঘন্টা বাকি} other{{count} ঘন্টা বাকি}}",
+  "tfaTwoFactorAuth": "টু-ফ্যাক্টর অথেন্টিকেশন"
 }

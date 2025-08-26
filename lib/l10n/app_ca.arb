@@ -1722,5 +1722,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{fa {count} mes} other{fa {count} mesos}}",
   "timeagoNbYearsAgo": "{count, plural, =1{fa {count} any} other{fa {count} anys}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Queda {count} minut} other{Queden {count} minuts}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{Queda {count} hora} other{Queden {count} hores}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{Queda {count} hora} other{Queden {count} hores}}",
+  "tfaTwoFactorAuth": "Autenticació de dos factors"
 }

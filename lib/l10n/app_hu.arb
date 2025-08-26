@@ -1578,5 +1578,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} hónapja} other{{count} hónapja}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} éve} other{{count} éve}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} perc van hátra} other{{count} perc van hátra}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{{count} óra van hátra} other{{count} óra van hátra}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{{count} óra van hátra} other{{count} óra van hátra}}",
+  "tfaTwoFactorAuth": "Kétlépcsős azonosítás"
 }
