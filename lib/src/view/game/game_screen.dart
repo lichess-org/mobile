@@ -76,7 +76,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     switch (ref.watch(gameScreenLoaderProvider(widget.source))) {
       case AsyncData(
         value: ChallengeDeclinedState(
-          response: ChallengeDeclinedResponse(:final challenge, :final declineReason),
+          response: ChallengeResponseDeclined(:final challenge, :final declineReason),
         ),
       ):
         return Scaffold(

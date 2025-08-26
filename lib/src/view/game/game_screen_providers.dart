@@ -39,7 +39,7 @@ sealed class GameCreatedState with _$GameCreatedState implements GameScreenState
 sealed class ChallengeDeclinedState with _$ChallengeDeclinedState implements GameScreenState {
   const ChallengeDeclinedState._();
 
-  const factory ChallengeDeclinedState(ChallengeDeclinedResponse response) =
+  const factory ChallengeDeclinedState(ChallengeResponseDeclined response) =
       _ChallengeDeclinedState;
 }
 
@@ -92,8 +92,8 @@ class GameScreenLoader extends _$GameScreenLoader {
             .newRealTimeChallenge(challengeRequest)
             .then(
               (data) => switch (data) {
-                ChallengeAcceptedResponse(:final gameFullId) => GameCreatedState(gameFullId),
-                ChallengeDeclinedResponse() => ChallengeDeclinedState(data),
+                ChallengeResponseAccepted(:final gameFullId) => GameCreatedState(gameFullId),
+                ChallengeResponseDeclined() => ChallengeDeclinedState(data),
               },
             ),
       ExistingGameSource(:final id) => Future.value(GameCreatedState(id)),

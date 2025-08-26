@@ -19,16 +19,31 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'create_game_service.g.dart';
 part 'create_game_service.freezed.dart';
 
+/// The user response of a challenge request.
+///
+/// It can be:
+/// - [ChallengeResponseAccepted]: The challenge was accepted and a game was created.
+/// - [ChallengeResponseDeclined]: The challenge was declined.
+sealed class ChallengeResponse {}
+
+/// The [ChallengeResponse] when challenge was accepted and a game was created.
 @freezed
-sealed class ChallengeResponse with _$ChallengeResponse {
-  const ChallengeResponse._();
+sealed class ChallengeResponseAccepted
+    with _$ChallengeResponseAccepted
+    implements ChallengeResponse {
+  const factory ChallengeResponseAccepted({required GameFullId gameFullId}) =
+      _ChallengeResponseAccepted;
+}
 
-  factory ChallengeResponse.accepted({required GameFullId gameFullId}) = ChallengeAcceptedResponse;
-
-  factory ChallengeResponse.declined({
+/// The [ChallengeResponse] when challenge was declined.
+@freezed
+sealed class ChallengeResponseDeclined
+    with _$ChallengeResponseDeclined
+    implements ChallengeResponse {
+  const factory ChallengeResponseDeclined({
     required Challenge challenge,
     required ChallengeDeclineReason? declineReason,
-  }) = ChallengeDeclinedResponse;
+  }) = _ChallengeResponseDeclined;
 }
 
 /// A provider for the [CreateGameService].
@@ -127,8 +142,6 @@ class CreateGameService {
   /// Create a new real time challenge.
   ///
   /// Will listen to the challenge socket and await the response from the destinated user.
-  /// Returns the challenge, along with [GameFullId] if the challenge was accepted,
-  /// or the [ChallengeDeclineReason] if the challenge was declined.
   Future<ChallengeResponse> newRealTimeChallenge(ChallengeRequest challengeReq) async {
     assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
 
@@ -168,11 +181,11 @@ class CreateGameService {
               final updatedChallenge = await challengeRepository.show(challenge.id);
               if (updatedChallenge.gameFullId != null) {
                 completer.complete(
-                  ChallengeResponse.accepted(gameFullId: updatedChallenge.gameFullId!),
+                  ChallengeResponseAccepted(gameFullId: updatedChallenge.gameFullId!),
                 );
               } else if (updatedChallenge.status == ChallengeStatus.declined) {
                 completer.complete(
-                  ChallengeResponse.declined(
+                  ChallengeResponseDeclined(
                     challenge: challenge,
                     declineReason: updatedChallenge.declineReason,
                   ),
