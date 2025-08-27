@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -102,14 +101,8 @@ class OnlineFriendsWidget extends ConsumerWidget {
         data: (data) {
           return ListSection(
             header: Text(context.l10n.nbFriendsOnline(data.length)),
-            onHeaderTap: data.isEmpty || data.length <= 10 ? null : () => _handleTap(context, data),
+            onHeaderTap: () => _handleTap(context, data),
             children: [
-              if (data.isEmpty)
-                ListTile(
-                  title: Text(context.l10n.friends),
-                  trailing: const CupertinoListTileChevron(),
-                  onTap: () => _handleTap(context, data),
-                ),
               for (final friend in data.take(10)) _OnlineFriendListTile(onlineFriend: friend),
             ],
           );
