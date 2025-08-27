@@ -620,12 +620,12 @@ void main() {
     });
   });
 
-  testWidgets('can disable puzzle rating for a run', variant: kPlatformVariant, (
+  testWidgets('Open as casual to not send the result', variant: kPlatformVariant, (
     WidgetTester tester,
   ) async {
     final mockClient = MockClient((request) {
       if (request.url.path == '/api/puzzle/batch/mix') {
-        return mockResponse(batchOf1, 200);
+        return mockResponse(emptyBatch, 200);
       }
       return mockResponse('', 404);
     });
@@ -635,7 +635,7 @@ void main() {
       home: PuzzleScreen(
         angle: const PuzzleTheme(PuzzleThemeKey.mix),
         puzzleId: puzzle2.puzzle.id,
-        openCasualRun: true,
+        openCasual: true,
       ),
       overrides: [
         lichessClientProvider.overrideWith((ref) {
@@ -696,14 +696,17 @@ void main() {
     // wait for solution replay animation to finish
     await tester.pump(const Duration(seconds: 1));
 
-    // check puzzle was saved as non rated
+    // check puzzle was not added to the solved list
     final captured = verify(saveDBReq).captured.map((e) => e as PuzzleBatch).toList();
-    expect(captured.length, 2);
-    expect(captured[0].solved, [PuzzleSolution(id: puzzle2.puzzle.id, win: false, rated: false)]);
-    expect(captured[1].solved.length, 0);
+    expect(captured.length, 1);
+    expect(captured[0].solved.length, 0);
   });
 }
 
 const batchOf1 = '''
 {"puzzles":[{"game":{"id":"PrlkCqOv","perf":{"key":"rapid","name":"Rapid"},"rated":true,"players":[{"name":"silverjo", "rating":1777,"color":"white"},{"name":"Robyarchitetto", "rating":1742,"color":"black"}],"pgn":"e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2 Bb7 Bh6 d5 e5 d4 Bxg7 Kxg7 Qf4 Bxf3 Qxf3 dxc3 Nxc3 Nac6 Qf6+ Kg8 Rd1 Nd4 O-O c5 Ne4 Nef5 Rd2 Qxf6 Nxf6+ Kg7 Re1 h5 h3 Rad8 b4 Nh4 Re3 Nhf5 Re1 a5 bxc5 bxc5 Bc4 Ra8 Rb1 Nh4 Rdb2 Nc6 Rb7 Nxe5 Bxe6 Kxf6 Bd5 Nf5 R7b6+ Kg7 Bxa8 Rxa8 R6b3 Nd4 Rb7 Nxd3 Rd1 Ne2+ Kh2 Ndf4 Rdd7 Rf8 Ra7 c4 Rxa5 c3 Rc5 Ne6 Rc4 Ra8 a4 Rb8 a5 Rb2 a6 c2","clock":"5+8"},"puzzle":{"id":"20yWT","rating":1859,"plays":551,"initialPly":93,"solution":["a6a7","b2a2","c4c2","a2a7","d7a7"],"themes":["endgame","long","advantage","advancedPawn"]}}]}
+''';
+
+const emptyBatch = '''
+{"puzzles":[]}
 ''';

@@ -61,8 +61,8 @@ sealed class PuzzleContext with _$PuzzleContext {
     /// List of solved puzzle results if available.
     IList<PuzzleRound>? rounds,
 
-    /// If true, will force all puzzles of the run to be solved in casual mode.
-    bool? casualRun,
+    /// If true, the result won't be recorded on the server for this puzzle.
+    bool? casual,
   }) = _PuzzleContext;
 }
 
