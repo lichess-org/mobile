@@ -122,37 +122,40 @@ class _Body extends ConsumerWidget {
           final hasMorePages = value.nextPage != null && value.nextPage! <= 20;
           final notifier = ref.read(broadcastsPaginatorProvider.notifier);
 
-          return CustomScrollView(
-            slivers: [
-              for (final section in sections)
-                SliverMainAxisGroup(
-                  key: ValueKey(section.$1),
-                  slivers: [
-                    if (section.$3.isNotEmpty)
-                      SliverAppBar(
-                        centerTitle: false,
-                        backgroundColor: ColorScheme.of(
-                          context,
-                        ).surfaceContainerHigh.withValues(alpha: 1),
-                        automaticallyImplyLeading: false,
-                        primary: false,
-                        title: AppBarTitleText(section.$2),
-                        pinned: true,
+          return SafeArea(
+            child: CustomScrollView(
+              slivers: [
+                for (final section in sections)
+                  SliverMainAxisGroup(
+                    key: ValueKey(section.$1),
+                    slivers: [
+                      if (section.$3.isNotEmpty)
+                        SliverAppBar(
+                          centerTitle: false,
+                          backgroundColor: ColorScheme.of(
+                            context,
+                          ).surfaceContainerHigh.withValues(alpha: 1),
+                          automaticallyImplyLeading: false,
+                          primary: false,
+                          title: AppBarTitleText(section.$2),
+                          pinned: true,
+                        ),
+                      SliverList.separated(
+                        separatorBuilder: (context, index) => PlatformDivider(
+                          height: 1,
+                          indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
+                        ),
+                        itemCount:
+                            section.$3.length + (section.$1 == 'past' && hasMorePages ? 1 : 0),
+                        itemBuilder: (context, index) =>
+                            (section.$1 == 'past' && hasMorePages && index == section.$3.length)
+                            ? BroadcastNextPageTile(notifier.next)
+                            : BroadcastListTile(broadcast: section.$3[index]),
                       ),
-                    SliverList.separated(
-                      separatorBuilder: (context, index) => PlatformDivider(
-                        height: 1,
-                        indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
-                      ),
-                      itemCount: section.$3.length + (section.$1 == 'past' && hasMorePages ? 1 : 0),
-                      itemBuilder: (context, index) =>
-                          (section.$1 == 'past' && hasMorePages && index == section.$3.length)
-                          ? BroadcastNextPageTile(notifier.next)
-                          : BroadcastListTile(broadcast: section.$3[index]),
-                    ),
-                  ],
-                ),
-            ],
+                    ],
+                  ),
+              ],
+            ),
           );
         },
         error: (_, _) => const Center(child: Text('Cannot load broadcasts')),
