@@ -61,7 +61,7 @@ class PuzzleScreen extends ConsumerStatefulWidget {
     required this.angle,
     this.puzzle,
     this.puzzleId,
-    this.openCasualRun = false,
+    this.openCasual = false,
     super.key,
   });
 
@@ -69,15 +69,15 @@ class PuzzleScreen extends ConsumerStatefulWidget {
   final Puzzle? puzzle;
   final PuzzleId? puzzleId;
 
-  /// If true, all puzzles played in this run will be casual puzzles. (Only if [puzzleId] is provided.)
-  final bool openCasualRun;
+  /// If true, the result won't be recorded on the server for the provider [puzzleId].
+  final bool openCasual;
 
   static Route<dynamic> buildRoute(
     BuildContext context, {
     required PuzzleAngle angle,
     PuzzleId? puzzleId,
     Puzzle? puzzle,
-    bool openCasualRun = false,
+    bool openCasual = false,
   }) {
     return buildScreenRoute(
       context,
@@ -85,7 +85,7 @@ class PuzzleScreen extends ConsumerStatefulWidget {
         angle: angle,
         puzzleId: puzzleId,
         puzzle: puzzle,
-        openCasualRun: openCasualRun,
+        openCasual: openCasual,
       ),
     );
   }
@@ -129,7 +129,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
             boardKey: _boardKey,
             angle: widget.angle,
             id: widget.puzzleId!,
-            openCasualRun: widget.openCasualRun,
+            openCasual: widget.openCasual,
           )
         : _LoadNextPuzzle(boardKey: _boardKey, angle: widget.angle);
   }
@@ -242,13 +242,13 @@ class _LoadPuzzleFromId extends ConsumerWidget {
     required this.boardKey,
     required this.angle,
     required this.id,
-    this.openCasualRun = false,
+    this.openCasual = false,
   });
 
   final PuzzleAngle angle;
   final PuzzleId id;
   final GlobalKey boardKey;
-  final bool openCasualRun;
+  final bool openCasual;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -260,7 +260,7 @@ class _LoadPuzzleFromId extends ConsumerWidget {
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
           puzzle: data,
           userId: session?.user.id,
-          casualRun: openCasualRun ? true : null,
+          casual: openCasual ? true : null,
         );
         return _PuzzleScaffold(
           angle: angle,
@@ -953,8 +953,8 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
               SwitchSettingTile(
                 title: Text(context.l10n.rated),
                 // ignore: avoid_bool_literals_in_conditional_expressions
-                value: initialPuzzleContext.casualRun == true ? false : rated,
-                onChanged: initialPuzzleContext.casualRun == true
+                value: initialPuzzleContext.casual == true ? false : rated,
+                onChanged: initialPuzzleContext.casual == true
                     ? null
                     : (value) {
                         ref.read(puzzlePreferencesProvider.notifier).setRated(value);

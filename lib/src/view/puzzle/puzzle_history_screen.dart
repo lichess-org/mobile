@@ -50,7 +50,7 @@ class PuzzleHistoryPreview extends ConsumerWidget {
                   context,
                   angle: const PuzzleTheme(PuzzleThemeKey.mix),
                   puzzleId: e.id,
-                  openCasualRun: shouldOpenCasualPuzzleRun ?? false,
+                  openCasual: shouldOpenCasualPuzzleRun ?? false,
                 ),
               );
             },

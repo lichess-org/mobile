@@ -286,20 +286,24 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
         );
       }
     } else {
-      final next = await (await _service).solve(
-        userId: initialContext.userId,
-        angle: initialContext.angle,
-        puzzle: state.puzzle,
-        solution: PuzzleSolution(
-          id: state.puzzle.puzzle.id,
-          win: state.result == PuzzleResult.win,
-          rated:
-              initialContext.userId != null &&
-              initialContext.casualRun != true &&
-              !state.hintShown &&
-              ref.read(puzzlePreferencesProvider).rated,
-        ),
-      );
+      final currentPuzzle = state.puzzle.puzzle;
+      final service = await _service;
+      final next =
+          currentPuzzle.id == initialContext.puzzle.puzzle.id && initialContext.casual == true
+          ? await service.nextPuzzle(userId: initialContext.userId, angle: initialContext.angle)
+          : await service.solve(
+              userId: initialContext.userId,
+              angle: initialContext.angle,
+              puzzle: state.puzzle,
+              solution: PuzzleSolution(
+                id: state.puzzle.puzzle.id,
+                win: state.result == PuzzleResult.win,
+                rated:
+                    initialContext.userId != null &&
+                    !state.hintShown &&
+                    ref.read(puzzlePreferencesProvider).rated,
+              ),
+            );
 
       state = state.copyWith(nextContext: next);
 
