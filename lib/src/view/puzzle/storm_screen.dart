@@ -787,7 +787,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
         : null;
 
     final percentFormat = NumberFormat.decimalPercentPattern(decimalDigits: 1);
-    final numberFormat = NumberFormat.decimalPattern();
+    final numberFormat = NumberFormat.decimalPatternDigits(decimalDigits: 2);
 
     return SafeArea(
       child: ListView(
