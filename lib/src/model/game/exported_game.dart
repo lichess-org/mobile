@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -101,6 +102,7 @@ sealed class LightExportedGame with _$LightExportedGame {
     @MoveConverter() Move? lastMove,
     Side? winner,
     ClockData? clock,
+    int? daysPerTurn,
     bool? bookmarked,
   }) = _ExportedGameData;
 
@@ -125,8 +127,10 @@ sealed class LightExportedGame with _$LightExportedGame {
 
   bool get isBookmarked => bookmarked == true;
 
-  String get clockDisplay {
-    return TimeIncrement(clock?.initial.inSeconds ?? 0, clock?.increment.inSeconds ?? 0).display;
+  String clockDisplay(AppLocalizations l10n) {
+    return daysPerTurn != null
+        ? l10n.nbDays(daysPerTurn!)
+        : TimeIncrement(clock?.initial.inSeconds ?? 0, clock?.increment.inSeconds ?? 0).display;
   }
 }
 
@@ -244,6 +248,7 @@ LightExportedGame _lightExportedGameFromPick(
     moves: pick('moves').asStringOrNull(),
     lastMove: pick('lastMove').asUciMoveOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
+    daysPerTurn: pick('daysPerTurn').asIntOrNull(),
     opening: pick('opening').letOrNull(_openingFromPick),
     bookmarked: isBookmarked
         ? true
