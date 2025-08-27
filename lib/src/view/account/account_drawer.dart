@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -153,6 +154,17 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                 Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute(context));
               },
             ),
+            if (kidMode)
+              ListTile(
+                tileColor: Theme.of(context).colorScheme.primaryContainer,
+                leading: const Icon(Symbols.sentiment_satisfied, weight: 600),
+                title: Text(context.l10n.kidModeIsEnabled),
+                onTap: () {
+                  launchUrl(lichessUri('/account/kid')).then((_) {
+                    ref.invalidate(accountProvider);
+                  });
+                },
+              ),
             const PlatformDivider(indent: 0),
           ],
           if (user != null) ...[
