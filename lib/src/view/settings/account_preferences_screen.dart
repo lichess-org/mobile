@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -9,6 +10,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccountPreferencesScreen extends ConsumerStatefulWidget {
@@ -41,6 +43,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
   @override
   Widget build(BuildContext context) {
     final accountPrefs = ref.watch(accountPreferencesProvider);
+    final kidMode = ref.watch(kidModeProvider).valueOrNull ?? false;
 
     final content = accountPrefs.when(
       data: (data) {
@@ -321,11 +324,38 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
               ],
             ),
             ListSection(
+              header: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SettingsSectionTitle(context.l10n.kidMode),
+                  Text(
+                    context.l10n.kidModeExplanation,
+                    maxLines: 5,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+              hasLeading: true,
+              children: [
+                ListTile(
+                  leading: const Icon(Symbols.sentiment_satisfied),
+                  title: Text(kidMode ? context.l10n.disableKidMode : context.l10n.enableKidMode),
+                  trailing: const _OpenInNewIcon(),
+                  onTap: () {
+                    launchUrl(lichessUri('/account/kid')).then((_) {
+                      ref.invalidate(kidModeProvider);
+                    });
+                  },
+                ),
+              ],
+            ),
+            ListSection(
               header: SettingsSectionTitle(context.l10n.security),
               hasLeading: true,
               children: [
                 ListTile(
-                  leading: const Icon(Icons.lock),
+                  leading: const Icon(Symbols.lock),
                   title: Text(context.l10n.changePassword),
                   trailing: const _OpenInNewIcon(),
                   onTap: () {
@@ -333,7 +363,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.security),
+                  leading: const Icon(Symbols.security),
                   title: Text(context.l10n.tfaTwoFactorAuth),
                   trailing: const _OpenInNewIcon(),
                   onTap: () {
@@ -348,7 +378,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
               children: [
                 if (Theme.of(context).platform == TargetPlatform.iOS)
                   ListTile(
-                    leading: const Icon(Icons.dangerous_outlined),
+                    leading: const Icon(Symbols.dangerous),
                     title: const Text('Delete your account'),
                     trailing: const _OpenInNewIcon(),
                     onTap: () {
