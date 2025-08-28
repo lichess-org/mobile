@@ -214,7 +214,10 @@ class CreateGameService {
   /// [ChallengeDeclineReason] will be returned.
   /// Otherwise, it means the challenge was created successfully.
   Future<ChallengeDeclineReason?> newCorrespondenceChallenge(ChallengeRequest challengeReq) async {
-    assert(challengeReq.timeControl == ChallengeTimeControlType.correspondence);
+    assert(
+      challengeReq.timeControl == ChallengeTimeControlType.correspondence ||
+          challengeReq.timeControl == ChallengeTimeControlType.unlimited,
+    );
 
     if (_challengeConnection != null) {
       throw StateError('Already creating a challenge.');
@@ -224,7 +227,7 @@ class CreateGameService {
     final completer = Completer<ChallengeDeclineReason?>()..future.whenComplete(dispose);
 
     try {
-      _log.info('Creating new correspondence challenge');
+      _log.info('Creating new correspondence|unlimited challenge');
 
       final challenge = await challengeRepository.create(challengeReq);
 
