@@ -147,7 +147,17 @@ enum ChallengeDirection { outward, inward }
 
 enum ChallengeStatus { created, offline, canceled, declined, accepted }
 
-enum ChallengeTimeControlType { unlimited, clock, correspondence }
+enum ChallengeTimeControlType {
+  unlimited,
+  clock,
+  correspondence;
+
+  String label(AppLocalizations l10n) => switch (this) {
+    ChallengeTimeControlType.unlimited => l10n.unlimited,
+    ChallengeTimeControlType.clock => l10n.clock,
+    ChallengeTimeControlType.correspondence => l10n.correspondence,
+  };
+}
 
 enum ChallengeDeclineReason {
   generic,
