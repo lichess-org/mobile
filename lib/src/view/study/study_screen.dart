@@ -29,11 +29,14 @@ import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -346,7 +349,21 @@ class _StudyMenu extends ConsumerWidget {
         ContextMenuAction(
           label: context.l10n.studyMembers,
           icon: Icons.group_outlined,
-          onPressed: () {},
+          onPressed: () => showModalBottomSheet<void>(
+            context: context,
+            showDragHandle: true,
+            isScrollControlled: true,
+            isDismissible: true,
+            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+            builder: (_) => DraggableScrollableSheet(
+                initialChildSize: 0.6,
+                snap: true,
+                expand: false,
+                builder: (context, scrollController) {
+                    return _StudyMembersSheet(id: state.study.id, scrollController: scrollController);
+                },
+            ),
+          ),
         ),
         if (state.chatOptions != null && kidModeAsync.valueOrNull == false)
           ContextMenuAction(
@@ -555,4 +572,41 @@ class _StudyAnalysisBoardState
 
     return super.build(context);
   }
+}
+
+
+class _StudyMembersSheet extends ConsumerWidget {
+    const _StudyMembersSheet({
+        required this.id,
+        required this.scrollController
+    });
+
+    final StudyId id;
+    final ScrollController scrollController;
+
+    @override
+    Widget build(BuildContext context, WidgetRef ref) {
+        final state = ref.watch(studyControllerProvider(id)).requireValue;
+
+        return BottomSheetScrollableContainer(
+            scrollController: scrollController,
+            children: [
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                        context.l10n.studyNbMembers(state.study.members.length),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                ),
+                const SizedBox(height: 16),
+                for (final member in state.study.members)
+                    ListTile(
+                        title: UserFullNameWidget(user: member.user),
+                        onTap: () {
+                            Navigator.of(context).push(UserScreen.buildRoute(context, member.user));
+                        }
+                    ),
+            ],
+        );
+    }
 }
