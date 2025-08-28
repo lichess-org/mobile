@@ -56,7 +56,10 @@ class UserRepository {
             .toIList();
 
         final isOnline = pick(json, 'status').letOrNull((p) => p('online').asBoolOrNull());
-        final isPlayingLive = pick(json, 'status').letOrNull((p) => p('playing').asBoolOrNull());
+        final isPlayingLive = pick(
+          json,
+          'status',
+        ).letOrNull((p) => p('playing').asMapOrNull<String, dynamic>() != null);
         final crosstable = pick(json, 'crosstable').letOrNull(Crosstable.fromPick);
 
         return (
