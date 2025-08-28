@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -44,6 +45,7 @@ StudyChapter makeChapter({
 Study makeStudy({
   StudyChapter? chapter,
   IList<StudyChapterMeta>? chapters,
+  IList<StudyMember>? members,
   IList<String?> hints = const IList.empty(),
   IList<String?> deviationComments = const IList.empty(),
 }) {
@@ -58,6 +60,14 @@ Study makeStudy({
     topics: const IList.empty(),
     chapters: chapters ?? IList([StudyChapterMeta(id: chapter.id, name: '', fen: null)]),
     chapter: chapter,
+    members:
+        members ??
+        IList(const [
+          StudyMember(
+            user: LightUser(id: UserId(''), name: ''),
+            role: '',
+          ),
+        ]),
     hints: hints,
     deviationComments: deviationComments,
   );

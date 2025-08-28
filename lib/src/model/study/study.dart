@@ -87,9 +87,11 @@ Study _studyFromPick(RequiredPick pick) {
       'chapters',
     ).asListOrThrow((pick) => StudyChapterMeta.fromJson(pick.asMapOrThrow())).lock,
     chapter: StudyChapter.fromJson(study('chapter').asMapOrThrow()),
-    members: study(
-      'members',
-    ).asMapOrThrow().values.map((member) => StudyMember.fromJson(member)).toIList(),
+    members: study('members')
+        .asMapOrThrow<String, Map<String, Object?>>()
+        .values
+        .map((p) => StudyMember.fromJson(p))
+        .toIList(),
     hints: hints.lock,
     deviationComments: deviationComments.lock,
   );
