@@ -356,12 +356,12 @@ class _StudyMenu extends ConsumerWidget {
             isDismissible: true,
             constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
             builder: (_) => DraggableScrollableSheet(
-                initialChildSize: 0.6,
-                snap: true,
-                expand: false,
-                builder: (context, scrollController) {
-                    return _StudyMembersSheet(id: state.study.id, scrollController: scrollController);
-                },
+              initialChildSize: 0.6,
+              snap: true,
+              expand: false,
+              builder: (context, scrollController) {
+                return _StudyMembersSheet(id: state.study.id, scrollController: scrollController);
+              },
             ),
           ),
         ),
@@ -574,39 +574,35 @@ class _StudyAnalysisBoardState
   }
 }
 
-
 class _StudyMembersSheet extends ConsumerWidget {
-    const _StudyMembersSheet({
-        required this.id,
-        required this.scrollController
-    });
+  const _StudyMembersSheet({required this.id, required this.scrollController});
 
-    final StudyId id;
-    final ScrollController scrollController;
+  final StudyId id;
+  final ScrollController scrollController;
 
-    @override
-    Widget build(BuildContext context, WidgetRef ref) {
-        final state = ref.watch(studyControllerProvider(id)).requireValue;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(studyControllerProvider(id)).requireValue;
 
-        return BottomSheetScrollableContainer(
-            scrollController: scrollController,
-            children: [
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                        context.l10n.studyNbMembers(state.study.members.length),
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                ),
-                const SizedBox(height: 16),
-                for (final member in state.study.members)
-                    ListTile(
-                        title: UserFullNameWidget(user: member.user),
-                        onTap: () {
-                            Navigator.of(context).push(UserScreen.buildRoute(context, member.user));
-                        }
-                    ),
-            ],
-        );
-    }
+    return BottomSheetScrollableContainer(
+      scrollController: scrollController,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            context.l10n.studyNbMembers(state.study.members.length),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        const SizedBox(height: 16),
+        for (final member in state.study.members)
+          ListTile(
+            title: UserFullNameWidget(user: member.user),
+            onTap: () {
+              Navigator.of(context).push(UserScreen.buildRoute(context, member.user));
+            },
+          ),
+      ],
+    );
+  }
 }
