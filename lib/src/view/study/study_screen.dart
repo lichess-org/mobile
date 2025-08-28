@@ -343,6 +343,11 @@ class _StudyMenu extends ConsumerWidget {
             );
           },
         ),
+        ContextMenuAction(
+          label: context.l10n.studyMembers,
+          icon: Icons.group_outlined,
+          onPressed: () {},
+        ),
         if (state.chatOptions != null && kidModeAsync.valueOrNull == false)
           ContextMenuAction(
             label: context.l10n.chatRoom,
