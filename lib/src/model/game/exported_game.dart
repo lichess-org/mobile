@@ -122,6 +122,18 @@ sealed class LightExportedGame with _$LightExportedGame {
     );
   }
 
+  factory LightExportedGame.fromPick(
+    RequiredPick pick, {
+    bool withBookmarked = false,
+    bool isBookmarked = false,
+  }) {
+    return _lightExportedGameFromPick(
+      pick,
+      withBookmarked: withBookmarked,
+      isBookmarked: isBookmarked,
+    );
+  }
+
   factory LightExportedGame.fromJson(Map<String, dynamic> json) =>
       _$LightExportedGameFromJson(json);
 

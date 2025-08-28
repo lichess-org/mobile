@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dartchess/dartchess.dart' show Side;
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,11 +20,56 @@ final userRepositoryProvider = Provider<UserRepository>((ref) {
   return UserRepository(client, aggregator);
 }, name: 'UserRepositoryProvider');
 
+typedef UserScreenData = ({
+  User user,
+  IList<UserActivity> activity,
+  IList<LightExportedGameWithPov> recentGames,
+  bool? isOnline,
+  bool? isPlayingLive,
+  Crosstable? crosstable,
+});
+
 class UserRepository {
   UserRepository(this.client, this.aggregator);
 
   final LichessClient client;
   final Aggregator aggregator;
+
+  Future<UserScreenData> getUserScreenData(UserId id) {
+    return client.readJson(
+      Uri(path: '/api/mobile/profile/$id'),
+      mapper: (json) {
+        final user = User.fromPick(pick(json, 'profile').required());
+        final activity = pick(
+          json,
+          'activity',
+        ).asListOrEmpty((p) => _userActivityFromPick(p.required())).toIList();
+        final recentGames = pick(json, 'games')
+            .asListOrEmpty((gamePick) => LightExportedGame.fromPick(gamePick.required()))
+            .map(
+              (e) => (
+                game: e,
+                // we know here user is not null for at least one of the players
+                pov: e.white.user?.id == id ? Side.white : Side.black,
+              ),
+            )
+            .toIList();
+
+        final isOnline = pick(json, 'status').letOrNull((p) => p('online').asBoolOrNull());
+        final isPlayingLive = pick(json, 'status').letOrNull((p) => p('playing').asBoolOrNull());
+        final crosstable = pick(json, 'crosstable').letOrNull(Crosstable.fromPick);
+
+        return (
+          user: user,
+          activity: activity,
+          recentGames: recentGames,
+          isOnline: isOnline,
+          isPlayingLive: isPlayingLive,
+          crosstable: crosstable,
+        );
+      },
+    );
+  }
 
   Future<User> getUser(UserId id, {bool withCanChallenge = false}) {
     return client.readJson(

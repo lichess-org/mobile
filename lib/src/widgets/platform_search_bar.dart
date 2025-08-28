@@ -77,6 +77,7 @@ class PlatformSearchBar extends StatelessWidget {
         onChanged: onChanged,
         placeholder: hintText,
         autofocus: autoFocus,
+        autocorrect: false,
       ),
     );
   }

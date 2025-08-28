@@ -1,13 +1,10 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
-import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
@@ -33,6 +30,11 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/text_badge.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+final _userScreenDataProvider = FutureProvider.autoDispose.family<UserScreenData, UserId>(
+  (ref, id) => ref.read(userRepositoryProvider).getUserScreenData(id),
+  name: 'UserScreenDataProvider',
+);
 
 class UserScreen extends ConsumerStatefulWidget {
   const UserScreen({required this.user, super.key});
@@ -85,9 +87,9 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final asyncUser = ref.watch(userAndStatusProvider(id: widget.user.id));
-    final updatedLightUser = asyncUser.maybeWhen(
-      data: (data) => data.$1.lightUser.copyWith(isOnline: data.$2.online),
+    final userScreenData = ref.watch(_userScreenDataProvider(widget.user.id));
+    final updatedLightUser = userScreenData.maybeWhen(
+      data: (data) => data.user.lightUser.copyWith(isOnline: data.isOnline),
       orElse: () => null,
     );
     return Scaffold(
@@ -98,8 +100,8 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         ),
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
-      body: asyncUser.when(
-        data: (data) => _UserProfileListView(data.$1, isLoading, setIsLoading),
+      body: userScreenData.when(
+        data: (data) => _UserProfileListView(data, isLoading, setIsLoading),
         loading: () => const Center(child: CircularProgressIndicator.adaptive()),
         error: (error, _) {
           if (error is ClientException && error.message.contains('404')) {
@@ -120,20 +122,10 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 }
 
-final _userActivityProvider = FutureProvider.autoDispose.family<IList<UserActivity>, UserId>(
-  (ref, id) => ref.read(userRepositoryProvider).getActivity(id),
-  name: 'userActivityProvider',
-);
-
-final _currentGameProvider = FutureProvider.autoDispose.family<ExportedGame, UserId>(
-  (ref, id) => ref.read(userRepositoryProvider).getCurrentGame(id),
-  name: 'currentGameProvider',
-);
-
 class _UserProfileListView extends ConsumerWidget {
-  const _UserProfileListView(this.user, this.isLoading, this.setIsLoading);
+  const _UserProfileListView(this.data, this.isLoading, this.setIsLoading);
 
-  final User user;
+  final UserScreenData data;
   final bool isLoading;
 
   final void Function(bool value) setIsLoading;
@@ -149,18 +141,12 @@ class _UserProfileListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final recentGames = ref.watch(userRecentGamesProvider(userId: user.id));
-    final activity = ref.watch(_userActivityProvider(user.id));
+    final UserScreenData(:user, :recentGames, :activity, :isPlayingLive, :crosstable) = data;
+
     final connectivity = ref.watch(connectivityChangesProvider);
-    final nbOfGames = ref.watch(userNumberOfGamesProvider(user.lightUser)).valueOrNull ?? 0;
+    final nbOfGames = user.count?.all ?? 0;
     final session = ref.watch(authSessionProvider);
     final kidMode = ref.watch(kidModeProvider);
-    final isLive = ref.watch(
-      _currentGameProvider(user.id).select((game) => game.valueOrNull?.playable ?? false),
-    );
-    final crosstable = session != null
-        ? ref.watch(crosstableProvider(session.user.id, user.id, matchup: false))
-        : null;
 
     if (user.disabled == true) {
       return Center(child: Text(context.l10n.settingsThisAccountIsClosed, style: Styles.bold));
@@ -184,11 +170,9 @@ class _UserProfileListView extends ConsumerWidget {
         ListSection(
           hasLeading: true,
           children: [
-            if (session != null &&
-                crosstable?.valueOrNull != null &&
-                (crosstable?.valueOrNull?.nbGames ?? 0) > 0) ...[
+            if (session != null && crosstable != null && (crosstable.nbGames) > 0) ...[
               () {
-                final crosstableData = crosstable!.valueOrNull!;
+                final crosstableData = crosstable;
                 final currentUserScore = crosstableData.users[session.user.id] ?? 0;
                 final otherUserScore = crosstableData.users[user.id] ?? 0;
 
@@ -215,7 +199,7 @@ class _UserProfileListView extends ConsumerWidget {
             ListTile(
               title: Text(context.l10n.watchGames),
               leading: const Icon(Icons.live_tv_outlined),
-              trailing: isLive ? const TextBadge(text: 'LIVE') : null,
+              trailing: isPlayingLive == true ? const TextBadge(text: 'LIVE') : null,
               onTap: () {
                 Navigator.of(
                   context,
@@ -284,8 +268,12 @@ class _UserProfileListView extends ConsumerWidget {
             ],
           ],
         ),
-        UserActivityWidget(activity: activity),
-        RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: user.lightUser),
+        UserActivityWidget(activity: AsyncData(activity)),
+        RecentGamesWidget(
+          recentGames: AsyncData(recentGames),
+          nbOfGames: nbOfGames,
+          user: user.lightUser,
+        ),
       ],
     );
   }
