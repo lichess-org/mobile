@@ -110,7 +110,6 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
 sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements BaseChallenge {
   const ChallengeRequest._();
 
-  @Assert('clock != null || days != null', 'Either clock or days must be set but not both.')
   const factory ChallengeRequest({
     required LightUser destUser,
     required Variant variant,

@@ -96,6 +96,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                     choices: [
                       ChallengeTimeControlType.clock,
                       ChallengeTimeControlType.correspondence,
+                      ChallengeTimeControlType.unlimited,
                     ],
                     selectedItem: preferences.timeControl,
                     labelBuilder: (ChallengeTimeControlType timeControl) =>
