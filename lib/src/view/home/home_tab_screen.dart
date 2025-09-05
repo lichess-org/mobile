@@ -272,7 +272,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                       edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                           ? MediaQuery.paddingOf(context).top + kToolbarHeight
                           : 0.0,
-                      refreshIndicatorKey: _refreshKey,
+                      key: _refreshKey,
                       onRefresh: () => _refreshData(isOnline: status.isOnline),
                       child: content,
                     ),

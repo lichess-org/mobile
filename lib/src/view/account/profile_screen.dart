@@ -74,7 +74,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                 ? MediaQuery.paddingOf(context).top + kToolbarHeight
                 : 0.0,
-            refreshIndicatorKey: _refreshIndicatorKey,
+            key: _refreshIndicatorKey,
             onRefresh: () => Future.wait([
               ref.refresh(accountProvider.future),
               ref.refresh(_accountActivityProvider.future),

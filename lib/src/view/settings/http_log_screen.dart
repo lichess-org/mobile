@@ -116,7 +116,7 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
       );
     }
     return HapticRefreshIndicator(
-      refreshIndicatorKey: widget.refreshIndicatorKey,
+      key: widget.refreshIndicatorKey,
       onRefresh: widget.onRefresh,
       child: ListView.separated(
         controller: widget.scrollController,

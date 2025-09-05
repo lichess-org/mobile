@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class HapticRefreshIndicator extends StatelessWidget {
-  final Key? refreshIndicatorKey;
   final Widget child;
   final double edgeOffset;
   final RefreshCallback onRefresh;
 
   const HapticRefreshIndicator({
-    this.refreshIndicatorKey,
+    super.key,
     required this.child,
     this.edgeOffset = 0.0,
     required this.onRefresh,
@@ -26,7 +25,6 @@ class HapticRefreshIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator.adaptive(
-      key: refreshIndicatorKey,
       edgeOffset: edgeOffset,
       onRefresh: _onRefreshWithHaptics,
       child: child,

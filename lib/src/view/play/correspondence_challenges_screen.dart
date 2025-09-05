@@ -104,7 +104,7 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
             ],
           ),
           body: HapticRefreshIndicator(
-            refreshIndicatorKey: _refreshKey,
+            key: _refreshKey,
             onRefresh: () => ref.refresh(correspondenceChallengesProvider.future),
             child: ListView.separated(
               itemCount: supportedChallenges.length,
