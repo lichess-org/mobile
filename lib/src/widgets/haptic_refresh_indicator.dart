@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,7 +16,10 @@ class HapticRefreshIndicator extends StatelessWidget {
   });
 
   Future<void> _onRefreshWithHaptics() async {
-    HapticFeedback.lightImpact();
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      HapticFeedback.lightImpact();
+    }
+
     await onRefresh();
   }
 
