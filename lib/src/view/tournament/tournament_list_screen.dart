@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_faq.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -214,11 +215,11 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
       ...userTours.map((tournament) => _TournamentListItem(tournament: tournament)),
     ];
 
-    return RefreshIndicator.adaptive(
+    return HapticRefreshIndicator(
       edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
           ? MediaQuery.paddingOf(context).top + kToolbarHeight
           : 0.0,
-      key: _refreshIndicatorKey,
+      refreshIndicatorKey: _refreshIndicatorKey,
       onRefresh: () async => ref.refresh(tournamentsProvider),
       child: ListView.separated(
         shrinkWrap: true,

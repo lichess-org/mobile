@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -94,11 +95,11 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
         body: isOnline
             ? OrientationBuilder(
                 builder: (context, orientation) {
-                  return RefreshIndicator.adaptive(
+                  return HapticRefreshIndicator(
                     edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                         ? MediaQuery.paddingOf(context).top + kToolbarHeight
                         : 0.0,
-                    key: _androidRefreshKey,
+                    refreshIndicatorKey: _androidRefreshKey,
                     onRefresh: _refreshData,
                     child: _Body(orientation),
                   );

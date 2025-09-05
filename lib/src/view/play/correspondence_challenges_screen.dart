@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/view/play/create_correspondence_game_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 class CorrespondenceChallengesScreen extends ConsumerStatefulWidget {
@@ -102,8 +103,8 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
                 ),
             ],
           ),
-          body: RefreshIndicator.adaptive(
-            key: _refreshKey,
+          body: HapticRefreshIndicator(
+            refreshIndicatorKey: _refreshKey,
             onRefresh: () => ref.refresh(correspondenceChallengesProvider.future),
             child: ListView.separated(
               itemCount: supportedChallenges.length,
