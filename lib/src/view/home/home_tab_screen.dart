@@ -49,6 +49,7 @@ import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -267,7 +268,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               drawer: const AccountDrawer(),
               body: widget.editModeEnabled
                   ? content
-                  : RefreshIndicator.adaptive(
+                  : HapticRefreshIndicator(
                       edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                           ? MediaQuery.paddingOf(context).top + kToolbarHeight
                           : 0.0,

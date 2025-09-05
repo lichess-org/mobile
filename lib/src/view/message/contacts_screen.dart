@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -107,7 +108,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, st) => Center(child: Text('Error: $e')),
             )
-          : RefreshIndicator.adaptive(
+          : HapticRefreshIndicator(
               onRefresh: () => ref.refresh(contactsProvider.future),
               child: ContactsListView(openConvo: pushConversationScreen),
             ),
