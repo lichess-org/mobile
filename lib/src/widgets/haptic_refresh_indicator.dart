@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// A wrapper widget over RefreshIndicator to provide haptic feedback on iOS
 class HapticRefreshIndicator extends StatelessWidget {
   final Widget child;
   final double edgeOffset;
