@@ -26,14 +26,26 @@ class StudyGamebook extends StatelessWidget {
   }
 }
 
-class _Comment extends ConsumerWidget {
+class _Comment extends ConsumerStatefulWidget {
   const _Comment({required this.id});
-
   final StudyId id;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(studyControllerProvider(id)).requireValue;
+  ConsumerState<_Comment> createState() => _CommentState();
+}
+
+class _CommentState extends ConsumerState<_Comment> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void didUpdateWidget(covariant _Comment oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _scrollController.jumpTo(0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(studyControllerProvider(widget.id)).requireValue;
 
     final comment =
         state.gamebookComment ??
@@ -47,7 +59,9 @@ class _Comment extends ConsumerWidget {
 
     return Expanded(
       child: Scrollbar(
+        controller: _scrollController,
         child: SingleChildScrollView(
+          controller: _scrollController,
           child: Padding(
             padding: const EdgeInsets.only(right: 5),
             child: Linkify(
