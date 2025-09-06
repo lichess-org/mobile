@@ -7,6 +7,10 @@
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Сақталған жүрісті жою</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Ойынға қосылу</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Пікір айту</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Қайырлы кеш, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Қайырлы кеш</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Қайырлы күн, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Қайырлы күн</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Тармақты жасыру</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Үйге</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Эфирдегі стримерлер</string>
@@ -14,7 +18,7 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Нәтиже жоқ</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Сіз әзір ешкіге серік емессіз.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Иә</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Тақтаны жаю</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Тақтаны жаю</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Атауында \"%s\" бар ойыншылар</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Сол</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Оң</string>
