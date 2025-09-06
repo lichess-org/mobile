@@ -260,9 +260,9 @@
     <item quantity="other">Ранг се ажурира сваких %s минута</item>
   </plurals>
   <plurals name="nbPuzzles">
-    <item quantity="one">%s тактика</item>
-    <item quantity="few">%s тактике</item>
-    <item quantity="other">%s тактика</item>
+    <item quantity="one">%s проблем</item>
+    <item quantity="few">%s проблема</item>
+    <item quantity="other">%s проблема</item>
   </plurals>
   <string name="gamesPlayed">Одиграних партија</string>
   <plurals name="nbGamesWithYou">
@@ -339,8 +339,8 @@
   </plurals>
   <plurals name="nbPlaying">
     <item quantity="one">%s игра</item>
-    <item quantity="few">%s играју</item>
-    <item quantity="other">%s играју</item>
+    <item quantity="few">%s игра</item>
+    <item quantity="other">%s игра</item>
   </plurals>
   <string name="exportGames">Извези партије</string>
   <string name="ratingRange">Распон рејтинга</string>
@@ -647,7 +647,7 @@
   <string name="side">Страна</string>
   <string name="clock">Сат</string>
   <string name="opponent">Противник</string>
-  <string name="learnMenu">учи</string>
+  <string name="learnMenu">Учи</string>
   <string name="studyMenu">Проучи</string>
   <string name="practice">Вежбање</string>
   <string name="community">Заједница</string>
