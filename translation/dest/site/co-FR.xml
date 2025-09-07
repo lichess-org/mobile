@@ -30,7 +30,7 @@
   <string name="kingInTheCenter">Rè in u centru</string>
   <string name="threeChecks">Trè scacchi</string>
   <string name="raceFinished">Cora compia</string>
-  <string name="variantEnding">Fine di a variante</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Fine di a variante</string>
   <string name="newOpponent">Aversariu novu</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">U vostru aversariu vole ghjucà una altra partita cù voi</string>
   <string name="joinTheGame">Ghjunghjite a partita</string>
@@ -238,7 +238,6 @@
   <string name="blackTimeOut">I neri ùn anu più tempu</string>
   <string name="drawOfferSent">Offerta di partita patta mandata</string>
   <string name="drawOfferAccepted">Offerta di patta accettata</string>
-  <string name="drawOfferCanceled">Offerta di patta annullata</string>
   <string name="whiteOffersDraw">I bianchi pruponenu a partita patta</string>
   <string name="blackOffersDraw">I neri pruponenu a partita patta</string>
   <string name="whiteDeclinesDraw">I bianchi ricusanu a partita patta</string>

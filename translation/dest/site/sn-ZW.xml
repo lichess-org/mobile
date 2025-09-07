@@ -30,7 +30,7 @@
   <string name="kingInTheCenter">Mambo pakati</string>
   <string name="threeChecks">MaChecks matatu</string>
   <string name="raceFinished">Mutambi wapera</string>
-  <string name="variantEnding">Hapachisina chekutamba</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Hapachisina chekutamba</string>
   <string name="newOpponent">Mumwe muvengi</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Munhu arikuda kutamba newe futi</string>
   <string name="joinTheGame">Pinda mumutamba</string>

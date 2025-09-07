@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">Rex in centro</string>
   <string name="threeChecks">Tres scacci</string>
   <string name="raceFinished">Curriculum perfectum est</string>
-  <string name="variantEnding">Finis variationis</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Finis variationis</string>
   <string name="newOpponent">Adversarius novus</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Tuus adversarius tecum novum ludum ludere vult</string>
   <string name="joinTheGame">Inire ad ludum</string>
@@ -233,7 +233,6 @@
   <string name="blackTimeOut">Tempus nullum est</string>
   <string name="drawOfferSent">Missa est pacis conditio</string>
   <string name="drawOfferAccepted">Accepta est pacis conditio</string>
-  <string name="drawOfferCanceled">Sublata est pacis conditio</string>
   <string name="whiteOffersDraw">Albus terminum proponit.</string>
   <string name="blackOffersDraw">Niger terminum proponit.</string>
   <string name="whiteDeclinesDraw">Albus terminum negat.</string>

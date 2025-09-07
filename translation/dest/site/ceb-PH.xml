@@ -30,7 +30,7 @@
   <string name="kingInTheCenter">Ang hari naa sa tunga</string>
   <string name="threeChecks">Tulo ka mga check</string>
   <string name="raceFinished">Nahuman na ang lumba</string>
-  <string name="variantEnding">Lahi-lahi nga pagkahuman</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Lahi-lahi nga pagkahuman</string>
   <string name="newOpponent">Bag-ong kontra</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Ang imong kontra kay gusto moduwa ug bag-ong duwa sa imo</string>
   <string name="joinTheGame">Apil sa duwa</string>

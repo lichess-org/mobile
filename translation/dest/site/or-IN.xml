@@ -29,7 +29,7 @@
   <string name="kingInTheCenter">କେନ୍ଦ୍ରରେ ରାଜା |</string>
   <string name="threeChecks">ତିନି ଚେକ୍</string>
   <string name="raceFinished">ରେସ୍ ସମାପ୍ତ</string>
-  <string name="variantEnding">ବିଭିନ୍ନ ପ୍ରକାର ସମାପ୍ତ</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">ବିଭିନ୍ନ ପ୍ରକାର ସମାପ୍ତ</string>
   <string name="newOpponent">ନୂଆ ପ୍ରତିଦ୍ୱନ୍ଦ୍ୱୀ</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">ଆପଣଙ୍କ ପ୍ରତିଦ୍ୱନ୍ଦ୍ୱୀ ଆପଣଙ୍କ ସହ ଏକ ନୂଆ ଖେଳ ଖେଳିବାକୁ ଚାହାଁନ୍ତି</string>
   <string name="joinTheGame">ଖେଳରେ ଯୋଗ ଦିଅନ୍ତୁ</string>

@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">Raja berada di tengah</string>
   <string name="threeChecks">Tiga kali skak</string>
   <string name="raceFinished">Balapan telah berakhir</string>
-  <string name="variantEnding">Akhir sesuai aturan variasi</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Akhir sesuai aturan variasi</string>
   <string name="newOpponent">Permainan yang baru</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Lawan Anda ingin bermain lagi dengan Anda</string>
   <string name="joinTheGame">Ikuti permainan</string>
@@ -257,7 +257,6 @@
   <string name="blackTimeOut">Hitam kehabisan waktu</string>
   <string name="drawOfferSent">Tawaran remis terkirim</string>
   <string name="drawOfferAccepted">Tawaran remis diterima</string>
-  <string name="drawOfferCanceled">Tawaran remis dibatalkan</string>
   <string name="whiteOffersDraw">Putih menawarkan remis</string>
   <string name="blackOffersDraw">Hitam menawarkan remis</string>
   <string name="whiteDeclinesDraw">Putih menolak remis</string>

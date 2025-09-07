@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Regele în centru</string>
   <string name="threeChecks">Trei șahuri</string>
   <string name="raceFinished">Competiție terminată</string>
-  <string name="variantEnding">Sfârșit prin variantă</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Sfârșit prin variantă</string>
   <string name="newOpponent">Adversar nou</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Adversarul dvs. vă propune o nouă partidă</string>
   <string name="joinTheGame">Intră în partidă</string>
@@ -298,7 +298,6 @@
   <string name="blackTimeOut">Timpul pentru negru a expirat</string>
   <string name="drawOfferSent">Propunere de remiză trimisă</string>
   <string name="drawOfferAccepted">Propunere de remiză acceptată</string>
-  <string name="drawOfferCanceled">Propunere remiză anulată</string>
   <string name="whiteOffersDraw">Albul a oferit remiza</string>
   <string name="blackOffersDraw">Negrul a oferit remiza</string>
   <string name="whiteDeclinesDraw">Albul refuză propunerea de remiză</string>
@@ -429,6 +428,7 @@
     <item quantity="other">Trebuie să joci încă %s de partide oficiale</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Scorul tău la %s este provizoriu</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Filtrele de rating sunt blocate pentru că ratingul tău nu este stabil. Jucarea partidelor cu rating va crește stabilitatea.</string>
   <string name="yourPerfRatingIsTooHigh">Scorul tău la %1$s (%2$s) este prea mare</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Scorul tău săptămânal la %1$s (%2$s) este prea mare</string>
   <string name="yourPerfRatingIsTooLow">Scorul tău la %1$s (%2$s) este prea mic</string>

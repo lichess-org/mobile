@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Царят е в центъра</string>
   <string name="threeChecks">Три шаха</string>
   <string name="raceFinished">Надпреварата завърши</string>
-  <string name="variantEnding">Край на варианта</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Край на варианта</string>
   <string name="newOpponent">Нов противник</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Противникът иска да играе нова игра с вас</string>
   <string name="joinTheGame">Влез в играта</string>
@@ -279,7 +279,6 @@
   <string name="blackTimeOut">Времето на черните изтече</string>
   <string name="drawOfferSent">Изпратено предложение за реми</string>
   <string name="drawOfferAccepted">Предложението за реми е прието</string>
-  <string name="drawOfferCanceled">Предложението за реми е отхвърлено</string>
   <string name="whiteOffersDraw">Белите предлагат реми</string>
   <string name="blackOffersDraw">Черните предлагат реми</string>
   <string name="whiteDeclinesDraw">Белите отказват реми</string>

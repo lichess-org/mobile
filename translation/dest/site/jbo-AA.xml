@@ -26,7 +26,7 @@
   <string name="kingInTheCenter">lo noltrunau cu zvati lo midju</string>
   <string name="threeChecks">ci nu ckape lo noltrunau</string>
   <string name="raceFinished">ca mulfa\'o lo nu bajyjvi</string>
-  <string name="variantEnding">lo drata javni gunma fanmo</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">lo drata javni gunma fanmo</string>
   <string name="newOpponent">cnino jivna</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">lo se jivna be do cu friti lo ka za\'u re\'u jivna</string>
   <string name="joinTheGame">fitytu\'i</string>
@@ -201,7 +201,6 @@
   <string name="blackTimeOut">lo te caxmati cu xaksu lo temci</string>
   <string name="drawOfferSent">lo se friti cu se benji</string>
   <string name="drawOfferAccepted">lo se friti cu se fitytu\'i</string>
-  <string name="drawOfferCanceled">lo se friti cu se nu\'osti</string>
   <string name="whiteOffersDraw">lo se caxmati cu friti lo nu no da cu jinga</string>
   <string name="blackOffersDraw">lo te caxmati cu friti lo nu no da cu jinga</string>
   <string name="whiteDeclinesDraw">lo se caxmati cu cpapro lo nu no da cu jinga</string>

@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Kuningas keskustassa</string>
   <string name="threeChecks">Kolme shakkia</string>
   <string name="raceFinished">Kilpa loppunut</string>
-  <string name="variantEnding">Lopetus varianttisääntöjen mukaan</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Lopetus varianttisääntöjen mukaan</string>
   <string name="newOpponent">Uusi vastustaja</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Vastustajasi haluaa pelata uudelleen</string>
   <string name="joinTheGame">Liity peliin</string>
@@ -280,7 +280,6 @@
   <string name="blackTimeOut">Mustalta loppui aika</string>
   <string name="drawOfferSent">Tasapeliehdotus lähetetty</string>
   <string name="drawOfferAccepted">Tasapeliehdotus hyväksytty</string>
-  <string name="drawOfferCanceled">Tasapeliehdotus peruttu</string>
   <string name="whiteOffersDraw">Valkea ehdottaa tasapeliä</string>
   <string name="blackOffersDraw">Musta ehdottaa tasapeliä</string>
   <string name="whiteDeclinesDraw">Valkea kieltäytyy tasapelistä</string>

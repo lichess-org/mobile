@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Koning in het centrum</string>
   <string name="threeChecks">Drie keer schaak</string>
   <string name="raceFinished">De race is voorbij</string>
-  <string name="variantEnding">Einde van de variant</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Einde van de variant</string>
   <string name="newOpponent">Nieuwe tegenstander</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Uw tegenstander wil een nieuwe partij met u spelen</string>
   <string name="joinTheGame">Speel mee</string>
@@ -274,13 +274,12 @@
     <item quantity="one">%s partij met u</item>
     <item quantity="other">%s partijen met u</item>
   </plurals>
-  <string name="ok">Oké</string>
+  <string name="ok">OK</string>
   <string name="cancel">Annuleren</string>
   <string name="whiteTimeOut">Tijd om voor wit</string>
   <string name="blackTimeOut">Tijd om voor zwart</string>
   <string name="drawOfferSent">Remiseaanbod verstuurd</string>
   <string name="drawOfferAccepted">Remiseaanbod geaccepteerd</string>
-  <string name="drawOfferCanceled">Remiseaanbod geannuleerd</string>
   <string name="whiteOffersDraw">Wit biedt remise aan</string>
   <string name="blackOffersDraw">Zwart biedt remise aan</string>
   <string name="whiteDeclinesDraw">Wit weigert remise</string>

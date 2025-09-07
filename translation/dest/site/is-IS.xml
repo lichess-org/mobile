@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Kóngur á miðborðinu</string>
   <string name="threeChecks">Þrjár skákir</string>
   <string name="raceFinished">Kapphlaupi lokið</string>
-  <string name="variantEnding">Lok afbrigðisins</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Lok afbrigðisins</string>
   <string name="newOpponent">Nýr andstæðingur</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Andstæðingur þinn vill tefla aðra skák við þig</string>
   <string name="joinTheGame">Hefja skák</string>
@@ -280,7 +280,6 @@
   <string name="blackTimeOut">Svartur féll á tíma</string>
   <string name="drawOfferSent">Boð um jafntefli sent</string>
   <string name="drawOfferAccepted">Boði um jafntefli samþykkt</string>
-  <string name="drawOfferCanceled">Boði um jafntefli afturkallað</string>
   <string name="whiteOffersDraw">Hvítur býður jafntefli</string>
   <string name="blackOffersDraw">Svartur býður jafntefli</string>
   <string name="whiteDeclinesDraw">Hvítur afþakkar jafntefli</string>

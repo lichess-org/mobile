@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">王居中</string>
   <string name="threeChecks">三次將軍</string>
   <string name="raceFinished">競賽結束</string>
-  <string name="variantEnding">變體終局</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">變體終局</string>
   <string name="newOpponent">換個對手</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">您的對手想和你複賽</string>
   <string name="joinTheGame">加入棋局</string>
@@ -258,7 +258,6 @@
   <string name="blackTimeOut">黑方時間到</string>
   <string name="drawOfferSent">和棋請求已發送</string>
   <string name="drawOfferAccepted">同意和棋</string>
-  <string name="drawOfferCanceled">和棋取消</string>
   <string name="whiteOffersDraw">白方提出和棋</string>
   <string name="blackOffersDraw">黑方提出和棋</string>
   <string name="whiteDeclinesDraw">白方拒絕和棋</string>

@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">Արքան կենտրոնում է</string>
   <string name="threeChecks">Երեք շախ</string>
   <string name="raceFinished">Մրցավազքը ավարտվեց</string>
-  <string name="variantEnding">Տարբերակի ավարտ</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Տարբերակի ավարտ</string>
   <string name="newOpponent">Գտնել նոր հակառակորդ</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Ձեր հակառակորդը ուզում է կրկին խաղալ Ձեզ հետ</string>
   <string name="joinTheGame">Միանալ խաղին</string>
@@ -276,7 +276,6 @@
   <string name="blackTimeOut">Սևերի ժամանակը սպառվեց</string>
   <string name="drawOfferSent">Ոչ-ոքի առաջարկը ուղարկված է</string>
   <string name="drawOfferAccepted">Ոչ-ոքի առաջարկը ընդունվել է</string>
-  <string name="drawOfferCanceled">Ոչ-ոքի առաջարկը հերքվել է</string>
   <string name="whiteOffersDraw">Սպիտակներն առաջարկում են ոչ-ոքի</string>
   <string name="blackOffersDraw">Սևերն առաջարկում են ոչ-ոքի</string>
   <string name="whiteDeclinesDraw">Սպիտակները մերժում են ոչ-ոքին</string>

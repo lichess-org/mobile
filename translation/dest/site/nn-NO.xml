@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Kongen i sentrum</string>
   <string name="threeChecks">Sjakk tre gonger</string>
   <string name="raceFinished">Kappløp er avslutta</string>
-  <string name="variantEnding">Variantavslutning</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variantavslutning</string>
   <string name="newOpponent">Ny motspelar</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Motspelaren din ønskjer å spela eit nytt parti med deg</string>
   <string name="joinTheGame">Bli med</string>
@@ -280,7 +280,6 @@
   <string name="blackTimeOut">Tida er ute for svart</string>
   <string name="drawOfferSent">Tilbod om remis er sendt</string>
   <string name="drawOfferAccepted">Remistilbod godtatt</string>
-  <string name="drawOfferCanceled">Remistilbodet vart trekt attende</string>
   <string name="whiteOffersDraw">Kvit tilbyr remis</string>
   <string name="blackOffersDraw">Svart tilbyr remis</string>
   <string name="whiteDeclinesDraw">Kvit avslår remis</string>
@@ -398,6 +397,7 @@
     <item quantity="other">Du må spela endå %s rangerte parti</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Ratinga di på %s er mellombels</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Rating-filtra er låst fordi ratinga di ikkje er stabil. Stabiliteten aukar om du spelar rata parti.</string>
   <string name="yourPerfRatingIsTooHigh">Ratinga di i %1$s (%2$s) er for høg</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Den beste vekesratinga di i %1$s (%2$s) er for høg</string>
   <string name="yourPerfRatingIsTooLow">Ratinga di i %1$s (%2$s) er for låg</string>

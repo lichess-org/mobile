@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Kralj u centru</string>
   <string name="threeChecks">Tri šaha</string>
   <string name="raceFinished">Utrka je završena</string>
-  <string name="variantEnding">Kraj varijacije</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Kraj varijacije</string>
   <string name="newOpponent">Novi protivnik</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Vaš protivnik želi da igra novu partiju sa vama</string>
   <string name="joinTheGame">Pridružite se partiji</string>
@@ -298,7 +298,6 @@
   <string name="blackTimeOut">Isteklo vrijeme crnome</string>
   <string name="drawOfferSent">Ponuda za remi poslana</string>
   <string name="drawOfferAccepted">Ponuda za remi prihvaćena</string>
-  <string name="drawOfferCanceled">Ponuda za remi povučena</string>
   <string name="whiteOffersDraw">Bijeli nudi remi</string>
   <string name="blackOffersDraw">Crni nudi remi</string>
   <string name="whiteDeclinesDraw">Bijeli odbija remi</string>

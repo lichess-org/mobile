@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">Төв дөх ноён</string>
   <string name="threeChecks">Гурван шаг</string>
   <string name="raceFinished">Уралдаан өндөрлөлөө</string>
-  <string name="variantEnding">Хувилбарын төгсгөл</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Хувилбарын төгсгөл</string>
   <string name="newOpponent">Шинэ өрсөлдөгч</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Таны өрсөлдөгч таньтай дахин тоглохыг хүсч байна</string>
   <string name="joinTheGame">Тоглолт руу орох</string>
@@ -241,7 +241,6 @@
   <string name="blackTimeOut">Харын цаг дуусчихлаа тийм ээ</string>
   <string name="drawOfferSent">Тэнцэх санал илгээлээ</string>
   <string name="drawOfferAccepted">Тэнцэх саналыг зөвшөөрлөө</string>
-  <string name="drawOfferCanceled">Тэнцэх саналаа цуцаллаа</string>
   <string name="whiteOffersDraw">Цагаан тэнцэхийг санал болгож байна</string>
   <string name="blackOffersDraw">Хар тэнцэхийг санал болгож байна</string>
   <string name="whiteDeclinesDraw">Цагаан тэнцэхээс татгалзаж байна</string>

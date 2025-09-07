@@ -30,7 +30,7 @@
   <string name="kingInTheCenter">Rei al mièg</string>
   <string name="threeChecks">Tres escacs</string>
   <string name="raceFinished">Corsa acabada</string>
-  <string name="variantEnding">Finala de varianta</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Finala de varianta</string>
   <string name="newOpponent">Nòu adversari</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Lo teu adversari vòl jogar una altra partida</string>
   <string name="joinTheGame">Rejònher la partida</string>

@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">Raja ing pusat</string>
   <string name="threeChecks">Telung priksa</string>
   <string name="raceFinished">Balapan rampung</string>
-  <string name="variantEnding">Pungkasan varian</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Pungkasan varian</string>
   <string name="newOpponent">pemain anyar</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">pemain lawanmu pengen dulanan karo kowe meneh</string>
   <string name="joinTheGame">gabung dulanan</string>

@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">Şah mərkəzdə</string>
   <string name="threeChecks">Üç şah</string>
   <string name="raceFinished">Yarış bitdi</string>
-  <string name="variantEnding">Variant bitdi</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variant bitdi</string>
   <string name="newOpponent">Yeni rəqib</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Rəqibiniz sizinlə yeni bir oyun oynamaq istəyir</string>
   <string name="joinTheGame">Oyuna qoşul</string>
@@ -274,7 +274,6 @@
   <string name="blackTimeOut">Qaraların vaxtı bitdi</string>
   <string name="drawOfferSent">Heç-heçə təklifi göndərildi</string>
   <string name="drawOfferAccepted">Heç-heçə təklifi qəbul edildi</string>
-  <string name="drawOfferCanceled">Heç-heçə təklifi ləğv edildi</string>
   <string name="whiteOffersDraw">Ağlar heç-heçə təklif edir</string>
   <string name="blackOffersDraw">Qaralar heç-heçə təklif edir</string>
   <string name="whiteDeclinesDraw">Ağlar heç-heçə təklifini rədd edir</string>

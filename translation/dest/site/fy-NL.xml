@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">Kening yn it sintrum</string>
   <string name="threeChecks">Trije kear skaak</string>
   <string name="raceFinished">Race is foarby</string>
-  <string name="variantEnding">Fariant beëinige</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Fariant beëinige</string>
   <string name="newOpponent">Nije tsjinstanner</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Dyn tsjinstanner wol in nij spul mei dy dwaan</string>
   <string name="joinTheGame">Meidwaan oan it spul</string>
@@ -233,7 +233,6 @@
   <string name="blackTimeOut">Tiid fan swart ôfrûn</string>
   <string name="drawOfferSent">Remise oanbod stjoerd</string>
   <string name="drawOfferAccepted">Remise oanbod akseptearre</string>
-  <string name="drawOfferCanceled">Remise oanbod annulearre</string>
   <string name="whiteOffersDraw">Wyt biedt remise oan</string>
   <string name="blackOffersDraw">Swart biedt remise oan</string>
   <string name="whiteDeclinesDraw">Wyt wegert remise-oanbod</string>

@@ -30,7 +30,7 @@
   <string name="kingInTheCenter">Король таҡтаның уртаһында</string>
   <string name="threeChecks">Өс шах</string>
   <string name="raceFinished">Ярыш бөттө</string>
-  <string name="variantEnding">Партия тамамланды</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Партия тамамланды</string>
   <string name="newOpponent">Яңы ярышыусы</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Ярышыусы һеҙҙең менән яңынан уйнарға тәкъдим итә</string>
   <string name="joinTheGame">Уйынға ҡушылырға</string>

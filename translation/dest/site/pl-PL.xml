@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Król w centrum</string>
   <string name="threeChecks">Trzy szachy</string>
   <string name="raceFinished">Wyścig zakończony</string>
-  <string name="variantEnding">Wariant zakończony</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Wariant zakończony</string>
   <string name="newOpponent">Nowy przeciwnik</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Przeciwnik chce zagrać z Tobą nową partię</string>
   <string name="joinTheGame">Dołącz do gry</string>
@@ -316,7 +316,6 @@
   <string name="blackTimeOut">Upłynął czas czarnych</string>
   <string name="drawOfferSent">Wysłano propozycję remisu</string>
   <string name="drawOfferAccepted">Przyjęto propozycję remisu</string>
-  <string name="drawOfferCanceled">Wycofano propozycję remisu</string>
   <string name="whiteOffersDraw">Białe proponują remis</string>
   <string name="blackOffersDraw">Czarne proponują remis</string>
   <string name="whiteDeclinesDraw">Białe odrzucają propozycję remisu</string>
@@ -460,6 +459,7 @@
     <item quantity="other">Musisz rozegrać jeszcze %s partii rankingowych</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Twój ranking (%s) jest prowizoryczny</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Filtry rankingu są zablokowane, ponieważ Twój ranking nie jest stabilny. Rozegranie partii rankingowych zwiększy tę stabilność.</string>
   <string name="yourPerfRatingIsTooHigh">Twój ranking %2$s (%1$s) jest za wysoki</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Twój ranking tygodniowy %2$s (%1$s) jest za wysoki</string>
   <string name="yourPerfRatingIsTooLow">Twój ranking %2$s (%1$s) jest za niski</string>

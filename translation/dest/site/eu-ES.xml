@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Erregea erdian</string>
   <string name="threeChecks">Hiru xake</string>
   <string name="raceFinished">Lasterketa bukatuta</string>
-  <string name="variantEnding">Aldaeragatik amaitu da</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Aldaeragatik amaitu da</string>
   <string name="newOpponent">Aurkari berria</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Zure aurkariak berriz jokatu nahi du</string>
   <string name="joinTheGame">Partidan sartu</string>
@@ -280,7 +280,6 @@
   <string name="blackTimeOut">Beltzaren denbora agortu egin da</string>
   <string name="drawOfferSent">Berdintzeko eskaintza bidali da</string>
   <string name="drawOfferAccepted">Berdintzeko eskaintza onartu da</string>
-  <string name="drawOfferCanceled">Berdintzeko eskaintza ezeztatu da</string>
   <string name="whiteOffersDraw">Zuriak berdinketa eskaintzen du</string>
   <string name="blackOffersDraw">Beltzak berdinketa eskaintzen du</string>
   <string name="whiteDeclinesDraw">Zuriak berdinketari uko egin dio.</string>

@@ -27,7 +27,7 @@
   <string name="kingInTheCenter">Патша варринче</string>
   <string name="threeChecks">Виҫ шах пани</string>
   <string name="raceFinished">Чупу вӗҫленчӗ</string>
-  <string name="variantEnding">Уйрӑм вӗҫленни</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Уйрӑм вӗҫленни</string>
   <string name="newOpponent">Ҫӗнӗ ӑмӑртуҫӑ</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Ӑмӑртуҫу санпа тепӗр хут выльасшӑн</string>
   <string name="joinTheGame">Вӑййине хутшӑн</string>
@@ -137,7 +137,6 @@
   <string name="blackTimeOut">Хурисен вӑхӑчӗ тухнӑ</string>
   <string name="drawOfferSent">Парма-пар сӗннине йанӑ</string>
   <string name="drawOfferAccepted">Парма-пар сӗннине йышӑннӑ</string>
-  <string name="drawOfferCanceled">Парма-пар сӗннине пӑрахӑҫланӑ</string>
   <string name="whiteOffersDraw">Шуррисем парма-паршӑн</string>
   <string name="blackOffersDraw">Хурисем парма-паршӑн</string>
   <string name="whiteDeclinesDraw">Шуррисем парма-паршӑн мар</string>

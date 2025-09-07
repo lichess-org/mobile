@@ -28,7 +28,7 @@
   <string name="kingInTheCenter">Шоҳ дар марказ аст</string>
   <string name="threeChecks">Се шоҳ</string>
   <string name="raceFinished">Рониш тамом шуд</string>
-  <string name="variantEnding">Бозӣ тамом шуд</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Бозӣ тамом шуд</string>
   <string name="newOpponent">Ҳарифи нав</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Ҳарифи шумо бозии нав пешниҳод дорад</string>
   <string name="joinTheGame">Ба бози муттахид шудан</string>
