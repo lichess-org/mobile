@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/http_log/http_log_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 
 class HttpLogScreen extends ConsumerStatefulWidget {
   const HttpLogScreen({super.key});
@@ -114,7 +115,7 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
         ),
       );
     }
-    return RefreshIndicator.adaptive(
+    return HapticRefreshIndicator(
       key: widget.refreshIndicatorKey,
       onRefresh: widget.onRefresh,
       child: ListView.separated(

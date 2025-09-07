@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -69,7 +70,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           final activity = ref.watch(_accountActivityProvider);
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
-          return RefreshIndicator.adaptive(
+          return HapticRefreshIndicator(
             edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                 ? MediaQuery.paddingOf(context).top + kToolbarHeight
                 : 0.0,
