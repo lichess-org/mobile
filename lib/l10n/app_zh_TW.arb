@@ -1658,5 +1658,6 @@
   "timeagoNbMonthsAgo": "{count, plural, other{{count}個月前}}",
   "timeagoNbYearsAgo": "{count, plural, other{{count}年前}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{剩下 {count} 分鐘}}",
-  "timeagoNbHoursRemaining": "{count, plural, other{剩下 {count} 小時}}"
+  "timeagoNbHoursRemaining": "{count, plural, other{剩下 {count} 小時}}",
+  "tfaTwoFactorAuth": "兩步驟驗證"
 }

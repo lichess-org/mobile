@@ -99,187 +99,186 @@ class _BodyState extends ConsumerState<_Body> {
 
     return NotificationListener(
       onNotification: handleScrollNotification,
-      child: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Theme.of(
-              context,
-            ).appBarTheme.backgroundColor?.withValues(alpha: headerOpacity),
-            pinned: true,
-            title: Text(context.l10n.mobileTheme),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(boardSize + 16.0),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: _BoardPreview(
-                  size: boardSize,
-                  boardPrefs: boardPrefs,
-                  brightness: brightness,
-                  hue: hue,
+      child: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: Theme.of(
+                context,
+              ).appBarTheme.backgroundColor?.withValues(alpha: headerOpacity),
+              pinned: true,
+              title: Text(context.l10n.mobileTheme),
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(boardSize + 16.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: _BoardPreview(
+                    size: boardSize,
+                    boardPrefs: boardPrefs,
+                    brightness: brightness,
+                    hue: hue,
+                  ),
                 ),
               ),
             ),
-          ),
-          SliverList.list(
-            children: [
-              ListSection(
-                hasLeading: true,
-                children: [
-                  if (getCorePalette() != null)
-                    SwitchSettingTile(
-                      leading: const Icon(Icons.colorize_outlined),
-                      title: Text(context.l10n.mobileSystemColors),
-                      value: generalPrefs.systemColors,
-                      onChanged: (value) {
-                        ref.read(generalPreferencesProvider.notifier).toggleSystemColors();
-                      },
-                    ),
-                  SettingsListTile(
-                    icon: const Icon(Icons.wallpaper),
-                    settingsLabel: Text(context.l10n.background),
-                    settingsValue: generalPrefs.backgroundColor != null
-                        ? generalPrefs.backgroundColor!.$1.label
-                        : (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
-                    onTap: () {
-                      Navigator.of(context).push(BackgroundChoiceScreen.buildRoute(context));
-                    },
-                  ),
-                  if (generalPrefs.backgroundColor != null || generalPrefs.backgroundImage != null)
-                    ListTile(
-                      leading: const Icon(Icons.cancel),
-                      title: const Text('Reset background'),
-                      onTap: () {
-                        ref
-                            .read(generalPreferencesProvider.notifier)
-                            .setBackground(backgroundColor: null, backgroundImage: null);
-                      },
-                    ),
-                  SettingsListTile(
-                    icon: const Icon(LichessIcons.chess_board),
-                    settingsLabel: Text(context.l10n.board),
-                    settingsValue: boardPrefs.boardTheme.label,
-                    onTap: () {
-                      Navigator.of(context).push(BoardChoiceScreen.buildRoute(context));
-                    },
-                  ),
-                  SettingsListTile(
-                    icon: const Icon(LichessIcons.chess_pawn),
-                    settingsLabel: Text(context.l10n.pieceSet),
-                    settingsValue: boardPrefs.pieceSet.label,
-                    onTap: () {
-                      Navigator.of(context).push(PieceSetScreen.buildRoute(context));
-                    },
-                  ),
-                  SettingsListTile(
-                    icon: const Icon(LichessIcons.arrow_full_upperright),
-                    settingsLabel: const Text('Drawn shape color'),
-                    explanation:
-                        'This color is only used for shapes drawn by hand using two fingers.',
-                    settingsValue: shapeColorL10n(context, boardPrefs.shapeColor),
-                    onTap: () {
-                      showChoicePicker(
-                        context,
-                        choices: ShapeColor.values,
-                        selectedItem: boardPrefs.shapeColor,
-                        labelBuilder: (t) => Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(text: shapeColorL10n(context, t)),
-                              const TextSpan(text: '   '),
-                              WidgetSpan(child: Container(width: 15, height: 15, color: t.color)),
-                            ],
-                          ),
-                        ),
-                        onSelectedItemChanged: (ShapeColor? value) {
-                          ref
-                              .read(boardPreferencesProvider.notifier)
-                              .setShapeColor(value ?? ShapeColor.green);
+            SliverList.list(
+              children: [
+                ListSection(
+                  hasLeading: true,
+                  children: [
+                    if (getCorePalette() != null)
+                      SwitchSettingTile(
+                        leading: const Icon(Icons.colorize_outlined),
+                        title: Text(context.l10n.mobileSystemColors),
+                        value: generalPrefs.systemColors,
+                        onChanged: (value) {
+                          ref.read(generalPreferencesProvider.notifier).toggleSystemColors();
                         },
-                      );
-                    },
-                  ),
-                  SwitchSettingTile(
-                    leading: const Icon(Icons.location_on),
-                    title: Text(context.l10n.preferencesBoardCoordinates),
-                    value: boardPrefs.coordinates,
-                    onChanged: (value) {
-                      ref.read(boardPreferencesProvider.notifier).toggleCoordinates();
-                    },
-                  ),
-                  SwitchSettingTile(
-                    // TODO translate
-                    leading: const Icon(Icons.border_outer),
-                    title: const Text('Show border'),
-                    value: boardPrefs.showBorder,
-                    onChanged: (value) {
-                      ref.read(boardPreferencesProvider.notifier).toggleBorder();
-                    },
-                  ),
-                ],
-              ),
-              ListSection(
-                header: SettingsSectionTitle(context.l10n.advancedSettings),
-                hasLeading: true,
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.brightness_6),
-                    title: Slider.adaptive(
-                      min: 0.2,
-                      max: 1.4,
-                      value: brightness,
-                      onChanged: (value) {
-                        setState(() {
-                          brightness = value;
-                        });
-                      },
-                      onChangeEnd: (value) {
-                        ref
-                            .read(boardPreferencesProvider.notifier)
-                            .adjustColors(brightness: brightness);
+                      ),
+                    SettingsListTile(
+                      icon: const Icon(Icons.wallpaper),
+                      settingsLabel: Text(context.l10n.background),
+                      settingsValue: generalPrefs.backgroundColor != null
+                          ? generalPrefs.backgroundColor!.$1.label
+                          : (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
+                      onTap: () {
+                        Navigator.of(context).push(BackgroundChoiceScreen.buildRoute(context));
                       },
                     ),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.invert_colors),
-                    title: Slider.adaptive(
-                      min: 0.0,
-                      max: 360.0,
-                      value: hue,
-                      onChanged: (value) {
-                        setState(() {
-                          hue = value;
-                        });
-                      },
-                      onChangeEnd: (value) {
-                        ref.read(boardPreferencesProvider.notifier).adjustColors(hue: hue);
+                    if (generalPrefs.backgroundColor != null ||
+                        generalPrefs.backgroundImage != null)
+                      ListTile(
+                        leading: const Icon(Icons.cancel),
+                        title: const Text('Reset background'),
+                        onTap: () {
+                          ref
+                              .read(generalPreferencesProvider.notifier)
+                              .setBackground(backgroundColor: null, backgroundImage: null);
+                        },
+                      ),
+                    SettingsListTile(
+                      icon: const Icon(LichessIcons.chess_board),
+                      settingsLabel: Text(context.l10n.board),
+                      settingsValue: boardPrefs.boardTheme.label,
+                      onTap: () {
+                        Navigator.of(context).push(BoardChoiceScreen.buildRoute(context));
                       },
                     ),
-                  ),
-                  ListTile(
-                    enabled: hasAjustedColors,
-                    leading: const Icon(Icons.cancel),
-                    title: Text(context.l10n.boardReset),
-                    onTap: hasAjustedColors
-                        ? () {
-                            setState(() {
-                              brightness = kBoardDefaultBrightnessFilter;
-                              hue = kBoardDefaultHueFilter;
-                            });
+                    SettingsListTile(
+                      icon: const Icon(LichessIcons.chess_pawn),
+                      settingsLabel: Text(context.l10n.pieceSet),
+                      settingsValue: boardPrefs.pieceSet.label,
+                      onTap: () {
+                        Navigator.of(context).push(PieceSetScreen.buildRoute(context));
+                      },
+                    ),
+                    SettingsListTile(
+                      icon: const Icon(LichessIcons.arrow_full_upperright),
+                      settingsLabel: const Text('Drawn shape color'),
+                      explanation:
+                          'This color is only used for shapes drawn by hand using two fingers.',
+                      settingsValue: shapeColorL10n(context, boardPrefs.shapeColor),
+                      onTap: () {
+                        showChoicePicker(
+                          context,
+                          choices: ShapeColor.values,
+                          selectedItem: boardPrefs.shapeColor,
+                          labelBuilder: (t) => Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(text: shapeColorL10n(context, t)),
+                                const TextSpan(text: '   '),
+                                WidgetSpan(child: Container(width: 15, height: 15, color: t.color)),
+                              ],
+                            ),
+                          ),
+                          onSelectedItemChanged: (ShapeColor? value) {
                             ref
                                 .read(boardPreferencesProvider.notifier)
-                                .adjustColors(brightness: brightness, hue: hue);
-                          }
-                        : null,
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SliverSafeArea(
-            top: false,
-            sliver: SliverToBoxAdapter(child: SizedBox(height: 16.0)),
-          ),
-        ],
+                                .setShapeColor(value ?? ShapeColor.green);
+                          },
+                        );
+                      },
+                    ),
+                    SwitchSettingTile(
+                      leading: const Icon(Icons.location_on),
+                      title: Text(context.l10n.preferencesBoardCoordinates),
+                      value: boardPrefs.coordinates,
+                      onChanged: (value) {
+                        ref.read(boardPreferencesProvider.notifier).toggleCoordinates();
+                      },
+                    ),
+                    SwitchSettingTile(
+                      // TODO translate
+                      leading: const Icon(Icons.border_outer),
+                      title: const Text('Show border'),
+                      value: boardPrefs.showBorder,
+                      onChanged: (value) {
+                        ref.read(boardPreferencesProvider.notifier).toggleBorder();
+                      },
+                    ),
+                  ],
+                ),
+                ListSection(
+                  header: SettingsSectionTitle(context.l10n.advancedSettings),
+                  hasLeading: true,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.brightness_6),
+                      title: Slider.adaptive(
+                        min: 0.2,
+                        max: 1.4,
+                        value: brightness,
+                        onChanged: (value) {
+                          setState(() {
+                            brightness = value;
+                          });
+                        },
+                        onChangeEnd: (value) {
+                          ref
+                              .read(boardPreferencesProvider.notifier)
+                              .adjustColors(brightness: brightness);
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.invert_colors),
+                      title: Slider.adaptive(
+                        min: 0.0,
+                        max: 360.0,
+                        value: hue,
+                        onChanged: (value) {
+                          setState(() {
+                            hue = value;
+                          });
+                        },
+                        onChangeEnd: (value) {
+                          ref.read(boardPreferencesProvider.notifier).adjustColors(hue: hue);
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      enabled: hasAjustedColors,
+                      leading: const Icon(Icons.cancel),
+                      title: Text(context.l10n.boardReset),
+                      onTap: hasAjustedColors
+                          ? () {
+                              setState(() {
+                                brightness = kBoardDefaultBrightnessFilter;
+                                hue = kBoardDefaultHueFilter;
+                              });
+                              ref
+                                  .read(boardPreferencesProvider.notifier)
+                                  .adjustColors(brightness: brightness, hue: hue);
+                            }
+                          : null,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

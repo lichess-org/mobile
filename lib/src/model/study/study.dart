@@ -25,6 +25,7 @@ sealed class Study with _$Study {
     required IList<String> topics,
     required IList<StudyChapterMeta> chapters,
     required StudyChapter chapter,
+    required IList<StudyMember> members,
     ChatData? chat,
 
     /// Hints to display in "gamebook"/"interactive" mode
@@ -86,6 +87,11 @@ Study _studyFromPick(RequiredPick pick) {
       'chapters',
     ).asListOrThrow((pick) => StudyChapterMeta.fromJson(pick.asMapOrThrow())).lock,
     chapter: StudyChapter.fromJson(study('chapter').asMapOrThrow()),
+    members: study('members')
+        .asMapOrThrow<String, Map<String, Object?>>()
+        .values
+        .map((p) => StudyMember.fromJson(p))
+        .toIList(),
     hints: hints.lock,
     deviationComments: deviationComments.lock,
   );

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
@@ -16,12 +17,34 @@ import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'create_game_service.g.dart';
+part 'create_game_service.freezed.dart';
 
-typedef ChallengeResponse = ({
-  GameFullId? gameFullId,
-  Challenge? challenge,
-  ChallengeDeclineReason? declineReason,
-});
+/// The user response of a challenge request.
+///
+/// It can be:
+/// - [ChallengeResponseAccepted]: The challenge was accepted and a game was created.
+/// - [ChallengeResponseDeclined]: The challenge was declined.
+sealed class ChallengeResponse {}
+
+/// The [ChallengeResponse] when challenge was accepted and a game was created.
+@freezed
+sealed class ChallengeResponseAccepted
+    with _$ChallengeResponseAccepted
+    implements ChallengeResponse {
+  const factory ChallengeResponseAccepted({required GameFullId gameFullId}) =
+      _ChallengeResponseAccepted;
+}
+
+/// The [ChallengeResponse] when challenge was declined.
+@freezed
+sealed class ChallengeResponseDeclined
+    with _$ChallengeResponseDeclined
+    implements ChallengeResponse {
+  const factory ChallengeResponseDeclined({
+    required Challenge challenge,
+    required ChallengeDeclineReason? declineReason,
+  }) = _ChallengeResponseDeclined;
+}
 
 /// A provider for the [CreateGameService].
 @riverpod
@@ -119,8 +142,6 @@ class CreateGameService {
   /// Create a new real time challenge.
   ///
   /// Will listen to the challenge socket and await the response from the destinated user.
-  /// Returns the challenge, along with [GameFullId] if the challenge was accepted,
-  /// or the [ChallengeDeclineReason] if the challenge was declined.
   Future<ChallengeResponse> newRealTimeChallenge(ChallengeRequest challengeReq) async {
     assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
 
@@ -159,17 +180,16 @@ class CreateGameService {
             try {
               final updatedChallenge = await challengeRepository.show(challenge.id);
               if (updatedChallenge.gameFullId != null) {
-                completer.complete((
-                  gameFullId: updatedChallenge.gameFullId,
-                  challenge: null,
-                  declineReason: null,
-                ));
+                completer.complete(
+                  ChallengeResponseAccepted(gameFullId: updatedChallenge.gameFullId!),
+                );
               } else if (updatedChallenge.status == ChallengeStatus.declined) {
-                completer.complete((
-                  gameFullId: null,
-                  challenge: challenge,
-                  declineReason: updatedChallenge.declineReason,
-                ));
+                completer.complete(
+                  ChallengeResponseDeclined(
+                    challenge: challenge,
+                    declineReason: updatedChallenge.declineReason,
+                  ),
+                );
               }
             } catch (e) {
               _log.warning('Failed to reload challenge', e);
@@ -194,7 +214,10 @@ class CreateGameService {
   /// [ChallengeDeclineReason] will be returned.
   /// Otherwise, it means the challenge was created successfully.
   Future<ChallengeDeclineReason?> newCorrespondenceChallenge(ChallengeRequest challengeReq) async {
-    assert(challengeReq.timeControl == ChallengeTimeControlType.correspondence);
+    assert(
+      challengeReq.timeControl == ChallengeTimeControlType.correspondence ||
+          challengeReq.timeControl == ChallengeTimeControlType.unlimited,
+    );
 
     if (_challengeConnection != null) {
       throw StateError('Already creating a challenge.');
@@ -204,7 +227,7 @@ class CreateGameService {
     final completer = Completer<ChallengeDeclineReason?>()..future.whenComplete(dispose);
 
     try {
-      _log.info('Creating new correspondence challenge');
+      _log.info('Creating new correspondence|unlimited challenge');
 
       final challenge = await challengeRepository.create(challengeReq);
 

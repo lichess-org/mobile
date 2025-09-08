@@ -161,7 +161,7 @@ class GameContextMenu extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
+                                  '${game.clockDisplay(context.l10n)} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
                                   style: const TextStyle(fontWeight: FontWeight.w500),
                                 ),
                                 Text(

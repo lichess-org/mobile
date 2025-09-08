@@ -5,6 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -785,6 +786,9 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
           ]
         : null;
 
+    final percentFormat = NumberFormat.decimalPercentPattern(decimalDigits: 1);
+    final numberFormat = NumberFormat.decimalPatternDigits(decimalDigits: 2);
+
     return SafeArea(
       child: ListView(
         children: [
@@ -795,13 +799,15 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
               _StatsRow(context.l10n.stormMoves, widget.stats.moves.toString()),
               _StatsRow(
                 context.l10n.accuracy,
-                '${(((widget.stats.moves - widget.stats.errors) / widget.stats.moves) * 100).toStringAsFixed(2)}%',
+                percentFormat.format(
+                  (widget.stats.moves - widget.stats.errors) / widget.stats.moves,
+                ),
               ),
               _StatsRow(context.l10n.stormCombo, widget.stats.comboBest.toString()),
               _StatsRow(context.l10n.stormTime, '${widget.stats.time.inSeconds}s'),
               _StatsRow(
                 context.l10n.stormTimePerMove,
-                '${widget.stats.timePerMove.toStringAsFixed(1)}s',
+                '${numberFormat.format(widget.stats.timePerMove)}s',
               ),
               _StatsRow(context.l10n.stormHighestSolved, widget.stats.highest.toString()),
             ],

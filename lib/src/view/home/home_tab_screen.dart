@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
@@ -20,6 +21,7 @@ import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -33,8 +35,10 @@ import 'package:lichess_mobile/src/view/account/account_drawer.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
+import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/play_menu.dart';
@@ -184,6 +188,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       skipLoadingOnReload: true,
       data: (status) {
         final session = ref.watch(authSessionProvider);
+        final unreadLichessMessage = ref.watch(unreadMessagesProvider).valueOrNull?.lichess == true;
         final ongoingGames = ref.watch(ongoingGamesProvider);
         final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
         final recentGames = ref.watch(myRecentGamesProvider);
@@ -226,7 +231,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 nbOfGames: nbOfGames,
               );
 
-        final content = ListView(controller: homeScrollController, children: widgets);
+        final content = ListView(
+          controller: homeScrollController,
+          children: [if (unreadLichessMessage) const _LichessMessageBanner(), ...widgets],
+        );
 
         return FocusDetector(
           onFocusLost: () {
@@ -484,6 +492,49 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   }
 }
 
+class _LichessMessageBanner extends ConsumerWidget {
+  const _LichessMessageBanner();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: () {
+        Navigator.of(context)
+            .push(
+              ConversationScreen.buildRoute(
+                context,
+                user: const LightUser(id: UserId('lichess'), name: 'lichess'),
+              ),
+            )
+            .then((_) => ref.invalidate(unreadMessagesProvider));
+      },
+      child: ColoredBox(
+        color: theme.colorScheme.tertiaryContainer,
+        child: Padding(
+          padding: Styles.bodyPadding,
+          child: Column(
+            children: [
+              Text(
+                context.l10n.showUnreadLichessMessage,
+                style: TextStyle(
+                  color: theme.colorScheme.onTertiaryContainer,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 4.0),
+              Text(
+                context.l10n.clickHereToReadIt,
+                style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _SignInWidget extends ConsumerWidget {
   const _SignInWidget();
 
@@ -683,10 +734,12 @@ class _OngoingGamesCarousel extends ConsumerWidget {
             Navigator.of(context, rootNavigator: true).push(
               GameScreen.buildRoute(
                 context,
-                initialGameId: game.fullId,
-                loadingFen: game.fen,
-                loadingOrientation: game.orientation,
-                loadingLastMove: game.lastMove,
+                source: ExistingGameSource(game.fullId),
+                loadingPosition: (
+                  fen: game.fen,
+                  orientation: game.orientation,
+                  lastMove: game.lastMove,
+                ),
               ),
             );
           },

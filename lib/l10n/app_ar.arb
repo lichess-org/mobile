@@ -1719,5 +1719,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =0{منذ {count} شهر} =1{منذ {count} شهر} =2{منذ {count} شهر} few{منذ {count} شهر} many{منذ {count} شهر} other{منذ {count} شهر}}",
   "timeagoNbYearsAgo": "{count, plural, =0{منذ {count} سنة} =1{منذ {count} سنة} =2{منذ {count} سنة} few{منذ {count} سنة} many{منذ {count} سنة} other{منذ {count} سنة}}",
   "timeagoNbMinutesRemaining": "{count, plural, =0{{count} دقيقة متبقية} =1{{count} دقيقة متبقية} =2{{count} دقيقة متبقية} few{{count} دقيقة متبقية} many{{count} دقيقة متبقية} other{{count} دقيقة متبقية}}",
-  "timeagoNbHoursRemaining": "{count, plural, =0{{count} ساعة متبقية} =1{{count} ساعة متبقية} =2{{count} ساعة متبقية} few{{count} ساعة متبقية} many{{count} ساعة متبقية} other{{count} ساعة متبقية}}"
+  "timeagoNbHoursRemaining": "{count, plural, =0{{count} ساعة متبقية} =1{{count} ساعة متبقية} =2{{count} ساعة متبقية} few{{count} ساعة متبقية} many{{count} ساعة متبقية} other{{count} ساعة متبقية}}",
+  "tfaTwoFactorAuth": "التوثيق ذو العاملين"
 }

@@ -1605,5 +1605,6 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{Prieš {count} mėnesį} few{Prieš {count} mėnesius} many{Prieš {count} mėnesio} other{Prieš {count} mėnesių}}",
   "timeagoNbYearsAgo": "{count, plural, =1{Prieš {count} metus} few{Prieš {count} metus} many{Prieš {count} metų} other{Prieš {count} metų}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Liko {count} minutė} few{Liko {count} minutės} many{Liko {count} minučių} other{Liko {count} minučių}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{Liko {count} valanda} few{Liko {count} valandos} many{Liko {count} valandų} other{Liko {count} valandų}}"
+  "timeagoNbHoursRemaining": "{count, plural, =1{Liko {count} valanda} few{Liko {count} valandos} many{Liko {count} valandų} other{Liko {count} valandų}}",
+  "tfaTwoFactorAuth": "Dviejų lygių tapatumo nustatymas"
 }

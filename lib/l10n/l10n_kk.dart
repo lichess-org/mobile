@@ -6219,4 +6219,7 @@ class AppLocalizationsKk extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Екісатылы өкіл-растау';
 }

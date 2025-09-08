@@ -1722,5 +1722,6 @@
   "timeagoNbMonthsAgo": "{count, plural, other{{count} 月前}}",
   "timeagoNbYearsAgo": "{count, plural, other{{count} 年前}}",
   "timeagoNbMinutesRemaining": "{count, plural, other{还剩 {count} 分钟}}",
-  "timeagoNbHoursRemaining": "{count, plural, other{还剩 {count} 小时}}"
+  "timeagoNbHoursRemaining": "{count, plural, other{还剩 {count} 小时}}",
+  "tfaTwoFactorAuth": "双重认证"
 }

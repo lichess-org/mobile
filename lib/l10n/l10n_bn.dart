@@ -6219,4 +6219,7 @@ class AppLocalizationsBn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'টু-ফ্যাক্টর অথেন্টিকেশন';
 }

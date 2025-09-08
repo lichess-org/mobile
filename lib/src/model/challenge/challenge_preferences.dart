@@ -72,7 +72,7 @@ sealed class ChallengePrefs with _$ChallengePrefs implements Serializable {
     timeControl: ChallengeTimeControlType.clock,
     clock: (time: Duration(minutes: 10), increment: Duration.zero),
     days: 3,
-    rated: false,
+    rated: true,
     sideChoice: SideChoice.random,
   );
 
@@ -84,7 +84,7 @@ sealed class ChallengePrefs with _$ChallengePrefs implements Serializable {
   // for real time fromPosition cannot be rated
   bool get isRatedAllowed => timeControl == ChallengeTimeControlType.clock
       ? variant != Variant.fromPosition
-      : variant == Variant.standard;
+      : timeControl == ChallengeTimeControlType.correspondence && variant == Variant.standard;
 
   ChallengeRequest makeRequest(LightUser destUser, [String? initialFen]) {
     return ChallengeRequest(

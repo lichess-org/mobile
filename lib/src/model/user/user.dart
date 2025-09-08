@@ -436,14 +436,16 @@ sealed class CrosstableMatchup with _$CrosstableMatchup {
       _CrosstableMatchup;
 
   factory CrosstableMatchup.fromJson(Map<String, dynamic> json) {
-    return CrosstableMatchup(
-      nbGames: pick(json, 'nbGames').required().asIntOrThrow(),
-      users: pick(json, 'users')
-          .asMapOrThrow<String, num>()
-          .map((key, value) => MapEntry(UserId(key), value.toDouble()))
-          .toIMap(),
-    );
+    return CrosstableMatchup.fromPick(pick(json).required());
   }
+
+  factory CrosstableMatchup.fromPick(RequiredPick pick) => CrosstableMatchup(
+    nbGames: pick('nbGames').asIntOrThrow(),
+    users: pick('users')
+        .asMapOrThrow<String, num>()
+        .map((key, value) => MapEntry(UserId(key), value.toDouble()))
+        .toIMap(),
+  );
 }
 
 @freezed
@@ -455,15 +457,17 @@ sealed class Crosstable with _$Crosstable {
   }) = _Crosstable;
 
   factory Crosstable.fromJson(Map<String, dynamic> json) {
-    return Crosstable(
-      nbGames: pick(json, 'nbGames').required().asIntOrThrow(),
-      users: pick(json, 'users')
-          .asMapOrThrow<String, num>()
-          .map((key, value) => MapEntry(UserId(key), value.toDouble()))
-          .toIMap(),
-      matchup: pick(json, 'matchup').letOrNull((matchupPick) {
-        return CrosstableMatchup.fromJson(matchupPick.asMapOrEmpty<String, dynamic>());
-      }),
-    );
+    return Crosstable.fromPick(pick(json).required());
   }
+
+  factory Crosstable.fromPick(RequiredPick pick) => Crosstable(
+    nbGames: pick('nbGames').asIntOrThrow(),
+    users: pick('users')
+        .asMapOrThrow<String, num>()
+        .map((key, value) => MapEntry(UserId(key), value.toDouble()))
+        .toIMap(),
+    matchup: pick('matchup').letOrNull((matchupPick) {
+      return CrosstableMatchup.fromPick(matchupPick.required());
+    }),
+  );
 }

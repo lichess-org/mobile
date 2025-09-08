@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/view/play/create_correspondence_game_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -51,7 +52,7 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
             Navigator.of(
               context,
               rootNavigator: true,
-            ).push(GameScreen.buildRoute(context, initialGameId: gameFullId));
+            ).push(GameScreen.buildRoute(context, source: ExistingGameSource(gameFullId)));
           }
 
         case 'reload_seeks':

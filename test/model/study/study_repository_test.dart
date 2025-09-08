@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
@@ -348,6 +349,28 @@ void main() {
         Study(
           id: const StudyId('JbWtuaeK'),
           name: 'How to Solve Puzzles Correctly',
+          members: IList(const [
+            StudyMember(
+              user: LightUser(
+                name: 'Kyle-and-Jess',
+                flair: 'nature.chipmunk',
+                id: UserId('kyle-and-jess'),
+              ),
+              role: 'w',
+            ),
+            StudyMember(
+              user: LightUser(name: 'jessieu726', flair: 'nature.duck', id: UserId('jessieu726')),
+              role: 'w',
+            ),
+            StudyMember(
+              user: LightUser(
+                name: 'kyle11878',
+                flair: 'activity.lichess-horsey',
+                id: UserId('kyle11878'),
+              ),
+              role: 'w',
+            ),
+          ]),
           liked: false,
           likes: 29,
           ownerId: const UserId('kyle-and-jess'),

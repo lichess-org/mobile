@@ -37,6 +37,7 @@ const modules = [
   'streamer',
   'study',
   'timeago',
+  'tfa',
 ]
 
 // list of keys (per module) to include in the ARB file
@@ -46,6 +47,7 @@ const whiteLists = {
   'contact': ['contact', 'contactLichess'],
   'search': ['search'],
   'streamer': ['lichessStreamers'],
+  'tfa': ['twoFactorAuth']
 }
 
 // Order of locales with variants matters: the fallback must always be first

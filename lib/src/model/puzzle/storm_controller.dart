@@ -234,15 +234,16 @@ class StormController extends _$StormController {
 
   StormRunStats _getStats() {
     final wins = state.history.where((e) => e.win == true).toList();
-    final mean = state.history.sumBy((e) => e.solvingTime!.inSeconds) / state.history.length;
+    final totalTime = state.clock.endAt!;
+    final mean = totalTime.inSeconds / state.history.length;
     final threshold = mean * 1.5;
     return StormRunStats(
       moves: state.moves,
       errors: state.errors,
       score: wins.length,
       comboBest: state.combo.best,
-      time: state.clock.endAt!,
-      timePerMove: mean,
+      time: totalTime,
+      timePerMove: totalTime.inSeconds / state.moves,
       highest: wins.isNotEmpty
           ? wins
                 .map((e) => e.rating)

@@ -216,6 +216,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       orientation: Side.white,
                       fen: kEmptyFEN,
                       moves: [],
+                      userActionsBar: BottomBar.empty(),
                     ),
                   ),
                   error: (err, stackTrace) {

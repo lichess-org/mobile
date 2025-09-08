@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
@@ -95,24 +96,17 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                     choices: [
                       ChallengeTimeControlType.clock,
                       ChallengeTimeControlType.correspondence,
+                      ChallengeTimeControlType.unlimited,
                     ],
                     selectedItem: preferences.timeControl,
                     labelBuilder: (ChallengeTimeControlType timeControl) =>
-                        Text(switch (timeControl) {
-                          ChallengeTimeControlType.clock => context.l10n.realTime,
-                          ChallengeTimeControlType.correspondence => context.l10n.correspondence,
-                          ChallengeTimeControlType.unlimited => context.l10n.unlimited,
-                        }),
+                        Text(timeControl.label(context.l10n)),
                     onSelectedItemChanged: (ChallengeTimeControlType value) {
                       ref.read(challengePreferencesProvider.notifier).setTimeControl(value);
                     },
                   );
                 },
-                child: Text(
-                  preferences.timeControl == ChallengeTimeControlType.clock
-                      ? context.l10n.realTime
-                      : context.l10n.correspondence,
-                ),
+                child: Text(preferences.timeControl.label(context.l10n)),
               ),
             ),
             if (timeControl == ChallengeTimeControlType.clock) ...[
@@ -198,7 +192,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                   );
                 },
               ),
-            ] else ...[
+            ] else if (timeControl == ChallengeTimeControlType.correspondence) ...[
               Builder(
                 builder: (context) {
                   int daysPerTurn = preferences.days;
@@ -293,16 +287,15 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
               ),
             ),
             if (account != null)
-              ExpandedSection(
-                expand: preferences.isRatedAllowed,
-                child: ListTile(
-                  title: Text(context.l10n.rated),
-                  trailing: Switch.adaptive(
-                    value: preferences.rated,
-                    onChanged: (bool value) {
-                      ref.read(challengePreferencesProvider.notifier).setRated(value);
-                    },
-                  ),
+              ListTile(
+                title: Text(context.l10n.rated),
+                trailing: Switch.adaptive(
+                  value: preferences.isRatedAllowed && preferences.rated,
+                  onChanged: preferences.isRatedAllowed
+                      ? (bool value) {
+                          ref.read(challengePreferencesProvider.notifier).setRated(value);
+                        }
+                      : null,
                 ),
               ),
             const SizedBox(height: 20),
@@ -312,105 +305,110 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: FilledButton(
-                    onPressed: timeControl == ChallengeTimeControlType.clock
-                        ? isValidTimeControl && isValidPosition
-                              ? () {
-                                  Navigator.of(
+                    onPressed: switch (timeControl) {
+                      ChallengeTimeControlType.clock =>
+                        isValidTimeControl && isValidPosition
+                            ? () {
+                                Navigator.of(
+                                  context,
+                                ).popUntil((route) => route is! ModalBottomSheetRoute);
+                                Navigator.of(context, rootNavigator: true).push(
+                                  GameScreen.buildRoute(
                                     context,
-                                  ).popUntil((route) => route is! ModalBottomSheetRoute);
-                                  Navigator.of(context, rootNavigator: true).push(
-                                    GameScreen.buildRoute(
-                                      context,
-                                      challenge: preferences.makeRequest(
+                                    source: UserChallengeSource(
+                                      preferences.makeRequest(
                                         widget.user,
                                         preferences.variant != Variant.fromPosition
                                             ? null
                                             : fromPositionFenInput,
                                       ),
                                     ),
-                                  );
+                                  ),
+                                );
+                              }
+                            : null,
+                      ChallengeTimeControlType.correspondence ||
+                      ChallengeTimeControlType.unlimited =>
+                        snapshot.connectionState != ConnectionState.waiting
+                            ? () async {
+                                final createGameService = ref.read(createGameServiceProvider);
+                                setState(() {
+                                  _pendingCorrespondenceChallenge = createGameService
+                                      .newCorrespondenceChallenge(
+                                        preferences.makeRequest(
+                                          widget.user,
+                                          preferences.variant != Variant.fromPosition
+                                              ? null
+                                              : fromPositionFenInput,
+                                        ),
+                                      );
+                                });
+
+                                try {
+                                  final maybeDeclined = await _pendingCorrespondenceChallenge;
+
+                                  if (!context.mounted) return;
+
+                                  Navigator.of(
+                                    context,
+                                  ).popUntil((route) => route is! ModalBottomSheetRoute);
+
+                                  if (maybeDeclined != null) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Text(context.l10n.challengeChallengeDeclined),
+                                            const SizedBox(height: 8.0),
+                                            const Divider(height: 26.0, thickness: 0.0),
+                                            Text(
+                                              maybeDeclined.label(context.l10n),
+                                              style: const TextStyle(fontStyle: FontStyle.italic),
+                                            ),
+                                            const Divider(height: 26.0, thickness: 0.0),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const Text(' — '),
+                                                  UserFullNameWidget(user: widget.user),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        duration: const Duration(seconds: 5),
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          // TODO l10n
+                                          'Challenge created: you will be notified when the game starts.\nYou can access it from the home tab.',
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                } catch (e) {
+                                  if (context.mounted) {
+                                    showSnackBar(
+                                      context,
+                                      context.l10n.mobileSomethingWentWrong,
+                                      type: SnackBarType.error,
+                                    );
+                                  }
+                                } finally {
+                                  setState(() {
+                                    _pendingCorrespondenceChallenge = null;
+                                  });
                                 }
-                              : null
-                        : timeControl == ChallengeTimeControlType.correspondence &&
-                              snapshot.connectionState != ConnectionState.waiting
-                        ? () async {
-                            final createGameService = ref.read(createGameServiceProvider);
-                            setState(() {
-                              _pendingCorrespondenceChallenge = createGameService
-                                  .newCorrespondenceChallenge(
-                                    preferences.makeRequest(
-                                      widget.user,
-                                      preferences.variant != Variant.fromPosition
-                                          ? null
-                                          : fromPositionFenInput,
-                                    ),
-                                  );
-                            });
-
-                            try {
-                              final maybeDeclined = await _pendingCorrespondenceChallenge;
-
-                              if (!context.mounted) return;
-
-                              Navigator.of(
-                                context,
-                              ).popUntil((route) => route is! ModalBottomSheetRoute);
-
-                              if (maybeDeclined != null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(context.l10n.challengeChallengeDeclined),
-                                        const SizedBox(height: 8.0),
-                                        const Divider(height: 26.0, thickness: 0.0),
-                                        Text(
-                                          maybeDeclined.label(context.l10n),
-                                          style: const TextStyle(fontStyle: FontStyle.italic),
-                                        ),
-                                        const Divider(height: 26.0, thickness: 0.0),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Text(' — '),
-                                              UserFullNameWidget(user: widget.user),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    duration: const Duration(seconds: 5),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      // TODO l10n
-                                      'Challenge created: you will be notified when the game starts.\nYou can access it from the home tab.',
-                                    ),
-                                  ),
-                                );
                               }
-                            } catch (e) {
-                              if (context.mounted) {
-                                showSnackBar(
-                                  context,
-                                  context.l10n.mobileSomethingWentWrong,
-                                  type: SnackBarType.error,
-                                );
-                              }
-                            } finally {
-                              setState(() {
-                                _pendingCorrespondenceChallenge = null;
-                              });
-                            }
-                          }
-                        : null,
+                            : null,
+                    },
                     child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
                   ),
                 );
