@@ -34,7 +34,10 @@ Future<void> main() async {
   }
 
   if (defaultTargetPlatform == TargetPlatform.android) {
-    await androidDisplayInitialization(widgetsBinding);
+    final currentState = WidgetsBinding.instance.lifecycleState;
+    if (currentState == AppLifecycleState.resumed) {
+      await androidDisplayInitialization(widgetsBinding);
+    }
   }
 
   runApp(ProviderScope(observers: [ProviderLogger()], child: const AppInitializationScreen()));
