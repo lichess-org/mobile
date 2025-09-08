@@ -34,8 +34,8 @@ Future<void> main() async {
   }
 
   if (defaultTargetPlatform == TargetPlatform.android) {
-    final currentState = WidgetsBinding.instance.lifecycleState;
-    if (currentState == AppLifecycleState.resumed) {
+    final lifecycleState = WidgetsBinding.instance.lifecycleState;
+    if (lifecycleState != AppLifecycleState.detached) {
       await androidDisplayInitialization(widgetsBinding);
     }
   }
