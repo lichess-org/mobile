@@ -55,7 +55,7 @@ dependencies:
   linkify: ^5.0.0
   logging: ^1.1.0
   material_color_utilities: ^0.11.1
-  material_symbols_icons: ^4.2811.0
+  material_symbols_icons: ^4.2872.0
   meta: ^1.8.0
   multistockfish: ^0.3.0
   package_info_plus: ^8.0.0
