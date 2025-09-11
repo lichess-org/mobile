@@ -67,13 +67,6 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
                           ),
                         ],
                       ),
-                      if (widget.seek.ratingRange != null) ...[
-                        const SizedBox(height: 8.0),
-                        Text(
-                          '${widget.seek.ratingRange!.$1}-${widget.seek.ratingRange!.$2}',
-                          style: TextTheme.of(context).titleMedium,
-                        ),
-                      ],
                       //Do not show rating range if the default values (-500, +500) are used
                       if (widget.seek.ratingRange != null &&
                           !(widget.seek.ratingRange!.$1 + 1000 == widget.seek.ratingRange!.$2)) ...[
