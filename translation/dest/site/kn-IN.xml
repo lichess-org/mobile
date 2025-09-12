@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">ರಾಜ ಮಧ್ಯಕ್ಕೆ ತಲುಪಿದ್ದಾನೆ</string>
   <string name="threeChecks">ಮೂರು ಚೆಕ್</string>
   <string name="raceFinished">ಓಟಸ್ಪರ್ಧೆ ಮುಕ್ತಾಯವಾಗಿದೆ</string>
-  <string name="variantEnding">ಈ ಪ್ರಭೇದದ ಮುಕ್ತಾಯ</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">ಈ ಪ್ರಭೇದದ ಮುಕ್ತಾಯ</string>
   <string name="newOpponent">ಹೊಸ ಎದುರಾಳಿ</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">ನಿಮ್ಮ ಎದುರಾಳಿ ನಿಮ್ಮೊಡನೆ ಒಂದು ಹೊಸ ಆಟ ಆಡಲು ಇಚ್ಛಿಸುತ್ತಿದ್ದಾರೆ</string>
   <string name="joinTheGame">ಆಟವನ್ನು ಸೇರಿ</string>
@@ -270,7 +270,6 @@
   <string name="blackTimeOut">ಕಪ್ಪು ದಳದ ನಿಗದಿತ ಸಮಯ ಮುಕ್ತಾಯ</string>
   <string name="drawOfferSent">ಡ್ರಾ ಮಾಡಿಕೊಳ್ಳಲು ಮನವಿ ಮಾಡಲಾಗಿದೆ</string>
   <string name="drawOfferAccepted">ಡ್ರಾ ಮನವಿಯನ್ನು ಸ್ವೀಕರಿಸಲಾಗಿದೆ</string>
-  <string name="drawOfferCanceled">ಡ್ರಾ ಮನವಿಯನ್ನು ನಿರಾಕರಿಸಲಾಗಿದೆ</string>
   <string name="whiteOffersDraw">ಬಿಳಿ ದಳ ಡ್ರಾ ಸ್ವೀಕರಿಸಲು ಮನವಿ ಮಾಡುತ್ತಿದೆ</string>
   <string name="blackOffersDraw">ಕಪ್ಪು ದಳ ಡ್ರಾ ಸ್ವೀಕರಿಸಲು ಮನವಿ ಮಾಡುತ್ತಿದೆ</string>
   <string name="whiteDeclinesDraw">ಬಿಳಿ ದಳ ಡ್ರಾ ನಿರಾಕರಿಸಿದೆ</string>

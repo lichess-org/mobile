@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Rei no centro</string>
   <string name="threeChecks">Xaque triplo</string>
   <string name="raceFinished">Carreira finalizada</string>
-  <string name="variantEnding">Final da partida por normas desta modalidade</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Final da partida por normas desta modalidade</string>
   <string name="newOpponent">Novo rival</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">O teu rival quere xogar outra partida contra ti</string>
   <string name="joinTheGame">Unirse á partida</string>
@@ -280,7 +280,6 @@
   <string name="blackTimeOut">Acabou o tempo das negras</string>
   <string name="drawOfferSent">Oferta de táboas enviada</string>
   <string name="drawOfferAccepted">Oferta de táboas aceptada</string>
-  <string name="drawOfferCanceled">Oferta de táboas cancelada</string>
   <string name="whiteOffersDraw">As brancas ofrecen táboas</string>
   <string name="blackOffersDraw">As negras ofrecen táboas</string>
   <string name="whiteDeclinesDraw">As brancas rexeitan as táboas</string>
@@ -398,6 +397,7 @@
     <item quantity="other">Necesitas xogar %s partidas puntuadas máis</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">A túa puntuación %s é provisional</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Os filtros de puntuación están bloqueados dado que a túa puntuación non é estable. Tes que xogar partidas puntuadas para incrementar a súa estabilidade.</string>
   <string name="yourPerfRatingIsTooHigh">A túa puntuación %1$s (%2$s) é demasiado alta</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">A túa puntuación máxima semanal %1$s (%2$s) é demasiado alta</string>
   <string name="yourPerfRatingIsTooLow">A túa puntuación %1$s (%2$s) é demasiado baixa</string>

@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">킹이 중앙에 도달</string>
   <string name="threeChecks">세 번의 체크</string>
   <string name="raceFinished">킹이 보드 끝에 도달함</string>
-  <string name="variantEnding">변형 종료</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">변형 종료</string>
   <string name="newOpponent">새로운 상대</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">상대가 재대결을 원합니다</string>
   <string name="joinTheGame">대국 참가</string>
@@ -262,7 +262,6 @@
   <string name="blackTimeOut">흑 시간 초과</string>
   <string name="drawOfferSent">무승부 요청함</string>
   <string name="drawOfferAccepted">무승부 요청 수락됨</string>
-  <string name="drawOfferCanceled">무승부 요청 취소함</string>
   <string name="whiteOffersDraw">백이 무승부를 제안합니다</string>
   <string name="blackOffersDraw">흑이 무승부를 제안합니다</string>
   <string name="whiteDeclinesDraw">백이 무승부 제안을 거절하였습니다</string>

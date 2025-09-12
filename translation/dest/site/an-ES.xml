@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">Rei en o centro</string>
   <string name="threeChecks">Tres escaques</string>
   <string name="raceFinished">Corrida rematada</string>
-  <string name="variantEnding">Fin d\'a variant</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Fin d\'a variant</string>
   <string name="newOpponent">Nuevo oponent</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Lo tuyo oponent quiere la reminche</string>
   <string name="joinTheGame">Unir-se a la partida</string>
@@ -276,7 +276,6 @@
   <string name="blackTimeOut">Cayida de bandera d\'as negras</string>
   <string name="drawOfferSent">Ofierta de taulas ninviada</string>
   <string name="drawOfferAccepted">Ofierta de taulas acceptada</string>
-  <string name="drawOfferCanceled">Ofierta de taulas cancelada</string>
   <string name="whiteOffersDraw">Las blancas ofreixen taulas</string>
   <string name="blackOffersDraw">Las negras ofreixen taulas</string>
   <string name="whiteDeclinesDraw">Las blancas refusan taulas</string>

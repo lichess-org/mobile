@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Raja di tengah</string>
   <string name="threeChecks">Tiga check</string>
   <string name="raceFinished">Perlumbaan tamat</string>
-  <string name="variantEnding">Variasi berakhir</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variasi berakhir</string>
   <string name="newOpponent">Lawan baru</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Lawan anda mahu bermain permainan yang baru dengan anda</string>
   <string name="joinTheGame">Menyertai permainan</string>
@@ -250,7 +250,6 @@
   <string name="blackTimeOut">Hitam habis masa</string>
   <string name="drawOfferSent">Tawaran seri dihantar</string>
   <string name="drawOfferAccepted">Tawaran seri diterima</string>
-  <string name="drawOfferCanceled">Tawaran seri dibatalkan</string>
   <string name="whiteOffersDraw">Pemain putih tawar seri</string>
   <string name="blackOffersDraw">Pemain hitam tawar seri</string>
   <string name="whiteDeclinesDraw">Pemain putih menolak seri</string>

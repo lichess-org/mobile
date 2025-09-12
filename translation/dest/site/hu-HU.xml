@@ -22,6 +22,7 @@
   <string name="asBlack">sötéttel</string>
   <string name="randomColor">Véletlen szín</string>
   <string name="createAGame">Játék létrehozása</string>
+  <string name="createTheGame">Create the game</string>
   <string name="whiteIsVictorious">Világos nyert</string>
   <string name="blackIsVictorious">Sötét nyert</string>
   <string name="youPlayTheWhitePieces">Világossal fogsz játszani</string>
@@ -31,7 +32,7 @@
   <string name="kingInTheCenter">Király a centrumban</string>
   <string name="threeChecks">Három sakk</string>
   <string name="raceFinished">A verseny befejeződött</string>
-  <string name="variantEnding">Variáns vége</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variáns vége</string>
   <string name="newOpponent">Új ellenfél</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Az ellenfeled visszavágót szeretne</string>
   <string name="joinTheGame">Csatlakozás a játékhoz</string>
@@ -273,7 +274,6 @@
   <string name="blackTimeOut">Sötét ideje lejárt</string>
   <string name="drawOfferSent">Döntetlen felajánlva</string>
   <string name="drawOfferAccepted">Döntetlen elfogadva</string>
-  <string name="drawOfferCanceled">Döntetlen ajánlás elvetve</string>
   <string name="whiteOffersDraw">Világos döntetlent ajánl</string>
   <string name="blackOffersDraw">Sötét döntetlent ajánl</string>
   <string name="whiteDeclinesDraw">Világos elutasította a döntetlen ajánlatot</string>

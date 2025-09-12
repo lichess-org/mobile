@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Kongen i sentrum</string>
   <string name="threeChecks">Tre sjakker</string>
   <string name="raceFinished">Målgang</string>
-  <string name="variantEnding">Variantavslutning</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variantavslutning</string>
   <string name="newOpponent">Ny motstander</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Din motstander vil spille et nytt parti med deg</string>
   <string name="joinTheGame">Bli med</string>
@@ -280,7 +280,6 @@
   <string name="blackTimeOut">Tiden er ute for svart</string>
   <string name="drawOfferSent">Remistilbud sendt</string>
   <string name="drawOfferAccepted">Remistilbud godtatt</string>
-  <string name="drawOfferCanceled">Remistilbud trukket tilbake</string>
   <string name="whiteOffersDraw">Hvit tilbyr remis</string>
   <string name="blackOffersDraw">Sort tilbyr remis</string>
   <string name="whiteDeclinesDraw">Hvit avslår remis</string>

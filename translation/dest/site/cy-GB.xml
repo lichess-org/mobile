@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">Teyrn yn y canol</string>
   <string name="threeChecks">Tri siach</string>
   <string name="raceFinished">Rasys drosodd</string>
-  <string name="variantEnding">Mae\'r amrywiolyn wedi dod i\'w ben.</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Mae\'r amrywiolyn wedi dod i\'w ben.</string>
   <string name="newOpponent">Gwrthwynebydd newydd</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Mae\'r gwrthwynebydd eisiau chwarae gêm arall yn eich erbyn chi</string>
   <string name="joinTheGame">Ymuno\'r gêm</string>
@@ -260,7 +260,6 @@
   <string name="blackTimeOut">Amser du ar ben</string>
   <string name="drawOfferSent">Anfonwyd cynnig cyfartal</string>
   <string name="drawOfferAccepted">Cynnig cyfartal wedi\'i dderbyn</string>
-  <string name="drawOfferCanceled">Cynnig cyfartal wedi\'i ganslo</string>
   <string name="whiteOffersDraw">Cynigia\'r Gwyn gêm gyfartal.</string>
   <string name="blackOffersDraw">Cynigia\'r Du gêm gyfartal.</string>
   <string name="whiteDeclinesDraw">Gwrthodd y Gwyn gêm gyfartal.</string>

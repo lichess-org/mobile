@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Keeng in the mid</string>
   <string name="threeChecks">Three checks</string>
   <string name="raceFinished">Race feenisht</string>
-  <string name="variantEnding">Variant endin</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variant endin</string>
   <string name="newOpponent">New opponent</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Yer oponnent wants tae pley a new spiel wi ye</string>
   <string name="joinTheGame">Jine the spiel</string>
@@ -279,7 +279,6 @@
   <string name="blackTimeOut">Black time oot</string>
   <string name="drawOfferSent">Draw bid sent</string>
   <string name="drawOfferAccepted">Draw bid acceptit</string>
-  <string name="drawOfferCanceled">Draw bid backlins-takkit</string>
   <string name="whiteOffersDraw">White bids a draw</string>
   <string name="blackOffersDraw">Black bids a draw</string>
   <string name="whiteDeclinesDraw">White refuises draw</string>

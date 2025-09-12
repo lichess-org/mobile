@@ -30,7 +30,7 @@
   <string name="kingInTheCenter">Roue e kreiz</string>
   <string name="threeChecks">Tri bec\'h</string>
   <string name="raceFinished">Echu ar redadeg</string>
-  <string name="variantEnding">Fin ar variant</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Fin ar variant</string>
   <string name="newOpponent">Enebour nevez</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Hoc\'h enebour en deus c\'hoant da c\'hoari a-enep deoc\'h adarre</string>
   <string name="joinTheGame">Kregiñ ganti</string>
@@ -313,7 +313,6 @@
   <string name="blackTimeOut">Amzer ebet ken evit ar re zu</string>
   <string name="drawOfferSent">Kinnig rampo kaset</string>
   <string name="drawOfferAccepted">Kinnig rampo asantet</string>
-  <string name="drawOfferCanceled">Kinnig rampo nullet</string>
   <string name="whiteOffersDraw">Ar re wenn a ginnig bezañ rampo</string>
   <string name="blackOffersDraw">Ar re zu a ginnig bezañ rampo</string>
   <string name="whiteDeclinesDraw">Ar re wenn a nac\'h bezañ rampo</string>

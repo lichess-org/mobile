@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">Karalius centre</string>
   <string name="threeChecks">Trys šachai</string>
   <string name="raceFinished">Lenktynės baigėsi</string>
-  <string name="variantEnding">Variantinė pabaiga</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variantinė pabaiga</string>
   <string name="newOpponent">Naujas varžovas</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Jūsų varžovas norėtų sužaisti dar kartą</string>
   <string name="joinTheGame">Prisijungti prie žaidimo</string>
@@ -313,7 +313,6 @@
   <string name="blackTimeOut">Baigėsi laikas juodiesiems</string>
   <string name="drawOfferSent">Lygiųjų pasiūlymas išsiųstas</string>
   <string name="drawOfferAccepted">Lygiųjų pasiūlymas priimtas</string>
-  <string name="drawOfferCanceled">Lygiųjų pasiūlymas atšauktas</string>
   <string name="whiteOffersDraw">Baltieji siūlo lygiąsias</string>
   <string name="blackOffersDraw">Juodieji siūlo lygiąsias</string>
   <string name="whiteDeclinesDraw">Baltieji atsisako lygiųjų</string>

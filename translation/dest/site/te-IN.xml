@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">రాజు రంగమధ్యం చేరారు</string>
   <string name="threeChecks">మూడువైపులనుండి ఆటకట్టు</string>
   <string name="raceFinished">పరుగు ముగిసింది</string>
-  <string name="variantEnding">మరొక ముగింపు</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">మరొక ముగింపు</string>
   <string name="newOpponent">కొత్త ప్రత్యర్థి</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">మీ ప్రత్యర్థి మరొక ఆట ఆడాలనుకుంటున్నారు</string>
   <string name="joinTheGame">ఆటలో పాల్గొనండి</string>
@@ -283,7 +283,6 @@
   <string name="blackTimeOut">నలుపు సమయం సమాప్తి</string>
   <string name="drawOfferSent">సంధి ప్రతిపాదన పంపబడింది</string>
   <string name="drawOfferAccepted">సంధి ప్రతిపాదన ఆమోదించబడింది</string>
-  <string name="drawOfferCanceled">సంధి ప్రతిపాదన రద్దుచేయబడింది</string>
   <string name="whiteOffersDraw">తెల్ల పావులు సంధి కోరుకుంటున్నాయి</string>
   <string name="blackOffersDraw">నల్ల పావులు సంధి కోరుకుంటున్నాయి</string>
   <string name="whiteDeclinesDraw">తెల్ల పావులు సంధి నిరాకరించాయి</string>

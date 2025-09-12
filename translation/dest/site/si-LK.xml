@@ -29,7 +29,7 @@
   <string name="kingInTheCenter">රජු කෙන්ද්‍රයේය</string>
   <string name="threeChecks">වැටලුම් තුනක්</string>
   <string name="raceFinished">තරඟය අවසන්</string>
-  <string name="variantEnding">විචල්‍ය අවසානය</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">විචල්‍ය අවසානය</string>
   <string name="newOpponent">නව ප්‍රතිවාදියා</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">ඔබේ ප්‍රතිවාදියාට ඔබ සමඟ නව ක්‍රීඩාවක් කිරීමට අවශ්‍යයි</string>
   <string name="joinTheGame">ක්‍රීඩාවට සම්බන්ධ වන්න</string>
@@ -272,7 +272,6 @@
   <string name="blackTimeOut">කලුගේ වේලාව ඉවතට</string>
   <string name="drawOfferSent">සමාන කිරීමේ අවස්තාව යවා ඇත</string>
   <string name="drawOfferAccepted">සමාන කිරීමේ අවස්තාව පිලිගනී</string>
-  <string name="drawOfferCanceled">සමාන කිරීමේ අවස්තාව අවලංගු කරයි</string>
   <string name="whiteOffersDraw">සුදු සමාන කිරීමේ අවස්තාවක් එවා ඇත</string>
   <string name="blackOffersDraw">කලු සමාන කිරීමේ අවස්තාවක් එවා ඇත</string>
   <string name="whiteDeclinesDraw">සුදු සමාන කිරීමේ අවස්තාව ප්‍රතික්ශේප කරයි</string>

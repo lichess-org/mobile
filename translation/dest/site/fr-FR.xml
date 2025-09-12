@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Roi au centre</string>
   <string name="threeChecks">Trois échecs</string>
   <string name="raceFinished">Course terminée</string>
-  <string name="variantEnding">Fin par variante</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Fin par variante</string>
   <string name="newOpponent">Nouvel adversaire</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Votre adversaire souhaite jouer une nouvelle partie avec vous</string>
   <string name="joinTheGame">Rejoindre la partie</string>
@@ -280,7 +280,6 @@
   <string name="blackTimeOut">Temps noir écoulé</string>
   <string name="drawOfferSent">Proposition de nulle envoyée</string>
   <string name="drawOfferAccepted">Proposition de nulle acceptée</string>
-  <string name="drawOfferCanceled">Proposition de nulle annulée</string>
   <string name="whiteOffersDraw">Les Blancs proposent la nulle</string>
   <string name="blackOffersDraw">Les Noirs proposent la nulle</string>
   <string name="whiteDeclinesDraw">Les Blancs refusent la nulle</string>
@@ -398,6 +397,7 @@
     <item quantity="other">Vous devez encore jouer %s parties classées</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Votre classement %s est provisoire</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Les filtres de classement sont verrouillés parce que votre classement (votre cote) n\'est pas stable. Jouer davantage de parties classées contribuera à stabiliser votre classement.</string>
   <string name="yourPerfRatingIsTooHigh">Votre cote %1$s (%2$s) est trop élevée</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Votre meilleure cote hebdomadaire de %1$s (%2$s) est trop élevée</string>
   <string name="yourPerfRatingIsTooLow">Votre cote de %1$s (%2$s) est trop faible</string>

@@ -27,7 +27,7 @@
   <string name="kingInTheCenter">باچا مينځ کښې</string>
   <string name="threeChecks">درې کشت</string>
   <string name="raceFinished">د سیالانو په پای</string>
-  <string name="variantEnding">مختلف پای</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">مختلف پای</string>
   <string name="newOpponent">نوی سیال</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">سیال مو نوې لوبه پیلول غواړي</string>
   <string name="joinTheGame">يوځلی بيا</string>
@@ -69,7 +69,6 @@
   <string name="cancel">ړنګول</string>
   <string name="drawOfferSent">انډولست ولېږدېد</string>
   <string name="drawOfferAccepted">انډولست ومنل شو</string>
-  <string name="drawOfferCanceled">انډولست وړنګېد</string>
   <string name="yourOpponentOffersADraw">سیال مو انډولست کوي</string>
   <string name="accept">منل</string>
   <string name="decline">ردول</string>

@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">மையத்தில் அரசன்</string>
   <string name="threeChecks">மூன்று இடையூறுகள்</string>
   <string name="raceFinished">ஓட்டம் முற்றிற்று</string>
-  <string name="variantEnding">திரிபுரு முடிவடைகிறது</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">திரிபுரு முடிவடைகிறது</string>
   <string name="newOpponent">புது எதிராளி</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">நும் எதிராளி நும்மோடு புது ஆட்டமாட விரும்புகிறார்</string>
   <string name="joinTheGame">ஆட்டத்தில் பொருந்தவும்</string>
@@ -280,7 +280,6 @@
   <string name="blackTimeOut">கருப்பின் காலம் கடந்தது</string>
   <string name="drawOfferSent">இழுபறி முன்வரவு தெரிவிப்பு</string>
   <string name="drawOfferAccepted">இழுபறி முன்வரவு ஏற்கப்பட்டது</string>
-  <string name="drawOfferCanceled">இழுபறி முன்வரவு நிராகரிக்கப்பட்டது</string>
   <string name="whiteOffersDraw">வெள்ளை இழுபறி வாய்ப்பளிக்கிறது</string>
   <string name="blackOffersDraw">கருப்பு இழுபறி வாய்ப்பளிக்கிறது</string>
   <string name="whiteDeclinesDraw">வெள்ளை இழுபறியை நிராகரித்தார்</string>

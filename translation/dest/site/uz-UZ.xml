@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Qirol markazga kelguncha</string>
   <string name="threeChecks">Uch marta shox berishgacha</string>
   <string name="raceFinished">Musobaqa yakunlandi</string>
-  <string name="variantEnding">Variant tugayabdi</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variant tugayabdi</string>
   <string name="newOpponent">Yangi sherik topish</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Sizni sherigingiz siz bilan yana boshidan o\'ynamoqchi</string>
   <string name="joinTheGame">O\'yinga rozi bo\'lish</string>
@@ -280,7 +280,6 @@
   <string name="blackTimeOut">Qoralar vaqti tugadi</string>
   <string name="drawOfferSent">Durrang uchun taklif yuborildi</string>
   <string name="drawOfferAccepted">Durrang taklifi qabul qilindi</string>
-  <string name="drawOfferCanceled">Durrang taklifi bekor qilindi</string>
   <string name="whiteOffersDraw">Oqlar durrang taklif qilishdi</string>
   <string name="blackOffersDraw">Qoralar durrang taklif qilishdi</string>
   <string name="whiteDeclinesDraw">Oqlar durrang taklifini inkor qilishdi</string>

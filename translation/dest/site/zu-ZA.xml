@@ -30,7 +30,7 @@
   <string name="kingInTheCenter">Inkosi phakathi</string>
   <string name="threeChecks">Ukuhlola ezintathu</string>
   <string name="raceFinished">Umjaho uqedile</string>
-  <string name="variantEnding">Ukuphela okuhlukile</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Ukuphela okuhlukile</string>
   <string name="newOpponent">Umphikisi omusha</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Umphikisi wakho ufuna ukudlala umdlalo omusha nawe</string>
   <string name="joinTheGame">Joyina umdlalo</string>
@@ -187,7 +187,6 @@
   <string name="blackTimeOut">Isikhathi siphelili mnyama</string>
   <string name="drawOfferSent">Dweba okunikezwayo kuthunyelwe</string>
   <string name="drawOfferAccepted">Dweba okunikezwayo okwamukelwe</string>
-  <string name="drawOfferCanceled">Dweba ukunikezwa kukhanseliwe</string>
   <string name="whiteOffersDraw">White unikeza ukudweba</string>
   <string name="blackOffersDraw">Okumnyama okunikezwayo</string>
   <string name="whiteDeclinesDraw">Imidwebo emhlophe yenqaba</string>

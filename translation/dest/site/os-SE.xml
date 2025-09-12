@@ -27,7 +27,7 @@
   <string name="kingInTheCenter">Къарол астæуы</string>
   <string name="threeChecks">Æртæ шахы</string>
   <string name="raceFinished">Ерысæй дугъ фæци</string>
-  <string name="variantEnding">Парти фæци</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Парти фæци</string>
   <string name="newOpponent">Ног ныхмæлæууæджы ссарын</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Дæ ныхмæлæууæгæн фæнды ногæй ахъазын</string>
   <string name="joinTheGame">Расидт райсын</string>
@@ -215,7 +215,6 @@
   <string name="blackTimeOut">Саутæн рæстæг фæци</string>
   <string name="drawOfferSent">Хæрæгсаст фæуын æнхъарæн æрвыст у</string>
   <string name="drawOfferAccepted">Хæрæгсаст фæуын æнхъарæн райст уыди</string>
-  <string name="drawOfferCanceled">Хæрæгсаст фæуын æнхъарæн аивд уыди</string>
   <string name="whiteOffersDraw">Урсытæ æнхъарынц хæрæхсаст фæуын</string>
   <string name="blackOffersDraw">Саутæ æнхъарынц хæрæхсаст фæуын</string>
   <string name="whiteDeclinesDraw">Урсытæ хæрæгсаст фæуын æнхъарæн нæ райстой</string>

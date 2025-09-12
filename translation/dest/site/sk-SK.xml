@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Kráľ v strede</string>
   <string name="threeChecks">Tri šachy</string>
   <string name="raceFinished">Preteky ukončené</string>
-  <string name="variantEnding">Koniec variantu</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Koniec variantu</string>
   <string name="newOpponent">Nový súper</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Váš súper by si s Vami rád zahral odvetnú partiu</string>
   <string name="joinTheGame">Pripojiť sa k partii</string>
@@ -316,7 +316,6 @@
   <string name="blackTimeOut">Čiernemu došiel čas</string>
   <string name="drawOfferSent">Ponuka remízy odoslaná</string>
   <string name="drawOfferAccepted">Ponuka remízy prijatá</string>
-  <string name="drawOfferCanceled">Ponuka remízy zrušená</string>
   <string name="whiteOffersDraw">Biely ponúka remízu</string>
   <string name="blackOffersDraw">Čierny ponúka remízu</string>
   <string name="whiteDeclinesDraw">Biely odmietol remízu</string>
@@ -460,6 +459,7 @@
     <item quantity="other">Potrebujete odohrať ešte %s hodnotených partií</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Váš %s rating je provizórny</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Filtre hodnotenia sú uzamknuté, pretože Vaše hodnotenie nie je stabilné. Hranie hodnotených partií zvýši jeho stabilitu.</string>
   <string name="yourPerfRatingIsTooHigh">Váš %1$s rating (%2$s) je príliš vysoký</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Váš najvyšší týždenný %1$s rating (%2$s) je príliš vysoký</string>
   <string name="yourPerfRatingIsTooLow">Váš %1$s rating (%2$s) je príliš nízky</string>

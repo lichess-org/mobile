@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">Къирал центералда буго</string>
   <string name="threeChecks">Лъабго шах</string>
   <string name="raceFinished">Хадур гъей лъугӀана</string>
-  <string name="variantEnding">ХӀай лъугӀана</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">ХӀай лъугӀана</string>
   <string name="newOpponent">ЦӀияв дандияв</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Дур дандиясе цӀидасан бокьун буго мунгун хӀазе</string>
   <string name="joinTheGame">ХӀаялде жувазе</string>
@@ -276,7 +276,6 @@
   <string name="blackTimeOut">ЧӀегӀеразул заман тӀагӀана</string>
   <string name="drawOfferSent">Ращад ккеялда разилъаян абуна</string>
   <string name="drawOfferAccepted">Ращадккеялда разилъана</string>
-  <string name="drawOfferCanceled">Ращад ккеялда разилъаян абичӀого тана</string>
   <string name="whiteOffersDraw">ХъахӀаз ращад ккеялда разилъаян абуна</string>
   <string name="blackOffersDraw">ЧӀегӀераз ращад ккеялда разилъаян абуна</string>
   <string name="whiteDeclinesDraw">ХъахӀаз ращадккей нахъчӀвана</string>

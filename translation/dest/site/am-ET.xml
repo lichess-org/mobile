@@ -31,7 +31,7 @@
   <string name="kingInTheCenter">ንጉስ መሃል ላይ</string>
   <string name="threeChecks">ሶስት ቼክ</string>
   <string name="raceFinished">ውድድሩ አልቋል</string>
-  <string name="variantEnding">ተለዋጭ ማብቂያ</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">ተለዋጭ ማብቂያ</string>
   <string name="newOpponent">አዲስ ተጫዋች</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">ተጫዋቹ/ቿ ከእርሶ ጋር እንደገና መጫወት ይፈልጋል</string>
   <string name="joinTheGame">ጨዋታውን ይቀላቀሉ</string>

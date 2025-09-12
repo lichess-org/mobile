@@ -27,7 +27,7 @@
   <string name="kingInTheCenter">Rege in le centro</string>
   <string name="threeChecks">Tres chacos</string>
   <string name="raceFinished">Curso finite</string>
-  <string name="variantEnding">Finite per regula variante</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Finite per regula variante</string>
   <string name="newOpponent">Nove adversario</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Tu adversario vole jocar un nove partita con te</string>
   <string name="joinTheGame">Entrar in le partita</string>
@@ -191,7 +191,6 @@
   <string name="blackTimeOut">Le tempore del nigro ha finite</string>
   <string name="drawOfferSent">Proposition de partita nulle inviate</string>
   <string name="drawOfferAccepted">Proposition de partita nulle acceptate</string>
-  <string name="drawOfferCanceled">Proposition de partita nulle cancellate</string>
   <string name="whiteOffersDraw">Le blanco propone le partita nulle</string>
   <string name="blackOffersDraw">Le nigro propone le partita nulle</string>
   <string name="whiteDeclinesDraw">Le blanco declina le partita nulle</string>

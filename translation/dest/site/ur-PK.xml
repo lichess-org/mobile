@@ -28,7 +28,7 @@
   <string name="kingInTheCenter">بادشاہ وسط میں ہے</string>
   <string name="threeChecks">تین بار شہ</string>
   <string name="raceFinished">دوڑ ختم</string>
-  <string name="variantEnding">مختلف اختتام</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">مختلف اختتام</string>
   <string name="newOpponent">نیا حریف</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">حریف ایک اور مقابلہ چاہتے ہیں</string>
   <string name="joinTheGame">قبول ہے!</string>
@@ -220,7 +220,6 @@
   <string name="blackTimeOut">سیاہ کا وقت ختم</string>
   <string name="drawOfferSent">مقابلہ برابری پر ختم کرنے کی پیشکش بھیج دی گئی</string>
   <string name="drawOfferAccepted">مقابلہ برابری پر ختم کرنے کی پیشکش قبول کرلی گئي</string>
-  <string name="drawOfferCanceled">مقابلہ برابری پر ختم کرنے کی پیشکش منسوخ کردی گئی</string>
   <string name="whiteOffersDraw">سفید مقابلہ برابری پر ختم کرنا چاہتا ہے</string>
   <string name="blackOffersDraw">سیاہ مقابلہ برابری پر ختم کرنا چاہتا ہے</string>
   <string name="whiteDeclinesDraw">سفید نے برابری کی درخواست مسترد کر دی</string>

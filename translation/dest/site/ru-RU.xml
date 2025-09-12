@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Король в центре</string>
   <string name="threeChecks">Три шаха</string>
   <string name="raceFinished">Гонка окончена</string>
-  <string name="variantEnding">Партия окончена</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Партия окончена</string>
   <string name="newOpponent">Найти другого соперника</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Соперник предлагает вам сыграть ещё раз</string>
   <string name="joinTheGame">Принять вызов</string>
@@ -316,7 +316,6 @@
   <string name="blackTimeOut">Чёрные просрочили время</string>
   <string name="drawOfferSent">Предложение ничьей отправлено</string>
   <string name="drawOfferAccepted">Предложение ничьей принято</string>
-  <string name="drawOfferCanceled">Предложение ничьей отменено</string>
   <string name="whiteOffersDraw">Белые предлагают ничью</string>
   <string name="blackOffersDraw">Чёрные предлагают ничью</string>
   <string name="whiteDeclinesDraw">Белые отклонили предложение ничьей</string>

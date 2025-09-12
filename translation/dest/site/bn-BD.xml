@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">রাজাকে কেন্দ্রে আনুন</string>
   <string name="threeChecks">তিনটি কিস্তি</string>
   <string name="raceFinished">প্রতিযোগিতা শেষ</string>
-  <string name="variantEnding">ভিন্ন রকমের সমাপ্তি</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">ভিন্ন রকমের সমাপ্তি</string>
   <string name="newOpponent">নতুন প্রতিপক্ষ</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">আপনার প্রতিপক্ষ পুনরায়  আপনার সাথে খেলতে চায়</string>
   <string name="joinTheGame">খেলাটিতে যোগ দিন</string>
@@ -276,7 +276,6 @@
   <string name="blackTimeOut">কালোর সময় আপ</string>
   <string name="drawOfferSent">সমান অফার পাঠানো হয়েছে</string>
   <string name="drawOfferAccepted">সমান অফার গ্রহণ করা হয়েছে</string>
-  <string name="drawOfferCanceled">সমান অফার বাতিল করা হয়েছে</string>
   <string name="whiteOffersDraw">সাদা অফার সমান</string>
   <string name="blackOffersDraw">কালো অফার সমান</string>
   <string name="whiteDeclinesDraw">সাদা সমান প্রত্যাখান করেছে</string>

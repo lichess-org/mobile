@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Konge i centrum</string>
   <string name="threeChecks">Tre skakker</string>
   <string name="raceFinished">Race færdigt</string>
-  <string name="variantEnding">Variantafslutning</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variantafslutning</string>
   <string name="newOpponent">Ny modstander</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Din modstander vil gerne spille et nyt parti</string>
   <string name="joinTheGame">Deltag i partiet</string>
@@ -280,7 +280,6 @@
   <string name="blackTimeOut">Tid udløbet for sort</string>
   <string name="drawOfferSent">Remistilbud afsendt</string>
   <string name="drawOfferAccepted">Remistilbud accepteret</string>
-  <string name="drawOfferCanceled">Remistilbud trukket tilbage</string>
   <string name="whiteOffersDraw">Hvid tilbyder remis</string>
   <string name="blackOffersDraw">Sort tilbyder remis</string>
   <string name="whiteDeclinesDraw">Hvid afslår remis</string>
@@ -398,6 +397,7 @@
     <item quantity="other">Du er nødt til at spille %s ratede partier mere</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Din %s rating er provisorisk</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Rating-filtre er låst, fordi din rating ikke er stabil. Stabiliteten øges ved at spille ratede partier.</string>
   <string name="yourPerfRatingIsTooHigh">Din %1$s rating (%2$s) er for høj</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Din ugentlige %1$s toprating (%2$s) er for høj</string>
   <string name="yourPerfRatingIsTooLow">Din %1$s rating (%2$s) er for lav</string>
@@ -497,7 +497,7 @@
   <string name="standByX">Et øjeblik %s, parrer spillere – gør dig klar!</string>
   <string name="pause">Sæt på pause</string>
   <string name="resume">Genoptag</string>
-  <string name="youArePlaying">Du spiller nu!</string>
+  <string name="youArePlaying">Du spiller!</string>
   <string name="winRate">Sejrsrate</string>
   <string name="performance">Præstation</string>
   <string name="tournamentComplete">Turnering afsluttet</string>

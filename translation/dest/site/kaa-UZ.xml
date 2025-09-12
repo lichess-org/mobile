@@ -30,7 +30,7 @@
   <string name="kingInTheCenter">Shax orayda</string>
   <string name="threeChecks">Úsh ret shax</string>
   <string name="raceFinished">Jarıs juwmaqlandı</string>
-  <string name="variantEnding">Variant tawsıldı</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variant tawsıldı</string>
   <string name="newOpponent">Jańa qarsılas</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Qarsılasıńız siz benen jáne oynawdı qáleydi</string>
   <string name="joinTheGame">Oyınǵa qosılıw</string>
@@ -197,7 +197,6 @@
   <string name="blackTimeOut">Qaranıń waqtı tawsıldı</string>
   <string name="drawOfferSent">Pat usınısı jiberildi</string>
   <string name="drawOfferAccepted">Pat usınısı qabıllandı</string>
-  <string name="drawOfferCanceled">Pat usınısı biykarlandı</string>
   <string name="whiteOffersDraw">Aqlar pattı usınıs etpekte</string>
   <string name="blackOffersDraw">Qaralar pattı usınıs etpekte</string>
   <string name="whiteDeclinesDraw">Aqlar pattı biykarladı</string>

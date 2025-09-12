@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Kungen är i centrum</string>
   <string name="threeChecks">Tre schackar</string>
   <string name="raceFinished">Lopp slut</string>
-  <string name="variantEnding">Variantbaserat slut</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variantbaserat slut</string>
   <string name="newOpponent">Ny motståndare</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Din motståndare vill spela ett nytt parti med dig</string>
   <string name="joinTheGame">Starta partiet</string>
@@ -279,7 +279,6 @@
   <string name="blackTimeOut">Svarts tid är slut</string>
   <string name="drawOfferSent">Remierbjudande skickat</string>
   <string name="drawOfferAccepted">Remierbjudande accepterat</string>
-  <string name="drawOfferCanceled">Remierbjudande avbrutet</string>
   <string name="whiteOffersDraw">Vit erbjuder remi</string>
   <string name="blackOffersDraw">Svart erbjuder remi</string>
   <string name="whiteDeclinesDraw">Vit avböjer remi</string>

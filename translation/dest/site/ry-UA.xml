@@ -30,7 +30,7 @@
   <string name="kingInTheCenter">Король у центрі</string>
   <string name="threeChecks">Три шаха</string>
   <string name="raceFinished">Перебіг ся кончив</string>
-  <string name="variantEnding">Бавка кончила ся</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Бавка кончила ся</string>
   <string name="newOpponent">Новый противник</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Противник хоче бавити из вами щи раз</string>
   <string name="joinTheGame">Прикапчати ся од бавцї</string>
@@ -280,7 +280,6 @@
   <string name="blackTimeOut">У чорных уйшов час</string>
   <string name="drawOfferSent">Понука ремізы загната</string>
   <string name="drawOfferAccepted">Понука ремізы прията</string>
-  <string name="drawOfferCanceled">Понука ремізы не прията</string>
   <string name="whiteOffersDraw">Білі понукувут ремізу</string>
   <string name="blackOffersDraw">Чорні понукувут ремізу</string>
   <string name="whiteDeclinesDraw">Білі одвергли ремізу</string>

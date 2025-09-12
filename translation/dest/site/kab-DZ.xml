@@ -23,7 +23,7 @@
   <string name="kingInTheCenter">Agellid deg tlemmast</string>
   <string name="threeChecks">kraḍ n yiciken</string>
   <string name="raceFinished">Tekfa tamzizla</string>
-  <string name="variantEnding">Taggara n talmest</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Taggara n talmest</string>
   <string name="newOpponent">Afna amaynu</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Afna inek ibɣa a d‑yurar slal amaynu akk yidek</string>
   <string name="joinTheGame">Sdukel aslal</string>
@@ -111,7 +111,6 @@
   <string name="cancel">Semmet</string>
   <string name="drawOfferSent">Asumer n ilem yuzen</string>
   <string name="drawOfferAccepted">Asumer n ilem iqbel</string>
-  <string name="drawOfferCanceled">Asumer n ilem isemmet</string>
   <string name="yourOpponentOffersADraw">Afna inek yetsummer ilem</string>
   <string name="accept">Qbel</string>
   <string name="decline">Agwi</string>

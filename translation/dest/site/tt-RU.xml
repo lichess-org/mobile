@@ -32,7 +32,7 @@
   <string name="kingInTheCenter">Патша такта уртасында</string>
   <string name="threeChecks">Өч шах</string>
   <string name="raceFinished">Ярыш бетте</string>
-  <string name="variantEnding">Вариант бетте</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Вариант бетте</string>
   <string name="newOpponent">Яңа ярышучы</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">Ярушычыгыз сезнең белән яңа уен уйнарга тели</string>
   <string name="joinTheGame">Уенга кушылу</string>
@@ -238,7 +238,6 @@
   <string name="blackTimeOut">Караларның вакыты чыкты</string>
   <string name="drawOfferSent">Тиңлек тәкъдиме җибәрелде</string>
   <string name="drawOfferAccepted">Тиңлек тәкъдиме кабул ителде</string>
-  <string name="drawOfferCanceled">Тиңлек тәкъдиме туктатылды</string>
   <string name="whiteOffersDraw">Аклар тиңлек тәкъдим итә</string>
   <string name="blackOffersDraw">Каралар тиңлек тәкъдим итә</string>
   <string name="whiteDeclinesDraw">Аклар тиңлекне кире кага</string>

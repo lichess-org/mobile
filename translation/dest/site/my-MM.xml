@@ -30,7 +30,7 @@
   <string name="kingInTheCenter">King in the centre</string>
   <string name="threeChecks">Three checks</string>
   <string name="raceFinished">ပြိုင်ပွဲပြီးပြီ</string>
-  <string name="variantEnding">Variant ending</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Variant ending</string>
   <string name="newOpponent">ပြိုင်ဘက်အသစ်ရှာရန်</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">သင့်ရဲ့ပြိုင်ဘက်က ပွဲအသစ်စရန် အကြံပြုသည်</string>
   <string name="joinTheGame">ဂိမ်းတွင်ပူးပေါင်းပါ</string>

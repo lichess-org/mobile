@@ -30,7 +30,7 @@
   <string name="kingInTheCenter">Mfalme katika kituo</string>
   <string name="threeChecks">Kaguzi tatu</string>
   <string name="raceFinished">Mbio imemalizika</string>
-  <string name="variantEnding">Kumalizia kwa njia tofauti</string>
+  <string name="variantEnding" comment="Used to describe ending conditions, such as exploding both kings in Atomic Chess.">Kumalizia kwa njia tofauti</string>
   <string name="newOpponent">mpinzani mwingine</string>
   <string name="yourOpponentWantsToPlayANewGameWithYou">mpinzani wako ataka mcheze upya</string>
   <string name="joinTheGame">jiunge na mchezo</string>
