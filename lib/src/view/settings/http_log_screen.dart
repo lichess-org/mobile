@@ -56,7 +56,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
     final asyncState = ref.watch(httpLogPaginatorProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('HTTP Logs'),
+        title: const Text('HTTP logs'),
         actions: [
           if (asyncState.valueOrNull?.isDeleteButtonVisible == true)
             IconButton(
