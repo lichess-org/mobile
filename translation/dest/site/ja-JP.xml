@@ -262,7 +262,6 @@
   <string name="blackTimeOut">黒時間切れ</string>
   <string name="drawOfferSent">ドローの提案を送信しました</string>
   <string name="drawOfferAccepted">ドロー提案が承諾されました</string>
-  <string name="drawOfferCanceled">ドローの提案をキャンセルしました</string>
   <string name="whiteOffersDraw">白が引き分けを提案しました</string>
   <string name="blackOffersDraw">黒が引き分けを提案しました</string>
   <string name="whiteDeclinesDraw">白が引き分けを拒否しました</string>
@@ -367,6 +366,7 @@
     <item quantity="other">レート戦があと %s 局必要です</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">あなたの %s レーティングは仮レートです</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">あなたのレーティングが不安定なため、レーティングフィルタは使用できません。レート戦をプレイすると安定度が上がります。</string>
   <string name="yourPerfRatingIsTooHigh">%1$s レーティング (%2$s) が高すぎます</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">%1$s の週間パフォーマンス (%2$s) が高すぎます</string>
   <string name="yourPerfRatingIsTooLow">%1$s レーティング (%2$s) が低すぎます</string>
@@ -966,4 +966,7 @@
   <string name="enableBlindMode">視覚障害モードをオンに</string>
   <string name="disableBlindMode">視覚障害モードをオフに</string>
   <string name="copyToClipboard">クリップボードにコピー</string>
+  <string name="search">検索</string>
+  <string name="clearSearch">検索をクリア</string>
+  <string name="tags">タグ</string>
 </resources>
