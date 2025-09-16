@@ -274,13 +274,12 @@
     <item quantity="one">%s partij met u</item>
     <item quantity="other">%s partijen met u</item>
   </plurals>
-  <string name="ok">Oké</string>
+  <string name="ok">OK</string>
   <string name="cancel">Annuleren</string>
   <string name="whiteTimeOut">Tijd om voor wit</string>
   <string name="blackTimeOut">Tijd om voor zwart</string>
   <string name="drawOfferSent">Remiseaanbod verstuurd</string>
   <string name="drawOfferAccepted">Remiseaanbod geaccepteerd</string>
-  <string name="drawOfferCanceled">Remiseaanbod geannuleerd</string>
   <string name="whiteOffersDraw">Wit biedt remise aan</string>
   <string name="blackOffersDraw">Zwart biedt remise aan</string>
   <string name="whiteDeclinesDraw">Wit weigert remise</string>
@@ -1010,4 +1009,7 @@ Alle exploitatiekosten, ontwikkeling en inhoud worden enkel gefinancierd door do
   <string name="enableBlindMode">Modus voor blinden inschakelen</string>
   <string name="disableBlindMode">Modus voor blinden uitschakelen</string>
   <string name="copyToClipboard">Kopiëren naar klembord</string>
+  <string name="online" comment="status of a user">online</string>
+  <string name="offline" comment="status of a user">offline</string>
+  <string name="search">Zoeken</string>
 </resources>

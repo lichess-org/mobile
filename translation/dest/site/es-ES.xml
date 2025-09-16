@@ -280,7 +280,6 @@
   <string name="blackTimeOut">Las negras agotaron su tiempo</string>
   <string name="drawOfferSent">Oferta de tablas enviada</string>
   <string name="drawOfferAccepted">Oferta de tablas aceptada</string>
-  <string name="drawOfferCanceled">Oferta de tablas cancelada</string>
   <string name="whiteOffersDraw">Las blancas ofrecen tablas</string>
   <string name="blackOffersDraw">Las negras ofrecen tablas</string>
   <string name="whiteDeclinesDraw">Las blancas rechazan tablas</string>
@@ -398,6 +397,7 @@
     <item quantity="other">Necesitas jugar %s partidas por puntos más</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Tu puntuación de %s es provisional</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Los filtros de valoración están bloqueados porque tu puntuación no es estable. Jugar partidas valoradas aumentará la estabilidad.</string>
   <string name="yourPerfRatingIsTooHigh">Tu puntuación de %1$s (%2$s) es demasiado alta</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Tu máxima puntación semanal de %1$s (%2$s) es demasiado alta</string>
   <string name="yourPerfRatingIsTooLow">Tu puntuación de %1$s (%2$s) es demasiado baja</string>
@@ -1010,4 +1010,9 @@ Todos los gastos de funcionamiento, desarrollo y contenidos se financian exclusi
   <string name="enableBlindMode">Activar modo para no videntes</string>
   <string name="disableBlindMode">Desactivar modo para no videntes</string>
   <string name="copyToClipboard">Copiar al portapapeles</string>
+  <string name="online" comment="status of a user">conectado</string>
+  <string name="offline" comment="status of a user">desconectado</string>
+  <string name="search">Buscar</string>
+  <string name="clearSearch">Borrar búsqueda</string>
+  <string name="tags">Etiquetas</string>
 </resources>

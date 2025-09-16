@@ -21,7 +21,7 @@
   <string name="blackPawn">sötét gyalog</string>
   <string name="sanCheck" comment="+ in standard notation">sakk</string>
   <string name="sanCheckmate" comment="# in standard notation">matt</string>
-  <string name="sanShortCastling" comment="O-O in standard notation">rövidsánc</string>
-  <string name="sanLongCastling" comment="O-O-O in standard notation">hosszúsánc</string>
+  <string name="sanShortCastling" comment="O-O in standard notation; also known as kingside castling">rövidsánc</string>
+  <string name="sanLongCastling" comment="O-O-O in standard notation; also known as queenside castling.">hosszúsánc</string>
   <string name="pgnAndFen" comment="Will be a heading read out over text-to-speech for blind users looking to share a PGN or FEN of a game.">PGN és FEN</string>
 </resources>
