@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
@@ -24,11 +25,13 @@ import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/text_badge.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final _userScreenDataProvider = FutureProvider.autoDispose.family<UserScreenData, UserId>(
@@ -93,12 +96,20 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       orElse: () => null,
     );
     return Scaffold(
-      appBar: AppBar(
+      appBar: PlatformAppBar(
         title: UserFullNameWidget(
           user: updatedLightUser ?? widget.user,
           shouldShowOnline: updatedLightUser != null,
         ),
-        actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
+        actions: [
+          if (isLoading) const PlatformAppBarLoadingIndicator(),
+          SemanticIconButton(
+            icon: const Icon(Icons.share),
+            semanticsLabel: 'Share profile',
+            onPressed: () =>
+                launchShareDialog(context, ShareParams(uri: lichessUri('/@/${widget.user.name}'))),
+          ),
+        ],
       ),
       body: userScreenData.when(
         data: (data) => _UserProfileListView(data, isLoading, setIsLoading),
