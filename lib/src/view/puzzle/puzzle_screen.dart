@@ -339,6 +339,22 @@ class _BodyState extends ConsumerState<_Body> {
     final currentEvalBest = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMove));
     final evalBestMove = (currentEvalBest ?? puzzleState.node.eval?.bestMove) as NormalMove?;
 
+    // Clear user shapes when puzzle or position changes.
+    ref.listen(ctrlProvider.select((state) => state.puzzle.puzzle.id), (previous, next) {
+      if (previous != null && previous != next && mounted) {
+        setState(() {
+          userShapes = ISet();
+        });
+      }
+    });
+    ref.listen(ctrlProvider.select((state) => state.currentPath), (previous, next) {
+      if (previous != null && previous != next && mounted) {
+        setState(() {
+          userShapes = ISet();
+        });
+      }
+    });
+
     final generatedShapes = puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
         ? ISet([
             Arrow(color: const Color(0x66003088), orig: evalBestMove.from, dest: evalBestMove.to),
