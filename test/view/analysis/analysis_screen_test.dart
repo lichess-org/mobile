@@ -961,6 +961,7 @@ void main() {
       );
 
       await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
 
       await switchToPremoveTab(tester);
 
@@ -1052,6 +1053,7 @@ void main() {
       );
 
       await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
 
       await switchToPremoveTab(tester);
 
@@ -1195,7 +1197,7 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-
+      await tester.pumpAndSettle();
       await switchToPremoveTab(tester);
 
       // Should be in starting position
@@ -1263,6 +1265,7 @@ void main() {
       );
 
       await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
 
       await switchToPremoveTab(tester);
 
