@@ -30,6 +30,23 @@ class BoardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ISet<Shape> allShapes = shapes ?? ISet();
+
+    // Add check highlight for spectator mode (no gameData)
+    if (gameData == null && fen.isNotEmpty) {
+      final position = Chess.fromSetup(Setup.parseFen(fen));
+      if (position.isCheck) {
+        final kingSquare = position.board.kingOf(position.turn);
+        if (kingSquare != null) {
+          final checkHighlight = Circle(
+            color: const Color(0xAA882020), // semi-transparent red
+            orig: kingSquare,
+          );
+          allShapes = allShapes.add(checkHighlight);
+        }
+      }
+    }
+
     final board = Chessboard(
       key: boardKey,
       size: size,
@@ -37,7 +54,7 @@ class BoardWidget extends StatelessWidget {
       orientation: orientation,
       game: gameData,
       lastMove: lastMove,
-      shapes: shapes,
+      shapes: allShapes,
       settings: settings,
     );
 
