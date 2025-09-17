@@ -74,6 +74,13 @@ sealed class AnalysisOptions with _$AnalysisOptions {
   };
 }
 
+class UnsupportedVariantException implements Exception {
+  final Variant variant;
+  final GameId gameId;
+
+  const UnsupportedVariantException(this.variant, this.gameId);
+}
+
 enum AnalysisGameResult {
   whiteWins,
   blackWins,
@@ -168,6 +175,9 @@ class AnalysisController extends _$AnalysisController
         {
           archivedGame = await ref.watch(archivedGameProvider(id: gameId).future);
           _variant = archivedGame!.meta.variant;
+          if (!_variant.isReadSupported) {
+            throw UnsupportedVariantException(_variant, gameId);
+          }
           pgn = archivedGame.makePgn();
           opening = archivedGame.data.opening;
           serverAnalysis = archivedGame.serverAnalysis;

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
@@ -37,10 +38,11 @@ import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final _logger = Logger('AnalysisScreen');
 
-class AnalysisScreen extends StatelessWidget {
+class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({required this.options, super.key});
 
   final AnalysisOptions options;
@@ -50,8 +52,75 @@ class AnalysisScreen extends StatelessWidget {
   }
 
   @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.watch(analysisControllerProvider(options));
+
+    return analysisState.when(
+      data: (state) => _AnalysisScreen(options: options),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, _) {
+        if (error is UnsupportedVariantException) {
+          return _UnsupportedVariantErrorScreen(error: error);
+        }
+        return Center(child: Text('Error: $error'));
+      },
+    );
+  }
+}
+
+class _UnsupportedVariantErrorScreen extends StatelessWidget {
+  const _UnsupportedVariantErrorScreen({required this.error});
+
+  final UnsupportedVariantException error;
+
+  @override
   Widget build(BuildContext context) {
-    return _AnalysisScreen(options: options);
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.analysis)),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              context.l10n.mobileSomethingWentWrong,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              context.l10n.mobileUnsupportedVariant(error.variant.name),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(context.l10n.cancel),
+                ),
+                Flexible(
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      final gameUrl = 'https://$kLichessHost/${error.gameId.value}';
+                      await launchUrl(Uri.parse(gameUrl), mode: LaunchMode.externalApplication);
+                    },
+                    icon: const Icon(Icons.open_in_browser),
+                    label: const Text('Open game in your browser'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
