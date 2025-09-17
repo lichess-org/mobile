@@ -51,7 +51,7 @@ class BoardWidget extends StatelessWidget {
               dimension: size,
               child: Center(
                 child: SizedBox(
-                  width: (size / 8) * 6.6,
+                  width: (size / 8) * 6.5,
                   height: (size / 8) * 4.6,
                   child: boardOverlay,
                 ),
