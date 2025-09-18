@@ -961,6 +961,7 @@ void main() {
       );
 
       await tester.pumpWidget(app);
+      await tester.pump();
 
       await switchToPremoveTab(tester);
 
@@ -1052,6 +1053,7 @@ void main() {
       );
 
       await tester.pumpWidget(app);
+      await tester.pump();
 
       await switchToPremoveTab(tester);
 
@@ -1195,6 +1197,7 @@ void main() {
       );
 
       await tester.pumpWidget(app);
+      await tester.pump();
 
       await switchToPremoveTab(tester);
 
@@ -1263,6 +1266,7 @@ void main() {
       );
 
       await tester.pumpWidget(app);
+      await tester.pump();
 
       await switchToPremoveTab(tester);
 
