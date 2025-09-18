@@ -13,10 +13,11 @@ import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class ServerAnalysisSummary extends ConsumerWidget {
-  const ServerAnalysisSummary(this.options);
+  const ServerAnalysisSummary(this.options, {super.key});
 
   final AnalysisOptions options;
 
@@ -24,6 +25,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final ctrlProvider = analysisControllerProvider(options);
+
     final playersAnalysis = ref.watch(
       ctrlProvider.select((value) => value.requireValue.playersAnalysis),
     );
@@ -63,7 +65,21 @@ class ServerAnalysisSummary extends ConsumerWidget {
                 const Padding(
                   padding: EdgeInsets.only(top: 16.0),
                   child: WaitingForServerAnalysis(),
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: FilledButton(
+                    onPressed: () => Navigator.of(context).push(
+                      RetroScreen.buildRoute(context, (
+                        id: options.gameId!,
+                        initialSide: ref.read(ctrlProvider).requireValue.pov,
+                      )),
+                    ),
+                    child: Text(context.l10n.learnFromYourMistakes),
+                  ),
                 ),
+
               AcplChart(options),
               Center(
                 child: SizedBox(

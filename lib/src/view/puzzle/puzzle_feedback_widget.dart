@@ -19,18 +19,11 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pieceSet = ref.watch(boardPreferencesProvider.select((value) => value.pieceSet));
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final brightness = Theme.of(context).brightness;
-
-    final piece = state.pov == Side.white ? PieceKind.whiteKing : PieceKind.blackKing;
-    final asset = pieceSet.assets[piece]!;
-
     switch (state.mode) {
       case PuzzleMode.view:
         final puzzleRating = context.l10n.puzzleRatingX(puzzle.puzzle.rating.toString());
         final playedXTimes = context.l10n.puzzlePlayedXTimes(puzzle.puzzle.plays).localizeNumbers();
-        return _FeedbackTile(
+        return FeedbackTile(
           leading: state.result == PuzzleResult.win
               ? Icon(Icons.check, size: 36, color: context.lichessColors.good)
               : null,
@@ -61,7 +54,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
       case PuzzleMode.load:
       case PuzzleMode.play:
         if (state.feedback == PuzzleFeedback.bad) {
-          return _FeedbackTile(
+          return FeedbackTile(
             leading: Icon(Icons.close, size: 36, color: context.lichessColors.error),
             title: Text(context.l10n.puzzleNotTheMove, overflow: TextOverflow.ellipsis),
             subtitle: Text(
@@ -71,40 +64,14 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
             ),
           );
         } else if (state.feedback == PuzzleFeedback.good) {
-          return _FeedbackTile(
+          return FeedbackTile(
             leading: Icon(Icons.check, size: 36, color: context.lichessColors.good),
             title: Text(context.l10n.puzzleBestMove),
             subtitle: Text(context.l10n.puzzleKeepGoing),
           );
         } else {
-          return _FeedbackTile(
-            leading: Stack(
-              alignment: Alignment.center,
-              clipBehavior: Clip.none,
-              children: [
-                BrightnessHueFilter(
-                  brightness: boardPrefs.brightness,
-                  hue: boardPrefs.hue,
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.0),
-                      color: brightness == Brightness.light
-                          ? boardPrefs.boardTheme.colors.lightSquare
-                          : boardPrefs.boardTheme.colors.darkSquare,
-                    ),
-                  ),
-                ),
-                Image.asset(
-                  asset.assetName,
-                  width: 48,
-                  height: 48,
-                  bundle: asset.bundle,
-                  package: asset.package,
-                ),
-              ],
-            ),
+          return FeedbackTile(
+            leading: SideToPlayPiece(side: state.pov),
             title: Text(context.l10n.yourTurn, overflow: TextOverflow.ellipsis),
             subtitle: Text(
               state.pov == Side.white
@@ -119,8 +86,52 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
   }
 }
 
-class _FeedbackTile extends StatelessWidget {
-  const _FeedbackTile({this.leading, required this.title, this.subtitle});
+class SideToPlayPiece extends ConsumerWidget {
+  const SideToPlayPiece({required this.side});
+
+  final Side side;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pieceSet = ref.watch(boardPreferencesProvider.select((value) => value.pieceSet));
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+
+    final brightness = Theme.of(context).brightness;
+    final piece = side == Side.white ? PieceKind.whiteKing : PieceKind.blackKing;
+    final asset = pieceSet.assets[piece]!;
+
+    return Stack(
+      alignment: Alignment.center,
+      clipBehavior: Clip.none,
+      children: [
+        BrightnessHueFilter(
+          brightness: boardPrefs.brightness,
+          hue: boardPrefs.hue,
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4.0),
+              color: brightness == Brightness.light
+                  ? boardPrefs.boardTheme.colors.lightSquare
+                  : boardPrefs.boardTheme.colors.darkSquare,
+            ),
+          ),
+        ),
+        Image.asset(
+          asset.assetName,
+          width: 48,
+          height: 48,
+          bundle: asset.bundle,
+          package: asset.package,
+        ),
+      ],
+    );
+  }
+}
+
+class FeedbackTile extends StatelessWidget {
+  const FeedbackTile({this.leading, required this.title, this.subtitle});
 
   final Widget? leading;
   final Widget title;
