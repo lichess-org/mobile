@@ -227,10 +227,23 @@ class _BodyState extends ConsumerState<_Body> {
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     Center(
-                                      child: PuzzleFeedbackWidget(
-                                        puzzle: puzzleState.puzzle,
-                                        state: puzzleState,
-                                        onStreak: true,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Expanded(
+                                            child: PuzzleFeedbackWidget(
+                                              puzzle: puzzleState.puzzle,
+                                              state: puzzleState,
+                                              onStreak: true,
+                                            ),
+                                          ),
+                                          Text(
+                                            context.l10n.puzzleRatingX(
+                                              puzzleState.puzzle.puzzle.rating.toString(),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 16.0),
+                                        ],
                                       ),
                                     ),
                                     Padding(
