@@ -104,7 +104,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         actions: [
           if (isLoading) const PlatformAppBarLoadingIndicator(),
           SemanticIconButton(
-            icon: const Icon(Icons.share),
+            icon: const PlatformShareIcon(),
             semanticsLabel: 'Share profile',
             onPressed: () =>
                 launchShareDialog(context, ShareParams(uri: lichessUri('/@/${widget.user.name}'))),

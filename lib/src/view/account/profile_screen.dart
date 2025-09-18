@@ -67,7 +67,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             data: (user) => user == null
                 ? const SizedBox.shrink()
                 : SemanticIconButton(
-                    icon: const Icon(Icons.share),
+                    icon: const PlatformShareIcon(),
                     semanticsLabel: 'Share profile',
                     onPressed: () => launchShareDialog(
                       context,
