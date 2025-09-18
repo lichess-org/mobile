@@ -30,11 +30,13 @@ class BoardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final safeFen = fen.isNotEmpty ? fen : Setup.standard.fen;
+
     ISet<Shape> allShapes = shapes ?? ISet();
 
     // Add check highlight for spectator mode (no gameData)
-    if (gameData == null && fen.isNotEmpty) {
-      final position = Chess.fromSetup(Setup.parseFen(fen));
+    if (gameData == null && safeFen.isNotEmpty) {
+      final position = Chess.fromSetup(Setup.parseFen(safeFen));
       if (position.isCheck) {
         final kingSquare = position.board.kingOf(position.turn);
         if (kingSquare != null) {
@@ -50,7 +52,7 @@ class BoardWidget extends StatelessWidget {
     final board = Chessboard(
       key: boardKey,
       size: size,
-      fen: fen,
+      fen: safeFen,
       orientation: orientation,
       game: gameData,
       lastMove: lastMove,
