@@ -30,13 +30,14 @@ class BoardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Chess position = Chess.fromSetup(Setup.parseFen(fen));
+    final safeFen = fen.trim().isNotEmpty ? fen : Setup.standard.fen;
+    final Chess position = Chess.fromSetup(Setup.parseFen(safeFen));
     // ✅ Safe fallback for spectator mode
     final effectiveGameData =
         gameData ??
         GameData(
           playerSide: PlayerSide.none, // spectator cannot move
-          sideToMove: Side.white, // doesn’t matter, just required
+          sideToMove: position.turn, // doesn’t matter, just required
           validMoves: IMap(), // no valid moves
           promotionMove: null,
           isCheck: position.isCheck,
@@ -47,7 +48,7 @@ class BoardWidget extends StatelessWidget {
     final board = Chessboard(
       key: boardKey,
       size: size,
-      fen: fen,
+      fen: safeFen,
       orientation: orientation,
       game: effectiveGameData,
       lastMove: lastMove,

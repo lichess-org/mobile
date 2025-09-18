@@ -155,7 +155,9 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         final shapes = userShapes.union(widget.shapes ?? ISet());
         final slicedMoves = widget.moves?.asMap().entries.slices(2);
 
-        final fen = widget.interactiveBoardParams?.position.fen ?? widget.fen!;
+        final fenCandidate = widget.interactiveBoardParams?.position.fen ?? widget.fen;
+        final fen = (fenCandidate?.isNotEmpty ?? false) ? fenCandidate! : Setup.standard.fen;
+
         final gameData = widget.interactiveBoardParams != null
             ? boardPrefs.toGameData(
                 variant: widget.interactiveBoardParams!.variant,
