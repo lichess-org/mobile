@@ -52,7 +52,12 @@ class BoardEditorController extends _$BoardEditorController {
   void editSquare(Square square) {
     final piece = state.pieceToAddOnEdit;
     if (piece != null) {
-      _updatePosition(state.pieces.add(square, piece));
+      final existingPiece = state.pieces[square];
+      if (existingPiece == piece) {
+        discardPiece(square);
+      } else {
+        _updatePosition(state.pieces.add(square, piece));
+      }
     } else {
       discardPiece(square);
     }
