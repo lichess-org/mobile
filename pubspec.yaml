@@ -30,7 +30,7 @@ dependencies:
   firebase_core: ^4.0.0
   firebase_crashlytics: ^5.0.0
   firebase_messaging: ^16.0.0
-  fl_chart: ^1.0.0
+  fl_chart: ^1.1.1
   flutter:
     sdk: flutter
   flutter_appauth: ^9.0.0
