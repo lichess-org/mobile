@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 /// A widget to display player information above/below the chess board.
 class GamePlayer extends StatelessWidget {
@@ -113,11 +114,7 @@ class GamePlayer extends StatelessWidget {
               ],
               const SizedBox(width: 5),
               if (player.user?.isPatron == true) ...[
-                Icon(
-                  LichessIcons.patron,
-                  size: playerFontSize,
-                  semanticLabel: context.l10n.patronLichessPatron,
-                ),
+                PatronIcon(size: playerFontSize, tier: player.user?.patronTierColor),
                 const SizedBox(width: 5),
               ],
               if (player.user?.title != null) ...[

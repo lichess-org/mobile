@@ -9,6 +9,56 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 
+/// A wing icon representing a Lichess patron with its different color tiers.
+class PatronIcon extends StatelessWidget {
+  const PatronIcon({this.tier, this.size, super.key});
+
+  final int? tier;
+  final double? size;
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyle = DefaultTextStyle.of(context).style;
+    final brightness = Theme.of(context).brightness;
+    return Icon(
+      LichessIcons.patron,
+      color: tier != null
+          ? brightness == Brightness.dark
+                ? patronColorsDark[(tier! - 1)]
+                : patronColorsLight[(tier! - 1)]
+          : null,
+      size: size ?? textStyle.fontSize,
+      semanticLabel: context.l10n.patronLichessPatron,
+    );
+  }
+
+  static final patronColorsDark = <Color>[
+    const HSLColor.fromAHSL(1.0, 90, 0.52, 0.57).toColor(),
+    const HSLColor.fromAHSL(1.0, 120, 0.32, 0.62).toColor(),
+    const HSLColor.fromAHSL(1.0, 151.9, 0.62, 0.62).toColor(),
+    const HSLColor.fromAHSL(1.0, 190, 0.52, 0.57).toColor(),
+    const HSLColor.fromAHSL(1.0, 207, 0.63, 0.66).toColor(),
+    const HSLColor.fromAHSL(1.0, 220, 0.62, 0.67).toColor(),
+    const HSLColor.fromAHSL(1.0, 270, 0.72, 0.73).toColor(),
+    const HSLColor.fromAHSL(1.0, 310, 0.52, 0.67).toColor(),
+    const HSLColor.fromAHSL(1.0, 0, 0.52, 0.65).toColor(),
+    const HSLColor.fromAHSL(1.0, 37, 0.74, 0.43).toColor(),
+  ];
+
+  static final patronColorsLight = <Color>[
+    const HSLColor.fromAHSL(1.0, 90, 0.60, 0.43).toColor(),
+    const HSLColor.fromAHSL(1.0, 120, 0.52, 0.52).toColor(),
+    const HSLColor.fromAHSL(1.0, 162.9, 0.65, 0.44).toColor(),
+    const HSLColor.fromAHSL(1.0, 190, 0.57, 0.48).toColor(),
+    const HSLColor.fromAHSL(1.0, 207, 0.78, 0.49).toColor(),
+    const HSLColor.fromAHSL(1.0, 220, 0.60, 0.57).toColor(),
+    const HSLColor.fromAHSL(1.0, 270, 0.62, 0.67).toColor(),
+    const HSLColor.fromAHSL(1.0, 310, 0.56, 0.57).toColor(),
+    const HSLColor.fromAHSL(1.0, 0, 0.52, 0.60).toColor(),
+    const HSLColor.fromAHSL(1.0, 37, 0.74, 0.43).toColor(),
+  ];
+}
+
 /// Displays a user name, title, flair (optional) with an optional rating.
 class UserFullNameWidget extends ConsumerWidget {
   const UserFullNameWidget({
@@ -92,12 +142,7 @@ class UserFullNameWidget extends ConsumerWidget {
         if (showPatron && user?.isPatron == true)
           Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: Icon(
-              LichessIcons.patron,
-              size: contextTextStyle.fontSize,
-              color: contextTextStyle.color,
-              semanticLabel: context.l10n.patronLichessPatron,
-            ),
+            child: PatronIcon(size: contextTextStyle.fontSize, tier: user?.patronTierColor),
           ),
         if (user?.title != null) ...[
           Text(
