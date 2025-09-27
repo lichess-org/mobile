@@ -42,6 +42,9 @@ abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableStep
   @override
   GameId get id => const GameId('--------');
 
+  /// Whether the game can be cancelled (no moves played yet).
+  bool get cancellable => playable && steps.length == 1;
+
   bool get abortable => playable && lastPosition.fullmoves <= 1;
 
   bool get resignable => playable && !abortable;

@@ -9,14 +9,12 @@ class YesNoDialog extends StatelessWidget {
     this.content,
     required this.onYes,
     required this.onNo,
-    this.alignment,
   });
 
   final Widget? title;
   final Widget? content;
   final VoidCallback onYes;
   final VoidCallback onNo;
-  final AlignmentGeometry? alignment;
 
   @override
   Widget build(BuildContext context) {
