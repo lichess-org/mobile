@@ -24,8 +24,6 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
     Speed.fromTimeIncrement(const TimeIncrement(0, 0)),
   );
 
-  OverTheBoardGame get game => state.game;
-
   void startNewGame(Variant variant, TimeIncrement timeIncrement) {
     state = OverTheBoardGameState.fromVariant(variant, Speed.fromTimeIncrement(timeIncrement));
   }
