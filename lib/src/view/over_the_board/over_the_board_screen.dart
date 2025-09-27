@@ -133,7 +133,7 @@ class _BodyState extends ConsumerState<_Body> {
 
           final navigator = Navigator.of(context);
           final game = gameState.game;
-          if (game.cancellable) {
+          if (game.abortable) {
             return navigator.pop();
           }
 
