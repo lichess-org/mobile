@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="playWithAFriend">Ludi kun amiko</string>
-  <string name="playWithTheMachine">Ludi kontraŭ la komputilo</string>
+  <string name="gameSetup">Agordoj de ludo</string>
+  <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">Defii geamikon</string>
+  <string name="playAgainstComputer" comment="Appears on the homepage. Opens the modal to create a game against a chess engine. Please keep your translation short.">Ludi kontraŭ komputilo</string>
+  <string name="gameMode">Tipo de ludo</string>
+  <string name="createLobbyGame">Krei ludon en atendejo</string>
+  <string name="youPlayAs">Koloro de viaj pecoj</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">Por inviti iun al ludo, donu ĉi tiun ligilon</string>
   <string name="gameOver">Ludo finiĝis</string>
   <string name="waitingForOpponent">Atendante kontraŭulon</string>
@@ -22,6 +26,7 @@
   <string name="asBlack">kiel nigro</string>
   <string name="randomColor">Hazarda koloro</string>
   <string name="createAGame">Krei ludon</string>
+  <string name="createTheGame">Krei ludon</string>
   <string name="whiteIsVictorious">Blanko venkis</string>
   <string name="blackIsVictorious">Nigro venkis</string>
   <string name="youPlayTheWhitePieces">Vi ludas per la blankaj pecoj</string>
@@ -74,6 +79,7 @@
   <string name="expandVariations">Etendi variaĵojn</string>
   <string name="forceVariation">Devigi variaĵon</string>
   <string name="copyVariationPgn">Kopi varianto PGN</string>
+  <string name="copyMainLinePgn">Kopii la ĉefan linion kiel PNG</string>
   <string name="move">Movo</string>
   <string name="variantLoss">Malvenka variaĵo</string>
   <string name="variantWin">Venka variaĵo</string>
@@ -156,6 +162,7 @@
   <string name="flipBoard">Rotacii tabulon</string>
   <string name="threefoldRepetition">Triobla ripeto</string>
   <string name="claimADraw">Postuli egalvenkon</string>
+  <string name="drawClaimed">Egalvenko petita</string>
   <string name="offerDraw">Proponi egalvenkon</string>
   <string name="draw">Egalvenko</string>
   <plurals name="nbPlayers">
@@ -165,6 +172,7 @@
   <string name="drawByMutualAgreement">Egalvenko per interkonsento</string>
   <string name="fiftyMovesWithoutProgress">Kvindek movoj sen progreso</string>
   <string name="currentGames">Ludataj ludoj</string>
+  <string name="joinedX">Aliĝinta %s</string>
   <plurals name="nbGames">
     <item quantity="one">%s ludo</item>
     <item quantity="other">%s ludoj</item>
@@ -276,7 +284,6 @@
   <string name="blackTimeOut">La tempo de nigro finiĝis</string>
   <string name="drawOfferSent">Egalvenka propono estis sendita</string>
   <string name="drawOfferAccepted">Egalvenka propono estis akceptita</string>
-  <string name="drawOfferCanceled">Egalvenka propono estis nuligita</string>
   <string name="whiteOffersDraw">Blanko proponas egalvenkon</string>
   <string name="blackOffersDraw">Nigro proponas egalvenkon</string>
   <string name="whiteDeclinesDraw">Blanko malakceptas egalvenkon</string>
@@ -286,7 +293,7 @@
   <string name="decline">Malakcepti</string>
   <string name="playingRightNow">Ludate nun</string>
   <string name="eventInProgress">Ludanta</string>
-  <string name="finished">Finite</string>
+  <string name="finished">Finita</string>
   <string name="abortGame">Ĉesigi ludon</string>
   <string name="gameAborted">Ludo estis ĉesigita</string>
   <string name="standard">Normale</string>
@@ -338,7 +345,7 @@
     <item quantity="other">%s aktualaj</item>
   </plurals>
   <string name="exportGames">Eksporti ludojn</string>
-  <string name="ratingRange">Rangogamo</string>
+  <string name="ratingFilter">Filtrilo de rango</string>
   <plurals name="giveNbSeconds">
     <item quantity="one">Doni %s sekundojn</item>
     <item quantity="other">Doni %s sekundojn</item>
@@ -347,7 +354,15 @@
   <string name="openingExplorerAndTablebase">Esplorilo de malfermoj &amp; tablobazo</string>
   <string name="takeback">Repreno</string>
   <string name="proposeATakeback">Proponi reprenon</string>
+  <string name="whiteProposesTakeback">Blanko proponas nuligi la lastan movon</string>
+  <string name="blackProposesTakeback">Nigro proponas nuligi la lastan movon</string>
   <string name="takebackPropositionSent">Reprena propono estis sendita</string>
+  <string name="whiteDeclinesTakeback">Blanko rifuzas nuligon de la lasta movo</string>
+  <string name="blackDeclinesTakeback">Nigro rifuzas nuligon de la lasta movo</string>
+  <string name="whiteAcceptsTakeback">Blanko akceptas nuligon de la lasta movo</string>
+  <string name="blackAcceptsTakeback">Nigro akceptas nuligon de la lasta movo</string>
+  <string name="whiteCancelsTakeback">Blanko nuligas la proponon nuligi movon</string>
+  <string name="blackCancelsTakeback">Nigro nuligas la proponon nuligi movon</string>
   <string name="yourOpponentProposesATakeback">Via kontraŭulo proponas nuligi la movon</string>
   <string name="bookmarkThisGame">Paĝmarki ĉi tiun ludon</string>
   <string name="tournament">Turniro</string>
@@ -386,6 +401,7 @@
     <item quantity="other">Vi devas ludi %s pli de taksaj ludoj</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Via rango de %s estas provizora</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">La rangaj filtriloj estas blokitaj ĉar via rango ne estas stabila. Ju pli da rangaj ludoj vi ludas des pli stabila estos via rango.</string>
   <string name="yourPerfRatingIsTooHigh">Via rango %1$s (%2$s) estas tro alta</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Via plej alta semajna rango en %1$s (%2$s) estas tro alta</string>
   <string name="yourPerfRatingIsTooLow">Via rango %1$s (%2$s) estas tro malalta</string>
@@ -416,7 +432,6 @@
   <string name="toStudy">Studo</string>
   <string name="importGame">Importi ludon</string>
   <string name="importGameExplanation">Kiam vi enmetas PGN-on de ludo, vi povas reludi ĝin, vidi komputilan analizon, babili kun la kontraŭulon, kaj dissemi la ligilon URL.</string>
-  <string name="importGameCaveat">Variaĵoj estos forigitaj. Por havi ilin enportu la PGN tra studoj.</string>
   <string name="importGameDataPrivacyWarning">Ĉi tiun PGN estas atingebla de la publiko. Por importi ludon private, uzu studon.</string>
   <plurals name="nbImportedGames">
     <item quantity="one">%s Importitaj ludoj</item>
@@ -480,6 +495,7 @@
   <string name="points">Poentoj</string>
   <string name="wins">Venkoj</string>
   <string name="losses">Malvenkoj</string>
+  <string name="startingIn" comment="Displayed above a timer">Komenciĝo post</string>
   <string name="standByX">Atentu %s, parigante ludantojn, pretiĝu!</string>
   <string name="pause">Paŭzu</string>
   <string name="resume">Daŭrigu</string>
@@ -540,6 +556,7 @@
   <string name="no">Ne</string>
   <string name="yes">Jes</string>
   <string name="website">Retejo</string>
+  <string name="mobile">Poŝaparato</string>
   <string name="help">Helpo:</string>
   <string name="createANewTopic">Krei novan temon</string>
   <string name="topics">Temoj</string>
@@ -770,10 +787,11 @@
   <string name="xJoinsY">%1$s kuplas %2$s</string>
   <string name="xLikesY">%1$s ŝatas %2$s</string>
   <string name="quickPairing">Rapida parado</string>
-  <string name="lobby">Lobio</string>
+  <string name="lobby">Atendejo</string>
   <string name="anonymous">Sennoma</string>
   <string name="yourScore">Via poentaro: %s</string>
   <string name="language">Lingvo</string>
+  <string name="allLanguages">Ĉiuj lingvoj</string>
   <string name="background">Fono</string>
   <string name="light">Hela</string>
   <string name="dark">Malhela</string>
@@ -802,6 +820,7 @@
   <string name="notifications">Sciigoj</string>
   <string name="notificationsX">Sciigoj: %1$s</string>
   <string name="perfRatingX">Rango: %s</string>
+  <string name="yourRatingIsX">Via rango estas %s</string>
   <plurals name="nbSecondsToPlayTheFirstMove">
     <item quantity="one">%s sekundo por ludi la unuan movon</item>
     <item quantity="other">%s sekundoj por ludi la unuan movon</item>
