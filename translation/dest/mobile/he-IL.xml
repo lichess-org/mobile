@@ -7,6 +7,7 @@
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">ניקוי המהלך השמור</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">הצטרפות למשחק</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">משוב</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">יום טוב</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">הסתרת וריאציות</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">בית</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">שדרנים בשידור חי</string>
@@ -14,7 +15,7 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">אין תוצאות</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">אינכם עוקבים אחר אף אחד.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">בסדר</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">שח-חי (על גבי לוח!)</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">שח-חי (על גבי לוח!)</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">שחקנים עם ״%s״</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">שמאל</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ימין</string>

@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Předvolby účtu</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Tyto předvolby jsou aplikovány na váš Lichess účet a budou použity napříč všemi zařízeními.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Všechny hry</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Jste si jistí?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Nastavení šachovnice</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zrušit nabídku vrácení tahu</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Vymazat</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Vymazat uložené tahy</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Připojit se ke hře</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Zpětná vazba</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Dobrý večer, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Dobrý večer</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Dobrý den, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Dobrý den</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Schovej variace</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Domů</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streameři</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Pro zobrazení této stránky musíte být přihlášeni.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Žádné výsledky</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Vezmi prosím na vědomí, že všechny funkce z původní aplikace nebo webové stránky nejsou momentálně k dispozici. Funkce však neustále přidáváme.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Nesledujete žádného uživatele.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Jako na šachovnici</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Jako na šachovnici</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Hráči s „%s“</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Vlevo</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Vpravo</string>
@@ -27,8 +35,26 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Hraj úlohy z tvých oblíbených zahájení, nebo si vyber styl.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Úlohy</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Nedávná vyhledávání</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Odebrat záložku</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Analýza na serveru</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Pozice hodin</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Šablony</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Cíl tažené figury</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Kruh</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Čtverec</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Widgety na domovské obrazovce</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Režim bez rušení</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Skrýt uživatelské rozhraní během hraní. Použij toto nastavení, pokud tě rozptylují navigační gesta systému na okraji obrazovky. Aplikuje se pro obrazovky partií a úloh.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Sebrané figury</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Vybrat obrázek</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Vlastní pozadí funguje pomůže ve tmavém režimu. Doporučuje se tmavý obrázek.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Rozmazat obrázek</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Skrýt šachovnici</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Zobrazit šachovnici</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Přejetím zobrazíš další pozadí</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Klikni nebo přetáhni</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Kliknout na dva pole</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Kreslení tvarů</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Nastavení</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Sdílet PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Sdílet URL hry</string>

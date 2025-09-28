@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">Հաշվի նախընտրություններ</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Գլխավոր էջ</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Լավ</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Երկուսով խաղատախտակի առջև</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Երկուսով խաղատախտակի առջև</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Ձախից</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Աջից</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">խնդիրներ</string>
