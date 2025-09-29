@@ -1,34 +1,25 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
-import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
-import 'package:lichess_mobile/src/model/game/exported_game.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../example_data.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
 const testId = GameId('abcdefgh');
-
-class MockGameRepository extends Mock implements GameRepository {}
-
-class MockOpeningExplorerRepository extends Mock implements OpeningExplorerRepository {}
 
 Future<Widget> makeTestApp(
   WidgetTester tester, {
@@ -36,53 +27,104 @@ Future<Widget> makeTestApp(
   Iterable<ExternalEval>? evals,
   IMap<String, OpeningExplorerEntry> openingExplorerEntries = const IMap.empty(),
 }) async {
-  final mockGameRepository = MockGameRepository();
-  when(() => mockGameRepository.getGame(testId)).thenAnswer(
-    (_) async => ExportedGame(
-      id: testId,
-      meta: GameMeta(
-        createdAt: DateTime.now(),
-        rated: false,
-        variant: Variant.standard,
-        speed: Speed.classical,
-        perf: Perf.classical,
-        division: const Division(middlegame: 25),
-      ),
-      data: LightExportedGame(
-        id: testId,
-        rated: false,
-        speed: Speed.classical,
-        perf: Perf.classical,
-        createdAt: DateTime.now(),
-        lastMoveAt: DateTime.now(),
-        status: GameStatus.unknown,
-        white: const Player(),
-        black: const Player(),
-        variant: Variant.standard,
-      ),
-      status: GameStatus.unknown,
-      source: GameSource.lobby,
-      white: const Player(),
-      black: const Player(),
-      evals: evals?.toIList(),
-      steps: makeSteps(moves),
-    ),
-  );
-  final mockOpeningExplorerRepository = MockOpeningExplorerRepository();
-  when(
-    () => mockOpeningExplorerRepository.getMasterDatabase(any(), since: any(named: 'since')),
-  ).thenAnswer(
-    (invocation) => Future.value(
-      openingExplorerEntries.get(invocation.positionalArguments.first as String) ??
-          OpeningExplorerEntry.empty(),
-    ),
-  );
+  final mockClient = MockClient((request) {
+    if (request.url.path == '/game/export/$testId') {
+      return mockResponse('''
+{
+  "id": "${testId.value}",
+  "rated": true,
+  "source": "lobby",
+  "variant": "standard",
+  "speed": "bullet",
+  "perf": "bullet",
+  "createdAt": 1706185945680,
+  "lastMoveAt": 1706186170504,
+  "status": "resign",
+  "players": {
+    "white": {
+      "user": {
+        "name": "veloce",
+        "id": "veloce"
+      },
+      "rating": 1789,
+      "ratingDiff": 9,
+      "analysis": {
+        "inaccuracy": 2,
+        "mistake": 1,
+        "blunder": 3,
+        "acpl": 90
+      }
+    },
+    "black": {
+      "user": {
+        "name": "chabrot",
+        "id": "chabrot"
+      },
+      "rating": 1810,
+      "ratingDiff": -9,
+      "analysis": {
+        "inaccuracy": 3,
+        "mistake": 0,
+        "blunder": 5,
+        "acpl": 135
+      }
+    }
+  },
+  "winner": "white",
+  "opening": {
+    "eco": "C52",
+    "name": "Italian Game: Evans Gambit, Main Line",
+    "ply": 10
+  },
+  "moves": "$moves",
+  "clocks": [${Iterable.generate(moves.length, (_) => '1000').join(',')}],
+  "analysis": [
+    ${evals?.map((eval) => jsonEncode({if (eval.cp != null) 'eval': eval.cp, if (eval.mate != null) 'mate': eval.mate, if (eval.variation != null) 'variation': eval.variation})).join(',') ?? ''}
+  ],
+  "clock": {
+    "initial": 120,
+    "increment": 1,
+    "totalTime": 160
+  }
+}
+        ''', 200);
+    }
+    if (request.url.host == kLichessOpeningExplorerHost && request.url.path == '/masters') {
+      final fen = request.url.queryParameters['fen']!;
+      final entry = openingExplorerEntries.entryOrNull(fen)?.value;
+      if (entry != null) {
+        return mockResponse(
+          jsonEncode({
+            'white': entry.white,
+            'draws': entry.draws,
+            'black': entry.black,
+            'moves': entry.moves
+                .map(
+                  (move) => {
+                    'uci': move.uci,
+                    'san': move.san,
+                    'white': move.white,
+                    'draws': move.draws,
+                    'black': move.black,
+                  },
+                )
+                .toList(),
+          }),
+          200,
+        );
+      }
+      return mockResponse('{"white":0,"draws":0,"black":0,"moves":[]}', 200);
+    }
+    return mockResponse('', 404);
+  });
+
   return await makeTestProviderScopeApp(
     tester,
     home: const RetroScreen(options: (id: testId, initialSide: Side.white)),
     overrides: [
-      gameRepositoryProvider.overrideWith((ref) => mockGameRepository),
-      openingExplorerRepositoryProvider.overrideWith((ref) => mockOpeningExplorerRepository),
+      lichessClientProvider.overrideWith((ref) {
+        return LichessClient(mockClient, ref);
+      }),
     ],
     defaultPreferences: {},
   );
