@@ -9,12 +9,14 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
@@ -55,6 +57,10 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
   Widget build(BuildContext context) {
     final ctrlProvider = gameControllerProvider(widget.id);
     final gameState = ref.watch(ctrlProvider).requireValue;
+
+    final hasServerAnalysis =
+        gameState.game.userAnalysable &&
+        ref.watch(archivedGameProvider(id: gameState.game.id)).valueOrNull?.serverAnalysis != null;
 
     final content = Column(
       mainAxisSize: MainAxisSize.min,
@@ -192,6 +198,18 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             label: Text(context.l10n.pause, textAlign: TextAlign.center),
           ),
         ],
+        if (hasServerAnalysis)
+          FilledButton.tonal(
+            onPressed: () {
+              Navigator.of(context).push(
+                RetroScreen.buildRoute(context, (
+                  id: gameState.game.id,
+                  initialSide: gameState.game.youAre ?? Side.white,
+                )),
+              );
+            },
+            child: Text(context.l10n.learnFromYourMistakes, textAlign: TextAlign.center),
+          ),
         if (gameState.game.userAnalysable)
           FilledButton.tonal(
             onPressed: () {
