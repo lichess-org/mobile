@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
@@ -41,8 +42,14 @@ class RetroScreen extends ConsumerWidget {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final asyncState = ref.watch(retroControllerProvider(options));
 
-    final appBarActions = asyncState.hasValue
-        ? [
+    return switch (asyncState) {
+      AsyncError() => const Center(child: Text('Failed to load mistakes for this game.')),
+      AsyncData() => Scaffold(
+        appBar: AppBar(
+          title: AppBarTitleText(
+            '${context.l10n.learnFromYourMistakes} (${asyncState.requireValue.currentMistakeIndex + 1}/${asyncState.requireValue.mistakes.length})',
+          ),
+          actions: [
             if (asyncState.requireValue.isEngineAvailable(enginePrefs) == true)
               EngineDepth(
                 savedEval: asyncState.valueOrNull?.currentNode.eval,
@@ -50,20 +57,15 @@ class RetroScreen extends ConsumerWidget {
                     ref.read(retroControllerProvider(options).notifier).requestEval(goDeeper: true),
               ),
             _RetroMenu(options: options),
-          ]
-        : <Widget>[];
-
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.learnFromYourMistakes), actions: appBarActions),
-      body: DefaultTabController(
-        length: 1,
-        child: switch (asyncState) {
-          AsyncData() => _RetroScreen(options),
-          AsyncError() => const Center(child: Text('Failed to load mistakes for this game.')),
-          _ => const Center(child: CircularProgressIndicator.adaptive()),
-        },
+          ],
+        ),
+        body: DefaultTabController(length: 1, child: _RetroScreen(options)),
       ),
-    );
+      _ => Scaffold(
+        appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
+        body: const Center(child: CircularProgressIndicator.adaptive()),
+      ),
+    };
   }
 }
 

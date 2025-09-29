@@ -23,12 +23,15 @@ import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'retro_controller.freezed.dart';
 part 'retro_controller.g.dart';
 
 typedef RetroOptions = ({GameId id, Side initialSide});
+
+final Logger _logger = Logger('RetroController');
 
 @freezed
 sealed class Mistake with _$Mistake {
@@ -53,14 +56,19 @@ sealed class Mistake with _$Mistake {
 }
 
 /// Depth needed to evaluate alternative solution moves.
+///
+/// https://github.com/lichess-org/lila/blob/d29f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/retrospect/retroCtrl.ts#L151
 const double _kEvalDepthThreshold = kDebugMode ? 12 : 18;
 
+/// Threshold for considering a move a correct alternative solution.
+///
 /// When checking a move that is not the server solution,
 /// consider it a correct move if the eval difference is above this threshold,
 /// i.e. the move does not make the position significantly worse.
+/// https://github.com/lichess-org/lila/blob/d29f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/retrospect/retroCtrl.ts#L161
 const double _kCorrectMovePovDiffThreshold = -0.04;
 
-/// Logic and magic numbers are based on the `RetroCtrl` class in the lila frontend.
+/// Logic is based on the `RetroCtrl` class in the lila frontend.
 @riverpod
 class RetroController extends _$RetroController with EngineEvaluationMixin {
   late Root _root;
@@ -137,6 +145,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
           return null;
         }
 
+        // https://github.com/lichess-org/lila/blob/d29f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/nodeFinder.ts#L26
         final bigEvalSwing = Eval.winningChancesPovDiff(side, eval, newEval).abs() > 0.1;
 
         final lostEasyMate = eval.mate != null && newEval.mate == null && eval.mate!.abs() <= 3;
@@ -149,23 +158,32 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
         var openingExplorerSolutions = const IList<UCIMove>.empty();
         final middlegame = _game.meta.division?.middlegame;
         if (middlegame == null || branch.position.ply + 1 < middlegame) {
-          final entry = await ref
-              .read(openingExplorerRepositoryProvider)
-              .getMasterDatabase(branch.position.fen, since: MasterDb.kEarliestYear);
+          try {
+            final entry = await ref
+                .read(openingExplorerRepositoryProvider)
+                .getMasterDatabase(branch.position.fen, since: MasterDb.kEarliestYear);
 
-          final masterMovesPlayedMoreThanOnce = entry.moves.where(
-            (move) => move.white + move.draws + move.black > 1,
-          );
-          // If we find this move in a master's game, be generous and not consider it a mistake.
-          if (masterMovesPlayedMoreThanOnce.any(
-            (move) => move.uci == branch.children.first.sanMove.move.uci,
-          )) {
-            return null;
+            // https://github.com/lichess-org/lila/blob/d28f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/retrospect/retroCtrl.ts#L108
+            final masterMovesPlayedMoreThanOnce = entry.moves.where(
+              (move) => move.white + move.draws + move.black > 1,
+            );
+            // If we find this move in a master's game, be generous and not consider it a mistake.
+            if (masterMovesPlayedMoreThanOnce.any(
+              (move) => move.uci == branch.children.first.sanMove.move.uci,
+            )) {
+              return null;
+            }
+
+            openingExplorerSolutions = masterMovesPlayedMoreThanOnce
+                .map((move) => move.uci)
+                .toIList();
+          } catch (e, st) {
+            _logger.warning(
+              'Failed to fetch opening explorer data for ply ${branch.position.ply}',
+              e,
+              st,
+            );
           }
-
-          openingExplorerSolutions = masterMovesPlayedMoreThanOnce
-              .map((move) => move.uci)
-              .toIList();
         }
 
         return Mistake(branch: branch, openingExplorerSolutions: openingExplorerSolutions);
@@ -234,8 +252,11 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   }
 
   void viewSolution() {
-    onUserMove(state.requireValue.currentMistake!.serverMove);
-    state = AsyncValue.data(state.requireValue.copyWith(feedback: RetroFeedback.viewingSolution));
+    final currentMistake = state.valueOrNull?.currentMistake;
+    if (currentMistake != null) {
+      onUserMove(currentMistake.serverMove);
+      state = AsyncValue.data(state.requireValue.copyWith(feedback: RetroFeedback.viewingSolution));
+    }
   }
 
   Future<void> flipSide() async {
@@ -364,6 +385,8 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
     if (state.requireValue.feedback == RetroFeedback.evalMove) {
       final eval = state.requireValue.currentNode.eval;
       if (eval == null) return;
+
+      // https://github.com/lichess-org/lila/blob/d29f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/retrospect/retroCtrl.ts#L151
       if (eval.depth >= _kEvalDepthThreshold ||
           (eval.depth >= 14 && state.requireValue.evalTime!.inSeconds > 6)) {
         final diff = Eval.winningChancesPovDiff(

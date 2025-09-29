@@ -86,6 +86,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
   }
 }
 
+/// Displays the side to move's king pience on a square matching the board's theme.
 class SideToPlayPiece extends ConsumerWidget {
   const SideToPlayPiece({required this.side});
 

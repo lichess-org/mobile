@@ -67,16 +67,19 @@ class ServerAnalysisSummary extends ConsumerWidget {
                   child: WaitingForServerAnalysis(),
                 )
               else
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: FilledButton(
-                    onPressed: () => Navigator.of(context).push(
-                      RetroScreen.buildRoute(context, (
-                        id: options.gameId!,
-                        initialSide: ref.read(ctrlProvider).requireValue.pov,
-                      )),
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                    child: FilledButton(
+                      onPressed: () => Navigator.of(context).push(
+                        RetroScreen.buildRoute(context, (
+                          id: options.gameId!,
+                          initialSide: ref.read(ctrlProvider).requireValue.pov,
+                        )),
+                      ),
+                      child: Text(context.l10n.learnFromYourMistakes),
                     ),
-                    child: Text(context.l10n.learnFromYourMistakes),
                   ),
                 ),
 
