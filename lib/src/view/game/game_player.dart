@@ -106,11 +106,7 @@ class GamePlayer extends StatelessWidget {
                   style: TextStyle(fontSize: playerFontSize, color: textShade(context, 0.7)),
                 ),
               if (player.user != null) ...[
-                Icon(
-                  player.onGame == true ? Icons.cloud : Icons.cloud_off,
-                  color: player.onGame == true ? LichessColors.green : null,
-                  size: 14,
-                ),
+                ConnectedIcon(isConnected: player.onGame == true, shouldShowIsOnGameLabels: true),
               ],
               const SizedBox(width: 5),
               if (player.user?.isPatron == true) ...[

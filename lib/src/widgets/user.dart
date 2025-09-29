@@ -8,6 +8,36 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
+import 'package:material_symbols_icons/symbols.dart';
+
+/// A Wifi icon representing that the user is currently connected (online) or not.
+class ConnectedIcon extends StatelessWidget {
+  const ConnectedIcon({
+    required this.isConnected,
+    this.shouldShowIsOnGameLabels = false,
+    super.key,
+  });
+
+  final bool isConnected;
+
+  /// Whether to show "is on game" labels in tooltips.
+  final bool shouldShowIsOnGameLabels;
+
+  @override
+  Widget build(BuildContext context) {
+    final label = isConnected
+        ? (shouldShowIsOnGameLabels ? 'Joined the game' : 'Online')
+        : (shouldShowIsOnGameLabels ? 'Left the game' : context.l10n.noNetwork);
+    return Tooltip(
+      message: label,
+      child: Icon(
+        isConnected ? Symbols.wifi : Symbols.wifi_off,
+        color: isConnected ? null : textShade(context, 0.4),
+        size: DefaultTextStyle.of(context).style.fontSize,
+      ),
+    );
+  }
+}
 
 /// A wing icon representing a Lichess patron with its different color tiers.
 class PatronIcon extends StatelessWidget {
@@ -133,11 +163,7 @@ class UserFullNameWidget extends ConsumerWidget {
         if (user != null && shouldShowOnline == true)
           Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: Icon(
-              user?.isOnline == true ? Icons.cloud : Icons.cloud_off,
-              size: contextTextStyle.fontSize,
-              color: user?.isOnline == true ? context.lichessColors.good : null,
-            ),
+            child: ConnectedIcon(isConnected: user?.isOnline == true),
           ),
         if (showPatron && user?.isPatron == true)
           Padding(

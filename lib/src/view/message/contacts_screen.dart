@@ -174,9 +174,7 @@ class ContactTile extends ConsumerWidget {
 
     final isRead = contact.lastMessage.read || contact.lastMessage.userId == me.id;
     return ListTile(
-      leading: contact.user.isOnline == true
-          ? const Icon(Icons.cloud, color: Colors.green)
-          : const Icon(Icons.cloud_off, color: Colors.grey),
+      leading: ConnectedIcon(isConnected: contact.user.isOnline == true),
       title: UserFullNameWidget(user: contact.user, showFlair: true, showPatron: true),
       subtitle: Text(contact.lastMessage.text, style: isRead ? null : unreadStyle),
       trailing: Text(
