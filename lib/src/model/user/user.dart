@@ -17,6 +17,11 @@ sealed class LightUser with _$LightUser {
     String? title,
     String? flair,
     bool? isPatron,
+
+    /// A color code representing the patron tier, if applicable.
+    ///
+    /// Ranges from 1 to 10, higher is better.
+    int? patronTierColor,
     bool? isOnline,
   }) = _LightUser;
 
@@ -43,6 +48,7 @@ extension LightUserExtension on Pick {
         title: requiredPick('title').asStringOrNull(),
         flair: requiredPick('flair').asStringOrNull(),
         isPatron: requiredPick('patron').asBoolOrNull(),
+        patronTierColor: requiredPick('patronColor').asIntOrNull(),
         isOnline: requiredPick('online').asBoolOrNull(),
       );
     }
@@ -74,6 +80,7 @@ sealed class User with _$User {
     String? title,
     String? flair,
     bool? isPatron,
+    int? patronTierColor,
     bool? disabled,
     bool? tosViolation,
 
@@ -93,8 +100,14 @@ sealed class User with _$User {
     TemporaryBan? playban,
   }) = _User;
 
-  LightUser get lightUser =>
-      LightUser(id: id, name: username, title: title, isPatron: isPatron, flair: flair);
+  LightUser get lightUser => LightUser(
+    id: id,
+    name: username,
+    title: title,
+    isPatron: isPatron,
+    patronTierColor: patronTierColor,
+    flair: flair,
+  );
 
   bool get isBot => title == 'BOT';
 
@@ -108,6 +121,7 @@ sealed class User with _$User {
       title: pick('title').asStringOrNull(),
       flair: pick('flair').asStringOrNull(),
       isPatron: pick('patron').asBoolOrNull(),
+      patronTierColor: pick('patronColor').asIntOrNull(),
       disabled: pick('disabled').asBoolOrNull(),
       tosViolation: pick('tosViolation').asBoolOrNull(),
       verified: pick('verified').asBoolOrNull(),

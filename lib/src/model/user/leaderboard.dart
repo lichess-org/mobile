@@ -36,6 +36,7 @@ sealed class LeaderboardUser with _$LeaderboardUser {
     required UserId id,
     required String username,
     bool? patron,
+    int? patronTierColor,
     String? title,
     String? flair,
     bool? online,
@@ -43,6 +44,12 @@ sealed class LeaderboardUser with _$LeaderboardUser {
     required int progress,
   }) = _LeaderboardUser;
 
-  LightUser get lightUser =>
-      LightUser(id: id, name: username, title: title, flair: flair, isPatron: patron);
+  LightUser get lightUser => LightUser(
+    id: id,
+    name: username,
+    title: title,
+    flair: flair,
+    isPatron: patron,
+    patronTierColor: patronTierColor,
+  );
 }
