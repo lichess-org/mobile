@@ -191,7 +191,7 @@ class _RetroAnalysisBoardState
   }
 
   @override
-  String get fen => analysisState.currentPosition!.board.fen;
+  String get fen => analysisState.currentPosition.board.fen;
 
   @override
   ISet<Shape> get extraShapes {

@@ -129,6 +129,13 @@ mixin EngineEvaluationMixin {
   }
 
   @mustCallSuper
+  Future<void> stopEval() async {
+    if (evaluationState.isEngineAvailable(evaluationPrefs)) {
+      toggleEngine();
+    }
+  }
+
+  @mustCallSuper
   void setNumEvalLines(int numEvalLines) {
     // clear all saved evals since the number of eval lines has changed
     positionTree.updateAll((node) => node.eval = null);

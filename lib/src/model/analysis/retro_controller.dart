@@ -60,6 +60,11 @@ sealed class Mistake with _$Mistake {
 /// https://github.com/lichess-org/lila/blob/d29f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/retrospect/retroCtrl.ts#L151
 const double _kEvalDepthThreshold = kDebugMode ? 12 : 18;
 
+const Duration _kLowerDepthThresholdTime = Duration(seconds: 6);
+
+/// If we don't reach [_kEvalDepthThreshold] after [_kLowerDepthThresholdTime], we lower the depth threshold to this value.
+const double _kEvalDepthThresholdAfterLongEvalTime = _kEvalDepthThreshold - 4;
+
 /// Threshold for considering a move a correct alternative solution.
 ///
 /// When checking a move that is not the server solution,
@@ -68,7 +73,11 @@ const double _kEvalDepthThreshold = kDebugMode ? 12 : 18;
 /// https://github.com/lichess-org/lila/blob/d29f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/retrospect/retroCtrl.ts#L161
 const double _kCorrectMovePovDiffThreshold = -0.04;
 
-/// Logic is based on the `RetroCtrl` class in the lila frontend.
+/// Threshold for considering a move a mistake due to how it affected the evaluation.
+///
+/// https://github.com/lichess-org/lila/blob/4b65c49546caf0a17068a1edcd0175ca18176c7b/ui/analyse/src/nodeFinder.ts#L25
+const double _kEvalSwingThreshold = 0.1;
+
 @riverpod
 class RetroController extends _$RetroController with EngineEvaluationMixin {
   late Root _root;
@@ -145,8 +154,8 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
           return null;
         }
 
-        // https://github.com/lichess-org/lila/blob/d29f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/nodeFinder.ts#L26
-        final bigEvalSwing = Eval.winningChancesPovDiff(side, eval, newEval).abs() > 0.1;
+        final bigEvalSwing =
+            Eval.winningChancesPovDiff(side, eval, newEval).abs() > _kEvalSwingThreshold;
 
         final lostEasyMate = eval.mate != null && newEval.mate == null && eval.mate!.abs() <= 3;
 
@@ -163,7 +172,6 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
                 .read(openingExplorerRepositoryProvider)
                 .getMasterDatabase(branch.position.fen, since: MasterDb.kEarliestYear);
 
-            // https://github.com/lichess-org/lila/blob/d28f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/retrospect/retroCtrl.ts#L108
             final masterMovesPlayedMoreThanOnce = entry.moves.where(
               (move) => move.white + move.draws + move.black > 1,
             );
@@ -211,9 +219,9 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   }
 
   void onUserMove(NormalMove move) {
-    if (!state.requireValue.currentPosition!.isLegal(move)) return;
+    if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (isPromotionPawnMove(state.requireValue.currentPosition!, move)) {
+    if (isPromotionPawnMove(state.requireValue.currentPosition, move)) {
       state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
       return;
     }
@@ -388,7 +396,8 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
       // https://github.com/lichess-org/lila/blob/d29f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/retrospect/retroCtrl.ts#L151
       if (eval.depth >= _kEvalDepthThreshold ||
-          (eval.depth >= 14 && state.requireValue.evalTime!.inSeconds > 6)) {
+          (eval.depth >= _kEvalDepthThresholdAfterLongEvalTime &&
+              state.requireValue.evalTime! > _kLowerDepthThresholdTime)) {
         final diff = Eval.winningChancesPovDiff(
           state.requireValue.pov,
           eval,
@@ -401,9 +410,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
           _onIncorrectMove();
         }
 
-        // We used unlimited search time during Feedback.evalMove,
-        // now restart evaluation with normal search time (effectively stopping it for this move)
-        requestEval();
+        stopEval();
       }
     }
   }
@@ -422,7 +429,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
     switch (state.feedback) {
       case RetroFeedback.incorrect:
       case RetroFeedback.findMove:
-        if (state.currentPosition!.ply == state.currentMistake!.serverBranch.position.ply) {
+        if (state.currentPosition.ply == state.currentMistake!.serverBranch.position.ply) {
           if (state.currentMistake!.isSolution(state.currentNode)) {
             _onCorrectMove();
           } else if (state.currentPosition == state.currentMistake!.userBranch.position) {
@@ -479,7 +486,7 @@ sealed class RetroState with _$RetroState implements EvaluationMixinState, Commo
       : 0.0;
 
   @override
-  Position? get currentPosition => currentNode.position;
+  Position get currentPosition => currentNode.position;
 
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) => true;
@@ -491,7 +498,7 @@ sealed class RetroState with _$RetroState implements EvaluationMixinState, Commo
   EngineGaugeParams get engineGaugeParams => (
     isLocalEngineAvailable: true,
     orientation: pov,
-    position: currentPosition!,
+    position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
   );
