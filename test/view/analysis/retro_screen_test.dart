@@ -125,6 +125,7 @@ Future<Widget> makeTestApp(
       lichessClientProvider.overrideWith((ref) {
         return LichessClient(mockClient, ref);
       }),
+      defaultClientProvider.overrideWithValue(mockClient),
     ],
     defaultPreferences: {},
   );
