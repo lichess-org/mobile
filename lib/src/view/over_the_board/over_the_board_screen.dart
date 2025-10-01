@@ -125,6 +125,39 @@ class _BodyState extends ConsumerState<_Body> {
 
     return WakelockWidget(
       child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) async {
+          if (didPop) {
+            return;
+          }
+
+          final navigator = Navigator.of(context);
+          final game = gameState.game;
+          if (game.abortable) {
+            return navigator.pop();
+          }
+
+          if (game.playable) {
+            ref.read(overTheBoardClockProvider.notifier).pause();
+          }
+
+          final shouldPop = await showAdaptiveDialog<bool>(
+            context: context,
+            builder: (context) {
+              return YesNoDialog(
+                title: Text(context.l10n.mobileAreYouSure),
+                content: const Text('Your game will be lost.'),
+                onNo: () => Navigator.of(context).pop(false),
+                onYes: () => Navigator.of(context).pop(true),
+              );
+            },
+          );
+          if (shouldPop == true) {
+            navigator.pop();
+          } else if (game.playable) {
+            ref.read(overTheBoardClockProvider.notifier).resume(gameState.turn);
+          }
+        },
         child: Column(
           children: [
             Expanded(

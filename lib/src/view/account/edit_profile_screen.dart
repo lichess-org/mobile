@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/widget.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 final _countries = countries.values.toList();
@@ -127,19 +127,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     return showAdaptiveDialog<bool>(
       context: context,
       builder: (context) {
-        return AlertDialog.adaptive(
+        return YesNoDialog(
           title: Text(context.l10n.mobileAreYouSure),
           content: const Text('Your changes will be lost.'),
-          actions: [
-            PlatformDialogAction(
-              child: Text(context.l10n.cancel),
-              onPressed: () => Navigator.of(context).pop(false),
-            ),
-            PlatformDialogAction(
-              child: Text(context.l10n.ok),
-              onPressed: () => Navigator.of(context).pop(true),
-            ),
-          ],
+          onNo: () => Navigator.of(context).pop(false),
+          onYes: () => Navigator.of(context).pop(true),
         );
       },
     );
