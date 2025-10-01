@@ -128,7 +128,8 @@ class OnlineFriends extends _$OnlineFriends {
     final patronColors = event.json?['patronColors'] as List<dynamic>? ?? [];
     final playing = event.json?['playing'] as List<dynamic>? ?? [];
     return friends.mapIndexed((i, v) {
-      final user = _parseFriend(v.toString(), patronColors[i] as int?);
+      final patronColor = friends.length == patronColors.length ? patronColors[i] as int? : null;
+      final user = _parseFriend(v.toString(), patronColor);
       final isPlaying = playing.contains(user.id.toString());
       return (user: user, playing: isPlaying);
     }).toIList();
