@@ -131,7 +131,7 @@ mixin EngineEvaluationMixin {
   @mustCallSuper
   Future<void> stopEval() async {
     if (evaluationState.isEngineAvailable(evaluationPrefs)) {
-      toggleEngine();
+      _evaluationService?.stop();
     }
   }
 

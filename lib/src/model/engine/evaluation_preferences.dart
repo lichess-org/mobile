@@ -36,11 +36,6 @@ class EngineEvaluationPreferences extends _$EngineEvaluationPreferences
     return save(state.copyWith(isEnabled: !state.isEnabled));
   }
 
-  Future<void> disable() {
-    if (!state.isEnabled) return Future.value();
-    return save(state.copyWith(isEnabled: false));
-  }
-
   Future<void> setNumEvalLines(int numEvalLines) {
     assert(numEvalLines >= 0 && numEvalLines <= 3);
     return save(state.copyWith(numEvalLines: numEvalLines));
