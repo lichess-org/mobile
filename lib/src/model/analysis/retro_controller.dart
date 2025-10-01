@@ -406,11 +406,13 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
         if (diff > _kCorrectMovePovDiffThreshold) {
           _onCorrectMove();
+
+          // We used unlimited search time during Feedback.evalMove,
+          // now restart evaluation with normal search time
+          requestEval();
         } else {
           _onIncorrectMove();
         }
-
-        stopEval();
       }
     }
   }
