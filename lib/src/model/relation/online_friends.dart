@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -75,8 +76,8 @@ class OnlineFriends extends _$OnlineFriends {
         state = AsyncValue.data(_parseFriendsList(event));
 
       case 'following_enters':
-        final isPatron = event.json?['patron'] as bool?;
-        final user = _parseFriend(event.data.toString(), isPatron);
+        final patronColor = event.json?['patronColor'] as int?;
+        final user = _parseFriend(event.data.toString(), patronColor);
         final playing = event.json?['playing'] as bool? ?? false;
         state = AsyncValue.data(state.requireValue.add((user: user, playing: playing)));
 
@@ -110,19 +111,24 @@ class OnlineFriends extends _$OnlineFriends {
 
   SocketPool get _socketPool => ref.read(socketPoolProvider);
 
-  LightUser _parseFriend(String friend, [bool? isPatron]) {
+  LightUser _parseFriend(String friend, [int? patronColor]) {
     final splitted = friend.split(' ');
     final name = splitted.length > 1 ? splitted[1] : splitted[0];
     final title = splitted.length > 1 ? splitted[0] : null;
-    return LightUser(id: UserId.fromUserName(name), name: name, title: title, isPatron: isPatron);
+    return LightUser(
+      id: UserId.fromUserName(name),
+      name: name,
+      title: title,
+      patronColor: patronColor,
+    );
   }
 
   IList<OnlineFriend> _parseFriendsList(SocketEvent event) {
     final friends = event.data as List<dynamic>;
-    final patrons = event.json?['patrons'] as List<dynamic>? ?? [];
+    final patronColors = event.json?['patronColors'] as List<dynamic>? ?? [];
     final playing = event.json?['playing'] as List<dynamic>? ?? [];
-    return friends.map((v) {
-      final user = _parseFriend(v.toString(), patrons.contains(v.toString()));
+    return friends.mapIndexed((i, v) {
+      final user = _parseFriend(v.toString(), patronColors[i] as int?);
       final isPlaying = playing.contains(user.id.toString());
       return (user: user, playing: isPlaying);
     }).toIList();

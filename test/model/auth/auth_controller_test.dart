@@ -30,7 +30,7 @@ void main() {
 
   const testUserSession = AuthSessionState(
     token: 'testToken',
-    user: LightUser(id: UserId('test'), name: 'test', title: 'GM', isPatron: true),
+    user: LightUser(id: UserId('test'), name: 'test', title: 'GM', patronColor: 1),
   );
   const loading = AsyncLoading<void>();
   const nullData = AsyncData<void>(null);

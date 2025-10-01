@@ -98,6 +98,7 @@ String makeFullEvent(
       "user": {
         "name": "$whiteUserName",
         "patron": true,
+        "patronColor": 1,
         "id": "${whiteUserName.toLowerCase()}"
       },
       "rating": 1806,
@@ -108,6 +109,7 @@ String makeFullEvent(
       "user": {
         "name": "$blackUserName",
         "patron": true,
+        "patronColor": 1,
         "id": "${blackUserName.toLowerCase()}"
       },
       "onGame": true

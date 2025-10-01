@@ -24,7 +24,7 @@ sealed class ChatMessage with _$ChatMessage {
     required String? username,
     required bool troll,
     required bool deleted,
-    required bool patron,
+    int? patronColor,
     String? flair,
     String? title,
   }) = _ChatMessage;
@@ -35,7 +35,7 @@ sealed class ChatMessage with _$ChatMessage {
           name: username!,
           title: title,
           flair: flair,
-          isPatron: patron,
+          patronColor: patronColor,
         )
       : null;
 
@@ -48,7 +48,7 @@ sealed class ChatMessage with _$ChatMessage {
       username: pick('u').asStringOrNull(),
       troll: pick('r').asBoolOrNull() ?? false,
       deleted: pick('d').asBoolOrNull() ?? false,
-      patron: pick('p').asBoolOrNull() ?? false,
+      patronColor: pick('pc').asIntOrNull(),
       flair: pick('f').asStringOrNull(),
       title: pick('title').asStringOrNull(),
     );

@@ -162,7 +162,8 @@ const tvChannelsResponse = '''
         "user": {
             "id": "tsukuru",
             "name": "Tsukuru",
-            "patron": true
+            "patron": true,
+            "patronColor": 1
         }
     },
     "threeCheck": {
@@ -172,7 +173,8 @@ const tvChannelsResponse = '''
         "user": {
             "id": "vdsukhov",
             "name": "vdsukhov",
-            "patron": true
+            "patron": true,
+            "patronColor": 1
         }
     },
     "ultraBullet": {

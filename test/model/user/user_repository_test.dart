@@ -51,6 +51,7 @@ void main() {
   "seenAt": 1290415680000,
   "title": "GM",
   "patron": true,
+  "patronColor": 1,
   "perfs": {
     "blitz": {
       "games": 2340,
