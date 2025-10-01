@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -73,7 +74,6 @@ class GameListTile extends StatelessWidget {
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
-          showDragHandle: true,
           builder: (context) => GameContextMenu(
             game: game,
             mySide: youAre,
@@ -123,7 +123,7 @@ class GameContextMenu extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16.0,
-          ).add(const EdgeInsets.only(bottom: 8.0)),
+          ).add(const EdgeInsets.only(bottom: 4.0)),
           child: Text(
             context.l10n.resVsX(
               game.white.fullName(context.l10n),
@@ -133,9 +133,7 @@ class GameContextMenu extends ConsumerWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-          ).add(const EdgeInsets.only(bottom: 8.0)),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: LayoutBuilder(
             builder: (context, constraints) {
               return IntrinsicHeight(
@@ -213,107 +211,117 @@ class GameContextMenu extends ConsumerWidget {
             },
           ),
         ),
-        BottomSheetContextMenuAction(
-          icon: Icons.biotech,
-          onPressed: game.variant.isReadSupported
-              ? () {
-                  Navigator.of(context).push(
-                    AnalysisScreen.buildRoute(
-                      context,
-                      AnalysisOptions.archivedGame(orientation: orientation, gameId: game.id),
-                    ),
-                  );
-                }
-              : () {
-                  showSnackBar(
-                    context,
-                    'This variant is not supported yet.',
-                    type: SnackBarType.info,
-                  );
-                },
-          child: Text(context.l10n.analysis),
-        ),
-        if (isLoggedIn && onPressedBookmark != null)
-          BottomSheetContextMenuAction(
-            onPressed: () => onPressedBookmark?.call(context),
-            icon: game.isBookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
-            closeOnPressed: true,
-            child: Text(
-              game.isBookmarked ? context.l10n.mobileRemoveBookmark : context.l10n.bookmarkThisGame,
+        ListSection(
+          children: [
+            BottomSheetContextMenuAction(
+              icon: Icons.biotech,
+              onPressed: game.variant.isReadSupported
+                  ? () {
+                      Navigator.of(context).push(
+                        AnalysisScreen.buildRoute(
+                          context,
+                          AnalysisOptions.archivedGame(orientation: orientation, gameId: game.id),
+                        ),
+                      );
+                    }
+                  : () {
+                      showSnackBar(
+                        context,
+                        'This variant is not supported yet.',
+                        type: SnackBarType.info,
+                      );
+                    },
+              child: Text(context.l10n.analysis),
             ),
-          ),
-        if (!isTabletOrLarger(context)) ...[
-          BottomSheetContextMenuAction(
-            onPressed: () {
-              launchShareDialog(
-                context,
-                ShareParams(uri: lichessUri('/${game.id}/${orientation.name}')),
-              );
-            },
-            icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
-            child: Text(context.l10n.mobileShareGameURL),
-          ),
-          BottomSheetContextMenuAction(
-            icon: Icons.gif,
-            child: Text(context.l10n.gameAsGIF),
-            onPressed: () async {
-              try {
-                final (gif, _) = await ref
-                    .read(gameShareServiceProvider)
-                    .gameGif(game.id, orientation);
-                if (context.mounted) {
+            if (isLoggedIn && onPressedBookmark != null)
+              BottomSheetContextMenuAction(
+                onPressed: () => onPressedBookmark?.call(context),
+                icon: game.isBookmarked
+                    ? Icons.bookmark_remove_outlined
+                    : Icons.bookmark_add_outlined,
+                closeOnPressed: true,
+                child: Text(
+                  game.isBookmarked
+                      ? context.l10n.mobileRemoveBookmark
+                      : context.l10n.bookmarkThisGame,
+                ),
+              ),
+            if (!isTabletOrLarger(context)) ...[
+              BottomSheetContextMenuAction(
+                onPressed: () {
                   launchShareDialog(
                     context,
-                    ShareParams(
-                      files: [gif],
-                      fileNameOverrides: ['${game.id}.gif'],
-                      subject:
-                          '${game.perf.title} • ${context.l10n.resVsX(game.white.fullName(context.l10n), game.black.fullName(context.l10n))}',
-                    ),
+                    ShareParams(uri: lichessUri('/${game.id}/${orientation.name}')),
                   );
-                }
-              } catch (e) {
-                debugPrint(e.toString());
-                if (context.mounted) {
-                  showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-                }
-              }
-            },
-          ),
-          BottomSheetContextMenuAction(
-            icon: Icons.text_snippet,
-            child: Text('PGN: ${context.l10n.downloadAnnotated}'),
-            onPressed: () async {
-              try {
-                final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
-                if (context.mounted) {
-                  launchShareDialog(context, ShareParams(text: pgn));
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-                }
-              }
-            },
-          ),
-          BottomSheetContextMenuAction(
-            icon: Icons.text_snippet,
-            // TODO improve translation
-            child: Text('PGN: ${context.l10n.downloadRaw}'),
-            onPressed: () async {
-              try {
-                final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);
-                if (context.mounted) {
-                  launchShareDialog(context, ShareParams(text: pgn));
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-                }
-              }
-            },
-          ),
-        ],
+                },
+                icon: Theme.of(context).platform == TargetPlatform.iOS
+                    ? Icons.ios_share
+                    : Icons.share,
+                child: Text(context.l10n.mobileShareGameURL),
+              ),
+              BottomSheetContextMenuAction(
+                icon: Icons.gif,
+                child: Text(context.l10n.gameAsGIF),
+                onPressed: () async {
+                  try {
+                    final (gif, _) = await ref
+                        .read(gameShareServiceProvider)
+                        .gameGif(game.id, orientation);
+                    if (context.mounted) {
+                      launchShareDialog(
+                        context,
+                        ShareParams(
+                          files: [gif],
+                          fileNameOverrides: ['${game.id}.gif'],
+                          subject:
+                              '${game.perf.title} • ${context.l10n.resVsX(game.white.fullName(context.l10n), game.black.fullName(context.l10n))}',
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    debugPrint(e.toString());
+                    if (context.mounted) {
+                      showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+                    }
+                  }
+                },
+              ),
+              BottomSheetContextMenuAction(
+                icon: Icons.text_snippet,
+                child: Text('PGN: ${context.l10n.downloadAnnotated}'),
+                onPressed: () async {
+                  try {
+                    final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
+                    if (context.mounted) {
+                      launchShareDialog(context, ShareParams(text: pgn));
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+                    }
+                  }
+                },
+              ),
+              BottomSheetContextMenuAction(
+                icon: Icons.text_snippet,
+                // TODO improve translation
+                child: Text('PGN: ${context.l10n.downloadRaw}'),
+                onPressed: () async {
+                  try {
+                    final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);
+                    if (context.mounted) {
+                      launchShareDialog(context, ShareParams(text: pgn));
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+                    }
+                  }
+                },
+              ),
+            ],
+          ],
+        ),
       ],
     );
   }

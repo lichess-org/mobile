@@ -53,7 +53,6 @@ class GameListDetailTile extends StatelessWidget {
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
-          showDragHandle: true,
           builder: (context) => GameContextMenu(
             opponentTitle: UserFullNameWidget.player(
               user: opponent.user,

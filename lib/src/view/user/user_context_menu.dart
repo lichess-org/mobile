@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
@@ -36,7 +35,7 @@ class UserContextMenu extends ConsumerWidget {
         return BottomSheetScrollableContainer(
           children: [
             Padding(
-              padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(bottom: 16.0)),
+              padding: Styles.horizontalBodyPadding,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -57,37 +56,47 @@ class UserContextMenu extends ConsumerWidget {
                 ],
               ),
             ),
-            const PlatformDivider(),
-            BottomSheetContextMenuAction(
-              onPressed: () {
-                Navigator.of(context).push(UserScreen.buildRoute(context, value.lightUser));
-              },
-              icon: Icons.person,
-              child: Text(context.l10n.profile),
+            ListSection(
+              children: [
+                BottomSheetContextMenuAction(
+                  onPressed: () {
+                    Navigator.of(context).push(UserScreen.buildRoute(context, value.lightUser));
+                  },
+                  icon: Icons.person,
+                  child: Text(context.l10n.profile),
+                ),
+                BottomSheetContextMenuAction(
+                  icon: Icons.live_tv_outlined,
+                  onPressed: () {
+                    Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).push(TvScreen.buildRoute(context, user: value.lightUser));
+                  },
+                  child: Text(context.l10n.watchGames),
+                ),
+                if (session != null && value.canChallenge == true)
+                  BottomSheetContextMenuAction(
+                    onPressed: () => UserScreen.challengeUser(value, context: context, ref: ref),
+                    icon: LichessIcons.crossed_swords,
+                    child: Text(context.l10n.challengeChallengeToPlay),
+                  ),
+              ],
             ),
-            ListTile(
-              title: Text(context.l10n.watchGames),
-              leading: const Icon(Icons.live_tv_outlined),
-              onTap: () {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(TvScreen.buildRoute(context, user: value.lightUser));
-              },
-            ),
-            if (session != null && value.canChallenge == true)
-              BottomSheetContextMenuAction(
-                onPressed: () => UserScreen.challengeUser(value, context: context, ref: ref),
-                icon: LichessIcons.crossed_swords,
-                child: Text(context.l10n.challengeChallengeToPlay),
-              ),
           ],
         );
       case AsyncError(:final error):
         debugPrint('Could not load user: $error');
         return const Center(child: Text('Could not load user'));
       case _:
-        return const CenterLoadingIndicator();
+        return const BottomSheetScrollableContainer(
+          children: [
+            Padding(
+              padding: Styles.bodyPadding,
+              child: Center(child: CircularProgressIndicator.adaptive()),
+            ),
+          ],
+        );
     }
   }
 }
