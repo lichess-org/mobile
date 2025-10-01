@@ -54,7 +54,7 @@ List<ExportedGame> generateExportedGames({int count = 100, String? username}) {
         black: blackPlayer,
         clock: (initial: const Duration(minutes: 2), increment: const Duration(seconds: 3)),
       ),
-      steps: _makeSteps('e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
+      steps: makeSteps('e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
       status: GameStatus.started,
       white: whitePlayer,
       black: blackPlayer,
@@ -67,7 +67,7 @@ List<ExportedGame> generateExportedGames({int count = 100, String? username}) {
   });
 }
 
-IList<GameStep> _makeSteps(String pgn) {
+IList<GameStep> makeSteps(String pgn) {
   Position position = Chess.initial;
   final steps = <GameStep>[GameStep(position: position)];
   for (final san in pgn.split(' ')) {
@@ -95,7 +95,7 @@ final offlineCorrespondenceGame = OfflineCorrespondenceGame(
     variant: Variant.standard,
   ),
   fullId: const GameFullId('g2bzFol8fgty'),
-  steps: _makeSteps('e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
+  steps: makeSteps('e4 Nc6 Bc4 e6 a3 g6 Nf3 Bg7 c3 Nge7 d3 O-O Be3 Na5 Ba2 b6 Qd2'),
   clock: const CorrespondenceClockData(
     white: Duration(days: 2, hours: 23, minutes: 59),
     black: Duration(days: 3),

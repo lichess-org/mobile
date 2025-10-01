@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
+import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -20,6 +21,7 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 /// - [GameAnalysisBoard]
 /// - [BroadcastAnalysisBoard]
 /// - [StudyAnalysisBoard]
+/// - [RetroAnalysisBoard]
 abstract class AnalysisBoard extends ConsumerStatefulWidget {
   const AnalysisBoard({super.key, required this.boardSize, this.boardRadius});
 
@@ -41,6 +43,9 @@ abstract class AnalysisBoardState<
   /// Whether the annotations should be shown on the board.
   bool get showAnnotations;
 
+  /// Override this to hide the best move arrow in certain states, even if enabled in [analysisPrefs].
+  bool get hideBestMoveArrow => false;
+
   void onUserMove(NormalMove move);
 
   void onPromotionSelection(Role? role);
@@ -48,8 +53,11 @@ abstract class AnalysisBoardState<
   /// For the study board to set a different fen if the position is `null`.
   String get fen => analysisState.currentPosition!.fen;
 
-  /// For the study board to add pgn shapes and variations arrows.
+  /// E.g. for the study board to add pgn shapes and variations arrows.
   ISet<Shape> get extraShapes => ISet();
+
+  /// Can be used to disable interaction with the board in certain states
+  bool get interactive => true;
 
   /// Set of shapes drawn by the user on the board (arrows, circle).
   ISet<Shape> userShapes = ISet();
@@ -59,7 +67,9 @@ abstract class AnalysisBoardState<
     final currentPosition = analysisState.currentPosition;
 
     final showBestMoveArrow =
-        analysisState.isEngineAvailable(enginePrefs) && analysisPrefs.showBestMoveArrow;
+        !hideBestMoveArrow &&
+        analysisState.isEngineAvailable(enginePrefs) &&
+        analysisPrefs.showBestMoveArrow;
 
     if (!showBestMoveArrow || currentPosition == null) {
       return ISet();
@@ -98,7 +108,7 @@ abstract class AnalysisBoardState<
       orientation: analysisState.pov,
       fen: fen,
       lastMove: analysisState.lastMove as NormalMove?,
-      game: (currentPosition != null)
+      game: (interactive && currentPosition != null)
           ? boardPrefs.toGameData(
               variant: analysisState.variant,
               position: currentPosition,

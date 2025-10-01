@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -64,6 +65,11 @@ class OpeningExplorer extends _$OpeningExplorer {
         return null;
     }
   }
+}
+
+@Riverpod(keepAlive: true)
+OpeningExplorerRepository openingExplorerRepository(Ref ref) {
+  return OpeningExplorerRepository(ref.read(defaultClientProvider));
 }
 
 class OpeningExplorerRepository {

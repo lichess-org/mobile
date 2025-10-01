@@ -22,6 +22,13 @@ sealed class Eval {
   /// 1  = infinitely winning
   /// -1 = infinitely losing
   double winningChances(Side side);
+
+  /// The difference, in winning chances, between two [Eval]s.
+  ///
+  /// 1  = e1 is infinitely better than e2
+  /// -1 = e1 is infinitely worse  than e2
+  static double winningChancesPovDiff(Side side, Eval e1, Eval e2) =>
+      (e1.winningChances(side) - e2.winningChances(side)) / 2;
 }
 
 /// The eval from the client side, either from the cloud or the local engine.
