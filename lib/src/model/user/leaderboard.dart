@@ -36,7 +36,7 @@ sealed class LeaderboardUser with _$LeaderboardUser {
     required UserId id,
     required String username,
     bool? patron,
-    int? patronTierColor,
+    int? patronColor,
     String? title,
     String? flair,
     bool? online,
@@ -50,6 +50,6 @@ sealed class LeaderboardUser with _$LeaderboardUser {
     title: title,
     flair: flair,
     isPatron: patron,
-    patronTierColor: patronTierColor,
+    patronColor: patronColor,
   );
 }

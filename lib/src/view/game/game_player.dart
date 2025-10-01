@@ -110,7 +110,7 @@ class GamePlayer extends StatelessWidget {
               ],
               const SizedBox(width: 5),
               if (player.user?.isPatron == true) ...[
-                PatronIcon(size: playerFontSize, tier: player.user?.patronTierColor),
+                PatronIcon(size: playerFontSize, color: player.user?.patronColor),
                 const SizedBox(width: 5),
               ],
               if (player.user?.title != null) ...[

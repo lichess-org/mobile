@@ -39,11 +39,11 @@ class ConnectedIcon extends StatelessWidget {
   }
 }
 
-/// A wing icon representing a Lichess patron with its different color tiers.
+/// A wing icon representing a Lichess patron with its chosen color.
 class PatronIcon extends StatelessWidget {
-  const PatronIcon({this.tier, this.size, super.key});
+  const PatronIcon({this.color, this.size, super.key});
 
-  final int? tier;
+  final int? color;
   final double? size;
 
   @override
@@ -52,10 +52,10 @@ class PatronIcon extends StatelessWidget {
     final brightness = Theme.of(context).brightness;
     return Icon(
       LichessIcons.patron,
-      color: tier != null
+      color: color != null
           ? brightness == Brightness.dark
-                ? patronColorsDark[(tier! - 1)]
-                : patronColorsLight[(tier! - 1)]
+                ? patronColorsDark[(color! - 1)]
+                : patronColorsLight[(color! - 1)]
           : null,
       size: size ?? textStyle.fontSize,
       semanticLabel: context.l10n.patronLichessPatron,
@@ -168,7 +168,7 @@ class UserFullNameWidget extends ConsumerWidget {
         if (showPatron && user?.isPatron == true)
           Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: PatronIcon(size: contextTextStyle.fontSize, tier: user?.patronTierColor),
+            child: PatronIcon(size: contextTextStyle.fontSize, color: user?.patronColor),
           ),
         if (user?.title != null) ...[
           Text(

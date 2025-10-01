@@ -357,7 +357,7 @@ LeaderboardUser _leaderboardUserFromPick(RequiredPick pick) {
     title: pick('title').asStringOrNull(),
     flair: pick('flair').asStringOrNull(),
     patron: pick('patron').asBoolOrNull(),
-    patronTierColor: pick('patronColor').asIntOrNull(),
+    patronColor: pick('patronColor').asIntOrNull(),
     online: pick('online').asBoolOrNull(),
     rating: pick(
       'perfs',
