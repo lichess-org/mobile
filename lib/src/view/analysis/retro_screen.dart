@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
@@ -47,7 +49,8 @@ class RetroScreen extends ConsumerWidget {
       AsyncData() => Scaffold(
         appBar: AppBar(
           title: AppBarTitleText(
-            '${context.l10n.learnFromYourMistakes} (${asyncState.requireValue.currentMistakeIndex + 1}/${asyncState.requireValue.mistakes.length})',
+            '${context.l10n.learnFromYourMistakes} (${math.min(asyncState.requireValue.mistakes.length, asyncState.requireValue.currentMistakeIndex + 1)}/${asyncState.requireValue.mistakes.length})',
+            maxLines: 2,
           ),
           actions: [
             if (asyncState.requireValue.isEngineAvailable(enginePrefs) == true)
