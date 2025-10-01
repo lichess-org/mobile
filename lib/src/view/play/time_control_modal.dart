@@ -35,7 +35,38 @@ class TimeControlModal extends StatelessWidget {
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       children: [
-        Padding(padding: _horizontalPadding, child: SettingsSectionTitle(context.l10n.timeControl)),
+        Padding(
+          padding: _horizontalPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SettingsSectionTitle(context.l10n.timeControl),
+              Text.rich(
+                TextSpan(
+                  text: context.l10n.minutesPerSide,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(color: textShade(context, 0.7)),
+                  children: [
+                    TextSpan(
+                      text: ' + ',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelLarge?.copyWith(color: textShade(context, 0.7)),
+                    ),
+                    TextSpan(
+                      text: context.l10n.incrementInSeconds,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelSmall?.copyWith(color: textShade(context, 0.7)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
         const SizedBox(height: 4.0),
         Card.filled(
           margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
