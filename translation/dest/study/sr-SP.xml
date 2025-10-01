@@ -15,7 +15,7 @@
   <string name="dateAddedOldest">Датум додавања (најстарије)</string>
   <string name="recentlyUpdated">Недавно ажуриране</string>
   <string name="mostPopular">Најпопуларније</string>
-  <string name="addNewChapter">Додајте ново поглавље</string>
+  <string name="addNewChapter">Додај ново поглавље</string>
   <plurals name="nbChapters">
     <item quantity="one">%s Поглавље</item>
     <item quantity="few">%s Поглављa</item>
@@ -32,7 +32,7 @@
     <item quantity="few">%s Чланa</item>
     <item quantity="other">%s Чланова</item>
   </plurals>
-  <string name="inviteToTheStudy">Позовите у студију</string>
+  <string name="inviteToTheStudy">Позови у студију</string>
   <string name="pleaseOnlyInvitePeopleYouKnow">Молимо вас да само позивате људе које познајете и који активно желе да се придруже овој студији.</string>
   <string name="searchByUsername">Претражујте по корисничком имену</string>
   <string name="spectator">Посматрач</string>
@@ -68,8 +68,8 @@
   <string name="embedInYourWebsite">Угради у свој сајт или блог</string>
   <string name="readMoreAboutEmbedding">Прочитај више о уграђивању</string>
   <string name="onlyPublicStudiesCanBeEmbedded">Само јавне студије могу бити уграђене!</string>
-  <string name="open">Отворите</string>
-  <string name="xBroughtToYouByY">%2$s Вам доноси %1$s</string>
+  <string name="open">Отвори</string>
+  <string name="xBroughtToYouByY">%1$s, донето вама од стране %2$s</string>
   <string name="studyNotFound">Студија није пронађена</string>
   <string name="editChapter">Измени поглавље</string>
   <string name="newChapter">Ново поглавље</string>
@@ -101,7 +101,6 @@
     <item quantity="other">Налепите свој PGN текст овде, до %s партија</item>
   </plurals>
   <string name="urlOfTheGame">Линкови партија, једна по реду</string>
-  <string name="loadAGameFromXOrY">Учитајте партије са %1$s или %2$s</string>
   <string name="createChapter">Направи поглавље</string>
   <string name="createStudy">Направи студију</string>
   <string name="editStudy">Измени студију</string>
@@ -144,5 +143,5 @@
   <string name="studyMembersTitle">Чланови студије</string>
   <string name="studyChaptersTitle">Поглавља студије</string>
   <string name="fromPgnGameTitle">Из PGN партије</string>
-  <string name="doubleDefeat" comment="A rare ending condition. Both sides were defeated, resulting in 0-0 (no points awarded to either side). Can only appear in studies and broadcasts.">Дупли пораз</string>
+  <string name="doubleDefeat">Дупли пораз</string>
 </resources>

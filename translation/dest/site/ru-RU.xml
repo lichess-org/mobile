@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="playWithAFriend">Сыграть с другом</string>
-  <string name="playWithTheMachine">Сыграть с компьютером</string>
+  <string name="gameSetup">Настройка игры</string>
+  <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">Бросить вызов другу</string>
+  <string name="playAgainstComputer" comment="Appears on the homepage. Opens the modal to create a game against a chess engine. Please keep your translation short.">Сыграть с компьютером</string>
+  <string name="gameMode">Игровой режим</string>
+  <string name="createLobbyGame">Создать запрос на игру</string>
+  <string name="youPlayAs">Вы играете за</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">Чтобы пригласить друга, отправьте ему эту ссылку</string>
   <string name="gameOver">Партия окончена</string>
   <string name="waitingForOpponent">Ожидание соперника</string>
@@ -316,7 +320,6 @@
   <string name="blackTimeOut">Чёрные просрочили время</string>
   <string name="drawOfferSent">Предложение ничьей отправлено</string>
   <string name="drawOfferAccepted">Предложение ничьей принято</string>
-  <string name="drawOfferCanceled">Предложение ничьей отменено</string>
   <string name="whiteOffersDraw">Белые предлагают ничью</string>
   <string name="blackOffersDraw">Чёрные предлагают ничью</string>
   <string name="whiteDeclinesDraw">Белые отклонили предложение ничьей</string>
@@ -388,7 +391,7 @@
     <item quantity="other">%s играются</item>
   </plurals>
   <string name="exportGames">Скачать игры</string>
-  <string name="ratingRange">Рейтинг соперника</string>
+  <string name="ratingFilter">Рейтинговый фильтр</string>
   <plurals name="giveNbSeconds">
     <item quantity="one">Дать %s секунду</item>
     <item quantity="few">Дать %s секунды</item>
@@ -460,6 +463,7 @@
     <item quantity="other">Вы должны сыграть ещё %s рейтинговых игр</item>
   </plurals>
   <string name="yourPerfRatingIsProvisional">Ваш рейтинг в %s ещё недостоверный</string>
+  <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Рейтинговые фильтры заблокированы, поскольку ваш рейтинг нестабилен. Игра на рейтинг повысит стабильность.</string>
   <string name="yourPerfRatingIsTooHigh">Ваш рейтинг в %1$s (%2$s) слишком высок для участия</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Ваш еженедельный рейтинг в %1$s (%2$s) слишком высок</string>
   <string name="yourPerfRatingIsTooLow">Ваш рейтинг в %1$s (%2$s) недостаточен для участия</string>
@@ -490,7 +494,6 @@
   <string name="toStudy">Студия</string>
   <string name="importGame">Импортировать партию</string>
   <string name="importGameExplanation">Вставьте запись партии в формате PGN, и вы получите возможность переигрывать партию, выполнять компьютерный анализ, общаться в чате и делиться ссылкой на эту игру.</string>
-  <string name="importGameCaveat">Варианты будут удалены. Чтобы их сохранить, импортируйте PGN в студии.</string>
   <string name="importGameDataPrivacyWarning">Этот PGN-файл может быть доступен публично. Чтобы импортировать игру приватно, используйте студию.</string>
   <plurals name="nbImportedGames">
     <item quantity="one">%s импортированная</item>
@@ -911,6 +914,7 @@
   <string name="notifications">Уведомления</string>
   <string name="notificationsX">Уведомлений: %1$s</string>
   <string name="perfRatingX">Рейтинг: %s</string>
+  <string name="yourRatingIsX">Ваш рейтинг %s</string>
   <plurals name="nbSecondsToPlayTheFirstMove">
     <item quantity="one">%s секунда на первый ход</item>
     <item quantity="few">%s секунды на первый ход</item>
@@ -966,6 +970,7 @@
   <string name="playVariationToCreateConditionalPremoves">Выполните ходы на доске, чтобы задать условные предходы</string>
   <string name="noConditionalPremoves">Безусловные предходы</string>
   <string name="playX">Сыграть %s</string>
+  <string name="challengeX">Бросить вызов %s</string>
   <plurals name="andSaveNbPremoveLines">
     <item quantity="one">и сохранить %s последовательность</item>
     <item quantity="few">и сохранить %s последовательности</item>
@@ -1100,4 +1105,9 @@
   <string name="enableBlindMode">Включить слепой режим</string>
   <string name="disableBlindMode">Выключить слепой режим</string>
   <string name="copyToClipboard">Скопировать в буфер обмена</string>
+  <string name="online" comment="status of a user">онлайн</string>
+  <string name="offline" comment="status of a user">офлайн</string>
+  <string name="search">Поиск</string>
+  <string name="clearSearch">Очистить поиск</string>
+  <string name="tags">Теги</string>
 </resources>
