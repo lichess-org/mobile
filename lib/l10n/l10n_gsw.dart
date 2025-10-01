@@ -707,9 +707,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastRoundName => 'Runde Name';
 
   @override
-  String get broadcastRoundNumber => 'Runde Nummere';
-
-  @override
   String get broadcastTournamentName => 'Turnier Name';
 
   @override
@@ -2092,10 +2089,22 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Das Benutzerkonto isch g\'schlosse.';
 
   @override
-  String get playWithAFriend => 'Schpill mit eme Fründ';
+  String get gameSetup => 'Schpielischtellige';
 
   @override
-  String get playWithTheMachine => 'Schpill mit em Computer';
+  String get challengeAFriend => 'En Fründ usefordere';
+
+  @override
+  String get playAgainstComputer => 'Schpill gäge de Computer';
+
+  @override
+  String get gameMode => 'Schpielart';
+
+  @override
+  String get createLobbyGame => 'Neus Schpiel erschtelle';
+
+  @override
+  String get youPlayAs => 'Du schpillsch mit';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Wottsch öpper zum Schpille ilade - schick die URL';
@@ -2748,9 +2757,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get drawOfferAccepted => 'Remis-Agebot akzeptiert';
 
   @override
-  String get drawOfferCanceled => 'Remis-Agebot zruggzoge';
-
-  @override
   String get whiteOffersDraw => 'Wiss offeriert Remis';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get exportGames => 'Schpiel exportiere';
 
   @override
-  String get ratingRange => 'Wertigsbereich';
+  String get ratingFilter => 'Wertigsfilter';
 
   @override
   String get thisAccountViolatedTos => 'Das Konto hät gäge d\'Lichess-Nutzigsbedingige verschtosse';
@@ -2946,6 +2952,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Dini $param Wertig isch provisorisch';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'D\'Bewertigsfilter sind geschperrt, will dini Wertig nöd schtabil isch. Durs Schpiele vu bewertete Schpiel wird die Schtabilität erhöht.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Füeg e Schpiel-PGN i, für Zuegriff uf Schpielwiderholig, Computeranalyse, Chat und e teilbari URL.';
-
-  @override
-  String get importGameCaveat => 'd\'Variazione werded glöscht. Zums b\'halte, muesch d\'PGN mit ere Schtudie importiere.';
 
   @override
   String get importGameDataPrivacyWarning => 'De PGN isch öffentlich zuegänglich. Zum es Schpiel privat importiere, nimmsch e Schtudie.';
@@ -4207,6 +4213,11 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Dini Wertig: $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Üeb mit em Computer';
 
   @override
@@ -4341,6 +4352,11 @@ class AppLocalizationsGsw extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Schpill $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Gforderet wird: $param';
   }
 
   @override
@@ -4751,6 +4767,21 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Kopier ufs Clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Suechi';
+
+  @override
+  String get clearSearch => 'Suechi lösche';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5581,6 +5612,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyCopyChapterPgn => 'PGN kopiere';
 
   @override
+  String get studyCopyRawChapterPgn => 'Kopier PGN';
+
+  @override
   String get studyDownloadGame => 'Das Schpiel abelade';
 
   @override
@@ -5704,11 +5738,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL vu de Schpiel';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Lad es Schpiel vo $param1 oder $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Kapitäl ärschtelä';

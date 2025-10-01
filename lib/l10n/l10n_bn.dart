@@ -64,7 +64,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileLiveStreamers => 'Live streamers';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'এই পাতাটি দেখতে হলে লগইন করুন।';
 
   @override
   String get mobileNoSearchResults => 'No results';
@@ -83,7 +83,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'যে খেলোয়াড়-দের নামে \"$param\" আছে।';
   }
 
   @override
@@ -239,7 +239,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileWatchTab => 'দেখুন';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'লীচেস অ্যাপ-এ স্বাগতম!';
 
   @override
   String get activityActivity => 'কার্যকলাপ';
@@ -705,9 +705,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get broadcastRoundName => 'Round name';
-
-  @override
-  String get broadcastRoundNumber => 'গোল নম্বর';
 
   @override
   String get broadcastTournamentName => 'Tournament name';
@@ -2092,10 +2089,22 @@ class AppLocalizationsBn extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'এই একাউন্টটি বন্ধ করা হয়েছে';
 
   @override
-  String get playWithAFriend => 'বন্ধুর সাথে খেলো';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'কম্পিউটারের সাথে খেলতে চান';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'কাউকে খেলার জন্য আমন্ত্রণ জানাতে চাইলে এই URL টি দিন';
@@ -2748,9 +2757,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get drawOfferAccepted => 'সমান অফার গ্রহণ করা হয়েছে';
 
   @override
-  String get drawOfferCanceled => 'সমান অফার বাতিল করা হয়েছে';
-
-  @override
   String get whiteOffersDraw => 'সাদা অফার সমান';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get exportGames => 'খেলা রপ্তানী';
 
   @override
-  String get ratingRange => 'রেটিং সীমা';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'এই অ্যাকাউন্টটি লিচেস্‌-এর পরিষেবার শর্তসমূহ লঙ্ঘন করেছে';
@@ -2946,6 +2952,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'আপনার $param অনুপাত হয় সাময়িক';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'যখন একটি খেলার PGN যোগ করবেন আপনি পাবেন একটি ব্রাউজাবেল উত্তর,\nএকটি কম্পিউটার বিশ্লেষণ, একটি খেলা আলাপ এবং একটি ভাগাভাগি করার URL.';
-
-  @override
-  String get importGameCaveat => 'Variations will be erased. To keep them, import the PGN via a study.';
 
   @override
   String get importGameDataPrivacyWarning => 'এই PGN জনসাধারণের দ্বারা অধিগত করা যেতে পারে। ব্যক্তিগতভাবে একটি গেম ইমপোর্ট করতে, একটি স্টাডি ব্যবহার করুন.';
@@ -4207,6 +4213,11 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'কম্পিউটারের সাথে অনুশীলন';
 
   @override
@@ -4341,6 +4352,11 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String playX(String param) {
     return 'খেলা $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4751,6 +4767,21 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5581,6 +5612,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get studyCopyChapterPgn => 'Copy PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => 'Download game';
 
   @override
@@ -5704,11 +5738,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'খেলাগুলোর URL, লাইনপ্রতি একটি';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return '$param1 অথবা $param2 থেকে খেলাসমূহ লোড করুন';
-  }
 
   @override
   String get studyCreateChapter => 'অধ্যায় তৈরি করুন';

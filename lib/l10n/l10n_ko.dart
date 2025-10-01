@@ -687,9 +687,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastRoundName => '라운드 이름';
 
   @override
-  String get broadcastRoundNumber => '라운드 숫자';
-
-  @override
   String get broadcastTournamentName => '토너먼트 이름';
 
   @override
@@ -2064,10 +2061,22 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsThisAccountIsClosed => '계정이 폐쇄되었습니다.';
 
   @override
-  String get playWithAFriend => '친구와 체스 두기';
+  String get gameSetup => '게임 설정';
 
   @override
-  String get playWithTheMachine => '컴퓨터와 체스 두기';
+  String get challengeAFriend => '친구에게 도전';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => '게임 모드';
+
+  @override
+  String get createLobbyGame => '로비 게임 만들기';
+
+  @override
+  String get youPlayAs => '당신은 재생';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => '이 URL로 친구를 초대하세요';
@@ -2720,9 +2729,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get drawOfferAccepted => '무승부 요청 수락됨';
 
   @override
-  String get drawOfferCanceled => '무승부 요청 취소함';
-
-  @override
   String get whiteOffersDraw => '백이 무승부를 제안합니다';
 
   @override
@@ -2846,7 +2852,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get exportGames => '대국 저장하기';
 
   @override
-  String get ratingRange => '레이팅 범위';
+  String get ratingFilter => '등급 필터';
 
   @override
   String get thisAccountViolatedTos => '이 계정은 Lichess 이용 약관을 위반하였습니다';
@@ -2918,6 +2924,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return '사용자의 임시 등급 $param는 임시적입니다.';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => '귀하의 평가가 안정적이지 않기 때문에 평가 필터가 잠겨 있습니다. 정격 게임을 플레이하면 안정성이 향상됩니다.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3028,9 +3037,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get importGameExplanation => '체스 대국의 PGN 을 붙여 넣으면, 복기와 컴퓨터 분석을 진행할 수 있고, 채팅을 칠 수도 있으며, 대국을 공유할 수 있는 URL 링크도 생성할 수 있습니다.';
-
-  @override
-  String get importGameCaveat => '변형은 지워집니다. 변형을 유지하려면 연구를 통해 PGN을 가져오세요.';
 
   @override
   String get importGameDataPrivacyWarning => '이 PGN은 모두가 볼 수 있게 됩니다. 비공개로 대국을 불러오려면, 연구 기능을 이용하세요.';
@@ -4179,6 +4185,11 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return '$param 귀하의 평가는';
+  }
+
+  @override
   String get practiceWithComputer => '컴퓨터와 연습하기';
 
   @override
@@ -4313,6 +4324,11 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String playX(String param) {
     return '$param 를 둠';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4723,6 +4739,21 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5506,6 +5537,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get studyCopyChapterPgn => 'PGN 복사';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => '게임 다운로드';
 
   @override
@@ -5629,11 +5663,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => '한 줄에 하나씩, 게임의 URL';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return '$param1 또는 $param2에서 게임 로드';
-  }
 
   @override
   String get studyCreateChapter => '챕터 만들기';

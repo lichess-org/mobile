@@ -396,7 +396,6 @@
   "broadcastOngoing": "Ongoing",
   "broadcastUpcoming": "Upcoming",
   "broadcastRoundName": "Round name",
-  "broadcastRoundNumber": "Round number",
   "broadcastTournamentName": "Tournament name",
   "broadcastTournamentDescription": "Short tournament description",
   "broadcastFullDescription": "Full tournament description",
@@ -528,7 +527,7 @@
       }
     }
   },
-  "challengeChallengeToPlay": "Challenge to a game",
+  "challengeChallengeToPlay": "Challenge",
   "challengeChallengeDeclined": "Challenge declined.",
   "challengeChallengeAccepted": "Challenge accepted!",
   "challengeChallengeCanceled": "Challenge cancelled.",
@@ -1094,8 +1093,12 @@
   "settingsCancelKeepAccount": "Cancel and keep my account",
   "settingsCloseAccountAreYouSure": "Are you sure you want to close your account?",
   "settingsThisAccountIsClosed": "This account is closed.",
-  "playWithAFriend": "Play with a friend",
-  "playWithTheMachine": "Play with the computer",
+  "gameSetup": "Game setup",
+  "challengeAFriend": "Challenge a friend",
+  "playAgainstComputer": "Play against computer",
+  "gameMode": "Game mode",
+  "createLobbyGame": "Create lobby game",
+  "youPlayAs": "You play as",
   "toInviteSomeoneToPlayGiveThisUrl": "To invite someone to play, give this URL",
   "gameOver": "Game Over",
   "waitingForOpponent": "Waiting for opponent",
@@ -1316,8 +1319,8 @@
   "time": "Time",
   "rating": "Rating",
   "ratingStats": "Rating stats",
-  "username": "User name",
-  "usernameOrEmail": "User name or email",
+  "username": "Username",
+  "usernameOrEmail": "Username or email",
   "changeUsername": "Change username",
   "changeUsernameNotSame": "Only the case of the letters can change. For example \"johndoe\" to \"JohnDoe\".",
   "changeUsernameDescription": "Change your username. This can only be done once and you are only allowed to change the case of the letters in your username.",
@@ -1426,7 +1429,6 @@
   "blackTimeOut": "Black time out",
   "drawOfferSent": "Draw offer sent",
   "drawOfferAccepted": "Draw offer accepted",
-  "drawOfferCanceled": "Draw offer cancelled",
   "whiteOffersDraw": "White offers draw",
   "blackOffersDraw": "Black offers draw",
   "whiteDeclinesDraw": "White declines draw",
@@ -1462,13 +1464,13 @@
   "loginToChat": "Sign in to chat",
   "youHaveBeenTimedOut": "You have been timed out.",
   "spectatorRoom": "Spectator room",
-  "composeMessage": "Compose message",
+  "composeMessage": "Message",
   "subject": "Subject",
   "send": "Send",
   "incrementInSeconds": "Increment in seconds",
   "freeOnlineChess": "Free Online Chess",
   "exportGames": "Export games",
-  "ratingRange": "Rating range",
+  "ratingFilter": "Rating filter",
   "thisAccountViolatedTos": "This account violated the Lichess Terms of Service",
   "openingExplorerAndTablebase": "Opening explorer & tablebase",
   "takeback": "Takeback",
@@ -1499,6 +1501,7 @@
       }
     }
   },
+  "ratingRangeIsDisabledBecauseYourRatingIsProvisional": "Rating filters are locked because your rating is not stable. Playing rated games will increase stability.",
   "yourPerfRatingIsTooHigh": "Your {param1} rating ({param2}) is too high",
   "@yourPerfRatingIsTooHigh": {
     "placeholders": {
@@ -1619,8 +1622,7 @@
   "continueFromHere": "Continue from here",
   "toStudy": "Study",
   "importGame": "Import game",
-  "importGameExplanation": "Paste a game PGN to get a browsable replay, computer analysis, game chat and public shareable URL.",
-  "importGameCaveat": "Variations will be erased. To keep them, import the PGN via a study.",
+  "importGameExplanation": "Paste a game PGN to get a browsable replay of the main line, computer analysis, game chat and public shareable URL.",
   "importGameDataPrivacyWarning": "This PGN can be accessed by the public. To import a game privately, use a study.",
   "thisIsAChessCaptcha": "This is a chess CAPTCHA.",
   "clickOnTheBoardToMakeYourMove": "Click on the board to make your move, and prove you are human.",
@@ -2320,6 +2322,14 @@
       }
     }
   },
+  "yourRatingIsX": "Your rating is {param}",
+  "@yourRatingIsX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "practiceWithComputer": "Practice with computer",
   "anotherWasX": "Another was {param}",
   "@anotherWasX": {
@@ -2385,6 +2395,14 @@
   "noConditionalPremoves": "No conditional premoves",
   "playX": "Play {param}",
   "@playX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeX": "Challenge {param}",
+  "@challengeX": {
     "placeholders": {
       "param": {
         "type": "String"
@@ -2666,6 +2684,11 @@
   "enableBlindMode": "Enable blind mode",
   "disableBlindMode": "Disable blind mode",
   "copyToClipboard": "Copy to clipboard",
+  "online": "online",
+  "offline": "offline",
+  "search": "Search",
+  "clearSearch": "Clear search",
+  "tags": "Tags",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {
@@ -3186,6 +3209,7 @@
   "studyStudyPgn": "Study PGN",
   "studyChapterPgn": "Chapter PGN",
   "studyCopyChapterPgn": "Copy PGN",
+  "studyCopyRawChapterPgn": "Copy Raw PGN",
   "studyDownloadGame": "Download game",
   "studyStudyUrl": "Study URL",
   "studyCurrentChapterUrl": "Current chapter URL",
@@ -3256,17 +3280,6 @@
   "studyLoadAGameFromPgn": "Load games from PGN",
   "studyAutomatic": "Automatic",
   "studyUrlOfTheGame": "URL of the games, one per line",
-  "studyLoadAGameFromXOrY": "Load games from {param1} or {param2}",
-  "@studyLoadAGameFromXOrY": {
-    "placeholders": {
-      "param1": {
-        "type": "String"
-      },
-      "param2": {
-        "type": "String"
-      }
-    }
-  },
   "studyCreateChapter": "Create chapter",
   "studyCreateStudy": "Create study",
   "studyEditStudy": "Edit study",

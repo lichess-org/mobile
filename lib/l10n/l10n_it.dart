@@ -159,7 +159,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsPickAnImageHelp => 'Lo sfondo personalizzato funziona solo in modalità scura. Si consiglia di usare un\'immagine scura.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Offusca l\'immagine';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Hide board';
@@ -168,10 +168,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'Mostra la scacchiera';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Scorri per visualizzare altri sfondi';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Tocca o trascina';
 
   @override
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
@@ -189,7 +189,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Touch feedback';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Se attivato, il dispositivo vibrerà brevemente quando sposti o catturi un pezzo.';
 
   @override
   String get mobileSettingsTab => 'Preferenze';
@@ -239,7 +239,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileWatchTab => 'Guarda';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Benvenuto nell\'app Lichess!';
 
   @override
   String get activityActivity => 'Attività';
@@ -705,9 +705,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get broadcastRoundName => 'Nome turno';
-
-  @override
-  String get broadcastRoundNumber => 'Turno numero';
 
   @override
   String get broadcastTournamentName => 'Nome del torneo';
@@ -2092,10 +2089,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Questo account è stato eliminato.';
 
   @override
-  String get playWithAFriend => 'Gioca con un amico';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'Gioca contro il computer';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Per invitare qualcuno a giocare, dagli questo URL';
@@ -2748,9 +2757,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get drawOfferAccepted => 'Offerta di patta accettata';
 
   @override
-  String get drawOfferCanceled => 'Offerta di patta annullata';
-
-  @override
   String get whiteOffersDraw => 'Il Bianco offre patta';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get exportGames => 'Esporta le partite';
 
   @override
-  String get ratingRange => 'Punteggio avversario';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Questo account ha violato i termini di servizio di Lichess';
@@ -2946,6 +2952,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Il tuo punteggio $param è provvisorio';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Quando incolli una partita tramite PGN potrai rivederla,\nanalizzarla con il computer, commentarla in chat, e condividerla tramite un indirizzo URL.';
-
-  @override
-  String get importGameCaveat => 'Le varianti saranno cancellate. Per salvarle, importa il PGN in uno studio.';
 
   @override
   String get importGameDataPrivacyWarning => 'Questo PGN è accessibile pubblicamente. Per importare una partita privatamente, utilizza uno studio.';
@@ -4207,6 +4213,11 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Allenati contro il computer';
 
   @override
@@ -4341,6 +4352,11 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Gioca $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4751,6 +4767,21 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copia negli appunti';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5581,6 +5612,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyCopyChapterPgn => 'Copia in PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => 'Scarica partita';
 
   @override
@@ -5704,11 +5738,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL della partita';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Carica una partita da $param1 o $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Crea capitolo';
@@ -5946,7 +5975,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyConclusionTitle => 'Grazie del tuo tempo';
 
   @override
-  String get studyConclusionText => 'Puoi trovare i tuoi <a href=\'/study/mine/hot\'>studi precedenti</a> sulla pagina del tuo profilo.<br>C\'è anche un <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>post sugli studi</a> sul blog.<br>Gli utenti esperti possono premere \"?\" per vedere le scorciatoie da tasriera.<br>Divertiti!';
+  String get studyConclusionText => 'Puoi trovare i tuoi <a href=\'/study/mine/hot\'>studi precedenti</a> sulla pagina del tuo profilo.<br>C\'è anche un <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>post sugli studi</a> sul blog.<br>Gli utenti esperti possono premere \"?\" per vedere le scorciatoie da tastiera.<br>Divertiti!';
 
   @override
   String get studyCreateChapterTitle => 'Creiamo un capitolo di studio';

@@ -707,9 +707,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastRoundName => 'Kierroksen nimi';
 
   @override
-  String get broadcastRoundNumber => 'Kierroksen numero';
-
-  @override
   String get broadcastTournamentName => 'Turnauksen nimi';
 
   @override
@@ -2092,10 +2089,22 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Tämä tunnus on suljettu.';
 
   @override
-  String get playWithAFriend => 'Pelaa kaveria vastaan';
+  String get gameSetup => 'Pelin luonti';
 
   @override
-  String get playWithTheMachine => 'Pelaa tietokonetta vastaan';
+  String get challengeAFriend => 'Haasta kaveri';
+
+  @override
+  String get playAgainstComputer => 'Pelaa tietokonetta vastaan';
+
+  @override
+  String get gameMode => 'Pelityyppi';
+
+  @override
+  String get createLobbyGame => 'Luo peli aulaan';
+
+  @override
+  String get youPlayAs => 'Nappuloidesi väri';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Lähetä tämä linkki kaverillesi, jonka haluat kutsua pelaamaan';
@@ -2748,9 +2757,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get drawOfferAccepted => 'Tasapeliehdotus hyväksytty';
 
   @override
-  String get drawOfferCanceled => 'Tasapeliehdotus peruttu';
-
-  @override
   String get whiteOffersDraw => 'Valkea ehdottaa tasapeliä';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get exportGames => 'Vie pelejä';
 
   @override
-  String get ratingRange => 'Vahvuuslukualue';
+  String get ratingFilter => 'Vahvuuslukusuodatin';
 
   @override
   String get thisAccountViolatedTos => 'Tämä käyttäjätunnus rikkoi Lichessin käyttöehtoja';
@@ -2946,6 +2952,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Vahvuuslukusi $param on tilapäinen';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Vahvuuslukusuodatin ei ole käytettävissäsi, koska vahvuuslukusi ei ole vakaa. Voit vakauttaa sitä pelaamalla pisteytettyjä pelejä.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Liitä pelin PGN, niin voit selata peliä ja saat sille tietokoneanalyysin, keskusteluhuoneen sekä URL:n, jonka voit jakaa.';
-
-  @override
-  String get importGameCaveat => 'Muunnelmat poistetaan. Jos haluat säilyttää ne, tuo PGN ensin tutkielmaan.';
 
   @override
   String get importGameDataPrivacyWarning => 'Tähän PGN:ään on julkinen pääsy. Käytä tutkielmaa halutessasi tuoda pelin ja pitää sen yksityisenä.';
@@ -4207,6 +4213,11 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Vahvuuslukusi on $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Harjoittele tietokonetta vastaan';
 
   @override
@@ -4341,6 +4352,11 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Siirrä $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Haasta $param';
   }
 
   @override
@@ -4751,6 +4767,21 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Kopioi leikepöydälle';
+
+  @override
+  String get online => 'online-tilassa';
+
+  @override
+  String get offline => 'offline-tilassa';
+
+  @override
+  String get search => 'Hae';
+
+  @override
+  String get clearSearch => 'Tyhjennä haku';
+
+  @override
+  String get tags => 'Tunnisteet';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5581,6 +5612,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopioi PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Kopioi kommentoimaton PGN';
+
+  @override
   String get studyDownloadGame => 'Lataa peli';
 
   @override
@@ -5704,11 +5738,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL peliin';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Lataa peli lähteestä $param1 tai $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Aloita luku';

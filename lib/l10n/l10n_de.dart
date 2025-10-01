@@ -707,9 +707,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get broadcastRoundName => 'Rundenname';
 
   @override
-  String get broadcastRoundNumber => 'Rundennummer';
-
-  @override
   String get broadcastTournamentName => 'Turniername';
 
   @override
@@ -1613,7 +1610,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleImprovementAreasDescription => 'Übe das, um deinen Fortschritt zu optimieren!';
 
   @override
-  String get puzzleStrengthDescription => 'Bei diesen Themen schneiden Sie am besten ab';
+  String get puzzleStrengthDescription => 'Bei diesen Themen schneidest du am besten ab';
 
   @override
   String puzzlePlayedXTimes(int count) {
@@ -2092,10 +2089,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Dieses Benutzerkonto ist geschlossen.';
 
   @override
-  String get playWithAFriend => 'Spiele mit einem Freund';
+  String get gameSetup => 'Spieleinstellungen';
 
   @override
-  String get playWithTheMachine => 'Spiele mit dem Computer';
+  String get challengeAFriend => 'Einen Freund herausfordern';
+
+  @override
+  String get playAgainstComputer => 'Gegen den Computer spielen';
+
+  @override
+  String get gameMode => 'Spielmodus';
+
+  @override
+  String get createLobbyGame => 'Neue Partie erstellen';
+
+  @override
+  String get youPlayAs => 'Du spielst als';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Versende diese URL, um jemanden zum Spiel einzuladen';
@@ -2748,9 +2757,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get drawOfferAccepted => 'Remisangebot angenommen';
 
   @override
-  String get drawOfferCanceled => 'Remisangebot zurückgezogen';
-
-  @override
   String get whiteOffersDraw => 'Weiß bietet Remis';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get exportGames => 'Partien exportieren';
 
   @override
-  String get ratingRange => 'Wertungsbereich';
+  String get ratingFilter => 'Wertungsfilter';
 
   @override
   String get thisAccountViolatedTos => 'Dieses Konto hat gegen die Lichess-Nutzungsbedingungen verstoßen';
@@ -2946,6 +2952,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Deine $param Wertung ist provisorisch';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Die Filter nach Wertungszahl sind gesperrt, da deine Wertungszahl nicht stabil ist. Gewertete Partien zu spielen erhöht die Stabilität deiner Wertung.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Wenn du ein PGN einfügst, hast du Zugriff auf eine Spielwiederholung, eine Computeranalyse, einen Spielchat und eine teilbare URL.';
-
-  @override
-  String get importGameCaveat => 'Varianten werden gelöscht. Importiere die PGN mittels einer Studie, um sie zu behalten.';
 
   @override
   String get importGameDataPrivacyWarning => 'Diese PGN ist öffentlich zugänglich. Nutze eine Studie, um eine Partie nur für dich zu importieren.';
@@ -4207,6 +4213,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Deine Wertungszahl beträgt $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Übe mit dem Computer';
 
   @override
@@ -4341,6 +4352,11 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Spiele $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Fordere $param heraus';
   }
 
   @override
@@ -4751,6 +4767,21 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'In die Zwischenablage kopieren';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Suchen';
+
+  @override
+  String get clearSearch => 'Neue Suche';
+
+  @override
+  String get tags => 'Schlagwörter';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5581,6 +5612,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get studyCopyChapterPgn => 'PGN kopieren';
 
   @override
+  String get studyCopyRawChapterPgn => 'PGN-Rohdaten kopieren';
+
+  @override
   String get studyDownloadGame => 'Lade die Partie herunter';
 
   @override
@@ -5704,11 +5738,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL der Partie';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Partie von $param1 oder $param2 laden';
-  }
 
   @override
   String get studyCreateChapter => 'Kapitel erstellen';
@@ -6047,10 +6076,10 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get timeagoJustNow => 'gerade eben';
+  String get timeagoJustNow => 'in Kürze';
 
   @override
-  String get timeagoRightNow => 'gerade jetzt';
+  String get timeagoRightNow => 'vor Kurzem';
 
   @override
   String get timeagoCompleted => 'abgeschlossen';

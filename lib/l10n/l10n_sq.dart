@@ -707,9 +707,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastRoundName => 'Emër raundi';
 
   @override
-  String get broadcastRoundNumber => 'Numër raundi';
-
-  @override
   String get broadcastTournamentName => 'Emër turneu';
 
   @override
@@ -2092,10 +2089,22 @@ class AppLocalizationsSq extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Kjo llogari është e mbyllur';
 
   @override
-  String get playWithAFriend => 'Luani me një shok';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'Luaj me kompjuterin';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Për të ftuar dikë të luajë, jepni këtë URL';
@@ -2748,9 +2757,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get drawOfferAccepted => 'Oferta për barazim u pranua';
 
   @override
-  String get drawOfferCanceled => 'Oferta për barazim u anulua';
-
-  @override
   String get whiteOffersDraw => 'I bardhi ofron barazim';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get exportGames => 'Eksporto lojërat';
 
   @override
-  String get ratingRange => 'Shtrirja e vlerësimit';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Kjo llogari ka shkelur Kushtet e Shërbimit të Lichess';
@@ -2946,6 +2952,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Vlerësimi juaj $param është i përkohshëm';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Ngjitni një PGN loje, që të merrni një përsëritje\ntë lojës në shfletues, analizë kompjuterike, bisedë\nloje dhe URL për ta ndarë me të tjerë.';
-
-  @override
-  String get importGameCaveat => 'Variacionet do të fshihen. Për t\'i mbajtur ato, importoni PGN përmes një studimi.';
 
   @override
   String get importGameDataPrivacyWarning => 'Kjo PGN mund të shihet nga publiku. Që të importoni privatisht një lojë, përdorni një ushtrim.';
@@ -4207,6 +4213,11 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Ushtrohuni me kompjuterin';
 
   @override
@@ -4341,6 +4352,11 @@ class AppLocalizationsSq extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Luani $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4751,6 +4767,21 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5581,6 +5612,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopjo PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => 'Shkarko lojën';
 
   @override
@@ -5704,11 +5738,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL e lojërave, një për rresht';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Ngarko lojëra nga $param1 ose $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Krijo kapitull';

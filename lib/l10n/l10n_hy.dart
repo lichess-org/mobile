@@ -9,7 +9,7 @@ class AppLocalizationsHy extends AppLocalizations {
   AppLocalizationsHy([String locale = 'hy']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Հաշվի նախընտրություններ';
 
   @override
   String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
@@ -705,9 +705,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get broadcastRoundName => 'Խաղափուլի անվանում';
-
-  @override
-  String get broadcastRoundNumber => 'Խաղափուլի համար';
 
   @override
   String get broadcastTournamentName => 'Մրցաշարի անվանում';
@@ -2092,10 +2089,22 @@ class AppLocalizationsHy extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Այս հաշիվը փակված է:';
 
   @override
-  String get playWithAFriend => 'Խաղալ ընկերոջ հետ';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'Խաղալ համակարգչի հետ';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Որևէ մեկին խաղի հրավիրելու համար ուղարկեք ստորև տրված հղումը';
@@ -2748,9 +2757,6 @@ class AppLocalizationsHy extends AppLocalizations {
   String get drawOfferAccepted => 'Ոչ-ոքի առաջարկը ընդունվել է';
 
   @override
-  String get drawOfferCanceled => 'Ոչ-ոքի առաջարկը հերքվել է';
-
-  @override
   String get whiteOffersDraw => 'Սպիտակներն առաջարկում են ոչ-ոքի';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get exportGames => 'Էկսպորտ անել խաղերը';
 
   @override
-  String get ratingRange => 'Elo միջակայք';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Այս օգտատերը խախտել է Lichess-ի օգտագործման պայմանները';
@@ -2946,6 +2952,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Ձեր վարկանիշը $param-ում դեռևս վավեր չէ';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Տեղադրեք պարտիայի գրառումը PGN ձևաչափով, և հնարավորություն կստանաք վերախաղարկելու պարտիան, կատարելու համակարգչային վերլուծություն, շփվելու զրուցարանում և կիսվելու այդ պարտիայի հղումով։';
-
-  @override
-  String get importGameCaveat => 'Տարբերակները կհեռացվեն։ Դրանք պահպանելու համար, PGN-ը տեղափոխեք ստուդիա։';
 
   @override
   String get importGameDataPrivacyWarning => 'Այս PGN ֆայլը կարող է հասանելի լինել բոլորին։ Պարտիան անհատապես ներբեռնելու համար օգտագործեք ստուդիան։';
@@ -4207,6 +4213,11 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Մարզում համակարգչի հետ';
 
   @override
@@ -4341,6 +4352,11 @@ class AppLocalizationsHy extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Խաղացեք $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4751,6 +4767,21 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5581,6 +5612,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get studyCopyChapterPgn => 'Պատճենել PGN-ը';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => 'Ներբեռնել պարտիան';
 
   @override
@@ -5704,11 +5738,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'Պարտիայի URL-ը, մեկ տողով';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Ներբեռնել խաղը $param1-ից կամ $param2-ից';
-  }
 
   @override
   String get studyCreateChapter => 'Ստեղծել գլուխը';

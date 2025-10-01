@@ -1238,12 +1238,6 @@ abstract class AppLocalizations {
   /// **'Round name'**
   String get broadcastRoundName;
 
-  /// No description provided for @broadcastRoundNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Round number'**
-  String get broadcastRoundNumber;
-
   /// No description provided for @broadcastTournamentName.
   ///
   /// In en, this message translates to:
@@ -1637,7 +1631,7 @@ abstract class AppLocalizations {
   /// No description provided for @challengeChallengeToPlay.
   ///
   /// In en, this message translates to:
-  /// **'Challenge to a game'**
+  /// **'Challenge'**
   String get challengeChallengeToPlay;
 
   /// No description provided for @challengeChallengeDeclined.
@@ -3764,17 +3758,41 @@ abstract class AppLocalizations {
   /// **'This account is closed.'**
   String get settingsThisAccountIsClosed;
 
-  /// No description provided for @playWithAFriend.
+  /// No description provided for @gameSetup.
   ///
   /// In en, this message translates to:
-  /// **'Play with a friend'**
-  String get playWithAFriend;
+  /// **'Game setup'**
+  String get gameSetup;
 
-  /// No description provided for @playWithTheMachine.
+  /// No description provided for @challengeAFriend.
   ///
   /// In en, this message translates to:
-  /// **'Play with the computer'**
-  String get playWithTheMachine;
+  /// **'Challenge a friend'**
+  String get challengeAFriend;
+
+  /// No description provided for @playAgainstComputer.
+  ///
+  /// In en, this message translates to:
+  /// **'Play against computer'**
+  String get playAgainstComputer;
+
+  /// No description provided for @gameMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Game mode'**
+  String get gameMode;
+
+  /// No description provided for @createLobbyGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Create lobby game'**
+  String get createLobbyGame;
+
+  /// No description provided for @youPlayAs.
+  ///
+  /// In en, this message translates to:
+  /// **'You play as'**
+  String get youPlayAs;
 
   /// No description provided for @toInviteSomeoneToPlayGiveThisUrl.
   ///
@@ -4733,13 +4751,13 @@ abstract class AppLocalizations {
   /// No description provided for @username.
   ///
   /// In en, this message translates to:
-  /// **'User name'**
+  /// **'Username'**
   String get username;
 
   /// No description provided for @usernameOrEmail.
   ///
   /// In en, this message translates to:
-  /// **'User name or email'**
+  /// **'Username or email'**
   String get usernameOrEmail;
 
   /// No description provided for @changeUsername.
@@ -5012,12 +5030,6 @@ abstract class AppLocalizations {
   /// **'Draw offer accepted'**
   String get drawOfferAccepted;
 
-  /// No description provided for @drawOfferCanceled.
-  ///
-  /// In en, this message translates to:
-  /// **'Draw offer cancelled'**
-  String get drawOfferCanceled;
-
   /// No description provided for @whiteOffersDraw.
   ///
   /// In en, this message translates to:
@@ -5231,7 +5243,7 @@ abstract class AppLocalizations {
   /// No description provided for @composeMessage.
   ///
   /// In en, this message translates to:
-  /// **'Compose message'**
+  /// **'Message'**
   String get composeMessage;
 
   /// No description provided for @subject.
@@ -5264,11 +5276,11 @@ abstract class AppLocalizations {
   /// **'Export games'**
   String get exportGames;
 
-  /// No description provided for @ratingRange.
+  /// No description provided for @ratingFilter.
   ///
   /// In en, this message translates to:
-  /// **'Rating range'**
-  String get ratingRange;
+  /// **'Rating filter'**
+  String get ratingFilter;
 
   /// No description provided for @thisAccountViolatedTos.
   ///
@@ -5407,6 +5419,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your {param} rating is provisional'**
   String yourPerfRatingIsProvisional(String param);
+
+  /// No description provided for @ratingRangeIsDisabledBecauseYourRatingIsProvisional.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.'**
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional;
 
   /// No description provided for @yourPerfRatingIsTooHigh.
   ///
@@ -5585,14 +5603,8 @@ abstract class AppLocalizations {
   /// No description provided for @importGameExplanation.
   ///
   /// In en, this message translates to:
-  /// **'Paste a game PGN to get a browsable replay, computer analysis, game chat and public shareable URL.'**
+  /// **'Paste a game PGN to get a browsable replay of the main line, computer analysis, game chat and public shareable URL.'**
   String get importGameExplanation;
-
-  /// No description provided for @importGameCaveat.
-  ///
-  /// In en, this message translates to:
-  /// **'Variations will be erased. To keep them, import the PGN via a study.'**
-  String get importGameCaveat;
 
   /// No description provided for @importGameDataPrivacyWarning.
   ///
@@ -7718,6 +7730,12 @@ abstract class AppLocalizations {
   /// **'Rating: {param}'**
   String perfRatingX(String param);
 
+  /// No description provided for @yourRatingIsX.
+  ///
+  /// In en, this message translates to:
+  /// **'Your rating is {param}'**
+  String yourRatingIsX(String param);
+
   /// No description provided for @practiceWithComputer.
   ///
   /// In en, this message translates to:
@@ -7975,6 +7993,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Play {param}'**
   String playX(String param);
+
+  /// No description provided for @challengeX.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge {param}'**
+  String challengeX(String param);
 
   /// No description provided for @showUnreadLichessMessage.
   ///
@@ -8713,6 +8737,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy to clipboard'**
   String get copyToClipboard;
+
+  /// No description provided for @online.
+  ///
+  /// In en, this message translates to:
+  /// **'online'**
+  String get online;
+
+  /// No description provided for @offline.
+  ///
+  /// In en, this message translates to:
+  /// **'offline'**
+  String get offline;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @clearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get clearSearch;
+
+  /// No description provided for @tags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get tags;
 
   /// No description provided for @opponentLeftCounter.
   ///
@@ -9602,6 +9656,12 @@ abstract class AppLocalizations {
   /// **'Copy PGN'**
   String get studyCopyChapterPgn;
 
+  /// No description provided for @studyCopyRawChapterPgn.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Raw PGN'**
+  String get studyCopyRawChapterPgn;
+
   /// No description provided for @studyDownloadGame.
   ///
   /// In en, this message translates to:
@@ -9835,12 +9895,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'URL of the games, one per line'**
   String get studyUrlOfTheGame;
-
-  /// No description provided for @studyLoadAGameFromXOrY.
-  ///
-  /// In en, this message translates to:
-  /// **'Load games from {param1} or {param2}'**
-  String studyLoadAGameFromXOrY(String param1, String param2);
 
   /// No description provided for @studyCreateChapter.
   ///

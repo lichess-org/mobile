@@ -727,9 +727,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get broadcastRoundName => 'Ime runde';
 
   @override
-  String get broadcastRoundNumber => 'Broj runde';
-
-  @override
   String get broadcastTournamentName => 'Ime turnira';
 
   @override
@@ -2118,10 +2115,22 @@ class AppLocalizationsHr extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Račun je zatvoren.';
 
   @override
-  String get playWithAFriend => 'Igraj protiv prijatelja';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'Igraj protiv računala';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Za poziv na igru, pošalji ovaj URL';
@@ -2774,9 +2783,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get drawOfferAccepted => 'Ponuda remija prihvaćena';
 
   @override
-  String get drawOfferCanceled => 'Opozvana ponuda remija';
-
-  @override
   String get whiteOffersDraw => 'Bijeli nudi remi';
 
   @override
@@ -2900,7 +2906,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get exportGames => 'Izvoz partija';
 
   @override
-  String get ratingRange => 'Raspon rejtinga';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Korisnički račun je prekršio Lichess Uvjete Pružanja Usluge';
@@ -2972,6 +2978,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Tvoj $param rejting je privremen';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3082,9 +3091,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Kada zalijepiš PGN neke partije, dobivaš reprizu partije (koju možeš pretraživati), \nračunalnu analizu, chat partije i URL za dijeljenje.';
-
-  @override
-  String get importGameCaveat => 'Varijacije će biti obrisane. Da bi ih sačuvao, uvezi PGN preko studije.';
 
   @override
   String get importGameDataPrivacyWarning => 'Ovaj PGN je javan. Kako bi unijeli privatnu igru, koristite opciju uči.';
@@ -4233,6 +4239,11 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Vježbaj sa kompjuterom';
 
   @override
@@ -4367,6 +4378,11 @@ class AppLocalizationsHr extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Igraj $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4777,6 +4793,21 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5654,6 +5685,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopiraj PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => 'Preuzmi igru';
 
   @override
@@ -5777,11 +5811,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL igre';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Učitaj igru sa $param1 ili $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Stvori poglavlje';

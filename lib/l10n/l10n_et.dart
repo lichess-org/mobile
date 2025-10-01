@@ -707,9 +707,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get broadcastRoundName => 'Vooru nimi';
 
   @override
-  String get broadcastRoundNumber => 'Vooru number';
-
-  @override
   String get broadcastTournamentName => 'Turniiri nimi';
 
   @override
@@ -2092,10 +2089,22 @@ class AppLocalizationsEt extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'See konto on suletud.';
 
   @override
-  String get playWithAFriend => 'Mängi sõbraga';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'Mängi arvuti vastu';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Et kutsuda kedagi mängima, anna talle see URL';
@@ -2748,9 +2757,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get drawOfferAccepted => 'Viigi pakkumine vastu võetud';
 
   @override
-  String get drawOfferCanceled => 'Viigi pakkumine tühistatud';
-
-  @override
   String get whiteOffersDraw => 'Valge pakub viiki';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get exportGames => 'Ekspordi mängud';
 
   @override
-  String get ratingRange => 'Reitingu vahemik';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Selle konto kasutaja rikkus Lichessi teenusetingimusi';
@@ -2946,6 +2952,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Teie $param reiting on liiga madal/kõrge';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Mängu PGN-i kleepimisel saate vaadeldava korduse,\narvutianalüüsi, mängu jututoa ning jagatava URL-i.';
-
-  @override
-  String get importGameCaveat => 'Variations will be erased. To keep them, import the PGN via a study.';
 
   @override
   String get importGameDataPrivacyWarning => 'This PGN can be accessed by the public. To import a game privately, use a study.';
@@ -4207,6 +4213,11 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Harjuta arvutiga';
 
   @override
@@ -4341,6 +4352,11 @@ class AppLocalizationsEt extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Käi $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4751,6 +4767,21 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5581,6 +5612,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopeeri PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => 'Lae alla mäng';
 
   @override
@@ -5704,11 +5738,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL mängu';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Lae mäng alla $param1 või $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Alusta peatükk';

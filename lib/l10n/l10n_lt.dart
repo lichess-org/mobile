@@ -747,9 +747,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastRoundName => 'Raundo pavadinimas';
 
   @override
-  String get broadcastRoundNumber => 'Raundo numeris';
-
-  @override
   String get broadcastTournamentName => 'Turnyro pavadinimas';
 
   @override
@@ -2146,10 +2143,22 @@ class AppLocalizationsLt extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Ši paskyra uždaryta.';
 
   @override
-  String get playWithAFriend => 'Žaisti su draugu';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'Žaisti su kompiuteriu';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Norėdami pakviesti varžovą, pasidalinkite šiuo adresu';
@@ -2802,9 +2811,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get drawOfferAccepted => 'Lygiųjų pasiūlymas priimtas';
 
   @override
-  String get drawOfferCanceled => 'Lygiųjų pasiūlymas atšauktas';
-
-  @override
   String get whiteOffersDraw => 'Baltieji siūlo lygiąsias';
 
   @override
@@ -2928,7 +2934,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get exportGames => 'Eksportuoti partijas';
 
   @override
-  String get ratingRange => 'Reitingo rėžis';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Ši paskyra pažeidė „Lichess“ naudojimo sąlygas';
@@ -3000,6 +3006,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Jūsų $param reitingas yra laikinas';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3110,9 +3119,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Įkeldami partijos PGN gausite naršomą peržiūrą,\nkompiuterinę analizę, partijos pokalbį bei URL dalinimuisi.';
-
-  @override
-  String get importGameCaveat => 'Variacijos bus ištrintos. Norėdami jas pasilikti importuokite PGN per studiją.';
 
   @override
   String get importGameDataPrivacyWarning => 'Šis PGN failas yra prieinamas visiems. Jei norite įkelti partiją privačiai, naudokite studijas.';
@@ -4261,6 +4267,11 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Treniruotė su kompiuteriu';
 
   @override
@@ -4395,6 +4406,11 @@ class AppLocalizationsLt extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Žaiskite $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4805,6 +4821,21 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5729,6 +5760,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopijuoti PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => 'Atsisiųsti žaidimą';
 
   @override
@@ -5852,11 +5886,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'Partijų adresai, vienas per eilutę';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Pakrauti partijas iš $param1 arba $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Sukurti skyrių';

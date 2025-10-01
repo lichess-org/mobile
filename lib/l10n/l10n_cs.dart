@@ -9,10 +9,10 @@ class AppLocalizationsCs extends AppLocalizations {
   AppLocalizationsCs([String locale = 'cs']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Předvolby účtu';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Tyto předvolby jsou aplikovány na váš Lichess účet a budou použity napříč všemi zařízeními.';
 
   @override
   String get mobileAllGames => 'Všechny hry';
@@ -21,7 +21,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileAreYouSure => 'Jste si jistí?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Nastavení šachovnice';
 
   @override
   String get mobileCancelTakebackOffer => 'Zrušit nabídku vrácení tahu';
@@ -40,19 +40,19 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Dobrý večer, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Dobrý večer';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Dobrý den, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Dobrý den';
 
   @override
   String get mobileHideVariation => 'Schovej variace';
@@ -70,7 +70,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileNoSearchResults => 'Žádné výsledky';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Vezmi prosím na vědomí, že všechny funkce z původní aplikace nebo webové stránky nejsou momentálně k dispozici. Funkce však neustále přidáváme.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Nesledujete žádného uživatele.';
@@ -120,64 +120,64 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileRecentSearches => 'Nedávná vyhledávání';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Odebrat záložku';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Analýza na serveru';
 
   @override
   String get mobileSettingsClockPosition => 'Pozice hodin';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Šablony';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Cíl tažené figury';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Kruh';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Čtverec';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Widgety na domovské obrazovce';
 
   @override
   String get mobileSettingsImmersiveMode => 'Režim bez rušení';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Skrýt uživatelské rozhraní během hraní. Použij toto nastavení, pokud tě rozptylují navigační gesta systému na okraji obrazovky. Aplikuje se pro obrazovky partií a úloh.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Sebrané figury';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Vybrat obrázek';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Vlastní pozadí funguje pomůže ve tmavém režimu. Doporučuje se tmavý obrázek.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Rozmazat obrázek';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Skrýt šachovnici';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Zobrazit šachovnici';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Přejetím zobrazíš další pozadí';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Klikni nebo přetáhni';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Kliknout na dva pole';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Kreslení tvarů';
 
   @override
   String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
@@ -745,9 +745,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get broadcastRoundName => 'Číslo kola';
-
-  @override
-  String get broadcastRoundNumber => 'Číslo kola';
 
   @override
   String get broadcastTournamentName => 'Název turnaje';
@@ -2146,10 +2143,22 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Tento účet je zrušen.';
 
   @override
-  String get playWithAFriend => 'Hrát proti kamarádovi';
+  String get gameSetup => 'Vytvořit hru';
 
   @override
-  String get playWithTheMachine => 'Hrát proti počítači';
+  String get challengeAFriend => 'Vyzvi přítele';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Pro pozvání někoho ke hře využijte tento odkaz';
@@ -2802,9 +2811,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get drawOfferAccepted => 'Soupeř remízu přijal';
 
   @override
-  String get drawOfferCanceled => 'Nabídka remízy byla zrušena';
-
-  @override
   String get whiteOffersDraw => 'Bílý nabízí remízu';
 
   @override
@@ -2928,7 +2934,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get exportGames => 'Exportovat partie';
 
   @override
-  String get ratingRange => 'Síla hráče';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Tento účet porušil podmínky služeb Lichess';
@@ -3000,6 +3006,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Váš rating $param je provizorní';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3110,9 +3119,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Vložení partie ve formátu PGN Vám umožní přehrání partie, získáte počítačovou analýzu, chat ke hře a URL ke sdílení hry.';
-
-  @override
-  String get importGameCaveat => 'Varianty budou vymazány. Chcete-li je ponechat, importujte PGN prostřednictvím studie.';
 
   @override
   String get importGameDataPrivacyWarning => 'K této PGN má přístup kdokoli. Chcete-li hru naimportovat soukromě, použijte studii.';
@@ -4261,6 +4267,11 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Procvičit s počítačem';
 
   @override
@@ -4395,6 +4406,11 @@ class AppLocalizationsCs extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Hrajte $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4805,6 +4821,21 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5729,6 +5760,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopírovat PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => 'Stáhnout hru';
 
   @override
@@ -5852,11 +5886,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL hry';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Načíst hru z $param1 nebo $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Vytvořit kapitolu';

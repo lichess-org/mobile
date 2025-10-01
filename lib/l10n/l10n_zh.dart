@@ -651,7 +651,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastBroadcasts => '转播';
 
   @override
-  String get broadcastMyBroadcasts => '我的直播';
+  String get broadcastMyBroadcasts => '我的转播';
 
   @override
   String get broadcastLiveBroadcasts => '赛事转播';
@@ -685,9 +685,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get broadcastRoundName => '轮次名称';
-
-  @override
-  String get broadcastRoundNumber => '轮数';
 
   @override
   String get broadcastTournamentName => '锦标赛名称';
@@ -892,7 +889,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count 直播',
+      other: '$count 场转播',
     );
     return '$_temp0';
   }
@@ -2064,10 +2061,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsThisAccountIsClosed => '此帐户已被关闭。';
 
   @override
-  String get playWithAFriend => '与好友下棋';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => '与电脑下棋';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => '分享这个网址以邀请好友下棋';
@@ -2573,7 +2582,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get changeUsernameNotSame => '只能更改字母大小写。例如，将“johndoe”改为“JohnDoe”。';
 
   @override
-  String get changeUsernameDescription => '更改用户名。注意只能更改一次，之后只能更改用户名字母的大小写。';
+  String get changeUsernameDescription => '更改用户名。注意只能更改一次，且只能更改用户名字母的大小写。';
 
   @override
   String get signupUsernameHint => '请务必选择一个和谐的用户名，用户名设置后无法更改，并且不合规的用户名会导致账户被封禁！';
@@ -2720,9 +2729,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get drawOfferAccepted => '对方同意和棋';
 
   @override
-  String get drawOfferCanceled => '和棋请求已取消';
-
-  @override
   String get whiteOffersDraw => '白方提出和棋';
 
   @override
@@ -2846,7 +2852,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportGames => '导出棋局';
 
   @override
-  String get ratingRange => '对方等级分范围';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => '该账户违反了 Lichess 服务条款';
@@ -2918,6 +2924,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return '你的 $param 等级分是暂时的';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3028,9 +3037,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get importGameExplanation => '粘贴 PGN 棋谱后可重放棋局、使用电脑分析、使用对局聊天室以及获得通往本局的链接。';
-
-  @override
-  String get importGameCaveat => '变着分支将被删除。若要保存这些变着，请通过研讨导入 PGN。';
 
   @override
   String get importGameDataPrivacyWarning => '该 PGN（用以记录棋类游戏棋谱的文件格式）可被公众访问。私人导入游戏请用研究研究';
@@ -4179,6 +4185,11 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => '与电脑练习';
 
   @override
@@ -4313,6 +4324,11 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String playX(String param) {
     return '走 $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4723,6 +4739,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get copyToClipboard => '复制到剪贴板';
+
+  @override
+  String get online => '在线';
+
+  @override
+  String get offline => '离线';
+
+  @override
+  String get search => '搜索';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5506,6 +5537,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyCopyChapterPgn => '复制 PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => '下载棋局';
 
   @override
@@ -5629,11 +5663,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => '游戏的 URL';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return '从 $param1 或 $param2 加载游戏';
-  }
 
   @override
   String get studyCreateChapter => '创建章节';
@@ -5981,7 +6010,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '在 $count 秒内',
+      other: '$count 秒后',
     );
     return '$_temp0';
   }
@@ -5991,7 +6020,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '在 $count 分钟内',
+      other: '$count 分钟后',
     );
     return '$_temp0';
   }
@@ -6001,7 +6030,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '在 $count 小时内',
+      other: '$count 小时后',
     );
     return '$_temp0';
   }
@@ -6011,7 +6040,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '在 $count 天内',
+      other: '$count 天后',
     );
     return '$_temp0';
   }
@@ -6021,7 +6050,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '在 $count 周内',
+      other: '$count 周后',
     );
     return '$_temp0';
   }
@@ -6031,7 +6060,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '在 $count 月内',
+      other: '$count 月后',
     );
     return '$_temp0';
   }
@@ -6041,7 +6070,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '在 $count 年内',
+      other: '$count 年后',
     );
     return '$_temp0';
   }
@@ -6795,9 +6824,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get broadcastRoundName => '回合名稱';
-
-  @override
-  String get broadcastRoundNumber => '回合數';
 
   @override
   String get broadcastTournamentName => '錦標賽名稱';
@@ -8143,12 +8169,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get settingsThisAccountIsClosed => '此帳號已被關閉。';
 
   @override
-  String get playWithAFriend => '和好友下棋';
-
-  @override
-  String get playWithTheMachine => '和電腦下棋';
-
-  @override
   String get toInviteSomeoneToPlayGiveThisUrl => '請分享此網址以邀人下棋';
 
   @override
@@ -8785,9 +8805,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get drawOfferAccepted => '同意和棋';
 
   @override
-  String get drawOfferCanceled => '和棋取消';
-
-  @override
   String get whiteOffersDraw => '白方提出和棋';
 
   @override
@@ -8909,9 +8926,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get exportGames => '導出棋局';
-
-  @override
-  String get ratingRange => '對方級別範圍';
 
   @override
   String get thisAccountViolatedTos => '此帳號違反了Lichess的使用規定';
@@ -9069,9 +9083,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get importGameExplanation => '貼上PGN棋譜後可以重播棋局，使用電腦分析、對局聊天室及取得此棋局的分享連結。';
-
-  @override
-  String get importGameCaveat => '變種分支將被刪除。 若要保存這些變種，請透過導入 PGN 棋譜建立一個研究。';
 
   @override
   String get importGameDataPrivacyWarning => '此為公開 PGN。若要導入私人棋局，請使用研究。';
@@ -11635,11 +11646,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get studyUrlOfTheGame => '棋局連結，一行一個';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return '從$param1或$param2載入棋局';
-  }
 
   @override
   String get studyCreateChapter => '建立章節';

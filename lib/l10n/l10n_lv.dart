@@ -726,9 +726,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get broadcastRoundName => 'Raunda nosaukums';
 
   @override
-  String get broadcastRoundNumber => 'Raunda skaitlis';
-
-  @override
   String get broadcastTournamentName => 'Turnīra nosaukums';
 
   @override
@@ -2116,10 +2113,22 @@ class AppLocalizationsLv extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Šis konts ir slēgts.';
 
   @override
-  String get playWithAFriend => 'Spēlēt ar draugu';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'Spēlēt ar datoru';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Lai uzaicinātu kādu spēlēt, iedod šo saiti';
@@ -2772,9 +2781,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get drawOfferAccepted => 'Neizšķirta piedāvājums pieņemts';
 
   @override
-  String get drawOfferCanceled => 'Neizšķirta piedāvājums atcelts';
-
-  @override
   String get whiteOffersDraw => 'Baltie piedāvā neizšķirtu';
 
   @override
@@ -2898,7 +2904,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get exportGames => 'Eksportēt spēles';
 
   @override
-  String get ratingRange => 'Reitinga diapazons';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'Šis konts pārkāpa Lichess Pakalpojuma Noteikumus';
@@ -2970,6 +2976,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Jūsu pagaidu reitings ir $param';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3080,9 +3089,6 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Ielīmējiet spēles PGN, lai iegūtu pārskatāmu atkārtojumu, datoranalīzi, spēles sarunu un URL ar ko dalīties.';
-
-  @override
-  String get importGameCaveat => 'Variācijas tiks izdzēstas. Lai tās paturētu, importē PGN izmantot izpētes rīku.';
 
   @override
   String get importGameDataPrivacyWarning => 'Jebkurš var piekļūt šim PGN. Lai importētu spēli privāti, izveido izpēti.';
@@ -4231,6 +4237,11 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Treniņš ar datoru';
 
   @override
@@ -4365,6 +4376,11 @@ class AppLocalizationsLv extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Spēlēt $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4775,6 +4791,21 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5652,6 +5683,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopēt PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => 'Lejupielādēt spēli';
 
   @override
@@ -5775,11 +5809,6 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'Spēles URL';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Ielādēt spēli no $param1 vai $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Izveidot nodaļu';

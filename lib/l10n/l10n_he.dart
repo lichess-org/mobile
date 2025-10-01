@@ -52,7 +52,7 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'יום טוב';
 
   @override
   String get mobileHideVariation => 'הסתרת וריאציות';
@@ -745,9 +745,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get broadcastRoundName => 'שם סבב';
-
-  @override
-  String get broadcastRoundNumber => 'מספר סבב';
 
   @override
   String get broadcastTournamentName => 'שם הטורניר';
@@ -2144,10 +2141,22 @@ class AppLocalizationsHe extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'החשבון הזה סגור.';
 
   @override
-  String get playWithAFriend => 'שחק/י עם חבר/ה';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'שחק/י מול המחשב';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'כדי להזמין מישהו לשחק, שתפו את הכתובת הזאת';
@@ -2800,9 +2809,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get drawOfferAccepted => 'הצעת התיקו התקבלה';
 
   @override
-  String get drawOfferCanceled => 'הצעת התיקו בוטלה';
-
-  @override
   String get whiteOffersDraw => 'לבן מציע תיקו';
 
   @override
@@ -2926,7 +2932,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get exportGames => 'ייצוא משחקים';
 
   @override
-  String get ratingRange => 'טווח דירוג';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'החשבון הזה הפר את תנאי השימוש של Lichess';
@@ -2998,6 +3004,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'דירוג ה־$param שלך זמני';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3108,9 +3117,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'כשמדביקים משחק בפורמט PGN מקבלים אפשרות לצפות במשחק ולדפדף בו, ניתוח ממוחשב, צ׳אט וקישור לשיתוף.';
-
-  @override
-  String get importGameCaveat => 'וריאציות — כלומר רצפי מהלכים שאינם המסעים הראשיים (mainline) — יימחקו. כדי לשמור אותן, ייבאו את ה־PGN כלוח למידה.';
 
   @override
   String get importGameDataPrivacyWarning => 'ה־PGN הזה זמין לציבור. כדי לייצא את המשחק באופן פרטי, השתמשו בלוח למידה.';
@@ -4259,6 +4265,11 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'התאמן/י עם המחשב';
 
   @override
@@ -4393,6 +4404,11 @@ class AppLocalizationsHe extends AppLocalizations {
   @override
   String playX(String param) {
     return 'שחקו $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4803,6 +4819,21 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5727,6 +5758,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyCopyChapterPgn => 'העתקת ה־PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => 'הורדת המשחק';
 
   @override
@@ -5850,11 +5884,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'כתובת אינטרנטית של משחק';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'טען משחק מ$param1 או מ$param2';
-  }
 
   @override
   String get studyCreateChapter => 'צור פרק';

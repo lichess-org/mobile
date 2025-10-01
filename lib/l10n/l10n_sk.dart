@@ -747,9 +747,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastRoundName => 'Názov kola';
 
   @override
-  String get broadcastRoundNumber => 'Číslo kola';
-
-  @override
   String get broadcastTournamentName => 'Názov turnaja';
 
   @override
@@ -2148,10 +2145,22 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Účet zrušený.';
 
   @override
-  String get playWithAFriend => 'Hrať s priateľom';
+  String get gameSetup => 'Nastavenie partie';
 
   @override
-  String get playWithTheMachine => 'Hrať proti počítaču';
+  String get challengeAFriend => 'Vyzvať priateľa';
+
+  @override
+  String get playAgainstComputer => 'Hrať proti počítaču';
+
+  @override
+  String get gameMode => 'Herný režim';
+
+  @override
+  String get createLobbyGame => 'Vytvoriť výzvu';
+
+  @override
+  String get youPlayAs => 'Hráte ako';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Zdieľaním tejto adresy môžete niekoho pozvať k partii';
@@ -2804,9 +2813,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get drawOfferAccepted => 'Ponuka remízy prijatá';
 
   @override
-  String get drawOfferCanceled => 'Ponuka remízy zrušená';
-
-  @override
   String get whiteOffersDraw => 'Biely ponúka remízu';
 
   @override
@@ -2930,7 +2936,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get exportGames => 'Exportovať partie';
 
   @override
-  String get ratingRange => 'Rozsah hodnotení';
+  String get ratingFilter => 'Filter podľa ratingu';
 
   @override
   String get thisAccountViolatedTos => 'Tento účet porušil Podmienky poskytovania služby Lichess';
@@ -3002,6 +3008,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Váš $param rating je provizórny';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Filtre hodnotenia sú uzamknuté, pretože Vaše hodnotenie nie je stabilné. Hranie hodnotených partií zvýši jeho stabilitu.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3112,9 +3121,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Vložením partie vo formáte PGN získate možnosť jej prehrania, počítačovú analýzu, chat k partii ako aj URL pre jej zdieľanie.';
-
-  @override
-  String get importGameCaveat => 'Variácie sa vymažú. Ak ich chcete zachovať, importujte PGN prostredníctvom štúdie.';
 
   @override
   String get importGameDataPrivacyWarning => 'Toto PGN je verejne dostupné. Ak chcete partiu importovať súkromne, použite štúdiu!';
@@ -4263,6 +4269,11 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Váš rating je $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Precvičenie s počítačom';
 
   @override
@@ -4397,6 +4408,11 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Hrať $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Vyzvať $param';
   }
 
   @override
@@ -4807,6 +4823,21 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5731,6 +5762,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopírovať PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Kopírovať čisté PGN';
+
+  @override
   String get studyDownloadGame => 'Stiahnúť hru';
 
   @override
@@ -5854,11 +5888,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL hry';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Načítať hru z $param1 alebo z $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Vytvoriť kapitolu';

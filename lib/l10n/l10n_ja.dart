@@ -687,9 +687,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastRoundName => 'ラウンド名';
 
   @override
-  String get broadcastRoundNumber => 'ラウンド';
-
-  @override
   String get broadcastTournamentName => '大会名';
 
   @override
@@ -1320,7 +1317,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesInputMovesWithVoice => '手を声で入力';
 
   @override
-  String get preferencesSnapArrowsToValidMoves => '可能な手を矢印で表示';
+  String get preferencesSnapArrowsToValidMoves => '有効な動きに矢印をスナップ';
 
   @override
   String get preferencesSayGgWpAfterLosingOrDrawing => '負けかドローの際に「Good game, well played」と言う';
@@ -2064,10 +2061,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'このアカウントは停止されました';
 
   @override
-  String get playWithAFriend => '友達と対局する';
+  String get gameSetup => 'ゲームの設定';
 
   @override
-  String get playWithTheMachine => 'コンピュータと対戦';
+  String get challengeAFriend => '友達に挑戦';
+
+  @override
+  String get playAgainstComputer => 'コンピュータと対戦';
+
+  @override
+  String get gameMode => '対局モード';
+
+  @override
+  String get createLobbyGame => 'ロビー対局を作成';
+
+  @override
+  String get youPlayAs => '色（白/黒）';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => '誰かを招待する時はこのURLを送ってください';
@@ -2720,9 +2729,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get drawOfferAccepted => 'ドロー提案が承諾されました';
 
   @override
-  String get drawOfferCanceled => 'ドローの提案をキャンセルしました';
-
-  @override
   String get whiteOffersDraw => '白が引き分けを提案しました';
 
   @override
@@ -2846,7 +2852,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get exportGames => '対局をエクスポートする';
 
   @override
-  String get ratingRange => 'レーティングの範囲';
+  String get ratingFilter => 'レーティング指定';
 
   @override
   String get thisAccountViolatedTos => 'このアカウントは Lichess の利用規約に違反しました';
@@ -2918,6 +2924,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'あなたの $param レーティングは仮レートです';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'あなたのレーティングが不安定なため、レーティングフィルタは使用できません。レート戦をプレイすると安定度が上がります。';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3028,9 +3037,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'ゲームの PGN を貼りつけると、ブラウザ上でのリプレイ、\nコンピュータ解析、ゲームチャット、共有可能 URL が得られます。';
-
-  @override
-  String get importGameCaveat => '変化手順は消えます。残したい場合は研究を経由して PGN をインポートしてください。';
 
   @override
   String get importGameDataPrivacyWarning => 'この PGN はすべての人に公開されます。非公開の状態で棋譜をインポートするには「研究」機能でどうぞ。';
@@ -4179,6 +4185,11 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'あなたのレーティングは $param';
+  }
+
+  @override
   String get practiceWithComputer => 'コンピューターと練習する';
 
   @override
@@ -4313,6 +4324,11 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String playX(String param) {
     return '指し手は $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return '$param に挑戦';
   }
 
   @override
@@ -4723,6 +4739,21 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'クリップボードにコピー';
+
+  @override
+  String get online => 'オンライン';
+
+  @override
+  String get offline => 'オフライン';
+
+  @override
+  String get search => '検索';
+
+  @override
+  String get clearSearch => '検索をクリア';
+
+  @override
+  String get tags => 'タグ';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5506,6 +5537,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyCopyChapterPgn => 'PGN をコピー';
 
   @override
+  String get studyCopyRawChapterPgn => 'コメント抜きの PGN をコピー';
+
+  @override
   String get studyDownloadGame => '1 局をダウンロード';
 
   @override
@@ -5629,11 +5663,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => '棋譜の URL';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return '$param1 か $param2 から棋譜を読み込み';
-  }
 
   @override
   String get studyCreateChapter => '章を作成';

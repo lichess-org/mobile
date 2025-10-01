@@ -707,9 +707,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastRoundName => 'Nom de ronda';
 
   @override
-  String get broadcastRoundNumber => 'Ronda número';
-
-  @override
   String get broadcastTournamentName => 'Nom del torneig';
 
   @override
@@ -2092,10 +2089,22 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'S\'ha tancat aquest compte.';
 
   @override
-  String get playWithAFriend => 'Juga amb un amic';
+  String get gameSetup => 'Configuració de la partida';
 
   @override
-  String get playWithTheMachine => 'Juga contra la màquina';
+  String get challengeAFriend => 'Repta un amic';
+
+  @override
+  String get playAgainstComputer => 'Juga contra l\'ordinador';
+
+  @override
+  String get gameMode => 'Tipus de partida';
+
+  @override
+  String get createLobbyGame => 'Crea una sala de joc';
+
+  @override
+  String get youPlayAs => 'Juga com a';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Per convidar algú a jugar, envia-li aquest enllaç';
@@ -2748,9 +2757,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get drawOfferAccepted => 'Oferta de taules acceptada';
 
   @override
-  String get drawOfferCanceled => 'Oferta de taules cancel·lada';
-
-  @override
   String get whiteOffersDraw => 'Blanques ofereixen taules';
 
   @override
@@ -2874,7 +2880,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get exportGames => 'Exporta les partides';
 
   @override
-  String get ratingRange => 'Rang de puntuació';
+  String get ratingFilter => 'Filtre de puntuació';
 
   @override
   String get thisAccountViolatedTos => 'Aquest compte ha violat els Termes de Servei de Lichess';
@@ -2946,6 +2952,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'La teva puntuació de $param és provisional';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'El filtres de puntuació estan bloquejats perquè la teva puntuació no és estable. Juga més partides per incrementar l\'estabilitat.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3056,9 +3065,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'Enganxa el PGN d\'una partida per obtenir una repetició navegable, anàlisi computeritzada, xat de joc i enllaç per compartir.';
-
-  @override
-  String get importGameCaveat => 'S\'esborraran les variants. Per mantenir-les, importeu el PGN mitjançant un estudi.';
 
   @override
   String get importGameDataPrivacyWarning => 'Aquest PGN és accessible públicament. Per a importar un joc de manera privada, utilitza un estudi.';
@@ -4207,6 +4213,11 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'La teva puntuació és de $param';
+  }
+
+  @override
   String get practiceWithComputer => 'Practicar amb l\'ordinador';
 
   @override
@@ -4341,6 +4352,11 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String playX(String param) {
     return 'Jugar $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Desafia $param';
   }
 
   @override
@@ -4751,6 +4767,21 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copia al porta-retalls';
+
+  @override
+  String get online => 'en línia';
+
+  @override
+  String get offline => 'fora de línia';
+
+  @override
+  String get search => 'Cerca';
+
+  @override
+  String get clearSearch => 'Neteja la cerca';
+
+  @override
+  String get tags => 'Etiquetes';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5581,6 +5612,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get studyCopyChapterPgn => 'Copiar PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copiar PGN en brut';
+
+  @override
   String get studyDownloadGame => 'Descarrega partida';
 
   @override
@@ -5704,11 +5738,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'URL del joc';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Carregar una partida desde $param1 o $param2';
-  }
 
   @override
   String get studyCreateChapter => 'Crear capítol';

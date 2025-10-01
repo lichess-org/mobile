@@ -787,9 +787,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastRoundName => 'اسم الجولة';
 
   @override
-  String get broadcastRoundNumber => 'الشوط';
-
-  @override
   String get broadcastTournamentName => 'اسم البطولة';
 
   @override
@@ -2204,10 +2201,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'هذا الحساب مغلق.';
 
   @override
-  String get playWithAFriend => 'اللعب مع صديق';
+  String get gameSetup => 'Game setup';
 
   @override
-  String get playWithTheMachine => 'اللعب مع الحاسوب';
+  String get challengeAFriend => 'Challenge a friend';
+
+  @override
+  String get playAgainstComputer => 'Play against computer';
+
+  @override
+  String get gameMode => 'Game mode';
+
+  @override
+  String get createLobbyGame => 'Create lobby game';
+
+  @override
+  String get youPlayAs => 'You play as';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'لدعوة شخص ما للعب، أرسل له هذا الرابط';
@@ -2860,9 +2869,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get drawOfferAccepted => 'تم قبول عرض التعادل';
 
   @override
-  String get drawOfferCanceled => 'أُلغي عرض التعادل';
-
-  @override
   String get whiteOffersDraw => 'الأبيض يعرض التعادل';
 
   @override
@@ -2986,7 +2992,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exportGames => 'تصدير المباريات';
 
   @override
-  String get ratingRange => 'نطاق التقييم';
+  String get ratingFilter => 'Rating filter';
 
   @override
   String get thisAccountViolatedTos => 'هذا الحساب انتهك شروط خدمة lichess';
@@ -3058,6 +3064,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'تقييمك في $param مؤقت';
   }
+
+  @override
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3168,9 +3177,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get importGameExplanation => 'عند لصق مباراة PGN تحصل على إمكانية كرار استعراضها وتحليل حاسوبي ودردشة للمباراة ورابط قابل للمشاركة.';
-
-  @override
-  String get importGameCaveat => 'سيتم محو التغييرات. للحفاظ عليها، يرجى استيراد PGN (تنسيق لعبة الشطرنج المحمول) عبر تبويب دراسة.';
 
   @override
   String get importGameDataPrivacyWarning => 'يمكن لأي أحد الوصول إلى PGN، إذا أردت إنشاء تحليل خاص، استخدم قسم دراسة.';
@@ -4319,6 +4325,11 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String yourRatingIsX(String param) {
+    return 'Your rating is $param';
+  }
+
+  @override
   String get practiceWithComputer => 'الممارسة مع الكمبيوتر';
 
   @override
@@ -4453,6 +4464,11 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String playX(String param) {
     return 'إلعب $param';
+  }
+
+  @override
+  String challengeX(String param) {
+    return 'Challenge $param';
   }
 
   @override
@@ -4863,6 +4879,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get online => 'online';
+
+  @override
+  String get offline => 'offline';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get tags => 'Tags';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5881,6 +5912,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get studyCopyChapterPgn => 'نسخ PGN';
 
   @override
+  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+
+  @override
   String get studyDownloadGame => 'حمل لعبة';
 
   @override
@@ -6004,11 +6038,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studyUrlOfTheGame => 'رابط اللعبة';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'استيراد لعبة من $param1 او $param2';
-  }
 
   @override
   String get studyCreateChapter => 'أنشئ الفصل';
