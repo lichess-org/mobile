@@ -22,7 +22,7 @@
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Da notare che non tutte le funzionalità della vecchia app o del sito web sono attualmente disponibili, ma stiamo continuamente aggiungendo funzionalità.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Non stai seguendo nessun utente.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Ok</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Gioca offline</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Gioca offline</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Giocatori con \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Sinistra</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Destra</string>
@@ -46,7 +46,11 @@
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Pezzi catturati</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Scegli un\'immagine</string>
   <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Lo sfondo personalizzato funziona solo in modalità scura. Si consiglia di usare un\'immagine scura.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Offusca l\'immagine</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Mostra la scacchiera</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Scorri per visualizzare altri sfondi</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Tocca o trascina</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Se attivato, il dispositivo vibrerà brevemente quando sposti o catturi un pezzo.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Preferenze</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Condividi PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Condividi URL della partita</string>
@@ -62,4 +66,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">La variante %s non è supportata in questa versione.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">In attesa dell\'avversario...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Guarda</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Benvenuto nell\'app Lichess!</string>
 </resources>

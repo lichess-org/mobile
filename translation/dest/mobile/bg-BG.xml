@@ -14,7 +14,7 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Няма резултати</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Моля забележете, че не всички функции от старото приложение или уеб-сайта са достъпни в момента, но ние постоянно добавяме нови функции.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ОК</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Двама над дъската</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Двама над дъската</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Играчи, съдържащи \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Ляво</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Дясно</string>
