@@ -35,7 +35,6 @@ sealed class LeaderboardUser with _$LeaderboardUser {
   const factory LeaderboardUser({
     required UserId id,
     required String username,
-    bool? patron,
     int? patronColor,
     String? title,
     String? flair,
@@ -44,12 +43,8 @@ sealed class LeaderboardUser with _$LeaderboardUser {
     required int progress,
   }) = _LeaderboardUser;
 
-  LightUser get lightUser => LightUser(
-    id: id,
-    name: username,
-    title: title,
-    flair: flair,
-    isPatron: patron,
-    patronColor: patronColor,
-  );
+  bool get isPatron => patronColor != null;
+
+  LightUser get lightUser =>
+      LightUser(id: id, name: username, title: title, flair: flair, patronColor: patronColor);
 }

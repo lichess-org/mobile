@@ -1357,6 +1357,7 @@ String makeCorrespondenceGameJsonWithForecast({
     "user": {
       "name": "thibault",
       "patron": true,
+      "patronColor": 1,
       "id": "thibault"
     },
     "rating": 1806,

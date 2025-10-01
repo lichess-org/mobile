@@ -236,6 +236,7 @@ const kStudyAllHotPage1Response = '''
               "name": "thibault",
               "flair": "smileys.disguised-face",
               "patron": true,
+              "patronColor": 1,
               "id": "thibault"
             },
             "role": "w"

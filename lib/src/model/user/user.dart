@@ -11,12 +11,13 @@ part 'user.g.dart';
 
 @Freezed(fromJson: true, toJson: true)
 sealed class LightUser with _$LightUser {
+  const LightUser._();
+
   const factory LightUser({
     required UserId id,
     required String name,
     String? title,
     String? flair,
-    bool? isPatron,
 
     /// A color code selected by the patron user.
     ///
@@ -24,6 +25,8 @@ sealed class LightUser with _$LightUser {
     int? patronColor,
     bool? isOnline,
   }) = _LightUser;
+
+  bool get isPatron => patronColor != null;
 
   factory LightUser.fromJson(Map<String, dynamic> json) => _$LightUserFromJson(json);
 }
@@ -47,7 +50,6 @@ extension LightUserExtension on Pick {
         name: name,
         title: requiredPick('title').asStringOrNull(),
         flair: requiredPick('flair').asStringOrNull(),
-        isPatron: requiredPick('patron').asBoolOrNull(),
         patronColor: requiredPick('patronColor').asIntOrNull(),
         isOnline: requiredPick('online').asBoolOrNull(),
       );
@@ -100,14 +102,8 @@ sealed class User with _$User {
     TemporaryBan? playban,
   }) = _User;
 
-  LightUser get lightUser => LightUser(
-    id: id,
-    name: username,
-    title: title,
-    isPatron: isPatron,
-    patronColor: patronColor,
-    flair: flair,
-  );
+  LightUser get lightUser =>
+      LightUser(id: id, name: username, title: title, patronColor: patronColor, flair: flair);
 
   bool get isBot => title == 'BOT';
 
@@ -120,7 +116,6 @@ sealed class User with _$User {
       username: pick('username').asStringOrThrow(),
       title: pick('title').asStringOrNull(),
       flair: pick('flair').asStringOrNull(),
-      isPatron: pick('patron').asBoolOrNull(),
       patronColor: pick('patronColor').asIntOrNull(),
       disabled: pick('disabled').asBoolOrNull(),
       tosViolation: pick('tosViolation').asBoolOrNull(),
