@@ -14,7 +14,7 @@ dependencies:
   async: ^2.10.0
   auto_size_text: ^3.0.0
   cached_network_image: ^3.2.2
-  chessground: ^7.1.0
+  chessground: ^7.2.0
   clock: ^1.1.1
   collection: ^1.17.0
   connectivity_plus: ^7.0.0
@@ -130,7 +130,7 @@ flutter:
       fonts:
         - asset: assets/fonts/SocialIcons.ttf
     - family: ChessFont
-      fonts: 
+      fonts:
         - asset: assets/fonts/ChessSansPiratf.ttf
     - family: LichessPuzzleIcons
       fonts:
@@ -144,9 +144,8 @@ flutter_native_splash:
   ios: true
   web: false
 
-  color: '#ffffff'
+  color: "#ffffff"
   image: assets/images/logo-black.png
 
-  color_dark: '#000000'
+  color_dark: "#000000"
   image_dark: assets/images/logo-white.png
-
