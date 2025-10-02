@@ -130,13 +130,13 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
 
-    initEngineEvaluation();
-
     _game = await ref.read(archivedGameProvider(id: options.id).future);
 
     if (engineSupportedVariants.contains(_game.meta.variant) == false) {
       throw Exception('Variant ${_game.meta.variant} is not supported for retro mode');
     }
+
+    initEngineEvaluation();
 
     _root = _game.makeTree();
 
