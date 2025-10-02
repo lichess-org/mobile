@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -128,8 +129,7 @@ class UCIProtocol {
 
       if ((depth < minDepth && moves.isNotEmpty) || povEv == null) return;
 
-      final pivot = _work!.threatMode == true ? 0 : 1;
-      final ev = _work!.ply % 2 == pivot ? -povEv : povEv;
+      final ev = _work!.position.turn == Side.white ? povEv : -povEv;
 
       // For now, ignore most upperbound/lowerbound messages.
       // However non-primary pvs may only have an upperbound.
@@ -147,6 +147,7 @@ class UCIProtocol {
           mate: isMate ? ev : null,
           pvs: IList([pvData]),
           millis: elapsedMs,
+          threatMode: _work!.threatMode == true,
         );
       } else if (_currentEval != null) {
         _currentEval = _currentEval!.copyWith(

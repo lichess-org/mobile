@@ -97,7 +97,7 @@ class StockfishEngine implements Engine {
       throw StateError('Engine is disposed');
     }
 
-    _log.info('engine start at ply ${work.ply} and path ${work.path}');
+    _log.info('engine start at ply ${work.position.ply} and path ${work.path}');
     _protocol.compute(work);
 
     if (_stockfish == null) {

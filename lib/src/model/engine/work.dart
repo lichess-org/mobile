@@ -30,9 +30,6 @@ sealed class Work with _$Work {
 
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
-  /// The work ply.
-  int get ply => steps.lastOrNull?.position.ply ?? initialPosition.ply;
-
   /// Cached eval for the work position.
   ClientEval? get evalCache => steps.lastOrNull?.eval;
 }

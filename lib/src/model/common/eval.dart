@@ -101,6 +101,7 @@ sealed class LocalEval with _$LocalEval implements ClientEval {
     required IList<PvData> pvs,
     required int millis,
     required Duration searchTime,
+    required bool threatMode,
     int? cp,
     int? mate,
   }) = _LocalEval;
@@ -242,11 +243,41 @@ sealed class PvData with _$PvData {
 
 typedef MoveWithWinningChances = ({Move move, double winningChances});
 
+ISet<Shape> moveShapes({
+  required Move move,
+  required Color color,
+  required Side sideToMove,
+  required PieceAssets pieceAssets,
+  double scale = 1.0,
+}) => switch (move) {
+  NormalMove(from: _, to: _, promotion: final promRole) => {
+    Arrow(color: color, orig: move.from, dest: move.to, scale: scale),
+    if (promRole != null)
+      PieceShape(
+        color: color,
+        orig: move.to,
+        pieceAssets: pieceAssets,
+        piece: Piece(color: sideToMove, role: promRole),
+      ),
+  }.toISet(),
+  DropMove(role: final role, to: _) => {
+    PieceShape(
+      color: color,
+      orig: move.to,
+      pieceAssets: pieceAssets,
+      opacity: 0.5,
+      piece: Piece(color: sideToMove, role: role),
+    ),
+  }.toISet(),
+};
+
 ISet<Shape> computeBestMoveShapes(
   IList<MoveWithWinningChances> moves,
   Side sideToMove,
-  PieceAssets pieceAssets,
-) {
+  PieceAssets pieceAssets, {
+  required Color bestMoveColor,
+  required Color otherMovesColor,
+}) {
   // Scale down all moves with index > 0 based on how much worse their winning chances are compared to the best move
   // (assume moves are ordered by their winning chances, so index==0 is the best move)
   double scaleArrowAgainstBestMove(int index) {
@@ -273,35 +304,15 @@ ISet<Shape> computeBestMoveShapes(
           final move = m.move;
           // Same colors as in the Web UI with a slightly different opacity
           // The best move has a different color than the other moves
-          final color = Color((i == 0) ? 0x66003088 : 0x664A4A4A);
-          switch (move) {
-            case NormalMove(from: _, to: _, promotion: final promRole):
-              return [
-                Arrow(
-                  color: color,
-                  orig: move.from,
-                  dest: move.to,
-                  scale: scaleArrowAgainstBestMove(i),
-                ),
-                if (promRole != null)
-                  PieceShape(
-                    color: color,
-                    orig: move.to,
-                    pieceAssets: pieceAssets,
-                    piece: Piece(color: sideToMove, role: promRole),
-                  ),
-              ];
-            case DropMove(role: final role, to: _):
-              return [
-                PieceShape(
-                  color: color,
-                  orig: move.to,
-                  pieceAssets: pieceAssets,
-                  opacity: 0.5,
-                  piece: Piece(color: sideToMove, role: role),
-                ),
-              ];
-          }
+          final color = (i == 0) ? bestMoveColor : otherMovesColor;
+
+          return moveShapes(
+            move: move,
+            color: color,
+            scale: scaleArrowAgainstBestMove(i),
+            sideToMove: sideToMove,
+            pieceAssets: pieceAssets,
+          );
         })
         .expand((e) => e),
   );
