@@ -129,6 +129,21 @@ class GameController extends _$GameController {
     });
   }
 
+  void onFocusLost() {
+    if (_socketClient.isDisposed) {
+      assert(false, 'socket client should not be disposed here');
+      return;
+    }
+    if (!state.hasValue || !state.requireValue.game.playable) {
+      return;
+    }
+    // real time games need the socket to stay connected otherwise lichess will think the player leaved
+    // correspondence games can and should close the socket when the app is in background (because lichess won't send the push notification update when the player is still connected to the socket)
+    if (state.requireValue.game.meta.speed == Speed.correspondence) {
+      _socketClient.close();
+    }
+  }
+
   void onFocusRegained() {
     if (_socketClient.isDisposed) {
       assert(false, 'socket client should not be disposed here');
