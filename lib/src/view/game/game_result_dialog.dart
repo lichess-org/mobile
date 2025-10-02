@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
@@ -57,10 +56,6 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
   Widget build(BuildContext context) {
     final ctrlProvider = gameControllerProvider(widget.id);
     final gameState = ref.watch(ctrlProvider).requireValue;
-
-    final hasServerAnalysis =
-        gameState.game.userAnalysable &&
-        ref.watch(archivedGameProvider(id: gameState.game.id)).valueOrNull?.serverAnalysis != null;
 
     final content = Column(
       mainAxisSize: MainAxisSize.min,
@@ -198,7 +193,15 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             label: Text(context.l10n.pause, textAlign: TextAlign.center),
           ),
         ],
-        if (hasServerAnalysis)
+        if (gameState.game.userAnalysable) ...[
+          FilledButton.tonal(
+            onPressed: () {
+              Navigator.of(
+                context,
+              ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
+            },
+            child: Text(context.l10n.analysis, textAlign: TextAlign.center),
+          ),
           FilledButton.tonal(
             onPressed: () {
               Navigator.of(context).push(
@@ -210,15 +213,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             },
             child: Text(context.l10n.learnFromYourMistakes, textAlign: TextAlign.center),
           ),
-        if (gameState.game.userAnalysable)
-          FilledButton.tonal(
-            onPressed: () {
-              Navigator.of(
-                context,
-              ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
-            },
-            child: Text(context.l10n.analysis, textAlign: TextAlign.center),
-          ),
+        ],
       ],
     );
 

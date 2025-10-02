@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -116,16 +117,28 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   @protected
   Node get positionTree => _root;
 
+  final Completer<void> _serverAnalysisCompleter = Completer<void>();
+
   @override
   Future<RetroState> build(RetroOptions options) async {
+    final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
+
     ref.onDispose(() {
       disposeEngineEvaluation();
+      serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
 
+    serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
+
     _game = await ref.read(archivedGameProvider(id: options.id).future);
     _root = _game.makeTree();
+
+    if (_game.serverAnalysis == null) {
+      await serverAnalysisService.requestAnalysis(options.id);
+      await _serverAnalysisCompleter.future;
+    }
 
     initEngineEvaluation();
 
@@ -446,6 +459,16 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
           }
         }
       case _:
+    }
+  }
+
+  void _listenToServerAnalysisEvents() {
+    final event = ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
+    if (event != null && event.$1 == options.id) {
+      ServerAnalysisService.mergeOngoingAnalysis(_root, event.$2.tree);
+      if (event.$2.isAnalysisComplete && !_serverAnalysisCompleter.isCompleted) {
+        _serverAnalysisCompleter.complete();
+      }
     }
   }
 }

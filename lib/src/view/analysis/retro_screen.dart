@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/retro_controller.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -30,7 +31,7 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
-class RetroScreen extends ConsumerWidget {
+class RetroScreen extends ConsumerStatefulWidget {
   const RetroScreen({required this.options, super.key});
 
   final RetroOptions options;
@@ -40,9 +41,31 @@ class RetroScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RetroScreen> createState() => _RetroScreenState();
+}
+
+class _RetroScreenState extends ConsumerState<RetroScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final asyncGame = ref.watch(archivedGameProvider(id: widget.options.id));
+
+    // switch (asyncGame) {
+    //   case AsyncError():
+    //     return Scaffold(
+    //       appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
+    //       body: Center(child: Text(context.l10n.unableToLoadTheGame)),
+    //     );
+    //   case AsyncData():
+    //     return _RetroContent(options: widget.options);
+    //   _:
+    //     return Scaffold(
+    //       appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
+    //       body: const Center(child: CircularProgressIndicator.adaptive()),
+    //     );
+    // }
+
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final asyncState = ref.watch(retroControllerProvider(options));
+    final asyncState = ref.watch(retroControllerProvider(widget.options));
 
     return switch (asyncState) {
       AsyncError() => const Center(child: Text('Failed to load mistakes for this game.')),
@@ -56,13 +79,14 @@ class RetroScreen extends ConsumerWidget {
             if (asyncState.requireValue.isEngineAvailable(enginePrefs) == true)
               EngineDepth(
                 savedEval: asyncState.valueOrNull?.currentNode.eval,
-                goDeeper: () =>
-                    ref.read(retroControllerProvider(options).notifier).requestEval(goDeeper: true),
+                goDeeper: () => ref
+                    .read(retroControllerProvider(widget.options).notifier)
+                    .requestEval(goDeeper: true),
               ),
-            _RetroMenu(options: options),
+            _RetroMenu(options: widget.options),
           ],
         ),
-        body: DefaultTabController(length: 1, child: _RetroScreen(options)),
+        body: DefaultTabController(length: 1, child: _RetroScreen(widget.options)),
       ),
       _ => Scaffold(
         appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),

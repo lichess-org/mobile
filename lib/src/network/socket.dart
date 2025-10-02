@@ -297,8 +297,11 @@ class SocketClient {
 
   /// Closes the WebSocket connection and disposes the client.
   ///
+  /// After calling this method, the client cannot be reused or reconnected. This can only be called
+  /// once.
+  ///
   /// The [SocketPool] will call this method when the client is no longer needed.
-  void _dispose() {
+  void dispose() {
     _socketStreamSubscription?.cancel();
     _pingTimer?.cancel();
     _reconnectTimer?.cancel();
@@ -570,7 +573,7 @@ class SocketPool {
           _disposeTimers[route]?.cancel();
           _disposeTimers[route] = Timer(idleTimeout, () {
             _logger.fine('Disposing idle socket on $route.');
-            _pool[route]?._dispose();
+            _pool[route]?.dispose();
             _pool.remove(route);
             // if during the idle time no new socket is requested, we reconnect
             // the default socket
@@ -611,7 +614,7 @@ class SocketPool {
   void dispose() {
     _averageLag.dispose();
     _disposeTimers.forEach((_, t) => t?.cancel());
-    _pool.forEach((_, c) => c._dispose());
+    _pool.forEach((_, c) => c.dispose());
   }
 }
 
