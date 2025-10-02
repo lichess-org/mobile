@@ -412,6 +412,14 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
+  Future<void> toggleEngineThreatMode() async {
+    if (state.hasValue) {
+      state = AsyncData(
+        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
+      );
+    }
+  }
+
   void _setPath(
     UciPath path, {
     bool shouldForceShowVariation = false,
@@ -487,7 +495,10 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       );
     }
 
-    if (pathChange) requestEval();
+    if (pathChange) {
+      state = AsyncData(state.requireValue.copyWith(engineInThreatMode: false));
+      requestEval();
+    }
   }
 
   ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
@@ -554,6 +565,8 @@ sealed class BroadcastAnalysisState
     ///
     /// This field is only used with user submitted PGNS.
     IList<PgnComment>? pgnRootComments,
+
+    @Default(false) bool engineInThreatMode,
   }) = _BroadcastGameState;
 
   /// Whether the game is new or ongoing
