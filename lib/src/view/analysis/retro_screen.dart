@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/retro_controller.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -27,11 +26,12 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
-class RetroScreen extends ConsumerStatefulWidget {
+class RetroScreen extends ConsumerWidget {
   const RetroScreen({required this.options, super.key});
 
   final RetroOptions options;
@@ -41,58 +41,66 @@ class RetroScreen extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<RetroScreen> createState() => _RetroScreenState();
-}
-
-class _RetroScreenState extends ConsumerState<RetroScreen> {
-  @override
-  Widget build(BuildContext context) {
-    final asyncGame = ref.watch(archivedGameProvider(id: widget.options.id));
-
-    // switch (asyncGame) {
-    //   case AsyncError():
-    //     return Scaffold(
-    //       appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
-    //       body: Center(child: Text(context.l10n.unableToLoadTheGame)),
-    //     );
-    //   case AsyncData():
-    //     return _RetroContent(options: widget.options);
-    //   _:
-    //     return Scaffold(
-    //       appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
-    //       body: const Center(child: CircularProgressIndicator.adaptive()),
-    //     );
-    // }
-
+  Widget build(BuildContext context, WidgetRef ref) {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final asyncState = ref.watch(retroControllerProvider(widget.options));
+    final asyncState = ref.watch(retroControllerProvider(options));
 
-    return switch (asyncState) {
-      AsyncError() => const Center(child: Text('Failed to load mistakes for this game.')),
-      AsyncData() => Scaffold(
-        appBar: AppBar(
-          title: AppBarTitleText(
-            '${context.l10n.learnFromYourMistakes} (${math.min(asyncState.requireValue.mistakes.length, asyncState.requireValue.currentMistakeIndex + 1)}/${asyncState.requireValue.mistakes.length})',
-            maxLines: 2,
+    switch (asyncState) {
+      case AsyncError(:final error):
+        debugPrint('Error loading retro controller for ${options.id}: $error');
+        return Scaffold(
+          appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
+          body: FullScreenRetryRequest(
+            onRetry: () {
+              ref.invalidate(retroControllerProvider(options));
+            },
           ),
-          actions: [
-            if (asyncState.requireValue.isEngineAvailable(enginePrefs) == true)
-              EngineDepth(
-                savedEval: asyncState.valueOrNull?.currentNode.eval,
-                goDeeper: () => ref
-                    .read(retroControllerProvider(widget.options).notifier)
-                    .requestEval(goDeeper: true),
+        );
+      case AsyncData(:final value):
+        if (value.serverAnalysisAvailable == false) {
+          return Scaffold(
+            appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(context.l10n.calculatingMoves),
+                  Padding(
+                    padding: Styles.bodySectionPadding,
+                    child: LinearProgressIndicator(value: value.serverAnalysisProgress),
+                  ),
+                ],
               ),
-            _RetroMenu(options: widget.options),
-          ],
-        ),
-        body: DefaultTabController(length: 1, child: _RetroScreen(widget.options)),
-      ),
-      _ => Scaffold(
-        appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
-        body: const Center(child: CircularProgressIndicator.adaptive()),
-      ),
-    };
+            ),
+          );
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: AppBarTitleText(
+              '${context.l10n.learnFromYourMistakes} (${math.min(asyncState.requireValue.mistakes.length, asyncState.requireValue.currentMistakeIndex + 1)}/${asyncState.requireValue.mistakes.length})',
+              maxLines: 2,
+            ),
+            actions: [
+              if (asyncState.requireValue.isEngineAvailable(enginePrefs) == true)
+                EngineDepth(
+                  savedEval: asyncState.valueOrNull?.currentNode.eval,
+                  goDeeper: () => ref
+                      .read(retroControllerProvider(options).notifier)
+                      .requestEval(goDeeper: true),
+                ),
+              _RetroMenu(options: options),
+            ],
+          ),
+          body: DefaultTabController(length: 1, child: _RetroScreen(options)),
+        );
+      case _:
+        return Scaffold(
+          appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
+          body: const Center(child: CircularProgressIndicator.adaptive()),
+        );
+    }
   }
 }
 
@@ -360,10 +368,7 @@ class _FeedbackWidget extends ConsumerWidget {
                 painter: MicroChipPainter(ColorScheme.of(context).secondary),
               ),
               title: Text(context.l10n.evaluatingYourMove),
-              subtitle: LinearProgressIndicator(
-                value: state.evalProgress,
-                color: context.lichessColors.primary,
-              ),
+              subtitle: LinearProgressIndicator(value: state.evalProgress),
             ),
             RetroFeedback.done => FeedbackTile(
               leading: SideToPlayPiece(side: state.pov),

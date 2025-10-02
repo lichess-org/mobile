@@ -141,6 +141,11 @@ sealed class ExternalEval with _$ExternalEval implements Eval {
     ({String name, String comment})? judgment,
   }) = _ExternalEval;
 
+  /// Whether this eval has a valid cp or mate value.
+  ///
+  /// While the server analysis is still pending, the eval may be null.
+  bool get hasEval => cp != null || mate != null;
+
   factory ExternalEval.fromPgnEval(PgnEvaluation eval) {
     return ExternalEval(
       cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,

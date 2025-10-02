@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -19,6 +20,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/conditional_premoves.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
+import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
@@ -57,12 +59,20 @@ class AnalysisScreen extends ConsumerWidget {
 
     return analysisState.when(
       data: (state) => _AnalysisScreen(options: options),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator.adaptive())),
       error: (error, _) {
+        debugPrint('Error loading analysis: $error');
         if (error is UnsupportedVariantException) {
           return _UnsupportedVariantErrorScreen(error: error);
         }
-        return Center(child: Text('Error: $error'));
+        return Scaffold(
+          appBar: AppBar(title: Text(context.l10n.analysis)),
+          body: FullScreenRetryRequest(
+            onRetry: () {
+              ref.invalidate(analysisControllerProvider(options));
+            },
+          ),
+        );
       },
     );
   }
@@ -557,6 +567,17 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
+        if (analysisState.isComputerAnalysisAllowed &&
+            engineSupportedVariants.contains(analysisState.variant))
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.learnFromYourMistakes),
+            onPressed: () => Navigator.of(context).push(
+              RetroScreen.buildRoute(context, (
+                id: options.gameId!,
+                initialSide: analysisState.pov,
+              )),
+            ),
+          ),
         // board editor can be used to quickly analyze a position, so engine must be allowed to access
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(

@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
@@ -193,7 +192,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             label: Text(context.l10n.pause, textAlign: TextAlign.center),
           ),
         ],
-        if (gameState.game.userAnalysable) ...[
+        if (gameState.game.userAnalysable)
           FilledButton.tonal(
             onPressed: () {
               Navigator.of(
@@ -202,18 +201,6 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             },
             child: Text(context.l10n.analysis, textAlign: TextAlign.center),
           ),
-          FilledButton.tonal(
-            onPressed: () {
-              Navigator.of(context).push(
-                RetroScreen.buildRoute(context, (
-                  id: gameState.game.id,
-                  initialSide: gameState.game.youAre ?? Side.white,
-                )),
-              );
-            },
-            child: Text(context.l10n.learnFromYourMistakes, textAlign: TextAlign.center),
-          ),
-        ],
       ],
     );
 

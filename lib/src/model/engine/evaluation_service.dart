@@ -33,6 +33,7 @@ const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
 final defaultEngineCores = min((Platform.numberOfProcessors / 2).ceil(), maxEngineCores);
 
+/// Variants supported by the local engine.
 const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
 /// A function that returns true if the evaluation should be emitted by the [EngineEvaluation]

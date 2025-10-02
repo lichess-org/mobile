@@ -173,7 +173,7 @@ class AnalysisController extends _$AnalysisController
     switch (options) {
       case ArchivedGame(:final gameId):
         {
-          archivedGame = await ref.watch(archivedGameProvider(id: gameId).future);
+          archivedGame = await ref.read(archivedGameProvider(id: gameId).future);
           _variant = archivedGame!.meta.variant;
           if (!_variant.isReadSupported) {
             throw UnsupportedVariantException(_variant, gameId);

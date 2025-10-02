@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
@@ -26,12 +27,9 @@ class ServerAnalysisSummary extends ConsumerWidget {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
     final ctrlProvider = analysisControllerProvider(options);
 
-    final playersAnalysis = ref.watch(
-      ctrlProvider.select((value) => value.requireValue.playersAnalysis),
-    );
-    final canShowGameSummary = ref.watch(
-      ctrlProvider.select((value) => value.requireValue.canShowGameSummary),
-    );
+    final analysisState = ref.watch(ctrlProvider).requireValue;
+    final playersAnalysis = analysisState.playersAnalysis;
+    final canShowGameSummary = analysisState.canShowGameSummary;
     final pgnHeaders = ref.watch(ctrlProvider.select((value) => value.requireValue.pgnHeaders));
     final currentGameAnalysis = ref.watch(currentAnalysisProvider);
 
@@ -66,7 +64,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                   padding: EdgeInsets.only(top: 16.0),
                   child: WaitingForServerAnalysis(),
                 )
-              else
+              else if (engineSupportedVariants.contains(analysisState.variant))
                 Align(
                   alignment: Alignment.center,
                   child: Padding(
@@ -390,7 +388,7 @@ class AcplChart extends ConsumerWidget {
               lineTouchData: LineTouchData(
                 enabled: false,
                 touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
-                  if (event is FlTapDownEvent ||
+                  if (event is FlTapUpEvent ||
                       event is FlPanUpdateEvent ||
                       event is FlLongPressMoveUpdate) {
                     final touchX = event.localPosition!.dx;

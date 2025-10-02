@@ -19,6 +19,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'server_analysis_service.g.dart';
 
+const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
+
 @Riverpod(keepAlive: true)
 ServerAnalysisService serverAnalysisService(Ref ref) {
   return ServerAnalysisService(ref);
@@ -73,7 +75,6 @@ class ServerAnalysisService {
             _analysisProgress.value = (id, data);
 
             if (data.isAnalysisComplete) {
-              _cancelAnalysis();
               if (_analysisCompleter != null && !_analysisCompleter!.isCompleted) {
                 _analysisCompleter?.complete();
               }
@@ -90,7 +91,6 @@ class ServerAnalysisService {
     try {
       await ref.read(gameRepositoryProvider).requestServerAnalysis(id.gameId);
       _currentAnalysis.value = id.gameId;
-      await _analysisCompleter?.future.timeout(const Duration(minutes: 1));
     } on ServerException catch (e) {
       // 400 means analysis already requested (most likely) so we'll still try to listen to the socket
       // for updates.
@@ -105,9 +105,11 @@ class ServerAnalysisService {
       debugPrint('Error requesting server analysis: $e');
       _cancelAnalysis();
       rethrow;
-    } finally {
-      _analysisCompleter = null;
     }
+
+    _analysisCompleter?.future.timeout(kMaxWaitForServerAnalysis).whenComplete(() {
+      _cancelAnalysis();
+    });
   }
 
   /// Cancel the ongoing server analysis, if any.
@@ -115,6 +117,7 @@ class ServerAnalysisService {
     _socketSubscription?.$2.cancel();
     _socketSubscription = null;
     _currentAnalysis.value = null;
+    _analysisCompleter = null;
     if (_socketClient?.isDisposed != true) {
       _socketClient?.dispose();
       _socketClient = null;

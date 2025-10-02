@@ -130,21 +130,57 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
 
-    serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
+    initEngineEvaluation();
 
     _game = await ref.read(archivedGameProvider(id: options.id).future);
+
+    if (engineSupportedVariants.contains(_game.meta.variant) == false) {
+      throw Exception('Variant ${_game.meta.variant} is not supported for retro mode');
+    }
+
     _root = _game.makeTree();
 
     if (_game.serverAnalysis == null) {
       await serverAnalysisService.requestAnalysis(options.id);
-      await _serverAnalysisCompleter.future;
+
+      _serverAnalysisCompleter.future.timeout(
+        kMaxWaitForServerAnalysis,
+        onTimeout: () {
+          _logger.warning(
+            'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
+          );
+          state = AsyncError(
+            Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
+            StackTrace.current,
+          );
+        },
+      );
+
+      final retroState = RetroState(
+        serverAnalysisAvailable: false,
+        mistakes: const IList.empty(),
+        currentMistakeIndex: 0,
+        feedback: RetroFeedback.findMove,
+        mainlinePath: _root.mainlinePath,
+        pov: options.initialSide,
+        currentNode: RetroCurrentNode.fromNode(_root.view),
+        variant: _game.meta.variant,
+        currentPath: UciPath.empty,
+        evaluationContext: EvaluationContext(
+          variant: _game.meta.variant,
+          initialPosition: _root.position,
+        ),
+        root: _root.view,
+      );
+
+      state = AsyncValue.data(retroState);
+
+      serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
+
+      return retroState;
     }
 
-    initEngineEvaluation();
-
-    // We need to define the state value in the build method because `requestEval` require the state
-    // to have a value.
-    state = AsyncData(await _initState(options.initialSide));
+    state = AsyncData(await _computeMistakes(options.initialSide));
 
     socketClient.firstConnection.then((_) {
       requestEval();
@@ -153,7 +189,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
     return state.requireValue;
   }
 
-  Future<RetroState> _initState(Side side) async {
+  Future<RetroState> _computeMistakes(Side side) async {
     final mistakes = (await Future.wait(
       _root.view.mainline.map((branch) async {
         if (branch.position.turn != side || branch.children.isEmpty) {
@@ -212,6 +248,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
     )).nonNulls.toIList();
 
     return RetroState(
+      serverAnalysisAvailable: true,
       mistakes: mistakes.toIList(),
       currentMistakeIndex: 0,
       feedback: mistakes.isNotEmpty ? RetroFeedback.findMove : RetroFeedback.done,
@@ -219,9 +256,9 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
       pov: side,
       currentNode: RetroCurrentNode.fromNode(mistakes.firstOrNull?.branch ?? _root.view),
       lastMove: mistakes.firstOrNull?.branch.sanMove.move,
-      variant: Variant.standard,
+      variant: _game.meta.variant,
       evaluationContext: EvaluationContext(
-        variant: Variant.standard,
+        variant: _game.meta.variant,
         initialPosition: _root.position,
       ),
       root: _root.view,
@@ -281,7 +318,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   }
 
   Future<void> flipSide() async {
-    state = AsyncValue.data(await _initState(state.requireValue.pov.opposite));
+    state = AsyncValue.data(await _computeMistakes(state.requireValue.pov.opposite));
   }
 
   void restart() {
@@ -462,12 +499,21 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
     }
   }
 
-  void _listenToServerAnalysisEvents() {
+  Future<void> _listenToServerAnalysisEvents() async {
+    if (!state.hasValue) return;
+
     final event = ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
     if (event != null && event.$1 == options.id) {
       ServerAnalysisService.mergeOngoingAnalysis(_root, event.$2.tree);
-      if (event.$2.isAnalysisComplete && !_serverAnalysisCompleter.isCompleted) {
-        _serverAnalysisCompleter.complete();
+      final progress = event.$2.evals.where((e) => e.hasEval).length / _root.mainline.length;
+      state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
+
+      if (event.$2.isAnalysisComplete) {
+        if (_serverAnalysisCompleter.isCompleted == false) {
+          _serverAnalysisCompleter.complete();
+        }
+        state = AsyncData(await _computeMistakes(options.initialSide));
+        requestEval();
       }
     }
   }
@@ -480,6 +526,10 @@ sealed class RetroState with _$RetroState implements EvaluationMixinState, Commo
   const RetroState._();
 
   const factory RetroState({
+    required bool serverAnalysisAvailable,
+
+    /// Progress of server analysis for the whole game, from 0.0 to 1.0.
+    double? serverAnalysisProgress,
     required IList<Mistake> mistakes,
     required int currentMistakeIndex,
     required RetroFeedback feedback,

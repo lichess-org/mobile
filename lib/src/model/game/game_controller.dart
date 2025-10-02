@@ -921,7 +921,6 @@ class GameController extends _$GameController {
   }
 
   Future<ExportedGame> _getPostGameData() {
-    print('_getPostGameData for ${gameFullId.gameId}');
     return _gameRepository.getGame(gameFullId.gameId);
   }
 
