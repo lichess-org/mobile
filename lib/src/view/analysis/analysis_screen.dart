@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
+import 'package:lichess_mobile/src/view/engine/engine_threat_mode_indicator.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
@@ -185,6 +186,13 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
           goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
         ),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
+      if (asyncState.hasValue)
+        EngineThreatModeIndicator(
+          engineInThreatMode: asyncState.requireValue.engineInThreatMode,
+          onPressed: asyncState.requireValue.currentPosition.isGameOver
+              ? null
+              : ref.read(ctrlProvider.notifier).toggleEngineThreatMode,
+        ),
       _AnalysisMenu(options: widget.options, state: asyncState),
     ];
 
