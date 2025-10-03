@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ServerAnalysisSummary extends ConsumerWidget {
   const ServerAnalysisSummary(this.options, {super.key});
@@ -99,7 +100,30 @@ class ServerAnalysisSummary extends ConsumerWidget {
                               _SummaryNumber('${playersAnalysis.white.accuracy}%'),
                               Center(
                                 heightFactor: 1.8,
-                                child: Text(context.l10n.accuracy, softWrap: true),
+                                child: InkWell(
+                                  onTap: () {
+                                    launchUrl(Uri.parse('https://lichess.org/page/accuracy'));
+                                  },
+                                  child: Text.rich(
+                                    TextSpan(
+                                      text: context.l10n.accuracy,
+                                      children: [
+                                        WidgetSpan(
+                                          alignment: PlaceholderAlignment.middle,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 4.0),
+                                            child: Icon(
+                                              Icons.info_outline,
+                                              size: 16,
+                                              color: Theme.of(context).colorScheme.primary,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    softWrap: true,
+                                  ),
+                                ),
                               ),
                               _SummaryNumber('${playersAnalysis.black.accuracy}%'),
                             ],
