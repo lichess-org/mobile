@@ -76,6 +76,7 @@ abstract mixin class BaseGame {
   String shareTitle(AppLocalizations l10n) =>
       '${meta.perf.title} • ${l10n.resVsX(white.fullName(l10n), black.fullName(l10n))}';
 
+  /// Returns the side of the player with the given id, or null if the player is not in the game.
   Side? playerSideOf(UserId id) {
     if (white.user?.id == id) {
       return Side.white;

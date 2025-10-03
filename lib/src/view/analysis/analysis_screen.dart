@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,8 +6,10 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -19,6 +22,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/conditional_premoves.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
+import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
@@ -57,12 +61,20 @@ class AnalysisScreen extends ConsumerWidget {
 
     return analysisState.when(
       data: (state) => _AnalysisScreen(options: options),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator.adaptive())),
       error: (error, _) {
+        debugPrint('Error loading analysis: $error');
         if (error is UnsupportedVariantException) {
           return _UnsupportedVariantErrorScreen(error: error);
         }
-        return Center(child: Text('Error: $error'));
+        return Scaffold(
+          appBar: AppBar(title: Text(context.l10n.analysis)),
+          body: FullScreenRetryRequest(
+            onRetry: () {
+              ref.invalidate(analysisControllerProvider(options));
+            },
+          ),
+        );
       },
     );
   }
@@ -550,6 +562,10 @@ class _BottomBar extends ConsumerWidget {
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
     final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+    final session = ref.read(authSessionProvider);
+    final mySide = session != null
+        ? analysisState.archivedGame?.playerSideOf(session.user.id)
+        : null;
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -557,6 +573,33 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
+        if (options case ArchivedGame())
+          if (analysisState.isComputerAnalysisAllowed &&
+              engineSupportedVariants.contains(analysisState.variant))
+            if (mySide != null)
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.learnFromYourMistakes),
+                onPressed: () => Navigator.of(context).push(
+                  RetroScreen.buildRoute(context, (
+                    id: options.gameId!,
+                    initialSide: analysisState.pov,
+                  )),
+                ),
+              )
+            else ...[
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.reviewWhiteMistakes),
+                onPressed: () => Navigator.of(context).push(
+                  RetroScreen.buildRoute(context, (id: options.gameId!, initialSide: Side.white)),
+                ),
+              ),
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.reviewBlackMistakes),
+                onPressed: () => Navigator.of(context).push(
+                  RetroScreen.buildRoute(context, (id: options.gameId!, initialSide: Side.black)),
+                ),
+              ),
+            ],
         // board editor can be used to quickly analyze a position, so engine must be allowed to access
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(

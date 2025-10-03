@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
@@ -66,10 +65,6 @@ class AuthRepository {
   }
 
   Future<void> signOut() async {
-    final url = Uri(path: '/api/token');
-    final response = await _client.delete(Uri(path: '/api/token'));
-    if (response.statusCode >= 400) {
-      throw http.ClientException('Failed to delete token: ${response.statusCode}', url);
-    }
+    await _client.deleteRead(Uri(path: '/api/token'));
   }
 }

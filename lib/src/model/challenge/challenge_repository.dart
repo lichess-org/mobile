@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
@@ -55,28 +54,16 @@ class ChallengeRepository {
 
   Future<void> accept(ChallengeId id) async {
     final uri = Uri(path: '/api/challenge/$id/accept');
-    final response = await client.post(uri);
-
-    if (response.statusCode >= 400) {
-      throw http.ClientException('Failed to accept challenge: ${response.statusCode}', uri);
-    }
+    await client.postRead(uri);
   }
 
   Future<void> decline(ChallengeId id, {ChallengeDeclineReason? reason}) async {
     final uri = Uri(path: '/api/challenge/$id/decline');
-    final response = await client.post(uri, body: reason != null ? {'reason': reason.name} : null);
-
-    if (response.statusCode >= 400) {
-      throw http.ClientException('Failed to decline challenge: ${response.statusCode}', uri);
-    }
+    await client.postRead(uri, body: reason != null ? {'reason': reason.name} : null);
   }
 
   Future<void> cancel(ChallengeId id) async {
     final uri = Uri(path: '/api/challenge/$id/cancel');
-    final response = await client.post(uri);
-
-    if (response.statusCode >= 400) {
-      throw http.ClientException('Failed to cancel challenge: ${response.statusCode}', uri);
-    }
+    await client.postRead(uri);
   }
 }

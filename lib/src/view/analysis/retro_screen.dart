@@ -26,6 +26,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
@@ -44,31 +45,70 @@ class RetroScreen extends ConsumerWidget {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final asyncState = ref.watch(retroControllerProvider(options));
 
-    return switch (asyncState) {
-      AsyncError() => const Center(child: Text('Failed to load mistakes for this game.')),
-      AsyncData() => Scaffold(
-        appBar: AppBar(
-          title: AppBarTitleText(
-            '${context.l10n.learnFromYourMistakes} (${math.min(asyncState.requireValue.mistakes.length, asyncState.requireValue.currentMistakeIndex + 1)}/${asyncState.requireValue.mistakes.length})',
-            maxLines: 2,
+    switch (asyncState) {
+      case AsyncError(:final error):
+        debugPrint('Error loading retro controller for ${options.id}: $error');
+        return Scaffold(
+          appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
+          body: FullScreenRetryRequest(
+            onRetry: () {
+              ref.invalidate(retroControllerProvider(options));
+            },
           ),
-          actions: [
-            if (asyncState.requireValue.isEngineAvailable(enginePrefs) == true)
-              EngineDepth(
-                savedEval: asyncState.valueOrNull?.currentNode.eval,
-                goDeeper: () =>
-                    ref.read(retroControllerProvider(options).notifier).requestEval(goDeeper: true),
-              ),
-            _RetroMenu(options: options),
+        );
+      case AsyncData(:final value):
+        if (value.serverAnalysisAvailable == false) {
+          return _LoadingScreen(serverAnalysisProgress: value.serverAnalysisProgress);
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: AppBarTitleText(
+              '${context.l10n.learnFromYourMistakes} (${math.min(asyncState.requireValue.mistakes.length, asyncState.requireValue.currentMistakeIndex + 1)}/${asyncState.requireValue.mistakes.length})',
+              maxLines: 2,
+            ),
+            actions: [
+              if (asyncState.requireValue.isEngineAvailable(enginePrefs) == true)
+                EngineDepth(
+                  savedEval: asyncState.valueOrNull?.currentNode.eval,
+                  goDeeper: () => ref
+                      .read(retroControllerProvider(options).notifier)
+                      .requestEval(goDeeper: true),
+                ),
+              _RetroMenu(options: options),
+            ],
+          ),
+          body: DefaultTabController(length: 1, child: _RetroScreen(options)),
+        );
+      case _:
+        return const _LoadingScreen();
+    }
+  }
+}
+
+class _LoadingScreen extends StatelessWidget {
+  const _LoadingScreen({this.serverAnalysisProgress});
+
+  final double? serverAnalysisProgress;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(context.l10n.calculatingMoves),
+            Padding(
+              padding: Styles.bodySectionPadding,
+              child: LinearProgressIndicator(value: serverAnalysisProgress),
+            ),
           ],
         ),
-        body: DefaultTabController(length: 1, child: _RetroScreen(options)),
       ),
-      _ => Scaffold(
-        appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
-        body: const Center(child: CircularProgressIndicator.adaptive()),
-      ),
-    };
+    );
   }
 }
 
@@ -336,10 +376,7 @@ class _FeedbackWidget extends ConsumerWidget {
                 painter: MicroChipPainter(ColorScheme.of(context).secondary),
               ),
               title: Text(context.l10n.evaluatingYourMove),
-              subtitle: LinearProgressIndicator(
-                value: state.evalProgress,
-                color: context.lichessColors.primary,
-              ),
+              subtitle: LinearProgressIndicator(value: state.evalProgress),
             ),
             RetroFeedback.done => FeedbackTile(
               leading: SideToPlayPiece(side: state.pov),
