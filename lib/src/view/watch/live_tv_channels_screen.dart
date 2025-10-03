@@ -70,10 +70,10 @@ class _Body extends ConsumerWidget {
               description: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(game.channel.label, style: Styles.boardPreviewTitle),
-                  Icon(game.channel.icon, color: ColorScheme.of(context).primary, size: 30),
+                  Icon(game.channel.icon, size: 32),
                   UserFullNameWidget.player(
                     user: game.player.asPlayer.user,
                     aiLevel: game.player.asPlayer.aiLevel,

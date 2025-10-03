@@ -71,7 +71,7 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
           UserFullNameWidget(user: game.opponent!.user, style: Styles.boardPreviewTitle),
           if (game.myTimeLeft(lastModified) != null)
             Text(relativeDate(context.l10n, DateTime.now().add(game.myTimeLeft(lastModified)!))),
-          Icon(game.perf.icon, size: 40, color: DefaultTextStyle.of(context).style.color),
+          Icon(game.perf.icon, size: 32, color: DefaultTextStyle.of(context).style.color),
         ],
       ),
       onTap: () {

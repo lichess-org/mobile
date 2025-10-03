@@ -449,7 +449,7 @@ class DailyPuzzle extends ConsumerWidget {
                   ),
                 ],
               ),
-              Icon(Icons.today, size: 34, color: context.lichessColors.brag.withValues(alpha: 0.7)),
+              Icon(Icons.today, size: 32, color: context.lichessColors.brag.withValues(alpha: 0.7)),
               Text(
                 data.puzzle.sideToMove == Side.white
                     ? context.l10n.whitePlays
@@ -586,7 +586,7 @@ class PuzzleAnglePreview extends ConsumerWidget {
                         PuzzleTheme(themeKey: final themeKey) => themeKey.icon,
                         PuzzleOpening() => PuzzleIcons.opening,
                       },
-                      size: 34,
+                      size: 32,
                       color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
                     ),
                     if (puzzle != null)

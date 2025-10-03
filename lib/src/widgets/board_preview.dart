@@ -49,7 +49,7 @@ class SmallBoardPreview extends ConsumerWidget {
     final content = LayoutBuilder(
       builder: (context, constraints) {
         final boardSize =
-            constraints.biggest.shortestSide - (constraints.biggest.shortestSide / 1.618);
+            constraints.biggest.shortestSide - (constraints.biggest.shortestSide / 1.518);
         return Padding(
           padding:
               padding ??
