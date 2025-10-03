@@ -94,6 +94,8 @@ class ServerAnalysisService {
     } on ServerException catch (e) {
       // 400 means analysis already requested (most likely) so we'll still try to listen to the socket
       // for updates.
+      // TODO: should disambiguate this better. Server will also return an error when max number
+      // of analyses is reached.
       if (e.statusCode == 400) {
         debugPrint('Analysis already requested for game $id');
       } else {
