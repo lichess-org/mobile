@@ -58,22 +58,7 @@ class RetroScreen extends ConsumerWidget {
         );
       case AsyncData(:final value):
         if (value.serverAnalysisAvailable == false) {
-          return Scaffold(
-            appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(context.l10n.calculatingMoves),
-                  Padding(
-                    padding: Styles.bodySectionPadding,
-                    child: LinearProgressIndicator(value: value.serverAnalysisProgress),
-                  ),
-                ],
-              ),
-            ),
-          );
+          return _LoadingScreen(serverAnalysisProgress: value.serverAnalysisProgress);
         }
 
         return Scaffold(
@@ -96,11 +81,34 @@ class RetroScreen extends ConsumerWidget {
           body: DefaultTabController(length: 1, child: _RetroScreen(options)),
         );
       case _:
-        return Scaffold(
-          appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
-          body: const Center(child: CircularProgressIndicator.adaptive()),
-        );
+        return const _LoadingScreen();
     }
+  }
+}
+
+class _LoadingScreen extends StatelessWidget {
+  const _LoadingScreen({this.serverAnalysisProgress});
+
+  final double? serverAnalysisProgress;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(context.l10n.calculatingMoves),
+            Padding(
+              padding: Styles.bodySectionPadding,
+              child: LinearProgressIndicator(value: serverAnalysisProgress),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
