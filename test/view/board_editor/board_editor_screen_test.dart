@@ -248,6 +248,30 @@ void main() {
       );
     });
 
+    testWidgets('Delete pieces with tapping square again', (tester) async {
+      final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+      await tester.pumpWidget(app);
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(ChessboardEditor)));
+      final controllerProvider = boardEditorControllerProvider(null);
+
+      await tester.tap(find.byKey(const Key('piece-button-white-queen')));
+      await tester.pump();
+
+      await tapSquare(tester, 'e2');
+      expect(
+        container.read(controllerProvider).fen,
+        'rnbqkbnr/pppppppp/8/8/8/8/PPPPQPPP/RNBQKBNR w KQkq - 0 1',
+      );
+      //Tap d1 square with the white Queen still in hand, empties the square
+      await tapSquare(tester, 'd1');
+
+      expect(
+        container.read(controllerProvider).fen,
+        'rnbqkbnr/pppppppp/8/8/8/8/PPPPQPPP/RNB1KBNR w KQkq - 0 1',
+      );
+    });
+
     testWidgets('Add pieces via tap and pan', (tester) async {
       final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
       await tester.pumpWidget(app);
