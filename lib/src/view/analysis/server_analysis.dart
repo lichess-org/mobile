@@ -11,10 +11,8 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class ServerAnalysisSummary extends ConsumerWidget {
@@ -63,22 +61,6 @@ class ServerAnalysisSummary extends ConsumerWidget {
                 const Padding(
                   padding: EdgeInsets.only(top: 16.0),
                   child: WaitingForServerAnalysis(),
-                )
-              else if (engineSupportedVariants.contains(analysisState.variant))
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                    child: FilledButton(
-                      onPressed: () => Navigator.of(context).push(
-                        RetroScreen.buildRoute(context, (
-                          id: options.gameId!,
-                          initialSide: ref.read(ctrlProvider).requireValue.pov,
-                        )),
-                      ),
-                      child: Text(context.l10n.learnFromYourMistakes),
-                    ),
-                  ),
                 ),
 
               AcplChart(options),
