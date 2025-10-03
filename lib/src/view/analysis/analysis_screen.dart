@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -560,6 +562,10 @@ class _BottomBar extends ConsumerWidget {
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
     final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+    final session = ref.read(authSessionProvider);
+    final mySide = session != null
+        ? analysisState.archivedGame?.playerSideOf(session.user.id)
+        : null;
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -567,17 +573,33 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
-        if (analysisState.isComputerAnalysisAllowed &&
-            engineSupportedVariants.contains(analysisState.variant))
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.learnFromYourMistakes),
-            onPressed: () => Navigator.of(context).push(
-              RetroScreen.buildRoute(context, (
-                id: options.gameId!,
-                initialSide: analysisState.pov,
-              )),
-            ),
-          ),
+        if (options case ArchivedGame())
+          if (analysisState.isComputerAnalysisAllowed &&
+              engineSupportedVariants.contains(analysisState.variant))
+            if (mySide != null)
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.learnFromYourMistakes),
+                onPressed: () => Navigator.of(context).push(
+                  RetroScreen.buildRoute(context, (
+                    id: options.gameId!,
+                    initialSide: analysisState.pov,
+                  )),
+                ),
+              )
+            else ...[
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.reviewWhiteMistakes),
+                onPressed: () => Navigator.of(context).push(
+                  RetroScreen.buildRoute(context, (id: options.gameId!, initialSide: Side.white)),
+                ),
+              ),
+              BottomSheetAction(
+                makeLabel: (context) => Text(context.l10n.reviewBlackMistakes),
+                onPressed: () => Navigator.of(context).push(
+                  RetroScreen.buildRoute(context, (id: options.gameId!, initialSide: Side.black)),
+                ),
+              ),
+            ],
         // board editor can be used to quickly analyze a position, so engine must be allowed to access
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
