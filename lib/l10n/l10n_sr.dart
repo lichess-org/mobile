@@ -5580,16 +5580,16 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyInviteToTheStudy => 'Позови у студију';
 
   @override
-  String get studyPleaseOnlyInvitePeopleYouKnow => 'Молимо вас да само позивате људе које познајете и који активно желе да се придруже овој студији.';
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Молимо да позовеш само људе који те знају и који активно желе да се придруже овој студији.';
 
   @override
-  String get studySearchByUsername => 'Претражујте по корисничком имену';
+  String get studySearchByUsername => 'Тражи по корисничком имену';
 
   @override
   String get studySpectator => 'Посматрач';
 
   @override
-  String get studyContributor => 'Cарадник';
+  String get studyContributor => 'Доприносилац';
 
   @override
   String get studyKick => 'Избаци';
@@ -5598,10 +5598,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyLeaveTheStudy => 'Напусти студију';
 
   @override
-  String get studyYouAreNowAContributor => 'Сада сте сарадник';
+  String get studyYouAreNowAContributor => 'Сада си доприносилац';
 
   @override
-  String get studyYouAreNowASpectator => 'Сада сте посматрач';
+  String get studyYouAreNowASpectator => 'Сада си посматрач';
 
   @override
   String get studyPgnTags => 'PGN ознаке';
@@ -5616,31 +5616,31 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyNewTag => 'Нова ознака';
 
   @override
-  String get studyCommentThisPosition => 'Прокоментаришите ову позицију';
+  String get studyCommentThisPosition => 'Коментариши на ову позицију';
 
   @override
-  String get studyCommentThisMove => 'Прокоментаришите овај потез';
+  String get studyCommentThisMove => 'Коментариши на овај потез';
 
   @override
-  String get studyAnnotateWithGlyphs => 'Прибележите глифовима';
+  String get studyAnnotateWithGlyphs => 'Прибележи глифовима';
 
   @override
-  String get studyTheChapterIsTooShortToBeAnalysed => 'Поглавље је прекратко за анализу.';
+  String get studyTheChapterIsTooShortToBeAnalysed => 'Поглавље је прекратко да би се анализирало.';
 
   @override
-  String get studyOnlyContributorsCanRequestAnalysis => 'Само сарадници у студији могу захтевати рачунарску анализу.';
+  String get studyOnlyContributorsCanRequestAnalysis => 'Само доприносиоци студије могу захтевати рачунарску анализу.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Добијте потпуну рачунарску анализу главне варијације од стране сервера.';
+  String get studyGetAFullComputerAnalysis => 'Добиј комплетну рачунарску анализу главне варијације од стране сервера.';
 
   @override
-  String get studyMakeSureTheChapterIsComplete => 'Побрините се да је поглавље завршено. Само једном можете захтевати анализу.';
+  String get studyMakeSureTheChapterIsComplete => 'Побрини се да је поглавље завршено. Можеш само једном захтевати анализу.';
 
   @override
   String get studyAllSyncMembersRemainOnTheSamePosition => 'Сви SYNC чланови остају на истој позицији';
 
   @override
-  String get studyShareChanges => 'Делите измене са посматрачима и сачувајте их на сервер';
+  String get studyShareChanges => 'Дели измене са посматрачима и сачувај их на серверу';
 
   @override
   String get studyPlaying => 'У току';
@@ -5685,7 +5685,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'Ово можете налепити у форум да уградите';
 
   @override
-  String get studyStartAtInitialPosition => 'Започни на иницијалној позицији';
+  String get studyStartAtInitialPosition => 'Започни на почетној позицији';
 
   @override
   String studyStartAtX(String param) {
@@ -5727,7 +5727,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyOrientation => 'Оријентација';
 
   @override
-  String get studyAnalysisMode => 'Врста анализе';
+  String get studyAnalysisMode => 'Режим анализе';
 
   @override
   String get studyPinnedChapterComment => 'Закачен коментар поглавља';
@@ -5736,7 +5736,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studySaveChapter => 'Сачувај поглавље';
 
   @override
-  String get studyClearAnnotations => 'Избриши анотације';
+  String get studyClearAnnotations => 'Избриши напомене';
 
   @override
   String get studyClearVariations => 'Clear variations';
@@ -5771,28 +5771,28 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get studyEmpty => 'Празно';
+  String get studyEmpty => 'Празна';
 
   @override
-  String get studyStartFromInitialPosition => 'Започните од иницијалне позиције';
+  String get studyStartFromInitialPosition => 'Започни од почетне позиције';
 
   @override
   String get studyEditor => 'Уређивач';
 
   @override
-  String get studyStartFromCustomPosition => 'Започните од жељене позиције';
+  String get studyStartFromCustomPosition => 'Започни од жељене позиције';
 
   @override
   String get studyLoadAGameByUrl => 'Учитајте партије преко линкова';
 
   @override
-  String get studyLoadAPositionFromFen => 'Учитајте позицију из FEN-а';
+  String get studyLoadAPositionFromFen => 'Учитај позицију из FEN-а';
 
   @override
   String get studyLoadAGameFromPgn => 'Учитајте партију из PGN-а';
 
   @override
-  String get studyAutomatic => 'Аутоматски';
+  String get studyAutomatic => 'Аутоматска';
 
   @override
   String get studyUrlOfTheGame => 'Линкови партија, једна по реду';
@@ -6130,9 +6130,9 @@ class AppLocalizationsSr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Налепите свој PGN текст овде, до $count партија',
-      few: 'Налепите свој PGN текст овде, до $count партије',
-      one: 'Налепите свој PGN текст овде, до $count партије',
+      other: 'Налепи партије као PGN текст овде. За сваку партију, ново поглавље је направљено. Студија може садржати до $count поглавља.',
+      few: 'Налепи партије као PGN текст овде. За сваку партију, ново поглавље је направљено. Студија може садржати до $count поглавља.',
+      one: 'Налепи свој PGN текст овде, до $count партије',
     );
     return '$_temp0';
   }

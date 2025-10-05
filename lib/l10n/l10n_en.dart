@@ -7179,7 +7179,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   }
 
   @override
-  String get challengeChallengeToPlay => 'Challenge to a game';
+  String get challengeChallengeToPlay => 'Challenge';
 
   @override
   String get challengeChallengeDeclined => 'Challenge declined.';
@@ -9109,7 +9109,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get spectatorRoom => 'Spectator room';
 
   @override
-  String get composeMessage => 'Compose message';
+  String get composeMessage => 'Message';
 
   @override
   String get subject => 'Subject';

@@ -786,13 +786,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastFideProfile => 'FIDE-profil';
 
   @override
-  String get broadcastFederation => 'Szövetség';
+  String get broadcastFederation => 'Ország';
 
   @override
   String get broadcastAgeThisYear => 'Idén betöltött életkor';
 
   @override
-  String get broadcastUnrated => 'Nem jegyzett';
+  String get broadcastUnrated => 'Nem értékelt';
 
   @override
   String get broadcastRecentTournaments => 'Legutóbbi versenyek';

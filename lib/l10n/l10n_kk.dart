@@ -2095,7 +2095,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get challengeAFriend => 'Challenge a friend';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Компьютермен ойнау';
 
   @override
   String get gameMode => 'Game mode';
@@ -3052,7 +3052,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get orUploadPgnFile => 'Не PGN файлын жүктеп салыңыз';
 
   @override
-  String get fromPosition => 'Күйден бастап';
+  String get fromPosition => 'Бір күйден бастап';
 
   @override
   String get continueFromHere => 'Осы жерден жалғастыру';

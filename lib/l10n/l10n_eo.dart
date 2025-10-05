@@ -3975,7 +3975,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Kontroli ĉiujn dosierujojn, trudmesaĝojn kaj rubujon';
 
   @override
   String verifyYourAddress(String param) {
@@ -4013,7 +4013,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get downloadImported => 'Elŝutu importitan';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Elŝuti ĉiujn ludojn';
 
   @override
   String get crosstable => 'Kructabelo';
@@ -4087,7 +4087,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get viewTheSolution => 'Vidi la solvon';
 
   @override
-  String get noChallenges => 'No challenges.';
+  String get noChallenges => 'Sen defioj.';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -4356,7 +4356,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return 'Defii $param';
   }
 
   @override
@@ -4757,7 +4757,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get stats => 'Stats';
 
   @override
-  String get accessibility => 'Accessibility';
+  String get accessibility => 'Alireblo';
 
   @override
   String get enableBlindMode => 'Enable blind mode';
@@ -4766,22 +4766,22 @@ class AppLocalizationsEo extends AppLocalizations {
   String get disableBlindMode => 'Disable blind mode';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Kopii al tondujo';
 
   @override
-  String get online => 'online';
+  String get online => 'konektita';
 
   @override
-  String get offline => 'offline';
+  String get offline => 'konektita';
 
   @override
-  String get search => 'Search';
+  String get search => 'Serĉi';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'Viŝi serĉon';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'Etikedoj';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5588,7 +5588,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyPlaying => 'Ludanta';
 
   @override
-  String get studyShowResults => 'Results';
+  String get studyShowResults => 'Rezultoj';
 
   @override
   String get studyShowEvalBar => 'Taksaj stangoj';
@@ -5920,7 +5920,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String studyPerPage(String param) {
-    return '$param per page';
+    return 'Po $param en ĉiu paĝo';
   }
 
   @override

@@ -2061,22 +2061,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsThisAccountIsClosed => '此帐户已被关闭。';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => '棋局设置';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => '挑战朋友';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => '挑战电脑';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => '游戏模式';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => '创建对局';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => '你执';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => '分享这个网址以邀请好友下棋';
@@ -2852,7 +2852,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportGames => '导出棋局';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => '等级分范围';
 
   @override
   String get thisAccountViolatedTos => '该账户违反了 Lichess 服务条款';
@@ -2926,7 +2926,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => '你的等级分不稳定，暂时无法选择等级分范围。下排位棋局会增加稳定性。';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -4186,7 +4186,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return 'Your rating is $param';
+    return '你的等级分是 $param';
   }
 
   @override
@@ -4328,7 +4328,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return '挑战 $param';
   }
 
   @override
@@ -4750,10 +4750,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get search => '搜索';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => '清除搜索';
 
   @override
-  String get tags => 'Tags';
+  String get tags => '标签';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5537,7 +5537,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyCopyChapterPgn => '复制 PGN';
 
   @override
-  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+  String get studyCopyRawChapterPgn => '复制纯 PGN';
 
   @override
   String get studyDownloadGame => '下载棋局';

@@ -2089,22 +2089,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Questo account è stato eliminato.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Impostazioni partita';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Lancia una sfida';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Gioca contro il computer';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Modalità di gioco';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Crea una partita nella lobby';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'Giochi come';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Per invitare qualcuno a giocare, dagli questo URL';

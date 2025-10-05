@@ -239,7 +239,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileWatchTab => 'Sledovat';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Vítejte v aplikaci Lichess!';
 
   @override
   String get activityActivity => 'Aktivita';
