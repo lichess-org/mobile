@@ -161,13 +161,13 @@ void main() {
       await tester.pumpWidget(await makeTestApp(tester, moves: 'e4 e5'));
 
       // Wait for retro to load
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       expect(find.text('No significant mistakes found for White'), findsOneWidget);
       expect(find.text('Review Black mistakes'), findsOneWidget);
 
       await tester.tap(find.text('Review Black mistakes'));
-      await tester.pumpAndSettle(); // Wait for side to flip
+      await tester.pump(); // Wait for side to flip
 
       expect(find.text('No significant mistakes found for Black'), findsOneWidget);
       expect(find.text('Review White mistakes'), findsOneWidget);
@@ -189,7 +189,7 @@ void main() {
       );
 
       // Wait for retro to load
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       expect(find.text('2. Nf3 was played'), findsOneWidget);
       expect(find.text('Find a better move for white'), findsOneWidget);
@@ -197,20 +197,19 @@ void main() {
 
       await playMove(tester, 'g1', 'f3');
       // Wait for failure message to appear and move to be taken back
-      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(milliseconds: 500));
       expect(find.byKey(const ValueKey('g1-whiteknight')), findsOneWidget);
 
       expect(find.text('You can do better'), findsOneWidget);
       expect(find.text('Try another move for white'), findsOneWidget);
 
       await playMove(tester, 'd2', 'd4');
-      await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
       expect(find.text('Evaluating your move ...'), findsOneWidget);
 
       // Should not be able to interact with the board while waiting for eval
       await playMove(tester, 'a7', 'a6');
-      await tester.pumpAndSettle();
+      await tester.pump();
       expect(find.byKey(const ValueKey('a7-blackpawn')), findsOneWidget);
 
       // Pretend d4 isn't a good move either
@@ -218,7 +217,7 @@ void main() {
         makeEvalHitEvent(uciMoves: ['e2e4', 'e7e5', 'd2d4'], bestMove: 'd7d5', cp: -2000),
       ]);
 
-      await tester.pumpAndSettle(); // Wait for eval to be processed
+      await tester.pump(); // Wait for eval to be processed
 
       // Move should be taken back
       expect(find.byKey(const ValueKey('d2-whitepawn')), findsOneWidget);
@@ -227,26 +226,26 @@ void main() {
       expect(find.text('Try another move for white'), findsOneWidget);
 
       await playMove(tester, 'f2', 'f4');
-      await tester.pumpAndSettle(); // Wait for success message to appear
+      await tester.pump(); // Wait for success message to appear
 
       expect(find.text('Good move'), findsOneWidget);
       expect(find.text('Next'), findsOneWidget);
 
       await tester.tap(find.text('Next mistake'));
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       expect(find.text('Done reviewing White mistakes'), findsOneWidget);
       expect(find.text('Review Black mistakes'), findsOneWidget);
 
       await tester.tap(find.text('Review Black mistakes'));
-      await tester.pumpAndSettle(); // Wait for side to flip
+      await tester.pump(); // Wait for side to flip
 
       expect(find.text('1... e5 was played'), findsOneWidget);
       expect(find.text('Find a better move for black'), findsOneWidget);
       expect(find.text('View the solution'), findsOneWidget);
 
       await tester.tap(find.text('View the solution'));
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       expect(find.text('Best was 1... c5'), findsOneWidget);
       // Correct move should be on the board
@@ -254,7 +253,7 @@ void main() {
 
       expect(find.text('Next mistake'), findsOneWidget);
       await tester.tap(find.text('Next mistake'));
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       expect(find.text('Done reviewing Black mistakes'), findsOneWidget);
       expect(find.text('Review White mistakes'), findsOneWidget);
@@ -287,7 +286,7 @@ void main() {
       );
 
       // Wait for retro to load
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       expect(find.text('2. Nf3 was played'), findsOneWidget);
       expect(find.text('Find a better move for white'), findsOneWidget);
