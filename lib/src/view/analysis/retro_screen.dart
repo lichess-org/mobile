@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_settings_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -119,59 +118,30 @@ class _RetroScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final analysisPrefs = ref.watch(analysisPreferencesProvider);
-    final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final showEvaluationGauge = analysisPrefs.showEvaluationGauge;
-
-    final numEvalLines = enginePrefs.numEvalLines;
-
     final state = ref.watch(retroControllerProvider(options)).requireValue;
 
-    final hideEngineLines = state.isSolving || numEvalLines == 0;
-
     return AnalysisLayout(
-      smallBoard: analysisPrefs.smallBoard,
       pov: state.pov,
       boardBuilder: (context, boardSize, borderRadius) =>
           RetroAnalysisBoard(options, boardSize: boardSize, boardRadius: borderRadius),
-      engineGaugeBuilder: showEvaluationGauge
-          ? (context, orientation) {
-              return orientation == Orientation.portrait
-                  ? EngineGauge(
-                      displayMode: EngineGaugeDisplayMode.horizontal,
-                      params: state.engineGaugeParams,
-                      engineLinesState: hideEngineLines
-                          ? null
-                          : analysisPrefs.showEngineLines
-                          ? EngineLinesShowState.expanded
-                          : EngineLinesShowState.collapsed,
-                      onTap: () {
-                        ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
-                      },
-                    )
-                  : Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                      child: EngineGauge(
-                        displayMode: EngineGaugeDisplayMode.vertical,
-                        params: state.engineGaugeParams,
-                      ),
-                    );
-            }
-          : null,
-      engineLines: analysisPrefs.showEngineLines
-          // We hide engine lines while solving (as they would give away the solution),
-          // but show them once the solution has been found.
-          // To avoid a layout jump, make the widget invisible instead of removing it completely.
-          ? Visibility.maintain(
-              visible: !hideEngineLines,
-              child: EngineLines(
-                onTapMove: ref.read(retroControllerProvider(options).notifier).onUserMove,
-                savedEval: state.currentNode.eval,
-                isGameOver: state.currentNode.position.isGameOver,
-              ),
-            )
-          : null,
+      engineGaugeBuilder: (context, orientation) {
+        return orientation == Orientation.portrait
+            ? EngineGauge(
+                displayMode: EngineGaugeDisplayMode.horizontal,
+                params: state.engineGaugeParams,
+                onTap: () {
+                  ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
+                },
+              )
+            : Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
+                child: EngineGauge(
+                  displayMode: EngineGaugeDisplayMode.vertical,
+                  params: state.engineGaugeParams,
+                ),
+              );
+      },
       bottomBar: _BottomBar(options),
       children: [
         Center(
@@ -214,10 +184,10 @@ class _RetroAnalysisBoardState
   AnalysisPrefs get analysisPrefs => ref.watch(analysisPreferencesProvider);
 
   @override
-  bool get showAnnotations => analysisPrefs.showAnnotations;
+  bool get showAnnotations => false;
 
   @override
-  bool get hideBestMoveArrow => analysisState.isSolving;
+  bool get hideBestMoveArrow => true;
 
   // Disable interaction while the engine is evaluating the move
   @override

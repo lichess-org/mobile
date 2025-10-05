@@ -10,14 +10,14 @@ class EngineSettingsWidget extends ConsumerWidget {
   const EngineSettingsWidget({
     this.onToggleLocalEvaluation,
     required this.onSetEngineSearchTime,
-    required this.onSetNumEvalLines,
+    this.onSetNumEvalLines,
     required this.onSetEngineCores,
     super.key,
   });
 
   final VoidCallback? onToggleLocalEvaluation;
   final void Function(Duration) onSetEngineSearchTime;
-  final void Function(int) onSetNumEvalLines;
+  final void Function(int)? onSetNumEvalLines;
   final void Function(int) onSetEngineCores;
 
   @override
@@ -52,13 +52,14 @@ class EngineSettingsWidget extends ConsumerWidget {
                 onSetEngineSearchTime(Duration(seconds: value.toInt()));
               },
             ),
-            SliderSettingsTile(
-              title: Text(context.l10n.multipleLines),
-              value: prefs.numEvalLines.toDouble(),
-              values: const [0, 1, 2, 3],
-              labelBuilder: (value) => value.toInt().toString(),
-              onChangeEnd: (value) => onSetNumEvalLines(value.toInt()),
-            ),
+            if (onSetNumEvalLines != null)
+              SliderSettingsTile(
+                title: Text(context.l10n.multipleLines),
+                value: prefs.numEvalLines.toDouble(),
+                values: const [0, 1, 2, 3],
+                labelBuilder: (value) => value.toInt().toString(),
+                onChangeEnd: (value) => onSetNumEvalLines!.call(value.toInt()),
+              ),
             if (maxEngineCores > 1)
               SliderSettingsTile(
                 title: Text(context.l10n.cpus),

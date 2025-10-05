@@ -57,8 +57,6 @@ sealed class Mistake with _$Mistake {
 }
 
 /// Depth needed to evaluate alternative solution moves.
-///
-/// https://github.com/lichess-org/lila/blob/d29f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/retrospect/retroCtrl.ts#L151
 const double _kEvalDepthThreshold = kDebugMode ? 12 : 18;
 
 const Duration _kLowerDepthThresholdTime = Duration(seconds: 6);
@@ -71,12 +69,9 @@ const double _kEvalDepthThresholdAfterLongEvalTime = _kEvalDepthThreshold - 4;
 /// When checking a move that is not the server solution,
 /// consider it a correct move if the eval difference is above this threshold,
 /// i.e. the move does not make the position significantly worse.
-/// https://github.com/lichess-org/lila/blob/d29f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/retrospect/retroCtrl.ts#L161
 const double _kCorrectMovePovDiffThreshold = -0.04;
 
 /// Threshold for considering a move a mistake due to how it affected the evaluation.
-///
-/// https://github.com/lichess-org/lila/blob/4b65c49546caf0a17068a1edcd0175ca18176c7b/ui/analyse/src/nodeFinder.ts#L25
 const double _kEvalSwingThreshold = 0.1;
 
 @riverpod
@@ -85,16 +80,12 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
   late ExportedGame _game;
 
+  final Completer<void> _serverAnalysisCompleter = Completer<void>();
+
   @override
   @protected
   EngineEvaluationPrefState get evaluationPrefs =>
-      state.valueOrNull?.feedback == RetroFeedback.evalMove
-      // Increase search time to make sure we reach the limit for deciding whether the move
-      // is good enough to be considered an alternative solution.
-      ? ref
-            .read(engineEvaluationPreferencesProvider)
-            .copyWith(engineSearchTime: kMaxEngineSearchTime)
-      : ref.read(engineEvaluationPreferencesProvider);
+      ref.read(engineEvaluationPreferencesProvider).copyWith(isEnabled: true, numEvalLines: 1);
 
   @override
   @protected
@@ -116,8 +107,6 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   @override
   @protected
   Node get positionTree => _root;
-
-  final Completer<void> _serverAnalysisCompleter = Completer<void>();
 
   @override
   Future<RetroState> build(RetroOptions options) async {
@@ -163,14 +152,13 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
         feedback: RetroFeedback.findMove,
         mainlinePath: _root.mainlinePath,
         pov: options.initialSide,
-        currentNode: RetroCurrentNode.fromNode(_root.view),
+        currentNode: RetroCurrentNode.fromNode(_root),
         variant: _game.meta.variant,
         currentPath: UciPath.empty,
         evaluationContext: EvaluationContext(
           variant: _game.meta.variant,
           initialPosition: _root.position,
         ),
-        root: _root.view,
       );
 
       state = AsyncValue.data(retroState);
@@ -191,13 +179,13 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
   Future<RetroState> _computeMistakes(Side side) async {
     final mistakes = (await Future.wait(
-      _root.view.mainline.map((branch) async {
+      _root.mainline.map((branch) async {
         if (branch.position.turn != side || branch.children.isEmpty) {
           return null;
         }
 
-        final eval = branch.serverEval;
-        final newEval = branch.children.first.serverEval;
+        final eval = branch.externalEval;
+        final newEval = branch.children.first.externalEval;
 
         if (eval == null || newEval == null) {
           return null;
@@ -243,7 +231,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
           }
         }
 
-        return Mistake(branch: branch, openingExplorerSolutions: openingExplorerSolutions);
+        return Mistake(branch: branch.view, openingExplorerSolutions: openingExplorerSolutions);
       }),
     )).nonNulls.toIList();
 
@@ -254,14 +242,13 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
       feedback: mistakes.isNotEmpty ? RetroFeedback.findMove : RetroFeedback.done,
       mainlinePath: _root.mainlinePath,
       pov: side,
-      currentNode: RetroCurrentNode.fromNode(mistakes.firstOrNull?.branch ?? _root.view),
+      currentNode: RetroCurrentNode.fromNode(mistakes.firstOrNull?.branch.branch ?? _root),
       lastMove: mistakes.firstOrNull?.branch.sanMove.move,
       variant: _game.meta.variant,
       evaluationContext: EvaluationContext(
         variant: _game.meta.variant,
         initialPosition: _root.position,
       ),
-      root: _root.view,
       currentPath: mistakes.isNotEmpty
           ? _root.mainlinePath.truncate(mistakes[0].branch.position.ply)
           : UciPath.empty,
@@ -278,7 +265,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
     final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
     if (newPath != null) {
-      _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
+      _setPath(newPath);
     }
   }
 
@@ -330,14 +317,12 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   }
 
   void _showMistake(int index) {
-    final nextMistake = state.requireValue.mistakes.getOrNull(index);
+    final mistake = state.requireValue.mistakes.getOrNull(index);
     final lastMistake = state.requireValue.mistakes.lastOrNull;
 
     _setPath(
       _root.mainlinePath.truncate(
-        nextMistake?.branch.position.ply ??
-            lastMistake?.branch.position.ply ??
-            _root.mainlinePath.size,
+        mistake?.branch.position.ply ?? lastMistake?.branch.position.ply ?? _root.mainlinePath.size,
       ),
     );
 
@@ -345,17 +330,15 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
       state.requireValue.copyWith(
         currentMistakeIndex: index,
         currentNode: RetroCurrentNode.fromNode(
-          nextMistake?.branch ?? lastMistake?.branch ?? _root.view,
+          mistake?.branch.branch ?? lastMistake?.branch.branch ?? _root,
         ),
-        feedback: nextMistake != null ? RetroFeedback.findMove : RetroFeedback.done,
+        feedback: mistake != null ? RetroFeedback.findMove : RetroFeedback.done,
       ),
     );
   }
 
   void _setPath(
     UciPath path, {
-    bool shouldForceShowVariation = false,
-    bool shouldRecomputeRootView = false,
 
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
@@ -365,18 +348,6 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
     final pathChange = state.currentPath != path;
     final currentNode = _root.nodeAt(path);
-
-    // always show variation if the user plays a move
-    if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
-      _root.updateAt(path, (node) {
-        if (node is Branch) node.isCollapsed = false;
-      });
-    }
-
-    // root view is only used to display move list, so we need to
-    // recompute the root view only when the nodelist length changes
-    // or a variation is hidden/shown
-    final rootView = shouldForceShowVariation || shouldRecomputeRootView ? _root.view : state.root;
 
     final isForward = path.size > state.currentPath.size;
     if (currentNode is Branch) {
@@ -402,20 +373,18 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
       this.state = AsyncValue.data(
         state.copyWith(
           currentPath: path,
-          currentNode: RetroCurrentNode.fromNode(currentNode.view),
+          currentNode: RetroCurrentNode.fromNode(currentNode),
           lastMove: currentNode.sanMove.move,
           promotionMove: null,
-          root: rootView,
         ),
       );
     } else {
       this.state = AsyncValue.data(
         state.copyWith(
           currentPath: path,
-          currentNode: RetroCurrentNode.fromNode(currentNode.view),
+          currentNode: RetroCurrentNode.fromNode(currentNode),
           lastMove: null,
           promotionMove: null,
-          root: rootView,
         ),
       );
     }
@@ -444,7 +413,6 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
       final eval = state.requireValue.currentNode.eval;
       if (eval == null) return;
 
-      // https://github.com/lichess-org/lila/blob/d29f27d8cbb0e0dac38308c23c63b828028c085f/ui/analyse/src/retrospect/retroCtrl.ts#L151
       if (eval.depth >= _kEvalDepthThreshold ||
           (eval.depth >= _kEvalDepthThresholdAfterLongEvalTime &&
               state.requireValue.evalTime! > _kLowerDepthThresholdTime)) {
@@ -470,8 +438,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   void _refreshCurrentNode({bool recomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
-        root: recomputeRootView ? _root.view : state.requireValue.root,
-        currentNode: RetroCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath).view),
+        currentNode: RetroCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
   }
@@ -492,7 +459,8 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
             this.state = AsyncValue.data(
               state.copyWith(feedback: RetroFeedback.evalMove, evalRequestedAt: DateTime.now()),
             );
-            requestEval();
+            // Be sure to get enough depth to evaluate the move properly
+            requestEval(goDeeper: true);
           }
         }
       case _:
@@ -539,7 +507,6 @@ sealed class RetroState with _$RetroState implements EvaluationMixinState, Commo
     required Variant variant,
     required UciPath currentPath,
     required EvaluationContext evaluationContext,
-    required ViewRoot root,
     DateTime? evalRequestedAt,
     Move? lastMove,
     NormalMove? promotionMove,
@@ -596,14 +563,14 @@ sealed class RetroCurrentNode with _$RetroCurrentNode implements AnalysisCurrent
     IList<int>? nags,
   }) = _RetroCurrentNode;
 
-  factory RetroCurrentNode.fromNode(ViewNode node) {
-    if (node is ViewBranch) {
+  factory RetroCurrentNode.fromNode(Node node) {
+    if (node is Branch) {
       return RetroCurrentNode(
         sanMove: node.sanMove,
         position: node.position,
         isRoot: node is Root,
         eval: node.eval,
-        serverEval: node.serverEval,
+        serverEval: node.externalEval,
         nags: IList(node.nags),
         hasChild: node.children.isNotEmpty,
       );
