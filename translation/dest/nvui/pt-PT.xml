@@ -11,6 +11,8 @@
   <string name="yourClock">Teu relógio</string>
   <string name="opponentClock">Relógio do oponente</string>
   <string name="gameStart">Início do jogo</string>
+  <string name="moveToRank">Mova da coluna 1 para 8.</string>
+  <string name="announcePieceLocations" comment="This is an instruction for how blind users can use the command form.&#10;&#10;Here, they can type in &quot;p N&quot;, &quot;p k&quot;, or &quot;p A&quot; for the respective commands. Capital letters are for white pieces while lowercase letters are for black pieces.&#10;&#10;Please write out &quot;capital&quot; or &quot;lowercase&quot; to distinguish it for blind users.">Anuncia a localização das peças. Por exemplo: um N maiúsculo para cavalo branco, um k minúsculo para o rei preto, um A maiúsculo para todas as peças brancas.</string>
   <string name="king">rei</string>
   <string name="whiteKing">rei branco</string>
   <string name="blackKing">rei preto</string>
