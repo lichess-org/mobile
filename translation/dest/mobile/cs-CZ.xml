@@ -70,4 +70,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Varianta %s není v této verzi aplikace podporována.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Čeká se na připojení protihráče...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sledovat</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Vítejte v aplikaci Lichess!</string>
 </resources>

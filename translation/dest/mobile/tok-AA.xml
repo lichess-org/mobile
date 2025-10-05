@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">musi ale</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">o kama lon musi</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">pilin sina</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">tenpo pimeja pona, %s o</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">tenpo pimeja pona</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">tenpo suno pona, %s o!</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">tenpo suno pona</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">lipu lawa</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">pona</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">musi pi jan tu pi ilo toki wan</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">musi pi jan tu pi ilo toki wan</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">poka soto</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">poka teje</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ma pi ilo tenpo</string>
