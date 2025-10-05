@@ -303,7 +303,7 @@
   <string name="loginToChat">sina wile toki la, o open e lipu jan</string>
   <string name="youHaveBeenTimedOut">sina o, ken ala toki.</string>
   <string name="spectatorRoom">tomo lukin</string>
-  <string name="composeMessage">o sitelen e toki</string>
+  <string name="composeMessage" comment="Appears as a button on user profiles. Pressing the button will let you send a message to that user. &quot;Message&quot; is used as a verb.&#10;&#10;This text used to state &quot;Compose message&quot;. Please shorten to just &quot;Message&quot; if you see a translation of the old version of the string.">o sitelen e toki</string>
   <string name="subject">sina toki pi ijo seme?</string>
   <string name="send">o pana</string>
   <string name="incrementInSeconds">tenpo Sekunta sin pi tawa wan</string>
