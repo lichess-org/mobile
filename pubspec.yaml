@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.17.9+001709 # See README.md for details about versioning
+version: 0.17.10+001710 # See README.md for details about versioning
 
 environment:
   # this should be updated with every new flutter stable release
