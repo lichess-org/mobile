@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Draft release with release notes
         id: create_release
-        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8
+        uses: softprops/action-gh-release@62c96d0c4e8a889135c1f3a25910db8dbe0e85f7
         with:
           tag_name: ${{ github.event.inputs.version }}
           draft: true
