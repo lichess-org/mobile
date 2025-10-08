@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
@@ -493,5 +494,95 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('2. Illegal Chapter'), findsOneWidget);
     });
+  });
+
+  testWidgets('Displays annotations on the correct square', (WidgetTester tester) async {
+    final mockRepository = MockStudyRepository();
+    when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+      (_) async => (
+        makeStudy(
+          chapter: makeChapter(
+            id: const StudyChapterId('1'),
+            orientation: Side.white,
+            gamebook: false,
+          ),
+        ),
+        '''
+[Event "annotation bug test: Chapter 2"]
+[Date "2025.09.28"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "annotation bug test"]
+[ChapterName "Chapter 2"]
+[ChapterURL "https://lichess.org/study/EQWia70B/M289O12T"]
+[Annotator "https://lichess.org/@/yassine00"]
+[FEN "8/8/2k5/8/8/8/8/1K3R2 b - - 5 3"]
+[SetUp "1"]
+[UTCDate "2025.09.28"]
+[UTCTime "14:16:01"]
+
+3... Kd5 4. Rg1!! Kd4 5. Re1 Kc4 6. Rh1?? *
+''',
+      ),
+    );
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const StudyScreen(id: testId),
+      overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+    );
+    await tester.pumpWidget(app);
+    // Wait for study to load
+    await tester.pumpAndSettle();
+
+    void expectAnnotations(Iterable<Matcher> annotations) {
+      final board = tester.widget<Chessboard>(find.byType(Chessboard));
+
+      if (annotations.isEmpty) {
+        expect(board.annotations, isNull);
+      } else {
+        expect(board.annotations!.length, annotations.length);
+        expect(board.annotations, allOf(annotations));
+      }
+    }
+
+    expectAnnotations([]);
+
+    // each pumpAndSettle() call waits for move to be played and potential annotation to appear
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle();
+    expectAnnotations([]);
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle();
+
+    // 4. Rg1!!
+    expectAnnotations([
+      containsPair(Square.g1, predicate<Annotation>((annotation) => annotation.symbol == '!!')),
+    ]);
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle(); // Wait for move to be played
+    expectAnnotations([]);
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle(); // Wait for move to be played
+    expectAnnotations([]);
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle(); // Wait for move to be played
+    expectAnnotations([]);
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle(); // Wait for move to be played
+
+    // Regression test for https://github.com/lichess-org/mobile/issues/2231
+    // 6. Rh1??
+    expectAnnotations([
+      containsPair(Square.h1, predicate<Annotation>((annotation) => annotation.symbol == '??')),
+    ]);
   });
 }
