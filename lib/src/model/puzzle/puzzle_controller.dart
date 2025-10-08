@@ -328,6 +328,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
   Future<void> toggleEngineThreatMode() async {
     state = state.copyWith(engineInThreatMode: !state.engineInThreatMode);
+    requestEval();
   }
 
   void _setPath(UciPath path, {bool isNavigating = false, bool firstMove = false}) {

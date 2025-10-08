@@ -417,6 +417,7 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       state = AsyncData(
         state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
       );
+      requestEval();
     }
   }
 

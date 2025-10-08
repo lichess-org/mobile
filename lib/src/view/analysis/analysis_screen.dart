@@ -29,7 +29,6 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_depth.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
-import 'package:lichess_mobile/src/view/engine/engine_threat_mode_indicator.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
@@ -186,13 +185,6 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
           goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
         ),
       AppBarAnalysisTabIndicator(tabs: tabs, controller: _tabController),
-      if (asyncState.hasValue)
-        EngineThreatModeIndicator(
-          engineInThreatMode: asyncState.requireValue.engineInThreatMode,
-          onPressed: asyncState.requireValue.currentPosition.isGameOver
-              ? null
-              : ref.read(ctrlProvider.notifier).toggleEngineThreatMode,
-        ),
       _AnalysisMenu(options: widget.options, state: asyncState),
     ];
 
@@ -571,13 +563,25 @@ class _BottomBar extends ConsumerWidget {
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
     final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+    final evalPrefs = ref.watch(engineEvaluationPreferencesProvider);
     final session = ref.read(authSessionProvider);
     final mySide = session != null
         ? analysisState.archivedGame?.playerSideOf(session.user.id)
         : null;
+
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        if (analysisState.isEngineAvailable(evalPrefs))
+          BottomSheetAction(
+            makeLabel: (context) => Text(
+              analysisState.engineInThreatMode
+                  ? 'Stop showing threat' // TODO l10n
+                  : context.l10n.showThreat,
+            ),
+            onPressed: () =>
+                ref.read(analysisControllerProvider(options).notifier).toggleEngineThreatMode(),
+          ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),

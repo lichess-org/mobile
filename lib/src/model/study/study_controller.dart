@@ -391,6 +391,7 @@ class StudyController extends _$StudyController
       state = AsyncData(
         state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
       );
+      requestEval();
     }
   }
 
