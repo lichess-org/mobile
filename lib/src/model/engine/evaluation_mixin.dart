@@ -49,6 +49,9 @@ abstract class EvaluationMixinState {
 
   /// Whether to always request a cloud evaluation, regardless of the current ply.
   bool get alwaysRequestCloudEval;
+
+  /// Whether the engine is in threat mode, i.e. pretending it's the the opposite side's turn.
+  bool get engineInThreatMode;
 }
 
 /// A mixin to provide engine evaluation functionality to an [AsyncNotifier].
@@ -287,8 +290,12 @@ mixin EngineEvaluationMixin {
           initialPositionEval: positionTree.eval,
           shouldEmit: _shouldEmit,
           goDeeper: goDeeper,
+          threatMode: curState.engineInThreatMode,
         )
         ?.forEach((event) {
+          if (curState.engineInThreatMode) {
+            return;
+          }
           final (work, eval) = event;
           bool isSameEvalString = true;
           positionTree.updateAt(work.path, (node) {
