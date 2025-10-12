@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="accountPreferences" comment="Displayed on account screen, under the 'Profile' entry. This is for preferences synced with website on the server.">የመለያ ምርጫዎች</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">ሁሉም ጨዋታ</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">እርግጠኛ ነዎት?</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">የመመለስ አቅርቦትን ሰርዝ</string>
@@ -14,7 +15,7 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ውጤት የለም</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">ምንም ተጠቃሚ እየተከተሉ አይደለም።.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">እሺ</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">በጠረጴዛ ላይ</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">በጠረጴዛ ላይ</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" ያላቸው ተጫዋቾች</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">ግራ</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ቀኝ</string>
