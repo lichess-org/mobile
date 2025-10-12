@@ -855,8 +855,8 @@ Jelszavad megváltoztatásához kattints az üzenetben lévő linkre.</string>
   <string name="skipThisMove">Lépés kihagyása</string>
   <string name="next">Tovább</string>
   <string name="xWasPlayed">lépés: %s</string>
-  <string name="findBetterMoveForWhite">Találj egy jobb lépést világosnak</string>
-  <string name="findBetterMoveForBlack">Találj egy jobb lépést sötétnek</string>
+  <string name="findBetterMoveForWhite">Találj egy jobb lépést világossal</string>
+  <string name="findBetterMoveForBlack">Találj egy jobb lépést sötéttel</string>
   <string name="resumeLearning">Tanulás folytatása</string>
   <string name="youCanDoBetter">Van jobb lépés is</string>
   <string name="tryAnotherMoveForWhite">Próbálj mást lépni világossal</string>
@@ -883,7 +883,7 @@ Jelszavad megváltoztatásához kattints az üzenetben lévő linkre.</string>
   <string name="playVariationToCreateConditionalPremoves">Egy változat megjátszásával, hozzáadható feltételes előre megadott lépés</string>
   <string name="noConditionalPremoves">Nincs feltételes előre megadott lépés</string>
   <string name="playX">%s megjátszása</string>
-  <string name="challengeX">Kihívás %s</string>
+  <string name="challengeX">%s kihívása</string>
   <plurals name="andSaveNbPremoveLines">
     <item quantity="one">és %s változat mentése</item>
     <item quantity="other">és %s változat mentése</item>

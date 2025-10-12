@@ -319,7 +319,7 @@
   <string name="loginToChat">Inicia sesión para conversar</string>
   <string name="youHaveBeenTimedOut">Fuches silenciado temporalmente.</string>
   <string name="spectatorRoom">Sala do espectador</string>
-  <string name="composeMessage">Escribir</string>
+  <string name="composeMessage" comment="Appears as a button on user profiles. Pressing the button will let you send a message to that user. &quot;Message&quot; is used as a verb.&#10;&#10;This text used to state &quot;Compose message&quot;. Please shorten to just &quot;Message&quot; if you see a translation of the old version of the string.">Escribir</string>
   <string name="subject">Asunto</string>
   <string name="send">Enviar</string>
   <string name="incrementInSeconds">Incremento en segundos</string>

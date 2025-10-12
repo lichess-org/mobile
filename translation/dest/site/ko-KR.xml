@@ -300,7 +300,7 @@
   <string name="loginToChat">채팅하려면 로그인하세요</string>
   <string name="youHaveBeenTimedOut">채팅에서 타임아웃 되었습니다.</string>
   <string name="spectatorRoom">관전자 채팅</string>
-  <string name="composeMessage">메시지 작성</string>
+  <string name="composeMessage" comment="Appears as a button on user profiles. Pressing the button will let you send a message to that user. &quot;Message&quot; is used as a verb.&#10;&#10;This text used to state &quot;Compose message&quot;. Please shorten to just &quot;Message&quot; if you see a translation of the old version of the string.">메시지 작성</string>
   <string name="subject">제목</string>
   <string name="send">전송</string>
   <string name="incrementInSeconds">수 당 추가 시간(초)</string>
