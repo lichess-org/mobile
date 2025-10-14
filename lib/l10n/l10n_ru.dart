@@ -2145,7 +2145,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Этот аккаунт закрыт.';
 
   @override
-  String get gameSetup => 'Настройка игры';
+  String get gameSetup => 'Параметры игры';
 
   @override
   String get challengeAFriend => 'Бросить вызов другу';
@@ -2154,7 +2154,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get playAgainstComputer => 'Сыграть с компьютером';
 
   @override
-  String get gameMode => 'Игровой режим';
+  String get gameMode => 'Режим игры';
 
   @override
   String get createLobbyGame => 'Создать запрос на игру';

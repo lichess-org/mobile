@@ -40,19 +40,19 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Jó estét,  $param!';
+    return 'Szép estét, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Jó estét!';
+  String get mobileGoodEveningWithoutName => 'Szép estét';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Jó napot,  $param!';
+    return 'Szép napot, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Jó napot!';
+  String get mobileGoodDayWithoutName => 'Szép napot';
 
   @override
   String get mobileHideVariation => 'Változatok elrejtése';
@@ -129,7 +129,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSettingsClockPosition => 'Óra helye';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Beállítások';
+  String get mobileSettingsCustomBackgroundPresets => 'Téma előbeállítások';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Fogott figura célmezőjének kijelölése';
@@ -141,7 +141,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Négyzet';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Kezdőlap elemek';
+  String get mobileSettingsHomeWidgets => 'Kezdőlap widget-ek';
 
   @override
   String get mobileSettingsImmersiveMode => 'Teljes képernyős mód';
@@ -168,7 +168,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'Sakktábla megjelenítése';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Oldalra húzás több háttér megjelenítéséhez';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Húzd oldalra több háttér megjelenítéséhez';
 
   @override
   String get mobileSettingsPieceShiftMethodEither => 'Koppintás vagy húzás';
@@ -236,7 +236,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileWaitingForOpponentToJoin => 'Várakozás az ellenfél csatlakozására...';
 
   @override
-  String get mobileWatchTab => 'Megnézés';
+  String get mobileWatchTab => 'Néznivaló';
 
   @override
   String get mobileWelcomeToLichessApp => 'Üdvözlünk a Lichess-alkalmazásban!';
@@ -2086,7 +2086,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get settingsCloseAccountAreYouSure => 'Biztosan törlöd a fiókod?';
 
   @override
-  String get settingsThisAccountIsClosed => 'Ez a fiók zárolva van.';
+  String get settingsThisAccountIsClosed => 'Ezt a fiókot zároltuk.';
 
   @override
   String get gameSetup => 'Játékbeállítás';
@@ -4281,10 +4281,10 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get findBetterMoveForWhite => 'Találj egy jobb lépést világosnak';
+  String get findBetterMoveForWhite => 'Találj egy jobb lépést világossal';
 
   @override
-  String get findBetterMoveForBlack => 'Találj egy jobb lépést sötétnek';
+  String get findBetterMoveForBlack => 'Találj egy jobb lépést sötéttel';
 
   @override
   String get resumeLearning => 'Tanulás folytatása';
@@ -4356,7 +4356,7 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Kihívás $param';
+    return '$param kihívása';
   }
 
   @override

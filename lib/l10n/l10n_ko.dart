@@ -9,7 +9,7 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => '계정 환경설정';
+  String get mobileAccountPreferences => '계정 환경 설정';
 
   @override
   String get mobileAccountPreferencesHelp => '이 환경설정은 Lichess 계정에 저장되며, 모든 기기에서 공유됩니다.';

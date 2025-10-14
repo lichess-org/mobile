@@ -524,7 +524,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get arenaOtherRules => 'Остала важна правила';
 
   @override
-  String get arenaThereIsACountdown => 'Постоји одбројавање за твој први потез. Не прављење потеза у овом периоду ће предати игру твом противнику.';
+  String get arenaThereIsACountdown => 'Постоји одбројавање за твој први потез. Не прављење потеза у овом периоду ће предати партију твом противнику.';
 
   @override
   String get arenaThisIsPrivate => 'Ово је приватни турнир';
@@ -666,9 +666,9 @@ class AppLocalizationsSr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Изједначење у првих $count потеза неће донети поене ниједном играчу.',
-      few: 'Изједначење у првих $count потеза неће донети поене ниједном играчу.',
-      one: 'Изједначење игре у првом $count потезу неће донети поене ни једном играчу.',
+      other: 'Ремизирање партије у првих $count потеза неће донети бодове ни једном играчу.',
+      few: 'Ремизирање партије у прва $count потеза неће донети бодове ни једном играчу.',
+      one: 'Ремизирање партије у првом $count потезу неће доносити бодове ни једном играчу.',
     );
     return '$_temp0';
   }
@@ -3970,7 +3970,7 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get yourRating => 'Ваш рејтинг';
+  String get yourRating => 'Твој рејтинг';
 
   @override
   String get cumulative => 'Кумулативно';
@@ -4382,19 +4382,19 @@ class AppLocalizationsSr extends AppLocalizations {
   String get clickHereToReadIt => 'Click here to read it';
 
   @override
-  String get sorry => 'Извините :(';
+  String get sorry => 'Извини :(';
 
   @override
-  String get weHadToTimeYouOutForAWhile => 'Морали смо Вас привремено избацити.';
+  String get weHadToTimeYouOutForAWhile => 'Морали смо ти дати тајм-аут на неко време.';
 
   @override
   String get why => 'Зашто?';
 
   @override
-  String get pleasantChessExperience => 'Желимо да свима обезбедимо пријатно искуство у шаху.';
+  String get pleasantChessExperience => 'Циљамо да обезбедимо пријатно искуство шаха за све.';
 
   @override
-  String get goodPractice => 'Баш због тога, ми се морамо потрудити да се сви играчи држе добре праксе.';
+  String get goodPractice => 'Због тога, морамо се побринути да сви играчи прате добре праксе.';
 
   @override
   String get potentialProblem => 'Када је потенцијални проблем детектован, ми прикажемо ову поруку.';
@@ -4409,13 +4409,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get tryToWin => 'Пробај да победиш (или барем изједначиш) сваку партију коју одиграш.';
 
   @override
-  String get resignLostGames => 'Предај изгубљене игре (немој пуштати да време истекне).';
+  String get resignLostGames => 'Предај изгубљене партије (немој пуштати време да истекне).';
 
   @override
   String get temporaryInconvenience => 'Извињавамо се на привременој нелагодности,';
 
   @override
-  String get wishYouGreatGames => 'и желимо вам одличне партије на lichess.org.';
+  String get wishYouGreatGames => 'и желимо ти одличне партије на lichess.org.';
 
   @override
   String get thankYouForReading => 'Хвала на читању!';
@@ -4427,10 +4427,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get currentMatchScore => 'Скор тренутног меча';
 
   @override
-  String get agreementAssistance => 'Слажем се да никада нећу добијати помоћ током својих игара (од стране шаховског рачунара, књиге, базе података или неке друге особе).';
+  String get agreementAssistance => 'Слажем се да никада нећу добијати помоћ током својих партија (од стране шаховског рачунара, књиге, базе података или неке друге особе).';
 
   @override
-  String get agreementNice => 'Слажем се да ћу увек бити пун поштовања према другим играчима.';
+  String get agreementNice => 'Слажем се да ћу увек бити поштен према другим играчима.';
 
   @override
   String agreementMultipleAccounts(String param) {
@@ -4438,7 +4438,7 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy => 'Слажем се да ћу поштовати све Личес полисе.';
+  String get agreementPolicy => 'Слажем се да ћу поштовати све Lichess полисе.';
 
   @override
   String get searchOrStartNewDiscussion => 'Претражи или започни нови разговор';
@@ -5546,7 +5546,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String studyStudiesCreatedByX(String param) {
-    return 'Студије које је $param направио/ла';
+    return 'Студије које је направио/ла $param';
   }
 
   @override
@@ -5745,10 +5745,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyDeleteChapter => 'Избриши поглавље';
 
   @override
-  String get studyDeleteThisChapter => 'Избриши ово поглавље? Нема повратка назад!';
+  String get studyDeleteThisChapter => 'Избриши ово поглавље. Нема повратка назад!';
 
   @override
-  String get studyClearAllCommentsInThisChapter => 'Избриши све коментаре, глифове и нацртане облике у овом поглављу?';
+  String get studyClearAllCommentsInThisChapter => 'Очисти све коментаре, глифове и нацртане облике у овом поглављу';
 
   @override
   String get studyRightUnderTheBoard => 'Одмах испод табле';
@@ -5783,19 +5783,19 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyStartFromCustomPosition => 'Започни од жељене позиције';
 
   @override
-  String get studyLoadAGameByUrl => 'Учитајте партије преко линкова';
+  String get studyLoadAGameByUrl => 'Учитај партије преко линкова';
 
   @override
   String get studyLoadAPositionFromFen => 'Учитај позицију из FEN-а';
 
   @override
-  String get studyLoadAGameFromPgn => 'Учитајте партију из PGN-а';
+  String get studyLoadAGameFromPgn => 'Учитај партијe из PGN-а';
 
   @override
   String get studyAutomatic => 'Аутоматска';
 
   @override
-  String get studyUrlOfTheGame => 'Линкови партија, једна по реду';
+  String get studyUrlOfTheGame => 'Линкови партија, један по реду';
 
   @override
   String get studyCreateChapter => 'Направи поглавље';
@@ -5810,7 +5810,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyVisibility => 'Видљивост';
 
   @override
-  String get studyPublic => 'Јавно';
+  String get studyPublic => 'Јавна';
 
   @override
   String get studyUnlisted => 'Неприказано';
@@ -5819,7 +5819,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyInviteOnly => 'Само по позиву';
 
   @override
-  String get studyAllowCloning => 'Дозволите клонирање';
+  String get studyAllowCloning => 'Дозволи клонирање';
 
   @override
   String get studyNobody => 'Нико';
@@ -5828,7 +5828,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyOnlyMe => 'Само ја';
 
   @override
-  String get studyContributors => 'Сарадници';
+  String get studyContributors => 'Доприносиоци';
 
   @override
   String get studyMembers => 'Чланови';
@@ -5837,7 +5837,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyEveryone => 'Сви';
 
   @override
-  String get studyEnableSync => 'Омогући синхронизацију';
+  String get studyEnableSync => 'Омогући sync';
 
   @override
   String get studyYesKeepEveryoneOnTheSamePosition => 'Да: задржи све на истој позицији';

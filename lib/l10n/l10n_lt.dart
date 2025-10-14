@@ -2143,19 +2143,19 @@ class AppLocalizationsLt extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Ši paskyra uždaryta.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Partijos nustatymai';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Teikite iššūkį draugui';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Žaiskite prieš kompiuterį';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Žaidimo režimas';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Sukurkite žaidimo užklausą';
 
   @override
   String get youPlayAs => 'You play as';

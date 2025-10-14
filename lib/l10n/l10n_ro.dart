@@ -2117,7 +2117,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Contul este închis.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Configurare joc';
 
   @override
   String get challengeAFriend => 'Provoacă un prieten';
@@ -2164,16 +2164,16 @@ class AppLocalizationsRo extends AppLocalizations {
   String get strength => 'Putere';
 
   @override
-  String get toggleTheChat => 'Arată/Ascunde discuţia';
+  String get toggleTheChat => 'Arată/Ascunde discuția';
 
   @override
-  String get chat => 'Discuţie';
+  String get chat => 'Discuție';
 
   @override
   String get resign => 'Renunță';
 
   @override
-  String get checkmate => 'Şah mat';
+  String get checkmate => 'Șah mat';
 
   @override
   String get stalemate => 'Pat';
@@ -4156,10 +4156,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get background => 'Fundal';
 
   @override
-  String get light => 'Luminoasă';
+  String get light => 'Luminos';
 
   @override
-  String get dark => 'Culoare închisă';
+  String get dark => 'Întunecat';
 
   @override
   String get transparent => 'Transparent';

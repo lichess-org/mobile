@@ -24,7 +24,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileBoardSettings => 'Preferencias de taboleiro';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancelar a proposta de cambio';
+  String get mobileCancelTakebackOffer => 'Cancelar a proposta de retroceso de xogada';
 
   @override
   String get mobileClearButton => 'Borrar';

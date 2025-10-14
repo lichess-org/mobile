@@ -40,19 +40,19 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Mirëmbrëma, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Mirëmbrëma';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Mirëdita, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Mirëdita';
 
   @override
   String get mobileHideVariation => 'Fshihe variantin';
@@ -70,7 +70,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileNoSearchResults => 'Nuk ka rezultate';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Ju lutemi, kini parasysh se jo krejt veçoritë nga aplikacioni apo sajti i vjetër janë të përdorshëm aktualisht, por gjithë kohës po shtojmë veçori.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Ju nuk po ndiqni asnjë përdorues.';
@@ -120,25 +120,25 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileRecentSearches => 'Kërkime së fundi';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Hiqe faqerojtësin';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Analizë shërbyesi';
 
   @override
   String get mobileSettingsClockPosition => 'Pozicion sahati';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Paracaktime';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Rreth';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Katror';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -162,10 +162,10 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'Blur the image';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Fshihe fushën';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Shfaqe fushën';
 
   @override
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
@@ -183,7 +183,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Shfa anë';
 
   @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
@@ -239,7 +239,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileWatchTab => 'Shiheni';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Mirë se vini te aplikacioni Lichess!';
 
   @override
   String get activityActivity => 'Aktiviteti';
@@ -2089,22 +2089,22 @@ class AppLocalizationsSq extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Kjo llogari është e mbyllur';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Ujdisje loje';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Sfidoni një shok';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Luani kundër kompjuterit';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Mënyrë loje';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Krijoni loji holli';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'Ju luani si';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Për të ftuar dikë të luajë, jepni këtë URL';
@@ -2880,7 +2880,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get exportGames => 'Eksporto lojërat';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'Filtër vlerësimesh';
 
   @override
   String get thisAccountViolatedTos => 'Kjo llogari ka shkelur Kushtet e Shërbimit të Lichess';
@@ -2954,7 +2954,7 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Filtrat e vlerësimit janë kyçur, ngaqë vlerësimi juaj s’është i qëndrueshëm. Luajtja e lojërave të vlerësuara do të rritë qëndrueshmërinë.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3165,7 +3165,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get winner => 'Fituesi';
 
   @override
-  String get standings => 'Standings';
+  String get standings => 'Renditja';
 
   @override
   String get createANewTournament => 'Krijoni një turne të ri';
@@ -4214,7 +4214,7 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return 'Your rating is $param';
+    return 'Vlerësimi juaj është $param';
   }
 
   @override
@@ -4356,7 +4356,7 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return 'Sfidoni $param';
   }
 
   @override
@@ -4766,22 +4766,22 @@ class AppLocalizationsSq extends AppLocalizations {
   String get disableBlindMode => 'Çaktivizo mënyrën për të verbër';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Kopjoje në të papastër';
 
   @override
-  String get online => 'online';
+  String get online => 'në linjë';
 
   @override
-  String get offline => 'offline';
+  String get offline => 'jashtë linje';
 
   @override
-  String get search => 'Search';
+  String get search => 'Kërko';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'Spastro kërkimin';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'Etiketa';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5612,7 +5612,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopjo PGN';
 
   @override
-  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+  String get studyCopyRawChapterPgn => 'Kopjo PNG të Papërpunuar';
 
   @override
   String get studyDownloadGame => 'Shkarko lojën';
