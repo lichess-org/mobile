@@ -5,7 +5,7 @@
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Todas as partidas</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Estás seguro?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Preferencias de taboleiro</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancelar a proposta de cambio</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancelar a proposta de retroceso de xogada</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Borrar</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Borrar a xogada gardada</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Unirse a unha partida</string>

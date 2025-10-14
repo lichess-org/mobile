@@ -7,14 +7,19 @@
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Spastroje lëvizjen e ruajtur</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Merrni pjesë në një lojë</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Përshtypje</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Mirëmbrëma, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Mirëmbrëma</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Mirëdita, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Mirëdita</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Fshihe variantin</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kreu</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Transmetues drejtpërsëdrejti</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Nuk ka rezultate</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Ju lutemi, kini parasysh se jo krejt veçoritë nga aplikacioni apo sajti i vjetër janë të përdorshëm aktualisht, por gjithë kohës po shtojmë veçori.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Ju nuk po ndiqni asnjë përdorues.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Mbi tabelën</string>
+  <string name="overTheBoard" comment="Used in the app's main play menu to launch the Over the board game mode.&#10;&#10;This lets you play a game offline on the device you are using the app on.">Mbi tabelën</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Lojtarët me \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Majtas</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Djathtas</string>
@@ -27,9 +32,17 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Luani enigmë nga hapjet tuaja të parapëlqyera, ose zgjidhni një temë.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ushtrime</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Kërkime së fundi</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Hiqe faqerojtësin</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">Analizë shërbyesi</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Pozicion sahati</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Paracaktime</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Rreth</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Katror</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Modaliteti zhytës</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Fshihe UI-n e sistemit kur luhet. Përdoreni këtë nëse ju bezdisin gjestet e sistemit për lëvizje në skaje të ekranit. Vlen për skena lojërash dhe puzzle-sh.</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Fshihe fushën</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Shfaqe fushën</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Shfa anë</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Rregullime</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Ndani PGN me të tjerë</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Ndani URL loje me të tjerë</string>
@@ -45,4 +58,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Varianti %s nuk mbulohet në këtë version.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Po pritet që të vijë kundërshtari...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Shiheni</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Mirë se vini te aplikacioni Lichess!</string>
 </resources>
