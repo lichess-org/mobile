@@ -20,7 +20,9 @@ class EngineDepth extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
         .watch(engineEvaluationProvider);
-    final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
+    final eval = localEval?.threatMode == true
+        ? localEval
+        : pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     final color =
         engineName ==
