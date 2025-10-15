@@ -131,7 +131,7 @@ class OnlineFriends extends _$OnlineFriends {
       final patronColor = friends.length == patronColors.length ? patronColors[i] as int? : null;
       final user = _parseFriend(
         v.toString(),
-        // temporary fix for patron colors being sent as 0 when the user is not a patron
+        // patron colors here being sent as 0 when the user is not a patron
         patronColor != null && patronColor > 0 ? patronColor : null,
       );
       final isPlaying = playing.contains(user.id.toString());
