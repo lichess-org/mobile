@@ -585,4 +585,52 @@ void main() {
       containsPair(Square.h1, predicate<Annotation>((annotation) => annotation.symbol == '??')),
     ]);
   });
+
+  testWidgets('Displays correct annotation for castling on correct square', (
+    WidgetTester tester,
+  ) async {
+    final mockRepository = MockStudyRepository();
+    when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+      (_) async => (
+        makeStudy(
+          chapter: makeChapter(
+            id: const StudyChapterId('1'),
+            orientation: Side.white,
+            gamebook: false,
+          ),
+        ),
+        '''
+[Event "Test castling annotations"]
+[Date "2025.09.28"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "Test castling annotations"]
+[FEN "r3kb1r/p2nqppp/5n2/1B2p1B1/4P3/1Q6/PPP2PPP/R3K2R w KQkq - 1 12"]
+
+12. O-O-O!!
+''',
+      ),
+    );
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const StudyScreen(id: testId),
+      overrides: [studyRepositoryProvider.overrideWith((ref) => mockRepository)],
+    );
+    await tester.pumpWidget(app);
+    // Wait for study to load
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Next'));
+    await tester.pumpAndSettle(); // Wait for O-O-O move to be played
+
+    final board = tester.widget<Chessboard>(find.byType(Chessboard));
+    expect(board.annotations!.length, 1);
+    expect(
+      board.annotations,
+      containsPair(Square.c1, predicate<Annotation>((annotation) => annotation.symbol == '!!')),
+    );
+  });
 }

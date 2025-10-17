@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_prefs.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -123,7 +124,10 @@ abstract class AnalysisBoardState<
           : null,
       shapes: userShapes.union(_bestMoveShapes(boardPrefs.pieceSet.assets)).union(extraShapes),
       annotations: sanMove != null && annotation != null
-          ? IMap({sanMove.move.to: annotation})
+          ? (sanMove.san == 'O-O' || sanMove.san == 'O-O-O') &&
+                    altCastles.containsKey(sanMove.move.uci)
+                ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
+                : IMap({sanMove.move.to: annotation})
           : null,
       settings: boardPrefs.toBoardSettings().copyWith(
         borderRadius: widget.boardRadius,
