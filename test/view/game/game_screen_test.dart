@@ -805,8 +805,9 @@ void main() {
           TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
             'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle',
             (ByteData? data) async {
-              final decodedMessages = pigeonCodec.decodeMessage(data);
-              messages.add(decodedMessages.single as ToggleMessage);
+              final decodedMessages = (pigeonCodec.decodeMessage(data) as List)
+                  .cast<ToggleMessage>();
+              messages.add(decodedMessages.single);
               return data;
             },
           );
