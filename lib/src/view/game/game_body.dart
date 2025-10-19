@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -35,6 +36,7 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingPosition = ({String? fen, Move? lastMove, Side? orientation});
 
@@ -105,6 +107,11 @@ class GameBody extends ConsumerWidget {
         debugPrint('SEVERE: [GameBody] could not load game data; $e\n$s');
         return const LoadGameError('Sorry, we could not load the game. Please try again later.');
       case AsyncData(value: final gameState, isRefreshing: false):
+        if (gameState.game.status != GameStatus.created &&
+            gameState.game.status != GameStatus.started) {
+          WakelockPlus.disable();
+        }
+
         final youAre = gameState.game.youAre ?? Side.white;
 
         // If playing against Stockfish, user is null
