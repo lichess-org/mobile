@@ -101,8 +101,9 @@ class ClockToolController extends _$ClockToolController {
     );
     // Start the countdown only if either this is not a zero-start clock
     // or the new active side has already made at least one move.
-    final Duration initialOfNewActive =
-    playerType.opposite == ClockSide.top ? state.options.topTime : state.options.bottomTime;
+    final Duration initialOfNewActive = playerType.opposite == ClockSide.top
+        ? state.options.topTime
+        : state.options.bottomTime;
     final bool hasNewActiveMoved =
         (playerType.opposite == ClockSide.top ? state.topMoves : state.bottomMoves) > 0;
     if (initialOfNewActive.inMilliseconds != 0 || hasNewActiveMoved) {
@@ -111,7 +112,6 @@ class ClockToolController extends _$ClockToolController {
       _clock.stop();
     }
   }
-
 
   void updateDuration(ClockSide playerType, Duration duration) {
     if (state.flagged != null || state.paused) {
@@ -185,7 +185,7 @@ class ClockToolController extends _$ClockToolController {
     // If the new active side starts at zero time, do not start their countdown yet.
     // We only begin decreasing a side's clock after that side has completed at least one move.
     // This makes 0+increment modes usable.
-    if(initialOfStartingPlayer.inMilliseconds == 0) {
+    if (initialOfStartingPlayer.inMilliseconds == 0) {
       _clock.stop();
     } else {
       _clock.startSide(playerType.opposite.chessClockSide);
@@ -213,7 +213,6 @@ class ClockToolController extends _$ClockToolController {
     }
     state = state.copyWith(paused: false);
   }
-
 
   void toggleOrientation(ClockOrientation clockOrientation) {
     state = state.copyWith(clockOrientation: clockOrientation);
