@@ -61,6 +61,7 @@
   <string name="studyPgn">PGN dello studio</string>
   <string name="chapterPgn">PGN del capitolo</string>
   <string name="copyChapterPgn">Copia in PGN</string>
+  <string name="copyRawChapterPgn">Copia PGN grezzo</string>
   <string name="downloadGame">Scarica partita</string>
   <string name="studyUrl">URL dello studio</string>
   <string name="currentChapterUrl">URL del capitolo corrente</string>
