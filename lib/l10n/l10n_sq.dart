@@ -9,10 +9,10 @@ class AppLocalizationsSq extends AppLocalizations {
   AppLocalizationsSq([String locale = 'sq']) : super(locale);
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Parapëlqime llogarie';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Këto parapëlqime aplikohen te llogaria juaj Lichess dhe do të përdoren në krejt pajisjet.';
 
   @override
   String get mobileAllGames => 'Krejt lojërat';
@@ -21,7 +21,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileAreYouSure => 'Jeni i sigurt?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Rregullime fushe';
 
   @override
   String get mobileCancelTakebackOffer => 'Anulojeni ofertën për prapakthim';
@@ -132,7 +132,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSettingsCustomBackgroundPresets => 'Paracaktime';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Vendndodhje e synuar për gurin e tërhequr';
 
   @override
   String get mobileSettingsDraggedTargetCircle => 'Rreth';
@@ -141,7 +141,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Katror';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Widget-e kreu';
 
   @override
   String get mobileSettingsImmersiveMode => 'Modaliteti zhytës';
@@ -150,16 +150,16 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSettingsImmersiveModeSubtitle => 'Fshihe UI-n e sistemit kur luhet. Përdoreni këtë nëse ju bezdisin gjestet e sistemit për lëvizje në skaje të ekranit. Vlen për skena lojërash dhe puzzle-sh.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Gurë të fituar';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Zgjidhni një figurë';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Sfondet e përshtatur funksionojnë vetëm nën mënyrën e errët. Rekomandohet një figurë e errët.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Turbulloje pamjen';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Fshihe fushën';
@@ -168,28 +168,28 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'Shfaqe fushën';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Që të shfaqen sfonde të tjerë, fërkojeni';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Ose prekeni, ose tërhiqeni';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Prekni dy kuadrate';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Vizatim formash';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Vizatoni figura duke përdorur dy gishta: mbajeni njërin gisht në një kuadrat të zbrazët dhe lëvizni gishtin tjetër që të vizatoni një formë.';
 
   @override
   String get mobileSettingsShowBorder => 'Shfa anë';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Reagim me prekje';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Kur është i aktivizuar, pajisja do të dridhet për pak, kur lëvizni apo fitoni një gur.';
 
   @override
   String get mobileSettingsTab => 'Rregullime';
@@ -1072,7 +1072,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get coordinatesNameSquare => 'Emërtoni kuadratin';
 
   @override
-  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Ushtrohuni vetëm me disa shtylla & rreshta';
 
   @override
   String get patronDonate => 'Dhuroni';
@@ -2101,7 +2101,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get gameMode => 'Mënyrë loje';
 
   @override
-  String get createLobbyGame => 'Krijoni loji holli';
+  String get createLobbyGame => 'Krijoni lojë holli';
 
   @override
   String get youPlayAs => 'Ju luani si';
@@ -5969,7 +5969,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get studyAnnotatePositionTitle => 'Vini shënim për një pozicion';
 
   @override
-  String get studyAnnotatePositionText => 'Click the !? button, or a right click on the move list on the right.<br>Annotation glyphs are shared and saved.';
+  String get studyAnnotatePositionText => 'Klikoni butonin !? , ose djathtasklikoni mbi listën e lëvizjeve djathtas.<br>Tregohen shenja shënimi dhe ruhen.';
 
   @override
   String get studyConclusionTitle => 'Faleminderit për kohën që harxhoni';

@@ -2073,7 +2073,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get gameMode => 'Chế độ chơi';
 
   @override
-  String get createLobbyGame => 'Tạo sảnh ván đấu';
+  String get createLobbyGame => 'Tạo ván đấu sảnh';
 
   @override
   String get youPlayAs => 'Bạn cầm quân';

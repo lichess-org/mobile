@@ -2101,7 +2101,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get gameMode => 'Pelityyppi';
 
   @override
-  String get createLobbyGame => 'Luo peli aulaan';
+  String get createLobbyGame => 'Luo peli';
 
   @override
   String get youPlayAs => 'Nappuloidesi väri';

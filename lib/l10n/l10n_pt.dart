@@ -8350,7 +8350,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get gameMode => 'Tipo de partida';
 
   @override
-  String get createLobbyGame => 'Criar jogo na sala de espera';
+  String get createLobbyGame => 'Criar partida na sala de espera';
 
   @override
   String get youPlayAs => 'Você joga com as';

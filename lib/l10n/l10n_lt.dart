@@ -2155,10 +2155,10 @@ class AppLocalizationsLt extends AppLocalizations {
   String get gameMode => 'Žaidimo režimas';
 
   @override
-  String get createLobbyGame => 'Sukurkite žaidimo užklausą';
+  String get createLobbyGame => 'Sukurti žaidimą laukimo salėje';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'Jūs žaidžiate kaip';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Norėdami pakviesti varžovą, pasidalinkite šiuo adresu';
@@ -2223,7 +2223,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get createAGame => 'Kurti žaidimą';
 
   @override
-  String get createTheGame => 'Create the game';
+  String get createTheGame => 'Sukurti žaidimą';
 
   @override
   String get whiteIsVictorious => 'Baltieji laimėjo';
@@ -2372,7 +2372,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get copyVariationPgn => 'Kopijuoti variacijos PGN';
 
   @override
-  String get copyMainLinePgn => 'Copy mainline PGN';
+  String get copyMainLinePgn => 'Kopijuoti pagrindinės linijos PGN';
 
   @override
   String get move => 'Ėjimas';
@@ -2562,7 +2562,7 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Joined $param';
+    return 'Prisijungė $param';
   }
 
   @override
@@ -2934,7 +2934,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get exportGames => 'Eksportuoti partijas';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'Reitingo filtras';
 
   @override
   String get thisAccountViolatedTos => 'Ši paskyra pažeidė „Lichess“ naudojimo sąlygas';
@@ -2949,7 +2949,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get proposeATakeback => 'Prašyti leidimo atšaukti ėjimą';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'Baltieji siūlo atstatyti';
 
   @override
   String get blackProposesTakeback => 'Black proposes takeback';

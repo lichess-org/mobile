@@ -2101,7 +2101,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get gameMode => 'Jokuaren modua';
 
   @override
-  String get createLobbyGame => 'Sortu partidaren itxarongela';
+  String get createLobbyGame => 'Sortu egongelako partida';
 
   @override
   String get youPlayAs => 'Kolore hau izango duzu';

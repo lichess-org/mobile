@@ -2101,7 +2101,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get gameMode => 'Játékmód';
 
   @override
-  String get createLobbyGame => 'Játszma létrehozása';
+  String get createLobbyGame => 'Játék létrehozása';
 
   @override
   String get youPlayAs => 'Úgy játszol, mint';

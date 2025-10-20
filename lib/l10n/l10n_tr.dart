@@ -2089,19 +2089,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Hesap kapatılmıştır.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Oyun ayarları';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Bir arkadaşınız oynayın';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Bilgisayara karsı oyna';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Oyun modü';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Oyun lobisi oluştur';
 
   @override
   String get youPlayAs => 'You play as';
@@ -4769,16 +4769,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get copyToClipboard => 'Panoya kopyala';
 
   @override
-  String get online => 'online';
+  String get online => 'çevrımıcı';
 
   @override
-  String get offline => 'offline';
+  String get offline => 'çevrimdışı';
 
   @override
-  String get search => 'Search';
+  String get search => 'Ara';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'Aramayı temizle';
 
   @override
   String get tags => 'Tags';

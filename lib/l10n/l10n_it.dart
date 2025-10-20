@@ -132,7 +132,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsCustomBackgroundPresets => 'Predefiniti';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Obiettivo pezzo trascinato';
 
   @override
   String get mobileSettingsDraggedTargetCircle => 'Circolare';
@@ -141,7 +141,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Quadrato';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Widget nella home';
 
   @override
   String get mobileSettingsImmersiveMode => 'Modalità immersiva';
@@ -162,7 +162,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsPickAnImageBlur => 'Offusca l\'immagine';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Nascondi scacchiera';
 
   @override
   String get mobileSettingsPickAnImageShowBoard => 'Mostra la scacchiera';
@@ -174,19 +174,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodEither => 'Tocca o trascina';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tocca due caselle';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Disegno della forma';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Disegna le forme usando due dita: mantenere un dito su un quadrato vuoto e trascinare un altro dito per disegnare una forma.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Mostra bordo';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Feedback tattile';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle => 'Se attivato, il dispositivo vibrerà brevemente quando sposti o catturi un pezzo.';
@@ -2101,7 +2101,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get gameMode => 'Modalità di gioco';
 
   @override
-  String get createLobbyGame => 'Crea una partita nella lobby';
+  String get createLobbyGame => 'Create lobby game';
 
   @override
   String get youPlayAs => 'Giochi come';
@@ -2880,7 +2880,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get exportGames => 'Esporta le partite';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'Filtro punteggi';
 
   @override
   String get thisAccountViolatedTos => 'Questo account ha violato i termini di servizio di Lichess';
@@ -2954,7 +2954,7 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'I filtri dei punteggi sono bloccati perché la tua valutazione non è stabile. Giocare partite classificate aumenterà la stabilità.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -4214,7 +4214,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return 'Your rating is $param';
+    return 'Il tuo punteggio è $param';
   }
 
   @override
@@ -4356,7 +4356,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return 'Sfida $param';
   }
 
   @override
@@ -4769,19 +4769,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get copyToClipboard => 'Copia negli appunti';
 
   @override
-  String get online => 'online';
+  String get online => 'in linea';
 
   @override
   String get offline => 'offline';
 
   @override
-  String get search => 'Search';
+  String get search => 'Cerca';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'Cancella ricerca';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'Tag';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5612,7 +5612,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyCopyChapterPgn => 'Copia in PGN';
 
   @override
-  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+  String get studyCopyRawChapterPgn => 'Copia PGN grezzo';
 
   @override
   String get studyDownloadGame => 'Scarica partita';

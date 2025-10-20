@@ -2194,13 +2194,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get blackIsVictorious => 'Црни је победио';
 
   @override
-  String get youPlayTheWhitePieces => 'Играте са белим фигурама';
+  String get youPlayTheWhitePieces => 'Играш белим фигурама';
 
   @override
-  String get youPlayTheBlackPieces => 'Играте са црним фигурама';
+  String get youPlayTheBlackPieces => 'Играш црним фигурама';
 
   @override
-  String get itsYourTurn => 'Ти си на потезу!';
+  String get itsYourTurn => 'Твој је потез!';
 
   @override
   String get cheatDetected => 'Детектована превара';
@@ -3644,7 +3644,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get studyMenu => 'Проучи';
 
   @override
-  String get practice => 'Вежбање';
+  String get practice => 'Вежбај';
 
   @override
   String get community => 'Заједница';
@@ -4804,9 +4804,9 @@ class AppLocalizationsSr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Ваш противник је напустио игру. Победа ће Вам бити приписана за $count секунди.',
-      few: 'Ваш противник је напустио игру. Победа ће Вам бити приписана за $count секунди.',
-      one: 'Ваш противник је напустио игру. Победа ће Вам бити приписана за $count секунди.',
+      other: 'Твој противник је напустио партију. Можеш прогласити победу за $count секунди.',
+      few: 'Твој противник је напустио партију. Можеш прогласити победу за $count секунде.',
+      one: 'Твој противник је напустио партију. Можеш прогласити победу за $count секунд.',
     );
     return '$_temp0';
   }
@@ -5869,7 +5869,7 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get studyWhereDoYouWantToStudyThat => 'Где желите то проучити?';
+  String get studyWhereDoYouWantToStudyThat => 'Где желиш то проучити?';
 
   @override
   String get studyGoodMove => 'Добар потез';

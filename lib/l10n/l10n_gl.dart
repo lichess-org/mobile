@@ -2101,7 +2101,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get gameMode => 'Modo de xogo';
 
   @override
-  String get createLobbyGame => 'Crear un reto';
+  String get createLobbyGame => 'Crear unha partida na sala de espera';
 
   @override
   String get youPlayAs => 'Xogas coas';

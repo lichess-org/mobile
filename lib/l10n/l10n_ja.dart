@@ -1227,7 +1227,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesInGameOnly => '対局中のみ';
 
   @override
-  String get preferencesExceptInGame => 'チェスゲームリクエストアクセプトする';
+  String get preferencesExceptInGame => 'ゲーム中のみ非表示';
 
   @override
   String get preferencesChessClock => '時間表示';

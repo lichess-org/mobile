@@ -186,7 +186,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Zobraziť okraj';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Hmatová odozva';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
@@ -4822,7 +4822,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get disableBlindMode => 'Zrušiť režim naslepo';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Kopírovať do schránky';
 
   @override
   String get online => 'online';
@@ -4831,13 +4831,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get offline => 'offline';
 
   @override
-  String get search => 'Search';
+  String get search => 'Hľadať';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'Vymazať vyhľadávanie';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'Značky';
 
   @override
   String opponentLeftCounter(int count) {

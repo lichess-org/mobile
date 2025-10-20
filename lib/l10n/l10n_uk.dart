@@ -2157,7 +2157,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get gameMode => 'Режим гри';
 
   @override
-  String get createLobbyGame => 'Створити ігрове лобі';
+  String get createLobbyGame => 'Create lobby game';
 
   @override
   String get youPlayAs => 'Ви граєте за';

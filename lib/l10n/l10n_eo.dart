@@ -4754,16 +4754,16 @@ class AppLocalizationsEo extends AppLocalizations {
   String get nothingToSeeHere => 'Nenio videbla ĉi tie nuntempe.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistikoj';
 
   @override
   String get accessibility => 'Alireblo';
 
   @override
-  String get enableBlindMode => 'Enable blind mode';
+  String get enableBlindMode => 'Aktivigi blindulan reĝimon';
 
   @override
-  String get disableBlindMode => 'Disable blind mode';
+  String get disableBlindMode => 'Malaktivigi blindulan reĝimon';
 
   @override
   String get copyToClipboard => 'Kopii al tondujo';
@@ -5612,7 +5612,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyCopyChapterPgn => 'Kopii PGN';
 
   @override
-  String get studyCopyRawChapterPgn => 'Copy Raw PGN';
+  String get studyCopyRawChapterPgn => 'Kopii PNG sen notoj';
 
   @override
   String get studyDownloadGame => 'Elŝuti ludon';
@@ -5958,7 +5958,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyStudyChaptersText => 'A study can contain several chapters.<br>Each chapter has a distinct initial position and move tree.';
 
   @override
-  String get studyCommentPositionTitle => 'Comment on a position';
+  String get studyCommentPositionTitle => 'Komenti pozicion';
 
   @override
   String studyCommentPositionText(String param) {
@@ -6002,7 +6002,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
-  String get studyFromFenStringTitle => 'From a FEN string';
+  String get studyFromFenStringTitle => 'El teksto FEN';
 
   @override
   String get studyFromFenStringText => 'Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.';

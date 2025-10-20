@@ -2101,7 +2101,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get gameMode => 'Spelmodus';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Maak een lobby spel aan';
 
   @override
   String get youPlayAs => 'Je speelt als';
@@ -2880,7 +2880,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get exportGames => 'Partijen exporteren';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'Filter van rating';
 
   @override
   String get thisAccountViolatedTos => 'Dit account heeft de Lichess Servicevoorwaarden geschonden';
@@ -4214,7 +4214,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return 'Your rating is $param';
+    return 'Uw rating is $param';
   }
 
   @override

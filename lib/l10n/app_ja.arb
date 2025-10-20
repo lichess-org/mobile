@@ -305,7 +305,7 @@
   "preferencesDisplayBoardResizeHandle": "盤サイズ変更マークを表示",
   "preferencesOnlyOnInitialPosition": "ゲーム開始時のみ",
   "preferencesInGameOnly": "対局中のみ",
-  "preferencesExceptInGame": "チェスゲームリクエストアクセプトする",
+  "preferencesExceptInGame": "ゲーム中のみ非表示",
   "preferencesChessClock": "時間表示",
   "preferencesTenthsOfSeconds": "0.1秒単位で時間表示",
   "preferencesWhenTimeRemainingLessThanTenSeconds": "持時間が残り10秒以下の場合",

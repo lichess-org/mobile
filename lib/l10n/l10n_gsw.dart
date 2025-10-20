@@ -2101,7 +2101,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get gameMode => 'Schpielart';
 
   @override
-  String get createLobbyGame => 'Neus Schpiel erschtelle';
+  String get createLobbyGame => 'Es Schpiel erschtelle';
 
   @override
   String get youPlayAs => 'Du schpillsch mit';

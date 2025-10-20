@@ -2101,7 +2101,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get gameMode => 'Mode de la partie';
 
   @override
-  String get createLobbyGame => 'Créer une partie au salon';
+  String get createLobbyGame => 'Créer une partie dans le salon';
 
   @override
   String get youPlayAs => 'Couleur';
