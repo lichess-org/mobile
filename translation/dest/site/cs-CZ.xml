@@ -350,7 +350,7 @@
   <string name="loginToChat">Přihlaš se k chatování</string>
   <string name="youHaveBeenTimedOut">Byli jste odhlášeni.</string>
   <string name="spectatorRoom">Chat diváků</string>
-  <string name="composeMessage" comment="Appears as a button on user profiles. Pressing the button will let you send a message to that user. &quot;Message&quot; is used as a verb.&#10;&#10;This text used to state &quot;Compose message&quot;. Please shorten to just &quot;Message&quot; if you see a translation of the old version of the string.">Napsat zprávu</string>
+  <string name="composeMessage">Napsat zprávu</string>
   <string name="subject">Předmět</string>
   <string name="send">Odeslat</string>
   <string name="incrementInSeconds">Bonus za tah (v sekundách)</string>

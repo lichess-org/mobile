@@ -23,9 +23,9 @@
   <string name="createTheGame">Започни партију</string>
   <string name="whiteIsVictorious">Бели је поебдио</string>
   <string name="blackIsVictorious">Црни је победио</string>
-  <string name="youPlayTheWhitePieces">Играте са белим фигурама</string>
-  <string name="youPlayTheBlackPieces">Играте са црним фигурама</string>
-  <string name="itsYourTurn">Ти си на потезу!</string>
+  <string name="youPlayTheWhitePieces">Играш белим фигурама</string>
+  <string name="youPlayTheBlackPieces">Играш црним фигурама</string>
+  <string name="itsYourTurn">Твој је потез!</string>
   <string name="cheatDetected">Детектована превара</string>
   <string name="kingInTheCenter">Краљ у центру</string>
   <string name="threeChecks">Три шаха</string>
@@ -37,9 +37,9 @@
   <string name="whitePlays">Бели на потезу</string>
   <string name="blackPlays">Црни на потезу</string>
   <plurals name="opponentLeftCounter">
-    <item quantity="one">Ваш противник је напустио игру. Победа ће Вам бити приписана за %s секунди.</item>
-    <item quantity="few">Ваш противник је напустио игру. Победа ће Вам бити приписана за %s секунди.</item>
-    <item quantity="other">Ваш противник је напустио игру. Победа ће Вам бити приписана за %s секунди.</item>
+    <item quantity="one">Твој противник је напустио партију. Можеш прогласити победу за %s секунд.</item>
+    <item quantity="few">Твој противник је напустио партију. Можеш прогласити победу за %s секунде.</item>
+    <item quantity="other">Твој противник је напустио партију. Можеш прогласити победу за %s секунди.</item>
   </plurals>
   <string name="opponentLeftChoices">Твој противник је изашао из партије. Можеш прогласити победу, прогласити партију ремијем или чекати.</string>
   <string name="forceResignation">Прогласи победу</string>
@@ -309,7 +309,7 @@
   <string name="loginToChat">Пријави се да ћаскаш</string>
   <string name="youHaveBeenTimedOut">Тајм-аутован/а си.</string>
   <string name="spectatorRoom">Соба за гледаоце</string>
-  <string name="composeMessage" comment="Appears as a button on user profiles. Pressing the button will let you send a message to that user. &quot;Message&quot; is used as a verb.&#10;&#10;This text used to state &quot;Compose message&quot;. Please shorten to just &quot;Message&quot; if you see a translation of the old version of the string.">Састави поруку</string>
+  <string name="composeMessage">Састави поруку</string>
   <string name="subject">Наслов</string>
   <string name="send">Пошаљи</string>
   <string name="incrementInSeconds">Додатак у секундама</string>
@@ -644,7 +644,7 @@
   <string name="opponent">Противник</string>
   <string name="learnMenu">Учи</string>
   <string name="studyMenu">Проучи</string>
-  <string name="practice">Вежбање</string>
+  <string name="practice">Вежбај</string>
   <string name="community">Заједница</string>
   <string name="tools">Алати</string>
   <string name="increment">Додатак</string>

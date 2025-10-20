@@ -3,7 +3,7 @@
   <string name="gameSetup">게임 설정</string>
   <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">친구에게 도전</string>
   <string name="gameMode">게임 모드</string>
-  <string name="createLobbyGame">로비 게임 만들기</string>
+  <string name="createLobbyGame" comment="One of three buttons on the home page. Opens the modal to create a game that goes in the lobby.">로비 게임 만들기</string>
   <string name="youPlayAs">당신은 재생</string>
   <string name="toInviteSomeoneToPlayGiveThisUrl">이 URL로 친구를 초대하세요</string>
   <string name="gameOver">대국 종료</string>
@@ -300,7 +300,7 @@
   <string name="loginToChat">채팅하려면 로그인하세요</string>
   <string name="youHaveBeenTimedOut">채팅에서 타임아웃 되었습니다.</string>
   <string name="spectatorRoom">관전자 채팅</string>
-  <string name="composeMessage" comment="Appears as a button on user profiles. Pressing the button will let you send a message to that user. &quot;Message&quot; is used as a verb.&#10;&#10;This text used to state &quot;Compose message&quot;. Please shorten to just &quot;Message&quot; if you see a translation of the old version of the string.">메시지 작성</string>
+  <string name="composeMessage">메시지 작성</string>
   <string name="subject">제목</string>
   <string name="send">전송</string>
   <string name="incrementInSeconds">수 당 추가 시간(초)</string>
