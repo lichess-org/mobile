@@ -21,10 +21,14 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
-final _followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, IList<UserStatus>)>((
+final followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, IList<UserStatus>)>((
   ref,
 ) async {
   final following = await ref.withClient((client) => RelationRepository(client).getFollowing());
+  if (following.isEmpty) {
+    return (IList<User>(), IList<UserStatus>());
+  }
+
   final statuses = await ref
       .read(userRepositoryProvider)
       .getUsersStatuses(following.map((user) => user.id).toISet());
@@ -59,7 +63,7 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final followingAndOnlines = ref.watch(_followingStatusesProvider);
+    final followingAndOnlines = ref.watch(followingStatusesProvider);
 
     switch (followingAndOnlines) {
       case AsyncData(:final value):
@@ -73,8 +77,12 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
                   text: context.l10n.nbFriendsOnline(
                     value.$2.where((status) => status.online ?? false).length,
                   ),
+                  key: const Key('online_tab'),
                 ),
-                Tab(text: context.l10n.nbFollowing(value.$1.length)),
+                Tab(
+                  text: context.l10n.nbFollowing(value.$1.length),
+                  key: const Key('following_tab'),
+                ),
               ],
             ),
           ),
@@ -173,6 +181,7 @@ class _Online extends ConsumerWidget {
     switch (onlineFriends) {
       case AsyncData(:final value):
         return ListView.separated(
+          key: const Key('online_tab_view'),
           itemCount: value.length,
           separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
               ? const PlatformDivider(height: 1)
@@ -192,12 +201,13 @@ class _Following extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final followingAndOnlines = ref.watch(_followingStatusesProvider);
+    final followingAndOnlines = ref.watch(followingStatusesProvider);
 
     switch (followingAndOnlines) {
       case AsyncData(:final value):
         IList<User> following = value.$1;
         return StatefulBuilder(
+          key: const Key('following_tab_view'),
           builder: (BuildContext context, StateSetter setState) {
             if (following.isEmpty) {
               return Center(child: Text(context.l10n.mobileNotFollowingAnyUser));
@@ -253,7 +263,7 @@ class _Following extends ConsumerWidget {
         );
       case AsyncError(:final error, :final stackTrace):
         debugPrint('SEVERE: [FriendScreen] could not load following users; $error\n$stackTrace');
-        return FullScreenRetryRequest(onRetry: () => ref.invalidate(_followingStatusesProvider));
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingStatusesProvider));
       case _:
         return const CenterLoadingIndicator();
     }
