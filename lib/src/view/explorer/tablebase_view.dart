@@ -269,7 +269,7 @@ class _TablebaseMoveRow extends StatelessWidget {
     } else if (move.category == TablebaseCategory.draw) {
       metrics.add(context.l10n.draw);
     } else {
-      if ((move.dtm != null || move.dtc != null) && move.zeroing == true) {
+      if ((move.dtm != null || move.dtc != null) && move.zeroing) {
         move.san.contains('x')
             ? metrics.add(context.l10n.capture)
             : metrics.add(context.l10n.pawnMove);
