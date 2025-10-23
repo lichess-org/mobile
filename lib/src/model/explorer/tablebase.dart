@@ -102,3 +102,18 @@ TablebaseCategory _parseTablebaseCategory(String value) {
     _ => TablebaseCategory.unknown,
   };
 }
+
+TablebaseCategory invertTablebaseCategory(TablebaseCategory category) {
+  return switch (category) {
+    TablebaseCategory.win => TablebaseCategory.loss,
+    TablebaseCategory.unknown => TablebaseCategory.unknown,
+    TablebaseCategory.syzygyWin => TablebaseCategory.syzygyLoss,
+    TablebaseCategory.maybeWin => TablebaseCategory.maybeLoss,
+    TablebaseCategory.cursedWin => TablebaseCategory.blessedLoss,
+    TablebaseCategory.draw => TablebaseCategory.draw,
+    TablebaseCategory.blessedLoss => TablebaseCategory.cursedWin,
+    TablebaseCategory.maybeLoss => TablebaseCategory.maybeWin,
+    TablebaseCategory.syzygyLoss => TablebaseCategory.syzygyWin,
+    TablebaseCategory.loss => TablebaseCategory.win,
+  };
+}

@@ -31,52 +31,19 @@ class TablebaseView extends ConsumerWidget {
             child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
           );
         }
+
         final children = <Widget>[];
 
-        final winMoves = <TablebaseMove>[];
-        final unknownMoves = <TablebaseMove>[];
-        final syzygyWinMoves = <TablebaseMove>[];
-        final maybeWinMoves = <TablebaseMove>[];
-        final cursedWinMoves = <TablebaseMove>[];
-        final drawMoves = <TablebaseMove>[];
-        final blessedLossMoves = <TablebaseMove>[];
-        final maybeLossMoves = <TablebaseMove>[];
-        final syzygyLossMoves = <TablebaseMove>[];
-        final lossMoves = <TablebaseMove>[];
-
-        // Classify moves into the categories as the TablebaseCategory send by the server is evaluating the position after the move is made, the Categories need to be inverted.
-        for (final move in value.moves) {
-          switch (move.category) {
-            case TablebaseCategory.loss:
-              winMoves.add(move);
-            case TablebaseCategory.unknown:
-              unknownMoves.add(move);
-            case TablebaseCategory.syzygyLoss:
-              syzygyWinMoves.add(move);
-            case TablebaseCategory.maybeLoss:
-              maybeWinMoves.add(move);
-            case TablebaseCategory.blessedLoss:
-              cursedWinMoves.add(move);
-            case TablebaseCategory.draw:
-              drawMoves.add(move);
-            case TablebaseCategory.cursedWin:
-              blessedLossMoves.add(move);
-            case TablebaseCategory.maybeWin:
-              maybeLossMoves.add(move);
-            case TablebaseCategory.syzygyWin:
-              syzygyLossMoves.add(move);
-            case TablebaseCategory.win:
-              lossMoves.add(move);
-          }
-        }
-
         void addMoveSection({
-          required List<TablebaseMove> moves,
+          required TablebaseCategory category,
           required String headerKey,
           required Widget headerChild,
           required bool? isWinningForWhite,
           required String moveKeyPrefix,
         }) {
+          final moves = value.moves
+              .where((move) => move.category == invertTablebaseCategory(category))
+              .toList();
           if (moves.isNotEmpty) {
             children.add(_TablebaseHeaderTile(key: Key(headerKey), child: headerChild));
             children.addAll(
@@ -94,70 +61,70 @@ class TablebaseView extends ConsumerWidget {
         }
 
         addMoveSection(
-          moves: winMoves,
+          category: TablebaseCategory.win,
           headerKey: 'winMovesHeader',
           headerChild: Text(context.l10n.winning),
           isWinningForWhite: position.turn == Side.white,
           moveKeyPrefix: 'win-move',
         );
         addMoveSection(
-          moves: unknownMoves,
+          category: TablebaseCategory.unknown,
           headerKey: 'unknownMovesHeader',
           headerChild: Text(context.l10n.unknown),
           isWinningForWhite: null,
           moveKeyPrefix: 'unknown-move',
         );
         addMoveSection(
-          moves: syzygyWinMoves,
+          category: TablebaseCategory.syzygyWin,
           headerKey: 'syzygyWinMovesHeader',
           headerChild: Text(context.l10n.unknownDueToRounding),
           isWinningForWhite: position.turn == Side.white,
           moveKeyPrefix: 'syzygy-win-move',
         );
         addMoveSection(
-          moves: maybeWinMoves,
+          category: TablebaseCategory.maybeWin,
           headerKey: 'maybeWinMovesHeader',
           headerChild: const Text('Win or 50 move draw'),
           isWinningForWhite: position.turn == Side.white,
           moveKeyPrefix: 'maybe-win-move',
         );
         addMoveSection(
-          moves: cursedWinMoves,
+          category: TablebaseCategory.cursedWin,
           headerKey: 'cursedWinMovesHeader',
           headerChild: Text(context.l10n.winPreventedBy50MoveRule),
           isWinningForWhite: position.turn == Side.white,
           moveKeyPrefix: 'cursed-win-move',
         );
         addMoveSection(
-          moves: drawMoves,
+          category: TablebaseCategory.draw,
           headerKey: 'drawMovesHeader',
           headerChild: Text(context.l10n.draw),
           isWinningForWhite: null,
           moveKeyPrefix: 'draw-move',
         );
         addMoveSection(
-          moves: blessedLossMoves,
+          category: TablebaseCategory.blessedLoss,
           headerKey: 'blessedLossMovesHeader',
           headerChild: Text(context.l10n.lossSavedBy50MoveRule),
           isWinningForWhite: null,
           moveKeyPrefix: 'blessed-loss-move',
         );
         addMoveSection(
-          moves: maybeLossMoves,
+          category: TablebaseCategory.maybeLoss,
           headerKey: 'maybeLossMovesHeader',
           headerChild: const Text('Loss or 50 move draw'),
           isWinningForWhite: position.turn != Side.white,
           moveKeyPrefix: 'maybe-loss-move',
         );
         addMoveSection(
-          moves: syzygyLossMoves,
+          category: TablebaseCategory.syzygyLoss,
           headerKey: 'syzygyLossMovesHeader',
           headerChild: Text(context.l10n.unknownDueToRounding),
           isWinningForWhite: position.turn != Side.white,
           moveKeyPrefix: 'syzygy-loss-move',
         );
         addMoveSection(
-          moves: lossMoves,
+          category: TablebaseCategory.loss,
           headerKey: 'losingMovesHeader',
           headerChild: Text(context.l10n.losing),
           isWinningForWhite: position.turn != Side.white,
