@@ -243,8 +243,8 @@ class _TablebaseMoveRow extends StatelessWidget {
       } else if (move.dtz != null) {
         metrics.add('DTZ ${move.dtz!.abs()}');
       }
-      if (move.dtm != null) metrics.add('DTM ${move.dtm!.abs()}');
       if (move.dtc != null) metrics.add('DTC ${move.dtc!.abs()}');
+      if (move.dtm != null) metrics.add('DTM ${move.dtm!.abs()}');
     }
 
     Widget metricsWidget = const SizedBox.shrink();
