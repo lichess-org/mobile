@@ -60,9 +60,9 @@ void main() {
           return mockResponse('''
 [
   {
-    "id": "${expectedId}",
+    "id": "$expectedId",
     "name": "TestUser",
-    "online": ${expectedOnlineStatus}
+    "online": $expectedOnlineStatus
   }
 ]
 ''', 200);
