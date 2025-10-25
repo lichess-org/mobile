@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/online_bots_screen.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 
@@ -60,7 +60,7 @@ class _Body extends ConsumerWidget {
               SearchScreen.buildRoute(
                 context,
                 onUserTap: (user) {
-                  Navigator.of(context).push(UserScreen.buildRoute(context, user));
+                  Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, user));
                 },
               ),
             ),

@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -80,7 +80,10 @@ void onLinkifyOpen(BuildContext context, LinkableElement link) {
   } else if (link.originText.startsWith('@')) {
     final username = link.originText.substring(1);
     Navigator.of(context).push(
-      UserScreen.buildRoute(context, LightUser(id: UserId.fromUserName(username), name: username)),
+      UserOrProfileScreen.buildRoute(
+        context,
+        LightUser(id: UserId.fromUserName(username), name: username),
+      ),
     );
   } else {
     launchUrl(Uri.parse(link.url));

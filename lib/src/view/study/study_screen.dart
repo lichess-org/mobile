@@ -29,7 +29,7 @@ import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -599,7 +599,7 @@ class _StudyMembersSheet extends ConsumerWidget {
           ListTile(
             title: UserFullNameWidget(user: member.user),
             onTap: () {
-              Navigator.of(context).push(UserScreen.buildRoute(context, member.user));
+              Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, member.user));
             },
           ),
       ],
