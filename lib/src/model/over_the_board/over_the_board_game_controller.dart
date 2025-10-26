@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dar
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'over_the_board_game_controller.freezed.dart';
-
 part 'over_the_board_game_controller.g.dart';
 
 @riverpod
@@ -164,11 +163,8 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
   }
 
   Position get currentPosition => game.stepAt(stepCursor).position;
-
   Side get turn => currentPosition.turn;
-
   bool get finished => game.finished;
-
   NormalMove? get lastMove =>
       stepCursor > 0 ? NormalMove.fromUci(game.steps[stepCursor].sanMove!.move.uci) : null;
 

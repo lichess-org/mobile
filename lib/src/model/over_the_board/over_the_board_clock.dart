@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'over_the_board_clock.freezed.dart';
-
 part 'over_the_board_clock.g.dart';
 
 @riverpod

@@ -83,20 +83,17 @@ class _BodyState extends ConsumerState<_Body> {
           if (context.mounted) {
             showAdaptiveDialog<void>(
               context: context,
-              builder: (context) =>
-                  OverTheBoardGameResultDialog(
-                    game: newGameState.game,
-                    onRematch: () {
-                      setState(() {
-                        orientation = orientation.opposite;
-                        ref
-                            .read(overTheBoardGameControllerProvider.notifier)
-                            .rematch();
-                        ref.read(overTheBoardClockProvider.notifier).restart();
-                        Navigator.pop(context);
-                      });
-                    },
-                  ),
+              builder: (context) => OverTheBoardGameResultDialog(
+                game: newGameState.game,
+                onRematch: () {
+                  setState(() {
+                    orientation = orientation.opposite;
+                    ref.read(overTheBoardGameControllerProvider.notifier).rematch();
+                    ref.read(overTheBoardClockProvider.notifier).restart();
+                    Navigator.pop(context);
+                  });
+                },
+              ),
               barrierDismissible: true,
             );
           }
