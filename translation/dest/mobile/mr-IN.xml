@@ -40,6 +40,9 @@
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.&#10;&#10;It is server analysis, which is to say it runs on a Lichess server (or a donor's server, through fishnet) and NOT on the player's device.">सर्व्हर विशलेषण </string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">घड्याळाची जागा</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">प्रीसेट</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">वर्तुळ</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">चौरस</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">प्रतिमा निवडा</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">सेटिंग्ज</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN पाठवा</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">खेळाची URL पाठवा</string>
