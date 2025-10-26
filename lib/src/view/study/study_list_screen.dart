@@ -125,42 +125,41 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
       appBar: PlatformAppBar(
         title: Text(sessionUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
         actions: [
-          if (_searchController.value.text.isEmpty)
-            ContextMenuIconButton(
-              consumeOutsideTap: true,
-              icon: const Icon(Icons.sort_outlined),
-              semanticsLabel: 'Sort studies',
-              actions: [
-                ContextMenuAction(
-                  icon: order == StudyListOrder.hot ? Icons.check : null,
-                  label: context.l10n.studyHot,
-                  onPressed: () => setState(() {
-                    order = StudyListOrder.hot;
-                  }),
-                ),
-                ContextMenuAction(
-                  icon: order == StudyListOrder.newest ? Icons.check : null,
-                  label: context.l10n.studyDateAddedNewest,
-                  onPressed: () => setState(() {
-                    order = StudyListOrder.newest;
-                  }),
-                ),
-                ContextMenuAction(
-                  icon: order == StudyListOrder.updated ? Icons.check : null,
-                  label: context.l10n.studyRecentlyUpdated,
-                  onPressed: () => setState(() {
-                    order = StudyListOrder.updated;
-                  }),
-                ),
-                ContextMenuAction(
-                  icon: order == StudyListOrder.popular ? Icons.check : null,
-                  label: context.l10n.studyMostPopular,
-                  onPressed: () => setState(() {
-                    order = StudyListOrder.popular;
-                  }),
-                ),
-              ],
-            ),
+          ContextMenuIconButton(
+            consumeOutsideTap: true,
+            icon: const Icon(Icons.sort_outlined),
+            semanticsLabel: 'Sort studies',
+            actions: [
+              ContextMenuAction(
+                icon: order == StudyListOrder.hot ? Icons.check : null,
+                label: context.l10n.studyHot,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.hot;
+                }),
+              ),
+              ContextMenuAction(
+                icon: order == StudyListOrder.newest ? Icons.check : null,
+                label: context.l10n.studyDateAddedNewest,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.newest;
+                }),
+              ),
+              ContextMenuAction(
+                icon: order == StudyListOrder.updated ? Icons.check : null,
+                label: context.l10n.studyRecentlyUpdated,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.updated;
+                }),
+              ),
+              ContextMenuAction(
+                icon: order == StudyListOrder.popular ? Icons.check : null,
+                label: context.l10n.studyMostPopular,
+                onPressed: () => setState(() {
+                  order = StudyListOrder.popular;
+                }),
+              ),
+            ],
+          ),
         ],
         bottom: sessionUser != null
             ? PreferredSize(

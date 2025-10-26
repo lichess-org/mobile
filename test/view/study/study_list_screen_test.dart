@@ -130,7 +130,7 @@ void main() {
 
       expect(requestedUrls, [
         'https://lichess.dev/study/all/hot?page=1',
-        'https://lichess.dev/study/search?page=1&q=Magnus',
+        'https://lichess.dev/study/search?page=1&q=Magnus&order=hot',
       ]);
     });
   });

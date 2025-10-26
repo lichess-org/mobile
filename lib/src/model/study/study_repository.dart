@@ -35,8 +35,15 @@ class StudyRepository {
     );
   }
 
-  Future<StudyList> searchStudies({required String query, int page = 1}) {
-    return _requestStudies(path: 'search', queryParameters: {'page': page.toString(), 'q': query});
+  Future<StudyList> searchStudies({
+    required String query,
+    required StudyListOrder order,
+    int page = 1,
+  }) {
+    return _requestStudies(
+      path: 'search',
+      queryParameters: {'page': page.toString(), 'q': query, 'order': order.name},
+    );
   }
 
   Future<StudyList> _requestStudies({
