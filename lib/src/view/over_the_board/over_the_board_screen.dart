@@ -68,9 +68,7 @@ class _BodyState extends ConsumerState<_Body> {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final overTheBoardPrefs = ref.watch(overTheBoardPreferencesProvider);
 
-    ref.listen(
-        overTheBoardClockProvider.select((value) => value.flagSide), (previous,
-        flagSide) {
+    ref.listen(overTheBoardClockProvider.select((value) => value.flagSide), (previous, flagSide) {
       if (previous == null && flagSide != null) {
         ref.read(overTheBoardGameControllerProvider.notifier).onFlag(flagSide);
       }
@@ -107,22 +105,18 @@ class _BodyState extends ConsumerState<_Body> {
             ref.read(overTheBoardClockProvider.notifier).pause();
             showAdaptiveDialog<void>(
               context: context,
-              builder: (context) =>
-                  YesNoDialog(
-                    title: Text(context.l10n.threefoldRepetition),
-                    content: const Text('Accept draw?'),
-                    onYes: () {
-                      Navigator.pop(context);
-                      ref
-                          .read(overTheBoardGameControllerProvider.notifier)
-                          .draw();
-                    },
-                    onNo: () {
-                      Navigator.pop(context);
-                      ref.read(overTheBoardClockProvider.notifier).resume(
-                          previous!.turn);
-                    },
-                  ),
+              builder: (context) => YesNoDialog(
+                title: Text(context.l10n.threefoldRepetition),
+                content: const Text('Accept draw?'),
+                onYes: () {
+                  Navigator.pop(context);
+                  ref.read(overTheBoardGameControllerProvider.notifier).draw();
+                },
+                onNo: () {
+                  Navigator.pop(context);
+                  ref.read(overTheBoardClockProvider.notifier).resume(previous!.turn);
+                },
+              ),
             );
           }
         });
@@ -169,48 +163,43 @@ class _BodyState extends ConsumerState<_Body> {
                   topTable: _Player(
                     side: orientation.opposite,
                     upsideDown:
-                    !overTheBoardPrefs.flipPiecesAfterMove ||
-                        orientation != gameState.turn,
+                        !overTheBoardPrefs.flipPiecesAfterMove || orientation != gameState.turn,
                     clockKey: const ValueKey('topClock'),
                   ),
                   bottomTable: _Player(
                     side: orientation,
                     upsideDown:
-                    overTheBoardPrefs.flipPiecesAfterMove &&
-                        orientation != gameState.turn,
+                        overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
                     clockKey: const ValueKey('bottomClock'),
                   ),
                   orientation: orientation,
                   fen: gameState.currentPosition.fen,
                   lastMove: gameState.lastMove,
                   interactiveBoardParams: (
-                  variant: gameState.game.meta.variant,
-                  position: gameState.currentPosition,
-                  playerSide: gameState.game.finished
-                      ? PlayerSide.none
-                      : gameState.turn == Side.white
-                      ? PlayerSide.white
-                      : PlayerSide.black,
-                  onPromotionSelection: ref
-                      .read(overTheBoardGameControllerProvider.notifier)
-                      .onPromotionSelection,
-                  promotionMove: gameState.promotionMove,
-                  onMove: (move, {isDrop}) {
-                    ref
-                        .read(overTheBoardClockProvider.notifier)
-                        .onMove(newSideToMove: gameState.turn.opposite);
-                    ref
+                    variant: gameState.game.meta.variant,
+                    position: gameState.currentPosition,
+                    playerSide: gameState.game.finished
+                        ? PlayerSide.none
+                        : gameState.turn == Side.white
+                        ? PlayerSide.white
+                        : PlayerSide.black,
+                    onPromotionSelection: ref
                         .read(overTheBoardGameControllerProvider.notifier)
-                        .makeMove(move);
-                  },
-                  premovable: null,
+                        .onPromotionSelection,
+                    promotionMove: gameState.promotionMove,
+                    onMove: (move, {isDrop}) {
+                      ref
+                          .read(overTheBoardClockProvider.notifier)
+                          .onMove(newSideToMove: gameState.turn.opposite);
+                      ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
+                    },
+                    premovable: null,
                   ),
                   moves: gameState.moves,
                   currentMoveIndex: gameState.stepCursor,
                   boardSettingsOverrides: BoardSettingsOverrides(
                     drawShape: const DrawShapeOptions(enable: false),
-                    pieceOrientationBehavior: overTheBoardPrefs
-                        .flipPiecesAfterMove
+                    pieceOrientationBehavior: overTheBoardPrefs.flipPiecesAfterMove
                         ? PieceOrientationBehavior.sideToPlay
                         : PieceOrientationBehavior.opponentUpsideDown,
                     pieceAssets: overTheBoardPrefs.symmetricPieces
@@ -259,27 +248,25 @@ class _BottomBar extends ConsumerWidget {
             onTap: gameState.finished
                 ? null
                 : () {
-              if (clock.active) {
-                ref.read(overTheBoardClockProvider.notifier).pause();
-              } else {
-                ref.read(overTheBoardClockProvider.notifier).resume(
-                    gameState.turn);
-              }
-            },
+                    if (clock.active) {
+                      ref.read(overTheBoardClockProvider.notifier).pause();
+                    } else {
+                      ref.read(overTheBoardClockProvider.notifier).resume(gameState.turn);
+                    }
+                  },
             icon: clock.active ? CupertinoIcons.pause : CupertinoIcons.play,
           ),
         BottomBarButton(
           label: 'Previous',
           onTap: gameState.canGoBack
               ? () {
-            ref.read(overTheBoardGameControllerProvider.notifier).goBack();
-            if (clock.active) {
-              ref
-                  .read(overTheBoardClockProvider.notifier)
-                  .switchSide(
-                  newSideToMove: gameState.turn.opposite, addIncrement: false);
-            }
-          }
+                  ref.read(overTheBoardGameControllerProvider.notifier).goBack();
+                  if (clock.active) {
+                    ref
+                        .read(overTheBoardClockProvider.notifier)
+                        .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
+                  }
+                }
               : null,
           icon: CupertinoIcons.chevron_back,
         ),
@@ -287,14 +274,13 @@ class _BottomBar extends ConsumerWidget {
           label: 'Next',
           onTap: gameState.canGoForward
               ? () {
-            ref.read(overTheBoardGameControllerProvider.notifier).goForward();
-            if (clock.active) {
-              ref
-                  .read(overTheBoardClockProvider.notifier)
-                  .switchSide(
-                  newSideToMove: gameState.turn.opposite, addIncrement: false);
-            }
-          }
+                  ref.read(overTheBoardGameControllerProvider.notifier).goForward();
+                  if (clock.active) {
+                    ref
+                        .read(overTheBoardClockProvider.notifier)
+                        .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
+                  }
+                }
               : null,
           icon: CupertinoIcons.chevron_forward,
         ),
@@ -316,18 +302,17 @@ class _BottomBar extends ConsumerWidget {
         if (gameState.game.finished)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.analysis),
-            onPressed: () =>
-                Navigator.of(context).push(
-                  AnalysisScreen.buildRoute(
-                    context,
-                    AnalysisOptions.standalone(
-                      orientation: Side.white,
-                      pgn: gameState.game.makePgn(),
-                      isComputerAnalysisAllowed: true,
-                      variant: gameState.game.meta.variant,
-                    ),
-                  ),
+            onPressed: () => Navigator.of(context).push(
+              AnalysisScreen.buildRoute(
+                context,
+                AnalysisOptions.standalone(
+                  orientation: Side.white,
+                  pgn: gameState.game.makePgn(),
+                  isComputerAnalysisAllowed: true,
+                  variant: gameState.game.meta.variant,
                 ),
+              ),
+            ),
           ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
@@ -340,19 +325,15 @@ class _BottomBar extends ConsumerWidget {
               final offerer = gameState.turn.name.capitalize();
               showAdaptiveDialog<void>(
                 context: context,
-                builder: (context) =>
-                    YesNoDialog(
-                      title: Text('${context.l10n.draw}?'),
-                      content: Text(
-                          '$offerer offers draw. Does opponent accept?'),
-                      onYes: () {
-                        Navigator.pop(context);
-                        ref
-                            .read(overTheBoardGameControllerProvider.notifier)
-                            .draw();
-                      },
-                      onNo: () => Navigator.pop(context),
-                    ),
+                builder: (context) => YesNoDialog(
+                  title: Text('${context.l10n.draw}?'),
+                  content: Text('$offerer offers draw. Does opponent accept?'),
+                  onYes: () {
+                    Navigator.pop(context);
+                    ref.read(overTheBoardGameControllerProvider.notifier).draw();
+                  },
+                  onNo: () => Navigator.pop(context),
+                ),
               );
             },
           ),
@@ -363,19 +344,15 @@ class _BottomBar extends ConsumerWidget {
               final offerer = gameState.turn.name.capitalize();
               showAdaptiveDialog<void>(
                 context: context,
-                builder: (context) =>
-                    YesNoDialog(
-                      title: Text('${context.l10n.resign}?'),
-                      content: Text(
-                          'Are you sure you want to resign as $offerer?'),
-                      onYes: () {
-                        Navigator.pop(context);
-                        ref
-                            .read(overTheBoardGameControllerProvider.notifier)
-                            .resign();
-                      },
-                      onNo: () => Navigator.pop(context),
-                    ),
+                builder: (context) => YesNoDialog(
+                  title: Text('${context.l10n.resign}?'),
+                  content: Text('Are you sure you want to resign as $offerer?'),
+                  onYes: () {
+                    Navigator.pop(context);
+                    ref.read(overTheBoardGameControllerProvider.notifier).resign();
+                  },
+                  onNo: () => Navigator.pop(context),
+                ),
               );
             },
           ),
@@ -383,18 +360,14 @@ class _BottomBar extends ConsumerWidget {
             gameClock.blackTimeLeft != null &&
             gameClock.whiteTimeLeft != null)
           BottomSheetAction(
-            makeLabel: (context) =>
-                Text(
-                  context.l10n.giveNbSeconds(
-                      gameState.game.meta.clock?.moreTime?.inSeconds ?? 15),
-                ),
+            makeLabel: (context) => Text(
+              context.l10n.giveNbSeconds(gameState.game.meta.clock?.moreTime?.inSeconds ?? 15),
+            ),
             onPressed: () {
               if (gameState.turn == Side.white) {
-                ref.read(overTheBoardClockProvider.notifier).giveTime(
-                    Side.black);
+                ref.read(overTheBoardClockProvider.notifier).giveTime(Side.black);
               } else {
-                ref.read(overTheBoardClockProvider.notifier).giveTime(
-                    Side.white);
+                ref.read(overTheBoardClockProvider.notifier).giveTime(Side.white);
               }
             },
           ),
@@ -404,8 +377,7 @@ class _BottomBar extends ConsumerWidget {
 }
 
 class _Player extends ConsumerWidget {
-  const _Player(
-      {required this.clockKey, required this.side, required this.upsideDown});
+  const _Player({required this.clockKey, required this.side, required this.upsideDown});
 
   final Side side;
   final Key clockKey;
@@ -430,14 +402,13 @@ class _Player extends ConsumerWidget {
         clock: clock.timeIncrement.isInfinite
             ? null
             : Clock(
-          timeLeft: Duration(
-              milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
-          key: clockKey,
-          active: clock.activeClock == side,
-          emergencyThreshold: Duration(
-            seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
-          ),
-        ),
+                timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
+                key: clockKey,
+                active: clock.activeClock == side,
+                emergencyThreshold: Duration(
+                  seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
+                ),
+              ),
       ),
     );
   }
