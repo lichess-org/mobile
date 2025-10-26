@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dar
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:flutter/material.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -46,6 +47,62 @@ void main() {
       expect(tester.getTopRight(find.byKey(const ValueKey('a1-whiterook'))), boardRect.topRight);
 
       expect(activeClock(tester), null);
+    });
+
+    testWidgets('Give time to opponent', (tester) async {
+      const time = Duration(minutes: 1);
+      await initOverTheBoardGame(tester, TimeIncrement(time.inSeconds, 0));
+
+      // Play a move to start the clock. It's now black's turn.
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump();
+
+      expect(activeClock(tester), Side.black);
+
+      // Pause the clock to make the test deterministic
+      await tester.tap(find.byTooltip('Pause'));
+      await tester.pump();
+      expect(activeClock(tester), null);
+
+      final whiteTimeBefore = findWhiteClock(tester).timeLeft;
+      final blackTimeBefore = findBlackClock(tester).timeLeft;
+
+      // Open menu. It's black's turn, so giving time will add it to white.
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Give 15 seconds'));
+      await tester.pumpAndSettle();
+
+      // White's time should have increased by 15s. Black's time should be unchanged.
+      expect(findWhiteClock(tester).timeLeft, whiteTimeBefore + const Duration(seconds: 15));
+      expect(findBlackClock(tester).timeLeft, blackTimeBefore);
+
+      // Resume clock
+      await tester.tap(find.byTooltip('Resume'));
+      await tester.pump();
+      expect(activeClock(tester), Side.black);
+
+      // Play another move. It's now white's turn.
+      await playMove(tester, 'e7', 'e5');
+      await tester.pump();
+      expect(activeClock(tester), Side.white);
+
+      // Pause again
+      await tester.tap(find.byTooltip('Pause'));
+      await tester.pump();
+
+      final whiteTimeBefore2 = findWhiteClock(tester).timeLeft;
+      final blackTimeBefore2 = findBlackClock(tester).timeLeft;
+
+      // Open menu. It's white's turn, so giving time will add it to black.
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Give 15 seconds'));
+      await tester.pumpAndSettle();
+
+      // Black's time should have increased. White's time should be unchanged.
+      expect(findWhiteClock(tester).timeLeft, whiteTimeBefore2);
+      expect(findBlackClock(tester).timeLeft, blackTimeBefore2 + const Duration(seconds: 15));
     });
 
     testWidgets('Game ends when out of time', (tester) async {
