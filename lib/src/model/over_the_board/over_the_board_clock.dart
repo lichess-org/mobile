@@ -13,7 +13,7 @@ part 'over_the_board_clock.g.dart';
 @riverpod
 class OverTheBoardClock extends _$OverTheBoardClock {
   final Stopwatch _stopwatch = Stopwatch();
-  final timeToGive = 15;
+  final int _timeToGive = 15;
 
   Timer? _updateTimer;
 
@@ -47,7 +47,7 @@ class OverTheBoardClock extends _$OverTheBoardClock {
   }
 
   void giveTime(Side side) {
-    final timeToGiveDuration = Duration(seconds: timeToGive);
+    final timeToGiveDuration = Duration(seconds: _timeToGive);
 
     if (side == Side.white) {
       state = state.copyWith(whiteTimeLeft: state.whiteTimeLeft! + timeToGiveDuration);
