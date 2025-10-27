@@ -33,7 +33,7 @@ dependencies:
   fl_chart: ^1.0.0
   flutter:
     sdk: flutter
-  flutter_appauth: ^10.0.0
+  flutter_appauth: ^11.0.0
   flutter_displaymode: ^0.6.0
   flutter_layout_grid: ^2.0.1
   flutter_linkify: ^6.0.0
