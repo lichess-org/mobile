@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -218,19 +217,6 @@ class EvaluationService {
       currentWork: null,
     );
 
-    Position initialPosition() {
-      if (!threatMode) {
-        return context.initialPosition;
-      }
-      final position = steps.lastOrNull?.position ?? context.initialPosition;
-      // TODO maybe add a playNullMove() to dartchess' Position class instead?
-      return position.copyWith(
-        turn: position.turn.opposite,
-        halfmoves: position.halfmoves + 1,
-        fullmoves: position.turn == Side.black ? position.fullmoves + 1 : position.fullmoves,
-      );
-    }
-
     final work = Work(
       variant: context.variant,
       threads: options.cores,
@@ -240,8 +226,8 @@ class EvaluationService {
       isDeeper: goDeeper,
       multiPv: options.multiPv,
       path: path,
-      initialPosition: initialPosition(),
-      steps: threatMode ? const IList.empty() : IList(steps),
+      initialPosition: context.initialPosition,
+      steps: IList(steps),
     );
 
     switch (work.evalCache) {

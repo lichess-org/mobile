@@ -193,11 +193,12 @@ class UCIProtocol {
       _sendAndLog(
         [
           'position fen',
-          _work!.initialPosition.fen,
+          if (_work!.threatMode == true) _work!.position.fen else _work!.initialPosition.fen,
           'moves',
-          ..._work!.steps.map(
-            (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
-          ),
+          if (_work!.threatMode != true)
+            ..._work!.steps.map(
+              (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
+            ),
         ].join(' '),
       );
       _sendAndLog('go movetime ${_work!.searchTime.inMilliseconds}');
