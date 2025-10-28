@@ -15,7 +15,7 @@ String lichessAssetUrl(String path) {
 }
 
 String lichessFlagSrc(String country) {
-  return '$kLichessCDNHost/assets/images/flags/$country.png';
+  return '$kLichessCDNHost/assets/flags/$country.png';
 }
 
 String lichessFlairSrc(String flair) {
