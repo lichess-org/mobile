@@ -90,8 +90,32 @@ class _Hint extends ConsumerStatefulWidget {
 class _HintState extends ConsumerState<_Hint> {
   bool showHint = false;
 
+  void _hideHint() {
+    setState(() {
+      showHint = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.listen(
+      studyControllerProvider(widget.id).select((state) => state.valueOrNull?.gamebookState),
+      (prev, next) {
+        if (prev == GamebookState.correctMove && next == GamebookState.findTheMove) {
+          _hideHint();
+        }
+      },
+    );
+
+    ref.listen(
+      studyControllerProvider(widget.id).select((state) => state.valueOrNull?.currentChapter.id),
+      (prev, next) {
+        if (prev != next) {
+          _hideHint();
+        }
+      },
+    );
+
     final hint = ref.watch(studyControllerProvider(widget.id)).requireValue.gamebookHint;
     return hint == null
         ? const SizedBox.shrink()
