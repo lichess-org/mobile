@@ -4028,6 +4028,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get analysisShapesHowTo => 'Që të vizatoni rrathë dhe shigjeta në fushë, shtypni shift+klikim, ose djathtasklikoni.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = e kuqe, shift = e verdhë, command ose alt = blu.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Lejoni lojtarë të tjerë t’ju dërgojnë mesazh';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsSq extends AppLocalizations {
   String get simulDescriptionHelp => 'Ndonjë gjë që doni t’u thoni pjesëmarrësve?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Për sintaksë më të thelluar mund të përdoret $param-i.';
+  String markdownIsAvailable(String param) {
+    return 'Për formatim mund të përdorni $param.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabetik';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Shto një kapitull të ri';

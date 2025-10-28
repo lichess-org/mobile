@@ -1091,7 +1091,6 @@
   "simulFeaturedHelp": "Näita oma simultaan kõigile {param}-s. Lülita välja privaatseks simultaaniks.",
   "simulDescription": "Simultaani kirjeldus",
   "simulDescriptionHelp": "Tahad osalejatele midagi öelda?",
-  "markdownAvailable": "{param} on saadaval täiendavate vormindusvõimaluste jaoks.",
   "embedsAvailable": "Aseta mängu URL või uuringu peatüki URL et seda sängitada.",
   "inYourLocalTimezone": "Kohalikus ajavööndis",
   "tournChat": "Turniiri vestlus",

@@ -560,7 +560,7 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
-  String get arenaDrawStreakVariants => 'Minimalus žaidimo ilgis užtikrinantis taškus skiriasi pagal variantą. Pateiktoje lentelėje nurodomi slenksčiai kiekvienam variantui.';
+  String get arenaDrawStreakVariants => 'Minimalus ėjimų skaičius lygiųjų partijose, užtikrinantis taškus, skiriasi pagal variantą. Pateiktoje lentelėje nurodomos ribinės reikšmės kiekvienam variantui.';
 
   @override
   String get arenaVariant => 'Variantas';
@@ -584,7 +584,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get arenaAllowBerserk => 'Leisti \"įsiūtį\"';
 
   @override
-  String get arenaAllowBerserkHelp => 'Leisti žaidėjams gauti papildomą tašką, perpus sumažinant savo laiką';
+  String get arenaAllowBerserkHelp => 'Leisti žaidėjams, perpus susimažinusiems savo laiką, gauti papildomą tašką';
 
   @override
   String get arenaAllowChatHelp => 'Leisti žaidėjams kalbėtis pokalbių kambaryje';
@@ -937,11 +937,11 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastLiveboard => 'Esama lenta';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Bendruomenės transliacija';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'Sukūrė ir valdo $param.';
   }
 
   @override
@@ -2952,28 +2952,28 @@ class AppLocalizationsLt extends AppLocalizations {
   String get whiteProposesTakeback => 'Baltieji siūlo atstatyti';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'Juodieji siūlo atstatyti ėjimą';
 
   @override
   String get takebackPropositionSent => 'Ėjimo atšaukimo prašymas išsiųstas';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'Baltieji atmeta ėjimo atstatymą';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'Juodieji atmeta ėjimo atstatymą';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'Baltieji priima ėjimo atstatymą';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'Juodieji priima ėjimo atstatymą';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'Baltieji atšaukia ėjimo atstatymą';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'Juodieji atšaukia ėjimo atstatymą';
 
   @override
   String get yourOpponentProposesATakeback => 'Varžovas prašo atšaukti ėjimą';
@@ -3008,7 +3008,7 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Reitingo filtrai užrakinti, nes jūsų reitingas nestabilus. Žaidžiant įvertintus žaidimus, padidės stabilumas.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3808,7 +3808,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get termsOfService => 'Naudojimosi sąlygos';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'Titulo patvirtinimas';
 
   @override
   String get sourceCode => 'Pirminis kodas';
@@ -4082,6 +4082,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get analysisShapesHowTo => 'Spustelėkite Shift + kairįjį pelės klavišą arba dešinįjį pelės klavišą norėdami piešti ant lentos.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl arba shift = raudona; command, alt arba meta = mėlyna; raktas iš kiekvieno = geltona.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Leisti kitiems žaidėjams jums parašyti';
 
   @override
@@ -4268,7 +4271,7 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return 'Your rating is $param';
+    return 'Jūsų reitingas yra $param';
   }
 
   @override
@@ -4410,7 +4413,7 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return 'Teikti iššūkį $param';
   }
 
   @override
@@ -4699,8 +4702,8 @@ class AppLocalizationsLt extends AppLocalizations {
   String get simulDescriptionHelp => 'Ar norite ką nors pranešti dalyviams?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param prieinama norint naudoti sudėtingesnę sintaksę.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4811,31 +4814,31 @@ class AppLocalizationsLt extends AppLocalizations {
   String get stats => 'Statistika';
 
   @override
-  String get accessibility => 'Accessibility';
+  String get accessibility => 'Prieinamumas';
 
   @override
-  String get enableBlindMode => 'Enable blind mode';
+  String get enableBlindMode => 'Įjungti akląjį režimą';
 
   @override
-  String get disableBlindMode => 'Disable blind mode';
+  String get disableBlindMode => 'Įšungti akląjį režimą';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Kopijuoti į iškarpinę';
 
   @override
-  String get online => 'online';
+  String get online => 'prisijungęs';
 
   @override
-  String get offline => 'offline';
+  String get offline => 'neprisijungta';
 
   @override
-  String get search => 'Search';
+  String get search => 'Ieškoti';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'Išvalyti paiešką';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'Žymos';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5659,6 +5662,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Abėcėlės tvarka';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Pridėti naują skyrių';

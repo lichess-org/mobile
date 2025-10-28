@@ -2206,7 +2206,8 @@
   "crosstable": "Crosstable",
   "youCanAlsoScrollOverTheBoardToMoveInTheGame": "Scroll over the board to move in the game.",
   "scrollOverComputerVariationsToPreviewThem": "Scroll over computer variations to preview them.",
-  "analysisShapesHowTo": "Press shift+click or right-click to draw circles and arrows on the board.",
+  "analysisShapesHowTo": "Press right-click (or shift+click) to draw circles and arrows on the board. For other colours, combine the following with right-click:",
+  "primaryColorArrowsHowTo": "Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.",
   "letOtherPlayersMessageYou": "Let other players message you",
   "receiveForumNotifications": "Receive notifications when mentioned in the forum",
   "shareYourInsightsData": "Share your chess insights data",
@@ -2630,8 +2631,8 @@
   },
   "simulDescription": "Simul description",
   "simulDescriptionHelp": "Anything you want to tell the participants?",
-  "markdownAvailable": "{param} is available for more advanced syntax.",
-  "@markdownAvailable": {
+  "markdownIsAvailable": "{param} is available for formatting.",
+  "@markdownIsAvailable": {
     "placeholders": {
       "param": {
         "type": "String"
@@ -3176,6 +3177,7 @@
   "studyRecentlyUpdated": "Recently updated",
   "studyMostPopular": "Most popular",
   "studyAlphabetical": "Alphabetical",
+  "studyRelevant": "Relevant",
   "studyAddNewChapter": "Add a new chapter",
   "studyAddMembers": "Add members",
   "studyInviteToTheStudy": "Invite to the study",

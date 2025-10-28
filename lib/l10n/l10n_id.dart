@@ -4004,6 +4004,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get analysisShapesHowTo => 'Tekan shift+klik atau klik-kanan untuk menggambar lingkaran dan panah di papan.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Memperbolehkan pemain lain mengirim pesan untuk Anda';
 
   @override
@@ -4621,8 +4624,8 @@ class AppLocalizationsId extends AppLocalizations {
   String get simulDescriptionHelp => 'Adakah sesuatu yang ingin Anda sampaikan pada peserta?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param tersedia untuk sintaks lebih lanjut.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5440,6 +5443,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Menurut abjad';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Tambahkan bab baru';

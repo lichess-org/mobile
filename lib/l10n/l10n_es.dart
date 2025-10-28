@@ -4028,6 +4028,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get analysisShapesHowTo => 'Haz clic con el botón derecho o Máyus+clic para dibujar círculos y flechas en el tablero.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl o mayúsculas = rojo; comando, alt, o meta = azul; una tecla de cada = amarillo.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Permitir que otras personas te envíen mensajes';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get simulDescriptionHelp => '¿Quieres decirle algo a los participantes?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Se puede usar $param para formatear el texto.';
+  String markdownIsAvailable(String param) {
+    return 'El formato de $param está disponible.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabético';
+
+  @override
+  String get studyRelevant => 'Relevante';
 
   @override
   String get studyAddNewChapter => 'Añadir nuevo capítulo';

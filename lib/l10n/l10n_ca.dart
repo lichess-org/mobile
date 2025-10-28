@@ -4028,6 +4028,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get analysisShapesHowTo => 'Pitja la tecla Shift + clic o feu clic dret per dibuixar cercles i fletxes al tauler.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Deixa que altres jugadors t\'envïin missatges';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsCa extends AppLocalizations {
   String get simulDescriptionHelp => 'Cap cosa per mencionar als participants?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param és disponible per a formats més avançats.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabètic';
+
+  @override
+  String get studyRelevant => 'Rellevant';
 
   @override
   String get studyAddNewChapter => 'Afegir un nou capítol';

@@ -1383,7 +1383,6 @@
   "simulFeaturedHelp": "Показывать сеанс на {param}. Отключите для частных сеансов.",
   "simulDescription": "Описание сеанса",
   "simulDescriptionHelp": "Хотите что-нибудь сказать участникам?",
-  "markdownAvailable": "{param} доступен для расширенного форматирования.",
   "embedsAvailable": "Вставьте URL игры или ссылку на студию, чтобы встроить её.",
   "inYourLocalTimezone": "В вашем часовом поясе",
   "tournChat": "Чат турнира",

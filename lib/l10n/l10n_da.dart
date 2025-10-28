@@ -2244,10 +2244,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get blackLeftTheGame => 'Sort forlod partiet';
 
   @override
-  String get whiteDidntMove => 'Hvid flyttede ikke';
+  String get whiteDidntMove => 'Hvid trak ikke';
 
   @override
-  String get blackDidntMove => 'Sort flyttede ikke';
+  String get blackDidntMove => 'Sort trak ikke';
 
   @override
   String get requestAComputerAnalysis => 'Anmod om en computeranalyse';
@@ -2631,7 +2631,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get email => 'E-mail';
 
   @override
-  String get passwordReset => 'Nulstil adgangskode';
+  String get passwordReset => 'Nulstilling af adgangskode';
 
   @override
   String get forgotPassword => 'Glemt adgangskode?';
@@ -4028,6 +4028,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get analysisShapesHowTo => 'Tryk shift + klik eller højreklik for at tegne cirkler og pile på brættet.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = rød, shift = gul, command eller alt = blå.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Lad andre spillere sende en besked til dig';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsDa extends AppLocalizations {
   String get simulDescriptionHelp => 'Noget du ønsker at fortælle deltagerne?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param er tilgængelig for mere avanceret syntaks.';
+  String markdownIsAvailable(String param) {
+    return '$param er tilgængelig til formatering.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabetisk';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Tilføj et nyt kapitel';

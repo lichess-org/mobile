@@ -4028,6 +4028,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get analysisShapesHowTo => 'Trykk shift+klikk eller høyreklikk for å tegne sirkler og piler på brettet.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = rød, Shift = gul, Command eller Alt = blå.';
+
+  @override
   String get letOtherPlayersMessageYou => 'La andre spillere kontakte deg.';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsNb extends AppLocalizations {
   String get simulDescriptionHelp => 'Er det noe du vil si til deltakerne?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param er tilgjengelig for utforming.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabetisk';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Legg til kapittel';

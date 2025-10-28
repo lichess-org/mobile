@@ -4082,6 +4082,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get analysisShapesHowTo => 'Kliknutím se shiftem či kliknutím pravým tlačítkem lze kreslit do šachovnice kolečka a šipky.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Povolit zprávy od ostatních hráčů';
 
   @override
@@ -4699,8 +4702,8 @@ class AppLocalizationsCs extends AppLocalizations {
   String get simulDescriptionHelp => 'Je tu něco co by jste chtěli sdělit účastníkům?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param je k dispozici pro pokročilé formátování.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5659,6 +5662,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Abecedně';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Přidat novou kapitolu';

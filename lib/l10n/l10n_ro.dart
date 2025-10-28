@@ -2117,7 +2117,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Contul este închis.';
 
   @override
-  String get gameSetup => 'Configurare joc';
+  String get gameSetup => 'Configurație joc';
 
   @override
   String get challengeAFriend => 'Provoacă un prieten';
@@ -2129,7 +2129,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get gameMode => 'Mod joc';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Creează un joc nou';
 
   @override
   String get youPlayAs => 'Tu joci ca';
@@ -2164,7 +2164,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get strength => 'Putere';
 
   @override
-  String get toggleTheChat => 'Arată/Ascunde discuția';
+  String get toggleTheChat => 'Comută conversația';
 
   @override
   String get chat => 'Discuție';
@@ -4056,6 +4056,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get analysisShapesHowTo => 'Apasă shift+click sau click-dreapta pentru a desena cercuri și săgeți pe tablă.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl sau shift = roșu; comandă, alt, sau meta = albastru; o cheie pentru fiecare = galben.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Permite altor jucători să îți trimită mesaje';
 
   @override
@@ -4673,8 +4676,8 @@ class AppLocalizationsRo extends AppLocalizations {
   String get simulDescriptionHelp => 'Ce vrei să spui participanţilor?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param este disponibil pentru sintaxă mai avansată.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5586,6 +5589,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabetic';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Adaugă un nou capitol';

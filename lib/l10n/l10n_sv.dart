@@ -4028,6 +4028,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get analysisShapesHowTo => 'Håll nere Skift när du klickar eller högerklickar för att rita cirklar och pilar på brädet.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Tillåt att andra spelare skickar meddelanden till dig';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsSv extends AppLocalizations {
   String get simulDescriptionHelp => 'Något du vill berätta för deltagarna?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param är tillgängligt för mer avancerad syntax.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabetisk';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Lägg till ett nytt kapitel';

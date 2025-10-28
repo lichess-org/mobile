@@ -4028,6 +4028,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get analysisShapesHowTo => 'Vajuta shift + click või paremat hiirenuppu, et joonistada lauale ringe ja nooli.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Luba teistel mängijatel saata sulle sõnumeid';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsEt extends AppLocalizations {
   String get simulDescriptionHelp => 'Tahad osalejatele midagi öelda?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param on saadaval täiendavate vormindusvõimaluste jaoks.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Tähestikuline';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Lisa uus peatükk';

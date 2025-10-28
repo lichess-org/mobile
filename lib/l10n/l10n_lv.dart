@@ -4052,6 +4052,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get analysisShapesHowTo => 'Klikšķiniet, turot pārslēgšanas taustiņu, vai klikšķiniet ar labo taustiņu uz galdiņa, lai zīmētu riņķus un bultas.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Ļaut citiem spēlētājiem jums sūtīt ziņas';
 
   @override
@@ -4669,8 +4672,8 @@ class AppLocalizationsLv extends AppLocalizations {
   String get simulDescriptionHelp => 'Vai vēlaties ko teikt dalībniekiem?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Papildu formatējumam pieejams $param.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5582,6 +5585,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabētiskā secībā';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Pievienot nodaļu';

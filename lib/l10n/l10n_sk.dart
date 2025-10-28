@@ -4084,6 +4084,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get analysisShapesHowTo => 'Stlačte shift+ľavé tlačidlo na myši alebo pravé tlačidlo na myši na kreslenie kruhov a šípok na šachovnici.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Povoliť ostatným hráčom aby Vám napísali správu';
 
   @override
@@ -4701,8 +4704,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get simulDescriptionHelp => 'Chcete účastníkom niečo povedať?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param je dostupné pre viac pokročilú syntax.';
+  String markdownIsAvailable(String param) {
+    return '$param je k dispozícii na formátovanie.';
   }
 
   @override
@@ -5661,6 +5664,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Abecedne';
+
+  @override
+  String get studyRelevant => 'Relevantné';
 
   @override
   String get studyAddNewChapter => 'Pridať novú kapitolu';

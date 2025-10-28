@@ -4026,6 +4026,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get analysisShapesHowTo => 'Lövhədə çevrə və ya oxlar çəkmək üçün shift+sol klik və ya sağ klikə toxunun.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Digər oyunçuların sizə mesaj göndərməsinə icazə ver';
 
   @override
@@ -4643,8 +4646,8 @@ class AppLocalizationsAz extends AppLocalizations {
   String get simulDescriptionHelp => 'Anything you want to tell the participants?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param is available for more advanced syntax.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5509,6 +5512,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Əlifbaya görə';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Yeni bir fəsil əlavə et';

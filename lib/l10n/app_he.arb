@@ -1321,7 +1321,6 @@
   "simulFeaturedHelp": "גרום למשחק להיות פומבי ב־{param}. בטל בשביל משחק סימולטני פרטי.",
   "simulDescription": "תיאור המשחק הסימולטני",
   "simulDescriptionHelp": "משהו שאת/ה רוצה להגיד למשתתפים?",
-  "markdownAvailable": "{param} זמין לתחביר מתקדם יותר.",
   "embedsAvailable": "הדביקו כתובת משחק (URL) או כתובת של פרק לוח למידה כדי להטמיע אותם.",
   "inYourLocalTimezone": "באזור הזמן שלך",
   "tournChat": "שליחת הודעה",

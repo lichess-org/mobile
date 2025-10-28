@@ -4028,6 +4028,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get analysisShapesHowTo => 'Натисни shift едновременно с ляво или дясно копче за да рисуваш кръгове и стрелки върху дъската.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Разреши на другите да ви пишат';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsBg extends AppLocalizations {
   String get simulDescriptionHelp => 'Има ли нещо което искате да кажете на участниците?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param е достъпен за разширено форматиране.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Азбучно';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Добавяне на нов раздел';

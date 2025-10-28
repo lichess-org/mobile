@@ -4028,6 +4028,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get analysisShapesHowTo => 'Käytä hiiren kakkospainiketta (tai shiftiä ja ykköspainiketta) piirtääksesi ympyröitä ja nuolia laudalle.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl tai Shift = punainen; Command, Alt tai Meta = sininen; näppäinyhdistelmä (yksi näppäin kustakin ryhmästä edellä) = keltainen.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Anna muiden käyttäjien lähettää sinulle viestejä';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get simulDescriptionHelp => 'Haluatko kertoa osallistujille jotain?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Tekstin yksityiskohtaisempaan muotoiluun voit käyttää $param-kieltä.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Aakkosjärjestyksessä';
+
+  @override
+  String get studyRelevant => 'Relevantti';
 
   @override
   String get studyAddNewChapter => 'Lisää uusi luku';

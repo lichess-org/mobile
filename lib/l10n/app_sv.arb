@@ -1343,7 +1343,6 @@
   "simulFeaturedHelp": "Visa din simultan för alla på {param}. Inaktivera för privata simultaner.",
   "simulDescription": "Simultan-beskrivning",
   "simulDescriptionHelp": "Något du vill berätta för deltagarna?",
-  "markdownAvailable": "{param} är tillgängligt för mer avancerad syntax.",
   "embedsAvailable": "Klistra in en spel-länk eller en studiekapitel-länk för att infoga den.",
   "inYourLocalTimezone": "I din egen lokala tidszon",
   "tournChat": "Turneringschatt",

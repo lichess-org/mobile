@@ -2508,7 +2508,7 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String joinedX(String param) {
-    return 'Biträte am $param';
+    return 'Biträte $param';
   }
 
   @override
@@ -4028,6 +4028,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get analysisShapesHowTo => 'Mit Shift + Musklick - rächts oder links - chasch grüeni oder roti Chreis und Pfil ufs Brätt zeichne.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Erlaub andere Schpiller dir Nachrichte z\'schicke';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get simulDescriptionHelp => 'Wottsch de Teilnehmer öppis mitteile?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param isch für erwitereti Syntax verfüegbar.';
+  String markdownIsAvailable(String param) {
+    return '$param isch zur Formatierig verfüegbar.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'alphabetisch';
+
+  @override
+  String get studyRelevant => 'Bedütend';
 
   @override
   String get studyAddNewChapter => 'Neus Kapitel zuefüege';

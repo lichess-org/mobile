@@ -4028,6 +4028,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get analysisShapesHowTo => 'Тақтада шеңбер мен нұсқағыш сызу үшін тінтуірмен оң шертіңіз немесе shift баса сол шертіңіз.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Ойыншыларға сізге хабар жіберу рұқсат па?';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsKk extends AppLocalizations {
   String get simulDescriptionHelp => 'Қатысушыларға тағы айтар сөзіңіз бар ма?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Кеңейтілген синтаксис үшін $param.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Әліппе ретімен';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Жаңа бөлім құру';

@@ -7385,8 +7385,14 @@ abstract class AppLocalizations {
   /// No description provided for @analysisShapesHowTo.
   ///
   /// In en, this message translates to:
-  /// **'Press shift+click or right-click to draw circles and arrows on the board.'**
+  /// **'Press right-click (or shift+click) to draw circles and arrows on the board. For other colours, combine the following with right-click:'**
   String get analysisShapesHowTo;
+
+  /// No description provided for @primaryColorArrowsHowTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.'**
+  String get primaryColorArrowsHowTo;
 
   /// No description provided for @letOtherPlayersMessageYou.
   ///
@@ -8498,11 +8504,11 @@ abstract class AppLocalizations {
   /// **'Anything you want to tell the participants?'**
   String get simulDescriptionHelp;
 
-  /// No description provided for @markdownAvailable.
+  /// No description provided for @markdownIsAvailable.
   ///
   /// In en, this message translates to:
-  /// **'{param} is available for more advanced syntax.'**
-  String markdownAvailable(String param);
+  /// **'{param} is available for formatting.'**
+  String markdownIsAvailable(String param);
 
   /// No description provided for @embedsAvailable.
   ///
@@ -9457,6 +9463,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Alphabetical'**
   String get studyAlphabetical;
+
+  /// No description provided for @studyRelevant.
+  ///
+  /// In en, this message translates to:
+  /// **'Relevant'**
+  String get studyRelevant;
 
   /// No description provided for @studyAddNewChapter.
   ///

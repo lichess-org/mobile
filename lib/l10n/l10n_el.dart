@@ -4028,6 +4028,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get analysisShapesHowTo => 'Πατήστε Shift + κλικ ή δεξί κλικ για να σχεδιάσετε κύκλους και βέλη στην σκακιέρα.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = κόκκινο, shift = κίτρινο, command ή alt = μπλε.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Επιτρέψτε άλλους παίκτες να σας στέλνουν μηνύματα';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsEl extends AppLocalizations {
   String get simulDescriptionHelp => 'Θέλετε να πείτε κάτι στους συμμετέχοντες;';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Η μορφή $param είναι διαθέσιμη για μια πιο προχωρημένη σύνταξη.';
+  String markdownIsAvailable(String param) {
+    return 'Μπορείτε να χρησιμοποιήσετε $param για μορφοποίηση.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Αλφαβητικά';
+
+  @override
+  String get studyRelevant => 'Συναφή';
 
   @override
   String get studyAddNewChapter => 'Προσθήκη νέου κεφαλαίου';

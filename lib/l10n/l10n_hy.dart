@@ -4028,6 +4028,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get analysisShapesHowTo => 'Խաղատախտակի վրա շրջանակներ և սլաքներ պատկերելու համար օգտագործեք Shift+մկնիկի ձախ կոճակը կամ աջ կոճակը։';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Թույլ տալ այլ խաղացողներին Ձեզ հաղորդագրություններ ուղարկել';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsHy extends AppLocalizations {
   String get simulDescriptionHelp => 'Ցանկանո՞ւմ եք որևէ բան պատմել մասնակիցներին։';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param հասանելի է ընդլայնված ֆորմատավորման համար';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Այբբենական կարգով';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Ավելացնել նոր գլուխ';

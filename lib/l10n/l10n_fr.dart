@@ -3512,10 +3512,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get newPasswordStrength => 'Robustesse du mot de passe';
 
   @override
-  String get clockInitialTime => 'Temps initial à la pendule';
+  String get clockInitialTime => 'Temps initial';
 
   @override
-  String get clockIncrement => 'Incrément de la pendule';
+  String get clockIncrement => 'Incrément';
 
   @override
   String get privacy => 'Confidentialité';
@@ -4026,6 +4026,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get analysisShapesHowTo => 'Utilisez maj+clic ou clic-droit pour dessiner des cercles et des flèches sur l\'échiquier.';
+
+  @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
 
   @override
   String get letOtherPlayersMessageYou => 'Permettre à d\'autres joueurs de vous envoyer des messages';
@@ -4645,8 +4648,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get simulDescriptionHelp => 'Voulez-vous dire quelque chose aux participants ?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param offre des options de formatage supplémentaires.';
+  String markdownIsAvailable(String param) {
+    return '$param est disponible pour aider au formatage.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alphabétique';
+
+  @override
+  String get studyRelevant => 'Pertinent';
 
   @override
   String get studyAddNewChapter => 'Ajouter un nouveau chapitre';

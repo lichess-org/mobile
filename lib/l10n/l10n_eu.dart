@@ -4028,6 +4028,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get analysisShapesHowTo => 'Zirkuluak eta geziak marrazteko, egizu shift+klik edo eskuin-klik.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Utzi beste jokalariei zuri mezuak bidaltzen';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsEu extends AppLocalizations {
   String get simulDescriptionHelp => 'Parte-hartzaileei zerbait esan nahi diezu?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param erabili dezakezu.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabetikoa';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Kapitulu berria gehitu';

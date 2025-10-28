@@ -4025,7 +4025,10 @@ class AppLocalizationsGl extends AppLocalizations {
   String get scrollOverComputerVariationsToPreviewThem => 'Pasa o punteiro sobre as variantes da computadora para visualizalas.';
 
   @override
-  String get analysisShapesHowTo => 'Pulsa Maiúsculas+clic ou preme o botón dereito do rato para debuxar círculos e frechas no taboleiro.';
+  String get analysisShapesHowTo => 'Preme o botón dereito do rato (ou pulsa Maiúsculas+clic) para debuxar círculos e frechas no taboleiro. Para obter outras cores, combina o seguinte co botón dereito do rato:';
+
+  @override
+  String get primaryColorArrowsHowTo => '(Ctrl ou Maiúsculas) = vermello;  (Comando, Alt ou Meta) = azul;  unha tecla de cada grupo = amarelo.';
 
   @override
   String get letOtherPlayersMessageYou => 'Permitir que outros xogadores che envíen mensaxes';
@@ -4645,8 +4648,8 @@ class AppLocalizationsGl extends AppLocalizations {
   String get simulDescriptionHelp => 'Queres dicirlle algo ós participantes?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param está dispoñíbel para unha sintaxe máis avanzada.';
+  String markdownIsAvailable(String param) {
+    return '$param está dispoñible para dar formato.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabeticamente';
+
+  @override
+  String get studyRelevant => 'Relevante';
 
   @override
   String get studyAddNewChapter => 'Engadir un novo capítulo';

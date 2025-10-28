@@ -1383,7 +1383,6 @@
   "simulFeaturedHelp": "Erakutsi zure aldi-berekoa mundu guztiari {param} helbideak. Desaktibatu aldi-bereko pribatuentzat.",
   "simulDescription": "Aldi-berekoaren deskribapena",
   "simulDescriptionHelp": "Parte-hartzaileei zerbait esan nahi diezu?",
-  "markdownAvailable": "{param} erabili dezakezu.",
   "embedsAvailable": "Itsatsi partida baten URL helbidea, azterlan baten atal baten URL helbidea hemen erakusteko.",
   "inYourLocalTimezone": "Zure ordu-zonan",
   "tournChat": "Txapelketaren txata",

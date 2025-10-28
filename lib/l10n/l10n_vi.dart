@@ -4000,6 +4000,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get analysisShapesHowTo => 'Nhấn Shift+click hoặc nhấp chuột phải để vẽ vòng tròn và mũi tên trên bàn cờ.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl hoặc shift = đỏ; command, alt hoặc meta = xanh; mỗi phím = vàng.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Cho phép người chơi khác gửi tin nhắn cho bạn';
 
   @override
@@ -4617,8 +4620,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get simulDescriptionHelp => 'Bạn có muốn nói điều gì với những người tham gia không?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param khả dụng cho những cấu trúc nâng cao hơn.';
+  String markdownIsAvailable(String param) {
+    return '$param có thể dùng để định dạng.';
   }
 
   @override
@@ -5436,6 +5439,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Theo thứ tự chữ cái';
+
+  @override
+  String get studyRelevant => 'Liên quan';
 
   @override
   String get studyAddNewChapter => 'Thêm một chương mới';

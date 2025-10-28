@@ -4023,7 +4023,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scrollOverComputerVariationsToPreviewThem => 'Scroll over computer variations to preview them.';
 
   @override
-  String get analysisShapesHowTo => 'Press shift+click or right-click to draw circles and arrows on the board.';
+  String get analysisShapesHowTo => 'Press right-click (or shift+click) to draw circles and arrows on the board. For other colours, combine the following with right-click:';
+
+  @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
 
   @override
   String get letOtherPlayersMessageYou => 'Let other players message you';
@@ -4643,8 +4646,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get simulDescriptionHelp => 'Anything you want to tell the participants?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param is available for more advanced syntax.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5509,6 +5512,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alphabetical';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Add a new chapter';
@@ -10892,8 +10898,8 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get simulDescriptionHelp => 'Anything you want to tell the participants?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param is available for more advanced syntax.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -11758,6 +11764,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get studyAlphabetical => 'Alphabetical';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Add a new chapter';

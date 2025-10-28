@@ -4084,6 +4084,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get analysisShapesHowTo => 'Pritisni shift+klik ali desni klik za risanje krožcev in puščic po šahovnici';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Dovoli drugim, da ti pišejo sporočila';
 
   @override
@@ -4701,8 +4704,8 @@ class AppLocalizationsSl extends AppLocalizations {
   String get simulDescriptionHelp => 'Kaj želite povedati udeležencem?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param je na voljo za naprednejšo skladnjo.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5663,6 +5666,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get studyAlphabetical => 'Po abecednem redu';
 
   @override
+  String get studyRelevant => 'Relevant';
+
+  @override
   String get studyAddNewChapter => 'Dodaj poglavje';
 
   @override
@@ -6167,7 +6173,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get studyVariantsAreSupportedTitle => 'Študije podpirajo variante';
 
   @override
-  String get studyVariantsAreSupportedText => 'Da, lahko študiraš Crazyhouse<br>in vse različice Lichessa!';
+  String get studyVariantsAreSupportedText => 'Da, lahko študiraš Crazyhouse<br>in vse Lichess različice!';
 
   @override
   String get studyChapterConclusionText => 'Poglavja so shranjena za vedno.<br>Zabavajte se z organiziranjem svoje šahovske vsebine!';

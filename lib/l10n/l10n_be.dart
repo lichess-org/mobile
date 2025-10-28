@@ -15,13 +15,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Усе гульні';
 
   @override
   String get mobileAreYouSure => 'Вы ўпэўнены?';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileBoardSettings => 'Наладкі дошкі';
 
   @override
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
@@ -33,29 +33,29 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Далучыцца да гульні';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Добры вечар, $param';
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Добры вечар';
 
   @override
   String mobileGoodDay(String param) {
-    return 'Good day, $param';
+    return 'Добры дзень, $param';
   }
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
+  String get mobileGoodDayWithoutName => 'Добры дзень';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Схаваць варыянт';
 
   @override
   String get mobileHomeTab => 'Галоўная';
@@ -207,13 +207,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSharePuzzle => 'Share this puzzle';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Паказаць каментары';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'Паказаць вынік';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Паказаць варыянты';
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
@@ -4076,6 +4076,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get analysisShapesHowTo => 'Каб маляваць стрэлкі і кружкі на дошцы, карыстайцеся Shift + ЛКМ або ПКМ.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Дазволіць дасылаць вам паведамленні';
 
   @override
@@ -4693,8 +4696,8 @@ class AppLocalizationsBe extends AppLocalizations {
   String get simulDescriptionHelp => 'Жадаеце штосьці сказаць удзельнікам?';
 
   @override
-  String markdownAvailable(String param) {
-    return 'Можаце выкарыстаць $param для больш адмысловага сінтаксісу.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5649,6 +5652,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Па алфавіце';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Дадаць новы раздзел';

@@ -4028,6 +4028,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get analysisShapesHowTo => 'Drücke Shift+Mausklick oder Rechtsklick, um Kreise und Pfeile auf dem Brett zu zeichnen.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Erlaube anderen Spielern dich zu kontaktieren';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get simulDescriptionHelp => 'Möchtest du den Teilnehmern etwas mitteilen?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param ist für erweiterte Formatierung verfügbar.';
+  String markdownIsAvailable(String param) {
+    return '$param ist zur Formatierung verfügbar.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alphabetisch';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Neues Kapitel hinzufügen';

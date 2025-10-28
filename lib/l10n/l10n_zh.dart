@@ -805,7 +805,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String broadcastStartsAfter(String param) {
-    return '从 $param 开始';
+    return '$param 后开始';
   }
 
   @override
@@ -4000,6 +4000,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get analysisShapesHowTo => '按shift+左键单击或右键单击在棋盘上绘制圆圈和箭头。';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = 红，Shift = 黄，Command 或 Alt = 蓝';
+
+  @override
   String get letOtherPlayersMessageYou => '允许其他人给您发私信';
 
   @override
@@ -4304,7 +4307,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get opening => '开局';
 
   @override
-  String get middlegame => '中盘';
+  String get middlegame => '中局';
 
   @override
   String get endgame => '残局';
@@ -4617,8 +4620,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get simulDescriptionHelp => '写下你想要告诉参与者的任何内容';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param 可用于更高级的格式。';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5438,6 +5441,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyAlphabetical => '按字母顺序';
 
   @override
+  String get studyRelevant => '相关内容';
+
+  @override
   String get studyAddNewChapter => '添加一个新章节';
 
   @override
@@ -6192,6 +6198,22 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileFeedbackButton => '問題反饋';
+
+  @override
+  String mobileGoodEvening(String param) {
+    return '晚安，$param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => '晚安';
+
+  @override
+  String mobileGoodDay(String param) {
+    return '你好，$param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => '你好';
 
   @override
   String get mobileHideVariation => '隱藏變化';
@@ -7013,11 +7035,24 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get broadcastSinceHideResults => '由於您選擇隱藏結果，所有預覽棋盤都是空的，以避免劇透。';
 
   @override
+  String get broadcastLiveboard => '實時棋局';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count 個直播',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String broadcastNbViewers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 位觀眾',
     );
     return '$_temp0';
   }
@@ -8169,6 +8204,18 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get settingsThisAccountIsClosed => '此帳號已被關閉。';
 
   @override
+  String get gameSetup => '棋局設置';
+
+  @override
+  String get challengeAFriend => '挑戰一位朋友';
+
+  @override
+  String get playAgainstComputer => '與電腦對局';
+
+  @override
+  String get gameMode => '遊戲模式';
+
+  @override
   String get toInviteSomeoneToPlayGiveThisUrl => '請分享此網址以邀人下棋';
 
   @override
@@ -8229,6 +8276,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get createAGame => '開始對局';
+
+  @override
+  String get createTheGame => '創建對局';
 
   @override
   String get whiteIsVictorious => '白方勝';
@@ -8558,6 +8608,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get currentGames => '當前對局';
+
+  @override
+  String joinedX(String param) {
+    return '於 $param 加入';
+  }
 
   @override
   String get viewInFullSize => '以全螢幕觀看棋局';
@@ -8940,7 +8995,31 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get proposeATakeback => '請求悔棋';
 
   @override
+  String get whiteProposesTakeback => '白方提議悔棋';
+
+  @override
+  String get blackProposesTakeback => '黑方提議悔棋';
+
+  @override
   String get takebackPropositionSent => '悔棋請求已發送';
+
+  @override
+  String get whiteDeclinesTakeback => '白方拒絕悔棋';
+
+  @override
+  String get blackDeclinesTakeback => '黑方拒絕悔棋';
+
+  @override
+  String get whiteAcceptsTakeback => '白方同意悔棋';
+
+  @override
+  String get blackAcceptsTakeback => '黑方同意悔棋';
+
+  @override
+  String get whiteCancelsTakeback => '白方取消悔棋';
+
+  @override
+  String get blackCancelsTakeback => '黑方取消悔棋';
 
   @override
   String get yourOpponentProposesATakeback => '對手請求悔棋';
@@ -10014,6 +10093,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get downloadImported => '下載導入的棋局';
 
   @override
+  String get downloadAllGames => '下載所有棋局';
+
+  @override
   String get crosstable => '歷程表';
 
   @override
@@ -10118,6 +10200,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get language => '語言';
+
+  @override
+  String get allLanguages => '所有語言';
 
   @override
   String get background => '背景';
@@ -10630,11 +10715,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get simulDescriptionHelp => '有甚麼要告訴參賽者的嗎？';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param 可用於更高級的格式。';
-  }
-
-  @override
   String get embedsAvailable => '貼上對局或學習章節網址來嵌入。';
 
   @override
@@ -10740,6 +10820,24 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get stats => '統計';
+
+  @override
+  String get copyToClipboard => '複製到剪貼簿';
+
+  @override
+  String get online => '在線';
+
+  @override
+  String get offline => '離線';
+
+  @override
+  String get search => '搜索';
+
+  @override
+  String get clearSearch => '清除搜索';
+
+  @override
+  String get tags => '標籤';
 
   @override
   String opponentLeftCounter(int count) {
@@ -11521,6 +11619,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get studyCopyChapterPgn => '複製PGN';
+
+  @override
+  String get studyCopyRawChapterPgn => '複製純 PGN';
 
   @override
   String get studyDownloadGame => '下載棋局';

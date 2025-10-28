@@ -1249,7 +1249,6 @@
   "simulFeaturedHelp": "Wys jou simul aan almal op {param}. Deaktiveer vir private simuls.",
   "simulDescription": "Simul beskrywing",
   "simulDescriptionHelp": "Enige iets wat jy vir die deelnemers wil vertel?",
-  "markdownAvailable": "{param} is beskikbaar vir meer ingewikkelde sintaks.",
   "embedsAvailable": "Plak 'n spel URL of a studie hoofstuk URL om dit in te bed.",
   "inYourLocalTimezone": "In you eie plaaslike tydsone",
   "tournChat": "Toernooi klets",

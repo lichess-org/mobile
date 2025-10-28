@@ -4026,6 +4026,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get analysisShapesHowTo => 'बोर्ड पर मंडलियां और तीरों को आकर्षित करने के लिए shift + click या right-click दबाएं';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'अन्य खिलाड़ियों को आपको संदेश देने दें';
 
   @override
@@ -4643,8 +4646,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String get simulDescriptionHelp => 'क्या आप प्रतिभागियों को कुछ बताना चाहते हैं?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param अत्याधुनिक स्वरूपण के लिए उपलब्ध है।';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5509,6 +5512,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'वर्णक्रमानुसार';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'एक नया अध्याय जोड़ें';

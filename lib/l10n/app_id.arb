@@ -1222,7 +1222,6 @@
   "simulFeaturedHelp": "Tampilkan simulasi Anda ke semua orang pada {param}. Nonaktifkan untuk simulasi pribadi.",
   "simulDescription": "Deskripsi simulasi",
   "simulDescriptionHelp": "Adakah sesuatu yang ingin Anda sampaikan pada peserta?",
-  "markdownAvailable": "{param} tersedia untuk sintaks lebih lanjut.",
   "inYourLocalTimezone": "Di zona waktu lokal Anda",
   "tournChat": "Obrolan turnamen",
   "noChat": "Tanpa obrolan",

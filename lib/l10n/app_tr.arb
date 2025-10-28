@@ -1378,7 +1378,6 @@
   "simulFeaturedHelp": "Eş zamanlı gösteriyi {param} adresinden herkese görünür kılar. Özel gösteriler için devre dışı bırakın.",
   "simulDescription": "Eş zamanlı gösterinin açıklaması",
   "simulDescriptionHelp": "Katılımcılara söylemek istediğiniz bir şey var mı?",
-  "markdownAvailable": "{param} kullanarak metni daha ayrıntılı bir şekilde biçimlendirebilirsiniz.",
   "embedsAvailable": "Bir maç veya çalışma bölümü eklemek için bağlantıyı buraya yapıştırın.",
   "inYourLocalTimezone": "Yerel zaman diliminizde",
   "tournChat": "Turnuva sohbeti",

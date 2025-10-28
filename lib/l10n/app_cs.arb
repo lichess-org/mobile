@@ -1367,7 +1367,6 @@
   "simulFeaturedHelp": "Zobrazit vaši simultánní hru všem na {param}. Vypnout pro soukromé simultánní hry.",
   "simulDescription": "Popis simultánky",
   "simulDescriptionHelp": "Je tu něco co by jste chtěli sdělit účastníkům?",
-  "markdownAvailable": "{param} je k dispozici pro pokročilé formátování.",
   "embedsAvailable": "Vložte URL hry nebo kapitoly studie pro zobrazení.",
   "inYourLocalTimezone": "Ve vašem časovém pásmu",
   "tournChat": "Turnajový chat",

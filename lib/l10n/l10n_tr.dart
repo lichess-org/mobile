@@ -4028,6 +4028,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get analysisShapesHowTo => 'Tahta üzerinde çember ya da ok çizmek için lütfen shift+click ya da right+click kullanın.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Diğer oyuncular size mesaj yollayabilsinler mi?';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get simulDescriptionHelp => 'Katılımcılara söylemek istediğiniz bir şey var mı?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param kullanarak metni daha ayrıntılı bir şekilde biçimlendirebilirsiniz.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabetik';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Yeni bir bölüm ekle';

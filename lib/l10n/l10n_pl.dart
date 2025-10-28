@@ -4084,6 +4084,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get analysisShapesHowTo => 'Kliknij podczas trzymania Shift lub przytrzymaj prawy przycisk myszy aby rysować okręgi i strzałki na szachownicy.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Zezwól na wiadomości od innych graczy';
 
   @override
@@ -4701,8 +4704,8 @@ class AppLocalizationsPl extends AppLocalizations {
   String get simulDescriptionHelp => 'Wiadomość do przekazania uczestnikom';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param jest dostępny dla bardziej zaawansowanej składni.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5661,6 +5664,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabetycznie';
+
+  @override
+  String get studyRelevant => 'Powiązane';
 
   @override
   String get studyAddNewChapter => 'Dodaj nowy rozdział';

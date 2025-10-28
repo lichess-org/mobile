@@ -4028,6 +4028,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get analysisShapesHowTo => 'Druk shift+klik of regs-kliek om sirkels en pyle te trek op die bord.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Laat ander spelers boodskappe aan jou stuur';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsAf extends AppLocalizations {
   String get simulDescriptionHelp => 'Enige iets wat jy vir die deelnemers wil vertel?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param is beskikbaar vir meer ingewikkelde sintaks.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabeties';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Voeg \'n nuwe hoofstuk by';

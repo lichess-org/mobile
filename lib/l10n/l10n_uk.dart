@@ -2157,7 +2157,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get gameMode => 'Режим гри';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Створити запит на гру';
 
   @override
   String get youPlayAs => 'Ви граєте за';
@@ -4084,6 +4084,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get analysisShapesHowTo => 'Натисніть shift+ЛКМ або ПКМ, щоби намалювати кола та стрілки на шахівниці.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl = червоний, Shift = жовтий, command або alt = синій.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Дозволити іншим гравцям надсилати Вам повідомлення';
 
   @override
@@ -4701,8 +4704,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get simulDescriptionHelp => 'Чи хочете ви щось повідомити учасникам?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param доступний для більш детального форматування.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5661,6 +5664,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'За алфавітом';
+
+  @override
+  String get studyRelevant => 'Релевантні';
 
   @override
   String get studyAddNewChapter => 'Додати новий розділ';

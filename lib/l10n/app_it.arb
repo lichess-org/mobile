@@ -1382,7 +1382,6 @@
   "simulFeaturedHelp": "Mostra la tua simulazione a tutti su {param}. Disabilita per le simulazioni private.",
   "simulDescription": "Descrizione della simulazione",
   "simulDescriptionHelp": "Vuoi dire qualcosa ai partecipanti?",
-  "markdownAvailable": "{param} è disponibile per la sintassi più avanzata.",
   "embedsAvailable": "Incolla l'URL di un gioco o l'URL di un capitolo di studio per incorporarlo.",
   "inYourLocalTimezone": "Nel tuo fuso orario locale",
   "tournChat": "Chat del torneo",

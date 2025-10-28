@@ -70,7 +70,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileNoSearchResults => 'لا توجد نتائج';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'ليست كل الميزات من التطبيق القديم أو الموقع متوفرة حاليا، لكننا نضيف الميزات دائما';
 
   @override
   String get mobileNotFollowingAnyUser => 'أنت لا تتابع أي مستخدم.';
@@ -123,7 +123,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileRemoveBookmark => 'إزالة الإشارة المرجعية';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'تحليل الخادم';
 
   @override
   String get mobileSettingsClockPosition => 'موضع الساعة';
@@ -2201,22 +2201,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'هذا الحساب مغلق.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'ترتيب اللعبة';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'تحدي صديق';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'لعب ضد الحاسوب';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'نمط اللعب';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'إنشاء ساحة لعب';
 
   @override
-  String get youPlayAs => 'You play as';
+  String get youPlayAs => 'لعب ك';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'لدعوة شخص ما للعب، أرسل له هذا الرابط';
@@ -2225,7 +2225,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get gameOver => 'انتهت المباراة';
 
   @override
-  String get waitingForOpponent => 'في إنتظار الخصم';
+  String get waitingForOpponent => 'في انتظار المنافس';
 
   @override
   String get orLetYourOpponentScanQrCode => 'أو أجعل خصمك يمسح رمز QR هذا';
@@ -2992,7 +2992,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exportGames => 'تصدير المباريات';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'تصفية التصنيف ';
 
   @override
   String get thisAccountViolatedTos => 'هذا الحساب انتهك شروط خدمة lichess';
@@ -3066,7 +3066,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'تصفية اللعب مغلق حاليا لأن تصنيفك غير مستقر، لعب مباريات مصنفة سوف يزيد من ثبات تصنيفك';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -4140,6 +4140,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get analysisShapesHowTo => 'استخدم ز الفأرة الأيمن لرسم دوائر وأسهم على الرقعة';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'السماح للاعبين بمراسلتك';
 
   @override
@@ -4757,8 +4760,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get simulDescriptionHelp => 'أي شيء تريد أن تخبره للمشاركين؟';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param متاح لتركيبات الأكثر تطوراً.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -4878,22 +4881,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get disableBlindMode => 'تعطيل الوضع الأعمى';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'نسخ للحافظة';
 
   @override
-  String get online => 'online';
+  String get online => 'متصل';
 
   @override
-  String get offline => 'offline';
+  String get offline => 'غير متصل ';
 
   @override
-  String get search => 'Search';
+  String get search => 'بحث';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'مسح البحث';
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'تصنيفات';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5811,6 +5814,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'أبجدي';
+
+  @override
+  String get studyRelevant => 'ذات صلة';
 
   @override
   String get studyAddNewChapter => 'أضف فصلاً جديدا';

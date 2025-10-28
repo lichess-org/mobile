@@ -4054,6 +4054,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get analysisShapesHowTo => 'Pritisni shift + lijevi klik ili desni klik kako bi crtao/la krugove i strelice na ploči.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Dopusti drugim igračima da ti pošalju poruku';
 
   @override
@@ -4671,8 +4674,8 @@ class AppLocalizationsHr extends AppLocalizations {
   String get simulDescriptionHelp => 'Želite li nešto reći sudionicima?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param je dostupan za napredniju sintaksu.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5584,6 +5587,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Abecednim redom';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Dodaj novo poglavlje';

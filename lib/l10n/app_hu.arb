@@ -1383,7 +1383,6 @@
   "simulFeaturedHelp": "Szimultán közzététele {param} oldalon. Kapcsold ki privát szimultánhoz.",
   "simulDescription": "Szimultán leírása",
   "simulDescriptionHelp": "Van bármi amit elmondanál a résztvevőknek?",
-  "markdownAvailable": "{param} is elérhető a haladó szerkesztéshez.",
   "embedsAvailable": "Illeszd be a játék vagy a tanulmány URL-jét a beágyazáshoz.",
   "inYourLocalTimezone": "Saját időzónád szerint",
   "tournChat": "Verseny csevegő",

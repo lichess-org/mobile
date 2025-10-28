@@ -1307,7 +1307,6 @@
   "simulFeaturedHelp": "Pokažite svoju simulaciju svima na {param}. Onemogući za privatne simulacije.",
   "simulDescription": "Opis simultanke",
   "simulDescriptionHelp": "Želite li nešto reći sudionicima?",
-  "markdownAvailable": "{param} je dostupan za napredniju sintaksu.",
   "embedsAvailable": "Zalijepite URL igre ili URL poglavlja studije da biste ga ugradili.",
   "inYourLocalTimezone": "U tvojoj vremenskoj zoni",
   "tournChat": "Turnirski razgovor",

@@ -4028,6 +4028,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get analysisShapesHowTo => 'Pressiona shift+clique ou clica com o botão direito do rato para desenhares círculos e setas no tabuleiro.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl ou shift = vermelho; comand, alt, ou meta = azul; uma tecla de cada = amarelo.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Permitir que outros jogadores te enviem mensagens';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get simulDescriptionHelp => 'Quer dizer alguma coisa aos participantes?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param está disponível para sintaxe mais avançada.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Ordem alfabética';
+
+  @override
+  String get studyRelevant => 'Relevante';
 
   @override
   String get studyAddNewChapter => 'Adicionar um novo capítulo';
@@ -10894,8 +10900,8 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get simulDescriptionHelp => 'Você gostaria de dizer algo aos participantes?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param está disponível para opções de formatação adicionais.';
+  String markdownIsAvailable(String param) {
+    return '$param está disponível para formatação.';
   }
 
   @override
@@ -11760,6 +11766,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get studyAlphabetical => 'Em ordem alfabética';
+
+  @override
+  String get studyRelevant => 'Relevante';
 
   @override
   String get studyAddNewChapter => 'Adicionar um novo capítulo';

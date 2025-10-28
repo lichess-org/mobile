@@ -4028,6 +4028,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get analysisShapesHowTo => 'Shift-kattintva vagy jobb egérgombbal rajzolhatsz karikákat és nyilakat a táblára';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Mások küldhetnek neked üzenetet';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsHu extends AppLocalizations {
   String get simulDescriptionHelp => 'Van bármi amit elmondanál a résztvevőknek?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param is elérhető a haladó szerkesztéshez.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Betűrendben';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Új fejezet hozzáadása';

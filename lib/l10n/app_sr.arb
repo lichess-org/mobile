@@ -1150,7 +1150,6 @@
   "simulFeaturedHelp": "Покажи своју симултанку свима на {param}. Онемогући за приватне симултанке.",
   "simulDescription": "Опис симултанке",
   "simulDescriptionHelp": "Желиш ли нешто да саопштиш учесницима?",
-  "markdownAvailable": "{param} је на располагању за напреднију синтаксу.",
   "embedsAvailable": "Убаци URL партије или поглавља студије.",
   "inYourLocalTimezone": "Према твојој локалној временској зони",
   "tournChat": "Чет на турниру",

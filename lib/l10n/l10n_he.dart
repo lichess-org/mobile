@@ -4080,6 +4080,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get analysisShapesHowTo => 'הקש \"Shift\" + מקש עכבר שמאלי או ימני כדי לצייר חצים ועיגולים על הלוח.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'אפשר/י לשחקנים אחרים לשלוח לך הודעות';
 
   @override
@@ -4697,8 +4700,8 @@ class AppLocalizationsHe extends AppLocalizations {
   String get simulDescriptionHelp => 'משהו שאת/ה רוצה להגיד למשתתפים?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param זמין לתחביר מתקדם יותר.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5657,6 +5660,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'בסדר האלפבית';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'הוסיפו פרק חדש';

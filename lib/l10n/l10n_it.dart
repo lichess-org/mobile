@@ -4028,6 +4028,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get analysisShapesHowTo => 'Premere MAIUSC+click o tasto destro del mouse per disegnare cerchi e frecce sulla scacchiera.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Lascia che gli altri giocatori ti inviino messaggi';
 
   @override
@@ -4645,8 +4648,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get simulDescriptionHelp => 'Vuoi dire qualcosa ai partecipanti?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param è disponibile per la sintassi più avanzata.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5511,6 +5514,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'Alfabetico';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Aggiungi un nuovo capitolo';

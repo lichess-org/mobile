@@ -1278,7 +1278,6 @@
   "simulFeaturedHelp": "Қалың ойынды {param}-те баршаға көрсету. Оңаша ойындарда өшірулі.",
   "simulDescription": "Қалың ойын сипаттамасы",
   "simulDescriptionHelp": "Қатысушыларға тағы айтар сөзіңіз бар ма?",
-  "markdownAvailable": "Кеңейтілген синтаксис үшін {param}.",
   "embedsAvailable": "Еңгізу үшін ойынның не зерттеу бөлімінің URL-ын қойыңыз.",
   "inYourLocalTimezone": "Жергілікті уақыт белдеуіңізде",
   "tournChat": "Жарыстың сұхбат бөлмесі",

@@ -4084,6 +4084,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get analysisShapesHowTo => 'Чтобы рисовать на доске кружки и стрелки, используйте Shift+левую кнопку мыши или правую кнопку.';
 
   @override
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+
+  @override
   String get letOtherPlayersMessageYou => 'Разрешить присылать вам сообщения';
 
   @override
@@ -4701,8 +4704,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get simulDescriptionHelp => 'Хотите что-нибудь сказать участникам?';
 
   @override
-  String markdownAvailable(String param) {
-    return '$param доступен для расширенного форматирования.';
+  String markdownIsAvailable(String param) {
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5661,6 +5664,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get studyAlphabetical => 'По алфавиту';
+
+  @override
+  String get studyRelevant => 'Relevant';
 
   @override
   String get studyAddNewChapter => 'Добавить новую главу';
