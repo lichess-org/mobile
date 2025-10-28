@@ -18,9 +18,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
@@ -217,11 +216,9 @@ class GamePlayer extends StatelessWidget {
                                   if (mePlaying) {
                                     ref.invalidate(accountProvider);
                                   }
-                                  Navigator.of(context).push(
-                                    mePlaying
-                                        ? ProfileScreen.buildRoute(context)
-                                        : UserScreen.buildRoute(context, player.user!),
-                                  );
+                                  Navigator.of(
+                                    context,
+                                  ).push(UserOrProfileScreen.buildRoute(context, player.user!));
                                 }
                               : null,
                           child: playerWidget,
