@@ -30,9 +30,7 @@ class _EngineLinesState extends ConsumerState<EngineLines> {
       engineEvaluationPreferencesProvider.select((p) => p.numEvalLines),
     );
     final localEval = ref.watch(engineEvaluationProvider).eval;
-    final eval = localEval?.threatMode == true
-        ? localEval
-        : pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
+    final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
     // save the last eval to display when the current eval is not yet available to avoid flickering
     if (eval != null) lastEval = eval;
 

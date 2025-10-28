@@ -61,13 +61,11 @@ class EngineGauge extends ConsumerWidget {
     final localEval = params.isLocalEngineAvailable
         ? ref.watch(engineEvaluationProvider).eval
         : null;
-    final eval = localEval?.threatMode == true
-        ? localEval
-        : pickBestEval(
-            localEval: localEval,
-            savedEval: params.savedEval,
-            serverEval: params.serverEval,
-          );
+    final eval = pickBestEval(
+      localEval: localEval,
+      savedEval: params.savedEval,
+      serverEval: params.serverEval,
+    );
 
     return GestureDetector(
       onTap: onTap,

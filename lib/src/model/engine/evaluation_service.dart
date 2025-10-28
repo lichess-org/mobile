@@ -403,6 +403,10 @@ Eval? pickBestEval({
   /// The eval from the server analysis
   required ExternalEval? serverEval,
 }) {
+  if (localEval?.threatMode == true) {
+    return localEval;
+  }
+
   return switch (savedEval) {
     CloudEval() => savedEval,
     final LocalEval eval => localEval != null && localEval.isBetter(eval) ? localEval : eval,
