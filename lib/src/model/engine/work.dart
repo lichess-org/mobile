@@ -28,11 +28,9 @@ sealed class Work with _$Work {
     required IList<Step> steps,
   }) = _Work;
 
-  Position get position {
-    final position = steps.lastOrNull?.position ?? initialPosition;
-    if (threatMode != true) {
-      return position;
-    }
+  Position get position => steps.lastOrNull?.position ?? initialPosition;
+
+  Position get threatModePosition {
     // TODO maybe add a playNullMove() to dartchess' Position class instead?
     return position.copyWith(
       turn: position.turn.opposite,

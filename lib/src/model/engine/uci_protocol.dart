@@ -129,7 +129,8 @@ class UCIProtocol {
 
       if ((depth < minDepth && moves.isNotEmpty) || povEv == null) return;
 
-      final ev = _work!.position.turn == Side.white ? povEv : -povEv;
+      final pivot = _work!.threatMode == true ? Side.black : Side.white;
+      final ev = _work!.position.turn == pivot ? povEv : -povEv;
 
       // For now, ignore most upperbound/lowerbound messages.
       // However non-primary pvs may only have an upperbound.
@@ -139,7 +140,7 @@ class UCIProtocol {
 
       if (multiPv == 1) {
         _currentEval = LocalEval(
-          position: _work!.position,
+          position: _work!.threatMode == true ? _work!.threatModePosition : _work!.position,
           searchTime: Duration(milliseconds: elapsedMs),
           depth: depth,
           nodes: nodes,
@@ -191,15 +192,16 @@ class UCIProtocol {
       setOption('MultiPV', math.max(1, _work!.multiPv).toString());
 
       _sendAndLog(
-        [
-          'position fen',
-          if (_work!.threatMode == true) _work!.position.fen else _work!.initialPosition.fen,
-          'moves',
-          if (_work!.threatMode != true)
-            ..._work!.steps.map(
-              (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
-            ),
-        ].join(' '),
+        _work!.threatMode == true
+            ? 'position fen ${_work!.threatModePosition.fen}'
+            : [
+                'position fen',
+                _work!.initialPosition.fen,
+                'moves',
+                ..._work!.steps.map(
+                  (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
+                ),
+              ].join(' '),
       );
       _sendAndLog('go movetime ${_work!.searchTime.inMilliseconds}');
       _isComputing.value = true;
