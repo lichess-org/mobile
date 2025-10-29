@@ -15,6 +15,7 @@ class ConnectedIcon extends StatelessWidget {
   const ConnectedIcon({
     required this.isConnected,
     this.shouldShowIsOnGameLabels = false,
+    this.size,
     super.key,
   });
 
@@ -22,6 +23,8 @@ class ConnectedIcon extends StatelessWidget {
 
   /// Whether to show "is on game" labels in tooltips.
   final bool shouldShowIsOnGameLabels;
+
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +35,8 @@ class ConnectedIcon extends StatelessWidget {
       message: label,
       child: Icon(
         isConnected ? Symbols.wifi : Symbols.wifi_off,
-        color: isConnected ? null : textShade(context, 0.4),
-        size: DefaultTextStyle.of(context).style.fontSize,
+        color: isConnected ? null : textShade(context, 0.3),
+        size: size,
       ),
     );
   }
