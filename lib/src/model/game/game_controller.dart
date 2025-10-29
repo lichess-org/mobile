@@ -129,7 +129,7 @@ class GameController extends _$GameController {
     });
   }
 
-  void onFocusLost() {
+  void onForegroundLost() {
     if (_socketClient.isDisposed) {
       assert(false, 'socket client should not be disposed here');
       return;
@@ -150,7 +150,7 @@ class GameController extends _$GameController {
       return;
     }
 
-    if (!state.hasValue || !state.requireValue.game.playable) {
+    if (!state.hasValue) {
       return;
     }
 
