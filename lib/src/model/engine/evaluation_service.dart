@@ -196,6 +196,7 @@ class EvaluationService {
     ClientEval? initialPositionEval,
     required ShouldEmitEvalFilter shouldEmit,
     bool goDeeper = false,
+    bool threatMode = false,
   }) {
     final context = _context;
     final engine = _engine;
@@ -220,6 +221,7 @@ class EvaluationService {
       variant: context.variant,
       threads: options.cores,
       hashSize: maxMemory,
+      threatMode: threatMode,
       searchTime: goDeeper ? kMaxEngineSearchTime : options.searchTime,
       isDeeper: goDeeper,
       multiPv: options.multiPv,
@@ -401,6 +403,10 @@ Eval? pickBestEval({
   /// The eval from the server analysis
   required ExternalEval? serverEval,
 }) {
+  if (localEval?.threatMode == true) {
+    return localEval;
+  }
+
   return switch (savedEval) {
     CloudEval() => savedEval,
     final LocalEval eval => localEval != null && localEval.isBetter(eval) ? localEval : eval,

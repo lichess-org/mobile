@@ -326,6 +326,11 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
     }
   }
 
+  Future<void> toggleEngineThreatMode() async {
+    state = state.copyWith(engineInThreatMode: !state.engineInThreatMode);
+    requestEval();
+  }
+
   void _setPath(UciPath path, {bool isNavigating = false, bool firstMove = false}) {
     final pathChange = state.currentPath != path;
     final newNode = _gameTree.branchAt(path).view;
@@ -359,7 +364,10 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       shouldBlinkNextArrow: false,
     );
 
-    if (pathChange) requestEval();
+    if (pathChange) {
+      state = state.copyWith(engineInThreatMode: false);
+      requestEval();
+    }
   }
 
   String makePgn() {
@@ -436,6 +444,7 @@ sealed class PuzzleState with _$PuzzleState implements EvaluationMixinState {
     required bool shouldBlinkNextArrow,
     required bool isEvaluationEnabled,
     PuzzleContext? nextContext,
+    @Default(false) bool engineInThreatMode,
   }) = _PuzzleState;
 
   @override

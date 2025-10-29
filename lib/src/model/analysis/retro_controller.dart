@@ -316,6 +316,15 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
     _showMistake(state.requireValue.currentMistakeIndex + 1);
   }
 
+  Future<void> toggleEngineThreatMode() async {
+    if (state.hasValue) {
+      state = AsyncData(
+        state.requireValue.copyWith(engineInThreatMode: !state.requireValue.engineInThreatMode),
+      );
+      requestEval();
+    }
+  }
+
   void _showMistake(int index) {
     final mistake = state.requireValue.mistakes.getOrNull(index);
     final lastMistake = state.requireValue.mistakes.lastOrNull;
@@ -390,6 +399,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
     }
 
     if (pathChange) {
+      this.state = AsyncValue.data(this.state.requireValue.copyWith(engineInThreatMode: false));
       requestEval();
     }
 
@@ -510,6 +520,7 @@ sealed class RetroState with _$RetroState implements EvaluationMixinState, Commo
     DateTime? evalRequestedAt,
     Move? lastMove,
     NormalMove? promotionMove,
+    @Default(false) bool engineInThreatMode,
   }) = _RetroState;
 
   @override
