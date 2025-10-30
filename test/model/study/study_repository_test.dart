@@ -349,8 +349,8 @@ void main() {
         Study(
           id: const StudyId('JbWtuaeK'),
           name: 'How to Solve Puzzles Correctly',
-          members: IList(const [
-            StudyMember(
+          members: IMap(const {
+            UserId('kyle-and-jess'): StudyMember(
               user: LightUser(
                 name: 'Kyle-and-Jess',
                 flair: 'nature.chipmunk',
@@ -358,11 +358,11 @@ void main() {
               ),
               role: 'w',
             ),
-            StudyMember(
+            UserId('jessieu726'): StudyMember(
               user: LightUser(name: 'jessieu726', flair: 'nature.duck', id: UserId('jessieu726')),
               role: 'w',
             ),
-            StudyMember(
+            UserId('kyle11878'): StudyMember(
               user: LightUser(
                 name: 'kyle11878',
                 flair: 'activity.lichess-horsey',
@@ -370,7 +370,7 @@ void main() {
               ),
               role: 'w',
             ),
-          ]),
+          }),
           liked: false,
           likes: 29,
           ownerId: const UserId('kyle-and-jess'),

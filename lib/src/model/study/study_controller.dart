@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -36,6 +37,7 @@ class StudyController extends _$StudyController
   late Root _root;
 
   Timer? _opponentFirstMoveTimer;
+  Timer? _sendMoveToSocketTimer;
   StreamSubscription<SocketEvent>? _socketSubscription;
   final _likeDebouncer = Debouncer(const Duration(milliseconds: 500));
 
@@ -70,6 +72,7 @@ class StudyController extends _$StudyController
   Future<StudyState> build(StudyId id) async {
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
+      _sendMoveToSocketTimer?.cancel();
       _socketSubscription?.cancel();
       _likeDebouncer.cancel();
       disposeEngineEvaluation();
@@ -129,12 +132,15 @@ class StudyController extends _$StudyController
     final variant = study.chapter.setup.variant;
     final orientation = study.chapter.setup.orientation;
 
+    final UserId? me = ref.read(authSessionProvider)?.user.id;
+
     // Some studies have illegal starting positions. This is usually the case for introductory chapters.
     // We do not treat this as an error, but display a static board instead.
     try {
       _root = Root.fromPgnGame(game);
     } on PositionSetupException {
       final illegalPositionState = StudyState(
+        myId: me,
         variant: variant,
         study: study,
         currentPath: UciPath.empty,
@@ -161,6 +167,7 @@ class StudyController extends _$StudyController
     Move? lastMove;
 
     final studyState = StudyState(
+      myId: me,
       variant: variant,
       study: study,
       currentPath: currentPath,
@@ -215,6 +222,9 @@ class StudyController extends _$StudyController
             study: state.requireValue.study.copyWith(liked: meLiked, likes: likes),
           ),
         );
+      case 'node':
+        // let's just ack the node for now
+        _sendMoveToSocketTimer?.cancel();
     }
   }
 
@@ -241,6 +251,8 @@ class StudyController extends _$StudyController
       state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
       return;
     }
+
+    _sendMoveToSocket(move);
 
     final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
     if (newPath != null) {
@@ -383,7 +395,32 @@ class StudyController extends _$StudyController
     if (!state.hasValue) return;
 
     _root.deleteAt(path);
+    _recordChange('deleteNode', {'path': path.value, 'jumpTo': path.penultimate.value});
     _setPath(path.penultimate, shouldRecomputeRootView: true);
+  }
+
+  void _sendMoveToSocket(NormalMove move) {
+    if (state.requireValue.isWriteable == false) return;
+
+    _sendMoveToSocketTimer?.cancel();
+    _recordChange('anaMove', {
+      'orig': move.from.name,
+      'dest': move.to.name,
+      'fen': state.requireValue.currentPosition!.fen,
+      'path': state.requireValue.currentPath.value,
+    });
+
+    _sendMoveToSocketTimer = Timer(const Duration(seconds: 3), () {
+      // resend the move in case it was lost
+      _sendMoveToSocket(move);
+    });
+  }
+
+  void _recordChange(String socketEvent, Map<String, dynamic> data) {
+    if (!state.hasValue) return;
+    if (state.requireValue.isWriteable == false) return;
+
+    _socketClient.send(socketEvent, {...data, 'ch': state.requireValue.study.chapter.id.value});
   }
 
   void _setPath(
@@ -469,6 +506,8 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
   const StudyState._();
 
   const factory StudyState({
+    UserId? myId,
+    bool? isAdmin,
     required Study study,
     required String pgn,
 
@@ -512,6 +551,18 @@ sealed class StudyState with _$StudyState implements EvaluationMixinState, Commo
     /// The PGN root comments of the study
     IList<PgnComment>? pgnRootComments,
   }) = _StudyState;
+
+  /// Whether the current user is the owner of the study.
+  bool get amIOwner => myId == study.ownerId || (isAdmin == true && canIContribute);
+
+  /// The current user's member information, if available.
+  StudyMember? get myMember => myId != null ? study.members[myId!] : null;
+
+  /// Whether the current user can contribute to the study.
+  bool get canIContribute => myMember?.role == 'w';
+
+  /// Whether the study is writeable by the current user
+  bool get isWriteable => canIContribute && !gamebookActive;
 
   @override
   bool get alwaysRequestCloudEval => false;
