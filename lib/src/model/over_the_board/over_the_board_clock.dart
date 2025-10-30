@@ -7,11 +7,13 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'over_the_board_clock.freezed.dart';
+
 part 'over_the_board_clock.g.dart';
 
 @riverpod
 class OverTheBoardClock extends _$OverTheBoardClock {
   final Stopwatch _stopwatch = Stopwatch();
+  final int _timeToGive = 15;
 
   Timer? _updateTimer;
 
@@ -42,6 +44,16 @@ class OverTheBoardClock extends _$OverTheBoardClock {
     return OverTheBoardClockState.fromTimeIncrement(
       TimeIncrement(const Duration(minutes: 5).inSeconds, const Duration(seconds: 3).inSeconds),
     );
+  }
+
+  void giveTime(Side side) {
+    final timeToGiveDuration = Duration(seconds: _timeToGive);
+
+    if (side == Side.white) {
+      state = state.copyWith(whiteTimeLeft: state.whiteTimeLeft! + timeToGiveDuration);
+    } else {
+      state = state.copyWith(blackTimeLeft: state.blackTimeLeft! + timeToGiveDuration);
+    }
   }
 
   void setupClock(TimeIncrement timeIncrement) {
