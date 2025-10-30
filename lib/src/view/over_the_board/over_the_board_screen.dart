@@ -64,6 +64,14 @@ class _BodyState extends ConsumerState<_Body> {
   Side orientation = Side.white;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showConfigureGameSheet(context, isDismissible: true);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final overTheBoardPrefs = ref.watch(overTheBoardPreferencesProvider);
