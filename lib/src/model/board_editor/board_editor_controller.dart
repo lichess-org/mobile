@@ -16,14 +16,10 @@ class BoardEditorController extends _$BoardEditorController {
     final pieces = readFen(initialFen ?? kInitialFEN).lock;
 
     final castlingRights = IMap({
-      CastlingRight.whiteKing:
-          position.castles.rookOf(Side.white, CastlingSide.king) != null,
-      CastlingRight.whiteQueen:
-          position.castles.rookOf(Side.white, CastlingSide.queen) != null,
-      CastlingRight.blackKing:
-          position.castles.rookOf(Side.black, CastlingSide.king) != null,
-      CastlingRight.blackQueen:
-          position.castles.rookOf(Side.black, CastlingSide.queen) != null,
+      CastlingRight.whiteKing: position.castles.rookOf(Side.white, CastlingSide.king) != null,
+      CastlingRight.whiteQueen: position.castles.rookOf(Side.white, CastlingSide.queen) != null,
+      CastlingRight.blackKing: position.castles.rookOf(Side.black, CastlingSide.king) != null,
+      CastlingRight.blackQueen: position.castles.rookOf(Side.black, CastlingSide.queen) != null,
     });
     return BoardEditorState(
       orientation: Side.white,
@@ -40,10 +36,7 @@ class BoardEditorController extends _$BoardEditorController {
   }
 
   void updateMode(EditorPointerMode mode, [Piece? pieceToAddOnEdit]) {
-    state = state.copyWith(
-      editorPointerMode: mode,
-      pieceToAddOnEdit: pieceToAddOnEdit,
-    );
+    state = state.copyWith(editorPointerMode: mode, pieceToAddOnEdit: pieceToAddOnEdit);
   }
 
   void discardPiece(Square square) {
@@ -52,9 +45,7 @@ class BoardEditorController extends _$BoardEditorController {
 
   void movePiece(Square? origin, Square destination, Piece piece) {
     if (origin != destination) {
-      _updatePosition(
-        state.pieces.remove(origin ?? destination).add(destination, piece),
-      );
+      _updatePosition(state.pieces.remove(origin ?? destination).add(destination, piece));
     }
   }
 
@@ -96,10 +87,7 @@ class BoardEditorController extends _$BoardEditorController {
     /// For en passant to be possible, there needs to be an adjacent pawn which has moved two squares forward.
     /// So the two squares behind must be empty
     void checkEnPassant(Square square, int fileOffset) {
-      final adjacentSquare = Square.fromCoords(
-        square.file.offset(fileOffset)!,
-        square.rank,
-      );
+      final adjacentSquare = Square.fromCoords(square.file.offset(fileOffset)!, square.rank);
       final targetSquare = Square.fromCoords(
         square.file.offset(fileOffset)!,
         square.rank.offset(side == Side.white ? 1 : -1)!,
@@ -113,9 +101,7 @@ class BoardEditorController extends _$BoardEditorController {
           board.roleAt(adjacentSquare) == Role.pawn &&
           board.sideAt(targetSquare) == null &&
           board.sideAt(originSquare) == null) {
-        enPassantOptions = enPassantOptions.union(
-          SquareSet.fromSquare(targetSquare),
-        );
+        enPassantOptions = enPassantOptions.union(SquareSet.fromSquare(targetSquare));
       }
     }
 
@@ -133,9 +119,7 @@ class BoardEditorController extends _$BoardEditorController {
   }
 
   void toggleEnPassantSquare(Square square) {
-    state = state.copyWith(
-      enPassantSquare: state.enPassantSquare == square ? null : square,
-    );
+    state = state.copyWith(enPassantSquare: state.enPassantSquare == square ? null : square);
   }
 
   void _updatePosition(IMap<Square, Piece> pieces) {
@@ -151,34 +135,22 @@ class BoardEditorController extends _$BoardEditorController {
         switch (castlingSide) {
           case CastlingSide.king:
             state = state.copyWith(
-              castlingRights: state.castlingRights.add(
-                CastlingRight.whiteKing,
-                allowed,
-              ),
+              castlingRights: state.castlingRights.add(CastlingRight.whiteKing, allowed),
             );
           case CastlingSide.queen:
             state = state.copyWith(
-              castlingRights: state.castlingRights.add(
-                CastlingRight.whiteQueen,
-                allowed,
-              ),
+              castlingRights: state.castlingRights.add(CastlingRight.whiteQueen, allowed),
             );
         }
       case Side.black:
         switch (castlingSide) {
           case CastlingSide.king:
             state = state.copyWith(
-              castlingRights: state.castlingRights.add(
-                CastlingRight.blackKing,
-                allowed,
-              ),
+              castlingRights: state.castlingRights.add(CastlingRight.blackKing, allowed),
             );
           case CastlingSide.queen:
             state = state.copyWith(
-              castlingRights: state.castlingRights.add(
-                CastlingRight.blackQueen,
-                allowed,
-              ),
+              castlingRights: state.castlingRights.add(CastlingRight.blackQueen, allowed),
             );
         }
     }
@@ -206,17 +178,16 @@ sealed class BoardEditorState with _$BoardEditorState {
     required Piece? pieceToAddOnEdit,
   }) = _BoardEditorState;
 
-  bool isCastlingAllowed(Side side, CastlingSide castlingSide) =>
-      switch (side) {
-        Side.white => switch (castlingSide) {
-          CastlingSide.king => castlingRights[CastlingRight.whiteKing]!,
-          CastlingSide.queen => castlingRights[CastlingRight.whiteQueen]!,
-        },
-        Side.black => switch (castlingSide) {
-          CastlingSide.king => castlingRights[CastlingRight.blackKing]!,
-          CastlingSide.queen => castlingRights[CastlingRight.blackQueen]!,
-        },
-      };
+  bool isCastlingAllowed(Side side, CastlingSide castlingSide) => switch (side) {
+    Side.white => switch (castlingSide) {
+      CastlingSide.king => castlingRights[CastlingRight.whiteKing]!,
+      CastlingSide.queen => castlingRights[CastlingRight.whiteQueen]!,
+    },
+    Side.black => switch (castlingSide) {
+      CastlingSide.king => castlingRights[CastlingRight.blackKing]!,
+      CastlingSide.queen => castlingRights[CastlingRight.blackQueen]!,
+    },
+  };
 
   /// Returns the castling rights part of the FEN string.
   ///
@@ -229,16 +200,13 @@ sealed class BoardEditorState with _$BoardEditorState {
     for (final side in Side.values) {
       final backrankKing = SquareSet.backrankOf(side) & board.kings;
       final rooksAndKings =
-          (board.bySide(side) & SquareSet.backrankOf(side)) &
-          (board.rooks | board.kings);
+          (board.bySide(side) & SquareSet.backrankOf(side)) & (board.rooks | board.kings);
       for (final castlingSide in CastlingSide.values) {
         final candidate = castlingSide == CastlingSide.king
             ? rooksAndKings.squares.lastOrNull
             : rooksAndKings.squares.firstOrNull;
         final isCastlingPossible =
-            candidate != null &&
-            board.rooks.has(candidate) &&
-            backrankKing.singleSquare != null;
+            candidate != null && board.rooks.has(candidate) && backrankKing.singleSquare != null;
         switch ((side, castlingSide)) {
           case (Side.white, CastlingSide.king):
             hasRook[CastlingRight.whiteKing] = isCastlingPossible;

@@ -38,10 +38,7 @@ class SettingsScreen extends ConsumerWidget {
       connectivityChangesProvider.select((s) => s.value?.isOnline ?? false),
     );
     final generalPrefs = ref.watch(generalPreferencesProvider);
-    final packageInfo = ref
-        .read(preloadedDataProvider)
-        .requireValue
-        .packageInfo;
+    final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final userSession = ref.watch(authSessionProvider);
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
@@ -61,9 +58,7 @@ class SettingsScreen extends ConsumerWidget {
                   title: Text(context.l10n.mobileAccountPreferences),
                   enabled: isOnline,
                   onTap: () {
-                    Navigator.of(
-                      context,
-                    ).push(AccountPreferencesScreen.buildRoute(context));
+                    Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
                   },
                 ),
               ],
@@ -77,9 +72,7 @@ class SettingsScreen extends ConsumerWidget {
                 settingsValue:
                     '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(SoundSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(SoundSettingsScreen.buildRoute(context));
                 },
               ),
               SettingsListTile(
@@ -97,9 +90,7 @@ class SettingsScreen extends ConsumerWidget {
                     labelBuilder: (t) => Text(t.title(context.l10n)),
                     onSelectedItemChanged: (BackgroundThemeMode? value) => ref
                         .read(generalPreferencesProvider.notifier)
-                        .setBackgroundThemeMode(
-                          value ?? BackgroundThemeMode.system,
-                        ),
+                        .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
                   );
                 },
               ),
@@ -110,9 +101,7 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(ThemeSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
                 },
               ),
               ListTile(
@@ -122,24 +111,19 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(
-                    HomeTabScreen.buildRoute(context, editModeEnabled: true),
-                  );
+                  Navigator.of(
+                    context,
+                  ).push(HomeTabScreen.buildRoute(context, editModeEnabled: true));
                 },
               ),
               ListTile(
                 leading: const Icon(Symbols.chess_pawn),
-                title: Text(
-                  context.l10n.mobileBoardSettings,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                title: Text(context.l10n.mobileBoardSettings, overflow: TextOverflow.ellipsis),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(BoardSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
                 },
               ),
               ListTile(
@@ -149,9 +133,7 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(EngineSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(EngineSettingsScreen.buildRoute(context));
                 },
               ),
               SettingsListTile(
@@ -165,13 +147,10 @@ class SettingsScreen extends ConsumerWidget {
                     showChoicePicker<Locale>(
                       context,
                       choices: AppLocalizations.supportedLocales,
-                      selectedItem:
-                          generalPrefs.locale ??
-                          Localizations.localeOf(context),
+                      selectedItem: generalPrefs.locale ?? Localizations.localeOf(context),
                       labelBuilder: (t) => Text(localeToLocalizedName(t)),
-                      onSelectedItemChanged: (Locale? locale) => ref
-                          .read(generalPreferencesProvider.notifier)
-                          .setLocale(locale),
+                      onSelectedItemChanged: (Locale? locale) =>
+                          ref.read(generalPreferencesProvider.notifier).setLocale(locale),
                     );
                   } else {
                     AppSettings.openAppSettings();
@@ -186,32 +165,25 @@ class SettingsScreen extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.storage_outlined),
                 title: const Text('Local database size'),
-                trailing: dbSize.hasValue
-                    ? Text(_getSizeString(dbSize.value))
-                    : null,
+                trailing: dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
               ),
               ListTile(
                 leading: const Icon(Icons.http),
                 title: const Text('HTTP logs'),
-                onTap: () =>
-                    Navigator.push(context, HttpLogScreen.buildRoute(context)),
+                onTap: () => Navigator.push(context, HttpLogScreen.buildRoute(context)),
               ),
             ],
           ),
           Padding(
             padding: Styles.bodySectionPadding,
-            child: Text(
-              'v${packageInfo.version}',
-              style: TextTheme.of(context).bodySmall,
-            ),
+            child: Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),
           ),
         ],
       ),
     );
   }
 
-  String _getSizeString(int? bytes) =>
-      '${_bytesToMB(bytes ?? 0).toStringAsFixed(2)}MB';
+  String _getSizeString(int? bytes) => '${_bytesToMB(bytes ?? 0).toStringAsFixed(2)}MB';
 
   double _bytesToMB(int bytes) => bytes * 0.000001;
 }

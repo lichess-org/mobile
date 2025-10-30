@@ -6,8 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart'
-    show AlertDialog, Navigator, Text, showAdaptiveDialog;
+import 'package:flutter/material.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -32,17 +31,10 @@ part 'evaluation_service.g.dart';
 const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 
 final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
-final defaultEngineCores = min(
-  (Platform.numberOfProcessors / 2).ceil(),
-  maxEngineCores,
-);
+final defaultEngineCores = min((Platform.numberOfProcessors / 2).ceil(), maxEngineCores);
 
 /// Variants supported by the local engine.
-const engineSupportedVariants = {
-  Variant.standard,
-  Variant.chess960,
-  Variant.fromPosition,
-};
+const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
 /// A function that returns true if the evaluation should be emitted by the [EngineEvaluation]
 /// provider.
@@ -52,10 +44,7 @@ typedef NNUEFiles = ({File bigNet, File smallNet});
 
 @Riverpod(keepAlive: true)
 EvaluationService evaluationService(Ref ref) {
-  final maxMemory = ref
-      .read(preloadedDataProvider)
-      .requireValue
-      .engineMaxMemoryInMb;
+  final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
   final service = EvaluationService(ref, maxMemory: maxMemory);
 
   ref.onDispose(() {
@@ -96,27 +85,18 @@ class EvaluationService {
     currentWork: null,
   );
 
-  final ValueNotifier<EngineEvaluationState> _state = ValueNotifier(
-    _defaultState,
-  );
+  final ValueNotifier<EngineEvaluationState> _state = ValueNotifier(_defaultState);
   ValueListenable<EngineEvaluationState> get state => _state;
 
   /// Get the NNUE files paths.
   NNUEFiles get nnueFiles {
-    final appSupportDirectory = _ref
-        .read(preloadedDataProvider)
-        .requireValue
-        .appSupportDirectory;
+    final appSupportDirectory = _ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
     if (appSupportDirectory == null) {
       throw Exception('App support directory is null.');
     }
 
-    final bigNetFile = File(
-      '${appSupportDirectory.path}/${Stockfish.latestBigNNUE}',
-    );
-    final smallNetFile = File(
-      '${appSupportDirectory.path}/${Stockfish.latestSmallNNUE}',
-    );
+    final bigNetFile = File('${appSupportDirectory.path}/${Stockfish.latestBigNNUE}');
+    final smallNetFile = File('${appSupportDirectory.path}/${Stockfish.latestSmallNNUE}');
 
     return (bigNet: bigNetFile, smallNet: smallNetFile);
   }
@@ -150,10 +130,7 @@ class EvaluationService {
   /// If [options] is not provided, the default options are used.
   /// This method must be called before calling [start]. It is the caller's
   /// responsibility to close the engine.
-  Future<void> _initEngine(
-    EvaluationContext context, {
-    EvaluationOptions? initOptions,
-  }) async {
+  Future<void> _initEngine(EvaluationContext context, {EvaluationOptions? initOptions}) async {
     await disposeEngine();
     _context = context;
     if (initOptions != null) options = initOptions;
@@ -253,8 +230,7 @@ class EvaluationService {
 
     switch (work.evalCache) {
       // if the search time is greater than the current search time, don't evaluate again
-      case final LocalEval localEval
-          when localEval.searchTime >= work.searchTime:
+      case final LocalEval localEval when localEval.searchTime >= work.searchTime:
       case CloudEval _:
         return null;
       case _:
@@ -309,9 +285,7 @@ class EvaluationService {
       );
     }
 
-    final connectivityResult = await _ref
-        .read(connectivityPluginProvider)
-        .checkConnectivity();
+    final connectivityResult = await _ref.read(connectivityPluginProvider).checkConnectivity();
     final onWifi = connectivityResult.contains(ConnectivityResult.wifi);
     if (onWifi == false) {
       if (inBackground) {
@@ -324,9 +298,7 @@ class EvaluationService {
           barrierDismissible: true,
           builder: (context) {
             return AlertDialog.adaptive(
-              content: const Text(
-                'Are you sure you want to download the NNUE files (79MB)?',
-              ),
+              content: const Text('Are you sure you want to download the NNUE files (79MB)?'),
               actions: [
                 PlatformDialogAction(
                   child: const Text('OK'),
@@ -356,10 +328,7 @@ class EvaluationService {
   }
 
   Future<void> deleteNNUEFiles() async {
-    final appSupportDirectory = _ref
-        .read(preloadedDataProvider)
-        .requireValue
-        .appSupportDirectory;
+    final appSupportDirectory = _ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
     if (appSupportDirectory == null) {
       throw Exception('App support directory is null.');
     }
@@ -407,10 +376,8 @@ class EngineEvaluation extends _$EngineEvaluation {
 
 @freezed
 sealed class EvaluationContext with _$EvaluationContext {
-  const factory EvaluationContext({
-    required Variant variant,
-    required Position initialPosition,
-  }) = _EvaluationContext;
+  const factory EvaluationContext({required Variant variant, required Position initialPosition}) =
+      _EvaluationContext;
 }
 
 @freezed
@@ -436,8 +403,7 @@ Eval? pickBestEval({
 }) {
   return switch (savedEval) {
     CloudEval() => savedEval,
-    final LocalEval eval =>
-      localEval != null && localEval.isBetter(eval) ? localEval : eval,
+    final LocalEval eval => localEval != null && localEval.isBetter(eval) ? localEval : eval,
     null => localEval ?? serverEval,
   };
 }
@@ -451,8 +417,7 @@ ClientEval? pickBestClientEval({
   required ClientEval? savedEval,
 }) {
   final eval =
-      pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null)
-          as ClientEval?;
+      pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
 
   return eval;
 }

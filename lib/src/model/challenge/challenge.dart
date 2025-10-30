@@ -23,23 +23,18 @@ abstract mixin class BaseChallenge {
   SideChoice get sideChoice;
   String? get initialFen;
 
-  TimeIncrement? get timeIncrement => clock != null
-      ? TimeIncrement(clock!.time.inSeconds, clock!.increment.inSeconds)
-      : null;
+  TimeIncrement? get timeIncrement =>
+      clock != null ? TimeIncrement(clock!.time.inSeconds, clock!.increment.inSeconds) : null;
 
   Perf get perf => Perf.fromVariantAndSpeed(
     variant,
-    timeIncrement != null
-        ? Speed.fromTimeIncrement(timeIncrement!)
-        : Speed.correspondence,
+    timeIncrement != null ? Speed.fromTimeIncrement(timeIncrement!) : Speed.correspondence,
   );
 }
 
 /// A challenge already created server-side.
 @Freezed(fromJson: true, toJson: true)
-sealed class Challenge
-    with _$Challenge, BaseChallenge
-    implements BaseChallenge {
+sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
   const Challenge._();
 
   const factory Challenge({
@@ -61,8 +56,7 @@ sealed class Challenge
     ChallengeDirection? direction,
   }) = _Challenge;
 
-  factory Challenge.fromJson(Map<String, dynamic> json) =>
-      _$ChallengeFromJson(json);
+  factory Challenge.fromJson(Map<String, dynamic> json) => _$ChallengeFromJson(json);
 
   factory Challenge.fromServerJson(Map<String, dynamic> json) {
     return _challengeFromPick(pick(json).required());
@@ -113,9 +107,7 @@ sealed class Challenge
 
 /// A challenge request to play a game with another user.
 @freezed
-sealed class ChallengeRequest
-    with _$ChallengeRequest, BaseChallenge
-    implements BaseChallenge {
+sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements BaseChallenge {
   const ChallengeRequest._();
 
   const factory ChallengeRequest({
@@ -141,8 +133,7 @@ sealed class ChallengeRequest
     return {
       'variant': variant.name,
       if (clock != null) 'clock.limit': clock!.time.inSeconds.toString(),
-      if (clock != null)
-        'clock.increment': clock!.increment.inSeconds.toString(),
+      if (clock != null) 'clock.increment': clock!.increment.inSeconds.toString(),
       if (days != null) 'days': days.toString(),
       if (rated) 'rated': 'true',
       if (variant == Variant.fromPosition) 'fen': initialFen,
@@ -195,12 +186,7 @@ enum ChallengeDeclineReason {
   };
 }
 
-typedef ChallengeUser = ({
-  LightUser user,
-  int? rating,
-  bool? provisionalRating,
-  int? lagRating,
-});
+typedef ChallengeUser = ({LightUser user, int? rating, bool? provisionalRating, int? lagRating});
 
 extension ChallengeExtension on Pick {
   ChallengeDirection asChallengeDirectionOrThrow() {
@@ -220,9 +206,7 @@ extension ChallengeExtension on Pick {
           );
       }
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to ChallengeDirection",
-    );
+    throw PickException("value $value at $debugParsingExit can't be casted to ChallengeDirection");
   }
 
   ChallengeDirection? asChallengeDirectionOrNull() {
@@ -257,9 +241,7 @@ extension ChallengeExtension on Pick {
           );
       }
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to ChallengeStatus",
-    );
+    throw PickException("value $value at $debugParsingExit can't be casted to ChallengeStatus");
   }
 
   ChallengeStatus? asChallengeStatusOrNull() {
@@ -323,9 +305,7 @@ extension ChallengeExtension on Pick {
           );
       }
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to SideChoice",
-    );
+    throw PickException("value $value at $debugParsingExit can't be casted to SideChoice");
   }
 
   SideChoice? asSideChoiceOrNull() {
@@ -373,16 +353,11 @@ Challenge _challengeFromPick(RequiredPick pick) {
     status: pick('status').asChallengeStatusOrThrow(),
     variant: pick('variant').asVariantOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
-    timeControl: pick(
-      'timeControl',
-      'type',
-    ).asChallengeTimeControlTypeOrThrow(),
+    timeControl: pick('timeControl', 'type').asChallengeTimeControlTypeOrThrow(),
     clock: pick('timeControl').letOrThrow((clockPick) {
       final time = clockPick('limit').asDurationFromSecondsOrNull();
       final increment = clockPick('increment').asDurationFromSecondsOrNull();
-      return time != null && increment != null
-          ? (time: time, increment: increment)
-          : null;
+      return time != null && increment != null ? (time: time, increment: increment) : null;
     }),
     days: pick('timeControl', 'daysPerTurn').asIntOrNull(),
     rated: pick('rated').asBoolOrThrow(),

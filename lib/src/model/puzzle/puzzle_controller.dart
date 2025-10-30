@@ -35,8 +35,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
   @override
   @protected
-  EngineEvaluationPrefState get evaluationPrefs =>
-      ref.read(engineEvaluationPreferencesProvider);
+  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
   @override
   @protected
@@ -45,8 +44,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
   @override
   @protected
-  EvaluationService evaluationServiceFactory() =>
-      ref.read(evaluationServiceProvider);
+  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
 
   @override
   @protected
@@ -60,15 +58,11 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   @protected
   Branch get positionTree => _gameTree;
 
-  Future<PuzzleService> get _service => ref.read(puzzleServiceFactoryProvider)(
-    queueLength: kPuzzleLocalQueueLength,
-  );
+  Future<PuzzleService> get _service =>
+      ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
 
   @override
-  PuzzleState build(
-    PuzzleContext initialContext, {
-    bool isPuzzleStreak = false,
-  }) {
+  PuzzleState build(PuzzleContext initialContext, {bool isPuzzleStreak = false}) {
     initEngineEvaluation();
 
     ref.onDispose(() {
@@ -86,14 +80,11 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
     return _loadNewContext(initialContext);
   }
 
-  PuzzleRepository _repository(LichessClient client) =>
-      PuzzleRepository(client);
+  PuzzleRepository _repository(LichessClient client) => PuzzleRepository(client);
 
   Future<void> _updateUserRating() async {
     try {
-      final data = await ref.withClient(
-        (client) => _repository(client).selectBatch(nb: 0),
-      );
+      final data = await ref.withClient((client) => _repository(client).selectBatch(nb: 0));
       final glicko = data.glicko;
       if (glicko != null) {
         state = state.copyWith(glicko: glicko);
@@ -121,9 +112,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       initialPath: initialPath,
       currentPath: UciPath.empty,
       node: _gameTree.view,
-      pov: _gameTree.nodeAt(initialPath).position.ply.isEven
-          ? Side.white
-          : Side.black,
+      pov: _gameTree.nodeAt(initialPath).position.ply.isEven ? Side.white : Side.black,
       hintShown: false,
       resultSent: false,
       isChangingDifficulty: false,
@@ -152,9 +141,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
     if (state.mode == PuzzleMode.play) {
       state = state.copyWith(hintSquare: null);
       final nodeList = _gameTree.branchesOn(state.currentPath).toList();
-      final movesToTest = nodeList
-          .sublist(state.initialPath.size)
-          .map((e) => e.sanMove);
+      final movesToTest = nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
 
       final isGoodMove = state.puzzle.testSolution(movesToTest);
 
@@ -162,9 +149,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
         state = state.copyWith(feedback: PuzzleFeedback.good);
 
         final isCheckmate = movesToTest.last.san.endsWith('#');
-        final nextUci = state.puzzle.puzzle.solution.getOrNull(
-          movesToTest.length,
-        );
+        final nextUci = state.puzzle.puzzle.solution.getOrNull(movesToTest.length);
         // checkmate is always a win
         if (isCheckmate) {
           _completePuzzle();
@@ -216,10 +201,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
     _mergeSolution();
 
-    state = state.copyWith(
-      root: _gameTree.view,
-      node: _gameTree.branchAt(state.currentPath).view,
-    );
+    state = state.copyWith(root: _gameTree.view, node: _gameTree.branchAt(state.currentPath).view);
 
     _onFailOrWin(PuzzleResult.lose);
 
@@ -236,10 +218,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
   void toggleHint() {
     if (state.hintSquare == null && state._nextSolutionMove != null) {
-      state = state.copyWith(
-        hintShown: true,
-        hintSquare: state._nextSolutionMove!.from,
-      );
+      state = state.copyWith(hintShown: true, hintSquare: state._nextSolutionMove!.from);
     } else {
       state = state.copyWith(hintSquare: null);
     }
@@ -254,9 +233,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   Future<PuzzleContext?> changeDifficulty(PuzzleDifficulty difficulty) async {
     state = state.copyWith(isChangingDifficulty: true);
 
-    await ref
-        .read(puzzlePreferencesProvider.notifier)
-        .setDifficulty(difficulty);
+    await ref.read(puzzlePreferencesProvider.notifier).setDifficulty(difficulty);
 
     final nextPuzzle = (await _service).resetBatch(
       userId: initialContext.userId,
@@ -276,10 +253,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
 
   void _goToNextNode({bool isNavigating = false}) {
     if (state.node.children.isEmpty) return;
-    _setPath(
-      state.currentPath + state.node.children.first.id,
-      isNavigating: isNavigating,
-    );
+    _setPath(state.currentPath + state.node.children.first.id, isNavigating: isNavigating);
   }
 
   void _goToPreviousNode({bool isNavigating = false}) {
@@ -315,12 +289,8 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       final currentPuzzle = state.puzzle.puzzle;
       final service = await _service;
       final next =
-          currentPuzzle.id == initialContext.puzzle.puzzle.id &&
-              initialContext.casual == true
-          ? await service.nextPuzzle(
-              userId: initialContext.userId,
-              angle: initialContext.angle,
-            )
+          currentPuzzle.id == initialContext.puzzle.puzzle.id && initialContext.casual == true
+          ? await service.nextPuzzle(userId: initialContext.userId, angle: initialContext.angle)
           : await service.solve(
               userId: initialContext.userId,
               angle: initialContext.angle,
@@ -338,23 +308,13 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
       state = state.copyWith(nextContext: next);
 
       ref
-          .read(
-            puzzleSessionProvider(
-              initialContext.userId,
-              initialContext.angle,
-            ).notifier,
-          )
+          .read(puzzleSessionProvider(initialContext.userId, initialContext.angle).notifier)
           .addAttempt(state.puzzle.puzzle.id, win: result == PuzzleResult.win);
 
       final rounds = next?.rounds;
       if (rounds != null) {
         ref
-            .read(
-              puzzleSessionProvider(
-                initialContext.userId,
-                initialContext.angle,
-              ).notifier,
-            )
+            .read(puzzleSessionProvider(initialContext.userId, initialContext.angle).notifier)
             .setRatingDiffs(rounds);
       }
 
@@ -366,11 +326,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
     }
   }
 
-  void _setPath(
-    UciPath path, {
-    bool isNavigating = false,
-    bool firstMove = false,
-  }) {
+  void _setPath(UciPath path, {bool isNavigating = false, bool firstMove = false}) {
     final pathChange = state.currentPath != path;
     final newNode = _gameTree.branchAt(path).view;
     final sanMove = newNode.sanMove;
@@ -409,10 +365,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
   String makePgn() {
     final initPosition = _gameTree.nodeAt(state.initialPath).position;
     var currentPosition = initPosition;
-    final pgnMoves = state.puzzle.puzzle.solution.fold<List<String>>([], (
-      List<String> acc,
-      move,
-    ) {
+    final pgnMoves = state.puzzle.puzzle.solution.fold<List<String>>([], (List<String> acc, move) {
       final moveObj = Move.parse(move);
       if (moveObj != null) {
         final String san;
@@ -445,10 +398,7 @@ class PuzzleController extends _$PuzzleController with EngineEvaluationMixin {
         final move = Move.parse(uci);
         final (pos, nodes) = previous;
         final (newPos, newSan) = pos.makeSan(move!);
-        return (
-          newPos,
-          nodes.add(Branch(position: newPos, sanMove: SanMove(newSan, move))),
-        );
+        return (newPos, nodes.add(Branch(position: newPos, sanMove: SanMove(newSan, move))));
       },
     );
     _gameTree.addNodesAt(state.initialPath, newNodes, prepend: true);
@@ -496,10 +446,8 @@ sealed class PuzzleState with _$PuzzleState implements EvaluationMixinState {
       mode == PuzzleMode.view && isEvaluationEnabled;
 
   @override
-  EvaluationContext get evaluationContext => EvaluationContext(
-    variant: Variant.standard,
-    initialPosition: initialPosition,
-  );
+  EvaluationContext get evaluationContext =>
+      EvaluationContext(variant: Variant.standard, initialPosition: initialPosition);
 
   @override
   Position get currentPosition => node.position;
@@ -508,13 +456,10 @@ sealed class PuzzleState with _$PuzzleState implements EvaluationMixinState {
 
   bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
 
-  bool get canGoBack =>
-      mode == PuzzleMode.view && currentPath.size > initialPath.size;
+  bool get canGoBack => mode == PuzzleMode.view && currentPath.size > initialPath.size;
 
   NormalMove? get _nextSolutionMove {
-    final uci = puzzle.puzzle.solution.getOrNull(
-      currentPath.size - initialPath.size,
-    );
+    final uci = puzzle.puzzle.solution.getOrNull(currentPath.size - initialPath.size);
     return uci == null ? null : NormalMove.fromUci(uci);
   }
 }

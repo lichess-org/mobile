@@ -18,8 +18,7 @@ class ToggleSoundButton extends ConsumerWidget {
     return SemanticIconButton(
       // TODO: i18n
       semanticsLabel: 'Toggle sound',
-      onPressed: () =>
-          ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+      onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
       icon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
     );
   }
@@ -27,11 +26,7 @@ class ToggleSoundButton extends ConsumerWidget {
 
 /// A menu item button that toggles the sound on and off.
 class ToggleSoundContextMenuAction extends StatelessWidget {
-  const ToggleSoundContextMenuAction({
-    required this.isEnabled,
-    required this.onPressed,
-    super.key,
-  });
+  const ToggleSoundContextMenuAction({required this.isEnabled, required this.onPressed, super.key});
 
   final bool isEnabled;
   final VoidCallback onPressed;

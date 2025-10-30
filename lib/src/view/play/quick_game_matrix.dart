@@ -41,10 +41,7 @@ class QuickGameMatrix extends ConsumerWidget {
           decoration: scaffoldOpacity != 0
               ? BoxDecoration(
                   image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                      logoColor,
-                      BlendMode.modulate,
-                    ),
+                    colorFilter: ColorFilter.mode(logoColor, BlendMode.modulate),
                     image: const AssetImage('assets/images/logo-transp.png'),
                     fit: BoxFit.contain,
                   ),
@@ -53,32 +50,18 @@ class QuickGameMatrix extends ConsumerWidget {
           child: const Column(
             children: [
               _SectionChoices(
-                choices: [
-                  TimeIncrement(60, 0),
-                  TimeIncrement(120, 1),
-                  TimeIncrement(180, 0),
-                ],
+                choices: [TimeIncrement(60, 0), TimeIncrement(120, 1), TimeIncrement(180, 0)],
               ),
               SizedBox(height: _kMatrixSpacing),
               _SectionChoices(
-                choices: [
-                  TimeIncrement(180, 2),
-                  TimeIncrement(300, 0),
-                  TimeIncrement(300, 3),
-                ],
+                choices: [TimeIncrement(180, 2), TimeIncrement(300, 0), TimeIncrement(300, 3)],
               ),
               SizedBox(height: _kMatrixSpacing),
               _SectionChoices(
-                choices: [
-                  TimeIncrement(600, 0),
-                  TimeIncrement(600, 5),
-                  TimeIncrement(900, 10),
-                ],
+                choices: [TimeIncrement(600, 0), TimeIncrement(600, 5), TimeIncrement(900, 10)],
               ),
               SizedBox(height: _kMatrixSpacing),
-              _SectionChoices(
-                choices: [TimeIncrement(1800, 0), TimeIncrement(1800, 20)],
-              ),
+              _SectionChoices(choices: [TimeIncrement(1800, 0), TimeIncrement(1800, 20)]),
             ],
           ),
         ),
@@ -95,8 +78,7 @@ class _SectionChoices extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-    final isOnline =
-        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     final choiceWidgets = choices
         .mapIndexed((index, choice) {
           return [
@@ -105,32 +87,23 @@ class _SectionChoices extends ConsumerWidget {
                 key: ValueKey(choice),
                 title: Text(
                   choice.display,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20.0,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
                 ),
-                subtitle: Text(
-                  choice.speed.label,
-                  style: const TextStyle(fontSize: 14.0),
-                ),
+                subtitle: Text(choice.speed.label, style: const TextStyle(fontSize: 14.0)),
                 speed: choice.speed,
                 onTap: isOnline
                     ? () {
                         Navigator.of(context, rootNavigator: true).push(
                           GameScreen.buildRoute(
                             context,
-                            source: LobbySource(
-                              GameSeek.fastPairing(choice, session),
-                            ),
+                            source: LobbySource(GameSeek.fastPairing(choice, session)),
                           ),
                         );
                       }
                     : null,
               ),
             ),
-            if (index < choices.length - 1)
-              const SizedBox(width: _kMatrixSpacing),
+            if (index < choices.length - 1) const SizedBox(width: _kMatrixSpacing),
           ];
         })
         .flattened
@@ -181,9 +154,7 @@ class _ChoiceChip extends StatelessWidget {
   final Speed? speed;
   final void Function()? onTap;
 
-  static const BorderRadius _kBorderRadius = BorderRadius.all(
-    Radius.circular(6.0),
-  );
+  static const BorderRadius _kBorderRadius = BorderRadius.all(Radius.circular(6.0));
 
   @override
   Widget build(BuildContext context) {
@@ -192,9 +163,7 @@ class _ChoiceChip extends StatelessWidget {
         ? scaffoldOpacity > 0
               ? Colors.white10
               : ColorScheme.of(context).surfaceContainerLow
-        : ColorScheme.of(
-            context,
-          ).surfaceContainerHighest.withValues(alpha: 0.50);
+        : ColorScheme.of(context).surfaceContainerHighest.withValues(alpha: 0.50);
 
     return Opacity(
       opacity: onTap != null ? 1.0 : 0.5,
@@ -208,9 +177,7 @@ class _ChoiceChip extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: DefaultTextStyle.merge(
               style: TextStyle(
-                color: Theme.of(
-                  context,
-                ).textTheme.labelMedium?.color?.withValues(alpha: 0.8),
+                color: Theme.of(context).textTheme.labelMedium?.color?.withValues(alpha: 0.8),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

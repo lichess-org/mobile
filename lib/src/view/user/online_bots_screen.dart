@@ -55,9 +55,7 @@ class OnlineBotsWidget extends ConsumerWidget {
             for (final bot in value.where((bot) => bot.verified == true))
               ListTile(
                 title: UserFullNameWidget(user: bot.lightUser),
-                subtitle: (bot.perfs[Perf.blitz]?.games ?? 0) > 0
-                    ? _BotRatings(bot: bot)
-                    : null,
+                subtitle: (bot.perfs[Perf.blitz]?.games ?? 0) > 0 ? _BotRatings(bot: bot) : null,
                 onTap: () => _challengeBot(bot, context: context, ref: ref),
                 onLongPress: () {
                   showModalBottomSheet<void>(
@@ -91,8 +89,7 @@ class _Body extends ConsumerWidget {
     return onlineBots.when(
       data: (data) => ListView.separated(
         itemCount: data.length,
-        separatorBuilder: (context, index) =>
-            Theme.of(context).platform == TargetPlatform.iOS
+        separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
             ? const PlatformDivider()
             : const SizedBox.shrink(),
         itemBuilder: (context, index) {
@@ -121,11 +118,7 @@ class _Body extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _BotRatings(bot: bot),
-                Text(
-                  bot.profile?.bio ?? '',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                Text(bot.profile?.bio ?? '', maxLines: 2, overflow: TextOverflow.ellipsis),
               ],
             ),
             onTap: () {
@@ -147,33 +140,21 @@ class _Body extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       error: (e, s) {
         debugPrint('Could not load bots: $e');
-        return FullScreenRetryRequest(
-          onRetry: () => ref.refresh(onlineBotsProvider),
-        );
+        return FullScreenRetryRequest(onRetry: () => ref.refresh(onlineBotsProvider));
       },
     );
   }
 }
 
-void _challengeBot(
-  User bot, {
-  required BuildContext context,
-  required WidgetRef ref,
-}) {
+void _challengeBot(User bot, {required BuildContext context, required WidgetRef ref}) {
   final session = ref.read(authSessionProvider);
   if (session == null) {
-    showSnackBar(
-      context,
-      context.l10n.challengeRegisterToSendChallenges,
-      type: SnackBarType.error,
-    );
+    showSnackBar(context, context.l10n.challengeRegisterToSendChallenges, type: SnackBarType.error);
     return;
   }
   final isOddBot = oddBots.contains(bot.lightUser.name.toLowerCase());
   if (isOddBot) {
-    Navigator.of(
-      context,
-    ).push(ChallengeOddBotsScreen.buildRoute(context, bot.lightUser));
+    Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(context, bot.lightUser));
   } else {
     showModalBottomSheet<void>(
       context: context,
@@ -208,9 +189,7 @@ class _BotRatings extends StatelessWidget {
                 if (rating != null && nbGames > 0)
                   Text(
                     '$rating',
-                    style: TextStyle(
-                      color: textShade(context, Styles.subtitleOpacity),
-                    ),
+                    style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
                   )
                 else
                   const Text('  -  '),

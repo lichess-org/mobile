@@ -93,10 +93,7 @@ class _ErrorWidget extends StatelessWidget {
               color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(errorMessage),
-            ),
+            child: Padding(padding: const EdgeInsets.all(10.0), child: Text(errorMessage)),
           ),
         ),
       ),

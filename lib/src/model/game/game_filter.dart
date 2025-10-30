@@ -50,8 +50,6 @@ sealed class GameFilterState with _$GameFilterState {
 
   int get count {
     final fields = [perfs, side];
-    return fields
-        .where((field) => field is Iterable ? field.isNotEmpty : field != null)
-        .length;
+    return fields.where((field) => field is Iterable ? field.isNotEmpty : field != null).length;
   }
 }

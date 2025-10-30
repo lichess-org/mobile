@@ -22,8 +22,7 @@ class HttpLogScreen extends ConsumerStatefulWidget {
 
 class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
   final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -39,12 +38,9 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       final currentState = ref.read(httpLogPaginatorProvider);
-      if (currentState.hasValue &&
-          !currentState.isLoading &&
-          currentState.requireValue.hasMore) {
+      if (currentState.hasValue && !currentState.isLoading && currentState.requireValue.hasMore) {
         ref.read(httpLogPaginatorProvider.notifier).next();
       }
     }
@@ -72,8 +68,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
                   context,
                   // TODO localize
                   title: const Text('Delete all logs'),
-                  onConfirm: () =>
-                      ref.read(httpLogPaginatorProvider.notifier).deleteAll(),
+                  onConfirm: () => ref.read(httpLogPaginatorProvider.notifier).deleteAll(),
                 );
               },
             ),
@@ -115,10 +110,7 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text('No logs to show'),
-            TextButton(
-              onPressed: widget.onRefresh,
-              child: const Text('Tap to refresh'),
-            ),
+            TextButton(onPressed: widget.onRefresh, child: const Text('Tap to refresh')),
           ],
         ),
       );
@@ -163,9 +155,7 @@ class HttpLogTile extends StatelessWidget {
                   Text(
                     httpLog.responseCode!.toString(),
                     style: TextStyle(
-                      color: httpLog.responseCode! >= 400
-                          ? context.lichessColors.error
-                          : null,
+                      color: httpLog.responseCode! >= 400 ? context.lichessColors.error : null,
                       fontFeatures: const [FontFeature.tabularFigures()],
                       fontSize: 12,
                     ),
@@ -186,10 +176,7 @@ class HttpLogTile extends StatelessWidget {
       ),
       title: Text(
         httpLog.requestUrl.host == kLichessHost
-            ? Uri(
-                path: httpLog.requestUrl.path,
-                query: httpLog.requestUrl.query,
-              ).toString()
+            ? Uri(path: httpLog.requestUrl.path, query: httpLog.requestUrl.query).toString()
             : httpLog.requestUrl.toString(),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,

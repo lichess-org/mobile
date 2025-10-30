@@ -8,8 +8,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart'
-    show currentNavigatorKeyProvider;
+import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -32,16 +31,11 @@ sealed class PuzzleStreak with _$PuzzleStreak {
 
   PuzzleId? get nextId => streak.getOrNull(index + 1);
 
-  factory PuzzleStreak.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleStreakFromJson(json);
+  factory PuzzleStreak.fromJson(Map<String, dynamic> json) => _$PuzzleStreakFromJson(json);
 }
 
 /// [PuzzleStreak] with its current [Puzzle].
-typedef StreakState = ({
-  PuzzleStreak streak,
-  Puzzle puzzle,
-  Puzzle? nextPuzzle,
-});
+typedef StreakState = ({PuzzleStreak streak, Puzzle puzzle, Puzzle? nextPuzzle});
 
 @riverpod
 class PuzzleStreakController extends _$PuzzleStreakController {
@@ -51,9 +45,7 @@ class PuzzleStreakController extends _$PuzzleStreakController {
     final streakStorage = ref.watch(streakStorageProvider(session?.user.id));
     final activeStreak = await streakStorage.loadActiveStreak();
     if (activeStreak != null) {
-      final puzzle = await ref.read(
-        puzzleProvider(activeStreak.streak[activeStreak.index]).future,
-      );
+      final puzzle = await ref.read(puzzleProvider(activeStreak.streak[activeStreak.index]).future);
       final nextPuzzle = activeStreak.nextId != null
           ? await ref.read(puzzleProvider(activeStreak.nextId!).future)
           : null;
@@ -61,9 +53,7 @@ class PuzzleStreakController extends _$PuzzleStreakController {
       return (streak: activeStreak, puzzle: puzzle, nextPuzzle: nextPuzzle);
     }
 
-    final newStreak = await ref.withClient(
-      (client) => PuzzleRepository(client).streak(),
-    );
+    final newStreak = await ref.withClient((client) => PuzzleRepository(client).streak());
     final nextPuzzle = await ref.withClient(
       (client) => PuzzleRepository(client).fetch(newStreak.streak[1]),
     );
@@ -99,9 +89,7 @@ class PuzzleStreakController extends _$PuzzleStreakController {
     ref.read(soundServiceProvider).play(Sound.confirmation);
 
     state = AsyncData((
-      streak: state.requireValue.streak.copyWith(
-        index: state.requireValue.streak.index + 1,
-      ),
+      streak: state.requireValue.streak.copyWith(index: state.requireValue.streak.index + 1),
       puzzle: state.requireValue.nextPuzzle!,
       nextPuzzle: null,
     ));
@@ -120,15 +108,9 @@ class PuzzleStreakController extends _$PuzzleStreakController {
           )
           .catchError((_) {
             // ignore: avoid_manual_providers_as_generated_provider_dependency
-            final currentContext = ref
-                .read(currentNavigatorKeyProvider)
-                .currentContext;
+            final currentContext = ref.read(currentNavigatorKeyProvider).currentContext;
             if (currentContext != null && currentContext.mounted) {
-              showSnackBar(
-                currentContext,
-                'Error loading next puzzle',
-                type: SnackBarType.error,
-              );
+              showSnackBar(currentContext, 'Error loading next puzzle', type: SnackBarType.error);
             }
           });
     }
@@ -153,9 +135,7 @@ class PuzzleStreakController extends _$PuzzleStreakController {
     if (userId != null) {
       final streak = state.requireValue.streak.index;
       if (streak > 0) {
-        await ref.withClient(
-          (client) => PuzzleRepository(client).postStreakRun(streak),
-        );
+        await ref.withClient((client) => PuzzleRepository(client).postStreakRun(streak));
       }
     }
   }

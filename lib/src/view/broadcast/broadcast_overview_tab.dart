@@ -14,11 +14,7 @@ final _dateFormatter = DateFormat.MMMd();
 
 /// A tab that displays the overview of a broadcast.
 class BroadcastOverviewTab extends ConsumerWidget {
-  const BroadcastOverviewTab({
-    required this.broadcast,
-    required this.tournamentId,
-    super.key,
-  });
+  const BroadcastOverviewTab({required this.broadcast, required this.tournamentId, super.key});
 
   final Broadcast broadcast;
   final BroadcastTournamentId tournamentId;
@@ -49,25 +45,16 @@ class BroadcastOverviewTab extends ConsumerWidget {
                         : '${_dateFormatter.format(information.dates!.startsAt)} - ${_dateFormatter.format(information.dates!.endsAt!)}',
                   ),
                 if (information.format != null)
-                  _BroadcastOverviewCard(
-                    Icons.emoji_events,
-                    '${information.format}',
-                  ),
+                  _BroadcastOverviewCard(Icons.emoji_events, '${information.format}'),
                 if (information.timeControl != null)
                   _BroadcastOverviewCard(
                     CupertinoIcons.stopwatch_fill,
                     '${information.timeControl}',
                   ),
                 if (information.location != null)
-                  _BroadcastOverviewCard(
-                    Icons.public,
-                    '${information.location}',
-                  ),
+                  _BroadcastOverviewCard(Icons.public, '${information.location}'),
                 if (information.players != null)
-                  _BroadcastOverviewCard(
-                    Icons.person,
-                    '${information.players}',
-                  ),
+                  _BroadcastOverviewCard(Icons.person, '${information.players}'),
                 if (information.website != null)
                   _BroadcastOverviewCard(
                     Icons.link,
@@ -112,9 +99,7 @@ class _BroadcastOverviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
       margin: const EdgeInsets.all(4.0),
       child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -124,19 +109,12 @@ class _BroadcastOverviewCard extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                iconData,
-                color: website != null ? ColorScheme.of(context).primary : null,
-              ),
+              Icon(iconData, color: website != null ? ColorScheme.of(context).primary : null),
               const SizedBox(width: 10),
               Flexible(
                 child: Text(
                   text,
-                  style: TextStyle(
-                    color: website != null
-                        ? ColorScheme.of(context).primary
-                        : null,
-                  ),
+                  style: TextStyle(color: website != null ? ColorScheme.of(context).primary : null),
                 ),
               ),
             ],

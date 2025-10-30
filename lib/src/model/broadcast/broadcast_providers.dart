@@ -40,9 +40,7 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
 class BroadcastsSearchPaginator extends _$BroadcastsSearchPaginator {
   @override
   Future<BroadcastSearchList> build(String searchTerm) {
-    return ref
-        .read(broadcastRepositoryProvider)
-        .searchBroadcasts(searchTerm: searchTerm);
+    return ref.read(broadcastRepositoryProvider).searchBroadcasts(searchTerm: searchTerm);
   }
 
   /// This function should be called only if there are more pages.
@@ -57,9 +55,7 @@ class BroadcastsSearchPaginator extends _$BroadcastsSearchPaginator {
         .searchBroadcasts(searchTerm: searchTerm, page: nextPage!);
 
     state = AsyncData((
-      broadcasts: broadcastSearchList.broadcasts.addAll(
-        broadcastSearchListNewPage.broadcasts,
-      ),
+      broadcasts: broadcastSearchList.broadcasts.addAll(broadcastSearchListNewPage.broadcasts),
       nextPage: broadcastSearchListNewPage.nextPage,
     ));
   }
@@ -70,16 +66,11 @@ Future<BroadcastTournament> broadcastTournament(
   Ref ref,
   BroadcastTournamentId broadcastTournamentId,
 ) {
-  return ref
-      .read(broadcastRepositoryProvider)
-      .getTournament(broadcastTournamentId);
+  return ref.read(broadcastRepositoryProvider).getTournament(broadcastTournamentId);
 }
 
 @riverpod
-Future<BroadcastRoundResponse> broadcastRound(
-  Ref ref,
-  BroadcastRoundId roundId,
-) {
+Future<BroadcastRoundResponse> broadcastRound(Ref ref, BroadcastRoundId roundId) {
   return ref.read(broadcastRepositoryProvider).getRound(roundId);
 }
 
@@ -97,16 +88,11 @@ Future<BroadcastPlayerWithGameResults> broadcastPlayer(
   BroadcastTournamentId broadcastTournamentId,
   String playerId,
 ) {
-  return ref
-      .read(broadcastRepositoryProvider)
-      .getPlayerResults(broadcastTournamentId, playerId);
+  return ref.read(broadcastRepositoryProvider).getPlayerResults(broadcastTournamentId, playerId);
 }
 
 @riverpod
-Future<IList<BroadcastTeamMatch>> broadcastTeamMatches(
-  Ref ref,
-  BroadcastRoundId roundId,
-) {
+Future<IList<BroadcastTeamMatch>> broadcastTeamMatches(Ref ref, BroadcastRoundId roundId) {
   return ref.read(broadcastRepositoryProvider).getTeamMatches(roundId);
 }
 

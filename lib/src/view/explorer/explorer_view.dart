@@ -17,13 +17,11 @@ const kExplorerTableRowPadding = EdgeInsets.symmetric(
 );
 const kHeaderTextStyle = TextStyle(fontSize: 12);
 
-Color whiteBoxColor(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.dark
+Color whiteBoxColor(BuildContext context) => Theme.of(context).brightness == Brightness.dark
     ? Colors.white.withValues(alpha: 0.8)
     : Colors.white;
 
-Color blackBoxColor(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.light
+Color blackBoxColor(BuildContext context) => Theme.of(context).brightness == Brightness.light
     ? Colors.black.withValues(alpha: 0.7)
     : Colors.black;
 

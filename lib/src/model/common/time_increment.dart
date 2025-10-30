@@ -5,8 +5,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 /// A pair of time and increment in seconds used as game clock
 @immutable
 class TimeIncrement implements Comparable<TimeIncrement> {
-  const TimeIncrement(this.time, this.increment)
-    : assert(time >= 0 && increment >= 0);
+  const TimeIncrement(this.time, this.increment) : assert(time >= 0 && increment >= 0);
 
   TimeIncrement.fromDurations(Duration time, Duration increment)
     : time = time.inSeconds,

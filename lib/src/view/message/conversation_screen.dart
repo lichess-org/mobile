@@ -44,10 +44,7 @@ class ConversationScreen extends ConsumerStatefulWidget {
 
   const ConversationScreen({super.key, required this.user});
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
-    required LightUser user,
-  }) {
+  static Route<dynamic> buildRoute(BuildContext context, {required LightUser user}) {
     return buildScreenRoute(context, screen: ConversationScreen(user: user));
   }
 
@@ -55,8 +52,7 @@ class ConversationScreen extends ConsumerStatefulWidget {
   ConsumerState<ConversationScreen> createState() => _ConversationScreenState();
 }
 
-class _ConversationScreenState extends ConsumerState<ConversationScreen>
-    with RouteAware {
+class _ConversationScreenState extends ConsumerState<ConversationScreen> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -88,10 +84,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen>
           showPatron: true,
           shouldShowOnline: true,
           onTap: () {
-            Navigator.push(
-              context,
-              UserOrProfileScreen.buildRoute(context, widget.user),
-            );
+            Navigator.push(context, UserOrProfileScreen.buildRoute(context, widget.user));
           },
         ),
       ),
@@ -107,9 +100,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final messageStateAsync = ref.watch(
-      conversationControllerProvider(user.id),
-    );
+    final messageStateAsync = ref.watch(conversationControllerProvider(user.id));
 
     switch (messageStateAsync) {
       case AsyncData(:final value):
@@ -141,11 +132,7 @@ class _Body extends ConsumerWidget {
                         return Center(
                           child: TextButton(
                             onPressed: () => ref
-                                .read(
-                                  conversationControllerProvider(
-                                    user.id,
-                                  ).notifier,
-                                )
+                                .read(conversationControllerProvider(user.id).notifier)
                                 .getMore(),
                             child: const Text('Load more'),
                           ),
@@ -201,12 +188,7 @@ class _Body extends ConsumerWidget {
         for (var i = 0; i < group.length; i++) {
           final m = group[i];
           items.add(
-            MessageItem(
-              m,
-              isMe: m.userId == state.me.id,
-              groupLength: group.length,
-              groupIndex: i,
-            ),
+            MessageItem(m, isMe: m.userId == state.me.id, groupLength: group.length, groupIndex: i),
           );
         }
       }
@@ -214,11 +196,7 @@ class _Body extends ConsumerWidget {
 
     for (int i = 0; i < messages.length; i++) {
       final message = messages[i];
-      final messageDate = DateTime(
-        message.date.year,
-        message.date.month,
-        message.date.day,
-      );
+      final messageDate = DateTime(message.date.year, message.date.month, message.date.day);
       final isNewDay = currentDate == null || currentDate != messageDate;
       final isLast = i == messages.length - 1;
 
@@ -263,17 +241,13 @@ class _ContactTyping extends ConsumerWidget {
           ? Text(
               '${user.name} is typing...',
               style: TextStyle(
-                color: Theme.of(
-                  context,
-                ).colorScheme.onSurface.withValues(alpha: 0.6),
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                 fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
               ),
             )
           : Text(
               '', // Empty text to maintain layout when not typing
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize,
-              ),
+              style: TextStyle(fontSize: Theme.of(context).textTheme.bodyMedium?.fontSize),
             ),
     );
   }
@@ -296,9 +270,7 @@ class _DateBubble extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
           decoration: BoxDecoration(
-            color: Theme.of(
-              context,
-            ).colorScheme.tertiaryContainer.withValues(alpha: 0.7),
+            color: Theme.of(context).colorScheme.tertiaryContainer.withValues(alpha: 0.7),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Text(
@@ -308,9 +280,7 @@ class _DateBubble extends StatelessWidget {
                 ? context.l10n.yesterday
                 : formatted,
             style: TextStyle(
-              color: Theme.of(
-                context,
-              ).colorScheme.onTertiaryContainer.withValues(alpha: 0.8),
+              color: Theme.of(context).colorScheme.onTertiaryContainer.withValues(alpha: 0.8),
               fontSize: 13,
               fontWeight: FontWeight.w600,
             ),
@@ -341,9 +311,7 @@ class _MessageBubble extends StatelessWidget {
   }
 
   Color _textColor(BuildContext context) {
-    return isMe
-        ? ColorScheme.of(context).onSecondaryContainer
-        : ColorScheme.of(context).onSurface;
+    return isMe ? ColorScheme.of(context).onSecondaryContainer : ColorScheme.of(context).onSurface;
   }
 
   bool get isInGroup => groupLength > 1;
@@ -408,10 +376,7 @@ class _MessageBubble extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 time,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: _textColor(context).withValues(alpha: 0.6),
-                ),
+                style: TextStyle(fontSize: 11, color: _textColor(context).withValues(alpha: 0.6)),
               ),
             ],
           ),
@@ -435,8 +400,7 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
   final controller = TextEditingController();
 
   bool get isBlocked =>
-      widget.state.convo.relations.inward == false ||
-      widget.state.convo.relations.outward == false;
+      widget.state.convo.relations.inward == false || widget.state.convo.relations.outward == false;
 
   bool get isBot => widget.state.isBot;
 
@@ -449,9 +413,7 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
     super.initState();
     controller.addListener(() {
       if (controller.text.isNotEmpty) {
-        ref
-            .read(conversationControllerProvider(widget.user.id).notifier)
-            .setTyping(widget.user.id);
+        ref.read(conversationControllerProvider(widget.user.id).notifier).setTyping(widget.user.id);
       }
     });
   }
@@ -477,14 +439,9 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         child: TextField(
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 10.0,
-              horizontal: 15.0,
-            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
             suffixIcon: sendButton,
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-            ),
+            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
             hintText: isBlocked
                 ? 'This conversation is blocked.'
                 : isBot

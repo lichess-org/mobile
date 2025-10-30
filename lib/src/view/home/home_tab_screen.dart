@@ -61,14 +61,8 @@ class HomeTabScreen extends ConsumerStatefulWidget {
 
   final bool editModeEnabled;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
-    bool editModeEnabled = false,
-  }) {
-    return buildScreenRoute(
-      context,
-      screen: HomeTabScreen(editModeEnabled: editModeEnabled),
-    );
+  static Route<dynamic> buildRoute(BuildContext context, {bool editModeEnabled = false}) {
+    return buildScreenRoute(context, screen: HomeTabScreen(editModeEnabled: editModeEnabled));
   }
 
   @override
@@ -92,9 +86,7 @@ class _IsEditingHome extends InheritedWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-      DiagnosticsProperty<bool>('isEditingWidgets', isEditingWidgets),
-    );
+    properties.add(DiagnosticsProperty<bool>('isEditingWidgets', isEditingWidgets));
   }
 }
 
@@ -114,10 +106,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   }
 
   Future<bool> shouldDisplayWelcomeMessage() async {
-    if (LichessBinding.instance.sharedPreferences.getBool(
-          'app_welcome_message_shown',
-        ) ==
-        true) {
+    if (LichessBinding.instance.sharedPreferences.getBool('app_welcome_message_shown') == true) {
       return false;
     }
 
@@ -126,8 +115,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     }
 
     final hasPlayedGames =
-        await (await ref.read(gameStorageProvider.future)).count(userId: null) >
-        0;
+        await (await ref.read(gameStorageProvider.future)).count(userId: null) > 0;
 
     return !hasPlayedGames;
   }
@@ -201,15 +189,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       skipLoadingOnReload: true,
       data: (status) {
         final session = ref.watch(authSessionProvider);
-        final unreadLichessMessage =
-            ref.watch(unreadMessagesProvider).valueOrNull?.lichess == true;
+        final unreadLichessMessage = ref.watch(unreadMessagesProvider).valueOrNull?.lichess == true;
         final ongoingGames = ref.watch(ongoingGamesProvider);
-        final offlineCorresGames = ref.watch(
-          offlineOngoingCorrespondenceGamesProvider,
-        );
+        final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
         final recentGames = ref.watch(myRecentGamesProvider);
-        final nbOfGames =
-            ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
+        final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
         final isTablet = isTabletOrLarger(context);
         final featuredTournaments = status.isOnline
             ? ref.watch(featuredTournamentsProvider)
@@ -219,10 +203,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         // (i.e. first installation, or the user has never played a game)
         final shouldShowWelcomeScreen =
             session == null &&
-            recentGames.maybeWhen(
-              data: (data) => data.isEmpty,
-              orElse: () => false,
-            );
+            recentGames.maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
 
         final widgets = shouldShowWelcomeScreen
             ? _welcomeScreenWidgets(
@@ -253,10 +234,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
 
         final content = ListView(
           controller: homeScrollController,
-          children: [
-            if (unreadLichessMessage) const _LichessMessageBanner(),
-            ...widgets,
-          ],
+          children: [if (unreadLichessMessage) const _LichessMessageBanner(), ...widgets],
         );
 
         return FocusDetector(
@@ -285,17 +263,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                       title: const AppBarLichessTitle(),
                       centerTitle: true,
                       leading: const AccountDrawerIconButton(),
-                      actions: const [
-                        _ChallengeScreenButton(),
-                        _PlayerScreenButton(),
-                      ],
+                      actions: const [_ChallengeScreenButton(), _PlayerScreenButton()],
                     ),
               drawer: const AccountDrawer(),
               body: widget.editModeEnabled
                   ? content
                   : HapticRefreshIndicator(
-                      edgeOffset:
-                          Theme.of(context).platform == TargetPlatform.iOS
+                      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                           ? MediaQuery.paddingOf(context).top + kToolbarHeight
                           : 0.0,
                       key: _refreshKey,
@@ -320,9 +294,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               floatingActionButton: widget.editModeEnabled || isTablet
                   ? null
                   : const FloatingPlayButton(),
-              bottomSheet: widget.editModeEnabled
-                  ? null
-                  : const OfflineBanner(),
+              bottomSheet: widget.editModeEnabled ? null : const OfflineBanner(),
             ),
           ),
         );
@@ -336,23 +308,16 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     required AuthSessionState? session,
     required ConnectivityStatus status,
     required AsyncValue<IList<OngoingGame>> ongoingGames,
-    required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>>
-    offlineCorresGames,
+    required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames,
     required AsyncValue<IList<LightExportedGameWithPov>> recentGames,
     required AsyncValue<IList<LightTournament>> featuredTournaments,
     required int nbOfGames,
   }) {
     final hasOngoingGames =
         (status.isOnline &&
-            ongoingGames.maybeWhen(
-              data: (data) => data.isNotEmpty,
-              orElse: () => false,
-            )) ||
+            ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false)) ||
         (!status.isOnline &&
-            offlineCorresGames.maybeWhen(
-              data: (data) => data.isNotEmpty,
-              orElse: () => false,
-            ));
+            offlineCorresGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false));
     final list = [
       const _EditableWidget(
         widget: HomeEditableWidget.hello,
@@ -363,28 +328,20 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         widget: HomeEditableWidget.perfCards,
         shouldShow: session != null && status.isOnline,
         child: AccountPerfCards(
-          padding: Styles.horizontalBodyPadding.add(
-            Styles.sectionBottomPadding,
-          ),
+          padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
         ),
       ),
       _EditableWidget(
         widget: HomeEditableWidget.quickPairing,
         shouldShow: status.isOnline,
-        child: const Padding(
-          padding: Styles.bodySectionPadding,
-          child: QuickGameMatrix(),
-        ),
+        child: const Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
       ),
       _EditableWidget(
         widget: HomeEditableWidget.ongoingGames,
         shouldShow: hasOngoingGames,
         child: status.isOnline
             ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
-            : _OfflineCorrespondenceCarousel(
-                offlineCorresGames,
-                maxGamesToShow: 20,
-              ),
+            : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
       ),
       _EditableWidget(
         widget: HomeEditableWidget.featuredTournaments,
@@ -394,11 +351,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       _EditableWidget(
         widget: HomeEditableWidget.recentGames,
         shouldShow: true,
-        child: RecentGamesWidget(
-          recentGames: recentGames,
-          nbOfGames: nbOfGames,
-          user: null,
-        ),
+        child: RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
       ),
     ];
     return list;
@@ -417,10 +370,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         child: LichessMessage(style: TextTheme.of(context).bodyLarge),
       ),
       const SizedBox(height: 8.0),
-      if (session == null) ...[
-        const Center(child: _SignInWidget()),
-        const SizedBox(height: 16.0),
-      ],
+      if (session == null) ...[const Center(child: _SignInWidget()), const SizedBox(height: 16.0)],
       if (Theme.of(context).platform != TargetPlatform.iOS &&
           (session == null || session.user.isPatron != true)) ...[
         Center(
@@ -458,9 +408,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 ],
               ),
             ),
-            Expanded(
-              child: FeaturedTournamentsWidget(featured: featuredTournaments),
-            ),
+            Expanded(child: FeaturedTournamentsWidget(featured: featuredTournaments)),
           ],
         )
       else ...[
@@ -469,10 +417,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
           const _EditableWidget(
             widget: HomeEditableWidget.quickPairing,
             shouldShow: true,
-            child: Padding(
-              padding: Styles.bodySectionPadding,
-              child: QuickGameMatrix(),
-            ),
+            child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
           ),
         if (status.isOnline)
           _EditableWidget(
@@ -488,8 +433,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     required AuthSessionState? session,
     required ConnectivityStatus status,
     required AsyncValue<IList<OngoingGame>> ongoingGames,
-    required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>>
-    offlineCorresGames,
+    required AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames,
     required AsyncValue<IList<LightExportedGameWithPov>> recentGames,
     required AsyncValue<IList<LightTournament>> featuredTournaments,
     required int nbOfGames,
@@ -517,10 +461,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 if (status.isOnline)
                   _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
                 else
-                  _OfflineCorrespondencePreview(
-                    offlineCorresGames,
-                    maxGamesToShow: 5,
-                  ),
+                  _OfflineCorrespondencePreview(offlineCorresGames, maxGamesToShow: 5),
               ],
             ),
           ),
@@ -531,11 +472,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               children: [
                 const SizedBox(height: 8.0),
                 FeaturedTournamentsWidget(featured: featuredTournaments),
-                RecentGamesWidget(
-                  recentGames: recentGames,
-                  nbOfGames: nbOfGames,
-                  user: null,
-                ),
+                RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
               ],
             ),
           ),
@@ -629,11 +566,7 @@ class _SignInWidget extends ConsumerWidget {
 ///   This parameter is only active when the user is not in edit mode, as we
 ///   always want to display the widget in edit mode.
 class _EditableWidget extends ConsumerWidget {
-  const _EditableWidget({
-    required this.child,
-    required this.widget,
-    required this.shouldShow,
-  });
+  const _EditableWidget({required this.child, required this.widget, required this.shouldShow});
 
   final Widget child;
   final HomeEditableWidget widget;
@@ -642,8 +575,7 @@ class _EditableWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final disabledWidgets = ref.watch(homePreferencesProvider).disabledWidgets;
-    final isEditing =
-        _IsEditingHome.maybeOf(context)?.isEditingWidgets ?? false;
+    final isEditing = _IsEditingHome.maybeOf(context)?.isEditingWidgets ?? false;
     final isEnabled = !disabledWidgets.contains(widget);
 
     if (!shouldShow) {
@@ -664,9 +596,7 @@ class _EditableWidget extends ConsumerWidget {
                       onChanged: widget.alwaysEnabled
                           ? null
                           : (_) {
-                              ref
-                                  .read(homePreferencesProvider.notifier)
-                                  .toggleWidget(widget);
+                              ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
                             },
                     ),
                   ],
@@ -702,11 +632,10 @@ class _IsDayTimeNotifier extends AutoDisposeNotifier<bool> {
   }
 }
 
-final _isDayTimeProvider =
-    NotifierProvider.autoDispose<_IsDayTimeNotifier, bool>(
-      _IsDayTimeNotifier.new,
-      name: '_isDayTimeProvider',
-    );
+final _isDayTimeProvider = NotifierProvider.autoDispose<_IsDayTimeNotifier, bool>(
+  _IsDayTimeNotifier.new,
+  name: '_isDayTimeProvider',
+);
 
 class _GreetingWidget extends ConsumerWidget {
   const _GreetingWidget();
@@ -741,9 +670,7 @@ class _GreetingWidget extends ConsumerWidget {
               if (user != null)
                 Flexible(
                   child: l10nWithWidget(
-                    isDayTime
-                        ? context.l10n.mobileGoodDay
-                        : context.l10n.mobileGoodEvening,
+                    isDayTime ? context.l10n.mobileGoodDay : context.l10n.mobileGoodEvening,
                     Text(user.name, style: style),
                     textStyle: style,
                   ),
@@ -776,10 +703,7 @@ class _TabletCreateAGameSection extends StatelessWidget {
         _EditableWidget(
           widget: HomeEditableWidget.quickPairing,
           shouldShow: true,
-          child: Padding(
-            padding: Styles.bodySectionPadding,
-            child: QuickGameMatrix(),
-          ),
+          child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
         ),
         PlayMenu(),
       ],
@@ -831,15 +755,11 @@ class _OngoingGamesCarousel extends ConsumerWidget {
 }
 
 class _OfflineCorrespondenceCarousel extends ConsumerWidget {
-  const _OfflineCorrespondenceCarousel(
-    this.offlineCorresGames, {
-    required this.maxGamesToShow,
-  });
+  const _OfflineCorrespondenceCarousel(this.offlineCorresGames, {required this.maxGamesToShow});
 
   final int maxGamesToShow;
 
-  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>>
-  offlineCorresGames;
+  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -853,10 +773,7 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
           onTap: (index) {
             final el = data[index];
             Navigator.of(context, rootNavigator: true).push(
-              OfflineCorrespondenceGameScreen.buildRoute(
-                context,
-                initialGame: (el.$1, el.$2),
-              ),
+              OfflineCorrespondenceGameScreen.buildRoute(context, initialGame: (el.$1, el.$2)),
             );
           },
           builder: (el) => OngoingGameCarouselItem(
@@ -905,10 +822,8 @@ class _OngoingGamesPreview extends ConsumerWidget {
         return PreviewGameList(
           list: list,
           maxGamesToShow: maxGamesToShow,
-          builder: (el) => OngoingGamePreview(
-            game: el,
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-          ),
+          builder: (el) =>
+              OngoingGamePreview(game: el, padding: const EdgeInsets.symmetric(vertical: 8.0)),
           moreScreenRouteBuilder: OngoingGamesScreen.buildRoute,
         );
       case _:
@@ -918,15 +833,11 @@ class _OngoingGamesPreview extends ConsumerWidget {
 }
 
 class _OfflineCorrespondencePreview extends ConsumerWidget {
-  const _OfflineCorrespondencePreview(
-    this.offlineCorresGames, {
-    required this.maxGamesToShow,
-  });
+  const _OfflineCorrespondencePreview(this.offlineCorresGames, {required this.maxGamesToShow});
 
   final int maxGamesToShow;
 
-  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>>
-  offlineCorresGames;
+  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -935,10 +846,7 @@ class _OfflineCorrespondencePreview extends ConsumerWidget {
         return PreviewGameList(
           list: data,
           maxGamesToShow: maxGamesToShow,
-          builder: (el) => OfflineCorrespondenceGamePreview(
-            game: el.$2,
-            lastModified: el.$1,
-          ),
+          builder: (el) => OfflineCorrespondenceGamePreview(game: el.$2, lastModified: el.$1),
           moreScreenRouteBuilder: OfflineCorrespondenceGamesScreen.buildRoute,
         );
       },
@@ -1042,9 +950,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
             ? null
             : () {
                 ref.invalidate(challengesProvider);
-                Navigator.of(
-                  context,
-                ).push(ChallengeRequestsScreen.buildRoute(context));
+                Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
               },
       ),
       _ => SemanticIconButton(

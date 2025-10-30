@@ -13,8 +13,7 @@ part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
-class GeneralPreferences extends _$GeneralPreferences
-    with PreferencesStorage<GeneralPrefs> {
+class GeneralPreferences extends _$GeneralPreferences with PreferencesStorage<GeneralPrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.general;
@@ -24,8 +23,7 @@ class GeneralPreferences extends _$GeneralPreferences
   GeneralPrefs get defaults => GeneralPrefs.defaults;
 
   @override
-  GeneralPrefs fromJson(Map<String, dynamic> json) =>
-      GeneralPrefs.fromJson(json);
+  GeneralPrefs fromJson(Map<String, dynamic> json) => GeneralPrefs.fromJson(json);
 
   @override
   GeneralPrefs build() {
@@ -59,9 +57,7 @@ class GeneralPreferences extends _$GeneralPreferences
       ref
           .read(boardPreferencesProvider.notifier)
           .setBoardTheme(
-            newState.systemColors
-                ? BoardTheme.system
-                : BoardPrefs.defaults.boardTheme,
+            newState.systemColors ? BoardTheme.system : BoardPrefs.defaults.boardTheme,
           ),
     ]).then((_) => {});
   }
@@ -74,12 +70,7 @@ class GeneralPreferences extends _$GeneralPreferences
       !(backgroundColor != null && backgroundImage != null),
       'Only one of backgroundColor or backgroundImage should be set',
     );
-    return save(
-      state.copyWith(
-        backgroundColor: backgroundColor,
-        backgroundImage: backgroundImage,
-      ),
-    );
+    return save(state.copyWith(backgroundColor: backgroundColor, backgroundImage: backgroundImage));
   }
 }
 
@@ -89,14 +80,10 @@ sealed class GeneralPrefs with _$GeneralPrefs implements Serializable {
 
   @Assert('masterVolume >= 0 && masterVolume <= 1')
   const factory GeneralPrefs({
-    @JsonKey(
-      unknownEnumValue: BackgroundThemeMode.system,
-      defaultValue: BackgroundThemeMode.system,
-    )
+    @JsonKey(unknownEnumValue: BackgroundThemeMode.system, defaultValue: BackgroundThemeMode.system)
     required BackgroundThemeMode themeMode,
     required bool isSoundEnabled,
-    @JsonKey(unknownEnumValue: SoundTheme.standard)
-    required SoundTheme soundTheme,
+    @JsonKey(unknownEnumValue: SoundTheme.standard) required SoundTheme soundTheme,
     @JsonKey(defaultValue: 0.8) required double masterVolume,
 
     /// Whether to use system colors on android 10+.
@@ -104,10 +91,7 @@ sealed class GeneralPrefs with _$GeneralPrefs implements Serializable {
 
     /// App theme seed
     @Deprecated('Use systemColors instead')
-    @JsonKey(
-      unknownEnumValue: AppThemeSeed.board,
-      defaultValue: AppThemeSeed.board,
-    )
+    @JsonKey(unknownEnumValue: AppThemeSeed.board, defaultValue: AppThemeSeed.board)
     required AppThemeSeed appThemeSeed,
 
     /// Locale to use in the app, use system locale if null
@@ -131,8 +115,7 @@ sealed class GeneralPrefs with _$GeneralPrefs implements Serializable {
     return _$GeneralPrefsFromJson(json);
   }
 
-  bool get isForcedDarkMode =>
-      backgroundColor != null || backgroundImage != null;
+  bool get isForcedDarkMode => backgroundColor != null || backgroundImage != null;
 }
 
 enum AppThemeSeed {
@@ -222,33 +205,26 @@ sealed class BackgroundImage with _$BackgroundImage {
     required double viewportHeight,
   }) = _BackgroundImage;
 
-  static Color getFilterColor(Color surfaceColor, double meanLuminance) =>
-      surfaceColor.withValues(
-        alpha: switch (meanLuminance) {
-          < 0.2 => 0,
-          < 0.4 => 0.25,
-          < 0.6 => 0.5,
-          _ => 0.8,
-        },
-      );
+  static Color getFilterColor(Color surfaceColor, double meanLuminance) => surfaceColor.withValues(
+    alpha: switch (meanLuminance) {
+      < 0.2 => 0,
+      < 0.4 => 0.25,
+      < 0.6 => 0.5,
+      _ => 0.8,
+    },
+  );
 
   /// Generate a base [ThemeData] from the seed color.
   static ThemeData getTheme(Color seedColor) => ThemeData.from(
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: seedColor,
-      brightness: Brightness.dark,
-    ),
-    textTheme: defaultTargetPlatform == TargetPlatform.iOS
-        ? kCupertinoDefaultTextTheme
-        : null,
+    colorScheme: ColorScheme.fromSeed(seedColor: seedColor, brightness: Brightness.dark),
+    textTheme: defaultTargetPlatform == TargetPlatform.iOS ? kCupertinoDefaultTextTheme : null,
   );
 
   /// The base theme for the background image.
   ThemeData get baseTheme => getTheme(seedColor);
 }
 
-class BackgroundImageConverter
-    implements JsonConverter<BackgroundImage?, Map<String, dynamic>?> {
+class BackgroundImageConverter implements JsonConverter<BackgroundImage?, Map<String, dynamic>?> {
   const BackgroundImageConverter();
 
   @override
@@ -261,9 +237,7 @@ class BackgroundImageConverter
 
     return BackgroundImage(
       path: json['path'] as String,
-      transform: Matrix4.fromList(
-        transform.map((e) => (e as num).toDouble()).toList(),
-      ),
+      transform: Matrix4.fromList(transform.map((e) => (e as num).toDouble()).toList()),
       isBlurred: json['isBlurred'] as bool,
       seedColor: Color(json['seedColor'] as int),
       meanLuminance: json['meanLuminance'] as double,

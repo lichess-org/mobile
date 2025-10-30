@@ -6,11 +6,7 @@ double estimateHeightMinusBoard(MediaQueryData mediaQuery) {
   final size = mediaQuery.size;
   final viewPadding = mediaQuery.viewPadding;
   final boardSize = size.width;
-  return size.height -
-      viewPadding.vertical -
-      boardSize -
-      kToolbarHeight -
-      kBottomBarHeight;
+  return size.height - viewPadding.vertical - boardSize - kToolbarHeight - kBottomBarHeight;
 }
 
 /// Returns the estimated height of what is left after removing the height of the board from the screen.

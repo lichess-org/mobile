@@ -171,10 +171,7 @@ class UserFullNameWidget extends ConsumerWidget {
         if (showPatron && user?.isPatron == true)
           Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: PatronIcon(
-              size: contextTextStyle.fontSize,
-              color: user?.patronColor,
-            ),
+            child: PatronIcon(size: contextTextStyle.fontSize, color: user?.patronColor),
           ),
         if (user?.title != null) ...[
           Text(
@@ -189,12 +186,7 @@ class UserFullNameWidget extends ConsumerWidget {
           const SizedBox(width: 5),
         ],
         Flexible(
-          child: Text(
-            displayName,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: style,
-          ),
+          child: Text(displayName, maxLines: 1, overflow: TextOverflow.ellipsis, style: style),
         ),
         if (showFlair && user?.flair != null) ...[
           const SizedBox(width: 5),
@@ -211,9 +203,7 @@ class UserFullNameWidget extends ConsumerWidget {
             ratingStr,
             style: contextTextStyle.copyWith(
               fontWeight: FontWeight.w400,
-              fontSize: contextTextStyle.fontSize != null
-                  ? contextTextStyle.fontSize! - 3
-                  : 13,
+              fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
               color: textShade(context, 0.8),
             ),
           ),

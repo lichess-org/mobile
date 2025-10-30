@@ -18,14 +18,8 @@ class EngineDepth extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (
-      engineName: engineName,
-      eval: localEval,
-      state: engineState,
-      currentWork: work,
-    ) = ref.watch(
-      engineEvaluationProvider,
-    );
+    final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
+        .watch(engineEvaluationProvider);
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     final color =
@@ -35,10 +29,7 @@ class EngineDepth extends ConsumerWidget {
         : ColorScheme.of(context).secondary;
     final textColor = ColorScheme.of(context).onSecondary;
 
-    final loadingIndicator = SpinKitFadingFour(
-      color: textColor.withValues(alpha: 0.7),
-      size: 10,
-    );
+    final loadingIndicator = SpinKitFadingFour(color: textColor.withValues(alpha: 0.7), size: 10);
 
     const microChipSize = 28.0;
     final iconTextStyle = TextStyle(
@@ -49,8 +40,7 @@ class EngineDepth extends ConsumerWidget {
 
     return SemanticIconButton(
       semanticsLabel: switch (eval) {
-        LocalEval(:final depth) =>
-          '$engineName, ${context.l10n.depthX('$depth')}',
+        LocalEval(:final depth) => '$engineName, ${context.l10n.depthX('$depth')}',
         CloudEval(:final depth) =>
           '${context.l10n.cloudAnalysis}, ${context.l10n.depthX('$depth')}',
         _ => context.l10n.loadingEngine,
@@ -95,10 +85,7 @@ class EngineDepth extends ConsumerWidget {
                 child: RepaintBoundary(
                   child: Center(
                     child: eval?.depth != null
-                        ? Text(
-                            '${math.min(99, eval!.depth)}',
-                            style: iconTextStyle,
-                          )
+                        ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
                         : loadingIndicator,
                   ),
                 ),
@@ -132,8 +119,7 @@ class MicroChipPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = outerRimWidth;
 
-    final innerSquareSize =
-        size.width - pinLength - innerRimWidth - outerRimWidth / 2;
+    final innerSquareSize = size.width - pinLength - innerRimWidth - outerRimWidth / 2;
 
     final innerSquarePath = Path()
       ..addRRect(
@@ -229,8 +215,7 @@ class MicroChipPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant MicroChipPainter oldDelegate) =>
-      color != oldDelegate.color;
+  bool shouldRepaint(covariant MicroChipPainter oldDelegate) => color != oldDelegate.color;
 }
 
 class _EnginePopup extends ConsumerWidget {
@@ -242,20 +227,14 @@ class _EnginePopup extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final evalState = ref.watch(engineEvaluationProvider);
-    final (
-      state: engineState,
-      currentWork: work,
-      engineName: engineName,
-      eval: evalStateEval,
-    ) = evalState;
+    final (state: engineState, currentWork: work, engineName: engineName, eval: evalStateEval) =
+        evalState;
     final bool canGoDeeper =
         goDeeper != null &&
         engineState == EngineState.idle &&
         (work == null || work.isDeeper != true);
 
-    final currentEval = engineState == EngineState.computing
-        ? evalStateEval ?? eval
-        : eval;
+    final currentEval = engineState == EngineState.computing ? evalStateEval ?? eval : eval;
 
     if (currentEval is CloudEval) {
       return ListTile(
@@ -272,9 +251,7 @@ class _EnginePopup extends ConsumerWidget {
       );
     }
 
-    final knps = engineState == EngineState.computing
-        ? ', ${evalStateEval?.knps.round()}kn/s'
-        : '';
+    final knps = engineState == EngineState.computing ? ', ${evalStateEval?.knps.round()}kn/s' : '';
     final depth = currentEval.depth;
 
     // remove Fairy-Stockfish version from engine name
@@ -284,11 +261,7 @@ class _EnginePopup extends ConsumerWidget {
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
-      leading: Image.asset(
-        'assets/images/stockfish/icon.png',
-        width: 44,
-        height: 44,
-      ),
+      leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
       title: Text(fixedEngineName),
       subtitle: Text(context.l10n.depthX('$depth$knps')),
       trailing: canGoDeeper

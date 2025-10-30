@@ -15,8 +15,7 @@ class PlayMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline =
-        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
     return Column(
       children: [
@@ -30,9 +29,7 @@ class PlayMenu extends ConsumerWidget {
               enabled: isOnline,
               onTap: () {
                 // Pops the play bottom sheet
-                Navigator.of(
-                  context,
-                ).popUntil((route) => route is! ModalBottomSheetRoute);
+                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
                 Navigator.of(
                   context,
                   rootNavigator: true,
@@ -45,13 +42,9 @@ class PlayMenu extends ConsumerWidget {
               enabled: isOnline,
               onTap: () {
                 // Pops the play bottom sheet
-                Navigator.of(
-                  context,
-                ).popUntil((route) => route is! ModalBottomSheetRoute);
+                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
 
-                Navigator.of(
-                  context,
-                ).push(TournamentListScreen.buildRoute(context));
+                Navigator.of(context).push(TournamentListScreen.buildRoute(context));
               },
               leading: const Icon(LichessIcons.tournament_cup),
               title: Text(context.l10n.arenaArenaTournaments),
@@ -63,9 +56,7 @@ class PlayMenu extends ConsumerWidget {
             ListTile(
               onTap: () {
                 // Pops the play bottom sheet
-                Navigator.of(
-                  context,
-                ).popUntil((route) => route is! ModalBottomSheetRoute);
+                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
                 Navigator.of(
                   context,
                   rootNavigator: true,
@@ -88,10 +79,6 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListSection(
-      hasLeading: true,
-      materialFilledCard: true,
-      children: children,
-    );
+    return ListSection(hasLeading: true, materialFilledCard: true, children: children);
   }
 }

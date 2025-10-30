@@ -31,17 +31,12 @@ class BoardEditorScreen extends ConsumerWidget {
   final String? initialFen;
 
   static Route<dynamic> buildRoute(BuildContext context, {String? initialFen}) {
-    return buildScreenRoute(
-      context,
-      screen: BoardEditorScreen(initialFen: initialFen),
-    );
+    return buildScreenRoute(context, screen: BoardEditorScreen(initialFen: initialFen));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardEditorState = ref.watch(
-      boardEditorControllerProvider(initialFen),
-    );
+    final boardEditorState = ref.watch(boardEditorControllerProvider(initialFen));
 
     return Scaffold(
       appBar: AppBar(
@@ -49,10 +44,7 @@ class BoardEditorScreen extends ConsumerWidget {
         actions: [
           SemanticIconButton(
             semanticsLabel: context.l10n.mobileSharePositionAsFEN,
-            onPressed: () => launchShareDialog(
-              context,
-              ShareParams(text: boardEditorState.fen),
-            ),
+            onPressed: () => launchShareDialog(context, ShareParams(text: boardEditorState.fen)),
             icon: const PlatformShareIcon(),
           ),
         ],
@@ -135,15 +127,13 @@ class _BoardEditor extends ConsumerWidget {
         boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
       ),
       pointerMode: editorState.editorPointerMode,
-      onDiscardedPiece: (Square square) => ref
-          .read(boardEditorControllerProvider(initialFen).notifier)
-          .discardPiece(square),
+      onDiscardedPiece: (Square square) =>
+          ref.read(boardEditorControllerProvider(initialFen).notifier).discardPiece(square),
       onDroppedPiece: (Square? origin, Square dest, Piece piece) => ref
           .read(boardEditorControllerProvider(initialFen).notifier)
           .movePiece(origin, dest, piece),
-      onEditedSquare: (Square square) => ref
-          .read(boardEditorControllerProvider(initialFen).notifier)
-          .editSquare(square),
+      onEditedSquare: (Square square) =>
+          ref.read(boardEditorControllerProvider(initialFen).notifier).editSquare(square),
     );
   }
 }
@@ -183,9 +173,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        borderRadius: widget.isTablet
-            ? Styles.boardBorderRadius
-            : BorderRadius.zero,
+        borderRadius: widget.isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
         boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
       ),
       child: ColoredBox(
@@ -204,9 +192,8 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                     ? context.lichessColors.good
                     : Colors.transparent,
                 child: GestureDetector(
-                  onTap: () => ref
-                      .read(editorController.notifier)
-                      .updateMode(EditorPointerMode.drag),
+                  onTap: () =>
+                      ref.read(editorController.notifier).updateMode(EditorPointerMode.drag),
                   child: Icon(CupertinoIcons.hand_draw, size: 0.9 * squareSize),
                 ),
               ),
@@ -222,11 +209,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
               return ColoredBox(
                 key: Key('piece-button-${piece.color.name}-${piece.role.name}'),
                 color:
-                    ref
-                            .read(
-                              boardEditorControllerProvider(widget.initialFen),
-                            )
-                            .activePieceOnEdit ==
+                    ref.read(boardEditorControllerProvider(widget.initialFen)).activePieceOnEdit ==
                         piece
                     ? ColorScheme.of(context).primary
                     : Colors.transparent,
@@ -239,13 +222,11 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                       pieceAssets: boardPrefs.pieceSet.assets,
                     ),
                     child: pieceWidget,
-                    onDragEnd: (_) => ref
-                        .read(editorController.notifier)
-                        .updateMode(EditorPointerMode.drag),
+                    onDragEnd: (_) =>
+                        ref.read(editorController.notifier).updateMode(EditorPointerMode.drag),
                   ),
-                  onTap: () => ref
-                      .read(editorController.notifier)
-                      .updateMode(EditorPointerMode.edit, piece),
+                  onTap: () =>
+                      ref.read(editorController.notifier).updateMode(EditorPointerMode.edit, piece),
                 ),
               );
             }),
@@ -259,9 +240,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                     : Colors.transparent,
                 child: GestureDetector(
                   onTap: () => {
-                    ref
-                        .read(editorController.notifier)
-                        .updateMode(EditorPointerMode.edit, null),
+                    ref.read(editorController.notifier).updateMode(EditorPointerMode.edit, null),
                   },
                   child: Icon(CupertinoIcons.delete, size: 0.8 * squareSize),
                 ),
@@ -343,10 +322,7 @@ class _BottomBar extends ConsumerWidget {
                           isScrollControlled: true,
                           useRootNavigator: true,
                           builder: (context) {
-                            return CreateChallengeBottomSheet(
-                              user,
-                              positionFen: editorState.fen,
-                            );
+                            return CreateChallengeBottomSheet(user, positionFen: editorState.fen);
                           },
                         );
                       },
@@ -368,9 +344,7 @@ class _BottomBar extends ConsumerWidget {
         BottomBarButton(
           key: const Key('flip-button'),
           label: context.l10n.flipBoard,
-          onTap: ref
-              .read(boardEditorControllerProvider(initialFen).notifier)
-              .flipBoard,
+          onTap: ref.read(boardEditorControllerProvider(initialFen).notifier).flipBoard,
           icon: CupertinoIcons.arrow_2_squarepath,
         ),
         BottomBarButton(
@@ -401,12 +375,9 @@ class _BottomBar extends ConsumerWidget {
           label: 'Filters',
           onTap: () => showModalBottomSheet<void>(
             context: context,
-            builder: (BuildContext context) =>
-                BoardEditorFilters(initialFen: initialFen),
+            builder: (BuildContext context) => BoardEditorFilters(initialFen: initialFen),
             showDragHandle: true,
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.sizeOf(context).height * 0.5,
-            ),
+            constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
           ),
           icon: Icons.tune,
         ),

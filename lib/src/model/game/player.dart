@@ -51,9 +51,7 @@ sealed class Player with _$Player {
   String displayName(AppLocalizations l10n) =>
       user?.name ??
       name ??
-      (aiLevel != null
-          ? l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString())
-          : l10n.anonymous);
+      (aiLevel != null ? l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString()) : l10n.anonymous);
 
   Player setOnGame(bool onGame) {
     final isOnGame = onGame || isAI;
@@ -76,6 +74,5 @@ sealed class PlayerAnalysis with _$PlayerAnalysis {
     int? accuracy,
   }) = _PlayerAnalysis;
 
-  factory PlayerAnalysis.fromJson(Map<String, dynamic> json) =>
-      _$PlayerAnalysisFromJson(json);
+  factory PlayerAnalysis.fromJson(Map<String, dynamic> json) => _$PlayerAnalysisFromJson(json);
 }

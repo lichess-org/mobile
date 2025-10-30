@@ -35,12 +35,10 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget bar = BottomAppBar(
-      color:
-          Theme.of(context).platform == TargetPlatform.iOS &&
-              cupertinoTransparent
-          ? (BottomAppBarTheme.of(context).color ??
-                    ColorScheme.of(context).surface)
-                .withValues(alpha: kCupertinoBarOpacity)
+      color: Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent
+          ? (BottomAppBarTheme.of(context).color ?? ColorScheme.of(context).surface).withValues(
+              alpha: kCupertinoBarOpacity,
+            )
           : null,
       height: kBottomBarHeight,
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
@@ -52,14 +50,10 @@ class BottomBar extends StatelessWidget {
       ),
     );
 
-    if (Theme.of(context).platform == TargetPlatform.iOS &&
-        cupertinoTransparent) {
+    if (Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent) {
       bar = ClipRect(
         child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: kCupertinoBarBlurSigma,
-            sigmaY: kCupertinoBarBlurSigma,
-          ),
+          filter: ImageFilter.blur(sigmaX: kCupertinoBarBlurSigma, sigmaY: kCupertinoBarBlurSigma),
           child: bar,
         ),
       );
@@ -129,10 +123,7 @@ class BottomBarButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 label,
-                style: TextStyle(
-                  fontSize: labelFontSize,
-                  color: highlighted ? primary : null,
-                ),
+                style: TextStyle(fontSize: labelFontSize, color: highlighted ? primary : null),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -150,17 +141,12 @@ class BottomBarButton extends StatelessWidget {
       child: Tooltip(
         excludeFromSemantics: true,
         message: label,
-        triggerMode: showTooltip
-            ? TooltipTriggerMode.longPress
-            : TooltipTriggerMode.manual,
+        triggerMode: showTooltip ? TooltipTriggerMode.longPress : TooltipTriggerMode.manual,
         child: InkWell(
           borderRadius: BorderRadius.zero,
           onTap: onTap,
           child: blink
-              ? _AnimatedInvertBackground(
-                  color: primary.withValues(alpha: 0.2),
-                  child: child,
-                )
+              ? _AnimatedInvertBackground(color: primary.withValues(alpha: 0.2), child: child)
               : child,
         ),
       ),
@@ -187,22 +173,16 @@ class _InvertBackgroundState extends State<_AnimatedInvertBackground>
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 2000),
-      vsync: this,
-    );
+    _controller = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
 
-    _colorAnimation =
-        ColorTween(
-          begin: Colors.transparent,
-          end: widget.color,
-        ).animate(_controller)..addStatusListener((status) {
-          if (_controller.status == AnimationStatus.completed) {
-            _controller.reverse();
-          } else if (_controller.status == AnimationStatus.dismissed) {
-            _controller.forward();
-          }
-        });
+    _colorAnimation = ColorTween(begin: Colors.transparent, end: widget.color).animate(_controller)
+      ..addStatusListener((status) {
+        if (_controller.status == AnimationStatus.completed) {
+          _controller.reverse();
+        } else if (_controller.status == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      });
 
     _controller.forward();
   }
@@ -217,8 +197,7 @@ class _InvertBackgroundState extends State<_AnimatedInvertBackground>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _colorAnimation,
-      builder: (_, _) =>
-          Container(color: _colorAnimation.value, child: widget.child),
+      builder: (_, _) => Container(color: _colorAnimation.value, child: widget.child),
     );
   }
 }

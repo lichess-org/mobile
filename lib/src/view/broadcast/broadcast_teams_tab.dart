@@ -49,21 +49,14 @@ class BroadcastTeamsTab extends ConsumerWidget {
         tournamentId,
         tournamentSlug,
       ),
-      AsyncError(:final error) => Center(
-        child: Text('Cannot load teams data: $error'),
-      ),
+      AsyncError(:final error) => Center(child: Text('Cannot load teams data: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
   }
 }
 
 class BroadcastTeamsList extends ConsumerWidget {
-  const BroadcastTeamsList(
-    this.teamMatches,
-    this.roundId,
-    this.tournamentId,
-    this.tournamentSlug,
-  );
+  const BroadcastTeamsList(this.teamMatches, this.roundId, this.tournamentId, this.tournamentSlug);
 
   final IList<BroadcastTeamMatch> teamMatches;
   final BroadcastRoundId roundId;
@@ -94,9 +87,7 @@ class BroadcastTeamsList extends ConsumerWidget {
           );
         },
       ),
-      AsyncError(:final error) => Center(
-        child: Text('Cannot load games data: $error'),
-      ),
+      AsyncError(:final error) => Center(child: Text('Cannot load games data: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
   }
@@ -134,10 +125,7 @@ class _TeamMatchCard extends StatelessWidget {
           ColoredBox(
             color: ColorScheme.of(context).surfaceDim,
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 12.0,
-                horizontal: 16.0,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
               child: Row(
                 children: [
                   Expanded(
@@ -232,22 +220,14 @@ class _GameRowState extends ConsumerState<_GameRow> {
       return const SizedBox.shrink();
     }
 
-    final team1Player = widget.teamGame.pov == Side.white
-        ? whitePlayer
-        : blackPlayer;
-    final team2Player = widget.teamGame.pov == Side.white
-        ? blackPlayer
-        : whitePlayer;
+    final team1Player = widget.teamGame.pov == Side.white ? whitePlayer : blackPlayer;
+    final team2Player = widget.teamGame.pov == Side.white ? blackPlayer : whitePlayer;
 
     final resultString = _getGameResult(widget.game, widget.teamGame.pov);
 
     final whiteWinningChances =
-        widget.game.isOngoing &&
-            (widget.game.cp != null || widget.game.mate != null)
-        ? ExternalEval(
-            cp: widget.game.cp,
-            mate: widget.game.mate,
-          ).winningChances(Side.white)
+        widget.game.isOngoing && (widget.game.cp != null || widget.game.mate != null)
+        ? ExternalEval(cp: widget.game.cp, mate: widget.game.mate).winningChances(Side.white)
         : null;
 
     return VisibilityDetector(
@@ -288,18 +268,13 @@ class _GameRowState extends ConsumerState<_GameRow> {
           );
         },
         child: ColoredBox(
-          color: widget.index.isEven
-              ? context.lichessTheme.rowEven
-              : context.lichessTheme.rowOdd,
+          color: widget.index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
           child: Padding(
             padding: _kGameRowPadding,
             child: Row(
               children: [
                 Expanded(
-                  child: BroadcastPlayerWidget(
-                    player: team1Player.player,
-                    showRating: isTablet,
-                  ),
+                  child: BroadcastPlayerWidget(player: team1Player.player, showRating: isTablet),
                 ),
                 SizedBox(width: isTablet ? _kTabletSpacing : _kPhoneSpacing),
                 SizedBox(
@@ -314,23 +289,15 @@ class _GameRowState extends ConsumerState<_GameRow> {
                                 height: _kEvalBarHeight,
                                 width: _kEvalBarWidth,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                    _kEvalBarHeight / 2,
-                                  ),
+                                  borderRadius: BorderRadius.circular(_kEvalBarHeight / 2),
                                   color: Colors.grey.withValues(alpha: 0.6),
                                 ),
                               )
-                      : Container(
-                          alignment: Alignment.center,
-                          child: Text(resultString),
-                        ),
+                      : Container(alignment: Alignment.center, child: Text(resultString)),
                 ),
                 SizedBox(width: isTablet ? _kTabletSpacing : _kPhoneSpacing),
                 Expanded(
-                  child: BroadcastPlayerWidget(
-                    player: team2Player.player,
-                    showRating: isTablet,
-                  ),
+                  child: BroadcastPlayerWidget(player: team2Player.player, showRating: isTablet),
                 ),
               ],
             ),
@@ -369,18 +336,14 @@ class _MiniEvalBar extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: pov == Side.white
-                    ? whiteBarWidth
-                    : _kEvalBarWidth - whiteBarWidth,
+                width: pov == Side.white ? whiteBarWidth : _kEvalBarWidth - whiteBarWidth,
                 height: _kEvalBarHeight,
                 color: pov == Side.white
                     ? EngineGauge.valueColor(context)
                     : EngineGauge.backgroundColor(context),
               ),
               Container(
-                width: pov == Side.white
-                    ? _kEvalBarWidth - whiteBarWidth
-                    : whiteBarWidth,
+                width: pov == Side.white ? _kEvalBarWidth - whiteBarWidth : whiteBarWidth,
                 height: _kEvalBarHeight,
                 color: pov == Side.white
                     ? EngineGauge.backgroundColor(context)
@@ -390,11 +353,7 @@ class _MiniEvalBar extends StatelessWidget {
           ),
         ),
 
-        Container(
-          width: _kEvalBarDividerWidth,
-          height: _kEvalBarHeight,
-          color: darken(Colors.red),
-        ),
+        Container(width: _kEvalBarDividerWidth, height: _kEvalBarHeight, color: darken(Colors.red)),
       ],
     );
   }

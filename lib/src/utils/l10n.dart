@@ -33,13 +33,8 @@ Text l10nWithWidget<T extends Widget>(
       children: <InlineSpan>[
         if (parts[0].isNotEmpty) TextSpan(text: parts[0], style: textStyle),
         if (parts[0] != localizedStringWithPlaceholder)
-          WidgetSpan(
-            child: widget,
-            alignment: PlaceholderAlignment.middle,
-            style: textStyle,
-          ),
-        if (parts.length > 1 && parts[1].isNotEmpty)
-          TextSpan(text: parts[1], style: textStyle),
+          WidgetSpan(child: widget, alignment: PlaceholderAlignment.middle, style: textStyle),
+        if (parts.length > 1 && parts[1].isNotEmpty) TextSpan(text: parts[1], style: textStyle),
       ],
     ),
   );
@@ -49,17 +44,11 @@ final _dateFormatterWithYear = DateFormat.yMMMMd();
 final _dateFormatterWithYearShort = DateFormat.yMMMd();
 
 /// Formats a date as a relative date string from now.
-String relativeDate(
-  AppLocalizations l10n,
-  DateTime date, {
-  bool shortDate = true,
-}) {
+String relativeDate(AppLocalizations l10n, DateTime date, {bool shortDate = true}) {
   final now = DateTime.now();
   final diff = date.difference(now);
 
-  final yearFormatter = shortDate
-      ? _dateFormatterWithYearShort
-      : _dateFormatterWithYear;
+  final yearFormatter = shortDate ? _dateFormatterWithYearShort : _dateFormatterWithYear;
 
   if (diff.isNegative) {
     return diff.inDays == 0

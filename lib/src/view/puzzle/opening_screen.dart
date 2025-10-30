@@ -13,9 +13,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 final _openingsProvider =
-    FutureProvider.autoDispose<
-      (bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)
-    >((ref) async {
+    FutureProvider.autoDispose<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)>((ref) async {
       final connectivity = await ref.watch(connectivityChangesProvider.future);
       final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
       IList<PuzzleOpeningFamily>? onlineOpenings;
@@ -97,16 +95,10 @@ class _OpeningFamily extends ConsumerWidget {
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: openingFamily.openings.isNotEmpty
           ? ExpansionTile(
-              title: Text(
-                openingFamily.name,
-                overflow: TextOverflow.ellipsis,
-                style: titleStyle,
-              ),
+              title: Text(openingFamily.name, overflow: TextOverflow.ellipsis, style: titleStyle),
               subtitle: Text(
                 '${openingFamily.count}',
-                style: TextStyle(
-                  color: textShade(context, Styles.subtitleOpacity),
-                ),
+                style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
               ),
               children: [
                 ListSection(
@@ -130,22 +122,16 @@ class _OpeningFamily extends ConsumerWidget {
               ],
             )
           : ListTile(
-              title: Text(
-                openingFamily.name,
-                overflow: TextOverflow.ellipsis,
-                style: titleStyle,
-              ),
+              title: Text(openingFamily.name, overflow: TextOverflow.ellipsis, style: titleStyle),
               subtitle: Text(
                 '${openingFamily.count}',
                 style: TextStyle(color: textShade(context, 0.5)),
               ),
               onTap: () {
-                Navigator.of(context, rootNavigator: true).push(
-                  PuzzleScreen.buildRoute(
-                    context,
-                    angle: PuzzleOpening(openingFamily.key),
-                  ),
-                );
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(PuzzleScreen.buildRoute(context, angle: PuzzleOpening(openingFamily.key)));
               },
             ),
     );
@@ -169,14 +155,12 @@ class _OpeningTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(name, overflow: TextOverflow.ellipsis, style: titleStyle),
-      trailing: Text(
-        '$count',
-        style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-      ),
+      trailing: Text('$count', style: TextStyle(color: textShade(context, Styles.subtitleOpacity))),
       onTap: () {
-        Navigator.of(context, rootNavigator: true).push(
-          PuzzleScreen.buildRoute(context, angle: PuzzleOpening(openingKey)),
-        );
+        Navigator.of(
+          context,
+          rootNavigator: true,
+        ).push(PuzzleScreen.buildRoute(context, angle: PuzzleOpening(openingKey)));
       },
     );
   }

@@ -25,9 +25,7 @@ sealed class Contacts with _$Contacts {
 
   factory Contacts.fromPick(RequiredPick pick) {
     return Contacts(
-      contacts: pick(
-        'contacts',
-      ).asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
+      contacts: pick('contacts').asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
       me: pick('me').asLightUserOrThrow(),
       isBot: pick('bot').asBoolOrFalse(),
     );
@@ -35,10 +33,7 @@ sealed class Contacts with _$Contacts {
 
   int get unreadCount {
     return contacts
-        .where(
-          (contact) =>
-              !contact.lastMessage.read && contact.lastMessage.userId != me.id,
-        )
+        .where((contact) => !contact.lastMessage.read && contact.lastMessage.userId != me.id)
         .length;
   }
 }
@@ -66,11 +61,8 @@ sealed class ConversationData with _$ConversationData {
 
 @freezed
 sealed class Message with _$Message {
-  const factory Message({
-    required UserId userId,
-    required String text,
-    required DateTime date,
-  }) = _Message;
+  const factory Message({required UserId userId, required String text, required DateTime date}) =
+      _Message;
 
   factory Message.fromServerJson(Map<String, dynamic> json) {
     return Message.fromPick(pick(json).required());
@@ -97,10 +89,7 @@ sealed class LastMessage with _$LastMessage {
 
 @freezed
 sealed class Contact with _$Contact {
-  const factory Contact({
-    required LightUser user,
-    required LastMessage lastMessage,
-  }) = _Contact;
+  const factory Contact({required LightUser user, required LastMessage lastMessage}) = _Contact;
 
   factory Contact.fromServerJson(Map<String, dynamic> json) {
     return Contact.fromPick(pick(json).required());
@@ -138,19 +127,11 @@ sealed class Convo with _$Convo {
   factory Convo.fromPick(RequiredPick pick) {
     return Convo(
       user: pick('user').asLightUserOrThrow(),
-      messages: pick(
-        'msgs',
-      ).asListOrThrow((it) => Message.fromPick(it)).toIList(),
-      relations: (
-        inward: pick('in').asBoolOrNull(),
-        outward: pick('out').asBoolOrNull(),
-      ),
+      messages: pick('msgs').asListOrThrow((it) => Message.fromPick(it)).toIList(),
+      relations: (inward: pick('in').asBoolOrNull(), outward: pick('out').asBoolOrNull()),
       postable: pick('postable').asBoolOrThrow(),
       modDetails: pick('modDetails').letOrNull(
-        (it) => (
-          kid: it('kid').asBoolOrThrow(),
-          openInbox: it('openInbox').asBoolOrThrow(),
-        ),
+        (it) => (kid: it('kid').asBoolOrThrow(), openInbox: it('openInbox').asBoolOrThrow()),
       ),
     );
   }
@@ -172,15 +153,9 @@ sealed class SearchResult with _$SearchResult {
 
   factory SearchResult.fromPick(RequiredPick pick) {
     return SearchResult(
-      contacts: pick(
-        'contacts',
-      ).asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
-      friends: pick(
-        'friends',
-      ).asListOrEmpty((it) => it.asLightUserOrThrow()).toIList(),
-      users: pick(
-        'users',
-      ).asListOrEmpty((it) => it.asLightUserOrThrow()).toIList(),
+      contacts: pick('contacts').asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
+      friends: pick('friends').asListOrEmpty((it) => it.asLightUserOrThrow()).toIList(),
+      users: pick('users').asListOrEmpty((it) => it.asLightUserOrThrow()).toIList(),
     );
   }
 }

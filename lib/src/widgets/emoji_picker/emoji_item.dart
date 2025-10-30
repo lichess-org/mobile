@@ -3,12 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
 class EmojiItem extends StatelessWidget {
-  const EmojiItem({
-    super.key,
-    required this.onTap,
-    required this.emoji,
-    this.size = 24,
-  });
+  const EmojiItem({super.key, required this.onTap, required this.emoji, this.size = 24});
 
   final VoidCallback onTap;
 

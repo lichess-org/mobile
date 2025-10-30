@@ -44,9 +44,7 @@ class GameListDetailTile extends StatelessWidget {
       height: 1,
     );
 
-    final scaledTitleFontSize = MediaQuery.of(
-      context,
-    ).textScaler.scale(titleFontSize);
+    final scaledTitleFontSize = MediaQuery.of(context).textScaler.scale(titleFontSize);
 
     return InkWell(
       onLongPress: () {
@@ -104,14 +102,10 @@ class GameListDetailTile extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    relativeDate(
-                                      context.l10n,
-                                      game.lastMoveAt,
-                                    ).toUpperCase(),
+                                    relativeDate(context.l10n, game.lastMoveAt).toUpperCase(),
                                     style: dateStyle,
                                   ),
                                   Row(
@@ -148,9 +142,7 @@ class GameListDetailTile extends StatelessWidget {
                           if (game.lastFen != null)
                             Consumer(
                               builder: (context, ref, child) {
-                                final showRatingAsync = ref.watch(
-                                  showRatingsPrefProvider,
-                                );
+                                final showRatingAsync = ref.watch(showRatingsPrefProvider);
                                 return Text.rich(
                                   TextSpan(
                                     text: gameStatusL10n(
@@ -174,15 +166,14 @@ class GameListDetailTile extends StatelessWidget {
                                     children: [
                                       if (me.ratingDiff != null)
                                         switch (showRatingAsync) {
-                                          AsyncData(value: ShowRatings.yes) =>
-                                            TextSpan(
-                                              text:
-                                                  ' (${me.ratingDiff == 0
-                                                      ? '±'
-                                                      : me.ratingDiff! > 0
-                                                      ? '+'
-                                                      : ''}${me.ratingDiff})',
-                                            ),
+                                          AsyncData(value: ShowRatings.yes) => TextSpan(
+                                            text:
+                                                ' (${me.ratingDiff == 0
+                                                    ? '±'
+                                                    : me.ratingDiff! > 0
+                                                    ? '+'
+                                                    : ''}${me.ratingDiff})',
+                                          ),
 
                                           _ => const TextSpan(),
                                         },
@@ -195,26 +186,19 @@ class GameListDetailTile extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (game.opening != null ||
-                                    moveList?.isNotEmpty == true)
+                                if (game.opening != null || moveList?.isNotEmpty == true)
                                   Text.rich(
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: textShade(
-                                        context,
-                                        Styles.subtitleOpacity,
-                                      ),
+                                      color: textShade(context, Styles.subtitleOpacity),
                                       fontSize: subtitleFontSize,
                                     ),
                                     TextSpan(
                                       text: game.opening?.name,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                      style: const TextStyle(fontWeight: FontWeight.w600),
                                       children: [
-                                        if (moveList != null &&
-                                            moveList.length > 1) ...[
+                                        if (moveList != null && moveList.length > 1) ...[
                                           const TextSpan(text: '\n'),
                                           ...moveList
                                               .take(isTablet ? 6 : 4)
@@ -227,17 +211,13 @@ class GameListDetailTile extends StatelessWidget {
                                                   text:
                                                       '${index + 1}. ${moves.map((e) => '${e.value} ').join()}',
                                                   style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.normal,
+                                                    fontWeight: FontWeight.normal,
                                                   ),
                                                 );
                                               }),
                                           TextSpan(
-                                            text:
-                                                '\u2026 ${(moveList.length / 2).ceil()} moves',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                            ),
+                                            text: '\u2026 ${(moveList.length / 2).ceil()} moves',
+                                            style: const TextStyle(fontWeight: FontWeight.normal),
                                           ),
                                         ],
                                       ],

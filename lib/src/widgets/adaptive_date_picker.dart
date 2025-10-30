@@ -18,9 +18,7 @@ void showAdaptiveDatePicker(
               return SizedBox(
                 height: 250,
                 child: CupertinoDatePicker(
-                  backgroundColor: CupertinoColors.systemBackground.resolveFrom(
-                    context,
-                  ),
+                  backgroundColor: CupertinoColors.systemBackground.resolveFrom(context),
                   initialDateTime: initialDate,
                   minimumDate: firstDate,
                   maximumDate: lastDate,

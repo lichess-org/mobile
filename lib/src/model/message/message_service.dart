@@ -25,8 +25,7 @@ class MessageService {
 
   final Ref ref;
 
-  StreamSubscription<ParsedLocalNotification>?
-  _notificationResponseSubscription;
+  StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
   StreamSubscription<ReceivedFcmMessage>? _fcmSubscription;
 
   void start() {
@@ -41,16 +40,15 @@ class MessageService {
       }
     });
 
-    _notificationResponseSubscription = NotificationService.responseStream
-        .listen((data) {
-          final (_, notification) = data;
-          switch (notification) {
-            case NewMessageNotification(:final conversationId):
-              _onNotificationResponse(conversationId);
-            case _:
-              break;
-          }
-        });
+    _notificationResponseSubscription = NotificationService.responseStream.listen((data) {
+      final (_, notification) = data;
+      switch (notification) {
+        case NewMessageNotification(:final conversationId):
+          _onNotificationResponse(conversationId);
+        case _:
+          break;
+      }
+    });
   }
 
   /// Handles a notification response that caused the app to open.

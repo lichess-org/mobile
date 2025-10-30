@@ -17,8 +17,7 @@ sealed class SanMove with _$SanMove {
   const SanMove._();
   const factory SanMove(String san, @MoveConverter() Move move) = _SanMove;
 
-  factory SanMove.fromJson(Map<String, dynamic> json) =>
-      _$SanMoveFromJson(json);
+  factory SanMove.fromJson(Map<String, dynamic> json) => _$SanMoveFromJson(json);
 
   bool get isCheck => san.contains('+');
   bool get isCapture => san.contains('x');
@@ -44,12 +43,7 @@ class MoveConverter implements JsonConverter<Move, String> {
 }
 
 /// Alternative castling uci notations.
-const altCastles = {
-  'e1a1': 'e1c1',
-  'e1h1': 'e1g1',
-  'e8a8': 'e8c8',
-  'e8h8': 'e8g8',
-};
+const altCastles = {'e1a1': 'e1c1', 'e1h1': 'e1g1', 'e8a8': 'e8c8', 'e8h8': 'e8g8'};
 
 /// Returns `true` if the move is a pawn promotion move that is not yet promoted.
 bool isPromotionPawnMove(Position position, NormalMove move) {
@@ -190,19 +184,16 @@ sealed class Opening {
 @Freezed(fromJson: true, toJson: true)
 sealed class LightOpening with _$LightOpening implements Opening {
   const LightOpening._();
-  const factory LightOpening({required String eco, required String name}) =
-      _LightOpening;
+  const factory LightOpening({required String eco, required String name}) = _LightOpening;
 
-  factory LightOpening.fromJson(Map<String, dynamic> json) =>
-      _$LightOpeningFromJson(json);
+  factory LightOpening.fromJson(Map<String, dynamic> json) => _$LightOpeningFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class Division with _$Division {
   const factory Division({double? middlegame, double? endgame}) = _Division;
 
-  factory Division.fromJson(Map<String, dynamic> json) =>
-      _$DivisionFromJson(json);
+  factory Division.fromJson(Map<String, dynamic> json) => _$DivisionFromJson(json);
 }
 
 @freezed
@@ -233,9 +224,7 @@ extension ChessExtension on Pick {
         );
       }
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to Move",
-    );
+    throw PickException("value $value at $debugParsingExit can't be casted to Move");
   }
 
   Move? asUciMoveOrNull() {
@@ -261,9 +250,7 @@ extension ChessExtension on Pick {
               "value $value at $debugParsingExit can't be casted to Side: invalid string.",
             );
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to Side",
-    );
+    throw PickException("value $value at $debugParsingExit can't be casted to Side");
   }
 
   Side? asSideOrNull() {
@@ -304,9 +291,7 @@ extension ChessExtension on Pick {
         return variant;
       }
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to Variant",
-    );
+    throw PickException("value $value at $debugParsingExit can't be casted to Variant");
   }
 
   Variant? asVariantOrNull() {

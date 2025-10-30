@@ -7,19 +7,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-const kMasterVolumeValues = [
-  0.0,
-  0.1,
-  0.2,
-  0.3,
-  0.4,
-  0.5,
-  0.6,
-  0.7,
-  0.8,
-  0.9,
-  1.0,
-];
+const kMasterVolumeValues = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
 
 class SoundSettingsScreen extends StatelessWidget {
   const SoundSettingsScreen({super.key});
@@ -50,12 +38,8 @@ class _Body extends ConsumerWidget {
     final generalPrefs = ref.watch(generalPreferencesProvider);
 
     void onChanged(SoundTheme? value) {
-      ref
-          .read(generalPreferencesProvider.notifier)
-          .setSoundTheme(value ?? SoundTheme.standard);
-      ref
-          .read(soundServiceProvider)
-          .changeTheme(value ?? SoundTheme.standard, playSound: true);
+      ref.read(generalPreferencesProvider.notifier).setSoundTheme(value ?? SoundTheme.standard);
+      ref.read(soundServiceProvider).changeTheme(value ?? SoundTheme.standard, playSound: true);
     }
 
     return ListView(
@@ -67,9 +51,7 @@ class _Body extends ConsumerWidget {
               value: generalPrefs.masterVolume,
               values: kMasterVolumeValues,
               onChangeEnd: (value) {
-                ref
-                    .read(generalPreferencesProvider.notifier)
-                    .setMasterVolume(value);
+                ref.read(generalPreferencesProvider.notifier).setMasterVolume(value);
               },
               labelBuilder: volumeLabel,
             ),

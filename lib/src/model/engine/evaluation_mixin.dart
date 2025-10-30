@@ -82,9 +82,7 @@ mixin EngineEvaluationMixin {
   Node get positionTree;
 
   final _evalRequestDebounce = Debouncer(kRequestEvalDebounceDelay);
-  final _localEngineAfterDelayDebounce = Debouncer(
-    kLocalEngineAfterCloudEvalDelay,
-  );
+  final _localEngineAfterDelayDebounce = Debouncer(kLocalEngineAfterCloudEvalDelay);
 
   StreamSubscription<SocketEvent>? _socketSubscription;
 
@@ -222,12 +220,7 @@ mixin EngineEvaluationMixin {
 
     bool isSameEvalString = true;
     positionTree.updateAt(path, (node) {
-      final eval = CloudEval(
-        depth: depth,
-        nodes: nodes,
-        pvs: pvs,
-        position: node.position,
-      );
+      final eval = CloudEval(depth: depth, nodes: nodes, pvs: pvs, position: node.position);
       final nodeDepth = node.eval?.depth;
       if (nodeDepth != null && nodeDepth >= depth) {
         // don't override the local eval if it's deeper than the cloud eval
@@ -243,25 +236,19 @@ mixin EngineEvaluationMixin {
   }
 
   bool _canCloudEval() {
-    if (evaluationState.currentPosition!.ply >= 15 &&
-        !evaluationState.alwaysRequestCloudEval) {
+    if (evaluationState.currentPosition!.ply >= 15 && !evaluationState.alwaysRequestCloudEval) {
       return false;
     }
-    if (positionTree.nodeAt(evaluationState.currentPath).eval is CloudEval)
-      return false;
+    if (positionTree.nodeAt(evaluationState.currentPath).eval is CloudEval) return false;
 
     // cloud eval does not support threefold repetition
     final Set<String> fens = <String>{};
-    final nodeList = positionTree
-        .branchesOn(evaluationState.currentPath)
-        .toList();
+    final nodeList = positionTree.branchesOn(evaluationState.currentPath).toList();
     for (var i = nodeList.length - 1; i >= 0; i--) {
       final node = nodeList[i];
       final epd = fenToEpd(node.position.fen);
       if (fens.contains(epd)) return false;
-      if (node.sanMove.isIrreversible(
-        evaluationState.evaluationContext.variant,
-      )) {
+      if (node.sanMove.isIrreversible(evaluationState.evaluationContext.variant)) {
         return true;
       }
       fens.add(epd);
@@ -313,9 +300,7 @@ mixin EngineEvaluationMixin {
                 final targetTime = work.searchTime;
                 final searchTime = eval.searchTime;
                 final likelyNodes =
-                    ((targetTime.inMilliseconds * eval.nodes) /
-                            searchTime.inMilliseconds)
-                        .round();
+                    ((targetTime.inMilliseconds * eval.nodes) / searchTime.inMilliseconds).round();
                 // if the cloud eval is likely better, stop the local engine
                 // nps varies with positional complexity so this is rough, but save planet earth
                 if (likelyNodes < nodeEval.nodes) {

@@ -76,23 +76,14 @@ class OngoingGamePreview extends ConsumerWidget {
             size: 34,
             color: game.isMyTurn
                 ? context.lichessColors.brag
-                : DefaultTextStyle.of(
-                    context,
-                  ).style.color?.withValues(alpha: 0.5),
+                : DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.5),
           ),
           if (game.isMyTurn && game.secondsLeft != null)
             Text(
-              relativeDate(
-                context.l10n,
-                DateTime.now().add(Duration(seconds: game.secondsLeft!)),
-              ),
+              relativeDate(context.l10n, DateTime.now().add(Duration(seconds: game.secondsLeft!))),
             )
           else
-            Text(
-              game.isMyTurn
-                  ? context.l10n.yourTurn
-                  : context.l10n.waitingForOpponent,
-            ),
+            Text(game.isMyTurn ? context.l10n.yourTurn : context.l10n.waitingForOpponent),
         ],
       ),
       onTap: () {

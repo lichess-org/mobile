@@ -138,9 +138,7 @@ class AppLichessBinding extends LichessBinding {
 
   @override
   Future<void> initializeFirebase() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
     if (kReleaseMode) {
       FlutterError.onError = firebaseCrashlytics.recordFlutterFatalError;
@@ -167,8 +165,7 @@ class AppLichessBinding extends LichessBinding {
   }
 
   @override
-  Stream<RemoteMessage> get firebaseMessagingOnMessage =>
-      FirebaseMessaging.onMessage;
+  Stream<RemoteMessage> get firebaseMessagingOnMessage => FirebaseMessaging.onMessage;
 
   @override
   Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>

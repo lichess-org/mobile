@@ -30,10 +30,7 @@ final Map<Uri, ISet<({String key, RegExp pathRegexp})>> _targetUris = {
   }),
 };
 
-typedef CachedAggregatorRequest = ({
-  Uri targetGroupUri,
-  Future<Map<String, dynamic>> future,
-});
+typedef CachedAggregatorRequest = ({Uri targetGroupUri, Future<Map<String, dynamic>> future});
 
 /// A provider for the [Aggregator] service.
 final aggregatorProvider = Provider<Aggregator>((ref) {
@@ -61,8 +58,9 @@ class Aggregator {
 
   (Future<void>, ISet<Uri>)? _pending;
 
-  final MemoryCache<ISet<Uri>, CachedAggregatorRequest> _groupRequests =
-      MemoryCache(defaultExpiry: const Duration(seconds: 5));
+  final MemoryCache<ISet<Uri>, CachedAggregatorRequest> _groupRequests = MemoryCache(
+    defaultExpiry: const Duration(seconds: 5),
+  );
 
   Future<T> readJson<T>(
     Uri url, {
@@ -77,11 +75,8 @@ class Aggregator {
     T Function(Object)? aggregatedMapper,
   }) => _call<T>(
     url,
-    atomicClientCall: () =>
-        client.readJson(url, headers: headers, mapper: atomicMapper),
-    mapper:
-        aggregatedMapper ??
-        (json) => atomicMapper(json as Map<String, dynamic>),
+    atomicClientCall: () => client.readJson(url, headers: headers, mapper: atomicMapper),
+    mapper: aggregatedMapper ?? (json) => atomicMapper(json as Map<String, dynamic>),
   );
 
   Future<IList<T>> readJsonList<T>(
@@ -90,8 +85,7 @@ class Aggregator {
     required T? Function(Map<String, dynamic>) mapper,
   }) => _call<IList<T>>(
     url,
-    atomicClientCall: () =>
-        client.readJsonList(url, headers: headers, mapper: mapper),
+    atomicClientCall: () => client.readJsonList(url, headers: headers, mapper: mapper),
     mapper: (json) => decodeObjectList<T>(json, mapper: mapper),
   );
 
@@ -101,8 +95,7 @@ class Aggregator {
     required T Function(Map<String, dynamic>) mapper,
   }) => _call<IList<T>>(
     url,
-    atomicClientCall: () =>
-        client.readNdJsonList(url, headers: headers, mapper: mapper),
+    atomicClientCall: () => client.readNdJsonList(url, headers: headers, mapper: mapper),
     mapper: (json) => decodeObjectList<T>(json, mapper: mapper),
   );
 
@@ -143,31 +136,22 @@ class Aggregator {
         final hasEnoughUris = uris.length >= group.value.length / 2;
         if (hasEnoughUris &&
             // test that list of uris matches all the group uris
-            uris.every(
-              (e) => group.value.any((g) => g.pathRegexp.hasMatch(e.path)),
-            )) {
+            uris.every((e) => group.value.any((g) => g.pathRegexp.hasMatch(e.path)))) {
           _groupRequests.putIfAbsent(
             uris,
-            () => (
-              targetGroupUri: group.key,
-              future: client.readJson(group.key, mapper: (x) => x),
-            ),
+            () => (targetGroupUri: group.key, future: client.readJson(group.key, mapper: (x) => x)),
           );
           break;
         }
       }
     }
 
-    final uris = _groupRequests.keys.firstWhereOrNull(
-      (key) => key.any((e) => e.path == uri.path),
-    );
+    final uris = _groupRequests.keys.firstWhereOrNull((key) => key.any((e) => e.path == uri.path));
     if (uris != null) {
       final entry = _groupRequests[uris]!;
       final aggregated = await entry.future;
       final group = _targetUris[entry.targetGroupUri]!;
-      final jsonKey = group
-          .firstWhere((e) => e.pathRegexp.hasMatch(uri.path))
-          .key;
+      final jsonKey = group.firstWhere((e) => e.pathRegexp.hasMatch(uri.path)).key;
       final result = aggregated[jsonKey] as Object;
 
       return mapper(result);

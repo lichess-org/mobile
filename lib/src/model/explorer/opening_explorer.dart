@@ -26,12 +26,8 @@ sealed class OpeningExplorerEntry with _$OpeningExplorerEntry {
     int? queuePosition,
   }) = _OpeningExplorerEntry;
 
-  factory OpeningExplorerEntry.empty() => const OpeningExplorerEntry(
-    white: 0,
-    draws: 0,
-    black: 0,
-    moves: IList.empty(),
-  );
+  factory OpeningExplorerEntry.empty() =>
+      const OpeningExplorerEntry(white: 0, draws: 0, black: 0, moves: IList.empty());
 
   factory OpeningExplorerEntry.fromJson(Map<String, Object?> json) =>
       _$OpeningExplorerEntryFromJson(json);
@@ -53,8 +49,7 @@ sealed class OpeningMove with _$OpeningMove {
     OpeningExplorerGame? game,
   }) = _OpeningMove;
 
-  factory OpeningMove.fromJson(Map<String, Object?> json) =>
-      _$OpeningMoveFromJson(json);
+  factory OpeningMove.fromJson(Map<String, Object?> json) => _$OpeningMoveFromJson(json);
 
   int get games {
     return white + draws + black;
@@ -82,16 +77,10 @@ sealed class OpeningExplorerGame with _$OpeningExplorerGame {
     return OpeningExplorerGame(
       id: pick('id').asGameIdOrThrow(),
       white: pick('white').letOrThrow(
-        (pick) => (
-          name: pick('name').asStringOrThrow(),
-          rating: pick('rating').asIntOrThrow(),
-        ),
+        (pick) => (name: pick('name').asStringOrThrow(), rating: pick('rating').asIntOrThrow()),
       ),
       black: pick('black').letOrThrow(
-        (pick) => (
-          name: pick('name').asStringOrThrow(),
-          rating: pick('rating').asIntOrThrow(),
-        ),
+        (pick) => (name: pick('name').asStringOrThrow(), rating: pick('rating').asIntOrThrow()),
       ),
       uci: pick('uci').asStringOrNull(),
       winner: pick('winner').asStringOrNull(),

@@ -29,11 +29,7 @@ class BoardEditorFilters extends ConsumerWidget {
             spacing: 8.0,
             children: Side.values.map((side) {
               return ChoiceChip(
-                label: Text(
-                  side == Side.white
-                      ? context.l10n.whitePlays
-                      : context.l10n.blackPlays,
-                ),
+                label: Text(side == Side.white ? context.l10n.whitePlays : context.l10n.blackPlays),
                 selected: editorState.sideToPlay == side,
                 onSelected: (selected) {
                   if (selected) {
@@ -57,23 +53,17 @@ class BoardEditorFilters extends ConsumerWidget {
                 SizedBox(
                   width: 100.0,
                   child: Text(
-                    side == Side.white
-                        ? context.l10n.white
-                        : context.l10n.black,
+                    side == Side.white ? context.l10n.white : context.l10n.black,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 ...[CastlingSide.king, CastlingSide.queen].map((castlingSide) {
                   return ChoiceChip(
-                    label: Text(
-                      castlingSide == CastlingSide.king ? 'O-O' : 'O-O-O',
-                    ),
+                    label: Text(castlingSide == CastlingSide.king ? 'O-O' : 'O-O-O'),
                     selected: editorState.isCastlingAllowed(side, castlingSide),
                     onSelected: (selected) {
-                      ref
-                          .read(editorController.notifier)
-                          .setCastling(side, castlingSide, selected);
+                      ref.read(editorController.notifier).setCastling(side, castlingSide, selected);
                     },
                   );
                 }),
@@ -93,9 +83,7 @@ class BoardEditorFilters extends ConsumerWidget {
                 label: Text(square.name),
                 selected: editorState.enPassantSquare == square,
                 onSelected: (selected) {
-                  ref
-                      .read(editorController.notifier)
-                      .toggleEnPassantSquare(square);
+                  ref.read(editorController.notifier).toggleEnPassantSquare(square);
                 },
               );
             }).toList(),
@@ -160,21 +148,16 @@ class _OpeningsTabState extends State<_OpeningsTab> {
 
   @override
   void initState() {
-    _openings = DefaultAssetBundle.of(context)
-        .loadString('assets/positions.json')
-        .then((s) {
-          final List<Position> result = [];
-          for (final opening
-              in (jsonDecode(s) as List<dynamic>)
-                  .cast<Map<String, dynamic>>()) {
-            for (final position
-                in (opening['positions'] as List<dynamic>)
-                    .cast<Map<String, dynamic>>()) {
-              result.add(Position.fromJson(position));
-            }
-          }
-          return result;
-        });
+    _openings = DefaultAssetBundle.of(context).loadString('assets/positions.json').then((s) {
+      final List<Position> result = [];
+      for (final opening in (jsonDecode(s) as List<dynamic>).cast<Map<String, dynamic>>()) {
+        for (final position
+            in (opening['positions'] as List<dynamic>).cast<Map<String, dynamic>>()) {
+          result.add(Position.fromJson(position));
+        }
+      }
+      return result;
+    });
     super.initState();
   }
 
@@ -215,17 +198,13 @@ class _EndGamesTabState extends State<_EndGamesTab> {
 
   @override
   void initState() {
-    _endGames = DefaultAssetBundle.of(context)
-        .loadString('assets/endgames.json')
-        .then((s) {
-          final List<Position> result = [];
-          for (final position
-              in (jsonDecode(s) as List<dynamic>)
-                  .cast<Map<String, dynamic>>()) {
-            result.add(Position.fromJson(position));
-          }
-          return result;
-        });
+    _endGames = DefaultAssetBundle.of(context).loadString('assets/endgames.json').then((s) {
+      final List<Position> result = [];
+      for (final position in (jsonDecode(s) as List<dynamic>).cast<Map<String, dynamic>>()) {
+        result.add(Position.fromJson(position));
+      }
+      return result;
+    });
     super.initState();
   }
 

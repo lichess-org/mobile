@@ -24,21 +24,13 @@ Future<void> showChoicePicker<T>(
           return AlertDialog(
             title: title,
             clipBehavior: Clip.hardEdge,
-            contentPadding: const EdgeInsets.only(
-              top: 16.0,
-              bottom: 24.0,
-              left: 0,
-              right: 0,
-            ),
+            contentPadding: const EdgeInsets.only(top: 16.0, bottom: 24.0, left: 0, right: 0),
             scrollable: true,
             content: Builder(
               builder: (context) {
                 final List<Widget> choiceWidgets = choices
                     .map((value) {
-                      return RadioListTile<T>(
-                        title: labelBuilder(value),
-                        value: value,
-                      );
+                      return RadioListTile<T>(title: labelBuilder(value), value: value);
                     })
                     .toList(growable: false);
                 return RadioGroup(
@@ -53,10 +45,7 @@ Future<void> showChoicePicker<T>(
                       ? SizedBox(
                           width: double.maxFinite,
                           height: deviceHeight * 0.6,
-                          child: ListView(
-                            shrinkWrap: true,
-                            children: choiceWidgets,
-                          ),
+                          child: ListView(shrinkWrap: true, children: choiceWidgets),
                         )
                       : ListBody(children: choiceWidgets),
                 );
@@ -104,8 +93,7 @@ Future<void> showChoicePicker<T>(
             return NotificationListener(
               onNotification: (ScrollEndNotification notification) {
                 if (onSelectedItemChanged != null) {
-                  final index =
-                      (notification.metrics as FixedExtentMetrics).itemIndex;
+                  final index = (notification.metrics as FixedExtentMetrics).itemIndex;
                   onSelectedItemChanged(choices[index]);
                 }
                 return false;
@@ -163,9 +151,7 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
                         onChanged: (value) {
                           if (value != null) {
                             setState(() {
-                              items = value
-                                  ? items.union({choice})
-                                  : items.difference({choice});
+                              items = value ? items.union({choice}) : items.difference({choice});
                             });
                           }
                         },

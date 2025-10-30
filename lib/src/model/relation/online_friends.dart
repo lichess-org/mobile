@@ -79,15 +79,11 @@ class OnlineFriends extends _$OnlineFriends {
         final patronColor = event.json?['patronColor'] as int?;
         final user = _parseFriend(event.data.toString(), patronColor);
         final playing = event.json?['playing'] as bool? ?? false;
-        state = AsyncValue.data(
-          state.requireValue.add((user: user, playing: playing)),
-        );
+        state = AsyncValue.data(state.requireValue.add((user: user, playing: playing)));
 
       case 'following_leaves':
         final data = _parseFriend(event.data.toString());
-        state = AsyncValue.data(
-          state.requireValue.removeWhere((v) => v.user.id == data.id),
-        );
+        state = AsyncValue.data(state.requireValue.removeWhere((v) => v.user.id == data.id));
 
       case 'following_playing':
         final data = _parseFriend(event.data.toString());
@@ -132,9 +128,7 @@ class OnlineFriends extends _$OnlineFriends {
     final patronColors = event.json?['patronColors'] as List<dynamic>? ?? [];
     final playing = event.json?['playing'] as List<dynamic>? ?? [];
     return friends.mapIndexed((i, v) {
-      final patronColor = friends.length == patronColors.length
-          ? patronColors[i] as int?
-          : null;
+      final patronColor = friends.length == patronColors.length ? patronColors[i] as int? : null;
       final user = _parseFriend(
         v.toString(),
         // patron colors here being sent as 0 when the user is not a patron

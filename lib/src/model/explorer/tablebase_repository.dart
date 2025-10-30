@@ -17,9 +17,7 @@ class Tablebase extends _$Tablebase {
 
     final client = ref.read(defaultClientProvider);
 
-    final tablebaseEntry = await TablebaseRepository(
-      client,
-    ).getTablebaseEntry(fen);
+    final tablebaseEntry = await TablebaseRepository(client).getTablebaseEntry(fen);
     return tablebaseEntry;
   }
 }

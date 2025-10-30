@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart'
-    show AlertDialog, Navigator, Text, showAdaptiveDialog;
+import 'package:flutter/material.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart' show LichessBinding;
@@ -11,10 +10,8 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart'
     show LocalNotification, PlaybanNotification;
-import 'package:lichess_mobile/src/model/user/user.dart'
-    show TemporaryBan, User;
-import 'package:lichess_mobile/src/tab_scaffold.dart'
-    show currentNavigatorKeyProvider;
+import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan, User;
+import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -34,17 +31,14 @@ class AccountService {
   AccountService(this._ref);
 
   ProviderSubscription<AsyncValue<User?>>? _accountProviderSubscription;
-  StreamSubscription<(NotificationResponse, LocalNotification)>?
-  _notificationResponseSubscription;
+  StreamSubscription<(NotificationResponse, LocalNotification)>? _notificationResponseSubscription;
   Timer? _refreshTimer;
 
   /// Stream of bookmark changes for the current user.
-  final StreamController<(GameId, bool)> _bookmarkChangesController =
-      StreamController.broadcast();
+  final StreamController<(GameId, bool)> _bookmarkChangesController = StreamController.broadcast();
 
   /// Stream of bookmark changes for the current user.
-  Stream<(GameId, bool)> get bookmarkChanges =>
-      _bookmarkChangesController.stream;
+  Stream<(GameId, bool)> get bookmarkChanges => _bookmarkChangesController.stream;
 
   final Ref _ref;
 
@@ -56,15 +50,11 @@ class AccountService {
     _accountProviderSubscription = _ref.listen(accountProvider, (_, account) {
       final playban = account.valueOrNull?.playban;
       final storedDate = prefs.getString(_storageKey);
-      final lastPlaybanNotificationDate = storedDate != null
-          ? DateTime.parse(storedDate)
-          : null;
+      final lastPlaybanNotificationDate = storedDate != null ? DateTime.parse(storedDate) : null;
 
       if (playban != null && lastPlaybanNotificationDate != playban.date) {
         _savePlaybanNotificationDate(playban.date);
-        _ref
-            .read(notificationServiceProvider)
-            .show(PlaybanNotification(playban));
+        _ref.read(notificationServiceProvider).show(PlaybanNotification(playban));
         _refreshTimer?.cancel();
         _refreshTimer = Timer(playban.duration, () {
           _ref.invalidate(accountProvider);
@@ -78,23 +68,19 @@ class AccountService {
       }
     });
 
-    _notificationResponseSubscription = NotificationService.responseStream
-        .listen((data) {
-          final (_, notification) = data;
-          switch (notification) {
-            case PlaybanNotification(:final playban):
-              showPlaybanDialog(playban);
-            case _:
-              break;
-          }
-        });
+    _notificationResponseSubscription = NotificationService.responseStream.listen((data) {
+      final (_, notification) = data;
+      switch (notification) {
+        case PlaybanNotification(:final playban):
+          showPlaybanDialog(playban);
+        case _:
+          break;
+      }
+    });
   }
 
   void _savePlaybanNotificationDate(DateTime date) {
-    LichessBinding.instance.sharedPreferences.setString(
-      _storageKey,
-      date.toIso8601String(),
-    );
+    LichessBinding.instance.sharedPreferences.setString(_storageKey, date.toIso8601String());
   }
 
   void _clearPlaybanNotificationDate() {

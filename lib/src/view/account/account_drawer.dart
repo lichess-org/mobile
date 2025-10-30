@@ -31,8 +31,7 @@ class AccountDrawerIconButton extends ConsumerStatefulWidget {
   const AccountDrawerIconButton({super.key});
 
   @override
-  ConsumerState<AccountDrawerIconButton> createState() =>
-      _AccountIconButtonState();
+  ConsumerState<AccountDrawerIconButton> createState() => _AccountIconButtonState();
 }
 
 class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
@@ -41,8 +40,7 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
-    final unreadMessages =
-        ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
+    final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
     return switch (account) {
       AsyncData(:final value) => Badge.count(
         offset: const Offset(-4, 0),
@@ -55,9 +53,7 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
               : CircleAvatar(
                   radius: 16,
                   foregroundImage: value.flair != null
-                      ? CachedNetworkImageProvider(
-                          lichessFlairSrc(value.flair!),
-                        )
+                      ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
                       : null,
                   onForegroundImageError: value.flair != null
                       ? (error, _) {
@@ -69,9 +65,7 @@ class _AccountIconButtonState extends ConsumerState<AccountDrawerIconButton> {
                   backgroundColor: value.flair == null || errorLoadingFlair
                       ? null
                       : ColorScheme.of(context).surfaceContainer,
-                  child: value.flair == null || errorLoadingFlair
-                      ? Text(value.initials)
-                      : null,
+                  child: value.flair == null || errorLoadingFlair ? Text(value.initials) : null,
                 ),
           onPressed: () {
             Scaffold.of(context).openDrawer();
@@ -110,8 +104,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
     final kidMode = account.valueOrNull?.kid ?? false;
     final LightUser? user = account.valueOrNull?.lightUser ?? userSession?.user;
 
-    final unreadMessages =
-        ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
+    final unreadMessages = ref.watch(unreadMessagesProvider).valueOrNull?.unread ?? 0;
 
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -120,10 +113,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
         children: [
           if (user != null) ...[
             ListTile(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               leading: switch (account) {
                 AsyncData(:final value) =>
                   value == null
@@ -131,9 +121,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                       : CircleAvatar(
                           radius: 20,
                           foregroundImage: value.flair != null
-                              ? CachedNetworkImageProvider(
-                                  lichessFlairSrc(value.flair!),
-                                )
+                              ? CachedNetworkImageProvider(lichessFlairSrc(value.flair!))
                               : null,
                           onForegroundImageError: value.flair != null
                               ? (error, _) {
@@ -142,8 +130,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
                                   });
                                 }
                               : null,
-                          backgroundColor:
-                              value.flair == null || errorLoadingFlair
+                          backgroundColor: value.flair == null || errorLoadingFlair
                               ? null
                               : ColorScheme.of(context).surfaceContainer,
                           child: value.flair == null || errorLoadingFlair
@@ -164,10 +151,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
               onTap: () {
                 ref.invalidate(accountProvider);
                 Navigator.of(context).pop();
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(ProfileScreen.buildRoute(context));
+                Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute(context));
               },
             ),
             if (kidMode)
@@ -191,10 +175,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
               onTap: () {
                 ref.invalidate(accountProvider);
                 Navigator.of(context).pop();
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(ProfileScreen.buildRoute(context));
+                Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute(context));
               },
             ),
             if (account.hasValue && !kidMode)
@@ -248,10 +229,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
           ],
           if (Theme.of(context).platform == TargetPlatform.android)
             ListTile(
-              leading: Icon(
-                LichessIcons.patron,
-                semanticLabel: context.l10n.patronLichessPatron,
-              ),
+              leading: Icon(LichessIcons.patron, semanticLabel: context.l10n.patronLichessPatron),
               title: Text(context.l10n.patronDonate),
               enabled: isOnline,
               onTap: () {
@@ -264,10 +242,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
             title: Text(context.l10n.settingsSettings),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(SettingsScreen.buildRoute(context));
+              Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute(context));
             },
           ),
           ListTile(
@@ -275,10 +250,7 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
             title: Text(context.l10n.about),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(AboutScreen.buildRoute(context));
+              Navigator.of(context, rootNavigator: true).push(AboutScreen.buildRoute(context));
             },
           ),
           const PlatformDivider(indent: 0),
@@ -310,18 +282,14 @@ class _AccountDrawerState extends ConsumerState<AccountDrawer> {
             title: Text(context.l10n.logOut),
             actions: <Widget>[
               TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: TextTheme.of(context).labelLarge,
-                ),
+                style: TextButton.styleFrom(textStyle: TextTheme.of(context).labelLarge),
                 child: Text(context.l10n.cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: TextTheme.of(context).labelLarge,
-                ),
+                style: TextButton.styleFrom(textStyle: TextTheme.of(context).labelLarge),
                 child: Text(context.l10n.mobileOkButton),
                 onPressed: () async {
                   Navigator.of(context).pop();
@@ -345,10 +313,7 @@ class AboutScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final packageInfo = ref
-        .read(preloadedDataProvider)
-        .requireValue
-        .packageInfo;
+    final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.about)),

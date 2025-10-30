@@ -40,12 +40,10 @@ class OfflineCorrespondenceGameScreen extends StatefulWidget {
   }
 
   @override
-  State<OfflineCorrespondenceGameScreen> createState() =>
-      _OfflineCorrespondenceGameScreenState();
+  State<OfflineCorrespondenceGameScreen> createState() => _OfflineCorrespondenceGameScreenState();
 }
 
-class _OfflineCorrespondenceGameScreenState
-    extends State<OfflineCorrespondenceGameScreen> {
+class _OfflineCorrespondenceGameScreenState extends State<OfflineCorrespondenceGameScreen> {
   late (DateTime, OfflineCorrespondenceGame) currentGame;
 
   @override
@@ -65,11 +63,7 @@ class _OfflineCorrespondenceGameScreenState
     final (lastModified, game) = currentGame;
     return Scaffold(
       appBar: AppBar(title: _Title(game)),
-      body: _Body(
-        game: game,
-        lastModified: lastModified,
-        onGameChanged: goToNextGame,
-      ),
+      body: _Body(game: game, lastModified: lastModified, onGameChanged: goToNextGame),
     );
   }
 }
@@ -80,9 +74,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mode = game.rated
-        ? ' • ${context.l10n.rated}'
-        : ' • ${context.l10n.casual}';
+    final mode = game.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -98,11 +90,7 @@ class _Title extends StatelessWidget {
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body({
-    required this.game,
-    required this.lastModified,
-    required this.onGameChanged,
-  });
+  const _Body({required this.game, required this.lastModified, required this.onGameChanged});
 
   final OfflineCorrespondenceGame game;
   final DateTime lastModified;
@@ -144,14 +132,10 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final materialDifference = ref.watch(
-      boardPreferencesProvider.select(
-        (prefs) => prefs.materialDifferenceFormat,
-      ),
+      boardPreferencesProvider.select((prefs) => prefs.materialDifferenceFormat),
     );
 
-    final offlineOngoingGames = ref.watch(
-      offlineOngoingCorrespondenceGamesProvider,
-    );
+    final offlineOngoingGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
 
     final position = game.positionAt(stepCursor);
     final youAre = game.youAre;
@@ -159,23 +143,16 @@ class _BodyState extends ConsumerState<_Body> {
     final black = GamePlayer(
       game: game,
       side: Side.black,
-      materialDiff: materialDifference.visible
-          ? game.materialDiffAt(stepCursor, Side.black)
-          : null,
+      materialDiff: materialDifference.visible ? game.materialDiffAt(stepCursor, Side.black) : null,
       materialDifferenceFormat: materialDifference,
       shouldLinkToUserProfile: false,
       mePlaying: youAre == Side.black,
       confirmMoveCallbacks: youAre == Side.black && moveToConfirm != null
           ? (confirm: confirmMove, cancel: cancelMove)
           : null,
-      clock:
-          youAre == Side.black &&
-              game.estimatedTimeLeft(Side.black, widget.lastModified) != null
+      clock: youAre == Side.black && game.estimatedTimeLeft(Side.black, widget.lastModified) != null
           ? CorrespondenceClock(
-              duration: game.estimatedTimeLeft(
-                Side.black,
-                widget.lastModified,
-              )!,
+              duration: game.estimatedTimeLeft(Side.black, widget.lastModified)!,
               active: activeClockSide == Side.black,
             )
           : null,
@@ -183,9 +160,7 @@ class _BodyState extends ConsumerState<_Body> {
     final white = GamePlayer(
       game: game,
       side: Side.white,
-      materialDiff: materialDifference.visible
-          ? game.materialDiffAt(stepCursor, Side.white)
-          : null,
+      materialDiff: materialDifference.visible ? game.materialDiffAt(stepCursor, Side.white) : null,
       materialDifferenceFormat: materialDifference,
       shouldLinkToUserProfile: false,
       mePlaying: youAre == Side.white,
@@ -194,10 +169,7 @@ class _BodyState extends ConsumerState<_Body> {
           : null,
       clock: game.estimatedTimeLeft(Side.white, widget.lastModified) != null
           ? CorrespondenceClock(
-              duration: game.estimatedTimeLeft(
-                Side.white,
-                widget.lastModified,
-              )!,
+              duration: game.estimatedTimeLeft(Side.white, widget.lastModified)!,
               active: activeClockSide == Side.white,
             )
           : null,
@@ -230,10 +202,7 @@ class _BodyState extends ConsumerState<_Body> {
               ),
               topTable: topPlayer,
               bottomTable: bottomPlayer,
-              moves: game.steps
-                  .skip(1)
-                  .map((e) => e.sanMove!.san)
-                  .toList(growable: false),
+              moves: game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false),
               currentMoveIndex: stepCursor,
               onSelectMove: (moveIndex) {
                 // ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
@@ -292,9 +261,7 @@ class _BodyState extends ConsumerState<_Body> {
                         ? () {
                             showConfirmDialog<void>(
                               context,
-                              title: Text(
-                                context.l10n.mobileCorrespondenceClearSavedMove,
-                              ),
+                              title: Text(context.l10n.mobileCorrespondenceClearSavedMove),
                               isDestructiveAction: true,
                               onConfirm: () => deleteRegisteredMove(),
                             );
@@ -392,9 +359,7 @@ class _BodyState extends ConsumerState<_Body> {
 
   Future<void> confirmMove() async {
     setState(() {
-      game = game.copyWith(
-        registeredMoveAtPgn: (moveToConfirm!.$1, moveToConfirm!.$2),
-      );
+      game = game.copyWith(registeredMoveAtPgn: (moveToConfirm!.$1, moveToConfirm!.$2));
       moveToConfirm = null;
     });
 
@@ -413,10 +378,7 @@ class _BodyState extends ConsumerState<_Body> {
   Future<void> deleteRegisteredMove() async {
     setState(() {
       stepCursor = stepCursor - 1;
-      game = game.copyWith(
-        steps: game.steps.removeLast(),
-        registeredMoveAtPgn: null,
-      );
+      game = game.copyWith(steps: game.steps.removeLast(), registeredMoveAtPgn: null);
     });
 
     final storage = await ref.read(correspondenceGameStorageProvider.future);

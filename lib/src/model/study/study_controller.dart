@@ -53,8 +53,7 @@ class StudyController extends _$StudyController
 
   @override
   @protected
-  EngineEvaluationPrefState get evaluationPrefs =>
-      ref.read(engineEvaluationPreferencesProvider);
+  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
   @override
   @protected
@@ -63,8 +62,7 @@ class StudyController extends _$StudyController
 
   @override
   @protected
-  EvaluationService evaluationServiceFactory() =>
-      ref.read(evaluationServiceProvider);
+  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
 
   @override
   @protected
@@ -102,9 +100,7 @@ class StudyController extends _$StudyController
     state = AsyncData(
       state.requireValue.copyWith(
         root: recomputeRootView ? _root.view : state.requireValue.root,
-        currentNode: StudyCurrentNode.fromNode(
-          _root.nodeAt(state.requireValue.currentPath),
-        ),
+        currentNode: StudyCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
   }
@@ -124,10 +120,7 @@ class StudyController extends _$StudyController
     _ensureItsOurTurnIfGamebook();
   }
 
-  Future<StudyState> _fetchChapter(
-    StudyId id, {
-    StudyChapterId? chapterId,
-  }) async {
+  Future<StudyState> _fetchChapter(StudyId id, {StudyChapterId? chapterId}) async {
     final (study, pgn) = await ref
         .read(studyRepositoryProvider)
         .getStudy(id: id, chapterId: chapterId);
@@ -181,15 +174,11 @@ class StudyController extends _$StudyController
       isOnMainline: true,
       root: _root.view,
       currentNode: StudyCurrentNode.fromNode(_root),
-      evaluationContext: EvaluationContext(
-        variant: variant,
-        initialPosition: _root.position,
-      ),
+      evaluationContext: EvaluationContext(variant: variant, initialPosition: _root.position),
       pgnRootComments: rootComments,
       lastMove: lastMove,
       pov: orientation,
-      isComputerAnalysisAllowed:
-          study.chapter.features.computer && !study.chapter.gamebook,
+      isComputerAnalysisAllowed: study.chapter.features.computer && !study.chapter.gamebook,
       gamebookActive: study.chapter.gamebook,
       pgn: pgn,
     );
@@ -213,9 +202,7 @@ class StudyController extends _$StudyController
       final liked = state.requireValue.study.liked;
       _socketClient.send('like', {'liked': !liked});
       state = AsyncValue.data(
-        state.requireValue.copyWith(
-          study: state.requireValue.study.copyWith(liked: !liked),
-        ),
+        state.requireValue.copyWith(study: state.requireValue.study.copyWith(liked: !liked)),
       );
     });
   }
@@ -227,16 +214,12 @@ class StudyController extends _$StudyController
     }
     switch (event.topic) {
       case 'liking':
-        final data =
-            (event.data as Map<String, dynamic>)['l'] as Map<String, dynamic>;
+        final data = (event.data as Map<String, dynamic>)['l'] as Map<String, dynamic>;
         final likes = data['likes'] as int;
         final bool meLiked = data['me'] as bool;
         state = AsyncValue.data(
           state.requireValue.copyWith(
-            study: state.requireValue.study.copyWith(
-              liked: meLiked,
-              likes: likes,
-            ),
+            study: state.requireValue.study.copyWith(liked: meLiked, likes: likes),
           ),
         );
       case 'node':
@@ -271,16 +254,9 @@ class StudyController extends _$StudyController
 
     _sendMoveToSocket(move);
 
-    final (newPath, isNewNode) = _root.addMoveAt(
-      state.requireValue.currentPath,
-      move,
-    );
+    final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
     if (newPath != null) {
-      _setPath(
-        newPath,
-        shouldRecomputeRootView: isNewNode,
-        shouldForceShowVariation: true,
-      );
+      _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
     }
 
     if (state.requireValue.gamebookActive) {
@@ -380,9 +356,7 @@ class StudyController extends _$StudyController
 
     final node = _root.nodeAt(path);
 
-    final childrenToShow = _root.isOnMainline(path)
-        ? node.children.skip(1)
-        : node.children;
+    final childrenToShow = _root.isOnMainline(path) ? node.children.skip(1) : node.children;
 
     for (final child in childrenToShow) {
       child.isCollapsed = false;
@@ -412,10 +386,7 @@ class StudyController extends _$StudyController
     if (state == null) return;
     _root.promoteAt(path, toMainline: toMainline);
     this.state = AsyncValue.data(
-      state.copyWith(
-        isOnMainline: _root.isOnMainline(state.currentPath),
-        root: _root.view,
-      ),
+      state.copyWith(isOnMainline: _root.isOnMainline(state.currentPath), root: _root.view),
     );
   }
 
@@ -424,10 +395,7 @@ class StudyController extends _$StudyController
     if (!state.hasValue) return;
 
     _root.deleteAt(path);
-    _recordChange('deleteNode', {
-      'path': path.value,
-      'jumpTo': path.penultimate.value,
-    });
+    _recordChange('deleteNode', {'path': path.value, 'jumpTo': path.penultimate.value});
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
@@ -452,10 +420,7 @@ class StudyController extends _$StudyController
     if (!state.hasValue) return;
     if (state.requireValue.isWriteable == false) return;
 
-    _socketClient.send(socketEvent, {
-      ...data,
-      'ch': state.requireValue.study.chapter.id.value,
-    });
+    _socketClient.send(socketEvent, {...data, 'ch': state.requireValue.study.chapter.id.value});
   }
 
   void _setPath(
@@ -473,9 +438,7 @@ class StudyController extends _$StudyController
     final currentNode = _root.nodeAt(path);
 
     // always show variation if the user plays a move
-    if (shouldForceShowVariation &&
-        currentNode is Branch &&
-        currentNode.isCollapsed) {
+    if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
       _root.updateAt(path, (node) {
         if (node is Branch) node.isCollapsed = false;
       });
@@ -484,9 +447,7 @@ class StudyController extends _$StudyController
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView = shouldForceShowVariation || shouldRecomputeRootView
-        ? _root.view
-        : state.root;
+    final rootView = shouldForceShowVariation || shouldRecomputeRootView ? _root.view : state.root;
 
     final isForward = path.size > state.currentPath.size;
     if (currentNode is Branch) {
@@ -538,18 +499,10 @@ class StudyController extends _$StudyController
   }
 }
 
-enum GamebookState {
-  startLesson,
-  findTheMove,
-  correctMove,
-  incorrectMove,
-  lessonComplete,
-}
+enum GamebookState { startLesson, findTheMove, correctMove, incorrectMove, lessonComplete }
 
 @freezed
-sealed class StudyState
-    with _$StudyState
-    implements EvaluationMixinState, CommonAnalysisState {
+sealed class StudyState with _$StudyState implements EvaluationMixinState, CommonAnalysisState {
   const StudyState._();
 
   const factory StudyState({
@@ -600,8 +553,7 @@ sealed class StudyState
   }) = _StudyState;
 
   /// Whether the current user is the owner of the study.
-  bool get amIOwner =>
-      myId == study.ownerId || (isAdmin == true && canIContribute);
+  bool get amIOwner => myId == study.ownerId || (isAdmin == true && canIContribute);
 
   /// The current user's member information, if available.
   StudyMember? get myMember => myId != null ? study.members[myId!] : null;
@@ -618,15 +570,11 @@ sealed class StudyState
   /// Whether the engine is available for evaluation
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
-      isComputerAnalysisAllowed &&
-      engineSupportedVariants.contains(variant) &&
-      prefs.isEnabled;
+      isComputerAnalysisAllowed && engineSupportedVariants.contains(variant) && prefs.isEnabled;
 
-  bool get isOpeningExplorerAvailable =>
-      !gamebookActive && study.chapter.features.explorer;
+  bool get isOpeningExplorerAvailable => !gamebookActive && study.chapter.features.explorer;
 
-  EngineGaugeParams? engineGaugeParams(EngineEvaluationPrefState prefs) =>
-      isEngineAvailable(prefs)
+  EngineGaugeParams? engineGaugeParams(EngineEvaluationPrefState prefs) => isEngineAvailable(prefs)
       ? (
           isLocalEngineAvailable: isEngineAvailable(prefs),
           orientation: pov,
@@ -655,11 +603,10 @@ sealed class StudyState
   bool get isAtStartOfChapter => currentPath.isEmpty;
 
   String? get gamebookComment {
-    final comment =
-        (currentNode.isRoot ? pgnRootComments : currentNode.comments)
-            ?.map((comment) => comment.text)
-            .nonNulls
-            .join('\n');
+    final comment = (currentNode.isRoot ? pgnRootComments : currentNode.comments)
+        ?.map((comment) => comment.text)
+        .nonNulls
+        .join('\n');
     return comment?.isNotEmpty == true
         ? comment
         : gamebookState == GamebookState.incorrectMove
@@ -669,8 +616,7 @@ sealed class StudyState
 
   String? get gamebookHint => study.hints.getOrNull(currentPath.size);
 
-  String? get gamebookDeviationComment =>
-      study.deviationComments.getOrNull(currentPath.size);
+  String? get gamebookDeviationComment => study.deviationComments.getOrNull(currentPath.size);
 
   GamebookState get gamebookState {
     if (isAtEndOfChapter) return GamebookState.lessonComplete;
@@ -685,8 +631,7 @@ sealed class StudyState
         : GamebookState.incorrectMove;
   }
 
-  bool get isIntroductoryChapter =>
-      currentNode.isRoot && currentNode.children.isEmpty;
+  bool get isIntroductoryChapter => currentNode.isRoot && currentNode.children.isEmpty;
 
   IList<PgnCommentShape> get pgnShapes => IList(
     (currentNode.isRoot ? pgnRootComments : currentNode.comments)
@@ -694,19 +639,15 @@ sealed class StudyState
         .flattened,
   );
 
-  PlayerSide get playerSide => gamebookActive
-      ? (pov == Side.white ? PlayerSide.white : PlayerSide.black)
-      : PlayerSide.both;
+  PlayerSide get playerSide =>
+      gamebookActive ? (pov == Side.white ? PlayerSide.white : PlayerSide.black) : PlayerSide.both;
 
-  ChatOptions? get chatOptions => study.chat != null
-      ? StudyChatOptions(id: study.id, writeable: study.chat!.writeable)
-      : null;
+  ChatOptions? get chatOptions =>
+      study.chat != null ? StudyChatOptions(id: study.id, writeable: study.chat!.writeable) : null;
 }
 
 @freezed
-sealed class StudyCurrentNode
-    with _$StudyCurrentNode
-    implements AnalysisCurrentNodeInterface {
+sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrentNodeInterface {
   const StudyCurrentNode._();
 
   const factory StudyCurrentNode({

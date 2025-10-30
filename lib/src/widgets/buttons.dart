@@ -182,11 +182,7 @@ class LoadingButtonBuilder<T> extends StatefulWidget {
 
   final Future<T>? initialFuture;
   final Future<T> Function() fetchData;
-  final Widget Function(
-    BuildContext context,
-    bool isLoading,
-    Future<T> Function() fetchData,
-  )
+  final Widget Function(BuildContext context, bool isLoading, Future<T> Function() fetchData)
   builder;
 
   @override

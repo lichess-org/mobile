@@ -42,9 +42,7 @@ sealed class GameHistoryPrefs with _$GameHistoryPrefs implements Serializable {
     required GameHistoryDisplayMode displayMode,
   }) = _GameHistoryPrefs;
 
-  static const defaults = GameHistoryPrefs(
-    displayMode: GameHistoryDisplayMode.detail,
-  );
+  static const defaults = GameHistoryPrefs(displayMode: GameHistoryDisplayMode.detail);
 
   factory GameHistoryPrefs.fromJson(Map<String, dynamic> json) {
     return _$GameHistoryPrefsFromJson(json);

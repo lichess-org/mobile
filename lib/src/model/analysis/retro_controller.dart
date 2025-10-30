@@ -84,9 +84,8 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
   @override
   @protected
-  EngineEvaluationPrefState get evaluationPrefs => ref
-      .read(engineEvaluationPreferencesProvider)
-      .copyWith(isEnabled: true, numEvalLines: 1);
+  EngineEvaluationPrefState get evaluationPrefs =>
+      ref.read(engineEvaluationPreferencesProvider).copyWith(isEnabled: true, numEvalLines: 1);
 
   @override
   @protected
@@ -95,8 +94,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
   @override
   @protected
-  EvaluationService evaluationServiceFactory() =>
-      ref.read(evaluationServiceProvider);
+  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
 
   @override
   @protected
@@ -116,21 +114,15 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
     ref.onDispose(() {
       disposeEngineEvaluation();
-      serverAnalysisService.lastAnalysisEvent.removeListener(
-        _listenToServerAnalysisEvents,
-      );
+      serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
     });
 
-    socketClient = ref
-        .watch(socketPoolProvider)
-        .open(AnalysisController.socketUri);
+    socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
 
     _game = await ref.read(archivedGameProvider(id: options.id).future);
 
     if (engineSupportedVariants.contains(_game.meta.variant) == false) {
-      throw Exception(
-        'Variant ${_game.meta.variant} is not supported for retro mode',
-      );
+      throw Exception('Variant ${_game.meta.variant} is not supported for retro mode');
     }
 
     initEngineEvaluation();
@@ -147,9 +139,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
             'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
           );
           state = AsyncError(
-            Exception(
-              'Server analysis did not finish within $kMaxWaitForServerAnalysis',
-            ),
+            Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
             StackTrace.current,
           );
         },
@@ -173,9 +163,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
       state = AsyncValue.data(retroState);
 
-      serverAnalysisService.lastAnalysisEvent.addListener(
-        _listenToServerAnalysisEvents,
-      );
+      serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
 
       return retroState;
     }
@@ -204,11 +192,9 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
         }
 
         final bigEvalSwing =
-            Eval.winningChancesPovDiff(side, eval, newEval).abs() >
-            _kEvalSwingThreshold;
+            Eval.winningChancesPovDiff(side, eval, newEval).abs() > _kEvalSwingThreshold;
 
-        final lostEasyMate =
-            eval.mate != null && newEval.mate == null && eval.mate!.abs() <= 3;
+        final lostEasyMate = eval.mate != null && newEval.mate == null && eval.mate!.abs() <= 3;
 
         final hasSolution = branch.children.length > 1;
 
@@ -221,10 +207,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
           try {
             final entry = await ref
                 .read(openingExplorerRepositoryProvider)
-                .getMasterDatabase(
-                  branch.position.fen,
-                  since: MasterDb.kEarliestYear,
-                );
+                .getMasterDatabase(branch.position.fen, since: MasterDb.kEarliestYear);
 
             final masterMovesPlayedMoreThanOnce = entry.moves.where(
               (move) => move.white + move.draws + move.black > 1,
@@ -248,10 +231,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
           }
         }
 
-        return Mistake(
-          branch: branch.view,
-          openingExplorerSolutions: openingExplorerSolutions,
-        );
+        return Mistake(branch: branch.view, openingExplorerSolutions: openingExplorerSolutions);
       }),
     )).nonNulls.toIList();
 
@@ -259,14 +239,10 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
       serverAnalysisAvailable: true,
       mistakes: mistakes.toIList(),
       currentMistakeIndex: 0,
-      feedback: mistakes.isNotEmpty
-          ? RetroFeedback.findMove
-          : RetroFeedback.done,
+      feedback: mistakes.isNotEmpty ? RetroFeedback.findMove : RetroFeedback.done,
       mainlinePath: _root.mainlinePath,
       pov: side,
-      currentNode: RetroCurrentNode.fromNode(
-        mistakes.firstOrNull?.branch.branch ?? _root,
-      ),
+      currentNode: RetroCurrentNode.fromNode(mistakes.firstOrNull?.branch.branch ?? _root),
       lastMove: mistakes.firstOrNull?.branch.sanMove.move,
       variant: _game.meta.variant,
       evaluationContext: EvaluationContext(
@@ -287,10 +263,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
       return;
     }
 
-    final (newPath, isNewNode) = _root.addMoveAt(
-      state.requireValue.currentPath,
-      move,
-    );
+    final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
     if (newPath != null) {
       _setPath(newPath);
     }
@@ -327,16 +300,12 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
     final currentMistake = state.valueOrNull?.currentMistake;
     if (currentMistake != null) {
       onUserMove(currentMistake.serverMove);
-      state = AsyncValue.data(
-        state.requireValue.copyWith(feedback: RetroFeedback.viewingSolution),
-      );
+      state = AsyncValue.data(state.requireValue.copyWith(feedback: RetroFeedback.viewingSolution));
     }
   }
 
   Future<void> flipSide() async {
-    state = AsyncValue.data(
-      await _computeMistakes(state.requireValue.pov.opposite),
-    );
+    state = AsyncValue.data(await _computeMistakes(state.requireValue.pov.opposite));
   }
 
   void restart() {
@@ -353,9 +322,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
 
     _setPath(
       _root.mainlinePath.truncate(
-        mistake?.branch.position.ply ??
-            lastMistake?.branch.position.ply ??
-            _root.mainlinePath.size,
+        mistake?.branch.position.ply ?? lastMistake?.branch.position.ply ?? _root.mainlinePath.size,
       ),
     );
 
@@ -430,16 +397,12 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   }
 
   void _onIncorrectMove() {
-    state = AsyncValue.data(
-      state.requireValue.copyWith(feedback: RetroFeedback.incorrect),
-    );
+    state = AsyncValue.data(state.requireValue.copyWith(feedback: RetroFeedback.incorrect));
     userPrevious();
   }
 
   void _onCorrectMove() {
-    state = AsyncValue.data(
-      state.requireValue.copyWith(feedback: RetroFeedback.correct),
-    );
+    state = AsyncValue.data(state.requireValue.copyWith(feedback: RetroFeedback.correct));
   }
 
   @override
@@ -475,9 +438,7 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   void _refreshCurrentNode({bool recomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
-        currentNode: RetroCurrentNode.fromNode(
-          _root.nodeAt(state.requireValue.currentPath),
-        ),
+        currentNode: RetroCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
   }
@@ -487,21 +448,16 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
     switch (state.feedback) {
       case RetroFeedback.incorrect:
       case RetroFeedback.findMove:
-        if (state.currentPosition.ply ==
-            state.currentMistake!.serverBranch.position.ply) {
+        if (state.currentPosition.ply == state.currentMistake!.serverBranch.position.ply) {
           if (state.currentMistake!.isSolution(state.currentNode)) {
             _onCorrectMove();
-          } else if (state.currentPosition ==
-              state.currentMistake!.userBranch.position) {
+          } else if (state.currentPosition == state.currentMistake!.userBranch.position) {
             Timer(const Duration(milliseconds: 500), () {
               _onIncorrectMove();
             });
           } else {
             this.state = AsyncValue.data(
-              state.copyWith(
-                feedback: RetroFeedback.evalMove,
-                evalRequestedAt: DateTime.now(),
-              ),
+              state.copyWith(feedback: RetroFeedback.evalMove, evalRequestedAt: DateTime.now()),
             );
             // Be sure to get enough depth to evaluate the move properly
             requestEval(goDeeper: true);
@@ -514,17 +470,11 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   Future<void> _listenToServerAnalysisEvents() async {
     if (!state.hasValue) return;
 
-    final event = ref
-        .read(serverAnalysisServiceProvider)
-        .lastAnalysisEvent
-        .value;
+    final event = ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
     if (event != null && event.$1 == options.id) {
       ServerAnalysisService.mergeOngoingAnalysis(_root, event.$2.tree);
-      final progress =
-          event.$2.evals.where((e) => e.hasEval).length / _root.mainline.length;
-      state = AsyncValue.data(
-        state.requireValue.copyWith(serverAnalysisProgress: progress),
-      );
+      final progress = event.$2.evals.where((e) => e.hasEval).length / _root.mainline.length;
+      state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
 
       if (event.$2.isAnalysisComplete) {
         if (_serverAnalysisCompleter.isCompleted == false) {
@@ -537,19 +487,10 @@ class RetroController extends _$RetroController with EngineEvaluationMixin {
   }
 }
 
-enum RetroFeedback {
-  findMove,
-  evalMove,
-  correct,
-  incorrect,
-  viewingSolution,
-  done,
-}
+enum RetroFeedback { findMove, evalMove, correct, incorrect, viewingSolution, done }
 
 @freezed
-sealed class RetroState
-    with _$RetroState
-    implements EvaluationMixinState, CommonAnalysisState {
+sealed class RetroState with _$RetroState implements EvaluationMixinState, CommonAnalysisState {
   const RetroState._();
 
   const factory RetroState({
@@ -579,12 +520,10 @@ sealed class RetroState
       feedback == RetroFeedback.incorrect ||
       feedback == RetroFeedback.evalMove;
 
-  Duration? get evalTime => evalRequestedAt != null
-      ? DateTime.now().difference(evalRequestedAt!)
-      : null;
+  Duration? get evalTime =>
+      evalRequestedAt != null ? DateTime.now().difference(evalRequestedAt!) : null;
 
-  double get evalProgress =>
-      feedback == RetroFeedback.evalMove && currentNode.eval != null
+  double get evalProgress => feedback == RetroFeedback.evalMove && currentNode.eval != null
       ? min(1.0, currentNode.eval!.depth / _kEvalDepthThreshold)
       : 0.0;
 
@@ -611,9 +550,7 @@ sealed class RetroState
 }
 
 @freezed
-sealed class RetroCurrentNode
-    with _$RetroCurrentNode
-    implements AnalysisCurrentNodeInterface {
+sealed class RetroCurrentNode with _$RetroCurrentNode implements AnalysisCurrentNodeInterface {
   const RetroCurrentNode._();
 
   const factory RetroCurrentNode({

@@ -17,8 +17,7 @@ class StormClockWidget extends StatefulWidget {
   _ClockState createState() => _ClockState();
 }
 
-class _ClockState extends State<StormClockWidget>
-    with SingleTickerProviderStateMixin {
+class _ClockState extends State<StormClockWidget> with SingleTickerProviderStateMixin {
   // ignore: avoid-late-keyword
   late AnimationController _controller;
 
@@ -45,17 +44,14 @@ class _ClockState extends State<StormClockWidget>
 
     // declaring as late final causes an error because the widget is being disposed
     // after the clock start
-    _controller =
-        AnimationController(
-          vsync: this,
-          duration: const Duration(milliseconds: 1500),
-        )..addStatusListener((status) {
-          if (status == AnimationStatus.completed) {
-            setState(() {
-              currentBonusSeconds = null;
-            });
-          }
-        });
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          setState(() {
+            currentBonusSeconds = null;
+          });
+        }
+      });
 
     time = widget.clock.timeLeft;
 
@@ -148,14 +144,8 @@ class _ClockState extends State<StormClockWidget>
                 ),
                 duration: const Duration(milliseconds: 500),
                 builder: (context, Duration value, _) {
-                  final minutes = value.inMinutes
-                      .remainder(60)
-                      .toString()
-                      .padLeft(2, '0');
-                  final seconds = value.inSeconds
-                      .remainder(60)
-                      .toString()
-                      .padLeft(2, '0');
+                  final minutes = value.inMinutes.remainder(60).toString().padLeft(2, '0');
+                  final seconds = value.inSeconds.remainder(60).toString().padLeft(2, '0');
                   return Text(
                     '$minutes:$seconds',
                     style: TextStyle(

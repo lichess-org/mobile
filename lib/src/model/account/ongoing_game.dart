@@ -22,8 +22,7 @@ class OngoingGamesNotifier extends AsyncNotifier<IList<OngoingGame>> {
     if (session == null) return Future.value(IList());
 
     return ref.withAggregatorCacheFor(
-      (client, aggregator) =>
-          AccountRepository(client, aggregator).getOngoingGames(nb: 50),
+      (client, aggregator) => AccountRepository(client, aggregator).getOngoingGames(nb: 50),
       // cache is useful to reduce the number of requests to the server because this is used by
       // both the correspondence service to sync games and the home screen to display ongoing games
       const Duration(minutes: 1),
@@ -57,8 +56,7 @@ class OngoingGamesNotifier extends AsyncNotifier<IList<OngoingGame>> {
       opponentAiLevel: game.opponent?.aiLevel,
       lastMove: game.lastMove,
       secondsLeft:
-          game.clock?.forSide(me).inSeconds ??
-          game.correspondenceClock?.forSide(me).inSeconds,
+          game.clock?.forSide(me).inSeconds ?? game.correspondenceClock?.forSide(me).inSeconds,
     );
     state = AsyncData(
       state.requireValue.replace(index, newGame).sort((a, b) {
@@ -71,11 +69,10 @@ class OngoingGamesNotifier extends AsyncNotifier<IList<OngoingGame>> {
 }
 
 /// A provider that fetches the current user's ongoing games.
-final ongoingGamesProvider =
-    AsyncNotifierProvider<OngoingGamesNotifier, IList<OngoingGame>>(
-      OngoingGamesNotifier.new,
-      name: 'OngoingGamesProvider',
-    );
+final ongoingGamesProvider = AsyncNotifierProvider<OngoingGamesNotifier, IList<OngoingGame>>(
+  OngoingGamesNotifier.new,
+  name: 'OngoingGamesProvider',
+);
 
 @freezed
 sealed class OngoingGame with _$OngoingGame {

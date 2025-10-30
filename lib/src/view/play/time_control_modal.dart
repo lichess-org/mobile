@@ -45,21 +45,21 @@ class TimeControlModal extends StatelessWidget {
               Text.rich(
                 TextSpan(
                   text: context.l10n.minutesPerSide,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: textShade(context, 0.7),
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(color: textShade(context, 0.7)),
                   children: [
                     TextSpan(
                       text: ' + ',
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: textShade(context, 0.7),
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelLarge?.copyWith(color: textShade(context, 0.7)),
                     ),
                     TextSpan(
                       text: context.l10n.incrementInSeconds,
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: textShade(context, 0.7),
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelSmall?.copyWith(color: textShade(context, 0.7)),
                     ),
                   ],
                 ),
@@ -71,10 +71,7 @@ class TimeControlModal extends StatelessWidget {
         Card.filled(
           margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10.0,
-              vertical: 16.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -86,10 +83,7 @@ class TimeControlModal extends StatelessWidget {
                     const TimeIncrement(60, 1),
                     const TimeIncrement(120, 1),
                   ],
-                  title: const _SectionTitle(
-                    title: 'Bullet',
-                    icon: LichessIcons.bullet,
-                  ),
+                  title: const _SectionTitle(title: 'Bullet', icon: LichessIcons.bullet),
                   onSelected: onSelected,
                 ),
                 _sectionSpacing,
@@ -101,10 +95,7 @@ class TimeControlModal extends StatelessWidget {
                     TimeIncrement(300, 0),
                     TimeIncrement(300, 3),
                   ],
-                  title: const _SectionTitle(
-                    title: 'Blitz',
-                    icon: LichessIcons.blitz,
-                  ),
+                  title: const _SectionTitle(title: 'Blitz', icon: LichessIcons.blitz),
                   onSelected: onSelected,
                 ),
                 _sectionSpacing,
@@ -116,10 +107,7 @@ class TimeControlModal extends StatelessWidget {
                     TimeIncrement(900, 0),
                     TimeIncrement(900, 10),
                   ],
-                  title: const _SectionTitle(
-                    title: 'Rapid',
-                    icon: LichessIcons.rapid,
-                  ),
+                  title: const _SectionTitle(title: 'Rapid', icon: LichessIcons.rapid),
                   onSelected: onSelected,
                 ),
                 _sectionSpacing,
@@ -131,10 +119,7 @@ class TimeControlModal extends StatelessWidget {
                     TimeIncrement(1800, 20),
                     TimeIncrement(3600, 0),
                   ],
-                  title: const _SectionTitle(
-                    title: 'Classical',
-                    icon: LichessIcons.classical,
-                  ),
+                  title: const _SectionTitle(title: 'Classical', icon: LichessIcons.classical),
                   onSelected: onSelected,
                 ),
               ],
@@ -144,20 +129,12 @@ class TimeControlModal extends StatelessWidget {
         Card.filled(
           margin: _horizontalPadding,
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10.0,
-              vertical: 16.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
             child: Theme(
-              data: Theme.of(
-                context,
-              ).copyWith(dividerColor: Colors.transparent),
+              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 initiallyExpanded: timeIncrement.isCustom,
-                title: _SectionTitle(
-                  title: context.l10n.custom,
-                  icon: Icons.tune,
-                ),
+                title: _SectionTitle(title: context.l10n.custom, icon: Icons.tune),
                 tilePadding: EdgeInsets.zero,
                 minTileHeight: 0,
                 children: [
@@ -190,18 +167,12 @@ class TimeControlModal extends StatelessWidget {
                                   labelBuilder: clockLabelInMinutes,
                                   onChange: (num value) {
                                     setState(() {
-                                      custom = TimeIncrement(
-                                        value.toInt(),
-                                        custom.increment,
-                                      );
+                                      custom = TimeIncrement(value.toInt(), custom.increment);
                                     });
                                   },
                                   onChangeEnd: (num value) {
                                     setState(() {
-                                      custom = TimeIncrement(
-                                        value.toInt(),
-                                        custom.increment,
-                                      );
+                                      custom = TimeIncrement(value.toInt(), custom.increment);
                                     });
                                   },
                                 ),
@@ -210,8 +181,7 @@ class TimeControlModal extends StatelessWidget {
                                 contentPadding: EdgeInsets.zero,
                                 title: Text.rich(
                                   TextSpan(
-                                    text:
-                                        '${context.l10n.incrementInSeconds}: ',
+                                    text: '${context.l10n.incrementInSeconds}: ',
                                     children: [
                                       TextSpan(
                                         style: const TextStyle(
@@ -228,30 +198,19 @@ class TimeControlModal extends StatelessWidget {
                                   values: kAvailableIncrementsInSeconds,
                                   onChange: (num value) {
                                     setState(() {
-                                      custom = TimeIncrement(
-                                        custom.time,
-                                        value.toInt(),
-                                      );
+                                      custom = TimeIncrement(custom.time, value.toInt());
                                     });
                                   },
                                   onChangeEnd: (num value) {
                                     setState(() {
-                                      custom = TimeIncrement(
-                                        custom.time,
-                                        value.toInt(),
-                                      );
+                                      custom = TimeIncrement(custom.time, value.toInt());
                                     });
                                   },
                                 ),
                               ),
                               FilledButton(
-                                onPressed: custom.isInfinite
-                                    ? null
-                                    : () => onSelected(custom),
-                                child: Text(
-                                  context.l10n.mobileOkButton,
-                                  style: Styles.bold,
-                                ),
+                                onPressed: custom.isInfinite ? null : () => onSelected(custom),
+                                child: Text(context.l10n.mobileOkButton, style: Styles.bold),
                               ),
                             ],
                           );

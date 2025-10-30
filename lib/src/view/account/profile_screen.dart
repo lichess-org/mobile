@@ -37,16 +37,14 @@ class ProfileScreen extends ConsumerStatefulWidget {
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-final _accountActivityProvider =
-    FutureProvider.autoDispose<IList<UserActivity>>((ref) {
-      final session = ref.watch(authSessionProvider);
-      if (session == null) return IList();
-      return ref.read(userRepositoryProvider).getActivity(session.user.id);
-    }, name: 'userActivityProvider');
+final _accountActivityProvider = FutureProvider.autoDispose<IList<UserActivity>>((ref) {
+  final session = ref.watch(authSessionProvider);
+  if (session == null) return IList();
+  return ref.read(userRepositoryProvider).getActivity(session.user.id);
+}, name: 'userActivityProvider');
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +52,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: account.when(
-          data: (user) => user == null
-              ? const SizedBox.shrink()
-              : UserFullNameWidget(user: user.lightUser),
+          data: (user) =>
+              user == null ? const SizedBox.shrink() : UserFullNameWidget(user: user.lightUser),
           loading: () => const SizedBox.shrink(),
           error: (error, _) => const SizedBox.shrink(),
         ),
@@ -64,9 +61,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           SemanticIconButton(
             icon: const Icon(Icons.edit),
             semanticsLabel: context.l10n.editProfile,
-            onPressed: () => Navigator.of(
-              context,
-            ).push(EditProfileScreen.buildRoute(context)),
+            onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute(context)),
           ),
           account.when(
             data: (user) => user == null
@@ -91,8 +86,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           }
           final activity = ref.watch(_accountActivityProvider);
           final recentGames = ref.watch(myRecentGamesProvider);
-          final nbOfGames =
-              ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
+          final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).valueOrNull ?? 0;
           return HapticRefreshIndicator(
             edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
                 ? MediaQuery.paddingOf(context).top + kToolbarHeight
@@ -112,9 +106,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     hasLeading: true,
                     children: [
                       ListTile(
-                        title: Text(
-                          context.l10n.nbBookmarks(user.count!.bookmark),
-                        ),
+                        title: Text(context.l10n.nbBookmarks(user.count!.bookmark)),
                         leading: const Icon(Icons.bookmarks_outlined),
                         onTap: () {
                           Navigator.of(context).push(
@@ -128,21 +120,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ],
                   ),
                 UserActivityWidget(activity: activity),
-                RecentGamesWidget(
-                  recentGames: recentGames,
-                  nbOfGames: nbOfGames,
-                  user: null,
-                ),
+                RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
               ],
             ),
           );
         },
-        loading: () =>
-            const Center(child: CircularProgressIndicator.adaptive()),
+        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
         error: (error, _) {
-          return FullScreenRetryRequest(
-            onRetry: () => ref.invalidate(accountProvider),
-          );
+          return FullScreenRetryRequest(onRetry: () => ref.invalidate(accountProvider));
         },
       ),
     );

@@ -62,20 +62,14 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
       );
     }
 
-    final cacheKey = OpeningExplorerCacheKey(
-      fen: widget.position.fen,
-      prefs: prefs,
-    );
+    final cacheKey = OpeningExplorerCacheKey(fen: widget.position.fen, prefs: prefs);
     final cacheOpeningExplorer = cache[cacheKey];
     final openingExplorerAsync = cacheOpeningExplorer != null
         ? AsyncValue.data((entry: cacheOpeningExplorer, isIndexing: false))
         : ref.watch(openingExplorerProvider(fen: widget.position.fen));
 
     if (cacheOpeningExplorer == null) {
-      ref.listen(openingExplorerProvider(fen: widget.position.fen), (
-        _,
-        curAsync,
-      ) {
+      ref.listen(openingExplorerProvider(fen: widget.position.fen), (_, curAsync) {
         curAsync.whenData((cur) {
           if (cur != null && !cur.isIndexing) {
             cache[cacheKey] = cur.entry;
@@ -109,8 +103,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
         final ply = widget.position.ply;
 
         final children = [
-          if (widget.opening != null)
-            OpeningNameHeader(opening: widget.opening!),
+          if (widget.opening != null) OpeningNameHeader(opening: widget.opening!),
           OpeningExplorerMoveTable(
             moves: value.entry.moves,
             whiteWins: value.entry.white,
@@ -119,9 +112,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
             onMoveSelected: widget.onMoveSelected,
             isIndexing: value.isIndexing,
           ),
-          if (widget.shouldDisplayGames &&
-              topGames != null &&
-              topGames.isNotEmpty) ...[
+          if (widget.shouldDisplayGames && topGames != null && topGames.isNotEmpty) ...[
             OpeningExplorerHeaderTile(
               key: const Key('topGamesHeader'),
               child: Text(context.l10n.topGames),
@@ -130,16 +121,12 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
               return OpeningExplorerGameTile(
                 key: Key('top-game-${topGames.get(index).id}'),
                 game: topGames.get(index),
-                color: index.isEven
-                    ? context.lichessTheme.rowEven
-                    : context.lichessTheme.rowOdd,
+                color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
                 ply: ply,
               );
             }, growable: false),
           ],
-          if (widget.shouldDisplayGames &&
-              recentGames != null &&
-              recentGames.isNotEmpty) ...[
+          if (widget.shouldDisplayGames && recentGames != null && recentGames.isNotEmpty) ...[
             OpeningExplorerHeaderTile(
               key: const Key('recentGamesHeader'),
               child: Text(context.l10n.recentGames),
@@ -148,9 +135,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
               return OpeningExplorerGameTile(
                 key: Key('recent-game-${recentGames.get(index).id}'),
                 game: recentGames.get(index),
-                color: index.isEven
-                    ? context.lichessTheme.rowEven
-                    : context.lichessTheme.rowOdd,
+                color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
                 ply: ply,
               );
             }, growable: false),
@@ -165,9 +150,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
           children: children,
         );
       case AsyncError(:final error):
-        debugPrint(
-          'SEVERE: [OpeningExplorerView] could not load opening explorer data; $error',
-        );
+        debugPrint('SEVERE: [OpeningExplorerView] could not load opening explorer data; $error');
         final connectivity = ref.watch(connectivityChangesProvider);
         // TODO l10n
         final message = connectivity.whenIs(
@@ -175,10 +158,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
           offline: () => 'Opening Explorer is not available offline.',
         );
         return Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(message),
-          ),
+          child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
         );
       case _:
         return _ExplorerListView(
@@ -188,10 +168,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
               lastExplorerWidgets ??
               [
                 const Shimmer(
-                  child: ShimmerLoading(
-                    isLoading: true,
-                    child: OpeningExplorerMoveTable.loading(),
-                  ),
+                  child: ShimmerLoading(isLoading: true, child: OpeningExplorerMoveTable.loading()),
                 ),
               ],
         );
@@ -220,9 +197,7 @@ class _ExplorerListView extends StatelessWidget {
           duration: const Duration(milliseconds: 400),
           curve: Curves.fastOutSlowIn,
           opacity: isLoading ? 0.20 : 0.0,
-          child: ColoredBox(
-            color: brightness == Brightness.dark ? Colors.black : Colors.white,
-          ),
+          child: ColoredBox(color: brightness == Brightness.dark ? Colors.black : Colors.white),
         ),
       ),
     );

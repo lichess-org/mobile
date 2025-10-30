@@ -37,26 +37,18 @@ class AccountRepository {
     return aggregator.readJson(
       Uri(path: '/api/account', queryParameters: {'playban': '1'}),
       atomicMapper: User.fromServerJson,
-      aggregatedMapper: (json) =>
-          User.fromServerJson(json as Map<String, dynamic>),
+      aggregatedMapper: (json) => User.fromServerJson(json as Map<String, dynamic>),
     );
   }
 
   Future<void> saveProfile(Map<String, String> profile) async {
     final uri = Uri(path: '/account/profile');
-    await client.postRead(
-      uri,
-      headers: {'Accept': 'application/json'},
-      body: profile,
-    );
+    await client.postRead(uri, headers: {'Accept': 'application/json'}, body: profile);
   }
 
   Future<IList<OngoingGame>> getOngoingGames({int? nb}) {
     return aggregator.readJson(
-      Uri(
-        path: '/api/account/playing',
-        queryParameters: nb != null ? {'nb': nb.toString()} : null,
-      ),
+      Uri(path: '/api/account/playing', queryParameters: nb != null ? {'nb': nb.toString()} : null),
       atomicMapper: ongoingGamesFromServerJson,
       aggregatedMapper: (json) {
         if (json is! List<dynamic>) {
@@ -87,10 +79,7 @@ class AccountRepository {
 
   /// Bookmark the game for the given `id` if `bookmark` is true else unbookmark it
   Future<void> bookmark(GameId id, {required bool bookmark}) async {
-    final uri = Uri(
-      path: '/bookmark/$id',
-      queryParameters: {'v': bookmark ? '1' : '0'},
-    );
+    final uri = Uri(path: '/bookmark/$id', queryParameters: {'v': bookmark ? '1' : '0'});
     await client.postRead(uri);
   }
 }

@@ -45,17 +45,15 @@ class SettingsListTile extends StatelessWidget {
             ? Text(
                 explanation!,
                 maxLines: 5,
-                style: ListTileTheme.of(context).subtitleTextStyle?.copyWith(
-                  fontSize: TextTheme.of(context).bodySmall?.fontSize,
-                ),
+                style: ListTileTheme.of(
+                  context,
+                ).subtitleTextStyle?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
               )
             : null,
         enabled: enabled,
         onTap: onTap,
         trailing: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.sizeOf(context).width * 0.25,
-          ),
+          constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.25),
           child: Text(
             settingsValue,
             overflow: TextOverflow.ellipsis,
@@ -92,9 +90,9 @@ class SwitchSettingTile extends StatelessWidget {
       title: _SettingsTitle(title: title),
       subtitle: subtitle != null
           ? DefaultTextStyle.merge(
-              style: ListTileTheme.of(context).subtitleTextStyle?.copyWith(
-                fontSize: TextTheme.of(context).bodySmall?.fontSize,
-              ),
+              style: ListTileTheme.of(
+                context,
+              ).subtitleTextStyle?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
               child: subtitle!,
             )
           : null,
@@ -138,9 +136,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
       min: 0,
       max: widget.values.length.toDouble() - 1,
       divisions: widget.values.length - 1,
-      label:
-          widget.labelBuilder?.call(widget.values[_index]) ??
-          widget.values[_index].toString(),
+      label: widget.labelBuilder?.call(widget.values[_index]) ?? widget.values[_index].toString(),
       onChanged: (value) {
         final newIndex = value.toInt();
         setState(() {
@@ -172,11 +168,7 @@ class SettingsSectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: textShade(context, 0.5),
-      ),
+      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: textShade(context, 0.5)),
     );
   }
 }
@@ -191,9 +183,7 @@ class _SettingsTitle extends StatelessWidget {
     return DefaultTextStyle.merge(
       maxLines: kSettingsTileTitleMaxLines,
       overflow: TextOverflow.ellipsis,
-      child: Text.rich(
-        TextSpan(children: [title.textSpan ?? TextSpan(text: title.data)]),
-      ),
+      child: Text.rich(TextSpan(children: [title.textSpan ?? TextSpan(text: title.data)])),
     );
   }
 }
@@ -245,9 +235,7 @@ class ChoicePicker<T> extends StatelessWidget {
             title: titleBuilder(value),
             subtitle: subtitleBuilder?.call(value),
             leading: leadingBuilder?.call(value),
-            onTap: onSelectedItemChanged != null
-                ? () => onSelectedItemChanged!(value)
-                : null,
+            onTap: onSelectedItemChanged != null ? () => onSelectedItemChanged!(value) : null,
           ),
       ],
     );

@@ -12,17 +12,13 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 class PuzzleSessionWidget extends ConsumerStatefulWidget {
-  const PuzzleSessionWidget({
-    required this.initialPuzzleContext,
-    required this.ctrlProvider,
-  });
+  const PuzzleSessionWidget({required this.initialPuzzleContext, required this.ctrlProvider});
 
   final PuzzleContext initialPuzzleContext;
   final PuzzleControllerProvider ctrlProvider;
 
   @override
-  ConsumerState<PuzzleSessionWidget> createState() =>
-      PuzzleSessionWidgetState();
+  ConsumerState<PuzzleSessionWidget> createState() => PuzzleSessionWidgetState();
 }
 
 class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
@@ -56,10 +52,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(
-      puzzleSessionProvider(
-        widget.initialPuzzleContext.userId,
-        widget.initialPuzzleContext.angle,
-      ),
+      puzzleSessionProvider(widget.initialPuzzleContext.userId, widget.initialPuzzleContext.angle),
     );
     final puzzleState = ref.watch(widget.ctrlProvider);
     final brightness = Theme.of(context).brightness;
@@ -71,8 +64,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
     final remainingSpace = estimateHeightMinusBoardFromContext(context);
     final estimatedTableHeight = remainingSpace / 2;
     const estimatedRatingWidgetHeight = 33.0;
-    final estimatedWidgetHeight =
-        estimatedTableHeight - estimatedRatingWidgetHeight;
+    final estimatedWidgetHeight = estimatedTableHeight - estimatedRatingWidgetHeight;
     final maxHeight = orientation == Orientation.portrait
         ? estimatedWidgetHeight >= 60
               ? 60.0
@@ -96,9 +88,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                   isLoading: loadingPuzzleId == attempt.id,
                   brightness: brightness,
                   attempt: attempt,
-                  onTap:
-                      puzzleState.puzzle.puzzle.id != attempt.id &&
-                          loadingPuzzleId == null
+                  onTap: puzzleState.puzzle.puzzle.id != attempt.id && loadingPuzzleId == null
                       ? (id) async {
                           final provider = puzzleProvider(id);
                           setState(() {
@@ -112,9 +102,7 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
                               puzzle: puzzle,
                             );
 
-                            ref
-                                .read(widget.ctrlProvider.notifier)
-                                .onLoadPuzzle(nextContext);
+                            ref.read(widget.ctrlProvider.notifier).onLoadPuzzle(nextContext);
                           } finally {
                             if (mounted) {
                               setState(() {
@@ -156,13 +144,11 @@ class _SessionItem extends StatelessWidget {
   final Brightness brightness;
   final void Function(PuzzleId id)? onTap;
 
-  Color get good => brightness == Brightness.light
-      ? LichessColors.good.shade300
-      : LichessColors.good.shade400;
+  Color get good =>
+      brightness == Brightness.light ? LichessColors.good.shade300 : LichessColors.good.shade400;
 
-  Color get error => brightness == Brightness.light
-      ? LichessColors.error.shade300
-      : LichessColors.error.shade400;
+  Color get error =>
+      brightness == Brightness.light ? LichessColors.error.shade300 : LichessColors.error.shade400;
 
   Color get next => Colors.grey.withValues(alpha: 0.5);
 
@@ -191,9 +177,7 @@ class _SessionItem extends StatelessWidget {
                 padding: EdgeInsets.all(2.0),
                 child: FittedBox(
                   fit: BoxFit.cover,
-                  child: CircularProgressIndicator.adaptive(
-                    backgroundColor: Colors.white,
-                  ),
+                  child: CircularProgressIndicator.adaptive(backgroundColor: Colors.white),
                 ),
               )
             : attempt?.ratingDiff != null && attempt!.ratingDiff != 0

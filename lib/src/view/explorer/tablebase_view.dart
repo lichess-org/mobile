@@ -28,10 +28,7 @@ class TablebaseView extends ConsumerWidget {
             offline: () => 'Tablebase is not available offline.',
           );
           return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(message),
-            ),
+            child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
           );
         }
 
@@ -45,22 +42,16 @@ class TablebaseView extends ConsumerWidget {
           required String moveKeyPrefix,
         }) {
           final moves = value.moves
-              .where(
-                (move) => move.category == invertTablebaseCategory(category),
-              )
+              .where((move) => move.category == invertTablebaseCategory(category))
               .toList();
           if (moves.isNotEmpty) {
-            children.add(
-              _TablebaseHeaderTile(key: Key(headerKey), child: headerChild),
-            );
+            children.add(_TablebaseHeaderTile(key: Key(headerKey), child: headerChild));
             children.addAll(
               List.generate(moves.length, (int index) {
                 return _TablebaseMoveRow(
                   key: Key('$moveKeyPrefix-${moves[index].uci}'),
                   move: moves[index],
-                  color: index.isEven
-                      ? context.lichessTheme.rowEven
-                      : context.lichessTheme.rowOdd,
+                  color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
                   onMoveSelected: onMoveSelected,
                   isWinningForWhite: isWinningForWhite,
                 );
@@ -143,19 +134,14 @@ class TablebaseView extends ConsumerWidget {
         return _TablebaseListView(isLoading: false, children: children);
 
       case AsyncError(:final error):
-        debugPrint(
-          'SEVERE: [TablebaseView] could not load tablebase data; $error',
-        );
+        debugPrint('SEVERE: [TablebaseView] could not load tablebase data; $error');
         final connectivity = ref.watch(connectivityChangesProvider);
         final message = connectivity.whenIs(
           online: () => 'Could not load tablebase data.',
           offline: () => 'Tablebase is not available offline.',
         );
         return Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(message),
-          ),
+          child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
         );
 
       case _:
@@ -190,9 +176,7 @@ class _TablebaseListView extends StatelessWidget {
           duration: const Duration(milliseconds: 400),
           curve: Curves.fastOutSlowIn,
           opacity: isLoading ? 0.20 : 0.0,
-          child: ColoredBox(
-            color: brightness == Brightness.dark ? Colors.black : Colors.white,
-          ),
+          child: ColoredBox(color: brightness == Brightness.dark ? Colors.black : Colors.white),
         ),
       ),
     );
@@ -267,10 +251,7 @@ class _TablebaseMoveRow extends StatelessWidget {
 
     if (metrics.isNotEmpty) {
       final List<Widget> metricBoxes = metrics.map((metric) {
-        final Widget metricText = Text(
-          metric,
-          style: const TextStyle(fontSize: 12),
-        );
+        final Widget metricText = Text(metric, style: const TextStyle(fontSize: 12));
 
         if (isWinningForWhite == true) {
           return Container(
@@ -299,10 +280,7 @@ class _TablebaseMoveRow extends StatelessWidget {
         } else {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(5),
-            ),
+            decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(5)),
             child: DefaultTextStyle.merge(
               style: const TextStyle(color: Colors.white),
               child: metricText,
@@ -310,26 +288,17 @@ class _TablebaseMoveRow extends StatelessWidget {
           );
         }
       }).toList();
-      metricsWidget = Wrap(
-        spacing: 8.0,
-        runSpacing: 4.0,
-        children: metricBoxes,
-      );
+      metricsWidget = Wrap(spacing: 8.0, runSpacing: 4.0, children: metricBoxes);
     }
     return InkWell(
-      onTap: onMoveSelected != null
-          ? () => onMoveSelected!(NormalMove.fromUci(move.uci))
-          : null,
+      onTap: onMoveSelected != null ? () => onMoveSelected!(NormalMove.fromUci(move.uci)) : null,
       child: Container(
         color: color,
         padding: kExplorerTableRowPadding,
         child: Row(
           children: [
             Expanded(
-              child: Text(
-                move.san,
-                style: const TextStyle(fontWeight: FontWeight.w500),
-              ),
+              child: Text(move.san, style: const TextStyle(fontWeight: FontWeight.w500)),
             ),
             metricsWidget,
           ],

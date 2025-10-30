@@ -43,8 +43,7 @@ class ServerAnalysisService {
   ValueListenable<GameId?> get currentAnalysis => _currentAnalysis;
 
   /// The last analysis progress event received from the server.
-  ValueListenable<(GameAnyId, ServerEvalEvent)?> get lastAnalysisEvent =>
-      _analysisProgress;
+  ValueListenable<(GameAnyId, ServerEvalEvent)?> get lastAnalysisEvent => _analysisProgress;
 
   SocketClient? _socketClient;
 
@@ -71,15 +70,12 @@ class ServerAnalysisService {
       _socketClient!.stream.listen(
         (event) {
           if (event.topic == 'analysisProgress') {
-            final data = ServerEvalEvent.fromJson(
-              event.data as Map<String, dynamic>,
-            );
+            final data = ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
 
             _analysisProgress.value = (id, data);
 
             if (data.isAnalysisComplete) {
-              if (_analysisCompleter != null &&
-                  !_analysisCompleter!.isCompleted) {
+              if (_analysisCompleter != null && !_analysisCompleter!.isCompleted) {
                 _analysisCompleter?.complete();
               }
             }
@@ -113,11 +109,9 @@ class ServerAnalysisService {
       rethrow;
     }
 
-    _analysisCompleter?.future.timeout(kMaxWaitForServerAnalysis).whenComplete(
-      () {
-        _cancelAnalysis();
-      },
-    );
+    _analysisCompleter?.future.timeout(kMaxWaitForServerAnalysis).whenComplete(() {
+      _cancelAnalysis();
+    });
   }
 
   /// Cancel the ongoing server analysis, if any.
@@ -145,12 +139,9 @@ class ServerAnalysisService {
     final glyphs = n2['glyphs'] as List<dynamic>?;
     final glyph = glyphs?.first as Map<String, dynamic>?;
     final comments = n2['comments'] as List<dynamic>?;
-    final comment =
-        (comments?.first as Map<String, dynamic>?)?['text'] as String?;
+    final comment = (comments?.first as Map<String, dynamic>?)?['text'] as String?;
     final children = n2['children'] as List<dynamic>? ?? [];
-    final pgnComment = pgnEval != null
-        ? PgnComment(eval: pgnEval, text: comment)
-        : null;
+    final pgnComment = pgnEval != null ? PgnComment(eval: pgnEval, text: comment) : null;
     if (n1 is Branch) {
       if (pgnComment != null) {
         if (n1.lichessAnalysisComments == null) {
@@ -202,10 +193,7 @@ class CurrentAnalysis extends _$CurrentAnalysis {
   }
 
   void _listener() {
-    final gameId = ref
-        .read(serverAnalysisServiceProvider)
-        .currentAnalysis
-        .value;
+    final gameId = ref.read(serverAnalysisServiceProvider).currentAnalysis.value;
     if (state != gameId) {
       state = gameId;
     }

@@ -16,12 +16,7 @@ import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 const _kSaveHistoryDebouncTimer = Duration(seconds: 2);
 
 class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({
-    this.onUserTap,
-    this.title,
-    this.autoFocus = true,
-    super.key,
-  });
+  const SearchScreen({this.onUserTap, this.title, this.autoFocus = true, super.key});
 
   final void Function(LightUser)? onUserTap;
   final Widget? title;
@@ -35,11 +30,7 @@ class SearchScreen extends ConsumerStatefulWidget {
   }) {
     return buildScreenRoute(
       context,
-      screen: SearchScreen(
-        onUserTap: onUserTap,
-        title: title,
-        autoFocus: autoFocus,
-      ),
+      screen: SearchScreen(onUserTap: onUserTap, title: title, autoFocus: autoFocus),
       fullscreenDialog: true,
     );
   }
@@ -140,8 +131,7 @@ class _Body extends ConsumerWidget {
                   header: Text(context.l10n.mobileRecentSearches),
                   headerTrailing: TextButton(
                     child: Text(context.l10n.mobileClearButton),
-                    onPressed: () =>
-                        ref.read(searchHistoryProvider.notifier).clear(),
+                    onPressed: () => ref.read(searchHistoryProvider.notifier).clear(),
                   ),
                   hasLeading: true,
                   children: searchHistory
@@ -197,10 +187,7 @@ class _UserList extends ConsumerWidget {
               ),
             )
           : Center(
-              child: Text(
-                context.l10n.mobileNoSearchResults,
-                style: Styles.noResultTextStyle,
-              ),
+              child: Text(context.l10n.mobileNoSearchResults, style: Styles.noResultTextStyle),
             ),
       error: (e, _) {
         debugPrint('Error loading search results: $e');

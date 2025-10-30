@@ -7,8 +7,7 @@ part 'analysis_preferences.freezed.dart';
 part 'analysis_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
-class AnalysisPreferences extends _$AnalysisPreferences
-    with PreferencesStorage<AnalysisPrefs> {
+class AnalysisPreferences extends _$AnalysisPreferences with PreferencesStorage<AnalysisPrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.analysis;
@@ -18,8 +17,7 @@ class AnalysisPreferences extends _$AnalysisPreferences
   AnalysisPrefs get defaults => AnalysisPrefs.defaults;
 
   @override
-  AnalysisPrefs fromJson(Map<String, dynamic> json) =>
-      AnalysisPrefs.fromJson(json);
+  AnalysisPrefs fromJson(Map<String, dynamic> json) => AnalysisPrefs.fromJson(json);
 
   @override
   AnalysisPrefs build() {
@@ -27,15 +25,11 @@ class AnalysisPreferences extends _$AnalysisPreferences
   }
 
   Future<void> toggleServerAnalysis() {
-    return save(
-      state.copyWith(enableServerAnalysis: !state.enableServerAnalysis),
-    );
+    return save(state.copyWith(enableServerAnalysis: !state.enableServerAnalysis));
   }
 
   Future<void> toggleShowEvaluationGauge() {
-    return save(
-      state.copyWith(showEvaluationGauge: !state.showEvaluationGauge),
-    );
+    return save(state.copyWith(showEvaluationGauge: !state.showEvaluationGauge));
   }
 
   Future<void> toggleShowEngineLines() {
@@ -64,9 +58,7 @@ class AnalysisPreferences extends _$AnalysisPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class AnalysisPrefs
-    with _$AnalysisPrefs
-    implements Serializable, CommonAnalysisPrefs {
+sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable, CommonAnalysisPrefs {
   const AnalysisPrefs._();
 
   const factory AnalysisPrefs({

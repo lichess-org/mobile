@@ -11,11 +11,7 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 class PuzzleFeedbackWidget extends ConsumerWidget {
-  const PuzzleFeedbackWidget({
-    required this.puzzle,
-    required this.state,
-    required this.onStreak,
-  });
+  const PuzzleFeedbackWidget({required this.puzzle, required this.state, required this.onStreak});
 
   final Puzzle puzzle;
   final PuzzleState state;
@@ -25,12 +21,8 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     switch (state.mode) {
       case PuzzleMode.view:
-        final puzzleRating = context.l10n.puzzleRatingX(
-          puzzle.puzzle.rating.toString(),
-        );
-        final playedXTimes = context.l10n
-            .puzzlePlayedXTimes(puzzle.puzzle.plays)
-            .localizeNumbers();
+        final puzzleRating = context.l10n.puzzleRatingX(puzzle.puzzle.rating.toString());
+        final playedXTimes = context.l10n.puzzlePlayedXTimes(puzzle.puzzle.plays).localizeNumbers();
         return FeedbackTile(
           leading: state.result == PuzzleResult.win
               ? Icon(Icons.check, size: 36, color: context.lichessColors.good)
@@ -51,11 +43,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
           subtitle: onStreak && state.result == PuzzleResult.lose
               ? null
               : RatingPrefAware(
-                  orElse: Text(
-                    '$playedXTimes.',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
+                  orElse: Text('$playedXTimes.', overflow: TextOverflow.ellipsis, maxLines: 2),
                   child: Text(
                     '$puzzleRating. $playedXTimes.',
                     overflow: TextOverflow.ellipsis,
@@ -67,15 +55,8 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
       case PuzzleMode.play:
         if (state.feedback == PuzzleFeedback.bad) {
           return FeedbackTile(
-            leading: Icon(
-              Icons.close,
-              size: 36,
-              color: context.lichessColors.error,
-            ),
-            title: Text(
-              context.l10n.puzzleNotTheMove,
-              overflow: TextOverflow.ellipsis,
-            ),
+            leading: Icon(Icons.close, size: 36, color: context.lichessColors.error),
+            title: Text(context.l10n.puzzleNotTheMove, overflow: TextOverflow.ellipsis),
             subtitle: Text(
               context.l10n.puzzleTrySomethingElse,
               overflow: TextOverflow.ellipsis,
@@ -84,11 +65,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
           );
         } else if (state.feedback == PuzzleFeedback.good) {
           return FeedbackTile(
-            leading: Icon(
-              Icons.check,
-              size: 36,
-              color: context.lichessColors.good,
-            ),
+            leading: Icon(Icons.check, size: 36, color: context.lichessColors.good),
             title: Text(context.l10n.puzzleBestMove),
             subtitle: Text(context.l10n.puzzleKeepGoing),
           );
@@ -117,15 +94,11 @@ class SideToPlayPiece extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pieceSet = ref.watch(
-      boardPreferencesProvider.select((value) => value.pieceSet),
-    );
+    final pieceSet = ref.watch(boardPreferencesProvider.select((value) => value.pieceSet));
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final brightness = Theme.of(context).brightness;
-    final piece = side == Side.white
-        ? PieceKind.whiteKing
-        : PieceKind.blackKing;
+    final piece = side == Side.white ? PieceKind.whiteKing : PieceKind.blackKing;
     final asset = pieceSet.assets[piece]!;
 
     return Stack(
@@ -180,9 +153,7 @@ class FeedbackTile extends StatelessWidget {
             children: [
               DefaultTextStyle.merge(
                 style: TextStyle(
-                  fontSize: defaultFontSize != null
-                      ? defaultFontSize * 1.2
-                      : null,
+                  fontSize: defaultFontSize != null ? defaultFontSize * 1.2 : null,
                   fontWeight: FontWeight.bold,
                 ),
                 child: title,

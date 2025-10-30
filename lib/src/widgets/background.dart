@@ -64,31 +64,27 @@ class FullScreenBackgroundImage extends StatefulWidget {
   final Directory appDocumentsDirectory;
   final Widget child;
 
-  static Size imageFitSize(BoxFit boxFit, Size imageSize, Size viewportSize) =>
-      switch (boxFit) {
-        BoxFit.fitWidth => Size(
-          viewportSize.width,
-          imageSize.height * viewportSize.width / imageSize.width,
-        ),
-        BoxFit.fitHeight => Size(
-          imageSize.width * viewportSize.height / imageSize.height,
-          viewportSize.height,
-        ),
-        _ => Size(imageSize.width, imageSize.height),
-      };
+  static Size imageFitSize(BoxFit boxFit, Size imageSize, Size viewportSize) => switch (boxFit) {
+    BoxFit.fitWidth => Size(
+      viewportSize.width,
+      imageSize.height * viewportSize.width / imageSize.width,
+    ),
+    BoxFit.fitHeight => Size(
+      imageSize.width * viewportSize.height / imageSize.height,
+      viewportSize.height,
+    ),
+    _ => Size(imageSize.width, imageSize.height),
+  };
 
   @override
-  State<FullScreenBackgroundImage> createState() =>
-      _FullScreenBackgroundImageState();
+  State<FullScreenBackgroundImage> createState() => _FullScreenBackgroundImageState();
 }
 
 class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
   final TransformationController _controller = TransformationController();
 
-  Size get pickedImageViewport => Size(
-    widget.backgroundImage.viewportWidth,
-    widget.backgroundImage.viewportHeight,
-  );
+  Size get pickedImageViewport =>
+      Size(widget.backgroundImage.viewportWidth, widget.backgroundImage.viewportHeight);
 
   @override
   void initState() {
@@ -99,8 +95,7 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
   @override
   void didUpdateWidget(FullScreenBackgroundImage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.backgroundImage.transform !=
-            oldWidget.backgroundImage.transform ||
+    if (widget.backgroundImage.transform != oldWidget.backgroundImage.transform ||
         widget.viewport != oldWidget.viewport) {
       _updateMatrix(widget.viewport);
     }
@@ -124,8 +119,7 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
     final viewportOrientation = widget.viewport.width > widget.viewport.height
         ? Orientation.landscape
         : Orientation.portrait;
-    final imageOrientation =
-        widget.backgroundImage.width > widget.backgroundImage.height
+    final imageOrientation = widget.backgroundImage.width > widget.backgroundImage.height
         ? Orientation.landscape
         : Orientation.portrait;
     final boxFit = imageOrientation == viewportOrientation
@@ -140,9 +134,7 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
       widget.viewport,
     );
 
-    final baseTheme = BackgroundImage.getTheme(
-      widget.backgroundImage.seedColor,
-    );
+    final baseTheme = BackgroundImage.getTheme(widget.backgroundImage.seedColor);
     final filterColor = BackgroundImage.getFilterColor(
       baseTheme.colorScheme.surface,
       widget.backgroundImage.meanLuminance,
@@ -170,9 +162,7 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
               color: widget.backgroundImage.seedColor,
               image: DecorationImage(
                 image: FileImage(
-                  File(
-                    '${widget.appDocumentsDirectory.path}/${widget.backgroundImage.path}',
-                  ),
+                  File('${widget.appDocumentsDirectory.path}/${widget.backgroundImage.path}'),
                 ),
                 fit: boxFit,
                 colorFilter: ColorFilter.mode(filterColor, BlendMode.srcOver),
@@ -197,10 +187,7 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
 }
 
 class _FullScreenBackgroundColorTheme extends StatelessWidget {
-  const _FullScreenBackgroundColorTheme({
-    required this.backgroundColor,
-    required this.child,
-  });
+  const _FullScreenBackgroundColorTheme({required this.backgroundColor, required this.child});
 
   final (BackgroundColor, bool) backgroundColor;
   final Widget child;

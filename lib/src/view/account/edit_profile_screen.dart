@@ -61,8 +61,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             _formData['rcfRating'] != user.profile?.rcfRating ||
             _formData['cfcRating'] != user.profile?.cfcRating ||
             _formData['dsbRating'] != user.profile?.dsbRating ||
-            _formData['links'] !=
-                user.profile?.links?.map((e) => e.url).join('\r\n');
+            _formData['links'] != user.profile?.links?.map((e) => e.url).join('\r\n');
       }
     }
     return false;
@@ -97,8 +96,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     child: Padding(
                       padding: Styles.bodyPadding.copyWith(top: 0, bottom: 0),
                       child: ListView(
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                         children: [
                           SizedBox(height: Styles.bodyPadding.top),
                           Text(context.l10n.allInformationIsPublicAndOptional),
@@ -156,9 +154,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
 
   @override
   Widget build(BuildContext context) {
-    final String? initialLinks = widget.user.profile?.links
-        ?.map((e) => e.url)
-        .join('\r\n');
+    final String? initialLinks = widget.user.profile?.links?.map((e) => e.url).join('\r\n');
 
     return Form(
       key: widget.formKey,
@@ -196,89 +192,56 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                           builder: (context) {
                             return Consumer(
                               builder: (context, ref, _) {
-                                final flairListAsync = ref.watch(
-                                  flairListProvider,
-                                );
+                                final flairListAsync = ref.watch(flairListProvider);
                                 switch (flairListAsync) {
                                   case AsyncData(:final value):
                                     return SafeArea(
                                       child: Dialog(
                                         child: ConstrainedBox(
                                           constraints: BoxConstraints(
-                                            maxHeight:
-                                                MediaQuery.sizeOf(
-                                                  context,
-                                                ).height *
-                                                0.5,
-                                            maxWidth:
-                                                MediaQuery.sizeOf(
-                                                  context,
-                                                ).width *
-                                                0.9,
+                                            maxHeight: MediaQuery.sizeOf(context).height * 0.5,
+                                            maxWidth: MediaQuery.sizeOf(context).width * 0.9,
                                           ),
                                           child: Column(
                                             children: [
                                               Expanded(
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                        vertical: 12.0,
-                                                        horizontal: 4.0,
-                                                      ),
+                                                  padding: const EdgeInsets.symmetric(
+                                                    vertical: 12.0,
+                                                    horizontal: 4.0,
+                                                  ),
                                                   child: EmojiPicker(
                                                     emojiData: value,
                                                     itemBuilder:
-                                                        (
-                                                          context,
-                                                          emojiId,
-                                                          emoji,
-                                                          callback,
-                                                        ) {
+                                                        (context, emojiId, emoji, callback) {
                                                           return EmojiItem(
                                                             onTap: () {
-                                                              callback(
-                                                                emojiId,
-                                                                emoji,
-                                                              );
+                                                              callback(emojiId, emoji);
                                                             },
                                                             emoji: emoji,
                                                           );
                                                         },
-                                                    onEmojiSelected:
-                                                        (emojiId, emoji) {
-                                                          Navigator.of(
-                                                            context,
-                                                          ).pop(emojiId);
-                                                        },
+                                                    onEmojiSelected: (emojiId, emoji) {
+                                                      Navigator.of(context).pop(emojiId);
+                                                    },
                                                   ),
                                                 ),
                                               ),
                                               Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
+                                                mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
                                                   TextButton(
                                                     onPressed: () {
-                                                      Navigator.of(
-                                                        context,
-                                                      ).pop('__clear__');
+                                                      Navigator.of(context).pop('__clear__');
                                                     },
-                                                    child: Text(
-                                                      context
-                                                          .l10n
-                                                          .mobileClearButton,
-                                                    ),
+                                                    child: Text(context.l10n.mobileClearButton),
                                                   ),
                                                   const SizedBox(width: 8.0),
                                                   TextButton(
                                                     onPressed: () {
-                                                      Navigator.of(
-                                                        context,
-                                                      ).pop();
+                                                      Navigator.of(context).pop();
                                                     },
-                                                    child: Text(
-                                                      context.l10n.cancel,
-                                                    ),
+                                                    child: Text(context.l10n.cancel),
                                                   ),
                                                 ],
                                               ),
@@ -291,18 +254,11 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                     return Dialog(
                                       child: ConstrainedBox(
                                         constraints: BoxConstraints(
-                                          maxHeight:
-                                              MediaQuery.sizeOf(
-                                                context,
-                                              ).height *
-                                              0.5,
-                                          maxWidth:
-                                              MediaQuery.sizeOf(context).width *
-                                              0.9,
+                                          maxHeight: MediaQuery.sizeOf(context).height * 0.5,
+                                          maxWidth: MediaQuery.sizeOf(context).width * 0.9,
                                         ),
                                         child: const Center(
-                                          child:
-                                              CircularProgressIndicator.adaptive(),
+                                          child: CircularProgressIndicator.adaptive(),
                                         ),
                                       ),
                                     );
@@ -323,15 +279,11 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Theme.of(context).dividerColor,
-                          ),
+                          border: Border.all(color: Theme.of(context).dividerColor),
                           borderRadius: BorderRadius.circular(4.0),
                         ),
                         child: field.value != null
-                            ? CachedNetworkImage(
-                                imageUrl: lichessFlairSrc(field.value!),
-                              )
+                            ? CachedNetworkImage(imageUrl: lichessFlairSrc(field.value!))
                             : Text(context.l10n.setFlair),
                       ),
                     ),
@@ -362,9 +314,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                           return const Iterable<String>.empty();
                         }
                         return _countries.where((String option) {
-                          return option.toLowerCase().contains(
-                            value.text.toLowerCase(),
-                          );
+                          return option.toLowerCase().contains(value.text.toLowerCase());
                         });
                       },
                       onSelected: (String selection) {
@@ -512,8 +462,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                   .read(accountRepositoryProvider)
                                   .saveProfile(
                                     widget.formData.map(
-                                      (key, value) =>
-                                          MapEntry(key, value.toString()),
+                                      (key, value) => MapEntry(key, value.toString()),
                                     ),
                                   ),
                             );

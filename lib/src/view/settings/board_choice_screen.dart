@@ -27,9 +27,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardTheme = ref.watch(
-      boardPreferencesProvider.select((p) => p.boardTheme),
-    );
+    final boardTheme = ref.watch(boardPreferencesProvider.select((p) => p.boardTheme));
 
     final hasSystemColors = getCorePalette() != null;
 
@@ -37,9 +35,8 @@ class _Body extends ConsumerWidget {
         .where((t) => t != BoardTheme.system || hasSystemColors)
         .toList();
 
-    void onChanged(BoardTheme? value) => ref
-        .read(boardPreferencesProvider.notifier)
-        .setBoardTheme(value ?? BoardTheme.brown);
+    void onChanged(BoardTheme? value) =>
+        ref.read(boardPreferencesProvider.notifier).setBoardTheme(value ?? BoardTheme.brown);
 
     const checkedIcon = Icon(Icons.check);
 
@@ -55,8 +52,7 @@ class _Body extends ConsumerWidget {
             onTap: () => onChanged(t),
           );
         },
-        separatorBuilder: (_, _) =>
-            Theme.of(context).platform == TargetPlatform.iOS
+        separatorBuilder: (_, _) => Theme.of(context).platform == TargetPlatform.iOS
             ? const PlatformDivider()
             : const SizedBox.shrink(),
         itemCount: choices.length,

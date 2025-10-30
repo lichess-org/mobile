@@ -18,17 +18,10 @@ class TextBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
-      decoration: BoxDecoration(
-        color: badgeColor,
-        borderRadius: BorderRadius.circular(15.0),
-      ),
+      decoration: BoxDecoration(color: badgeColor, borderRadius: BorderRadius.circular(15.0)),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-          color: textColor,
-        ),
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: textColor),
       ),
     );
   }

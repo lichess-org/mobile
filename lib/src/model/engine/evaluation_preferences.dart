@@ -66,27 +66,21 @@ enum ChessEnginePref {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class EngineEvaluationPrefState
-    with _$EngineEvaluationPrefState
-    implements Serializable {
+sealed class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Serializable {
   const EngineEvaluationPrefState._();
 
   const factory EngineEvaluationPrefState({
     /// Whether the engine evaluation is enabled (acts both for local and cloud).
     required bool isEnabled,
     @Assert('numEvalLines >= 0 && numEvalLines <= 3') required int numEvalLines,
-    @Assert('numEngineCores >= 1 && numEngineCores <= maxEngineCores')
-    required int numEngineCores,
+    @Assert('numEngineCores >= 1 && numEngineCores <= maxEngineCores') required int numEngineCores,
     @JsonKey(
       defaultValue: _searchTimeDefault,
       fromJson: _searchTimeFromJson,
       toJson: _searchTimeToJson,
     )
     required Duration engineSearchTime,
-    @JsonKey(
-      defaultValue: ChessEnginePref.sf16,
-      unknownEnumValue: ChessEnginePref.sf16,
-    )
+    @JsonKey(defaultValue: ChessEnginePref.sf16, unknownEnumValue: ChessEnginePref.sf16)
     required ChessEnginePref enginePref,
   }) = _EngineEvaluationPrefState;
 

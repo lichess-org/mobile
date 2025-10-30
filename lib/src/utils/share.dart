@@ -5,10 +5,7 @@ import 'package:share_plus/share_plus.dart';
 ///
 /// Using this function is recommended over calling [SharePlus.instance.share] directly
 /// in order to make it work on iPads.
-Future<ShareResult> launchShareDialog(
-  BuildContext context,
-  ShareParams params,
-) {
+Future<ShareResult> launchShareDialog(BuildContext context, ShareParams params) {
   final box = context.findRenderObject() as RenderBox?;
   final origin = box != null ? box.localToGlobal(Offset.zero) & box.size : null;
 

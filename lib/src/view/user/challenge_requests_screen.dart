@@ -41,20 +41,13 @@ class _Body extends ConsumerWidget {
 
     switch (challengesAsync) {
       case AsyncError():
-        return const SafeArea(
-          child: Center(child: Text('Error loading challenges.')),
-        );
+        return const SafeArea(child: Center(child: Text('Error loading challenges.')));
       case AsyncData(value: final challenges):
         final list = challenges.inward.addAll(challenges.outward);
 
         if (list.isEmpty) {
           return SafeArea(
-            child: Center(
-              child: Text(
-                context.l10n.noChallenges,
-                style: Styles.noResultTextStyle,
-              ),
-            ),
+            child: Center(child: Text(context.l10n.noChallenges, style: Styles.noResultTextStyle)),
           );
         }
 
@@ -68,17 +61,11 @@ class _Body extends ConsumerWidget {
 
             if (user == null) return null;
 
-            return _ChallengeListItem(
-              challenge: challenge,
-              challengerUser: user,
-              session: session,
-            );
+            return _ChallengeListItem(challenge: challenge, challengerUser: user, session: session);
           },
         );
       case _:
-        return const SafeArea(
-          child: Center(child: CircularProgressIndicator.adaptive()),
-        );
+        return const SafeArea(child: Center(child: CircularProgressIndicator.adaptive()));
     }
   }
 }
@@ -97,26 +84,19 @@ class _ChallengeListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Future<void> acceptChallenge() async {
-      final fullId = await ref
-          .read(challengeServiceProvider)
-          .acceptChallenge(challenge.id);
+      final fullId = await ref.read(challengeServiceProvider).acceptChallenge(challenge.id);
       if (!context.mounted) return;
       if (fullId == null) {
-        return showSnackBar(
-          context,
-          'Failed to accept challenge',
-          type: SnackBarType.error,
-        );
+        return showSnackBar(context, 'Failed to accept challenge', type: SnackBarType.error);
       }
-      Navigator.of(context, rootNavigator: true).push(
-        GameScreen.buildRoute(context, source: ExistingGameSource(fullId)),
-      );
+      Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(GameScreen.buildRoute(context, source: ExistingGameSource(fullId)));
     }
 
     Future<void> declineChallenge(ChallengeDeclineReason? reason) async {
-      ref
-          .read(challengeRepositoryProvider)
-          .decline(challenge.id, reason: reason);
+      ref.read(challengeRepositoryProvider).decline(challenge.id, reason: reason);
       ref.read(notificationServiceProvider).cancel(challenge.id.value.hashCode);
     }
 
@@ -176,8 +156,7 @@ class _ChallengeListItem extends ConsumerWidget {
                 : showConfirmDialog
           : null,
       onAccept:
-          challenge.direction == ChallengeDirection.outward ||
-              !challenge.variant.isPlaySupported
+          challenge.direction == ChallengeDirection.outward || !challenge.variant.isPlaySupported
           ? null
           : session == null
           ? showMissingAccountMessage
@@ -185,9 +164,7 @@ class _ChallengeListItem extends ConsumerWidget {
       onCancel: challenge.direction == ChallengeDirection.outward
           ? () => ref.read(challengeRepositoryProvider).cancel(challenge.id)
           : null,
-      onDecline: challenge.direction == ChallengeDirection.inward
-          ? declineChallenge
-          : null,
+      onDecline: challenge.direction == ChallengeDirection.inward ? declineChallenge : null,
     );
   }
 }

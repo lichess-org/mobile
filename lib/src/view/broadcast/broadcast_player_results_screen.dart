@@ -97,11 +97,7 @@ class BroadcastPlayerResultsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: BroadcastPlayerWidget(
-          player: player,
-          showFederation: false,
-          showRating: false,
-        ),
+        title: BroadcastPlayerWidget(player: player, showFederation: false, showRating: false),
       ),
       body: _Body(tournamentId, playerId),
     );
@@ -118,27 +114,20 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerWithGameResults = ref.watch(
-      broadcastPlayerProvider(tournamentId, playerId),
-    );
+    final playerWithGameResults = ref.watch(broadcastPlayerProvider(tournamentId, playerId));
 
     switch (playerWithGameResults) {
       case AsyncData(value: final playerWithGameResults):
         final games = playerWithGameResults.games;
 
         final showRatingDiff = games.any((result) => result.ratingDiff != null);
-        final indexWidth = max(
-          8.0 + games.length.toString().length * 10.0,
-          28.0,
-        );
+        final indexWidth = max(8.0 + games.length.toString().length * 10.0, 28.0);
 
         return ListView.builder(
           itemCount: games.length + 1,
           itemBuilder: (context, index) {
             if (index == 0) {
-              return _OverallStatPlayer(
-                playerWithGameResults: playerWithGameResults,
-              );
+              return _OverallStatPlayer(playerWithGameResults: playerWithGameResults);
             }
 
             final playerGameResult = playerWithGameResults.games[index - 1];
@@ -167,27 +156,16 @@ class _OverallStatPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BroadcastPlayerWithGameResults(
-      :playerWithOverallResult,
-      :fideData,
-      :games,
-    ) = playerWithGameResults;
+    final BroadcastPlayerWithGameResults(:playerWithOverallResult, :fideData, :games) =
+        playerWithGameResults;
     final birthYear = fideData.birthYear;
     final (:standard, :rapid, :blitz) = fideData.ratings;
-    final BroadcastPlayerWithOverallResult(
-      :player,
-      :score,
-      :played,
-      :performance,
-      :ratingDiff,
-    ) = playerWithOverallResult;
+    final BroadcastPlayerWithOverallResult(:player, :score, :played, :performance, :ratingDiff) =
+        playerWithOverallResult;
     final BroadcastPlayer(:federation, :fideId) = player;
 
     final statWidth =
-        (MediaQuery.sizeOf(context).width -
-            Styles.bodyPadding.horizontal -
-            10 * 2) /
-        3;
+        (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
     const cardSpacing = 10.0;
 
     return Padding(
@@ -203,26 +181,17 @@ class _OverallStatPlayer extends StatelessWidget {
                 if (standard != null)
                   SizedBox(
                     width: statWidth,
-                    child: _StatCard(
-                      context.l10n.classical,
-                      value: standard.toString(),
-                    ),
+                    child: _StatCard(context.l10n.classical, value: standard.toString()),
                   ),
                 if (rapid != null)
                   SizedBox(
                     width: statWidth,
-                    child: _StatCard(
-                      context.l10n.rapid,
-                      value: rapid.toString(),
-                    ),
+                    child: _StatCard(context.l10n.rapid, value: rapid.toString()),
                   ),
                 if (blitz != null)
                   SizedBox(
                     width: statWidth,
-                    child: _StatCard(
-                      context.l10n.blitz,
-                      value: blitz.toString(),
-                    ),
+                    child: _StatCard(context.l10n.blitz, value: blitz.toString()),
                   ),
               ],
             ),
@@ -247,10 +216,7 @@ class _OverallStatPlayer extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            'assets/images/fide-fed/$federation.png',
-                            height: 12,
-                          ),
+                          Image.asset('assets/images/fide-fed/$federation.png', height: 12),
                           const SizedBox(width: 5),
                           Flexible(
                             child: Text(
@@ -287,10 +253,7 @@ class _OverallStatPlayer extends StatelessWidget {
                 if (performance != null)
                   SizedBox(
                     width: statWidth,
-                    child: _StatCard(
-                      context.l10n.performance,
-                      value: performance.toString(),
-                    ),
+                    child: _StatCard(context.l10n.performance, value: performance.toString()),
                   ),
                 if (ratingDiff != null)
                   SizedBox(
@@ -325,14 +288,8 @@ class _GameResultRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BroadcastPlayerGameResult(
-      :roundId,
-      :gameId,
-      :color,
-      :points,
-      :ratingDiff,
-      :opponent,
-    ) = playerGameResult;
+    final BroadcastPlayerGameResult(:roundId, :gameId, :color, :points, :ratingDiff, :opponent) =
+        playerGameResult;
     final opponentRating = opponent.rating;
 
     return GestureDetector(
@@ -347,9 +304,7 @@ class _GameResultRow extends StatelessWidget {
         );
       },
       child: ColoredBox(
-        color: index.isEven
-            ? context.lichessTheme.rowEven
-            : context.lichessTheme.rowOdd,
+        color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
         child: Padding(
           padding: _kTableRowPadding,
           child: Row(
@@ -363,13 +318,7 @@ class _GameResultRow extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
-                flex: 5,
-                child: BroadcastPlayerWidget(
-                  player: opponent,
-                  showRating: false,
-                ),
-              ),
+              Expanded(flex: 5, child: BroadcastPlayerWidget(player: opponent, showRating: false)),
               Expanded(
                 flex: 3,
                 child: (opponentRating != null)
@@ -388,10 +337,7 @@ class _GameResultRow extends StatelessWidget {
                                   color == Side.white ||
                               Theme.of(context).brightness == Brightness.dark &&
                                   color == Side.black)
-                          ? Border.all(
-                              width: 2.0,
-                              color: ColorScheme.of(context).outline,
-                            )
+                          ? Border.all(width: 2.0, color: ColorScheme.of(context).outline)
                           : null,
                       shape: BoxShape.circle,
                       color: switch (color) {
@@ -428,10 +374,7 @@ class _GameResultRow extends StatelessWidget {
                 SizedBox(
                   width: 38,
                   child: (playerGameResult.ratingDiff != null)
-                      ? ProgressionWidget(
-                          playerGameResult.ratingDiff!,
-                          fontSize: 14,
-                        )
+                      ? ProgressionWidget(playerGameResult.ratingDiff!, fontSize: 14)
                       : null,
                 ),
             ],
@@ -452,10 +395,7 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StatCard(
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: 4.0,
-      ),
+      contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
       stat,
       value: value,
       child: child,

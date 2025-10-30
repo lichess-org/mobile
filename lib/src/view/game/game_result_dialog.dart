@@ -18,11 +18,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
-  const GameResultDialog({
-    required this.id,
-    required this.onNewOpponentCallback,
-    super.key,
-  });
+  const GameResultDialog({required this.id, required this.onNewOpponentCallback, super.key});
 
   final GameFullId id;
 
@@ -101,9 +97,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                             gameState.game.opponent?.onGame == true &&
                             gameState.game.opponent?.offeringRematch != true
                         ? () {
-                            ref
-                                .read(ctrlProvider.notifier)
-                                .proposeOrAcceptRematch();
+                            ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
                           }
                         : null,
                     child: Text(context.l10n.rematch),
@@ -135,9 +129,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                       ),
                       tooltip: context.l10n.accept,
                       onPressed: () {
-                        ref
-                            .read(ctrlProvider.notifier)
-                            .proposeOrAcceptRematch();
+                        ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
                       },
                     ),
                     IconButton.filled(
@@ -164,9 +156,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
           FilledButton.tonal(
             onPressed: _activateButtons
                 ? () {
-                    Navigator.of(
-                      context,
-                    ).popUntil((route) => route is! PopupRoute);
+                    Navigator.of(context).popUntil((route) => route is! PopupRoute);
                     widget.onNewOpponentCallback(gameState.game);
                   }
                 : null,
@@ -183,21 +173,14 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                 Navigator.of(context).pop(); // Pop the screen after frame
               });
             },
-            label: Text(
-              context.l10n.backToTournament,
-              textAlign: TextAlign.center,
-            ),
+            label: Text(context.l10n.backToTournament, textAlign: TextAlign.center),
           ),
           FilledButton.tonalIcon(
             icon: const Icon(Icons.pause),
             onPressed: () {
               // Pause the tournament
               ref
-                  .read(
-                    tournamentControllerProvider(
-                      gameState.tournament!.id,
-                    ).notifier,
-                  )
+                  .read(tournamentControllerProvider(gameState.tournament!.id).notifier)
                   .joinOrPause();
               // Close the dialog
               Navigator.of(context).popUntil((route) => route is! PopupRoute);
@@ -212,9 +195,9 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
         if (gameState.game.userAnalysable)
           FilledButton.tonal(
             onPressed: () {
-              Navigator.of(context).push(
-                AnalysisScreen.buildRoute(context, gameState.analysisOptions),
-              );
+              Navigator.of(
+                context,
+              ).push(AnalysisScreen.buildRoute(context, gameState.analysisOptions));
             },
             child: Text(context.l10n.analysis, textAlign: TextAlign.center),
           ),
@@ -243,11 +226,7 @@ class ExportedGameResultDialog extends StatelessWidget {
 }
 
 class OverTheBoardGameResultDialog extends StatelessWidget {
-  const OverTheBoardGameResultDialog({
-    super.key,
-    required this.game,
-    required this.onRematch,
-  });
+  const OverTheBoardGameResultDialog({super.key, required this.game, required this.onRematch});
 
   final OverTheBoardGame game;
 
@@ -330,10 +309,7 @@ class _ResultDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final paddedContent = Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: child,
-    );
+    final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: child);
     final sizedContent = SizedBox(
       width: min(screenWidth, kMaterialPopupMenuMaxWidth),
       child: paddedContent,

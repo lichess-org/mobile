@@ -33,18 +33,14 @@ typedef AccountPrefState = ({
 @Riverpod(keepAlive: true)
 Future<ShowRatings> showRatingsPref(Ref ref) async {
   return ref.watch(
-    accountPreferencesProvider.selectAsync(
-      (state) => state?.showRatings ?? ShowRatings.yes,
-    ),
+    accountPreferencesProvider.selectAsync((state) => state?.showRatings ?? ShowRatings.yes),
   );
 }
 
 @Riverpod(keepAlive: true)
 Future<bool> clockSound(Ref ref) async {
   return ref.watch(
-    accountPreferencesProvider.selectAsync(
-      (state) => state?.clockSound.value ?? true,
-    ),
+    accountPreferencesProvider.selectAsync((state) => state?.clockSound.value ?? true),
   );
 }
 
@@ -52,8 +48,7 @@ Future<bool> clockSound(Ref ref) async {
 Future<PieceNotation> pieceNotation(Ref ref) async {
   return ref.watch(
     accountPreferencesProvider.selectAsync(
-      (state) =>
-          state?.pieceNotation ?? defaultAccountPreferences.pieceNotation,
+      (state) => state?.pieceNotation ?? defaultAccountPreferences.pieceNotation,
     ),
   );
 }
@@ -98,20 +93,16 @@ class AccountPreferences extends _$AccountPreferences {
   }
 
   Future<void> setZen(Zen value) => _setPref('zen', value);
-  Future<void> setPieceNotation(PieceNotation value) =>
-      _setPref('pieceNotation', value);
+  Future<void> setPieceNotation(PieceNotation value) => _setPref('pieceNotation', value);
   Future<void> setShowRatings(ShowRatings value) => _setPref('ratings', value);
 
   Future<void> setPremove(BooleanPref value) => _setPref('premove', value);
   Future<void> setTakeback(Takeback value) => _setPref('takeback', value);
   Future<void> setAutoQueen(AutoQueen value) => _setPref('autoQueen', value);
-  Future<void> setAutoThreefold(AutoThreefold value) =>
-      _setPref('autoThreefold', value);
+  Future<void> setAutoThreefold(AutoThreefold value) => _setPref('autoThreefold', value);
   Future<void> setMoretime(Moretime value) => _setPref('moretime', value);
-  Future<void> setClockSound(BooleanPref value) =>
-      _setPref('clockSound', value);
-  Future<void> setConfirmResign(BooleanPref value) =>
-      _setPref('confirmResign', value);
+  Future<void> setClockSound(BooleanPref value) => _setPref('clockSound', value);
+  Future<void> setConfirmResign(BooleanPref value) => _setPref('confirmResign', value);
   Future<void> setSubmitMove(SubmitMove value) => _setPref('submitMove', value);
   Future<void> setFollow(BooleanPref value) => _setPref('follow', value);
   Future<void> setChallenge(Challenge value) => _setPref('challenge', value);
@@ -498,8 +489,7 @@ enum Message implements AccountPref<int> {
 }
 
 class SubmitMove implements AccountPref<int> {
-  SubmitMove(Iterable<SubmitMoveChoice> choices)
-    : choices = ISet(choices.toSet());
+  SubmitMove(Iterable<SubmitMoveChoice> choices) : choices = ISet(choices.toSet());
 
   final ISet<SubmitMoveChoice> choices;
 
@@ -517,9 +507,8 @@ class SubmitMove implements AccountPref<int> {
     return choices.map((choice) => choice.label(l10n)).join(', ');
   }
 
-  factory SubmitMove.fromInt(int value) => SubmitMove(
-    SubmitMoveChoice.values.where((choice) => _bitPresent(value, choice.value)),
-  );
+  factory SubmitMove.fromInt(int value) =>
+      SubmitMove(SubmitMoveChoice.values.where((choice) => _bitPresent(value, choice.value)));
 }
 
 enum SubmitMoveChoice {

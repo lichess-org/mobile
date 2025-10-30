@@ -20,8 +20,7 @@ class EngineSettingsScreen extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<EngineSettingsScreen> createState() =>
-      _EngineSettingsScreenState();
+  ConsumerState<EngineSettingsScreen> createState() => _EngineSettingsScreenState();
 }
 
 class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
@@ -36,9 +35,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
       _hasNNUEFiles = ref.read(evaluationServiceProvider).checkNNUEFilesExist();
     });
 
-    _downloadProgress = ref
-        .read(evaluationServiceProvider)
-        .nnueDownloadProgress;
+    _downloadProgress = ref.read(evaluationServiceProvider).nnueDownloadProgress;
     _downloadProgress.addListener(_onDownloadProgressChanged);
 
     super.initState();
@@ -95,30 +92,22 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                   );
                 },
               ),
-              if (prefs.enginePref == ChessEnginePref.sfLatest &&
-                  !_hasNNUEFiles)
+              if (prefs.enginePref == ChessEnginePref.sfLatest && !_hasNNUEFiles)
                 LoadingButtonBuilder(
                   initialFuture: _downloadNNUEFilesFuture,
-                  fetchData: () => ref
-                      .read(evaluationServiceProvider)
-                      .downloadNNUEFiles(inBackground: false),
+                  fetchData: () =>
+                      ref.read(evaluationServiceProvider).downloadNNUEFiles(inBackground: false),
                   builder: (context, isLoading, fetchData) {
                     return ListTile(
                       trailing: isLoading
                           ? AnimatedBuilder(
                               animation: _downloadProgress,
                               builder: (_, _) {
-                                return CircularProgressIndicator(
-                                  value: _downloadProgress.value,
-                                );
+                                return CircularProgressIndicator(value: _downloadProgress.value);
                               },
                             )
                           : const Icon(Icons.download),
-                      title: Text(
-                        isLoading
-                            ? 'Downloading NNUE files'
-                            : 'Download NNUE files',
-                      ),
+                      title: Text(isLoading ? 'Downloading NNUE files' : 'Download NNUE files'),
                       subtitle: const Text('79MB'),
                       enabled: !isLoading,
                       onTap: () async {
@@ -132,8 +121,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                     );
                   },
                 )
-              else if (prefs.enginePref == ChessEnginePref.sfLatest &&
-                  _hasNNUEFiles)
+              else if (prefs.enginePref == ChessEnginePref.sfLatest && _hasNNUEFiles)
                 ListTile(
                   trailing: const Icon(Icons.check),
                   title: const Text('NNUE files downloaded'),
@@ -144,9 +132,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                       barrierDismissible: true,
                       builder: (context) {
                         return AlertDialog.adaptive(
-                          content: const Text(
-                            'Do you want to delete the NNUE files?',
-                          ),
+                          content: const Text('Do you want to delete the NNUE files?'),
                           actions: [
                             PlatformDialogAction(
                               child: const Text('OK'),
@@ -165,9 +151,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                       },
                     );
                     if (isOk == true) {
-                      await ref
-                          .read(evaluationServiceProvider)
-                          .deleteNNUEFiles();
+                      await ref.read(evaluationServiceProvider).deleteNNUEFiles();
                       setState(() {
                         _hasNNUEFiles = false;
                       });
@@ -178,19 +162,13 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
           ),
           EngineSettingsWidget(
             onSetEngineSearchTime: (value) {
-              ref
-                  .read(engineEvaluationPreferencesProvider.notifier)
-                  .setEngineSearchTime(value);
+              ref.read(engineEvaluationPreferencesProvider.notifier).setEngineSearchTime(value);
             },
             onSetEngineCores: (value) {
-              ref
-                  .read(engineEvaluationPreferencesProvider.notifier)
-                  .setEngineCores(value);
+              ref.read(engineEvaluationPreferencesProvider.notifier).setEngineCores(value);
             },
             onSetNumEvalLines: (value) {
-              ref
-                  .read(engineEvaluationPreferencesProvider.notifier)
-                  .setNumEvalLines(value);
+              ref.read(engineEvaluationPreferencesProvider.notifier).setNumEvalLines(value);
             },
           ),
         ],

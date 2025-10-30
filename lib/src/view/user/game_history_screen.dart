@@ -56,11 +56,7 @@ class GameHistoryScreen extends ConsumerWidget {
   }) {
     return buildScreenRoute(
       context,
-      screen: GameHistoryScreen(
-        user: user,
-        isOnline: isOnline,
-        gameFilter: gameFilter,
-      ),
+      screen: GameHistoryScreen(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
 
@@ -69,14 +65,10 @@ class GameHistoryScreen extends ConsumerWidget {
     final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
     final nbGamesAsync = ref.watch(userNumberOfGamesProvider(user));
     final title = user != null && gameFilter.opponent != null
-        ? AppBarTitleText(
-            context.l10n.resVsX(user!.name, gameFilter.opponent!.username),
-          )
+        ? AppBarTitleText(context.l10n.resVsX(user!.name, gameFilter.opponent!.username))
         : filtersInUse.count == 0
         ? nbGamesAsync.when(
-            data: (nbGames) => AppBarTitleText(
-              context.l10n.nbGames(nbGames).localizeNumbers(),
-            ),
+            data: (nbGames) => AppBarTitleText(context.l10n.nbGames(nbGames).localizeNumbers()),
             loading: () => const ButtonLoadingIndicator(),
             error: (e, s) => AppBarTitleText(context.l10n.mobileAllGames),
           )
@@ -104,9 +96,7 @@ class GameHistoryScreen extends ConsumerWidget {
             ),
           ).then((value) {
             if (value != null) {
-              ref
-                  .read(gameFilterProvider(filter: gameFilter).notifier)
-                  .setFilter(value);
+              ref.read(gameFilterProvider(filter: gameFilter).notifier).setFilter(value);
             }
           }),
     );
@@ -138,21 +128,14 @@ class GameHistoryScreen extends ConsumerWidget {
     );
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: title,
-        actions: [filterBtn, displayModeButton],
-      ),
+      appBar: PlatformAppBar(title: title, actions: [filterBtn, displayModeButton]),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body({
-    required this.user,
-    required this.isOnline,
-    required this.gameFilter,
-  });
+  const _Body({required this.user, required this.isOnline, required this.gameFilter});
 
   final LightUser? user;
   final bool isOnline;
@@ -179,8 +162,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       final state = ref.read(
         userGameHistoryProvider(
           widget.user?.id,
@@ -212,9 +194,7 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final gameFilterState = ref.watch(
-      gameFilterProvider(filter: widget.gameFilter),
-    );
+    final gameFilterState = ref.watch(gameFilterProvider(filter: widget.gameFilter));
     final gameListProvider = userGameHistoryProvider(
       widget.user?.id,
       isOnline: widget.isOnline,
@@ -243,9 +223,7 @@ class _BodyState extends ConsumerState<_Body> {
                     ? PlatformDivider(
                         height: 1,
                         cupertinoHasLeading: true,
-                        indent: displayMode == GameHistoryDisplayMode.detail
-                            ? 0
-                            : null,
+                        indent: displayMode == GameHistoryDisplayMode.detail ? 0 : null,
                       )
                     : const SizedBox.shrink(),
                 itemCount: list.length + (state.isLoading ? 1 : 0),
@@ -255,9 +233,7 @@ class _BodyState extends ConsumerState<_Body> {
                       padding: EdgeInsets.symmetric(vertical: 32.0),
                       child: CenterLoadingIndicator(),
                     );
-                  } else if (state.hasError &&
-                      state.hasMore &&
-                      index == list.length) {
+                  } else if (state.hasError && state.hasMore && index == list.length) {
                     // TODO: add a retry button
                     return const Padding(
                       padding: EdgeInsets.symmetric(vertical: 32.0),
@@ -272,17 +248,10 @@ class _BodyState extends ConsumerState<_Body> {
                     try {
                       await ref
                           .read(accountServiceProvider)
-                          .setGameBookmark(
-                            game.id,
-                            bookmark: !game.bookmarked!,
-                          );
+                          .setGameBookmark(game.id, bookmark: !game.bookmarked!);
                     } on Exception catch (_) {
                       if (context.mounted) {
-                        showSnackBar(
-                          context,
-                          'Bookmark action failed',
-                          type: SnackBarType.error,
-                        );
+                        showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
                       }
                     }
                   }
@@ -304,18 +273,11 @@ class _BodyState extends ConsumerState<_Body> {
                       motion: const StretchMotion(),
                       children: [
                         SlidableAction(
-                          backgroundColor: ColorScheme.of(
-                            context,
-                          ).tertiaryContainer,
-                          foregroundColor: ColorScheme.of(
-                            context,
-                          ).onTertiaryContainer,
+                          backgroundColor: ColorScheme.of(context).tertiaryContainer,
+                          foregroundColor: ColorScheme.of(context).onTertiaryContainer,
                           onPressed: game.variant.isReadSupported
                               ? (_) {
-                                  Navigator.of(
-                                    context,
-                                    rootNavigator: true,
-                                  ).push(
+                                  Navigator.of(context, rootNavigator: true).push(
                                     AnalysisScreen.buildRoute(
                                       context,
                                       AnalysisOptions.archivedGame(
@@ -416,8 +378,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
               .watch(userProvider(id: userId))
               .when(
                 data: (user) => perfFilter(availablePerfs(user)),
-                loading: () =>
-                    const Center(child: CircularProgressIndicator.adaptive()),
+                loading: () => const Center(child: CircularProgressIndicator.adaptive()),
                 error: (_, _) => perfFilter(gamePerfs),
               )
         : perfFilter(gamePerfs);
@@ -468,9 +429,8 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
         })
         .toList(growable: false);
     perfs.sort(
-      (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns.compareTo(
-        user.perfs[p1]!.numberOfGamesOrRuns,
-      ),
+      (p1, p2) =>
+          user.perfs[p2]!.numberOfGamesOrRuns.compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
     );
     return perfs;
   }

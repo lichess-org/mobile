@@ -18,11 +18,7 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
-  const ChatBottomBarButton({
-    required this.options,
-    this.showLabel = false,
-    super.key,
-  });
+  const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
 
   final ChatOptions options;
   final bool showLabel;
@@ -35,9 +31,7 @@ class ChatBottomBarButton extends ConsumerWidget {
       label: context.l10n.chatRoom,
       showLabel: showLabel,
       onTap: () {
-        Navigator.of(
-          context,
-        ).push(ChatScreen.buildRoute(context, options: options));
+        Navigator.of(context).push(ChatScreen.buildRoute(context, options: options));
       },
       icon: Icons.chat_bubble_outline,
       badgeLabel: switch (chatUnread) {
@@ -58,10 +52,7 @@ class ChatScreen extends ConsumerStatefulWidget {
 
   const ChatScreen({required this.options});
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
-    required ChatOptions options,
-  }) {
+  static Route<dynamic> buildRoute(BuildContext context, {required ChatOptions options}) {
     return buildScreenRoute(context, screen: ChatScreen(options: options));
   }
 
@@ -87,9 +78,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
 
   @override
   void didPop() {
-    ref
-        .read(chatControllerProvider(widget.options).notifier)
-        .markMessagesAsRead();
+    ref.read(chatControllerProvider(widget.options).notifier).markMessagesAsRead();
     super.didPop();
   }
 
@@ -119,16 +108,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
                     reverse: true,
                     itemCount: value.messages.length,
                     itemBuilder: (context, index) {
-                      final message =
-                          value.messages[value.messages.length - index - 1];
+                      final message = value.messages[value.messages.length - index - 1];
                       return (message.username == 'lichess')
                           ? _MessageAction(message: message.message)
                           : (message.username == session?.user.name)
-                          ? _MessageBubble(
-                              options: widget.options,
-                              you: true,
-                              message: message,
-                            )
+                          ? _MessageBubble(options: widget.options, you: true, message: message)
                           : _MessageBubble(
                               options: widget.options,
                               you: false,
@@ -139,17 +123,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
                   ),
                 ),
               ),
-              if (widget.options.writeable)
-                _ChatBottomBar(options: widget.options),
+              if (widget.options.writeable) _ChatBottomBar(options: widget.options),
             ],
           ),
         );
       case AsyncError(:final error):
         return Scaffold(body: Center(child: Text(error.toString())));
       case _:
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator.adaptive()),
-        );
+        return const Scaffold(body: Center(child: CircularProgressIndicator.adaptive()));
     }
   }
 }
@@ -167,13 +148,11 @@ class _MessageBubble extends ConsumerWidget {
   final ChatMessage message;
   final bool showUsername;
 
-  Color _bubbleColor(BuildContext context, Brightness brightness) => you
-      ? ColorScheme.of(context).secondary
-      : ColorScheme.of(context).surfaceContainerHigh;
+  Color _bubbleColor(BuildContext context, Brightness brightness) =>
+      you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainerHigh;
 
-  Color _textColor(BuildContext context, Brightness brightness) => you
-      ? ColorScheme.of(context).onSecondary
-      : ColorScheme.of(context).onSurface;
+  Color _textColor(BuildContext context, Brightness brightness) =>
+      you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -188,9 +167,7 @@ class _MessageBubble extends ConsumerWidget {
               final result = await showAdaptiveDialog<bool>(
                 context: context,
                 builder: (context) => YesNoDialog(
-                  content: Text(
-                    context.l10n.reportXToModerators('"${message.message}"'),
-                  ),
+                  content: Text(context.l10n.reportXToModerators('"${message.message}"')),
                   onYes: () {
                     return Navigator.of(context).pop(true);
                   },
@@ -198,9 +175,7 @@ class _MessageBubble extends ConsumerWidget {
                 ),
               );
               if (result == true) {
-                ref
-                    .read(chatControllerProvider(options).notifier)
-                    .reportMessage(message);
+                ref.read(chatControllerProvider(options).notifier).reportMessage(message);
               }
             },
             icon: Icons.report_problem_outlined,
@@ -214,10 +189,7 @@ class _MessageBubble extends ConsumerWidget {
           alignment: you ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-            padding: const EdgeInsets.symmetric(
-              vertical: 10.0,
-              horizontal: 15.0,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.0),
               color: _bubbleColor(context, brightness),
@@ -233,9 +205,9 @@ class _MessageBubble extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                       color: _textColor(context, brightness),
                     ),
-                    onTap: () => Navigator.of(context).push(
-                      UserOrProfileScreen.buildRoute(context, message.user!),
-                    ),
+                    onTap: () => Navigator.of(
+                      context,
+                    ).push(UserOrProfileScreen.buildRoute(context, message.user!)),
                   ),
                 Linkify(
                   onOpen: (link) => onLinkifyOpen(context, link),
@@ -312,23 +284,16 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
         semanticsLabel: context.l10n.send,
       ),
     );
-    final placeholder = session != null
-        ? context.l10n.talkInChat
-        : context.l10n.loginToChat;
+    final placeholder = session != null ? context.l10n.talkInChat : context.l10n.loginToChat;
     return SafeArea(
       top: false,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: TextField(
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 10.0,
-              horizontal: 15.0,
-            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
             suffixIcon: sendButton,
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-            ),
+            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
             hintText: placeholder,
           ),
           controller: _textController,

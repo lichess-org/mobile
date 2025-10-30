@@ -11,9 +11,7 @@ Future<Locale> setupIntl(WidgetsBinding widgetsBinding) async {
   final systemLocale = widgetsBinding.platformDispatcher.locale;
 
   // Get locale from shared preferences, if any
-  final json = LichessBinding.instance.sharedPreferences.getString(
-    PrefCategory.general.storageKey,
-  );
+  final json = LichessBinding.instance.sharedPreferences.getString(PrefCategory.general.storageKey);
   final generalPref = json != null
       ? GeneralPrefs.fromJson(jsonDecode(json) as Map<String, dynamic>)
       : GeneralPrefs.defaults;

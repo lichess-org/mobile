@@ -123,11 +123,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return widget.puzzle != null
-        ? _LoadPuzzleFromPuzzle(
-            boardKey: _boardKey,
-            angle: widget.angle,
-            puzzle: widget.puzzle!,
-          )
+        ? _LoadPuzzleFromPuzzle(boardKey: _boardKey, angle: widget.angle, puzzle: widget.puzzle!)
         : widget.puzzleId != null
         ? _LoadPuzzleFromId(
             boardKey: _boardKey,
@@ -150,11 +146,7 @@ class _Title extends ConsumerWidget {
     bool isDailyPuzzle = false;
     if (initialPuzzleContext != null) {
       isDailyPuzzle =
-          ref
-              .watch(puzzleControllerProvider(initialPuzzleContext!))
-              .puzzle
-              .isDailyPuzzle ==
-          true;
+          ref.watch(puzzleControllerProvider(initialPuzzleContext!)).puzzle.isDailyPuzzle == true;
     }
 
     if (isDailyPuzzle) {
@@ -206,9 +198,7 @@ class _LoadNextPuzzle extends ConsumerWidget {
           );
         }
       case AsyncError(:final error, :final stackTrace):
-        debugPrint(
-          'SEVERE: [PuzzleScreen] could not load next puzzle; $error\n$stackTrace',
-        );
+        debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $error\n$stackTrace');
         return _PuzzleScaffold(
           angle: angle,
           initialPuzzleContext: null,
@@ -225,11 +215,7 @@ class _LoadNextPuzzle extends ConsumerWidget {
 }
 
 class _LoadPuzzleFromPuzzle extends ConsumerWidget {
-  const _LoadPuzzleFromPuzzle({
-    required this.boardKey,
-    required this.angle,
-    required this.puzzle,
-  });
+  const _LoadPuzzleFromPuzzle({required this.boardKey, required this.angle, required this.puzzle});
 
   final PuzzleAngle angle;
   final Puzzle puzzle;
@@ -246,10 +232,7 @@ class _LoadPuzzleFromPuzzle extends ConsumerWidget {
     return _PuzzleScaffold(
       angle: angle,
       initialPuzzleContext: initialPuzzleContext,
-      body: _Body(
-        boardKey: boardKey,
-        initialPuzzleContext: initialPuzzleContext,
-      ),
+      body: _Body(boardKey: boardKey, initialPuzzleContext: initialPuzzleContext),
     );
   }
 }
@@ -282,15 +265,10 @@ class _LoadPuzzleFromId extends ConsumerWidget {
         return _PuzzleScaffold(
           angle: angle,
           initialPuzzleContext: initialPuzzleContext,
-          body: _Body(
-            boardKey: boardKey,
-            initialPuzzleContext: initialPuzzleContext,
-          ),
+          body: _Body(boardKey: boardKey, initialPuzzleContext: initialPuzzleContext),
         );
       case AsyncError(:final error, :final stackTrace):
-        debugPrint(
-          'SEVERE: [PuzzleScreen] could not load next puzzle; $error\n$stackTrace',
-        );
+        debugPrint('SEVERE: [PuzzleScreen] could not load next puzzle; $error\n$stackTrace');
         return _PuzzleScaffold(
           angle: angle,
           initialPuzzleContext: null,
@@ -329,13 +307,9 @@ class _PuzzleScaffold extends StatelessWidget {
           ),
           actions: [
             const ToggleSoundButton(),
-            if (initialPuzzleContext != null)
-              _PuzzleSettingsButton(initialPuzzleContext!),
+            if (initialPuzzleContext != null) _PuzzleSettingsButton(initialPuzzleContext!),
           ],
-          title: _Title(
-            angle: angle,
-            initialPuzzleContext: initialPuzzleContext,
-          ),
+          title: _Title(angle: angle, initialPuzzleContext: initialPuzzleContext),
         ),
         body: body,
       ),
@@ -362,27 +336,18 @@ class _BodyState extends ConsumerState<_Body> {
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
-    final currentEvalBest = ref.watch(
-      engineEvaluationProvider.select((s) => s.eval?.bestMove),
-    );
-    final evalBestMove =
-        (currentEvalBest ?? puzzleState.node.eval?.bestMove) as NormalMove?;
+    final currentEvalBest = ref.watch(engineEvaluationProvider.select((s) => s.eval?.bestMove));
+    final evalBestMove = (currentEvalBest ?? puzzleState.node.eval?.bestMove) as NormalMove?;
 
     // Clear user shapes when puzzle or position changes.
-    ref.listen(ctrlProvider.select((state) => state.puzzle.puzzle.id), (
-      previous,
-      next,
-    ) {
+    ref.listen(ctrlProvider.select((state) => state.puzzle.puzzle.id), (previous, next) {
       if (previous != null && previous != next && mounted) {
         setState(() {
           userShapes = ISet();
         });
       }
     });
-    ref.listen(ctrlProvider.select((state) => state.currentPath), (
-      previous,
-      next,
-    ) {
+    ref.listen(ctrlProvider.select((state) => state.currentPath), (previous, next) {
       if (previous != null && previous != next && mounted) {
         setState(() {
           userShapes = ISet();
@@ -390,31 +355,19 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    final generatedShapes =
-        puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
+    final generatedShapes = puzzleState.isEngineAvailable(enginePrefs) && evalBestMove != null
         ? ISet([
-            Arrow(
-              color: const Color(0x66003088),
-              orig: evalBestMove.from,
-              dest: evalBestMove.to,
-            ),
+            Arrow(color: const Color(0x66003088), orig: evalBestMove.from, dest: evalBestMove.to),
           ])
         : puzzleState.hintSquare != null
-        ? ISet([
-            Circle(
-              color: ShapeColor.green.color,
-              orig: puzzleState.hintSquare!,
-            ),
-          ])
+        ? ISet([Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)])
         : null;
     final shapes = userShapes.union(generatedShapes ?? ISet());
 
     final gameData = boardPreferences.toGameData(
       variant: Variant.standard,
       position: puzzleState.currentPosition,
-      playerSide:
-          puzzleState.mode == PuzzleMode.load ||
-              puzzleState.currentPosition.isGameOver
+      playerSide: puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
           ? PlayerSide.none
           : puzzleState.mode == PuzzleMode.view
           ? PlayerSide.both
@@ -443,8 +396,7 @@ class _BodyState extends ConsumerState<_Body> {
 
     final content = PopScope(
       canPop:
-          Theme.of(context).platform != TargetPlatform.iOS ||
-          puzzleState.mode == PuzzleMode.view,
+          Theme.of(context).platform != TargetPlatform.iOS || puzzleState.mode == PuzzleMode.view,
       child: SafeArea(
         // view padding can change on Android when immersive mode is enabled, so to prevent any
         // board vertical shift, we set `maintainBottomViewPadding` to true.
@@ -457,9 +409,7 @@ class _BodyState extends ConsumerState<_Body> {
             final isTablet = isTabletOrLarger(context);
 
             final defaultSettings = boardPreferences.toBoardSettings().copyWith(
-              borderRadius: isTablet
-                  ? Styles.boardBorderRadius
-                  : BorderRadius.zero,
+              borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
               boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
               drawShape: DrawShapeOptions(
                 enable: boardPreferences.enableShapeDrawings,
@@ -471,10 +421,8 @@ class _BodyState extends ConsumerState<_Body> {
 
             if (orientation == Orientation.landscape) {
               final defaultBoardSize =
-                  constraints.biggest.shortestSide -
-                  (kTabletBoardTableSidePadding * 2);
-              final sideWidth =
-                  constraints.biggest.longestSide - defaultBoardSize;
+                  constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
+              final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
               final boardSize = sideWidth >= 250
                   ? defaultBoardSize
                   : constraints.biggest.longestSide / kGoldenRatio -
@@ -515,9 +463,7 @@ class _BodyState extends ConsumerState<_Body> {
                               onStreak: false,
                             ),
                           ),
-                          _PuzzleStatus(
-                            initialPuzzleContext: widget.initialPuzzleContext,
-                          ),
+                          _PuzzleStatus(initialPuzzleContext: widget.initialPuzzleContext),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(top: 16.0),
@@ -535,8 +481,7 @@ class _BodyState extends ConsumerState<_Body> {
                                         shouldShowComputerAnalysis: false,
                                         shouldShowComments: false,
                                         shouldShowAnnotations: false,
-                                        displayMode:
-                                            PgnTreeDisplayMode.twoColumn,
+                                        displayMode: PgnTreeDisplayMode.twoColumn,
                                       ),
                                     ],
                                   ),
@@ -571,9 +516,7 @@ class _BodyState extends ConsumerState<_Body> {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: isTablet
-                            ? kTabletBoardTableSidePadding
-                            : 12.0,
+                        horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                       ),
                       child: Center(
                         child: PuzzleFeedbackWidget(
@@ -587,9 +530,7 @@ class _BodyState extends ConsumerState<_Body> {
                   if (engineGauge != null)
                     Padding(
                       padding: isTablet
-                          ? const EdgeInsets.symmetric(
-                              horizontal: kTabletBoardTableSidePadding,
-                            )
+                          ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
                           : EdgeInsets.zero,
                       child: EngineGauge(
                         params: engineGauge,
@@ -600,9 +541,7 @@ class _BodyState extends ConsumerState<_Body> {
                     const SizedBox(height: kEvalGaugeSize),
                   Padding(
                     padding: isTablet
-                        ? const EdgeInsets.symmetric(
-                            horizontal: kTabletBoardTableSidePadding,
-                          )
+                        ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
                         : EdgeInsets.zero,
                     child: BoardWidget(
                       size: boardSize,
@@ -617,13 +556,9 @@ class _BodyState extends ConsumerState<_Body> {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: isTablet
-                            ? kTabletBoardTableSidePadding
-                            : 12.0,
+                        horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                       ),
-                      child: _PuzzleStatus(
-                        initialPuzzleContext: widget.initialPuzzleContext,
-                      ),
+                      child: _PuzzleStatus(initialPuzzleContext: widget.initialPuzzleContext),
                     ),
                   ),
                   _BottomBar(
@@ -641,10 +576,8 @@ class _BodyState extends ConsumerState<_Body> {
     return Theme.of(context).platform == TargetPlatform.android
         ? AndroidGesturesExclusionWidget(
             boardKey: widget.boardKey,
-            shouldExcludeGesturesOnFocusGained: () =>
-                puzzleState.mode != PuzzleMode.view,
-            shouldSetImmersiveMode:
-                boardPreferences.immersiveModeWhilePlaying ?? false,
+            shouldExcludeGesturesOnFocusGained: () => puzzleState.mode != PuzzleMode.view,
+            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
             child: content,
           )
         : content;
@@ -698,18 +631,13 @@ class _PuzzleStatus extends ConsumerWidget {
                   TweenAnimationBuilder<double>(
                     tween: Tween<double>(
                       begin: puzzleState.glicko!.rating,
-                      end:
-                          puzzleState.nextContext?.glicko?.rating ??
-                          puzzleState.glicko!.rating,
+                      end: puzzleState.nextContext?.glicko?.rating ?? puzzleState.glicko!.rating,
                     ),
                     duration: const Duration(milliseconds: 500),
                     builder: (context, double rating, _) {
                       return Text(
                         rating.truncate().toString(),
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                       );
                     },
                   ),
@@ -717,20 +645,14 @@ class _PuzzleStatus extends ConsumerWidget {
               ),
             ),
           ),
-        PuzzleSessionWidget(
-          initialPuzzleContext: initialPuzzleContext,
-          ctrlProvider: ctrlProvider,
-        ),
+        PuzzleSessionWidget(initialPuzzleContext: initialPuzzleContext, ctrlProvider: ctrlProvider),
       ],
     );
   }
 }
 
 class _BottomBar extends ConsumerStatefulWidget {
-  const _BottomBar({
-    required this.initialPuzzleContext,
-    required this.puzzleId,
-  });
+  const _BottomBar({required this.initialPuzzleContext, required this.puzzleId});
 
   final PuzzleContext initialPuzzleContext;
   final PuzzleId puzzleId;
@@ -836,9 +758,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                   return BottomBarButton(
                     onTap: snapshot.connectionState != ConnectionState.waiting
                         ? () async {
-                            toggleFuture = ref
-                                .read(ctrlProvider.notifier)
-                                .toggleEvaluation();
+                            toggleFuture = ref.read(ctrlProvider.notifier).toggleEvaluation();
                             try {
                               await toggleFuture;
                             } finally {
@@ -857,9 +777,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
         if (puzzleState.mode == PuzzleMode.view)
           RepeatButton(
             triggerDelays: _BottomBar._repeatTriggerDelays,
-            onLongPress: puzzleState.canGoBack
-                ? () => _moveBackward(ref)
-                : null,
+            onLongPress: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
             child: BottomBarButton(
               onTap: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
               label: 'Previous',
@@ -881,12 +799,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           ),
         if (puzzleState.mode == PuzzleMode.view)
           BottomBarButton(
-            onTap:
-                puzzleState.mode == PuzzleMode.view &&
-                    puzzleState.nextContext != null
-                ? () => ref
-                      .read(ctrlProvider.notifier)
-                      .onLoadPuzzle(puzzleState.nextContext!)
+            onTap: puzzleState.mode == PuzzleMode.view && puzzleState.nextContext != null
+                ? () => ref.read(ctrlProvider.notifier).onLoadPuzzle(puzzleState.nextContext!)
                 : null,
             highlighted: true,
             label: context.l10n.puzzleContinueTraining,
@@ -897,9 +811,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   }
 
   Future<void> _showPuzzleMenu(BuildContext context, WidgetRef ref) {
-    final puzzleState = ref.watch(
-      puzzleControllerProvider(widget.initialPuzzleContext),
-    );
+    final puzzleState = ref.watch(puzzleControllerProvider(widget.initialPuzzleContext));
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -908,11 +820,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           onPressed: () {
             launchShareDialog(
               context,
-              ShareParams(
-                text: lichessUri(
-                  '/training/${puzzleState.puzzle.puzzle.id}',
-                ).toString(),
-              ),
+              ShareParams(text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}').toString()),
             );
           },
         ),
@@ -925,11 +833,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                 AnalysisOptions.standalone(
                   orientation: puzzleState.pov,
                   pgn: ref
-                      .read(
-                        puzzleControllerProvider(
-                          widget.initialPuzzleContext,
-                        ).notifier,
-                      )
+                      .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
                       .makePgn(),
                   isComputerAnalysisAllowed: true,
                   variant: Variant.standard,
@@ -940,9 +844,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           },
         ),
         BottomSheetAction(
-          makeLabel: (context) => Text(
-            context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value),
-          ),
+          makeLabel: (context) =>
+              Text(context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value)),
           onPressed: () async {
             final game = await ref.read(
               archivedGameProvider(id: puzzleState.puzzle.game.id).future,
@@ -966,15 +869,11 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   }
 
   void _moveForward(WidgetRef ref) {
-    ref
-        .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
-        .userNext();
+    ref.read(puzzleControllerProvider(widget.initialPuzzleContext).notifier).userNext();
   }
 
   void _moveBackward(WidgetRef ref) {
-    ref
-        .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
-        .userPrevious();
+    ref.read(puzzleControllerProvider(widget.initialPuzzleContext).notifier).userPrevious();
   }
 }
 
@@ -990,9 +889,7 @@ class _PuzzleSettingsButton extends StatelessWidget {
         context: context,
         isDismissible: true,
         isScrollControlled: true,
-        constraints: BoxConstraints(
-          minHeight: MediaQuery.sizeOf(context).height * 0.5,
-        ),
+        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
         builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),
       ),
       semanticsLabel: context.l10n.settingsSettings,
@@ -1009,19 +906,12 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-    final autoNext = ref.watch(
-      puzzlePreferencesProvider.select((value) => value.autoNext),
-    );
-    final rated = ref.watch(
-      puzzlePreferencesProvider.select((value) => value.rated),
-    );
+    final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
+    final rated = ref.watch(puzzlePreferencesProvider.select((value) => value.rated));
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
-    final difficulty = ref.watch(
-      puzzlePreferencesProvider.select((state) => state.difficulty),
-    );
-    final isOnline =
-        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
+    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
       children: [
@@ -1045,8 +935,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                               context,
                               choices: PuzzleDifficulty.values,
                               selectedItem: difficulty,
-                              labelBuilder: (t) =>
-                                  Text(puzzleDifficultyL10n(context, t)),
+                              labelBuilder: (t) => Text(puzzleDifficultyL10n(context, t)),
                               onSelectedItemChanged: (PuzzleDifficulty? d) {
                                 if (d != null) {
                                   setState(() {
@@ -1062,9 +951,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                                   .read(ctrlProvider.notifier)
                                   .changeDifficulty(selectedDifficulty);
                               if (context.mounted && nextContext != null) {
-                                ref
-                                    .read(ctrlProvider.notifier)
-                                    .onLoadPuzzle(nextContext);
+                                ref.read(ctrlProvider.notifier).onLoadPuzzle(nextContext);
                               }
                             });
                           },
@@ -1086,21 +973,16 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                 onChanged: initialPuzzleContext.casual == true
                     ? null
                     : (value) {
-                        ref
-                            .read(puzzlePreferencesProvider.notifier)
-                            .setRated(value);
+                        ref.read(puzzlePreferencesProvider.notifier).setRated(value);
                       },
               ),
             ListTile(
               title: Text(context.l10n.mobileBoardSettings),
               trailing: const CupertinoListTileChevron(),
               onTap: () {
-                Navigator.of(context).push(
-                  BoardSettingsScreen.buildRoute(
-                    context,
-                    fullscreenDialog: true,
-                  ),
-                );
+                Navigator.of(
+                  context,
+                ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
               },
             ),
           ],

@@ -12,8 +12,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileAccountPreferences => 'Accountvoorkeuren';
 
   @override
-  String get mobileAccountPreferencesHelp =>
-      'Deze voorkeuren worden toegepast op je Lichess account en worden op alle apparaten gebruikt.';
+  String get mobileAccountPreferencesHelp => 'Deze voorkeuren worden toegepast op je Lichess account en worden op alle apparaten gebruikt.';
 
   @override
   String get mobileAllGames => 'Alle partijen';
@@ -65,15 +64,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileLiveStreamers => 'Live streamers';
 
   @override
-  String get mobileMustBeLoggedIn =>
-      'Je moet ingelogd zijn om deze pagina te bekijken.';
+  String get mobileMustBeLoggedIn => 'Je moet ingelogd zijn om deze pagina te bekijken.';
 
   @override
   String get mobileNoSearchResults => 'Geen resultaten';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable =>
-      'Houd er rekening mee dat niet alle functies van de oude app of website beschikbaar zijn, maar we voegen voortdurend functies toe.';
+  String get mobileNotAllFeaturesAreAvailable => 'Houd er rekening mee dat niet alle functies van de oude app of website beschikbaar zijn, maar we voegen voortdurend functies toe.';
 
   @override
   String get mobileNotFollowingAnyUser => 'U volgt geen gebruiker.';
@@ -96,31 +93,25 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobilePositionRight => 'Rechts';
 
   @override
-  String get mobilePrefMagnifyDraggedPiece =>
-      'Versleept stuk vergroot weergeven';
+  String get mobilePrefMagnifyDraggedPiece => 'Versleept stuk vergroot weergeven';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Wil je deze reeks beëindigen?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow =>
-      'Niets te tonen, wijzig de filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Niets te tonen, wijzig de filters';
 
   @override
-  String get mobilePuzzleStormNothingToShow =>
-      'Niets om te tonen. Speel een aantal reeksen Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'Niets om te tonen. Speel een aantal reeksen Puzzle Storm.';
 
   @override
-  String get mobilePuzzleStormSubtitle =>
-      'Los zoveel mogelijk puzzels op in 3 minuten.';
+  String get mobilePuzzleStormSubtitle => 'Los zoveel mogelijk puzzels op in 3 minuten.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning =>
-      'Je verliest je huidige reeks en de score wordt opgeslagen.';
+  String get mobilePuzzleStreakAbortWarning => 'Je verliest je huidige reeks en de score wordt opgeslagen.';
 
   @override
-  String get mobilePuzzleThemesSubtitle =>
-      'Speel puzzels uit je favorieten openingen, of kies een thema.';
+  String get mobilePuzzleThemesSubtitle => 'Speel puzzels uit je favorieten openingen, of kies een thema.';
 
   @override
   String get mobilePuzzlesTab => 'Puzzels';
@@ -156,19 +147,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Volledig scherm-modus';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle =>
-      'Systeem-UI verbergen tijdens het spelen. Gebruik dit als je last hebt van de navigatiegebaren aan de randen van het scherm. Van toepassing bij partijen en puzzels.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Systeem-UI verbergen tijdens het spelen. Gebruik dit als je last hebt van de navigatiegebaren aan de randen van het scherm. Van toepassing bij partijen en puzzels.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces =>
-      'Geslagen stukken';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Geslagen stukken';
 
   @override
   String get mobileSettingsPickAnImage => 'Kies een afbeelding';
 
   @override
-  String get mobileSettingsPickAnImageHelp =>
-      'Aangepaste achtergrond werkt alleen in donkere modus. Een donkere afbeelding wordt aanbevolen.';
+  String get mobileSettingsPickAnImageHelp => 'Aangepaste achtergrond werkt alleen in donkere modus. Een donkere afbeelding wordt aanbevolen.';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'Afbeelding vervagen';
@@ -180,8 +168,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSettingsPickAnImageShowBoard => 'Bord tonen';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay =>
-      'Veeg om andere achtergronden te tonen';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Veeg om andere achtergronden te tonen';
 
   @override
   String get mobileSettingsPieceShiftMethodEither => 'Tikken of slepen';
@@ -193,8 +180,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSettingsShapeDrawing => 'Vormen tekenen';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle =>
-      'Maak vormen door twee vingers te gebruiken: Houd één vinger op een leeg vakje en sleep een andere vinger om een vorm te tekenen.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Maak vormen door twee vingers te gebruiken: Houd één vinger op een leeg vakje en sleep een andere vinger om een vorm te tekenen.';
 
   @override
   String get mobileSettingsShowBorder => 'Rand tonen';
@@ -203,8 +189,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Trillen bij aanraking';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle =>
-      'Wanneer ingeschakeld, zal het apparaat kort trillen wanneer je een stuk verplaatst of slaat.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Wanneer ingeschakeld, zal het apparaat kort trillen wanneer je een stuk verplaatst of slaat.';
 
   @override
   String get mobileSettingsTab => 'Instellingen';
@@ -436,12 +421,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String activityRankedInTournament(
-    int count,
-    String param2,
-    String param3,
-    String param4,
-  ) {
+  String activityRankedInTournament(int count, String param2, String param3, String param4) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
@@ -483,62 +463,52 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaIsItRated => 'Is dit met rating?';
 
   @override
-  String get arenaWillBeNotified =>
-      'Je krijgt een melding wanneer dit toernooi start, dus het is veilig om in een ander tabblad te spelen terwijl je wacht.';
+  String get arenaWillBeNotified => 'Je krijgt een melding wanneer dit toernooi start, dus het is veilig om in een ander tabblad te spelen terwijl je wacht.';
 
   @override
-  String get arenaIsRated =>
-      'Dit toernooi is met rating en zal je rating beïnvloeden.';
+  String get arenaIsRated => 'Dit toernooi is met rating en zal je rating beïnvloeden.';
 
   @override
-  String get arenaIsNotRated =>
-      'Dit toernooi is *niet* met rating en zal je rating *niet* beïnvloeden.';
+  String get arenaIsNotRated => 'Dit toernooi is *niet* met rating en zal je rating *niet* beïnvloeden.';
 
   @override
-  String get arenaSomeRated =>
-      'Sommige toernooien zijn met rating en zullen je rating beïnvloeden.';
+  String get arenaSomeRated => 'Sommige toernooien zijn met rating en zullen je rating beïnvloeden.';
 
   @override
   String get arenaHowAreScoresCalculated => 'Hoe worden scores berekend?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer =>
-      'Een overwinning heeft een basisscore van 2 punten, een remise één punt. Een verlies is geen punten waard.\nAls je twee partijen na elkaar wint, start je een \"dubbele-punten-reeks\", voorgesteld door een icoontje van een vlam.\nDe volgende partijen zullen steeds het dubbele aantal punten waard zijn, totdat je er niet in slaagt een spel te winnen.\nEen overwinning zal dus 4 punten waard zijn, remise 2, en verlies nog steeds 0 punten.\n\nBijvoorbeeld, twee overwinningen gevolgd door een gelijkspel zullen 6 punten waard zijn: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Een overwinning heeft een basisscore van 2 punten, een remise één punt. Een verlies is geen punten waard.\nAls je twee partijen na elkaar wint, start je een \"dubbele-punten-reeks\", voorgesteld door een icoontje van een vlam.\nDe volgende partijen zullen steeds het dubbele aantal punten waard zijn, totdat je er niet in slaagt een spel te winnen.\nEen overwinning zal dus 4 punten waard zijn, remise 2, en verlies nog steeds 0 punten.\n\nBijvoorbeeld, twee overwinningen gevolgd door een gelijkspel zullen 6 punten waard zijn: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer =>
-      'Wanneer een speler op de Berserk-knop klikt aan het begin van het spel, verliest hij/zij de helft van de tijd op de klok, maar de overwinning is één extra toernooipunt waard.\n\nBerserk gaan in partijen met een klok met extra seconden per zet, zorgt ervoor dat je ook die extra seconden kwijt bent. Bijvoorbeeld 2+1 wordt 1+0. (1+2 is een uitzondering, dat geeft 1+0)\n\nBerserk is niet beschikbaar voor partijen met nul begintijd (0+1, 0+2).\n\nBerserk geeft je enkel een extra punt als beide spelers minstens 7 zetten spelen in de partij.';
+  String get arenaBerserkAnswer => 'Wanneer een speler op de Berserk-knop klikt aan het begin van het spel, verliest hij/zij de helft van de tijd op de klok, maar de overwinning is één extra toernooipunt waard.\n\nBerserk gaan in partijen met een klok met extra seconden per zet, zorgt ervoor dat je ook die extra seconden kwijt bent. Bijvoorbeeld 2+1 wordt 1+0. (1+2 is een uitzondering, dat geeft 1+0)\n\nBerserk is niet beschikbaar voor partijen met nul begintijd (0+1, 0+2).\n\nBerserk geeft je enkel een extra punt als beide spelers minstens 7 zetten spelen in de partij.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Hoe wordt de winnaar bepaald?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer =>
-      'De speler(s) met de meeste punten op het einde van de tijdslimiet van het toernooi zal (zullen) aangeduid worden als winnaar(s).';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'De speler(s) met de meeste punten op het einde van de tijdslimiet van het toernooi zal (zullen) aangeduid worden als winnaar(s).';
 
   @override
   String get arenaHowDoesPairingWork => 'Hoe werkt het paren van spelers?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer =>
-      'Aan het begin van het toernooi worden spelers ingedeeld op basis van hun rating.\nWanneer je een partij beëindigt, keer terug naar de toernooilobby: je zult dan gekoppeld worden met een speler dicht bij jouw rang in het toernooi. Dit zorgt voor zo min mogelijk wachttijd, maar het is mogelijk dat je niet tegen iedereen in het toernooi speelt.\nSpeel snel en ga terug naar de toernooilobby om meer partijen te spelen en meer punten te winnen.';
+  String get arenaHowDoesPairingWorkAnswer => 'Aan het begin van het toernooi worden spelers ingedeeld op basis van hun rating.\nWanneer je een partij beëindigt, keer terug naar de toernooilobby: je zult dan gekoppeld worden met een speler dicht bij jouw rang in het toernooi. Dit zorgt voor zo min mogelijk wachttijd, maar het is mogelijk dat je niet tegen iedereen in het toernooi speelt.\nSpeel snel en ga terug naar de toernooilobby om meer partijen te spelen en meer punten te winnen.';
 
   @override
   String get arenaHowDoesItEnd => 'Hoe eindigt het?';
 
   @override
-  String get arenaHowDoesItEndAnswer =>
-      'Het toernooi heeft een klok die aftelt. Wanneer die klok de nul bereikt, wordt het klassement van het toernooi bevroren en wordt de winnaar aangekondigd. Partijen die nog aan de gang zijn moeten uitgespeeld worden, maar tellen niet meer mee voor de rangschikking in het toernooi.';
+  String get arenaHowDoesItEndAnswer => 'Het toernooi heeft een klok die aftelt. Wanneer die klok de nul bereikt, wordt het klassement van het toernooi bevroren en wordt de winnaar aangekondigd. Partijen die nog aan de gang zijn moeten uitgespeeld worden, maar tellen niet meer mee voor de rangschikking in het toernooi.';
 
   @override
   String get arenaOtherRules => 'Andere belangrijke regels';
 
   @override
-  String get arenaThereIsACountdown =>
-      'Er wordt afgeteld voor je eerste zet doet. Als je binnen deze tijd geen zet doet, verlies je de partij.';
+  String get arenaThereIsACountdown => 'Er wordt afgeteld voor je eerste zet doet. Als je binnen deze tijd geen zet doet, verlies je de partij.';
 
   @override
   String get arenaThisIsPrivate => 'Dit is een privétoernooi';
@@ -554,8 +524,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get arenaDrawStreakVariants =>
-      'De minimale lengte die nodig is opdat een remisepartij punten zou opleveren hangt af van de variant. De tabel hieronder geeft een lijst van de ondergrens voor elke variant.';
+  String get arenaDrawStreakVariants => 'De minimale lengte die nodig is opdat een remisepartij punten zou opleveren hangt af van de variant. De tabel hieronder geeft een lijst van de ondergrens voor elke variant.';
 
   @override
   String get arenaVariant => 'Variant';
@@ -573,15 +542,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaCustomStartDate => 'Aangepaste startdatum';
 
   @override
-  String get arenaCustomStartDateHelp =>
-      'In je eigen lokale tijdzone. Dit overschrijft de instelling \"Tijd voordat het toernooi begint\"';
+  String get arenaCustomStartDateHelp => 'In je eigen lokale tijdzone. Dit overschrijft de instelling \"Tijd voordat het toernooi begint\"';
 
   @override
   String get arenaAllowBerserk => 'Berserk toestaan';
 
   @override
-  String get arenaAllowBerserkHelp =>
-      'Spelers kunnen met de helft van de tijd spelen om een extra punt te krijgen';
+  String get arenaAllowBerserkHelp => 'Spelers kunnen met de helft van de tijd spelen om een extra punt te krijgen';
 
   @override
   String get arenaAllowChatHelp => 'Spelers kunnen chatten in de chatruimte';
@@ -590,8 +557,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaArenaStreaks => 'Arena streaks';
 
   @override
-  String get arenaArenaStreaksHelp =>
-      'Na 2 overwinningen geven opeenvolgende overwinningen 4 punten in plaats van 2.';
+  String get arenaArenaStreaksHelp => 'Na 2 overwinningen geven opeenvolgende overwinningen 4 punten in plaats van 2.';
 
   @override
   String get arenaNoBerserkAllowed => 'Berserk niet toegestaan';
@@ -621,12 +587,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaPickYourTeam => 'Kies je team';
 
   @override
-  String get arenaWhichTeamWillYouRepresentInThisBattle =>
-      'Welk team vertegenwoordig jij in dit toernooi?';
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Welk team vertegenwoordig jij in dit toernooi?';
 
   @override
-  String get arenaYouMustJoinOneOfTheseTeamsToParticipate =>
-      'Je moet lid worden van één van deze teams om deel te kunnen nemen!';
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Je moet lid worden van één van deze teams om deel te kunnen nemen!';
 
   @override
   String get arenaCreated => 'Aangemaakt';
@@ -641,8 +605,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaTournamentStats => 'Toernooi statistieken';
 
   @override
-  String get arenaRankAvgHelp =>
-      'Het gemiddelde klassering is een percentage van uw klassering. Lager is beter.\n\nBijvoorbeeld, wanneer je de derde plaats staat in een tornooi van 100 deelnemers = 3%. Tiende plaats zijn in een tornooi van 1000 deelnemers = 1%.';
+  String get arenaRankAvgHelp => 'Het gemiddelde klassering is een percentage van uw klassering. Lager is beter.\n\nBijvoorbeeld, wanneer je de derde plaats staat in een tornooi van 100 deelnemers = 3%. Tiende plaats zijn in een tornooi van 1000 deelnemers = 1%.';
 
   @override
   String get arenaMedians => 'medianen';
@@ -674,12 +637,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaOnlyTitled => 'Alleen titelhouders';
 
   @override
-  String get arenaOnlyTitledHelp =>
-      'Officiële titel vereist voor deelname aan het toernooi';
+  String get arenaOnlyTitledHelp => 'Officiële titel vereist voor deelname aan het toernooi';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed =>
-      'De toernooiparingen zijn nu gesloten.';
+  String get arenaTournamentPairingsAreNowClosed => 'De toernooiparingen zijn nu gesloten.';
 
   @override
   String get arenaBerserkRate => 'Berserk-percentage';
@@ -689,10 +650,8 @@ class AppLocalizationsNl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'Als een partij binnen $count zetten in remise eindigt, levert dit voor geen van beide spelers punten op.',
-      one:
-          'Als een partij binnen $count zetten in remise eindigt, levert dit voor geen van beide spelers punten op.',
+      other: 'Als een partij binnen $count zetten in remise eindigt, levert dit voor geen van beide spelers punten op.',
+      one: 'Als een partij binnen $count zetten in remise eindigt, levert dit voor geen van beide spelers punten op.',
     );
     return '$_temp0';
   }
@@ -730,12 +689,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastAboutBroadcasts => 'Over uitzending';
 
   @override
-  String get broadcastHowToUseLichessBroadcasts =>
-      'Hoe Lichess Uitzendingen te gebruiken.';
+  String get broadcastHowToUseLichessBroadcasts => 'Hoe Lichess Uitzendingen te gebruiken.';
 
   @override
-  String get broadcastTheNewRoundHelp =>
-      'De nieuwe ronde zal dezelfde leden en bijdragers hebben als de vorige.';
+  String get broadcastTheNewRoundHelp => 'De nieuwe ronde zal dezelfde leden en bijdragers hebben als de vorige.';
 
   @override
   String get broadcastAddRound => 'Ronde toevoegen';
@@ -767,12 +724,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastSourceSingleUrl => 'URL van PGN-bron';
 
   @override
-  String get broadcastSourceUrlHelp =>
-      'Link die Lichess gebruikt om PGN updates te krijgen. Deze moet openbaar toegankelijk zijn via internet.';
+  String get broadcastSourceUrlHelp => 'Link die Lichess gebruikt om PGN updates te krijgen. Deze moet openbaar toegankelijk zijn via internet.';
 
   @override
-  String get broadcastSourceGameIds =>
-      'Tot 64 Lichess partij-ID\'\'s, gescheiden door spaties.';
+  String get broadcastSourceGameIds => 'Tot 64 Lichess partij-ID\'\'s, gescheiden door spaties.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
@@ -780,8 +735,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get broadcastStartDateHelp =>
-      'Optioneel, als je weet wanneer het evenement start';
+  String get broadcastStartDateHelp => 'Optioneel, als je weet wanneer het evenement start';
 
   @override
   String get broadcastCurrentGameUrl => 'Huidige partij-link';
@@ -796,12 +750,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastDeleteRound => 'Deze ronde verwijderen';
 
   @override
-  String get broadcastDefinitivelyDeleteRound =>
-      'Deze ronde en bijbehorende partijen definitief verwijderen.';
+  String get broadcastDefinitivelyDeleteRound => 'Deze ronde en bijbehorende partijen definitief verwijderen.';
 
   @override
-  String get broadcastDeleteAllGamesOfThisRound =>
-      'Alle partijen van deze ronde verwijderen. De bron zal actief moeten zijn om ze opnieuw te maken.';
+  String get broadcastDeleteAllGamesOfThisRound => 'Alle partijen van deze ronde verwijderen. De bron zal actief moeten zijn om ze opnieuw te maken.';
 
   @override
   String get broadcastEditRoundStudy => 'Studieronde bewerken';
@@ -810,16 +762,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastDeleteTournament => 'Verwijder dit toernooi';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament =>
-      'Verwijder definitief het hele toernooi, inclusief alle rondes en partijen.';
+  String get broadcastDefinitivelyDeleteTournament => 'Verwijder definitief het hele toernooi, inclusief alle rondes en partijen.';
 
   @override
-  String get broadcastShowScores =>
-      'Toon scores van spelers op basis van partij-uitslagen';
+  String get broadcastShowScores => 'Toon scores van spelers op basis van partij-uitslagen';
 
   @override
-  String get broadcastReplacePlayerTags =>
-      'Optioneel: vervang spelersnamen, beoordelingen en titels';
+  String get broadcastReplacePlayerTags => 'Optioneel: vervang spelersnamen, beoordelingen en titels';
 
   @override
   String get broadcastFideFederations => 'FIDE-federaties';
@@ -861,15 +810,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastOverview => 'Overzicht';
 
   @override
-  String get broadcastSubscribeTitle =>
-      'Krijg een melding wanneer elke ronde start. Je kunt bel- of pushmeldingen voor uitzendingen in je accountvoorkeuren in-/uitschakelen.';
+  String get broadcastSubscribeTitle => 'Krijg een melding wanneer elke ronde start. Je kunt bel- of pushmeldingen voor uitzendingen in je accountvoorkeuren in-/uitschakelen.';
 
   @override
   String get broadcastUploadImage => 'Toernooifoto uploaden';
 
   @override
-  String get broadcastNoBoardsYet =>
-      'Nog geen borden. Deze zullen verschijnen van zodra er partijen worden geüpload.';
+  String get broadcastNoBoardsYet => 'Nog geen borden. Deze zullen verschijnen van zodra er partijen worden geüpload.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -902,8 +849,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastWebmastersPage => 'pagina van de webmaster';
 
   @override
-  String get broadcastEmbedThisBroadcast =>
-      'Deze uitzending insluiten in je website';
+  String get broadcastEmbedThisBroadcast => 'Deze uitzending insluiten in je website';
 
   @override
   String get broadcastRatingDiff => 'Ratingverschil';
@@ -939,15 +885,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastPastBroadcasts => 'Afgelopen uitzendingen';
 
   @override
-  String get broadcastAllBroadcastsByMonth =>
-      'Alle uitzendingen per maand weergeven';
+  String get broadcastAllBroadcastsByMonth => 'Alle uitzendingen per maand weergeven';
 
   @override
   String get broadcastBackToLiveMove => 'Terug naar de actuele stelling';
 
   @override
-  String get broadcastSinceHideResults =>
-      'Omdat je ervoor kiest om de resultaten te verbergen, zijn alle borden leeg om spoilers te voorkomen.';
+  String get broadcastSinceHideResults => 'Omdat je ervoor kiest om de resultaten te verbergen, zijn alle borden leeg om spoilers te voorkomen.';
 
   @override
   String get broadcastLiveboard => 'Live-bord';
@@ -1000,8 +944,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get challengeChallengeCanceled => 'Uitdaging geannuleerd.';
 
   @override
-  String get challengeRegisterToSendChallenges =>
-      'Gelieve te registreren om uitdagingen te versturen.';
+  String get challengeRegisterToSendChallenges => 'Gelieve te registreren om uitdagingen te versturen.';
 
   @override
   String challengeYouCannotChallengeX(String param) {
@@ -1029,51 +972,40 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get challengeDeclineGeneric =>
-      'Momenteel neem ik geen uitdagingen aan.';
+  String get challengeDeclineGeneric => 'Momenteel neem ik geen uitdagingen aan.';
 
   @override
-  String get challengeDeclineLater =>
-      'Op dit moment neem ik geen uitdagingen aan, probeer het later nog eens.';
+  String get challengeDeclineLater => 'Op dit moment neem ik geen uitdagingen aan, probeer het later nog eens.';
 
   @override
-  String get challengeDeclineTooFast =>
-      'Dit tempo is mij te snel, daag me a.u.b. uit voor een langzamere partij.';
+  String get challengeDeclineTooFast => 'Dit tempo is mij te snel, daag me a.u.b. uit voor een langzamere partij.';
 
   @override
-  String get challengeDeclineTooSlow =>
-      'Dit tempo is mij te traag, daag me a.u.b. uit voor een snellere partij.';
+  String get challengeDeclineTooSlow => 'Dit tempo is mij te traag, daag me a.u.b. uit voor een snellere partij.';
 
   @override
-  String get challengeDeclineTimeControl =>
-      'Ik neem geen uitdagingen aan met dit tempo.';
+  String get challengeDeclineTimeControl => 'Ik neem geen uitdagingen aan met dit tempo.';
 
   @override
-  String get challengeDeclineRated =>
-      'Stuur me a.u.b. een uitdaging met rating.';
+  String get challengeDeclineRated => 'Stuur me a.u.b. een uitdaging met rating.';
 
   @override
-  String get challengeDeclineCasual =>
-      'Stuur me a.u.b. een uitdaging zonder rating.';
+  String get challengeDeclineCasual => 'Stuur me a.u.b. een uitdaging zonder rating.';
 
   @override
-  String get challengeDeclineStandard =>
-      'Momenteel neem ik geen uitdagingen aan voor varianten.';
+  String get challengeDeclineStandard => 'Momenteel neem ik geen uitdagingen aan voor varianten.';
 
   @override
-  String get challengeDeclineVariant =>
-      'Momenteel voel ik er niet voor om deze variant te spelen.';
+  String get challengeDeclineVariant => 'Momenteel voel ik er niet voor om deze variant te spelen.';
 
   @override
   String get challengeDeclineNoBot => 'Ik neem geen uitdagingen van bots aan.';
 
   @override
-  String get challengeDeclineOnlyBot =>
-      'Ik neem alleen uitdagingen van bots aan.';
+  String get challengeDeclineOnlyBot => 'Ik neem alleen uitdagingen van bots aan.';
 
   @override
-  String get challengeInviteLichessUser =>
-      'Of nodig een Lichess-gebruiker uit:';
+  String get challengeInviteLichessUser => 'Of nodig een Lichess-gebruiker uit:';
 
   @override
   String get contactContact => 'Contact';
@@ -1098,36 +1030,28 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get coordinatesKnowingTheChessBoard =>
-      'De schaakbordcoördinaten kennen is een zeer belangrijke schaakvaardigheid:';
+  String get coordinatesKnowingTheChessBoard => 'De schaakbordcoördinaten kennen is een zeer belangrijke schaakvaardigheid:';
 
   @override
-  String get coordinatesMostChessCourses =>
-      'De meeste schaakcursussen en -oefeningen maken gebruik van de algebraïsche notatie.';
+  String get coordinatesMostChessCourses => 'De meeste schaakcursussen en -oefeningen maken gebruik van de algebraïsche notatie.';
 
   @override
-  String get coordinatesTalkToYourChessFriends =>
-      'Het maakt het gemakkelijker om met je schaakvrienden te praten, aangezien jullie beide de \"taal van het schaken\" begrijpen.';
+  String get coordinatesTalkToYourChessFriends => 'Het maakt het gemakkelijker om met je schaakvrienden te praten, aangezien jullie beide de \"taal van het schaken\" begrijpen.';
 
   @override
-  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
-      'Je kunt een spel effectiever analyseren als je niet hoeft te zoeken naar de namen van de velden.';
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Je kunt een spel effectiever analyseren als je niet hoeft te zoeken naar de namen van de velden.';
 
   @override
-  String get coordinatesACoordinateAppears =>
-      'Er verschijnt een coördinaat op het bord en je moet op het bijbehorende veld klikken.';
+  String get coordinatesACoordinateAppears => 'Er verschijnt een coördinaat op het bord en je moet op het bijbehorende veld klikken.';
 
   @override
-  String get coordinatesASquareIsHighlightedExplanation =>
-      'Op het bord wordt een veld uitgelicht en je dient het coördinaat in te voeren (bijvoorbeeld \"e4\").';
+  String get coordinatesASquareIsHighlightedExplanation => 'Op het bord wordt een veld uitgelicht en je dient het coördinaat in te voeren (bijvoorbeeld \"e4\").';
 
   @override
-  String get coordinatesYouHaveThirtySeconds =>
-      'Je hebt 30 seconden om zoveel mogelijk velden correct te benoemen!';
+  String get coordinatesYouHaveThirtySeconds => 'Je hebt 30 seconden om zoveel mogelijk velden correct te benoemen!';
 
   @override
-  String get coordinatesGoAsLongAsYouWant =>
-      'Speel zolang als je wilt, er is geen tijdslimiet!';
+  String get coordinatesGoAsLongAsYouWant => 'Speel zolang als je wilt, er is geen tijdslimiet!';
 
   @override
   String get coordinatesShowCoordinates => 'Coördinaten tonen';
@@ -1148,8 +1072,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get coordinatesNameSquare => 'Velden benoemen';
 
   @override
-  String get coordinatesPracticeOnlySomeFilesAndRanks =>
-      'Alleen sommige kolommen & rijen oefenen';
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Alleen sommige kolommen & rijen oefenen';
 
   @override
   String get patronDonate => 'Doneer';
@@ -1172,8 +1095,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get perfStatProvisional => 'voorlopig';
 
   @override
-  String get perfStatNotEnoughRatedGames =>
-      'Er zijn niet genoeg partijen met rating gespeeld om een betrouwbare rating vast te stellen.';
+  String get perfStatNotEnoughRatedGames => 'Er zijn niet genoeg partijen met rating gespeeld om een betrouwbare rating vast te stellen.';
 
   @override
   String perfStatProgressOverLastXGames(String param) {
@@ -1186,11 +1108,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String perfStatRatingDeviationTooltip(
-    String param1,
-    String param2,
-    String param3,
-  ) {
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
     return 'Een lagere waarde betekent dat de rating stabieler is. Boven $param1 wordt de rating als voorlopig beschouwd. Om in de ranglijsten te worden opgenomen, moet deze waarde lager zijn dan $param2 (standaard schaken) of $param3 (varianten).';
   }
 
@@ -1289,19 +1207,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesMaterialDifference => 'Materiaalverschil';
 
   @override
-  String get preferencesBoardHighlights =>
-      'Bord laten oplichten (laatste zet en schaak)';
+  String get preferencesBoardHighlights => 'Bord laten oplichten (laatste zet en schaak)';
 
   @override
-  String get preferencesPieceDestinations =>
-      'Bestemming van het stuk (geldige zetten en premoves)';
+  String get preferencesPieceDestinations => 'Bestemming van het stuk (geldige zetten en premoves)';
 
   @override
   String get preferencesBoardCoordinates => 'Bordcoördinaten (A-H, 1-8)';
 
   @override
-  String get preferencesMoveListWhilePlaying =>
-      'Zetnotatie zichtbaar tijdens partij';
+  String get preferencesMoveListWhilePlaying => 'Zetnotatie zichtbaar tijdens partij';
 
   @override
   String get preferencesPgnPieceNotation => 'Stuknotatie in PGN';
@@ -1322,16 +1237,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesShowFlairs => 'Geef de flairs van de spelers weer';
 
   @override
-  String get preferencesExplainShowPlayerRatings =>
-      'Deze instelling zorgt ervoor dat alle ratings op de website verborgen blijven zodat je je kunt concentreren op het schaken. Partijen kunnen nog steeds met rating zijn; dit gaat alleen om wat je te zien krijgt.';
+  String get preferencesExplainShowPlayerRatings => 'Deze instelling zorgt ervoor dat alle ratings op de website verborgen blijven zodat je je kunt concentreren op het schaken. Partijen kunnen nog steeds met rating zijn; dit gaat alleen om wat je te zien krijgt.';
 
   @override
-  String get preferencesDisplayBoardResizeHandle =>
-      'Toon de knop om het bordformaat te wijzigen';
+  String get preferencesDisplayBoardResizeHandle => 'Toon de knop om het bordformaat te wijzigen';
 
   @override
-  String get preferencesOnlyOnInitialPosition =>
-      'Enkel tijdens de beginstelling';
+  String get preferencesOnlyOnInitialPosition => 'Enkel tijdens de beginstelling';
 
   @override
   String get preferencesInGameOnly => 'Alleen tijdens partij';
@@ -1346,16 +1258,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesTenthsOfSeconds => 'Tienden van seconden';
 
   @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds =>
-      'Wanneer resterende tijd < 10 seconden';
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Wanneer resterende tijd < 10 seconden';
 
   @override
-  String get preferencesHorizontalGreenProgressBars =>
-      'Horizontale groene voortgangsbalk';
+  String get preferencesHorizontalGreenProgressBars => 'Horizontale groene voortgangsbalk';
 
   @override
-  String get preferencesSoundWhenTimeGetsCritical =>
-      'Geluidssignaal als tijd opraakt';
+  String get preferencesSoundWhenTimeGetsCritical => 'Geluidssignaal als tijd opraakt';
 
   @override
   String get preferencesGiveMoreTime => 'Meer tijd geven';
@@ -1376,92 +1285,73 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesBothClicksAndDrag => 'Beide';
 
   @override
-  String get preferencesPremovesPlayingDuringOpponentTurn =>
-      'Vooraf-zetten (spelen tijdens beurt tegenstander)';
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Vooraf-zetten (spelen tijdens beurt tegenstander)';
 
   @override
-  String get preferencesTakebacksWithOpponentApproval =>
-      'Terugnames (met goedkeuring van tegenstander)';
+  String get preferencesTakebacksWithOpponentApproval => 'Terugnames (met goedkeuring van tegenstander)';
 
   @override
-  String get preferencesInCasualGamesOnly =>
-      'Alleen bij partijen zonder rating';
+  String get preferencesInCasualGamesOnly => 'Alleen bij partijen zonder rating';
 
   @override
-  String get preferencesPromoteToQueenAutomatically =>
-      'Automatisch promoveren tot dame';
+  String get preferencesPromoteToQueenAutomatically => 'Automatisch promoveren tot dame';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically =>
-      'Houd de <Ctrl> toets ingedrukt om auto-promotie tijdelijk uit te zetten';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Houd de <Ctrl> toets ingedrukt om auto-promotie tijdelijk uit te zetten';
 
   @override
   String get preferencesWhenPremoving => 'Bij vooraf-zetten';
 
   @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically =>
-      'Eis automatisch remise op bij driemaal dezelfde stelling';
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Eis automatisch remise op bij driemaal dezelfde stelling';
 
   @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds =>
-      'Wanneer resterende tijd < 30 seconden';
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Wanneer resterende tijd < 30 seconden';
 
   @override
   String get preferencesMoveConfirmation => 'Zetbevestiging';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled =>
-      'Kan tijdens een partij uitgeschakeld worden met het bordmenu';
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan tijdens een partij uitgeschakeld worden met het bordmenu';
 
   @override
   String get preferencesInCorrespondenceGames => 'Bij correspondentiepartijen';
 
   @override
-  String get preferencesCorrespondenceAndUnlimited =>
-      'Correspondentiepartij en zonder klok';
+  String get preferencesCorrespondenceAndUnlimited => 'Correspondentiepartij en zonder klok';
 
   @override
-  String get preferencesConfirmResignationAndDrawOffers =>
-      'Opgave en remise-aanbod bevestigen';
+  String get preferencesConfirmResignationAndDrawOffers => 'Opgave en remise-aanbod bevestigen';
 
   @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook =>
-      'Rokeren';
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Rokeren';
 
   @override
-  String get preferencesCastleByMovingTwoSquares =>
-      'Verplaats de koning twee velden';
+  String get preferencesCastleByMovingTwoSquares => 'Verplaats de koning twee velden';
 
   @override
-  String get preferencesCastleByMovingOntoTheRook =>
-      'Verplaats de koning naar de toren';
+  String get preferencesCastleByMovingOntoTheRook => 'Verplaats de koning naar de toren';
 
   @override
-  String get preferencesInputMovesWithTheKeyboard =>
-      'Zetten invoeren met het toetsenbord';
+  String get preferencesInputMovesWithTheKeyboard => 'Zetten invoeren met het toetsenbord';
 
   @override
   String get preferencesInputMovesWithVoice => 'Zetten invoeren met je stem';
 
   @override
-  String get preferencesSnapArrowsToValidMoves =>
-      'Geldige zetten markeren met pijlen';
+  String get preferencesSnapArrowsToValidMoves => 'Geldige zetten markeren met pijlen';
 
   @override
-  String get preferencesSayGgWpAfterLosingOrDrawing =>
-      'Zeg \"Goede partij, goed gespeeld\" bij verlies of remise';
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Zeg \"Goede partij, goed gespeeld\" bij verlies of remise';
 
   @override
-  String get preferencesYourPreferencesHaveBeenSaved =>
-      'Uw voorkeuren werden opgeslagen.';
+  String get preferencesYourPreferencesHaveBeenSaved => 'Uw voorkeuren werden opgeslagen.';
 
   @override
-  String get preferencesScrollOnTheBoardToReplayMoves =>
-      'Scroll op het bord om zetten opnieuw af te spelen';
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll op het bord om zetten opnieuw af te spelen';
 
   @override
-  String get preferencesCorrespondenceEmailNotification =>
-      'Dagelijkse e-mailmeldingen met de lijst van jouw correspondentiepartijen';
+  String get preferencesCorrespondenceEmailNotification => 'Dagelijkse e-mailmeldingen met de lijst van jouw correspondentiepartijen';
 
   @override
   String get preferencesNotifyStreamStart => 'Streamer gaat live';
@@ -1476,8 +1366,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesNotifyInvitedStudy => 'Studie uitnodiging';
 
   @override
-  String get preferencesNotifyGameEvent =>
-      'Spelupdates voor correspondentiepartijen';
+  String get preferencesNotifyGameEvent => 'Spelupdates voor correspondentiepartijen';
 
   @override
   String get preferencesNotifyChallenge => 'Uitdagingen';
@@ -1486,15 +1375,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Toernooi begint binnenkort';
 
   @override
-  String get preferencesNotifyTimeAlarm =>
-      'Klok met correspondentie bijna leeg';
+  String get preferencesNotifyTimeAlarm => 'Klok met correspondentie bijna leeg';
 
   @override
   String get preferencesNotifyBell => 'Bel melding binnen Lichess';
 
   @override
-  String get preferencesNotifyPush =>
-      'Apparaatmelding wanneer je niet op Lichess bent';
+  String get preferencesNotifyPush => 'Apparaatmelding wanneer je niet op Lichess bent';
 
   @override
   String get preferencesNotifyWeb => 'Browser';
@@ -1554,8 +1441,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleDownVote => 'Puzzel niet leuk vinden';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange =>
-      'Je puzzelrating zal niet veranderen: puzzels zijn geen competitie. De rating helpt bij het selecteren van de beste puzzels voor je huidige vaardigheid.';
+  String get puzzleYourPuzzleRatingWillNotChange => 'Je puzzelrating zal niet veranderen: puzzels zijn geen competitie. De rating helpt bij het selecteren van de beste puzzels voor je huidige vaardigheid.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'Vind de beste zet voor wit.';
@@ -1564,8 +1450,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleFindTheBestMoveForBlack => 'Vind de beste zet voor zwart.';
 
   @override
-  String get puzzleToGetPersonalizedPuzzles =>
-      'Om gepersonaliseerde puzzels te krijgen:';
+  String get puzzleToGetPersonalizedPuzzles => 'Om gepersonaliseerde puzzels te krijgen:';
 
   @override
   String puzzlePuzzleId(String param) {
@@ -1603,16 +1488,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzlePuzzlesByOpenings => 'Puzzels per opening';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost =>
-      'Openingen die je het meest hebt gespeeld in partijen met rating';
+  String get puzzleOpeningsYouPlayedTheMost => 'Openingen die je het meest hebt gespeeld in partijen met rating';
 
   @override
-  String get puzzleUseFindInPage =>
-      'Gebruik \"In pagina zoeken\" in het browsermenu om je favoriete opening te vinden!';
+  String get puzzleUseFindInPage => 'Gebruik \"In pagina zoeken\" in het browsermenu om je favoriete opening te vinden!';
 
   @override
-  String get puzzleUseCtrlF =>
-      'Gebruik Ctrl+F om je favoriete opening te vinden!';
+  String get puzzleUseCtrlF => 'Gebruik Ctrl+F om je favoriete opening te vinden!';
 
   @override
   String get puzzleNotTheMove => 'Dat is niet de juiste zet!';
@@ -1664,8 +1546,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleNextPuzzle => 'Volgende puzzel';
 
   @override
-  String get puzzleJumpToNextPuzzleImmediately =>
-      'Ga direct door naar volgende puzzel';
+  String get puzzleJumpToNextPuzzleImmediately => 'Ga direct door naar volgende puzzel';
 
   @override
   String get puzzlePuzzleDashboard => 'Puzzeldashboard';
@@ -1686,8 +1567,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleFailed => 'niet opgelost';
 
   @override
-  String get puzzleStreakDescription =>
-      'Los steeds moeilijker wordende puzzels op en bouw aan een succesreeks. Er is geen klok, dus neem de tijd. Eén foute zet en het spel is uit! Per sessie kun je één zet overslaan.';
+  String get puzzleStreakDescription => 'Los steeds moeilijker wordende puzzels op en bouw aan een succesreeks. Er is geen klok, dus neem de tijd. Eén foute zet en het spel is uit! Per sessie kun je één zet overslaan.';
 
   @override
   String puzzleYourStreakX(String param) {
@@ -1695,8 +1575,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get puzzleStreakSkipExplanation =>
-      'Sla deze zet over om je reeks te behouden! Werkt maar eenmaal per sessie.';
+  String get puzzleStreakSkipExplanation => 'Sla deze zet over om je reeks te behouden! Werkt maar eenmaal per sessie.';
 
   @override
   String get puzzleContinueTheStreak => 'Doorgaan met de reeks';
@@ -1708,15 +1587,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleFromMyGames => 'Van mijn partijen';
 
   @override
-  String get puzzleLookupOfPlayer =>
-      'Zoek puzzels uit partijen van een specifieke speler';
+  String get puzzleLookupOfPlayer => 'Zoek puzzels uit partijen van een specifieke speler';
 
   @override
   String get puzzleSearchPuzzles => 'Puzzels zoeken';
 
   @override
-  String get puzzleFromMyGamesNone =>
-      'Je hebt geen puzzels in de database staan, maar Lichess waardeert je nog steeds heel erg.\nSpeel rapid en klassieke partijen om de kans te vergroten dat een puzzel uit jouw partijen wordt toegevoegd!';
+  String get puzzleFromMyGamesNone => 'Je hebt geen puzzels in de database staan, maar Lichess waardeert je nog steeds heel erg.\nSpeel rapid en klassieke partijen om de kans te vergroten dat een puzzel uit jouw partijen wordt toegevoegd!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Train, analyseer, verbeter';
@@ -1727,16 +1604,13 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get puzzleNoPuzzlesToShow =>
-      'Niets te tonen, speel eerst wat puzzels!';
+  String get puzzleNoPuzzlesToShow => 'Niets te tonen, speel eerst wat puzzels!';
 
   @override
-  String get puzzleImprovementAreasDescription =>
-      'Train deze om je voortgang te optimaliseren!';
+  String get puzzleImprovementAreasDescription => 'Train deze om je voortgang te optimaliseren!';
 
   @override
-  String get puzzleStrengthDescription =>
-      'Je presteert het beste in deze thema\'s';
+  String get puzzleStrengthDescription => 'Je presteert het beste in deze thema\'s';
 
   @override
   String puzzlePlayedXTimes(int count) {
@@ -1808,222 +1682,190 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeAdvancedPawn => 'Opgerukte pion';
 
   @override
-  String get puzzleThemeAdvancedPawnDescription =>
-      'Een pion die promoveert of dreigt te promoveren is hier cruciaal.';
+  String get puzzleThemeAdvancedPawnDescription => 'Een pion die promoveert of dreigt te promoveren is hier cruciaal.';
 
   @override
   String get puzzleThemeAdvantage => 'Voordeel';
 
   @override
-  String get puzzleThemeAdvantageDescription =>
-      'Grijp je kans om een doorslaggevend voordeel te verkrijgen. (200cp ≤ eval ≤ 600 cp)';
+  String get puzzleThemeAdvantageDescription => 'Grijp je kans om een doorslaggevend voordeel te verkrijgen. (200cp ≤ eval ≤ 600 cp)';
 
   @override
   String get puzzleThemeAnastasiaMate => 'Mat van Anastasia';
 
   @override
-  String get puzzleThemeAnastasiaMateDescription =>
-      'Een paard werkt samen met een toren of dame om de koning van de tegenstander tussen de zijkant van het bord en een eigen stuk te vangen.';
+  String get puzzleThemeAnastasiaMateDescription => 'Een paard werkt samen met een toren of dame om de koning van de tegenstander tussen de zijkant van het bord en een eigen stuk te vangen.';
 
   @override
   String get puzzleThemeArabianMate => 'Arabisch mat';
 
   @override
-  String get puzzleThemeArabianMateDescription =>
-      'Een paard en een toren werken samen om de koning van de tegenstander in een hoek van het bord in te sluiten.';
+  String get puzzleThemeArabianMateDescription => 'Een paard en een toren werken samen om de koning van de tegenstander in een hoek van het bord in te sluiten.';
 
   @override
   String get puzzleThemeAttackingF2F7 => 'f2 of f7 aanvallen';
 
   @override
-  String get puzzleThemeAttackingF2F7Description =>
-      'Een aanval gericht op de f2 of de f7-pion, zoals in de Fegatello-opening.';
+  String get puzzleThemeAttackingF2F7Description => 'Een aanval gericht op de f2 of de f7-pion, zoals in de Fegatello-opening.';
 
   @override
   String get puzzleThemeAttraction => 'Lokken';
 
   @override
-  String get puzzleThemeAttractionDescription =>
-      'Een afruil of offer om een vijandelijk stuk naar een veld te lokken of te dwingen waardoor een tactisch vervolg mogelijk wordt gemaakt.';
+  String get puzzleThemeAttractionDescription => 'Een afruil of offer om een vijandelijk stuk naar een veld te lokken of te dwingen waardoor een tactisch vervolg mogelijk wordt gemaakt.';
 
   @override
   String get puzzleThemeBackRankMate => 'Mat op de achterste rij';
 
   @override
-  String get puzzleThemeBackRankMateDescription =>
-      'Zet de koning mat op de achterste rij, ingesloten door zijn eigen stukken.';
+  String get puzzleThemeBackRankMateDescription => 'Zet de koning mat op de achterste rij, ingesloten door zijn eigen stukken.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Lopereindspel';
 
   @override
-  String get puzzleThemeBishopEndgameDescription =>
-      'Een eindspel met alleen lopers en pionnen.';
+  String get puzzleThemeBishopEndgameDescription => 'Een eindspel met alleen lopers en pionnen.';
 
   @override
   String get puzzleThemeBodenMate => 'Mat van Boden';
 
   @override
-  String get puzzleThemeBodenMateDescription =>
-      'Twee lopers op kruisende diagonalen zetten een koning mat die wordt belemmerd door de eigen stukken.';
+  String get puzzleThemeBodenMateDescription => 'Twee lopers op kruisende diagonalen zetten een koning mat die wordt belemmerd door de eigen stukken.';
 
   @override
   String get puzzleThemeCastling => 'Rokeren';
 
   @override
-  String get puzzleThemeCastlingDescription =>
-      'Breng de koning in veiligheid en zet de toren in voor een aanval.';
+  String get puzzleThemeCastlingDescription => 'Breng de koning in veiligheid en zet de toren in voor een aanval.';
 
   @override
   String get puzzleThemeCapturingDefender => 'De verdediger slaan';
 
   @override
-  String get puzzleThemeCapturingDefenderDescription =>
-      'Een stuk slaan dat essentieel is voor de verdediging van een ander stuk, waardoor vervolgens het nu onverdedigde stuk een volgende zet kan worden geslagen.';
+  String get puzzleThemeCapturingDefenderDescription => 'Een stuk slaan dat essentieel is voor de verdediging van een ander stuk, waardoor vervolgens het nu onverdedigde stuk een volgende zet kan worden geslagen.';
 
   @override
   String get puzzleThemeCrushing => 'Verpletteren';
 
   @override
-  String get puzzleThemeCrushingDescription =>
-      'Zie de blunder van de tegenstander om een verpletterend voordeel te verkrijgen. (eval ≥ 600cp)';
+  String get puzzleThemeCrushingDescription => 'Zie de blunder van de tegenstander om een verpletterend voordeel te verkrijgen. (eval ≥ 600cp)';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Mat met twee lopers';
 
   @override
-  String get puzzleThemeDoubleBishopMateDescription =>
-      'Twee lopers op belendende diagonalen zetten een koning mat die wordt belemmerd door de eigen stukken.';
+  String get puzzleThemeDoubleBishopMateDescription => 'Twee lopers op belendende diagonalen zetten een koning mat die wordt belemmerd door de eigen stukken.';
 
   @override
   String get puzzleThemeDovetailMate => 'Zwaluwstaartmat';
 
   @override
-  String get puzzleThemeDovetailMateDescription =>
-      'Een dame zet mat naast de koning, wiens vluchtvelden geblokkeerd zijn door eigen stukken.';
+  String get puzzleThemeDovetailMateDescription => 'Een dame zet mat naast de koning, wiens vluchtvelden geblokkeerd zijn door eigen stukken.';
 
   @override
   String get puzzleThemeEquality => 'Evenwicht';
 
   @override
-  String get puzzleThemeEqualityDescription =>
-      'Terugkomen uit een verloren stelling en een remise veiligstellen of een gelijkwaardige stelling bereiken. (eval ≤ 200cp)';
+  String get puzzleThemeEqualityDescription => 'Terugkomen uit een verloren stelling en een remise veiligstellen of een gelijkwaardige stelling bereiken. (eval ≤ 200cp)';
 
   @override
   String get puzzleThemeKingsideAttack => 'Koningsaanval';
 
   @override
-  String get puzzleThemeKingsideAttackDescription =>
-      'Een aanval op de vijandelijke koning na een korte rokade.';
+  String get puzzleThemeKingsideAttackDescription => 'Een aanval op de vijandelijke koning na een korte rokade.';
 
   @override
   String get puzzleThemeClearance => 'Breekzet';
 
   @override
-  String get puzzleThemeClearanceDescription =>
-      'Een zet, vaak met tempo, die een veld, lijn of diagonaal vrijmaakt voor een tactisch vervolg.';
+  String get puzzleThemeClearanceDescription => 'Een zet, vaak met tempo, die een veld, lijn of diagonaal vrijmaakt voor een tactisch vervolg.';
 
   @override
   String get puzzleThemeDefensiveMove => 'Verdedigende zet';
 
   @override
-  String get puzzleThemeDefensiveMoveDescription =>
-      'Een nauwkeurige zet of reeks zetten die nodig zijn om verlies van materiaal of een ander voordeel te voorkomen.';
+  String get puzzleThemeDefensiveMoveDescription => 'Een nauwkeurige zet of reeks zetten die nodig zijn om verlies van materiaal of een ander voordeel te voorkomen.';
 
   @override
   String get puzzleThemeDeflection => 'Weglokken';
 
   @override
-  String get puzzleThemeDeflectionDescription =>
-      'Een zet die een vijandelijk stuk afleidt van een andere taak die het uitoefent, zoals het bewaken van een belangrijk veld.';
+  String get puzzleThemeDeflectionDescription => 'Een zet die een vijandelijk stuk afleidt van een andere taak die het uitoefent, zoals het bewaken van een belangrijk veld.';
 
   @override
   String get puzzleThemeDiscoveredAttack => 'Aftrekaanval';
 
   @override
-  String get puzzleThemeDiscoveredAttackDescription =>
-      'Een stuk verplaatsen dat daarvoor een aanval van een ander lange afstandsstuk blokkeerde, bijvoorbeeld een paard dat opzij gaat voor een toren.';
+  String get puzzleThemeDiscoveredAttackDescription => 'Een stuk verplaatsen dat daarvoor een aanval van een ander lange afstandsstuk blokkeerde, bijvoorbeeld een paard dat opzij gaat voor een toren.';
 
   @override
   String get puzzleThemeDoubleCheck => 'Dubbelschaak';
 
   @override
-  String get puzzleThemeDoubleCheckDescription =>
-      'Schaak geven met twee stukken tegelijk als gevolg van een aftrekaanval waarbij zowel het verplaatste als het geactiveerde stuk de koning van de tegenstander aanvalt.';
+  String get puzzleThemeDoubleCheckDescription => 'Schaak geven met twee stukken tegelijk als gevolg van een aftrekaanval waarbij zowel het verplaatste als het geactiveerde stuk de koning van de tegenstander aanvalt.';
 
   @override
   String get puzzleThemeEndgame => 'Eindspel';
 
   @override
-  String get puzzleThemeEndgameDescription =>
-      'Tactiek in de slotfase van de partij.';
+  String get puzzleThemeEndgameDescription => 'Tactiek in de slotfase van de partij.';
 
   @override
-  String get puzzleThemeEnPassantDescription =>
-      'Tactiek met betrekking tot de en passant-regel, waarbij een pion een vijandelijke pion die vanuit zijn beginpositie twee velden tegelijk wordt opgespeeld, kan slaan.';
+  String get puzzleThemeEnPassantDescription => 'Tactiek met betrekking tot de en passant-regel, waarbij een pion een vijandelijke pion die vanuit zijn beginpositie twee velden tegelijk wordt opgespeeld, kan slaan.';
 
   @override
   String get puzzleThemeExposedKing => 'Onveilige koning';
 
   @override
-  String get puzzleThemeExposedKingDescription =>
-      'Een stelling met een koning met weinig verdedigers, vaak leidend tot schaakmat.';
+  String get puzzleThemeExposedKingDescription => 'Een stelling met een koning met weinig verdedigers, vaak leidend tot schaakmat.';
 
   @override
   String get puzzleThemeFork => 'Vork';
 
   @override
-  String get puzzleThemeForkDescription =>
-      'Een zet waarbij het gespeelde stuk twee vijandelijke stukken tegelijk aanvalt.';
+  String get puzzleThemeForkDescription => 'Een zet waarbij het gespeelde stuk twee vijandelijke stukken tegelijk aanvalt.';
 
   @override
   String get puzzleThemeHangingPiece => 'Ongedekt stuk';
 
   @override
-  String get puzzleThemeHangingPieceDescription =>
-      'Een situatie waarin een vijandelijk stuk niet of onvoldoende verdedigd wordt en daarom ongestraft geslagen kan worden.';
+  String get puzzleThemeHangingPieceDescription => 'Een situatie waarin een vijandelijk stuk niet of onvoldoende verdedigd wordt en daarom ongestraft geslagen kan worden.';
 
   @override
   String get puzzleThemeHookMate => 'Haakmat';
 
   @override
-  String get puzzleThemeHookMateDescription =>
-      'Mat met een toren, paard en pion tezamen met een vijandelijke pion om de vluchtvelden van de koning in te perken.';
+  String get puzzleThemeHookMateDescription => 'Mat met een toren, paard en pion tezamen met een vijandelijke pion om de vluchtvelden van de koning in te perken.';
 
   @override
   String get puzzleThemeInterference => 'Tussenplaatsing';
 
   @override
-  String get puzzleThemeInterferenceDescription =>
-      'Een stuk plaatsen tussen twee vijandelijke stukken om één of beide stukken onverdedigd te laten, zoals een paard op een verdedigd veld tussen twee torens.';
+  String get puzzleThemeInterferenceDescription => 'Een stuk plaatsen tussen twee vijandelijke stukken om één of beide stukken onverdedigd te laten, zoals een paard op een verdedigd veld tussen twee torens.';
 
   @override
   String get puzzleThemeIntermezzo => 'Tussenzet';
 
   @override
-  String get puzzleThemeIntermezzoDescription =>
-      'In plaats van de verwachte zet, eerst een andere zet doen met een directe dreiging die de tegenstander eerst moet beantwoorden. Ook wel bekend als \"Zwischenzug\" of \"In between\".';
+  String get puzzleThemeIntermezzoDescription => 'In plaats van de verwachte zet, eerst een andere zet doen met een directe dreiging die de tegenstander eerst moet beantwoorden. Ook wel bekend als \"Zwischenzug\" of \"In between\".';
 
   @override
   String get puzzleThemeKillBoxMate => 'Mat in dodelijk vierkant';
 
   @override
-  String get puzzleThemeKillBoxMateDescription =>
-      'Een toren staat naast de vijandelijke koning en wordt gedekt door een dame die ook de ontsnappingsvelden van de koning blokkeert. De toren en de dame vangen de vijandelijke koning in een dodelijk 3x3-vierkant.';
+  String get puzzleThemeKillBoxMateDescription => 'Een toren staat naast de vijandelijke koning en wordt gedekt door een dame die ook de ontsnappingsvelden van de koning blokkeert. De toren en de dame vangen de vijandelijke koning in een dodelijk 3x3-vierkant.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovic-mat';
 
   @override
-  String get puzzleThemeVukovicMateDescription =>
-      'Een toren en een paard werken samen om de koning mat te zetten. De toren zet mat terwijl hij door een ander stuk wordt ondersteund; het paard wordt gebruikt om ontsnappingsvelden van de koning te blokkeren.';
+  String get puzzleThemeVukovicMateDescription => 'Een toren en een paard werken samen om de koning mat te zetten. De toren zet mat terwijl hij door een ander stuk wordt ondersteund; het paard wordt gebruikt om ontsnappingsvelden van de koning te blokkeren.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Paardeneindspel';
 
   @override
-  String get puzzleThemeKnightEndgameDescription =>
-      'Een eindspel met alleen paarden en pionnen.';
+  String get puzzleThemeKnightEndgameDescription => 'Een eindspel met alleen paarden en pionnen.';
 
   @override
   String get puzzleThemeLong => 'Lange puzzel';
@@ -2035,15 +1877,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeMaster => 'Partijen van meesters';
 
   @override
-  String get puzzleThemeMasterDescription =>
-      'Puzzels van partijen met één titelhouder.';
+  String get puzzleThemeMasterDescription => 'Puzzels van partijen met één titelhouder.';
 
   @override
   String get puzzleThemeMasterVsMaster => 'Partijen van meesters onderling';
 
   @override
-  String get puzzleThemeMasterVsMasterDescription =>
-      'Puzzels van partijen met twee titelhouders.';
+  String get puzzleThemeMasterVsMasterDescription => 'Puzzels van partijen met twee titelhouders.';
 
   @override
   String get puzzleThemeMate => 'Mat';
@@ -2079,92 +1919,79 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeMateIn5 => 'Mat in 5 of meer';
 
   @override
-  String get puzzleThemeMateIn5Description =>
-      'Bedenk een langere reeks zetten.';
+  String get puzzleThemeMateIn5Description => 'Bedenk een langere reeks zetten.';
 
   @override
   String get puzzleThemeMiddlegame => 'Middenspel';
 
   @override
-  String get puzzleThemeMiddlegameDescription =>
-      'Tactiek in de tweede fase van de partij.';
+  String get puzzleThemeMiddlegameDescription => 'Tactiek in de tweede fase van de partij.';
 
   @override
   String get puzzleThemeOneMove => 'Eén-zet puzzel';
 
   @override
-  String get puzzleThemeOneMoveDescription =>
-      'Een puzzel die maar één zet vereist.';
+  String get puzzleThemeOneMoveDescription => 'Een puzzel die maar één zet vereist.';
 
   @override
   String get puzzleThemeOpening => 'Opening';
 
   @override
-  String get puzzleThemeOpeningDescription =>
-      'Tactiek in de eerste fase van de partij.';
+  String get puzzleThemeOpeningDescription => 'Tactiek in de eerste fase van de partij.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pionneneindspel';
 
   @override
-  String get puzzleThemePawnEndgameDescription =>
-      'Een eindspel met alleen pionnen.';
+  String get puzzleThemePawnEndgameDescription => 'Een eindspel met alleen pionnen.';
 
   @override
   String get puzzleThemePin => 'Penning';
 
   @override
-  String get puzzleThemePinDescription =>
-      'Tactiek waarbij een stuk niet verplaatst kan worden op straffe van een aanval op een stuk van hogere waarde.';
+  String get puzzleThemePinDescription => 'Tactiek waarbij een stuk niet verplaatst kan worden op straffe van een aanval op een stuk van hogere waarde.';
 
   @override
   String get puzzleThemePromotion => 'Promotie';
 
   @override
-  String get puzzleThemePromotionDescription =>
-      'Een pion die promoveert of dreigt te promoveren is hier cruciaal.';
+  String get puzzleThemePromotionDescription => 'Een pion die promoveert of dreigt te promoveren is hier cruciaal.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Dame-eindspel';
 
   @override
-  String get puzzleThemeQueenEndgameDescription =>
-      'Een eindspel met alleen dame en pionnen.';
+  String get puzzleThemeQueenEndgameDescription => 'Een eindspel met alleen dame en pionnen.';
 
   @override
   String get puzzleThemeQueenRookEndgame => 'Dame-toreneindspel';
 
   @override
-  String get puzzleThemeQueenRookEndgameDescription =>
-      'Een eindspel met alleen dame, torens en pionnen.';
+  String get puzzleThemeQueenRookEndgameDescription => 'Een eindspel met alleen dame, torens en pionnen.';
 
   @override
   String get puzzleThemeQueensideAttack => 'Aanval op de damevleugel';
 
   @override
-  String get puzzleThemeQueensideAttackDescription =>
-      'Een aanval op de vijandelijke koning na een lange rokade.';
+  String get puzzleThemeQueensideAttackDescription => 'Een aanval op de vijandelijke koning na een lange rokade.';
 
   @override
   String get puzzleThemeQuietMove => 'Stille zet';
 
   @override
-  String get puzzleThemeQuietMoveDescription =>
-      'Een zet die niet schaak geeft of een stuk slaat, maar een onvermijdelijke dreiging door een latere zet voorbereidt.';
+  String get puzzleThemeQuietMoveDescription => 'Een zet die niet schaak geeft of een stuk slaat, maar een onvermijdelijke dreiging door een latere zet voorbereidt.';
 
   @override
   String get puzzleThemeRookEndgame => 'Toreneindspel';
 
   @override
-  String get puzzleThemeRookEndgameDescription =>
-      'Een eindspel met alleen torens en pionnen.';
+  String get puzzleThemeRookEndgameDescription => 'Een eindspel met alleen torens en pionnen.';
 
   @override
   String get puzzleThemeSacrifice => 'Offer';
 
   @override
-  String get puzzleThemeSacrificeDescription =>
-      'Tactiek waarbij op korte termijn materiaal wordt opgegeven om voordeel te verkrijgen na een aantal gedwongen zetten.';
+  String get puzzleThemeSacrificeDescription => 'Tactiek waarbij op korte termijn materiaal wordt opgegeven om voordeel te verkrijgen na een aantal gedwongen zetten.';
 
   @override
   String get puzzleThemeShort => 'Korte puzzel';
@@ -2176,36 +2003,31 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeSkewer => 'Röntgenaanval';
 
   @override
-  String get puzzleThemeSkewerDescription =>
-      'Een motief waarbij een waardevol stuk wordt aangevallen en vervolgens wordt verplaatst, waardoor een lichter stuk erachter kan worden geslagen of aangevallen. Het omgekeerde van een penning.';
+  String get puzzleThemeSkewerDescription => 'Een motief waarbij een waardevol stuk wordt aangevallen en vervolgens wordt verplaatst, waardoor een lichter stuk erachter kan worden geslagen of aangevallen. Het omgekeerde van een penning.';
 
   @override
   String get puzzleThemeSmotheredMate => 'Stikmat';
 
   @override
-  String get puzzleThemeSmotheredMateDescription =>
-      'Schaakmat met een paard waarbij de aangevallen koning geen zet kan doen omdat hij ingesloten is (of verstikt) door zijn eigen stukken.';
+  String get puzzleThemeSmotheredMateDescription => 'Schaakmat met een paard waarbij de aangevallen koning geen zet kan doen omdat hij ingesloten is (of verstikt) door zijn eigen stukken.';
 
   @override
   String get puzzleThemeSuperGM => 'Partijen van topschakers';
 
   @override
-  String get puzzleThemeSuperGMDescription =>
-      'Puzzels van partijen gespeeld door de beste schakers ter wereld.';
+  String get puzzleThemeSuperGMDescription => 'Puzzels van partijen gespeeld door de beste schakers ter wereld.';
 
   @override
   String get puzzleThemeTrappedPiece => 'Ingesloten stuk';
 
   @override
-  String get puzzleThemeTrappedPieceDescription =>
-      'Een stuk kan niet meer ontsnappen omdat het geen velden meer heeft.';
+  String get puzzleThemeTrappedPieceDescription => 'Een stuk kan niet meer ontsnappen omdat het geen velden meer heeft.';
 
   @override
   String get puzzleThemeUnderPromotion => 'Minorpromotie';
 
   @override
-  String get puzzleThemeUnderPromotionDescription =>
-      'Promotie tot paard, loper of toren.';
+  String get puzzleThemeUnderPromotionDescription => 'Promotie tot paard, loper of toren.';
 
   @override
   String get puzzleThemeVeryLong => 'Zeer lange puzzel';
@@ -2217,29 +2039,25 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeXRayAttack => 'Röntgenaanval';
 
   @override
-  String get puzzleThemeXRayAttackDescription =>
-      'Een stuk valt een veld aan of verdedigt een veld, door een vijandelijk stuk heen.';
+  String get puzzleThemeXRayAttackDescription => 'Een stuk valt een veld aan of verdedigt een veld, door een vijandelijk stuk heen.';
 
   @override
   String get puzzleThemeZugzwang => 'Zetdwang';
 
   @override
-  String get puzzleThemeZugzwangDescription =>
-      'De tegenstander is beperkt in de zetten die hij kan doen, en elke zet verslechtert zijn stelling.';
+  String get puzzleThemeZugzwangDescription => 'De tegenstander is beperkt in de zetten die hij kan doen, en elke zet verslechtert zijn stelling.';
 
   @override
   String get puzzleThemeMix => 'Gezonde mix';
 
   @override
-  String get puzzleThemeMixDescription =>
-      'Van alles wat. Je weet niet wat je te wachten staat, je moet dus op alles voorbereid zijn! Net als in echte partijen.';
+  String get puzzleThemeMixDescription => 'Van alles wat. Je weet niet wat je te wachten staat, je moet dus op alles voorbereid zijn! Net als in echte partijen.';
 
   @override
   String get puzzleThemePlayerGames => 'Eigen partijen';
 
   @override
-  String get puzzleThemePlayerGamesDescription =>
-      'Zoek puzzels gegenereerd uit jouw partijen, of uit partijen van een andere speler.';
+  String get puzzleThemePlayerGamesDescription => 'Zoek puzzels gegenereerd uit jouw partijen, of uit partijen van een andere speler.';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
@@ -2256,19 +2074,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get settingsCloseAccount => 'Verwijder account';
 
   @override
-  String get settingsManagedAccountCannotBeClosed =>
-      'Je account wordt beheerd, en kan niet verwijderd worden.';
+  String get settingsManagedAccountCannotBeClosed => 'Je account wordt beheerd, en kan niet verwijderd worden.';
 
   @override
-  String get settingsCantOpenSimilarAccount =>
-      'Het is niet toegestaan om een nieuw account met dezelfde naam aan te maken, ook al is het hoofdlettergebruik anders.';
+  String get settingsCantOpenSimilarAccount => 'Het is niet toegestaan om een nieuw account met dezelfde naam aan te maken, ook al is het hoofdlettergebruik anders.';
 
   @override
   String get settingsCancelKeepAccount => 'Annuleer en behoud mijn account';
 
   @override
-  String get settingsCloseAccountAreYouSure =>
-      'Weet je zeker dat je je account wilt verwijderen?';
+  String get settingsCloseAccountAreYouSure => 'Weet je zeker dat je je account wilt verwijderen?';
 
   @override
   String get settingsThisAccountIsClosed => 'Dit account is gesloten.';
@@ -2292,8 +2107,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get youPlayAs => 'Je speelt als';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl =>
-      'Deel deze link als u iemand wil uitnodigen om met u te spelen';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'Deel deze link als u iemand wil uitnodigen om met u te spelen';
 
   @override
   String get gameOver => 'Partij afgelopen';
@@ -2302,8 +2116,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get waitingForOpponent => 'Wachten op een tegenstander';
 
   @override
-  String get orLetYourOpponentScanQrCode =>
-      'Of laat je tegenstander deze QR-code scannen';
+  String get orLetYourOpponentScanQrCode => 'Of laat je tegenstander deze QR-code scannen';
 
   @override
   String get waiting => 'Even geduld a.u.b.';
@@ -2392,8 +2205,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get newOpponent => 'Nieuwe tegenstander';
 
   @override
-  String get yourOpponentWantsToPlayANewGameWithYou =>
-      'Uw tegenstander wil een nieuwe partij met u spelen';
+  String get yourOpponentWantsToPlayANewGameWithYou => 'Uw tegenstander wil een nieuwe partij met u spelen';
 
   @override
   String get joinTheGame => 'Speel mee';
@@ -2405,8 +2217,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get blackPlays => 'Zwart aan zet';
 
   @override
-  String get opponentLeftChoices =>
-      'De andere speler is weggegaan. U kunt de winst opeisen, remise claimen of wachten.';
+  String get opponentLeftChoices => 'De andere speler is weggegaan. U kunt de winst opeisen, remise claimen of wachten.';
 
   @override
   String get forceResignation => 'Eis de overwinning op';
@@ -2418,8 +2229,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get talkInChat => 'Wees a.u.b. vriendelijk in de chat!';
 
   @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou =>
-      'Degene die als eerste op deze link klikt, zal met u spelen.';
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Degene die als eerste op deze link klikt, zal met u spelen.';
 
   @override
   String get whiteResigned => 'Wit geeft op';
@@ -2566,8 +2376,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding =>
-      'DTZ50\'\' met afronding, gebaseerd op het aantal halfzetten tot de volgende stukwinst of pionzet';
+  String get dtzWithRounding => 'DTZ50\'\' met afronding, gebaseerd op het aantal halfzetten tot de volgende stukwinst of pionzet';
 
   @override
   String get noGameFound => 'Geen partij gevonden';
@@ -2576,8 +2385,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get maxDepthReached => 'Maximale diepte bereikt!';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu =>
-      'Misschien meer partijen toevoegen via het voorkeuren-menu?';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Misschien meer partijen toevoegen via het voorkeuren-menu?';
 
   @override
   String get openings => 'Openingen';
@@ -2594,27 +2402,22 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove =>
-      'Speel de eerste zet/eindverkenner';
+  String get playFirstOpeningEndgameExplorerMove => 'Speel de eerste zet/eindverkenner';
 
   @override
-  String get winPreventedBy50MoveRule =>
-      'Winst voorkomen door vijftig-zetten regel';
+  String get winPreventedBy50MoveRule => 'Winst voorkomen door vijftig-zetten regel';
 
   @override
   String get lossSavedBy50MoveRule => 'Verlies gered door vijftig-zetten regel';
 
   @override
-  String get winOr50MovesByPriorMistake =>
-      'Winst of 50 zetten door een voorafgaande fout';
+  String get winOr50MovesByPriorMistake => 'Winst of 50 zetten door een voorafgaande fout';
 
   @override
-  String get lossOr50MovesByPriorMistake =>
-      'Verlies of 50 zetten door voorafgaande fout';
+  String get lossOr50MovesByPriorMistake => 'Verlies of 50 zetten door voorafgaande fout';
 
   @override
-  String get unknownDueToRounding =>
-      'Winst/verlies alleen gegarandeerd als aanbevolen tablebase-regel is gevolgd sinds het meest recente stukwinst of de meest recente pionzet, ten gevolge van eventuele afronding.';
+  String get unknownDueToRounding => 'Winst/verlies alleen gegarandeerd als aanbevolen tablebase-regel is gevolgd sinds het meest recente stukwinst of de meest recente pionzet, ten gevolge van eventuele afronding.';
 
   @override
   String get allSet => 'Klaar!';
@@ -2662,8 +2465,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get infiniteAnalysis => 'Oneindige analyse';
 
   @override
-  String get removesTheDepthLimit =>
-      'Verwijdert de dieptelimiet, en houdt je computer warm';
+  String get removesTheDepthLimit => 'Verwijdert de dieptelimiet, en houdt je computer warm';
 
   @override
   String get blunder => 'Blunder';
@@ -2722,15 +2524,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get rememberMe => 'Mijn gegevens onthouden';
 
   @override
-  String get youNeedAnAccountToDoThat =>
-      'Je hebt een account nodig om dat te doen';
+  String get youNeedAnAccountToDoThat => 'Je hebt een account nodig om dat te doen';
 
   @override
   String get signUp => 'Registreren';
 
   @override
-  String get computersAreNotAllowedToPlay =>
-      'Computers en spelers met ondersteuning van schaakengines mogen hier niet spelen. Maak a.u.b. geen gebruik van schaakengines, databases of de hulp van andere spelers terwijl je je partijen speelt.';
+  String get computersAreNotAllowedToPlay => 'Computers en spelers met ondersteuning van schaakengines mogen hier niet spelen. Maak a.u.b. geen gebruik van schaakengines, databases of de hulp van andere spelers terwijl je je partijen speelt.';
 
   @override
   String get games => 'Partijen';
@@ -2807,20 +2607,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get changeUsername => 'Wijzig gebruikersnaam';
 
   @override
-  String get changeUsernameNotSame =>
-      'Enkel de hoofdlettergevoeligheid van de letters kan veranderen. Bijvoorbeeld van \"janjansen\" naar \"JanJansen\".';
+  String get changeUsernameNotSame => 'Enkel de hoofdlettergevoeligheid van de letters kan veranderen. Bijvoorbeeld van \"janjansen\" naar \"JanJansen\".';
 
   @override
-  String get changeUsernameDescription =>
-      'Wijzig je gebruikersnaam. Dit kan slechts eenmaal worden gedaan en je kunt alleen het hoofdlettergebruik van je gebruikersnaam veranderen.';
+  String get changeUsernameDescription => 'Wijzig je gebruikersnaam. Dit kan slechts eenmaal worden gedaan en je kunt alleen het hoofdlettergebruik van je gebruikersnaam veranderen.';
 
   @override
-  String get signupUsernameHint =>
-      'Zorg ervoor dat u een gezinsvriendelijke gebruikersnaam kiest. U kunt het later niet meer wijzigen en alle accounts met ongepaste gebruikersnamen zullen gesloten worden!';
+  String get signupUsernameHint => 'Zorg ervoor dat u een gezinsvriendelijke gebruikersnaam kiest. U kunt het later niet meer wijzigen en alle accounts met ongepaste gebruikersnamen zullen gesloten worden!';
 
   @override
-  String get signupEmailHint =>
-      'We zullen het alleen gebruiken om het wachtwoord opnieuw in te stellen.';
+  String get signupEmailHint => 'We zullen het alleen gebruiken om het wachtwoord opnieuw in te stellen.';
 
   @override
   String get password => 'Wachtwoord';
@@ -2841,23 +2637,19 @@ class AppLocalizationsNl extends AppLocalizations {
   String get forgotPassword => 'Wachtwoord vergeten?';
 
   @override
-  String get error_weakPassword =>
-      'Dit wachtwoord komt heel vaak voor en is te gemakkelijk te raden.';
+  String get error_weakPassword => 'Dit wachtwoord komt heel vaak voor en is te gemakkelijk te raden.';
 
   @override
-  String get error_namePassword =>
-      'Gebruik uw gebruikersnaam niet als wachtwoord.';
+  String get error_namePassword => 'Gebruik uw gebruikersnaam niet als wachtwoord.';
 
   @override
-  String get blankedPassword =>
-      'Je hebt hetzelfde wachtwoord gebruikt op een andere site en die site heeft een datalek gehad. Om de veiligheid van je Lichess-account te garanderen, dien je een nieuw wachtwoord in te stellen. Bedankt voor je begrip.';
+  String get blankedPassword => 'Je hebt hetzelfde wachtwoord gebruikt op een andere site en die site heeft een datalek gehad. Om de veiligheid van je Lichess-account te garanderen, dien je een nieuw wachtwoord in te stellen. Bedankt voor je begrip.';
 
   @override
   String get youAreLeavingLichess => 'Je verlaat Lichess';
 
   @override
-  String get neverTypeYourPassword =>
-      'Voer je Lichess-wachtwoord nooit in op een andere website!';
+  String get neverTypeYourPassword => 'Voer je Lichess-wachtwoord nooit in op een andere website!';
 
   @override
   String proceedToX(String param) {
@@ -2865,23 +2657,19 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get passwordSuggestion =>
-      'Stel geen wachtwoord in dat iemand anders voorstelt. Ze kunnen het gebruiken om je account te stelen.';
+  String get passwordSuggestion => 'Stel geen wachtwoord in dat iemand anders voorstelt. Ze kunnen het gebruiken om je account te stelen.';
 
   @override
-  String get emailSuggestion =>
-      'Stel geen e-mailadres in dat iemand anders voorstelt. Ze kunnen het gebruiken om je account te stelen.';
+  String get emailSuggestion => 'Stel geen e-mailadres in dat iemand anders voorstelt. Ze kunnen het gebruiken om je account te stelen.';
 
   @override
   String get emailConfirmHelp => 'Hulp met e-mailbevestiging';
 
   @override
-  String get emailConfirmNotReceived =>
-      'Geen bevestigingsmail ontvangen na aanmelden?';
+  String get emailConfirmNotReceived => 'Geen bevestigingsmail ontvangen na aanmelden?';
 
   @override
-  String get whatSignupUsername =>
-      'Welke gebruikersnaam heb je gebruikt om je aan te melden?';
+  String get whatSignupUsername => 'Welke gebruikersnaam heb je gebruikt om je aan te melden?';
 
   @override
   String usernameNotFound(String param) {
@@ -2889,8 +2677,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get usernameCanBeUsedForNewAccount =>
-      'U kunt deze gebruikersnaam gebruiken om een nieuw account aan te maken';
+  String get usernameCanBeUsedForNewAccount => 'U kunt deze gebruikersnaam gebruiken om een nieuw account aan te maken';
 
   @override
   String emailSent(String param) {
@@ -2898,20 +2685,16 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get emailCanTakeSomeTime =>
-      'Het kan even duren voordat de mail binnenkomt.';
+  String get emailCanTakeSomeTime => 'Het kan even duren voordat de mail binnenkomt.';
 
   @override
-  String get refreshInboxAfterFiveMinutes =>
-      'Wacht 5 minuten en vernieuw uw e-mail inbox.';
+  String get refreshInboxAfterFiveMinutes => 'Wacht 5 minuten en vernieuw uw e-mail inbox.';
 
   @override
-  String get checkSpamFolder =>
-      'Controleer ook uw spammap, het kan daar terechtkomen. Als dat zo is, markeer het als geen spam.';
+  String get checkSpamFolder => 'Controleer ook uw spammap, het kan daar terechtkomen. Als dat zo is, markeer het als geen spam.';
 
   @override
-  String get emailForSignupHelp =>
-      'Als niks anders lukt, stuur ons dan deze e-mail:';
+  String get emailForSignupHelp => 'Als niks anders lukt, stuur ons dan deze e-mail:';
 
   @override
   String copyTextToEmail(String param) {
@@ -2919,8 +2702,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get waitForSignupHelp =>
-      'We nemen binnenkort contact op om te helpen bij het afronden van de inschrijving.';
+  String get waitForSignupHelp => 'We nemen binnenkort contact op om te helpen bij het afronden van de inschrijving.';
 
   @override
   String accountConfirmed(String param) {
@@ -2933,8 +2715,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get accountConfirmationEmailNotNeeded =>
-      'Je hebt geen bevestigingsmail nodig.';
+  String get accountConfirmationEmailNotNeeded => 'Je hebt geen bevestigingsmail nodig.';
 
   @override
   String accountClosed(String param) {
@@ -3045,12 +2826,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get rematchOfferSent => 'Uitnodiging voor nieuwe partij verstuurd';
 
   @override
-  String get rematchOfferAccepted =>
-      'Uitnodiging voor nieuwe partij geaccepteerd';
+  String get rematchOfferAccepted => 'Uitnodiging voor nieuwe partij geaccepteerd';
 
   @override
-  String get rematchOfferCanceled =>
-      'Uitnodiging voor nieuwe partij geannuleerd';
+  String get rematchOfferCanceled => 'Uitnodiging voor nieuwe partij geannuleerd';
 
   @override
   String get rematchOfferDeclined => 'Uitnodiging voor nieuwe partij geweigerd';
@@ -3104,8 +2883,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get ratingFilter => 'Filter van rating';
 
   @override
-  String get thisAccountViolatedTos =>
-      'Dit account heeft de Lichess Servicevoorwaarden geschonden';
+  String get thisAccountViolatedTos => 'Dit account heeft de Lichess Servicevoorwaarden geschonden';
 
   @override
   String get openingExplorerAndTablebase => 'Openingsverkenner & tablebase';
@@ -3144,8 +2922,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get blackCancelsTakeback => 'Zwart annuleert terugnemen';
 
   @override
-  String get yourOpponentProposesATakeback =>
-      'Uw tegenstander stelt een terugname voor';
+  String get yourOpponentProposesATakeback => 'Uw tegenstander stelt een terugname voor';
 
   @override
   String get bookmarkThisGame => 'Voeg deze partij toe aan uw favorieten';
@@ -3166,8 +2943,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get backToTournament => 'Terug naar het toernooi';
 
   @override
-  String get noDrawBeforeSwissLimit =>
-      'In een Zwitsers toernooi kun je pas na 30 zetten remise aanbieden.';
+  String get noDrawBeforeSwissLimit => 'In een Zwitsers toernooi kun je pas na 30 zetten remise aanbieden.';
 
   @override
   String get thematic => 'Thematisch';
@@ -3178,8 +2954,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional =>
-      'Raitingfilters zijn vergrendeld omdat je rating niet stabiel is. Het spelen van partijen met rating zal de stabiliteit vergroten.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Raitingfilters zijn vergrendeld omdat je rating niet stabiel is. Het spelen van partijen met rating zal de stabiliteit vergroten.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3220,8 +2995,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get backToGame => 'Terug naar partij';
 
   @override
-  String get siteDescription =>
-      'Gratis online schaken. Schaak nu met een heldere vormgeving. Geen registratie nodig, geen advertenties, geen plug-ins vereist. Schaak tegen de computer, vrienden of willekeurige tegenstanders.';
+  String get siteDescription => 'Gratis online schaken. Schaak nu met een heldere vormgeving. Geen registratie nodig, geen advertenties, geen plug-ins vereist. Schaak tegen de computer, vrienden of willekeurige tegenstanders.';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
@@ -3290,19 +3064,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get importGame => 'Importeer partij';
 
   @override
-  String get importGameExplanation =>
-      'Als je een PGN in het venster plakt, krijg je een doorzoekbare replay, een computeranalyse, een chatbox bij de partij en een deelbare URL.';
+  String get importGameExplanation => 'Als je een PGN in het venster plakt, krijg je een doorzoekbare replay, een computeranalyse, een chatbox bij de partij en een deelbare URL.';
 
   @override
-  String get importGameDataPrivacyWarning =>
-      'Deze PGN kan toegankelijk zijn voor iedereen. Gebruik een studie om een partij privé te importeren.';
+  String get importGameDataPrivacyWarning => 'Deze PGN kan toegankelijk zijn voor iedereen. Gebruik een studie om een partij privé te importeren.';
 
   @override
   String get thisIsAChessCaptcha => 'Dit is een schaak CAPTCHA.';
 
   @override
-  String get clickOnTheBoardToMakeYourMove =>
-      'Klik op het bord om je zet te spelen en te bewijzen dat je een mens bent.';
+  String get clickOnTheBoardToMakeYourMove => 'Klik op het bord om je zet te spelen en te bewijzen dat je een mens bent.';
 
   @override
   String get captcha_fail => 'Gelieve de schaak-captcha op te lossen.';
@@ -3409,20 +3180,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get advancedSettings => 'Geavanceerde instellingen';
 
   @override
-  String get safeTournamentName =>
-      'Kies een zeer veilige naam voor het toernooi.';
+  String get safeTournamentName => 'Kies een zeer veilige naam voor het toernooi.';
 
   @override
-  String get inappropriateNameWarning =>
-      'Bij zelfs het minste vermoeden van een misplaatst gekozen naam, kan uw account gesloten worden.';
+  String get inappropriateNameWarning => 'Bij zelfs het minste vermoeden van een misplaatst gekozen naam, kan uw account gesloten worden.';
 
   @override
-  String get emptyTournamentName =>
-      'Laat het veld leeg om het toernooi naar een willekeurige grootmeester te vernoemen.';
+  String get emptyTournamentName => 'Laat het veld leeg om het toernooi naar een willekeurige grootmeester te vernoemen.';
 
   @override
-  String get makePrivateTournament =>
-      'Maak het toernooi privé en beperk de toegang met een wachtwoord';
+  String get makePrivateTournament => 'Maak het toernooi privé en beperk de toegang met een wachtwoord';
 
   @override
   String get join => 'Neem deel';
@@ -3546,8 +3313,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get flair => 'Symbool';
 
   @override
-  String get youCanHideFlair =>
-      'Er bestaat een instelling om alle gebruikersflairs over de hele site te verbergen.';
+  String get youCanHideFlair => 'Er bestaat een instelling om alle gebruikersflairs over de hele site te verbergen.';
 
   @override
   String get biography => 'Biografie';
@@ -3568,8 +3334,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get inlineNotation => 'Geïntegreerde notatie';
 
   @override
-  String get makeAStudy =>
-      'Maak een studie aan om ze te bewaren en/of te delen.';
+  String get makeAStudy => 'Maak een studie aan om ze te bewaren en/of te delen.';
 
   @override
   String get clearSavedMoves => 'Zetten wissen';
@@ -3584,15 +3349,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get activePlayers => 'Actieve spelers';
 
   @override
-  String get bewareTheGameIsRatedButHasNoClock =>
-      'Let op, de partij is met rating maar heeft geen klok!';
+  String get bewareTheGameIsRatedButHasNoClock => 'Let op, de partij is met rating maar heeft geen klok!';
 
   @override
   String get success => 'Succes';
 
   @override
-  String get automaticallyProceedToNextGameAfterMoving =>
-      'Na je zet direct doorgaan naar de volgende partij';
+  String get automaticallyProceedToNextGameAfterMoving => 'Na je zet direct doorgaan naar de volgende partij';
 
   @override
   String get autoSwitch => 'Automatische wissel';
@@ -3613,8 +3376,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get descPrivate => 'Interne beschrijving';
 
   @override
-  String get descPrivateHelp =>
-      'Tekst die alleen de teamleden zien. Indien ingesteld, vervangt deze de openbare beschrijving voor teamleden.';
+  String get descPrivateHelp => 'Tekst die alleen de teamleden zien. Indien ingesteld, vervangt deze de openbare beschrijving voor teamleden.';
 
   @override
   String get no => 'Nee';
@@ -3683,20 +3445,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get other => 'Anders';
 
   @override
-  String get reportCheatBoostHelp =>
-      'Plak de link naar de partij(en) en leg uit wat er mis is met het gedrag van de gebruiker. Zeg niet alleen \'hij speelt vals\', maar leg ook uit hoe je tot deze conclusie komt.';
+  String get reportCheatBoostHelp => 'Plak de link naar de partij(en) en leg uit wat er mis is met het gedrag van de gebruiker. Zeg niet alleen \'hij speelt vals\', maar leg ook uit hoe je tot deze conclusie komt.';
 
   @override
-  String get reportUsernameHelp =>
-      'Leg uit wat er aan deze gebruikersnaam beledigend is. Zeg niet gewoon \"het is aanstootgevend/ongepast\", maar vertel ons hoe je tot deze conclusie komt, vooral als de belediging verhuld wordt, niet in het Engels is, in dialect is, of een historische of culturele verwijzing is.';
+  String get reportUsernameHelp => 'Leg uit wat er aan deze gebruikersnaam beledigend is. Zeg niet gewoon \"het is aanstootgevend/ongepast\", maar vertel ons hoe je tot deze conclusie komt, vooral als de belediging verhuld wordt, niet in het Engels is, in dialect is, of een historische of culturele verwijzing is.';
 
   @override
-  String get reportProcessedFasterInEnglish =>
-      'Je melding wordt sneller verwerkt als deze in het Engels is geschreven.';
+  String get reportProcessedFasterInEnglish => 'Je melding wordt sneller verwerkt als deze in het Engels is geschreven.';
 
   @override
-  String get error_provideOneCheatedGameLink =>
-      'Geef ten minste één link naar een partij waarin vals gespeeld is.';
+  String get error_provideOneCheatedGameLink => 'Geef ten minste één link naar een partij waarin vals gespeeld is.';
 
   @override
   String by(String param) {
@@ -3721,15 +3479,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get typePrivateNotesHere => 'Type privénotities hier';
 
   @override
-  String get writeAPrivateNoteAboutThisUser =>
-      'Maak een privé-notitie over deze gebruiker';
+  String get writeAPrivateNoteAboutThisUser => 'Maak een privé-notitie over deze gebruiker';
 
   @override
   String get noNoteYet => 'Nog geen notities';
 
   @override
-  String get invalidUsernameOrPassword =>
-      'Ongeldige gebruikersnaam of wachtwoord';
+  String get invalidUsernameOrPassword => 'Ongeldige gebruikersnaam of wachtwoord';
 
   @override
   String get incorrectPassword => 'Onjuist wachtwoord';
@@ -3750,8 +3506,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get newPasswordAgain => 'Nieuw wachtwoord (opnieuw)';
 
   @override
-  String get newPasswordsDontMatch =>
-      'De nieuwe wachtwoorden komen niet overeen';
+  String get newPasswordsDontMatch => 'De nieuwe wachtwoorden komen niet overeen';
 
   @override
   String get newPasswordStrength => 'Wachtwoordsterkte';
@@ -3775,8 +3530,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get letOtherPlayersChallengeYou => 'Andere spelers mogen je uitdagen';
 
   @override
-  String get letOtherPlayersInviteYouToStudy =>
-      'Laat andere spelers je uitnodigen voor een Study';
+  String get letOtherPlayersInviteYouToStudy => 'Laat andere spelers je uitnodigen voor een Study';
 
   @override
   String get sound => 'Geluid';
@@ -3844,12 +3598,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get starting => 'Startend:';
 
   @override
-  String get allInformationIsPublicAndOptional =>
-      'Alle informatie is publiek toegankelijk en optioneel.';
+  String get allInformationIsPublicAndOptional => 'Alle informatie is publiek toegankelijk en optioneel.';
 
   @override
-  String get biographyDescription =>
-      'Vertel over jezelf, wat je aantrekt in schaken, je favoriete openingen, partijen, spelers…';
+  String get biographyDescription => 'Vertel over jezelf, wat je aantrekt in schaken, je favoriete openingen, partijen, spelers…';
 
   @override
   String get listBlockedPlayers => 'Toon lijst geblokkeerde spelers';
@@ -3897,8 +3649,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get error_email => 'Dit e-mailadres is ongeldig';
 
   @override
-  String get error_email_acceptable =>
-      'Dit e-mailadres is niet acceptabel. Controleer het nogmaals en probeer het opnieuw.';
+  String get error_email_acceptable => 'Dit e-mailadres is niet acceptabel. Controleer het nogmaals en probeer het opnieuw.';
 
   @override
   String get error_email_unique => 'E-mailadres ongeldig of al in gebruik';
@@ -4029,8 +3780,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get hostANewSimul => 'Geef een nieuwe simultaan';
 
   @override
-  String get signUpToHostOrJoinASimul =>
-      'Meld je aan om een simul te geven of eraan deel te nemen';
+  String get signUpToHostOrJoinASimul => 'Meld je aan om een simul te geven of eraan deel te nemen';
 
   @override
   String get noSimulFound => 'Simultaan niet gevonden';
@@ -4042,54 +3792,43 @@ class AppLocalizationsNl extends AppLocalizations {
   String get returnToSimulHomepage => 'Ga terug naar de Simultaan hoofdpagina';
 
   @override
-  String get aboutSimul =>
-      'Bij simultanen speelt één speler tegen meerdere spelers tegelijk.';
+  String get aboutSimul => 'Bij simultanen speelt één speler tegen meerdere spelers tegelijk.';
 
   @override
-  String get aboutSimulImage =>
-      'Van de 50 tegenstanders won Fischer 47 partijen, speelde hij 2 keer remise en verloor hij 1 keer.';
+  String get aboutSimulImage => 'Van de 50 tegenstanders won Fischer 47 partijen, speelde hij 2 keer remise en verloor hij 1 keer.';
 
   @override
-  String get aboutSimulRealLife =>
-      'Dit concept bestaat ook als evenement in de echte wereld. Dan beweegt de simultaangever van tafel naar tafel om steeds één zet te spelen.';
+  String get aboutSimulRealLife => 'Dit concept bestaat ook als evenement in de echte wereld. Dan beweegt de simultaangever van tafel naar tafel om steeds één zet te spelen.';
 
   @override
-  String get aboutSimulRules =>
-      'Wanneer de simultaan begint, begint iedere partij met de simultaangever. De simultaangever speelt iedere partij met wit en de simultaan eindigt wanneer alle partijen afgerond zijn.';
+  String get aboutSimulRules => 'Wanneer de simultaan begint, begint iedere partij met de simultaangever. De simultaangever speelt iedere partij met wit en de simultaan eindigt wanneer alle partijen afgerond zijn.';
 
   @override
-  String get aboutSimulSettings =>
-      'Simultanen zijn altijd zonder rating. Extra partijen, extra tijd en terugzetten is niet mogelijk.';
+  String get aboutSimulSettings => 'Simultanen zijn altijd zonder rating. Extra partijen, extra tijd en terugzetten is niet mogelijk.';
 
   @override
   String get create => 'Creëer';
 
   @override
-  String get whenCreateSimul =>
-      'Wanneer je een simultaan creëert, kun je tegen meerdere spelers tegelijk spelen.';
+  String get whenCreateSimul => 'Wanneer je een simultaan creëert, kun je tegen meerdere spelers tegelijk spelen.';
 
   @override
-  String get simulVariantsHint =>
-      'Als je meerdere varianten selecteert, kan iedere speler kiezen welke variant hij wil spelen.';
+  String get simulVariantsHint => 'Als je meerdere varianten selecteert, kan iedere speler kiezen welke variant hij wil spelen.';
 
   @override
-  String get simulClockHint =>
-      'Fischer-speeltempo. Hoe meer tegenstanders er zijn, hoe meer tijd je nodig hebt.';
+  String get simulClockHint => 'Fischer-speeltempo. Hoe meer tegenstanders er zijn, hoe meer tijd je nodig hebt.';
 
   @override
-  String get simulAddExtraTime =>
-      'Je mag extra tijd aan je eigen klok toevoegen om beter met de simultaan om te kunnen gaan.';
+  String get simulAddExtraTime => 'Je mag extra tijd aan je eigen klok toevoegen om beter met de simultaan om te kunnen gaan.';
 
   @override
   String get simulHostExtraTime => 'Extra tijd voor de simultaangever';
 
   @override
-  String get simulAddExtraTimePerPlayer =>
-      'Voeg extra tijd toe aan de klok voor elke speler die meedoet aan de simultaan.';
+  String get simulAddExtraTimePerPlayer => 'Voeg extra tijd toe aan de klok voor elke speler die meedoet aan de simultaan.';
 
   @override
-  String get simulHostExtraTimePerPlayer =>
-      'Extra tijd voor de simultaangever per deelnemer';
+  String get simulHostExtraTimePerPlayer => 'Extra tijd voor de simultaangever per deelnemer';
 
   @override
   String get lichessTournaments => 'Lichess toernooien';
@@ -4125,8 +3864,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get keyEnterOrExitVariation => 'vermeld/stop variant';
 
   @override
-  String get keyRequestComputerAnalysis =>
-      'Verzoek om computeranalyse, Leer van je fouten';
+  String get keyRequestComputerAnalysis => 'Verzoek om computeranalyse, Leer van je fouten';
 
   @override
   String get keyNextLearnFromYourMistakes => 'Volgende (leer van je fouten)';
@@ -4156,12 +3894,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get toggleGlyphAnnotations => 'Zet glyph-aantekeningen aan of uit';
 
   @override
-  String get togglePositionAnnotations =>
-      'Zet stellingsaantekeningen aan of uit';
+  String get togglePositionAnnotations => 'Zet stellingsaantekeningen aan of uit';
 
   @override
-  String get variationArrowsInfo =>
-      'Met de variantpijlen kunt u navigeren zonder de zettenlijst te gebruiken.';
+  String get variationArrowsInfo => 'Met de variantpijlen kunt u navigeren zonder de zettenlijst te gebruiken.';
 
   @override
   String get playSelectedMove => 'speel geselecteerde zet';
@@ -4170,12 +3906,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get newTournament => 'Nieuw toernooi';
 
   @override
-  String get tournamentHomeTitle =>
-      'Schaaktoernooi met verschillende speelduur en varianten';
+  String get tournamentHomeTitle => 'Schaaktoernooi met verschillende speelduur en varianten';
 
   @override
-  String get tournamentHomeDescription =>
-      'Speel snelle schaaktoernooien! Neem deel aan een officieel gepland toernooi, of maak er zelf een. Bullet, Blitz, Classical, Chess960, King of the Hill, Threecheck, en meer opties verkrijgbaar voor eindeloos schaakplezier.';
+  String get tournamentHomeDescription => 'Speel snelle schaaktoernooien! Neem deel aan een officieel gepland toernooi, of maak er zelf een. Bullet, Blitz, Classical, Chess960, King of the Hill, Threecheck, en meer opties verkrijgbaar voor eindeloos schaakplezier.';
 
   @override
   String get tournamentNotFound => 'Toernooi niet gevonden';
@@ -4184,12 +3918,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get tournamentDoesNotExist => 'Dit toernooi bestaat niet.';
 
   @override
-  String get tournamentMayHaveBeenCanceled =>
-      'Het is mogelijk afgelast, indien alle spelers zijn weggegaan voordat het toernooi gestart was.';
+  String get tournamentMayHaveBeenCanceled => 'Het is mogelijk afgelast, indien alle spelers zijn weggegaan voordat het toernooi gestart was.';
 
   @override
-  String get returnToTournamentsHomepage =>
-      'Ga terug naar de startpagina van de toernooien';
+  String get returnToTournamentsHomepage => 'Ga terug naar de startpagina van de toernooien';
 
   @override
   String weeklyPerfTypeRatingDistribution(String param) {
@@ -4202,19 +3934,12 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String youAreBetterThanPercentOfPerfTypePlayers(
-    String param1,
-    String param2,
-  ) {
+  String youAreBetterThanPercentOfPerfTypePlayers(String param1, String param2) {
     return 'Je bent beter dan $param1 van de $param2 spelers.';
   }
 
   @override
-  String userIsBetterThanPercentOfPerfTypePlayers(
-    String param1,
-    String param2,
-    String param3,
-  ) {
+  String userIsBetterThanPercentOfPerfTypePlayers(String param1, String param2, String param3) {
     return '$param1 is beter dan $param2 van alle $param3 spelers.';
   }
 
@@ -4241,20 +3966,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get checkYourEmail => 'Controleer je email';
 
   @override
-  String get weHaveSentYouAnEmailClickTheLink =>
-      'We hebben je een email gestuurd. Klik op de link in de email om je account te activeren.';
+  String get weHaveSentYouAnEmailClickTheLink => 'We hebben je een email gestuurd. Klik op de link in de email om je account te activeren.';
 
   @override
-  String get ifYouDoNotSeeTheEmailCheckOtherPlaces =>
-      'Als je de email niet ziet, kijk dan op andere plaatsen, zoals je spam of andere mappen.';
+  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Als je de email niet ziet, kijk dan op andere plaatsen, zoals je spam of andere mappen.';
 
   @override
-  String get ifYouDoNotGetTheEmail =>
-      'Als u de e-mail niet binnen 5 minuten ontvangt:';
+  String get ifYouDoNotGetTheEmail => 'Als u de e-mail niet binnen 5 minuten ontvangt:';
 
   @override
-  String get checkAllEmailFolders =>
-      'Controleer ongewenste email, spam en andere mappen';
+  String get checkAllEmailFolders => 'Controleer ongewenste email, spam en andere mappen';
 
   @override
   String verifyYourAddress(String param) {
@@ -4277,12 +3998,10 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get networkLagBetweenYouAndLichess =>
-      'Netwerkvertraging tussen u en Lichess';
+  String get networkLagBetweenYouAndLichess => 'Netwerkvertraging tussen u en Lichess';
 
   @override
-  String get timeToProcessAMoveOnLichessServer =>
-      'Tijd om een zet te verwerken op de lichess server';
+  String get timeToProcessAMoveOnLichessServer => 'Tijd om een zet te verwerken op de lichess server';
 
   @override
   String get downloadAnnotated => 'Download de geannoteerde partij';
@@ -4300,28 +4019,22 @@ class AppLocalizationsNl extends AppLocalizations {
   String get crosstable => 'Onderlinge partijen';
 
   @override
-  String get youCanAlsoScrollOverTheBoardToMoveInTheGame =>
-      'Je kunt ook over het bord scrollen om je zetten uit te voeren.';
+  String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'Je kunt ook over het bord scrollen om je zetten uit te voeren.';
 
   @override
-  String get scrollOverComputerVariationsToPreviewThem =>
-      'Beweeg de muis over computervarianten om ze te bekijken.';
+  String get scrollOverComputerVariationsToPreviewThem => 'Beweeg de muis over computervarianten om ze te bekijken.';
 
   @override
-  String get analysisShapesHowTo =>
-      'Druk op shift+linkermuisknop of rechtermuisknop om cirkels en pijlen op het bord te tekenen.';
+  String get analysisShapesHowTo => 'Druk op shift+linkermuisknop of rechtermuisknop om cirkels en pijlen op het bord te tekenen.';
 
   @override
-  String get primaryColorArrowsHowTo =>
-      'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
 
   @override
-  String get letOtherPlayersMessageYou =>
-      'Andere spelers mogen je berichten zenden';
+  String get letOtherPlayersMessageYou => 'Andere spelers mogen je berichten zenden';
 
   @override
-  String get receiveForumNotifications =>
-      'Ontvang meldingen wanneer je genoemd wordt op het forum';
+  String get receiveForumNotifications => 'Ontvang meldingen wanneer je genoemd wordt op het forum';
 
   @override
   String get shareYourInsightsData => 'Deel de data van je partijen';
@@ -4342,8 +4055,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get kidModeIsEnabled => 'Kindvriendelijke modus is ingeschakeld.';
 
   @override
-  String get kidModeExplanation =>
-      'Dit gaat over veiligheid. In kindvriendelijke modus, worden alle communicatiemogelijkheden op de website uitgeschakeld. Activeer dit voor kinderen en scholieren, om hen te beschermen tegen andere internetgebruikers.';
+  String get kidModeExplanation => 'Dit gaat over veiligheid. In kindvriendelijke modus, worden alle communicatiemogelijkheden op de website uitgeschakeld. Activeer dit voor kinderen en scholieren, om hen te beschermen tegen andere internetgebruikers.';
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
@@ -4351,8 +4063,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get askYourChessTeacherAboutLiftingKidMode =>
-      'Je account wordt beheerd. Vraag je schaakdocent om de kindermodus uit te zetten.';
+  String get askYourChessTeacherAboutLiftingKidMode => 'Je account wordt beheerd. Vraag je schaakdocent om de kindermodus uit te zetten.';
 
   @override
   String get enableKidMode => 'Activeer Kindermodus';
@@ -4373,8 +4084,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get playChessEverywhere => 'Schaak overal';
 
   @override
-  String get everybodyGetsAllFeaturesForFree =>
-      'Iedereen krijgt gratis alle mogelijkheden';
+  String get everybodyGetsAllFeaturesForFree => 'Iedereen krijgt gratis alle mogelijkheden';
 
   @override
   String get viewTheSolution => 'Bekijk de oplossing';
@@ -4460,20 +4170,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get embedInYourWebsite => 'Insluiten in uw website';
 
   @override
-  String get usernameAlreadyUsed =>
-      'Deze naam is al in gebruik, probeer a.u.b. een andere naam.';
+  String get usernameAlreadyUsed => 'Deze naam is al in gebruik, probeer a.u.b. een andere naam.';
 
   @override
-  String get usernamePrefixInvalid =>
-      'De gebruikersnaam moet met een letter beginnen.';
+  String get usernamePrefixInvalid => 'De gebruikersnaam moet met een letter beginnen.';
 
   @override
-  String get usernameSuffixInvalid =>
-      'De gebruikersnaam moet eindigen met een letter of een cijfer.';
+  String get usernameSuffixInvalid => 'De gebruikersnaam moet eindigen met een letter of een cijfer.';
 
   @override
-  String get usernameCharsInvalid =>
-      'De gebruikersnaam mag alleen letters, cijfers, underscores, en koppeltekens bevatten.';
+  String get usernameCharsInvalid => 'De gebruikersnaam mag alleen letters, cijfers, underscores, en koppeltekens bevatten.';
 
   @override
   String get usernameUnacceptable => 'Deze gebruikersnaam is niet acceptabel.';
@@ -4534,8 +4240,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get resumePractice => 'Hervat oefenen';
 
   @override
-  String get drawByFiftyMoves =>
-      'De partij is in remise geëindigd vanwege de 50-zettenregel.';
+  String get drawByFiftyMoves => 'De partij is in remise geëindigd vanwege de 50-zettenregel.';
 
   @override
   String get theGameIsADraw => 'De partij eindigt in remise.';
@@ -4609,12 +4314,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get noMistakesFoundForBlack => 'Geen fouten gevonden voor zwart';
 
   @override
-  String get doneReviewingWhiteMistakes =>
-      'Klaar met analyseren van fouten van wit';
+  String get doneReviewingWhiteMistakes => 'Klaar met analyseren van fouten van wit';
 
   @override
-  String get doneReviewingBlackMistakes =>
-      'Klaar met analyseren van fouten van zwart';
+  String get doneReviewingBlackMistakes => 'Klaar met analyseren van fouten van zwart';
 
   @override
   String get doItAgain => 'Probeer het opnieuw';
@@ -4644,8 +4347,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get addCurrentVariation => 'Voeg huidige variant toe';
 
   @override
-  String get playVariationToCreateConditionalPremoves =>
-      'Speel een variant om voorwaardelijke zetten vooruit te maken';
+  String get playVariationToCreateConditionalPremoves => 'Speel een variant om voorwaardelijke zetten vooruit te maken';
 
   @override
   String get noConditionalPremoves => 'Geen voorwaardelijke zetten vooruit';
@@ -4661,8 +4363,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get showUnreadLichessMessage =>
-      'Je hebt een privébericht van Lichess ontvangen.';
+  String get showUnreadLichessMessage => 'Je hebt een privébericht van Lichess ontvangen.';
 
   @override
   String get clickHereToReadIt => 'Klik hier om het te bekijken';
@@ -4671,23 +4372,19 @@ class AppLocalizationsNl extends AppLocalizations {
   String get sorry => 'Sorry :(';
 
   @override
-  String get weHadToTimeYouOutForAWhile =>
-      'We moesten je voor een korte tijd een time-out geven.';
+  String get weHadToTimeYouOutForAWhile => 'We moesten je voor een korte tijd een time-out geven.';
 
   @override
   String get why => 'Waarom?';
 
   @override
-  String get pleasantChessExperience =>
-      'Wij streven ernaar om iedereen een prettige schaakervaring te bieden.';
+  String get pleasantChessExperience => 'Wij streven ernaar om iedereen een prettige schaakervaring te bieden.';
 
   @override
-  String get goodPractice =>
-      'Daarom moeten we ervoor zorgen dat alle spelers goede praktijken volgen.';
+  String get goodPractice => 'Daarom moeten we ervoor zorgen dat alle spelers goede praktijken volgen.';
 
   @override
-  String get potentialProblem =>
-      'Wanneer een mogelijk probleem is gedetecteerd, tonen we dit bericht.';
+  String get potentialProblem => 'Wanneer een mogelijk probleem is gedetecteerd, tonen we dit bericht.';
 
   @override
   String get howToAvoidThis => 'Hoe kunnen we dit voorkomen?';
@@ -4696,20 +4393,16 @@ class AppLocalizationsNl extends AppLocalizations {
   String get playEveryGame => 'Speel elk partij die je start.';
 
   @override
-  String get tryToWin =>
-      'Probeer elke partij die je speelt te winnen (of tenminste gelijk te spelen).';
+  String get tryToWin => 'Probeer elke partij die je speelt te winnen (of tenminste gelijk te spelen).';
 
   @override
-  String get resignLostGames =>
-      'Geef verloren partijen op (laat de klok niet tot 0 lopen).';
+  String get resignLostGames => 'Geef verloren partijen op (laat de klok niet tot 0 lopen).';
 
   @override
-  String get temporaryInconvenience =>
-      'Onze excuses voor het tijdelijke ongemak,';
+  String get temporaryInconvenience => 'Onze excuses voor het tijdelijke ongemak,';
 
   @override
-  String get wishYouGreatGames =>
-      'en wij wensen u veel goede partijen op lichess.org.';
+  String get wishYouGreatGames => 'en wij wensen u veel goede partijen op lichess.org.';
 
   @override
   String get thankYouForReading => 'Bedankt voor het lezen!';
@@ -4721,12 +4414,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get currentMatchScore => 'Huidige wedstrijd score';
 
   @override
-  String get agreementAssistance =>
-      'Ik ga ermee akkoord dat ik tijdens mijn partijen geen hulp krijg (van een schaakcomputer, -boek, -database of ander persoon).';
+  String get agreementAssistance => 'Ik ga ermee akkoord dat ik tijdens mijn partijen geen hulp krijg (van een schaakcomputer, -boek, -database of ander persoon).';
 
   @override
-  String get agreementNice =>
-      'Ik ga ermee akkoord dat ik altijd respectvol tegenover andere spelers zal zijn.';
+  String get agreementNice => 'Ik ga ermee akkoord dat ik altijd respectvol tegenover andere spelers zal zijn.';
 
   @override
   String agreementMultipleAccounts(String param) {
@@ -4734,8 +4425,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get agreementPolicy =>
-      'Ik ga ermee akkoord dat ik de Lichess-regels zal volgen.';
+  String get agreementPolicy => 'Ik ga ermee akkoord dat ik de Lichess-regels zal volgen.';
 
   @override
   String get searchOrStartNewDiscussion => 'Zoek of start een nieuwe discussie';
@@ -4756,8 +4446,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get classical => 'Klassiek';
 
   @override
-  String get ultraBulletDesc =>
-      'Extreem snelle partijen: minder dan 30 seconden';
+  String get ultraBulletDesc => 'Extreem snelle partijen: minder dan 30 seconden';
 
   @override
   String get bulletDesc => 'Zeer snelle partijen: minder dan 3 minuten';
@@ -4772,8 +4461,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get classicalDesc => 'Klassieke partijen: 25 minuten en meer';
 
   @override
-  String get correspondenceDesc =>
-      'Correspondentiepartijen: een of meer dagen per zet';
+  String get correspondenceDesc => 'Correspondentiepartijen: een of meer dagen per zet';
 
   @override
   String get puzzleDesc => 'Schaaktactieken trainer';
@@ -4814,8 +4502,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get theForumEtiquette => 'de regels van het forum';
 
   @override
-  String get thisTopicIsArchived =>
-      'Dit onderwerp is gearchiveerd; er kan niet meer op worden gereageerd.';
+  String get thisTopicIsArchived => 'Dit onderwerp is gearchiveerd; er kan niet meer op worden gereageerd.';
 
   @override
   String joinTheTeamXToPost(String param1) {
@@ -4828,8 +4515,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get youCannotPostYetPlaySomeGames =>
-      'Je kunt nog geen post in de forums plaatsen. Speel eerst een paar partijen!';
+  String get youCannotPostYetPlaySomeGames => 'Je kunt nog geen post in de forums plaatsen. Speel eerst een paar partijen!';
 
   @override
   String get subscribe => 'Abonneren';
@@ -4866,8 +4552,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned =>
-      'Iemand die je hebt gerapporteerd is geband';
+  String get someoneYouReportedWasBanned => 'Iemand die je hebt gerapporteerd is geband';
 
   @override
   String get congratsYouWon => 'Gefeliciteerd, je hebt gewonnen!';
@@ -4883,8 +4568,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get lostAgainstTOSViolator =>
-      'Je hebt verloren van iemand die de Lichess voorwaarden heeft geschonden';
+  String get lostAgainstTOSViolator => 'Je hebt verloren van iemand die de Lichess voorwaarden heeft geschonden';
 
   @override
   String refundXpointsTimeControlY(String param1, String param2) {
@@ -4913,12 +4597,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get tournDescription => 'Toernooibeschrijving';
 
   @override
-  String get tournDescriptionHelp =>
-      'Iets bijzonders dat je de deelnemers wilt vertellen? Probeer het kort te houden. Markdown-links zijn beschikbaar: [name](https://url)';
+  String get tournDescriptionHelp => 'Iets bijzonders dat je de deelnemers wilt vertellen? Probeer het kort te houden. Markdown-links zijn beschikbaar: [name](https://url)';
 
   @override
-  String get ratedFormHelp =>
-      'Partijen worden met rating gespeeld \nen hebben effect op de rating van de spelers';
+  String get ratedFormHelp => 'Partijen worden met rating gespeeld \nen hebben effect op de rating van de spelers';
 
   @override
   String get onlyMembersOfTeam => 'Alleen leden van het team';
@@ -4963,8 +4645,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get simulDescription => 'Omschrijving van de simultaan';
 
   @override
-  String get simulDescriptionHelp =>
-      'Is er nog iets wat de deelnemers moeten weten?';
+  String get simulDescriptionHelp => 'Is er nog iets wat de deelnemers moeten weten?';
 
   @override
   String markdownIsAvailable(String param) {
@@ -4972,8 +4653,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get embedsAvailable =>
-      'Plak de URL van een partij of een studie om deze in te voegen.';
+  String get embedsAvailable => 'Plak de URL van een partij of een studie om deze in te voegen.';
 
   @override
   String get inYourLocalTimezone => 'In je eigen lokale tijdzone';
@@ -5018,16 +4698,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get reopenYourAccount => 'Account heropenen';
 
   @override
-  String get reopenYourAccountDescription =>
-      'Als je je account had gesloten, maar sindsdien van gedachten veranderd bent, krijg je de kans om je account te herstellen.';
+  String get reopenYourAccountDescription => 'Als je je account had gesloten, maar sindsdien van gedachten veranderd bent, krijg je de kans om je account te herstellen.';
 
   @override
-  String get emailAssociatedToaccount =>
-      'E-mailadres gekoppeld aan het account';
+  String get emailAssociatedToaccount => 'E-mailadres gekoppeld aan het account';
 
   @override
-  String get sentEmailWithLink =>
-      'We hebben je een e-mail gestuurd met een link.';
+  String get sentEmailWithLink => 'We hebben je een e-mail gestuurd met een link.';
 
   @override
   String get tournamentEntryCode => 'Toernooi toegangscode';
@@ -5047,8 +4724,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get resignTheGame => 'Partij opgeven';
 
   @override
-  String get youCantStartNewGame =>
-      'Je kunt geen nieuwe partij beginnen voordat deze is afgelopen.';
+  String get youCantStartNewGame => 'Je kunt geen nieuwe partij beginnen voordat deze is afgelopen.';
 
   @override
   String get since => 'Vanaf';
@@ -5063,8 +4739,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get switchSides => 'Van kleur wisselen';
 
   @override
-  String get closingAccountWithdrawAppeal =>
-      'Met het sluiten van je account wordt je beroep ingetrokken';
+  String get closingAccountWithdrawAppeal => 'Met het sluiten van je account wordt je beroep ingetrokken';
 
   @override
   String get ourEventTips => 'Onze tips voor het organiseren van evenementen';
@@ -5076,8 +4751,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get showMeEverything => 'Alles tonen';
 
   @override
-  String get lichessPatronInfo =>
-      'Lichess is een organisatie zonder winstoogmerk en is volledig open en gratis (libre).\nAlle exploitatiekosten, ontwikkeling en inhoud worden enkel gefinancierd door donaties van gebruikers.';
+  String get lichessPatronInfo => 'Lichess is een organisatie zonder winstoogmerk en is volledig open en gratis (libre).\nAlle exploitatiekosten, ontwikkeling en inhoud worden enkel gefinancierd door donaties van gebruikers.';
 
   @override
   String get nothingToSeeHere => 'Hier is momenteel niets te zien.';
@@ -5117,10 +4791,8 @@ class AppLocalizationsNl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'Je tegenstander speelt niet verder. Je kunt de overwinning opeisen over $count seconden.',
-      one:
-          'Je tegenstander heeft het spel verlaten. Je kan de overwinning opeisen over $count seconde.',
+      other: 'Je tegenstander speelt niet verder. Je kunt de overwinning opeisen over $count seconden.',
+      one: 'Je tegenstander heeft het spel verlaten. Je kan de overwinning opeisen over $count seconde.',
     );
     return '$_temp0';
   }
@@ -5613,12 +5285,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get stormMoveToStart => 'Doe een zet om te beginnen';
 
   @override
-  String get stormYouPlayTheWhitePiecesInAllPuzzles =>
-      'In alle puzzels speel je met de witte stukken';
+  String get stormYouPlayTheWhitePiecesInAllPuzzles => 'In alle puzzels speel je met de witte stukken';
 
   @override
-  String get stormYouPlayTheBlackPiecesInAllPuzzles =>
-      'In alle puzzels speel je met de zwarte stukken';
+  String get stormYouPlayTheBlackPiecesInAllPuzzles => 'In alle puzzels speel je met de zwarte stukken';
 
   @override
   String get stormPuzzlesSolved => 'puzzels opgelost';
@@ -5741,8 +5411,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get stormSkipHelp => 'Je kunt één zet per race overslaan:';
 
   @override
-  String get stormSkipExplanation =>
-      'Sla deze zet over om je combo te behouden! Werkt maar eenmaal per race.';
+  String get stormSkipExplanation => 'Sla deze zet over om je combo te behouden! Werkt maar eenmaal per race.';
 
   @override
   String get stormFailedPuzzles => 'Mislukte puzzels';
@@ -5769,8 +5438,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get stormThisRunHasExpired => 'Deze sessie is verlopen!';
 
   @override
-  String get stormThisRunWasOpenedInAnotherTab =>
-      'Deze sessie is geopend in een ander tabblad!';
+  String get stormThisRunWasOpenedInAnotherTab => 'Deze sessie is geopend in een ander tabblad!';
 
   @override
   String stormXRuns(int count) {
@@ -5860,8 +5528,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyInviteToTheStudy => 'Uitnodigen voor de studie';
 
   @override
-  String get studyPleaseOnlyInvitePeopleYouKnow =>
-      'Nodig alleen deelnemers uit die jou kennen en actief mee willen doen aan deze studie.';
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Nodig alleen deelnemers uit die jou kennen en actief mee willen doen aan deze studie.';
 
   @override
   String get studySearchByUsername => 'Zoeken op gebruikersnaam';
@@ -5906,28 +5573,22 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyAnnotateWithGlyphs => 'Maak aantekeningen met symbolen';
 
   @override
-  String get studyTheChapterIsTooShortToBeAnalysed =>
-      'Dit hoofdstuk is te kort om geanalyseerd te worden.';
+  String get studyTheChapterIsTooShortToBeAnalysed => 'Dit hoofdstuk is te kort om geanalyseerd te worden.';
 
   @override
-  String get studyOnlyContributorsCanRequestAnalysis =>
-      'Alleen de bijdragers kunnen een computer analyse aanvragen.';
+  String get studyOnlyContributorsCanRequestAnalysis => 'Alleen de bijdragers kunnen een computer analyse aanvragen.';
 
   @override
-  String get studyGetAFullComputerAnalysis =>
-      'Krijg een volledige computer analyse van de hoofdlijn.';
+  String get studyGetAFullComputerAnalysis => 'Krijg een volledige computer analyse van de hoofdlijn.';
 
   @override
-  String get studyMakeSureTheChapterIsComplete =>
-      'Zorg ervoor dat het hoofdstuk voltooid is. Je kunt slechts één keer een analyse aanvragen.';
+  String get studyMakeSureTheChapterIsComplete => 'Zorg ervoor dat het hoofdstuk voltooid is. Je kunt slechts één keer een analyse aanvragen.';
 
   @override
-  String get studyAllSyncMembersRemainOnTheSamePosition =>
-      'Alle SYNC leden blijven op dezelfde positie';
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Alle SYNC leden blijven op dezelfde positie';
 
   @override
-  String get studyShareChanges =>
-      'Deel veranderingen met toeschouwers en sla deze op op de server';
+  String get studyShareChanges => 'Deel veranderingen met toeschouwers en sla deze op op de server';
 
   @override
   String get studyPlaying => 'Spelend';
@@ -5969,8 +5630,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Huidige hoofdstuk URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed =>
-      'Je kunt deze link plakken wanneer je een bericht schrijft op het forum om de partij interactief weer te geven';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Je kunt deze link plakken wanneer je een bericht schrijft op het forum om de partij interactief weer te geven';
 
   @override
   String get studyStartAtInitialPosition => 'Begin bij de startpositie';
@@ -5987,8 +5647,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyReadMoreAboutEmbedding => 'Lees meer over insluiten';
 
   @override
-  String get studyOnlyPublicStudiesCanBeEmbedded =>
-      'Alleen openbare studies kunnen worden ingevoegd!';
+  String get studyOnlyPublicStudiesCanBeEmbedded => 'Alleen openbare studies kunnen worden ingevoegd!';
 
   @override
   String get studyOpen => 'Open';
@@ -6019,8 +5678,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyAnalysisMode => 'Analysemodus';
 
   @override
-  String get studyPinnedChapterComment =>
-      'Vastgezet commentaar van het hoofdstuk';
+  String get studyPinnedChapterComment => 'Vastgezet commentaar van het hoofdstuk';
 
   @override
   String get studySaveChapter => 'Hoofdstuk opslaan';
@@ -6035,12 +5693,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyDeleteChapter => 'Verwijder hoofdstuk';
 
   @override
-  String get studyDeleteThisChapter =>
-      'Wil je dit hoofdstuk verwijderen? Je kan dit niet ongedaan maken!';
+  String get studyDeleteThisChapter => 'Wil je dit hoofdstuk verwijderen? Je kan dit niet ongedaan maken!';
 
   @override
-  String get studyClearAllCommentsInThisChapter =>
-      'Wis alle opmerkingen, glyphs en getekende vormen in dit hoofdstuk';
+  String get studyClearAllCommentsInThisChapter => 'Wis alle opmerkingen, glyphs en getekende vormen in dit hoofdstuk';
 
   @override
   String get studyRightUnderTheBoard => 'Recht onder het bord';
@@ -6132,8 +5788,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyEnableSync => 'Synchronisatie inschakelen';
 
   @override
-  String get studyYesKeepEveryoneOnTheSamePosition =>
-      'Ja: houd iedereen op dezelfde stelling';
+  String get studyYesKeepEveryoneOnTheSamePosition => 'Ja: houd iedereen op dezelfde stelling';
 
   @override
   String get studyNoLetPeopleBrowseFreely => 'Nee: laat mensen vrij bladeren';
@@ -6151,8 +5806,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyClearChat => 'Maak de chat leeg';
 
   @override
-  String get studyDeleteTheStudyChatHistory =>
-      'Verwijder de studiechat geschiedenis? Er is geen weg terug!';
+  String get studyDeleteTheStudyChatHistory => 'Verwijder de studiechat geschiedenis? Er is geen weg terug!';
 
   @override
   String get studyDeleteStudy => 'Studie verwijderen';
@@ -6268,8 +5922,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyWhatWouldYouPlay => 'Wat zou je in deze stelling spelen?';
 
   @override
-  String get studyYouCompletedThisLesson =>
-      'Gefeliciteerd! Je hebt deze les voltooid.';
+  String get studyYouCompletedThisLesson => 'Gefeliciteerd! Je hebt deze les voltooid.';
 
   @override
   String studyPerPage(String param) {
@@ -6283,15 +5936,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'Welkom bij Lichess Study!';
 
   @override
-  String get studyWelcomeToLichessStudyText =>
-      'Dit is een gedeeld analyselbord.<br><br>Gebruik het om partijen te analyseren en aantekeningen te maken,<br>stellingen met vrienden te bespreken,<br>en natuurlijk voor schaaklessen!<br><br>Het is een krachtig gereedschap, laten we even de tijd nemen om te zien hoe het werkt.';
+  String get studyWelcomeToLichessStudyText => 'Dit is een gedeeld analyselbord.<br><br>Gebruik het om partijen te analyseren en aantekeningen te maken,<br>stellingen met vrienden te bespreken,<br>en natuurlijk voor schaaklessen!<br><br>Het is een krachtig gereedschap, laten we even de tijd nemen om te zien hoe het werkt.';
 
   @override
   String get studySharedAndSaveTitle => 'Gedeeld en opgeslagen';
 
   @override
-  String get studySharedAndSavedText =>
-      'Andere leden kunnen in real time je zetten zien!<br>Plus, alles wordt voor altijd bewaard.';
+  String get studySharedAndSavedText => 'Andere leden kunnen in real time je zetten zien!<br>Plus, alles wordt voor altijd bewaard.';
 
   @override
   String get studyStudyMembersTitle => 'Studieleden';
@@ -6310,8 +5961,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyStudyChaptersTitle => 'Studiehoofdstukken';
 
   @override
-  String get studyStudyChaptersText =>
-      'Een studie kan meerdere hoofdstukken bevatten.<br>Elk hoofdstuk heeft een specifieke beginpositie en zettenboom.';
+  String get studyStudyChaptersText => 'Een studie kan meerdere hoofdstukken bevatten.<br>Elk hoofdstuk heeft een specifieke beginpositie en zettenboom.';
 
   @override
   String get studyCommentPositionTitle => 'Reageer op een stelling';
@@ -6322,84 +5972,70 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get studyAnnotatePositionTitle =>
-      'Een stelling van commentaar voorzien';
+  String get studyAnnotatePositionTitle => 'Een stelling van commentaar voorzien';
 
   @override
-  String get studyAnnotatePositionText =>
-      'Klik op de !? knop, of klik met de rechtermuisknop op de zerrenlijst aan de rechterkant.<br>Aantekeningen worden gedeeld en opgeslagen.';
+  String get studyAnnotatePositionText => 'Klik op de !? knop, of klik met de rechtermuisknop op de zerrenlijst aan de rechterkant.<br>Aantekeningen worden gedeeld en opgeslagen.';
 
   @override
   String get studyConclusionTitle => 'Bedankt voor je tijd';
 
   @override
-  String get studyConclusionText =>
-      'Je kunt je <a href=\'/studie/mine/hot\'>vorige studies</a> vinden op je profielpagina.<br>Er is ook een <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blogpost over studies</a>.<br>Power users kunnen op \"?\" drukken om sneltoetsen te zien.<br>Veel plezier!';
+  String get studyConclusionText => 'Je kunt je <a href=\'/studie/mine/hot\'>vorige studies</a> vinden op je profielpagina.<br>Er is ook een <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blogpost over studies</a>.<br>Power users kunnen op \"?\" drukken om sneltoetsen te zien.<br>Veel plezier!';
 
   @override
   String get studyCreateChapterTitle => 'Laten we een studiehoofdstuk maken';
 
   @override
-  String get studyCreateChapterText =>
-      'Een studie kan verschillende hoofdstukken bevatten.<br>Elk hoofdstuk heeft een aparte zettenboom,<br>en kan op verschillende manieren worden gemaakt.';
+  String get studyCreateChapterText => 'Een studie kan verschillende hoofdstukken bevatten.<br>Elk hoofdstuk heeft een aparte zettenboom,<br>en kan op verschillende manieren worden gemaakt.';
 
   @override
   String get studyFromInitialPositionTitle => 'Vanaf beginstelling';
 
   @override
-  String get studyFromInitialPositionText =>
-      'Gewoon een bord voor een nieuwe partij.<br>Geschikt om openingen te verkennen.';
+  String get studyFromInitialPositionText => 'Gewoon een bord voor een nieuwe partij.<br>Geschikt om openingen te verkennen.';
 
   @override
   String get studyCustomPositionTitle => 'Aangepaste stelling';
 
   @override
-  String get studyCustomPositionText =>
-      'Richt het bord op jouw manier in <br>Geschikt om eindspellen te verkennen.';
+  String get studyCustomPositionText => 'Richt het bord op jouw manier in <br>Geschikt om eindspellen te verkennen.';
 
   @override
-  String get studyLoadExistingLichessGameTitle =>
-      'Laad een bestaande lichess-partij';
+  String get studyLoadExistingLichessGameTitle => 'Laad een bestaande lichess-partij';
 
   @override
-  String get studyLoadExistingLichessGameText =>
-      'Plak een lichess partij link<br>(zoals lichess.org/7fHIU0XI)<br>om de partijzetten in het hoofdstuk te laden.';
+  String get studyLoadExistingLichessGameText => 'Plak een lichess partij link<br>(zoals lichess.org/7fHIU0XI)<br>om de partijzetten in het hoofdstuk te laden.';
 
   @override
   String get studyFromFenStringTitle => 'Van een FEN-tekenreeks';
 
   @override
-  String get studyFromFenStringText =>
-      'Plak een stelling in FEN-formaat<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>om het hoofdstuk te beginnen vanaf een bepaalde stelling.';
+  String get studyFromFenStringText => 'Plak een stelling in FEN-formaat<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>om het hoofdstuk te beginnen vanaf een bepaalde stelling.';
 
   @override
   String get studyFromPgnGameTitle => 'Van een PGN-bestand';
 
   @override
-  String get studyFromPgnGameText =>
-      'Plak een partij in PGN-formaat.<br>om zetten, reacties en variaties in het hoofdstuk te laden.';
+  String get studyFromPgnGameText => 'Plak een partij in PGN-formaat.<br>om zetten, reacties en variaties in het hoofdstuk te laden.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Studies ondersteunen varianten';
 
   @override
-  String get studyVariantsAreSupportedText =>
-      'Ja, je kunt crazyhouse<br>en alle lichess-varianten bestuderen!';
+  String get studyVariantsAreSupportedText => 'Ja, je kunt crazyhouse<br>en alle lichess-varianten bestuderen!';
 
   @override
-  String get studyChapterConclusionText =>
-      'Hoofdstukken worden voor altijd bewaard.<br>Veel plezier met het ordenen van uw schaakinhoud!';
+  String get studyChapterConclusionText => 'Hoofdstukken worden voor altijd bewaard.<br>Veel plezier met het ordenen van uw schaakinhoud!';
 
   @override
   String get studyDoubleDefeat => 'Dubbele nederlaag';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin =>
-      'Zwarte nederlaag, maar Wit kan niet winnen';
+  String get studyBlackDefeatWhiteCanNotWin => 'Zwarte nederlaag, maar Wit kan niet winnen';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin =>
-      'Witte nederlaag, maar Zwart kan niet winnen';
+  String get studyWhiteDefeatBlackCanNotWin => 'Witte nederlaag, maar Zwart kan niet winnen';
 
   @override
   String studyNbChapters(int count) {
@@ -6439,8 +6075,7 @@ class AppLocalizationsNl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'Plak hier spellen als PGN-tekst. Voor elk spel wordt een nieuw hoofdstuk gemaakt. De studie kan maximaal $count hoofdstukken hebben.',
+      other: 'Plak hier spellen als PGN-tekst. Voor elk spel wordt een nieuw hoofdstuk gemaakt. De studie kan maximaal $count hoofdstukken hebben.',
       one: 'Plak je PGN tekst hier, tot $count spel mogelijk',
     );
     return '$_temp0';

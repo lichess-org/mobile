@@ -53,8 +53,7 @@ class _CommentState extends ConsumerState<_Comment> {
           GamebookState.findTheMove => context.l10n.studyWhatWouldYouPlay,
           GamebookState.correctMove => context.l10n.studyGoodMove,
           GamebookState.incorrectMove => context.l10n.puzzleNotTheMove,
-          GamebookState.lessonComplete =>
-            context.l10n.studyYouCompletedThisLesson,
+          GamebookState.lessonComplete => context.l10n.studyYouCompletedThisLesson,
           _ => '',
         };
 
@@ -100,21 +99,16 @@ class _HintState extends ConsumerState<_Hint> {
   @override
   Widget build(BuildContext context) {
     ref.listen(
-      studyControllerProvider(
-        widget.id,
-      ).select((state) => state.valueOrNull?.gamebookState),
+      studyControllerProvider(widget.id).select((state) => state.valueOrNull?.gamebookState),
       (prev, next) {
-        if (prev == GamebookState.correctMove &&
-            next == GamebookState.findTheMove) {
+        if (prev == GamebookState.correctMove && next == GamebookState.findTheMove) {
           _hideHint();
         }
       },
     );
 
     ref.listen(
-      studyControllerProvider(
-        widget.id,
-      ).select((state) => state.valueOrNull?.currentChapter.id),
+      studyControllerProvider(widget.id).select((state) => state.valueOrNull?.currentChapter.id),
       (prev, next) {
         if (prev != next) {
           _hideHint();
@@ -122,10 +116,7 @@ class _HintState extends ConsumerState<_Hint> {
       },
     );
 
-    final hint = ref
-        .watch(studyControllerProvider(widget.id))
-        .requireValue
-        .gamebookHint;
+    final hint = ref.watch(studyControllerProvider(widget.id)).requireValue.gamebookHint;
     return hint == null
         ? const SizedBox.shrink()
         : SizedBox(
@@ -185,10 +176,7 @@ class GamebookButton extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
                   label,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: highlighted ? primary : null,
-                  ),
+                  style: TextStyle(fontSize: 16.0, color: highlighted ? primary : null),
                 ),
               ),
             ],

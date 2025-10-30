@@ -52,8 +52,7 @@ class FocusDetector extends StatefulWidget {
   _FocusDetectorState createState() => _FocusDetectorState();
 }
 
-class _FocusDetectorState extends State<FocusDetector>
-    with WidgetsBindingObserver {
+class _FocusDetectorState extends State<FocusDetector> with WidgetsBindingObserver {
   final _visibilityDetectorKey = UniqueKey();
 
   /// Counter to keep track of the visibility changes.

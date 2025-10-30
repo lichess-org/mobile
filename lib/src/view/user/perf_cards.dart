@@ -12,12 +12,7 @@ import 'package:lichess_mobile/src/widgets/rating.dart';
 
 /// A widget that displays the performance cards of a user.
 class PerfCards extends StatelessWidget {
-  const PerfCards({
-    required this.user,
-    required this.isMe,
-    this.padding,
-    super.key,
-  });
+  const PerfCards({required this.user, required this.isMe, this.padding, super.key});
 
   final User user;
 
@@ -25,9 +20,7 @@ class PerfCards extends StatelessWidget {
 
   final EdgeInsetsGeometry? padding;
 
-  static const BorderRadius _kCardBorderRadius = BorderRadius.all(
-    Radius.circular(6.0),
-  );
+  static const BorderRadius _kCardBorderRadius = BorderRadius.all(Radius.circular(6.0));
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +31,13 @@ class PerfCards extends StatelessWidget {
             return false;
           }
           final p = user.perfs[element];
-          return p != null &&
-              p.numberOfGamesOrRuns > 0 &&
-              p.ratingDeviation < kClueLessDeviation;
+          return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
         })
         .toList(growable: false);
 
     gamePerfs.sort(
-      (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns.compareTo(
-        user.perfs[p1]!.numberOfGamesOrRuns,
-      ),
+      (p1, p2) =>
+          user.perfs[p2]!.numberOfGamesOrRuns.compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
     );
 
     final List<Perf> puzzlePerfs = Perf.values
@@ -61,9 +51,8 @@ class PerfCards extends StatelessWidget {
         .toList(growable: false);
 
     puzzlePerfs.sort(
-      (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns.compareTo(
-        user.perfs[p1]!.numberOfGamesOrRuns,
-      ),
+      (p1, p2) =>
+          user.perfs[p2]!.numberOfGamesOrRuns.compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
     );
 
     final userPerfs = [...gamePerfs, ...puzzlePerfs];
@@ -91,23 +80,16 @@ class PerfCards extends StatelessWidget {
                   height: 100,
                   width: 100,
                   child: Card(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: _kCardBorderRadius,
-                    ),
+                    shape: const RoundedRectangleBorder(borderRadius: _kCardBorderRadius),
                     child: InkWell(
                       borderRadius: _kCardBorderRadius,
-                      onTap: isPerfWithoutStats
-                          ? null
-                          : () => _handlePerfCardTap(context, perf),
+                      onTap: isPerfWithoutStats ? null : () => _handlePerfCardTap(context, perf),
                       child: Padding(
                         padding: const EdgeInsets.all(6.0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text(
-                              perf.shortTitle,
-                              style: TextStyle(color: textShade(context, 0.7)),
-                            ),
+                            Text(perf.shortTitle, style: TextStyle(color: textShade(context, 0.7))),
                             Icon(perf.icon, color: textShade(context, 0.6)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,

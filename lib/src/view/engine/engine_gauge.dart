@@ -52,8 +52,7 @@ class EngineGauge extends ConsumerWidget {
       ? lighten(ColorScheme.of(context).surface, .07)
       : lighten(ColorScheme.of(context).onSurface, .17);
 
-  static Color valueColor(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark
+  static Color valueColor(BuildContext context) => Theme.of(context).brightness == Brightness.dark
       ? darken(ColorScheme.of(context).onSurface, .1)
       : darken(ColorScheme.of(context).surface, .01);
 
@@ -152,20 +151,10 @@ class _EvalGaugeState extends State<_EvalGauge> {
           child: RepaintBoundary(
             child: Container(
               constraints: widget.displayMode == EngineGaugeDisplayMode.vertical
-                  ? const BoxConstraints(
-                      minWidth: kEvalGaugeSize,
-                      minHeight: double.infinity,
-                    )
-                  : const BoxConstraints(
-                      minWidth: double.infinity,
-                      minHeight: kEvalGaugeSize,
-                    ),
-              width: widget.displayMode == EngineGaugeDisplayMode.vertical
-                  ? kEvalGaugeSize
-                  : null,
-              height: widget.displayMode == EngineGaugeDisplayMode.vertical
-                  ? null
-                  : kEvalGaugeSize,
+                  ? const BoxConstraints(minWidth: kEvalGaugeSize, minHeight: double.infinity)
+                  : const BoxConstraints(minWidth: double.infinity, minHeight: kEvalGaugeSize),
+              width: widget.displayMode == EngineGaugeDisplayMode.vertical ? kEvalGaugeSize : null,
+              height: widget.displayMode == EngineGaugeDisplayMode.vertical ? null : kEvalGaugeSize,
               child: CustomPaint(
                 painter: widget.displayMode == EngineGaugeDisplayMode.vertical
                     ? _EvalGaugeVerticalPainter(
@@ -189,15 +178,11 @@ class _EvalGaugeState extends State<_EvalGauge> {
                                 ? Alignment.centerLeft
                                 : Alignment.centerRight,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 4.0,
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
                               child: Text(
                                 evalDisplay ?? '',
                                 style: TextStyle(
-                                  color: toValue >= 0.5
-                                      ? Colors.black
-                                      : Colors.white,
+                                  color: toValue >= 0.5 ? Colors.black : Colors.white,
                                   fontSize: kEvalGaugeFontSize,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -210,8 +195,7 @@ class _EvalGaugeState extends State<_EvalGauge> {
                                   ? Alignment.centerRight
                                   : Alignment.centerLeft,
                               child: Icon(
-                                widget.engineLinesState ==
-                                        EngineLinesShowState.expanded
+                                widget.engineLinesState == EngineLinesShowState.expanded
                                     ? Icons.arrow_drop_up
                                     : Icons.arrow_drop_down,
                                 color: Colors.grey,

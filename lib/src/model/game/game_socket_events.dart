@@ -15,10 +15,8 @@ part 'game_socket_events.freezed.dart';
 
 @freezed
 sealed class GameFullEvent with _$GameFullEvent {
-  const factory GameFullEvent({
-    required PlayableGame game,
-    required int socketEventVersion,
-  }) = _GameFullEvent;
+  const factory GameFullEvent({required PlayableGame game, required int socketEventVersion}) =
+      _GameFullEvent;
 
   factory GameFullEvent.fromJson(Map<String, dynamic> json) {
     return GameFullEvent(
@@ -82,9 +80,7 @@ MoveEvent _socketMoveEventFromPick(RequiredPick pick) {
         at: clock.now(),
         white: it('white').asDurationFromSecondsOrThrow(),
         black: it('black').asDurationFromSecondsOrThrow(),
-        lag: it(
-          'lag',
-        ).letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10)),
+        lag: it('lag').letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10)),
       ),
     ),
   );
@@ -110,12 +106,9 @@ GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
   return GameEndEvent(
     status: pick('status').asGameStatusOrThrow(),
     winner: pick('winner').asSideOrNull(),
-    ratingDiff: pick('ratingDiff').letOrNull(
-      (it) => (
-        white: it('white').asIntOrThrow(),
-        black: it('black').asIntOrThrow(),
-      ),
-    ),
+    ratingDiff: pick(
+      'ratingDiff',
+    ).letOrNull((it) => (white: it('white').asIntOrThrow(), black: it('black').asIntOrThrow())),
     boosted: pick('boosted').asBoolOrNull(),
     clock: pick('clock').letOrNull(
       (it) => (
@@ -167,10 +160,7 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
     final comments = node['comments'] as List<dynamic>?;
     final comment = comments?.first as Map<String, dynamic>?;
     final judgment = glyph != null && comment != null
-        ? (
-            name: _nagToJugdmentName(glyph['id'] as int),
-            comment: comment['text'] as String,
-          )
+        ? (name: _nagToJugdmentName(glyph['id'] as int), comment: comment['text'] as String)
         : null;
 
     final variation = nextVariation;
@@ -239,10 +229,9 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
       ),
     ),
     isAnalysisComplete: !isAnalysisIncomplete,
-    division: pick('division').letOrNull(
-      (it) =>
-          (middle: it('middle').asIntOrNull(), end: it('end').asIntOrNull()),
-    ),
+    division: pick(
+      'division',
+    ).letOrNull((it) => (middle: it('middle').asIntOrNull(), end: it('end').asIntOrNull())),
   );
 }
 
@@ -253,10 +242,6 @@ String _nagToJugdmentName(int nag) => switch (nag) {
   int() => '',
 };
 
-typedef ServerAnalysis = ({
-  GameId id,
-  PlayerAnalysis white,
-  PlayerAnalysis black,
-});
+typedef ServerAnalysis = ({GameId id, PlayerAnalysis white, PlayerAnalysis black});
 
 typedef GameDivision = ({int? middle, int? end});

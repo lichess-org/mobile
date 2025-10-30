@@ -23,8 +23,7 @@ class LobbyScreenLoadingContent extends StatefulWidget {
   final Future<void> Function() cancelGameCreation;
 
   @override
-  State<LobbyScreenLoadingContent> createState() =>
-      _LobbyScreenLoadingContentState();
+  State<LobbyScreenLoadingContent> createState() => _LobbyScreenLoadingContentState();
 }
 
 class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
@@ -53,10 +52,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      widget.seek.perf.icon,
-                      color: DefaultTextStyle.of(context).style.color,
-                    ),
+                    Icon(widget.seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
                     const SizedBox(width: 8.0),
                     Text(
                       widget.seek.timeIncrement?.display ??
@@ -67,8 +63,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
                 ),
                 //Do not show rating range if the default values (-500, +500) are used
                 if (widget.seek.ratingRange != null &&
-                    !(widget.seek.ratingRange!.$1 + 1000 ==
-                        widget.seek.ratingRange!.$2)) ...[
+                    !(widget.seek.ratingRange!.$1 + 1000 == widget.seek.ratingRange!.$2)) ...[
                   const SizedBox(height: 8.0),
                   RatingPrefAware(
                     child: Text(
@@ -93,8 +88,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
                       ? null
                       : () async {
                           setState(() {
-                            _cancelGameCreationFuture = widget
-                                .cancelGameCreation();
+                            _cancelGameCreationFuture = widget.cancelGameCreation();
                           });
                           try {
                             await _cancelGameCreationFuture;
@@ -131,8 +125,7 @@ class ChallengeLoadingContent extends StatefulWidget {
   final Future<void> Function() cancelChallenge;
 
   @override
-  State<ChallengeLoadingContent> createState() =>
-      _ChallengeLoadingContentState();
+  State<ChallengeLoadingContent> createState() => _ChallengeLoadingContentState();
 }
 
 class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
@@ -223,11 +216,7 @@ class _ChallengeLoadingContentState extends State<ChallengeLoadingContent> {
 }
 
 class StandaloneGameLoadingContent extends StatelessWidget {
-  const StandaloneGameLoadingContent({
-    this.position,
-    this.userActionsBar,
-    super.key,
-  });
+  const StandaloneGameLoadingContent({this.position, this.userActionsBar, super.key});
 
   final LoadingPosition? position;
   final Widget? userActionsBar;
@@ -335,10 +324,7 @@ class LoadGameError extends StatelessWidget {
 
 /// A board that shows a message that a challenge has been declined.
 class ChallengeDeclinedBoard extends StatelessWidget {
-  const ChallengeDeclinedBoard({
-    required this.declineReason,
-    required this.challenge,
-  });
+  const ChallengeDeclinedBoard({required this.declineReason, required this.challenge});
 
   final String declineReason;
   final Challenge challenge;
@@ -373,10 +359,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                         ),
                         const SizedBox(height: 8.0),
                         Divider(height: 26.0, thickness: 0.0, color: textColor),
-                        Text(
-                          declineReason,
-                          style: const TextStyle(fontStyle: FontStyle.italic),
-                        ),
+                        Text(declineReason, style: const TextStyle(fontStyle: FontStyle.italic)),
                         Divider(height: 26.0, thickness: 0.0, color: textColor),
                         if (challenge.destUser != null)
                           Align(
@@ -385,9 +368,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 const Text(' — '),
-                                UserFullNameWidget(
-                                  user: challenge.destUser?.user,
-                                ),
+                                UserFullNameWidget(user: challenge.destUser?.user),
                                 if (challenge.destUser?.lagRating != null) ...[
                                   const SizedBox(width: 6.0),
                                   LagIndicator(

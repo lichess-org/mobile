@@ -25,25 +25,16 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
   );
 
   void startNewGame(Variant variant, TimeIncrement timeIncrement) {
-    state = OverTheBoardGameState.fromVariant(
-      variant,
-      Speed.fromTimeIncrement(timeIncrement),
-    );
+    state = OverTheBoardGameState.fromVariant(variant, Speed.fromTimeIncrement(timeIncrement));
   }
 
   void rematch() {
-    state = OverTheBoardGameState.fromVariant(
-      state.game.meta.variant,
-      state.game.meta.speed,
-    );
+    state = OverTheBoardGameState.fromVariant(state.game.meta.variant, state.game.meta.speed);
   }
 
   void resign() {
     state = state.copyWith(
-      game: state.game.copyWith(
-        status: GameStatus.resign,
-        winner: state.turn.opposite,
-      ),
+      game: state.game.copyWith(status: GameStatus.resign, winner: state.turn.opposite),
     );
   }
 
@@ -57,9 +48,7 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
       return;
     }
 
-    final (newPos, newSan) = state.currentPosition.makeSan(
-      Move.parse(move.uci)!,
-    );
+    final (newPos, newSan) = state.currentPosition.makeSan(Move.parse(move.uci)!);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
       position: newPos,
@@ -80,30 +69,18 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
     );
 
     // check for threefold repetition
-    if (state.game.steps.count(
-          (p) => p.position.board == newStep.position.board,
-        ) ==
-        3) {
-      state = state.copyWith(
-        game: state.game.copyWith(isThreefoldRepetition: true),
-      );
+    if (state.game.steps.count((p) => p.position.board == newStep.position.board) == 3) {
+      state = state.copyWith(game: state.game.copyWith(isThreefoldRepetition: true));
     } else {
-      state = state.copyWith(
-        game: state.game.copyWith(isThreefoldRepetition: false),
-      );
+      state = state.copyWith(game: state.game.copyWith(isThreefoldRepetition: false));
     }
 
     if (state.currentPosition.isCheckmate) {
       state = state.copyWith(
-        game: state.game.copyWith(
-          status: GameStatus.mate,
-          winner: state.turn.opposite,
-        ),
+        game: state.game.copyWith(status: GameStatus.mate, winner: state.turn.opposite),
       );
     } else if (state.currentPosition.isStalemate) {
-      state = state.copyWith(
-        game: state.game.copyWith(status: GameStatus.stalemate),
-      );
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
     }
 
     _moveFeedback(sanMove);
@@ -124,28 +101,19 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
 
   void onFlag(Side side) {
     state = state.copyWith(
-      game: state.game.copyWith(
-        status: GameStatus.outoftime,
-        winner: side.opposite,
-      ),
+      game: state.game.copyWith(status: GameStatus.outoftime, winner: side.opposite),
     );
   }
 
   void goForward() {
     if (state.canGoForward) {
-      state = state.copyWith(
-        stepCursor: state.stepCursor + 1,
-        promotionMove: null,
-      );
+      state = state.copyWith(stepCursor: state.stepCursor + 1, promotionMove: null);
     }
   }
 
   void goBack() {
     if (state.canGoBack) {
-      state = state.copyWith(
-        stepCursor: state.stepCursor - 1,
-        promotionMove: null,
-      );
+      state = state.copyWith(stepCursor: state.stepCursor - 1, promotionMove: null);
     }
   }
 
@@ -192,16 +160,14 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
   Position get currentPosition => game.stepAt(stepCursor).position;
   Side get turn => currentPosition.turn;
   bool get finished => game.finished;
-  NormalMove? get lastMove => stepCursor > 0
-      ? NormalMove.fromUci(game.steps[stepCursor].sanMove!.move.uci)
-      : null;
+  NormalMove? get lastMove =>
+      stepCursor > 0 ? NormalMove.fromUci(game.steps[stepCursor].sanMove!.move.uci) : null;
 
   MaterialDiffSide? currentMaterialDiff(Side side) {
     return game.steps[stepCursor].diff?.bySide(side);
   }
 
-  List<String> get moves =>
-      game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false);
+  List<String> get moves => game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false);
 
   bool get canGoForward => stepCursor < game.steps.length - 1;
   bool get canGoBack => stepCursor > 0;

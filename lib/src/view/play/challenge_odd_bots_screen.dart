@@ -53,158 +53,50 @@ class _BotFen {
 
 final Map<String, List<_BotFen>> _botFens = {
   'leelaknightodds': [
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKB1R w KQkq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQkq',
-      side: Side.black,
-    ),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKB1R w KQkq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQkq', side: Side.black),
   ],
   'leelaqueenodds': [
-    _BotFen(
-      fen: 'rnb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq',
-      side: Side.black,
-    ),
+    _BotFen(fen: 'rnb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq', side: Side.white),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq', side: Side.black),
   ],
   'leelaqueenforknight': [
-    _BotFen(
-      fen: 'r1bqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: 'r1bqkbnr/pppppppp/8/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq',
-      side: Side.black,
-    ),
+    _BotFen(fen: 'r1bqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq', side: Side.white),
+    _BotFen(fen: 'r1bqkbnr/pppppppp/8/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq', side: Side.black),
   ],
   'leelarookodds': [
-    _BotFen(
-      fen: '1nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kkq',
-      side: Side.black,
-    ),
+    _BotFen(fen: '1nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk', side: Side.white),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kkq', side: Side.black),
   ],
   'leelapieceodds': [
-    _BotFen(
-      fen: 'r1bqkb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: 'rn1qk1nr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: '1nbqkb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: '1nbqkbn1/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: 'r2qk1nr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: '2bqkb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: '1n1qk1nr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: 'rnb1kb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: 'r2qk2r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: '1nb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: 'r1b1kb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: 'rn2k1nr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: '1nb1kb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: '1nb1kbn1/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ',
-      side: Side.white,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKB1R w KQkq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RN1QK1NR w KQkq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKB1R w Kkq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBN1 w kq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R2QK1NR w KQkq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/2BQKB1R w Kkq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1N1QK1NR w Kkq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNB1KB1R w KQkq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R2QK2R w KQkq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NB1KBNR w Kkq - 0 1',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1B1KB1R w KQkq - 0 1',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RN2K1NR w KQkq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NB1KB1R w Kkq',
-      side: Side.black,
-    ),
-    _BotFen(
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NB1KBN1 w kq',
-      side: Side.black,
-    ),
+    _BotFen(fen: 'r1bqkb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq', side: Side.white),
+    _BotFen(fen: 'rn1qk1nr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq', side: Side.white),
+    _BotFen(fen: '1nbqkb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk', side: Side.white),
+    _BotFen(fen: '1nbqkbn1/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ', side: Side.white),
+    _BotFen(fen: 'r2qk1nr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq', side: Side.white),
+    _BotFen(fen: '2bqkb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk', side: Side.white),
+    _BotFen(fen: '1n1qk1nr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk', side: Side.white),
+    _BotFen(fen: 'rnb1kb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq', side: Side.white),
+    _BotFen(fen: 'r2qk2r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq', side: Side.white),
+    _BotFen(fen: '1nb1kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk', side: Side.white),
+    _BotFen(fen: 'r1b1kb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq', side: Side.white),
+    _BotFen(fen: 'rn2k1nr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq', side: Side.white),
+    _BotFen(fen: '1nb1kb1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk', side: Side.white),
+    _BotFen(fen: '1nb1kbn1/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ', side: Side.white),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKB1R w KQkq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RN1QK1NR w KQkq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKB1R w Kkq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBN1 w kq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R2QK1NR w KQkq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/2BQKB1R w Kkq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1N1QK1NR w Kkq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNB1KB1R w KQkq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R2QK2R w KQkq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NB1KBNR w Kkq - 0 1', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1B1KB1R w KQkq - 0 1', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RN2K1NR w KQkq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NB1KB1R w Kkq', side: Side.black),
+    _BotFen(fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NB1KBN1 w kq', side: Side.black),
   ],
 };
 final oddBots = _botFens.keys;
@@ -220,9 +112,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
     super.initState();
     final preferences = ref.read(challengePreferencesProvider);
     //special bots have a shorter range of time controls, to prevent an error of the slider we need to check if the time stored in the preferences is within the range of the slider
-    seconds =
-        (preferences.clock.time.inSeconds < 60 ||
-            preferences.clock.time.inSeconds > 15 * 60)
+    seconds = (preferences.clock.time.inSeconds < 60 || preferences.clock.time.inSeconds > 15 * 60)
         ? 300
         : preferences.clock.time.inSeconds;
     incrementSeconds = preferences.clock.increment.inSeconds > 10
@@ -246,10 +136,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                         text: '${context.l10n.minutesPerSide}: ',
                         children: [
                           TextSpan(
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                             text: clockLabelInMinutes(seconds),
                           ),
                         ],
@@ -287,10 +174,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                         text: '${context.l10n.incrementInSeconds}: ',
                         children: [
                           TextSpan(
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                             text: incrementSeconds.toString(),
                           ),
                         ],
@@ -333,8 +217,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       (2 * borderWidth * crossAxisCount)) /
                   crossAxisCount;
 
-              final borderRadius =
-                  Styles.boardBorderRadius.topLeft.x + borderWidth;
+              final borderRadius = Styles.boardBorderRadius.topLeft.x + borderWidth;
 
               final userBotFens = _botFens[widget.bot.name.toLowerCase()] ?? [];
               final rowCount = (userBotFens.length / crossAxisCount).ceil();
@@ -405,10 +288,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       );
                     }
                   : null,
-              child: Text(
-                context.l10n.challengeChallengeToPlay,
-                style: Styles.bold,
-              ),
+              child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
             ),
           ),
         ],

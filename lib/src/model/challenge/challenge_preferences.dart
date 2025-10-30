@@ -22,8 +22,7 @@ class ChallengePreferences extends _$ChallengePreferences
   ChallengePrefs defaults({LightUser? user}) => ChallengePrefs.defaults;
 
   @override
-  ChallengePrefs fromJson(Map<String, dynamic> json) =>
-      ChallengePrefs.fromJson(json);
+  ChallengePrefs fromJson(Map<String, dynamic> json) => ChallengePrefs.fromJson(json);
 
   @override
   ChallengePrefs build() {
@@ -78,17 +77,14 @@ sealed class ChallengePrefs with _$ChallengePrefs implements Serializable {
   );
 
   Speed get speed => timeControl == ChallengeTimeControlType.clock
-      ? Speed.fromTimeIncrement(
-          TimeIncrement(clock.time.inSeconds, clock.increment.inSeconds),
-        )
+      ? Speed.fromTimeIncrement(TimeIncrement(clock.time.inSeconds, clock.increment.inSeconds))
       : Speed.correspondence;
 
   // for correspondence game only standard can be rated
   // for real time fromPosition cannot be rated
   bool get isRatedAllowed => timeControl == ChallengeTimeControlType.clock
       ? variant != Variant.fromPosition
-      : timeControl == ChallengeTimeControlType.correspondence &&
-            variant == Variant.standard;
+      : timeControl == ChallengeTimeControlType.correspondence && variant == Variant.standard;
 
   ChallengeRequest makeRequest(LightUser destUser, [String? initialFen]) {
     return ChallengeRequest(
@@ -96,9 +92,7 @@ sealed class ChallengePrefs with _$ChallengePrefs implements Serializable {
       variant: variant,
       timeControl: timeControl,
       clock: timeControl == ChallengeTimeControlType.clock ? clock : null,
-      days: timeControl == ChallengeTimeControlType.correspondence
-          ? days
-          : null,
+      days: timeControl == ChallengeTimeControlType.correspondence ? days : null,
       rated: isRatedAllowed && rated,
       sideChoice: sideChoice,
       initialFen: initialFen,

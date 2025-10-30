@@ -21,16 +21,15 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
-final _followingStatusesProvider =
-    FutureProvider.autoDispose<(IList<User>, IList<UserStatus>)>((ref) async {
-      final following = await ref.withClient(
-        (client) => RelationRepository(client).getFollowing(),
-      );
-      final statuses = await ref
-          .read(userRepositoryProvider)
-          .getUsersStatuses(following.map((user) => user.id).toISet());
-      return (following, statuses);
-    });
+final _followingStatusesProvider = FutureProvider.autoDispose<(IList<User>, IList<UserStatus>)>((
+  ref,
+) async {
+  final following = await ref.withClient((client) => RelationRepository(client).getFollowing());
+  final statuses = await ref
+      .read(userRepositoryProvider)
+      .getUsersStatuses(following.map((user) => user.id).toISet());
+  return (following, statuses);
+});
 
 class FriendScreen extends ConsumerStatefulWidget {
   const FriendScreen({super.key});
@@ -43,8 +42,7 @@ class FriendScreen extends ConsumerStatefulWidget {
   ConsumerState<FriendScreen> createState() => _FriendScreenState();
 }
 
-class _FriendScreenState extends ConsumerState<FriendScreen>
-    with TickerProviderStateMixin {
+class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProviderStateMixin {
   late final TabController _tabController;
 
   @override
@@ -80,10 +78,7 @@ class _FriendScreenState extends ConsumerState<FriendScreen>
               ],
             ),
           ),
-          body: TabBarView(
-            controller: _tabController,
-            children: const [_Online(), _Following()],
-          ),
+          body: TabBarView(controller: _tabController, children: const [_Online(), _Following()]),
         );
       case _:
         return PlatformScaffold(
@@ -108,8 +103,7 @@ class OnlineFriendsWidget extends ConsumerWidget {
             header: Text(context.l10n.nbFriendsOnline(data.length)),
             onHeaderTap: () => _handleTap(context, data),
             children: [
-              for (final friend in data.take(10))
-                _OnlineFriendListTile(onlineFriend: friend),
+              for (final friend in data.take(10)) _OnlineFriendListTile(onlineFriend: friend),
             ],
           );
         },
@@ -155,18 +149,14 @@ class _OnlineFriendListTile extends ConsumerWidget {
               icon: const Icon(Icons.live_tv),
             )
           : null,
-      onTap: () => Navigator.of(
-        context,
-      ).push(UserOrProfileScreen.buildRoute(context, user)),
+      onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, user)),
       onLongPress: () => showModalBottomSheet<void>(
         context: context,
         useRootNavigator: true,
         isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
-        constraints: BoxConstraints(
-          minHeight: MediaQuery.sizeOf(context).height * 0.5,
-        ),
+        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
         builder: (context) => UserContextMenu(userId: user.id),
       ),
     );
@@ -184,8 +174,7 @@ class _Online extends ConsumerWidget {
       case AsyncData(:final value):
         return ListView.separated(
           itemCount: value.length,
-          separatorBuilder: (context, index) =>
-              Theme.of(context).platform == TargetPlatform.iOS
+          separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
               ? const PlatformDivider(height: 1)
               : const SizedBox.shrink(),
           itemBuilder: (context, index) {
@@ -211,14 +200,11 @@ class _Following extends ConsumerWidget {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             if (following.isEmpty) {
-              return Center(
-                child: Text(context.l10n.mobileNotFollowingAnyUser),
-              );
+              return Center(child: Text(context.l10n.mobileNotFollowingAnyUser));
             }
             return ListView.separated(
               itemCount: following.length,
-              separatorBuilder: (context, index) =>
-                  Theme.of(context).platform == TargetPlatform.iOS
+              separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
                   ? const PlatformDivider(height: 1)
                   : const SizedBox.shrink(),
               itemBuilder: (context, index) {
@@ -233,14 +219,11 @@ class _Following extends ConsumerWidget {
                         onPressed: (BuildContext context) async {
                           final oldState = following;
                           setState(() {
-                            following = following.removeWhere(
-                              (v) => v.id == user.id,
-                            );
+                            following = following.removeWhere((v) => v.id == user.id);
                           });
                           try {
                             await ref.withClient(
-                              (client) =>
-                                  RelationRepository(client).unfollow(user.id),
+                              (client) => RelationRepository(client).unfollow(user.id),
                             );
                           } catch (_) {
                             setState(() {
@@ -259,9 +242,9 @@ class _Following extends ConsumerWidget {
                     user,
                     _isOnline(user, value.$2),
                     onTap: () => {
-                      Navigator.of(context).push(
-                        UserOrProfileScreen.buildRoute(context, user.lightUser),
-                      ),
+                      Navigator.of(
+                        context,
+                      ).push(UserOrProfileScreen.buildRoute(context, user.lightUser)),
                     },
                   ),
                 );
@@ -270,19 +253,14 @@ class _Following extends ConsumerWidget {
           },
         );
       case AsyncError(:final error, :final stackTrace):
-        debugPrint(
-          'SEVERE: [FriendScreen] could not load following users; $error\n$stackTrace',
-        );
-        return FullScreenRetryRequest(
-          onRetry: () => ref.invalidate(_followingStatusesProvider),
-        );
+        debugPrint('SEVERE: [FriendScreen] could not load following users; $error\n$stackTrace');
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(_followingStatusesProvider));
       case _:
         return const CenterLoadingIndicator();
     }
   }
 
   bool _isOnline(User user, IList<UserStatus> statuses) {
-    return statuses.firstWhere((status) => status.id == user.id).online ??
-        false;
+    return statuses.firstWhere((status) => status.id == user.id).online ?? false;
   }
 }

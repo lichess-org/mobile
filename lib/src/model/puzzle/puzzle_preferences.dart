@@ -9,8 +9,7 @@ part 'puzzle_preferences.freezed.dart';
 part 'puzzle_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
-class PuzzlePreferences extends _$PuzzlePreferences
-    with SessionPreferencesStorage<PuzzlePrefs> {
+class PuzzlePreferences extends _$PuzzlePreferences with SessionPreferencesStorage<PuzzlePrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.puzzle;
@@ -55,13 +54,8 @@ sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
     @Default(true) bool rated,
   }) = _PuzzlePrefs;
 
-  factory PuzzlePrefs.defaults({UserId? id}) => PuzzlePrefs(
-    id: id,
-    difficulty: PuzzleDifficulty.normal,
-    autoNext: false,
-    rated: true,
-  );
+  factory PuzzlePrefs.defaults({UserId? id}) =>
+      PuzzlePrefs(id: id, difficulty: PuzzleDifficulty.normal, autoNext: false, rated: true);
 
-  factory PuzzlePrefs.fromJson(Map<String, dynamic> json) =>
-      _$PuzzlePrefsFromJson(json);
+  factory PuzzlePrefs.fromJson(Map<String, dynamic> json) => _$PuzzlePrefsFromJson(json);
 }

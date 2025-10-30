@@ -20,9 +20,7 @@ String gameStatusL10n(
     case GameStatus.mate:
       return context.l10n.checkmate;
     case GameStatus.resign:
-      return winner == Side.black
-          ? context.l10n.whiteResigned
-          : context.l10n.blackResigned;
+      return winner == Side.black ? context.l10n.whiteResigned : context.l10n.blackResigned;
     case GameStatus.stalemate:
       return context.l10n.stalemate;
     case GameStatus.timeout:
@@ -52,9 +50,7 @@ String gameStatusL10n(
           ? context.l10n.whiteTimeOut
           : context.l10n.blackTimeOut;
     case GameStatus.noStart:
-      return winner == Side.black
-          ? context.l10n.whiteDidntMove
-          : context.l10n.blackDidntMove;
+      return winner == Side.black ? context.l10n.whiteDidntMove : context.l10n.blackDidntMove;
     case GameStatus.unknownFinish:
       return context.l10n.finished;
     case GameStatus.cheat:

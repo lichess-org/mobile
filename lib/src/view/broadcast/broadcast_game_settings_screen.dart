@@ -21,10 +21,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
   }) {
-    return buildScreenRoute(
-      context,
-      screen: BroadcastGameSettingsScreen(roundId, gameId),
-    );
+    return buildScreenRoute(context, screen: BroadcastGameSettingsScreen(roundId, gameId));
   }
 
   @override
@@ -42,17 +39,15 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
               SwitchSettingTile(
                 title: Text(context.l10n.inlineNotation),
                 value: broadcastPrefs.inlineNotation,
-                onChanged: (value) => ref
-                    .read(broadcastPreferencesProvider.notifier)
-                    .toggleInlineNotation(),
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
                 // TODO: translate
                 title: const Text('Smaller board'),
                 value: broadcastPrefs.smallBoard,
-                onChanged: (value) => ref
-                    .read(broadcastPreferencesProvider.notifier)
-                    .toggleSmallBoard(),
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleSmallBoard(),
               ),
               ListTile(
                 title: Text(context.l10n.openingExplorer),
@@ -73,48 +68,40 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                 title: Text(context.l10n.mobileServerAnalysis),
                 value: broadcastPrefs.enableServerAnalysis,
                 onChanged: (_) {
-                  ref
-                      .read(broadcastPreferencesProvider.notifier)
-                      .toggleServerAnalysis();
+                  ref.read(broadcastPreferencesProvider.notifier).toggleServerAnalysis();
                 },
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.evaluationGauge),
                 value: broadcastPrefs.showEvaluationGauge,
-                onChanged: (value) => ref
-                    .read(broadcastPreferencesProvider.notifier)
-                    .toggleShowEvaluationGauge(),
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleShowEvaluationGauge(),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.toggleGlyphAnnotations),
                 value: broadcastPrefs.showAnnotations,
-                onChanged: (_) => ref
-                    .read(broadcastPreferencesProvider.notifier)
-                    .toggleAnnotations(),
+                onChanged: (_) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleAnnotations(),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.mobileShowComments),
                 value: broadcastPrefs.showPgnComments,
-                onChanged: (_) => ref
-                    .read(broadcastPreferencesProvider.notifier)
-                    .togglePgnComments(),
+                onChanged: (_) =>
+                    ref.read(broadcastPreferencesProvider.notifier).togglePgnComments(),
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.bestMoveArrow),
                 value: broadcastPrefs.showBestMoveArrow,
-                onChanged: (value) => ref
-                    .read(broadcastPreferencesProvider.notifier)
-                    .toggleShowBestMoveArrow(),
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleShowBestMoveArrow(),
               ),
             ],
           ),
           EngineSettingsWidget(
             onSetEngineSearchTime: (value) =>
                 ref.read(controller.notifier).setEngineSearchTime(value),
-            onSetNumEvalLines: (value) =>
-                ref.read(controller.notifier).setNumEvalLines(value),
-            onSetEngineCores: (value) =>
-                ref.read(controller.notifier).setEngineCores(value),
+            onSetNumEvalLines: (value) => ref.read(controller.notifier).setNumEvalLines(value),
+            onSetEngineCores: (value) => ref.read(controller.notifier).setEngineCores(value),
           ),
         ],
       ),

@@ -16,14 +16,9 @@ const kAnalysisBoardHeaderOrFooterHeight = 26.0;
 const kSmallBoardScale = 0.8;
 
 typedef BoardBuilder =
-    Widget Function(
-      BuildContext context,
-      double boardSize,
-      BorderRadius? boardRadius,
-    );
+    Widget Function(BuildContext context, double boardSize, BorderRadius? boardRadius);
 
-typedef EngineGaugeBuilder =
-    Widget Function(BuildContext context, Orientation orientation);
+typedef EngineGaugeBuilder = Widget Function(BuildContext context, Orientation orientation);
 
 enum AnalysisTab {
   explorer(Icons.explore),
@@ -52,11 +47,7 @@ enum AnalysisTab {
 
 /// Indicator for the analysis tab, typically shown in the app bar.
 class AppBarAnalysisTabIndicator extends StatefulWidget {
-  const AppBarAnalysisTabIndicator({
-    required this.tabs,
-    required this.controller,
-    super.key,
-  });
+  const AppBarAnalysisTabIndicator({required this.tabs, required this.controller, super.key});
 
   final TabController controller;
 
@@ -67,12 +58,10 @@ class AppBarAnalysisTabIndicator extends StatefulWidget {
   final List<AnalysisTab> tabs;
 
   @override
-  State<AppBarAnalysisTabIndicator> createState() =>
-      _AppBarAnalysisTabIndicatorState();
+  State<AppBarAnalysisTabIndicator> createState() => _AppBarAnalysisTabIndicatorState();
 }
 
-class _AppBarAnalysisTabIndicatorState
-    extends State<AppBarAnalysisTabIndicator> {
+class _AppBarAnalysisTabIndicatorState extends State<AppBarAnalysisTabIndicator> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -206,18 +195,12 @@ class AnalysisLayout extends StatelessWidget {
 
                 if (orientation == Orientation.landscape) {
                   final headerAndFooterHeight =
-                      (boardHeader != null
-                          ? kAnalysisBoardHeaderOrFooterHeight
-                          : 0.0) +
-                      (boardFooter != null
-                          ? kAnalysisBoardHeaderOrFooterHeight
-                          : 0.0);
+                      (boardHeader != null ? kAnalysisBoardHeaderOrFooterHeight : 0.0) +
+                      (boardFooter != null ? kAnalysisBoardHeaderOrFooterHeight : 0.0);
                   final sideWidth =
-                      constraints.biggest.longestSide -
-                      constraints.biggest.shortestSide;
+                      constraints.biggest.longestSide - constraints.biggest.shortestSide;
                   final defaultBoardSize =
-                      constraints.biggest.shortestSide -
-                      (kTabletBoardTableSidePadding * 2);
+                      constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
                   final boardSize =
                       (sideWidth >= 250
                           ? defaultBoardSize
@@ -243,9 +226,7 @@ class AnalysisLayout extends StatelessWidget {
                                         )
                                       : null,
                                 ),
-                                clipBehavior: isTablet
-                                    ? Clip.hardEdge
-                                    : Clip.none,
+                                clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
                                 child: SizedBox(
                                   height: kAnalysisBoardHeaderOrFooterHeight,
                                   width: boardSize,
@@ -255,9 +236,7 @@ class AnalysisLayout extends StatelessWidget {
                             boardBuilder(
                               context,
                               boardSize,
-                              isTablet &&
-                                      boardHeader == null &&
-                                      boardFooter != null
+                              isTablet && boardHeader == null && boardFooter != null
                                   ? tabletBoardRadius
                                   : null,
                             ),
@@ -273,9 +252,7 @@ class AnalysisLayout extends StatelessWidget {
                                         )
                                       : null,
                                 ),
-                                clipBehavior: isTablet
-                                    ? Clip.hardEdge
-                                    : Clip.none,
+                                clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
                                 height: kAnalysisBoardHeaderOrFooterHeight,
                                 width: boardSize,
                                 child: boardFooter,
@@ -297,10 +274,7 @@ class AnalysisLayout extends StatelessWidget {
                                 child: Card(
                                   clipBehavior: Clip.hardEdge,
                                   semanticContainer: false,
-                                  child: TabBarView(
-                                    controller: tabController,
-                                    children: children,
-                                  ),
+                                  child: TabBarView(controller: tabController, children: children),
                                 ),
                               ),
                             ],
@@ -311,10 +285,8 @@ class AnalysisLayout extends StatelessWidget {
                   );
                 } else {
                   final defaultBoardSize = constraints.biggest.shortestSide;
-                  final remainingHeight =
-                      constraints.maxHeight - defaultBoardSize;
-                  final isSmallScreen =
-                      remainingHeight < kSmallHeightMinusBoard;
+                  final remainingHeight = constraints.maxHeight - defaultBoardSize;
+                  final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
                   final boardSize = isTablet || isSmallScreen
                       ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                       : defaultBoardSize;
@@ -345,19 +317,14 @@ class AnalysisLayout extends StatelessWidget {
                                         )
                                       : null,
                                 ),
-                                clipBehavior: isTablet
-                                    ? Clip.hardEdge
-                                    : Clip.none,
+                                clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
                                 height: kAnalysisBoardHeaderOrFooterHeight,
                                 child: boardHeader,
                               ),
                             boardBuilder(
                               context,
-                              boardSize *
-                                  (smallBoard == true ? kSmallBoardScale : 1.0),
-                              isTablet &&
-                                      boardHeader == null &&
-                                      boardFooter != null
+                              boardSize * (smallBoard == true ? kSmallBoardScale : 1.0),
+                              isTablet && boardHeader == null && boardFooter != null
                                   ? tabletBoardRadius
                                   : null,
                             ),
@@ -373,9 +340,7 @@ class AnalysisLayout extends StatelessWidget {
                                         )
                                       : null,
                                 ),
-                                clipBehavior: isTablet
-                                    ? Clip.hardEdge
-                                    : Clip.none,
+                                clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
                                 height: kAnalysisBoardHeaderOrFooterHeight,
                                 child: boardFooter,
                               ),
@@ -385,20 +350,13 @@ class AnalysisLayout extends StatelessWidget {
                       Expanded(
                         child: Padding(
                           padding: isTablet
-                              ? const EdgeInsets.symmetric(
-                                  horizontal: kTabletBoardTableSidePadding,
-                                )
+                              ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
                               : EdgeInsets.zero,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: ColorScheme.of(
-                                context,
-                              ).surfaceContainerLowest,
+                              color: ColorScheme.of(context).surfaceContainerLowest,
                             ),
-                            child: TabBarView(
-                              controller: tabController,
-                              children: children,
-                            ),
+                            child: TabBarView(controller: tabController, children: children),
                           ),
                         ),
                       ),

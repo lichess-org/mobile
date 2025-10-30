@@ -14,10 +14,7 @@ class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
   const OfflineCorrespondenceGamesScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(
-      context,
-      screen: const OfflineCorrespondenceGamesScreen(),
-    );
+    return buildScreenRoute(context, screen: const OfflineCorrespondenceGamesScreen());
   }
 
   @override
@@ -44,10 +41,7 @@ class _Body extends ConsumerWidget {
         children: [
           const SizedBox(height: 8.0),
           ...data.map(
-            (game) => OfflineCorrespondenceGamePreview(
-              game: game.$2,
-              lastModified: game.$1,
-            ),
+            (game) => OfflineCorrespondenceGamePreview(game: game.$2, lastModified: game.$1),
           ),
         ],
       ),
@@ -74,30 +68,15 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          UserFullNameWidget(
-            user: game.opponent!.user,
-            style: Styles.boardPreviewTitle,
-          ),
+          UserFullNameWidget(user: game.opponent!.user, style: Styles.boardPreviewTitle),
           if (game.myTimeLeft(lastModified) != null)
-            Text(
-              relativeDate(
-                context.l10n,
-                DateTime.now().add(game.myTimeLeft(lastModified)!),
-              ),
-            ),
-          Icon(
-            game.perf.icon,
-            size: 32,
-            color: DefaultTextStyle.of(context).style.color,
-          ),
+            Text(relativeDate(context.l10n, DateTime.now().add(game.myTimeLeft(lastModified)!))),
+          Icon(game.perf.icon, size: 32, color: DefaultTextStyle.of(context).style.color),
         ],
       ),
       onTap: () {
         Navigator.of(context, rootNavigator: true).push(
-          OfflineCorrespondenceGameScreen.buildRoute(
-            context,
-            initialGame: (lastModified, game),
-          ),
+          OfflineCorrespondenceGameScreen.buildRoute(context, initialGame: (lastModified, game)),
         );
       },
     );

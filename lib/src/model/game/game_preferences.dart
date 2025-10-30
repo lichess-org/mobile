@@ -7,8 +7,7 @@ part 'game_preferences.g.dart';
 
 /// Local game preferences, defined client-side only.
 @Riverpod(keepAlive: true)
-class GamePreferences extends _$GamePreferences
-    with PreferencesStorage<GamePrefs> {
+class GamePreferences extends _$GamePreferences with PreferencesStorage<GamePrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.game;
@@ -41,6 +40,5 @@ sealed class GamePrefs with _$GamePrefs implements Serializable {
 
   static const defaults = GamePrefs(enableChat: true);
 
-  factory GamePrefs.fromJson(Map<String, dynamic> json) =>
-      _$GamePrefsFromJson(json);
+  factory GamePrefs.fromJson(Map<String, dynamic> json) => _$GamePrefsFromJson(json);
 }

@@ -46,9 +46,7 @@ class _NonLinearSliderState extends State<NonLinearSlider> {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity:
-          Theme.of(context).platform != TargetPlatform.iOS ||
-              widget.onChangeEnd != null
+      opacity: Theme.of(context).platform != TargetPlatform.iOS || widget.onChangeEnd != null
           ? 1
           : 0.5,
       child: Slider.adaptive(
@@ -56,9 +54,7 @@ class _NonLinearSliderState extends State<NonLinearSlider> {
         min: 0,
         max: widget.values.length.toDouble() - 1,
         divisions: widget.values.length - 1,
-        label:
-            widget.labelBuilder?.call(widget.values[_index]) ??
-            widget.values[_index].toString(),
+        label: widget.labelBuilder?.call(widget.values[_index]) ?? widget.values[_index].toString(),
         onChanged: widget.onChangeEnd != null
             ? (double value) {
                 final newIndex = value.toInt();

@@ -119,56 +119,46 @@ class PuzzleBatchStorage {
         .toIList();
   }
 
-  Future<IMap<PuzzleThemeKey, int>> fetchSavedThemes({
-    required UserId? userId,
-  }) async {
+  Future<IMap<PuzzleThemeKey, int>> fetchSavedThemes({required UserId? userId}) async {
     final list = await _db.query(
       _tableName,
       where: 'userId = ?',
       whereArgs: [userId ?? _anonUserKey],
     );
 
-    return list.fold<IMap<PuzzleThemeKey, int>>(
-      IMap<PuzzleThemeKey, int>(const {}),
-      (acc, map) {
-        final angle = map['angle'] as String?;
-        final raw = map['data'] as String?;
+    return list.fold<IMap<PuzzleThemeKey, int>>(IMap<PuzzleThemeKey, int>(const {}), (acc, map) {
+      final angle = map['angle'] as String?;
+      final raw = map['data'] as String?;
 
-        final theme = angle != null ? puzzleThemeNameMap.get(angle) : null;
+      final theme = angle != null ? puzzleThemeNameMap.get(angle) : null;
 
-        if (theme != null) {
-          int? count;
-          if (raw != null) {
-            final json = jsonDecode(raw);
-            if (json is! Map<String, dynamic>) {
-              throw const FormatException(
-                '[PuzzleBatchStorage] cannot fetch puzzles: expected an object',
-              );
-            }
-            final data = PuzzleBatch.fromJson(json);
-            count = data.unsolved.length;
+      if (theme != null) {
+        int? count;
+        if (raw != null) {
+          final json = jsonDecode(raw);
+          if (json is! Map<String, dynamic>) {
+            throw const FormatException(
+              '[PuzzleBatchStorage] cannot fetch puzzles: expected an object',
+            );
           }
-          return count != null ? acc.add(theme, count) : acc;
+          final data = PuzzleBatch.fromJson(json);
+          count = data.unsolved.length;
         }
+        return count != null ? acc.add(theme, count) : acc;
+      }
 
-        return acc;
-      },
-    );
+      return acc;
+    });
   }
 
-  Future<IMap<String, int>> fetchSavedOpenings({
-    required UserId? userId,
-  }) async {
+  Future<IMap<String, int>> fetchSavedOpenings({required UserId? userId}) async {
     final list = await _db.query(
       _tableName,
       where: 'userId = ?',
       whereArgs: [userId ?? _anonUserKey],
     );
 
-    return list.fold<IMap<String, int>>(IMap<String, int>(const {}), (
-      acc,
-      map,
-    ) {
+    return list.fold<IMap<String, int>>(IMap<String, int>(const {}), (acc, map) {
       final angle = map['angle'] as String?;
       final raw = map['data'] as String?;
 
@@ -206,6 +196,5 @@ sealed class PuzzleBatch with _$PuzzleBatch {
     required IList<Puzzle> unsolved,
   }) = _PuzzleBatch;
 
-  factory PuzzleBatch.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleBatchFromJson(json);
+  factory PuzzleBatch.fromJson(Map<String, dynamic> json) => _$PuzzleBatchFromJson(json);
 }

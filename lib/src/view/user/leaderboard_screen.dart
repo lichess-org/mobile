@@ -44,47 +44,25 @@ class _Body extends ConsumerWidget {
           _Leaderboard(data.blitz, LichessIcons.blitz, 'BLITZ'),
           _Leaderboard(data.rapid, LichessIcons.rapid, 'RAPID'),
           _Leaderboard(data.classical, LichessIcons.classical, 'CLASSICAL'),
-          _Leaderboard(
-            data.ultrabullet,
-            LichessIcons.ultrabullet,
-            'ULTRA BULLET',
-          ),
+          _Leaderboard(data.ultrabullet, LichessIcons.ultrabullet, 'ULTRA BULLET'),
           _Leaderboard(data.crazyhouse, LichessIcons.h_square, 'CRAZYHOUSE'),
           _Leaderboard(data.chess960, LichessIcons.die_six, 'CHESS 960'),
-          _Leaderboard(
-            data.kingOfThehill,
-            LichessIcons.bullet,
-            'KING OF THE HILL',
-          ),
-          _Leaderboard(
-            data.threeCheck,
-            LichessIcons.three_check,
-            'THREE CHECK',
-          ),
+          _Leaderboard(data.kingOfThehill, LichessIcons.bullet, 'KING OF THE HILL'),
+          _Leaderboard(data.threeCheck, LichessIcons.three_check, 'THREE CHECK'),
           _Leaderboard(data.atomic, LichessIcons.atom, 'ATOMIC'),
           _Leaderboard(data.horde, LichessIcons.horde, 'HORDE'),
           _Leaderboard(data.antichess, LichessIcons.antichess, 'ANTICHESS'),
-          _Leaderboard(
-            data.racingKings,
-            LichessIcons.racing_kings,
-            'RACING KINGS',
-          ),
+          _Leaderboard(data.racingKings, LichessIcons.racing_kings, 'RACING KINGS'),
         ];
 
         return SafeArea(
           child: SingleChildScrollView(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final crossAxisCount = math.min(
-                  3,
-                  (constraints.maxWidth / 300).floor(),
-                );
+                final crossAxisCount = math.min(3, (constraints.maxWidth / 300).floor());
                 return LayoutGrid(
                   columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
-                  rowSizes: List.generate(
-                    (list.length / crossAxisCount).ceil(),
-                    (_) => auto,
-                  ),
+                  rowSizes: List.generate((list.length / crossAxisCount).ceil(), (_) => auto),
                   children: list,
                 );
               },
@@ -93,8 +71,7 @@ class _Body extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-      error: (error, stack) =>
-          const Center(child: Text('Could not load leaderboard.')),
+      error: (error, stack) => const Center(child: Text('Could not load leaderboard.')),
     );
   }
 }
@@ -123,9 +100,7 @@ class LeaderboardListTile extends StatelessWidget {
   }
 
   void _handleTap(BuildContext context) {
-    Navigator.of(
-      context,
-    ).push(UserOrProfileScreen.buildRoute(context, user.lightUser));
+    Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, user.lightUser));
   }
 }
 
@@ -144,13 +119,9 @@ class _Progress extends StatelessWidget {
         Text(rating.toString(), maxLines: 1),
         const SizedBox(width: 5),
         Icon(
-          progress > 0
-              ? LichessIcons.arrow_full_upperright
-              : LichessIcons.arrow_full_lowerright,
+          progress > 0 ? LichessIcons.arrow_full_upperright : LichessIcons.arrow_full_lowerright,
           size: 16,
-          color: progress > 0
-              ? context.lichessColors.good
-              : context.lichessColors.error,
+          color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
         ),
         Text(
           progress.abs().toString().padRight(2),
@@ -158,9 +129,7 @@ class _Progress extends StatelessWidget {
           style: TextStyle(
             fontSize: 12,
             fontFeatures: const [FontFeature.tabularFigures()],
-            color: progress > 0
-                ? context.lichessColors.good
-                : context.lichessColors.error,
+            color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
           ),
         ),
       ],
@@ -187,9 +156,7 @@ class _Leaderboard extends StatelessWidget {
             Text(title),
           ],
         ),
-        children: userList
-            .map((user) => LeaderboardListTile(user: user))
-            .toList(),
+        children: userList.map((user) => LeaderboardListTile(user: user)).toList(),
       ),
     );
   }

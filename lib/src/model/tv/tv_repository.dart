@@ -41,8 +41,7 @@ TvChannels tvChannelsFromServerJson(Map<String, dynamic> json) {
   });
 }
 
-TvGame _tvGameFromJson(Map<String, dynamic> json) =>
-    _tvGameFromPick(pick(json).required());
+TvGame _tvGameFromJson(Map<String, dynamic> json) => _tvGameFromPick(pick(json).required());
 
 TvGame _tvGameFromPick(RequiredPick pick) => TvGame(
   user: pick('user').asLightUserOrThrow(),

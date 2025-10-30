@@ -76,9 +76,7 @@ abstract class AnalysisBoardState<
     }
 
     final eval = pickBestClientEval(
-      localEval: ref.watch(
-        engineEvaluationProvider.select((value) => value.eval),
-      ),
+      localEval: ref.watch(engineEvaluationProvider.select((value) => value.eval)),
       savedEval: analysisState.currentNode.eval,
     );
 
@@ -92,11 +90,7 @@ abstract class AnalysisBoardState<
       return ISet();
     }
 
-    return computeBestMoveShapes(
-      eval.bestMoves,
-      currentPosition.turn,
-      pieceAssets,
-    );
+    return computeBestMoveShapes(eval.bestMoves, currentPosition.turn, pieceAssets);
   }
 
   @override
@@ -106,9 +100,7 @@ abstract class AnalysisBoardState<
     final currentNode = analysisState.currentNode;
     final currentPosition = analysisState.currentPosition;
 
-    final annotation = showAnnotations
-        ? makeAnnotation(currentNode.nags)
-        : null;
+    final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
 
     return Chessboard(
@@ -130,22 +122,16 @@ abstract class AnalysisBoardState<
               onPromotionSelection: onPromotionSelection,
             )
           : null,
-      shapes: userShapes
-          .union(_bestMoveShapes(boardPrefs.pieceSet.assets))
-          .union(extraShapes),
+      shapes: userShapes.union(_bestMoveShapes(boardPrefs.pieceSet.assets)).union(extraShapes),
       annotations: sanMove != null && annotation != null
           ? (sanMove.san == 'O-O' || sanMove.san == 'O-O-O') &&
                     altCastles.containsKey(sanMove.move.uci)
-                ? IMap({
-                    Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation,
-                  })
+                ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
                 : IMap({sanMove.move.to: annotation})
           : null,
       settings: boardPrefs.toBoardSettings().copyWith(
         borderRadius: widget.boardRadius,
-        boxShadow: widget.boardRadius != null
-            ? boardShadows
-            : const <BoxShadow>[],
+        boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
         drawShape: DrawShapeOptions(
           enable: boardPrefs.enableShapeDrawings,
           onCompleteShape: _onCompleteShape,

@@ -15,9 +15,7 @@ class Challenges extends _$Challenges {
 
   @override
   Future<ChallengesList> build() {
-    _subscription = ChallengeService.stream.listen(
-      (list) => state = AsyncValue.data(list),
-    );
+    _subscription = ChallengeService.stream.listen((list) => state = AsyncValue.data(list));
 
     ref.onDispose(() {
       _subscription?.cancel();

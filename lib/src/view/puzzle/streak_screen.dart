@@ -45,10 +45,7 @@ class StreakScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WakelockWidget(
       child: Scaffold(
-        appBar: AppBar(
-          actions: const [ToggleSoundButton()],
-          title: const Text('Puzzle Streak'),
-        ),
+        appBar: AppBar(actions: const [ToggleSoundButton()], title: const Text('Puzzle Streak')),
         body: const _Load(),
       ),
     );
@@ -65,9 +62,7 @@ class _Load extends ConsumerWidget {
 
     switch (streak) {
       case AsyncValue(:final error?, :final stackTrace):
-        debugPrint(
-          'SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace',
-        );
+        debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
         return PuzzleErrorBoardWidget(errorMessage: error.toString());
       case AsyncValue(:final value?):
         return _Body(
@@ -128,11 +123,9 @@ class _BodyState extends ConsumerState<_Body> {
     });
 
     ref.listen(ctrlProvider, (previous, next) {
-      if (previous?.result != PuzzleResult.lose &&
-          next.result == PuzzleResult.lose) {
+      if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
         ref.read(puzzleStreakControllerProvider.notifier).gameOver();
-      } else if (previous?.result != PuzzleResult.win &&
-          next.result == PuzzleResult.win) {
+      } else if (previous?.result != PuzzleResult.win && next.result == PuzzleResult.win) {
         ref.read(puzzleStreakControllerProvider.notifier).next();
       }
     });
@@ -140,9 +133,7 @@ class _BodyState extends ConsumerState<_Body> {
     final gameData = boardPreferences.toGameData(
       variant: Variant.standard,
       position: puzzleState.currentPosition,
-      playerSide:
-          puzzleState.mode == PuzzleMode.load ||
-              puzzleState.currentPosition.isGameOver
+      playerSide: puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
           ? PlayerSide.none
           : puzzleState.mode == PuzzleMode.view
           ? PlayerSide.both
@@ -170,9 +161,7 @@ class _BodyState extends ConsumerState<_Body> {
           context: context,
           builder: (context) => YesNoDialog(
             title: Text(context.l10n.mobileAreYouSure),
-            content: const Text(
-              'No worries, your score will be saved locally.',
-            ),
+            content: const Text('No worries, your score will be saved locally.'),
             onYes: () => Navigator.of(context).pop(true),
             onNo: () => Navigator.of(context).pop(false),
           ),
@@ -192,43 +181,32 @@ class _BodyState extends ConsumerState<_Body> {
                 child: SafeArea(
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final orientation =
-                          constraints.maxWidth > constraints.maxHeight
+                      final orientation = constraints.maxWidth > constraints.maxHeight
                           ? Orientation.landscape
                           : Orientation.portrait;
                       final isTablet = isTabletOrLarger(context);
 
-                      final defaultSettings = boardPreferences
-                          .toBoardSettings()
-                          .copyWith(
-                            borderRadius: isTablet
-                                ? Styles.boardBorderRadius
-                                : BorderRadius.zero,
-                            boxShadow: isTablet
-                                ? boardShadows
-                                : const <BoxShadow>[],
-                            drawShape: DrawShapeOptions(
-                              enable: boardPreferences.enableShapeDrawings,
-                              onCompleteShape: _onCompleteShape,
-                              onClearShapes: _onClearShapes,
-                              newShapeColor: boardPreferences.shapeColor.color,
-                            ),
-                          );
+                      final defaultSettings = boardPreferences.toBoardSettings().copyWith(
+                        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+                        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                        drawShape: DrawShapeOptions(
+                          enable: boardPreferences.enableShapeDrawings,
+                          onCompleteShape: _onCompleteShape,
+                          onClearShapes: _onClearShapes,
+                          newShapeColor: boardPreferences.shapeColor.color,
+                        ),
+                      );
 
                       if (orientation == Orientation.landscape) {
                         final defaultBoardSize =
-                            constraints.biggest.shortestSide -
-                            (kTabletBoardTableSidePadding * 2);
-                        final sideWidth =
-                            constraints.biggest.longestSide - defaultBoardSize;
+                            constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
+                        final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
                         final boardSize = sideWidth >= 250
                             ? defaultBoardSize
                             : constraints.biggest.longestSide / kGoldenRatio -
                                   (kTabletBoardTableSidePadding * 2);
                         return Padding(
-                          padding: const EdgeInsets.all(
-                            kTabletBoardTableSidePadding,
-                          ),
+                          padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -245,15 +223,12 @@ class _BodyState extends ConsumerState<_Body> {
                               const SizedBox(width: 16.0),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     Center(
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
                                           Expanded(
                                             child: PuzzleFeedbackWidget(
@@ -264,8 +239,7 @@ class _BodyState extends ConsumerState<_Body> {
                                           ),
                                           Text(
                                             context.l10n.puzzleRatingX(
-                                              puzzleState.puzzle.puzzle.rating
-                                                  .toString(),
+                                              puzzleState.puzzle.puzzle.rating.toString(),
                                             ),
                                           ),
                                           const SizedBox(width: 16.0),
@@ -274,9 +248,7 @@ class _BodyState extends ConsumerState<_Body> {
                                     ),
                                     Padding(
                                       padding: EdgeInsets.symmetric(
-                                        horizontal: isTablet
-                                            ? kTabletBoardTableSidePadding
-                                            : 12.0,
+                                        horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                                         vertical: 32.0,
                                       ),
                                       child: Center(
@@ -289,20 +261,15 @@ class _BodyState extends ConsumerState<_Body> {
                                                 Icon(
                                                   LichessIcons.streak,
                                                   size: 150.0,
-                                                  color: ColorScheme.of(
-                                                    context,
-                                                  ).primary,
+                                                  color: ColorScheme.of(context).primary,
                                                 ),
                                                 const SizedBox(width: 8.0),
                                                 Text(
-                                                  widget.streak.index
-                                                      .toString(),
+                                                  widget.streak.index.toString(),
                                                   style: TextStyle(
                                                     fontSize: 90.0,
                                                     fontWeight: FontWeight.bold,
-                                                    color: ColorScheme.of(
-                                                      context,
-                                                    ).primary,
+                                                    color: ColorScheme.of(context).primary,
                                                   ),
                                                 ),
                                               ],
@@ -321,15 +288,12 @@ class _BodyState extends ConsumerState<_Body> {
                                             children: [
                                               DebouncedPgnTreeView(
                                                 root: puzzleState.root,
-                                                currentPath:
-                                                    puzzleState.currentPath,
+                                                currentPath: puzzleState.currentPath,
                                                 pgnRootComments: null,
-                                                shouldShowComputerAnalysis:
-                                                    false,
+                                                shouldShowComputerAnalysis: false,
                                                 shouldShowComments: false,
                                                 shouldShowAnnotations: false,
-                                                displayMode: PgnTreeDisplayMode
-                                                    .twoColumn,
+                                                displayMode: PgnTreeDisplayMode.twoColumn,
                                               ),
                                             ],
                                           ),
@@ -337,8 +301,7 @@ class _BodyState extends ConsumerState<_Body> {
                                       ),
                                     ),
                                     _BottomBar(
-                                      initialPuzzleContext:
-                                          widget.initialPuzzleContext,
+                                      initialPuzzleContext: widget.initialPuzzleContext,
                                       streak: widget.streak,
                                     ),
                                   ],
@@ -348,11 +311,9 @@ class _BodyState extends ConsumerState<_Body> {
                           ),
                         );
                       } else {
-                        final defaultBoardSize =
-                            constraints.biggest.shortestSide;
+                        final defaultBoardSize = constraints.biggest.shortestSide;
                         final double boardSize = isTablet
-                            ? defaultBoardSize -
-                                  kTabletBoardTableSidePadding * 2
+                            ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                             : defaultBoardSize;
 
                         return Column(
@@ -362,15 +323,11 @@ class _BodyState extends ConsumerState<_Body> {
                             Expanded(
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: isTablet
-                                      ? kTabletBoardTableSidePadding
-                                      : 12.0,
+                                  horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                                 ),
                                 child: Center(
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0,
-                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                     child: PuzzleFeedbackWidget(
                                       puzzle: puzzleState.puzzle,
                                       state: puzzleState,
@@ -400,9 +357,7 @@ class _BodyState extends ConsumerState<_Body> {
                             Expanded(
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: isTablet
-                                      ? kTabletBoardTableSidePadding
-                                      : 12.0,
+                                  horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
@@ -411,8 +366,7 @@ class _BodyState extends ConsumerState<_Body> {
                                     right: 10.0,
                                   ),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       Card(
                                         child: Padding(
@@ -422,9 +376,7 @@ class _BodyState extends ConsumerState<_Body> {
                                               Icon(
                                                 LichessIcons.streak,
                                                 size: 50.0,
-                                                color: ColorScheme.of(
-                                                  context,
-                                                ).primary,
+                                                color: ColorScheme.of(context).primary,
                                               ),
                                               const SizedBox(width: 8.0),
                                               Text(
@@ -432,9 +384,7 @@ class _BodyState extends ConsumerState<_Body> {
                                                 style: TextStyle(
                                                   fontSize: 30.0,
                                                   fontWeight: FontWeight.bold,
-                                                  color: ColorScheme.of(
-                                                    context,
-                                                  ).primary,
+                                                  color: ColorScheme.of(context).primary,
                                                 ),
                                               ),
                                             ],
@@ -443,8 +393,7 @@ class _BodyState extends ConsumerState<_Body> {
                                       ),
                                       Text(
                                         context.l10n.puzzleRatingX(
-                                          puzzleState.puzzle.puzzle.rating
-                                              .toString(),
+                                          puzzleState.puzzle.puzzle.rating.toString(),
                                         ),
                                       ),
                                     ],
@@ -472,10 +421,8 @@ class _BodyState extends ConsumerState<_Body> {
     return Theme.of(context).platform == TargetPlatform.android
         ? AndroidGesturesExclusionWidget(
             boardKey: _boardKey,
-            shouldExcludeGesturesOnFocusGained: () =>
-                puzzleState.mode != PuzzleMode.view,
-            shouldSetImmersiveMode:
-                boardPreferences.immersiveModeWhilePlaying ?? false,
+            shouldExcludeGesturesOnFocusGained: () => puzzleState.mode != PuzzleMode.view,
+            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
             child: content,
           )
         : content;
@@ -513,10 +460,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = puzzleControllerProvider(
-      initialPuzzleContext,
-      isPuzzleStreak: true,
-    );
+    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext, isPuzzleStreak: true);
     final puzzleState = ref.watch(ctrlProvider);
 
     return BottomBar(
@@ -537,9 +481,7 @@ class _BottomBar extends ConsumerWidget {
                 ? null
                 : () {
                     ref.read(ctrlProvider.notifier).skipMove();
-                    ref
-                        .read(puzzleStreakControllerProvider.notifier)
-                        .skipMove();
+                    ref.read(puzzleStreakControllerProvider.notifier).skipMove();
                   },
           ),
         if (streak.finished)
@@ -548,16 +490,12 @@ class _BottomBar extends ConsumerWidget {
               launchShareDialog(
                 context,
                 ShareParams(
-                  text: lichessUri(
-                    '/training/${puzzleState.puzzle.puzzle.id}',
-                  ).toString(),
+                  text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}').toString(),
                 ),
               );
             },
             label: 'Share this puzzle',
-            icon: Theme.of(context).platform == TargetPlatform.iOS
-                ? Icons.ios_share
-                : Icons.share,
+            icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
           ),
         if (streak.finished)
           BottomBarButton(
@@ -588,9 +526,7 @@ class _BottomBar extends ConsumerWidget {
           ),
         if (streak.finished)
           BottomBarButton(
-            onTap: puzzleState.canGoNext
-                ? () => ref.read(ctrlProvider.notifier).userNext()
-                : null,
+            onTap: puzzleState.canGoNext ? () => ref.read(ctrlProvider.notifier).userNext() : null,
             label: context.l10n.next,
             icon: CupertinoIcons.chevron_forward,
           ),

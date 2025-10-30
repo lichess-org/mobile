@@ -26,14 +26,8 @@ class StudyListScreen extends ConsumerStatefulWidget {
 
   final StudyCategory? initialCategory;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
-    StudyCategory? initialCategory,
-  }) {
-    return buildScreenRoute(
-      context,
-      screen: StudyListScreen(initialCategory: initialCategory),
-    );
+  static Route<dynamic> buildRoute(BuildContext context, {StudyCategory? initialCategory}) {
+    return buildScreenRoute(context, screen: StudyListScreen(initialCategory: initialCategory));
   }
 
   @override
@@ -55,11 +49,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
   bool requestedNextPage = false;
 
   StudyListPaginatorProvider get paginatorProvider =>
-      StudyListPaginatorProvider(
-        category: category,
-        order: order,
-        search: search,
-      );
+      StudyListPaginatorProvider(category: category, order: order, search: search);
 
   @override
   void initState() {
@@ -68,10 +58,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
     _scrollController.addListener(_scrollListener);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (currentCategoryKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          currentCategoryKey.currentContext!,
-          alignment: 0.5,
-        );
+        Scrollable.ensureVisible(currentCategoryKey.currentContext!, alignment: 0.5);
       }
     });
   }
@@ -86,8 +73,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
   void _scrollListener() {
     if (!requestedNextPage &&
-        _scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 300) {
+        _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
       final studiesList = ref.read(paginatorProvider);
 
       if (!studiesList.isLoading) {
@@ -137,11 +123,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(
-          sessionUser != null
-              ? context.l10n.studyMenu
-              : context.l10n.studyAllStudies,
-        ),
+        title: Text(sessionUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
         actions: [
           if (_searchController.value.text.isEmpty)
             ContextMenuIconButton(
@@ -197,10 +179,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
                             key: cat == category ? currentCategoryKey : null,
                             showCheckmark: false,
                             label: Text(cat.l10n(context.l10n)),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0,
-                              vertical: 4.0,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0),
                             ),
@@ -251,20 +230,13 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
               : const PlatformDivider(height: 1, color: Colors.transparent),
           itemBuilder: (context, index) => index == 0
               ? searchBar
-              : StudyListItem(
-                  study: studies.studies[index - 1],
-                  flairSize: 30.0,
-                ),
+              : StudyListItem(study: studies.studies[index - 1], flairSize: 30.0),
         ),
-        AsyncError() => FullScreenRetryRequest(
-          onRetry: () => ref.invalidate(paginatorProvider),
-        ),
+        AsyncError() => FullScreenRetryRequest(onRetry: () => ref.invalidate(paginatorProvider)),
         _ => Column(
           children: [
             searchBar,
-            const Expanded(
-              child: Center(child: CircularProgressIndicator.adaptive()),
-            ),
+            const Expanded(child: Center(child: CircularProgressIndicator.adaptive())),
           ],
         ),
       },
@@ -273,12 +245,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
 }
 
 class StudyListItem extends StatelessWidget {
-  const StudyListItem({
-    required this.study,
-    this.flairSize,
-    this.titleMaxLines,
-    super.key,
-  });
+  const StudyListItem({required this.study, this.flairSize, this.titleMaxLines, super.key});
 
   final StudyPageItem study;
   final double? flairSize;
@@ -288,11 +255,7 @@ class StudyListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: StudyFlair(flair: study.flair, size: flairSize ?? 24.0),
-      title: Text(
-        study.name,
-        overflow: TextOverflow.ellipsis,
-        maxLines: titleMaxLines ?? 2,
-      ),
+      title: Text(study.name, overflow: TextOverflow.ellipsis, maxLines: titleMaxLines ?? 2),
       subtitle: _StudySubtitle(study: study),
       onTap: () => Navigator.of(
         context,
@@ -304,9 +267,7 @@ class StudyListItem extends StatelessWidget {
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.sizeOf(context).height * 0.5,
-          ),
+          constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
           builder: (context) => _ContextMenu(study: study),
         );
       },
@@ -326,10 +287,9 @@ class _ContextMenu extends ConsumerWidget {
       children: [
         Text(
           study.name,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            height: 1.1,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(height: 1.1, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16.0),
         _StudyChapters(study: study),
@@ -373,11 +333,7 @@ class _StudyMembers extends StatelessWidget {
       header: Text(
         context.l10n.studyMembers,
 
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: textShade(context, 0.5),
-        ),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: textShade(context, 0.5)),
       ),
       margin: EdgeInsets.zero,
       children: [
@@ -385,9 +341,7 @@ class _StudyMembers extends StatelessWidget {
           (member) => ListTile(
             dense: true,
             leading: Icon(
-              member.role == 'w'
-                  ? LichessIcons.radio_tower_lichess
-                  : Icons.remove_red_eye,
+              member.role == 'w' ? LichessIcons.radio_tower_lichess : Icons.remove_red_eye,
             ),
             title: UserFullNameWidget(user: member.user, showFlair: false),
           ),
@@ -431,10 +385,7 @@ class _StudySubtitle extends StatelessWidget {
         children: [
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
-            child: Icon(
-              study.liked ? Icons.favorite : Icons.favorite_outline,
-              size: 14,
-            ),
+            child: Icon(study.liked ? Icons.favorite : Icons.favorite_outline, size: 14),
           ),
           TextSpan(text: ' ${study.likes}'),
           const TextSpan(text: ' • '),

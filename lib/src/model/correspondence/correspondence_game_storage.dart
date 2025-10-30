@@ -19,8 +19,9 @@ Future<CorrespondenceGameStorage> correspondenceGameStorage(Ref ref) async {
 }
 
 @riverpod
-Future<IList<(DateTime, OfflineCorrespondenceGame)>>
-offlineOngoingCorrespondenceGames(Ref ref) async {
+Future<IList<(DateTime, OfflineCorrespondenceGame)>> offlineOngoingCorrespondenceGames(
+  Ref ref,
+) async {
   final session = ref.watch(authSessionProvider);
   // cannot use ref.watch because it would create a circular dependency
   // as we invalidate this provider in the storage save and delete methods
@@ -45,16 +46,11 @@ class CorrespondenceGameStorage {
   final Ref ref;
 
   /// Fetches all ongoing correspondence games, sorted by time left.
-  Future<IList<(DateTime, OfflineCorrespondenceGame)>> fetchOngoingGames(
-    UserId? userId,
-  ) async {
+  Future<IList<(DateTime, OfflineCorrespondenceGame)>> fetchOngoingGames(UserId? userId) async {
     final list = await _db.query(
       kCorrespondenceStorageTable,
       where: 'userId = ? AND data LIKE ?',
-      whereArgs: [
-        '${userId ?? kCorrespondenceStorageAnonId}',
-        '%"status":"started"%',
-      ],
+      whereArgs: ['${userId ?? kCorrespondenceStorageAnonId}', '%"status":"started"%'],
     );
 
     return _decodeGames(list).sort((a, b) {
@@ -71,8 +67,9 @@ class CorrespondenceGameStorage {
   }
 
   /// Fetches all correspondence games with a registered move.
-  Future<IList<(DateTime, OfflineCorrespondenceGame)>>
-  fetchGamesWithRegisteredMove(UserId? userId) async {
+  Future<IList<(DateTime, OfflineCorrespondenceGame)>> fetchGamesWithRegisteredMove(
+    UserId? userId,
+  ) async {
     try {
       final list = await _db.query(
         kCorrespondenceStorageTable,
@@ -83,10 +80,7 @@ class CorrespondenceGameStorage {
       final list = await _db.query(
         kCorrespondenceStorageTable,
         where: 'userId = ? AND data LIKE ?',
-        whereArgs: [
-          '${userId ?? kCorrespondenceStorageAnonId}',
-          '%status":"started"%',
-        ],
+        whereArgs: ['${userId ?? kCorrespondenceStorageAnonId}', '%status":"started"%'],
       );
 
       return _decodeGames(list).where((e) {
@@ -140,9 +134,7 @@ class CorrespondenceGameStorage {
     ref.invalidate(offlineOngoingCorrespondenceGamesProvider);
   }
 
-  IList<(DateTime, OfflineCorrespondenceGame)> _decodeGames(
-    List<Map<String, Object?>> list,
-  ) {
+  IList<(DateTime, OfflineCorrespondenceGame)> _decodeGames(List<Map<String, Object?>> list) {
     return list.map((e) {
       final lmString = e['lastModified'] as String?;
       final raw = e['data'] as String?;

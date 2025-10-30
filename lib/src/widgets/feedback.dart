@@ -10,10 +10,7 @@ import 'package:popover/popover.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const threeBounceLoadingIndicator = SpinKitThreeBounce(
-  color: Colors.grey,
-  size: 15,
-);
+const threeBounceLoadingIndicator = SpinKitThreeBounce(color: Colors.grey, size: 15);
 
 /// A icon that shows the lag rating of the current socket connection.
 ///
@@ -39,10 +36,7 @@ class SocketPingRatingIcon extends ConsumerWidget {
               builder: (_, ref, _) {
                 final p = ref.watch(socketPingProvider(route: socketUri));
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   child: Text.rich(
                     TextSpan(
                       text: 'PING: ',
@@ -55,9 +49,7 @@ class SocketPingRatingIcon extends ConsumerWidget {
                         ),
                         TextSpan(
                           text: ' ms',
-                          style: TextStyle(
-                            color: ColorScheme.of(context).onSurface,
-                          ),
+                          style: TextStyle(color: ColorScheme.of(context).onSurface),
                         ),
                       ],
                     ),
@@ -104,15 +96,11 @@ class SocketPingRatingListTile extends ConsumerWidget {
                   const TextSpan(text: ' ms'),
                 ],
               ),
-              style: TextStyle(
-                color: ColorScheme.of(context).onSurface.withValues(alpha: 0.7),
-              ),
+              style: TextStyle(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.7)),
             )
           : Text(
               context.l10n.noNetwork,
-              style: TextStyle(
-                color: ColorScheme.of(context).onSurface.withValues(alpha: 0.7),
-              ),
+              style: TextStyle(color: ColorScheme.of(context).onSurface.withValues(alpha: 0.7)),
             ),
       enabled: ping.averageLag > Duration.zero,
       onTap: () {
@@ -133,12 +121,7 @@ class LagIndicator extends StatelessWidget {
   /// Visual size of the indicator.
   final double size;
 
-  static const materialLevels = {
-    0: Colors.red,
-    1: Colors.yellow,
-    2: Colors.green,
-    3: Colors.green,
-  };
+  static const materialLevels = {0: Colors.red, 1: Colors.yellow, 2: Colors.green, 3: Colors.green};
 
   @override
   Widget build(BuildContext context) {
@@ -181,19 +164,14 @@ class OfflineBanner extends ConsumerWidget {
               padding: Styles.horizontalBodyPadding,
               child: Row(
                 children: [
-                  Icon(
-                    Icons.report_outlined,
-                    color: theme.colorScheme.onTertiaryContainer,
-                  ),
+                  Icon(Icons.report_outlined, color: theme.colorScheme.onTertiaryContainer),
                   const SizedBox(width: 5),
                   Flexible(
                     child: Text(
                       'Network connectivity unavailable.',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: theme.colorScheme.onTertiaryContainer,
-                      ),
+                      style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
                     ),
                   ),
                 ],
@@ -250,15 +228,9 @@ class FullScreenRetryRequest extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            context.l10n.mobileSomethingWentWrong,
-            style: Styles.sectionTitle,
-          ),
+          Text(context.l10n.mobileSomethingWentWrong, style: Styles.sectionTitle),
           const SizedBox(height: 10),
-          FilledButton.tonal(
-            onPressed: onRetry,
-            child: Text(context.l10n.retry),
-          ),
+          FilledButton.tonal(onPressed: onRetry, child: Text(context.l10n.retry)),
         ],
       ),
     );
@@ -268,22 +240,14 @@ class FullScreenRetryRequest extends StatelessWidget {
 enum SnackBarType { error, info, success }
 
 /// Shows a snackbar with the given message.
-void showSnackBar(
-  BuildContext context,
-  String message, {
-  SnackBarType type = SnackBarType.info,
-}) {
+void showSnackBar(BuildContext context, String message, {SnackBarType type = SnackBarType.info}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(
         message,
-        style: type == SnackBarType.error
-            ? const TextStyle(color: Colors.white)
-            : null,
+        style: type == SnackBarType.error ? const TextStyle(color: Colors.white) : null,
       ),
-      backgroundColor: type == SnackBarType.error
-          ? context.lichessColors.error
-          : null,
+      backgroundColor: type == SnackBarType.error ? context.lichessColors.error : null,
     ),
   );
 }

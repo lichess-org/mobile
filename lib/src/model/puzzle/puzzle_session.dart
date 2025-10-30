@@ -38,9 +38,7 @@ class PuzzleSession extends _$PuzzleSession {
         addIfNotFound: true,
       );
       final newState = d.copyWith(
-        attempts: newAttempts.length > maxSize
-            ? newAttempts.sublist(1)
-            : newAttempts,
+        attempts: newAttempts.length > maxSize ? newAttempts.sublist(1) : newAttempts,
         lastUpdatedAt: DateTime.now(),
       );
       state = newState;
@@ -61,9 +59,7 @@ class PuzzleSession extends _$PuzzleSession {
     });
   }
 
-  Future<void> _update(
-    PuzzleSessionData Function(PuzzleSessionData d) update,
-  ) async {
+  Future<void> _update(PuzzleSessionData Function(PuzzleSessionData d) update) async {
     await _store.setString(_storageKey, jsonEncode(update(state).toJson()));
   }
 
@@ -72,13 +68,10 @@ class PuzzleSession extends _$PuzzleSession {
     if (stored == null) {
       return PuzzleSessionData.initial(angle: angle);
     }
-    return PuzzleSessionData.fromJson(
-      jsonDecode(stored) as Map<String, dynamic>,
-    );
+    return PuzzleSessionData.fromJson(jsonDecode(stored) as Map<String, dynamic>);
   }
 
-  SharedPreferencesWithCache get _store =>
-      LichessBinding.instance.sharedPreferences;
+  SharedPreferencesWithCache get _store => LichessBinding.instance.sharedPreferences;
 
   String get _storageKey => 'puzzle_session.${userId ?? '**anon**'}';
 }
@@ -103,9 +96,7 @@ sealed class PuzzleSessionData with _$PuzzleSessionData {
     try {
       return _$PuzzleSessionDataFromJson(json);
     } catch (e) {
-      return PuzzleSessionData.initial(
-        angle: const PuzzleTheme(PuzzleThemeKey.mix),
-      );
+      return PuzzleSessionData.initial(angle: const PuzzleTheme(PuzzleThemeKey.mix));
     }
   }
 }
@@ -114,14 +105,10 @@ sealed class PuzzleSessionData with _$PuzzleSessionData {
 sealed class PuzzleAttempt with _$PuzzleAttempt {
   const PuzzleAttempt._();
 
-  const factory PuzzleAttempt({
-    required PuzzleId id,
-    required bool win,
-    int? ratingDiff,
-  }) = _PuzzleAttempt;
+  const factory PuzzleAttempt({required PuzzleId id, required bool win, int? ratingDiff}) =
+      _PuzzleAttempt;
 
-  factory PuzzleAttempt.fromJson(Map<String, dynamic> json) =>
-      _$PuzzleAttemptFromJson(json);
+  factory PuzzleAttempt.fromJson(Map<String, dynamic> json) => _$PuzzleAttemptFromJson(json);
 
   String? get ratingDiffString {
     if (ratingDiff == null) return null;

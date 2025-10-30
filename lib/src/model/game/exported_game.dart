@@ -30,9 +30,7 @@ typedef ClockData = ({Duration initial, Duration increment});
 ///
 /// See [PlayableGame] for a game owned by the current user and that can be played unless finished.
 @Freezed(fromJson: true, toJson: true)
-sealed class ExportedGame
-    with _$ExportedGame, BaseGame, IndexableSteps
-    implements BaseGame {
+sealed class ExportedGame with _$ExportedGame, BaseGame, IndexableSteps implements BaseGame {
   const ExportedGame._();
 
   @Assert('steps.isNotEmpty')
@@ -41,14 +39,10 @@ sealed class ExportedGame
     required GameMeta meta,
     // TODO refactor to not include this field
     required LightExportedGame data,
-    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson)
-    required IList<GameStep> steps,
+    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson) required IList<GameStep> steps,
     String? initialFen,
     required GameStatus status,
-    @JsonKey(
-      defaultValue: GameSource.unknown,
-      unknownEnumValue: GameSource.unknown,
-    )
+    @JsonKey(defaultValue: GameSource.unknown, unknownEnumValue: GameSource.unknown)
     required GameSource source,
     Side? winner,
 
@@ -65,19 +59,12 @@ sealed class ExportedGame
   ///
   /// Currently, those endpoints are supported:
   /// - GET /game/export/:id
-  factory ExportedGame.fromServerJson(
-    Map<String, dynamic> json, {
-    bool withBookmarked = false,
-  }) {
-    return _archivedGameFromPick(
-      pick(json).required(),
-      withBookmarked: withBookmarked,
-    );
+  factory ExportedGame.fromServerJson(Map<String, dynamic> json, {bool withBookmarked = false}) {
+    return _archivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
   }
 
   /// Create an exported game from a local storage JSON.
-  factory ExportedGame.fromJson(Map<String, dynamic> json) =>
-      _$ExportedGameFromJson(json);
+  factory ExportedGame.fromJson(Map<String, dynamic> json) => _$ExportedGameFromJson(json);
 }
 
 /// A [LightExportedGame] associated with a point of view of a player.
@@ -155,10 +142,7 @@ sealed class LightExportedGame with _$LightExportedGame {
   String clockDisplay(AppLocalizations l10n) {
     return daysPerTurn != null
         ? l10n.nbDays(daysPerTurn!)
-        : TimeIncrement(
-            clock?.initial.inSeconds ?? 0,
-            clock?.increment.inSeconds ?? 0,
-          ).display;
+        : TimeIncrement(clock?.initial.inSeconds ?? 0, clock?.increment.inSeconds ?? 0).display;
   }
 }
 
@@ -171,24 +155,18 @@ IList<ExternalEval>? gameEvalsFromPick(RequiredPick pick) {
           bestMove: p0('best').asStringOrNull(),
           variation: p0('variation').asStringOrNull(),
           judgment: p0('judgment').letOrNull(
-            (j) => (
-              name: j('name').asStringOrThrow(),
-              comment: j('comment').asStringOrThrow(),
-            ),
+            (j) => (name: j('name').asStringOrThrow(), comment: j('comment').asStringOrThrow()),
           ),
         ),
       )
       ?.lock;
 }
 
-ExportedGame _archivedGameFromPick(
-  RequiredPick pick, {
-  bool withBookmarked = false,
-}) {
+ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = false}) {
   final data = _lightExportedGameFromPick(pick, withBookmarked: withBookmarked);
-  final clocks = pick('clocks').asListOrNull<Duration>(
-    (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
-  );
+  final clocks = pick(
+    'clocks',
+  ).asListOrNull<Duration>((p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
   final division = pick('division').letOrNull(_divisionFromPick);
 
   final initialFen = pick('initialFen').asStringOrNull();
@@ -212,10 +190,9 @@ ExportedGame _archivedGameFromPick(
       opening: data.opening,
       division: division,
     ),
-    source: pick('source').letOrThrow(
-      (pick) =>
-          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
-    ),
+    source: pick(
+      'source',
+    ).letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     data: data,
     status: data.status,
     winner: data.winner,
@@ -228,9 +205,7 @@ ExportedGame _archivedGameFromPick(
       final movesList = moves.isEmpty ? <String>[] : moves.split(' ');
 
       // assume lichess always send initialFen with fromPosition and chess960
-      Position position =
-          (data.variant == Variant.fromPosition ||
-              data.variant == Variant.chess960)
+      Position position = (data.variant == Variant.fromPosition || data.variant == Variant.chess960)
           ? Chess.fromSetup(Setup.parseFen(initialFen!))
           : data.variant.initialPosition;
       int index = 0;
@@ -268,10 +243,9 @@ LightExportedGame _lightExportedGameFromPick(
   return LightExportedGame(
     id: pick('id').asGameIdOrThrow(),
     fullId: pick('fullId').asGameFullIdOrNull(),
-    source: pick('source').letOrNull(
-      (pick) =>
-          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
-    ),
+    source: pick(
+      'source',
+    ).letOrNull((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
@@ -297,10 +271,7 @@ LightExportedGame _lightExportedGameFromPick(
 }
 
 LightOpening _openingFromPick(RequiredPick pick) {
-  return LightOpening(
-    eco: pick('eco').asStringOrThrow(),
-    name: pick('name').asStringOrThrow(),
-  );
+  return LightOpening(eco: pick('eco').asStringOrThrow(), name: pick('name').asStringOrThrow());
 }
 
 ClockData _clockDataFromPick(RequiredPick pick) {
@@ -315,8 +286,7 @@ Player _playerFromUserGamePick(RequiredPick pick) {
   return Player(
     user: pick('user').asLightUserOrNull(),
     name: _removeRatingFromName(originalName),
-    rating:
-        pick('rating').asIntOrNull() ?? _extractRatingFromName(originalName),
+    rating: pick('rating').asIntOrNull() ?? _extractRatingFromName(originalName),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     aiLevel: pick('aiLevel').asIntOrNull(),
     analysis: pick('analysis').letOrNull(_playerAnalysisFromPick),

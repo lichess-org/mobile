@@ -51,11 +51,7 @@ void openGameScreen(
             ),
     );
   } else {
-    showSnackBar(
-      context,
-      'This variant is not supported yet.',
-      type: SnackBarType.info,
-    );
+    showSnackBar(context, 'This variant is not supported yet.', type: SnackBarType.info);
   }
 }
 
@@ -72,12 +68,10 @@ class GameBookmarkContextMenuAction extends StatefulWidget {
   final Future<void> Function() onToggleBookmark;
 
   @override
-  State<GameBookmarkContextMenuAction> createState() =>
-      _GameBookmarkContextMenuActionState();
+  State<GameBookmarkContextMenuAction> createState() => _GameBookmarkContextMenuActionState();
 }
 
-class _GameBookmarkContextMenuActionState
-    extends State<GameBookmarkContextMenuAction> {
+class _GameBookmarkContextMenuActionState extends State<GameBookmarkContextMenuAction> {
   Future<void>? _pendingBookmarkAction;
   late bool _bookmarked;
 
@@ -93,12 +87,8 @@ class _GameBookmarkContextMenuActionState
       future: _pendingBookmarkAction,
       builder: (context, snapshot) {
         return ContextMenuAction(
-          icon: _bookmarked
-              ? Icons.bookmark_remove_outlined
-              : Icons.bookmark_add_outlined,
-          label: _bookmarked
-              ? context.l10n.mobileRemoveBookmark
-              : context.l10n.bookmarkThisGame,
+          icon: _bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
+          label: _bookmarked ? context.l10n.mobileRemoveBookmark : context.l10n.bookmarkThisGame,
           onPressed: snapshot.connectionState == ConnectionState.waiting
               ? null
               : () async {
@@ -115,11 +105,7 @@ class _GameBookmarkContextMenuActionState
                     }
                   } catch (_) {
                     if (context.mounted) {
-                      showSnackBar(
-                        context,
-                        'Bookmark action failed',
-                        type: SnackBarType.error,
-                      );
+                      showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
                     }
                   }
                 },
@@ -143,10 +129,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
           : Icons.share_outlined,
       label: context.l10n.mobileShareGameURL,
       onPressed: () {
-        launchShareDialog(
-          context,
-          ShareParams(uri: lichessUri('/$gameId/${orientation.name}')),
-        );
+        launchShareDialog(context, ShareParams(uri: lichessUri('/$gameId/${orientation.name}')));
       },
     ),
     ContextMenuAction(
@@ -154,9 +137,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
       label: context.l10n.gameAsGIF,
       onPressed: () async {
         try {
-          final (gif, game) = await ref
-              .read(gameShareServiceProvider)
-              .gameGif(gameId, orientation);
+          final (gif, game) = await ref.read(gameShareServiceProvider).gameGif(gameId, orientation);
           if (context.mounted) {
             launchShareDialog(
               context,
@@ -170,11 +151,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
         } catch (e) {
           debugPrint(e.toString());
           if (context.mounted) {
-            showSnackBar(
-              context,
-              'Failed to get GIF',
-              type: SnackBarType.error,
-            );
+            showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
           }
         }
       },
@@ -184,19 +161,13 @@ List<Widget> makeFinishedGameShareContextMenuActions(
       label: context.l10n.downloadAnnotated,
       onPressed: () async {
         try {
-          final pgn = await ref
-              .read(gameShareServiceProvider)
-              .annotatedPgn(gameId);
+          final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(gameId);
           if (context.mounted) {
             launchShareDialog(context, ShareParams(text: pgn));
           }
         } catch (e) {
           if (context.mounted) {
-            showSnackBar(
-              context,
-              'Failed to get PGN',
-              type: SnackBarType.error,
-            );
+            showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
           }
         }
       },
@@ -212,11 +183,7 @@ List<Widget> makeFinishedGameShareContextMenuActions(
           }
         } catch (e) {
           if (context.mounted) {
-            showSnackBar(
-              context,
-              'Failed to get PGN',
-              type: SnackBarType.error,
-            );
+            showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
           }
         }
       },

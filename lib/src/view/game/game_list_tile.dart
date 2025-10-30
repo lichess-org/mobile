@@ -29,11 +29,7 @@ final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
 /// A list tile for a game in a game list.
 class GameListTile extends StatelessWidget {
-  const GameListTile({
-    required this.item,
-    this.padding,
-    this.onPressedBookmark,
-  });
+  const GameListTile({required this.item, this.padding, this.onPressedBookmark});
 
   final LightExportedGameWithPov item;
   final EdgeInsetsGeometry? padding;
@@ -46,27 +42,14 @@ class GameListTile extends StatelessWidget {
     final opponent = youAre == Side.white ? game.black : game.white;
 
     Widget getResultIcon(LightExportedGame game, Side mySide) {
-      if (game.status == GameStatus.aborted ||
-          game.status == GameStatus.noStart) {
-        return const Icon(
-          CupertinoIcons.xmark_square_fill,
-          color: LichessColors.grey,
-        );
+      if (game.status == GameStatus.aborted || game.status == GameStatus.noStart) {
+        return const Icon(CupertinoIcons.xmark_square_fill, color: LichessColors.grey);
       } else {
         return game.winner == null
-            ? Icon(
-                CupertinoIcons.equal_square_fill,
-                color: context.lichessColors.brag,
-              )
+            ? Icon(CupertinoIcons.equal_square_fill, color: context.lichessColors.brag)
             : game.winner == mySide
-            ? Icon(
-                CupertinoIcons.plus_square_fill,
-                color: context.lichessColors.good,
-              )
-            : Icon(
-                CupertinoIcons.minus_square_fill,
-                color: context.lichessColors.error,
-              );
+            ? Icon(CupertinoIcons.plus_square_fill, color: context.lichessColors.good)
+            : Icon(CupertinoIcons.minus_square_fill, color: context.lichessColors.error);
       }
     }
 
@@ -101,17 +84,12 @@ class GameListTile extends StatelessWidget {
       },
       leading: Icon(game.perf.icon),
       title: opponentTitle,
-      subtitle: Text(
-        relativeDate(context.l10n, game.lastMoveAt, shortDate: false),
-      ),
+      subtitle: Text(relativeDate(context.l10n, game.lastMoveAt, shortDate: false)),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (me.analysis != null) ...[
-            Icon(
-              CupertinoIcons.chart_bar_alt_fill,
-              color: textShade(context, 0.5),
-            ),
+            Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
             const SizedBox(width: 5),
           ],
           getResultIcon(game, youAre),
@@ -151,11 +129,7 @@ class GameContextMenu extends ConsumerWidget {
               game.white.fullName(context.l10n),
               game.black.fullName(context.l10n),
             ),
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              letterSpacing: -0.5,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: -0.5),
           ),
         ),
         Padding(
@@ -168,9 +142,7 @@ class GameContextMenu extends ConsumerWidget {
                   children: [
                     if (game.lastFen != null)
                       BoardThumbnail(
-                        size:
-                            constraints.maxWidth -
-                            (constraints.maxWidth / 1.618),
+                        size: constraints.maxWidth - (constraints.maxWidth / 1.618),
                         fen: game.lastFen!,
                         orientation: mySide,
                         lastMove: game.lastMove,
@@ -188,17 +160,12 @@ class GameContextMenu extends ConsumerWidget {
                               children: [
                                 Text(
                                   '${game.clockDisplay(context.l10n)} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                  style: const TextStyle(fontWeight: FontWeight.w500),
                                 ),
                                 Text(
                                   _dateFormatter.format(game.lastMoveAt),
                                   style: TextStyle(
-                                    color: textShade(
-                                      context,
-                                      Styles.subtitleOpacity,
-                                    ),
+                                    color: textShade(context, Styles.subtitleOpacity),
                                     fontSize: 12,
                                   ),
                                 ),
@@ -229,10 +196,7 @@ class GameContextMenu extends ConsumerWidget {
                                 game.opening!.name,
                                 maxLines: 2,
                                 style: TextStyle(
-                                  color: textShade(
-                                    context,
-                                    Styles.subtitleOpacity,
-                                  ),
+                                  color: textShade(context, Styles.subtitleOpacity),
                                   fontSize: 12,
                                 ),
                                 overflow: TextOverflow.ellipsis,
@@ -256,10 +220,7 @@ class GameContextMenu extends ConsumerWidget {
                       Navigator.of(context).push(
                         AnalysisScreen.buildRoute(
                           context,
-                          AnalysisOptions.archivedGame(
-                            orientation: orientation,
-                            gameId: game.id,
-                          ),
+                          AnalysisOptions.archivedGame(orientation: orientation, gameId: game.id),
                         ),
                       );
                     }
@@ -290,9 +251,7 @@ class GameContextMenu extends ConsumerWidget {
                 onPressed: () {
                   launchShareDialog(
                     context,
-                    ShareParams(
-                      uri: lichessUri('/${game.id}/${orientation.name}'),
-                    ),
+                    ShareParams(uri: lichessUri('/${game.id}/${orientation.name}')),
                   );
                 },
                 icon: Theme.of(context).platform == TargetPlatform.iOS
@@ -322,11 +281,7 @@ class GameContextMenu extends ConsumerWidget {
                   } catch (e) {
                     debugPrint(e.toString());
                     if (context.mounted) {
-                      showSnackBar(
-                        context,
-                        'Failed to get GIF',
-                        type: SnackBarType.error,
-                      );
+                      showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
                     }
                   }
                 },
@@ -336,19 +291,13 @@ class GameContextMenu extends ConsumerWidget {
                 child: Text('PGN: ${context.l10n.downloadAnnotated}'),
                 onPressed: () async {
                   try {
-                    final pgn = await ref
-                        .read(gameShareServiceProvider)
-                        .annotatedPgn(game.id);
+                    final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
                     if (context.mounted) {
                       launchShareDialog(context, ShareParams(text: pgn));
                     }
                   } catch (e) {
                     if (context.mounted) {
-                      showSnackBar(
-                        context,
-                        'Failed to get PGN',
-                        type: SnackBarType.error,
-                      );
+                      showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
                     }
                   }
                 },
@@ -359,19 +308,13 @@ class GameContextMenu extends ConsumerWidget {
                 child: Text('PGN: ${context.l10n.downloadRaw}'),
                 onPressed: () async {
                   try {
-                    final pgn = await ref
-                        .read(gameShareServiceProvider)
-                        .rawPgn(game.id);
+                    final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);
                     if (context.mounted) {
                       launchShareDialog(context, ShareParams(text: pgn));
                     }
                   } catch (e) {
                     if (context.mounted) {
-                      showSnackBar(
-                        context,
-                        'Failed to get PGN',
-                        type: SnackBarType.error,
-                      );
+                      showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
                     }
                   }
                 },
