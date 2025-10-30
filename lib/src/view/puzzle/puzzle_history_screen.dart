@@ -38,7 +38,9 @@ class PuzzleHistoryPreview extends ConsumerWidget {
     return _PreviewBoardsGrid(
       rowGap: 16,
       builder: (crossAxisCount, boardWidth) {
-        final cappedHistory = maxRows != null ? history.take(crossAxisCount * maxRows!) : history;
+        final cappedHistory = maxRows != null
+            ? history.take(crossAxisCount * maxRows!)
+            : history;
 
         return cappedHistory.map((e) {
           final (fen, side, lastMove) = e.preview;
@@ -109,7 +111,8 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
       final currentState = ref.read(puzzleActivityProvider).valueOrNull;
       if (currentState != null && !currentState.isLoading) {
         ref.read(puzzleActivityProvider.notifier).getNext();
@@ -124,11 +127,17 @@ class _BodyState extends ConsumerState<_Body> {
     return historyState.when(
       data: (state) {
         if (state.hasError) {
-          showSnackBar(context, 'Error loading history', type: SnackBarType.error);
+          showSnackBar(
+            context,
+            'Error loading history',
+            type: SnackBarType.error,
+          );
         }
-        final crossAxisCount = MediaQuery.sizeOf(context).width > FormFactor.tablet ? 4 : 2;
+        final crossAxisCount =
+            MediaQuery.sizeOf(context).width > FormFactor.tablet ? 4 : 2;
         final columnsGap = _kPuzzlePadding * crossAxisCount + _kPuzzlePadding;
-        final boardWidth = (MediaQuery.sizeOf(context).width - columnsGap) / crossAxisCount;
+        final boardWidth =
+            (MediaQuery.sizeOf(context).width - columnsGap) / crossAxisCount;
 
         // List prepared for the ListView.builder.
         // It includes the date headers, and puzzles are sliced into rows of `crossAxisCount` length.
@@ -157,7 +166,12 @@ class _BodyState extends ConsumerState<_Body> {
                 padding: const EdgeInsets.only(right: _kPuzzlePadding),
                 child: Row(
                   children: element
-                      .map((e) => PuzzleHistoryBoard(e as PuzzleHistoryEntry, boardWidth))
+                      .map(
+                        (e) => PuzzleHistoryBoard(
+                          e as PuzzleHistoryEntry,
+                          boardWidth,
+                        ),
+                      )
                       .toList(),
                 ),
               );
@@ -166,10 +180,15 @@ class _BodyState extends ConsumerState<_Body> {
                   ? _dateFormatter.format(element)
                   : relativeDate(context.l10n, element);
               return Padding(
-                padding: const EdgeInsets.only(left: _kPuzzlePadding).add(Styles.sectionTopPadding),
+                padding: const EdgeInsets.only(
+                  left: _kPuzzlePadding,
+                ).add(Styles.sectionTopPadding),
                 child: Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
                 ),
               );
             } else {
@@ -179,7 +198,9 @@ class _BodyState extends ConsumerState<_Body> {
         );
       },
       error: (e, s) {
-        debugPrint('SEVERE: [PuzzleHistoryScreen] could not load puzzle history');
+        debugPrint(
+          'SEVERE: [PuzzleHistoryScreen] could not load puzzle history',
+        );
         return const Center(child: Text('Could not load Puzzle History'));
       },
       loading: () => const CenterLoadingIndicator(),
@@ -216,7 +237,10 @@ class PuzzleHistoryBoard extends ConsumerWidget {
         orientation: turn,
         fen: fen,
         lastMove: lastMove,
-        footer: Padding(padding: const EdgeInsets.only(top: 2), child: _PuzzleResult(puzzle)),
+        footer: Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: _PuzzleResult(puzzle),
+        ),
       ),
     );
   }
@@ -254,13 +278,24 @@ class _PuzzleResult extends StatelessWidget {
               Text(
                 '${entry.solvingTime!.inSeconds}s',
                 overflow: TextOverflow.fade,
-                style: const TextStyle(color: Colors.white, fontSize: 10, height: 1.0),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  height: 1.0,
+                ),
               )
             else
               Text(
-                (entry.win ? context.l10n.puzzleSolved : context.l10n.puzzleFailed).toUpperCase(),
+                (entry.win
+                        ? context.l10n.puzzleSolved
+                        : context.l10n.puzzleFailed)
+                    .toUpperCase(),
                 overflow: TextOverflow.fade,
-                style: const TextStyle(fontSize: 10, color: Colors.white, height: 1.0),
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Colors.white,
+                  height: 1.0,
+                ),
               ),
           ],
         ),
@@ -286,12 +321,16 @@ class _PreviewBoardsGrid extends StatelessWidget {
             : 2;
         const columnGap = 12.0;
         final boardWidth =
-            (constraints.maxWidth - (columnGap * crossAxisCount - columnGap)) / crossAxisCount;
+            (constraints.maxWidth - (columnGap * crossAxisCount - columnGap)) /
+            crossAxisCount;
         final boards = builder(crossAxisCount, boardWidth);
 
         return LayoutGrid(
           columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
-          rowSizes: List.generate((boards.length / crossAxisCount).ceil(), (_) => auto),
+          rowSizes: List.generate(
+            (boards.length / crossAxisCount).ceil(),
+            (_) => auto,
+          ),
           rowGap: rowGap,
           columnGap: columnGap,
           children: boards,

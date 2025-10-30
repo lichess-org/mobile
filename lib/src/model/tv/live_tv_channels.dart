@@ -48,7 +48,9 @@ class LiveTvChannels extends _$LiveTvChannels {
   Future<IMap<TvChannel, TvGameSnapshot>> _doStartWatching() async {
     final repoGames = await ref.read(tvRepositoryProvider).channels();
 
-    _socketClient = ref.read(socketPoolProvider).open(Uri(path: kDefaultSocketRoute));
+    _socketClient = ref
+        .read(socketPoolProvider)
+        .open(Uri(path: kDefaultSocketRoute));
 
     await _socketClient.firstConnection;
     _socketWatch(repoGames);
@@ -84,13 +86,19 @@ class LiveTvChannels extends _$LiveTvChannels {
     _socketClient.send('startWatchingTvChannels', null);
     _socketClient.send(
       'startWatching',
-      games.entries.where((e) => TvChannel.values.contains(e.key)).map((e) => e.value.id).join(' '),
+      games.entries
+          .where((e) => TvChannel.values.contains(e.key))
+          .map((e) => e.value.id)
+          .join(' '),
     );
   }
 
   void _handleSocketEvent(SocketEvent event) {
     if (!state.hasValue) {
-      assert(false, 'received a SocketEvent while LiveTvChannels state is null');
+      assert(
+        false,
+        'received a SocketEvent while LiveTvChannels state is null',
+      );
       return;
     }
 
@@ -98,13 +106,18 @@ class LiveTvChannels extends _$LiveTvChannels {
       case 'fen':
         final json = event.data as Map<String, dynamic>;
         final fenEvent = FenSocketEvent.fromJson(json);
-        final snapshots = state.requireValue.values.where((s) => s.id == fenEvent.id);
+        final snapshots = state.requireValue.values.where(
+          (s) => s.id == fenEvent.id,
+        );
 
         if (snapshots.isNotEmpty) {
           state = AsyncValue.data(
             state.requireValue.updateAll(
               (key, value) => value.id == fenEvent.id
-                  ? value.copyWith(fen: fenEvent.fen, lastMove: fenEvent.lastMove)
+                  ? value.copyWith(
+                      fen: fenEvent.fen,
+                      lastMove: fenEvent.lastMove,
+                    )
                   : value,
             ),
           );

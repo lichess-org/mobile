@@ -52,7 +52,8 @@ class StreakStorage {
     ref.invalidate(savedStreakScoreProvider);
   }
 
-  SharedPreferencesWithCache get _store => LichessBinding.instance.sharedPreferences;
+  SharedPreferencesWithCache get _store =>
+      LichessBinding.instance.sharedPreferences;
 
   String get _storageKey => 'puzzle_streak.${userId ?? '**anon**'}';
 }

@@ -79,7 +79,9 @@ class _AppState extends ConsumerState<Application> {
 
       // Play registered moves whenever the app comes back online.
       if (prevWasOffline && currentIsOnline) {
-        final nbMovesPlayed = await ref.read(correspondenceServiceProvider).playRegisteredMoves();
+        final nbMovesPlayed = await ref
+            .read(correspondenceServiceProvider)
+            .playRegisteredMoves();
         if (nbMovesPlayed > 0) {
           ref.invalidate(ongoingGamesProvider);
         }
@@ -128,10 +130,14 @@ class _AppState extends ConsumerState<Application> {
                 context,
               ).copyWith(height: isShortVerticalScreen(context) ? 60 : null),
       ),
-      onGenerateRoute: (settings) =>
-          settings.name != null ? resolveAppLinkUri(context, Uri.parse(settings.name!)) : null,
+      onGenerateRoute: (settings) => settings.name != null
+          ? resolveAppLinkUri(context, Uri.parse(settings.name!))
+          : null,
       onGenerateInitialRoutes: (initialRoute) {
-        final homeRoute = buildScreenRoute<void>(context, screen: const MainTabScaffold());
+        final homeRoute = buildScreenRoute<void>(
+          context,
+          screen: const MainTabScaffold(),
+        );
         return <Route<dynamic>?>[
           homeRoute,
           resolveAppLinkUri(context, Uri.parse(initialRoute)),

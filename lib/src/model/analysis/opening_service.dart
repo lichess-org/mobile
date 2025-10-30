@@ -29,7 +29,12 @@ class OpeningService {
   Future<FullOpening?> fetchFromFen(String fen) async {
     final db = await _db;
     final epd = '${fen.split(' - ')[0]} -';
-    final list = await db.query('openings', where: 'epd = ?', whereArgs: [epd], limit: 1);
+    final list = await db.query(
+      'openings',
+      where: 'epd = ?',
+      whereArgs: [epd],
+      limit: 1,
+    );
     final first = list.firstOrNull;
 
     if (first != null) {

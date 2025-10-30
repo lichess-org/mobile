@@ -28,7 +28,10 @@ class PuzzleDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const SizedBox.shrink(), actions: const [DaysSelector()]),
+      appBar: AppBar(
+        title: const SizedBox.shrink(),
+        actions: const [DaysSelector()],
+      ),
       body: const _Body(),
     );
   }
@@ -46,14 +49,19 @@ class _Body extends ConsumerWidget {
 class PuzzleDashboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
+    final puzzleDashboard = ref.watch(
+      puzzleDashboardProvider(ref.watch(daysProvider).days),
+    );
 
     return puzzleDashboard.when(
       data: (dashboard) {
         if (dashboard == null) {
           return const SizedBox.shrink();
         }
-        final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
+        final chartData = dashboard.themes
+            .take(9)
+            .sortedBy((e) => e.theme.name)
+            .toList();
         return ListSection(
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +69,9 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               Text(context.l10n.puzzlePuzzleDashboard),
               Text(
                 context.l10n.puzzlePuzzleDashboardDescription,
-                style: Styles.subtitle.copyWith(color: textShade(context, Styles.subtitleOpacity)),
+                style: Styles.subtitle.copyWith(
+                  color: textShade(context, Styles.subtitleOpacity),
+                ),
               ),
             ],
           ),
@@ -83,7 +93,8 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               ),
               StatCard(
                 context.l10n.puzzleSolved.capitalize(),
-                value: '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
+                value:
+                    '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
                 elevation: 0,
               ),
             ]),
@@ -92,13 +103,18 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         );
       },
       error: (e, s) {
-        debugPrint('SEVERE: [PuzzleDashboardWidget] could not load puzzle dashboard; $e\n$s');
+        debugPrint(
+          'SEVERE: [PuzzleDashboardWidget] could not load puzzle dashboard; $e\n$s',
+        );
         return Padding(
           padding: Styles.bodySectionPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(context.l10n.puzzlePuzzleDashboard, style: Styles.sectionTitle),
+              Text(
+                context.l10n.puzzlePuzzleDashboard,
+                style: Styles.sectionTitle,
+              ),
               if (e is ClientException && e.message.contains('404'))
                 Text(context.l10n.puzzleNoPuzzlesToShow)
               else
@@ -162,7 +178,9 @@ class PuzzleChart extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: AspectRatio(
-        aspectRatio: MediaQuery.sizeOf(context).width > FormFactor.desktop ? 2.8 : 1.2,
+        aspectRatio: MediaQuery.sizeOf(context).width > FormFactor.desktop
+            ? 2.8
+            : 1.2,
         child: RadarChart(
           RadarChartData(
             radarBorderData: BorderSide(width: 0.5, color: radarColor),
@@ -174,12 +192,16 @@ class PuzzleChart extends StatelessWidget {
                 fillColor: chartColor.withValues(alpha: 0.2),
                 borderColor: chartColor,
                 dataEntries: puzzleData
-                    .map((theme) => RadarEntry(value: theme.performance.toDouble()))
+                    .map(
+                      (theme) =>
+                          RadarEntry(value: theme.performance.toDouble()),
+                    )
                     .toList(),
               ),
             ],
-            getTitle: (index, angle) =>
-                RadarChartTitle(text: puzzleData[index].theme.l10n(context.l10n).name),
+            getTitle: (index, angle) => RadarChartTitle(
+              text: puzzleData[index].theme.l10n(context.l10n).name,
+            ),
             titleTextStyle: const TextStyle(fontSize: 10),
             titlePositionPercentageOffset: 0.09,
             tickCount: 3,

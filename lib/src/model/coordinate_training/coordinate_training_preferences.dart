@@ -84,7 +84,9 @@ enum TrainingMode {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class CoordinateTrainingPrefs with _$CoordinateTrainingPrefs implements Serializable {
+sealed class CoordinateTrainingPrefs
+    with _$CoordinateTrainingPrefs
+    implements Serializable {
   const CoordinateTrainingPrefs._();
 
   const factory CoordinateTrainingPrefs({

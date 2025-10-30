@@ -37,22 +37,30 @@ class GameSettings extends ConsumerWidget {
                       title: Text(context.l10n.preferencesMoveConfirmation),
                       value: data.shouldConfirmMove,
                       onChanged: (value) {
-                        ref.read(gameControllerProvider(id).notifier).toggleMoveConfirmation();
+                        ref
+                            .read(gameControllerProvider(id).notifier)
+                            .toggleMoveConfirmation();
                       },
                     ),
                   if (data.prefs?.autoQueen == AutoQueen.always)
                     SwitchSettingTile(
-                      title: Text(context.l10n.preferencesPromoteToQueenAutomatically),
+                      title: Text(
+                        context.l10n.preferencesPromoteToQueenAutomatically,
+                      ),
                       value: data.canAutoQueen,
                       onChanged: (value) {
-                        ref.read(gameControllerProvider(id).notifier).toggleAutoQueen();
+                        ref
+                            .read(gameControllerProvider(id).notifier)
+                            .toggleAutoQueen();
                       },
                     ),
                   SwitchSettingTile(
                     title: Text(context.l10n.preferencesZenMode),
                     value: data.isZenModeEnabled,
                     onChanged: (value) {
-                      ref.read(gameControllerProvider(id).notifier).toggleZenMode();
+                      ref
+                          .read(gameControllerProvider(id).notifier)
+                          .toggleZenMode();
                     },
                   ),
                 ];
@@ -64,23 +72,30 @@ class GameSettings extends ConsumerWidget {
               value: gamePrefs.enableChat ?? false,
               onChanged: (value) {
                 ref.read(gamePreferencesProvider.notifier).toggleChat();
-                ref.read(gameControllerProvider(id).notifier).onToggleChat(value);
+                ref
+                    .read(gameControllerProvider(id).notifier)
+                    .onToggleChat(value);
               },
             ),
             SwitchSettingTile(
               title: Text(context.l10n.preferencesBlindfold),
               value: gamePrefs.blindfoldMode ?? false,
               onChanged: (value) {
-                ref.read(gamePreferencesProvider.notifier).toggleBlindfoldMode();
+                ref
+                    .read(gamePreferencesProvider.notifier)
+                    .toggleBlindfoldMode();
               },
             ),
             ListTile(
               title: Text(context.l10n.mobileBoardSettings),
               trailing: const CupertinoListTileChevron(),
               onTap: () {
-                Navigator.of(
-                  context,
-                ).push(BoardSettingsScreen.buildRoute(context, fullscreenDialog: true));
+                Navigator.of(context).push(
+                  BoardSettingsScreen.buildRoute(
+                    context,
+                    fullscreenDialog: true,
+                  ),
+                );
               },
             ),
           ],

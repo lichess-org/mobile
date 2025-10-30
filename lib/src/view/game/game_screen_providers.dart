@@ -28,7 +28,9 @@ sealed class GameScreenState {}
 /// - A game has been created from a lobby seek.
 /// - A challenge has been accepted and a game has been created from it.
 @freezed
-sealed class GameCreatedState with _$GameCreatedState implements GameScreenState {
+sealed class GameCreatedState
+    with _$GameCreatedState
+    implements GameScreenState {
   const GameCreatedState._();
 
   const factory GameCreatedState(GameFullId createdGameId) = _GameCreatedState;
@@ -36,7 +38,9 @@ sealed class GameCreatedState with _$GameCreatedState implements GameScreenState
 
 /// A real time challenge has been declined.
 @freezed
-sealed class ChallengeDeclinedState with _$ChallengeDeclinedState implements GameScreenState {
+sealed class ChallengeDeclinedState
+    with _$ChallengeDeclinedState
+    implements GameScreenState {
   const ChallengeDeclinedState._();
 
   const factory ChallengeDeclinedState(ChallengeResponseDeclined response) =
@@ -56,7 +60,9 @@ sealed class GameScreenSource {}
 
 /// An existing game source for [GameScreen], identified by its [GameFullId].
 @freezed
-sealed class ExistingGameSource with _$ExistingGameSource implements GameScreenSource {
+sealed class ExistingGameSource
+    with _$ExistingGameSource
+    implements GameScreenSource {
   const ExistingGameSource._();
 
   const factory ExistingGameSource(GameFullId id) = _ExistingGameSource;
@@ -72,10 +78,13 @@ sealed class LobbySource with _$LobbySource implements GameScreenSource {
 
 /// A user challenge source for [GameScreen], identified by the [ChallengeRequest] from which the game will be created.
 @freezed
-sealed class UserChallengeSource with _$UserChallengeSource implements GameScreenSource {
+sealed class UserChallengeSource
+    with _$UserChallengeSource
+    implements GameScreenSource {
   const UserChallengeSource._();
 
-  const factory UserChallengeSource(ChallengeRequest challengeRequest) = _UserChallengeSource;
+  const factory UserChallengeSource(ChallengeRequest challengeRequest) =
+      _UserChallengeSource;
 }
 
 /// A provider that loads or creates a game for the [GameScreen].
@@ -86,13 +95,15 @@ class GameScreenLoader extends _$GameScreenLoader {
     final service = ref.watch(createGameServiceProvider);
 
     return switch (source) {
-      LobbySource(:final seek) => service.newLobbyGame(seek).then((id) => GameCreatedState(id)),
+      LobbySource(:final seek) =>
+        service.newLobbyGame(seek).then((id) => GameCreatedState(id)),
       UserChallengeSource(:final challengeRequest) =>
         service
             .newRealTimeChallenge(challengeRequest)
             .then(
               (data) => switch (data) {
-                ChallengeResponseAccepted(:final gameFullId) => GameCreatedState(gameFullId),
+                ChallengeResponseAccepted(:final gameFullId) =>
+                  GameCreatedState(gameFullId),
                 ChallengeResponseDeclined() => ChallengeDeclinedState(data),
               },
             ),
@@ -105,7 +116,9 @@ class GameScreenLoader extends _$GameScreenLoader {
     if (source case LobbySource(:final seek)) {
       final service = ref.read(createGameServiceProvider);
       state = const AsyncValue.loading();
-      state = AsyncValue.data(await service.newLobbyGame(seek).then((id) => GameCreatedState(id)));
+      state = AsyncValue.data(
+        await service.newLobbyGame(seek).then((id) => GameCreatedState(id)),
+      );
     }
   }
 
@@ -130,40 +143,54 @@ class IsBoardTurned extends _$IsBoardTurned {
 @riverpod
 Future<bool> isGameBookmarked(Ref ref, GameFullId gameId) {
   return ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.game.bookmarked ?? false),
+    gameControllerProvider(
+      gameId,
+    ).selectAsync((state) => state.game.bookmarked ?? false),
   );
 }
 
 @riverpod
 Future<({bool finished, Side? pov})> gameShareData(Ref ref, GameFullId gameId) {
   return ref.watch(
-    gameControllerProvider(
-      gameId,
-    ).selectAsync((state) => (finished: state.game.finished, pov: state.game.youAre)),
+    gameControllerProvider(gameId).selectAsync(
+      (state) => (finished: state.game.finished, pov: state.game.youAre),
+    ),
   );
 }
 
 @riverpod
 Future<bool> isRealTimePlayableGame(Ref ref, GameFullId gameId) {
   return ref.watch(
-    gameControllerProvider(
-      gameId,
-    ).selectAsync((state) => state.game.meta.speed != Speed.correspondence && state.game.playable),
+    gameControllerProvider(gameId).selectAsync(
+      (state) =>
+          state.game.meta.speed != Speed.correspondence && state.game.playable,
+    ),
   );
 }
 
 /// User game preferences, defined server-side.
 @riverpod
-Future<({ServerGamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled, bool canAutoQueen})>
+Future<
+  ({
+    ServerGamePrefs? prefs,
+    bool shouldConfirmMove,
+    bool isZenModeEnabled,
+    bool canAutoQueen,
+  })
+>
 userGamePrefs(Ref ref, GameFullId gameId) async {
   final prefs = await ref.watch(
     gameControllerProvider(gameId).selectAsync((state) => state.game.prefs),
   );
   final shouldConfirmMove = await ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.shouldConfirmMove),
+    gameControllerProvider(
+      gameId,
+    ).selectAsync((state) => state.shouldConfirmMove),
   );
   final isZenModeEnabled = await ref.watch(
-    gameControllerProvider(gameId).selectAsync((state) => state.isZenModeEnabled),
+    gameControllerProvider(
+      gameId,
+    ).selectAsync((state) => state.isZenModeEnabled),
   );
   final canAutoQueen = await ref.watch(
     gameControllerProvider(gameId).selectAsync((state) => state.canAutoQueen),
@@ -181,10 +208,14 @@ userGamePrefs(Ref ref, GameFullId gameId) async {
 /// This is data that won't change during the game.
 @riverpod
 Future<GameMeta> gameMeta(Ref ref, GameFullId gameId) async {
-  return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.game.meta));
+  return await ref.watch(
+    gameControllerProvider(gameId).selectAsync((state) => state.game.meta),
+  );
 }
 
 @riverpod
 Future<TournamentMeta?> gameTournament(Ref ref, GameFullId gameId) async {
-  return await ref.watch(gameControllerProvider(gameId).selectAsync((state) => state.tournament));
+  return await ref.watch(
+    gameControllerProvider(gameId).selectAsync((state) => state.tournament),
+  );
 }

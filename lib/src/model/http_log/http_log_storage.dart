@@ -90,7 +90,8 @@ sealed class HttpLogEntry with _$HttpLogEntry {
   const factory HttpLogEntry({
     required String httpLogId,
     required String requestMethod,
-    @JsonKey(toJson: _urlToJson, fromJson: _urlFromJson) required Uri requestUrl,
+    @JsonKey(toJson: _urlToJson, fromJson: _urlFromJson)
+    required Uri requestUrl,
     required DateTime requestDateTime,
     int? responseCode,
     DateTime? responseDateTime,
@@ -104,7 +105,8 @@ sealed class HttpLogEntry with _$HttpLogEntry {
     return responseDateTime!.difference(requestDateTime);
   }
 
-  factory HttpLogEntry.fromJson(Map<String, dynamic> json) => _$HttpLogEntryFromJson(json);
+  factory HttpLogEntry.fromJson(Map<String, dynamic> json) =>
+      _$HttpLogEntryFromJson(json);
 }
 
 String _urlToJson(Uri url) => url.toString();
@@ -117,7 +119,11 @@ Uri _urlFromJson(String url) => Uri.parse(url);
 /// - `next`: An optional integer representing the next cursor.
 @Freezed(fromJson: true, toJson: true)
 sealed class HttpLog with _$HttpLog {
-  const factory HttpLog({required IList<HttpLogEntry> items, required int? next}) = _HttpLog;
+  const factory HttpLog({
+    required IList<HttpLogEntry> items,
+    required int? next,
+  }) = _HttpLog;
 
-  factory HttpLog.fromJson(Map<String, dynamic> json) => _$HttpLogFromJson(json);
+  factory HttpLog.fromJson(Map<String, dynamic> json) =>
+      _$HttpLogFromJson(json);
 }

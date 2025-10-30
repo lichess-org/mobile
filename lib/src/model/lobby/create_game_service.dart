@@ -64,7 +64,8 @@ class CreateGameService {
   final Logger _log;
 
   LichessClient get lichessClient => ref.read(lichessClientProvider);
-  ChallengeRepository get challengeRepository => ref.read(challengeRepositoryProvider);
+  ChallengeRepository get challengeRepository =>
+      ref.read(challengeRepositoryProvider);
 
   /// The current lobby connection if we are creating a game from the lobby.
   StreamSubscription<SocketEvent>? _lobbyConnection;
@@ -116,7 +117,9 @@ class CreateGameService {
     }
 
     try {
-      await LobbyRepository(lichessClient).createSeek(actualSeek, sri: socketClient.sri);
+      await LobbyRepository(
+        lichessClient,
+      ).createSeek(actualSeek, sri: socketClient.sri);
     } catch (e) {
       _log.warning('Failed to create seek', e);
       // if the completer is not yet completed, complete it with an error
@@ -142,7 +145,9 @@ class CreateGameService {
   /// Create a new real time challenge.
   ///
   /// Will listen to the challenge socket and await the response from the destinated user.
-  Future<ChallengeResponse> newRealTimeChallenge(ChallengeRequest challengeReq) async {
+  Future<ChallengeResponse> newRealTimeChallenge(
+    ChallengeRequest challengeReq,
+  ) async {
     assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
 
     if (_challengeConnection != null) {
@@ -150,7 +155,8 @@ class CreateGameService {
     }
 
     // ensure the pending connection is closed in any case
-    final completer = Completer<ChallengeResponse>()..future.whenComplete(dispose);
+    final completer = Completer<ChallengeResponse>()
+      ..future.whenComplete(dispose);
 
     try {
       _log.info('Creating new challenge game');
@@ -178,10 +184,14 @@ class CreateGameService {
         socketClient.stream.listen((event) async {
           if (event.topic == 'reload') {
             try {
-              final updatedChallenge = await challengeRepository.show(challenge.id);
+              final updatedChallenge = await challengeRepository.show(
+                challenge.id,
+              );
               if (updatedChallenge.gameFullId != null) {
                 completer.complete(
-                  ChallengeResponseAccepted(gameFullId: updatedChallenge.gameFullId!),
+                  ChallengeResponseAccepted(
+                    gameFullId: updatedChallenge.gameFullId!,
+                  ),
                 );
               } else if (updatedChallenge.status == ChallengeStatus.declined) {
                 completer.complete(
@@ -213,7 +223,9 @@ class CreateGameService {
   /// It will wait a little bit in case of an immediate decline (e.g. bots), in that case a
   /// [ChallengeDeclineReason] will be returned.
   /// Otherwise, it means the challenge was created successfully.
-  Future<ChallengeDeclineReason?> newCorrespondenceChallenge(ChallengeRequest challengeReq) async {
+  Future<ChallengeDeclineReason?> newCorrespondenceChallenge(
+    ChallengeRequest challengeReq,
+  ) async {
     assert(
       challengeReq.timeControl == ChallengeTimeControlType.correspondence ||
           challengeReq.timeControl == ChallengeTimeControlType.unlimited,
@@ -224,7 +236,8 @@ class CreateGameService {
     }
 
     // ensure the pending connection is closed in any case
-    final completer = Completer<ChallengeDeclineReason?>()..future.whenComplete(dispose);
+    final completer = Completer<ChallengeDeclineReason?>()
+      ..future.whenComplete(dispose);
 
     try {
       _log.info('Creating new correspondence|unlimited challenge');
@@ -252,10 +265,13 @@ class CreateGameService {
         socketClient.stream.listen((event) async {
           if (event.topic == 'reload') {
             try {
-              final updatedChallenge = await challengeRepository.show(challenge.id);
+              final updatedChallenge = await challengeRepository.show(
+                challenge.id,
+              );
               if (updatedChallenge.status == ChallengeStatus.declined) {
                 completer.complete(
-                  updatedChallenge.declineReason ?? ChallengeDeclineReason.generic,
+                  updatedChallenge.declineReason ??
+                      ChallengeDeclineReason.generic,
                 );
               }
             } catch (e) {

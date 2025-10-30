@@ -28,7 +28,8 @@ sealed class OfflineCorrespondenceGame
     required GameId id,
     required GameFullId fullId,
     required GameMeta meta,
-    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson) required IList<GameStep> steps,
+    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson)
+    required IList<GameStep> steps,
     CorrespondenceClockData? clock,
     String? initialFen,
     required bool rated,
@@ -60,7 +61,8 @@ sealed class OfflineCorrespondenceGame
 
   bool get isMyTurn => sideToMove == youAre;
 
-  Duration? myTimeLeft(DateTime lastModifiedTime) => estimatedTimeLeft(youAre!, lastModifiedTime);
+  Duration? myTimeLeft(DateTime lastModifiedTime) =>
+      estimatedTimeLeft(youAre!, lastModifiedTime);
 
   Duration? estimatedTimeLeft(Side side, DateTime lastModifiedTime) {
     final timeLeft = side == Side.white ? clock?.white : clock?.black;

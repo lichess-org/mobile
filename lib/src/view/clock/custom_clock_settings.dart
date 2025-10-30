@@ -9,7 +9,11 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
 class CustomClockSettings extends StatefulWidget {
-  const CustomClockSettings({required this.onSubmit, required this.player, required this.clock});
+  const CustomClockSettings({
+    required this.onSubmit,
+    required this.player,
+    required this.clock,
+  });
 
   final ClockSide player;
   final TimeIncrement clock;
@@ -44,7 +48,8 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
           padding: Styles.horizontalBodyPadding,
           child: FilledButton(
             child: Text(context.l10n.apply),
-            onPressed: () => widget.onSubmit(widget.player, TimeIncrement(time, increment)),
+            onPressed: () =>
+                widget.onSubmit(widget.player, TimeIncrement(time, increment)),
           ),
         ),
       ],
@@ -84,7 +89,9 @@ class _PlayerTimeSlider extends StatelessWidget {
           ),
         ),
         ListTile(
-          title: Text('${context.l10n.increment}: ${context.l10n.nbSeconds(clock.increment)}'),
+          title: Text(
+            '${context.l10n.increment}: ${context.l10n.nbSeconds(clock.increment)}',
+          ),
           subtitle: NonLinearSlider(
             value: clock.increment,
             values: kAvailableIncrementsInSeconds,

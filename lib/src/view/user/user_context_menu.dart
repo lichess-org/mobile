@@ -40,7 +40,10 @@ class UserContextMenu extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  UserFullNameWidget(user: value.lightUser, style: Styles.title),
+                  UserFullNameWidget(
+                    user: value.lightUser,
+                    style: Styles.title,
+                  ),
                   const SizedBox(height: 8.0),
                   if (value.profile?.bio != null)
                     Linkify(
@@ -61,9 +64,9 @@ class UserContextMenu extends ConsumerWidget {
               children: [
                 BottomSheetContextMenuAction(
                   onPressed: () {
-                    Navigator.of(
-                      context,
-                    ).push(UserOrProfileScreen.buildRoute(context, value.lightUser));
+                    Navigator.of(context).push(
+                      UserOrProfileScreen.buildRoute(context, value.lightUser),
+                    );
                   },
                   icon: Icons.person,
                   child: Text(context.l10n.profile),
@@ -80,7 +83,11 @@ class UserContextMenu extends ConsumerWidget {
                 ),
                 if (session != null && value.canChallenge == true)
                   BottomSheetContextMenuAction(
-                    onPressed: () => UserScreen.challengeUser(value, context: context, ref: ref),
+                    onPressed: () => UserScreen.challengeUser(
+                      value,
+                      context: context,
+                      ref: ref,
+                    ),
                     icon: LichessIcons.crossed_swords,
                     child: Text(context.l10n.challengeChallengeToPlay),
                   ),

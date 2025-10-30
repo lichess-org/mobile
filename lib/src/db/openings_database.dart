@@ -45,12 +45,20 @@ Future<Database> _openDb(String path) async {
     });
 
     // Copy from asset
-    final ByteData data = await rootBundle.load(p.url.join('assets', 'chess_openings.db'));
-    final List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    final ByteData data = await rootBundle.load(
+      p.url.join('assets', 'chess_openings.db'),
+    );
+    final List<int> bytes = data.buffer.asUint8List(
+      data.offsetInBytes,
+      data.lengthInBytes,
+    );
 
     // Write and flush the bytes written
     await File(path).writeAsBytes(bytes, flush: true);
   }
 
-  return databaseFactory.openDatabase(path, options: OpenDatabaseOptions(readOnly: true));
+  return databaseFactory.openDatabase(
+    path,
+    options: OpenDatabaseOptions(readOnly: true),
+  );
 }

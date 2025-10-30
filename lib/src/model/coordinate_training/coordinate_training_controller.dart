@@ -56,7 +56,9 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
 
   void _finishTraining() {
     // TODO save score in local storage here (and display high score and/or average score in UI)
-    final orientation = _getOrientation(ref.read(coordinateTrainingPreferencesProvider).sideChoice);
+    final orientation = _getOrientation(
+      ref.read(coordinateTrainingPreferencesProvider).sideChoice,
+    );
     _updateTimer?.cancel();
     state = CoordinateTrainingState(
       lastGuess: state.lastGuess,
@@ -66,7 +68,9 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
   }
 
   void abortTraining() {
-    final orientation = _getOrientation(ref.read(coordinateTrainingPreferencesProvider).sideChoice);
+    final orientation = _getOrientation(
+      ref.read(coordinateTrainingPreferencesProvider).sideChoice,
+    );
     _updateTimer?.cancel();
     state = CoordinateTrainingState(orientation: orientation);
   }
@@ -101,7 +105,9 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
       );
     }
 
-    state = state.copyWith(lastGuess: correctGuess ? Guess.correct : Guess.incorrect);
+    state = state.copyWith(
+      lastGuess: correctGuess ? Guess.correct : Guess.incorrect,
+    );
   }
 }
 

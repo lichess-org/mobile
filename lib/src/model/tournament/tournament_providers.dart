@@ -24,9 +24,15 @@ Future<TournamentLists> tournaments(Ref ref) {
 }
 
 @riverpod
-Future<TournamentPlayer> tournamentPlayer(Ref ref, TournamentId tournamentId, UserId userId) {
+Future<TournamentPlayer> tournamentPlayer(
+  Ref ref,
+  TournamentId tournamentId,
+  UserId userId,
+) {
   return ref.withClientCacheFor(
-    (client) => ref.read(tournamentRepositoryProvider).getTournamentPlayer(tournamentId, userId),
+    (client) => ref
+        .read(tournamentRepositoryProvider)
+        .getTournamentPlayer(tournamentId, userId),
     const Duration(seconds: 10),
   );
 }

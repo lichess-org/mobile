@@ -13,7 +13,11 @@ class BroadcastSearchScreen extends StatefulWidget {
   const BroadcastSearchScreen();
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const BroadcastSearchScreen(), fullscreenDialog: true);
+    return buildScreenRoute(
+      context,
+      screen: const BroadcastSearchScreen(),
+      fullscreenDialog: true,
+    );
   }
 
   @override
@@ -63,7 +67,9 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastList = ref.watch(broadcastsSearchPaginatorProvider(searchTerm));
+    final broadcastList = ref.watch(
+      broadcastsSearchPaginatorProvider(searchTerm),
+    );
 
     return SafeArea(
       child: broadcastList.when(
@@ -71,25 +77,33 @@ class _Body extends ConsumerWidget {
         data: (value) {
           final broadcasts = value.broadcasts;
           final hasMorePages = value.nextPage != null && value.nextPage! <= 20;
-          final notifier = ref.read(broadcastsSearchPaginatorProvider(searchTerm).notifier);
+          final notifier = ref.read(
+            broadcastsSearchPaginatorProvider(searchTerm).notifier,
+          );
 
           return (broadcasts.isNotEmpty)
               ? ListView.separated(
                   separatorBuilder: (context, index) => PlatformDivider(
                     height: 1,
-                    indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
+                    indent:
+                        BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
                   ),
                   itemCount: broadcasts.length + (hasMorePages ? 1 : 0),
-                  itemBuilder: (context, index) => (hasMorePages && index == broadcasts.length)
+                  itemBuilder: (context, index) =>
+                      (hasMorePages && index == broadcasts.length)
                       ? BroadcastNextPageTile(notifier.next)
                       : BroadcastListTile(broadcast: broadcasts[index]),
                 )
               : Center(
-                  child: Text(context.l10n.mobileNoSearchResults, style: Styles.noResultTextStyle),
+                  child: Text(
+                    context.l10n.mobileNoSearchResults,
+                    style: Styles.noResultTextStyle,
+                  ),
                 );
         },
         error: (_, _) => const Center(child: Text('Could not load round data')),
-        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
       ),
     );
   }

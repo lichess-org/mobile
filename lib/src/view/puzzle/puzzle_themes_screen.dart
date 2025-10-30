@@ -17,7 +17,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 @riverpod
 final _themesProvider =
     FutureProvider.autoDispose<
-      (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)
+      (
+        bool,
+        IMap<PuzzleThemeKey, int>,
+        IMap<PuzzleThemeKey, PuzzleThemeData>?,
+        bool,
+      )
     >((ref) async {
       final connectivity = await ref.watch(connectivityChangesProvider.future);
       final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
@@ -28,7 +33,12 @@ final _themesProvider =
         onlineThemes = null;
       }
       final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
-      return (connectivity.isOnline, savedThemes, onlineThemes, savedOpenings.isNotEmpty);
+      return (
+        connectivity.isOnline,
+        savedThemes,
+        onlineThemes,
+        savedOpenings.isNotEmpty,
+      );
     });
 
 class PuzzleThemesScreen extends StatelessWidget {
@@ -58,20 +68,25 @@ class _Body extends ConsumerWidget {
 
     return themes.when(
       data: (data) {
-        final (hasConnectivity, savedThemes, onlineThemes, hasSavedOpenings) = data;
+        final (hasConnectivity, savedThemes, onlineThemes, hasSavedOpenings) =
+            data;
 
         final openingsAvailable = hasConnectivity || hasSavedOpenings;
         return ListView(
           children: [
             Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              data: Theme.of(
+                context,
+              ).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 enabled: openingsAvailable,
                 title: Text(context.l10n.puzzleByOpenings),
                 trailing: const Icon(Icons.keyboard_arrow_right),
                 onExpansionChanged: openingsAvailable
                     ? (expanded) {
-                        Navigator.of(context).push(OpeningThemeScreen.buildRoute(context));
+                        Navigator.of(
+                          context,
+                        ).push(OpeningThemeScreen.buildRoute(context));
                       }
                     : null,
               ),
@@ -87,7 +102,8 @@ class _Body extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-      error: (error, stack) => const Center(child: Text('Could not load themes.')),
+      error: (error, stack) =>
+          const Center(child: Text('Could not load themes.')),
     );
   }
 }
@@ -122,20 +138,28 @@ class _Category extends ConsumerWidget {
           ListSection(
             hasLeading: true,
             children: themes.map((theme) {
-              final isThemeAvailable = hasConnectivity || savedThemes.containsKey(theme);
+              final isThemeAvailable =
+                  hasConnectivity || savedThemes.containsKey(theme);
 
               return ListTile(
                 enabled: isThemeAvailable,
                 leading: Icon(theme.icon),
-                trailing: hasConnectivity && onlineThemes?.containsKey(theme) == true
+                trailing:
+                    hasConnectivity && onlineThemes?.containsKey(theme) == true
                     ? Padding(
                         padding: const EdgeInsets.only(left: 6.0),
-                        child: Text('${onlineThemes![theme]!.count}', style: themeCountStyle),
+                        child: Text(
+                          '${onlineThemes![theme]!.count}',
+                          style: themeCountStyle,
+                        ),
                       )
                     : savedThemes.containsKey(theme)
                     ? Padding(
                         padding: const EdgeInsets.only(left: 6.0),
-                        child: Text('${savedThemes[theme]!}', style: themeCountStyle),
+                        child: Text(
+                          '${savedThemes[theme]!}',
+                          style: themeCountStyle,
+                        ),
                       )
                     : null,
                 title: Text(theme.l10n(context.l10n).name),
@@ -143,14 +167,18 @@ class _Category extends ConsumerWidget {
                   theme.l10n(context.l10n).description,
                   maxLines: 10,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                  style: TextStyle(
+                    color: textShade(context, Styles.subtitleOpacity),
+                  ),
                 ),
                 onTap: isThemeAvailable
                     ? () {
-                        Navigator.of(
-                          context,
-                          rootNavigator: true,
-                        ).push(PuzzleScreen.buildRoute(context, angle: PuzzleTheme(theme)));
+                        Navigator.of(context, rootNavigator: true).push(
+                          PuzzleScreen.buildRoute(
+                            context,
+                            angle: PuzzleTheme(theme),
+                          ),
+                        );
                       }
                     : null,
               );

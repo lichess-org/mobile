@@ -16,7 +16,11 @@ Future<void> showBroadcastShareMenu(
       onPressed: () {
         launchShareDialog(
           context,
-          ShareParams(uri: lichessUri('/broadcast/${broadcast.tour.slug}/${broadcast.tour.id}')),
+          ShareParams(
+            uri: lichessUri(
+              '/broadcast/${broadcast.tour.slug}/${broadcast.tour.id}',
+            ),
+          ),
         );
       },
     ),

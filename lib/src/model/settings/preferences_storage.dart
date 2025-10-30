@@ -53,7 +53,9 @@ mixin PreferencesStorage<T extends Serializable> on Notifier<T> {
   }
 
   T fetch() {
-    final stored = LichessBinding.instance.sharedPreferences.getString(prefCategory.storageKey);
+    final stored = LichessBinding.instance.sharedPreferences.getString(
+      prefCategory.storageKey,
+    );
     if (stored == null) {
       return defaults;
     }

@@ -8,7 +8,8 @@ part 'broadcast_preferences.freezed.dart';
 part 'broadcast_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
-class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorage<BroadcastPrefs> {
+class BroadcastPreferences extends _$BroadcastPreferences
+    with PreferencesStorage<BroadcastPrefs> {
   @override
   @protected
   PrefCategory get prefCategory => PrefCategory.broadcast;
@@ -18,7 +19,8 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
   BroadcastPrefs get defaults => BroadcastPrefs.defaults;
 
   @override
-  BroadcastPrefs fromJson(Map<String, dynamic> json) => BroadcastPrefs.fromJson(json);
+  BroadcastPrefs fromJson(Map<String, dynamic> json) =>
+      BroadcastPrefs.fromJson(json);
 
   @override
   BroadcastPrefs build() {
@@ -30,11 +32,15 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
   }
 
   Future<void> toggleServerAnalysis() {
-    return save(state.copyWith(enableServerAnalysis: !state.enableServerAnalysis));
+    return save(
+      state.copyWith(enableServerAnalysis: !state.enableServerAnalysis),
+    );
   }
 
   Future<void> toggleShowEvaluationGauge() {
-    return save(state.copyWith(showEvaluationGauge: !state.showEvaluationGauge));
+    return save(
+      state.copyWith(showEvaluationGauge: !state.showEvaluationGauge),
+    );
   }
 
   Future<void> toggleShowEngineLines() {
@@ -63,7 +69,9 @@ class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorag
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, CommonAnalysisPrefs {
+sealed class BroadcastPrefs
+    with _$BroadcastPrefs
+    implements Serializable, CommonAnalysisPrefs {
   const factory BroadcastPrefs({
     required bool showEvaluationBar,
     @JsonKey(defaultValue: true) required bool enableServerAnalysis,
@@ -88,5 +96,6 @@ sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, Commo
     smallBoard: false,
   );
 
-  factory BroadcastPrefs.fromJson(Map<String, dynamic> json) => _$BroadcastPrefsFromJson(json);
+  factory BroadcastPrefs.fromJson(Map<String, dynamic> json) =>
+      _$BroadcastPrefsFromJson(json);
 }

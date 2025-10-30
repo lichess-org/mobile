@@ -48,16 +48,20 @@ class QuickActionService {
       if (shortcutType.startsWith('recent_seek_')) {
         final index = int.tryParse(shortcutType.split('_').last);
         if (index != null) {
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).push(GameScreen.buildRoute(context, source: LobbySource(recentSeeks[index])));
+          Navigator.of(context, rootNavigator: true).push(
+            GameScreen.buildRoute(
+              context,
+              source: LobbySource(recentSeeks[index]),
+            ),
+          );
         }
       } else if (shortcutType == 'play_puzzles') {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(PuzzleScreen.buildRoute(context, angle: const PuzzleTheme(PuzzleThemeKey.mix)));
+        Navigator.of(context, rootNavigator: true).push(
+          PuzzleScreen.buildRoute(
+            context,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          ),
+        );
       }
     });
     setQuickActions(recentSeeks);
@@ -75,8 +79,12 @@ class QuickActionService {
         final index = entry.key;
         final seek = entry.value;
 
-        final time = seek.clock != null ? seek.clock!.$1.inMinutes.toString() : '-';
-        final increment = seek.clock != null ? seek.clock!.$2.inSeconds.toString() : '0';
+        final time = seek.clock != null
+            ? seek.clock!.$1.inMinutes.toString()
+            : '-';
+        final increment = seek.clock != null
+            ? seek.clock!.$2.inSeconds.toString()
+            : '0';
         final rated = seek.rated ? l10n.ratedTournament : l10n.casualTournament;
 
         final variant = (seek.variant == Variant.standard)

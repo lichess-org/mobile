@@ -53,7 +53,9 @@ enum BottomTab {
   }
 }
 
-final currentBottomTabProvider = StateProvider<BottomTab>((ref) => BottomTab.home);
+final currentBottomTabProvider = StateProvider<BottomTab>(
+  (ref) => BottomTab.home,
+);
 
 final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
   final currentTab = ref.watch(currentBottomTabProvider);
@@ -99,7 +101,8 @@ final learnScrollController = ScrollController(debugLabel: 'learnScroll');
 final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final moreScrollController = ScrollController(debugLabel: 'MoreScroll');
 
-final RouteObserver<PageRoute<void>> rootNavPageRouteObserver = RouteObserver<PageRoute<void>>();
+final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
+    RouteObserver<PageRoute<void>>();
 
 /// A [ChangeNotifier] that can be used to notify when the Home tab is tapped, and all the built in
 /// interactions (pop stack, scroll to top) are done.
@@ -141,13 +144,20 @@ class MainTabScaffold extends ConsumerWidget {
       child: MainTabScaffoldProperties(
         extendBody: extendBody,
         child: Scaffold(
-          body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _tabBuilder),
+          body: _TabSwitchingView(
+            currentTab: currentTab,
+            tabBuilder: _tabBuilder,
+          ),
           extendBody: extendBody,
           bottomNavigationBar: Theme.of(context).platform == TargetPlatform.iOS
               ? _CupertinoTabBar(
                   height: 50,
-                  backgroundColor: NavigationBarTheme.of(context).backgroundColor,
-                  border: const Border(top: BorderSide(color: Colors.transparent)),
+                  backgroundColor: NavigationBarTheme.of(
+                    context,
+                  ).backgroundColor,
+                  border: const Border(
+                    top: BorderSide(color: Colors.transparent),
+                  ),
                   activeColor: ColorScheme.of(context).onSurface,
                   currentIndex: currentTab.index,
                   items: [
@@ -256,7 +266,11 @@ class MainTabScaffold extends ConsumerWidget {
 /// [InheritedWidget] providing [Scaffold] properties of the [MainTabScaffold].
 class MainTabScaffoldProperties extends InheritedWidget {
   /// Constructs a new [MainTabScaffoldProperties].
-  const MainTabScaffoldProperties({required super.child, required this.extendBody, super.key});
+  const MainTabScaffoldProperties({
+    required super.child,
+    required this.extendBody,
+    super.key,
+  });
 
   /// The value of [Scaffold.extendBody] defined in the [MainTabScaffold].
   final bool extendBody;
@@ -268,7 +282,8 @@ class MainTabScaffoldProperties extends InheritedWidget {
 
   /// Retrieve the [MainTabScaffoldProperties] background color from the context.
   static MainTabScaffoldProperties? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<MainTabScaffoldProperties>();
+    return context
+        .dependOnInheritedWidgetOfExactType<MainTabScaffoldProperties>();
   }
 
   /// Returns true if the [MainTabScaffold] has an extended body.
@@ -334,18 +349,25 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
     if (tabFocusNodes.length != BottomTab.values.length) {
       if (tabFocusNodes.length > BottomTab.values.length) {
         discardedNodes.addAll(tabFocusNodes.sublist(BottomTab.values.length));
-        tabFocusNodes.removeRange(BottomTab.values.length, tabFocusNodes.length);
+        tabFocusNodes.removeRange(
+          BottomTab.values.length,
+          tabFocusNodes.length,
+        );
       } else {
         tabFocusNodes.addAll(
           List<FocusScopeNode>.generate(
             BottomTab.values.length - tabFocusNodes.length,
-            (int index) =>
-                FocusScopeNode(debugLabel: '$MainTabScaffold Tab ${index + tabFocusNodes.length}'),
+            (int index) => FocusScopeNode(
+              debugLabel:
+                  '$MainTabScaffold Tab ${index + tabFocusNodes.length}',
+            ),
           ),
         );
       }
     }
-    FocusScope.of(context).setFirstFocus(tabFocusNodes[widget.currentTab.index]);
+    FocusScope.of(
+      context,
+    ).setFirstFocus(tabFocusNodes[widget.currentTab.index]);
   }
 
   @override
@@ -377,7 +399,9 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
                 node: tabFocusNodes[index],
                 child: Builder(
                   builder: (BuildContext context) {
-                    return shouldBuildTab[index] ? widget.tabBuilder(context, index) : Container();
+                    return shouldBuildTab[index]
+                        ? widget.tabBuilder(context, index)
+                        : Container();
                   },
                 ),
               ),
@@ -489,7 +513,10 @@ class _MaterialTabViewState extends ConsumerState<_MaterialTabView> {
       routeBuilder = widget.routes![name];
     }
     if (routeBuilder != null) {
-      return MaterialPageRoute<dynamic>(builder: routeBuilder, settings: settings);
+      return MaterialPageRoute<dynamic>(
+        builder: routeBuilder,
+        settings: settings,
+      );
     }
     if (widget.onGenerateRoute != null) {
       return widget.onGenerateRoute!(settings);
@@ -596,7 +623,10 @@ class _CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
         width: 0.0, // 0.0 means one physical pixel
       ),
     ),
-  }) : assert(items.length >= 2, "Tabs need at least 2 items to conform to Apple's HIG"),
+  }) : assert(
+         items.length >= 2,
+         "Tabs need at least 2 items to conform to Apple's HIG",
+       ),
        assert(0 <= currentIndex && currentIndex < items.length),
        assert(height >= 0.0);
 
@@ -676,11 +706,14 @@ class _CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
     BorderSide resolveBorderSide(BorderSide side) {
       return side == BorderSide.none
           ? side
-          : side.copyWith(color: CupertinoDynamicColor.resolve(side.color, context));
+          : side.copyWith(
+              color: CupertinoDynamicColor.resolve(side.color, context),
+            );
     }
 
     // Return the border as is when it's a subclass.
-    final Border? resolvedBorder = border == null || border.runtimeType != Border
+    final Border? resolvedBorder =
+        border == null || border.runtimeType != Border
         ? border
         : Border(
             top: resolveBorderSide(border!.top),
@@ -689,7 +722,10 @@ class _CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
             right: resolveBorderSide(border!.right),
           );
 
-    final Color inactive = CupertinoDynamicColor.resolve(inactiveColor, context);
+    final Color inactive = CupertinoDynamicColor.resolve(
+      inactiveColor,
+      context,
+    );
     Widget result = DecoratedBox(
       decoration: BoxDecoration(border: resolvedBorder, color: backgroundColor),
       child: SizedBox(
@@ -699,7 +735,9 @@ class _CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
           data: IconThemeData(color: inactive, size: iconSize),
           child: DefaultTextStyle(
             // Default with the inactive state.
-            style: CupertinoTheme.of(context).textTheme.tabLabelTextStyle.copyWith(color: inactive),
+            style: CupertinoTheme.of(
+              context,
+            ).textTheme.tabLabelTextStyle.copyWith(color: inactive),
             child: Padding(
               padding: EdgeInsets.only(bottom: bottomPadding),
               child: Semantics(
@@ -720,7 +758,10 @@ class _CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
       // For non-opaque backgrounds, apply a blur effect.
       result = ClipRect(
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: kCupertinoBarBlurSigma, sigmaY: kCupertinoBarBlurSigma),
+          filter: ImageFilter.blur(
+            sigmaX: kCupertinoBarBlurSigma,
+            sigmaY: kCupertinoBarBlurSigma,
+          ),
           child: result,
         ),
       );
@@ -731,7 +772,9 @@ class _CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
 
   List<Widget> _buildTabItems(BuildContext context) {
     final List<Widget> result = <Widget>[];
-    final CupertinoLocalizations localizations = CupertinoLocalizations.of(context);
+    final CupertinoLocalizations localizations = CupertinoLocalizations.of(
+      context,
+    );
 
     for (int index = 0; index < items.length; index += 1) {
       final bool active = index == currentIndex;
@@ -744,7 +787,10 @@ class _CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
             child: TextFieldTapRegion(
               child: Semantics(
                 selected: active,
-                hint: localizations.tabSemanticsLabel(tabIndex: index + 1, tabCount: items.length),
+                hint: localizations.tabSemanticsLabel(
+                  tabIndex: index + 1,
+                  tabCount: items.length,
+                ),
                 child: MouseRegion(
                   cursor: kIsWeb ? SystemMouseCursors.click : MouseCursor.defer,
                   child: GestureDetector(
@@ -782,7 +828,11 @@ class _CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   /// Change the active tab item's icon and title colors to active.
-  Widget _wrapActiveItem(BuildContext context, Widget item, {required bool active}) {
+  Widget _wrapActiveItem(
+    BuildContext context,
+    Widget item, {
+    required bool active,
+  }) {
     if (!active) {
       return item;
     }

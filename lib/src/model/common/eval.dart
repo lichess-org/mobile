@@ -74,7 +74,8 @@ sealed class CloudEval with _$CloudEval implements ClientEval {
   String get evalString => _evalString(cp, mate);
 
   @override
-  double winningChances(Side side) => _toPov(side, _toWhiteWinningChances(cp, mate));
+  double winningChances(Side side) =>
+      _toPov(side, _toWhiteWinningChances(cp, mate));
 
   @override
   int? get cp => pvs[0].cp;
@@ -154,7 +155,8 @@ sealed class ExternalEval with _$ExternalEval implements Eval {
     );
   }
 
-  factory ExternalEval.fromJson(Map<String, dynamic> json) => _$ExternalEvalFromJson(json);
+  factory ExternalEval.fromJson(Map<String, dynamic> json) =>
+      _$ExternalEvalFromJson(json);
 
   @override
   String get evalString => _evalString(cp, mate);
@@ -201,7 +203,8 @@ IList<MoveWithWinningChances> _bestMoves(IList<PvData> pvs, Position position) {
 @freezed
 sealed class PvData with _$PvData {
   const PvData._();
-  const factory PvData({required IList<UCIMove> moves, int? mate, int? cp}) = _PvData;
+  const factory PvData({required IList<UCIMove> moves, int? mate, int? cp}) =
+      _PvData;
 
   String get evalString => _evalString(cp, mate);
 
@@ -235,7 +238,13 @@ sealed class PvData with _$PvData {
   MoveWithWinningChances? _firstMoveWithWinningChances(Side sideToMove) {
     final uciMove = (moves.isNotEmpty) ? Move.parse(moves.first) : null;
     return (uciMove != null)
-        ? (move: uciMove, winningChances: _toPov(sideToMove, _toWhiteWinningChances(cp, mate)))
+        ? (
+            move: uciMove,
+            winningChances: _toPov(
+              sideToMove,
+              _toWhiteWinningChances(cp, mate),
+            ),
+          )
         : null;
   }
 }
@@ -255,13 +264,17 @@ ISet<Shape> computeBestMoveShapes(
     const winningDiffScaleFactor = 2.5;
 
     final bestMove = moves[0];
-    final winningDiffComparedToBestMove = bestMove.winningChances - moves[index].winningChances;
+    final winningDiffComparedToBestMove =
+        bestMove.winningChances - moves[index].winningChances;
     // Force minimum scale if the best move is significantly better than this move
     if (winningDiffComparedToBestMove > 0.3) {
       return minScale;
     }
     return clampDouble(
-      math.max(minScale, maxScale - winningDiffScaleFactor * winningDiffComparedToBestMove),
+      math.max(
+        minScale,
+        maxScale - winningDiffScaleFactor * winningDiffComparedToBestMove,
+      ),
       0,
       1,
     );
@@ -311,7 +324,8 @@ double cpToPawns(int cp) => cp / 100;
 
 int cpFromPawns(double pawns) => (pawns * 100).round();
 
-double cpWinningChances(int cp) => _rawWinningChances(math.min(math.max(-1000, cp), 1000));
+double cpWinningChances(int cp) =>
+    _rawWinningChances(math.min(math.max(-1000, cp), 1000));
 
 double mateWinningChances(int mate) {
   final cp = (21 - math.min(10, mate.abs())) * 100;

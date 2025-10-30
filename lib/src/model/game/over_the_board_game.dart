@@ -16,19 +16,26 @@ part 'over_the_board_game.g.dart';
 ///
 /// See [PlayableGame] for a game that is played online.
 @Freezed(fromJson: true, toJson: true)
-abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableSteps {
+abstract class OverTheBoardGame
+    with _$OverTheBoardGame, BaseGame, IndexableSteps {
   const OverTheBoardGame._();
 
   @override
   Player get white => Player(
     onGame: true,
-    user: LightUser(id: UserId(Side.white.name), name: Side.white.name.capitalize()),
+    user: LightUser(
+      id: UserId(Side.white.name),
+      name: Side.white.name.capitalize(),
+    ),
   );
 
   @override
   Player get black => Player(
     onGame: true,
-    user: LightUser(id: UserId(Side.black.name), name: Side.black.name.capitalize()),
+    user: LightUser(
+      id: UserId(Side.black.name),
+      name: Side.black.name.capitalize(),
+    ),
   );
 
   @override
@@ -49,7 +56,8 @@ abstract class OverTheBoardGame with _$OverTheBoardGame, BaseGame, IndexableStep
 
   @Assert('steps.isNotEmpty')
   factory OverTheBoardGame({
-    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson) required IList<GameStep> steps,
+    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson)
+    required IList<GameStep> steps,
     required GameMeta meta,
     required String? initialFen,
     required GameStatus status,

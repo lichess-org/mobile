@@ -29,7 +29,9 @@ class ServerAnalysisSummary extends ConsumerWidget {
     final analysisState = ref.watch(ctrlProvider).requireValue;
     final playersAnalysis = analysisState.playersAnalysis;
     final canShowGameSummary = analysisState.canShowGameSummary;
-    final pgnHeaders = ref.watch(ctrlProvider.select((value) => value.requireValue.pgnHeaders));
+    final pgnHeaders = ref.watch(
+      ctrlProvider.select((value) => value.requireValue.pgnHeaders),
+    );
     final currentGameAnalysis = ref.watch(currentAnalysisProvider);
 
     if (analysisPrefs.enableServerAnalysis == false || !canShowGameSummary) {
@@ -44,7 +46,9 @@ class ServerAnalysisSummary extends ConsumerWidget {
               if (canShowGameSummary)
                 FilledButton.tonal(
                   onPressed: () {
-                    ref.read(analysisPreferencesProvider.notifier).toggleServerAnalysis();
+                    ref
+                        .read(analysisPreferencesProvider.notifier)
+                        .toggleServerAnalysis();
                   },
                   child: Text(context.l10n.enable),
                 ),
@@ -71,7 +75,8 @@ class ServerAnalysisSummary extends ConsumerWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Table(
-                      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
                       columnWidths: const {
                         0: FlexColumnWidth(1),
                         1: FlexColumnWidth(1),
@@ -80,14 +85,18 @@ class ServerAnalysisSummary extends ConsumerWidget {
                       children: [
                         TableRow(
                           decoration: const BoxDecoration(
-                            border: Border(bottom: BorderSide(color: Colors.grey)),
+                            border: Border(
+                              bottom: BorderSide(color: Colors.grey),
+                            ),
                           ),
                           children: [
                             _SummaryPlayerName(Side.white, pgnHeaders),
                             Center(
                               child: Text(
                                 pgnHeaders.get('Result') ?? '',
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             _SummaryPlayerName(Side.black, pgnHeaders),
@@ -97,25 +106,36 @@ class ServerAnalysisSummary extends ConsumerWidget {
                             playersAnalysis.black.accuracy != null)
                           TableRow(
                             children: [
-                              _SummaryNumber('${playersAnalysis.white.accuracy}%'),
+                              _SummaryNumber(
+                                '${playersAnalysis.white.accuracy}%',
+                              ),
                               Center(
                                 heightFactor: 1.8,
                                 child: InkWell(
                                   onTap: () {
-                                    launchUrl(Uri.parse('https://lichess.org/page/accuracy'));
+                                    launchUrl(
+                                      Uri.parse(
+                                        'https://lichess.org/page/accuracy',
+                                      ),
+                                    );
                                   },
                                   child: Text.rich(
                                     TextSpan(
                                       text: context.l10n.accuracy,
                                       children: [
                                         WidgetSpan(
-                                          alignment: PlaceholderAlignment.middle,
+                                          alignment:
+                                              PlaceholderAlignment.middle,
                                           child: Padding(
-                                            padding: const EdgeInsets.only(left: 4.0),
+                                            padding: const EdgeInsets.only(
+                                              left: 4.0,
+                                            ),
                                             child: Icon(
                                               Icons.info_outline,
                                               size: 16,
-                                              color: Theme.of(context).colorScheme.primary,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
                                             ),
                                           ),
                                         ),
@@ -125,30 +145,47 @@ class ServerAnalysisSummary extends ConsumerWidget {
                                   ),
                                 ),
                               ),
-                              _SummaryNumber('${playersAnalysis.black.accuracy}%'),
+                              _SummaryNumber(
+                                '${playersAnalysis.black.accuracy}%',
+                              ),
                             ],
                           ),
                         for (final item in [
                           (
                             playersAnalysis.white.inaccuracies.toString(),
-                            context.l10n.nbInaccuracies(2).replaceAll('2', '').trim().capitalize(),
+                            context.l10n
+                                .nbInaccuracies(2)
+                                .replaceAll('2', '')
+                                .trim()
+                                .capitalize(),
                             playersAnalysis.black.inaccuracies.toString(),
                           ),
                           (
                             playersAnalysis.white.mistakes.toString(),
-                            context.l10n.nbMistakes(2).replaceAll('2', '').trim().capitalize(),
+                            context.l10n
+                                .nbMistakes(2)
+                                .replaceAll('2', '')
+                                .trim()
+                                .capitalize(),
                             playersAnalysis.black.mistakes.toString(),
                           ),
                           (
                             playersAnalysis.white.blunders.toString(),
-                            context.l10n.nbBlunders(2).replaceAll('2', '').trim().capitalize(),
+                            context.l10n
+                                .nbBlunders(2)
+                                .replaceAll('2', '')
+                                .trim()
+                                .capitalize(),
                             playersAnalysis.black.blunders.toString(),
                           ),
                         ])
                           TableRow(
                             children: [
                               _SummaryNumber(item.$1),
-                              Center(heightFactor: 1.2, child: Text(item.$2, softWrap: true)),
+                              Center(
+                                heightFactor: 1.2,
+                                child: Text(item.$2, softWrap: true),
+                              ),
                               _SummaryNumber(item.$3),
                             ],
                           ),
@@ -156,7 +193,9 @@ class ServerAnalysisSummary extends ConsumerWidget {
                             playersAnalysis.black.acpl != null)
                           TableRow(
                             children: [
-                              _SummaryNumber(playersAnalysis.white.acpl.toString()),
+                              _SummaryNumber(
+                                playersAnalysis.white.acpl.toString(),
+                              ),
                               Center(
                                 heightFactor: 1.5,
                                 child: Text(
@@ -165,7 +204,9 @@ class ServerAnalysisSummary extends ConsumerWidget {
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              _SummaryNumber(playersAnalysis.black.acpl.toString()),
+                              _SummaryNumber(
+                                playersAnalysis.black.acpl.toString(),
+                              ),
                             ],
                           ),
                       ],
@@ -200,14 +241,18 @@ class ServerAnalysisSummary extends ConsumerWidget {
                               future: pendingRequest,
                               builder: (context, snapshot) {
                                 return FilledButton.tonal(
-                                  onPressed: ref.watch(authSessionProvider) == null
+                                  onPressed:
+                                      ref.watch(authSessionProvider) == null
                                       ? () {
                                           showSnackBar(
                                             context,
-                                            context.l10n.youNeedAnAccountToDoThat,
+                                            context
+                                                .l10n
+                                                .youNeedAnAccountToDoThat,
                                           );
                                         }
-                                      : snapshot.connectionState == ConnectionState.waiting
+                                      : snapshot.connectionState ==
+                                            ConnectionState.waiting
                                       ? null
                                       : () {
                                           setState(() {
@@ -225,7 +270,9 @@ class ServerAnalysisSummary extends ConsumerWidget {
                                                 });
                                           });
                                         },
-                                  child: Text(context.l10n.requestAComputerAnalysis),
+                                  child: Text(
+                                    context.l10n.requestAComputerAnalysis,
+                                  ),
                                 );
                               },
                             );
@@ -340,7 +387,9 @@ class AcplChart extends ConsumerWidget {
       label: VerticalLineLabel(
         style: TextStyle(
           fontSize: 10,
-          color: TextTheme.of(context).labelMedium?.color?.withValues(alpha: 0.3),
+          color: TextTheme.of(
+            context,
+          ).labelMedium?.color?.withValues(alpha: 0.3),
         ),
         labelResolver: (line) => label,
         padding: const EdgeInsets.only(right: 1),
@@ -361,7 +410,9 @@ class AcplChart extends ConsumerWidget {
     }
 
     final spots = data
-        .mapIndexed((i, e) => FlSpot(i.toDouble(), e.winningChances(Side.white)))
+        .mapIndexed(
+          (i, e) => FlSpot(i.toDouble(), e.winningChances(Side.white)),
+        )
         .toList(growable: false);
 
     final divisionLines = <VerticalLine>[];
@@ -370,7 +421,10 @@ class AcplChart extends ConsumerWidget {
       if (state.division!.middlegame! > 0) {
         divisionLines.add(phaseVerticalBar(0.0, context.l10n.opening));
         divisionLines.add(
-          phaseVerticalBar(state.division!.middlegame! - 1, context.l10n.middlegame),
+          phaseVerticalBar(
+            state.division!.middlegame! - 1,
+            context.l10n.middlegame,
+          ),
         );
       } else {
         divisionLines.add(phaseVerticalBar(0.0, context.l10n.middlegame));
@@ -379,7 +433,9 @@ class AcplChart extends ConsumerWidget {
 
     if (state.division?.endgame != null) {
       if (state.division!.endgame! > 0) {
-        divisionLines.add(phaseVerticalBar(state.division!.endgame! - 1, context.l10n.endgame));
+        divisionLines.add(
+          phaseVerticalBar(state.division!.endgame! - 1, context.l10n.endgame),
+        );
       } else {
         divisionLines.add(phaseVerticalBar(0.0, context.l10n.endgame));
       }
@@ -393,26 +449,32 @@ class AcplChart extends ConsumerWidget {
             LineChartData(
               lineTouchData: LineTouchData(
                 enabled: false,
-                touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
-                  if (event is FlTapUpEvent ||
-                      event is FlPanUpdateEvent ||
-                      event is FlLongPressMoveUpdate) {
-                    final touchX = event.localPosition!.dx;
-                    final chartWidth =
-                        context.size!.width - 32; // Insets on both sides of the chart of 16
-                    final minX = spots.first.x;
-                    final maxX = spots.last.x;
-                    final touchXDataValue = minX + (touchX / chartWidth) * (maxX - minX);
-                    final closestSpot = spots.reduce(
-                      (a, b) =>
-                          (a.x - touchXDataValue).abs() < (b.x - touchXDataValue).abs() ? a : b,
-                    );
-                    final closestNodeIndex = closestSpot.x.round();
-                    ref
-                        .read(analysisControllerProvider(options).notifier)
-                        .jumpToNthNodeOnMainline(closestNodeIndex);
-                  }
-                },
+                touchCallback:
+                    (FlTouchEvent event, LineTouchResponse? touchResponse) {
+                      if (event is FlTapUpEvent ||
+                          event is FlPanUpdateEvent ||
+                          event is FlLongPressMoveUpdate) {
+                        final touchX = event.localPosition!.dx;
+                        final chartWidth =
+                            context.size!.width -
+                            32; // Insets on both sides of the chart of 16
+                        final minX = spots.first.x;
+                        final maxX = spots.last.x;
+                        final touchXDataValue =
+                            minX + (touchX / chartWidth) * (maxX - minX);
+                        final closestSpot = spots.reduce(
+                          (a, b) =>
+                              (a.x - touchXDataValue).abs() <
+                                  (b.x - touchXDataValue).abs()
+                              ? a
+                              : b,
+                        );
+                        final closestNodeIndex = closestSpot.x.round();
+                        ref
+                            .read(analysisControllerProvider(options).notifier)
+                            .jumpToNthNodeOnMainline(closestNodeIndex);
+                      }
+                    },
               ),
               minY: -1.0,
               maxY: 1.0,
@@ -422,8 +484,16 @@ class AcplChart extends ConsumerWidget {
                   isCurved: false,
                   barWidth: 1,
                   color: mainLineColor.withValues(alpha: 0.7),
-                  aboveBarData: BarAreaData(show: true, color: aboveLineColor, applyCutOffY: true),
-                  belowBarData: BarAreaData(show: true, color: belowLineColor, applyCutOffY: true),
+                  aboveBarData: BarAreaData(
+                    show: true,
+                    color: aboveLineColor,
+                    applyCutOffY: true,
+                  ),
+                  belowBarData: BarAreaData(
+                    show: true,
+                    color: belowLineColor,
+                    applyCutOffY: true,
+                  ),
                   dotData: const FlDotData(show: false),
                 ),
               ],

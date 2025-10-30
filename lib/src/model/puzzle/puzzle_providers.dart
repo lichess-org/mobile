@@ -97,7 +97,9 @@ Future<IList<PuzzleHistoryEntry>?> puzzleRecentActivity(Ref ref) async {
 
 @riverpod
 Future<StormDashboard?> stormDashboard(Ref ref, UserId id) {
-  return ref.withClient((client) => PuzzleRepository(client).stormDashboard(id));
+  return ref.withClient(
+    (client) => PuzzleRepository(client).stormDashboard(id),
+  );
 }
 
 @riverpod

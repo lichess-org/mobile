@@ -30,7 +30,9 @@ part 'playable_game.freezed.dart';
 /// See also:
 /// - [ExportedGame] for a game that is finished and not owned by the current user.
 @freezed
-sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implements BaseGame {
+sealed class PlayableGame
+    with _$PlayableGame, BaseGame, IndexableSteps
+    implements BaseGame {
   const PlayableGame._();
 
   @Assert('steps.isNotEmpty')
@@ -100,11 +102,16 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
       meta.tournament == null;
   bool get resignable => playable && !abortable;
   bool get drawable =>
-      playable && lastPosition.fullmoves >= 2 && !(me?.offeringDraw == true) && !hasAI;
+      playable &&
+      lastPosition.fullmoves >= 2 &&
+      !(me?.offeringDraw == true) &&
+      !hasAI;
   bool get rematchable =>
       (meta.rules == null || !meta.rules!.contains(GameRule.noRematch)) &&
       (finished ||
-          (aborted && (!meta.rated || !{GameSource.lobby, GameSource.pool}.contains(source)))) &&
+          (aborted &&
+              (!meta.rated ||
+                  !{GameSource.lobby, GameSource.pool}.contains(source)))) &&
       meta.tournament == null &&
       boosted != true;
   bool get canTakeback =>
@@ -122,7 +129,8 @@ sealed class PlayableGame with _$PlayableGame, BaseGame, IndexableSteps implemen
       (meta.rules == null || !meta.rules!.contains(GameRule.noClaimWin));
 
   bool get userAnalysable =>
-      finished && steps.length > 4 || (playable && (clock == null || youAre == null));
+      finished && steps.length > 4 ||
+      (playable && (clock == null || youAre == null));
 
   ExportedGame toExportedGame({required DateTime finishedAt}) {
     return ExportedGame(
@@ -189,7 +197,8 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   final initialFen = requiredGamePick('initialFen').asStringOrNull();
 
   // assume lichess always send initialFen with fromPosition and chess960
-  Position position = (meta.variant == Variant.fromPosition || meta.variant == Variant.chess960)
+  Position position =
+      (meta.variant == Variant.fromPosition || meta.variant == Variant.chess960)
       ? Chess.fromSetup(Setup.parseFen(initialFen!))
       : meta.variant.initialPosition;
 
@@ -214,16 +223,21 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   return PlayableGame(
     id: requiredGamePick('id').asGameIdOrThrow(),
     meta: meta,
-    source: requiredGamePick(
-      'source',
-    ).letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
+    source: requiredGamePick('source').letOrThrow(
+      (pick) =>
+          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
+    ),
     initialFen: initialFen,
     steps: steps.toIList(),
     white: pick('white').letOrThrow(_playerFromUserGamePick),
     black: pick('black').letOrThrow(_playerFromUserGamePick),
     clock: pick('clock').letOrNull(_playableClockDataFromPick),
-    correspondenceClock: pick('correspondence').letOrNull(_correspondenceClockDataFromPick),
-    correspondenceForecast: pick('forecast').letOrNull(_correspondenceForecastFromPick),
+    correspondenceClock: pick(
+      'correspondence',
+    ).letOrNull(_correspondenceClockDataFromPick),
+    correspondenceForecast: pick(
+      'forecast',
+    ).letOrNull(_correspondenceForecastFromPick),
     status: pick('game', 'status').asGameStatusOrThrow(),
     winner: pick('game', 'winner').asSideOrNull(),
     boosted: pick('game', 'boosted').asBoolOrNull(),
@@ -261,26 +275,40 @@ GameMeta _playableGameMetaFromPick(RequiredPick pick) {
         moreTime: cPick('moretime').asDurationFromSecondsOrNull(),
       ),
     ),
-    daysPerTurn: pick('correspondence').letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
+    daysPerTurn: pick(
+      'correspondence',
+    ).letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
     startedAtTurn: pick('game', 'startedAtTurn').asIntOrNull(),
     rules: pick('game', 'rules').letOrNull(
-      (it) =>
-          ISet(it.asListOrThrow((e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown)),
+      (it) => ISet(
+        it.asListOrThrow(
+          (e) => GameRule.nameMap[e.asStringOrThrow()] ?? GameRule.unknown,
+        ),
+      ),
     ),
     division: pick('division').letOrNull(_divisionFromPick),
-    tournament: pick('tournament').letOrNull(_playableGameTournamentDataFromPick),
+    tournament: pick(
+      'tournament',
+    ).letOrNull(_playableGameTournamentDataFromPick),
   );
 }
 
-TournamentMeta? _playableGameTournamentDataFromPick(RequiredPick pick) => TournamentMeta(
-  id: pick('id').asTournamentIdOrThrow(),
-  name: pick('name').asStringOrThrow(),
-  clock: (timeLeft: Duration(seconds: pick('secondsLeft').asIntOrThrow()), at: DateTime.now()),
-  berserkable: pick('berserkable').asBoolOrFalse(),
-  ranks: pick(
-    'ranks',
-  ).letOrNull((p) => (white: p('white').asIntOrThrow(), black: p('black').asIntOrThrow())),
-);
+TournamentMeta? _playableGameTournamentDataFromPick(RequiredPick pick) =>
+    TournamentMeta(
+      id: pick('id').asTournamentIdOrThrow(),
+      name: pick('name').asStringOrThrow(),
+      clock: (
+        timeLeft: Duration(seconds: pick('secondsLeft').asIntOrThrow()),
+        at: DateTime.now(),
+      ),
+      berserkable: pick('berserkable').asBoolOrFalse(),
+      ranks: pick('ranks').letOrNull(
+        (p) => (
+          white: p('white').asIntOrThrow(),
+          black: p('black').asIntOrThrow(),
+        ),
+      ),
+    );
 
 ServerGamePrefs _gamePrefsFromPick(RequiredPick pick) {
   return ServerGamePrefs(
@@ -313,7 +341,9 @@ PlayableClockData _playableClockDataFromPick(RequiredPick pick) {
     running: pick('running').asBoolOrThrow(),
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
-    lag: pick('lag').letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10)),
+    lag: pick(
+      'lag',
+    ).letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10)),
     at: DateTime.now(),
   );
 }
@@ -325,16 +355,19 @@ CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
   );
 }
 
-CorrespondenceForecast _correspondenceForecastFromPick(RequiredPick pick) => IList(
-  pick('steps').asListOrThrow(
-    (pick) => IList(
-      pick.asListOrThrow(
-        (pick) =>
-            SanMove(pick('san').asStringOrThrow(), Move.parse(pick('uci').asStringOrThrow())!),
+CorrespondenceForecast _correspondenceForecastFromPick(RequiredPick pick) =>
+    IList(
+      pick('steps').asListOrThrow(
+        (pick) => IList(
+          pick.asListOrThrow(
+            (pick) => SanMove(
+              pick('san').asStringOrThrow(),
+              Move.parse(pick('uci').asStringOrThrow())!,
+            ),
+          ),
+        ),
       ),
-    ),
-  ),
-);
+    );
 
 Division _divisionFromPick(RequiredPick pick) {
   return Division(

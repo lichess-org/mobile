@@ -13,7 +13,10 @@ part 'challenge_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 ChallengeRepository challengeRepository(Ref ref) {
-  return ChallengeRepository(ref.read(lichessClientProvider), ref.read(aggregatorProvider));
+  return ChallengeRepository(
+    ref.read(lichessClientProvider),
+    ref.read(aggregatorProvider),
+  );
 }
 
 typedef ChallengesList = ({IList<Challenge> inward, IList<Challenge> outward});
@@ -59,7 +62,10 @@ class ChallengeRepository {
 
   Future<void> decline(ChallengeId id, {ChallengeDeclineReason? reason}) async {
     final uri = Uri(path: '/api/challenge/$id/decline');
-    await client.postRead(uri, body: reason != null ? {'reason': reason.name} : null);
+    await client.postRead(
+      uri,
+      body: reason != null ? {'reason': reason.name} : null,
+    );
   }
 
   Future<void> cancel(ChallengeId id) async {

@@ -7,12 +7,20 @@ import 'package:flutter/widgets.dart';
 Future<void> precachePieceImages(PieceSet pieceSet) async {
   try {
     final devicePixelRatio =
-        WidgetsBinding.instance.platformDispatcher.implicitView?.devicePixelRatio ?? 1.0;
+        WidgetsBinding
+            .instance
+            .platformDispatcher
+            .implicitView
+            ?.devicePixelRatio ??
+        1.0;
 
     ChessgroundImages.instance.clear();
 
     for (final asset in pieceSet.assets.values) {
-      await ChessgroundImages.instance.load(asset, devicePixelRatio: devicePixelRatio);
+      await ChessgroundImages.instance.load(
+        asset,
+        devicePixelRatio: devicePixelRatio,
+      );
       debugPrint('Preloaded piece image: ${asset.assetName}');
     }
   } catch (e) {

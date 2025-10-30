@@ -47,9 +47,15 @@ class OpeningExplorerSettings extends ConsumerWidget {
                 (speed) => FilterChip(
                   label: Text(
                     String.fromCharCode(speed.icon.codePoint),
-                    style: TextStyle(fontFamily: speed.icon.fontFamily, fontSize: 18.0),
+                    style: TextStyle(
+                      fontFamily: speed.icon.fontFamily,
+                      fontSize: 18.0,
+                    ),
                   ),
-                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).title,
+                  tooltip: Perf.fromVariantAndSpeed(
+                    Variant.standard,
+                    speed,
+                  ).title,
                   selected: prefs.lichessDb.speeds.contains(speed),
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
@@ -142,8 +148,9 @@ class OpeningExplorerSettings extends ConsumerWidget {
                     Side.black => const Text('Black'),
                   },
                   selected: prefs.playerDb.side == side,
-                  onSelected: (_) =>
-                      ref.read(openingExplorerPreferencesProvider.notifier).setPlayerDbSide(side),
+                  onSelected: (_) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .setPlayerDbSide(side),
                 ),
               )
               .toList(growable: false),
@@ -158,9 +165,15 @@ class OpeningExplorerSettings extends ConsumerWidget {
                 (speed) => FilterChip(
                   label: Text(
                     String.fromCharCode(speed.icon.codePoint),
-                    style: TextStyle(fontFamily: speed.icon.fontFamily, fontSize: 18.0),
+                    style: TextStyle(
+                      fontFamily: speed.icon.fontFamily,
+                      fontSize: 18.0,
+                    ),
                   ),
-                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).title,
+                  tooltip: Perf.fromVariantAndSpeed(
+                    Variant.standard,
+                    speed,
+                  ).title,
                   selected: prefs.playerDb.speeds.contains(speed),
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)

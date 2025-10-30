@@ -43,8 +43,12 @@ sealed class TablebaseEntry with _$TablebaseEntry {
       checkmate: pick('checkmate').asBoolOrFalse(),
       stalemate: pick('stalemate').asBoolOrFalse(),
       insufficientMaterial: pick('insufficient_material').asBoolOrFalse(),
-      category: pick('category').letOrThrow((p) => _parseTablebaseCategory(p.asStringOrThrow())),
-      moves: pick('moves').asListOrEmpty((p) => TablebaseMove.fromPick(p.required())).toIList(),
+      category: pick(
+        'category',
+      ).letOrThrow((p) => _parseTablebaseCategory(p.asStringOrThrow())),
+      moves: pick(
+        'moves',
+      ).asListOrEmpty((p) => TablebaseMove.fromPick(p.required())).toIList(),
     );
   }
 }
@@ -82,7 +86,9 @@ sealed class TablebaseMove with _$TablebaseMove {
       checkmate: pick('checkmate').asBoolOrFalse(),
       stalemate: pick('stalemate').asBoolOrFalse(),
       insufficientMaterial: pick('insufficient_material').asBoolOrFalse(),
-      category: pick('category').letOrThrow((p) => _parseTablebaseCategory(p.asStringOrThrow())),
+      category: pick(
+        'category',
+      ).letOrThrow((p) => _parseTablebaseCategory(p.asStringOrThrow())),
     );
   }
 }

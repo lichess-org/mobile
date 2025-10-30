@@ -36,7 +36,10 @@ class StudyRepository {
   }
 
   Future<StudyList> searchStudies({required String query, int page = 1}) {
-    return _requestStudies(path: 'search', queryParameters: {'page': page.toString(), 'q': query});
+    return _requestStudies(
+      path: 'search',
+      queryParameters: {'page': page.toString(), 'q': query},
+    );
   }
 
   Future<StudyList> _requestStudies({
@@ -47,13 +50,17 @@ class StudyRepository {
       Uri(path: '/study/$path', queryParameters: queryParameters),
       headers: {'Accept': 'application/json'},
       mapper: (Map<String, dynamic> json) {
-        final paginator = pick(json, 'paginator').asMapOrThrow<String, dynamic>();
+        final paginator = pick(
+          json,
+          'paginator',
+        ).asMapOrThrow<String, dynamic>();
 
         return (
-          studies: pick(
-            paginator,
-            'currentPageResults',
-          ).asListOrThrow((pick) => StudyPageItem.fromJson(pick.asMapOrThrow())).toIList(),
+          studies: pick(paginator, 'currentPageResults')
+              .asListOrThrow(
+                (pick) => StudyPageItem.fromJson(pick.asMapOrThrow()),
+              )
+              .toIList(),
           nextPage: pick(paginator, 'nextPage').asIntOrNull(),
         );
       },

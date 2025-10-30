@@ -49,8 +49,13 @@ Future<int?> sqliteVersion(Ref ref) async {
 
 Future<int?> _getDatabaseVersion(Database db) async {
   try {
-    final versionStr = (await db.rawQuery('SELECT sqlite_version()')).first.values.first.toString();
-    final versionCells = versionStr.split('.').map((i) => int.parse(i)).toList();
+    final versionStr = (await db.rawQuery(
+      'SELECT sqlite_version()',
+    )).first.values.first.toString();
+    final versionCells = versionStr
+        .split('.')
+        .map((i) => int.parse(i))
+        .toList();
     return versionCells[0] * 100000 + versionCells[1] * 1000 + versionCells[2];
   } catch (_) {
     return null;
@@ -217,7 +222,11 @@ Future<void> _deleteOldEntries(Database db, String table, Duration ttl) async {
     return;
   }
 
-  await db.delete(table, where: 'lastModified < ?', whereArgs: [date.toIso8601String()]);
+  await db.delete(
+    table,
+    where: 'lastModified < ?',
+    whereArgs: [date.toIso8601String()],
+  );
 }
 
 Future<bool> _doesTableExist(Database db, String table) async {

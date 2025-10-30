@@ -20,7 +20,8 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
+import 'package:lichess_mobile/src/tab_scaffold.dart'
+    show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:logging/logging.dart';
@@ -30,7 +31,10 @@ part 'correspondence_service.g.dart';
 
 @Riverpod(keepAlive: true)
 CorrespondenceService correspondenceService(Ref ref) {
-  final service = CorrespondenceService(Logger('CorrespondenceService'), ref: ref);
+  final service = CorrespondenceService(
+    Logger('CorrespondenceService'),
+    ref: ref,
+  );
   ref.onDispose(() => service.dispose());
   return service;
 }
@@ -42,7 +46,8 @@ class CorrespondenceService {
   final Ref ref;
   final Logger _log;
 
-  StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
+  StreamSubscription<ParsedLocalNotification>?
+  _notificationResponseSubscription;
   StreamSubscription<ReceivedFcmMessage>? _fcmSubscription;
 
   void start() {
@@ -59,15 +64,16 @@ class CorrespondenceService {
       }
     });
 
-    _notificationResponseSubscription = NotificationService.responseStream.listen((data) {
-      final (_, notification) = data;
-      switch (notification) {
-        case CorresGameUpdateNotification(:final fullId):
-          _onNotificationResponse(fullId);
-        case _:
-          break;
-      }
-    });
+    _notificationResponseSubscription = NotificationService.responseStream
+        .listen((data) {
+          final (_, notification) = data;
+          switch (notification) {
+            case CorresGameUpdateNotification(:final fullId):
+              _onNotificationResponse(fullId);
+            case _:
+              break;
+          }
+        });
   }
 
   void dispose() {
@@ -101,7 +107,9 @@ class CorrespondenceService {
 
     await playRegisteredMoves();
 
-    final storedOngoingGames = await (await _storage).fetchOngoingGames(_session?.user.id);
+    final storedOngoingGames = await (await _storage).fetchOngoingGames(
+      _session?.user.id,
+    );
 
     try {
       final gameRepository = ref.read(gameRepositoryProvider);
@@ -164,7 +172,11 @@ class CorrespondenceService {
 
         final eventStream = socket
             .where((e) => e != '0')
-            .map((e) => SocketEvent.fromJson(jsonDecode(e as String) as Map<String, dynamic>));
+            .map(
+              (e) => SocketEvent.fromJson(
+                jsonDecode(e as String) as Map<String, dynamic>,
+              ),
+            );
 
         final Completer<PlayableGame> gameCompleter = Completer();
         final Completer<void> movePlayedCompleter = Completer();
@@ -172,11 +184,15 @@ class CorrespondenceService {
         streamSubscription = eventStream.listen((event) {
           switch (event.topic) {
             case 'full':
-              final playableGame = GameFullEvent.fromJson(event.data as Map<String, dynamic>).game;
+              final playableGame = GameFullEvent.fromJson(
+                event.data as Map<String, dynamic>,
+              ).game;
               gameCompleter.complete(playableGame);
 
             case 'move':
-              final moveEvent = MoveEvent.fromJson(event.data as Map<String, dynamic>);
+              final moveEvent = MoveEvent.fromJson(
+                event.data as Map<String, dynamic>,
+              );
               // move acknowledged
               if (moveEvent.uci == gameToSync.registeredMoveAtPgn!.$2.uci) {
                 movesPlayed++;
@@ -204,11 +220,17 @@ class CorrespondenceService {
             correspondenceGameStorageProvider.future,
           )).save(gameToSync.copyWith(registeredMoveAtPgn: null));
         } else {
-          _log.info('Cannot play game ${gameToSync.id} move because its state has changed');
+          _log.info(
+            'Cannot play game ${gameToSync.id} move because its state has changed',
+          );
           updateStoredGame(gameToSync.fullId, playableGame);
         }
       } catch (e, s) {
-        _log.severe('Failed to sync correspondence game ${gameToSync.id}', e, s);
+        _log.severe(
+          'Failed to sync correspondence game ${gameToSync.id}',
+          e,
+          s,
+        );
       } finally {
         streamSubscription?.cancel();
         socket?.close();

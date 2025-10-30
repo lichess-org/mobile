@@ -17,8 +17,14 @@ class GameBookmarksScreen extends ConsumerWidget {
 
   final int nbBookmarks;
 
-  static Route<dynamic> buildRoute(BuildContext context, {required int nbBookmarks}) {
-    return buildScreenRoute(context, screen: GameBookmarksScreen(nbBookmarks: nbBookmarks));
+  static Route<dynamic> buildRoute(
+    BuildContext context, {
+    required int nbBookmarks,
+  }) {
+    return buildScreenRoute(
+      context,
+      screen: GameBookmarksScreen(nbBookmarks: nbBookmarks),
+    );
   }
 
   @override
@@ -54,7 +60,8 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
       final state = ref.read(gameBookmarksPaginatorProvider);
 
       if (!state.hasValue) {
@@ -87,7 +94,10 @@ class _BodyState extends ConsumerState<_Body> {
                 controller: _scrollController,
                 separatorBuilder: (context, index) =>
                     Theme.of(context).platform == TargetPlatform.iOS
-                    ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                    ? const PlatformDivider(
+                        height: 1,
+                        cupertinoHasLeading: true,
+                      )
                     : const SizedBox.shrink(),
                 itemCount: list.length + (state.isLoading ? 1 : 0),
                 itemBuilder: (context, index) {
@@ -96,7 +106,9 @@ class _BodyState extends ConsumerState<_Body> {
                       padding: EdgeInsets.symmetric(vertical: 32.0),
                       child: CenterLoadingIndicator(),
                     );
-                  } else if (state.hasError && state.hasMore && index == list.length) {
+                  } else if (state.hasError &&
+                      state.hasMore &&
+                      index == list.length) {
                     // TODO: add a retry button
                     return const Padding(
                       padding: EdgeInsets.symmetric(vertical: 32.0),
@@ -112,10 +124,16 @@ class _BodyState extends ConsumerState<_Body> {
                       await ref
                           .read(accountServiceProvider)
                           .setGameBookmark(game.id, bookmark: false);
-                      ref.read(gameBookmarksPaginatorProvider.notifier).removeBookmark(game.id);
+                      ref
+                          .read(gameBookmarksPaginatorProvider.notifier)
+                          .removeBookmark(game.id);
                     } on Exception catch (_) {
                       if (context.mounted) {
-                        showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
+                        showSnackBar(
+                          context,
+                          'Bookmark action failed',
+                          type: SnackBarType.error,
+                        );
                       }
                     }
                   }
@@ -130,11 +148,18 @@ class _BodyState extends ConsumerState<_Body> {
                       motion: const StretchMotion(),
                       children: [
                         SlidableAction(
-                          backgroundColor: ColorScheme.of(context).tertiaryContainer,
-                          foregroundColor: ColorScheme.of(context).onTertiaryContainer,
+                          backgroundColor: ColorScheme.of(
+                            context,
+                          ).tertiaryContainer,
+                          foregroundColor: ColorScheme.of(
+                            context,
+                          ).onTertiaryContainer,
                           onPressed: game.variant.isReadSupported
                               ? (_) {
-                                  Navigator.of(context, rootNavigator: true).push(
+                                  Navigator.of(
+                                    context,
+                                    rootNavigator: true,
+                                  ).push(
                                     AnalysisScreen.buildRoute(
                                       context,
                                       AnalysisOptions.archivedGame(

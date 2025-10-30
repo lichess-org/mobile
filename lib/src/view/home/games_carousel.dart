@@ -73,7 +73,9 @@ class _GamesCarouselState<T> extends State<GamesCarousel<T>> {
               title: Text(context.l10n.nbGamesInPlay(widget.list.length)),
               onTap: widget.list.length > 2
                   ? () {
-                      Navigator.of(context).push(widget.moreScreenRouteBuilder(context));
+                      Navigator.of(
+                        context,
+                      ).push(widget.moreScreenRouteBuilder(context));
                     }
                   : null,
             ),
@@ -85,14 +87,20 @@ class _GamesCarouselState<T> extends State<GamesCarousel<T>> {
               child: CarouselView.weighted(
                 controller: _controller,
                 padding: kGameCarouselPadding,
-                shape: const RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
-                elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0 : 1,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: Styles.cardBorderRadius,
+                ),
+                elevation: Theme.of(context).platform == TargetPlatform.iOS
+                    ? 0
+                    : 1,
                 flexWeights: kGameCarouselFlexWeights,
                 itemSnapping: true,
                 onTap: (index) {
                   widget.onTap?.call(index);
                 },
-                children: [for (final game in widget.list) widget.builder(game)],
+                children: [
+                  for (final game in widget.list) widget.builder(game),
+                ],
               ),
             ),
           ),
@@ -113,7 +121,10 @@ class OngoingGameCarouselItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeLeft = game.secondsLeft != null
-        ? relativeDate(context.l10n, DateTime.now().add(Duration(seconds: game.secondsLeft!)))
+        ? relativeDate(
+            context.l10n,
+            DateTime.now().add(Duration(seconds: game.secondsLeft!)),
+          )
         : null;
     final timeTextStyle = TextStyle(
       color: Colors.white.withValues(alpha: game.isMyTurn ? 1.0 : 0.7),
@@ -141,9 +152,13 @@ class OngoingGameCarouselItem extends StatelessWidget {
                     if (game.isMyTurn) ...[
                       const Icon(Icons.timer, size: 16.0, color: Colors.white),
                       const SizedBox(width: 4.0),
-                      if (timeLeft != null) Text(timeLeft, style: timeTextStyle),
+                      if (timeLeft != null)
+                        Text(timeLeft, style: timeTextStyle),
                     ] else
-                      Text(context.l10n.waitingForOpponent, style: timeTextStyle),
+                      Text(
+                        context.l10n.waitingForOpponent,
+                        style: timeTextStyle,
+                      ),
                   ],
                 ),
                 const SizedBox(height: 4.0),
@@ -152,7 +167,9 @@ class OngoingGameCarouselItem extends StatelessWidget {
                   rating: game.opponentRating,
                   aiLevel: game.opponentAiLevel,
                   style: Styles.boardPreviewTitle.copyWith(
-                    color: Colors.white.withValues(alpha: game.isMyTurn ? 1.0 : 0.7),
+                    color: Colors.white.withValues(
+                      alpha: game.isMyTurn ? 1.0 : 0.7,
+                    ),
                   ),
                 ),
               ],
@@ -193,7 +210,9 @@ class _BoardCarouselItem extends ConsumerWidget {
     final brightness = ColorScheme.of(context).brightness;
 
     final backgroundColor = lighten(
-      isRealTimeGame ? context.lichessColors.brag : boardPrefs.boardTheme.colors.darkSquare,
+      isRealTimeGame
+          ? context.lichessColors.brag
+          : boardPrefs.boardTheme.colors.darkSquare,
       brightness == Brightness.light ? 0.25 : 0.0,
     );
 
@@ -212,7 +231,8 @@ class _BoardCarouselItem extends ConsumerWidget {
     final totalFlex = kGameCarouselFlexWeights.reduce((a, b) => a + b);
     final double width = screenWidth - 16.0;
     final boardSize =
-        width * kGameCarouselFlexWeights[0] / totalFlex - kGameCarouselPadding.horizontal;
+        width * kGameCarouselFlexWeights[0] / totalFlex -
+        kGameCarouselPadding.horizontal;
 
     return ColoredBox(
       color: backgroundColorWithHueFilter,
@@ -262,7 +282,10 @@ class _BoardCarouselItem extends ConsumerWidget {
     return ChessboardColorScheme(
       lightSquare: lightSquare,
       darkSquare: darkSquare,
-      background: SolidColorChessboardBackground(lightSquare: lightSquare, darkSquare: darkSquare),
+      background: SolidColorChessboardBackground(
+        lightSquare: lightSquare,
+        darkSquare: darkSquare,
+      ),
       whiteCoordBackground: SolidColorChessboardBackground(
         lightSquare: lightSquare,
         darkSquare: darkSquare,

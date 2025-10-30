@@ -45,6 +45,11 @@ sealed class LeaderboardUser with _$LeaderboardUser {
 
   bool get isPatron => patronColor != null;
 
-  LightUser get lightUser =>
-      LightUser(id: id, name: username, title: title, flair: flair, patronColor: patronColor);
+  LightUser get lightUser => LightUser(
+    id: id,
+    name: username,
+    title: title,
+    flair: flair,
+    patronColor: patronColor,
+  );
 }

@@ -22,7 +22,8 @@ class GameSetupPreferences extends _$GameSetupPreferences
   GameSetupPrefs defaults({LightUser? user}) => GameSetupPrefs.defaults;
 
   @override
-  GameSetupPrefs fromJson(Map<String, dynamic> json) => GameSetupPrefs.fromJson(json);
+  GameSetupPrefs fromJson(Map<String, dynamic> json) =>
+      GameSetupPrefs.fromJson(json);
 
   @override
   GameSetupPrefs build() {
@@ -70,8 +71,10 @@ sealed class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
     customDaysPerTurn: 3,
   );
 
-  Perf get realTimePerf =>
-      Perf.fromVariantAndSpeed(customVariant, Speed.fromTimeIncrement(timeIncrement));
+  Perf get realTimePerf => Perf.fromVariantAndSpeed(
+    customVariant,
+    Speed.fromTimeIncrement(timeIncrement),
+  );
 
   /// Returns the real time rating range for the custom setup.
   ///
@@ -112,7 +115,19 @@ sealed class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
 
 const kDefaultRatingDelta = (-500, 500);
 
-const kSubtractingRatingRange = [-500, -450, -400, -350, -300, -250, -200, -150, -100, -50, 0];
+const kSubtractingRatingRange = [
+  -500,
+  -450,
+  -400,
+  -350,
+  -300,
+  -250,
+  -200,
+  -150,
+  -100,
+  -50,
+  0,
+];
 
 const kAddingRatingRange = [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500];
 

@@ -25,7 +25,9 @@ const kPuzzleLocalQueueLength = 50;
 
 @Riverpod(keepAlive: true)
 Future<PuzzleService> puzzleService(Ref ref) {
-  return ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
+  return ref.read(puzzleServiceFactoryProvider)(
+    queueLength: kPuzzleLocalQueueLength,
+  );
 }
 
 @Riverpod(keepAlive: true)
@@ -114,8 +116,12 @@ class PuzzleService {
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     puzzleStorage.save(puzzle: puzzle);
-    const emptyBatch = PuzzleBatch(solved: IListConst([]), unsolved: IListConst([]));
-    final data = await batchStorage.fetch(userId: userId, angle: angle) ?? emptyBatch;
+    const emptyBatch = PuzzleBatch(
+      solved: IListConst([]),
+      unsolved: IListConst([]),
+    );
+    final data =
+        await batchStorage.fetch(userId: userId, angle: angle) ?? emptyBatch;
     await batchStorage.save(
       userId: userId,
       angle: angle,
@@ -137,7 +143,10 @@ class PuzzleService {
   }
 
   /// Deletes the puzzle batch of [angle] from the local storage.
-  Future<void> deleteBatch({required UserId? userId, required PuzzleAngle angle}) async {
+  Future<void> deleteBatch({
+    required UserId? userId,
+    required PuzzleAngle angle,
+  }) async {
     await batchStorage.delete(userId: userId, angle: angle);
   }
 
@@ -149,10 +158,8 @@ class PuzzleService {
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
-  FutureResult<(PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?)> _syncAndLoadData(
-    UserId? userId,
-    PuzzleAngle angle,
-  ) async {
+  FutureResult<(PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?)>
+  _syncAndLoadData(UserId? userId, PuzzleAngle angle) async {
     final data = await batchStorage.fetch(userId: userId, angle: angle);
 
     final unsolved = data?.unsolved ?? IList(const []);
@@ -161,7 +168,9 @@ class PuzzleService {
     final deficit = max(0, queueLength - unsolved.length);
 
     if (deficit > 0 || solved.isNotEmpty) {
-      _log.fine('Will sync puzzles with lichess (deficit: $deficit, solved: ${solved.length})');
+      _log.fine(
+        'Will sync puzzles with lichess (deficit: $deficit, solved: ${solved.length})',
+      );
 
       final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
 
@@ -169,12 +178,17 @@ class PuzzleService {
       final batchResponse = _ref.withClient(
         (client) => Result.capture(
           solved.isNotEmpty && userId != null
-              ? PuzzleRepository(
-                  client,
-                ).solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
-              : PuzzleRepository(
-                  client,
-                ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
+              ? PuzzleRepository(client).solveBatch(
+                  nb: deficit,
+                  solved: solved,
+                  angle: angle,
+                  difficulty: difficulty,
+                )
+              : PuzzleRepository(client).selectBatch(
+                  nb: deficit,
+                  angle: angle,
+                  difficulty: difficulty,
+                ),
         ),
       );
 
@@ -196,7 +210,11 @@ class PuzzleService {
           .flatMap((tuple) async {
             final (newBatch, glicko, rounds, shouldSave) = tuple;
             if (newBatch != null && shouldSave) {
-              await batchStorage.save(userId: userId, angle: angle, data: newBatch);
+              await batchStorage.save(
+                userId: userId,
+                angle: angle,
+                data: newBatch,
+              );
             }
             return Result.value((newBatch, glicko, rounds));
           });

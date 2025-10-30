@@ -17,21 +17,30 @@ class ProgressionWidget extends StatelessWidget {
       children: [
         if (progress != 0) ...[
           Icon(
-            progress > 0 ? LichessIcons.arrow_full_upperright : LichessIcons.arrow_full_lowerright,
+            progress > 0
+                ? LichessIcons.arrow_full_upperright
+                : LichessIcons.arrow_full_lowerright,
             size: fontSize,
-            color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
+            color: progress > 0
+                ? context.lichessColors.good
+                : context.lichessColors.error,
           ),
           Text(
             progress.abs().toString(),
             style: TextStyle(
-              color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
+              color: progress > 0
+                  ? context.lichessColors.good
+                  : context.lichessColors.error,
               fontSize: fontSize,
             ),
           ),
         ] else
           Text(
             '0',
-            style: TextStyle(color: textShade(context, _customOpacity), fontSize: fontSize),
+            style: TextStyle(
+              color: textShade(context, _customOpacity),
+              fontSize: fontSize,
+            ),
           ),
       ],
     );

@@ -9,7 +9,8 @@ part 'home_preferences.freezed.dart';
 part 'home_preferences.g.dart';
 
 @Riverpod(keepAlive: true)
-class HomePreferences extends _$HomePreferences with SessionPreferencesStorage<HomePrefs> {
+class HomePreferences extends _$HomePreferences
+    with SessionPreferencesStorage<HomePrefs> {
   @override
   @protected
   PrefCategory get prefCategory => PrefCategory.home;
@@ -41,7 +42,9 @@ class HomePreferences extends _$HomePreferences with SessionPreferencesStorage<H
 
 @Freezed(fromJson: true, toJson: true)
 sealed class HomePrefs with _$HomePrefs implements Serializable {
-  const factory HomePrefs({required IList<HomeEditableWidget> disabledWidgets}) = _HomePrefs;
+  const factory HomePrefs({
+    required IList<HomeEditableWidget> disabledWidgets,
+  }) = _HomePrefs;
 
   static const defaults = HomePrefs(disabledWidgets: _defaultList);
 
@@ -54,4 +57,6 @@ sealed class HomePrefs with _$HomePrefs implements Serializable {
   }
 }
 
-const _defaultList = IListConst<HomeEditableWidget>([HomeEditableWidget.quickPairing]);
+const _defaultList = IListConst<HomeEditableWidget>([
+  HomeEditableWidget.quickPairing,
+]);

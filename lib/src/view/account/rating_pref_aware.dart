@@ -30,7 +30,8 @@ class RatingPrefAware extends ConsumerWidget {
 
     return switch (showRatingAsync) {
       AsyncData(value: ShowRatings.yes) => child,
-      AsyncData(value: ShowRatings.exceptInGame) => isActiveGameOfCurrentUser ? orElse : child,
+      AsyncData(value: ShowRatings.exceptInGame) =>
+        isActiveGameOfCurrentUser ? orElse : child,
       _ => orElse,
     };
   }

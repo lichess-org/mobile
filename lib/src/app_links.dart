@@ -28,10 +28,18 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
       final roundId = BroadcastRoundId(appLinkUri.pathSegments[3]);
       if (appLinkUri.pathSegments.length > 4) {
         final gameId = BroadcastGameId(appLinkUri.pathSegments[4]);
-        return BroadcastGameScreen.buildRoute(context, roundId: roundId, gameId: gameId);
+        return BroadcastGameScreen.buildRoute(
+          context,
+          roundId: roundId,
+          gameId: gameId,
+        );
       } else {
         final tab = BroadcastRoundTab.tabOrNullFromString(appLinkUri.fragment);
-        return BroadcastRoundScreenLoading.buildRoute(context, roundId, initialTab: tab);
+        return BroadcastRoundScreenLoading.buildRoute(
+          context,
+          roundId,
+          initialTab: tab,
+        );
       }
     case 'tournament':
       final tournamentId = TournamentId(appLinkUri.pathSegments[1]);
@@ -63,11 +71,16 @@ Route<dynamic>? resolveAppLinkUri(BuildContext context, Uri appLinkUri) {
   return null;
 }
 
-const kLichessLinkifiers = [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()];
+const kLichessLinkifiers = [
+  UrlLinkifier(),
+  EmailLinkifier(),
+  UserTagLinkifier(),
+];
 
 /// Handles link clicks in Linkify widgets throughout the app.
 void onLinkifyOpen(BuildContext context, LinkableElement link) {
-  if (link is UrlElement && link.url.startsWith(RegExp('https?:\\/\\/$kLichessHost'))) {
+  if (link is UrlElement &&
+      link.url.startsWith(RegExp('https?:\\/\\/$kLichessHost'))) {
     // Handle Lichess links specifically
     final appLinkUri = Uri.parse(link.url);
     final route = resolveAppLinkUri(context, appLinkUri);

@@ -59,7 +59,9 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
       onPressed: () => showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.sizeOf(context).height * 0.4,
+        ),
         builder: (_) => StatefulBuilder(
           builder: (context, setLocalState) {
             return BottomSheetScrollableContainer(
@@ -87,7 +89,9 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
     return Scaffold(
       body: _Body(filter),
       appBar: AppBar(
-        backgroundColor: ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 1),
+        backgroundColor: ColorScheme.of(
+          context,
+        ).surfaceContainerHigh.withValues(alpha: 1),
         title: title,
         actions: [searchButton, filterButton],
       ),
@@ -118,7 +122,11 @@ class _Body extends ConsumerWidget {
               }.toList(growable: false),
             ),
             if (filter == _BroadcastFilter.all)
-              ('past', context.l10n.broadcastPastBroadcasts, value.past.toList(growable: false)),
+              (
+                'past',
+                context.l10n.broadcastPastBroadcasts,
+                value.past.toList(growable: false),
+              ),
           ];
           final hasMorePages = value.nextPage != null && value.nextPage! <= 20;
           final notifier = ref.read(broadcastsPaginatorProvider.notifier);
@@ -144,12 +152,18 @@ class _Body extends ConsumerWidget {
                       SliverList.separated(
                         separatorBuilder: (context, index) => PlatformDivider(
                           height: 1,
-                          indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
+                          indent:
+                              BroadcastListTile.thumbnailSize(context) +
+                              16.0 +
+                              10.0,
                         ),
                         itemCount:
-                            section.$3.length + (section.$1 == 'past' && hasMorePages ? 1 : 0),
+                            section.$3.length +
+                            (section.$1 == 'past' && hasMorePages ? 1 : 0),
                         itemBuilder: (context, index) =>
-                            (section.$1 == 'past' && hasMorePages && index == section.$3.length)
+                            (section.$1 == 'past' &&
+                                hasMorePages &&
+                                index == section.$3.length)
                             ? BroadcastNextPageTile(notifier.next)
                             : BroadcastListTile(broadcast: section.$3[index]),
                       ),
@@ -160,7 +174,8 @@ class _Body extends ConsumerWidget {
           );
         },
         error: (_, _) => const Center(child: Text('Cannot load broadcasts')),
-        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
       ),
     );
   }

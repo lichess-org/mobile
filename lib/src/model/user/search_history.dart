@@ -17,7 +17,8 @@ class SearchHistory extends _$SearchHistory {
   String _storageKey(AuthSessionState? session) =>
       'search.history.${session?.user.id ?? '**anon**'}';
 
-  SharedPreferencesWithCache get _prefs => LichessBinding.instance.sharedPreferences;
+  SharedPreferencesWithCache get _prefs =>
+      LichessBinding.instance.sharedPreferences;
 
   @override
   SearchHistoryState build() {
@@ -25,7 +26,9 @@ class SearchHistory extends _$SearchHistory {
     final stored = _prefs.getString(_storageKey(session));
 
     return stored != null
-        ? SearchHistoryState.fromJson(jsonDecode(stored) as Map<String, dynamic>)
+        ? SearchHistoryState.fromJson(
+            jsonDecode(stored) as Map<String, dynamic>,
+          )
         : SearchHistoryState(history: IList());
   }
 
@@ -54,7 +57,8 @@ class SearchHistory extends _$SearchHistory {
 
 @Freezed(fromJson: true, toJson: true)
 sealed class SearchHistoryState with _$SearchHistoryState {
-  const factory SearchHistoryState({required IList<String> history}) = _SearchHistoryState;
+  const factory SearchHistoryState({required IList<String> history}) =
+      _SearchHistoryState;
 
   factory SearchHistoryState.fromJson(Map<String, dynamic> json) =>
       _$SearchHistoryStateFromJson(json);

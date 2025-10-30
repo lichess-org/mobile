@@ -83,20 +83,24 @@ class _BodyState extends State<_Body> {
               children: [
                 FilledButton(
                   onPressed: parsedInput != null
-                      ? () => Navigator.of(
-                          context,
-                          rootNavigator: true,
-                        ).push(AnalysisScreen.buildRoute(context, parsedInput!.options))
+                      ? () => Navigator.of(context, rootNavigator: true).push(
+                          AnalysisScreen.buildRoute(
+                            context,
+                            parsedInput!.options,
+                          ),
+                        )
                       : null,
                   child: Text(context.l10n.analysis),
                 ),
                 const SizedBox(height: 16.0),
                 FilledButton(
                   onPressed: parsedInput != null
-                      ? () => Navigator.of(
-                          context,
-                          rootNavigator: true,
-                        ).push(BoardEditorScreen.buildRoute(context, initialFen: parsedInput!.fen))
+                      ? () => Navigator.of(context, rootNavigator: true).push(
+                          BoardEditorScreen.buildRoute(
+                            context,
+                            initialFen: parsedInput!.fen,
+                          ),
+                        )
                       : null,
                   child: Text(context.l10n.boardEditor),
                 ),

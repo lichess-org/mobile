@@ -34,7 +34,9 @@ const _nbPerPage = 20;
 /// stored locally are fetched instead.
 @riverpod
 Future<IList<LightExportedGameWithPov>> myRecentGames(Ref ref) async {
-  final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+  final online = await ref.watch(
+    connectivityChangesProvider.selectAsync((c) => c.isOnline),
+  );
   final session = ref.watch(authSessionProvider);
   if (session != null && online) {
     return ref
@@ -56,7 +58,10 @@ Future<IList<LightExportedGameWithPov>> myRecentGames(Ref ref) async {
 
 /// A provider that fetches the recent games from the server for a given user.
 @riverpod
-Future<IList<LightExportedGameWithPov>> userRecentGames(Ref ref, {required UserId userId}) {
+Future<IList<LightExportedGameWithPov>> userRecentGames(
+  Ref ref, {
+  required UserId userId,
+}) {
   return ref
       .read(gameRepositoryProvider)
       .getUserGames(userId, withBookmarked: true, max: kNumberOfRecentGames);
@@ -70,9 +75,13 @@ Future<IList<LightExportedGameWithPov>> userRecentGames(Ref ref, {required UserI
 @riverpod
 Future<int> userNumberOfGames(Ref ref, LightUser? user) async {
   final session = ref.watch(authSessionProvider);
-  final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+  final online = await ref.watch(
+    connectivityChangesProvider.selectAsync((c) => c.isOnline),
+  );
   return user != null
-      ? ref.watch(userProvider(id: user.id).selectAsync((u) => u.count?.all ?? 0))
+      ? ref.watch(
+          userProvider(id: user.id).selectAsync((u) => u.count?.all ?? 0),
+        )
       : session != null && online
       ? ref.watch(accountProvider.selectAsync((u) => u?.count?.all ?? 0))
       : (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
@@ -104,12 +113,15 @@ class UserGameHistory extends _$UserGameHistory {
     GameFilterState filter = const GameFilterState(),
   }) async {
     _bookmarkChangesSubscription?.cancel();
-    _bookmarkChangesSubscription = ref.read(accountServiceProvider).bookmarkChanges.listen((data) {
-      final (id, bookmarked) = data;
-      if (state.hasValue) {
-        setBookmark(id, bookmarked: bookmarked);
-      }
-    });
+    _bookmarkChangesSubscription = ref
+        .read(accountServiceProvider)
+        .bookmarkChanges
+        .listen((data) {
+          final (id, bookmarked) = data;
+          if (state.hasValue) {
+            setBookmark(id, bookmarked: bookmarked);
+          }
+        });
 
     ref.cacheFor(const Duration(minutes: 5));
     ref.onDispose(() {
@@ -119,7 +131,9 @@ class UserGameHistory extends _$UserGameHistory {
 
     final session = ref.watch(authSessionProvider);
     final prefs = ref.watch(gameHistoryPreferencesProvider);
-    final online = await ref.watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+    final online = await ref.watch(
+      connectivityChangesProvider.selectAsync((c) => c.isOnline),
+    );
     final storage = await ref.watch(gameStorageProvider.future);
 
     final id = userId ?? session?.user.id;
@@ -136,7 +150,10 @@ class UserGameHistory extends _$UserGameHistory {
                 (value) => value
                     // we can assume that `youAre` is not null either for logged
                     // in users or for anonymous users
-                    .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
+                    .map(
+                      (e) =>
+                          (game: e.game.data, pov: e.game.youAre ?? Side.white),
+                    )
                     .toIList(),
               );
 
@@ -185,12 +202,19 @@ class UserGameHistory extends _$UserGameHistory {
                   (value) => value
                       // we can assume that `youAre` is not null either for logged
                       // in users or for anonymous users
-                      .map((e) => (game: e.game.data, pov: e.game.youAre ?? Side.white))
+                      .map(
+                        (e) => (
+                          game: e.game.data,
+                          pov: e.game.youAre ?? Side.white,
+                        ),
+                      )
                       .toIList(),
                 ));
 
       if (value.isEmpty) {
-        state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
+        state = AsyncData(
+          currentVal.copyWith(hasMore: false, isLoading: false),
+        );
         return;
       }
 
@@ -220,7 +244,10 @@ class UserGameHistory extends _$UserGameHistory {
 
     state = AsyncData(
       state.requireValue.copyWith(
-        gameList: gameList.replace(index, (game: game.copyWith(bookmarked: bookmarked), pov: pov)),
+        gameList: gameList.replace(index, (
+          game: game.copyWith(bookmarked: bookmarked),
+          pov: pov,
+        )),
       ),
     );
   }

@@ -91,7 +91,10 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
       lastMove: widget.lastMove as NormalMove?,
       enableCoordinates: false,
       borderRadius: (widget.showEvaluationBar)
-          ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
+          ? Styles.boardBorderRadius.copyWith(
+              topRight: Radius.zero,
+              bottomRight: Radius.zero,
+            )
           : Styles.boardBorderRadius,
       boxShadow: (widget.showEvaluationBar) ? [] : boardShadows,
       pieceAssets: boardPrefs.pieceSet.assets,
@@ -163,7 +166,10 @@ class _BoardThumbnailEvalGauge extends StatelessWidget {
   final double height;
   final double whiteWinnigChances;
 
-  const _BoardThumbnailEvalGauge({required this.height, required this.whiteWinnigChances});
+  const _BoardThumbnailEvalGauge({
+    required this.height,
+    required this.whiteWinnigChances,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +189,10 @@ class _BoardThumbnailEvalGauge extends StatelessWidget {
                 height: height - whiteBarHeight,
                 color: EngineGauge.backgroundColor(context),
               ),
-              Container(height: whiteBarHeight, color: EngineGauge.valueColor(context)),
+              Container(
+                height: whiteBarHeight,
+                color: EngineGauge.valueColor(context),
+              ),
             ],
           ),
         ),

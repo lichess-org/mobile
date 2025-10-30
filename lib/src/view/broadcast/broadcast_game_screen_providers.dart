@@ -16,12 +16,18 @@ Future<BroadcastGame> broadcastRoundGame(
   BroadcastGameId gameId,
 ) {
   return ref.watch(
-    broadcastRoundControllerProvider(roundId).selectAsync((round) => round.games[gameId]!),
+    broadcastRoundControllerProvider(
+      roundId,
+    ).selectAsync((round) => round.games[gameId]!),
   );
 }
 
 @riverpod
-Future<ClientEval?> broadcastGameEval(Ref ref, BroadcastRoundId roundId, BroadcastGameId gameId) {
+Future<ClientEval?> broadcastGameEval(
+  Ref ref,
+  BroadcastRoundId roundId,
+  BroadcastGameId gameId,
+) {
   return ref.watch(
     broadcastAnalysisControllerProvider(
       roundId,
@@ -31,7 +37,11 @@ Future<ClientEval?> broadcastGameEval(Ref ref, BroadcastRoundId roundId, Broadca
 }
 
 @riverpod
-Future<bool> isBroadcastEngineAvailable(Ref ref, BroadcastRoundId roundId, BroadcastGameId gameId) {
+Future<bool> isBroadcastEngineAvailable(
+  Ref ref,
+  BroadcastRoundId roundId,
+  BroadcastGameId gameId,
+) {
   final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
   return ref.watch(
     broadcastAnalysisControllerProvider(
@@ -44,6 +54,8 @@ Future<bool> isBroadcastEngineAvailable(Ref ref, BroadcastRoundId roundId, Broad
 @riverpod
 Future<String> broadcastGameScreenTitle(Ref ref, BroadcastRoundId roundId) {
   return ref.watch(
-    broadcastRoundControllerProvider(roundId).selectAsync((round) => round.round.name),
+    broadcastRoundControllerProvider(
+      roundId,
+    ).selectAsync((round) => round.round.name),
   );
 }

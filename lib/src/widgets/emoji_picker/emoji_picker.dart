@@ -13,7 +13,8 @@ typedef EmojiSearchBarBuilder =
       ValueNotifier<EmojiSkinTone> skinTone,
     );
 
-typedef EmojiSectionHeaderBuilder = Widget Function(BuildContext context, Category category);
+typedef EmojiSectionHeaderBuilder =
+    Widget Function(BuildContext context, Category category);
 
 typedef EmojiItemBuilder =
     Widget Function(
@@ -69,7 +70,8 @@ class EmojiPicker extends StatefulWidget {
   State<EmojiPicker> createState() => _EmojiPickerState();
 }
 
-class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStateMixin {
+class _EmojiPickerState extends State<EmojiPicker>
+    with SingleTickerProviderStateMixin {
   final _debouncer = Debouncer(const Duration(milliseconds: 250));
 
   // global keys for each section
@@ -90,7 +92,9 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
   final ValueNotifier<String> keyword = ValueNotifier('');
 
   // current selected skin tone
-  final ValueNotifier<EmojiSkinTone> skinTone = ValueNotifier(EmojiSkinTone.none);
+  final ValueNotifier<EmojiSkinTone> skinTone = ValueNotifier(
+    EmojiSkinTone.none,
+  );
 
   late TabController tabController;
   final scrollController = ScrollController();
@@ -103,7 +107,10 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
     super.initState();
 
     emojiData = widget.emojiData;
-    tabController = TabController(length: widget.emojiData.categories.length, vsync: this);
+    tabController = TabController(
+      length: widget.emojiData.categories.length,
+      vsync: this,
+    );
     mostVisibleIndex.addListener(scrollToMostVisibleSectionIndex);
     skinTone.value = widget.configuration.defaultSkinTone;
 
@@ -167,30 +174,32 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
   }
 
   Widget _buildSections(BuildContext context) {
-    CustomScrollView builder(EmojiData emojiData, EmojiSkinTone skinTone) => CustomScrollView(
-      controller: scrollController,
-      slivers: emojiData.categories
-          .map(
-            (category) => SliverPadding(
-              padding: widget.padding,
-              sliver: SliverVisibilityDetector(
-                key: ValueKey(category.id),
-                onVisibilityChanged: (info) => updateMostVisibleSection(category.id, info),
-                sliver: EmojiSection(
-                  sectionKey: sectionKeys[category.id]!,
-                  skinTone: skinTone,
-                  configuration: widget.configuration,
-                  emojiData: emojiData,
-                  category: category,
-                  headerBuilder: widget.headerBuilder,
-                  itemBuilder: widget.itemBuilder,
-                  onEmojiSelected: widget.onEmojiSelected,
+    CustomScrollView builder(EmojiData emojiData, EmojiSkinTone skinTone) =>
+        CustomScrollView(
+          controller: scrollController,
+          slivers: emojiData.categories
+              .map(
+                (category) => SliverPadding(
+                  padding: widget.padding,
+                  sliver: SliverVisibilityDetector(
+                    key: ValueKey(category.id),
+                    onVisibilityChanged: (info) =>
+                        updateMostVisibleSection(category.id, info),
+                    sliver: EmojiSection(
+                      sectionKey: sectionKeys[category.id]!,
+                      skinTone: skinTone,
+                      configuration: widget.configuration,
+                      emojiData: emojiData,
+                      category: category,
+                      headerBuilder: widget.headerBuilder,
+                      itemBuilder: widget.itemBuilder,
+                      onEmojiSelected: widget.onEmojiSelected,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
-          .toList(),
-    );
+              )
+              .toList(),
+        );
 
     if (widget.configuration.showSearchBar) {
       return ValueListenableBuilder<EmojiSkinTone>(
@@ -306,7 +315,10 @@ class EmojiSection extends StatelessWidget {
           PinnedHeaderSliver(
             child:
                 headerBuilder?.call(context, category) ??
-                EmojiSectionHeader(category: category, configuration: configuration),
+                EmojiSectionHeader(
+                  category: category,
+                  configuration: configuration,
+                ),
           ),
         SliverGrid.builder(
           key: sectionKey,
@@ -317,7 +329,12 @@ class EmojiSection extends StatelessWidget {
           itemBuilder: (context, index) {
             final emojiId = category.emojiIds[index];
             final emojiSrc = emojiData.getEmojiById(emojiId);
-            return itemBuilder?.call(context, emojiId, emojiSrc, onEmojiSelected) ??
+            return itemBuilder?.call(
+                  context,
+                  emojiId,
+                  emojiSrc,
+                  onEmojiSelected,
+                ) ??
                 EmojiItem(
                   size: configuration.emojiSize,
                   emoji: emojiSrc,
@@ -331,7 +348,11 @@ class EmojiSection extends StatelessWidget {
 }
 
 class EmojiSectionHeader extends StatelessWidget {
-  const EmojiSectionHeader({super.key, required this.category, required this.configuration});
+  const EmojiSectionHeader({
+    super.key,
+    required this.category,
+    required this.configuration,
+  });
 
   final Category category;
   final EmojiPickerConfiguration configuration;
@@ -342,14 +363,23 @@ class EmojiSectionHeader extends StatelessWidget {
       height: 28,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       width: double.infinity,
-      color: Theme.of(context).colorScheme.surfaceContainer.withValues(alpha: 1.0),
-      child: Text(category.name, style: Theme.of(context).textTheme.titleMedium),
+      color: Theme.of(
+        context,
+      ).colorScheme.surfaceContainer.withValues(alpha: 1.0),
+      child: Text(
+        category.name,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
     );
   }
 }
 
 class EmojiSearchBar extends StatefulWidget {
-  const EmojiSearchBar({super.key, required this.configuration, required this.onKeywordChanged});
+  const EmojiSearchBar({
+    super.key,
+    required this.configuration,
+    required this.onKeywordChanged,
+  });
 
   final EmojiPickerConfiguration configuration;
   final void Function(String keyword) onKeywordChanged;
@@ -373,7 +403,9 @@ class _EmojiSearchBarState extends State<EmojiSearchBar> {
     return Container(
       height: 48,
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-      color: Theme.of(context).colorScheme.surfaceContainer.withValues(alpha: 1.0),
+      color: Theme.of(
+        context,
+      ).colorScheme.surfaceContainer.withValues(alpha: 1.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

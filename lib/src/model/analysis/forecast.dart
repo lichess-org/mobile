@@ -20,7 +20,10 @@ const kMaxForecastPlies = 30;
 sealed class Forecast with _$Forecast {
   const Forecast._();
 
-  const factory Forecast({required bool onMyTurn, required IList<UciPath> lines}) = _Forecast;
+  const factory Forecast({
+    required bool onMyTurn,
+    required IList<UciPath> lines,
+  }) = _Forecast;
 
   /// Two forecasts are considered to collide if the current player cannot theoretically play both of them.
   /// For example, for black, 1. e4 e5 and 1. e4 c5 are colliding forecasts, as black cannot play both e5 and c5
@@ -52,7 +55,9 @@ sealed class Forecast with _$Forecast {
     final requiredPlyMod = onMyTurn ? 1 : 0;
 
     // must end with player move
-    return (path.size % 2 != requiredPlyMod ? path.penultimate : path).truncate(kMaxForecastPlies);
+    return (path.size % 2 != requiredPlyMod ? path.penultimate : path).truncate(
+      kMaxForecastPlies,
+    );
   }
 
   /// Returns whether the given path is part of a new candidate premove line that is not a prefix of the other saved conditional premove lines.
@@ -73,7 +78,9 @@ sealed class Forecast with _$Forecast {
     }
     return copyWith(
       lines: lines
-          .removeWhere((line) => candidate.contains(line) || _collides(line, candidate))
+          .removeWhere(
+            (line) => candidate.contains(line) || _collides(line, candidate),
+          )
           .insert(0, candidate),
     );
   }

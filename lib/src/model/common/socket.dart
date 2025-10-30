@@ -37,6 +37,11 @@ sealed class SocketEvent with _$SocketEvent {
         data: {'nbPlayers': json['d'] as int, 'nbGames': json['r'] as int},
       );
     }
-    return SocketEvent(topic: topic, json: json, data: json['d'], version: json['v'] as int?);
+    return SocketEvent(
+      topic: topic,
+      json: json,
+      data: json['d'],
+      version: json['v'] as int?,
+    );
   }
 }

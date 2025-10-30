@@ -17,7 +17,12 @@ class CorrespondenceClock extends StatefulWidget {
   /// Callback when the clock reaches zero.
   final VoidCallback? onFlag;
 
-  const CorrespondenceClock({required this.duration, required this.active, this.onFlag, super.key});
+  const CorrespondenceClock({
+    required this.duration,
+    required this.active,
+    this.onFlag,
+    super.key,
+  });
 
   @override
   State<CorrespondenceClock> createState() => _CorrespondenceClockState();
@@ -89,7 +94,11 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final brightness = Theme.of(context).brightness;
     final colorScheme = ColorScheme.of(context);
-    final clockStyle = ClockStyle.defaultStyle(brightness, colorScheme, context.lichessColors);
+    final clockStyle = ClockStyle.defaultStyle(
+      brightness,
+      colorScheme,
+      context.lichessColors,
+    );
 
     final daysStr = days > 1
         ? context.l10n.nbDays(days)
@@ -97,13 +106,17 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
         ? context.l10n.oneDay
         : '';
 
-    final hoursStr = days > 0 && hours > 0 ? ' ${context.l10n.nbHours(hours)}' : '';
+    final hoursStr = days > 0 && hours > 0
+        ? ' ${context.l10n.nbHours(hours)}'
+        : '';
 
     return RepaintBoundary(
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-          color: widget.active ? clockStyle.activeBackgroundColor : clockStyle.backgroundColor,
+          color: widget.active
+              ? clockStyle.activeBackgroundColor
+              : clockStyle.backgroundColor,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
@@ -115,10 +128,14 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
               text: TextSpan(
                 text: '$daysStr$hoursStr',
                 style: TextStyle(
-                  color: widget.active ? clockStyle.activeTextColor : clockStyle.textColor,
+                  color: widget.active
+                      ? clockStyle.activeTextColor
+                      : clockStyle.textColor,
                   fontSize: 18,
                   height: isShortVerticalScreen(context) ? 1.0 : null,
-                  fontFeatures: days == 0 ? const [FontFeature.tabularFigures()] : null,
+                  fontFeatures: days == 0
+                      ? const [FontFeature.tabularFigures()]
+                      : null,
                 ),
                 children: [
                   if (days == 0) ...[
@@ -126,13 +143,18 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
                     TextSpan(
                       text: ':',
                       style: TextStyle(
-                        color: widget.active && timeLeft.inSeconds.remainder(2) == 0
+                        color:
+                            widget.active &&
+                                timeLeft.inSeconds.remainder(2) == 0
                             ? clockStyle.activeTextColor.withValues(alpha: 0.5)
                             : null,
                       ),
                     ),
                     TextSpan(text: mins.toString().padLeft(2, '0')),
-                    if (hours == 0) ...[const TextSpan(text: ':'), TextSpan(text: secs)],
+                    if (hours == 0) ...[
+                      const TextSpan(text: ':'),
+                      TextSpan(text: secs),
+                    ],
                   ],
                 ],
               ),

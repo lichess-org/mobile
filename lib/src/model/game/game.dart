@@ -130,9 +130,16 @@ abstract mixin class BaseGame {
       }
 
       final comment = eval != null || clock != null
-          ? PgnComment(text: eval?.judgment?.comment, clock: clock, emt: emt, eval: pgnEval)
+          ? PgnComment(
+              text: eval?.judgment?.comment,
+              clock: clock,
+              emt: emt,
+              eval: pgnEval,
+            )
           : null;
-      final nag = eval?.judgment != null ? _judgmentNameToNag(eval!.judgment!.name) : null;
+      final nag = eval?.judgment != null
+          ? _judgmentNameToNag(eval!.judgment!.name)
+          : null;
       final nextNode = Branch(
         sanMove: step.sanMove!,
         position: step.position,
@@ -178,11 +185,15 @@ abstract mixin class BaseGame {
         'White':
             white.user?.name ??
             white.name ??
-            (white.aiLevel != null ? 'Stockfish level ${white.aiLevel}' : 'Anonymous'),
+            (white.aiLevel != null
+                ? 'Stockfish level ${white.aiLevel}'
+                : 'Anonymous'),
         'Black':
             black.user?.name ??
             black.name ??
-            (black.aiLevel != null ? 'Stockfish level ${black.aiLevel}' : 'Anonymous'),
+            (black.aiLevel != null
+                ? 'Stockfish level ${black.aiLevel}'
+                : 'Anonymous'),
         'Result': status.value >= GameStatus.mate.value
             ? winner == null
                   ? '½-½'
@@ -193,12 +204,15 @@ abstract mixin class BaseGame {
         if (white.rating != null) 'WhiteElo': white.rating!.toString(),
         if (black.rating != null) 'BlackElo': black.rating!.toString(),
         if (white.ratingDiff != null)
-          'WhiteRatingDiff': '${white.ratingDiff! > 0 ? '+' : ''}${white.ratingDiff!}',
+          'WhiteRatingDiff':
+              '${white.ratingDiff! > 0 ? '+' : ''}${white.ratingDiff!}',
         if (black.ratingDiff != null)
-          'BlackRatingDiff': '${black.ratingDiff! > 0 ? '+' : ''}${black.ratingDiff!}',
+          'BlackRatingDiff':
+              '${black.ratingDiff! > 0 ? '+' : ''}${black.ratingDiff!}',
         'Variant': meta.variant.label,
         if (meta.clock != null)
-          'TimeControl': '${meta.clock!.initial.inSeconds}+${meta.clock!.increment.inSeconds}',
+          'TimeControl':
+              '${meta.clock!.initial.inSeconds}+${meta.clock!.increment.inSeconds}',
         if (initialFen != null) 'FEN': initialFen!,
         if (meta.opening != null) 'ECO': meta.opening!.eco,
         if (meta.opening != null) 'Opening': meta.opening!.name,
@@ -210,9 +224,13 @@ abstract mixin class BaseGame {
 
 /// A mixin that provides methods to access game data at a specific step.
 mixin IndexableSteps on BaseGame {
-  String get sanMoves => steps.where((e) => e.sanMove != null).map((e) => e.sanMove!.san).join(' ');
+  String get sanMoves => steps
+      .where((e) => e.sanMove != null)
+      .map((e) => e.sanMove!.san)
+      .join(' ');
 
-  MaterialDiffSide? materialDiffAt(int cursor, Side side) => steps[cursor].diff?.bySide(side);
+  MaterialDiffSide? materialDiffAt(int cursor, Side side) =>
+      steps[cursor].diff?.bySide(side);
 
   GameStep stepAt(int cursor) => steps[cursor];
 
@@ -224,12 +242,16 @@ mixin IndexableSteps on BaseGame {
 
   Position positionAt(int cursor) => steps[cursor].position;
 
-  Duration? archivedWhiteClockAt(int cursor) => steps[cursor].archivedWhiteClock;
+  Duration? archivedWhiteClockAt(int cursor) =>
+      steps[cursor].archivedWhiteClock;
 
-  Duration? archivedBlackClockAt(int cursor) => steps[cursor].archivedBlackClock;
+  Duration? archivedBlackClockAt(int cursor) =>
+      steps[cursor].archivedBlackClock;
 
   Duration? archivedClockOf(Side side, int cursor) {
-    return side == Side.white ? steps[cursor].archivedWhiteClock : steps[cursor].archivedBlackClock;
+    return side == Side.white
+        ? steps[cursor].archivedWhiteClock
+        : steps[cursor].archivedBlackClock;
   }
 
   Move? get lastMove {
@@ -244,7 +266,8 @@ mixin IndexableSteps on BaseGame {
 
   int get lastPly => steps.last.position.ply;
 
-  MaterialDiffSide? lastMaterialDiffAt(Side side) => steps.last.diff?.bySide(side);
+  MaterialDiffSide? lastMaterialDiffAt(Side side) =>
+      steps.last.diff?.bySide(side);
 }
 
 enum GameSource {
@@ -300,7 +323,8 @@ sealed class TournamentMeta with _$TournamentMeta {
     ({int white, int black})? ranks,
   }) = _TournamentMeta;
 
-  factory TournamentMeta.fromJson(Map<String, dynamic> json) => _$TournamentMetaFromJson(json);
+  factory TournamentMeta.fromJson(Map<String, dynamic> json) =>
+      _$TournamentMetaFromJson(json);
 
   bool get isOngoing => clock.timeLeft > Duration.zero;
   bool get isFinished => clock.timeLeft <= Duration.zero;
@@ -342,14 +366,17 @@ sealed class GameMeta with _$GameMeta {
     TournamentMeta? tournament,
   }) = _GameMeta;
 
-  factory GameMeta.fromJson(Map<String, dynamic> json) => _$GameMetaFromJson(json);
+  factory GameMeta.fromJson(Map<String, dynamic> json) =>
+      _$GameMetaFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class CorrespondenceClockData with _$CorrespondenceClockData {
   const CorrespondenceClockData._();
-  const factory CorrespondenceClockData({required Duration white, required Duration black}) =
-      _CorrespondenceClockData;
+  const factory CorrespondenceClockData({
+    required Duration white,
+    required Duration black,
+  }) = _CorrespondenceClockData;
 
   factory CorrespondenceClockData.fromJson(Map<String, dynamic> json) =>
       _$CorrespondenceClockDataFromJson(json);

@@ -40,7 +40,10 @@ class ImageColorWorker {
     final connection = Completer<(ReceivePort, SendPort)>.sync();
     initPort.handler = (dynamic initialMessage) {
       final commandPort = initialMessage as SendPort;
-      connection.complete((ReceivePort.fromRawReceivePort(initPort), commandPort));
+      connection.complete((
+        ReceivePort.fromRawReceivePort(initPort),
+        commandPort,
+      ));
     };
 
     try {
@@ -50,7 +53,8 @@ class ImageColorWorker {
       rethrow;
     }
 
-    final (ReceivePort receivePort, SendPort sendPort) = await connection.future;
+    final (ReceivePort receivePort, SendPort sendPort) =
+        await connection.future;
 
     return ImageColorWorker._(receivePort, sendPort);
   }
@@ -72,7 +76,10 @@ class ImageColorWorker {
     if (_closed && _activeRequests.isEmpty) _responses.close();
   }
 
-  static void _handleCommandsToIsolate(ReceivePort receivePort, SendPort sendPort) {
+  static void _handleCommandsToIsolate(
+    ReceivePort receivePort,
+    SendPort sendPort,
+  ) {
     receivePort.listen((message) async {
       if (message == 'shutdown') {
         receivePort.close();
@@ -83,7 +90,8 @@ class ImageColorWorker {
         // final stopwatch0 = Stopwatch()..start();
         final quantizerResult = await QuantizerCelebi().quantize(image, 32);
         final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
-          (int key, int value) => MapEntry<int, int>(getArgbFromAbgr(key), value),
+          (int key, int value) =>
+              MapEntry<int, int>(getArgbFromAbgr(key), value),
         );
         final significantColors = Map<int, int>.from(colorToCount)
           ..removeWhere((key, value) => value < 10);
@@ -108,11 +116,14 @@ class ImageColorWorker {
         if ((meanTone - sourceColor.tone).abs() > 20) {
           sourceColor.tone = meanTone;
         }
-        final scheme = (significantColors.length <= 10 ? SchemeMonochrome.new : SchemeFidelity.new)(
-          sourceColorHct: sourceColor,
-          isDark: sourceColor.tone < 50,
-          contrastLevel: 0.0,
-        );
+        final scheme =
+            (significantColors.length <= 10
+            ? SchemeMonochrome.new
+            : SchemeFidelity.new)(
+              sourceColorHct: sourceColor,
+              isDark: sourceColor.tone < 50,
+              contrastLevel: 0.0,
+            );
         // print('Quantize and scoring took: ${stopwatch0.elapsedMilliseconds}ms');
         final result = (
           primaryContainer: scheme.primaryContainer,
@@ -142,7 +153,9 @@ class ImageColorWorker {
 
 // code below taken from: https://github.com/flutter/flutter/blob/74669e4bf1352a5134ad68398a6bf7fac0a6473b/packages/flutter/lib/src/material/color_scheme.dart
 
-Future<QuantizerResult> extractColorsFromImageProvider(ImageProvider imageProvider) async {
+Future<QuantizerResult> extractColorsFromImageProvider(
+  ImageProvider imageProvider,
+) async {
   final ui.Image scaledImage = await _imageProviderToScaled(imageProvider);
   final ByteData? imageBytes = await scaledImage.toByteData();
 
@@ -189,8 +202,12 @@ Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
 
       final bool rescale = width > maxDimension || height > maxDimension;
       if (rescale) {
-        paintWidth = (width > height) ? maxDimension : (maxDimension / height) * width;
-        paintHeight = (height > width) ? maxDimension : (maxDimension / width) * height;
+        paintWidth = (width > height)
+            ? maxDimension
+            : (maxDimension / height) * width;
+        paintHeight = (height > width)
+            ? maxDimension
+            : (maxDimension / width) * height;
       }
       final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
       final Canvas canvas = Canvas(pictureRecorder);
@@ -202,7 +219,10 @@ Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
       );
 
       final ui.Picture picture = pictureRecorder.endRecording();
-      scaledImage = await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
+      scaledImage = await picture.toImage(
+        paintWidth.toInt(),
+        paintHeight.toInt(),
+      );
       imageCompleter.complete(info.image);
     },
     onError: (Object exception, StackTrace? stackTrace) {
@@ -213,7 +233,9 @@ Future<ui.Image> _imageProviderToScaled(ImageProvider imageProvider) async {
 
   loadFailureTimeout = Timer(const Duration(seconds: 5), () {
     stream.removeListener(listener);
-    imageCompleter.completeError(TimeoutException('Timeout occurred trying to load image'));
+    imageCompleter.completeError(
+      TimeoutException('Timeout occurred trying to load image'),
+    );
   });
 
   stream.addListener(listener);

@@ -26,7 +26,9 @@ enum TournamentFreq implements Comparable<TournamentFreq> {
   yearly,
   unique;
 
-  static final IMap<String, TournamentFreq> nameMap = IMap(TournamentFreq.values.asNameMap());
+  static final IMap<String, TournamentFreq> nameMap = IMap(
+    TournamentFreq.values.asNameMap(),
+  );
 
   @override
   int compareTo(TournamentFreq other) {
@@ -40,7 +42,12 @@ typedef TournamentLists = ({
   IList<LightTournament> finished,
 });
 
-typedef TournamentMe = ({int rank, GameFullId? gameId, bool? withdraw, Duration? pauseDelay});
+typedef TournamentMe = ({
+  int rank,
+  GameFullId? gameId,
+  bool? withdraw,
+  Duration? pauseDelay,
+});
 
 const int kStandingsPageSize = 10;
 typedef StandingPage = ({int page, IList<StandingPlayer> players});
@@ -74,7 +81,9 @@ TournamentMeta _tournamentMetaFromPick(RequiredPick pick) {
     maxRating: pick('maxRating', 'rating').asIntOrNull(),
     duration: pick('minutes').asDurationFromMinutesOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
-    freq: pick('schedule').letOrNull((p) => p('freq').asTournamentFreqOrThrow()),
+    freq: pick(
+      'schedule',
+    ).letOrNull((p) => p('freq').asTournamentFreqOrThrow()),
     variant: pick('variant').asVariantOrThrow(),
   );
 }
@@ -97,12 +106,14 @@ sealed class LightTournament with _$LightTournament {
   factory LightTournament.fromServerJson(Map<String, Object?> json) =>
       _lightTournamentFromPick(pick(json).required());
 
-  factory LightTournament.fromPick(RequiredPick pick) => _lightTournamentFromPick(pick);
+  factory LightTournament.fromPick(RequiredPick pick) =>
+      _lightTournamentFromPick(pick);
 
   bool get isSystemTournament => meta.freq != null;
 
   // TODO: add support for team battle
-  bool get isSupportedInApp => playSupportedVariants.contains(meta.variant) && isTeamBattle != true;
+  bool get isSupportedInApp =>
+      playSupportedVariants.contains(meta.variant) && isTeamBattle != true;
 }
 
 LightTournament _lightTournamentFromPick(RequiredPick pick) {
@@ -169,7 +180,9 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     meta: _tournamentMetaFromPick(pick),
     featuredGame: pick('featured').asFeaturedGameOrNull(),
     description: pick('description').asStringOrNull(),
-    startsAt: pick('startsAt').letOrNull((p) => DateTime.parse(p.asStringOrThrow())),
+    startsAt: pick(
+      'startsAt',
+    ).letOrNull((p) => DateTime.parse(p.asStringOrThrow())),
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
     timeToStart: pick(
@@ -187,13 +200,19 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     reloadEndpoint: pick('reloadEndpoint').asStringOrNull(),
     stats: pick('stats').letOrNull((p) => TournamentStats._fromPick(p)),
     chat: pick('chat').letOrNull((p) => chatDataFromPick(p)),
-    quote: pick(
-      'quote',
-    ).letOrNull((p) => (text: p('text').asStringOrThrow(), author: p('author').asStringOrThrow())),
+    quote: pick('quote').letOrNull(
+      (p) => (
+        text: p('text').asStringOrThrow(),
+        author: p('author').asStringOrThrow(),
+      ),
+    ),
   );
 }
 
-Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick pick) {
+Tournament _updateTournamentFromPartialPick(
+  Tournament tournament,
+  RequiredPick pick,
+) {
   final newFeaturedGameId = pick('featured', 'id').asGameIdOrNull();
   return tournament.copyWith(
     // Sometimes a new FEN comes in via the websocket, but the API reload response
@@ -301,7 +320,8 @@ sealed class FeaturedGame with _$FeaturedGame {
     required FeaturedGameClocks? clocks,
   }) = _FeaturedGame;
 
-  Duration? clockOf(Side side) => side == Side.white ? clocks?.white : clocks?.black;
+  Duration? clockOf(Side side) =>
+      side == Side.white ? clocks?.white : clocks?.black;
 
   FeaturedPlayer playerOf(Side side) => side == Side.white ? white : black;
 
@@ -379,7 +399,9 @@ extension TournamentExtension on Pick {
       final freq = TournamentFreq.nameMap[value];
       if (freq != null) return freq;
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to TournamentFreq");
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to TournamentFreq",
+    );
   }
 
   IList<LightTournament> asTournamentListOrThrow() =>
@@ -427,9 +449,9 @@ extension TournamentExtension on Pick {
     final requiredPick = this.required();
     return (
       page: requiredPick('page').asIntOrThrow(),
-      players: requiredPick(
-        'players',
-      ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
+      players: requiredPick('players')
+          .asListOrThrow((pick) => _standingPlayerFromPick(pick.required()))
+          .toIList(),
     );
   }
 

@@ -37,7 +37,9 @@ sealed class StormRunStats with _$StormRunStats {
         .where(
           (e) => (filter.slow && filter.failed)
               ? (!e.win && slowPuzzleIds.any((id) => id == e.id))
-              : (filter.slow ? slowPuzzleIds.any((id) => id == e.id) : (!filter.failed || !e.win)),
+              : (filter.slow
+                    ? slowPuzzleIds.any((id) => id == e.id)
+                    : (!filter.failed || !e.win)),
         )
         .toIList();
   }
@@ -76,7 +78,10 @@ sealed class StormDayScore with _$StormDayScore {
 
 @freezed
 sealed class StormNewHigh with _$StormNewHigh {
-  const factory StormNewHigh({required StormNewHighType key, required int prev}) = _StormNewHigh;
+  const factory StormNewHigh({
+    required StormNewHighType key,
+    required int prev,
+  }) = _StormNewHigh;
 }
 
 final IMap<String, StormNewHighType> stormNewHighTypeMap = IMap(
@@ -94,7 +99,9 @@ extension StormExtension on Pick {
         return stormNewHighTypeMap[value]!;
       }
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to StormNewHighType");
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to StormNewHighType",
+    );
   }
 
   StormNewHighType? asStormNewHighTypeOrNull() {

@@ -54,7 +54,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     final session = ref.watch(authSessionProvider);
 
     return ListTileTheme.merge(
@@ -72,7 +73,9 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 title: Text(context.l10n.loadPosition),
-                onTap: () => Navigator.of(context).push(LoadPositionScreen.buildRoute(context)),
+                onTap: () => Navigator.of(
+                  context,
+                ).push(LoadPositionScreen.buildRoute(context)),
               ),
               ListTile(
                 leading: const Icon(Icons.biotech_outlined),
@@ -149,7 +152,10 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(PlayerScreen.buildRoute(context));
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(PlayerScreen.buildRoute(context));
                 },
               ),
               if (session != null)

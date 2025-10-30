@@ -20,7 +20,17 @@ final _soundEffectPlugin = SoundEffect();
 final _logger = Logger('SoundService');
 
 // Must match name of files in assets/sounds/standard
-enum Sound { move, capture, lowTime, dong, error, confirmation, puzzleStormEnd, clock, berserk }
+enum Sound {
+  move,
+  capture,
+  lowTime,
+  dong,
+  error,
+  confirmation,
+  puzzleStormEnd,
+  clock,
+  berserk,
+}
 
 @Riverpod(keepAlive: true)
 SoundService soundService(Ref ref) {
@@ -34,9 +44,14 @@ final _extension = defaultTargetPlatform == TargetPlatform.iOS ? 'aifc' : 'mp3';
 const Set<Sound> _emtpySet = {};
 
 /// Loads all sounds of the given [SoundTheme].
-Future<void> _loadAllSounds(SoundTheme soundTheme, {Set<Sound> excluded = _emtpySet}) async {
+Future<void> _loadAllSounds(
+  SoundTheme soundTheme, {
+  Set<Sound> excluded = _emtpySet,
+}) async {
   await Future.wait(
-    Sound.values.where((s) => !excluded.contains(s)).map((sound) => _loadSound(soundTheme, sound)),
+    Sound.values
+        .where((s) => !excluded.contains(s))
+        .map((sound) => _loadSound(soundTheme, sound)),
   );
 }
 
@@ -73,7 +88,9 @@ class SoundService {
       );
       final theme =
           (stored != null
-                  ? GeneralPrefs.fromJson(jsonDecode(stored) as Map<String, dynamic>)
+                  ? GeneralPrefs.fromJson(
+                      jsonDecode(stored) as Map<String, dynamic>,
+                    )
                   : GeneralPrefs.defaults)
               .soundTheme;
       await _soundEffectPlugin.initialize(maxStreams: _kMaxConcurrentStreams);
@@ -87,7 +104,8 @@ class SoundService {
   Future<void> play(Sound sound, {double volume = 1.0}) async {
     assert((volume >= 0.0) && (volume <= 1.0));
     final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
-    final finalVolume = _ref.read(generalPreferencesProvider).masterVolume * volume;
+    final finalVolume =
+        _ref.read(generalPreferencesProvider).masterVolume * volume;
     if (!isEnabled || finalVolume == 0.0) {
       return;
     }

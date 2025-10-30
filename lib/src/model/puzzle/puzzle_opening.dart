@@ -22,7 +22,9 @@ Future<IList<PuzzleOpeningData>> flatOpeningsList(Ref ref) async {
       .map(
         (f) => [
           (key: f.key, name: f.name, count: f.count),
-          ...f.openings.map((o) => (key: o.key, name: '${f.name}: ${o.name}', count: o.count)),
+          ...f.openings.map(
+            (o) => (key: o.key, name: '${f.name}: ${o.name}', count: o.count),
+          ),
         ],
       )
       .expand((e) => e)

@@ -23,7 +23,10 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({this.channel, this.initialGame, this.user, super.key})
-    : assert(channel != null || user != null, 'Either channel or user must be provided');
+    : assert(
+        channel != null || user != null,
+        'Either channel or user must be provided',
+      );
 
   final TvChannel? channel;
   final (GameId id, Side orientation)? initialGame;
@@ -40,7 +43,9 @@ class TvScreen extends ConsumerStatefulWidget {
       context,
       screen: TvScreen(
         channel: channel,
-        initialGame: gameId != null ? (gameId, orientation ?? Side.white) : null,
+        initialGame: gameId != null
+            ? (gameId, orientation ?? Side.white)
+            : null,
         user: user,
       ),
     );
@@ -94,10 +99,13 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                 child: asyncGame.when(
                   data: (gameState) {
                     final game = gameState.game;
-                    final position = gameState.game.positionAt(gameState.stepCursor);
+                    final position = gameState.game.positionAt(
+                      gameState.stepCursor,
+                    );
 
                     // If Stockfish is playing, user is null
-                    final crosstable = game.white.user != null && game.black.user != null
+                    final crosstable =
+                        game.white.user != null && game.black.user != null
                         ? ref.watch(
                             crosstableProvider(
                               game.white.user!.id,
@@ -117,18 +125,24 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                           ? CountdownClockBuilder(
                               key: _blackClockKey,
                               timeLeft: gameState.game.clock!.black,
-                              delay: gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
+                              delay:
+                                  gameState.game.clock!.lag ??
+                                  const Duration(milliseconds: 10),
                               clockUpdatedAt: gameState.game.clock!.at,
                               active: gameState.activeClockSide == Side.black,
                               builder: (context, timeLeft) {
                                 return Clock(
                                   timeLeft: timeLeft,
-                                  active: gameState.activeClockSide == Side.black,
+                                  active:
+                                      gameState.activeClockSide == Side.black,
                                 );
                               },
                             )
                           : null,
-                      materialDiff: game.materialDiffAt(gameState.stepCursor, Side.black),
+                      materialDiff: game.materialDiffAt(
+                        gameState.stepCursor,
+                        Side.black,
+                      ),
                     );
                     final whitePlayerWidget = GamePlayer(
                       game: game.copyWith(white: game.white.setOnGame(true)),
@@ -139,17 +153,23 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                               key: _whiteClockKey,
                               timeLeft: gameState.game.clock!.white,
                               clockUpdatedAt: gameState.game.clock!.at,
-                              delay: gameState.game.clock!.lag ?? const Duration(milliseconds: 10),
+                              delay:
+                                  gameState.game.clock!.lag ??
+                                  const Duration(milliseconds: 10),
                               active: gameState.activeClockSide == Side.white,
                               builder: (context, timeLeft) {
                                 return Clock(
                                   timeLeft: timeLeft,
-                                  active: gameState.activeClockSide == Side.white,
+                                  active:
+                                      gameState.activeClockSide == Side.white,
                                 );
                               },
                             )
                           : null,
-                      materialDiff: game.materialDiffAt(gameState.stepCursor, Side.white),
+                      materialDiff: game.materialDiffAt(
+                        gameState.stepCursor,
+                        Side.white,
+                      ),
                     );
 
                     return GameLayout(
@@ -164,7 +184,10 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       bottomTable: gameState.orientation == Side.white
                           ? whitePlayerWidget
                           : blackPlayerWidget,
-                      moves: game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false),
+                      moves: game.steps
+                          .skip(1)
+                          .map((e) => e.sanMove!.san)
+                          .toList(growable: false),
                       currentMoveIndex: gameState.stepCursor,
                       onSelectMove: (index) {
                         ref.read(_tvGameCtrl.notifier).goToMove(index);
@@ -178,7 +201,8 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                             icon: CupertinoIcons.arrow_2_squarepath,
                           ),
                           RepeatButton(
-                            onLongPress: ref.read(_tvGameCtrl.notifier).canGoBack()
+                            onLongPress:
+                                ref.read(_tvGameCtrl.notifier).canGoBack()
                                 ? () => _moveBackward(ref)
                                 : null,
                             child: BottomBarButton(
@@ -192,14 +216,16 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                             ),
                           ),
                           RepeatButton(
-                            onLongPress: ref.read(_tvGameCtrl.notifier).canGoForward()
+                            onLongPress:
+                                ref.read(_tvGameCtrl.notifier).canGoForward()
                                 ? () => _moveForward(ref)
                                 : null,
                             child: BottomBarButton(
                               key: const ValueKey('goto-next'),
                               icon: CupertinoIcons.chevron_forward,
                               label: context.l10n.next,
-                              onTap: ref.read(_tvGameCtrl.notifier).canGoForward()
+                              onTap:
+                                  ref.read(_tvGameCtrl.notifier).canGoForward()
                                   ? () => _moveForward(ref)
                                   : null,
                               showTooltip: false,
@@ -220,7 +246,9 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     ),
                   ),
                   error: (err, stackTrace) {
-                    debugPrint('SEVERE: [TvScreen] could not load stream; $err\n$stackTrace');
+                    debugPrint(
+                      'SEVERE: [TvScreen] could not load stream; $err\n$stackTrace',
+                    );
                     return const GameLayout(
                       topTable: kEmptyWidget,
                       bottomTable: kEmptyWidget,

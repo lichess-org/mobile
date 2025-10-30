@@ -8,7 +8,9 @@ Position randomChess960Position() {
   final rank8 = _positions[_random.nextInt(_positions.length)];
 
   return Chess.fromSetup(
-    Setup.parseFen('$rank8/pppppppp/8/8/8/8/PPPPPPPP/${rank8.toUpperCase()} w KQkq - 0 1'),
+    Setup.parseFen(
+      '$rank8/pppppppp/8/8/8/8/PPPPPPPP/${rank8.toUpperCase()} w KQkq - 0 1',
+    ),
   );
 }
 

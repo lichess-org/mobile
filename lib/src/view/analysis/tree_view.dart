@@ -19,7 +19,8 @@ class AnalysisTreeView extends ConsumerWidget {
     final analysisState = ref.watch(ctrlProvider).requireValue;
     final prefs = ref.watch(analysisPreferencesProvider);
     // enable computer analysis takes effect here only if it's a lichess game
-    final enableServerAnalysis = !options.isLichessGameAnalysis || prefs.enableServerAnalysis;
+    final enableServerAnalysis =
+        !options.isLichessGameAnalysis || prefs.enableServerAnalysis;
 
     return SingleChildScrollView(
       padding: EdgeInsets.zero,
@@ -33,7 +34,8 @@ class AnalysisTreeView extends ConsumerWidget {
             notifier: ref.read(ctrlProvider.notifier),
             shouldShowComputerAnalysis: enableServerAnalysis,
             shouldShowComments: enableServerAnalysis && prefs.showPgnComments,
-            shouldShowAnnotations: enableServerAnalysis && prefs.showAnnotations,
+            shouldShowAnnotations:
+                enableServerAnalysis && prefs.showAnnotations,
             premovePaths: analysisState.forecast?.lines,
             displayMode: prefs.inlineNotation
                 ? PgnTreeDisplayMode.inlineNotation

@@ -27,7 +27,8 @@ sealed class Streamer with _$Streamer {
   }
 }
 
-Streamer _streamersFromJson(Map<String, dynamic> json) => _streamersFromPick(pick(json).required());
+Streamer _streamersFromJson(Map<String, dynamic> json) =>
+    _streamersFromPick(pick(json).required());
 
 Streamer _streamersFromPick(RequiredPick pick) {
   final stream = pick('stream');

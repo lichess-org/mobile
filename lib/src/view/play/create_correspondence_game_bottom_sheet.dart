@@ -22,10 +22,12 @@ class CreateCorrespondenceGameBottomSheet extends ConsumerStatefulWidget {
   const CreateCorrespondenceGameBottomSheet({super.key});
 
   @override
-  ConsumerState<CreateCorrespondenceGameBottomSheet> createState() => _CreateGameBodyState();
+  ConsumerState<CreateCorrespondenceGameBottomSheet> createState() =>
+      _CreateGameBodyState();
 }
 
-class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomSheet> {
+class _CreateGameBodyState
+    extends ConsumerState<CreateCorrespondenceGameBottomSheet> {
   Future<void>? _pendingCreateGame;
 
   @override
@@ -52,7 +54,10 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                           text: '${context.l10n.daysPerTurn}: ',
                           children: [
                             TextSpan(
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
                               text: _daysLabel(daysPerTurn),
                             ),
                           ],
@@ -91,7 +96,9 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                     selectedItem: preferences.customVariant,
                     labelBuilder: (Variant variant) => Text(variant.label),
                     onSelectedItemChanged: (Variant variant) {
-                      ref.read(gameSetupPreferencesProvider.notifier).setCustomVariant(variant);
+                      ref
+                          .read(gameSetupPreferencesProvider.notifier)
+                          .setCustomVariant(variant);
                     },
                   );
                 },
@@ -114,7 +121,9 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                 trailing: Switch.adaptive(
                   value: preferences.customRated,
                   onChanged: (bool value) {
-                    ref.read(gameSetupPreferencesProvider.notifier).setCustomRated(value);
+                    ref
+                        .read(gameSetupPreferencesProvider.notifier)
+                        .setCustomRated(value);
                   },
                 ),
               ),
@@ -135,14 +144,18 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: FilledButton(
-                    onPressed: snapshot.connectionState == ConnectionState.waiting
+                    onPressed:
+                        snapshot.connectionState == ConnectionState.waiting
                         ? null
                         : () async {
                             setState(() {
                               _pendingCreateGame = ref
                                   .read(createGameServiceProvider)
                                   .newCorrespondenceGame(
-                                    GameSeek.correspondence(preferences, account),
+                                    GameSeek.correspondence(
+                                      preferences,
+                                      account,
+                                    ),
                                   );
                             });
 
@@ -155,9 +168,9 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                             }
                             if (context.mounted) {
                               ref.invalidate(correspondenceChallengesProvider);
-                              Navigator.of(
-                                context,
-                              ).popUntil((route) => route is! ModalBottomSheetRoute);
+                              Navigator.of(context).popUntil(
+                                (route) => route is! ModalBottomSheetRoute,
+                              );
                             }
                           },
                     child: Text(context.l10n.createAGame),

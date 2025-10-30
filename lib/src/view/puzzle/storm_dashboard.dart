@@ -44,7 +44,10 @@ class _Body extends ConsumerWidget {
 
   final LightUser user;
 
-  static const EdgeInsets _statCardPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0);
+  static const EdgeInsets _statCardPadding = EdgeInsets.symmetric(
+    horizontal: 8.0,
+    vertical: 10.0,
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,7 +61,9 @@ class _Body extends ConsumerWidget {
         return ListView(
           children: [
             Padding(
-              padding: Styles.sectionTopPadding.add(Styles.horizontalBodyPadding),
+              padding: Styles.sectionTopPadding.add(
+                Styles.horizontalBodyPadding,
+              ),
               child: StatCardRow([
                 StatCard(
                   backgroundColor: LichessColors.brag.withValues(alpha: 0.5),
@@ -95,7 +100,10 @@ class _Body extends ConsumerWidget {
             if (data.dayHighscores.isNotEmpty) ...[
               Padding(
                 padding: Styles.bodySectionPadding,
-                child: Text(context.l10n.stormBestRunOfDay, style: Styles.sectionTitle),
+                child: Text(
+                  context.l10n.stormBestRunOfDay,
+                  style: Styles.sectionTitle,
+                ),
               ),
               Padding(
                 padding: Styles.horizontalBodyPadding,
@@ -104,10 +112,22 @@ class _Body extends ConsumerWidget {
                   children: [
                     TableRow(
                       children: [
-                        Text(textAlign: TextAlign.center, context.l10n.stormScore),
-                        Text(textAlign: TextAlign.center, context.l10n.stormTime),
-                        Text(textAlign: TextAlign.center, context.l10n.stormHighestSolved),
-                        Text(textAlign: TextAlign.center, context.l10n.stormRuns),
+                        Text(
+                          textAlign: TextAlign.center,
+                          context.l10n.stormScore,
+                        ),
+                        Text(
+                          textAlign: TextAlign.center,
+                          context.l10n.stormTime,
+                        ),
+                        Text(
+                          textAlign: TextAlign.center,
+                          context.l10n.stormHighestSolved,
+                        ),
+                        Text(
+                          textAlign: TextAlign.center,
+                          context.l10n.stormRuns,
+                        ),
                       ],
                     ),
                   ],
@@ -136,9 +156,13 @@ class _Body extends ConsumerWidget {
                     // Data row
                     final entryIndex = (index - 1) ~/ 2;
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 10,
+                      ),
                       child: Table(
-                        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                        defaultVerticalAlignment:
+                            TableCellVerticalAlignment.middle,
                         children: [
                           TableRow(
                             children: [
@@ -156,7 +180,8 @@ class _Body extends ConsumerWidget {
                               ),
                               Text(
                                 textAlign: TextAlign.center,
-                                data.dayHighscores[entryIndex].highest.toString(),
+                                data.dayHighscores[entryIndex].highest
+                                    .toString(),
                               ),
                               Text(
                                 textAlign: TextAlign.center,
@@ -176,7 +201,9 @@ class _Body extends ConsumerWidget {
         );
       },
       error: (e, s) {
-        debugPrint('SEVERE: [StormDashboardModel] could not load storm dashboard; $e\n$s');
+        debugPrint(
+          'SEVERE: [StormDashboardModel] could not load storm dashboard; $e\n$s',
+        );
         return const SafeArea(child: Text('Could not load dashboard'));
       },
       loading: () => _Loading(),

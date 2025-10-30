@@ -67,7 +67,9 @@ class GameBookmarksPaginator extends _$GameBookmarksPaginator {
         until: _list.last.game.createdAt,
       );
       if (value.isEmpty) {
-        state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
+        state = AsyncData(
+          currentVal.copyWith(hasMore: false, isLoading: false),
+        );
         return;
       }
 
@@ -94,7 +96,9 @@ class GameBookmarksPaginator extends _$GameBookmarksPaginator {
 
     final index = gameList.indexOf(entry);
 
-    state = AsyncData(state.requireValue.copyWith(gameList: gameList.removeAt(index)));
+    state = AsyncData(
+      state.requireValue.copyWith(gameList: gameList.removeAt(index)),
+    );
   }
 }
 

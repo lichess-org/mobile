@@ -52,13 +52,18 @@ class BroadcastBoardsTab extends ConsumerWidget {
                   children: [
                     const Icon(Icons.info, size: 30),
                     const SizedBox(height: 8.0),
-                    Text(context.l10n.broadcastNoBoardsYet, textAlign: TextAlign.center),
+                    Text(
+                      context.l10n.broadcastNoBoardsYet,
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               )
             : BroadcastPreview(
                 games: showOnlyOngoingGames
-                    ? value.games.values.where((game) => game.isOngoing).toIList()
+                    ? value.games.values
+                          .where((game) => game.isOngoing)
+                          .toIList()
                     : value.games.values.toIList(),
                 tournamentId: tournamentId,
                 roundId: roundId,
@@ -134,7 +139,8 @@ class BroadcastPreview extends ConsumerWidget {
         final boardSize =
             boardWithMaybeEvalBarWidth -
             (showEvaluationBar
-                ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
+                ? boardThumbnailEvalGaugeAspectRatio *
+                      boardWithMaybeEvalBarWidth
                 : 0);
 
         if (games == null) {
@@ -191,10 +197,12 @@ class ObservedBoardThumbnail extends ConsumerStatefulWidget {
   final Side playingSide;
 
   @override
-  ConsumerState<ObservedBoardThumbnail> createState() => _ObservedBoardThumbnailState();
+  ConsumerState<ObservedBoardThumbnail> createState() =>
+      _ObservedBoardThumbnailState();
 }
 
-class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail> {
+class _ObservedBoardThumbnailState
+    extends ConsumerState<ObservedBoardThumbnail> {
   bool isBoardVisible = false;
 
   @override
@@ -240,8 +248,12 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
         orientation: Side.white,
         fen: widget.game.fen,
         showEvaluationBar: widget.showEvaluationBar,
-        whiteWinningChances: (widget.game.cp != null || widget.game.mate != null)
-            ? ExternalEval(cp: widget.game.cp, mate: widget.game.mate).winningChances(Side.white)
+        whiteWinningChances:
+            (widget.game.cp != null || widget.game.mate != null)
+            ? ExternalEval(
+                cp: widget.game.cp,
+                mate: widget.game.mate,
+              ).winningChances(Side.white)
             : null,
         lastMove: widget.game.lastMove,
         size: widget.boardSize,
@@ -275,7 +287,10 @@ class _PlayerWidgetLoading extends StatelessWidget {
         padding: _kPlayerWidgetPadding,
         child: Container(
           height: _kPlayerWidgetTextStyle.fontSize,
-          decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(5),
+          ),
         ),
       ),
     );
@@ -312,12 +327,16 @@ class _PlayerWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: BroadcastPlayerWidget(player: player, showRating: false)),
+              Expanded(
+                child: BroadcastPlayerWidget(player: player, showRating: false),
+              ),
               const SizedBox(width: 5),
               if (game.isOver)
                 Text(
                   game.status.resultToString(side),
-                  style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
+                  style: const TextStyle().copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 )
               else if (clock != null)
                 CountdownClockBuilder(

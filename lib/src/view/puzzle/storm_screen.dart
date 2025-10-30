@@ -71,7 +71,9 @@ class _Load extends ConsumerWidget {
       case AsyncData(value: final PuzzleStormResponse data):
         return _Body(data: data);
       case AsyncError(:final error, :final stackTrace):
-        debugPrint('SEVERE: [PuzzleStormScreen] could not load storm; $error\n$stackTrace');
+        debugPrint(
+          'SEVERE: [PuzzleStormScreen] could not load storm; $error\n$stackTrace',
+        );
         return PuzzleErrorBoardWidget(errorMessage: error.toString());
       case _:
         return const CenterLoadingIndicator();
@@ -94,7 +96,10 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = stormControllerProvider(widget.data.puzzles, widget.data.timestamp);
+    final ctrlProvider = stormControllerProvider(
+      widget.data.puzzles,
+      widget.data.timestamp,
+    );
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final stormState = ref.watch(ctrlProvider);
 
@@ -124,8 +129,10 @@ class _BodyState extends ConsumerState<_Body> {
           ? PlayerSide.white
           : PlayerSide.black,
       promotionMove: stormState.promotionMove,
-      onMove: (move, {isDrop, captured}) => ref.read(ctrlProvider.notifier).onUserMove(move),
-      onPromotionSelection: (role) => ref.read(ctrlProvider.notifier).onPromotionSelection(role),
+      onMove: (move, {isDrop, captured}) =>
+          ref.read(ctrlProvider.notifier).onUserMove(move),
+      onPromotionSelection: (role) =>
+          ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       premovable: null,
     );
 
@@ -162,32 +169,43 @@ class _BodyState extends ConsumerState<_Body> {
                 child: SafeArea(
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final orientation = constraints.maxWidth > constraints.maxHeight
+                      final orientation =
+                          constraints.maxWidth > constraints.maxHeight
                           ? Orientation.landscape
                           : Orientation.portrait;
                       final isTablet = isTabletOrLarger(context);
 
-                      final defaultSettings = boardPreferences.toBoardSettings().copyWith(
-                        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-                        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-                        drawShape: DrawShapeOptions(
-                          enable: boardPreferences.enableShapeDrawings,
-                          onCompleteShape: _onCompleteShape,
-                          onClearShapes: _onClearShapes,
-                          newShapeColor: boardPreferences.shapeColor.color,
-                        ),
-                      );
+                      final defaultSettings = boardPreferences
+                          .toBoardSettings()
+                          .copyWith(
+                            borderRadius: isTablet
+                                ? Styles.boardBorderRadius
+                                : BorderRadius.zero,
+                            boxShadow: isTablet
+                                ? boardShadows
+                                : const <BoxShadow>[],
+                            drawShape: DrawShapeOptions(
+                              enable: boardPreferences.enableShapeDrawings,
+                              onCompleteShape: _onCompleteShape,
+                              onClearShapes: _onClearShapes,
+                              newShapeColor: boardPreferences.shapeColor.color,
+                            ),
+                          );
 
                       if (orientation == Orientation.landscape) {
                         final defaultBoardSize =
-                            constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-                        final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
+                            constraints.biggest.shortestSide -
+                            (kTabletBoardTableSidePadding * 2);
+                        final sideWidth =
+                            constraints.biggest.longestSide - defaultBoardSize;
                         final boardSize = sideWidth >= 250
                             ? defaultBoardSize
                             : constraints.biggest.longestSide / kGoldenRatio -
                                   (kTabletBoardTableSidePadding * 2);
                         return Padding(
-                          padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
+                          padding: const EdgeInsets.all(
+                            kTabletBoardTableSidePadding,
+                          ),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -204,17 +222,25 @@ class _BodyState extends ConsumerState<_Body> {
                               const SizedBox(width: 16.0),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        StormClockWidget(clock: stormState.clock),
-                                        if (stormState.mode == StormMode.initial)
+                                        StormClockWidget(
+                                          clock: stormState.clock,
+                                        ),
+                                        if (stormState.mode ==
+                                            StormMode.initial)
                                           Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 context.l10n.stormMoveToStart,
@@ -235,7 +261,9 @@ class _BodyState extends ConsumerState<_Body> {
                                                           .stormYouPlayTheBlackPiecesInAllPuzzles,
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(fontSize: 12),
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -244,7 +272,9 @@ class _BodyState extends ConsumerState<_Body> {
 
                                     Padding(
                                       padding: EdgeInsets.symmetric(
-                                        horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                                        horizontal: isTablet
+                                            ? kTabletBoardTableSidePadding
+                                            : 12.0,
                                         vertical: 32.0,
                                       ),
                                       child: Center(
@@ -257,15 +287,21 @@ class _BodyState extends ConsumerState<_Body> {
                                                 Icon(
                                                   LichessIcons.storm,
                                                   size: 150.0,
-                                                  color: ColorScheme.of(context).primary,
+                                                  color: ColorScheme.of(
+                                                    context,
+                                                  ).primary,
                                                 ),
                                                 const SizedBox(width: 8),
                                                 Text(
-                                                  stormState.numSolved.toString().padRight(2),
+                                                  stormState.numSolved
+                                                      .toString()
+                                                      .padRight(2),
                                                   style: TextStyle(
                                                     fontSize: 90.0,
                                                     fontWeight: FontWeight.bold,
-                                                    color: ColorScheme.of(context).primary,
+                                                    color: ColorScheme.of(
+                                                      context,
+                                                    ).primary,
                                                     fontFeatures: const [
                                                       FontFeature.tabularFigures(),
                                                     ],
@@ -287,9 +323,11 @@ class _BodyState extends ConsumerState<_Body> {
                           ),
                         );
                       } else {
-                        final defaultBoardSize = constraints.biggest.shortestSide;
+                        final defaultBoardSize =
+                            constraints.biggest.shortestSide;
                         final double boardSize = isTablet
-                            ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                            ? defaultBoardSize -
+                                  kTabletBoardTableSidePadding * 2
                             : defaultBoardSize;
 
                         return Column(
@@ -299,7 +337,9 @@ class _BodyState extends ConsumerState<_Body> {
                             Expanded(
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                                  horizontal: isTablet
+                                      ? kTabletBoardTableSidePadding
+                                      : 12.0,
                                 ),
                                 child: _TopTable(widget.data),
                               ),
@@ -324,7 +364,9 @@ class _BodyState extends ConsumerState<_Body> {
                             Expanded(
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                                  horizontal: isTablet
+                                      ? kTabletBoardTableSidePadding
+                                      : 12.0,
                                 ),
                                 child: _Combo(stormState.combo),
                               ),
@@ -347,8 +389,10 @@ class _BodyState extends ConsumerState<_Body> {
         ? AndroidGesturesExclusionWidget(
             boardKey: _boardKey,
             shouldExcludeGesturesOnFocusGained: () =>
-                stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
-            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+                stormState.mode == StormMode.initial ||
+                stormState.mode == StormMode.running,
+            shouldSetImmersiveMode:
+                boardPreferences.immersiveModeWhilePlaying ?? false,
             child: content,
           )
         : content;
@@ -436,7 +480,10 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
 }
 
 void _showStats(BuildContext context, StormRunStats stats) {
-  Navigator.of(context, rootNavigator: true).push(_RunStats.buildRoute(context, stats));
+  Navigator.of(
+    context,
+    rootNavigator: true,
+  ).push(_RunStats.buildRoute(context, stats));
 }
 
 class _TopTable extends ConsumerWidget {
@@ -446,7 +493,9 @@ class _TopTable extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stormState = ref.watch(stormControllerProvider(data.puzzles, data.timestamp));
+    final stormState = ref.watch(
+      stormControllerProvider(data.puzzles, data.timestamp),
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
@@ -465,7 +514,10 @@ class _TopTable extends ConsumerWidget {
                       context.l10n.stormMoveToStart,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       stormState.pov == Side.white
@@ -485,7 +537,11 @@ class _TopTable extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    Icon(LichessIcons.storm, size: 50.0, color: ColorScheme.of(context).primary),
+                    Icon(
+                      LichessIcons.storm,
+                      size: 50.0,
+                      color: ColorScheme.of(context).primary,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       stormState.numSolved.toString().padRight(2),
@@ -518,7 +574,8 @@ class _Combo extends ConsumerStatefulWidget {
   ConsumerState<_Combo> createState() => _ComboState();
 }
 
-class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMixin {
+class _ComboState extends ConsumerState<_Combo>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -606,7 +663,9 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
                           boxShadow: _controller.value == 1.0
                               ? [
                                   BoxShadow(
-                                    color: indicatorColor.withValues(alpha: 0.3),
+                                    color: indicatorColor.withValues(
+                                      alpha: 0.3,
+                                    ),
                                     blurRadius: 10.0,
                                     spreadRadius: 2.0,
                                   ),
@@ -614,10 +673,14 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
                               : [],
                         ),
                         child: ClipRRect(
-                          borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(3.0),
+                          ),
                           child: LinearProgressIndicator(
                             value: _controller.value,
-                            valueColor: AlwaysStoppedAnimation<Color>(indicatorColor),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              indicatorColor,
+                            ),
                           ),
                         ),
                       ),
@@ -626,24 +689,37 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: StormCombo.levelBonus.mapIndexed((index, level) {
+                      children: StormCombo.levelBonus.mapIndexed((
+                        index,
+                        level,
+                      ) {
                         final isCurrentLevel = index < lvl;
                         return AnimatedContainer(
                           alignment: Alignment.center,
                           curve: Curves.easeIn,
                           duration: const Duration(milliseconds: 1000),
-                          width: 28 * MediaQuery.textScalerOf(context).scale(14) / 14,
-                          height: 24 * MediaQuery.textScalerOf(context).scale(14) / 14,
+                          width:
+                              28 *
+                              MediaQuery.textScalerOf(context).scale(14) /
+                              14,
+                          height:
+                              24 *
+                              MediaQuery.textScalerOf(context).scale(14) /
+                              14,
                           decoration: isCurrentLevel
                               ? BoxDecoration(
                                   color: comboShades[index],
-                                  borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(3.0),
+                                  ),
                                 )
                               : null,
                           child: Text(
                             '${level}s',
                             style: TextStyle(
-                              color: isCurrentLevel ? ColorScheme.of(context).onSecondary : null,
+                              color: isCurrentLevel
+                                  ? ColorScheme.of(context).onSecondary
+                                  : null,
                             ),
                           ),
                         );
@@ -669,7 +745,9 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
         3 => 0.7,
         _ => 0.0,
       };
-      return brightness == Brightness.light ? darken(baseColor, shade) : lighten(baseColor, shade);
+      return brightness == Brightness.light
+          ? darken(baseColor, shade)
+          : lighten(baseColor, shade);
     });
   }
 }
@@ -730,7 +808,11 @@ class _RunStats extends StatelessWidget {
   final StormRunStats stats;
 
   static Route<dynamic> buildRoute(BuildContext context, StormRunStats stats) {
-    return buildScreenRoute(context, screen: _RunStats(stats), fullscreenDialog: true);
+    return buildScreenRoute(
+      context,
+      screen: _RunStats(stats),
+      fullscreenDialog: true,
+    );
   }
 
   @override
@@ -780,7 +862,9 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                     style: Styles.sectionTitle,
                   ),
                   subtitle: Text(
-                    context.l10n.stormPreviousHighscoreWasX(widget.stats.newHigh!.prev.toString()),
+                    context.l10n.stormPreviousHighscoreWasX(
+                      widget.stats.newHigh!.prev.toString(),
+                    ),
                   ),
                 ),
               ),
@@ -796,22 +880,34 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
         children: [
           if (highScoreWidgets != null) ...highScoreWidgets,
           ListSection(
-            header: Text('${widget.stats.score} ${context.l10n.stormPuzzlesSolved}'),
+            header: Text(
+              '${widget.stats.score} ${context.l10n.stormPuzzlesSolved}',
+            ),
             children: [
               _StatsRow(context.l10n.stormMoves, widget.stats.moves.toString()),
               _StatsRow(
                 context.l10n.accuracy,
                 percentFormat.format(
-                  (widget.stats.moves - widget.stats.errors) / widget.stats.moves,
+                  (widget.stats.moves - widget.stats.errors) /
+                      widget.stats.moves,
                 ),
               ),
-              _StatsRow(context.l10n.stormCombo, widget.stats.comboBest.toString()),
-              _StatsRow(context.l10n.stormTime, '${widget.stats.time.inSeconds}s'),
+              _StatsRow(
+                context.l10n.stormCombo,
+                widget.stats.comboBest.toString(),
+              ),
+              _StatsRow(
+                context.l10n.stormTime,
+                '${widget.stats.time.inSeconds}s',
+              ),
               _StatsRow(
                 context.l10n.stormTimePerMove,
                 '${numberFormat.format(widget.stats.timePerMove)}s',
               ),
-              _StatsRow(context.l10n.stormHighestSolved, widget.stats.highest.toString()),
+              _StatsRow(
+                context.l10n.stormHighestSolved,
+                widget.stats.highest.toString(),
+              ),
             ],
           ),
           const SizedBox(height: 10.0),
@@ -833,7 +929,10 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
               children: [
                 Row(
                   children: [
-                    Text(context.l10n.stormPuzzlesPlayed, style: Styles.sectionTitle),
+                    Text(
+                      context.l10n.stormPuzzlesPlayed,
+                      style: Styles.sectionTitle,
+                    ),
                     const Spacer(),
                     Tooltip(
                       excludeFromSemantics: true,
@@ -841,9 +940,13 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                       child: SemanticIconButton(
                         semanticsLabel: context.l10n.stormFailedPuzzles,
                         icon: const Icon(Icons.close),
-                        onPressed: () =>
-                            setState(() => filter = filter.copyWith(failed: !filter.failed)),
-                        color: filter.failed ? ColorScheme.of(context).primary : null,
+                        onPressed: () => setState(
+                          () =>
+                              filter = filter.copyWith(failed: !filter.failed),
+                        ),
+                        color: filter.failed
+                            ? ColorScheme.of(context).primary
+                            : null,
                       ),
                     ),
                     Tooltip(
@@ -852,18 +955,28 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                       child: SemanticIconButton(
                         semanticsLabel: context.l10n.stormSlowPuzzles,
                         icon: const Icon(Icons.hourglass_bottom),
-                        onPressed: () =>
-                            setState(() => filter = filter.copyWith(slow: !filter.slow)),
-                        color: filter.slow ? ColorScheme.of(context).primary : null,
+                        onPressed: () => setState(
+                          () => filter = filter.copyWith(slow: !filter.slow),
+                        ),
+                        color: filter.slow
+                            ? ColorScheme.of(context).primary
+                            : null,
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 3.0),
                 if (puzzleList.isNotEmpty)
-                  PuzzleHistoryPreview(puzzleList, shouldOpenCasualPuzzleRun: true)
+                  PuzzleHistoryPreview(
+                    puzzleList,
+                    shouldOpenCasualPuzzleRun: true,
+                  )
                 else
-                  Center(child: Text(context.l10n.mobilePuzzleStormFilterNothingToShow)),
+                  Center(
+                    child: Text(
+                      context.l10n.mobilePuzzleStormFilterNothingToShow,
+                    ),
+                  ),
               ],
             ),
           ),
@@ -918,8 +1031,9 @@ class _StormDashboardButton extends ConsumerWidget {
     return const SizedBox.shrink();
   }
 
-  void _showDashboard(BuildContext context, AuthSessionState session) => Navigator.of(
-    context,
-    rootNavigator: true,
-  ).push(StormDashboardModal.buildRoute(context, session.user));
+  void _showDashboard(BuildContext context, AuthSessionState session) =>
+      Navigator.of(
+        context,
+        rootNavigator: true,
+      ).push(StormDashboardModal.buildRoute(context, session.user));
 }

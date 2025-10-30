@@ -10,14 +10,18 @@ const double _kCurrCoordOpacity = 0.9;
 const double _kNextCoordOpacity = 0.7;
 
 class CoordinateDisplay extends ConsumerStatefulWidget {
-  const CoordinateDisplay({required this.currentCoord, required this.nextCoord});
+  const CoordinateDisplay({
+    required this.currentCoord,
+    required this.nextCoord,
+  });
 
   final Square currentCoord;
 
   final Square nextCoord;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => CoordinateDisplayState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      CoordinateDisplayState();
 }
 
 class CoordinateDisplayState extends ConsumerState<CoordinateDisplay>
@@ -62,7 +66,9 @@ class CoordinateDisplayState extends ConsumerState<CoordinateDisplay>
       color: Colors.white.withValues(alpha: 0.9),
       fontWeight: FontWeight.bold,
       fontFeatures: [const FontFeature.tabularFigures()],
-      shadows: const [Shadow(color: Colors.black, offset: Offset(0, 5), blurRadius: 40.0)],
+      shadows: const [
+        Shadow(color: Colors.black, offset: Offset(0, 5), blurRadius: 40.0),
+      ],
     );
 
     return IgnorePointer(
@@ -74,7 +80,10 @@ class CoordinateDisplayState extends ConsumerState<CoordinateDisplay>
               position: _currCoordSlideInAnimation,
               child: ScaleTransition(
                 scale: _scaleAnimation,
-                child: Text(trainingState.currentCoord?.name ?? '', style: textStyle),
+                child: Text(
+                  trainingState.currentCoord?.name ?? '',
+                  style: textStyle,
+                ),
               ),
             ),
           ),
@@ -86,7 +95,10 @@ class CoordinateDisplayState extends ConsumerState<CoordinateDisplay>
                 translation: _kNextCoordFractionalTranslation,
                 child: Transform.scale(
                   scale: _kNextCoordScale,
-                  child: Text(trainingState.nextCoord?.name ?? '', style: textStyle),
+                  child: Text(
+                    trainingState.nextCoord?.name ?? '',
+                    style: textStyle,
+                  ),
                 ),
               ),
             ),

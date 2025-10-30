@@ -82,7 +82,9 @@ class ConversationController extends _$ConversationController {
     final message = Message(userId: _me!.id, text: text, date: DateTime.now());
     final convo = state.requireValue.convo;
     final newMessages = convo.messages.insert(0, message);
-    state = AsyncData(state.requireValue.copyWith(convo: convo.copyWith(messages: newMessages)));
+    state = AsyncData(
+      state.requireValue.copyWith(convo: convo.copyWith(messages: newMessages)),
+    );
   }
 
   void markAsRead() {

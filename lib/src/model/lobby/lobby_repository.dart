@@ -13,7 +13,9 @@ part 'lobby_repository.g.dart';
 
 @riverpod
 Future<IList<CorrespondenceChallenge>> correspondenceChallenges(Ref ref) {
-  return ref.withClient((client) => LobbyRepository(client).getCorrespondenceChallenges());
+  return ref.withClient(
+    (client) => LobbyRepository(client).getCorrespondenceChallenges(),
+  );
 }
 
 class LobbyRepository {

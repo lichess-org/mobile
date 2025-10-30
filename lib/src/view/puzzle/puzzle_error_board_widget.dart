@@ -23,26 +23,37 @@ class PuzzleErrorBoardWidget extends ConsumerWidget {
             child: SafeArea(
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final orientation = constraints.maxWidth > constraints.maxHeight
+                  final orientation =
+                      constraints.maxWidth > constraints.maxHeight
                       ? Orientation.landscape
                       : Orientation.portrait;
                   final isTablet = isTabletOrLarger(context);
 
-                  final defaultSettings = boardPreferences.toBoardSettings().copyWith(
-                    borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-                    boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-                  );
+                  final defaultSettings = boardPreferences
+                      .toBoardSettings()
+                      .copyWith(
+                        borderRadius: isTablet
+                            ? Styles.boardBorderRadius
+                            : BorderRadius.zero,
+                        boxShadow: isTablet
+                            ? boardShadows
+                            : const <BoxShadow>[],
+                      );
 
                   if (orientation == Orientation.landscape) {
                     final defaultBoardSize =
-                        constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-                    final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
+                        constraints.biggest.shortestSide -
+                        (kTabletBoardTableSidePadding * 2);
+                    final sideWidth =
+                        constraints.biggest.longestSide - defaultBoardSize;
                     final boardSize = sideWidth >= 250
                         ? defaultBoardSize
                         : constraints.biggest.longestSide / kGoldenRatio -
                               (kTabletBoardTableSidePadding * 2);
                     return Padding(
-                      padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
+                      padding: const EdgeInsets.all(
+                        kTabletBoardTableSidePadding,
+                      ),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -69,7 +80,9 @@ class PuzzleErrorBoardWidget extends ConsumerWidget {
                       children: [
                         Padding(
                           padding: isTablet
-                              ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                              ? const EdgeInsets.symmetric(
+                                  horizontal: kTabletBoardTableSidePadding,
+                                )
                               : EdgeInsets.zero,
                           child: BoardWidget(
                             size: boardSize,

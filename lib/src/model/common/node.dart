@@ -190,11 +190,17 @@ abstract class Node {
   }
 
   /// Adds a list of nodes at the given path and returns the new path.
-  UciPath? addNodesAt(UciPath path, Iterable<Branch> newNodes, {bool prepend = false}) {
+  UciPath? addNodesAt(
+    UciPath path,
+    Iterable<Branch> newNodes, {
+    bool prepend = false,
+  }) {
     final node = newNodes.elementAtOrNull(0);
     if (node == null) return path;
     final (newPath, _) = addNodeAt(path, node, prepend: prepend);
-    return newPath != null ? addNodesAt(newPath, newNodes.skip(1), prepend: prepend) : null;
+    return newPath != null
+        ? addNodesAt(newPath, newNodes.skip(1), prepend: prepend)
+        : null;
   }
 
   /// Adds a new node with that [Move] at the given path.
@@ -220,7 +226,9 @@ abstract class Node {
         pos.board.roleAt(move.from) == Role.king &&
         pos.board.roleAt(move.to) != Role.rook;
 
-    final convertedMove = potentialAltCastlingMove ? convertAltCastlingMove(move) ?? move : move;
+    final convertedMove = potentialAltCastlingMove
+        ? convertAltCastlingMove(move) ?? move
+        : move;
 
     final (newPos, newSan) = pos.makeSan(convertedMove);
     final newNode = Branch(
@@ -232,18 +240,26 @@ abstract class Node {
   }
 
   /// Adds a list of moves at the given path and returns the new path or null if the node at the path does not exist.
-  UciPath? addMovesAt(UciPath path, Iterable<Move> moves, {bool prepend = false}) {
+  UciPath? addMovesAt(
+    UciPath path,
+    Iterable<Move> moves, {
+    bool prepend = false,
+  }) {
     final move = moves.elementAtOrNull(0);
     if (move == null) return path;
     final (newPath, _) = addMoveAt(path, move, prepend: prepend);
-    return newPath != null ? addMovesAt(newPath, moves.skip(1), prepend: prepend) : null;
+    return newPath != null
+        ? addMovesAt(newPath, moves.skip(1), prepend: prepend)
+        : null;
   }
 
   /// The function `convertAltCastlingMove` checks if a move is an alternative
   /// castling move and converts it to the corresponding standard castling move if so.
   Move? convertAltCastlingMove(Move move) {
     return altCastles.containsValue(move.uci)
-        ? Move.parse(altCastles.entries.firstWhere((e) => e.value == move.uci).key)
+        ? Move.parse(
+            altCastles.entries.firstWhere((e) => e.value == move.uci).key,
+          )
         : move;
   }
 
@@ -306,33 +322,49 @@ abstract class Node {
   /// Export the tree to a PGN string.
   ///
   /// Optionally, headers and initial game comments can be provided.
-  String makePgn([IMap<String, String>? headers, IList<PgnComment>? rootComments]) {
+  String makePgn([
+    IMap<String, String>? headers,
+    IList<PgnComment>? rootComments,
+  ]) {
     final pgnNode = PgnNode<PgnNodeData>();
-    final List<({Node from, PgnNode<PgnNodeData> to})> stack = [(from: this, to: pgnNode)];
+    final List<({Node from, PgnNode<PgnNodeData> to})> stack = [
+      (from: this, to: pgnNode),
+    ];
 
     while (stack.isNotEmpty) {
       final frame = stack.removeLast();
-      for (int childIdx = 0; childIdx < frame.from.children.length; childIdx++) {
+      for (
+        int childIdx = 0;
+        childIdx < frame.from.children.length;
+        childIdx++
+      ) {
         final childFrom = frame.from.children[childIdx];
         final childTo = PgnChildNode(
           PgnNodeData(
             san: childFrom.sanMove.san,
-            startingComments: childFrom.startingComments?.map((c) => c.makeComment()).toList(),
-            comments: (childFrom.lichessAnalysisComments ?? childFrom.comments)?.map((c) {
-              final eval = childFrom.eval;
-              final pgnEval = eval?.cp != null
-                  ? PgnEvaluation.pawns(pawns: cpToPawns(eval!.cp!), depth: eval.depth)
-                  : eval?.mate != null
-                  ? PgnEvaluation.mate(mate: eval!.mate, depth: eval.depth)
-                  : c.eval;
-              return PgnComment(
-                text: c.text,
-                shapes: c.shapes,
-                clock: c.clock,
-                emt: c.emt,
-                eval: pgnEval,
-              ).makeComment();
-            }).toList(),
+            startingComments: childFrom.startingComments
+                ?.map((c) => c.makeComment())
+                .toList(),
+            comments: (childFrom.lichessAnalysisComments ?? childFrom.comments)
+                ?.map((c) {
+                  final eval = childFrom.eval;
+                  final pgnEval = eval?.cp != null
+                      ? PgnEvaluation.pawns(
+                          pawns: cpToPawns(eval!.cp!),
+                          depth: eval.depth,
+                        )
+                      : eval?.mate != null
+                      ? PgnEvaluation.mate(mate: eval!.mate, depth: eval.depth)
+                      : c.eval;
+                  return PgnComment(
+                    text: c.text,
+                    shapes: c.shapes,
+                    clock: c.clock,
+                    emt: c.emt,
+                    eval: pgnEval,
+                  ).makeComment();
+                })
+                .toList(),
             nags: childFrom.nags,
           ),
         );
@@ -421,7 +453,9 @@ class Branch extends Node {
         if (lichessAnalysisComments == null) {
           lichessAnalysisComments = [c];
         } else {
-          final existing = lichessAnalysisComments?.firstWhereOrNull((e) => e.text == c.text);
+          final existing = lichessAnalysisComments?.firstWhereOrNull(
+            (e) => e.text == c.text,
+          );
           if (existing == null) {
             lichessAnalysisComments?.add(c);
           }
@@ -431,7 +465,9 @@ class Branch extends Node {
         if (startingComments == null) {
           startingComments = [c];
         } else {
-          final existing = startingComments?.firstWhereOrNull((e) => e.text == c.text);
+          final existing = startingComments?.firstWhereOrNull(
+            (e) => e.text == c.text,
+          );
           if (existing == null) {
             startingComments?.add(c);
           }
@@ -456,16 +492,19 @@ class Branch extends Node {
 
   /// Gets the first available clock from the comments.
   Duration? get clock {
-    final clockComment = (lichessAnalysisComments ?? comments)?.firstWhereOrNull(
-      (c) => c.clock != null,
-    );
+    final clockComment = (lichessAnalysisComments ?? comments)
+        ?.firstWhereOrNull((c) => c.clock != null);
     return clockComment?.clock;
   }
 
   /// Gets the first available external eval from the comments.
   ExternalEval? get externalEval {
-    final comment = (lichessAnalysisComments ?? comments)?.firstWhereOrNull((c) => c.eval != null);
-    return comment?.eval != null ? ExternalEval.fromPgnEval(comment!.eval!) : null;
+    final comment = (lichessAnalysisComments ?? comments)?.firstWhereOrNull(
+      (c) => c.eval != null,
+    );
+    return comment?.eval != null
+        ? ExternalEval.fromPgnEval(comment!.eval!)
+        : null;
   }
 
   @override
@@ -523,21 +562,33 @@ class Root extends Node {
 
     while (stack.isNotEmpty) {
       final frame = stack.removeLast();
-      for (int childIdx = 0; childIdx < frame.from.children.length; childIdx++) {
+      for (
+        int childIdx = 0;
+        childIdx < frame.from.children.length;
+        childIdx++
+      ) {
         final childFrom = frame.from.children[childIdx];
         final move = frame.to.position.parseSan(childFrom.data.san);
         if (move != null) {
           final newPos = frame.to.position.play(move);
           final isMainline = stack.isEmpty;
-          final comments = childFrom.data.comments?.map(PgnComment.fromPgn).map((c) {
-            if (c.eval == null && isLichessAnalysis && isMainline && newPos.isCheckmate) {
+          final comments = childFrom.data.comments?.map(PgnComment.fromPgn).map((
+            c,
+          ) {
+            if (c.eval == null &&
+                isLichessAnalysis &&
+                isMainline &&
+                newPos.isCheckmate) {
               return PgnComment(
                 text: c.text,
                 clock: c.clock,
                 emt: c.emt,
                 // lichess analysis does not provide eval for checkmate, and we want it to be displayed
                 // in the eval bar
-                eval: PgnEvaluation.mate(mate: newPos.turn == Side.white ? -1 : 1, depth: 1),
+                eval: PgnEvaluation.mate(
+                  mate: newPos.turn == Side.white ? -1 : 1,
+                  depth: 1,
+                ),
               );
             }
             return c;
@@ -548,10 +599,14 @@ class Root extends Node {
             position: newPos,
             isCollapsed: frame.nesting > 2 || hideVariations && childIdx > 0,
             isComputerVariation: isLichessAnalysis && childIdx > 0,
-            lichessAnalysisComments: isLichessAnalysis ? comments?.toList() : null,
+            lichessAnalysisComments: isLichessAnalysis
+                ? comments?.toList()
+                : null,
             startingComments: isLichessAnalysis
                 ? null
-                : childFrom.data.startingComments?.map(PgnComment.fromPgn).toList(),
+                : childFrom.data.startingComments
+                      ?.map(PgnComment.fromPgn)
+                      .toList(),
             comments: isLichessAnalysis ? null : comments?.toList(),
             nags: childFrom.data.nags,
           );
@@ -570,7 +625,9 @@ class Root extends Node {
 
           onVisitNode?.call(root, branch, isMainline);
         } else {
-          _logger.warning('Invalid move: ${childFrom.data.san}, on position: ${frame.to.position}');
+          _logger.warning(
+            'Invalid move: ${childFrom.data.san}, on position: ${frame.to.position}',
+          );
         }
       }
     }
@@ -711,16 +768,14 @@ sealed class ViewBranch extends ViewNode with _$ViewBranch {
   bool get hasTextComment => textComments.isNotEmpty;
 
   Duration? get clock {
-    final clockComment = (lichessAnalysisComments ?? comments)?.firstWhereOrNull(
-      (c) => c.clock != null,
-    );
+    final clockComment = (lichessAnalysisComments ?? comments)
+        ?.firstWhereOrNull((c) => c.clock != null);
     return clockComment?.clock;
   }
 
   Duration? get elapsedMoveTime {
-    final clockComment = (lichessAnalysisComments ?? comments)?.firstWhereOrNull(
-      (c) => c.emt != null,
-    );
+    final clockComment = (lichessAnalysisComments ?? comments)
+        ?.firstWhereOrNull((c) => c.emt != null);
     return clockComment?.emt;
   }
 
@@ -728,7 +783,9 @@ sealed class ViewBranch extends ViewNode with _$ViewBranch {
   ///
   /// For now we only trust the eval coming from lichess analysis.
   ExternalEval? get serverEval {
-    final pgnEval = lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
+    final pgnEval = lichessAnalysisComments
+        ?.firstWhereOrNull((c) => c.eval != null)
+        ?.eval;
     return pgnEval != null ? ExternalEval.fromPgnEval(pgnEval) : null;
   }
 

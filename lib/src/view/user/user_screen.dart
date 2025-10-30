@@ -34,10 +34,11 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final _userScreenDataProvider = FutureProvider.autoDispose.family<UserScreenData, UserId>(
-  (ref, id) => ref.read(userRepositoryProvider).getUserScreenData(id),
-  name: 'UserScreenDataProvider',
-);
+final _userScreenDataProvider = FutureProvider.autoDispose
+    .family<UserScreenData, UserId>(
+      (ref, id) => ref.read(userRepositoryProvider).getUserScreenData(id),
+      name: 'UserScreenDataProvider',
+    );
 
 class UserScreen extends ConsumerStatefulWidget {
   const UserScreen({required this.user, super.key});
@@ -48,7 +49,11 @@ class UserScreen extends ConsumerStatefulWidget {
     return buildScreenRoute(context, screen: UserScreen(user: user));
   }
 
-  static void challengeUser(User user, {required BuildContext context, required WidgetRef ref}) {
+  static void challengeUser(
+    User user, {
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
     final session = ref.read(authSessionProvider);
     if (session == null) {
       showSnackBar(
@@ -60,7 +65,9 @@ class UserScreen extends ConsumerStatefulWidget {
     }
     final isOddBot = oddBots.contains(user.lightUser.name.toLowerCase());
     if (isOddBot) {
-      Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(context, user.lightUser));
+      Navigator.of(
+        context,
+      ).push(ChallengeOddBotsScreen.buildRoute(context, user.lightUser));
     } else {
       showModalBottomSheet<void>(
         context: context,
@@ -106,14 +113,17 @@ class _UserScreenState extends ConsumerState<UserScreen> {
           SemanticIconButton(
             icon: const PlatformShareIcon(),
             semanticsLabel: 'Share profile',
-            onPressed: () =>
-                launchShareDialog(context, ShareParams(uri: lichessUri('/@/${widget.user.name}'))),
+            onPressed: () => launchShareDialog(
+              context,
+              ShareParams(uri: lichessUri('/@/${widget.user.name}')),
+            ),
           ),
         ],
       ),
       body: userScreenData.when(
         data: (data) => _UserProfileListView(data, isLoading, setIsLoading),
-        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
         error: (error, _) {
           if (error is ClientException && error.message.contains('404')) {
             return Center(
@@ -152,7 +162,13 @@ class _UserProfileListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final UserScreenData(:user, :recentGames, :activity, :isPlayingLive, :crosstable) = data;
+    final UserScreenData(
+      :user,
+      :recentGames,
+      :activity,
+      :isPlayingLive,
+      :crosstable,
+    ) = data;
 
     final connectivity = ref.watch(connectivityChangesProvider);
     final nbOfGames = user.count?.all ?? 0;
@@ -160,10 +176,17 @@ class _UserProfileListView extends ConsumerWidget {
     final kidMode = ref.watch(kidModeProvider);
 
     if (user.disabled == true) {
-      return Center(child: Text(context.l10n.settingsThisAccountIsClosed, style: Styles.bold));
+      return Center(
+        child: Text(
+          context.l10n.settingsThisAccountIsClosed,
+          style: Styles.bold,
+        ),
+      );
     }
 
-    Future<void> userAction(Future<void> Function(LichessClient client) action) async {
+    Future<void> userAction(
+      Future<void> Function(LichessClient client) action,
+    ) async {
       setIsLoading(true);
       try {
         await ref
@@ -181,10 +204,13 @@ class _UserProfileListView extends ConsumerWidget {
         ListSection(
           hasLeading: true,
           children: [
-            if (session != null && crosstable != null && (crosstable.nbGames) > 0) ...[
+            if (session != null &&
+                crosstable != null &&
+                (crosstable.nbGames) > 0) ...[
               () {
                 final crosstableData = crosstable;
-                final currentUserScore = crosstableData.users[session.user.id] ?? 0;
+                final currentUserScore =
+                    crosstableData.users[session.user.id] ?? 0;
                 final otherUserScore = crosstableData.users[user.id] ?? 0;
 
                 return ListTile(
@@ -210,7 +236,9 @@ class _UserProfileListView extends ConsumerWidget {
             ListTile(
               title: Text(context.l10n.watchGames),
               leading: const Icon(Icons.live_tv_outlined),
-              trailing: isPlayingLive == true ? const TextBadge(text: 'LIVE') : null,
+              trailing: isPlayingLive == true
+                  ? const TextBadge(text: 'LIVE')
+                  : null,
               onTap: () {
                 Navigator.of(
                   context,
@@ -223,18 +251,26 @@ class _UserProfileListView extends ConsumerWidget {
                 ListTile(
                   title: Text(context.l10n.challengeChallengeToPlay),
                   leading: const Icon(LichessIcons.crossed_swords),
-                  onTap: () => UserScreen.challengeUser(user, context: context, ref: ref),
+                  onTap: () => UserScreen.challengeUser(
+                    user,
+                    context: context,
+                    ref: ref,
+                  ),
                 ),
 
-              if (user.blocking != true && !user.isBot && kidMode.valueOrNull == false)
+              if (user.blocking != true &&
+                  !user.isBot &&
+                  kidMode.valueOrNull == false)
                 ListTile(
                   leading: const Icon(Icons.chat_bubble_outline),
                   title: Text(context.l10n.composeMessage),
                   onTap: () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(ConversationScreen.buildRoute(context, user: user.lightUser));
+                    Navigator.of(context, rootNavigator: true).push(
+                      ConversationScreen.buildRoute(
+                        context,
+                        user: user.lightUser,
+                      ),
+                    );
                   },
                 ),
               if (user.followable == true && user.following != true)
@@ -243,7 +279,10 @@ class _UserProfileListView extends ConsumerWidget {
                   title: Text(context.l10n.follow),
                   onTap: isLoading
                       ? null
-                      : () => userAction((client) => RelationRepository(client).follow(user.id)),
+                      : () => userAction(
+                          (client) =>
+                              RelationRepository(client).follow(user.id),
+                        ),
                 )
               else if (user.following == true)
                 ListTile(
@@ -251,7 +290,10 @@ class _UserProfileListView extends ConsumerWidget {
                   title: Text(context.l10n.unfollow),
                   onTap: isLoading
                       ? null
-                      : () => userAction((client) => RelationRepository(client).unfollow(user.id)),
+                      : () => userAction(
+                          (client) =>
+                              RelationRepository(client).unfollow(user.id),
+                        ),
                 ),
               if (user.following != true && user.blocking != true)
                 ListTile(
@@ -259,7 +301,9 @@ class _UserProfileListView extends ConsumerWidget {
                   title: Text(context.l10n.block),
                   onTap: isLoading
                       ? null
-                      : () => userAction((client) => RelationRepository(client).block(user.id)),
+                      : () => userAction(
+                          (client) => RelationRepository(client).block(user.id),
+                        ),
                 )
               else if (user.blocking == true)
                 ListTile(
@@ -267,13 +311,21 @@ class _UserProfileListView extends ConsumerWidget {
                   title: Text(context.l10n.unblock),
                   onTap: isLoading
                       ? null
-                      : () => userAction((client) => RelationRepository(client).unblock(user.id)),
+                      : () => userAction(
+                          (client) =>
+                              RelationRepository(client).unblock(user.id),
+                        ),
                 ),
               ListTile(
                 leading: const Icon(Icons.report_problem_outlined),
                 title: Text(context.l10n.reportXToModerators(user.username)),
                 onTap: () {
-                  launchUrl(lichessUri('/report', {'username': user.id, 'login': session.user.id}));
+                  launchUrl(
+                    lichessUri('/report', {
+                      'username': user.id,
+                      'login': session.user.id,
+                    }),
+                  );
                 },
               ),
             ],

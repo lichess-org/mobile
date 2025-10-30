@@ -48,7 +48,10 @@ sealed class GameSeek with _$GameSeek {
   /// Construct a fast pairing game seek from a predefined time control.
   factory GameSeek.fastPairing(TimeIncrement setup, AuthSessionState? session) {
     return GameSeek(
-      clock: (Duration(seconds: setup.time), Duration(seconds: setup.increment)),
+      clock: (
+        Duration(seconds: setup.time),
+        Duration(seconds: setup.increment),
+      ),
       rated: session != null,
     );
   }
@@ -72,20 +75,27 @@ sealed class GameSeek with _$GameSeek {
       days: setup.customDaysPerTurn,
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      ratingRange: account != null ? setup.correspondenceRatingRange(account) : null,
+      ratingRange: account != null
+          ? setup.correspondenceRatingRange(account)
+          : null,
     );
   }
 
   /// Construct a game seek from a playable game to find a new opponent, using
   /// the same time control, variant and rated status.
-  factory GameSeek.newOpponentFromGame(PlayableGame game, GameSetupPrefs setup) {
+  factory GameSeek.newOpponentFromGame(
+    PlayableGame game,
+    GameSetupPrefs setup,
+  ) {
     return GameSeek(
       clock: game.meta.clock != null
           ? (game.meta.clock!.initial, game.meta.clock!.increment)
           : null,
       rated: game.meta.rated,
       variant: game.meta.variant,
-      ratingDelta: game.source == GameSource.lobby ? setup.customRatingDelta : null,
+      ratingDelta: game.source == GameSource.lobby
+          ? setup.customRatingDelta
+          : null,
     );
   }
 
@@ -102,12 +112,15 @@ sealed class GameSeek with _$GameSeek {
     return copyWith(ratingRange: range, ratingDelta: null);
   }
 
-  TimeIncrement? get timeIncrement =>
-      clock != null ? TimeIncrement(clock!.$1.inSeconds, clock!.$2.inSeconds) : null;
+  TimeIncrement? get timeIncrement => clock != null
+      ? TimeIncrement(clock!.$1.inSeconds, clock!.$2.inSeconds)
+      : null;
 
   Perf get perf => Perf.fromVariantAndSpeed(
     variant ?? Variant.standard,
-    timeIncrement != null ? Speed.fromTimeIncrement(timeIncrement!) : Speed.correspondence,
+    timeIncrement != null
+        ? Speed.fromTimeIncrement(timeIncrement!)
+        : Speed.correspondence,
   );
 
   Map<String, String> get requestBody => {
@@ -116,17 +129,22 @@ sealed class GameSeek with _$GameSeek {
     if (days != null) 'days': days.toString(),
     'rated': rated.toString(),
     if (variant != null) 'variant': variant!.name,
-    if (ratingRange != null) 'ratingRange': '${ratingRange!.$1}-${ratingRange!.$2}',
+    if (ratingRange != null)
+      'ratingRange': '${ratingRange!.$1}-${ratingRange!.$2}',
   };
 
-  factory GameSeek.fromJson(Map<String, dynamic> json) => _$GameSeekFromJson(json);
+  factory GameSeek.fromJson(Map<String, dynamic> json) =>
+      _$GameSeekFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class RecentGameSeekPrefs with _$RecentGameSeekPrefs implements Serializable {
+sealed class RecentGameSeekPrefs
+    with _$RecentGameSeekPrefs
+    implements Serializable {
   const RecentGameSeekPrefs._();
 
-  const factory RecentGameSeekPrefs({required IList<GameSeek> seeks}) = _RecentGameSeekPrefs;
+  const factory RecentGameSeekPrefs({required IList<GameSeek> seeks}) =
+      _RecentGameSeekPrefs;
 
   factory RecentGameSeekPrefs.fromJson(Map<String, dynamic> json) =>
       _$RecentGameSeekPrefsFromJson(json);
@@ -140,7 +158,8 @@ sealed class RecentGameSeekPrefs with _$RecentGameSeekPrefs implements Serializa
 }
 
 @Riverpod(keepAlive: true)
-class RecentGameSeek extends _$RecentGameSeek with PreferencesStorage<RecentGameSeekPrefs> {
+class RecentGameSeek extends _$RecentGameSeek
+    with PreferencesStorage<RecentGameSeekPrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.gameSeeks;
@@ -165,7 +184,9 @@ class RecentGameSeek extends _$RecentGameSeek with PreferencesStorage<RecentGame
   }
 
   Future<void> clearRequests() async {
-    await LichessBinding.instance.sharedPreferences.remove(prefCategory.storageKey);
+    await LichessBinding.instance.sharedPreferences.remove(
+      prefCategory.storageKey,
+    );
     state = RecentGameSeekPrefs.empty;
   }
 }

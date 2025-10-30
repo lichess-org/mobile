@@ -31,7 +31,9 @@ class System {
   Future<bool> clearUserData() async {
     if (Platform.isAndroid) {
       try {
-        final result = await _channel.invokeMethod<bool>('clearApplicationUserData');
+        final result = await _channel.invokeMethod<bool>(
+          'clearApplicationUserData',
+        );
         return result ?? false;
       } on PlatformException catch (e) {
         debugPrint('Failed to clear user data: ${e.message}');
@@ -44,7 +46,9 @@ class System {
 }
 
 /// A provider that returns OS version of an Android device.
-final androidVersionProvider = FutureProvider<AndroidBuildVersion?>((ref) async {
+final androidVersionProvider = FutureProvider<AndroidBuildVersion?>((
+  ref,
+) async {
   if (!Platform.isAndroid) {
     return null;
   }

@@ -18,7 +18,9 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-final _hotStudiesProvider = FutureProvider.autoDispose<IList<StudyPageItem>>((Ref ref) {
+final _hotStudiesProvider = FutureProvider.autoDispose<IList<StudyPageItem>>((
+  Ref ref,
+) {
   return ref.withClientCacheFor(
     (client) => StudyRepository(ref, client)
         .getStudies(category: StudyCategory.all, order: StudyListOrder.hot)
@@ -39,13 +41,18 @@ final _myStudiesLengthProvider = FutureProvider.autoDispose<int>((Ref ref) {
   );
 });
 
-final _myFavoriteStudiesLengthProvider = FutureProvider.autoDispose<int>((Ref ref) {
+final _myFavoriteStudiesLengthProvider = FutureProvider.autoDispose<int>((
+  Ref ref,
+) {
   final session = ref.watch(authSessionProvider);
   if (session == null) return Future.value(0);
 
   return ref.withClientCacheFor(
     (client) => StudyRepository(ref, client)
-        .getStudies(category: StudyCategory.likes, order: StudyListOrder.updated)
+        .getStudies(
+          category: StudyCategory.likes,
+          order: StudyListOrder.updated,
+        )
         .then((value) => value.studies.length),
     const Duration(hours: 6),
   );
@@ -81,12 +88,15 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     final session = ref.watch(authSessionProvider);
     final haveIStudies =
-        session != null && (ref.watch(_myStudiesLengthProvider).valueOrNull ?? 0) > 0;
+        session != null &&
+        (ref.watch(_myStudiesLengthProvider).valueOrNull ?? 0) > 0;
     final haveIFavoriteStudies =
-        session != null && (ref.watch(_myFavoriteStudiesLengthProvider).valueOrNull ?? 0) > 0;
+        session != null &&
+        (ref.watch(_myFavoriteStudiesLengthProvider).valueOrNull ?? 0) > 0;
 
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,
@@ -101,7 +111,10 @@ class _Body extends ConsumerWidget {
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
-                title: Text(context.l10n.coordinatesCoordinateTraining, style: Styles.callout),
+                title: Text(
+                  context.l10n.coordinatesCoordinateTraining,
+                  style: Styles.callout,
+                ),
                 onTap: () => Navigator.of(
                   context,
                   rootNavigator: true,
@@ -122,7 +135,10 @@ class _Body extends ConsumerWidget {
                   AsyncData(:final value) =>
                     value
                         .take(5)
-                        .map((study) => StudyListItem(study: study, titleMaxLines: 1))
+                        .map(
+                          (study) =>
+                              StudyListItem(study: study, titleMaxLines: 1),
+                        )
                         .toList(growable: false),
                   _ => [],
                 }),
@@ -131,7 +147,9 @@ class _Body extends ConsumerWidget {
             if (haveIStudies || haveIFavoriteStudies)
               ListSection(
                 hasLeading: true,
-                margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
+                margin: Styles.horizontalBodyPadding.add(
+                  Styles.sectionBottomPadding,
+                ),
                 children: [
                   if (haveIStudies)
                     ListTile(

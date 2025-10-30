@@ -73,23 +73,33 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       },
     );
 
-    final round = await ref.read(broadcastRepositoryProvider).getRound(broadcastRoundId);
+    final round = await ref
+        .read(broadcastRepositoryProvider)
+        .getRound(broadcastRoundId);
 
-    return BroadcastRoundState(round: round.round, games: round.games, observedGames: ISet());
+    return BroadcastRoundState(
+      round: round.round,
+      games: round.games,
+      observedGames: ISet(),
+    );
   }
 
   Future<void> _syncRound() async {
     if (state.hasValue == false) return;
 
     final key = _key;
-    final round = await ref.read(broadcastRepositoryProvider).getRound(broadcastRoundId);
+    final round = await ref
+        .read(broadcastRepositoryProvider)
+        .getRound(broadcastRoundId);
     // check provider is still mounted
     if (key == _key) {
       state = AsyncData(
         BroadcastRoundState(
           round: round.round,
           games: round.games,
-          observedGames: state.requireValue.observedGames.where(round.games.containsKey).toISet(),
+          observedGames: state.requireValue.observedGames
+              .where(round.games.containsKey)
+              .toISet(),
         ),
       );
       _sendEvalMultiGet();
@@ -126,7 +136,11 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     // We check that the event we received is for the last move of the game
     if (currentPath?.value != '!') return;
 
-    final broadcastGameId = pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
+    final broadcastGameId = pick(
+      event.data,
+      'p',
+      'chapterId',
+    ).asBroadcastGameIdOrThrow();
     final fen = pick(event.data, 'n', 'fen').asStringOrThrow();
 
     final playingSide = Setup.parseFen(fen).turn;
@@ -139,9 +153,14 @@ class BroadcastRoundController extends _$BroadcastRoundController {
           (broadcastGame) => broadcastGame.copyWith(
             players: IMap({
               playingSide: broadcastGame.players[playingSide]!,
-              playingSide.opposite: broadcastGame.players[playingSide.opposite]!.copyWith(
-                clock: pick(event.data, 'n', 'clock').asDurationFromCentiSecondsOrNull(),
-              ),
+              playingSide.opposite: broadcastGame.players[playingSide.opposite]!
+                  .copyWith(
+                    clock: pick(
+                      event.data,
+                      'n',
+                      'clock',
+                    ).asDurationFromCentiSecondsOrNull(),
+                  ),
             }),
             fen: fen,
             lastMove: pick(event.data, 'n', 'uci').asUciMoveOrThrow(),
@@ -163,13 +182,17 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   }
 
   void _handleGamesChangeEvent(SocketEvent event) {
-    final games = IMap.fromEntries(pick(event.data).asListOrThrow(gameFromPick));
+    final games = IMap.fromEntries(
+      pick(event.data).asListOrThrow(gameFromPick),
+    );
 
     state = AsyncData(
       state.requireValue.copyWith(
         round: state.requireValue.round,
         games: games,
-        observedGames: state.requireValue.observedGames.where(games.containsKey).toISet(),
+        observedGames: state.requireValue.observedGames
+            .where(games.containsKey)
+            .toISet(),
       ),
     );
 
@@ -183,7 +206,11 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   }
 
   void _handleClockEvent(SocketEvent event) {
-    final broadcastGameId = pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
+    final broadcastGameId = pick(
+      event.data,
+      'p',
+      'chapterId',
+    ).asBroadcastGameIdOrThrow();
     final relayClocks = pick(event.data, 'p', 'relayClocks');
 
     // We check that the clocks for the broadcast game preview have been updated else we do nothing
@@ -232,7 +259,8 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     state = AsyncData(
       round.copyWith(
         games: round.games.updateAll(
-          (id, game) => (game.fen == fen) ? game.copyWith(cp: cp, mate: mate) : game,
+          (id, game) =>
+              (game.fen == fen) ? game.copyWith(cp: cp, mate: mate) : game,
         ),
       ),
     );
@@ -247,7 +275,9 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     if (state.valueOrNull?.games.containsKey(gameId) != true) return;
 
     state = AsyncData(
-      state.requireValue.copyWith(observedGames: state.requireValue.observedGames.add(gameId)),
+      state.requireValue.copyWith(
+        observedGames: state.requireValue.observedGames.add(gameId),
+      ),
     );
 
     _evalRequestDebouncer(_sendEvalMultiGet);
@@ -257,7 +287,9 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     if (!state.hasValue) return;
 
     state = AsyncData(
-      state.requireValue.copyWith(observedGames: state.requireValue.observedGames.remove(gameId)),
+      state.requireValue.copyWith(
+        observedGames: state.requireValue.observedGames.remove(gameId),
+      ),
     );
 
     _evalRequestDebouncer(_sendEvalMultiGet);
@@ -266,7 +298,8 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   void _sendEvalMultiGet() {
     final round = state.requireValue;
     final prefs = ref.read(broadcastPreferencesProvider);
-    if (prefs.showEvaluationGauge == false || round.observedGames.isEmpty) return;
+    if (prefs.showEvaluationGauge == false || round.observedGames.isEmpty)
+      return;
 
     _socketClient.send('evalGetMulti', {
       'fens': [for (final id in round.observedGames) round.games[id]!.fen],

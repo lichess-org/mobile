@@ -35,7 +35,8 @@ FenSocketEvent _tvFenEventFromPick(RequiredPick pick) {
 
 @freezed
 sealed class FinishSocketEvent with _$FinishSocketEvent {
-  const factory FinishSocketEvent({required GameId id, required Side? winner}) = _FinishSocketEvent;
+  const factory FinishSocketEvent({required GameId id, required Side? winner}) =
+      _FinishSocketEvent;
 
   factory FinishSocketEvent.fromJson(Map<String, dynamic> json) {
     return _finishEventFromPick(pick(json).required());

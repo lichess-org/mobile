@@ -35,7 +35,10 @@ class TvController extends _$TvController {
     (GameId id, Side orientation)? initialGame,
     UserId? userId,
   }) {
-    assert(channel != null || userId != null, 'Either a channel or a userId must be provided');
+    assert(
+      channel != null || userId != null,
+      'Either a channel or a userId must be provided',
+    );
 
     _onReload = ref.invalidateSelf;
 
@@ -71,7 +74,9 @@ class TvController extends _$TvController {
       id = channelGame.id;
       orientation = channelGame.side ?? Side.white;
     } else if (userId != null) {
-      final game = await ref.read(userRepositoryProvider).getCurrentGame(userId!);
+      final game = await ref
+          .read(userRepositoryProvider)
+          .getCurrentGame(userId!);
       id = game.id;
       orientation = game.playerSideOf(userId!) ?? Side.white;
     } else {
@@ -84,7 +89,9 @@ class TvController extends _$TvController {
         .open(
           Uri(
             path: '/watch/$id/${orientation.name}/v6',
-            queryParameters: userId != null ? {'userTv': userId.toString()} : null,
+            queryParameters: userId != null
+                ? {'userTv': userId.toString()}
+                : null,
           ),
           forceReconnect: true,
           onEventGapFailure: () {
@@ -95,8 +102,12 @@ class TvController extends _$TvController {
     _socketSubscription?.cancel();
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
-    return socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) {
-      final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
+    return socketClient.stream.firstWhere((e) => e.topic == 'full').then((
+      event,
+    ) {
+      final fullEvent = GameFullEvent.fromJson(
+        event.data as Map<String, dynamic>,
+      );
       socketClient.version = fullEvent.socketEventVersion;
 
       return TvState(
@@ -112,15 +123,21 @@ class TvController extends _$TvController {
     state = AsyncValue.data(newState);
   }
 
-  bool canGoBack() => state.mapOrNull(data: (d) => d.value.stepCursor > 0) ?? false;
+  bool canGoBack() =>
+      state.mapOrNull(data: (d) => d.value.stepCursor > 0) ?? false;
 
   bool canGoForward() =>
-      state.mapOrNull(data: (d) => d.value.stepCursor < d.value.game.steps.length - 1) ?? false;
+      state.mapOrNull(
+        data: (d) => d.value.stepCursor < d.value.game.steps.length - 1,
+      ) ??
+      false;
 
   void toggleBoard() {
     if (state.hasValue) {
       final curState = state.requireValue;
-      state = AsyncValue.data(curState.copyWith(orientation: curState.orientation.opposite));
+      state = AsyncValue.data(
+        curState.copyWith(orientation: curState.orientation.opposite),
+      );
     }
   }
 
@@ -128,7 +145,9 @@ class TvController extends _$TvController {
     if (state.hasValue) {
       final curState = state.requireValue;
       if (curState.stepCursor < curState.game.steps.length - 1) {
-        state = AsyncValue.data(curState.copyWith(stepCursor: curState.stepCursor + 1));
+        state = AsyncValue.data(
+          curState.copyWith(stepCursor: curState.stepCursor + 1),
+        );
         final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
         if (san != null) {
           _playReplayMoveSound(san);
@@ -141,7 +160,9 @@ class TvController extends _$TvController {
     if (state.hasValue) {
       final curState = state.requireValue;
       if (curState.stepCursor > 0) {
-        state = AsyncValue.data(curState.copyWith(stepCursor: curState.stepCursor - 1));
+        state = AsyncValue.data(
+          curState.copyWith(stepCursor: curState.stepCursor - 1),
+        );
         final san = curState.game.stepAt(curState.stepCursor - 1).sanMove?.san;
         if (san != null) {
           _playReplayMoveSound(san);
@@ -183,7 +204,10 @@ class TvController extends _$TvController {
             _onReload?.call();
             return;
           }
-          final reloadEvent = SocketEvent(topic: data['t'] as String, data: data['d']);
+          final reloadEvent = SocketEvent(
+            topic: data['t'] as String,
+            data: data['d'],
+          );
           _handleSocketEvent(reloadEvent);
         } else {
           _onReload?.call();
@@ -228,9 +252,14 @@ class TvController extends _$TvController {
         state = AsyncData(newState);
 
       case 'endData':
-        final endData = GameEndEvent.fromJson(event.data as Map<String, dynamic>);
+        final endData = GameEndEvent.fromJson(
+          event.data as Map<String, dynamic>,
+        );
         TvState newState = state.requireValue.copyWith(
-          game: state.requireValue.game.copyWith(status: endData.status, winner: endData.winner),
+          game: state.requireValue.game.copyWith(
+            status: endData.status,
+            winner: endData.winner,
+          ),
         );
         if (endData.clock != null) {
           newState = newState.copyWith.game.clock!(

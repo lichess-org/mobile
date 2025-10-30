@@ -24,14 +24,19 @@ class CorrespondenceChallengesScreen extends ConsumerStatefulWidget {
   const CorrespondenceChallengesScreen({super.key});
 
   static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const CorrespondenceChallengesScreen());
+    return buildScreenRoute(
+      context,
+      screen: const CorrespondenceChallengesScreen(),
+    );
   }
 
   @override
-  ConsumerState<CorrespondenceChallengesScreen> createState() => _ChallengesBodyState();
+  ConsumerState<CorrespondenceChallengesScreen> createState() =>
+      _ChallengesBodyState();
 }
 
-class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen> {
+class _ChallengesBodyState
+    extends ConsumerState<CorrespondenceChallengesScreen> {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -41,7 +46,9 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
   void initState() {
     super.initState();
 
-    socketClient = ref.read(socketPoolProvider).open(Uri(path: '/lobby/socket/v5'));
+    socketClient = ref
+        .read(socketPoolProvider)
+        .open(Uri(path: '/lobby/socket/v5'));
 
     _socketSubscription = socketClient.stream.listen((event) {
       switch (event.topic) {
@@ -50,10 +57,12 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
           final data = event.data as Map<String, dynamic>;
           final gameFullId = pick(data['id']).asGameFullIdOrThrow();
           if (mounted) {
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(GameScreen.buildRoute(context, source: ExistingGameSource(gameFullId)));
+            Navigator.of(context, rootNavigator: true).push(
+              GameScreen.buildRoute(
+                context,
+                source: ExistingGameSource(gameFullId),
+              ),
+            );
           }
 
         case 'reload_seeks':
@@ -105,15 +114,18 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
           ),
           body: HapticRefreshIndicator(
             key: _refreshKey,
-            onRefresh: () => ref.refresh(correspondenceChallengesProvider.future),
+            onRefresh: () =>
+                ref.refresh(correspondenceChallengesProvider.future),
             child: ListView.separated(
               itemCount: supportedChallenges.length,
-              separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+              separatorBuilder: (context, index) =>
+                  Theme.of(context).platform == TargetPlatform.iOS
                   ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
                   : const SizedBox.shrink(),
               itemBuilder: (context, index) {
                 final challenge = supportedChallenges[index];
-                final isMySeek = UserId.fromUserName(challenge.username) == session?.user.id;
+                final isMySeek =
+                    UserId.fromUserName(challenge.username) == session?.user.id;
 
                 return CorrespondenceChallengeListItem(
                   challenge: challenge,
@@ -126,7 +138,10 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
                       ? null
                       : session == null
                       ? () {
-                          showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                          showSnackBar(
+                            context,
+                            context.l10n.youNeedAnAccountToDoThat,
+                          );
                         }
                       : () {
                           showConfirmDialog<void>(
@@ -134,13 +149,19 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
                             title: Text(context.l10n.accept),
                             isDestructiveAction: true,
                             onConfirm: () {
-                              socketClient.send('joinSeek', challenge.id.toString());
+                              socketClient.send(
+                                'joinSeek',
+                                challenge.id.toString(),
+                              );
                             },
                           );
                         },
                   onCancel: isMySeek
                       ? () {
-                          socketClient.send('cancelSeek', challenge.id.toString());
+                          socketClient.send(
+                            'cancelSeek',
+                            challenge.id.toString(),
+                          );
                         }
                       : null,
                 );
@@ -149,7 +170,9 @@ class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen>
           ),
         );
       case _:
-        return const Scaffold(body: Center(child: CircularProgressIndicator.adaptive()));
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator.adaptive()),
+        );
     }
   }
 }

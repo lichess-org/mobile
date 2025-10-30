@@ -18,10 +18,12 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
   final prefCategory = PrefCategory.openingExplorer;
 
   @override
-  OpeningExplorerPrefs defaults({LightUser? user}) => OpeningExplorerPrefs.defaults(user: user);
+  OpeningExplorerPrefs defaults({LightUser? user}) =>
+      OpeningExplorerPrefs.defaults(user: user);
 
   @override
-  OpeningExplorerPrefs fromJson(Map<String, dynamic> json) => OpeningExplorerPrefs.fromJson(json);
+  OpeningExplorerPrefs fromJson(Map<String, dynamic> json) =>
+      OpeningExplorerPrefs.fromJson(json);
 
   @override
   OpeningExplorerPrefs build() {
@@ -56,8 +58,9 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
   Future<void> setLichessDbSince(DateTime since) =>
       save(state.copyWith(lichessDb: state.lichessDb.copyWith(since: since)));
 
-  Future<void> setPlayerDbUsernameOrId(String username) =>
-      save(state.copyWith(playerDb: state.playerDb.copyWith(username: username)));
+  Future<void> setPlayerDbUsernameOrId(String username) => save(
+    state.copyWith(playerDb: state.playerDb.copyWith(username: username)),
+  );
 
   Future<void> setPlayerDbSide(Side side) =>
       save(state.copyWith(playerDb: state.playerDb.copyWith(side: side)));
@@ -87,7 +90,9 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Serializable {
+sealed class OpeningExplorerPrefs
+    with _$OpeningExplorerPrefs
+    implements Serializable {
   const OpeningExplorerPrefs._();
 
   const factory OpeningExplorerPrefs({
@@ -97,12 +102,13 @@ sealed class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Seriali
     required PlayerDb playerDb,
   }) = _OpeningExplorerPrefs;
 
-  factory OpeningExplorerPrefs.defaults({LightUser? user}) => OpeningExplorerPrefs(
-    db: OpeningDatabase.master,
-    masterDb: MasterDb.defaults,
-    lichessDb: LichessDb.defaults,
-    playerDb: PlayerDb.defaults(user: user),
-  );
+  factory OpeningExplorerPrefs.defaults({LightUser? user}) =>
+      OpeningExplorerPrefs(
+        db: OpeningDatabase.master,
+        masterDb: MasterDb.defaults,
+        lichessDb: LichessDb.defaults,
+        playerDb: PlayerDb.defaults(user: user),
+      );
 
   factory OpeningExplorerPrefs.fromJson(Map<String, dynamic> json) {
     return _$OpeningExplorerPrefsFromJson(json);
@@ -148,7 +154,17 @@ sealed class LichessDb with _$LichessDb {
     Speed.classical,
     Speed.correspondence,
   });
-  static const kAvailableRatings = ISetConst({400, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500});
+  static const kAvailableRatings = ISetConst({
+    400,
+    1000,
+    1200,
+    1400,
+    1600,
+    1800,
+    2000,
+    2200,
+    2500,
+  });
   static final earliestDate = DateTime.utc(2012, 12);
   static final now = DateTime.now();
   static const kDaysInAYear = 365;

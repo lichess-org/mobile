@@ -6,6 +6,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'broadcast_player_screen_providers.g.dart';
 
 @riverpod
-Future<BroadcastTournamentId> broadcastTournamentId(Ref ref, BroadcastRoundId roundId) {
-  return ref.watch(broadcastRoundProvider(roundId).selectAsync((round) => round.tournament.id));
+Future<BroadcastTournamentId> broadcastTournamentId(
+  Ref ref,
+  BroadcastRoundId roundId,
+) {
+  return ref.watch(
+    broadcastRoundProvider(roundId).selectAsync((round) => round.tournament.id),
+  );
 }

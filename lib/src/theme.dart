@@ -11,22 +11,30 @@ const kSliderTheme = SliderThemeData(
   year2023: false,
 );
 
-ThemeData makeAppTheme(BuildContext context, GeneralPrefs generalPrefs, BoardPrefs boardPrefs) {
+ThemeData makeAppTheme(
+  BuildContext context,
+  GeneralPrefs generalPrefs,
+  BoardPrefs boardPrefs,
+) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
   final brightness = generalPrefs.isForcedDarkMode
       ? Brightness.dark
       : switch (generalPrefs.themeMode) {
           BackgroundThemeMode.light => Brightness.light,
           BackgroundThemeMode.dark => Brightness.dark,
-          BackgroundThemeMode.system => MediaQuery.platformBrightnessOf(context),
+          BackgroundThemeMode.system => MediaQuery.platformBrightnessOf(
+            context,
+          ),
         };
 
-  if (generalPrefs.backgroundColor == null && generalPrefs.backgroundImage == null) {
+  if (generalPrefs.backgroundColor == null &&
+      generalPrefs.backgroundImage == null) {
     return _makeDefaultTheme(brightness, generalPrefs, boardPrefs, isIOS);
   } else {
     return _makeBackgroundImageTheme(
       baseTheme:
-          generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundColor!.$1.baseTheme,
+          generalPrefs.backgroundImage?.baseTheme ??
+          generalPrefs.backgroundColor!.$1.baseTheme,
       seedColor:
           generalPrefs.backgroundImage?.seedColor ??
           (generalPrefs.backgroundColor!.$2
@@ -48,7 +56,10 @@ class CustomTheme extends ThemeExtension<CustomTheme> {
 
   @override
   CustomTheme copyWith({Color? rowEven, Color? rowOdd}) {
-    return CustomTheme(rowEven: rowEven ?? this.rowEven, rowOdd: rowOdd ?? this.rowOdd);
+    return CustomTheme(
+      rowEven: rowEven ?? this.rowEven,
+      rowOdd: rowOdd ?? this.rowOdd,
+    );
   }
 
   @override
@@ -70,7 +81,8 @@ extension CustomThemeBuildContext on BuildContext {
     rowOdd: ColorScheme.of(this).surfaceContainerLow,
   );
 
-  CustomTheme get lichessTheme => Theme.of(this).extension<CustomTheme>() ?? _defaultLichessTheme;
+  CustomTheme get lichessTheme =>
+      Theme.of(this).extension<CustomTheme>() ?? _defaultLichessTheme;
 }
 
 // --
@@ -87,7 +99,8 @@ ThemeData _makeDefaultTheme(
     Brightness.light => dynamicColorSchemes?.light,
     Brightness.dark => dynamicColorSchemes?.dark,
   };
-  final hasSystemColors = systemScheme != null && generalPrefs.systemColors == true;
+  final hasSystemColors =
+      systemScheme != null && generalPrefs.systemColors == true;
 
   final neutralScheme = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
@@ -124,7 +137,10 @@ ThemeData _makeDefaultTheme(
       : ThemeData.from(colorScheme: boardScheme, textTheme: textTheme);
 
   return theme.copyWith(
-    cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
+    cupertinoOverrideTheme: _makeCupertinoThemeData(
+      theme.colorScheme,
+      brightness,
+    ),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     appBarTheme: _appBarTheme.copyWith(
       backgroundColor: isIOS
@@ -139,19 +155,27 @@ ThemeData _makeDefaultTheme(
     ),
     navigationBarTheme: isIOS
         ? NavigationBarThemeData(
-            backgroundColor: theme.colorScheme.surface.withValues(alpha: kCupertinoBarOpacity),
+            backgroundColor: theme.colorScheme.surface.withValues(
+              alpha: kCupertinoBarOpacity,
+            ),
           )
         : null,
     bottomAppBarTheme: BottomAppBarThemeData(
       color: theme.colorScheme.surface,
       elevation: isIOS ? 0 : null,
     ),
-    iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
+    iconTheme: IconThemeData(
+      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+    ),
     listTileTheme: _makeListTileTheme(theme.colorScheme, isIOS),
     cardTheme: isIOS
-        ? _kCupertinoCardTheme.copyWith(color: theme.colorScheme.surfaceContainerHigh)
+        ? _kCupertinoCardTheme.copyWith(
+            color: theme.colorScheme.surfaceContainerHigh,
+          )
         : null,
-    inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(theme.colorScheme) : null,
+    inputDecorationTheme: isIOS
+        ? _makeCupertinoInputDecorationTheme(theme.colorScheme)
+        : null,
     floatingActionButtonTheme: isIOS
         ? FloatingActionButtonThemeData(
             backgroundColor: theme.colorScheme.secondaryFixedDim,
@@ -178,42 +202,60 @@ ThemeData _makeBackgroundImageTheme({
 
   return baseTheme.copyWith(
     colorScheme: baseTheme.colorScheme.copyWith(
-      surface: baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha),
-      surfaceContainerLowest: baseTheme.colorScheme.surfaceContainerLowest.withValues(
+      surface: baseTheme.colorScheme.surface.withValues(
         alpha: baseSurfaceAlpha,
       ),
+      surfaceContainerLowest: baseTheme.colorScheme.surfaceContainerLowest
+          .withValues(alpha: baseSurfaceAlpha),
       surfaceContainerLow: baseTheme.colorScheme.surfaceContainerLow.withValues(
         alpha: baseSurfaceAlpha,
       ),
-      surfaceContainer: baseTheme.colorScheme.surfaceContainer.withValues(alpha: baseSurfaceAlpha),
-      surfaceContainerHigh: baseTheme.colorScheme.surfaceContainerHigh.withValues(
+      surfaceContainer: baseTheme.colorScheme.surfaceContainer.withValues(
         alpha: baseSurfaceAlpha,
       ),
-      surfaceContainerHighest: baseTheme.colorScheme.surfaceContainerHighest.withValues(
-        alpha: baseSurfaceAlpha,
+      surfaceContainerHigh: baseTheme.colorScheme.surfaceContainerHigh
+          .withValues(alpha: baseSurfaceAlpha),
+      surfaceContainerHighest: baseTheme.colorScheme.surfaceContainerHighest
+          .withValues(alpha: baseSurfaceAlpha),
+      surfaceDim: baseTheme.colorScheme.surfaceDim.withValues(
+        alpha: baseSurfaceAlpha + 1,
       ),
-      surfaceDim: baseTheme.colorScheme.surfaceDim.withValues(alpha: baseSurfaceAlpha + 1),
-      surfaceBright: baseTheme.colorScheme.surfaceBright.withValues(alpha: baseSurfaceAlpha - 2),
+      surfaceBright: baseTheme.colorScheme.surfaceBright.withValues(
+        alpha: baseSurfaceAlpha - 2,
+      ),
     ),
-    cupertinoOverrideTheme: _makeCupertinoThemeData(baseTheme.colorScheme, baseTheme.brightness),
+    cupertinoOverrideTheme: _makeCupertinoThemeData(
+      baseTheme.colorScheme,
+      baseTheme.brightness,
+    ),
     listTileTheme: _makeListTileTheme(baseTheme.colorScheme, isIOS),
     cardTheme: isIOS ? _kCupertinoCardTheme : null,
-    inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(baseTheme.colorScheme) : null,
-    bottomSheetTheme: (isIOS ? _kCupertinoBottomSheetTheme : const BottomSheetThemeData()).copyWith(
-      backgroundColor: isIOS
-          ? lighten(baseTheme.colorScheme.surface, 0.1).withValues(alpha: 0.9)
-          : baseTheme.colorScheme.surface.withValues(alpha: 0.9),
-    ),
+    inputDecorationTheme: isIOS
+        ? _makeCupertinoInputDecorationTheme(baseTheme.colorScheme)
+        : null,
+    bottomSheetTheme:
+        (isIOS ? _kCupertinoBottomSheetTheme : const BottomSheetThemeData())
+            .copyWith(
+              backgroundColor: isIOS
+                  ? lighten(
+                      baseTheme.colorScheme.surface,
+                      0.1,
+                    ).withValues(alpha: 0.9)
+                  : baseTheme.colorScheme.surface.withValues(alpha: 0.9),
+            ),
     drawerTheme: DrawerThemeData(
-      backgroundColor: baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.9),
+      backgroundColor: baseTheme.colorScheme.surfaceContainerLow.withValues(
+        alpha: 0.9,
+      ),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: baseTheme.colorScheme.secondaryFixedDim,
       foregroundColor: baseTheme.colorScheme.onSecondaryFixedVariant,
     ),
-    dialogTheme: (isIOS ? _kCupertinoDialogTheme : const DialogThemeData()).copyWith(
-      backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
-    ),
+    dialogTheme: (isIOS ? _kCupertinoDialogTheme : const DialogThemeData())
+        .copyWith(
+          backgroundColor: baseTheme.colorScheme.surface.withValues(alpha: 0.9),
+        ),
     filledButtonTheme: isIOS ? _kCupertinoFilledButtonTheme : null,
     outlinedButtonTheme: isIOS ? _kCupertinoOutlinedButtonTheme : null,
     menuTheme: isIOS
@@ -228,13 +270,17 @@ ThemeData _makeBackgroundImageTheme({
         : MenuThemeData(
             style: MenuStyle(
               backgroundColor: WidgetStatePropertyAll(
-                baseTheme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
+                baseTheme.colorScheme.surfaceContainerLow.withValues(
+                  alpha: 0.8,
+                ),
               ),
             ),
           ),
     scaffoldBackgroundColor: seedColor.withValues(alpha: 0),
     appBarTheme: _appBarTheme.copyWith(
-      backgroundColor: isBackgroundImage ? null : seedColor.withValues(alpha: kCupertinoBarOpacity),
+      backgroundColor: isBackgroundImage
+          ? null
+          : seedColor.withValues(alpha: kCupertinoBarOpacity),
       scrolledUnderElevation: isIOS ? 0 : null,
       titleTextStyle: isIOS
           ? const CupertinoTextThemeData().navTitleTextStyle.copyWith(
@@ -245,7 +291,9 @@ ThemeData _makeBackgroundImageTheme({
     navigationBarTheme: isIOS
         ? NavigationBarThemeData(
             backgroundColor: isBackgroundImage
-                ? baseTheme.colorScheme.surface.withValues(alpha: baseSurfaceAlpha)
+                ? baseTheme.colorScheme.surface.withValues(
+                    alpha: baseSurfaceAlpha,
+                  )
                 : seedColor.withValues(alpha: kCupertinoBarOpacity),
           )
         : null,
@@ -273,7 +321,9 @@ ThemeData _makeBackgroundImageTheme({
 const _kCupertinoFilledButtonTheme = FilledButtonThemeData(
   style: ButtonStyle(
     shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
     ),
   ),
 );
@@ -281,7 +331,9 @@ const _kCupertinoFilledButtonTheme = FilledButtonThemeData(
 const _kCupertinoOutlinedButtonTheme = OutlinedButtonThemeData(
   style: ButtonStyle(
     shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
     ),
   ),
 );
@@ -294,7 +346,11 @@ ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
   return ListTileThemeData(
     iconColor: colorScheme.onSurface.withValues(alpha: 0.7),
     titleTextStyle: isIOS
-        ? TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: 16)
+        ? TextStyle(
+            color: colorScheme.onSurface,
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+          )
         : null,
     subtitleTextStyle: TextStyle(
       color: colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
@@ -308,12 +364,16 @@ const _appBarTheme = AppBarTheme(actionsPadding: EdgeInsets.only(right: 8.0));
 
 const _kCupertinoBottomSheetTheme = BottomSheetThemeData(
   elevation: 0,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(14))),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.vertical(top: Radius.circular(14)),
+  ),
 );
 
 const _kCupertinoDialogTheme = DialogThemeData(
   elevation: 0,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(14))),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(14)),
+  ),
 );
 
 const _kCupertinoCardTheme = CardThemeData(
@@ -322,7 +382,9 @@ const _kCupertinoCardTheme = CardThemeData(
   shape: RoundedRectangleBorder(borderRadius: Styles.cardBorderRadius),
 );
 
-InputDecorationTheme _makeCupertinoInputDecorationTheme(ColorScheme colorScheme) {
+InputDecorationTheme _makeCupertinoInputDecorationTheme(
+  ColorScheme colorScheme,
+) {
   return InputDecorationTheme(
     filled: true,
     fillColor: colorScheme.surfaceContainer.withValues(alpha: 0.7),
@@ -350,7 +412,10 @@ InputDecorationTheme _makeCupertinoInputDecorationTheme(ColorScheme colorScheme)
   );
 }
 
-CupertinoThemeData _makeCupertinoThemeData(ColorScheme colorScheme, Brightness brightness) {
+CupertinoThemeData _makeCupertinoThemeData(
+  ColorScheme colorScheme,
+  Brightness brightness,
+) {
   return CupertinoThemeData(
     applyThemeToAll: true,
     primaryColor: colorScheme.primary,
@@ -360,12 +425,12 @@ CupertinoThemeData _makeCupertinoThemeData(ColorScheme colorScheme, Brightness b
       textStyle: const CupertinoThemeData().textTheme.textStyle.copyWith(
         color: colorScheme.onSurface,
       ),
-      navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
-        color: colorScheme.onSurface,
-      ),
-      navLargeTitleTextStyle: const CupertinoThemeData().textTheme.navLargeTitleTextStyle.copyWith(
-        color: colorScheme.onSurface,
-      ),
+      navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle
+          .copyWith(color: colorScheme.onSurface),
+      navLargeTitleTextStyle: const CupertinoThemeData()
+          .textTheme
+          .navLargeTitleTextStyle
+          .copyWith(color: colorScheme.onSurface),
     ),
     brightness: brightness,
   );

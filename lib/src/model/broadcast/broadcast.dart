@@ -5,7 +5,11 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 
 part 'broadcast.freezed.dart';
 
-typedef BroadcastList = ({IList<Broadcast> active, IList<Broadcast> past, int? nextPage});
+typedef BroadcastList = ({
+  IList<Broadcast> active,
+  IList<Broadcast> past,
+  int? nextPage,
+});
 
 typedef BroadcastSearchList = ({IList<Broadcast> broadcasts, int? nextPage});
 
@@ -30,7 +34,9 @@ enum BroadcastResult {
             '½-0' => BroadcastResult.whiteHalfWins,
             '0-½' => BroadcastResult.blackHalfWins,
             '*' => BroadcastResult.newOrOngoing,
-            _ => throw FormatException("value $result can't be interpreted as a broadcast result"),
+            _ => throw FormatException(
+              "value $result can't be interpreted as a broadcast result",
+            ),
           };
   }
 
@@ -153,7 +159,9 @@ sealed class BroadcastGame with _$BroadcastGame {
 
   // see lila commit 09822641e1cce954a6c39078c5ef0fc6eebe10b5
   bool get isOngoing =>
-      status == BroadcastResult.newOrOngoing && thinkTime != null && lastMove != null;
+      status == BroadcastResult.newOrOngoing &&
+      thinkTime != null &&
+      lastMove != null;
   bool get isOver => status.isOver;
   Side get sideToMove => Setup.parseFen(fen).turn;
 }
@@ -182,7 +190,8 @@ sealed class BroadcastPlayerWithClock with _$BroadcastPlayerWithClock {
 }
 
 @freezed
-sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallResult {
+sealed class BroadcastPlayerWithOverallResult
+    with _$BroadcastPlayerWithOverallResult {
   const factory BroadcastPlayerWithOverallResult({
     required BroadcastPlayer player,
     required int played,
@@ -192,7 +201,10 @@ sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallR
   }) = _BroadcastPlayerWithOverallResult;
 }
 
-typedef BroadcastFideData = ({({int? standard, int? rapid, int? blitz}) ratings, int? birthYear});
+typedef BroadcastFideData = ({
+  ({int? standard, int? rapid, int? blitz}) ratings,
+  int? birthYear,
+});
 
 typedef BroadcastPlayerWithGameResults = ({
   BroadcastPlayerWithOverallResult playerWithOverallResult,
@@ -218,13 +230,16 @@ enum RoundStatus { live, finished, upcoming }
 
 @freezed
 sealed class BroadcastTeam with _$BroadcastTeam {
-  const factory BroadcastTeam({required String name, required double points}) = _BroadcastTeam;
+  const factory BroadcastTeam({required String name, required double points}) =
+      _BroadcastTeam;
 }
 
 @freezed
 sealed class BroadcastTeamGame with _$BroadcastTeamGame {
-  const factory BroadcastTeamGame({required BroadcastGameId id, required Side pov}) =
-      _BroadcastTeamGame;
+  const factory BroadcastTeamGame({
+    required BroadcastGameId id,
+    required Side pov,
+  }) = _BroadcastTeamGame;
 }
 
 @freezed

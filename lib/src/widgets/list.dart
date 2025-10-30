@@ -28,7 +28,9 @@ class ListSection extends StatelessWidget {
     bool header = false,
     this.margin,
     this.hasLeading = false,
-  }) : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
+  }) : children = [
+         for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink(),
+       ],
        onHeaderTap = null,
        headerTrailing = null,
        header = header ? const SizedBox.shrink() : null,
@@ -93,25 +95,35 @@ class ListSection extends StatelessWidget {
                       const SizedBox(height: materialVerticalPadding),
                       if (header != null)
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 16.0,
+                          ),
                           child: Container(
                             width: double.infinity,
                             height: 25,
                             decoration: const BoxDecoration(
                               color: Colors.black,
-                              borderRadius: BorderRadius.all(Radius.circular(16)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(16),
+                              ),
                             ),
                           ),
                         ),
                       for (int i = 0; i < children.length; i++)
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 16.0,
+                          ),
                           child: Container(
                             width: double.infinity,
                             height: 50,
                             decoration: const BoxDecoration(
                               color: Colors.black,
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
                             ),
                           ),
                         ),
@@ -127,7 +139,11 @@ class ListSection extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (header != null)
-                    ListSectionHeader(title: header!, onTap: onHeaderTap, trailing: headerTrailing),
+                    ListSectionHeader(
+                      title: header!,
+                      onTap: onHeaderTap,
+                      trailing: headerTrailing,
+                    ),
                   (materialFilledCard ? Card.filled : Card.new)(
                     clipBehavior: clipBehavior,
                     color: backgroundColor,
@@ -185,7 +201,12 @@ class ListSection extends StatelessWidget {
 
 /// A header for a [ListSection].
 class ListSectionHeader extends StatelessWidget {
-  const ListSectionHeader({super.key, required this.title, this.onTap, this.trailing});
+  const ListSectionHeader({
+    super.key,
+    required this.title,
+    this.onTap,
+    this.trailing,
+  });
 
   final Widget title;
 
@@ -205,14 +226,24 @@ class ListSectionHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-              child: DefaultTextStyle.merge(style: Styles.sectionTitle, child: title),
+              child: DefaultTextStyle.merge(
+                style: Styles.sectionTitle,
+                child: title,
+              ),
             ),
             if (onTap != null)
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(context.l10n.more, style: TextStyle(color: ColorScheme.of(context).primary)),
-                  Icon(Icons.chevron_right, size: 16, color: ColorScheme.of(context).primary),
+                  Text(
+                    context.l10n.more,
+                    style: TextStyle(color: ColorScheme.of(context).primary),
+                  ),
+                  Icon(
+                    Icons.chevron_right,
+                    size: 16,
+                    color: ColorScheme.of(context).primary,
+                  ),
                 ],
               )
             else if (trailing != null)
@@ -268,7 +299,9 @@ class PlatformDivider extends StatelessWidget {
             indent:
                 indent ??
                 (cupertinoHasLeading
-                    ? 16.0 + (cupertinoLeadingIndent ?? _defaultListTileLeadingWidth)
+                    ? 16.0 +
+                          (cupertinoLeadingIndent ??
+                              _defaultListTileLeadingWidth)
                     : 16.0),
             endIndent: endIndent,
             color: color,
@@ -312,7 +345,10 @@ class AnimatedListModel<E> {
   E removeAt(int index) {
     final E removedItem = _items.removeAt(index - itemsOffset);
     if (removedItem != null) {
-      _animatedList!.removeItem(index, (BuildContext context, Animation<double> animation) {
+      _animatedList!.removeItem(index, (
+        BuildContext context,
+        Animation<double> animation,
+      ) {
         return removedItemBuilder(removedItem, context, animation);
       });
     }
@@ -359,7 +395,10 @@ class SliverAnimatedListModel<E> {
   E removeAt(int index) {
     final E removedItem = _items.removeAt(index - itemsOffset);
     if (removedItem != null) {
-      _animatedList!.removeItem(index, (BuildContext context, Animation<double> animation) {
+      _animatedList!.removeItem(index, (
+        BuildContext context,
+        Animation<double> animation,
+      ) {
         return removedItemBuilder(removedItem, context, animation);
       });
     }

@@ -23,7 +23,8 @@ final _logger = Logger('NotificationService');
 
 /// A provider instance of the [FlutterLocalNotificationsPlugin].
 @Riverpod(keepAlive: true)
-FlutterLocalNotificationsPlugin notificationDisplay(Ref _) => FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin notificationDisplay(Ref _) =>
+    FlutterLocalNotificationsPlugin();
 
 /// A provider instance of the [NotificationService].
 @Riverpod(keepAlive: true)
@@ -39,7 +40,10 @@ NotificationService notificationService(Ref ref) {
 typedef ReceivedFcmMessage = ({FcmMessage message, bool fromBackground});
 
 /// A [NotificationResponse] and the associated [LocalNotification].
-typedef ParsedLocalNotification = (NotificationResponse response, LocalNotification notification);
+typedef ParsedLocalNotification = (
+  NotificationResponse response,
+  LocalNotification notification,
+);
 
 /// A service that manages notifications.
 ///
@@ -58,25 +62,28 @@ class NotificationService {
   StreamSubscription<String>? _fcmTokenRefreshSubscription;
 
   /// The connectivity changes stream subscription.
-  ProviderSubscription<AsyncValue<ConnectivityStatus>>? _connectivitySubscription;
+  ProviderSubscription<AsyncValue<ConnectivityStatus>>?
+  _connectivitySubscription;
 
   /// The stream controller for notification responses.
-  static final StreamController<ParsedLocalNotification> _responseStreamController =
-      StreamController.broadcast();
+  static final StreamController<ParsedLocalNotification>
+  _responseStreamController = StreamController.broadcast();
 
   /// The stream of notification responses.
   ///
   /// A notification response is dispatched when a notification has been interacted with.
-  static Stream<ParsedLocalNotification> get responseStream => _responseStreamController.stream;
+  static Stream<ParsedLocalNotification> get responseStream =>
+      _responseStreamController.stream;
 
   /// The stream controller for FCM messages.
-  static final StreamController<ReceivedFcmMessage> _fcmMessageStreamController =
-      StreamController.broadcast();
+  static final StreamController<ReceivedFcmMessage>
+  _fcmMessageStreamController = StreamController.broadcast();
 
   /// The stream of FCM messages.
   ///
   /// A FCM message is dispatched when a message is received from the Firebase Cloud Messaging service.
-  static Stream<ReceivedFcmMessage> get fcmMessageStream => _fcmMessageStreamController.stream;
+  static Stream<ReceivedFcmMessage> get fcmMessageStream =>
+      _fcmMessageStreamController.stream;
 
   /// The stream subscription for notification responses.
   StreamSubscription<NotificationResponse>? _responseStreamSubscription;
@@ -99,7 +106,10 @@ class NotificationService {
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
     // listen for connectivity changes to register device once the app is online
-    _connectivitySubscription = _ref.listen(connectivityChangesProvider, (prev, current) async {
+    _connectivitySubscription = _ref.listen(connectivityChangesProvider, (
+      prev,
+      current,
+    ) async {
       if (current.value?.isOnline == true && !_registeredDevice) {
         try {
           await registerDevice();
@@ -111,7 +121,9 @@ class NotificationService {
     });
 
     // Listen for incoming messages while the app is in the foreground.
-    LichessBinding.instance.firebaseMessagingOnMessage.listen((RemoteMessage message) {
+    LichessBinding.instance.firebaseMessagingOnMessage.listen((
+      RemoteMessage message,
+    ) {
       _processFcmMessage(message, fromBackground: false);
     });
 
@@ -133,15 +145,19 @@ class NotificationService {
     );
 
     // Listen for token refresh and update the token on the server accordingly.
-    _fcmTokenRefreshSubscription = LichessBinding.instance.firebaseMessaging.onTokenRefresh.listen((
-      String token,
-    ) {
-      _registerToken(token);
-    });
+    _fcmTokenRefreshSubscription = LichessBinding
+        .instance
+        .firebaseMessaging
+        .onTokenRefresh
+        .listen((String token) {
+          _registerToken(token);
+        });
 
     // Get any messages which caused the application to open from
     // a terminated state.
-    final RemoteMessage? initialMessage = await LichessBinding.instance.firebaseMessaging
+    final RemoteMessage? initialMessage = await LichessBinding
+        .instance
+        .firebaseMessaging
         .getInitialMessage();
 
     if (initialMessage != null) {
@@ -149,7 +165,9 @@ class NotificationService {
     }
 
     // Handle any other interaction that caused the app to open when in background.
-    LichessBinding.instance.firebaseMessagingOnMessageOpenedApp.listen(_handleFcmMessageOpenedApp);
+    LichessBinding.instance.firebaseMessagingOnMessageOpenedApp.listen(
+      _handleFcmMessageOpenedApp,
+    );
   }
 
   /// Shows a notification.
@@ -185,7 +203,9 @@ class NotificationService {
 
   /// Function called by the notification plugin when a notification has been tapped on.
   static void onDidReceiveNotificationResponse(NotificationResponse response) {
-    _logger.fine('received local notification ${response.id} response in foreground.');
+    _logger.fine(
+      'received local notification ${response.id} response in foreground.',
+    );
 
     final rawPayload = response.payload;
 
@@ -206,10 +226,13 @@ class NotificationService {
 
     switch (parsedMessage) {
       case final CorresGameUpdateFcmMessage corresMessage:
-        final notification = CorresGameUpdateNotification.fromFcmMessage(corresMessage);
+        final notification = CorresGameUpdateNotification.fromFcmMessage(
+          corresMessage,
+        );
         _responseStreamController.add((
           NotificationResponse(
-            notificationResponseType: NotificationResponseType.selectedNotification,
+            notificationResponseType:
+                NotificationResponseType.selectedNotification,
             id: notification.id,
             payload: jsonEncode(notification.payload),
           ),
@@ -220,7 +243,8 @@ class NotificationService {
         final notification = NewMessageNotification.fromFcmMessage(newMessage);
         _responseStreamController.add((
           NotificationResponse(
-            notificationResponseType: NotificationResponseType.selectedNotification,
+            notificationResponseType:
+                NotificationResponseType.selectedNotification,
             id: notification.id,
             payload: jsonEncode(notification.payload),
           ),
@@ -229,7 +253,9 @@ class NotificationService {
 
       // TODO: handle other notification types
       case UnhandledFcmMessage(data: final data):
-        _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
+        _logger.warning(
+          'Received unhandled FCM notification type: ${data['lichess.type']}',
+        );
 
       case MalformedFcmMessage(data: final data):
         _logger.severe('Received malformed FCM message: $data');
@@ -261,21 +287,44 @@ class NotificationService {
 
     final parsedMessage = FcmMessage.fromRemoteMessage(message);
 
-    _fcmMessageStreamController.add((message: parsedMessage, fromBackground: fromBackground));
+    _fcmMessageStreamController.add((
+      message: parsedMessage,
+      fromBackground: fromBackground,
+    ));
 
     switch (parsedMessage) {
-      case CorresGameUpdateFcmMessage(fullId: final fullId, notification: final notification):
+      case CorresGameUpdateFcmMessage(
+        fullId: final fullId,
+        notification: final notification,
+      ):
         if (fromBackground == false && notification != null) {
-          await show(CorresGameUpdateNotification(fullId, notification.title!, notification.body!));
+          await show(
+            CorresGameUpdateNotification(
+              fullId,
+              notification.title!,
+              notification.body!,
+            ),
+          );
         }
 
-      case NewMessageFcmMessage(conversationId: final userId, notification: final notification):
+      case NewMessageFcmMessage(
+        conversationId: final userId,
+        notification: final notification,
+      ):
         if (fromBackground == false && notification != null) {
-          await show(NewMessageNotification(userId, notification.title!, notification.body!));
+          await show(
+            NewMessageNotification(
+              userId,
+              notification.title!,
+              notification.body!,
+            ),
+          );
         }
 
       case UnhandledFcmMessage(data: final data):
-        _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
+        _logger.warning(
+          'Received unhandled FCM notification type: ${data['lichess.type']}',
+        );
 
       case MalformedFcmMessage(data: final data):
         _logger.severe('Received malformed FCM message: $data');
@@ -295,7 +344,8 @@ class NotificationService {
   /// Register the device for push notifications.
   Future<void> registerDevice() async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      final apnsToken = await LichessBinding.instance.firebaseMessaging.getAPNSToken();
+      final apnsToken = await LichessBinding.instance.firebaseMessaging
+          .getAPNSToken();
       if (apnsToken == null) {
         _logger.warning('APNS token is null');
         return;
@@ -315,14 +365,17 @@ class NotificationService {
       return;
     }
     try {
-      await _ref.withClient((client) => client.post(Uri(path: '/mobile/unregister')));
+      await _ref.withClient(
+        (client) => client.post(Uri(path: '/mobile/unregister')),
+      );
     } catch (e, st) {
       _logger.severe('could not unregister device; $e', e, st);
     }
   }
 
   Future<void> _registerToken(String token) async {
-    final settings = await LichessBinding.instance.firebaseMessaging.getNotificationSettings();
+    final settings = await LichessBinding.instance.firebaseMessaging
+        .getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.denied) {
       return;
     }
@@ -332,14 +385,18 @@ class NotificationService {
       return;
     }
     try {
-      await _ref.withClient((client) => client.post(Uri(path: '/mobile/register/firebase/$token')));
+      await _ref.withClient(
+        (client) => client.post(Uri(path: '/mobile/register/firebase/$token')),
+      );
     } catch (e, st) {
       _logger.severe('could not register device; $e', e, st);
     }
   }
 
   @pragma('vm:entry-point')
-  static Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  static Future<void> _firebaseMessagingBackgroundHandler(
+    RemoteMessage message,
+  ) async {
     // create a new provider scope for the background isolate
     final ref = ProviderContainer();
 
@@ -348,7 +405,9 @@ class NotificationService {
     await ref.read(preloadedDataProvider.future);
 
     try {
-      await ref.read(notificationServiceProvider)._processFcmMessage(message, fromBackground: true);
+      await ref
+          .read(notificationServiceProvider)
+          ._processFcmMessage(message, fromBackground: true);
 
       ref.dispose();
     } catch (e) {

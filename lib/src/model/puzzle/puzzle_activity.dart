@@ -43,7 +43,9 @@ class PuzzleActivity extends _$PuzzleActivity {
     );
   }
 
-  Map<DateTime, IList<PuzzleHistoryEntry>> _groupByDay(Iterable<PuzzleHistoryEntry> list) {
+  Map<DateTime, IList<PuzzleHistoryEntry>> _groupByDay(
+    Iterable<PuzzleHistoryEntry> list,
+  ) {
     final map = <DateTime, IList<PuzzleHistoryEntry>>{};
     for (final entry in list) {
       final date = DateTime(entry.date.year, entry.date.month, entry.date.day);
@@ -64,10 +66,14 @@ class PuzzleActivity extends _$PuzzleActivity {
       state = AsyncData(currentVal.copyWith(isLoading: true));
       try {
         final value = await ref.withClient(
-          (client) => PuzzleRepository(client).puzzleActivity(_nbPerPage, before: _list.last.date),
+          (client) => PuzzleRepository(
+            client,
+          ).puzzleActivity(_nbPerPage, before: _list.last.date),
         );
         if (value.isEmpty) {
-          state = AsyncData(currentVal.copyWith(hasMore: false, isLoading: false));
+          state = AsyncData(
+            currentVal.copyWith(hasMore: false, isLoading: false),
+          );
           return;
         }
         _list.addAll(value);
@@ -80,7 +86,9 @@ class PuzzleActivity extends _$PuzzleActivity {
           ),
         );
       } catch (error) {
-        state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
+        state = AsyncData(
+          currentVal.copyWith(isLoading: false, hasError: true),
+        );
       }
     }
   }

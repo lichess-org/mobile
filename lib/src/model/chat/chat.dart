@@ -10,7 +10,9 @@ typedef ChatData = ({IList<ChatMessage> lines, bool writeable});
 
 ChatData chatDataFromPick(RequiredPick pick) {
   return (
-    lines: pick('lines').asListOrThrow((it) => ChatMessage.fromPick(it)).toIList(),
+    lines: pick(
+      'lines',
+    ).asListOrThrow((it) => ChatMessage.fromPick(it)).toIList(),
     writeable: pick('writeable').asBoolOrTrue(),
   );
 }
@@ -54,7 +56,8 @@ sealed class ChatMessage with _$ChatMessage {
     );
   }
 
-  bool get isSpam => spamRegex.hasMatch(message) || followMeRegex.hasMatch(message);
+  bool get isSpam =>
+      spamRegex.hasMatch(message) || followMeRegex.hasMatch(message);
 }
 
 final RegExp spamRegex = RegExp(

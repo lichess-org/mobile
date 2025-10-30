@@ -62,13 +62,16 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
       body: SafeArea(
         child: ListView.separated(
           itemCount: PieceSet.values.length,
-          separatorBuilder: (_, _) => Theme.of(context).platform == TargetPlatform.iOS
+          separatorBuilder: (_, _) =>
+              Theme.of(context).platform == TargetPlatform.iOS
               ? const PlatformDivider()
               : const SizedBox.shrink(),
           itemBuilder: (context, index) {
             final pieceSet = PieceSet.values[index];
             return ListTile(
-              trailing: boardPrefs.pieceSet == pieceSet ? const Icon(Icons.check) : null,
+              trailing: boardPrefs.pieceSet == pieceSet
+                  ? const Icon(Icons.check)
+                  : null,
               title: Text(pieceSet.label),
               subtitle: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 264),
@@ -81,7 +84,8 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
                     ),
                     Row(
                       children: [
-                        for (final img in getPieceImages(pieceSet)) Image(image: img, height: 44),
+                        for (final img in getPieceImages(pieceSet))
+                          Image(image: img, height: 44),
                       ],
                     ),
                   ],

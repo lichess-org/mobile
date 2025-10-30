@@ -50,8 +50,13 @@ Future<void> setupFirstLaunch() async {
 
     // on android 12+ set board theme to system colors
     if (getCorePalette() != null) {
-      final boardPrefs = BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system);
-      await prefs.setString(PrefCategory.board.storageKey, jsonEncode(boardPrefs.toJson()));
+      final boardPrefs = BoardPrefs.defaults.copyWith(
+        boardTheme: BoardTheme.system,
+      );
+      await prefs.setString(
+        PrefCategory.board.storageKey,
+        jsonEncode(boardPrefs.toJson()),
+      );
     }
 
     _screenSizeBasedInitialization();
@@ -59,26 +64,37 @@ Future<void> setupFirstLaunch() async {
     await prefs.setBool('first_run', false);
   }
 
-  if (installedVersion != null && Version.parse(installedVersion) < Version(0, 15, 12)) {
+  if (installedVersion != null &&
+      Version.parse(installedVersion) < Version(0, 15, 12)) {
     // migrate home preferences to session preferences
     final homePrefs = prefs.getString(PrefCategory.home.storageKey);
     if (homePrefs == null) {
-      final storedSession = await SecureStorage.instance.read(key: kSessionStorageKey);
+      final storedSession = await SecureStorage.instance.read(
+        key: kSessionStorageKey,
+      );
       final session = storedSession != null
-          ? AuthSessionState.fromJson(jsonDecode(storedSession) as Map<String, dynamic>)
+          ? AuthSessionState.fromJson(
+              jsonDecode(storedSession) as Map<String, dynamic>,
+            )
           : null;
-      const empty = HomePrefs(disabledWidgets: IListConst<HomeEditableWidget>([]));
+      const empty = HomePrefs(
+        disabledWidgets: IListConst<HomeEditableWidget>([]),
+      );
       // keep quick game matrix for already installed apps, since it was removed by default in 0.15.12
       prefs.setString(
         SessionPreferencesStorage.key(PrefCategory.home.storageKey, session),
         jsonEncode(empty.toJson()),
       );
     } else {
-      prefs.setString(SessionPreferencesStorage.key(PrefCategory.home.storageKey, null), homePrefs);
+      prefs.setString(
+        SessionPreferencesStorage.key(PrefCategory.home.storageKey, null),
+        homePrefs,
+      );
     }
   }
 
-  if (installedVersion == null || Version.parse(installedVersion) != appVersion) {
+  if (installedVersion == null ||
+      Version.parse(installedVersion) != appVersion) {
     prefs.setString('installed_version', appVersion.canonicalizedVersion);
   }
 }
@@ -97,7 +113,8 @@ Future<void> initializeLocalNotifications(Locale locale) async {
       ),
       linux: const LinuxInitializationSettings(defaultActionName: 'Action'),
     ),
-    onDidReceiveNotificationResponse: NotificationService.onDidReceiveNotificationResponse,
+    onDidReceiveNotificationResponse:
+        NotificationService.onDidReceiveNotificationResponse,
     // onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
 }
@@ -108,7 +125,9 @@ Future<void> preloadPieceImages() async {
   BoardPrefs boardPrefs = BoardPrefs.defaults;
   if (storedPrefs != null) {
     try {
-      boardPrefs = BoardPrefs.fromJson(jsonDecode(storedPrefs) as Map<String, dynamic>);
+      boardPrefs = BoardPrefs.fromJson(
+        jsonDecode(storedPrefs) as Map<String, dynamic>,
+      );
     } catch (e) {
       _logger.warning('Failed to decode board preferences: $e');
     }
@@ -123,14 +142,18 @@ Future<void> preloadPieceImages() async {
 Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
   // On android 12+ set dynamic color schemes
   try {
-    Future.wait([DynamicColorPlugin.getCorePalette(), DynamicColorPlugin.getColorSchemes()]).then((
-      List<dynamic> value,
-    ) {
+    Future.wait([
+      DynamicColorPlugin.getCorePalette(),
+      DynamicColorPlugin.getColorSchemes(),
+    ]).then((List<dynamic> value) {
       final CorePalette? palette = value[0] as CorePalette?;
       final schemes = value[1] as dynamic;
       final ColorSchemes? colorSchemes = schemes != null
           // ignore: avoid_dynamic_calls
-          ? (light: schemes.light as ColorScheme, dark: schemes.dark as ColorScheme)
+          ? (
+              light: schemes.light as ColorScheme,
+              dark: schemes.dark as ColorScheme,
+            )
           : null;
 
       setSystemColors(palette, colorSchemes);
@@ -162,11 +185,19 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
 
   final List<DisplayMode> sameResolution =
       supported
-          .where((DisplayMode m) => m.width == active.width && m.height == active.height)
+          .where(
+            (DisplayMode m) =>
+                m.width == active.width && m.height == active.height,
+          )
           .toList()
-        ..sort((DisplayMode a, DisplayMode b) => b.refreshRate.compareTo(a.refreshRate));
+        ..sort(
+          (DisplayMode a, DisplayMode b) =>
+              b.refreshRate.compareTo(a.refreshRate),
+        );
 
-  final DisplayMode mostOptimalMode = sameResolution.isNotEmpty ? sameResolution.first : active;
+  final DisplayMode mostOptimalMode = sameResolution.isNotEmpty
+      ? sameResolution.first
+      : active;
 
   // This setting is per session.
   await FlutterDisplayMode.setPreferredMode(mostOptimalMode);
@@ -178,12 +209,28 @@ Future<void> _screenSizeBasedInitialization() async {
   final mediaQueryData = MediaQueryData.fromView(
     WidgetsBinding.instance.platformDispatcher.views.first,
   );
-  final isSmallScreen = estimateHeightMinusBoard(mediaQueryData) < kSmallHeightMinusBoard;
+  final isSmallScreen =
+      estimateHeightMinusBoard(mediaQueryData) < kSmallHeightMinusBoard;
 
-  final analysisPrefs = AnalysisPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
-  await prefs.setString(PrefCategory.analysis.storageKey, jsonEncode(analysisPrefs.toJson()));
-  final studyPrefs = StudyPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
-  await prefs.setString(PrefCategory.study.storageKey, jsonEncode(studyPrefs.toJson()));
-  final broadcastPrefs = BroadcastPrefs.defaults.copyWith(showEngineLines: !isSmallScreen);
-  await prefs.setString(PrefCategory.broadcast.storageKey, jsonEncode(broadcastPrefs.toJson()));
+  final analysisPrefs = AnalysisPrefs.defaults.copyWith(
+    showEngineLines: !isSmallScreen,
+  );
+  await prefs.setString(
+    PrefCategory.analysis.storageKey,
+    jsonEncode(analysisPrefs.toJson()),
+  );
+  final studyPrefs = StudyPrefs.defaults.copyWith(
+    showEngineLines: !isSmallScreen,
+  );
+  await prefs.setString(
+    PrefCategory.study.storageKey,
+    jsonEncode(studyPrefs.toJson()),
+  );
+  final broadcastPrefs = BroadcastPrefs.defaults.copyWith(
+    showEngineLines: !isSmallScreen,
+  );
+  await prefs.setString(
+    PrefCategory.broadcast.storageKey,
+    jsonEncode(broadcastPrefs.toJson()),
+  );
 }

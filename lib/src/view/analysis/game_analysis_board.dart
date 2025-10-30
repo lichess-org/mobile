@@ -21,7 +21,8 @@ class GameAnalysisBoard extends AnalysisBoard {
 }
 
 class _GameAnalysisBoardState
-    extends AnalysisBoardState<GameAnalysisBoard, AnalysisState, AnalysisPrefs> {
+    extends
+        AnalysisBoardState<GameAnalysisBoard, AnalysisState, AnalysisPrefs> {
   @override
   AnalysisState get analysisState =>
       ref.watch(analysisControllerProvider(widget.options)).requireValue;
@@ -41,6 +42,7 @@ class _GameAnalysisBoardState
       .onUserMove(move, shouldReplace: widget.shouldReplaceChildOnUserMove);
 
   @override
-  void onPromotionSelection(Role? role) =>
-      ref.read(analysisControllerProvider(widget.options).notifier).onPromotionSelection(role);
+  void onPromotionSelection(Role? role) => ref
+      .read(analysisControllerProvider(widget.options).notifier)
+      .onPromotionSelection(role);
 }

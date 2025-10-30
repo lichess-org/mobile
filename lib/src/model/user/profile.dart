@@ -31,10 +31,13 @@ sealed class Profile with _$Profile {
 
   factory Profile.fromPick(RequiredPick pick) {
     const lineSplitter = LineSplitter();
-    final rawLinks = pick('links').letOrNull((e) => lineSplitter.convert(e.asStringOrThrow()));
+    final rawLinks = pick(
+      'links',
+    ).letOrNull((e) => lineSplitter.convert(e.asStringOrThrow()));
 
     return Profile(
-      country: pick('flag').asStringOrNull() ?? pick('country').asStringOrNull(),
+      country:
+          pick('flag').asStringOrNull() ?? pick('country').asStringOrNull(),
       location: pick('location').asStringOrNull(),
       bio: pick('bio').asStringOrNull(),
       realName: pick('realName').asStringOrNull(),
@@ -65,7 +68,8 @@ sealed class Profile with _$Profile {
 
 @freezed
 sealed class SocialLink with _$SocialLink {
-  const factory SocialLink({required LinkSite? site, required Uri url}) = _SocialLink;
+  const factory SocialLink({required LinkSite? site, required Uri url}) =
+      _SocialLink;
 
   const SocialLink._();
 
@@ -76,7 +80,9 @@ sealed class SocialLink with _$SocialLink {
     final uri = Uri.tryParse(updatedUrl);
     if (uri == null) return null;
     final host = uri.host.replaceAll(RegExp(r'www\.'), '');
-    final site = LinkSite.values.firstWhereOrNull((e) => e.domains.contains(host));
+    final site = LinkSite.values.firstWhereOrNull(
+      (e) => e.domains.contains(host),
+    );
 
     return site != null ? SocialLink(site: site, url: uri) : null;
   }

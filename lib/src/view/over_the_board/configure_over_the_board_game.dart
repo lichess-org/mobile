@@ -14,7 +14,10 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-void showConfigureGameSheet(BuildContext context, {required bool isDismissible}) {
+void showConfigureGameSheet(
+  BuildContext context, {
+  required bool isDismissible,
+}) {
   final double screenHeight = MediaQuery.sizeOf(context).height;
   showModalBottomSheet<void>(
     context: context,
@@ -36,7 +39,8 @@ class _ConfigureOverTheBoardGameSheet extends ConsumerStatefulWidget {
       _ConfigureOverTheBoardGameSheetState();
 }
 
-class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverTheBoardGameSheet> {
+class _ConfigureOverTheBoardGameSheetState
+    extends ConsumerState<_ConfigureOverTheBoardGameSheet> {
   late Variant chosenVariant;
 
   late TimeIncrement timeIncrement;
@@ -92,7 +96,10 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                   text: '${context.l10n.minutesPerSide}: ',
                   children: [
                     TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                       text: clockLabelInMinutes(timeIncrement.time),
                     ),
                   ],
@@ -112,7 +119,10 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
                   text: '${context.l10n.incrementInSeconds}: ',
                   children: [
                     TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                       text: timeIncrement.increment.toString(),
                     ),
                   ],
@@ -131,7 +141,9 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
           padding: Styles.horizontalBodyPadding,
           child: FilledButton(
             onPressed: () {
-              ref.read(overTheBoardClockProvider.notifier).setupClock(timeIncrement);
+              ref
+                  .read(overTheBoardClockProvider.notifier)
+                  .setupClock(timeIncrement);
               ref
                   .read(overTheBoardGameControllerProvider.notifier)
                   .startNewGame(chosenVariant, timeIncrement);
@@ -168,14 +180,16 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
         SwitchSettingTile(
           title: const Text('Use symmetric pieces'),
           value: prefs.symmetricPieces,
-          onChanged: (_) =>
-              ref.read(overTheBoardPreferencesProvider.notifier).toggleSymmetricPieces(),
+          onChanged: (_) => ref
+              .read(overTheBoardPreferencesProvider.notifier)
+              .toggleSymmetricPieces(),
         ),
         SwitchSettingTile(
           title: const Text('Flip pieces and opponent info after move'),
           value: prefs.flipPiecesAfterMove,
-          onChanged: (_) =>
-              ref.read(overTheBoardPreferencesProvider.notifier).toggleFlipPiecesAfterMove(),
+          onChanged: (_) => ref
+              .read(overTheBoardPreferencesProvider.notifier)
+              .toggleFlipPiecesAfterMove(),
         ),
       ],
     );

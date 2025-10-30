@@ -65,7 +65,8 @@ class _Body extends ConsumerWidget {
                     : null,
                 onTap: () async {
                   final ImagePicker picker = ImagePicker();
-                  final maxDimension = max(viewport.width, viewport.height) * devicePixelRatio;
+                  final maxDimension =
+                      max(viewport.width, viewport.height) * devicePixelRatio;
                   final XFile? image = await picker.pickImage(
                     source: ImageSource.gallery,
                     maxWidth: maxDimension,
@@ -74,24 +75,35 @@ class _Body extends ConsumerWidget {
                   );
 
                   if (image != null) {
-                    final decodedImage = await decodeImageFromList(await image.readAsBytes());
-                    final imageProvider = FileImage(File(image.path));
-                    final quantizerResult = await extractColorsFromImageProvider(imageProvider);
-                    final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
-                      (int key, int value) => MapEntry<int, int>(getArgbFromAbgr(key), value),
+                    final decodedImage = await decodeImageFromList(
+                      await image.readAsBytes(),
                     );
+                    final imageProvider = FileImage(File(image.path));
+                    final quantizerResult =
+                        await extractColorsFromImageProvider(imageProvider);
+                    final Map<int, int> colorToCount = quantizerResult
+                        .colorToCount
+                        .map(
+                          (int key, int value) =>
+                              MapEntry<int, int>(getArgbFromAbgr(key), value),
+                        );
                     // Score colors for color scheme suitability.
-                    final List<int> scoredResults = Score.score(colorToCount, desired: 1);
+                    final List<int> scoredResults = Score.score(
+                      colorToCount,
+                      desired: 1,
+                    );
                     final ui.Color baseColor = Color(scoredResults.first);
                     final meanLuminance =
                         colorToCount.entries.fold<double>(
                           0,
                           (double previousValue, MapEntry<int, int> entry) =>
-                              previousValue + Color(entry.key).computeLuminance() * entry.value,
+                              previousValue +
+                              Color(entry.key).computeLuminance() * entry.value,
                         ) /
                         colorToCount.values.fold<int>(
                           0,
-                          (int previousValue, int element) => previousValue + element,
+                          (int previousValue, int element) =>
+                              previousValue + element,
                         );
 
                     if (context.mounted) {
@@ -133,7 +145,9 @@ class _Body extends ConsumerWidget {
           ),
         ],
         ListSection(
-          header: SettingsSectionTitle(context.l10n.mobileSettingsCustomBackgroundPresets),
+          header: SettingsSectionTitle(
+            context.l10n.mobileSettingsCustomBackgroundPresets,
+          ),
           backgroundColor: ColorScheme.of(context).surfaceContainerLowest,
           children: [
             GridView.builder(
@@ -168,7 +182,9 @@ class _Body extends ConsumerWidget {
                             final selected = colorChoices[index];
                             ref
                                 .read(generalPreferencesProvider.notifier)
-                                .setBackground(backgroundColor: (selected, true));
+                                .setBackground(
+                                  backgroundColor: (selected, true),
+                                );
                             Navigator.pop(context);
                           }
                         }
@@ -196,10 +212,12 @@ class ConfirmColorBackgroundScreen extends StatefulWidget {
   final BoardPrefs boardPrefs;
 
   @override
-  State<ConfirmColorBackgroundScreen> createState() => _ConfirmColorBackgroundScreenState();
+  State<ConfirmColorBackgroundScreen> createState() =>
+      _ConfirmColorBackgroundScreenState();
 }
 
-class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScreen> {
+class _ConfirmColorBackgroundScreenState
+    extends State<ConfirmColorBackgroundScreen> {
   late PageController _controller;
 
   @override
@@ -232,7 +250,8 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
             final orientation = constraints.maxWidth > constraints.maxHeight
                 ? Orientation.landscape
                 : Orientation.portrait;
-            final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
+            final landscapeBoardPadding =
+                MediaQuery.paddingOf(context).top + 60.0;
             return Stack(
               children: [
                 PageView.builder(
@@ -259,7 +278,8 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                         child: Chessboard.fixed(
                           size: orientation == Orientation.portrait
                               ? constraints.maxWidth
-                              : constraints.maxHeight - landscapeBoardPadding * 2,
+                              : constraints.maxHeight -
+                                    landscapeBoardPadding * 2,
                           fen: kInitialFEN,
                           orientation: Side.white,
                           settings: widget.boardPrefs.toBoardSettings(),
@@ -322,11 +342,13 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
   final Size viewport;
   final Directory appDocumentsDirectory;
 
-  Orientation get viewportOrientation =>
-      viewport.width > viewport.height ? Orientation.landscape : Orientation.portrait;
+  Orientation get viewportOrientation => viewport.width > viewport.height
+      ? Orientation.landscape
+      : Orientation.portrait;
 
-  Orientation get imageOrientation =>
-      imageSize.width > imageSize.height ? Orientation.landscape : Orientation.portrait;
+  Orientation get imageOrientation => imageSize.width > imageSize.height
+      ? Orientation.landscape
+      : Orientation.portrait;
 
   BoxFit get boxFit => imageOrientation == viewportOrientation
       ? BoxFit.cover
@@ -334,19 +356,28 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
       ? BoxFit.fitWidth
       : BoxFit.fitHeight;
 
-  Size get imageFitSize => FullScreenBackgroundImage.imageFitSize(boxFit, imageSize, viewport);
+  Size get imageFitSize =>
+      FullScreenBackgroundImage.imageFitSize(boxFit, imageSize, viewport);
 
-  Matrix4 get centerWidthMatrix =>
-      Matrix4.translationValues((viewport.width - imageFitSize.width) / 2, 0, 0);
+  Matrix4 get centerWidthMatrix => Matrix4.translationValues(
+    (viewport.width - imageFitSize.width) / 2,
+    0,
+    0,
+  );
 
-  Matrix4 get centerHeightMatrix =>
-      Matrix4.translationValues(0, (viewport.height - imageFitSize.height) / 2, 0);
+  Matrix4 get centerHeightMatrix => Matrix4.translationValues(
+    0,
+    (viewport.height - imageFitSize.height) / 2,
+    0,
+  );
 
   @override
-  State<ConfirmImageBackgroundScreen> createState() => _ConfirmImageBackgroundScreenState();
+  State<ConfirmImageBackgroundScreen> createState() =>
+      _ConfirmImageBackgroundScreenState();
 }
 
-class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScreen> {
+class _ConfirmImageBackgroundScreenState
+    extends State<ConfirmImageBackgroundScreen> {
   bool blur = false;
   bool showBoard = true;
 
@@ -405,7 +436,10 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: Image.file(File(widget.image.path)).image,
-                    colorFilter: ColorFilter.mode(filterColor, BlendMode.srcOver),
+                    colorFilter: ColorFilter.mode(
+                      filterColor,
+                      BlendMode.srcOver,
+                    ),
                     fit: widget.boxFit,
                   ),
                 ),
@@ -429,12 +463,15 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                     opacity: showBoard ? 1 : 0,
                     child: Padding(
                       padding: EdgeInsets.only(
-                        left: widget.viewportOrientation == Orientation.portrait ? 0 : 16.0,
+                        left: widget.viewportOrientation == Orientation.portrait
+                            ? 0
+                            : 16.0,
                       ),
                       child: Chessboard.fixed(
                         size: widget.viewportOrientation == Orientation.portrait
                             ? widget.viewport.width
-                            : widget.viewport.height - landscapeBoardPadding * 2,
+                            : widget.viewport.height -
+                                  landscapeBoardPadding * 2,
                         fen: kInitialFEN,
                         orientation: Side.white,
                         settings: widget.boardPrefs.toBoardSettings(),
@@ -446,7 +483,9 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
             ),
             Positioned(
               top: MediaQuery.paddingOf(context).top + 26.0,
-              left: widget.viewportOrientation == Orientation.portrait ? 0 : null,
+              left: widget.viewportOrientation == Orientation.portrait
+                  ? 0
+                  : null,
               right: 0,
               child: Center(
                 child: Card(
@@ -462,11 +501,17 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                       });
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 16.0,
+                      ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(blur ? Icons.check_circle : Icons.circle_outlined, size: 16),
+                          Icon(
+                            blur ? Icons.check_circle : Icons.circle_outlined,
+                            size: 16,
+                          ),
                           const SizedBox(width: 6.0),
                           Text(
                             context.l10n.mobileSettingsPickAnImageBlur,
@@ -512,7 +557,8 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                         onPressed: () async {
                           final ext = extension(widget.image.path);
                           final relativePath = 'custom-board-background$ext';
-                          final targetPath = '${widget.appDocumentsDirectory.path}/$relativePath';
+                          final targetPath =
+                              '${widget.appDocumentsDirectory.path}/$relativePath';
                           await FileImage(File(targetPath)).evict();
                           await File(widget.image.path).copy(targetPath);
                           if (context.mounted) {

@@ -30,13 +30,18 @@ class AuthSession extends _$AuthSession {
 
 @Freezed(fromJson: true, toJson: true)
 sealed class AuthSessionState with _$AuthSessionState {
-  const factory AuthSessionState({required LightUser user, required String token}) =
-      _AuthSessionState;
+  const factory AuthSessionState({
+    required LightUser user,
+    required String token,
+  }) = _AuthSessionState;
 
-  factory AuthSessionState.fromJson(Map<String, dynamic> json) => _$AuthSessionStateFromJson(json);
+  factory AuthSessionState.fromJson(Map<String, dynamic> json) =>
+      _$AuthSessionStateFromJson(json);
 }
 
 @riverpod
 bool isLoggedIn(Ref ref) {
-  return ref.watch(authSessionProvider.select((authSession) => authSession != null));
+  return ref.watch(
+    authSessionProvider.select((authSession) => authSession != null),
+  );
 }

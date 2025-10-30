@@ -54,7 +54,8 @@ sealed class Study with _$Study {
     return chapters.indexWhere((c) => c.id == chapterId);
   }
 
-  StudyChapterMeta get currentChapterMeta => chapters.firstWhere((c) => c.id == chapter.id);
+  StudyChapterMeta get currentChapterMeta =>
+      chapters.firstWhere((c) => c.id == chapter.id);
 
   factory Study.fromServerJson(Map<String, Object?> json) {
     return _studyFromPick(pick(json).required());
@@ -85,10 +86,12 @@ Study _studyFromPick(RequiredPick pick) {
       chat: study('features', 'chat').asBoolOrFalse(),
       sticky: study('features', 'sticky').asBoolOrFalse(),
     ),
-    topics: study('topics').asListOrThrow((pick) => pick.asStringOrThrow()).lock,
-    chapters: study(
-      'chapters',
-    ).asListOrThrow((pick) => StudyChapterMeta.fromJson(pick.asMapOrThrow())).lock,
+    topics: study(
+      'topics',
+    ).asListOrThrow((pick) => pick.asStringOrThrow()).lock,
+    chapters: study('chapters')
+        .asListOrThrow((pick) => StudyChapterMeta.fromJson(pick.asMapOrThrow()))
+        .lock,
     chapter: StudyChapter.fromJson(study('chapter').asMapOrThrow()),
     members: study('members')
         .asMapOrThrow<String, Map<String, Object?>>()
@@ -111,10 +114,12 @@ sealed class StudyChapter with _$StudyChapter {
     @JsonKey(defaultValue: false) required bool practise,
     required int? conceal,
     @JsonKey(defaultValue: false) required bool gamebook,
-    @JsonKey(fromJson: studyChapterFeaturesFromJson) required StudyChapterFeatures features,
+    @JsonKey(fromJson: studyChapterFeaturesFromJson)
+    required StudyChapterFeatures features,
   }) = _StudyChapter;
 
-  factory StudyChapter.fromJson(Map<String, Object?> json) => _$StudyChapterFromJson(json);
+  factory StudyChapter.fromJson(Map<String, Object?> json) =>
+      _$StudyChapterFromJson(json);
 }
 
 typedef StudyChapterFeatures = ({bool computer, bool explorer});
@@ -155,7 +160,8 @@ sealed class StudyChapterMeta with _$StudyChapterMeta {
     required String? fen,
   }) = _StudyChapterMeta;
 
-  factory StudyChapterMeta.fromJson(Map<String, Object?> json) => _$StudyChapterMetaFromJson(json);
+  factory StudyChapterMeta.fromJson(Map<String, Object?> json) =>
+      _$StudyChapterMetaFromJson(json);
 }
 
 @Freezed(fromJson: true)
@@ -167,7 +173,8 @@ sealed class StudyPageItem with _$StudyPageItem {
     required String name,
     required bool liked,
     required int likes,
-    @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch) required DateTime updatedAt,
+    @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch)
+    required DateTime updatedAt,
     required LightUser? owner,
     required IList<String> topics,
     required IList<StudyMember> members,
@@ -175,14 +182,17 @@ sealed class StudyPageItem with _$StudyPageItem {
     required String? flair,
   }) = _StudyPageItem;
 
-  factory StudyPageItem.fromJson(Map<String, Object?> json) => _$StudyPageItemFromJson(json);
+  factory StudyPageItem.fromJson(Map<String, Object?> json) =>
+      _$StudyPageItemFromJson(json);
 }
 
 @Freezed(fromJson: true)
 sealed class StudyMember with _$StudyMember {
   const StudyMember._();
 
-  const factory StudyMember({required LightUser user, required String role}) = _StudyMember;
+  const factory StudyMember({required LightUser user, required String role}) =
+      _StudyMember;
 
-  factory StudyMember.fromJson(Map<String, Object?> json) => _$StudyMemberFromJson(json);
+  factory StudyMember.fromJson(Map<String, Object?> json) =>
+      _$StudyMemberFromJson(json);
 }

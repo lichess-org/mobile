@@ -117,7 +117,8 @@ class AnalysisController extends _$AnalysisController
 
   @override
   @protected
-  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+  EngineEvaluationPrefState get evaluationPrefs =>
+      ref.read(engineEvaluationPreferencesProvider);
 
   @override
   @protected
@@ -126,7 +127,8 @@ class AnalysisController extends _$AnalysisController
 
   @override
   @protected
-  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
+  EvaluationService evaluationServiceFactory() =>
+      ref.read(evaluationServiceProvider);
 
   @override
   @protected
@@ -149,10 +151,14 @@ class AnalysisController extends _$AnalysisController
     ref.onDispose(() {
       _socketSubscription?.cancel();
       disposeEngineEvaluation();
-      serverAnalysisService.lastAnalysisEvent.removeListener(_listenToServerAnalysisEvents);
+      serverAnalysisService.lastAnalysisEvent.removeListener(
+        _listenToServerAnalysisEvents,
+      );
     });
 
-    socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
+    socketClient = ref
+        .watch(socketPoolProvider)
+        .open(AnalysisController.socketUri);
     _socketSubscription?.cancel();
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
@@ -173,7 +179,9 @@ class AnalysisController extends _$AnalysisController
     switch (options) {
       case ArchivedGame(:final gameId):
         {
-          archivedGame = await ref.read(archivedGameProvider(id: gameId).future);
+          archivedGame = await ref.read(
+            archivedGameProvider(id: gameId).future,
+          );
           _variant = archivedGame!.meta.variant;
           if (!_variant.isReadSupported) {
             throw UnsupportedVariantException(_variant, gameId);
@@ -195,7 +203,9 @@ class AnalysisController extends _$AnalysisController
         }
       case ActiveCorrespondenceGame(:final gameFullId):
         {
-          final game = await _gameRepository.getActiveCorrespondenceGame(gameFullId);
+          final game = await _gameRepository.getActiveCorrespondenceGame(
+            gameFullId,
+          );
           _variant = game.meta.variant;
           pgn = game.makePgn();
           opening = game.meta.opening;
@@ -244,7 +254,8 @@ class AnalysisController extends _$AnalysisController
       onVisitNode: (root, branch, isMainline) {
         if (isMainline &&
             options.initialMoveCursor != null &&
-            branch.position.ply <= root.position.ply + options.initialMoveCursor!) {
+            branch.position.ply <=
+                root.position.ply + options.initialMoveCursor!) {
           path = path + branch.id;
           lastMove = branch.sanMove.move;
         }
@@ -275,7 +286,9 @@ class AnalysisController extends _$AnalysisController
           }
         });
 
-    final currentPath = options.initialMoveCursor == null ? _root.mainlinePath : path;
+    final currentPath = options.initialMoveCursor == null
+        ? _root.mainlinePath
+        : path;
     final currentNode = _root.nodeAt(currentPath);
 
     late final Forecast? forecast;
@@ -299,10 +312,15 @@ class AnalysisController extends _$AnalysisController
         }
         _root.addNodesAt(gameMainlinePath, nodes);
 
-        paths.add(UciPath.fromUciMoves(line.map((sanMove) => sanMove.move.uci)));
+        paths.add(
+          UciPath.fromUciMoves(line.map((sanMove) => sanMove.move.uci)),
+        );
       }
 
-      forecast = Forecast(onMyTurn: activeCorrespondenceGame.isMyTurn, lines: paths.lock);
+      forecast = Forecast(
+        onMyTurn: activeCorrespondenceGame.isMyTurn,
+        lines: paths.lock,
+      );
     } else {
       forecast = null;
     }
@@ -311,12 +329,15 @@ class AnalysisController extends _$AnalysisController
     // analysis preferences change
     final prefs = ref.read(analysisPreferencesProvider);
 
-    final isEngineAllowed = isComputerAnalysisAllowed && engineSupportedVariants.contains(_variant);
+    final isEngineAllowed =
+        isComputerAnalysisAllowed && engineSupportedVariants.contains(_variant);
     if (isEngineAllowed) {
       initEngineEvaluation();
     }
 
-    serverAnalysisService.lastAnalysisEvent.addListener(_listenToServerAnalysisEvents);
+    serverAnalysisService.lastAnalysisEvent.addListener(
+      _listenToServerAnalysisEvents,
+    );
 
     final analysisState = AnalysisState(
       variant: _variant,
@@ -335,7 +356,10 @@ class AnalysisController extends _$AnalysisController
       contextOpening: opening,
       isComputerAnalysisAllowed: isComputerAnalysisAllowed,
       isServerAnalysisEnabled: prefs.enableServerAnalysis,
-      evaluationContext: EvaluationContext(variant: _variant, initialPosition: _root.position),
+      evaluationContext: EvaluationContext(
+        variant: _variant,
+        initialPosition: _root.position,
+      ),
       playersAnalysis: serverAnalysis,
       acplChartData: serverAnalysis != null ? _makeAcplChartData() : null,
       division: division,
@@ -361,7 +385,9 @@ class AnalysisController extends _$AnalysisController
 
   Future<void> onFocusRegained() async {
     if (options case ActiveCorrespondenceGame(:final gameFullId)) {
-      final updatedGame = await _gameRepository.getActiveCorrespondenceGame(gameFullId);
+      final updatedGame = await _gameRepository.getActiveCorrespondenceGame(
+        gameFullId,
+      );
       _addNewLiveMoves(
         updatedGame.steps
             // Skip one more step, since the first one is the initial position
@@ -372,7 +398,10 @@ class AnalysisController extends _$AnalysisController
   }
 
   void _addNewLiveMoves(Iterable<Move> moves) {
-    final newLiveMovePath = _root.addMovesAt(state.requireValue.pathToLiveMove!, moves);
+    final newLiveMovePath = _root.addMovesAt(
+      state.requireValue.pathToLiveMove!,
+      moves,
+    );
 
     _root.promoteAt(newLiveMovePath!, toMainline: true);
     _setPath(
@@ -403,7 +432,9 @@ class AnalysisController extends _$AnalysisController
 
     switch (event.topic) {
       case 'fen':
-        _handleFenEvent(FenSocketEvent.fromJson(event.data as Map<String, dynamic>));
+        _handleFenEvent(
+          FenSocketEvent.fromJson(event.data as Map<String, dynamic>),
+        );
     }
   }
 
@@ -430,7 +461,9 @@ class AnalysisController extends _$AnalysisController
     state = AsyncData(
       state.requireValue.copyWith(
         root: recomputeRootView ? _root.view : state.requireValue.root,
-        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
+        currentNode: AnalysisCurrentNode.fromNode(
+          _root.nodeAt(state.requireValue.currentPath),
+        ),
       ),
     );
   }
@@ -449,7 +482,11 @@ class AnalysisController extends _$AnalysisController
       replace: shouldReplace,
     );
     if (newPath != null) {
-      _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
+      _setPath(
+        newPath,
+        shouldRecomputeRootView: isNewNode,
+        shouldForceShowVariation: true,
+      );
     }
   }
 
@@ -473,7 +510,8 @@ class AnalysisController extends _$AnalysisController
     final curState = state.requireValue;
     if (!curState.currentNode.hasChild) return;
     _setPath(
-      curState.currentPath + _root.nodeAt(curState.currentPath).children.first.id,
+      curState.currentPath +
+          _root.nodeAt(curState.currentPath).children.first.id,
       isNavigating: true,
     );
   }
@@ -515,7 +553,9 @@ class AnalysisController extends _$AnalysisController
   void expandVariations(UciPath path) {
     final node = _root.nodeAt(path);
 
-    final childrenToShow = _root.isOnMainline(path) ? node.children.skip(1) : node.children;
+    final childrenToShow = _root.isOnMainline(path)
+        ? node.children.skip(1)
+        : node.children;
 
     for (final child in childrenToShow) {
       child.isCollapsed = false;
@@ -542,7 +582,10 @@ class AnalysisController extends _$AnalysisController
     _root.promoteAt(path, toMainline: toMainline);
     final curState = state.requireValue;
     state = AsyncData(
-      curState.copyWith(isOnMainline: _root.isOnMainline(curState.currentPath), root: _root.view),
+      curState.copyWith(
+        isOnMainline: _root.isOnMainline(curState.currentPath),
+        root: _root.view,
+      ),
     );
   }
 
@@ -556,7 +599,9 @@ class AnalysisController extends _$AnalysisController
     state = AsyncData(
       state.requireValue.copyWith(
         forecast: state.requireValue.forecast!.add(
-          state.requireValue.currentPath.stripPrefix(state.requireValue.pathToLiveMove!),
+          state.requireValue.currentPath.stripPrefix(
+            state.requireValue.pathToLiveMove!,
+          ),
         ),
       ),
     );
@@ -580,7 +625,9 @@ class AnalysisController extends _$AnalysisController
 
     _gameRepository.saveForecast(
       gameId: (options as ActiveCorrespondenceGame).gameFullId,
-      forecast: newForecast.toApiForecast(_root.branchAt(newLiveMovePath)!.view),
+      forecast: newForecast.toApiForecast(
+        _root.branchAt(newLiveMovePath)!.view,
+      ),
       moveToPlay: moveToPlay,
     );
 
@@ -594,7 +641,9 @@ class AnalysisController extends _$AnalysisController
 
   void removePremovePath(UciPath path) {
     state = AsyncData(
-      state.requireValue.copyWith(forecast: state.requireValue.forecast!.remove(path)),
+      state.requireValue.copyWith(
+        forecast: state.requireValue.forecast!.remove(path),
+      ),
     );
 
     _syncForecast();
@@ -606,7 +655,9 @@ class AnalysisController extends _$AnalysisController
     _gameRepository.saveForecast(
       gameId: (options as ActiveCorrespondenceGame).gameFullId,
       forecast: state.requireValue.forecast!.toApiForecast(
-        pathToLiveMove.isEmpty ? _root.view : _root.branchAt(pathToLiveMove)!.view,
+        pathToLiveMove.isEmpty
+            ? _root.view
+            : _root.branchAt(pathToLiveMove)!.view,
       ),
     );
   }
@@ -652,7 +703,9 @@ class AnalysisController extends _$AnalysisController
       final game = state.requireValue.archivedGame;
       if (game == null) return;
       final toggledBookmark = !(game.data.bookmarked ?? false);
-      await ref.read(accountServiceProvider).setGameBookmark(game.id, bookmark: toggledBookmark);
+      await ref
+          .read(accountServiceProvider)
+          .setGameBookmark(game.id, bookmark: toggledBookmark);
       state = AsyncValue.data(
         state.requireValue.copyWith(
           archivedGame: state.requireValue.archivedGame?.copyWith(
@@ -676,7 +729,9 @@ class AnalysisController extends _$AnalysisController
     final (currentNode, opening) = _nodeOpeningAt(_root, path);
 
     // always show variation if the user plays a move
-    if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
+    if (shouldForceShowVariation &&
+        currentNode is Branch &&
+        currentNode.isCollapsed) {
       _root.updateAt(path, (node) {
         if (node is Branch) node.isCollapsed = false;
       });
@@ -747,7 +802,10 @@ class AnalysisController extends _$AnalysisController
     if (pathChange) requestEval();
   }
 
-  Future<(UciPath, FullOpening)?> _fetchOpening(String fen, UciPath path) async {
+  Future<(UciPath, FullOpening)?> _fetchOpening(
+    String fen,
+    UciPath path,
+  ) async {
     if (!kOpeningAllowedVariants.contains(_variant)) return null;
 
     final opening = await ref.read(openingServiceProvider).fetchFromFen(fen);
@@ -767,14 +825,20 @@ class AnalysisController extends _$AnalysisController
   }
 
   void _listenToServerAnalysisEvents() {
-    final event = ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
+    final event = ref
+        .read(serverAnalysisServiceProvider)
+        .lastAnalysisEvent
+        .value;
     if (event != null && event.$1 == state.requireValue.gameId) {
       ServerAnalysisService.mergeOngoingAnalysis(_root, event.$2.tree);
       state = AsyncData(
         state.requireValue.copyWith(
           acplChartData: _makeAcplChartData(),
           playersAnalysis: event.$2.analysis != null
-              ? (white: event.$2.analysis!.white, black: event.$2.analysis!.black)
+              ? (
+                  white: event.$2.analysis!.white,
+                  black: event.$2.analysis!.black,
+                )
               : null,
           root: _root.view,
         ),
@@ -791,7 +855,9 @@ class AnalysisController extends _$AnalysisController
           (node) => (
             node.position.isCheckmate,
             node.position.turn,
-            node.lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval,
+            node.lichessAnalysisComments
+                ?.firstWhereOrNull((c) => c.eval != null)
+                ?.eval,
           ),
         )
         .map((el) {
@@ -919,7 +985,9 @@ sealed class AnalysisState
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
       isEngineAvailable(prefs) ||
-      (isComputerAnalysisAllowed && isServerAnalysisEnabled && currentNode.serverEval != null);
+      (isComputerAnalysisAllowed &&
+          isServerAnalysisEnabled &&
+          currentNode.serverEval != null);
 
   /// Whether the engine is allowed for this analysis and variant.
   bool get isEngineAllowed =>
@@ -950,15 +1018,20 @@ sealed class AnalysisState
 
   /// If it's our turn and we have branched off from the main line, this is the move we would play
   /// if we to save the entire current path as a premove line.
-  SanMove? get pendingMove => forecast?.onMyTurn == true && branchedOffFromLiveMove
-      ? liveMoveNode!.childById(currentPath.stripPrefix(pathToLiveMove!).head!)?.sanMove
+  SanMove? get pendingMove =>
+      forecast?.onMyTurn == true && branchedOffFromLiveMove
+      ? liveMoveNode!
+            .childById(currentPath.stripPrefix(pathToLiveMove!).head!)
+            ?.sanMove
       : null;
 
-  IList<UciPath>? get linesForPendingMove =>
-      pendingMove != null ? forecast?.linesStartingWith(pendingMove!.move) : null;
+  IList<UciPath>? get linesForPendingMove => pendingMove != null
+      ? forecast?.linesStartingWith(pendingMove!.move)
+      : null;
 
   @override
-  bool isEngineAvailable(EngineEvaluationPrefState prefs) => isEngineAllowed && prefs.isEnabled;
+  bool isEngineAvailable(EngineEvaluationPrefState prefs) =>
+      isEngineAllowed && prefs.isEnabled;
 
   @override
   Position get currentPosition => currentNode.position;
@@ -1023,7 +1096,9 @@ sealed class AnalysisCurrentNode
   ///
   /// For now we only trust the eval coming from lichess analysis.
   ExternalEval? get serverEval {
-    final pgnEval = lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
+    final pgnEval = lichessAnalysisComments
+        ?.firstWhereOrNull((c) => c.eval != null)
+        ?.eval;
     return pgnEval != null
         ? ExternalEval(
             cp: pgnEval.pawns != null ? cpFromPawns(pgnEval.pawns!) : null,

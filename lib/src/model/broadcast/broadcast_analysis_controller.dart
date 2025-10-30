@@ -51,7 +51,8 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
   @override
   @protected
-  EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+  EngineEvaluationPrefState get evaluationPrefs =>
+      ref.read(engineEvaluationPreferencesProvider);
 
   @override
   @protected
@@ -60,7 +61,8 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
   @override
   @protected
-  EvaluationService evaluationServiceFactory() => ref.read(evaluationServiceProvider);
+  EvaluationService evaluationServiceFactory() =>
+      ref.read(evaluationServiceProvider);
 
   @override
   @protected
@@ -75,7 +77,10 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   Root get positionTree => _root;
 
   @override
-  Future<BroadcastAnalysisState> build(BroadcastRoundId roundId, BroadcastGameId gameId) async {
+  Future<BroadcastAnalysisState> build(
+    BroadcastRoundId roundId,
+    BroadcastGameId gameId,
+  ) async {
     ref.onDispose(() {
       _key = null;
       _subscription?.cancel();
@@ -112,7 +117,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       },
     );
 
-    final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
+    final pgn = await ref
+        .read(broadcastRepositoryProvider)
+        .getGamePgn(roundId, gameId);
 
     final game = PgnGame.parsePgn(pgn);
     final pgnHeaders = IMap(game.headers);
@@ -163,7 +170,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     if (!state.hasValue) return;
     final key = _key;
 
-    final pgn = await ref.read(broadcastRepositoryProvider).getGamePgn(roundId, gameId);
+    final pgn = await ref
+        .read(broadcastRepositoryProvider)
+        .getGamePgn(roundId, gameId);
 
     // check provider is still mounted
     if (key == _key) {
@@ -171,7 +180,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       final wasOnLivePath = curState.broadcastLivePath == curState.currentPath;
       final game = PgnGame.parsePgn(pgn);
       final pgnHeaders = IMap(game.headers);
-      final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
+      final rootComments = IList(
+        game.comments.map((c) => PgnComment.fromPgn(c)),
+      );
 
       final newRoot = Root.fromPgnGame(game, isLichessAnalysis: true);
 
@@ -184,7 +195,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
 
       _root = newRoot;
 
-      final newCurrentPath = wasOnLivePath ? broadcastPath : curState.currentPath;
+      final newCurrentPath = wasOnLivePath
+          ? broadcastPath
+          : curState.currentPath;
       final newCurrentNode = wasOnLivePath
           ? AnalysisCurrentNode.fromNode(_root.nodeAt(newCurrentPath))
           : curState.currentNode;
@@ -213,7 +226,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     state = AsyncData(
       state.requireValue.copyWith(
         root: recomputeRootView ? _root.view : state.requireValue.root,
-        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
+        currentNode: AnalysisCurrentNode.fromNode(
+          _root.nodeAt(state.requireValue.currentPath),
+        ),
       ),
     );
   }
@@ -232,7 +247,11 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   }
 
   void _handleAddNodeEvent(SocketEvent event) {
-    final broadcastGameId = pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
+    final broadcastGameId = pick(
+      event.data,
+      'p',
+      'chapterId',
+    ).asBroadcastGameIdOrThrow();
 
     // We check if the event is for this game
     if (broadcastGameId != gameId) return;
@@ -247,7 +266,11 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     // The path for the node that was received
     final path = pick(event.data, 'p', 'path').asUciPathOrThrow();
     final uciMove = pick(event.data, 'n', 'uci').asUciMoveOrThrow();
-    final clock = pick(event.data, 'n', 'clock').asDurationFromCentiSecondsOrNull();
+    final clock = pick(
+      event.data,
+      'n',
+      'clock',
+    ).asDurationFromCentiSecondsOrNull();
 
     final (newPath, isNewNode) = _root.addMoveAt(path, uciMove, clock: clock);
 
@@ -273,17 +296,22 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   }
 
   void _handleSetTagsEvent(SocketEvent event) {
-    final broadcastGameId = pick(event.data, 'chapterId').asBroadcastGameIdOrThrow();
+    final broadcastGameId = pick(
+      event.data,
+      'chapterId',
+    ).asBroadcastGameIdOrThrow();
 
     // We check if the event is for this game
     if (broadcastGameId != gameId) return;
 
-    final pgnHeadersEntries = pick(
-      event.data,
-      'tags',
-    ).asListOrThrow((header) => MapEntry(header(0).asStringOrThrow(), header(1).asStringOrThrow()));
+    final pgnHeadersEntries = pick(event.data, 'tags').asListOrThrow(
+      (header) =>
+          MapEntry(header(0).asStringOrThrow(), header(1).asStringOrThrow()),
+    );
 
-    final pgnHeaders = state.requireValue.pgnHeaders.addEntries(pgnHeadersEntries);
+    final pgnHeaders = state.requireValue.pgnHeaders.addEntries(
+      pgnHeadersEntries,
+    );
     state = AsyncData(state.requireValue.copyWith(pgnHeaders: pgnHeaders));
   }
 
@@ -297,9 +325,16 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
       return;
     }
 
-    final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
+    final (newPath, isNewNode) = _root.addMoveAt(
+      state.requireValue.currentPath,
+      move,
+    );
     if (newPath != null) {
-      _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
+      _setPath(
+        newPath,
+        shouldRecomputeRootView: isNewNode,
+        shouldForceShowVariation: true,
+      );
     }
   }
 
@@ -358,7 +393,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
   void toggleBoard() {
     if (!state.hasValue) return;
 
-    state = AsyncData(state.requireValue.copyWith(pov: state.requireValue.pov.opposite));
+    state = AsyncData(
+      state.requireValue.copyWith(pov: state.requireValue.pov.opposite),
+    );
   }
 
   @override
@@ -427,7 +464,9 @@ class BroadcastAnalysisController extends _$BroadcastAnalysisController
     final currentNode = _root.nodeAt(path);
 
     // always show variation if the user plays a move
-    if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
+    if (shouldForceShowVariation &&
+        currentNode is Branch &&
+        currentNode.isCollapsed) {
       _root.updateAt(path, (node) {
         if (node is Branch) node.isCollapsed = false;
       });
@@ -576,7 +615,8 @@ sealed class BroadcastAnalysisState
 
   /// Whether an evaluation can be available
   bool hasAvailableEval(EngineEvaluationPrefState prefs) =>
-      isEngineAvailable(prefs) || (isServerAnalysisEnabled && currentNode.serverEval != null);
+      isEngineAvailable(prefs) ||
+      (isServerAnalysisEnabled && currentNode.serverEval != null);
 
   @override
   bool isEngineAvailable(EngineEvaluationPrefState prefs) => prefs.isEnabled;

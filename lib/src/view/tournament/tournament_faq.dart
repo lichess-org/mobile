@@ -35,7 +35,10 @@ class TournamentFAQScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(context.l10n.arenaHowAreScoresCalculated, style: Styles.sectionTitle),
+                  Text(
+                    context.l10n.arenaHowAreScoresCalculated,
+                    style: Styles.sectionTitle,
+                  ),
                   const SizedBox(height: 10),
                   Text(context.l10n.arenaHowAreScoresCalculatedAnswer),
                 ],
@@ -57,7 +60,10 @@ class TournamentFAQScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(context.l10n.arenaHowIsTheWinnerDecided, style: Styles.sectionTitle),
+                  Text(
+                    context.l10n.arenaHowIsTheWinnerDecided,
+                    style: Styles.sectionTitle,
+                  ),
                   const SizedBox(height: 10),
                   Text(context.l10n.arenaHowIsTheWinnerDecidedAnswer),
                 ],
@@ -68,7 +74,10 @@ class TournamentFAQScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(context.l10n.arenaHowDoesPairingWork, style: Styles.sectionTitle),
+                  Text(
+                    context.l10n.arenaHowDoesPairingWork,
+                    style: Styles.sectionTitle,
+                  ),
                   const SizedBox(height: 10),
                   Text(context.l10n.arenaHowDoesPairingWorkAnswer),
                 ],
@@ -79,7 +88,10 @@ class TournamentFAQScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(context.l10n.arenaHowDoesItEnd, style: Styles.sectionTitle),
+                  Text(
+                    context.l10n.arenaHowDoesItEnd,
+                    style: Styles.sectionTitle,
+                  ),
                   const SizedBox(height: 10),
                   Text(context.l10n.arenaHowDoesItEndAnswer),
                 ],
@@ -90,7 +102,10 @@ class TournamentFAQScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(context.l10n.arenaOtherRules, style: Styles.sectionTitle),
+                  Text(
+                    context.l10n.arenaOtherRules,
+                    style: Styles.sectionTitle,
+                  ),
                   const SizedBox(height: 10),
                   Text(context.l10n.arenaThereIsACountdown),
                   const SizedBox(height: 6),
@@ -116,11 +131,16 @@ class TournamentFAQScreen extends StatelessWidget {
                     ],
                     rows: const [
                       DataRow(
-                        cells: [DataCell(Text('Standard, Chess960, Horde')), DataCell(Text('30'))],
+                        cells: [
+                          DataCell(Text('Standard, Chess960, Horde')),
+                          DataCell(Text('30')),
+                        ],
                       ),
                       DataRow(
                         cells: [
-                          DataCell(Text('Antichess, Crazyhouse, King of the Hill')),
+                          DataCell(
+                            Text('Antichess, Crazyhouse, King of the Hill'),
+                          ),
                           DataCell(Text('20')),
                         ],
                       ),

@@ -15,7 +15,9 @@ Future<ExportedGame> archivedGame(Ref ref, {required GameId id}) async {
   ExportedGame game;
   try {
     final isLoggedIn = ref.watch(isLoggedInProvider);
-    game = await ref.read(gameRepositoryProvider).getGame(id, withBookmarked: isLoggedIn);
+    game = await ref
+        .read(gameRepositoryProvider)
+        .getGame(id, withBookmarked: isLoggedIn);
   } catch (_) {
     final gameStorage = await ref.watch(gameStorageProvider.future);
     final storedGame = await gameStorage.fetch(gameId: id);
@@ -29,6 +31,9 @@ Future<ExportedGame> archivedGame(Ref ref, {required GameId id}) async {
 }
 
 @riverpod
-Future<IList<LightExportedGame>> gamesById(Ref ref, {required ISet<GameId> ids}) {
+Future<IList<LightExportedGame>> gamesById(
+  Ref ref, {
+  required ISet<GameId> ids,
+}) {
   return ref.read(gameRepositoryProvider).getGamesByIds(ids);
 }

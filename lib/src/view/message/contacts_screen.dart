@@ -14,9 +14,13 @@ import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
-final messageSearchQueryProvider = StateProvider.autoDispose<String>((ref) => '');
+final messageSearchQueryProvider = StateProvider.autoDispose<String>(
+  (ref) => '',
+);
 
-final messageSearchResultsProvider = FutureProvider.autoDispose<SearchResult>((ref) async {
+final messageSearchResultsProvider = FutureProvider.autoDispose<SearchResult>((
+  ref,
+) async {
   final repo = ref.read(messageRepositoryProvider);
   final query = ref.watch(messageSearchQueryProvider);
   if (query.length < 3) {
@@ -54,7 +58,10 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
   }
 
   Future<void> pushConversationScreen(LightUser user) async {
-    await Navigator.push(context, ConversationScreen.buildRoute(context, user: user));
+    await Navigator.push(
+      context,
+      ConversationScreen.buildRoute(context, user: user),
+    );
     ref.invalidate(contactsProvider);
     ref.read(messageSearchQueryProvider.notifier).state = '';
     controller.clear();
@@ -72,10 +79,15 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
         title: Text(context.l10n.inbox),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(
-            Theme.of(context).platform == TargetPlatform.iOS ? 52.0 : kToolbarHeight,
+            Theme.of(context).platform == TargetPlatform.iOS
+                ? 52.0
+                : kToolbarHeight,
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
             child: PlatformSearchBar(
               controller: controller,
               focusNode: focusNode,
@@ -93,16 +105,25 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
           ? searchResultsAsync.when(
               data: (result) => ListView(
                 children: [
-                  if (result.contacts.isNotEmpty) _SearchCategoryTitle(context.l10n.discussions),
+                  if (result.contacts.isNotEmpty)
+                    _SearchCategoryTitle(context.l10n.discussions),
                   ...result.contacts.map(
-                    (contact) => ContactTile(contact, me, openConvo: pushConversationScreen),
+                    (contact) => ContactTile(
+                      contact,
+                      me,
+                      openConvo: pushConversationScreen,
+                    ),
                   ),
-                  if (result.friends.isNotEmpty) _SearchCategoryTitle(context.l10n.friends),
+                  if (result.friends.isNotEmpty)
+                    _SearchCategoryTitle(context.l10n.friends),
                   ...result.friends.map(
                     (user) => UserTile(user, openConvo: pushConversationScreen),
                   ),
-                  if (result.users.isNotEmpty) _SearchCategoryTitle(context.l10n.players),
-                  ...result.users.map((user) => UserTile(user, openConvo: pushConversationScreen)),
+                  if (result.users.isNotEmpty)
+                    _SearchCategoryTitle(context.l10n.players),
+                  ...result.users.map(
+                    (user) => UserTile(user, openConvo: pushConversationScreen),
+                  ),
                 ],
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -159,7 +180,12 @@ class ContactsListView extends ConsumerWidget {
 }
 
 class ContactTile extends ConsumerWidget {
-  const ContactTile(this.contact, this.me, {required this.openConvo, super.key});
+  const ContactTile(
+    this.contact,
+    this.me, {
+    required this.openConvo,
+    super.key,
+  });
 
   final Contact contact;
   final LightUser me;
@@ -172,11 +198,19 @@ class ContactTile extends ConsumerWidget {
       fontWeight: FontWeight.bold,
     );
 
-    final isRead = contact.lastMessage.read || contact.lastMessage.userId == me.id;
+    final isRead =
+        contact.lastMessage.read || contact.lastMessage.userId == me.id;
     return ListTile(
       leading: ConnectedIcon(isConnected: contact.user.isOnline == true),
-      title: UserFullNameWidget(user: contact.user, showFlair: true, showPatron: true),
-      subtitle: Text(contact.lastMessage.text, style: isRead ? null : unreadStyle),
+      title: UserFullNameWidget(
+        user: contact.user,
+        showFlair: true,
+        showPatron: true,
+      ),
+      subtitle: Text(
+        contact.lastMessage.text,
+        style: isRead ? null : unreadStyle,
+      ),
       trailing: Text(
         relativeDate(context.l10n, contact.lastMessage.date),
         style: isRead ? null : unreadStyle,

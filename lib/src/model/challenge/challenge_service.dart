@@ -13,7 +13,8 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
+import 'package:lichess_mobile/src/tab_scaffold.dart'
+    show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -42,7 +43,8 @@ class ChallengeService {
   ChallengesList? _previous;
 
   StreamSubscription<ChallengesList>? _socketSubscription;
-  StreamSubscription<(NotificationResponse, LocalNotification)>? _notificationResponseSubscription;
+  StreamSubscription<(NotificationResponse, LocalNotification)>?
+  _notificationResponseSubscription;
 
   /// The stream of challenge events that are received from the server.
   static Stream<ChallengesList> get stream => socketGlobalStream.map((event) {
@@ -57,15 +59,16 @@ class ChallengeService {
   void start() {
     _socketSubscription = stream.listen(_onSocketEvent);
 
-    _notificationResponseSubscription = NotificationService.responseStream.listen((data) {
-      final (response, notification) = data;
-      switch (notification) {
-        case ChallengeNotification(:final challenge):
-          _onNotificationResponse(response.actionId, challenge);
-        case _:
-          break;
-      }
-    });
+    _notificationResponseSubscription = NotificationService.responseStream
+        .listen((data) {
+          final (response, notification) = data;
+          switch (notification) {
+            case ChallengeNotification(:final challenge):
+              _onNotificationResponse(response.actionId, challenge);
+            case _:
+              break;
+          }
+        });
   }
 
   void _onSocketEvent(ChallengesList current) {
@@ -87,16 +90,20 @@ class ChallengeService {
     await Future.wait(
       prevInwardIds
           .whereNot((challengeId) => currentInwardIds.contains(challengeId))
-          .map((id) async => await notificationService.cancel(id.value.hashCode)),
+          .map(
+            (id) async => await notificationService.cancel(id.value.hashCode),
+          ),
     );
 
     // new incoming challenges
     await Future.wait(
-      _current?.inward.whereNot((challenge) => prevInwardIds.contains(challenge.id)).map((
-            challenge,
-          ) async {
-            return await notificationService.show(ChallengeNotification(challenge));
-          }) ??
+      _current?.inward
+              .whereNot((challenge) => prevInwardIds.contains(challenge.id))
+              .map((challenge) async {
+                return await notificationService.show(
+                  ChallengeNotification(challenge),
+                );
+              }) ??
           <Future<int>>[],
     );
   }
@@ -108,7 +115,10 @@ class ChallengeService {
   }
 
   /// Handle a local notification response when the app is in the foreground.
-  Future<void> _onNotificationResponse(String? actionid, Challenge challenge) async {
+  Future<void> _onNotificationResponse(
+    String? actionid,
+    Challenge challenge,
+  ) async {
     final challengeId = challenge.id;
 
     switch (actionid) {
@@ -129,7 +139,9 @@ class ChallengeService {
         if (challenge != null) {
           _showConfirmDialog(context, challenge);
         } else {
-          Navigator.of(context).push(ChallengeRequestsScreen.buildRoute(context));
+          Navigator.of(
+            context,
+          ).push(ChallengeRequestsScreen.buildRoute(context));
         }
     }
   }
@@ -137,7 +149,9 @@ class ChallengeService {
   Future<GameFullId?> acceptChallenge(ChallengeId id) async {
     final challengeRepo = ref.read(challengeRepositoryProvider);
     await challengeRepo.accept(id);
-    return await challengeRepo.show(id).then((challenge) => challenge.gameFullId);
+    return await challengeRepo
+        .show(id)
+        .then((challenge) => challenge.gameFullId);
   }
 
   Future<void> _acceptChallenge(ChallengeId id) async {
@@ -147,7 +161,11 @@ class ChallengeService {
     if (context == null || !context.mounted) return;
 
     if (fullId == null) {
-      return showSnackBar(context, 'Failed to accept challenge', type: SnackBarType.error);
+      return showSnackBar(
+        context,
+        'Failed to accept challenge',
+        type: SnackBarType.error,
+      );
     }
 
     final rootNavState = Navigator.of(context, rootNavigator: true);
@@ -172,7 +190,9 @@ class ChallengeService {
               leading: Icon(Icons.close, color: context.lichessColors.error),
               isDestructiveAction: true,
               onPressed: () {
-                ref.read(challengeRepositoryProvider).decline(id, reason: reason);
+                ref
+                    .read(challengeRepositoryProvider)
+                    .decline(id, reason: reason);
               },
             ),
           )

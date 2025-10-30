@@ -11,7 +11,8 @@ sealed class Category with _$Category {
     @JsonKey(name: 'emojis') required List<String> emojiIds,
   }) = _Category;
 
-  factory Category.fromJson(Map<String, Object?> json) => _$CategoryFromJson(json);
+  factory Category.fromJson(Map<String, Object?> json) =>
+      _$CategoryFromJson(json);
 }
 
 @Freezed(toJson: true, fromJson: true)
@@ -42,7 +43,8 @@ sealed class EmojiData with _$EmojiData {
     required Map<String, Emoji> emojis,
   }) = _EmojiData;
 
-  factory EmojiData.fromJson(Map<String, dynamic> json) => _$EmojiDataFromJson(json);
+  factory EmojiData.fromJson(Map<String, dynamic> json) =>
+      _$EmojiDataFromJson(json);
 
   String getEmojiById(String id) {
     final emoji = emojis[id];
@@ -52,7 +54,10 @@ sealed class EmojiData with _$EmojiData {
     return emoji.skins.first.src;
   }
 
-  EmojiData filterByKeyword(String keyword, {bool keepEmptyCategories = false}) {
+  EmojiData filterByKeyword(
+    String keyword, {
+    bool keepEmptyCategories = false,
+  }) {
     final filteredCategories = <Category>[];
     final filteredEmojis = <String, Emoji>{};
 
@@ -74,7 +79,10 @@ sealed class EmojiData with _$EmojiData {
       }
     }
 
-    final filteredEmojiData = copyWith(categories: filteredCategories, emojis: filteredEmojis);
+    final filteredEmojiData = copyWith(
+      categories: filteredCategories,
+      emojis: filteredEmojis,
+    );
 
     return filteredEmojiData;
   }

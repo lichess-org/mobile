@@ -26,8 +26,10 @@ const IMap<Role, int> pieceScores = IMapConst({
 sealed class MaterialDiff with _$MaterialDiff {
   const MaterialDiff._();
 
-  const factory MaterialDiff({required MaterialDiffSide black, required MaterialDiffSide white}) =
-      _MaterialDiff;
+  const factory MaterialDiff({
+    required MaterialDiffSide black,
+    required MaterialDiffSide white,
+  }) = _MaterialDiff;
 
   factory MaterialDiff.fromBoard(Board board, {Board? startingPosition}) {
     int score = 0;
@@ -35,9 +37,11 @@ sealed class MaterialDiff with _$MaterialDiff {
     final IMap<Role, int> whiteCount = board.materialCount(Side.white);
 
     final IMap<Role, int> blackStartingCount =
-        startingPosition?.materialCount(Side.black) ?? Board.standard.materialCount(Side.black);
+        startingPosition?.materialCount(Side.black) ??
+        Board.standard.materialCount(Side.black);
     final IMap<Role, int> whiteStartingCount =
-        startingPosition?.materialCount(Side.white) ?? Board.standard.materialCount(Side.white);
+        startingPosition?.materialCount(Side.white) ??
+        Board.standard.materialCount(Side.white);
 
     IMap<Role, int> subtractPieceCounts(
       IMap<Role, int> startingCount,
@@ -48,8 +52,14 @@ sealed class MaterialDiff with _$MaterialDiff {
       );
     }
 
-    final IMap<Role, int> blackCapturedPieces = subtractPieceCounts(whiteStartingCount, whiteCount);
-    final IMap<Role, int> whiteCapturedPieces = subtractPieceCounts(blackStartingCount, blackCount);
+    final IMap<Role, int> blackCapturedPieces = subtractPieceCounts(
+      whiteStartingCount,
+      whiteCount,
+    );
+    final IMap<Role, int> whiteCapturedPieces = subtractPieceCounts(
+      blackStartingCount,
+      blackCount,
+    );
 
     Map<Role, int> count;
     Map<Role, int> black;

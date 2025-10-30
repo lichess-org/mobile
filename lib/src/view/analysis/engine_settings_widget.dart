@@ -45,9 +45,13 @@ class EngineSettingsWidget extends ConsumerWidget {
             SliderSettingsTile(
               title: const Text('Search time'),
               value: prefs.engineSearchTime.inSeconds.toDouble(),
-              values: kAvailableEngineSearchTimes.map((e) => e.inSeconds.toDouble()).toList(),
+              values: kAvailableEngineSearchTimes
+                  .map((e) => e.inSeconds.toDouble())
+                  .toList(),
               labelBuilder: (value) =>
-                  value == kMaxEngineSearchTime.inSeconds.toDouble() ? '∞' : '${value.toInt()}s',
+                  value == kMaxEngineSearchTime.inSeconds.toDouble()
+                  ? '∞'
+                  : '${value.toInt()}s',
               onChangeEnd: (value) {
                 onSetEngineSearchTime(Duration(seconds: value.toInt()));
               },

@@ -29,7 +29,10 @@ class Localizations extends _$Localizations {
 
   ActiveLocalizations _getLocale(GeneralPrefs prefs) {
     if (prefs.locale != null) {
-      return (locale: prefs.locale!, strings: lookupAppLocalizations(prefs.locale!));
+      return (
+        locale: prefs.locale!,
+        strings: lookupAppLocalizations(prefs.locale!),
+      );
     }
     final locale = WidgetsBinding.instance.platformDispatcher.locale;
     return (locale: locale, strings: lookupAppLocalizations(locale));

@@ -42,8 +42,10 @@ sealed class ChatOptions {
 @freezed
 abstract class GameChatOptions extends ChatOptions with _$GameChatOptions {
   const GameChatOptions._();
-  const factory GameChatOptions({required GameFullId id, required LightUser? opponent}) =
-      _GameChatOptions;
+  const factory GameChatOptions({
+    required GameFullId id,
+    required LightUser? opponent,
+  }) = _GameChatOptions;
 
   @override
   bool get isPublic => false;
@@ -53,10 +55,13 @@ abstract class GameChatOptions extends ChatOptions with _$GameChatOptions {
 }
 
 @freezed
-abstract class TournamentChatOptions extends ChatOptions with _$TournamentChatOptions {
+abstract class TournamentChatOptions extends ChatOptions
+    with _$TournamentChatOptions {
   const TournamentChatOptions._();
-  const factory TournamentChatOptions({required TournamentId id, required bool writeable}) =
-      _TournamentChatOptions;
+  const factory TournamentChatOptions({
+    required TournamentId id,
+    required bool writeable,
+  }) = _TournamentChatOptions;
 
   @override
   LightUser? get opponent => null;
@@ -68,8 +73,10 @@ abstract class TournamentChatOptions extends ChatOptions with _$TournamentChatOp
 @freezed
 abstract class StudyChatOptions extends ChatOptions with _$StudyChatOptions {
   const StudyChatOptions._();
-  const factory StudyChatOptions({required StudyId id, required bool writeable}) =
-      _StudyChatOptions;
+  const factory StudyChatOptions({
+    required StudyId id,
+    required bool writeable,
+  }) = _StudyChatOptions;
 
   @override
   LightUser? get opponent => null;
@@ -81,7 +88,9 @@ abstract class StudyChatOptions extends ChatOptions with _$StudyChatOptions {
 /// A provider that gets the chat unread messages
 @riverpod
 Future<int> chatUnread(Ref ref, ChatOptions options) async {
-  return ref.watch(chatControllerProvider(options).selectAsync((s) => s.unreadMessages));
+  return ref.watch(
+    chatControllerProvider(options).selectAsync((s) => s.unreadMessages),
+  );
 }
 
 const IList<ChatMessage> _kEmptyMessages = IListConst([]);
@@ -106,14 +115,18 @@ class ChatController extends _$ChatController {
         gameControllerProvider(id).selectAsync((s) => s.game.chat?.lines),
       ),
       TournamentChatOptions(:final id) => ref.watch(
-        tournamentControllerProvider(id).selectAsync((s) => s.tournament.chat?.lines),
+        tournamentControllerProvider(
+          id,
+        ).selectAsync((s) => s.tournament.chat?.lines),
       ),
       StudyChatOptions(:final id) => ref.watch(
         studyControllerProvider(id).selectAsync((s) => s.study.chat?.lines),
       ),
     };
 
-    final filteredMessages = _selectMessages(initialMessages ?? _kEmptyMessages);
+    final filteredMessages = _selectMessages(
+      initialMessages ?? _kEmptyMessages,
+    );
     final readMessagesCount = await _getReadMessagesCount();
 
     return ChatState(
@@ -167,7 +180,9 @@ class ChatController extends _$ChatController {
     return all
         .where(
           (m) =>
-              !m.deleted && (!m.troll || m.username?.toLowerCase() == _me?.id.value) && !m.isSpam,
+              !m.deleted &&
+              (!m.troll || m.username?.toLowerCase() == _me?.id.value) &&
+              !m.isSpam,
         )
         .toIList();
   }
@@ -205,7 +220,10 @@ class ChatController extends _$ChatController {
         if (options.isPublic == false && newUnread > 0) {
           ref.read(soundServiceProvider).play(Sound.confirmation, volume: 0.5);
         }
-        return s.copyWith(messages: newMessages, unreadMessages: s.unreadMessages + newUnread);
+        return s.copyWith(
+          messages: newMessages,
+          unreadMessages: s.unreadMessages + newUnread,
+        );
       });
     }
   }
@@ -215,6 +233,8 @@ class ChatController extends _$ChatController {
 sealed class ChatState with _$ChatState {
   const ChatState._();
 
-  const factory ChatState({required IList<ChatMessage> messages, required int unreadMessages}) =
-      _ChatState;
+  const factory ChatState({
+    required IList<ChatMessage> messages,
+    required int unreadMessages,
+  }) = _ChatState;
 }

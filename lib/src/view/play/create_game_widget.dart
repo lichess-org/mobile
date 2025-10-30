@@ -21,14 +21,16 @@ class CreateGameWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     final account = ref.watch(accountProvider).valueOrNull;
     final userPerf = account?.perfs[playPrefs.realTimePerf];
     final canUseRatingRange = userPerf != null && userPerf.provisional != true;
 
-    final labelStyle = Theme.of(
-      context,
-    ).textTheme.labelMedium?.copyWith(color: textShade(context, 0.5), height: 1.0);
+    final labelStyle = Theme.of(context).textTheme.labelMedium?.copyWith(
+      color: textShade(context, 0.5),
+      height: 1.0,
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -53,11 +55,15 @@ class CreateGameWidget extends ConsumerWidget {
                       style: const TextStyle(letterSpacing: 2.0),
                     ),
                     onPressed: () {
-                      final double screenHeight = MediaQuery.sizeOf(context).height;
+                      final double screenHeight = MediaQuery.sizeOf(
+                        context,
+                      ).height;
                       showModalBottomSheet<void>(
                         context: context,
                         isScrollControlled: true,
-                        constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
+                        constraints: BoxConstraints(
+                          maxHeight: screenHeight - (screenHeight / 10),
+                        ),
                         builder: (BuildContext context) {
                           return TimeControlModal(
                             timeIncrement: playPrefs.timeIncrement,
@@ -97,7 +103,9 @@ class CreateGameWidget extends ConsumerWidget {
                         selectedItem: playPrefs.customVariant,
                         labelBuilder: (Variant variant) => Text(variant.label),
                         onSelectedItemChanged: (Variant variant) {
-                          ref.read(gameSetupPreferencesProvider.notifier).setCustomVariant(variant);
+                          ref
+                              .read(gameSetupPreferencesProvider.notifier)
+                              .setCustomVariant(variant);
                         },
                       );
                     },
@@ -137,7 +145,11 @@ class CreateGameWidget extends ConsumerWidget {
                           },
                         );
                       },
-                      child: Text(playPrefs.customRated ? context.l10n.rated : context.l10n.casual),
+                      child: Text(
+                        playPrefs.customRated
+                            ? context.l10n.rated
+                            : context.l10n.casual,
+                      ),
                     ),
                   ],
                 ),
@@ -158,7 +170,8 @@ class CreateGameWidget extends ConsumerWidget {
                               showModalBottomSheet<void>(
                                 context: context,
                                 constraints: BoxConstraints(
-                                  minHeight: MediaQuery.sizeOf(context).height * 0.4,
+                                  minHeight:
+                                      MediaQuery.sizeOf(context).height * 0.4,
                                 ),
                                 isScrollControlled: true,
                                 builder: (BuildContext context) {
@@ -166,12 +179,20 @@ class CreateGameWidget extends ConsumerWidget {
                                     children: [
                                       PlayRatingRange(
                                         perf: userPerf,
-                                        ratingDelta: playPrefs.customRatingDelta,
-                                        onRatingDeltaChange: (int subtract, int add) {
-                                          ref
-                                              .read(gameSetupPreferencesProvider.notifier)
-                                              .setCustomRatingRange(subtract, add);
-                                        },
+                                        ratingDelta:
+                                            playPrefs.customRatingDelta,
+                                        onRatingDeltaChange:
+                                            (int subtract, int add) {
+                                              ref
+                                                  .read(
+                                                    gameSetupPreferencesProvider
+                                                        .notifier,
+                                                  )
+                                                  .setCustomRatingRange(
+                                                    subtract,
+                                                    add,
+                                                  );
+                                            },
                                       ),
                                     ],
                                   );
@@ -195,9 +216,14 @@ class CreateGameWidget extends ConsumerWidget {
           onPressed: isOnline
               ? () {
                   // Pops the play bottom sheet
-                  Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                  Navigator.of(
+                    context,
+                  ).popUntil((route) => route is! ModalBottomSheetRoute);
 
-                  final playban = ref.read(accountProvider).valueOrNull?.playban;
+                  final playban = ref
+                      .read(accountProvider)
+                      .valueOrNull
+                      ?.playban;
                   if (playban != null) {
                     ref.read(accountServiceProvider).showPlaybanDialog(playban);
                     return;

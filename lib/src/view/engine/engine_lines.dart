@@ -11,7 +11,11 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 
 class EngineLines extends ConsumerStatefulWidget {
-  const EngineLines({required this.onTapMove, required this.savedEval, required this.isGameOver});
+  const EngineLines({
+    required this.onTapMove,
+    required this.savedEval,
+    required this.isGameOver,
+  });
 
   final void Function(NormalMove move) onTapMove;
   final ClientEval? savedEval;
@@ -30,7 +34,10 @@ class _EngineLinesState extends ConsumerState<EngineLines> {
       engineEvaluationPreferencesProvider.select((p) => p.numEvalLines),
     );
     final localEval = ref.watch(engineEvaluationProvider).eval;
-    final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
+    final eval = pickBestClientEval(
+      localEval: localEval,
+      savedEval: widget.savedEval,
+    );
     // save the last eval to display when the current eval is not yet available to avoid flickering
     if (eval != null) lastEval = eval;
 
@@ -54,7 +61,10 @@ class _EngineLinesState extends ConsumerState<EngineLines> {
               : emptyLines);
 
     if (content.length < numEvalLines) {
-      final padding = List.filled(numEvalLines - content.length, const Engineline.empty());
+      final padding = List.filled(
+        numEvalLines - content.length,
+        const Engineline.empty(),
+      );
       content.addAll(padding);
     }
 
@@ -87,7 +97,10 @@ class Engineline extends ConsumerWidget {
 
     final pieceNotation = ref
         .watch(pieceNotationProvider)
-        .maybeWhen(data: (value) => value, orElse: () => defaultAccountPreferences.pieceNotation);
+        .maybeWhen(
+          data: (value) => value,
+          orElse: () => defaultAccountPreferences.pieceNotation,
+        );
 
     final lineBuffer = StringBuffer();
     int ply = fromPosition.ply + 1;
@@ -122,11 +135,16 @@ class Engineline extends ConsumerWidget {
                       : EngineGauge.valueColor(context),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 4.0,
+                  vertical: 2.0,
+                ),
                 child: Text(
                   evalString,
                   style: TextStyle(
-                    color: pvData.winningSide == Side.black ? Colors.white : Colors.black,
+                    color: pvData.winningSide == Side.black
+                        ? Colors.white
+                        : Colors.black,
                     fontSize: kEvalGaugeFontSize,
                     fontWeight: FontWeight.w600,
                   ),
@@ -139,7 +157,9 @@ class Engineline extends ConsumerWidget {
                   maxLines: 1,
                   softWrap: false,
                   style: TextStyle(
-                    fontFamily: pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
+                    fontFamily: pieceNotation == PieceNotation.symbol
+                        ? 'ChessFont'
+                        : null,
                     color: textShade(context, onTapMove == null ? 0.8 : 1.0),
                   ),
                   overflow: TextOverflow.ellipsis,

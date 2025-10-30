@@ -107,8 +107,16 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
   Widget build(BuildContext context) {
     final isTablet = isTabletOrLarger(context);
 
-    Widget buildItem(BuildContext context, int index, Animation<double> animation) =>
-        _buildMainListItem(context, index, animation, (index) => _angles[index]);
+    Widget buildItem(
+      BuildContext context,
+      int index,
+      Animation<double> animation,
+    ) => _buildMainListItem(
+      context,
+      index,
+      animation,
+      (index) => _angles[index],
+    );
 
     return PopScope(
       canPop: false,
@@ -138,7 +146,9 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
                       itemBuilder: buildItem,
                     ),
                   ),
-                  Expanded(child: ListView(children: const [PuzzleHistoryWidget()])),
+                  Expanded(
+                    child: ListView(children: const [PuzzleHistoryWidget()]),
+                  ),
                 ],
               )
             : AnimatedList(
@@ -172,10 +182,12 @@ Widget _buildMainListItem(
       return PuzzleAnglePreview(
         angle: const PuzzleTheme(PuzzleThemeKey.mix),
         onTap: () {
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).push(PuzzleScreen.buildRoute(context, angle: const PuzzleTheme(PuzzleThemeKey.mix)));
+          Navigator.of(context, rootNavigator: true).push(
+            PuzzleScreen.buildRoute(
+              context,
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            ),
+          );
         },
       );
     default:
@@ -279,7 +291,10 @@ class _PuzzleMenu extends ConsumerWidget {
               (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
           onTap: isOnline
               ? () {
-                  Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute(context));
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(StreakScreen.buildRoute(context));
                 }
               : null,
         ),
@@ -290,7 +305,10 @@ class _PuzzleMenu extends ConsumerWidget {
           subtitle: context.l10n.mobilePuzzleStormSubtitle,
           onTap: isOnline
               ? () {
-                  Navigator.of(context, rootNavigator: true).push(StormScreen.buildRoute(context));
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(StormScreen.buildRoute(context));
                 }
               : null,
         ),
@@ -319,7 +337,10 @@ class PuzzleHistoryWidget extends ConsumerWidget {
             children: [
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 8.0,
+                  ),
                   child: Text(context.l10n.puzzleNoPuzzlesToShow),
                 ),
               ),
@@ -336,13 +357,22 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           clipBehavior: Clip.none,
           header: showHeader ? Text(context.l10n.puzzleHistory) : null,
           onHeaderTap: showHeader
-              ? () => Navigator.of(context).push(PuzzleHistoryScreen.buildRoute(context))
+              ? () => Navigator.of(
+                  context,
+                ).push(PuzzleHistoryScreen.buildRoute(context))
               : null,
-          children: [PuzzleHistoryPreview(recentActivity.take(maxItems).toIList(), maxRows: 5)],
+          children: [
+            PuzzleHistoryPreview(
+              recentActivity.take(maxItems).toIList(),
+              maxRows: 5,
+            ),
+          ],
         );
       },
       error: (e, s) {
-        debugPrint('SEVERE: [PuzzleHistoryWidget] could not load puzzle history');
+        debugPrint(
+          'SEVERE: [PuzzleHistoryWidget] could not load puzzle history',
+        );
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load Puzzle history.'),
@@ -371,7 +401,9 @@ class _DashboardButton extends ConsumerWidget {
         .watch(connectivityChangesProvider)
         .whenIs(
           online: () => () {
-            Navigator.of(context).push(PuzzleDashboardScreen.buildRoute(context));
+            Navigator.of(
+              context,
+            ).push(PuzzleDashboardScreen.buildRoute(context));
           },
           offline: () => null,
         );
@@ -425,7 +457,8 @@ class DailyPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     final puzzle = ref.watch(dailyPuzzleProvider);
 
     return puzzle.when(
@@ -442,14 +475,23 @@ class DailyPuzzle extends ConsumerWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(context.l10n.puzzlePuzzleOfTheDay, style: Styles.boardPreviewTitle),
                   Text(
-                    context.l10n.puzzlePlayedXTimes(data.puzzle.plays).localizeNumbers(),
+                    context.l10n.puzzlePuzzleOfTheDay,
+                    style: Styles.boardPreviewTitle,
+                  ),
+                  Text(
+                    context.l10n
+                        .puzzlePlayedXTimes(data.puzzle.plays)
+                        .localizeNumbers(),
                     style: _puzzlePreviewSubtitleStyle(context),
                   ),
                 ],
               ),
-              Icon(Icons.today, size: 32, color: context.lichessColors.brag.withValues(alpha: 0.7)),
+              Icon(
+                Icons.today,
+                size: 32,
+                color: context.lichessColors.brag.withValues(alpha: 0.7),
+              ),
               Text(
                 data.puzzle.sideToMove == Side.white
                     ? context.l10n.whitePlays
@@ -471,7 +513,10 @@ class DailyPuzzle extends ConsumerWidget {
       },
       loading: () => isOnline
           ? const Shimmer(
-              child: ShimmerLoading(isLoading: true, child: SmallBoardPreview.loading()),
+              child: ShimmerLoading(
+                isLoading: true,
+                child: SmallBoardPreview.loading(),
+              ),
             )
           : const SizedBox.shrink(),
       error: (error, _) {
@@ -503,7 +548,10 @@ class PuzzleAnglePreview extends ConsumerWidget {
 
       return loading
           ? const Shimmer(
-              child: ShimmerLoading(isLoading: true, child: SmallBoardPreview.loading()),
+              child: ShimmerLoading(
+                isLoading: true,
+                child: SmallBoardPreview.loading(),
+              ),
             )
           : Slidable(
               dragStartBehavior: DragStartBehavior.start,
@@ -514,7 +562,9 @@ class PuzzleAnglePreview extends ConsumerWidget {
                   SlidableAction(
                     icon: Icons.delete,
                     onPressed: (context) async {
-                      final service = await ref.read(puzzleServiceProvider.future);
+                      final service = await ref.read(
+                        puzzleServiceProvider.future,
+                      );
                       if (context.mounted) {
                         service.deleteBatch(
                           userId: ref.read(authSessionProvider)?.user.id,
@@ -587,7 +637,9 @@ class PuzzleAnglePreview extends ConsumerWidget {
                         PuzzleOpening() => PuzzleIcons.opening,
                       },
                       size: 32,
-                      color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
+                      color: DefaultTextStyle.of(
+                        context,
+                      ).style.color?.withValues(alpha: 0.6),
                     ),
                     if (puzzle != null)
                       Text(
@@ -596,7 +648,9 @@ class PuzzleAnglePreview extends ConsumerWidget {
                             : context.l10n.blackPlays,
                       )
                     else
-                      const Text('No puzzles available, please go online to fetch them.'),
+                      const Text(
+                        'No puzzles available, please go online to fetch them.',
+                      ),
                   ],
                 ),
                 onTap: puzzle != null ? onTap : null,

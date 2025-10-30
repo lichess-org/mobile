@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/clock.dart' show CountdownClockBuilder;
+import 'package:lichess_mobile/src/widgets/clock.dart'
+    show CountdownClockBuilder;
 
 class PlaybanMessage extends StatelessWidget {
-  const PlaybanMessage({required this.playban, this.centerText = false, super.key});
+  const PlaybanMessage({
+    required this.playban,
+    this.centerText = false,
+    super.key,
+  });
 
   final TemporaryBan playban;
   final bool centerText;
@@ -53,32 +58,53 @@ class PlaybanMessage extends StatelessWidget {
         const SizedBox(height: 6.0),
         Align(
           alignment: centerText ? Alignment.center : Alignment.topLeft,
-          child: Text(context.l10n.howToAvoidThis, style: const TextStyle(fontSize: 20.0)),
+          child: Text(
+            context.l10n.howToAvoidThis,
+            style: const TextStyle(fontSize: 20.0),
+          ),
         ),
         Text.rich(
           TextSpan(
             children: [
-              const TextSpan(text: '\u2022', style: TextStyle(height: 1.25, fontSize: 20.0)),
+              const TextSpan(
+                text: '\u2022',
+                style: TextStyle(height: 1.25, fontSize: 20.0),
+              ),
               const TextSpan(text: ' '),
-              TextSpan(text: context.l10n.playEveryGame, style: const TextStyle(height: 1.25)),
+              TextSpan(
+                text: context.l10n.playEveryGame,
+                style: const TextStyle(height: 1.25),
+              ),
             ],
           ),
         ),
         Text.rich(
           TextSpan(
             children: [
-              const TextSpan(text: '\u2022', style: TextStyle(height: 1.25, fontSize: 20.0)),
+              const TextSpan(
+                text: '\u2022',
+                style: TextStyle(height: 1.25, fontSize: 20.0),
+              ),
               const TextSpan(text: ' '),
-              TextSpan(text: context.l10n.tryToWin, style: const TextStyle(height: 1.25)),
+              TextSpan(
+                text: context.l10n.tryToWin,
+                style: const TextStyle(height: 1.25),
+              ),
             ],
           ),
         ),
         Text.rich(
           TextSpan(
             children: [
-              const TextSpan(text: '\u2022', style: TextStyle(height: 1.25, fontSize: 20.0)),
+              const TextSpan(
+                text: '\u2022',
+                style: TextStyle(height: 1.25, fontSize: 20.0),
+              ),
               const TextSpan(text: ' '),
-              TextSpan(text: context.l10n.resignLostGames, style: const TextStyle(height: 1.25)),
+              TextSpan(
+                text: context.l10n.resignLostGames,
+                style: const TextStyle(height: 1.25),
+              ),
             ],
           ),
         ),

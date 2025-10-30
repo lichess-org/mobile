@@ -163,18 +163,21 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 playerSide: widget.interactiveBoardParams!.playerSide,
                 promotionMove: widget.interactiveBoardParams!.promotionMove,
                 onMove: widget.interactiveBoardParams!.onMove,
-                onPromotionSelection: widget.interactiveBoardParams!.onPromotionSelection,
+                onPromotionSelection:
+                    widget.interactiveBoardParams!.onPromotionSelection,
                 premovable: widget.interactiveBoardParams!.premovable,
               )
             : null;
 
         if (orientation == Orientation.landscape) {
           final defaultBoardSize =
-              constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
+              constraints.biggest.shortestSide -
+              (kTabletBoardTableSidePadding * 2);
           final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
           final boardSize = sideWidth >= 250
               ? defaultBoardSize
-              : constraints.biggest.longestSide / kGoldenRatio - (kTabletBoardTableSidePadding * 2);
+              : constraints.biggest.longestSide / kGoldenRatio -
+                    (kTabletBoardTableSidePadding * 2);
           return Padding(
             padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
             child: Row(
@@ -199,7 +202,9 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       widget.topTable,
-                      if (boardPrefs.moveListDisplay && !widget.zenMode && slicedMoves != null)
+                      if (boardPrefs.moveListDisplay &&
+                          !widget.zenMode &&
+                          slicedMoves != null)
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(top: 16.0),
@@ -235,7 +240,8 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
 
           // vertical space left on portrait mode to check if we can display the
           // move list
-          final verticalSpaceLeftBoardOnPortrait = constraints.biggest.height - boardSize;
+          final verticalSpaceLeftBoardOnPortrait =
+              constraints.biggest.height - boardSize;
 
           return Column(
             mainAxisSize: MainAxisSize.max,
@@ -246,7 +252,11 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   verticalSpaceLeftBoardOnPortrait >= kSmallHeightMinusBoard)
                 if (widget.zenMode)
                   // display empty move list to keep the layout consistent in zen mode
-                  const MoveList(type: MoveListType.inline, slicedMoves: [], currentMoveIndex: 0)
+                  const MoveList(
+                    type: MoveListType.inline,
+                    slicedMoves: [],
+                    currentMoveIndex: 0,
+                  )
                 else
                   MoveList(
                     type: MoveListType.inline,
@@ -264,7 +274,9 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
               ),
               Padding(
                 padding: isTablet
-                    ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                    ? const EdgeInsets.symmetric(
+                        horizontal: kTabletBoardTableSidePadding,
+                      )
                     : EdgeInsets.zero,
                 child: BoardWidget(
                   size: boardSize,

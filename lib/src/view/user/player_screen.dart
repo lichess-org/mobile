@@ -60,7 +60,9 @@ class _Body extends ConsumerWidget {
               SearchScreen.buildRoute(
                 context,
                 onUserTap: (user) {
-                  Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, user));
+                  Navigator.of(
+                    context,
+                  ).push(UserOrProfileScreen.buildRoute(context, user));
                 },
               ),
             ),

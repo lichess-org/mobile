@@ -7,7 +7,10 @@ import 'package:flutter/foundation.dart';
 const _emergencyDelay = Duration(seconds: 20);
 const _tickDelay = Duration(milliseconds: 100);
 
-typedef _EmergencyState = ({bool shouldTriggerEmergencyCallback, DateTime? nextEmergency});
+typedef _EmergencyState = ({
+  bool shouldTriggerEmergencyCallback,
+  DateTime? nextEmergency,
+});
 
 /// A chess clock.
 class ChessClock {
@@ -198,7 +201,8 @@ class ChessClock {
         nextEmergency: clock.now().add(_emergencyDelay),
       );
       onEmergency?.call(_activeSide);
-    } else if (emergencyThreshold != null && timeLeft > emergencyThreshold! * 1.5) {
+    } else if (emergencyThreshold != null &&
+        timeLeft > emergencyThreshold! * 1.5) {
       _activeSideEmergencyState = (
         shouldTriggerEmergencyCallback: true,
         nextEmergency: _activeSideEmergencyState.nextEmergency,
