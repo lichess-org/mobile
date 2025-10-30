@@ -11,9 +11,11 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
+import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'over_the_board_game_controller.freezed.dart';
+
 part 'over_the_board_game_controller.g.dart';
 
 @riverpod
@@ -105,6 +107,10 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
     );
   }
 
+  void giveTime(Side side) {
+    ref.read(overTheBoardClockProvider.notifier).giveTime(side);
+  }
+
   void goForward() {
     if (state.canGoForward) {
       state = state.copyWith(stepCursor: state.stepCursor + 1, promotionMove: null);
@@ -158,8 +164,11 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
   }
 
   Position get currentPosition => game.stepAt(stepCursor).position;
+
   Side get turn => currentPosition.turn;
+
   bool get finished => game.finished;
+
   NormalMove? get lastMove =>
       stepCursor > 0 ? NormalMove.fromUci(game.steps[stepCursor].sanMove!.move.uci) : null;
 
@@ -170,5 +179,6 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
   List<String> get moves => game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false);
 
   bool get canGoForward => stepCursor < game.steps.length - 1;
+
   bool get canGoBack => stepCursor > 0;
 }

@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/view/clock/clock_tool_screen.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/view/more/load_position_screen.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
+import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -133,6 +134,16 @@ class _Body extends ConsumerWidget {
                     context,
                     rootNavigator: true,
                   ).push(ClockToolScreen.buildRoute(context));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.settings_outlined),
+                title: Text(context.l10n.settingsSettings),
+                onTap: () {
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(SettingsScreen.buildRoute(context));
                 },
               ),
             ],
