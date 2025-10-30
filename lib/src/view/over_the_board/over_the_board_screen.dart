@@ -185,11 +185,10 @@ class _BodyState extends ConsumerState<_Body> {
                     playerSide: gameState.game.finished
                         ? PlayerSide.none
                         : gameState.turn == Side.white
-                        ? PlayerSide.white
-                        : PlayerSide.black,
-                    onPromotionSelection: ref
-                        .read(overTheBoardGameControllerProvider.notifier)
-                        .onPromotionSelection,
+                            ? PlayerSide.white
+                            : PlayerSide.black,
+                    onPromotionSelection:
+                        ref.read(overTheBoardGameControllerProvider.notifier).onPromotionSelection,
                     promotionMove: gameState.promotionMove,
                     onMove: (move, {isDrop}) {
                       ref
@@ -235,78 +234,76 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
-
     final clock = ref.watch(overTheBoardClockProvider);
 
     return BottomBar(
-        children: [
-            BottomBarButton(
-                label: context.l10n.menu,
-                onTap: () {
-                    _showOtbGameMenu(context, ref);
-                },
-                icon: Icons.menu,
-            ),
-            if (!clock.timeIncrement.isInfinite)
-                BottomBarButton(
-                    label: clock.active ? 'Pause' : 'Resume',
-                    onTap: gameState.finished
-                        ? null
-                        : () {
-                            if (clock.active) {
-                                ref.read(overTheBoardClockProvider.notifier).pause();
-                            } else {
-                                ref.read(overTheBoardClockProvider.notifier).resume(gameState.turn);
-                            }
-                        },
-                    icon: clock.active ? CupertinoIcons.pause : CupertinoIcons.play,
-                ),
-            BottomBarButton(
-                label: 'Previous',
-                onTap: gameState.canGoBack
-                    ? () {
-                        ref.read(overTheBoardGameControllerProvider.notifier).goBack();
-                        if (clock.active) {
-                            ref
-                                .read(overTheBoardClockProvider.notifier)
-                                .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
-                        }
+      children: [
+        BottomBarButton(
+          label: context.l10n.menu,
+          onTap: () {
+            _showOtbGameMenu(context, ref);
+          },
+          icon: Icons.menu,
+        ),
+        if (!clock.timeIncrement.isInfinite)
+          BottomBarButton(
+            label: clock.active ? 'Pause' : 'Resume',
+            onTap: gameState.finished
+                ? null
+                : () {
+                    if (clock.active) {
+                      ref.read(overTheBoardClockProvider.notifier).pause();
+                    } else {
+                      ref.read(overTheBoardClockProvider.notifier).resume(gameState.turn);
                     }
-                    : null,
-                icon: CupertinoIcons.chevron_back,
-            ),
-            BottomBarButton(
-                label: 'Next',
-                onTap: gameState.canGoForward
-                    ? () {
-                        ref.read(overTheBoardGameControllerProvider.notifier).goForward();
-                        if (clock.active) {
-                            ref
-                                .read(overTheBoardClockProvider.notifier)
-                                .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
-                        }
-                    }
-                    : null,
-                icon: CupertinoIcons.chevron_forward,
-            ),
-
-            BottomBarButton(
-                label: 'Takeback',
-                onTap: gameState.canGoBack
-                    ? () {
-                        ref.read(overTheBoardGameControllerProvider.notifier).goBack();
-                        if (clock.active) {
-                            ref
-                                .read(overTheBoardClockProvider.notifier)
-                                .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
-                        }
-                    }
-                    : null,
-                icon: Icons.undo,
-            ),
-        ],
+                  },
+            icon: clock.active ? CupertinoIcons.pause : CupertinoIcons.play,
+          ),
+        BottomBarButton(
+          label: 'Previous',
+          onTap: gameState.canGoBack
+              ? () {
+                  ref.read(overTheBoardGameControllerProvider.notifier).goBack();
+                  if (clock.active) {
+                    ref
+                        .read(overTheBoardClockProvider.notifier)
+                        .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
+                  }
+                }
+              : null,
+          icon: CupertinoIcons.chevron_back,
+        ),
+        BottomBarButton(
+          label: 'Next',
+          onTap: gameState.canGoForward
+              ? () {
+                  ref.read(overTheBoardGameControllerProvider.notifier).goForward();
+                  if (clock.active) {
+                    ref
+                        .read(overTheBoardClockProvider.notifier)
+                        .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
+                  }
+                }
+              : null,
+          icon: CupertinoIcons.chevron_forward,
+        ),
+        BottomBarButton(
+          label: 'Takeback',
+          onTap: gameState.canGoBack
+              ? () {
+                  ref.read(overTheBoardGameControllerProvider.notifier).goBack();
+                  if (clock.active) {
+                    ref
+                        .read(overTheBoardClockProvider.notifier)
+                        .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
+                  }
+                }
+              : null,
+          icon: Icons.undo,
+        ),
+      ],
     );
-}
+  }
 
   Future<void> _showOtbGameMenu(BuildContext context, WidgetRef ref) {
     final gameState = ref.read(overTheBoardGameControllerProvider);
@@ -377,14 +374,13 @@ class _BottomBar extends ConsumerWidget {
       ],
     );
   }
+}
 
 class _Player extends ConsumerWidget {
   const _Player({required this.clockKey, required this.side, required this.upsideDown});
 
   final Side side;
-
   final Key clockKey;
-
   final bool upsideDown;
 
   @override
@@ -409,7 +405,6 @@ class _Player extends ConsumerWidget {
                 timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
                 key: clockKey,
                 active: clock.activeClock == side,
-                // https://github.com/lichess-org/mobile/issues/785#issuecomment-2183903498
                 emergencyThreshold: Duration(
                   seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
                 ),
