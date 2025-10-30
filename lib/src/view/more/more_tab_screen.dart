@@ -174,7 +174,7 @@ class _Body extends ConsumerWidget {
               hasLeading: true,
               children: [
                 ListTile(
-                  leading: const PatronIcon(color: 10),
+                  leading: PatronIcon(color: 10, size: IconTheme.of(context).size),
                   title: Text(context.l10n.patronDonate),
                   subtitle: Text(context.l10n.patronBecomePatron),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
