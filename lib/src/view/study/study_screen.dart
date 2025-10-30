@@ -595,7 +595,7 @@ class _StudyMembersSheet extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 16),
-        for (final member in state.study.members)
+        for (final member in state.study.members.values)
           ListTile(
             title: UserFullNameWidget(user: member.user),
             onTap: () {

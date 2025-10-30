@@ -21,11 +21,17 @@ sealed class Study with _$Study {
     required bool liked,
     required int likes,
     required UserId? ownerId,
+
+    /// Current user's ID, if available
+    UserId? myId,
+
+    /// Whether the current user is an admin of the study
+    bool? isAdmin,
     required StudyFeatures features,
     required IList<String> topics,
     required IList<StudyChapterMeta> chapters,
     required StudyChapter chapter,
-    required IList<StudyMember> members,
+    required IMap<UserId, StudyMember> members,
     ChatData? chat,
 
     /// Hints to display in "gamebook"/"interactive" mode
@@ -37,6 +43,18 @@ sealed class Study with _$Study {
     /// Index corresponds to the current ply.
     required IList<String?> deviationComments,
   }) = _Study;
+
+  /// The owner of the study.
+  StudyMember? get owner => ownerId != null ? members[ownerId!]! : null;
+
+  /// Whether the current user is the owner of the study.
+  bool get amIOwner => myId == ownerId || (isAdmin == true && canIContribute);
+
+  /// The current user's member information, if available.
+  StudyMember? get myMember => myId != null ? members[myId!] : null;
+
+  /// Whether the current user can contribute to the study.
+  bool get canIContribute => myMember?.role == 'w';
 
   /// Returns the index of the chapter with the given [chapterId].
   ///
@@ -89,9 +107,8 @@ Study _studyFromPick(RequiredPick pick) {
     chapter: StudyChapter.fromJson(study('chapter').asMapOrThrow()),
     members: study('members')
         .asMapOrThrow<String, Map<String, Object?>>()
-        .values
-        .map((p) => StudyMember.fromJson(p))
-        .toIList(),
+        .map((key, value) => MapEntry(UserId(key), StudyMember.fromJson(value)))
+        .toIMap(),
     hints: hints.lock,
     deviationComments: deviationComments.lock,
   );
