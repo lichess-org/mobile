@@ -21,12 +21,6 @@ sealed class Study with _$Study {
     required bool liked,
     required int likes,
     required UserId? ownerId,
-
-    /// Current user's ID, if available
-    UserId? myId,
-
-    /// Whether the current user is an admin of the study
-    bool? isAdmin,
     required StudyFeatures features,
     required IList<String> topics,
     required IList<StudyChapterMeta> chapters,
@@ -46,15 +40,6 @@ sealed class Study with _$Study {
 
   /// The owner of the study.
   StudyMember? get owner => ownerId != null ? members[ownerId!]! : null;
-
-  /// Whether the current user is the owner of the study.
-  bool get amIOwner => myId == ownerId || (isAdmin == true && canIContribute);
-
-  /// The current user's member information, if available.
-  StudyMember? get myMember => myId != null ? members[myId!] : null;
-
-  /// Whether the current user can contribute to the study.
-  bool get canIContribute => myMember?.role == 'w';
 
   /// Returns the index of the chapter with the given [chapterId].
   ///
