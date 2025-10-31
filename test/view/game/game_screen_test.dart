@@ -4,6 +4,7 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -14,6 +15,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -25,6 +27,7 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:wakelock_plus_platform_interface/messages.g.dart';
 
 import '../../model/game/game_socket_example_data.dart';
 import '../../network/fake_websocket_channel.dart';
@@ -789,6 +792,51 @@ void main() {
       });
     });
   });
+
+  group('Wakelock', () {
+    for (final gameStatus in GameStatus.values) {
+      final gameIsFinished = gameStatus != GameStatus.started && gameStatus != GameStatus.created;
+      testWidgets(
+        '${gameIsFinished ? 'disables' : 'does not disable'} when game status is ${gameStatus.name}',
+        (tester) async {
+          final List<ToggleMessage> messages = <ToggleMessage>[];
+          const pigeonCodec = _PigeonCodec();
+
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
+            'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle',
+            (ByteData? data) async {
+              final decodedMessages = (pigeonCodec.decodeMessage(data) as List)
+                  .cast<ToggleMessage>();
+              messages.add(decodedMessages.single);
+              return data;
+            },
+          );
+
+          addTearDown(() {
+            TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
+              'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle',
+              null,
+            );
+          });
+
+          await createTestGame(
+            tester,
+            pgn: 'e4 e5',
+            defaultPreferences: {PrefCategory.game.storageKey: '{"enableChat": false}'},
+          );
+
+          sendServerSocketMessages(testGameSocketUri, [
+            '{"t":"endData","d":{"status":"${gameStatus.name}","winner":"white","clock":{"wc":17800,"bc":0}}}',
+          ]);
+
+          await tester.pump();
+
+          await tester.pump(const Duration(seconds: 500));
+          expect(messages.last.enable, gameIsFinished ? isFalse : isTrue);
+        },
+      );
+    }
+  });
 }
 
 /// Finds the clock on the specified [side].
@@ -918,3 +966,36 @@ Future<void> loadFinishedTestGame(
 const _finishedGameFullEvent = '''
 {"t":"full","d":{"game":{"id":"CCW6EEru","variant":{"key":"standard","name":"Standard","short":"Std"},"speed":"bullet","perf":"bullet","rated":true,"fen":"6kr/p1p2rpp/4Q3/2b1p3/8/2P5/P2N1PPP/R3R1K1 b - - 0 22","turns":43,"source":"lobby","status":{"id":31,"name":"resign"},"createdAt":1706185945680,"winner":"white","pgn":"e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 Bb6 Ba3 Nf6 Qb3 d6 Bxf7+ Kf8 O-O Qe7 Nxe5 Nxe5 dxe5 Be6 Bxe6 Nxe4 Re1 Nc5 Bxc5 Bxc5 Qxb7 Re8 Bh3 dxe5 Qf3+ Kg8 Nd2 Rf8 Qd5+ Rf7 Be6 Qxe6 Qxe6"},"white":{"user":{"name":"veloce","id":"veloce"},"rating":1789,"ratingDiff":9},"black":{"user":{"name":"chabrot","id":"chabrot"},"rating":1810,"ratingDiff":-9},"socket":0,"clock":{"running":false,"initial":120,"increment":1,"white":31.2,"black":27.42,"emerg":15,"moretime":15},"takebackable":true,"youAre":"white","prefs":{"autoQueen":2,"zen":2,"confirmResign":true,"enablePremove":true},"chat":{"lines":[]}}}
 ''';
+
+/// Necessary to mock wakelock_plus method calls
+/// See: https://github.com/fluttercommunity/wakelock_plus/blob/0c74e5bbc6aefac57b6c96bb7ef987705ed559ec/wakelock_plus_platform_interface/lib/messages.g.dart#L127-L156
+class _PigeonCodec extends StandardMessageCodec {
+  const _PigeonCodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is int) {
+      buffer.putUint8(4);
+      buffer.putInt64(value);
+    } else if (value is ToggleMessage) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else if (value is IsEnabledMessage) {
+      buffer.putUint8(130);
+      writeValue(buffer, value.encode());
+    } else {
+      super.writeValue(buffer, value);
+    }
+  }
+
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case 129:
+        return ToggleMessage.decode(readValue(buffer)!);
+      case 130:
+        return IsEnabledMessage.decode(readValue(buffer)!);
+      default:
+        return super.readValueOfType(type, buffer);
+    }
+  }
+}
