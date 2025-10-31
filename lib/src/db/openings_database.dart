@@ -11,7 +11,7 @@ part 'openings_database.g.dart';
 // The dataset is from https://github.com/lichess-org/chess-openings
 // It can be updated by running the script at scripts/update_openings_db.py
 
-const _kDatabaseVersion = 2;
+const _kDatabaseVersion = 3;
 const _kDatabaseName = 'chess_openings$_kDatabaseVersion.db';
 
 @Riverpod(keepAlive: true)
