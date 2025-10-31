@@ -74,7 +74,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
   }
 }
 
-class BroadcastPreview extends ConsumerWidget {
+class BroadcastPreview extends ConsumerStatefulWidget {
   const BroadcastPreview({
     required this.tournamentId,
     required this.roundId,
@@ -99,9 +99,27 @@ class BroadcastPreview extends ConsumerWidget {
   final String title;
   final String tournamentSlug;
   final String roundSlug;
+  @override
+  ConsumerState<BroadcastPreview> createState() => _BroadcastPreviewState();
+}
+
+class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
+  String _searchQuery = '';
+  late final TextEditingController _searchController;
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final showEvaluationBar = ref.watch(
       broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
     );
@@ -119,48 +137,86 @@ class BroadcastPreview extends ConsumerWidget {
             Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
         numberOfBoardsByRow;
+    final IList<BroadcastGame>? games = widget.games == null
+        ? null
+        : _searchQuery.isEmpty
+        ? widget.games
+        : widget.games!.where((game) => _containsPlayer(game, _searchQuery)).toIList();
 
-    return GridView.builder(
-      padding: MediaQuery.paddingOf(context).add(Styles.bodyPadding),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: numberOfBoardsByRow,
-        crossAxisSpacing: boardSpacing,
-        mainAxisSpacing: boardSpacing,
-        mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
-        childAspectRatio: 1 + boardThumbnailEvalGaugeAspectRatio,
-      ),
-      itemCount: games == null ? numberLoadingBoards : games!.length,
-      itemBuilder: (context, index) {
-        final boardSize =
-            boardWithMaybeEvalBarWidth -
-            (showEvaluationBar
-                ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
-                : 0);
+    return Column(
+      children: [
+        Padding(
+          padding: Styles.bodyPadding.copyWith(bottom: 0),
+          child: TextField(
+            controller: _searchController,
+            textInputAction: TextInputAction.search,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: context.l10n.search,
+              suffixIcon: _searchQuery.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        _searchController.clear();
+                        setState(() {
+                          _searchQuery = '';
+                        });
+                      },
+                    )
+                  : null,
+            ),
+            onChanged: (value) {
+              setState(() {
+                _searchQuery = value;
+              });
+            },
+          ),
+        ),
+        Expanded(
+          child: GridView.builder(
+            padding: MediaQuery.paddingOf(context).add(Styles.bodyPadding),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: numberOfBoardsByRow,
+              crossAxisSpacing: boardSpacing,
+              mainAxisSpacing: boardSpacing,
+              mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
+              childAspectRatio: 1 + boardThumbnailEvalGaugeAspectRatio,
+            ),
+            itemCount: games == null ? numberLoadingBoards : games.length,
+            itemBuilder: (context, index) {
+              final boardSize =
+                  boardWithMaybeEvalBarWidth -
+                  (showEvaluationBar
+                      ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
+                      : 0);
 
-        if (games == null) {
-          return BoardThumbnail.loading(
-            size: boardSize,
-            header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
-            footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
-          );
-        }
+              if (games == null) {
+                return BoardThumbnail.loading(
+                  size: boardSize,
+                  header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+                  footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+                );
+              }
 
-        final game = games![index];
-        final playingSide = Setup.parseFen(game.fen).turn;
+              final game = games[index];
+              final playingSide = Setup.parseFen(game.fen).turn;
 
-        return ObservedBoardThumbnail(
-          roundId: roundId,
-          game: game,
-          title: title,
-          tournamentId: tournamentId,
-          tournamentSlug: tournamentSlug,
-          roundSlug: roundSlug,
-          showEvaluationBar: showEvaluationBar,
-          boardSize: boardSize,
-          boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
-          playingSide: playingSide,
-        );
-      },
+              return ObservedBoardThumbnail(
+                roundId: widget.roundId,
+                game: game,
+                title: widget.title,
+                tournamentId: widget.tournamentId,
+                tournamentSlug: widget.tournamentSlug,
+                roundSlug: widget.roundSlug,
+                showEvaluationBar: showEvaluationBar,
+                boardSize: boardSize,
+                boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
+                playingSide: playingSide,
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
@@ -339,4 +395,9 @@ class _PlayerWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+bool _containsPlayer(BroadcastGame game, String query) {
+  final q = query.toLowerCase();
+  return game.players.values.any((pwc) => pwc.player.name?.toLowerCase().contains(q) ?? false);
 }

@@ -140,6 +140,49 @@ void main() {
 
       expect(find.text('00:07'), findsOneWidget);
     });
+    testWidgets('Test search by player names', variant: kPlatformVariant, (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+        overrides: [
+          lichessClientProvider.overrideWith((ref) => LichessClient(_liveBroadcastClient(), ref)),
+        ],
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Load the tournament
+      await tester.pump();
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Load the round
+      await tester.pump();
+
+      expect(find.byType(BoardThumbnail), findsNWidgets(2));
+      // Enter a query that doesn't match any player
+      final searchField = find.byType(TextField);
+      expect(searchField, findsOneWidget);
+
+      await tester.enterText(searchField, 'aaaaaa');
+      await tester.pump();
+      // Filtered to zero results
+      expect(find.byType(BoardThumbnail), findsNothing);
+
+      await tester.enterText(searchField, 'giri');
+      await tester.pump();
+      // Filtered to one result
+      expect(find.byType(BoardThumbnail), findsOneWidget);
+      expect(find.text('Giri, Anish'), findsOneWidget);
+
+      await tester.enterText(searchField, '');
+      await tester.pump();
+      // Clear the field -> results restored
+      await tester.pump();
+      expect(find.byType(BoardThumbnail), findsNWidgets(2));
+    });
   });
 
   group('Test overview tab', () {
@@ -1237,6 +1280,32 @@ const _liveRoundResponse = '''
           "fideId": 1503014,
           "fed": "NOR",
           "clock": 800
+        }
+      ],
+      "lastMove": "c4d5",
+      "thinkTime": 0,
+      "status": "*"
+    },
+    {
+      "id": "22222222",
+      "name": "Giri, Anish - Keymer, Vincent",
+      "fen": "8/8/5k2/3K2p1/r5Rp/7P/6P1/8 b - - 1 48",
+      "players": [
+        {
+          "name": "Giri, Anish",
+          "title": "GM",
+          "rating": 2769,
+          "fideId": 24116068,
+          "fed": "NED",
+          "clock": 2001
+        },
+        {
+          "name": "Keymer, Vincent",
+          "title": "GM",
+          "rating": 2773,
+          "fideId": 12940690,
+          "fed": "GER",
+          "clock": 901
         }
       ],
       "lastMove": "c4d5",
