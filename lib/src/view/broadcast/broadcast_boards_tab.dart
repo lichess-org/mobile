@@ -158,6 +158,7 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
                       icon: const Icon(Icons.clear),
                       onPressed: () {
                         _searchController.clear();
+                        FocusScope.of(context).unfocus();
                         setState(() {
                           _searchQuery = '';
                         });
