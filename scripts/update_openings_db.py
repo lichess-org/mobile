@@ -6,11 +6,14 @@ import csv
 import os
 import sys
 import sqlite3
-
+import subprocess
 path_to_chess_openings = sys.argv[1]
 
-os.system(f"cd {path_to_chess_openings} && make all")
+if not os.path.isdir(path_to_chess_openings):
+    print(f"Error: {path_to_chess_openings} is not a valid directory.")
+    sys.exit(1)
 
+subprocess.run(["make", "all"], cwd=path_to_chess_openings, check=True)
 conn = sqlite3.connect('../assets/chess_openings.db')
 cur = conn.cursor()
 cur.execute('DELETE FROM openings;')
