@@ -141,6 +141,10 @@ class HttpLogTile extends StatelessWidget {
 
   final HttpLogEntry httpLog;
 
+  String get endpoint => httpLog.requestUrl.host == kLichessHost
+      ? Uri(path: httpLog.requestUrl.path, query: httpLog.requestUrl.query).toString()
+      : httpLog.requestUrl.toString();
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -175,9 +179,7 @@ class HttpLogTile extends StatelessWidget {
             : const Icon(Icons.error_outline, color: Colors.grey),
       ),
       title: Text(
-        httpLog.requestUrl.host == kLichessHost
-            ? Uri(path: httpLog.requestUrl.path, query: httpLog.requestUrl.query).toString()
-            : httpLog.requestUrl.toString(),
+        '${httpLog.requestMethod} $endpoint',
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
