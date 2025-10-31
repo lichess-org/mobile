@@ -14,7 +14,8 @@ if not os.path.isdir(path_to_chess_openings):
     sys.exit(1)
 
 subprocess.run(["make", "all"], cwd=path_to_chess_openings, check=True)
-conn = sqlite3.connect('../assets/chess_openings.db')
+db_path = os.path.join(os.path.dirname(__file__), '../assets/chess_openings.db')
+conn = sqlite3.connect(db_path)
 cur = conn.cursor()
 cur.execute('DELETE FROM openings;')
 conn.commit()
