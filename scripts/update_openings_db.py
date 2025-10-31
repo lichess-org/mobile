@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
-# usage: ./update_openings_db.py <path to lichess-org/chess-openings repo>
-
 import csv
 import os
-import sys
 import sqlite3
 import subprocess
+import sys
+
+if len(sys.argv) <= 1:
+    print("Usage: ./update_openings_db.py <path to lichess-org/chess-openings repo>")
+    sys.exit(1)
+
 path_to_chess_openings = sys.argv[1]
 
 if not os.path.isdir(path_to_chess_openings):
