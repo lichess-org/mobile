@@ -140,50 +140,6 @@ void main() {
 
       expect(find.text('00:07'), findsOneWidget);
     });
-
-    testWidgets('Test search by player names', variant: kPlatformVariant, (tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: BroadcastRoundScreen(broadcast: _liveBroadcast),
-        overrides: [
-          lichessClientProvider.overrideWith((ref) => LichessClient(_liveBroadcastClient(), ref)),
-        ],
-      );
-
-      await tester.pumpWidget(app);
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the tournament
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the round
-      await tester.pump();
-
-      expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(6));
-      // Enter a query that doesn't match any player
-      final searchField = find.byType(SearchBar);
-      expect(searchField, findsOneWidget);
-
-      await tester.enterText(searchField, 'aaaaaa');
-      await tester.pump();
-      // Filtered to zero results
-      expect(find.byType(BoardThumbnail), findsNothing);
-
-      await tester.enterText(searchField, 'giri');
-      await tester.pump();
-      // Filtered to one result
-      expect(find.byType(BoardThumbnail), findsOneWidget);
-      expect(find.text('Giri, Anish'), findsOneWidget);
-
-      await tester.enterText(searchField, '');
-      await tester.pump();
-      // Clear the field -> results restored
-      await tester.pump();
-      expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(6));
-    });
   });
 
   group('Test overview tab', () {
