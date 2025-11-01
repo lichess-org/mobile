@@ -86,6 +86,7 @@ class _PlatformSearchBarState extends State<PlatformSearchBar> {
       onChanged: widget.onChanged,
       hintText: widget.hintText,
       autoFocus: widget.autoFocus,
+      textInputAction: TextInputAction.search,
     );
   }
 }
