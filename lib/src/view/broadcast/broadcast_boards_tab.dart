@@ -144,13 +144,14 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
         : _searchQuery.isEmpty
         ? widget.games
         : widget.games!.where((game) => _containsPlayer(game, _searchQuery)).toIList();
+    final showSearchBar = widget.games != null && widget.games!.length > 6;
 
-    return SafeArea(
-      child: Column(
-        children: [
-          if (widget.games != null && widget.games!.length > 8)
-            Padding(
-              padding: Styles.bodyPadding.copyWith(bottom: 8.0),
+    return CustomScrollView(
+      slivers: [
+        if (showSearchBar)
+          SliverPadding(
+            padding: Styles.bodyPadding.copyWith(bottom: 0.0),
+            sliver: SliverToBoxAdapter(
               child: PlatformSearchBar(
                 controller: _searchController,
                 onChanged: (value) {
@@ -166,52 +167,51 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
                 },
               ),
             ),
-          Expanded(
-            child: GridView.builder(
-              padding: Styles.bodyPadding,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: numberOfBoardsByRow,
-                crossAxisSpacing: boardSpacing,
-                mainAxisSpacing: boardSpacing,
-                mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
-                childAspectRatio: 1 + boardThumbnailEvalGaugeAspectRatio,
-              ),
-              itemCount: games == null ? numberLoadingBoards : games.length,
-              itemBuilder: (context, index) {
-                final boardSize =
-                    boardWithMaybeEvalBarWidth -
-                    (showEvaluationBar
-                        ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
-                        : 0);
+          ),
+        SliverPadding(
+          padding: MediaQuery.paddingOf(context).add(Styles.bodyPadding),
+          sliver: SliverGrid(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final boardSize =
+                  boardWithMaybeEvalBarWidth -
+                  (showEvaluationBar
+                      ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
+                      : 0);
 
-                if (games == null) {
-                  return BoardThumbnail.loading(
-                    size: boardSize,
-                    header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
-                    footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
-                  );
-                }
-
-                final game = games[index];
-                final playingSide = Setup.parseFen(game.fen).turn;
-
-                return ObservedBoardThumbnail(
-                  roundId: widget.roundId,
-                  game: game,
-                  title: widget.title,
-                  tournamentId: widget.tournamentId,
-                  tournamentSlug: widget.tournamentSlug,
-                  roundSlug: widget.roundSlug,
-                  showEvaluationBar: showEvaluationBar,
-                  boardSize: boardSize,
-                  boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
-                  playingSide: playingSide,
+              if (games == null) {
+                return BoardThumbnail.loading(
+                  size: boardSize,
+                  header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+                  footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
                 );
-              },
+              }
+
+              final game = games[index];
+              final playingSide = Setup.parseFen(game.fen).turn;
+
+              return ObservedBoardThumbnail(
+                roundId: widget.roundId,
+                game: game,
+                title: widget.title,
+                tournamentId: widget.tournamentId,
+                tournamentSlug: widget.tournamentSlug,
+                roundSlug: widget.roundSlug,
+                showEvaluationBar: showEvaluationBar,
+                boardSize: boardSize,
+                boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
+                playingSide: playingSide,
+              );
+            }, childCount: games == null ? numberLoadingBoards : games.length),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: numberOfBoardsByRow,
+              crossAxisSpacing: boardSpacing,
+              mainAxisSpacing: boardSpacing,
+              mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
+              childAspectRatio: 1 + boardThumbnailEvalGaugeAspectRatio,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
