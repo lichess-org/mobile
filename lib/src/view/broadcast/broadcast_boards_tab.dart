@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 // height of 1.0 is important because we need to determine the height of the text
@@ -106,6 +107,7 @@ class BroadcastPreview extends ConsumerStatefulWidget {
 class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
   String _searchQuery = '';
   late final TextEditingController _searchController;
+
   @override
   void initState() {
     super.initState();
@@ -143,81 +145,73 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
         ? widget.games
         : widget.games!.where((game) => _containsPlayer(game, _searchQuery)).toIList();
 
-    return Column(
-      children: [
-        Padding(
-          padding: Styles.bodyPadding.copyWith(bottom: 0),
-          child: TextField(
-            controller: _searchController,
-            textInputAction: TextInputAction.search,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search),
-              hintText: context.l10n.search,
-              suffixIcon: _searchQuery.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        _searchController.clear();
-                        FocusScope.of(context).unfocus();
-                        setState(() {
-                          _searchQuery = '';
-                        });
-                      },
-                    )
-                  : null,
+    return SafeArea(
+      child: Column(
+        children: [
+          if (widget.games != null && widget.games!.length > 8)
+            Padding(
+              padding: Styles.bodyPadding.copyWith(bottom: 8.0),
+              child: PlatformSearchBar(
+                controller: _searchController,
+                onChanged: (value) {
+                  setState(() {
+                    _searchQuery = value;
+                  });
+                },
+                onClear: () {
+                  _searchController.clear();
+                  setState(() {
+                    _searchQuery = '';
+                  });
+                },
+              ),
             ),
-            onChanged: (value) {
-              setState(() {
-                _searchQuery = value;
-              });
-            },
-          ),
-        ),
-        Expanded(
-          child: GridView.builder(
-            padding: MediaQuery.paddingOf(context).add(Styles.bodyPadding),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: numberOfBoardsByRow,
-              crossAxisSpacing: boardSpacing,
-              mainAxisSpacing: boardSpacing,
-              mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
-              childAspectRatio: 1 + boardThumbnailEvalGaugeAspectRatio,
-            ),
-            itemCount: games == null ? numberLoadingBoards : games.length,
-            itemBuilder: (context, index) {
-              final boardSize =
-                  boardWithMaybeEvalBarWidth -
-                  (showEvaluationBar
-                      ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
-                      : 0);
+          Expanded(
+            child: GridView.builder(
+              padding: Styles.bodyPadding,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: numberOfBoardsByRow,
+                crossAxisSpacing: boardSpacing,
+                mainAxisSpacing: boardSpacing,
+                mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
+                childAspectRatio: 1 + boardThumbnailEvalGaugeAspectRatio,
+              ),
+              itemCount: games == null ? numberLoadingBoards : games.length,
+              itemBuilder: (context, index) {
+                final boardSize =
+                    boardWithMaybeEvalBarWidth -
+                    (showEvaluationBar
+                        ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
+                        : 0);
 
-              if (games == null) {
-                return BoardThumbnail.loading(
-                  size: boardSize,
-                  header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
-                  footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+                if (games == null) {
+                  return BoardThumbnail.loading(
+                    size: boardSize,
+                    header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+                    footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+                  );
+                }
+
+                final game = games[index];
+                final playingSide = Setup.parseFen(game.fen).turn;
+
+                return ObservedBoardThumbnail(
+                  roundId: widget.roundId,
+                  game: game,
+                  title: widget.title,
+                  tournamentId: widget.tournamentId,
+                  tournamentSlug: widget.tournamentSlug,
+                  roundSlug: widget.roundSlug,
+                  showEvaluationBar: showEvaluationBar,
+                  boardSize: boardSize,
+                  boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
+                  playingSide: playingSide,
                 );
-              }
-
-              final game = games[index];
-              final playingSide = Setup.parseFen(game.fen).turn;
-
-              return ObservedBoardThumbnail(
-                roundId: widget.roundId,
-                game: game,
-                title: widget.title,
-                tournamentId: widget.tournamentId,
-                tournamentSlug: widget.tournamentSlug,
-                roundSlug: widget.roundSlug,
-                showEvaluationBar: showEvaluationBar,
-                boardSize: boardSize,
-                boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
-                playingSide: playingSide,
-              );
-            },
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

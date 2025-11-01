@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -31,11 +29,7 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      final textFieldFinder = debugDefaultTargetPlatformOverride == TargetPlatform.iOS
-          ? find.byType(CupertinoSearchTextField)
-          : find.byType(SearchBar);
-
-      await tester.enterText(textFieldFinder, 'joh');
+      await tester.enterText(find.byType(SearchBar), 'joh');
 
       // await debouce call
       await tester.pump(const Duration(milliseconds: 300));
@@ -66,11 +60,7 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      final textFieldFinder = debugDefaultTargetPlatformOverride == TargetPlatform.iOS
-          ? find.byType(CupertinoSearchTextField)
-          : find.byType(SearchBar);
-
-      await tester.enterText(textFieldFinder, 'johnny');
+      await tester.enterText(find.byType(SearchBar), 'johnny');
       // await debouce call
       await tester.pump(const Duration(milliseconds: 300));
 
