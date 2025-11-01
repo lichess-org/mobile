@@ -5,28 +5,38 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/computer/computer_game.dart';
 
 part 'work.freezed.dart';
 
-typedef EvalResult = (Work, LocalEval);
+typedef EvalResult = (AnalysisWork, LocalEval);
 
 /// A work item for the engine.
-@freezed
-sealed class Work with _$Work {
-  const Work._();
+sealed class Work {
+  const Work({required this.threads, this.hashSize, required this.multiPv});
 
-  const factory Work({
+  final int threads;
+  final int? hashSize;
+  final int multiPv;
+}
+
+@freezed
+sealed class AnalysisWork extends Work with _$AnalysisWork {
+  const AnalysisWork._({required super.threads, super.hashSize, required super.multiPv});
+
+  const factory AnalysisWork({
     required Variant variant,
     required int threads,
     int? hashSize,
     required UciPath path,
     required Duration searchTime,
+    int? depth,
     required int multiPv,
     required bool threatMode,
     bool? isDeeper,
     required Position initialPosition,
     required IList<Step> steps,
-  }) = _Work;
+  }) = _AnalysisWork;
 
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
@@ -41,6 +51,39 @@ sealed class Work with _$Work {
 
   /// Cached eval for the work position.
   ClientEval? get evalCache => steps.lastOrNull?.eval;
+}
+
+@freezed
+sealed class MoveWork with _$MoveWork implements Work {
+  const MoveWork._();
+
+  const factory MoveWork({
+    required String fen,
+    required StockfishLevel level,
+    // do we want to allow clock in offline Stockfish ?
+    required ClockData? clock,
+  }) = _MoveWork;
+
+  @override
+  // maybe use engine setting for the number of threads ?
+  // should it be a different setting of analysis ?
+  int get threads => 1;
+
+  @override
+  int? get hashSize => null;
+
+  @override
+  int get multiPv => 1;
+}
+
+@freezed
+sealed class ClockData with _$ClockData {
+  const factory ClockData({
+    required Duration whiteTime,
+    required Duration blackTime,
+    required Duration whiteIncrement,
+    required Duration blackIncrement,
+  }) = _ClockData;
 }
 
 @freezed

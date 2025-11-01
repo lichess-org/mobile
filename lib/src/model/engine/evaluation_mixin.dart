@@ -329,5 +329,5 @@ mixin EngineEvaluationMixin {
         });
   }
 
-  bool _shouldEmit(Work work) => work.path == evaluationState.currentPath;
+  bool _shouldEmit(AnalysisWork work) => work.path == evaluationState.currentPath;
 }

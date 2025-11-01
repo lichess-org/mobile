@@ -38,7 +38,7 @@ const engineSupportedVariants = {Variant.standard, Variant.chess960, Variant.fro
 
 /// A function that returns true if the evaluation should be emitted by the [EngineEvaluation]
 /// provider.
-typedef ShouldEmitEvalFilter = bool Function(Work work);
+typedef ShouldEmitEvalFilter = bool Function(AnalysisWork work);
 
 typedef NNUEFiles = ({File bigNet, File smallNet});
 
@@ -131,6 +131,7 @@ class EvaluationService {
   /// This method must be called before calling [start]. It is the caller's
   /// responsibility to close the engine.
   Future<void> _initEngine(EvaluationContext context, {EvaluationOptions? initOptions}) async {
+    debugPrint('Init the engine');
     await disposeEngine();
     _context = context;
     if (initOptions != null) options = initOptions;
@@ -160,7 +161,7 @@ class EvaluationService {
     if (_engine == null ||
         _engine?.isDisposed == true ||
         _context != context ||
-        options != initOptions) {
+        (initOptions != null && options != initOptions)) {
       await _initEngine(context, initOptions: initOptions);
     }
   }
@@ -178,6 +179,7 @@ class EvaluationService {
 
   /// Dispose the service.
   void _dispose() {
+    debugPrint('Disposing the evaluation service');
     disposeEngine();
     _state.dispose();
   }
@@ -217,7 +219,7 @@ class EvaluationService {
       currentWork: null,
     );
 
-    final work = Work(
+    final work = AnalysisWork(
       variant: context.variant,
       threads: options.cores,
       hashSize: maxMemory,
@@ -244,7 +246,7 @@ class EvaluationService {
     }
 
     final evalStream = engine
-        .start(work)
+        .runAnalysis(work)
         .throttle(kEngineEvalEmissionThrottleDelay, trailing: true);
 
     evalStream.forEach((t) {
@@ -260,6 +262,40 @@ class EvaluationService {
     });
 
     return evalStream;
+  }
+
+  // see how it can be improved, maybe merge `start` and `startMoveWork` functions
+  Future<Move>? startMoveWork(MoveWork work) {
+    final context = _context;
+    final engine = _engine;
+    if (context == null || engine == null) {
+      assert(false, 'Engine not initialized');
+      return null;
+    }
+
+    if (!engineSupportedVariants.contains(context.variant)) {
+      return null;
+    }
+
+    // reset eval
+    _state.value = (
+      engineName: _state.value.engineName,
+      state: _state.value.state,
+      eval: null,
+      currentWork: null,
+    );
+
+    return engine.getBestMove(work).then((bestMove) {
+      return Move.parse(bestMove)!;
+    });
+  }
+
+  void newGame() {
+    if (_context == null || _engine == null) {
+      assert(false, 'Engine not initialized');
+    }
+
+    _engine?.newGame();
   }
 
   void stop() {
@@ -352,7 +388,7 @@ class EvaluationService {
 typedef EngineEvaluationState = ({
   String engineName,
   EngineState state,
-  Work? currentWork,
+  AnalysisWork? currentWork,
   LocalEval? eval,
 });
 

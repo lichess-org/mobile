@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/computer/computer_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -229,6 +230,47 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
   const OverTheBoardGameResultDialog({super.key, required this.game, required this.onRematch});
 
   final OverTheBoardGame game;
+
+  final void Function() onRematch;
+
+  @override
+  Widget build(BuildContext context) {
+    final content = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        GameResult(game: game),
+        FilledButton(
+          onPressed: onRematch,
+          child: Text(context.l10n.rematch, textAlign: TextAlign.center),
+        ),
+        FilledButton.tonal(
+          onPressed: () {
+            Navigator.of(context).push(
+              AnalysisScreen.buildRoute(
+                context,
+                AnalysisOptions.standalone(
+                  orientation: Side.white,
+                  pgn: game.makePgn(),
+                  isComputerAnalysisAllowed: true,
+                  variant: game.meta.variant,
+                ),
+              ),
+            );
+          },
+          child: Text(context.l10n.analysis, textAlign: TextAlign.center),
+        ),
+      ],
+    );
+
+    return _ResultDialog(child: content);
+  }
+}
+
+class ComputerGameResultDialog extends StatelessWidget {
+  const ComputerGameResultDialog({super.key, required this.game, required this.onRematch});
+
+  final ComputerGame game;
 
   final void Function() onRematch;
 
