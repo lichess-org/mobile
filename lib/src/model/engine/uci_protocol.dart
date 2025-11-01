@@ -24,6 +24,9 @@ class UCIProtocol {
 
   Future<String> get engineName => _engineNameCompleter.future;
 
+  Future<String> get bestMove => _bestMoveCompleter.future;
+
+  Completer<String> _bestMoveCompleter = Completer();
   Work? _work;
   Work? _nextWork;
   bool _stopRequested = false;
@@ -40,8 +43,10 @@ class UCIProtocol {
   }
 
   void dispose() {
-    if (_work != null && _currentEval != null) {
-      _evalController.sink.add((_work!, _currentEval!));
+    // this local variable only exists to allow dart to correctly infer types
+    final work = _work;
+    if (work is AnalysisWork && _currentEval != null) {
+      _evalController.sink.add((work, _currentEval!));
     }
     _work = null;
     _send = null;
@@ -54,6 +59,7 @@ class UCIProtocol {
     if (_send != null) _log.info('<<< $command');
   }
 
+  /// It will set the option only once even if you call it multiple times
   void setOption(String name, String value) {
     if (_options[name] != value) {
       _sendAndLog('setoption name $name value $value');
@@ -67,9 +73,19 @@ class UCIProtocol {
     _sendAndLog('isready');
   }
 
+  void newGame() {
+    _stop();
+    _sendAndLog('ucinewgame');
+    _sendAndLog('isready');
+  }
+
   final spaceRegex = RegExp(r'\s+');
 
   void received(String line) {
+    // I prefer to log every output instead of only the ones we don't deal with
+    _log.info('>>> $line');
+    // this local variable only exists to allow dart to correctly infer types
+    final work = _work;
     final parts = line.trim().split(spaceRegex);
     if (parts.first == 'uciok') {
       // Affects notation only. Life would be easier if everyone would always
@@ -85,13 +101,15 @@ class UCIProtocol {
         _engineNameCompleter.complete(parts.sublist(2).join(' '));
       }
     } else if (parts.first == 'bestmove') {
-      if (_work != null && _currentEval != null) {
-        _evalController.sink.add((_work!, _currentEval!));
+      if (work is AnalysisWork && _currentEval != null) {
+        _evalController.sink.add((work, _currentEval!));
       }
+      _bestMoveCompleter.complete(parts[1]);
+      _bestMoveCompleter = Completer();
       _work = null;
       _swapWork();
       return;
-    } else if (_work != null && _stopRequested != true && parts.first == 'info') {
+    } else if (work is AnalysisWork && _stopRequested != true && parts.first == 'info') {
       int depth = 0;
       int nodes = 0;
       int multiPv = 1;
@@ -128,8 +146,8 @@ class UCIProtocol {
 
       if ((depth < minDepth && moves.isNotEmpty) || povEv == null) return;
 
-      final pivot = _work!.threatMode == true ? 0 : 1;
-      final ev = _work!.ply % 2 == pivot ? -povEv : povEv;
+      final pivot = work.threatMode == true ? 0 : 1;
+      final ev = work.ply % 2 == pivot ? -povEv : povEv;
 
       // For now, ignore most upperbound/lowerbound messages.
       // However non-primary pvs may only have an upperbound.
@@ -139,7 +157,7 @@ class UCIProtocol {
 
       if (multiPv == 1) {
         _currentEval = LocalEval(
-          position: _work!.position,
+          position: work.position,
           searchTime: Duration(milliseconds: elapsedMs),
           depth: depth,
           nodes: nodes,
@@ -156,14 +174,13 @@ class UCIProtocol {
       }
 
       if (multiPv == _expectedPvs && _currentEval != null) {
-        _evalController.sink.add((_work!, _currentEval!));
+        _evalController.sink.add((work, _currentEval!));
 
-        if (elapsedMs > _work!.searchTime.inMilliseconds) {
-          _stop();
-        }
+        // why do we need this condition ?
+        // if (elapsedMs > work.searchTime.inMilliseconds) {
+        //  _stop();
+        //}
       }
-    } else if (!['Stockfish', 'id', 'option', 'info'].contains(parts.first)) {
-      _log.info(line);
     }
   }
 
@@ -182,24 +199,48 @@ class UCIProtocol {
     _nextWork = null;
 
     if (_work != null) {
+      // this local variable only exists to allow dart to correctly infer types
+      final work = _work!;
       _currentEval = null;
       _expectedPvs = 1;
 
-      setOption('Threads', _work!.threads.toString());
-      setOption('Hash', (_work!.hashSize ?? 16).toString());
-      setOption('MultiPV', math.max(1, _work!.multiPv).toString());
+      setOption('Threads', work.threads.toString());
+      setOption('Hash', (work.hashSize ?? 16).toString());
+      setOption('MultiPV', math.max(1, work.multiPv).toString());
 
-      _sendAndLog(
-        [
-          'position fen',
-          _work!.initialPosition.fen,
-          'moves',
-          ..._work!.steps.map(
-            (s) => _work!.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
-          ),
-        ].join(' '),
-      );
-      _sendAndLog('go movetime ${_work!.searchTime.inMilliseconds}');
+      switch (work) {
+        case AnalysisWork():
+          _sendAndLog(
+            [
+              'position fen',
+              work.initialPosition.fen,
+              'moves',
+              ...work.steps.map(
+                (s) => work.variant == Variant.chess960 ? s.sanMove.move.uci : s.castleSafeUCI,
+              ),
+            ].join(' '),
+          );
+          _sendAndLog('go movetime ${work.searchTime.inMilliseconds}');
+        case MoveWork():
+          setOption('UCI_LimitStrength', 'true');
+          setOption('UCI_Elo', work.level.elo.toString());
+          _sendAndLog('position fen ${work.fen}');
+          final goCommand = [
+            'go',
+            'movetime ${work.level.moveTime.inMilliseconds}',
+            'depth ${work.level.depth}',
+          ];
+          if (work.clock != null) {
+            final clock = work.clock!;
+            goCommand.addAll([
+              'wtime ${clock.whiteTime.inMilliseconds}',
+              'btime ${clock.blackTime.inMilliseconds}',
+              'winc ${clock.whiteIncrement.inMilliseconds}',
+              'binc ${clock.blackIncrement.inMilliseconds}',
+            ]);
+          }
+          _sendAndLog(goCommand.join(' '));
+      }
       _isComputing.value = true;
     } else {
       _isComputing.value = false;

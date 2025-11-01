@@ -48,6 +48,7 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
       return;
     }
 
+    // is there a reason to get uci from Move and the parse it again to get a move ?
     final (newPos, newSan) = state.currentPosition.makeSan(Move.parse(move.uci)!);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
